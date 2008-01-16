@@ -1,0 +1,76 @@
+/**********************************************************************
+ * 
+ * fitqtl_hk.h
+ *
+ * copyright (c) 2007, Karl W Broman
+ *
+ * last modified Nov, 2007
+ * first written Nov, 2007
+ *
+ * Licensed under the GNU General Public License version 2 (June, 1991)
+ *
+ * C functions for the R/qtl package
+ *
+ * These functions are for fitting a fixed multiple-QTL model by 
+ * Haley-Knott regression.
+ *
+ * Contains: R_fitqtl_hk, fitqtl_hk, galtRssHK
+ *
+ **********************************************************************/
+void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen, 
+		 double *genoprob, int *n_cov, double *cov, int *model, 
+		 int *n_int, double *pheno, int *get_ests,
+		  /* return variables */
+		 double *lod, int *df, double *ests, double *ests_covar,
+		 double *design_mat);
+
+/**********************************************************************
+ * 
+ * fitqtl_hk
+ *
+ * Fits a fixed multiple-QTL model by Haley-Knott regression.
+ * 
+ * n_ind        Number of individuals
+ *
+ * n_qtl        Number of QTLs in the model 
+ *
+ * n_gen        Number of different genotypes
+ *
+ * Genoprob     QTL genotype probabilities
+ *
+ * Cov          covariates matrix, Cov[mar][ind]
+ *
+ * n_cov        Number of covariates
+ *
+ * model        Model matrix
+ *
+ * n_int        Number of interactions in the model
+ *
+ * pheno        Phenotype data, as a vector
+ *
+ * get_ests     0/1: If 1, return estimated effects and their variances
+ *
+ * lod          Return LOD score
+ *
+ * df           Return degree of freedom
+ *
+ * ests         Return ests (vector of length sizefull)
+ *
+ * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
+ *
+ **********************************************************************/
+
+void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
+	       double **Cov, int n_cov, 
+	       int *model, int n_int, double *pheno, int get_ests,
+	       double *lod, int *df, double *ests, double *ests_covar,
+	       double *design_mat); 
+
+/* galtRssHK - calculate RSS for full model by Haley-Knott regression */
+double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl, 
+		 double ***Genoprob, double **Cov, int n_cov, int *model, 
+		 int n_int, double *dwork, int *iwork, int sizefull,
+		 int get_ests, double *ests, double **Ests_covar,
+		 double *designmat);
+
+/* end of fitqtl_hk.h */

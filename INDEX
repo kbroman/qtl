@@ -1,0 +1,136 @@
++.scanone               Arithmetic Operators for scanone and scantwo
+                        results
++.scanoneperm           Arithmetic Operators for permutation results
+add.cim.covar           Indicate marker covariates from composite
+                        interval mapping
+add.threshold           Add significance threshold to plot
+addint                  Add pairwise interaction to a multiple-QTL
+                        model
+addpair                 Scan for an additional pair of QTL in a
+                        multiple-QTL model
+addqtl                  Scan for an additional QTL in a multiple-QTL
+                        model
+addtoqtl                Add to a qtl object
+argmax.geno             Reconstruct underlying genotypes
+badorder                An intercross with misplaced markers
+bayesint                Bayesian credible interval
+bristle3                Data on bristle number in Drosophila
+bristleX                Data on bristle number in Drosophila
+c.cross                 Combine data for QTL experiments
+c.scanone               Combine columns from multiple scanone results
+c.scanoneperm           Combine data from scanone permutations
+c.scantwoperm           Combine data from scantwo permutations
+calc.errorlod           Identify likely genotyping errors
+calc.genoprob           Calculate conditional genotype probabilities
+cbind.scanoneperm       Combine columns from multiple scanone
+                        permutation results
+checkAlleles            Identify markers with switched alleles
+chrlen                  Chromosome lengths in QTL experiment
+cim                     Composite interval mapping
+clean.cross             Remove derived data
+clean.scantwo           Clean up scantwo output
+comparecrosses          Compare two cross objects.
+comparegeno             Compare individuals' genotype data
+compareorder            Compare two orderings of markers on a
+                        chromosome
+condense.scantwo        Condense the output from a 2-d genome scan
+convert.scanone         Convert output from scanone for R/qtl version
+                        0.98
+convert.scantwo         Convert output from scantwo for R/qtl version
+                        1.03 and earlier
+drop.markers            Drop a set of markers
+drop.nullmarkers        Drop markers without any genotype data
+dropfromqtl             Drop a QTL from a qtl object
+effectplot              Plot phenotype means against genotypes at one
+                        or two markers.
+effectscan              Plot estimated QTL effects across the whole
+                        genome
+est.map                 Estimate genetic maps
+est.rf                  Estimate pairwise recombination fractions
+fake.4way               Simulated data for a 4-way cross
+fake.bc                 Simulated data for a backcross
+fake.f2                 Simulated data for an F2 intercross
+fill.geno               Fill holes in genotype data
+find.flanking           Find flanking markers for a specified position
+find.marker             Find marker closest to a specified position
+find.markerpos          Find position of a marker.
+find.pheno              Find column number for a particular phenotype.
+find.pseudomarker       Find the pseudomarker closest to a specified
+                        position
+fitqtl                  Fit a multiple-QTL model
+fitstahl                Fit Stahl interference model
+geno.crosstab           Create table of two-locus genotypes
+geno.image              Plot grid of genotype data
+geno.table              Create table of genotype distributions
+hyper                   Data on hypertension
+jittermap               Jitter marker positions in a genetic map
+listeria                Data on Listeria monocytogenes susceptibility
+lodint                  LOD support interval
+makeqtl                 Make a qtl object
+map10                   An example genetic map
+max.scanone             Maximum peak in genome scan
+max.scantwo             Maximum peak in two-dimensional genome scan
+movemarker              Move a marker to a new chromosome
+nmissing                Number of missing genotypes
+plot.cross              Plot various features of a cross object
+plot.errorlod           Plot grid of error LOD values
+plot.geno               Plot observed genotypes, flagging likely errors
+plot.info               Plot the proportion of missing genotype
+                        information
+plot.map                Plot genetic map
+plot.missing            Plot grid of missing genotypes
+plot.pheno              Plot a phenotype distribution
+plot.pxg                Plot phenotypes versus marker genotypes.
+plot.qtl                Plot QTL locations
+plot.rf                 Plot recombination fractions
+plot.scanone            Plot LOD curves
+plot.scanoneboot        Plot results of bootstrap for QTL position.
+plot.scanoneperm        Plot permutation results for a single-QTL
+                        genome scan
+plot.scantwo            Plot LOD scores for a two-dimensional genome
+                        scan
+plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
+                        scan
+plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
+pull.geno               Pull out the genotype data from a cross
+pull.map                Pull out the genetic map from a cross
+pull.pheno              Pull out phenotype data from a cross
+qtl-package             Introductory comments on R/qtl
+qtlversion              Installed version of R/qtl
+read.cross              Read data for a QTL experiment
+refineqtl               Refine the positions of QTL
+reorderqtl              Reorder the QTL in a qtl object.
+replace.map             Replace the genetic map of a cross
+replaceqtl              Replace a QTL in a qtl object with a different
+                        position.
+ripple                  Compare marker orders
+scanone                 Genome scan with a single QTL model
+scanoneboot             Bootstrap to get interval estimate of QTL
+                        location
+scanqtl                 General QTL scan
+scantwo                 Two-dimensional genome scan with a two-QTL
+                        model
+sim.cross               Simulate a QTL experiment
+sim.geno                Simulate genotypes given observed marker data
+sim.map                 Simulate a genetic map
+strip.partials          Strip partially informative genotypes
+subset.cross            Subsetting data for QTL experiment
+subset.scanone          Subsetting the results of a genome scan
+subset.scantwo          Subsetting the results of a 2-d genome scan
+summary.cross           Print summary of QTL experiment
+summary.fitqtl          Summary of fit of qtl model
+summary.map             Print summary of a genetic map
+summary.qtl             Print summary of a QTL object
+summary.ripple          Print summary of ripple results
+summary.scanone         Summarize the results of a genome scans
+summary.scanoneboot     Bootstrap confidence interval for QTL location
+summary.scanoneperm     LOD thresholds from scanone permutation results
+summary.scantwo         Summarize the results of a two-dimensional
+                        genome scan
+summary.scantwo.old     Summarize the results of a two-dimensional
+                        genome scan
+summary.scantwoperm     LOD thresholds from scantwo permutation results
+switch.order            Switch the order of markers on a chromosome
+top.errorlod            List genotypes with large error LOD scores
+tryallpositions         Test all possible positions for a marker
+write.cross             Write data for a QTL experiment to a file

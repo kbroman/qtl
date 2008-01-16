@@ -1,0 +1,869 @@
+######################################################################
+#
+# summary.scantwo.R
+#
+# copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
+#
+# last modified Jan, 2008
+# first written Nov, 2001
+# Licensed under the GNU General Public License version 2 (June, 1991)
+# 
+# Part of the R/qtl package
+# Contains: summary.scantwo, print.summary.scantwo,
+#           max.scantwo, clean.scantwo, print.scantwo, subset.scantwo
+#           summary.scantwoperm, print.summary.scantwoperm
+#           condense.scantwo, summary.scantwocondensed
+#           max.scantwocondensed, print.summary.addpair
+#
+######################################################################
+
+######################################################################
+#
+# summarize the result from scantwo
+#
+######################################################################
+summary.scantwo <-
+function(object, thresholds, 
+         what=c("best", "full", "add", "int"),
+         perms, alphas, lodcolumn=1, pvalues=FALSE,
+         df=FALSE, allpairs=TRUE, ...)
+{
+  if(!any(class(object) == "scantwo") &&
+     !any(class(object) == "scantwocondensed")) 
+    stop("Input should have class \"scantwo\".")
+
+  addpair <- attr(object, "addpair")
+  if(!is.null(addpair) && addpair) { # results from addpair() that need special treatment
+    if("lod.minus1" %in% names(attributes(object))) { # asymmetric formula
+      attr(object, "addpair") <- NULL
+      x <- summary.scantwo(object, allpairs=allpairs)
+      class(x) <- "data.frame"
+      x <- x[,c(1,2,8,9,10,3,4,5),drop=FALSE]
+
+      mlod.minus1 <- tapply(attr(object, "lod.minus1"), object$map$chr, max, na.rm=TRUE)
+      mlod.minus2 <- tapply(attr(object, "lod.minus2"), object$map$chr, max, na.rm=TRUE)
+      
+      w <- which(x[,1] == x[,2])
+      for(i in seq(along=w))
+        if(x[w[i],5] < x[w[i],8]) x[w[i],3:5] <- x[w[i],c(7,6,8)]
+      
+      if(any(x[,1] != x[,2])) {
+        w <- which(x[,1] != x[,2])
+        y <- x[w,,drop=FALSE]
+        for(i in 1:nrow(y))
+          y[,1:5] <- y[,c(2,1,7,6,8)]
+        
+        neworder <- cbind(1:nrow(x), rep(NA, nrow(x)))
+        neworder[w,2] <- nrow(x) + 1:nrow(y)
+        neworder <- as.numeric(t(neworder))
+
+        x <- rbind(x, y)[neworder[!is.na(neworder)],,drop=FALSE]
+      }
+        
+      x <- cbind(x[,1:5], lod.2v1b=rep(NA,nrow(x)), lod.2v1a=rep(NA,nrow(x)))
+      names(x)[5] <- "lod.2v0"
+
+      x[,6] <- x[,5] - mlod.minus1[as.character(x[,2])]
+      x[,7] <- x[,5] - mlod.minus2[as.character(x[,1])]
+
+      if(!missing(thresholds)) {
+        if(length(thresholds) > 2)
+          warning("Only the first two values in thresholds are used.")
+        
+        if(length(thresholds) == 1) thresholds <- c(thresholds, 0)
+        x <- x[!is.na(x[,5]) & x[,5] >= thresholds[1] &
+               ((!is.na(x[,6]) & x[,6] >= thresholds[2]) |
+                (!is.na(x[,7]) & x[,7] >= thresholds[2])),,drop=FALSE]
+      }
+
+      class(x) <- c("summary.addpair", "data.frame")
+      return(x)
+    }
+    else { # symmetric formula
+      attr(object, "addpair") <- NULL
+      if(missing(thresholds))
+        x <- summary.scantwo(object, allpairs=allpairs)
+      else
+        x <- summary.scantwo(object, thresholds=thresholds, allpairs=allpairs)
+
+      x <- x[,1:6]
+      colnames(x)[5:6] <- c("lod.2v0", "lod.2v1")
+
+      if(!missing(thresholds)) {
+        if(length(thresholds) > 2)
+          warning("Only the first two values in thresholds are used.")
+
+        if(length(thresholds) == 1) thresholds <- c(thresholds, 0)
+        x <- x[!is.na(x[,5]) & x[,5] >= thresholds[1] &
+               !is.na(x[,6]) & x[,6] >= thresholds[2],,drop=FALSE]
+      }
+
+      class(x) <- c("summary.addpair", "data.frame")
+      return(x)
+    }
+  }
+
+  what <- match.arg(what)
+
+  if(!missing(thresholds)) {
+    if(length(thresholds) != 5)
+      stop("If thresholds are given, there must be 5 of them.")
+    else if(!is.numeric(thresholds))
+      stop("thresholds should be a numeric vector")
+  }
+
+  if(!missing(alphas)) {
+    if(length(alphas) != 5) {
+      if(length(alphas)==1) 
+        alphas <- rep(alphas, 5)
+      else
+        stop("If alphas are given, there must be 5 of them.")
+    }
+    else if(!is.numeric(alphas))
+      stop("alphas should be a numeric vector")
+  }
+
+  if(!missing(perms) && !any(class(perms) == "scantwoperm"))
+    stop("perms must be in scantwoperm format.")
+
+  # subset object and permutations, if necessary
+  if(any(class(object) == "scantwo")) {
+    d <- dim(object$lod)
+    if(length(d)==3) {
+      if(!missing(perms)) {
+        ncp <- sapply(perms, ncol)
+        if(any(ncp != d[3]))
+          stop("perms have different numbers of columns as object input.\n")
+      }
+      
+      if(lodcolumn < 1 || lodcolumn > d[3])
+        stop("lodcolumn must be between 1 and ", d[3])
+      
+      object$lod <- object$lod[,,lodcolumn]
+      if(!missing(perms))
+        perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
+    }
+  }
+  else { # condensed version
+    if(is.matrix(object$pos1.jnt)) {
+      d <- ncol(object$pos1.jnt)
+      if(!missing(perms)) {
+        ncp <- sapply(perms, ncol)
+        if(any(ncp != d))
+          stop("perms have different numbers of columns as object input.\n")
+      }
+      
+      if(lodcolumn < 1 || lodcolumn > d)
+        stop("lodcolumn must be between 1 and ", d)
+      
+      for(i in 3:length(object))
+        object[[i]] <- object[[i]][,lodcolumn]
+
+      if(!missing(perms))
+        perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
+    }
+  }
+    
+  # check input
+  if(missing(perms) && !missing(alphas))
+    stop("If alphas are to be used, permutation results must be provided.")
+  if(!missing(thresholds) && !missing(alphas)) 
+    stop("Only one of threshold and alpha should be specified.")
+  if(pvalues && what != "best") {
+    pvalues <- FALSE
+    warning("pvalues shown only with what=\"best\".")
+  }
+  if(pvalues && missing(perms)) {
+    pvalues <- FALSE
+    warning("p-values may be calculated only if perms are provided.")
+  }
+
+  if(any(class(object) == "scantwo"))
+    out <- subrousummaryscantwo(object, for.perm=FALSE)
+  else
+    out <- as.data.frame(object)
+
+  if(!allpairs) # only look at self-self cases
+    out <- out[out$chr1==out$chr2,]
+  
+  if(!missing(alphas)) { # get thresholds
+    thresholds <- rep(0,length(perms))
+    for(i in 1:length(perms))
+      thresholds[i] <- quantile(perms[[i]], 1-alphas[i])
+    thresholds[alphas==1] <- 0
+    thresholds[alphas==0] <- Inf
+  }
+
+  if(what=="best") {
+    p1.f <- out$pos1.jnt
+    p2.f <- out$pos2.jnt
+    p1.a <- out$pos1.add
+    p2.a <- out$pos2.add
+
+    lf <- out$jnt.lod.full
+    li <- out$jnt.lod.full - out$add.lod.add
+    lfv1 <- out$jnt.lod.full - out$lod.1qtl
+    la <- out$add.lod.add
+    lav1 <- out$add.lod.add - out$lod.1qtl
+  }
+  else if(what=="full") {
+    p1.f <- p1.a <- out$pos1.jnt
+    p2.f <- p2.a <- out$pos2.jnt
+
+    lf <- out$jnt.lod.full
+    li <- out$jnt.lod.full - out$jnt.lod.add
+    lfv1 <- out$jnt.lod.full - out$lod.1qtl
+    la <- out$jnt.lod.add
+    lav1 <- out$jnt.lod.add - out$lod.1qtl
+  }
+  else if(what=="add") {
+    p1.f <- p1.a <- out$pos1.add
+    p2.f <- p2.a <- out$pos2.add
+
+    lf <- out$add.lod.full
+    li <- out$add.lod.full - out$add.lod.add
+    lfv1 <- out$add.lod.full - out$lod.1qtl
+    la <- out$add.lod.add
+    lav1 <- out$add.lod.add - out$lod.1qtl
+  }
+  else { # what == "int"
+    p1.f <- p1.a <- out$pos1.int
+    p2.f <- p2.a <- out$pos2.int
+
+    lf <- out$int.lod.full
+    li <- out$int.lod.full - out$int.lod.add
+    lfv1 <- out$int.lod.full - out$lod.1qtl
+    la <- out$int.lod.add
+    lav1 <- out$int.lod.add - out$lod.1qtl
+  }
+
+
+  out <- data.frame(chr1=out$chr1, chr2=out$chr2,
+                    pos1f=p1.f,
+                    pos2f=p2.f,
+                    lod.full=lf, lod.fv1=lfv1, lod.int=li, 
+                    pos1a=p1.a,
+                    pos2a=p2.a,
+                    lod.add=la, lod.av1=lav1)
+                    
+  if(what != "best") {
+    out <- out[,-(8:9)]
+    names(out)[3:4] <- c("pos1", "pos2")
+  }
+
+  if(!missing(thresholds) || !missing(alphas)) { # apply thresholds
+    out <- out[(out$lod.full >= thresholds[1] & (out$lod.fv1 >= thresholds[2] |
+                  out$lod.int >= thresholds[3])) |
+               (out$lod.add >= thresholds[4] & out$lod.av1 >= thresholds[5]),,drop=FALSE]
+  }
+
+  if(pvalues && nrow(out) > 0) {
+    result <- as.data.frame(matrix(ncol=11+5, nrow=nrow(out)))
+    wh <- c(1,2,3,4,5,7,9,11,12,13,15)
+    wh2 <- (1:16)[-wh]
+    result[,wh] <- out
+    names(result)[wh] <- names(out)
+    colnames(result)[wh2] <- rep("pval",5)
+    for(i in 1:5) {
+      for(j in 1:nrow(out))
+        result[j,wh2[i]] <- mean(perms[[i]] >= result[j,wh2[i]-1], na.rm=TRUE)
+    }
+    out <- result
+  }
+
+  attr(out, "df") <- revisescantwodf(attr(object, "df"))
+
+  if(!missing(perms) && "df" %in% names(attributes(out)) &&
+     "df" %in% names(attributes(perms))) {
+    df.o <- attr(out, "df")
+    df.p <- attr(perms, "df")
+    if(length(df.o) != length(df.p) ||
+       any(df.o != df.p))
+      warning("Degrees of freedom in input object and perms do not match.")
+  }
+
+  if(!df) attr(out, "df") <- NULL
+  
+  class(out) <- c("summary.scantwo", "data.frame")
+
+  out
+}
+
+
+
+
+# subroutine for summary.scantwo; pulls out the key info
+#     on each pair of chromosomes
+subrousummaryscantwo <-
+function(object, for.perm=FALSE)
+{
+  lod <- object$lod
+  lod[is.na(lod)] <- 0
+  map <- object$map
+
+  pos <- map[,2]
+  chr <- factor(map[,1])
+  tchr <- as.numeric(chr)
+  n.chr <- max(tchr)
+  xchr <- tapply(map[,4], map[,1], function(a) a[1])
+  xchr <- xchr[!is.na(xchr)]
+  n.phe <- 1
+  if(length(dim(lod)) == 3) n.phe <- dim(lod)[3]
+
+  if(!("scanoneX" %in% names(object)) ||
+     is.null(object$scanoneX)) {
+    if(n.phe==1) scanoneX <- diag(lod)
+    else {
+      scanoneX <- diag(lod[,,1])
+      for(i in 2:n.phe) scanoneX <- cbind(scanoneX, diag(lod[,,i]))
+    }
+  }
+  else scanoneX <- object$scanoneX
+
+  n.chrpair <- n.chr*(n.chr+1)/2
+
+  fill <- matrix(0, nrow=n.chrpair, ncol=n.phe)
+
+  out <- .C("R_summary_scantwo",
+            as.integer(nrow(map)),
+            as.integer(n.phe),
+            as.double(lod),
+            as.integer(n.chr),
+            as.integer(tchr),
+            as.double(pos),
+            as.integer(xchr),
+            as.double(scanoneX),
+            as.integer(n.chrpair),
+            chr1=as.integer(rep(0,n.chrpair)),
+            chr2=as.integer(rep(0,n.chrpair)),
+            as.integer(rep(0,n.chr*n.chr)),
+            pos1.jnt=as.double(fill),
+            pos2.jnt=as.double(fill),
+            pos1.add=as.double(fill),
+            pos2.add=as.double(fill),
+            pos1.int=as.double(fill),
+            pos2.int=as.double(fill),
+            jnt.lod.full=as.double(fill),
+            jnt.lod.add=as.double(fill),
+            add.lod.full=as.double(fill),
+            add.lod.add=as.double(fill),
+            int.lod.full=as.double(fill),
+            int.lod.add=as.double(fill),
+            lod.1qtl=as.double(fill),
+            PACKAGE="qtl")
+  
+  chr1 <- levels(chr)[out$chr1+1]
+  chr2 <- levels(chr)[out$chr2+1]
+
+  if(n.phe == 1)
+    out <- data.frame(chr1=chr1, chr2=chr2,
+                      pos1.jnt=out$pos1.jnt,
+                      pos2.jnt=out$pos2.jnt,
+                      jnt.lod.full=out$jnt.lod.full,
+                      jnt.lod.add=out$jnt.lod.add,
+                      pos1.add=out$pos1.add,
+                      pos2.add=out$pos2.add,
+                      add.lod.full=out$add.lod.full,
+                      add.lod.add=out$add.lod.add,
+                      pos1.int=out$pos1.int,
+                      pos2.int=out$pos2.int,
+                      int.lod.full=out$int.lod.full,
+                      int.lod.add=out$int.lod.add,
+                      lod.1qtl=out$lod.1qtl)
+  else
+    out <- list(chr1=chr1, chr2=chr2,
+                pos1.jnt=matrix(out$pos1.jnt, ncol=n.phe),
+                pos2.jnt=matrix(out$pos2.jnt, ncol=n.phe),
+                jnt.lod.full=matrix(out$jnt.lod.full, ncol=n.phe),
+                jnt.lod.add=matrix(out$jnt.lod.add, ncol=n.phe),
+                pos1.add=matrix(out$pos1.add, ncol=n.phe),
+                pos2.add=matrix(out$pos2.add, ncol=n.phe),
+                add.lod.full=matrix(out$add.lod.full, ncol=n.phe),
+                add.lod.add=matrix(out$add.lod.add, ncol=n.phe),
+                pos1.int=matrix(out$pos1.int, ncol=n.phe),
+                pos2.int=matrix(out$pos2.int, ncol=n.phe),
+                int.lod.full=matrix(out$int.lod.full, ncol=n.phe),
+                int.lod.add=matrix(out$int.lod.add, ncol=n.phe),
+                lod.1qtl=matrix(out$lod.1qtl, ncol=n.phe))
+
+  if(for.perm) {
+    if(n.phe==1) {
+      out <- c("full"=max(out$jnt.lod.full,na.rm=TRUE),
+               "fv1"=max(out$jnt.lod.full - out$lod.1qtl, na.rm=TRUE),
+               "int"=max(out$jnt.lod.full - out$add.lod.add, na.rm=TRUE),
+               "add"=max(out$add.lod.add, na.rm=TRUE),
+               "av1"=max(out$add.lod.add - out$lod.1qtl, na.rm=TRUE))
+    }
+    else {
+      out <- list("full"=apply(out$jnt.lod.full, 2, max, na.rm=TRUE),
+                  "fv1"=apply(out$jnt.lod.full - out$lod.1qtl, 2, max, na.rm=TRUE),
+                  "int"=apply(out$jnt.lod.full - out$add.lod.add, 2, max, na.rm=TRUE),
+                  "add"=apply(out$add.lod.add, 2, max, na.rm=TRUE),
+                  "av1"=apply(out$add.lod.add - out$lod.1qtl, 2, max, na.rm=TRUE))
+    }
+  }
+      
+  out
+}
+
+
+print.summary.scantwo <-
+function(x, ...)
+{
+  if(nrow(x)==0) {
+    cat("    There were no pairs of loci meeting the criteria.\n")
+    return(invisible(NULL))
+  }
+
+  if("df" %in% names(attributes(x))) {
+    df <- attr(x, "df")
+    cat("Degrees of freedom:\n")
+    rownames(df) <- paste("   ", rownames(df), ": ", sep="")
+    print(df)
+    cat("\n")
+  }
+
+  z <- as.character(unlist(x[,1]))
+
+  if(max(nchar(z)) == 1)
+    rownames(x) <- apply(x[,1:2], 1, function(a)
+                         paste("c", a, collapse=":", sep=""))
+  else
+    rownames(x) <- apply(x[,1:2], 1, function(a)
+                         paste(sprintf("c%-2s", a), collapse=":"))
+
+  x <- x[,-(1:2)]
+
+  cn <- colnames(x)
+  if(any(cn=="pos1a")) 
+    cn[cn=="pos1a"] <- "    pos1a"
+
+  wh <- grep("^pval", cn)
+  if(length(wh) > 0)
+    cn[wh] <- "pval"
+  colnames(x) <- cn
+
+  print.data.frame(x, digits=3)
+}
+
+
+print.summary.addpair <-
+function(x, ...)
+{
+  if(nrow(x)==0) {
+    cat("    There were no pairs of loci meeting the criteria.\n")
+    return(invisible(NULL))
+  }
+
+  z <- as.character(unlist(x[,1]))
+
+  if(max(nchar(z)) == 1)
+    rownames(x) <- apply(x[,1:2], 1, function(a)
+                         paste("c", a, collapse=":", sep=""))
+  else
+    rownames(x) <- apply(x[,1:2], 1, function(a)
+                         paste(sprintf("c%-2s", a), collapse=":"))
+
+  x <- x[,-(1:2), drop=FALSE]
+
+  print.data.frame(x, digits=3)
+}
+
+
+
+print.scantwo <-
+function(x, ...)
+{
+  d <- dim(x$lod)
+
+  if(nrow(x$lod) == 0)
+    cat("Empty scantwo object.\n")
+  else {
+
+    if(length(d)==2)
+      print(summary(x))
+    else {
+      for(i in 1:d[3]) {
+        cat("Phenotype", i, "\n")
+        print(summary(x, lod=i))
+      }
+    }
+  }
+}
+
+
+######################################################################
+#
+# max.scantwo:  Give pair of chromosome with maximum 2-locus LOD score
+#
+######################################################################
+
+max.scantwo <-
+function(object, lodcolumn=1,
+         what=c("best", "full", "add", "int"),
+         df=FALSE, na.rm=TRUE, ...)
+{
+  if(class(object)[1] != "scantwo" &&
+     class(object)[1] != "scantwocondensed")
+    stop("Input must have class \"scantwo\".")
+
+  addpair <- attr(object, "addpair")
+  if(!is.null(addpair) && addpair) { # special treatment for output for addpair
+    temp <- summary(object)
+    mx <- max(temp[,5],na.rm=TRUE)
+    return(temp[!is.na(temp[,5]) & temp[,5]==mx,])
+  }
+
+  what <- match.arg(what)
+  if(class(object)[1] == "scantwo") {
+    d <- dim(object$lod)
+    if(length(d)==3) {
+      if(lodcolumn < 1 || lodcolumn > d[3])
+        stop("lodcolumn must be between 1 and ", d[3])
+      object$lod <- object$lod[,,lodcolumn]
+    }
+
+    out <- subrousummaryscantwo(object, for.perm=FALSE)
+  }
+  else { # condensed version
+    if(is.matrix(object$pos1.jnt)) {
+      d <- ncol(object$pos1.jnt)
+      if(lodcolumn < 1 || lodcolumn > d)
+        stop("lodcolumn must be between 1 and ", d)
+      
+      for(i in 3:length(object))
+        object[[i]] <- object[[i]][,lodcolumn]
+    }
+    out <- as.data.frame(object)
+  }
+
+  if(what=="best") {
+    wh <- which(!is.na(out$jnt.lod.full) & out$jnt.lod.full==max(out$jnt.lod.full, na.rm=TRUE))
+    p1.f <- out$pos1.jnt[wh]
+    p2.f <- out$pos2.jnt[wh]
+    p1.a <- out$pos1.add[wh]
+    p2.a <- out$pos2.add[wh]
+
+    lf <- out$jnt.lod.full[wh]
+    li <- out$jnt.lod.full[wh] - out$add.lod.add[wh]
+    lfv1 <- out$jnt.lod.full[wh] - out$lod.1qtl[wh]
+    la <- out$add.lod.add[wh]
+    lav1 <- out$add.lod.add[wh] - out$lod.1qtl[wh]
+  }
+  else if(what=="full") {
+    wh <- which(!is.na(out$jnt.lod.full) & out$jnt.lod.full==max(out$jnt.lod.full, na.rm=TRUE))
+    p1.f <- p1.a <- out$pos1.jnt[wh]
+    p2.f <- p2.a <- out$pos2.jnt[wh]
+
+    lf <- out$jnt.lod.full[wh]
+    li <- out$jnt.lod.full[wh] - out$jnt.lod.add[wh]
+    lfv1 <- out$jnt.lod.full[wh] - out$lod.1qtl[wh]
+    la <- out$jnt.lod.add[wh]
+    lav1 <- out$jnt.lod.add[wh] - out$lod.1qtl[wh]
+  }
+  else if(what=="add") {
+    wh <- which(!is.na(out$add.lod.add) & out$add.lod.add==max(out$add.lod.add, na.rm=TRUE))
+    p1.f <- p1.a <- out$pos1.add[wh]
+    p2.f <- p2.a <- out$pos2.add[wh]
+
+    lf <- out$add.lod.full[wh]
+    li <- out$add.lod.full[wh] - out$add.lod.add[wh]
+    lfv1 <- out$add.lod.full[wh] - out$lod.1qtl[wh]
+    la <- out$add.lod.add[wh]
+    lav1 <- out$add.lod.add[wh] - out$lod.1qtl[wh]
+  }
+  else { # what == "int"
+    lod.int <- out$int.lod.full - out$int.lod.add
+    wh <- which(!is.na(lod.int) & lod.int == max(lod.int, na.rm=TRUE))
+    p1.f <- p1.a <- out$pos1.int[wh]
+    p2.f <- p2.a <- out$pos2.int[wh]
+
+    lf <- out$int.lod.full[wh]
+    li <- out$int.lod.full[wh] - out$int.lod.add[wh]
+    lfv1 <- out$int.lod.full[wh] - out$lod.1qtl[wh]
+    la <- out$int.lod.add[wh]
+    lav1 <- out$int.lod.add[wh] - out$lod.1qtl[wh]
+  }
+
+  out <- data.frame(chr1=out$chr1[wh], chr2=out$chr2[wh],
+                    pos1f=p1.f,
+                    pos2f=p2.f,
+                    lod.full=lf, lod.fv1=lfv1, lod.int=li, 
+                    pos1a=p1.a,
+                    pos2a=p2.a,
+                    lod.add=la, lod.av1=lav1)
+                    
+  if(what != "best") {
+    out <- out[,-(8:9)]
+    names(out)[3:4] <- c("pos1", "pos2")
+  }
+
+  class(out) <- c("summary.scantwo", "data.frame")
+  rownames(out) <- what
+  if(df && "df" %in% names(attributes(object)))
+    attr(out, "df") <- revisescantwodf(attr(object,"df"))
+
+  out
+}
+
+
+
+######################################################################
+# clean.scantwo
+#
+# sets LOD scores that are missing or < 0 to 0
+# If full LOD < add've LOD, set full = add've
+# sets LOD scores for pairs of positions that are not separated
+#     by a marker to 0.
+###################################################################### 
+
+clean.scantwo <-
+function(object)
+{
+  if(class(object)[1] != "scantwo")
+    stop("Input should have class \"scantwo\".")
+  
+  addpair <- attr(object, "addpair")
+  if(is.null(addpair)) addpair <- FALSE
+  
+  lod <- object$lod
+  map <- object$map
+  if(!("fullmap" %in% names(attributes(object))))
+    stop("clean.scantwo only works on scantwo objects created with R/qtl ver >= 1.04-38.\n")
+  fmap <- attr(object, "fullmap")
+
+  lod[is.na(lod) | lod < 0] <- 0
+  
+  subrou <- function(x,y,z)
+    {
+      out <- x
+      for(i in seq(along=x))
+          out[i] <- sum((z >= x[i] & z <= y[i]) | (z <= x[i] & z >= y[i])) +
+            (x[i] == y[i])
+          out
+    }
+
+  last <- 0
+  for(i in seq(along=fmap)) {
+    m <- map[map[,1]==names(fmap)[i],2]
+    idx <- 1:length(m)+last
+    last <- last + length(m)
+    if(length(dim(lod))==3) # case of multiple phenotypes
+      lod[idx,idx,][outer(m, m, subrou, fmap[[i]])==0] <- 0
+    else
+      lod[idx,idx][outer(m, m, subrou, fmap[[i]])==0] <- 0
+  }
+
+  # if full LOD < add've LOD, set full = add've
+  if(!addpair) {
+    if(length(dim(lod)) == 2) {
+      lo <- lower.tri(lod)
+      wh <- (lod[lo] < t(lod)[lo])
+      if(any(wh))
+        lod[lo][wh] <- t(lod)[lo][wh]
+    }
+    else {
+      lo <- lower.tri(lod[,,1])
+      for(i in 1:dim(lod)[3]) {
+        wh <- (lod[,,i][lo] < t(lod[,,i])[lo])
+        if(any(wh))
+          lod[,,i][lo][wh] <- t(lod[,,i])[lo][wh]
+      }
+    }
+  }
+
+  object$lod <- lod
+
+  object
+}
+
+
+
+######################################################################
+#
+# subset.scantwo
+#
+######################################################################
+subset.scantwo <-
+function(x, chr, lodcolumn, ...)
+{
+  if(class(x)[1] != "scantwo")
+    stop("Input should have class \"scantwo\".")
+
+  if((missing(chr) || length(chr)==0) && missing(lodcolumn)) return(x)
+
+  if(!missing(lodcolumn)) {
+    if(any(lodcolumn>0) && any(lodcolumn<0))
+      stop("lodcolumn values can't be both >0 and <0.")
+
+    if(any(lodcolumn<0) || is.logical(lodcolumn))
+      lodcolumn <- (1:(dim(x$lod)[3]))[lodcolumn]
+    if(length(lodcolumn)==0)
+      stop("You must retain at least one LOD column.")
+    if(any(lodcolumn < 1 || lodcolumn > dim(x$lod)[3]))
+      stop("lodcolumn values must be >=1 and <=",dim(x$lod)[3])
+
+    x$lod <- x$lod[,,lodcolumn]
+    if("scanoneX" %in% names(x))
+      x$scanoneX <- x$scanoneX[,lodcolumn]
+  }
+
+  a <- unique(x$map[,1])
+  if(is.numeric(chr) && all(chr < 0)) 
+    chr <- a[chr]
+  else chr <- a[match(chr,a)]
+
+  wh <- x$map[,1] %in% chr
+
+  x$map <- x$map[wh,,drop=FALSE]
+
+  if(length(dim(x$lod))==2)
+    x$lod <- x$lod[wh,wh,drop=FALSE]
+  else 
+    x$lod <- x$lod[wh,wh,,drop=FALSE]
+
+  if(!is.null(x$scanoneX))
+    x$scanoneX <- x$scanoneX[wh]
+
+  if("fullmap" %in% names(attributes(x))) {
+    fmap <- attr(x, "fullmap")
+    fmap <- fmap[chr]
+    attr(x, "fullmap") <- fmap
+  }
+
+  df <- attr(x, "df")
+  if(any(!is.na(match(c("AX","XX"), rownames(df)))) &&
+     all(!x$map$xchr))
+    attr(x, "df") <- df["AA",,drop=FALSE]
+
+  x
+}
+
+######################################################################
+# summary.scantwoperm
+#
+# Give genome-wide LOD thresholds on the basis of results of
+# scantwo permutation test (from scantwo with n.perm > 0)
+######################################################################
+summary.scantwoperm <-
+function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
+{
+  if(class(object)[1] != "scantwoperm")
+    stop("Input should have class \"scantwoperm\".")
+
+  out <- lapply(object, apply, 2, quantile, 1-alpha)
+
+  for(i in 1:length(out)) {
+    if(!is.matrix(out[[i]]))
+      out[[i]] <- matrix(out[[i]], nrow=length(alpha))
+    rownames(out[[i]]) <- paste(alpha*100, "%", sep="")
+  }
+
+  if(df && "df" %in% names(attributes(object)))
+    attr(out, "df") <- attr(object, "df")
+
+  attr(out, "n.perm") <- nrow(object[[1]])
+  class(out) <- c("summary.scantwoperm", "list")
+  out
+}
+
+print.summary.scantwoperm <-
+function(x, ...) 
+{
+  nam <- names(x)
+  rn <- rownames(x[[1]])
+  n.perm <- attr(x, "n.perm")
+
+  nc <- sapply(x, ncol)
+  if(length(unique(nc)) != 1)
+    stop("The components shouldn't have varying numbers of columns.\n")
+  nc <- nc[1]
+
+  if("df" %in% names(attributes(x))) {
+    df <- attr(x, "df")
+    cat("Degrees of freedom:\n")
+    rownames(df) <- paste("   ", rownames(df), ": ", sep="")
+    print(df)
+    cat("\n")
+  }
+
+  if(nc==1) {
+    phe <- colnames(x[[1]])
+    if(is.null(phe)) phe <- ""
+
+    x <- matrix(unlist(x), nrow=length(rn))
+    dimnames(x) <- list(rn, nam)
+
+    if(is.null(phe))
+      cat(paste("(", n.perm, " permutations)", sep=""), "\n")
+    else 
+      cat(phe, paste("(", n.perm, " permutations)", sep=""), "\n")
+    print(x, digits=3)
+  }
+  else {
+    phe <- colnames(x[[1]])
+    if(is.null(phe)) phe <- paste("pheno", 1:nc)
+
+    for(i in 1:nc) {
+      y <- matrix(ncol=length(x), nrow=nrow(x[[1]]))
+      for(j in 1:length(x))
+        y[,j] <- x[[j]][,i]
+      dimnames(y) <- list(rn, nam)
+
+      cat(phe[i], paste("(", n.perm, " permutations)", sep=""), "\n")
+      print(y, digits=3)
+      if(i != nc) cat("\n")
+    }
+  }
+}
+
+######################################################################
+# combine scantwoperm results ... paste the rows together
+######################################################################
+rbind.scantwoperm <- c.scantwoperm <-
+function(...)
+{
+  dots <- list(...)
+  if(length(dots)==1) return(dots[[1]])
+  for(i in seq(along=dots)) {
+    if(class(dots[[i]])[1] != "scantwoperm")
+      stop("Input should have class \"scantwoperm\".")
+  }
+
+  nc <- sapply(dots, function(a) ncol(a[[1]]))
+  if(length(unique(nc)) != 1)
+    stop("Number of LOD columns in the input objects must be constant.\n")
+
+  flag <- 0
+  for(j in 1:length(dots[[1]])) {
+    for(i in 2:length(dots)) {
+      dots[[1]][[j]] <- rbind(dots[[1]][[j]], dots[[i]][[j]])
+      if(any(colnames(dots[[i]][[j]]) != colnames(dots[[1]][[j]]))) flag <- 1
+    }
+  }
+  if(flag) warning("Mismatch in column names; input may not be consistent.\n")
+
+  dots[[1]]
+}
+
+######################################################################
+# condensed scantwo output
+
+condense <- 
+function(object)
+  UseMethod("condense")
+
+condense.scantwo <-
+function(object)
+{  
+  out <- subrousummaryscantwo(object, for.perm=FALSE)
+  attr(out, "df") <- attr(object, "df")
+  class(out) <- c("scantwocondensed", "list")
+  out
+}
+
+summary.scantwocondensed <- summary.scantwo
+max.scantwocondensed <- max.scantwo
+
+
+# end of summary.scantwo.R

@@ -1,0 +1,102 @@
+
+R version 2.6.1 (2007-11-26)
+Copyright (C) 2007 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ######################################################################
+> #
+> # TestIO/input.R
+> #
+> # copyright (c) 2002, Karl W Broman
+> # last modified Feb, 2002
+> # first written Feb, 2002
+> # Licensed under the GNU General Public License version 2 (June, 1991)
+> #
+> # This file contains code for testing the cross IO in R/qtl.
+> #
+> # Needed input files:
+> #
+> #    gen.txt, map.txt, phe.txt    [Karl's format]
+> #    listeria.raw, listeria.map   [mapmaker format]
+> #    listeria.raw, listeria2.map  [mapmaker format; no marker pos]
+> #    listeria.csv                 [csv format] 
+> #    listeria2.csv                [csv format; no marker pos] 
+> #
+> ######################################################################
+> 
+> library(qtl)
+> 
+> ##############################
+> # Reading
+> ##############################
+> # Read CSV format
+> csv <- read.cross("csv", "", "listeria.csv")
+ --Read the following data:
+	 120  individuals
+	 133  markers
+	 1  phenotypes
+ --Cross type: f2 
+Warning message:
+In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+
+> csv2 <- read.cross("csv", "", "listeria2.csv", estimate=FALSE)
+ --Read the following data:
+	 120  individuals
+	 133  markers
+	 1  phenotypes
+ --Cross type: f2 
+Warning message:
+In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+
+> 
+> # Read mapmaker format
+> mm <- read.cross("mm", "", "listeria.raw", "listeria.map")
+ --Read the following data:
+	Type of cross:          f2 
+	Number of individuals:  120 
+	Number of markers:      133 
+	Number of phenotypes:   1 
+ --Cross type: f2 
+Warning message:
+In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+
+> mm2 <- read.cross("mm", "", "listeria.raw", "listeria2.map", estimate=FALSE)
+ --Read the following data:
+	Type of cross:          f2 
+	Number of individuals:  120 
+	Number of markers:      133 
+	Number of phenotypes:   1 
+ --Cross type: f2 
+Warning message:
+In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+
+> 
+> ##############################
+> # Writing
+> ##############################
+> # Write in CSV format
+> write.cross(csv, "csv", filestem="junk1")
+> csv3 <- read.cross("csv", "", "junk1.csv", genotypes=c("AA","AB","BB","not BB","not AA"))
+ --Read the following data:
+	 120  individuals
+	 133  markers
+	 3  phenotypes
+ --Cross type: f2 
+> comparecrosses(csv, csv3)
+	Crosses are identical.
+> 
+> # Write in mapmaker format
+> write.cross(csv, "mm", filestem="junk2")
+> 

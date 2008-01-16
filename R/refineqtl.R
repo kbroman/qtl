@@ -1,0 +1,453 @@
+######################################################################
+#
+# refineqtl.R
+#
+# copyright (c) 2006-8, Karl W. Broman
+# last modified Jan, 2008
+# first written Jun, 2006
+# Licensed under the GNU General Public License version 2 (June, 1991)
+# 
+# Part of the R/qtl package
+# Contains: refineqtl, plotLodProfile
+#
+######################################################################
+
+######################################################################
+# this is like scanqtl, though the positions are all fixed loci;
+# it calls scanqtl iteratively, trying to find the best positions for
+# each QTL.
+#
+# the method is like that of that described by Zeng and colleagues
+# regarding MIM; each QTL is slid from one end of the chromosome to
+# the other, or to the next flanking QTLs, if there are linked ones
+#
+# maxit is the maximum number of iterations (going through all QTLs
+# in each iteration) to perform
+######################################################################
+refineqtl <-
+function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
+         method=c("imp", "hk"), verbose=TRUE, maxit=10,
+         incl.markers=TRUE, keeplodprofile=FALSE)
+{
+  method <- match.arg(method)
+  
+  if(!is.null(covar) && !is.data.frame(covar))
+    stop("covar should be a data.frame")
+
+  if(!missing(qtl) && (!missing(chr) || !missing(pos) || !missing(qtl.name)))
+    warning("qtl argument is provided, and so chr, pos and qtl.name are ignored.")
+
+  if(missing(qtl) && (missing(chr) || missing(pos)))
+    stop("Provide either qtl or both chr and pos.")
+
+  if(!missing(qtl)) {
+    chr <- qtl$chr
+    pos <- qtl$pos
+  }
+  else { # chr and pos provided
+    if(is.numeric(chr)) {
+      if(!any(is.na(match(chr, names(cross$geno)))))
+        chr <- as.character(chr)
+      else {
+        if(any(chr) < 1 || chr > nchr(cross))
+          stop("chr argument misspecified.")
+        else
+          chr <- names(cross$geno)[chr]
+      }
+    }
+
+    if(missing(qtl.name)) {
+      if(method=="imp")
+        qtl <- makeqtl(cross, chr=chr, pos=pos, what="draws")
+      else
+        qtl <- makeqtl(cross, chr=chr, pos=pos, what="prob")
+    }
+    else {
+      if(method=="imp")
+        qtl <- makeqtl(cross, chr=chr, pos=pos, qtl.name=qtl.name, what="draws")
+      else
+        qtl <- makeqtl(cross, chr=chr, pos=pos, qtl.name=qtl.name, what="prob")
+    }
+  }
+
+  if(method=="imp") {
+    if(!("geno" %in% names(qtl))) {
+      if("prob" %in% names(qtl)) {
+        warning("The qtl object doesn't contain imputations; using method=\"hk\".")
+        method <- "hk"
+      }
+      else
+        stop("The qtl object needs to be created with makeqtl with what=\"draws\".")
+    }
+  }
+  else {
+    if(!("prob" %in% names(qtl))) {
+      if("geno" %in% names(qtl)) {
+        warning("The qtl object doesn't contain QTL genotype probabilities; using method=\"imp\".")
+        method <- "imp"
+      }
+      else
+        stop("The qtl object needs to be created with makeqtl with what=\"prob\".")
+    }
+  }
+
+  if(!all(chr %in% names(cross$geno)))
+    stop("Chr ", paste(unique(chr[!(chr %in% cross$geno)]), sep=" "),
+         " not found in cross.")
+
+  if(verbose > 1) scanqtl.verbose <- TRUE
+  else scanqtl.verbose <- FALSE
+
+  cross <- subset(cross, chr=as.character(unique(chr))) # pull out just those chromosomes
+
+  # check phenotypes and covariates; drop ind'ls with missing values
+  if(pheno.col < 1 || pheno.col > nphe(cross))
+    stop("pheno.col should be between 1 and ", nphe(cross))
+  pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar)) phcovar <- cbind(pheno, covar)
+  else phcovar <- as.data.frame(pheno)
+  hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+  if(all(hasmissing))
+    stop("All individuals are missing phenotypes or covariates.")
+
+  if(any(hasmissing)) {
+    origcross <- cross
+    origqtl <- qtl
+
+    cross <- subset(cross, ind=!hasmissing)
+    pheno <- pheno[!hasmissing]
+    if(!is.null(covar)) covar <- covar[!hasmissing,]
+
+    if(method=="imp")
+      qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
+    else
+      qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
+
+    qtl$n.ind <- sum(!hasmissing)
+  }
+
+  # if missing formula, include just the additive QTL
+  if(missing(formula)) 
+    formula <- as.formula(paste("y ~", paste(qtl$altname, collapse="+")))
+  formula <- checkformula(formula, qtl$altname, colnames(covar))
+
+  # identify which QTL are in the model formula
+  tovary <- sort(parseformula(formula, qtl$altname, colnames(covar))$idx.qtl)
+  if(length(tovary) != qtl$n.qtl)
+    reducedqtl <- dropfromqtl(qtl, index=(1:qtl$n.qtl)[-tovary])
+  else reducedqtl <- qtl
+
+  # if a QTL is missing from the formula, we need to revise the formula, moving
+  # everything over, for use in scanqtl
+  if(any(1:length(tovary) != tovary)) {
+    tempform <- strsplit(deparseQTLformula(formula), " *~ *")[[1]][2]
+    terms <- strsplit(tempform, " *\\+ *")[[1]]
+    for(j in seq(along=terms)) {
+      if(length(grep(":", terms[j])) > 0) { # interaction
+        temp <- strsplit(terms[j], " *: *")[[1]]
+
+        for(k in seq(along=temp)) {
+          g <- grep("^[Qq][0-9]+$", temp[k])
+          if(length(g) > 0) {
+            num <- as.numeric(substr(temp[k], 2, nchar(temp[k])))
+            temp[k] <- paste("Q", which(tovary == num), sep="")
+          }
+        }
+        terms[j] <- paste(temp, collapse=":")
+      }
+      else {
+        g <- grep("^[Qq][0-9]+$", terms[j])
+        if(length(g) > 0) {
+          num <- as.numeric(substr(terms[j], 2, nchar(terms[j])))
+          terms[j] <- paste("Q", which(tovary == num), sep="")
+        }
+      }
+    }
+    formula <- as.formula(paste("y ~", paste(terms, collapse=" + ")))
+  }
+
+  curpos <- pos[tovary]
+  chrnam <- chr[tovary]
+  if(verbose) cat("pos:", curpos, "\n")
+  converged <- FALSE
+
+  oldo <- NULL
+  lc <- length(chrnam)
+
+  lastout <- vector("list", length(curpos))
+  names(lastout) <- qtl$name[tovary]
+
+  if(keeplodprofile) # do drop-one analysis
+    basefit <- fitqtl(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
+                      method=method, dropone=TRUE, get.ests=FALSE,
+                      run.checks=FALSE)
+  else if(verbose)
+    basefit <- fitqtl(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
+                      method=method, dropone=FALSE, get.ests=FALSE,
+                      run.checks=FALSE)
+
+
+  if(verbose) {
+    origlod <- curlod <- thisitlod <- basefit$result.full[1,4]
+    origpos <- curpos
+  }
+
+  for(i in 1:maxit) {
+    
+    if(verbose) cat("Iteration", i, "\n")
+    o <- sample(lc)
+
+    # make sure the first here was not the last before
+    if(!is.null(oldo)) 
+      while(o[1] != oldo[lc])
+        o <- sample(lc)
+    oldo <- o
+
+    newpos <- curpos
+    for(j in o) {
+
+      otherchr <- chrnam[-j] 
+      otherpos <- newpos[-j]
+
+      thispos <- as.list(newpos)
+      if(any(otherchr == chrnam[j])) { # linked QTLs
+        linkedpos <- otherpos[otherchr==chr[j]]
+        if(any(linkedpos < newpos[j]))
+          low <- max(linkedpos[linkedpos < newpos[j]])
+        else low <- -Inf
+        if(any(linkedpos > newpos[j]))
+          high <- max(linkedpos[linkedpos > newpos[j]])
+        else high <- Inf
+        
+        thispos[[j]] <- c(low, high)
+      }
+      else 
+        thispos[[j]] <- c(-Inf, Inf)
+
+      out <- scanqtl(cross=cross, pheno.col=pheno.col, chr=chrnam, pos=thispos,
+                     covar=covar, formula=formula, method=method,
+                     incl.markers=incl.markers,
+                     verbose=scanqtl.verbose)
+
+      lastout[[j]] <- out
+
+      newpos[j] <- as.numeric(strsplit(names(out)[out==max(out)],"@")[[1]][2])
+
+      if(verbose) {
+        cat(" Q", j, " pos: ", curpos[j], " -> ", newpos[j], "\n", sep="")
+        cat("    LOD increase: ", round(max(out) - curlod, 3), "\n")
+        curlod <- max(out)
+      }
+    }
+
+    if(verbose) {
+      cat("all pos:", curpos, "->", newpos, "\n")
+      cat("LOD increase at this iteration: ", round(curlod - thisitlod, 3), "\n")
+      thisitlod <- curlod
+    }
+
+    if(all(curpos == newpos)) {
+      converged <- TRUE
+      break
+    }
+    curpos <- newpos
+  }
+
+  if(verbose) {
+    cat("overall pos:", origpos, "->", newpos, "\n")
+    cat("LOD increase overall: ", round(curlod - origlod, 3), "\n")
+    thisitlod <- curlod
+  }
+
+  if(!converged) warning("Didn't converge.")
+  
+  # do the qtl have custom names?
+  g <- grep("^Chr.+@[0-9\\.]+$", qtl$name)
+  if(length(g) == length(qtl$name)) thenames <- NULL
+  else thenames <- qtl$name
+
+  if(any(hasmissing)) {
+    qtl <- origqtl
+    cross <- origcross
+  }
+  for(j in seq(along=tovary)) 
+    qtl <- replaceqtl(cross, qtl, tovary[j], chrnam[j], newpos[j])
+
+  if(!is.null(thenames)) qtl$name <- thenames
+
+  if(keeplodprofile) {
+    # subtract off the results from the drop-one analysis from the LOD profiles
+    dropresult <- basefit$result.drop
+    if(is.null(dropresult)) {
+      if(length(lastout)==1) {
+        dropresult <- rbind(c(NA,NA, basefit$result.full[1,4]))
+        rownames(dropresult) <- names(lastout)
+      }
+      else 
+        stop("There's a problem: need dropresult, but didn't obtain one.")
+    }
+
+    rn <- rownames(dropresult)
+    qn <- names(lastout)
+    for(i in seq(along=lastout)) {
+      lastout[[i]] <- lastout[[i]] - (max(lastout[[i]]) - dropresult[rn==qn[i],3])
+      pos <- as.numeric(matrix(unlist(strsplit(names(lastout[[i]]), "@")),byrow=TRUE,ncol=2)[,2])
+      chr <- rep(qtl$chr[tovary][i], length(pos))
+      lastout[[i]] <- data.frame(chr=chr, pos=pos, lod=as.numeric(lastout[[i]]))
+    }
+    names(lastout) <- qtl$name[tovary]
+  }
+
+  if(keeplodprofile) 
+    attr(qtl, "lodprofile") <- lastout
+  
+  qtl
+}
+
+######################################################################
+# plotLodProfile
+#
+# This is for creating a plot of 1-d LOD profiles calculated within
+# refineqtl.  
+######################################################################
+
+plotLodProfile <-
+function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
+         qtl.labels=TRUE, mtick=c("line", "triangle"),
+         show.marker.names=FALSE, alternate.chrid=FALSE, ...)
+{
+  if(!("qtl" %in% class(qtl)))
+    stop("Input qtl is not a qtl object")
+
+  lodprof <- attr(qtl, "lodprofile")
+  if(is.null(lodprof))
+    stop("You must first run refineqtl, using keeplodprofile=TRUE")
+  
+  m <- match(qtl$name, names(lodprof))
+  if(any(is.na(m)))
+    qtl <- dropfromqtl(qtl, index=which(is.na(m)))
+
+  n.qtl <- length(lodprof)
+  if(length(lwd) == 1) lwd <- rep(lwd, n.qtl)
+  else if(length(lwd) != n.qtl) {
+    warning("lwd should have length 1 or ", n.qtl)
+    lwd <- rep(lwd[1], n.qtl)
+  }
+  if(length(lty) == 1) lty <- rep(lty, n.qtl)
+  else if(length(lty) != n.qtl) {
+    warning("lty should have length 1 or ", n.qtl)
+    lty <- rep(lty[1], n.qtl)
+  }
+  if(length(col) == 1) col <- rep(col, n.qtl)
+  else if(length(col) != n.qtl) {
+    warning("col should have length 1 or ", n.qtl)
+    col <- rep(col[1], n.qtl)
+  }
+
+  map <- attr(qtl, "map")
+  if(is.null(map))
+    stop("Input qtl object should contain the genetic map.")
+  
+  qtlnam <- names(lodprof)
+  m <- match(qtlnam, qtl$name)
+  if(!all(is.na(m))) {
+    if(any(is.na(m))) {
+      warning("QTL ", paste(qtlnam[is.na(m)], collapse=" "), " not understood.")
+      qtlnam <- qtlnam[!is.na(m)]
+      lodprof <- lodprof[!is.na(m)]
+      m <- m[!is.na(m)]
+    }
+  }
+  else {
+    m <- match(qtlnam, qtl$altname)
+    if(any(is.na(m))) {
+      warning("QTL ", paste(qtlnam[is.na(m)], collapse=" "), " not understood.")
+      qtlnam <- qtlnam[!is.na(m)]
+      lodprof <- lodprof[!is.na(m)]
+      m <- m[!is.na(m)]
+    }
+  }
+
+  tempscan <- cbind(lodprof[[1]], mark=1)
+  if(length(lodprof) > 1)
+    for(i in 2:length(lodprof)) 
+      tempscan <- rbind(tempscan, cbind(lodprof[[i]], mark=i))
+  tempscan[,3] <- NA
+  rownames(tempscan) <- paste("c", tempscan[,1], ".loc", 1:nrow(tempscan), sep="")
+
+  thechr <- as.character(unique(tempscan[,1]))
+  orderedchr <- names(map)
+
+  m <- match(thechr, orderedchr)
+  if(any(is.na(m))) {
+    if(sum(is.na(m)) > 1)
+      stop("Can't find chromosomes ", paste(thechr[is.na(m)], sep=" "), " in map.")
+    else
+      stop("Can't find chromosome ", thechr[is.na(m)], " in map.")
+  }
+    
+  for(i in thechr) {
+    if(is.matrix(map[[i]])) map[[i]] <- map[[i]][1,]
+      
+    nm <- length(map[[i]])
+    thismap <- data.frame(chr=rep(i, nm), pos=as.numeric(map[[i]]),
+                          lod=rep(NA, nm), mark=rep(-1, nm))
+    rownames(thismap) <- names(map[[i]])
+    tempscan <- rbind(tempscan, thismap)
+  }
+    
+  o <- order(match(tempscan[,1],  orderedchr), tempscan[,2])
+  tempscan <- tempscan[o,]
+
+  class(tempscan) <- c("scanone", "data.frame")
+
+  if(missing(chr)) chr <- thechr
+  dontskip <- which(!is.na(match(thechr, chr)))
+  
+  temp <- tempscan
+  for(i in seq(along=lodprof))
+    temp[temp[,4]==i,3] <- lodprof[[i]][,3]
+
+  dots <- list(...)
+  if("ylim" %in% names(dots)) {
+    plot.scanone(temp, chr=chr, incl.markers=incl.markers, gap=gap,
+                 mtick=mtick, show.marker.names=show.marker.names,
+                 alternate.chrid=alternate.chrid, col="white", ...)
+  }
+  else if(qtl.labels) {
+    temp <- temp[!is.na(match(temp[,1], chr)),]
+    begend <- matrix(unlist(tapply(temp[,2],temp[,1],range)),ncol=2,byrow=TRUE)
+    rownames(begend) <- unique(temp[,1])
+    begend <- begend[as.character(chr),,drop=FALSE]
+    len <- begend[,2]-begend[,1]
+    if(length(chr)==1) start <- 0
+    else start <- c(0,cumsum(len+gap))-c(begend[,1],0)
+    names(start) <- chr
+
+    ylim <- c(0, max(temp[,3], na.rm=TRUE)+1)
+
+    plot.scanone(temp, chr=chr, incl.markers=incl.markers, gap=gap,
+                 mtick=mtick, show.marker.names=show.marker.names,
+                 alternate.chrid=alternate.chrid, col="white", ylim=ylim,
+                 ...)
+  }
+
+  for(i in dontskip) {
+    temp <- tempscan
+    temp[temp[,4]==i,3] <- lodprof[[i]][,3]
+    temp <- temp[temp[,4]>0,]
+    plot.scanone(temp, chr=chr, incl.markers=FALSE, gap=gap, add=TRUE,
+                 col=col[i], lwd=lwd[i], lty=lty[i], ...)
+    
+    if(qtl.labels) {
+      maxlod <- max(temp[,3], na.rm=TRUE) 
+      maxpos <- temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[thechr[i]]
+      d <- min(c(0.5, diff(par("usr")[3:4]*0.03)))
+      text(maxpos, maxlod + d, names(lodprof)[i], col=col[i], font=(lwd[i]>1)+1, ...)
+    }
+  }
+                 
+  invisible()
+}
+
+# end of refineqtl.R

@@ -1,0 +1,199 @@
+
+"To do" list for R/qtl
+----------------------------------------------------------------------
+This file is intended to contain a list of many of the additions and
+revisions that are planned for the R/qtl package.  
+
+If you any additions or revisions to suggest, please send an email to
+Karl Broman, <kbroman@biostat.wisc.edu>.
+----------------------------------------------------------------------
+ 
+SHORT TERM:
+
+o Add an explanation regarding the coding in the coefficient 
+  estimates in fitqtl().  Add text to the help file for
+  summary.fitqtl(). 
+
+o FAQ: - constructing covariate matrices
+
+----------------------------------------------------------------------
+
+MEDIUM-SHORT TERM:
+
+o cM coordinates in scantwo plot for multiple chromosomes
+
+o plots of segregation ratios at markers
+
+o lodint/bayesint as option to summary.scanone.
+
+o conditional LOD scores from scantwo output.
+
+o scanqtl: if formula symmetric w/ respect to two QTL that are on the 
+  same chromosome, only scan the triangle (rather than the square)
+
+o write tools for converting the output from scanqtl() to the format
+  for scanone() or scantwo(), according to whether it's a 1-d or
+  2-d search, or print a warning otherwise.
+
+o pairprob at markers + putative QTL?  For linked loci in scanqtl by
+  HK/EM. 
+
+o Allow plot.geno (or other cases in which subset.cross is used to
+  pull out individuals) to refer to individual IDs.
+
+o findpeaks() function, for finding multiple maxima on a chromosome
+  in scanone results.
+
+o Have read.cross indicate the cross type at the end.
+
+o incorporate revised code from Steffen Moeller.
+
+o Tabbing in "allpheno" from summary.scanone output looks odd...maybe
+  use spaces? [Gary reported this, but I've not been able to reproduce
+  this problem.] 
+
+o X chromosome in cim().
+
+o Test scanone with method="ehk", especially regarding interactions.
+
+o Include Bjarke's code on eHK for scantwo.
+
+o Fix plot.scantwo for the case that incl.markers=TRUE, so that
+  positions are not equally spaced, but are according to the genetic
+  map.  (This is working if just one chromosome is plotted, but should
+  be made to work generally.)  
+
+o Go through all of the various plot functions and make sure that
+  the x- and y-axis labels are created with axis() rather than
+  text() and segments().  This way, the size of the labels can be
+  modified with par(cex.axis)
+
+o Turn the tutorial into a Sweave vingette, to conform to the
+  Bioconductor requirements?
+
+o Revise plot.rf so that it can have different color schemes, as in
+  plot.scantwo. 
+
+o Simpler methods to get at interesting bits in the est.rf results.
+
+o Add cross type "dh" for doubled haploids.  Treat this just like
+  a backcross, but with different genotype labels.
+
+  Actually, should revised read.cross so that if all genotypes are 
+  AA and BB, the thing is called DH by default.  Maybe add an 
+  argument to read.cross so that one may specify the cross type.
+
+o Finish off the work to get coefficient estimates by imputation in
+  fitqtl for the X chromosome in BC and F2. 
+
+o Revise c.cross so that you can combine crosses even if there are
+  different numbers of chromosomes
+
+o Ensure consistency in use of chromosome numbers vs names/IDs when
+  plotting results of genome scans, subsetting crosses, and so forth
+  (sometimes #'s taken as indices and sometimes as names).
+
+o Documentation on RI lines.
+
+----------------------------------------------------------------------
+
+MEDIUM TERM:
+
+o covariates with 2part model in scanone
+
+o Analysis of censored phenotypes.
+
+o Analysis of residuals.
+
+o plot.scanone for *many* phenotypes: an image-type plot
+
+o read.cross for "qtx" sometimes doesn't seem to take the
+  genotype pattern appropriately; read in a backcross as if it
+  were an F2. 
+
+o An NA in the mapmaker data file caused an error in read.cross;
+  the line became too long.  Maybe this is true whenever an item
+  doesn't match what is expected.
+
+o Speed up read.cross.mm; deliver meaningful errors if map/genotypes
+  don't match, and if too many genotypes in a row.
+
+o scanone() with model="2part" gives NAs as LOD scores if there
+  is complete penetrance (one of the p's goes to 1).  This doesn't
+  happen with model="binary".
+
+  The problem is that if everyone with a certain genotype survives,
+  then you have great segregation distortion if you look at only
+  the dead individuals, and so you can't estimate both means.
+
+o MIM for a set of QTLs at specified locations with specified
+  interactions (as a new method in fitqtl and scanqtl).
+
+o In MIM: allow return of SEs of effects.  Write coef.mim, resid.mim,
+  and dev.mim to pull out the est'd coefficients, the residuals, and
+  the "deviance" (2 * ln likelihood).
+
+o Incorporate the DIRECT algorithm stuff from Hao
+
+o scanone with additive alleles at QTL
+
+o Pull out results for an interval.
+
+o Modify the map expansion for RI lines for the X chromosome.
+  [really need to add additional functions for mapping, as
+   the marginal genotype distribution is 2:1 rather than 1:1]
+  --the transition matrix is not symmetric 
+  Pr(BB|AA) = 2r/(1+4r) and Pr(AA|BB) = 4r/(1+4r)
+
+o Ability to get at the individual contributions to the LOD score? 
+
+o Incorporate the code from Brian Yandell, Fei Zou and Amy Jin on
+  semi-parametric QTL mapping methods.
+
+o Add appropriate functions to analyze advanced intercrosses (AILs). 
+
+o Analysis of binary traits by imputation
+
+o Include widgets for getting more easy access to the data.
+
+o Allow phenotypes on multiple individuals (esp for recombinant inbred
+  lines). 
+
+----------------------------------------------------------------------
+
+LONG TERM:
+
+o HMM stuff for BCn data.
+
+o "embarassing parallel" processing for permutation tests (Rmpi, snow)
+
+o Imprinting/parent-of-origin effects.
+
+o Treating a covariate as a random effect.
+
+o Multiple phenotypes (esp. regarding pleiotropy).
+
+o Model search for MIM etc...forward and stepwise selection.
+
+o Function to plot, for a specified q1, LOD{q2|q1} vs q2 (using the
+  output from scantwo).
+
+o Take the fit of the null model outside of the C code for
+  the imputation method in scanone and scantwo, so that it
+  only has to be done once (rather than for each chr or chr pair).
+
+o Starting values for EM for the two-part model (and more generally).
+  Allow the option of an automatic selection of multiple starting
+  points. 
+
+o Generalized linear models in scanone and scantwo.
+
+o Analysis functions such as scanone and scantwo might assign an
+  attribute to their output which identifies the input data and/or
+  function call.
+
+o Re-write the C code for EM underneath scanone and scantwo so that it
+  is not so tedious.
+
+----------------------------------------------------------------------
+end of TODO.txt

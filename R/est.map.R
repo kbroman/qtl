@@ -1,0 +1,224 @@
+######################################################################
+#
+# est.map.R
+#
+# copyright (c) 2001-8, Karl W Broman
+# last modified Jan, 2008
+# first written Apr, 2001
+# Licensed under the GNU General Public License version 2 (June, 1991)
+# 
+# Part of the R/qtl package
+# Contains: est.map
+#
+######################################################################
+
+######################################################################
+#
+# est.map: re-estimate the genetic map for an experimental cross
+#
+######################################################################
+
+est.map <- 
+function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
+         m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
+         omit.noninformative=TRUE)
+{
+  if(!any(class(cross) == "cross"))
+    stop("Input should have class \"cross\".")
+
+  type <- class(cross)[1]
+
+  if(m < 0 || p < 0 || p > 1)
+    stop("Must have m >=0 and 0 <= p <= 1")
+  
+  if(m > 0 && p < 1 && type != "bc" && type != "f2") {
+    warning("m and p currently used only for backcrosses and intercrosses.")
+    m <- p <- 0
+  }
+  if(m > 0 && p < 1 && !missing(map.function)) 
+    warning("Map function not used with interference model.")
+  if(m > 0 && p < 1) interf.model <- TRUE
+  else interf.model <- FALSE
+
+  # map function
+  map.function <- match.arg(map.function)
+  if(map.function=="kosambi") {
+    mf <- mf.k; imf <- imf.k
+  }
+  else if(map.function=="c-f") {
+    mf <- mf.cf; imf <- imf.cf
+  }
+  else if(map.function=="morgan") {
+    mf <- mf.m; imf <- imf.m
+  }
+  else {
+    mf <- mf.h; imf <- imf.h
+  }
+
+  # don't let error.prob be exactly zero (or >1)
+  if(error.prob < 1e-50) error.prob <- 1e-50
+  if(error.prob > 1) {
+    error.prob <- 1-1e-50
+    warning("error.prob shouldn't be > 1!")
+  }
+
+  n.ind <- nind(cross)
+  n.mar <- nmar(cross)
+  n.chr <- nchr(cross)
+
+  newmap <- vector("list",n.chr)
+  names(newmap) <- names(cross$geno)
+  chrtype <- sapply(cross$geno, class)
+
+  # calculate genotype probabilities one chromosome at a time
+  for(i in 1:n.chr) {
+
+    if(n.mar[i] < 2) {
+      newmap[[i]] <- cross$geno[[i]]$map
+      next
+    }
+
+    # which type of cross is this?
+    if(type == "f2") {
+      one.map <- TRUE
+      if(chrtype[i] == "A") # autosomal
+        cfunc <- "est_map_f2"
+      else                              # X chromsome 
+        cfunc <- "est_map_bc"
+    }
+    else if(type == "bc" || type=="riself" || type=="risib") {
+      one.map <- TRUE
+      cfunc <- "est_map_bc"
+    }
+    else if(type == "4way") {
+      one.map <- FALSE
+      cfunc <- "est_map_4way"
+    }
+    else 
+      stop("est.map not available for cross type ", type, ".")
+
+    # genotype data
+    gen <- cross$geno[[i]]$data
+    gen[is.na(gen)] <- 0
+
+    # remove individuals that have less than two typed markers
+    if(omit.noninformative) {
+      o <- apply(gen,1,function(a) sum(a!=0)>1)
+      gen <- gen[o,,drop=FALSE]
+    }
+    
+    # recombination fractions
+    if(one.map) {
+      # recombination fractions
+      rf <- mf(diff(cross$geno[[i]]$map))
+      if(type=="risib" || type=="riself")
+        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype[i])
+      rf[rf < 1e-14] <- 1e-14
+    }
+    else {
+      # randomize the maps a bit
+      orig <- cross$geno[[i]]$map
+      cross$geno[[i]]$map <- cross$geno[[i]]$map +
+        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
+
+      rf <- mf(diff(cross$geno[[i]]$map[1,]))
+      rf[rf < 1e-14] <- 1e-14
+      rf2 <- mf(diff(cross$geno[[i]]$map[2,]))
+      rf2[rf2 < 1e-14] <- 1e-14
+      if(!sex.sp && chrtype[i]=="X")
+        temp.sex.sp <- TRUE
+      else temp.sex.sp <- sex.sp
+    }
+
+    if(interf.model) 
+      d <- diff(cross$geno[[i]]$map)
+
+    if(verbose) cat(paste("Chr ", names(cross$geno)[i], ":\n",sep="")) 
+
+    # call the C function
+    if(one.map && !interf.model) {
+      z <- .C(cfunc,
+              as.integer(nrow(gen)),         # number of individuals
+              as.integer(n.mar[i]),      # number of markers
+              as.integer(gen),           # genotype data
+              rf=as.double(rf),          # recombination fractions
+              as.double(error.prob),     
+              loglik=as.double(0),       # log likelihood
+              as.integer(maxit),
+              as.double(tol),
+              as.integer(verbose),
+              PACKAGE="qtl")
+
+      if(type=="riself" || type=="risib") 
+        z$rf <- adjust.rf.ri(z$rf, substr(type, 3, nchar(type)),
+                             chrtype[i], expand=FALSE)
+      newmap[[i]] <- cumsum(c(min(cross$geno[[i]]$map),imf(z$rf)))
+      names(newmap[[i]]) <- names(cross$geno[[i]]$map)
+      attr(newmap[[i]],"loglik") <- z$loglik
+    }
+    else if(interf.model) { # Chi-square / Stahl model
+      if(type=="bc" || (type=="f2" && chrtype[i]=="X")) {
+        z <- .C("R_est_map_bci",
+                as.integer(nrow(gen)),         # number of individuals
+                as.integer(n.mar[i]),      # number of markers
+                as.integer(gen),           # genotype data
+                d=as.double(d),          # cM distances
+                as.integer(m),
+                as.double(p),
+                as.double(error.prob),
+                loglik=as.double(0),       # log likelihood
+                as.integer(maxit),
+                as.double(tol),
+                as.integer(verbose),
+                PACKAGE="qtl")
+      } else {
+        z <- .C("R_est_map_f2i",
+                as.integer(nrow(gen)),         # number of individuals
+                as.integer(n.mar[i]),      # number of markers
+                as.integer(gen),           # genotype data
+                d=as.double(d),          # cM distances
+                as.integer(m),
+                as.double(p),
+                as.double(error.prob),
+                loglik=as.double(0),       # log likelihood
+                as.integer(maxit),
+                as.double(tol),
+                as.integer(verbose),
+                PACKAGE="qtl")
+      }
+      newmap[[i]] <- cumsum(c(min(cross$geno[[i]]$map),z$d))
+      names(newmap[[i]]) <- names(cross$geno[[i]]$map)
+      attr(newmap[[i]], "loglik") <- z$loglik
+      attr(newmap[[i]], "m") <- m
+      attr(newmap[[i]], "p") <- p
+    }
+    else {
+      z <- .C(cfunc,
+              as.integer(nrow(gen)),         # number of individuals
+              as.integer(n.mar[i]),      # number of markers
+              as.integer(gen),           # genotype data
+              rf=as.double(rf),          # recombination fractions
+              rf2=as.double(rf2),        # recombination fractions
+              as.double(error.prob),
+              loglik=as.double(0),       # log likelihood
+              as.integer(maxit),
+              as.double(tol),
+              as.integer(temp.sex.sp),
+              as.integer(verbose),
+              PACKAGE="qtl")
+              
+      if(!temp.sex.sp) z$rf2 <- z$rf
+
+      newmap[[i]] <- rbind(cumsum(c(min(orig[1,]),imf(z$rf))),
+                           cumsum(c(min(orig[2,]),imf(z$rf2))))
+      dimnames(newmap[[i]]) <- dimnames(cross$geno[[i]]$map)
+      attr(newmap[[i]],"loglik") <- z$loglik
+    }
+
+  } # end loop over chromosomes
+
+  class(newmap) <- "map"
+  newmap
+}
+
+# end of est.map.R

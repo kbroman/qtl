@@ -1,0 +1,59 @@
+\name{replaceqtl}
+\alias{replaceqtl}
+
+\title{Replace a QTL in a qtl object with a different position.}
+
+\description{
+  This function replaces a QTL or QTLs in a qtl object with a different
+  position.
+}
+
+\usage{
+replaceqtl(cross, qtl, indextodrop, chr, pos, qtl.name)
+}
+
+\arguments{
+ \item{cross}{An object of class \code{cross}. See
+   \code{\link[qtl]{read.cross}} for details.}
+ \item{qtl}{A qtl object, as created by \code{\link[qtl]{makeqtl}}.}
+ \item{indextodrop}{Numeric index indicating the QTL to be replaced.}
+ \item{chr}{Vector (of same length as \code{indextodrop}) indicating the
+   chromosomes for the new QTL.} 
+ \item{pos}{Vector (of same length as \code{indextodrop}) indicating the
+   positions for the new QTL. If there is no marker or pseudomarker at a
+ position, the nearest position is used.} 
+ \item{qtl.name}{Optional vector (of same length as \code{indextodrop})
+   of user-specified names for each new QTL, used in the
+   drop-one-term ANOVA table in \code{\link[qtl]{fitqtl}}.
+   If unspecified, the names will be of the form \code{"Chr1@10"} for a
+   QTL on Chromsome 1 at 10 cM.} 
+}
+
+
+\value{
+  The input \code{qtl} object,
+  but with some QTL replaced by new ones.  See \code{\link[qtl]{makeqtl}} for
+  details on the format. 
+}
+
+\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+
+\examples{
+data(fake.f2)
+
+# take out several QTLs and make QTL object
+qc <- c(1, 6, 13)
+qp <- c(25.8, 33.6, 18.63)
+fake.f2 <- subset(fake.f2, chr=qc)
+\dontshow{fake.f2 <- subset(fake.f2, ind=1:50)}
+fake.f2 <- sim.geno(fake.f2, n.draws=8, step=2, err=0.001)
+qtl <- makeqtl(fake.f2, qc, qp, what="draws")
+
+qtl <- replaceqtl(fake.f2, qtl, 2, 6, 48.1)
+}
+
+\seealso{ \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{fitqtl}},
+  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{addtoqtl}},
+  \code{\link[qtl]{reorderqtl}} }
+
+\keyword{utilities}

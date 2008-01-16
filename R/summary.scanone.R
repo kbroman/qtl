@@ -1,0 +1,776 @@
+######################################################################
+#
+# summary.scanone.R
+#
+# copyright (c) 2001-7, Karl W Broman
+# 
+# last modified Sep, 2007
+# first written Sep, 2001
+# Licensed under the GNU General Public License version 2 (June, 1991)
+# 
+# Part of the R/qtl package
+# Contains: summary.scanone, print.summary.scanone,
+#           max.scanone, c.scanone, subset.scanone,
+#           summary.scanoneperm, print.summary.scanoneperm
+#           c.scanoneperm, rbind.scanoneperm, cbind.scanoneperm
+#           grab.arg.names
+#
+######################################################################
+
+##################################################################
+# summarize scanone results 
+##################################################################
+summary.scanone <-
+function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
+         perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE, ...)
+{
+  if(!any(class(object) == "scanone"))
+    stop("Input should have class \"scanone\".")
+
+  format <- match.arg(format)
+  ncol.object <- ncol(object)-2
+  cn.object <- colnames(object)[-(1:2)]
+
+  if(ncol.object==1 && format != "onepheno") {
+    warning("With just one LOD column, format=\"onepheno\" used.")
+    format <- "onepheno"
+  }
+
+  if(format != "onepheno" && !missing(lodcolumn))
+    warning("lodcolumn ignored except when format=\"onepheno\".")
+
+  if(!missing(perms) && !any(class(perms) == "scanoneperm"))
+    warning("perms need to be in scanoneperm format.")
+
+  # check input
+  if(missing(perms) && !missing(alpha))
+    stop("If alpha is to be used, permutation results must be provided.")
+  if(!missing(threshold) && !missing(alpha)) 
+    stop("Only one of threshold and alpha should be specified.")
+
+  if(format == "onepheno") {
+    if(!missing(lodcolumn) && length(lodcolumn) > 1) {
+      warning("With format=\"onepheno\", lodcolumn should have length 1.")
+      lodcolumn <- lodcolumn[1]
+    }
+    if(lodcolumn < 1 || lodcolumn > ncol.object)
+      stop("lodcolumn should be between 1 and no. LOD columns.")
+  }
+
+  if(!missing(alpha) && length(alpha) > 1) {
+    warning("alpha should have length 1.")
+    alpha <- alpha[1]
+  }
+
+  if(!missing(perms)) {
+    if("xchr" %in% names(attributes(perms))) {
+      ncol.perms <- ncol(perms$A)
+      cn.perms <- colnames(perms$A)
+    }
+    else {
+      ncol.perms <- ncol(perms)
+      cn.perms <- colnames(perms)
+    }
+
+    if(ncol.object != ncol.perms)
+      stop("scanone input has different number of LOD columns as perms input.")
+    if(!all(cn.object == cn.perms))
+      warning("Column names in scanone input do not match those in perms input.")
+  }
+
+  if(format != "onepheno") {
+    if(!missing(threshold)) {
+      if(length(threshold)==1) 
+        threshold <- rep(threshold, ncol.object)
+      else if(length(threshold) != ncol.object)
+        stop("threshold should have length 1 or match number LOD scores in scanone input.")
+    }
+  }
+    
+  if(missing(perms) && pvalues) {
+    warning("Can show p-values only if perms are provided.")
+    pvalues <- FALSE
+  }
+
+  if(!missing(perms) && "df" %in% names(attributes(object)) &&
+     "df" %in% names(attributes(perms))) {
+    df.o <- attr(object, "df")
+    df.p <- attr(perms, "df")
+    if(length(df.o) != length(df.p) ||
+       any(df.o != df.p))
+      warning("Degrees of freedom in input object and perms do not match.")
+  }
+  # end of check of input
+
+  # chromosome IDs as a character string
+  chr <- as.character(object[,1])
+
+  if(format=="onepheno") {
+    lodcolumn <- lodcolumn+2
+
+    # pull out max on each chromosome
+    wh <- NULL
+    for(i in unique(chr)) {
+      if(any(!is.na(object[chr==i,lodcolumn]))) {
+        mx <- max(object[chr==i,lodcolumn],na.rm=TRUE)
+        wh <- c(wh, which(chr==i & object[,lodcolumn]==mx))
+      }
+    }
+    thechr <- as.character(object[wh,1])
+
+    if(!missing(threshold)) 
+      wh <- wh[object[wh,lodcolumn] > threshold]
+    else if(!missing(alpha)) {
+      thr <- summary(perms, alpha)
+      if("xchr" %in% names(attributes(perms))) {
+        thr <- sapply(thr, function(a,b) a[,b], lodcolumn-2)
+        xchr <- attr(perms, "xchr")
+        xchr <- names(xchr)[xchr]
+        xchr <- thechr %in% xchr
+        wh <- wh[(!xchr & object[wh,lodcolumn] > thr[1]) |
+                 (xchr & object[wh,lodcolumn] > thr[2])]
+      }
+      else {
+        thr <- thr[,lodcolumn-2]
+        wh <- wh[object[wh,lodcolumn] > thr]
+      }
+    }
+
+    result <- object[wh,]
+  } # end of "onepheno" format
+
+  else if(format=="allpheno") {
+    # pull out max on each chromosome
+    wh <- vector("list", ncol.object)
+    for(lodcolumn in 1:ncol.object+2) {
+      for(i in unique(chr)) {
+        if(any(!is.na(object[chr==i,lodcolumn]))) {
+          mx <- max(object[chr==i,lodcolumn],na.rm=TRUE)
+          wh[[lodcolumn-2]] <- c(wh[[lodcolumn-2]], which(chr==i & object[,lodcolumn]==mx))
+        }
+      }
+    }
+
+    if(!missing(threshold)) { # rows with at least one LOD > threshold
+      for(lodcolumn in 1:ncol.object) {
+        temp <- wh[[lodcolumn]]
+        wh[[lodcolumn]] <- temp[object[temp,lodcolumn+2] > threshold[lodcolumn]]
+      }
+    }
+    else if(!missing(alpha)) {
+      thr <- summary(perms, alpha)
+      if("xchr" %in% names(attributes(perms))) {
+        xchr <- attr(perms, "xchr")
+        xchr <- names(xchr)[xchr]
+
+        for(lodcolumn in 1:ncol.object) {
+          temp <- wh[[lodcolumn]]
+          thechr <- as.character(object[temp,1])
+          xchr <- thechr %in% xchr
+          wh[[lodcolumn]] <- temp[(!xchr & object[temp,lodcolumn+2] > thr$A[lodcolumn]) |
+                                  (xchr & object[temp,lodcolumn+2] > thr$X[lodcolumn])]
+        }
+      }
+      else {
+        for(lodcolumn in 1:ncol.object) {
+          temp <- wh[[lodcolumn]]
+          wh[[lodcolumn]] <- temp[object[temp,lodcolumn+2] > thr[lodcolumn]]
+        }
+      }
+    }
+
+    wh <- sort(unique(unlist(wh)))
+    result <- object[wh,]
+  }  # end of format=="allpheno"
+
+  else { # format=="allpeaks"
+    # pull out max on each chromosome
+    wh <- vector("list", ncol.object)
+
+    for(lodcolumn in (1:ncol.object)+2) {
+      for(i in unique(chr)) {
+        if(any(!is.na(object[chr==i,lodcolumn]))) {
+          mx <- max(object[chr==i,lodcolumn],na.rm=TRUE)
+          temp <- which(chr==i & object[,lodcolumn]==mx)
+          if(length(temp)>1) temp <- sample(temp, 1)
+          wh[[lodcolumn-2]] <- c(wh[[lodcolumn-2]], temp)
+        }
+        else 
+          wh[[lodcolumn-2]] <- c(wh, NA)
+      }
+    }
+
+    pos <- sapply(wh, function(a,b) b[a], object[,2])
+
+    lod <- pos
+
+    for(i in 1:ncol(pos))
+      lod[,i] <- object[wh[[i]],i+2]
+    thechr <- as.character(unique(object[,1]))
+
+    if(!missing(threshold)) { # rows with at least one LOD > threshold
+      keep <- NULL
+      for(i in seq(along=thechr)) 
+        if(any(lod[i,] > threshold)) keep <- c(keep, i)
+    }
+    else if(!missing(alpha)) {
+      keep <- NULL
+      thr <- summary(perms, alpha)
+      if("xchr" %in% names(attributes(perms))) {
+        xchr <- attr(perms, "xchr")
+        xchr <- names(xchr)[xchr]
+        xchr <- thechr %in% xchr
+
+        for(i in seq(along=thechr)) {
+          if((xchr[i] && any(lod[i,] > thr$X)) ||
+             (!xchr[i] && any(lod[i,] > thr$A)))
+            keep <- c(keep, i)
+        }
+      }
+      else {
+        for(i in seq(along=thechr)) {
+          if(any(lod[i,] > thr))
+            keep <- c(keep, i)
+        }
+      }
+    }
+    else keep <- seq(along=thechr)
+
+    pos <- pos[keep,,drop=FALSE]
+    lod <- lod[keep,,drop=FALSE]
+    thechr <- thechr[keep]
+    result <- as.data.frame(matrix(ncol=ncol.object*2+1,nrow=length(keep)))
+    names(result)[1] <- "chr"
+    names(result)[(1:ncol.object)*2] <- "pos"
+    names(result)[(1:ncol.object)*2+1] <- names(object)[-(1:2)]
+    result[,1] <- thechr
+    result[,(1:ncol.object)*2] <- pos
+    result[,(1:ncol.object)*2+1] <- lod
+  }    
+
+  if(pvalues && nrow(result) > 0) { # get p-values and add to the results
+    rn <- rownames(result)
+
+    if("xchr" %in% names(attributes(perms))) {
+      xchr <- attr(perms, "xchr")
+      xchr <- names(xchr)[xchr]
+      xchr <- as.character(result[,1]) %in% xchr
+      L <- attr(perms, "L")
+      Lt <- sum(L)
+      
+      pval <- vector("list", ncol.object)
+      for(i in 1:ncol.object) {
+        if(format=="allpeaks") thecol <- i*2+1
+        else thecol <- i+2
+        
+        pval[[i]] <- rep(0, length(xchr))
+        if(any(xchr))
+          pval[[i]][xchr] <- sapply(result[xchr,thecol], function(a, b, rat)
+                                    1-mean(b < a)^rat, perms$X[,i], Lt/L[2])
+        if(any(!xchr))
+          pval[[i]][!xchr] <- sapply(result[!xchr,thecol], function(a, b, rat)
+                                     1-mean(b < a)^rat, perms$A[,i], Lt/L[1])
+      }
+    }
+    else {
+      pval <- vector("list", ncol.object)
+      for(i in 1:ncol.object) {
+        if(format=="allpeaks") thecol <- i*2+1
+        else thecol <- i+2
+        
+        pval[[i]] <- sapply(result[,thecol], function(a, b) mean(b >= a), perms[,i])
+      }
+    }
+    
+    if(format == "allpeaks") {
+      temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*3+1))
+    
+      names(temp)[1] <- names(result)[1]
+      temp[,1] <- result[,1]
+
+      for(i in 1:ncol.object) {
+        names(temp)[i*3+(-1:1)] <- c(names(result)[i*2+(0:1)], "pval")
+        temp[,i*3-1:0] <- result[,i*2+(0:1)]
+        temp[,i*3+1] <- pval[[i]]
+      }
+    }
+    else {
+      temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*2+2))
+    
+      names(temp)[1:2] <- names(result)[1:2]
+      temp[,1:2] <- result[,1:2]
+      for(i in 1:ncol.object) {
+        names(temp)[i*2+1:2] <- c(names(result)[i+2], "pval")
+        temp[,i*2+1] <- result[,i+2]
+        temp[,i*2+2] <- pval[[i]]
+      }
+    }
+    result <- temp
+    rownames(result) <- rn
+  }
+  
+  if(df && "df" %in% names(attributes(object)))
+    attr(result, "df") <- attr(object, "df")
+  if(!df) attr(result, "df") <- NULL
+
+  if(format=="allpeaks") rownames(result) <- as.character(result$chr)
+
+  class(result) <- c("summary.scanone", "data.frame")
+  result
+}
+
+# print output of summary.scanone
+print.summary.scanone <-
+function(x, ...)
+{
+  if(nrow(x) == 0) {
+    cat("    There were no LOD peaks above the threshold.\n")
+    return(invisible(NULL))
+  }
+
+  if("df" %in% names(attributes(x))) {
+    df <- attr(x, "df")
+    cat("Degrees of freedom: ")
+    if(is.matrix(df)) { # for 2-part model
+      cat("\n")
+      rownames(df) <- paste("   ", rownames(df), ": ", sep="")
+      print(df)
+    }
+    else {
+      cat(paste(names(df), ":", df, sep="", collapse="  "), "\n")
+    }
+    cat("\n")
+  }
+  
+  print.data.frame(x,digits=3)
+}
+
+# pull out maximum LOD peak, genome-wide
+max.scanone <-
+function(object, chr, lodcolumn=1, df=FALSE, na.rm=TRUE, ...)
+{
+  if(!any(class(object) == "scanone"))
+    stop("Input must have class \"scanone\".")
+
+  if("df" %in% names(attributes(object)))
+    thedf <- attr(object, "df")
+  else thedf <- NULL
+
+  if(lodcolumn < 1 || lodcolumn+2 > ncol(object))
+    stop("Argument lodcolumn misspecified.")
+
+  if(missing(chr)) {
+    maxlod <- max(object[,lodcolumn+2],na.rm=TRUE)
+    wh <- which(!is.na(object[,lodcolumn+2]) & object[,lodcolumn+2]==maxlod)
+    if(length(wh) > 1) wh <- sample(wh, 1)
+    object <- object[wh,]
+
+    object[,1] <- factor(as.character(unique(object[,1])))
+
+    attr(object, "df") <- thedf
+    return(summary.scanone(object, threshold=0, lodcolumn=lodcolumn, df=df))
+  }
+  else {
+    res <- NULL
+    for(i in seq(along=chr)) {
+      temp <- object[object[,1]==chr[i],]
+      maxlod <- max(temp[,lodcolumn+2],na.rm=TRUE)
+      wh <- which(!is.na(temp[,lodcolumn+2]) & temp[,lodcolumn+2]==maxlod)
+      if(length(wh) > 1) wh <- sample(wh, 1)
+      temp <- temp[wh,]
+      res <- rbind(res,temp)
+    }
+
+    res[,1] <- factor(as.character(unique(res[,1])))
+    attr(res, "df") <- thedf
+    return(summary.scanone(res,threshold=0,lodcolumn=lodcolumn, df=df))
+  }
+}
+
+######################################################################
+# subset.scanone
+######################################################################
+subset.scanone <-
+function(x, chr, lodcolumn, ...)
+{
+  if(!any(class(x) == "scanone"))
+    stop("Input should have class \"scanone\".")
+
+  if(missing(chr) && missing(lodcolumn))
+    stop("You must specify either chr or lodcolumn.")
+
+  if("df" %in% names(attributes(x)))
+    df <- attr(x, "df")
+  else df <- NULL
+
+  y <- x
+
+  if(!missing(chr)) 
+    x <- x[x[,1] %in% chr,]
+
+  if(!missing(lodcolumn)) {
+    if(any(lodcolumn>0) && any(lodcolumn<0))
+      stop("lodcolumn values can't be both >0 and <0.")
+    if(any(lodcolumn<0) || is.logical(lodcolumn))
+      lodcolumn <- (1:(ncol(x)-2))[lodcolumn]
+    if(length(lodcolumn)==0)
+      stop("You must retain at least one LOD column.")
+    if(any(lodcolumn < 1 || lodcolumn > ncol(x)-2))
+      stop("lodcolumn values must be >=1 and <=",ncol(x)-2)
+    x <- x[,c(1,2,lodcolumn+2)]
+  }
+
+  class(x) <- class(y)
+  nam <- names(attributes(y))
+  if("method" %in% nam)
+    attr(x, "method") <- attr(y,"method")
+  if("type" %in% nam)
+    attr(x, "type") <- attr(y,"type")
+  if("model" %in% nam)
+    attr(x, "model") <- attr(y,"model")
+
+  attr(x, "df") <- df
+  x
+}
+
+######################################################################
+# c.scanone
+#
+# Combine the results of multiple runs of scanone into single object
+# (pasting the columns together).
+######################################################################
+c.scanone <-
+function(..., labels)
+{
+  dots <- list(...)
+  if(length(dots)==1) return(dots[[1]])
+  for(i in seq(along=dots)) {
+    if(!any(class(dots[[i]]) == "scanone"))
+      stop("Input should have class \"scanone\".")
+  }
+
+  df <- lapply(dots, attr, "df")
+  flag <- 0
+  for(i in 2:length(df)) {
+    if(length(df[[i]]) != length(df[[1]]) ||
+       any(df[[i]] != df[[1]]))
+      flag <- 1
+  }
+  if(flag) warning("Mismatch in degrees of freedom; may cause problems.")
+
+  if(!missing(labels)) {
+    if(length(labels)==1)
+      labels <- rep(labels, length(dots))
+    if(length(labels) != length(dots))
+      stop("labels needs to be the same length as the number of objects input.")
+  }
+  else {
+    labels <- grab.arg.names(...)
+  }
+
+  nr <- sapply(dots, nrow)
+  if(length(unique(nr)) != 1)
+    stop("The input must all have the same number of rows.")
+
+  chr <- lapply(dots, function(a) a$chr)
+  pos <- lapply(dots, function(a) a$pos)
+  for(i in 2:length(dots)) {
+    if(any(chr[[1]] != chr[[i]]) || any(pos[[1]] != pos[[i]])) {
+      cat("The input must conform exactly (same chr and positions\n")
+      stop("(That is, calc.genoprob and/or sim.geno must have used the same step and off.end)\n")
+    }
+  }
+  cl <- class(dots[[1]])
+
+  for(i in 1:length(dots)) {
+    colnames(dots[[i]])[-(1:2)] <- paste(colnames(dots[[i]])[-(1:2)], labels[i], sep=".")
+    dots[[i]] <- as.data.frame(dots[[i]])
+  }
+
+  result <- dots[[1]]
+
+  for(i in 2:length(dots)) 
+    result <- cbind(result, dots[[i]][,-(1:2),drop=FALSE])
+
+  class(result) <- cl
+  result
+}
+
+grab.arg.names <-
+function(...)
+{
+  # pull out the names from the input
+  temp <- deparse(substitute(c(...)))
+  temp <- unlist(strsplit(temp, ","))
+  for(i in seq(along=temp))
+    temp[i] <-  paste(unlist(strsplit(temp[i]," ")),collapse="")
+  temp[1] <- substr(temp[1], 3, nchar(temp[1]))
+  temp[length(temp)] <- substr(temp[length(temp)], 1, nchar(temp[length(temp)])-1)
+
+  temp
+}
+
+
+######################################################################
+# summary.scanoneperm
+#
+# Give genome-wide LOD thresholds on the basis of the results of
+# scanone permutation test (from scanone with n.perm > 0)
+######################################################################
+summary.scanoneperm <-
+function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
+{
+  if(!any(class(object) == "scanoneperm"))
+    stop("Input should have class \"scanoneperm\".")
+
+  if(any(alpha < 0 | alpha > 1))
+    stop("alpha should be between 0 and 1.")
+
+  if("xchr" %in% names(attributes(object))) { # X-chromosome-specific results
+    L <- attr(object, "L")
+    alphaA <- 1 - (1-alpha)^(L[1]/sum(L))
+    alphaX <- 1 - (1-alpha)^(L[2]/sum(L))
+    
+    if(!is.matrix(object$A)) object$A <- as.matrix(object$A)
+    quA <- apply(object$A, 2, quantile, 1-alphaA, na.rm=TRUE)
+    if(!is.matrix(quA)) {
+      nam <- names(quA)
+      quA <- matrix(quA, nrow=length(alpha))
+      dimnames(quA) <- list(paste(100*alpha,"%", sep=""), nam)
+    }
+    else rownames(quA) <- paste(100*alpha, "%", sep="")
+    
+    if(!is.matrix(object$X)) object$X <- as.matrix(object$X)
+    quX <- apply(object$X, 2, quantile, 1-alphaX, na.rm=TRUE)
+    if(!is.matrix(quX)) {
+      nam <- names(quX)
+      quX <- matrix(quX, nrow=length(alpha))
+      dimnames(quX) <- list(paste(100*alpha,"%", sep=""), nam)
+    }
+    else rownames(quX) <- paste(100*alpha, "%", sep="")
+
+    quant <- list("A"=quA, "X"=quX)
+
+    if(df && "df" %in% names(attributes(object)))
+      attr(quant,"df") <- attr(object, "df")
+
+    attr(quant, "n.perm") <- c("A"=nrow(object$A), "X"=nrow(object$X))
+    class(quant) <- "summary.scanoneperm"
+  }
+  else {
+    if(!is.matrix(object)) object <- as.matrix(object)
+    quant <- apply(object, 2, quantile, 1-alpha, na.rm=TRUE)
+    if(!is.matrix(quant)) {
+      nam <- names(quant)
+      quant <- matrix(quant, nrow=length(alpha))
+      dimnames(quant) <- list(paste(100*alpha,"%", sep=""), nam)
+    }
+    else rownames(quant) <- paste(100*alpha, "%", sep="")
+
+    if(df && "df" %in% names(attributes(object)))
+      attr(quant,"df") <- attr(object, "df")
+
+    attr(quant, "n.perm") <- nrow(object)
+    class(quant) <- "summary.scanoneperm"
+  }
+  quant
+}
+
+print.summary.scanoneperm <-
+function(x, ...)
+{
+  if("df" %in% names(attributes(x))) {
+    df <- attr(x, "df")
+    cat("Degrees of freedom: ")
+    if(is.matrix(df)) { # for 2-part model
+      cat("\n")
+      rownames(df) <- paste("   ", rownames(df), ": ", sep="")
+      print(df)
+    }
+    else {
+      cat(paste(names(df), ":", df, sep="", collapse="  "), "\n")
+    }
+    cat("\n")
+  }
+
+  n.perm <- attr(x, "n.perm")
+  if(length(n.perm)==2) {
+    cat("Autosome LOD thresholds (", n.perm[1], " permutations)\n", sep="")
+    x$A <- x$A[1:nrow(x$A),,drop=FALSE]
+    print(x$A, digits=3)
+
+    cat("\nX chromosome LOD thresholds (", n.perm[2], " permutations)\n", sep="")
+    x$X <- x$X[1:nrow(x$X),,drop=FALSE]
+    print(x$X, digits=3)
+  }
+  else {
+    cat("LOD thresholds (", n.perm, " permutations)\n", sep="")
+    x <- x[1:nrow(x),,drop=FALSE]
+    print(x, digits=3)
+  }
+}
+
+######################################################################
+# combine scanoneperm results ... paste the rows together
+######################################################################
+rbind.scanoneperm <- c.scanoneperm <-
+function(...)
+{
+  dots <- list(...)
+  if(length(dots)==1) return(dots[[1]])
+  for(i in seq(along=dots)) {
+    if(!any(class(dots[[i]]) == "scanoneperm"))
+      stop("Input should have class \"scanoneperm\".")
+  }
+
+  df <- lapply(dots, attr, "df")
+  flag <- 0
+  for(i in 2:length(df)) {
+    if(length(df[[i]]) != length(df[[1]]) ||
+       any(df[[i]] != df[[1]]))
+      flag <- 1
+  }
+  if(flag) warning("Mismatch in degrees of freedom; may cause problems.")
+
+  if("xchr" %in% names(attributes(dots[[1]]))) {
+    xchr <- lapply(dots, attr, "xchr")
+    L <- lapply(dots, attr, "L")
+    for(i in 2:length(dots)) {
+      if(length(xchr[[1]]) != length(xchr[[i]]) ||
+         any(xchr[[1]] != xchr[[i]]))
+        stop("xchr attributes in the input must be consistent.")
+      if(length(L[[1]]) != length(L[[i]]) ||
+         any(L[[1]] != L[[i]]))
+        stop("L attributes in the input must be consistent.")
+    }
+    for(i in 1:length(dots)) dots[[i]] <- unclass(dots[[i]])
+
+    ncA <- sapply(dots, function(a) ncol(a$A))
+    ncX <- sapply(dots, function(a) ncol(a$X))
+    if(length(unique(ncA)) != 1 || length(unique(ncX)) != 1)
+      stop("The input must all have the same number of columns.")
+    result <- dots[[1]]
+    for(i in 2:length(dots)) {
+      result$A <- rbind(result$A, dots[[i]]$A)
+      result$X <- rbind(result$X, dots[[i]]$X)
+    }
+    class(result) <- "scanoneperm"
+    attr(result, "xchr") <- xchr[[1]]
+    attr(result, "L") <- L[[1]]
+  }
+  else { 
+    nc <- sapply(dots, ncol)
+    if(length(unique(nc)) != 1)
+      stop("The input must all have the same number of columns.")
+    for(i in 1:length(dots)) dots[[i]] <- unclass(dots[[i]])
+    result <- dots[[1]]
+    for(i in 2:length(dots))
+      result <- rbind(result, dots[[i]])
+    class(result) <- "scanoneperm"
+  }
+  result
+}
+
+######################################################################
+# combine scanoneperm results ... paste the columns together
+######################################################################
+cbind.scanoneperm <- 
+function(..., labels)
+{
+  dots <- list(...)
+  if(length(dots)==1) return(dots[[1]])
+
+  for(i in seq(along=dots)) {
+    if(!any(class(dots[[i]]) == "scanoneperm"))
+      stop("Input should have class \"scanoneperm\".")
+  }
+
+  df <- lapply(dots, attr, "df")
+  flag <- 0
+  for(i in 2:length(df)) {
+    if(length(df[[i]]) != length(df[[1]]) ||
+       any(df[[i]] != df[[1]]))
+      flag <- 1
+  }
+  if(flag) warning("Mismatch in degrees of freedom; may cause problems.")
+
+  if(!missing(labels)) {
+    if(length(labels)==1)
+      labels <- rep(labels, length(dots))
+    if(length(labels) != length(dots))
+      stop("labels needs to be the same length as the number of objects input.")
+  }
+  else {
+    labels <- grab.arg.names(...)
+  }
+
+
+  if("xchr" %in% names(attributes(dots[[1]]))) {
+    xchr <- lapply(dots, attr, "xchr")
+    L <- lapply(dots, attr, "L")
+    for(i in 2:length(dots)) {
+      if(length(xchr[[1]]) != length(xchr[[i]]) ||
+         any(xchr[[1]] != xchr[[i]]))
+        stop("xchr attributes in the input must be consistent.")
+      if(length(L[[1]]) != length(L[[i]]) ||
+         any(L[[1]] != L[[i]]))
+        stop("L attributes in the input must be consistent.")
+    }
+    for(i in 1:length(dots)) dots[[i]] <- unclass(dots[[i]])
+
+    nr <- sapply(dots, function(a) nrow(a$A))
+    mnr <- max(nr)
+    if(any(nr < mnr)) { # pad with NAs
+      for(i in which(nr < mnr))
+        dots[[i]]$A <- rbind(dots[[i]]$A, matrix(NA, ncol=ncol(dots[[i]]$A),
+                                             nrow=mnr-nr[i]))
+    }
+
+    nr <- sapply(dots, function(a) nrow(a$X))
+    mnr <- max(nr)
+    if(any(nr < mnr)) { # pad with NAs
+      for(i in which(nr < mnr))
+        dots[[i]]$X <- rbind(dots[[i]]$X, matrix(NA, ncol=ncol(dots[[i]]$X),
+                                             nrow=mnr-nr[i]))
+    }
+
+    colnames(dots[[1]]$A) <- paste(colnames(dots[[1]]$A),labels[1],sep=".")
+    colnames(dots[[1]]$X) <- paste(colnames(dots[[1]]$X),labels[1],sep=".")
+    result <- dots[[1]]
+    for(i in 2:length(dots)) {
+      colnames(dots[[i]]$A) <- paste(colnames(dots[[i]]$A),labels[i],sep=".")
+      colnames(dots[[i]]$X) <- paste(colnames(dots[[i]]$X),labels[i],sep=".")
+      result$A <- cbind(result$A, dots[[i]]$A)
+      result$X <- cbind(result$X, dots[[i]]$X)
+    }
+    class(result) <- "scanoneperm"
+    attr(result, "xchr") <- xchr[[1]]
+    attr(result, "L") <- L[[1]]
+  }
+  else { 
+    for(i in 1:length(dots)) dots[[i]] <- unclass(dots[[i]])
+
+    nr <- sapply(dots, nrow)
+    mnr <- max(nr)
+    if(any(nr < mnr)) { # pad with NAs
+      for(i in which(nr < mnr))
+        dots[[i]] <- rbind(dots[[i]], matrix(NA, ncol=ncol(dots[[i]]),
+                                             nrow=mnr-nr[i]))
+    }
+
+    colnames(dots[[1]]) <- paste(colnames(dots[[1]]),labels[1],sep=".")
+    result <- dots[[1]]
+    for(i in 2:length(dots)) {
+      colnames(dots[[i]]) <- paste(colnames(dots[[i]]), labels[i], sep=".")
+      result <- cbind(result, dots[[i]])
+    }
+    class(result) <- "scanoneperm"
+  }
+  result
+}
+
+
+  
+
+
+# end of summary.scanone.R

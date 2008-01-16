@@ -1,0 +1,95 @@
+\name{addint}
+\alias{addint}
+
+\title{Add pairwise interaction to a multiple-QTL model}
+
+\description{
+  Try adding all possible pairwise interactions, one at a time, to a
+  multiple QTL model.
+}
+
+\usage{
+addint(pheno, qtl, covar=NULL, formula, method=c("imp","hk"),
+       qtl.only=FALSE, verbose=TRUE)
+}
+\arguments{
+ \item{pheno}{Phenotype data (a numeric vector).}
+ \item{qtl}{An object of class \code{qtl}, as output from
+   \code{\link[qtl]{makeqtl}}.} 
+ \item{covar}{A data.frame of covariates.  These must be strictly
+   numeric.} 
+ \item{formula}{An object of class \code{\link[stats]{formula}}
+   indicating the model to be fitted.  QTLs are referred to as
+   \code{Q1}, \code{Q2}, etc.  Covariates are referred to by their names
+   in the data frame \code{covar}.} 
+ \item{method}{Indicates whether to use multiple imputation or
+   Haley-Knott regression.}
+ \item{qtl.only}{If TRUE, only test QTL:QTL interactions (and not
+   interactions with covariates).}
+ \item{verbose}{If TRUE, will print a message if there are no
+   interactions to test.}
+}
+
+\details{
+  The formula is used to specified the model to be fit. In the
+  formula, use \code{Q1}, \code{Q2}, etc., or \code{q1},
+  \code{q2}, etc., to represent the QTLs, and the column names in the
+  covariate data frame to represent the covariates.
+    
+  We enforce a hierarchical structure on the model formula: if a QTL or
+  covariate is in involved in an interaction, its main effect must also
+  be included.   
+
+}
+
+\section{Value}{
+  An object of class \code{addint}, with results as in the
+  drop-one-term analysis from \code{\link[qtl]{fitqtl}}.  This is a data
+  frame (given class \code{"addint"}, with the following columns: 
+  degrees of freedom (df), Type III sum of squares (Type III
+  SS), LOD score(LOD), percentage of variance explained (\%var), F
+  statistics (F value),  and P values for chi square (Pvalue(chi2))
+  and F distribution (Pvalue(F)).
+
+  Note that the degree of freedom, Type III sum of squares, the LOD
+  score and the percentage of variance explained are the values
+  comparing the full to the sub-model with the term dropped. Also note
+  that for imputation method, the percentage of variance explained, the
+  the F values and the P values are approximations calculated from the
+  LOD score.
+
+  Pairwise interactions already included in the input \code{formula} are
+  not tested. 
+}
+
+\references{
+  Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping
+  quantitative trait loci in line crosses using flanking markers.
+  \emph{Heredity} \bold{69}, 315--324.
+
+  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
+  trait mapping.  \emph{Genetics} \bold{159}, 371--387.
+}
+
+\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+
+\examples{
+data(fake.f2)
+
+# take out several QTLs and make QTL object
+qc <- c(1, 8, 13)
+qp <- c(26, 56, 28)
+fake.f2 <- subset(fake.f2, chr=qc)
+\dontshow{fake.f2 <- subset(fake.f2, ind=1:50)}
+fake.f2 <- sim.geno(fake.f2, n.draws=8, step=2, err=0.001)
+qtl <- makeqtl(fake.f2, qc, qp)
+
+# try all possible pairwise interactions, one at a time
+addint(fake.f2$pheno[,1], qtl, formula=y~Q1+Q2+Q3)
+}
+
+\seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
+  \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{refineqtl}},
+  \code{\link[qtl]{addqtl}}, \code{\link[qtl]{addpair}} }  
+
+\keyword{models}

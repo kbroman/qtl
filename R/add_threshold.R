@@ -1,0 +1,83 @@
+######################################################################
+#
+# add_threshold.R
+#
+# copyright (c) 2006-7, Karl W Broman, Johns Hopkins University
+#
+# last modified Oct, 2007
+# first written Dec, 2006
+# Licensed under the GNU General Public License version 2 (June, 1991)
+# 
+# Contains: add.threshold
+# 
+######################################################################
+
+######################################################################
+# add.threshold: function to add threshold lines to a plot
+# created by plot.scanone()
+#
+# out: scanone output used to create the plot
+# chr: chromosomes that were plotted
+#
+# perms: scanone permutation results
+# alpha: significance level (a single number)
+#
+# gap:   the gap between chromosomes, as specified in the call to plot.scanone
+#
+# ...:   extra arguments passed to abline or segments to control line types/widths/colors
+#        (e.g., specify lty=2 to give dashed lines)
+######################################################################
+
+add.threshold <-
+function(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, ...)
+{
+  if(missing(out)) 
+    stop("You must provide scanone output, so we can get chromosome lengths.")
+  if(!any(class(out) == "scanone"))
+    stop("out should have class \"scanone\".")
+  if(!missing(chr))
+    out <- subset(out, chr=chr)
+
+  if(missing(perms))
+    stop("You must specify permutation results, to get the thresholds")
+  if(length(alpha) > 1 || alpha<0 || alpha>1)
+    stop("alpha should have length 1 and be between and 1.")
+    
+  thr <- summary(perms, alpha=alpha)
+
+  if(length(thr) == 1) 
+    abline(h=thr[lodcolumn], ...)
+  else {
+    a <- thr$A[lodcolumn]
+    x <- thr$X[lodcolumn]
+    noX <- FALSE
+    xchr <- attr(perms, "xchr")
+
+    L <- tapply(out[,2], out[,1], function(a) diff(range(a)))
+    L <- L[!is.na(L)]
+    xchr <- xchr[match(names(L), names(xchr))]
+
+    if(all(xchr))
+      abline(h=x, ...)
+    else if(all(!xchr))
+      abline(h=a, ...)
+    else {
+
+      start <- c(0,cumsum(L+gap))
+      end <- start+ c(L,0)
+      wh <- which(!xchr)
+      if(length(wh)==1 || all(diff(wh)==1))
+        segments(start[min(wh)], a, end[max(wh)], a, ...)
+      else
+        segments(start[wh], a, start[wh+1], a, ...)
+      wh <- which(xchr)
+      if(length(wh)==1 || all(diff(wh)==1))
+        segments(start[min(wh)], x, end[max(wh)], x, ...)
+      else
+        segments(start[wh], x, start[wh+1], x, ...)
+    }
+  }
+  invisible()
+}
+
+# end of add_threshold.R

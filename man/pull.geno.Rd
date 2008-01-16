@@ -1,0 +1,40 @@
+\name{pull.geno}
+\alias{pull.geno}
+
+\title{Pull out the genotype data from a cross}
+
+\description{
+  Pull out the genotype data from a cross object, as a single big matrix.
+}
+
+\usage{pull.geno(cross, chr)}
+
+\arguments{
+ \item{cross}{An object of class \code{cross}.  See
+   \code{\link[qtl]{read.cross}} for details.}
+ \item{chr}{An optional vector specifying which chromosomes to keep or
+   discard. This may be a logical vector, a numeric vector, or a vector
+   of character strings.} 
+}
+
+\value{
+  A matrix of size n.ind x tot.mar.  The raw genotype data in the input
+  cross object, with the chromosomes pasted together.
+}
+
+\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+
+\examples{
+data(listeria)
+dat <- pull.geno(listeria)
+
+# image of the genotype data
+image(1:ncol(dat),1:nrow(dat),t(dat),ylab="Individuals",xlab="Markers",
+      col=c("red","yellow","blue","green","violet"))
+abline(v=cumsum(c(0,nmar(listeria)))+0.5)
+abline(h=nrow(dat)+0.5)
+}
+
+\seealso{ \code{\link[qtl]{pull.pheno}}, \code{\link[qtl]{pull.map}} }
+
+\keyword{utilities}

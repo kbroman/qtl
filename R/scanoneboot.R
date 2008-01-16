@@ -1,0 +1,101 @@
+#####################################################################
+#
+# scanoneboot.R
+#
+# copyright (c) 2007, Karl W Broman
+# 
+# last modified Apr, 2007
+# first written Apr, 2007
+# Licensed under the GNU General Public License version 2 (June, 1991)
+# 
+# Part of the R/qtl package
+# Contains: scanoneboot, summary.scanoneboot, print.scanoneboot
+#
+######################################################################
+
+######################################################################
+# scanoneboot: function to get bootstrap-based confidence interval for
+#              QTL location
+######################################################################
+scanoneboot <-
+function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
+         method=c("em","imp","hk","ehk","mr","mr-imp","mr-argmax"),
+         addcovar=NULL, intcovar=NULL, weights=NULL,
+         use=c("all.obs", "complete.obs"), upper=FALSE,
+         ties.random=FALSE, start=NULL, maxit=4000, tol=1e-4,
+         n.boot=1000, verbose=FALSE)
+{
+  if(!missing(chr)) cross <- subset(cross, chr)
+  if(nchr(cross) != 1) { # scan just one chromosome
+    warning("Considering just the first chromosome (", names(cross$geno)[1], ").")
+    cross <- subset(cross, 1)
+  }
+  
+  # do scan with actual data
+  out <- scanone(cross, pheno.col=pheno.col, model=model, method=method,
+                 addcovar=addcovar, intcovar=intcovar, weights=weights,
+                 use=use, upper=upper, ties.random=ties.random, start=start,
+                 maxit=maxit, tol=tol)
+  
+  maxlod <- max(out[,3],na.rm=TRUE)
+  w <- which(!is.na(out[,3]) & out[,3] == maxlod)
+
+  results <- rep(NA, n.boot)
+  n.ind <- nind(cross)
+  n.prnt <- floor(n.boot/20)
+
+  for(i in 1:n.boot) {
+    temp <- subset(cross, ind=sample(n.ind, repl=TRUE))
+    out <- scanone(temp, pheno.col=pheno.col, model=model, method=method,
+                   addcovar=addcovar, intcovar=intcovar, weights=weights,
+                   use=use, upper=upper, ties.random=ties.random, start=start,
+                   maxit=maxit, tol=tol)
+    mx <- max(out[,3],na.rm=TRUE)
+    w <- out[!is.na(out[,3]) & out[,3]==mx,2]
+    if(length(w) > 1) w <- sample(w,1)
+    results[i] <- w
+    
+    if(verbose && ((i-1) %% n.prnt) == 0)
+        cat("replicate", i, "\n")
+  }
+
+  attr(results, "results") <- out
+  class(results) <- "scanoneboot"
+  results
+}
+
+
+# summary function for scanoneboot output
+summary.scanoneboot <-
+function(object, prob=0.95, expandtomarkers=FALSE, ...)
+{
+  lo <- (1-prob)/2
+  results <- attr(object, "results")
+  o <- max(results)
+  qu <- quantile(object, c(lo, 1-lo))
+
+  wh1 <- which(results[,2] <= qu[1])
+  wh1 <- wh1[length(wh1)]
+  wh2 <- which(results[,2] >= qu[2])
+  wh2 <- wh2[1]
+  
+  if(expandtomarkers) {
+    markerpos <- (1:nrow(results))[-grep("^c.+\\.loc-*[0-9]+(\\.[0-9]+)*$", rownames(results))]
+    if(any(markerpos <= wh1))
+      wh1 <- max(markerpos[markerpos <= wh1])
+    if(any(markerpos >= wh2))
+      wh2 <- min(markerpos[markerpos >= wh2])
+  }
+  
+  rbind(results[wh1,], o, results[wh2,])
+}
+
+                     
+# print function for scanoneboot output
+print.scanoneboot <-
+function(x, ...)
+{
+  print(as.numeric(x))
+}
+
+# end of scanoneboot.R

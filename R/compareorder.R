@@ -1,0 +1,66 @@
+######################################################################
+#
+# compareorder.R
+#
+# copyright (c) 2007, Karl W Broman
+#
+# last modified Nov, 2007
+# first written Oct, 2007
+# Licensed under the GNU General Public License version 2 (June, 1991)
+#
+# Part of the R/qtl package
+# Contains: compareorder
+#
+######################################################################
+
+######################################################################
+# Calculate likelihood for a fixed order of markers on a given
+# chromosome versus the current one
+######################################################################
+compareorder <-
+function(cross, chr, order, error.prob=0.0001,
+         map.function=c("haldane","kosambi","c-f","morgan"),
+         maxit=4000, tol=0.0001, sex.sp=TRUE)
+{
+  if(missing(chr)) chr <- 1
+  if(length(chr) > 1) 
+  
+  map.function <- match.arg(map.function)
+  cross <- subset(cross, chr)
+
+  if(length(order) != totmar(cross)) {
+    if(length(order) == totmar(cross)+1)
+      order <- order[-length(order)]
+    else
+      stop("Argument 'order' should have length ", totmar(cross))
+  }
+
+  orig <- est.map(cross, error.prob=error.prob, map.function=map.function,
+                  maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
+
+  cross$geno[[1]]$data <- cross$geno[[1]]$data[,order]
+  
+  new <- est.map(cross, error.prob=error.prob, map.function=map.function,
+                 maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
+
+  result <- matrix(0, ncol=2, nrow=2)
+  dimnames(result) <- list(c("orig","new"), c("LOD", "length"))
+  result[2,1] <- (attr(new[[1]], "loglik") - attr(orig[[1]], "loglik"))/log(10)
+
+  if(is.matrix(orig[[1]])) {
+    result[,2] <- c(diff(range(orig[[1]][1,])),
+                    diff(range(new[[1]][1,])))
+    if(sex.sp) {
+      result <- cbind(result, c(diff(range(orig[[1]][2,])),
+                                diff(range(new[[1]][2,]))))
+      colnames(result)[2:3] <- c("femaleLength","maleLength")
+    }
+  }
+  else 
+  result[,2] <- c(diff(range(orig[[1]])),
+                  diff(range(new[[1]])))
+
+  as.data.frame(result)
+}
+
+# end of compareorder.R
