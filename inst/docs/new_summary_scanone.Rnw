@@ -1,0 +1,223 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Karl W. Broman
+% The new summary.scanone
+%
+% This is an "Sweave" document; see the corresponding PDF.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+
+%\usepackage{times}
+\usepackage{amsmath}
+
+
+% revise margins
+\setlength{\headheight}{0.0in}
+\setlength{\topmargin}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\textheight}{8.5in}
+\setlength{\footskip}{0.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\newcommand{\code}{\texttt}
+\newcommand{\lod}{\text{LOD}}
+
+
+
+\begin{document}
+
+\SweaveOpts{prefix.string=Figs/scantwo}
+\setkeys{Gin}{width=\textwidth} %% <- change width of figures
+% Try to get the R code from running into the margin
+<<echo=FALSE>>=
+options(width=77)
+@ 
+
+
+
+
+\textbf{The new \code{summary.scanone}} \\
+Karl W Broman, 27 Oct 2006
+
+\bigskip
+
+In R/qtl version 1.04, the function \code{summary.scanone}
+has been changed quite substantially.  Also, the
+permutations with \code{scanone} have changed to allow the calculation
+of autosome- and X-chromosome-specific LOD thresholds, and to enable
+stratified permutation tests.
+
+In this document, I describe the revisions and how to use the new
+functions.   We'll first look at the \code{fake.f2} data as an
+example.   
+
+First we need to load the package and the data.
+<<loaddata>>=
+library(qtl)
+data(fake.f2)
+@ 
+
+<<loadresults,echo=FALSE>>=
+load("fakef2_results.RData")
+@ 
+
+I'm going to use \code{scanone} with \code{method="hk"}.  First I run
+\code{calc.genoprob}, and then \code{scanone} as before.
+<<scanoneA,eval=FALSE>>=
+fake.f2 <- calc.genoprob(fake.f2, step=2.5)
+out.f2 <- scanone(fake.f2, method="hk")
+@ 
+
+In \code{summary.scanone}, we can now get an indication of the number
+of degrees of freedom associated with the LOD scores.  We use
+\code{df=TRUE}, as follows.
+<<summaryscanoneA>>=
+summary(out.f2, threshold=3, df=TRUE)
+@ 
+
+There are a couple of improvements in the permutations performed
+by \code{scanone}.  First, we can calculate autosome- and
+X-chromosome-specific LOD thresholds; this is important in this case,
+as the number of degrees of freedom is different for the X
+chromosome.  Separate autosome and X chromosome permutations may be
+performed in \code{scanone} via \code{perm.Xsp=TRUE}.  The
+X-chromosome-specific thresholds requires many more 
+permutation replicates to get a threshold of equivalent precision.
+An increased number of permutations is chosen automatically.
+
+Permutations can take a very long time, and so one
+might want to use a multi-processor computer or cluster and do
+multiple shorter runs in parallel.  And so we have added a function
+\code{c.scanoneperm} for combining such runs together.
+<<scanonepermA,eval=FALSE>>=
+operm1.f2 <- scanone(fake.f2, method="hk", n.perm=500, perm.Xsp=TRUE)
+operm2.f2 <- scanone(fake.f2, method="hk", n.perm=500, perm.Xsp=TRUE)
+operm.f2 <- c(operm1.f2, operm2.f2)
+@ 
+
+Getting the autosome- and X-chromosome-specific thresholds is a bit
+tricky, and so another improvement is the addition of the function
+\code{summary.scanoneperm} for calculating such thresholds.  The
+argument \code{alpha} indicates the significance levels.
+<<summaryscanonepermA>>=
+summary(operm.f2, alpha=c(0.05, 0.20))
+@ 
+
+Further, we may include the permutation results in the call to
+\code{summary.scanone} to automatically calculate thresholds and to
+have genome-scan-adjusted p-values displayed.
+<<summaryscaononeB>>=
+summary(out.f2, perms=operm.f2, alpha=0.05, pvalues=TRUE)
+@ 
+
+Finally, one may prefer to do a stratified permutation test, permuting
+the phenotypes separately within each of the groups defined by sex and
+cross direction.  This may be done in \code{scanone} with the argument
+\code{perm.strata}, which should be a numeric vector whose unique
+values define the separate strata.  
+
+We set of the strata as follows.
+<<thestrata>>=
+sex <- fake.f2$pheno$sex
+pgm <- fake.f2$pheno$pgm
+strata <- sex + 2*pgm
+table(strata)
+@ 
+
+We then perform the permutation test in four pieces, and combine the
+results together, as follows.
+<<scanonepermB,eval=FALSE>>=
+operm1.f2strat <- scanone(fake.f2, method="hk", n.perm=250,
+                         perm.Xsp=TRUE, perm.strata=strata)
+operm2.f2strat <- scanone(fake.f2, method="hk", n.perm=250,
+                         perm.Xsp=TRUE, perm.strata=strata)
+operm3.f2strat <- scanone(fake.f2, method="hk", n.perm=250,
+                         perm.Xsp=TRUE, perm.strata=strata)
+operm4.f2strat <- scanone(fake.f2, method="hk", n.perm=250,
+                         perm.Xsp=TRUE, perm.strata=strata)
+operm.f2strat <- c(operm1.f2strat, operm2.f2strat, operm3.f2strat,
+                   operm4.f2strat)
+@ 
+
+The new thresholds are as follows.
+<<summaryscanonepermB>>=
+summary(operm.f2strat, alpha=c(0.05, 0.20))
+@ 
+
+The big changes to the \code{summary.scanone} function concern the
+case of results for multiple phenotypes.  To illustrate this, we will
+look at the \code{fake.bc} data, which has two phenotypes.  First we
+load the data.
+<<fakebc>>=
+data(fake.bc)
+@ 
+
+<<loaddataB,echo=FALSE>>=
+load("fakebc_results.RData")
+@ 
+
+Now let's run \code{calc.genoprob} and do a genome scan on the two
+phenotypes.  Again, we use \code{method="hk"} for the sake of speed.
+<<scanoneB,eval=FALSE>>=
+fake.bc <- calc.genoprob(fake.bc, step=2.5)
+out.bc <- scanone(fake.bc, pheno.col=1:2, method="hk")
+@ 
+
+The results contain LOD scores for each of the phenotypes.  By
+default, \code{summary.scanone} looks at the first of these, though it
+also shows the LOD score for the second phenotype at the locations of
+the LOD peaks for the first phenotype.
+<<summaryscanoneC>>=
+summary(out.bc, threshold=3)
+@ 
+
+If we use \code{lodcolumn=2}, we get the analogous results, looking at
+the second phenotype.
+<<summaryscanoneD>>=
+summary(out.bc, threshold=3, lodcolumn=2)
+@ 
+
+If we use \code{format="allpheno"}, we get separate rows for the peaks
+of each of the phenotypes.  
+<<summaryscanoneE>>=
+summary(out.bc, threshold=3, format="allpheno")
+@ 
+
+Perhaps the most convenient output is obtained with
+\code{format="allpeaks"}, which gives a single row for each
+chromosome, with the maximum LOD score and its position for each of
+the phenotypes.  A chromosome is displayed if the LOD score for at
+least one of the phenotypes exceeds its threshold.  The
+\code{threshold} argument can be a single threshold, applied to all
+phenotypes, or we can give a vector with separate thresholds for each
+of the LOD score columns.
+<<summaryscanoneF>>=
+summary(out.bc, threshold=c(3,2.5), format="allpeaks")
+@ 
+
+A permutation test may be performed as before.  Since the
+\code{fake.bc} data has only autosomal data, use of
+\code{perm.Xsp=TRUE} would be ignored.
+<<scanonepermC,eval=FALSE>>=
+operm.bc <- scanone(out.bc, pheno.col=1:2, method="hk", n.perm=1000)
+@ 
+
+We can again use \code{summary} to get LOD thresholds
+<<summaryscanonepermC>>=
+summary(operm.bc, alpha=0.05)
+@ 
+
+And again these can be used in \code{summary.scanone} to calculate
+thresholds and get genome-scan-adjusted p-values.
+<<summaryscanoneG>>=
+summary(out.bc, perms=operm.bc, alpha=0.05, format="allpeaks", 
+        pvalues=TRUE)
+@ 
+
+
+\end{document}
+

@@ -1,0 +1,638 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Karl W. Broman
+% The new multiple-qtl mapping functions
+%
+% This is an "Sweave" document; see the corresponding PDF.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+
+\usepackage{times}
+\usepackage{amsmath}
+
+
+% revise margins
+\setlength{\headheight}{0.0in}
+\setlength{\topmargin}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\textheight}{8.5in}
+\setlength{\footskip}{0.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\newcommand{\code}{\texttt}
+\newcommand{\lod}{\text{LOD}}
+
+% make "Figure" within figure captions a small font
+\renewcommand{\figurename}{\small Figure}
+
+
+\begin{document}
+
+\SweaveOpts{prefix.string=Figs/scantwo}
+\setkeys{Gin}{width=5in} %% <- change width of figures
+% Try to get the R code from running into the margin
+<<echo=FALSE>>=
+options(width=87, digits=3, scipen=4)
+@ 
+
+% Change S input/output font size
+\DefineVerbatimEnvironment{Sinput}{Verbatim}
+{fontsize=\footnotesize, baselinestretch=0.75}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}
+{fontsize=\footnotesize, baselinestretch=0.75}
+
+\textbf{\large New functions for exploring multiple-QTL models} \\
+Karl W Broman, 16 January 2008
+
+\bigskip
+
+R/qtl version 1.08 includes a number of new functions to simplify the
+exploration of multiple-QTL models.  
+
+The ``Brief tour of R/qtl'' document contains a brief description of
+these functions (see Example 5 in that document); here, we provide a more thorough
+explanation. 
+
+\bigskip
+\textbf{\large Introduction}
+
+Let us begin with a brief overview of the changes.
+The basic functions remain \code{makeqtl} (for creating a QTL object),
+\code{fitqtl} (for fitting a defined multiple-QTL model) and
+\code{scanqtl} (for multi-dimensional scans with a multiple-QTL
+model). 
+
+Previously, \code{fitqtl} and \code{scanqtl} used multiple imputation
+exclusively.  We have now implemented Haley-Knott regression as well.
+To use Haley-Knott regression, use the argument \code{what="prob"} in
+a call to \code{makeqtl} and then \code{method="hk"} in calls to
+\code{fitqtl} and \code{scanqtl} (and the other functions, to be
+described shortly).
+
+The \code{scanqtl} function, while completely flexible and so suitable
+for most purposes, is rather cumbersome to use.  Our most important
+additions are the functions \code{addqtl}, to scan for a single QTL to
+be added to a multiple-QTL model, and \code{addpair}, to scan for a
+pair of QTL to be added to a multiple-QTL model.  The output of these
+functions is of the forms produced by \code{scanone} and
+\code{scantwo}, respectively, and so one may use the corresponding
+plot and summary functions, making the results easier to deal with.
+For most purposes, these functions will be sufficient and direct calls
+to \code{scanqtl} will no longer be needed.  Thus, we will not discuss
+the use of \code{scanqtl} further here.  
+
+The next important addition is \code{refineqtl}, which uses an
+iterative algorithm to refine the locations of QTL in a multiple-QTL
+model, with the aim of obtaining the maximum likelihood estimates of
+the QTL positions.  If the function is called with 
+\code{keeplodprofile=TRUE}, one may use another new function,
+\code{plotLodProfile}, to plot the LOD profiles for each QTL, in the
+context of the multiple-QTL model, as is commonly used in multiple
+interval mapping.  
+
+The function \code{addint} may be used to test all possible pairwise
+interactions among the QTL in a multiple-QTL model.
+
+Finally, we added several functions for manipulating a QTL object
+(created by \code{makeqtl}).  
+The function \code{addtoqtl} is used to add additional QTL to an
+object, \code{dropfromqtl} is used to remove QTL from an object, 
+\code{replaceqtl} is used to move a QTL to a new position, and
+\code{reorderqtl} is used to change the order the loci within the QTL
+object. 
+
+\bigskip
+\textbf{\large \code{makeqtl} and \code{fitqtl}}
+
+We'll look at the \code{hyper} data as an example.  These data are
+from Sugiyama et al. (Genomics 71:70--71, 2001), and concern blood
+pressure in 250 male backcross mice.  We'll use
+multiple imputation (the default), as Haley-Knott regression performs
+poorly in the case of selectively genotyping, which was used for the
+\code{hyper} data.
+
+First we need to load the package and the data.
+<<loaddata,eval=TRUE>>=
+library(qtl)
+data(hyper)
+@ 
+
+We will use the multiple imputation approach, and so we first run
+\code{sim.geno} to perform the imputations.  We'll use 128
+imputations; more is always better, but it slows the work down
+considerably.  
+<<simgeno,eval=FALSE>>=
+hyper <- sim.geno(hyper, step=2, n.draws=128, err=0.001)
+@ 
+<<runsimgeno,echo=FALSE>>=
+file <- "Rcache/simgeno.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+  set.seed(94743379)
+<<simgeno>>
+  save(hyper, file=file)
+}
+@ 
+
+Results of \code{scanone} and \code{scantwo}, which we won't revisit,
+indicated QTL on chromosomes 1, 4, 6  and 15, with an interaction
+between the QTL on chr 6 and 15, and the possibility of a second QTL
+on chr 1.  We will begin by fitting this 4-QTL model.  The function
+\code{makeqtl} is used to create a QTL object; it pulls out the
+imputated genotypes at the selected locations.
+<<makeqtl>>=
+qtl <- makeqtl(hyper, chr=c(1, 4, 6, 15), pos=c(67.3, 30, 60, 17.5))
+@ 
+
+Note that if you type the name of the QTL object, you get a brief
+summary.  
+<<print.qtl>>=
+qtl
+@ 
+
+Also, there is a plot function for displaying the locations of the QTL
+on the genetic map.  See Fig.~\ref{fig:plotqtl}.
+<<plotqtl,eval=FALSE>>=
+plot(qtl)
+@ 
+
+\begin{figure}
+\centering
+<<plotqtlplot,fig=TRUE,echo=FALSE,height=4>>=
+par(mar=c(4.1,4.1,4.1,0.1), cex.axis=0.8, cex.main=1, cex=0.7)
+<<plotqtl>>
+@ 
+\caption{\small Locations of the QTL object \code{qtl} on the genetic map for
+  the \code{hyper} data.\label{fig:plotqtl}}
+\end{figure}
+
+We may now use \code{fitqtl} to fit the model (with QTL in fixed
+positions); \code{fitqtl} requires a column of phenotypes, rather than
+a cross object, and so we use \code{pull.pheno} to pull out the data
+for the first phenotype, blood pressure.  Note that we use
+\code{Q3*Q4} to indicate that QTL 3 and 4 should interact.  We could
+also have written the formula as \verb|y~Q1+Q2+Q3+Q4+Q3:Q4|.  See the
+help file for \code{formula} for more information.
+<<fitqtl1>>=
+phe <- pull.pheno(hyper, 1)
+out.fq <- fitqtl(phe, qtl=qtl, formula=y~Q1+Q2+Q3*Q4)
+summary(out.fq)
+@ 
+
+The initial table indicates the overall fit of the model; the LOD
+score of 21.8 is relative to the null model (with no QTL).  In the
+second table, each locus is dropped from the model, one at a time, and
+a comparison is made between the full model and the model with the
+term omitted.  If a QTL is dropped, any interactions it is involved in
+are also dropped, and so the loci on chr 6 and 15 are associated with
+2 degrees of freedom, as the 6$\times$15 interaction is dropped when
+either of these QTL is dropped.  The results indicate strong evidence
+for all of these loci as well as the interaction.
+
+\bigskip
+\textbf{\large \code{refineqtl} and \code{plotLodProfile}}
+
+Let us explore the use of \code{refineqtl}, which allows us to
+get improved estimates of the locations of the QTL.  We use
+\code{verbose=FALSE} to suppress the display of tracing information.
+<<refineqtl,eval=FALSE>>=
+rqtl <- refineqtl(hyper, qtl=qtl, formula=y~Q1+Q2+Q3*Q4, verbose=FALSE)
+@ 
+<<runrefineqtl,echo=FALSE>>=
+file <- "Rcache/refineqtl.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<refineqtl>>
+  save(rqtl, file=file)
+}
+@ 
+
+The output is a modified QTL object, with loci in new positions. 
+We can type the name of the new QTL object to see the new locations.
+<<printrefineqtl>>=
+rqtl
+@ 
+
+The loci on chr 1 and 4 changed position very slightly.  Let us use
+\code{fitqtl} to assess the improvement in fit; we'll skip the
+drop-one analysis.
+<<fitqtl2>>=
+out.fq2 <- fitqtl(phe, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, dropone=FALSE)
+summary(out.fq2)
+@ 
+
+The LOD score comparing the full model to the null model has increased
+by \Sexpr{round(out.fq2[[1]][1,4] - out.fq[[1]][1,4],1)}, from
+\Sexpr{round(out.fq[[1]][1,4],1)} to \Sexpr{round(out.fq2[[1]][1,4],1)}.  
+
+If \code{refineqtl} is run with the argument
+\code{keeplodprofile=TRUE}, one saves the LOD traces at that last
+iteration, which can then be plotted with \code{plotLodProfile}, as
+follows. See Fig.~\ref{fig:lodprofile}.
+<<lodprofile,eval=FALSE>>=
+rqtl <- refineqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, verbose=FALSE, 
+                  keeplodprofile=TRUE)
+plotLodProfile(rqtl)
+@ 
+
+
+\begin{figure}
+\centering
+<<plotlodprofile,fig=TRUE,echo=FALSE,height=4>>=
+file <- "Rcache/lodprofile.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+  rqtl <- refineqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, verbose=FALSE, 
+                    keeplodprofile=TRUE)
+  save(rqtl, file=file)
+}
+par(mar=c(4.1,4.1,4.1,0.1), cex=0.8)
+plotLodProfile(rqtl)
+@ 
+\caption{\small LOD profiles for a 4-QTL model with the \code{hyper}
+  data.\label{fig:lodprofile}}  
+\end{figure}
+
+The LOD profiles in Fig.~\ref{fig:lodprofile} are similar to the usual
+LOD curves, but instead of comparing a model with a single QTL at a
+particular position to the null model, we compare, at each position
+for a given QTL, the model with the QTL of interest at that particular
+position (and with the positions of all other QTL fixed at their
+maximum likelihood estimates) to the model with the QTL of interest
+omitted (and, again, with the positions of all other QTL fixed at
+their maximum likelihood estimates).  For the loci on chromosomes 6
+and 15, the 6$\times$15 interaction is omitted when either of the two
+loci is omitted.  Note that maximum LOD for each of the LOD profiles
+should be the value observed in the drop-one analysis from
+\code{fitqtl}. 
+
+These profile LOD curves are useful for the assessment of both the
+evidence for the individual QTL and the precision of localization of
+each QTL, but note that they fail to take account of the uncertainty in the
+location of the other QTL in the model.  
+
+\bigskip
+\textbf{\large \code{addint}}
+
+The function \code{addint} is used to test, one at a time, all
+possible pairwise interactions between QTL that are not already
+included in a model.  For our model with loci on chr 1, 4, 6 and 15,
+and with a 6$\times$15 interaction, we will consider each of the 5
+other possible pairwise interactions, and will compare the base model
+(with the four QTL and just the 6$\times$15 interaction) to the model
+with the additional interaction included.
+
+The syntax of the function is similar to that of \code{fitqtl}, taking
+a phenotype, QTL object, and model formula.  The output is a table of
+results similar to that provided by the drop-one analysis of
+\code{fitqtl}. 
+<<addint>>=
+addint(phe, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
+@ 
+
+None of the interactions is particularly interesting.
+
+Note the difference in the results if we use as the formula
+\code{y~Q1+Q2+Q3+Q4} (that is, omitting the 6$\times$15 interaction.
+<<addint2>>=
+addint(phe, qtl=rqtl, formula=y~Q1+Q2+Q3+Q4)
+@ 
+
+The 6$\times$15 interaction is also tested, and the LOD scores for the
+other interactions are somewhat different, as they concern comparisons
+between the 4-locus additive model and the model with that one
+interaction added.
+
+\bigskip
+\textbf{\large \code{addqtl}}
+
+We may use the \code{addqtl} function to scan for an additional QTL,
+to be added to the model.  By default, the new QTL is strictly
+additive.  The syntax of \code{addqtl} is similar to that of
+\code{refineqtl}: it requires the cross object, \code{hyper}, as well
+as a QTL object and a formula.
+<<addqtl,eval=FALSE>>=
+out.aq <- addqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
+@ 
+<<runnaddqtl,echo=FALSE>>=
+file <- "Rcache/addqtl.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<addqtl>>
+  save(out.aq, file=file)
+}
+@ 
+
+The output of \code{addqtl} has the same form as that from
+\code{scanone}, and so we may use the same summary and plot
+functions.  For example, we can identify the genome-wide maximum LOD
+score with \code{max.scanone}.
+<<maxaddqtl>>=
+max(out.aq)
+@ 
+
+And we may plot the results with \code{plot.scanone}; see Fig.~\ref{fig:addqtl}
+<<plotaddqtl,eval=FALSE>>=
+plot(out.aq)
+@ 
+
+\begin{figure}
+\centering
+<<plotaddqtlplot,fig=TRUE,echo=FALSE,height=4>>=
+par(mar=c(4.1,4.1,4.1,0.1))
+<<plotaddqtl>>
+@ 
+\caption{\small LOD curves for adding one QTL to the 4-QTL model, with
+  the \code{hyper} data.\label{fig:addqtl}}  
+\end{figure}
+
+We may also use \code{addqtl} to scan for an additional QTL,
+interacting with one of the current loci.  This is done by including
+the additional QTL in the model formula, with the relevant interaction
+term.  For example, let's scan for
+an additional QTL interacting with the chr 15 locus.
+<<addqtlint,eval=FALSE>>=
+out.aqi <- addqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4+Q4*Q5)
+@ 
+
+<<runaddqtlint,echo=FALSE>>=
+file <- "Rcache/addqtlint.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<addqtlint>>
+  save(out.aqi, file=file)
+}
+@ 
+
+We plot the results as follows; see Fig.~\ref{fig:addqtlint}.
+<<plotaddqtlint,eval=FALSE>>=
+plot(out.aqi)
+@ 
+
+\begin{figure}
+\centering
+<<plotaddqtlintplot,fig=TRUE,echo=FALSE,height=4>>=
+par(mar=c(4.1,4.1,4.1,0.1))
+<<plotaddqtlint>>
+@ 
+\caption{\small LOD curves for adding one QTL, interacting with the
+  chromosome 15 locus, to the 4-QTL model, with
+  the \code{hyper} data.\label{fig:addqtlint}}  
+\end{figure}
+
+Also of interest are the LOD scores for the interaction between the
+chr 15 locus and the new locus being scanned, which are the
+differences between the LOD scores in \code{out.aqi} and \code{out.aq}.
+See Fig.~\ref{fig:addqtlint2}
+<<plotaddqtlint2,eval=FALSE>>=
+plot(out.aqi - out.aq)
+@ 
+
+\begin{figure}
+\centering
+<<plotaddqtlint2plot,fig=TRUE,echo=FALSE,height=4>>=
+par(mar=c(4.1,4.1,4.1,0.1))
+<<plotaddqtlint2>>
+@ 
+\caption{\small Interaction LOD curves in the scan for an additional
+  QTL, interacting with the chromosome 15 locus, to the 4-QTL model,
+  with the \code{hyper} data.\label{fig:addqtlint2}}
+\end{figure}
+
+There is nothing particularly exciting in either of these plots.
+
+
+\bigskip
+\textbf{\large \code{addpair}}
+
+The function \code{addpair} is similar to \code{addqtl}, but performs
+a two-dimensional scan to seek a pair of QTL to add.  By default,
+\code{addpair} performs a two-dimensional scan analogous to that of
+\code{scantwo}: for each pair of positions for the two putative QTL,
+we fit both an additive model and a model including an interaction
+between the two QTL.
+
+Recall that in the single-QTL analysis with the \code{hyper} data,
+there were two peaks in the LOD curve on chromosome 1, which indicates
+that there may be two QTL on that chromosome.  In the context of our
+multiple-QTL model, the LOD profile on chromosome 1 (see
+Fig.~\ref{fig:lodprofile}) still shows two peaks, though the distal
+one is more prominent.   
+
+We may use \code{addpair} to investigate the
+possibility of a second QTL on chromosome 1.  To do so, we omit the
+chr 1 locus from our formula, and perform a two-dimensional scan just
+on chromosome 1.
+<<addpair,eval=FALSE>>=
+out.ap <- addpair(hyper, qtl=rqtl, chr=1, formula=y~Q2+Q3*Q4, verbose=FALSE)
+@ 
+<<runaddpair,echo=FALSE>>=
+file <- "Rcache/addpair.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<addpair>>
+  save(out.ap, file=file)
+}
+@ 
+
+The output is of the same form as that produced by \code{scantwo}, and
+so we may use the same summary and plot functions.
+<<summaddpair>>=
+summary(out.ap)
+@ 
+
+There is little evidence for an interaction, and the LOD score comparing
+the model with two additive QTL on chr 1 to that with a single QTL on chr 1 
+is 1.64, indicating relatively weak evidence for a second QTL on chr 1.
+
+Let us also plot the results.  We'll focus on the evidence for a 
+second QTL on the chromosome, displaying $\lod_{fv1}$ (evidence for a 
+second QTL, allowing for an interaction) and $\lod_{av1}$ (evidence for
+a second QTL, assuming to two are additive).  See Fig~\ref{fig:addpair}.
+<<plotaddpair, eval=FALSE>>=
+plot(out.ap, lower="cond-int", upper="cond-add")
+@ 
+
+\begin{figure}
+\centering
+<<plotaddpairplot,fig=TRUE,echo=FALSE,height=4.6>>=
+plot(out.ap, lower="cond-int", upper="cond-add", 
+     layout=list(cbind(1,2),c(5,1)),
+     mar1=c(4,4,0,0)+0.1, mar2=c(4,2,0,2)+0.1)
+@ 
+\caption{\small Results of a two-dimensional, two-QTL scan on
+  chromosome 1, in the context of a model with additional QTL on chr
+  4, 6 and 15, and a 6$\times$15 interaction, 
+  with the \code{hyper} data. $\lod_{fv1}$ is in the lower-right
+  triangle, and $\lod_{av1}$ is in the upper-left triangle.  \label{fig:addpair}}
+\end{figure}
+
+There is a good deal of flexibility in the way that \code{addpair} may
+be used.  As in \code{addqtl}, where one can scan for loci that
+interact with a particular locus in the model, we can use
+\code{addpair} to scan for an additional pair, with any prespecified
+set of interactions.
+
+For example, we may retain the loci on chromosomes 1, 4 and 6, and
+scan for an additional pair of interacting loci, one of which also
+interacts with chromosome 6.  This would be useful for assessing
+evidence for an additional QTL interacting with the chromosome 15
+locus, but allowing the location of the locus on chromosome 15 to
+vary.  We use the formula \verb|y~Q1+Q2+Q3+Q5*Q6+Q3:Q5|, as we will omit
+the chr 15 locus (\code{Q4}), scan for an additional interacting pair
+(\code{Q5*Q6}), and allow the first QTL in the additional pair to
+interact with the chr 6 locus (\code{Q3}).  Note that the positions of
+the chr 1, 4 and 6 loci are assumed known.  A three-dimensional scan
+could be performed with the \code{scanqtl} function, but we won't try
+that here.
+
+To save time, we will focus just on chromosomes 7 and 15.
+<<addpair2, eval=FALSE>>=
+out.ap2 <- addpair(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3+Q5*Q6+Q3:Q5, chr=c(7,15),
+                   verbose=FALSE)
+@ 
+<<runaddpair2,echo=FALSE>>=
+file <- "Rcache/addpair2.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<addpair2>>
+  save(out.ap2, file=file)
+}
+@ 
+
+Because we are using a special formula here, with one of the new QTL
+interacting with the chr 6 locus, the results are similar to, but not
+quite the same as, those from \code{scantwo}.  Rather than fitting an
+additive and an interactive model at each pair of positions, we fit
+just the single model specified in the formula.  And note that as the
+formula is not symmetric in \code{Q5} and \code{Q6}, we must do a full
+2-dimensional scan, and not just on the triangle.  (That is, we need
+\code{Q5} and \code{Q6} assigned to chromosomes (7,15) as well as
+(15,7).) 
+
+The summary of the results are somewhat different here.  For each pair
+of chromosomes, a set of three LOD scores are presented.
+\code{lod.2v0} compares the full model to the model with neither of
+the two new QTL included,  \code{lod.2v1b} compares the full model to
+the model with the first of the two new QTL omitted, and
+\code{lod.2v1a} compares the full model to the model with the second
+QTL omitted.  When a QTL is omitted, any interactions involving that
+QTL is also omitted.  
+
+<<summaddpair2>>=
+summary(out.ap2)
+@ 
+
+Note that, because of the lack of symmetry in the formula we used in
+\code{addpair}, separate results are provided for the two cases
+\code{c7:c15} (in which the chr 7 locus interacts with the chr 6
+locus) and \code{c15:c7} (in which the chr 15 locus interacts with the
+chr 6 locus).  The \code{c15:c7} row is most interesting, but
+\code{lod.2v1a} is \Sexpr{round(summary(out.ap2)[3,7],2)}, indicating little
+evidence for a chr 7 locus.  (Note that \code{lod.2v1a} here concerns
+both the chr 7 locus and the 7$\times$15 interaction.)
+
+With this sort of \code{addpair} output, the \code{thresholds}
+argument should have length just 1 or 2 (which is different from the
+usual case for \code{summary.scantwo}). Rows will be retained if
+\code{lod.2v0} is greater than \code{thresholds[1]} and either 
+of \code{lod.2v1a} or \code{lod.2v1b} is greater than
+\code{thresholds[2]}.  (If a single thresholds is given, we assume
+that \code{thresholds[2]==0}.)  Note that, of the other arguments to
+\code{summary.scantwo}, all but \code{allpairs} is ignored.
+
+The plot of the output from \code{addpair}, in the case of a special
+formula, is also different from the usual \code{scantwo} plot.  
+
+<<plotaddpair2, eval=FALSE>>=
+plot(out.ap2)
+@ 
+
+\begin{figure}
+\centering
+<<plotaddpair2plot,fig=TRUE,echo=FALSE,height=4.6>>=
+plot(out.ap2, 
+     layout=list(cbind(1,2),c(5,1)),
+     mar1=c(4,4,0,0)+0.1, mar2=c(4,2,0,2)+0.1)
+@ 
+\caption{\small Results of a two-dimensional, two-QTL scan on chr 7
+  and 15, in the context of a model with additional QTL on chr 1, 4,
+  and 6, with the \code{hyper} data.  The two QTL being scanned were
+  allowed to interact, and the first of them interacts with the chr 6
+  locus.  The LOD scores displayed are for the 5-QTL model relative to
+  the 3-QTL model.  The x-axis corresponds to the first of the new QTL (which interacts with the
+  chr 6 locus); the y-axis corresponds to the second of the new
+  QTL.\label{fig:addpair2}}
+\end{figure}
+
+The plot, shown in Fig.~\ref{fig:addpair2}, contains LOD scores
+comparing the full 5-QTL model to the 3-QTL model (having loci on chr
+1, 4 and 6).  The x-axis corresponds to the first of the new QTL
+(\code{Q5}), which is the one that interacts with the chr 6 locus.
+The y-axis corresponds to the second of the new QTL (\code{Q6}).  
+Clearly, the QTL interacting with the chr 6 locus wants to be on chr
+15.  
+
+Note that the \code{lower} and \code{upper} arguments to
+\code{plot.scantwo} are ignored in this case.
+
+
+
+\bigskip
+\textbf{\large \code{addtoqtl}, \code{dropfromqtl}, and \code{replaceqtl}}
+
+Our analysis of the \code{hyper} data, above, did not indicate much
+evidence for any further QTL.  If we had seen evidence for additional
+loci, we would want to add them to the QTL object and repeat our
+explorations with \code{fitqtl}, \code{addint}, \code{addqtl}, and
+\code{addpair}.   
+
+The functions \code{addtoqtl}, \code{dropfromqtl} and
+\code{replaceqtl} can be used to facilitate such analyses.  Rather
+than re-creating the QTL object from scratch with \code{makeqtl}, one
+can use \code{addtoqtl} to add an additional locus to a QTL object
+that was previously created.  For example, if we were satisfied with the evidence for
+an additional QTL on chr 1, it could be added to the QTL object
+\code{rqtl} as follows.
+<<addtoqtl>>=
+rqtl <- addtoqtl(hyper, rqtl, 1, 73.3)
+rqtl
+@ 
+
+The syntax of \code{addtoqtl} is much like that of \code{makeqtl},
+though one also provides the QTL object to which additional QTL are to
+be added.
+
+If we want to move the first QTL on chromosome 1 to a different
+position (say to 43.3 cM rather than 67.8 cM), we may use
+\code{replaceqtl}, as follows.
+<<replaceqtl>>=
+rqtl <- replaceqtl(hyper, rqtl, 1, 1, 43.3)
+rqtl
+@ 
+
+If we wish to reorder the QTL (e.g., according to their map positions), 
+we may use \code{reorderqtl}, as follows. 
+<<reorderqtl>>=
+rqtl <- reorderqtl(rqtl, c(1,5,2:4))
+rqtl
+@ 
+
+Finally, \code{dropfromqtl} is used to drop a locus from a QTL object.
+<<dropfromqtl>>=
+rqtl <- dropfromqtl(rqtl, 2)
+rqtl
+@ 
+
+\end{document}

@@ -1,0 +1,355 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Karl W. Broman
+% The new summary.scantwo and plot.scantwo
+%
+% This is an "Sweave" document; see the corresponding PDF.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+
+%\usepackage{times}
+\usepackage{amsmath}
+
+
+% revise margins
+\setlength{\headheight}{0.0in}
+\setlength{\topmargin}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\textheight}{8.5in}
+\setlength{\footskip}{0.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\newcommand{\code}{\texttt}
+\newcommand{\lod}{\text{LOD}}
+
+
+
+\begin{document}
+
+\SweaveOpts{prefix.string=Figs/scantwo}
+\setkeys{Gin}{width=\textwidth} %% <- change width of figures
+% Try to get the R code from running into the margin
+<<echo=FALSE>>=
+options(width=77)
+@ 
+
+
+
+
+\textbf{The new \code{summary.scantwo} and \code{plot.scantwo}} \\
+Karl W Broman, 27 Oct 2006
+
+\bigskip
+
+In R/qtl version 1.04, the functions \code{summary.scantwo} and
+\code{plot.scantwo} have been changed quite substantially.  Also, the
+permutations with \code{scantwo} have been changed to match the new
+format for \code{summary.scantwo}.
+
+In this document, I describe the revisions and how to use the new
+functions.   We'll look at the \code{hyper} data as an example.  
+
+First we need to load the package and the data.
+<<loaddata,eval=FALSE>>=
+library(qtl)
+data(hyper)
+@ 
+
+<<loadresults,echo=FALSE>>=
+load("hyper_results.RData")
+@ 
+
+I'm going to use \code{scantwo} with \code{method="em"}.  First I run
+\code{calc.genoprob}, and then \code{scantwo} as before.
+
+<<scantwo,eval=FALSE>>=
+hyper <- calc.genoprob(hyper, step=2.5)
+out2 <- scantwo(hyper)
+@ 
+
+The output, in this new version of R/qtl, is slightly different.
+The LOD scores for the full model (two QTL plus interaction) are there
+as before, but in place of the epistasis LOD scores, I save the LOD
+scores for the additive QTL model.  Also, we now always run the
+single-QTL analysis with \code{scanone}, since the results are
+necessary to make sense of the output of \code{scantwo}.
+
+The big change is in \code{summary.scantwo}.  Consider a pair of
+positions in the genome, $s$ and $t$.  We consider four models.
+\begin{eqnarray*}
+\text{Full: } && y = \mu + \beta_1 q_1 + \beta_2 q_2 + \beta_3 (q_1
+\times q_2) + \epsilon \\
+\text{Add: } && y = \mu + \beta_1 q_1 + \beta_2 q_2 + \epsilon \\
+\text{One: } && y = \mu + \beta_1 q_1 + \epsilon \\
+\text{Null: } && y = \mu + \epsilon
+\end{eqnarray*}
+
+Let $l_f(s,t)$ be the log$_{10}$ likelihood for the full model with QTL
+at $s$ and $t$, $l_a(s,t)$ be the log$_{10}$ likelihood for the additive
+model with QTL at $s$ and $t$, $l_1(s)$ be the log$_{10}$ likelihood
+for the single-QTL model with the QTL at $s$, and $l_0$ be the
+log$_{10}$ likelihood under the null (with no QTL).  
+
+Define the LOD scores as follows.
+\begin{eqnarray*}
+\lod_f(s,t) & = & l_f(s,t) - l_0 \\
+\lod_a(s,t) & = & l_a(s,t) - l_0 \\
+\lod_1(s) & = & l_1(s) - l_0 
+\end{eqnarray*}
+
+Now for the new part.  Following a suggestion from Gary Churchill, we
+consider a pair of chromosomes $j$ and $k$.  (We include the case
+$j=k$.)  Let $c(s)$ denote the chromosome for position $s$.  We now
+consider the maximum LOD scores over that pair of chromosomes.
+\begin{eqnarray*}
+M_f(j,k) & = & \max_{c(s)=j, c(t)=k} \lod_f(s,t) \\
+M_a(j,k) & = & \max_{c(s)=j, c(t)=k} \lod_a(s,t) \\
+M_1(j,k) & = & \max_{c(s)=j \text{ or } k} \lod_1(s)
+\end{eqnarray*}
+
+So $M_f(j,k)$ is the log$_{10}$ likelihood ratio comparing the full
+model with QTL on chromosomes $j$ and $k$ to the null model, and
+$M_a(j,k)$ is the analogous thing for the additive model.  Note that
+the pair of positions at which the full model is maximized may be
+different from the pair of positions at which the additive model is
+maximized.  $M_1(j,k)$ is the log$_{10}$ likelihood ratio comparing
+the model with a single QTL on either chromosomes $j$ or $k$ to the
+null model.
+
+We derive three further LOD scores from the above.
+\begin{eqnarray*}
+M_i(j,k) & = & M_f(j,k) - M_a(j,k) \\
+M_{fv1}(j,k) & = & M_f(j,k) - M_1(j,k) \\
+M_{av1}(j,k) & = & M_a(j,k) - M_1(j,k) 
+\end{eqnarray*}
+
+$M_i(j,k)$ is the log$_{10}$ likelihood ratio comparing the full model
+with QTL on chromosomes $j$ and $k$ to the additive model with QTL on
+chromosomes $j$ and $k$, and so indicates evidence for an interaction
+between QTL on chromosomes $j$ and $k$, assuming that there is precisely
+one QTL on each chromosome (or, for $j=k$, that there are two QTL
+on the chromosome).
+
+$M_{fv1}(j,k)$ is the log$_{10}$ likelihood ratio comparing the full model
+with QTL on chromosomes $j$ and $k$ to the single-QTL model, with a
+single QTL on either chromosome $j$ or $k$.  Thus, it indicates
+evidence for a second QTL, allowing for the possibility of epistasis.
+
+$M_{av1}(j,k)$ is the log$_{10}$ likelihood ratio comparing the additive model
+with QTL on chromosomes $j$ and $k$ to the single-QTL model, with a
+single QTL on either chromosome $j$ or $k$.  Thus, it indicates
+evidence for a second QTL, assuming no epistasis.
+
+In \code{summary.scantwo}, we must provide thresholds for each of the
+five LOD scores, $M_f(j,k)$, $M_{fv1}(j,k)$, $M_i(j,k)$, $M_a(j,k)$
+and $M_{av1}(j,k)$.  A pair of chromosomes $(j,k)$ is reported as
+interesting if either of the following holds:
+\begin{itemize}
+\item $M_f(j,k) \ge T_f$ and [$M_{fv1}(j,k) \ge
+  T_{fv1}$ or $M_i(j,k) \ge T_i$]
+\item $M_a(j,k) \ge T_a$ and $M_{av1}(j,k) \ge T_{av1}$
+\end{itemize}
+
+I'm inclined towards ignoring $M_i(j,k)$ in this rule (i.e. setting
+$T_i = \infty$), and using a common significance level ($\alpha$ = 5 or
+10\%) for the four remaining thresholds.
+
+By default, \code{summary.scantwo} now calculates the five LOD scores
+above, keeping track of the positions at which $M_f(j,k)$ and
+$M_a(j,k)$ were maximized.  It either prints the best results on all
+pairs of chromosomes, or we must provide five thresholds ($T_f$,
+$T_{fv1}$, $T_i$, $T_a$ and $T_{av1}$, in that order). 
+
+The thresholds can be obtained by a permutation test (see below), but
+this is extremely time-consuming.  For a mouse backcross, we suggest
+the thresholds (6.0, 4.7, 4.4, 4.7, 2.6) for the full,
+conditional-interactive, interaction, additive, and
+conditional-additive LOD scores, respectively.  For a mouse
+intercross, we suggest the thresholds (9.1, 7.1, 6.3, 6.3, 3.3) for the
+full, conditional-interactive, interaction, additive, and
+conditional-additive LOD scores, respectively.  These were obtained by
+10,000 simulations of crosses with 250 individuals, markers at a 10 cM
+spacing, and analysis by Haley-Knott regression.
+
+<<summaryscantwoA>>=
+summary(out2, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6))
+@ 
+
+$M_f$, $M_{fv1}$ and $M_i$ are \code{lod.full}, \code{lod.fv1} and
+\code{lod.int}, respectively, and correspond to positions \code{pos1f}
+and \code{pos2f}.
+
+$M_a$ and $M_{av1}$ are \code{lod.add} and \code{lod.av1},
+respectively, and correspond to positions \code{pos1a} and
+\code{pos2a}. 
+
+The above is the default output, with \code{what="best"}.  The
+argument \code{what} may also be given as \code{"full"}, \code{"add"},
+or \code{"int"}, in which case, for each pair of chromosomes, we pull
+out the pair of positions with maximum full, additive, or interactive
+LOD score, respectively, and calculate, for example, the interaction
+LOD score as the difference between the full and additive LOD scores
+\emph{for that fixed pair of positions}, rather than allow the full
+and additive models to be maximized at different positions.  (This is
+more like what we did before, and is included just for completeness.)
+The same set of five thresholds is required.
+
+<<summaryscantwoB>>=
+summary(out2, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6), what="full")
+summary(out2, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6), what="add")
+summary(out2, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6), what="int")
+@ 
+
+One may also restrict the summary to just the case of $j=k$, to look
+at evidence for linked QTL on each chromosome, by using
+\code{allpairs=FALSE}.  
+
+<<summaryscantwoC>>=
+summary(out2, allpairs=FALSE)
+@ 
+
+Note also that the degrees of freedom associated with each LOD score
+may be displayed, via \code{df=TRUE}:
+
+<<summaryscantwoD>>=
+summary(out2, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6), df=TRUE)
+@ 
+
+The old version of \code{summary.scantwo} is still available, though
+it is now called \code{summary.scantwo.old}.
+
+<<oldsummaryscantwo>>=
+summary.scantwo.old(out2, thresholds=c(6, 4, 4))
+@ 
+
+The permutation test with \code{scantwo} has also changed.  At each
+permutation replicate, we record the maxima for each of the
+$M_f(j,k)$, $M_{fv1}(j,k)$, $M_i(j,k)$, $M_a(j,k)$ and
+$M_{av1}(j,k)$.  The output is given class \code{"scantwoperm"}, and
+there is a \code{summary.scantwoperm} function for getting LOD
+thresholds.  These permutations can take a very long time, and so one
+would generally use a multi-processor computer or cluster and do
+multiple shorter runs in parallel.  And so we have added a function
+\code{c.scantwoperm} for combining such runs together.
+
+%In addition, we have added an argument \code{perm.strata} for doing
+%stratified permutation tests.  In the \code{hyper} data, the extremes
+%were genotyped at most markers, and the rest of the individuals were
+%genotyped only in selected regions.  This suggests that one should do
+%a stratified permutation test, permuting individuals within
+%the more completely genotyped group and separately permuting those
+%within the less completely genotyped group.  
+
+We could perform the \code{scantwo} permutations in five batches, as
+follows.  
+<<scantwoperm,eval=FALSE>>=
+operm2A <- scantwo(hyper, n.perm=200)
+operm2B <- scantwo(hyper, n.perm=200)
+operm2C <- scantwo(hyper, n.perm=200)
+operm2D <- scantwo(hyper, n.perm=200)
+operm2E <- scantwo(hyper, n.perm=200)
+operm2 <- c(operm2A, operm2B, operm2C, operm2D, operm2E)
+@ 
+
+The 5 and 20\% thresholds could be calculated as follows.
+<<summaryscantwoperm>>=
+summary(operm2, alpha=c(0.05,0.20))
+@ 
+
+The permutation results may also be used within the
+\code{summary.scantwo} function, to automatically calculate the
+thresholds for desired significance levels.  In this case, rather than
+provide \code{thresholds}, one provides \code{alphas}, which again
+should be a vector of length 5, giving the significance levels for 
+$M_f(j,k)$, $M_{fv1}(j,k)$, $M_i(j,k)$, $M_a(j,k)$ and
+$M_{av1}(j,k)$, in that order.
+<<summaryscantwopermB>>=
+summary(out2, perms=operm2, alphas=rep(0.05, 5))
+@ 
+
+My version of the decision rule, in which $M_{i}(j,k)$
+is ignored, could be obtained as follows:
+<<summaryscantwopermC>>=
+summary(out2, perms=operm2, alphas=c(0.05, 0.05, 0, 0.05, 0.05))
+@ 
+
+In the case that permutation results are provided,
+genome-scan-adjusted p-values may also be displayed, via 
+\code{pvalues=TRUE}:
+
+<<summaryscantwoD>>=
+summary(out2, perms=operm2, alphas=c(0.05, 0.05, 0, 0.05, 0.05), 
+        pvalues=TRUE)
+@ 
+
+I have also made an important change in \code{plot.scantwo}.  The
+arguments \code{upper} and \code{lower} control what is plotted in the
+upper-left and lower-right triangles, respectively.
+The options are \code{"full"}, \code{"add"}, \code{"cond-int"}, 
+\code{"cond-add"}, and \code{"int"}.  The case \code{"full"} is what
+was previously called \code{"joint"}, but this and the case
+\code{"add"} are not changed; the LOD scores for the full model (two
+QTLs plus interaction) and the additive model are displayed.
+
+The other two cases, \code{"cond-int"}, and
+\code{"cond-add"}, are quite different.  
+We now plot the following LOD scores:
+\begin{eqnarray*}
+\text{\code{"cond-int"}: } && \lod_{fv1}(s,t) = \lod_f(s,t) - M_1[c(s), c(t)] \\
+\text{\code{"cond-add"}: } && \lod_{av1}(s,t) = \lod_a(s,t) - M_1[c(s), c(t)] 
+\end{eqnarray*}
+When these values are negative, they are replaced with 0.  
+Before, we had subtracted off the maximum of the single-QTL LOD scores
+at the points $s$ and $t$.  Now we subtract off the maximum of the
+single-QTL LOD scores for the chromosomes containing $s$ and $t$.  
+
+Note that these LOD scores will be maximized at the same positions as
+$\lod_f$ and $\lod_a$.  Indeed, except for the negative values being
+changed to 0's, they will have the same shape as $\lod_f$ and
+$\lod_a$.  
+
+In the following code, we plot $\lod_f$ in the lower triangle and
+$\lod_i$ in the upper triangle, for
+chromosomes 1, 4, 6, and 15.  The result appears in Figure~\ref{scantwofull}.
+<<plotscantwoA,eval=FALSE>>=
+plot(out2, chr=c(1,4,6,15))
+@ 
+
+\begin{figure}
+\centering
+<<plotscantwoAplot,fig=TRUE,echo=FALSE,height=5>>=
+plot(out2, chr=c(1,4,6,15),layout=list(cbind(1,2),c(5,1)),
+     mar1=c(4,4,0,0)+0.1, mar2=c(4,2,0,2)+0.1)
+@ 
+\caption{LOD scores for selected chromosomes for a two-dimensional
+  scan with the \code{hyper} data.  Epistasis LOD scores are in the
+  upper triangle and $\lod_f$ is in the lower triangle.\label{scantwofull}}
+\end{figure}
+
+The same plot, but with the $fv1$-type LOD scores in the upper
+triangle, would be obtained as follows.  The result appears in
+Figure~\ref{scantwocondint}. 
+<<plotscantwoB,eval=FALSE>>=
+plot(out2, chr=c(1,4,6,15), upper="cond-int")
+@ 
+
+\begin{figure}
+\centering
+<<plotscantwoBplot,fig=TRUE,echo=FALSE,height=5>>=
+plot(out2, chr=c(1,4,6,15), upper="cond-int", 
+     layout=list(cbind(1,2),c(5,1)),
+     mar1=c(4,4,0,0)+0.1, mar2=c(4,2,0,2)+0.1)
+@
+\caption{LOD scores for selected chromosomes for a two-dimensional
+  scan with the \code{hyper} data.  $\lod_{fv1}$ is in the upper
+  triangle and $\lod_f$ is in the lower
+  triangle.\label{scantwocondint}}  
+\end{figure}
+
+
+\end{document}
+
