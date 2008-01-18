@@ -43,16 +43,18 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
   int tot_gen, i, j, curpos;
 
   /* reorganize genotype probabilities */
-  Genoprob = (double ***)R_alloc(*n_qtl, sizeof(double **));
-  tot_gen = 0;
-  for(i=0; i < *n_qtl; i++)
-    tot_gen += (n_gen[i]+1);
-  Genoprob[0] = (double **)R_alloc(tot_gen, sizeof(double *));
-  for(i=1; i < *n_qtl; i++)
-    Genoprob[i] = Genoprob[i-1] + (n_gen[i-1]+1);
-  for(i=0, curpos=0; i < *n_qtl; i++) 
-    for(j=0; j<n_gen[i]+1; j++, curpos += *n_ind)
-      Genoprob[i][j] = genoprob + curpos;
+  if(*n_qtl > 0) {
+    Genoprob = (double ***)R_alloc(*n_qtl, sizeof(double **));
+    tot_gen = 0;
+    for(i=0; i < *n_qtl; i++)
+      tot_gen += (n_gen[i]+1);
+    Genoprob[0] = (double **)R_alloc(tot_gen, sizeof(double *));
+    for(i=1; i < *n_qtl; i++)
+      Genoprob[i] = Genoprob[i-1] + (n_gen[i-1]+1);
+    for(i=0, curpos=0; i < *n_qtl; i++) 
+      for(j=0; j<n_gen[i]+1; j++, curpos += *n_ind)
+	Genoprob[i][j] = genoprob + curpos;
+  }
 
   /* reorganize cov (if they are not empty) */
   /* currently reorg_errlod function is used to reorganize the data */
@@ -183,7 +185,7 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
   rss_full = 0.0;
   tol = TOL;
   n_qc = n_qtl + n_cov;
-  idx_int_q = (int *)R_alloc(n_qtl, sizeof(int));
+  if(n_qtl > 0) idx_int_q = (int *)R_alloc(n_qtl, sizeof(int));
   X = (double **)R_alloc(sizefull, sizeof(double *));
 
   /* split the memory block: 
