@@ -123,7 +123,7 @@ function(cross)
 # used in discan, effectplot, plot.pxg, scanone, scantwo, vbscan, reviseXdata
 # cross.attr gives the cross attributes
 getgenonames <-
-function(type=c("f2","bc","riself","risib","4way"),
+function(type=c("f2","bc","riself","risib","4way","special"),
          chrtype=c("A","X"), expandX=c("simple","standard","full"),
          sexpgm, cross.attr)
 {  
@@ -135,6 +135,8 @@ function(type=c("f2","bc","riself","risib","4way"),
     sex <- sexpgm$sex
     pgm <- sexpgm$pgm
   }
+
+  if(type=="special") return(cross.attr$genotypes)
 
   if(missing(cross.attr) || !("alleles" %in% names(cross.attr))) {
     if(type == "4way") alleles <- LETTERS[1:4]
