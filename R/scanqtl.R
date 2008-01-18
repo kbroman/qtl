@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-7, Hao Wu and Karl W. Broman
-# last modified Dec, 2007
+# copyright (c) 2002-8, Hao Wu and Karl W. Broman
+# last modified Jan, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -148,7 +148,7 @@ scanqtl <-
     stop("All individuals are missing phenotypes or covariates.")
   cross <- subset(cross, ind=!hasmissing)
   pheno <- pheno[!hasmissing]
-  if(!is.null(covar)) covar <- covar[!hasmissing,]
+  if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
   sexpgm <- getsex(cross)
 
   # find the chromosome with multiple QTLs

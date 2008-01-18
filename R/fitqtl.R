@@ -130,7 +130,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   # This is done in case of that user input covar but has no covar in formula
   covar.C <- NULL
   if(!is.null(p$idx.covar))
-    covar.C <- as.matrix(covar[,p$idx.covar])
+    covar.C <- as.matrix(covar[,p$idx.covar,drop=FALSE])
   
   sizefull <- 1+sum(n.gen.QC)
   if(p$n.int > 0) {
@@ -225,7 +225,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # covariates
       if(p$n.covar > 0) {
         for(j in 1:p$n.covar) {
-          Z[,curcol+j] <- ZZ[[p$n.qtl+j]] <- as.matrix(covar[,p$idx.covar[j]])
+          Z[,curcol+j] <- ZZ[[p$n.qtl+j]] <- as.matrix(covar[,p$idx.covar[j],drop=FALSE])
           colnames(Z)[curcol+j] <- colnames(ZZ[[p$n.qtl+j]]) <- names(covar)[p$idx.covar[j]]
 #        colnames(Z)[curcol+1:p$n.covar] <- names(covar)[p$idx.covar]
         }
@@ -435,7 +435,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # covarariate to be passed to C function
       covar.C <- NULL
       if(!is.null(p.new$idx.covar))
-        covar.C <- as.matrix(covar[,p.new$idx.covar])
+        covar.C <- as.matrix(covar[,p.new$idx.covar,drop=FALSE])
       
       if(method != "imp") {
         # form genotype probabilities as a matrix

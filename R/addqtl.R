@@ -68,7 +68,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp","hk"),
     else
       qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
-    if(!is.null(covar)) covar <- covar[!hasmissing,]
+    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
   }
 
   # number of covarariates
@@ -372,7 +372,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     else
       qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
-    if(!is.null(covar)) covar <- covar[!hasmissing,]
+    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
   }
 
   # fit the base model
@@ -690,7 +690,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     else
       qtl$prob <- lapply(qtl$geno, function(a) a[!hasmissing,,drop=FALSE])
 
-    if(!is.null(covar)) covar <- covar[!hasmissing,]
+    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
   }
 
   # fit the base model
