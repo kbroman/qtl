@@ -10,6 +10,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o addqtl/scanqtl too slow (maybe it's because of makeqtl?)
+
+o plotLodProfile reported to sometimes give a screwed-up figure. 
+
 o Add an explanation regarding the coding in the coefficient 
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
@@ -20,7 +24,14 @@ o FAQ: - constructing covariate matrices
 
 MEDIUM-SHORT TERM:
 
+o Fix convergence problems in scanone with method="ehk", especially
+  in the case of covariates and interactions. 
+
 o cM coordinates in scantwo plot for multiple chromosomes
+
+o Plotting scanone results for *many* phenotypes as an image plot.
+  (Perhaps threshold the really high LODs and eliminate curves that
+  fail to meet a given threshold.)
 
 o plots of segregation ratios at markers
 
@@ -53,8 +64,6 @@ o Tabbing in "allpheno" from summary.scanone output looks odd...maybe
   this problem.] 
 
 o X chromosome in cim().
-
-o Test scanone with method="ehk", especially regarding interactions.
 
 o Include Bjarke's code on eHK for scantwo.
 
