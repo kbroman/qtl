@@ -10,6 +10,13 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o revise fitqtl and related functions to take cross and pheno.col, so
+  the syntax is consistent across functions.
+
+o In all functions taking pheno.col, allow this to be a vector of
+  character strings.  Also allow it to be a vector of actual phenotype 
+  values.
+
 o addqtl/scanqtl too slow (maybe it's because of makeqtl?)
 
 o plotLodProfile reported to sometimes give a screwed-up figure. 
