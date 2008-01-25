@@ -147,7 +147,7 @@ markerforwself2(x, y, maxsize=7)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
 getid(cross)
 getsex(cross)
-getgenonames(type=c("f2","bc","riself","risib","4way"),
+getgenonames(type=c("f2","bc","riself","risib","4way","special"),
              chrtype=c("A","X"), expandX=c("simple","standard","full"),
              sexpgm, cross.attr)
 grab.arg.names(\dots)

@@ -9,12 +9,15 @@
 }
 
 \usage{
-\method{plot}{scantwoperm}(x, \dots)
+\method{plot}{scantwoperm}(x, lodcolumn=1, \dots)
 }			    
 
 \arguments{
   \item{x}{An object of class \code{"scantwoperm"}, as output by
     \code{\link[qtl]{scantwo}} when \code{n.perm} is specified.}
+  \item{lodcolumn}{This indicates the LOD score column to plot.  This
+    should be a single number between 1 and the number of LOD columns in 
+    the object input.} 
   \item{\dots}{Passed to the function \code{\link[graphics]{hist}} when it
     is called.}
 }

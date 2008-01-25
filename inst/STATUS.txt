@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 1/18/2008:
+Version 1.08, 1/24/2008:
 
 Major changes:
 
@@ -85,6 +85,9 @@ Minor changes:
 
   Added a function plot.scanoneboot, for plotting a histogram of the
   results of scanoneboot.
+
+  scanoneboot now stops with an error if the argument pheno.col
+  indicates multiple phenotypes.
 
   Revised find.marker to have an argument "index" which may be used in
   place of the "pos", to find marker names by their numeric order

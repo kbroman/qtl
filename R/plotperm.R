@@ -77,11 +77,13 @@ function(x, ...)
 # plot histogram of the permutation results from scanone
 ############################################################
 plot.scanoneperm <-
-function(x, ...)
+function(x, lodcolumn=1, ...)
 {
   if(is.list(x)) { # separate X chr results
-    A <- x$A
-    X <- x$X
+    if(lodcolumn < 1 || lodcolumn > ncol(x$A))
+      stop("lodcolumn should be between 1 and ", ncol(x$A))
+    A <- x$A[,lodcolumn]
+    X <- x$X[,lodcolumn]
     
     n.brkA <- ceiling(2*sqrt(length(A)))
     n.brkX <- ceiling(2*sqrt(length(X)))
@@ -124,6 +126,9 @@ function(x, ...)
     }
   }
   else {  
+    if(lodcolumn < 1 || lodcolumn > ncol(x))
+      stop("lodcolumn should be between 1 and ", ncol(x$A))
+    x <- x[,lodcolumn]
     n.brk <- ceiling(2*sqrt(length(x)))
     xlim <- c(0,max(as.numeric(x)))
 
@@ -179,8 +184,12 @@ function(x, ...)
 # plot histogram of the permutation results from scantwo
 ############################################################
 plot.scantwoperm <-
-function(x, ...)
+function(x, lodcolumn=1, ...)
 {
+  if(lodcolumn < 1 || lodcolumn > ncol(x[[1]]))
+    stop("lodcolumn should be between 1 and ", ncol(x[[1]]))
+  x <- lapply(x, function(a,b) a[,b], lodcolumn)
+
   xlim <- c(0,max(unlist(x)))
   brks <- seq(0, max(unlist(x)), length=ceiling(4*sqrt(length(x[[1]])))+1)
 

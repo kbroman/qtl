@@ -2,9 +2,9 @@
 #
 # scanoneboot.R
 #
-# copyright (c) 2007, Karl W Broman
+# copyright (c) 2007-8, Karl W Broman
 # 
-# last modified Apr, 2007
+# last modified Jan, 2008
 # first written Apr, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -31,6 +31,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     cross <- subset(cross, 1)
   }
   
+  if(length(pheno.col) > 1)
+    stop("pheno.col should indicate a single phenotype")
+  if(pheno.col < 1 || pheno.col > nphe(cross))
+    stop("pheno.col should be between 1 and ", nphe(cross))
+
   # do scan with actual data
   out <- scanone(cross, pheno.col=pheno.col, model=model, method=method,
                  addcovar=addcovar, intcovar=intcovar, weights=weights,
