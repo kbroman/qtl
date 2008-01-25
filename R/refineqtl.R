@@ -409,22 +409,27 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     temp[temp[,4]==i,3] <- lodprof[[i]][,3]
 
   dots <- list(...)
+
+  temp <- temp[!is.na(match(temp[,1], chr)),]
+  begend <- matrix(unlist(tapply(temp[,2],temp[,1],range)),ncol=2,byrow=TRUE)
+  rownames(begend) <- unique(temp[,1])
+  begend <- begend[as.character(chr),,drop=FALSE]
+  len <- begend[,2]-begend[,1]
+  if(length(chr)==1) start <- 0
+  else start <- c(0,cumsum(len+gap))-c(begend[,1],0)
+  names(start) <- chr
+
+
   if("ylim" %in% names(dots)) {
     plot.scanone(temp, chr=chr, incl.markers=incl.markers, gap=gap,
                  mtick=mtick, show.marker.names=show.marker.names,
                  alternate.chrid=alternate.chrid, col="white", ...)
   }
-  else if(qtl.labels) {
-    temp <- temp[!is.na(match(temp[,1], chr)),]
-    begend <- matrix(unlist(tapply(temp[,2],temp[,1],range)),ncol=2,byrow=TRUE)
-    rownames(begend) <- unique(temp[,1])
-    begend <- begend[as.character(chr),,drop=FALSE]
-    len <- begend[,2]-begend[,1]
-    if(length(chr)==1) start <- 0
-    else start <- c(0,cumsum(len+gap))-c(begend[,1],0)
-    names(start) <- chr
-
-    ylim <- c(0, max(temp[,3], na.rm=TRUE)+1)
+  else {
+    if(qtl.labels)
+      ylim <- c(0, max(temp[,3], na.rm=TRUE)+1)
+    else
+      ylim <- c(0, max(temp[,3], na.rm=TRUE))
 
     plot.scanone(temp, chr=chr, incl.markers=incl.markers, gap=gap,
                  mtick=mtick, show.marker.names=show.marker.names,

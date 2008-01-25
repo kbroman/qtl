@@ -10,6 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Get an error if I give ylim to plotLodProfile
+  "Error in start[thechr[i]] : object is not subsettable"
+
+o In plot.geno, allow use of xlim and ylim; also do this in
+  plot.scanoneperm and plot.scantwoperm.
+
 o revise fitqtl and related functions to take cross and pheno.col, so
   the syntax is consistent across functions.
 
