@@ -173,7 +173,7 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
 		 double *designmat) 
 {
   /* local variables */
-  int i, j, k, *jpvt, ny, idx_col, n_qc, n_int_col, job;
+  int i, j, k, *jpvt, ny, idx_col, n_qc, n_int_col, job, outerrep;
   double *work, *qty, *qraux, *coef, *resid, tol, sigmasq, **X;
   int n_int_q, *idx_int_q;
   int nrep, thisidx, gen, totrep, thecol, rep;
@@ -222,7 +222,7 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
      2 -> [1 0]; 3 ->[0 1]. For 4-way, 1 -> [0 0 0], 2 -> [1 0 0],
      3 -> [0 1 0], 4 -> [0 0 1] and so on */
   for(i=0; i<n_qtl; i++) {
-    for(k=0; k<n_gen[i]; k++) {
+    for(k=0; k<n_gen[i]; k++) { /* this is confusing; remember n_gen is 1 fewer than no. genotypes */
       for(j=0; j<n_ind; j++) /*loop thru individuals */
 	X[idx_col][j] = Genoprob[i][k+1][j];
       idx_col++;
@@ -259,14 +259,17 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
     }
 
     nrep = 1; 
-    for(k=0; k<n_int_q; k++) { /* go through QTL involved in this interaction */
+    for(k=n_int_q-1; k>=0; k--) { /* go through QTL involved in this interaction */
       thisidx = idx_int_q[k];
       
       totrep = n_int_col / (n_gen[thisidx] * nrep);
-      for(gen=0, thecol=0; gen<n_gen[thisidx]; gen++)
-	for(rep=0; rep<nrep; rep++, thecol++) 
-	  for(j=0; j<n_ind; j++) 
-	    X[idx_col+thecol][j] *= Genoprob[thisidx][gen][j];
+      thecol = 0;
+      for(outerrep=0; outerrep < totrep; outerrep++) {
+	for(gen=0; gen<n_gen[thisidx]; gen++)
+	  for(rep=0; rep<nrep; rep++, thecol++) 
+	    for(j=0; j<n_ind; j++) 
+	      X[idx_col+thecol][j] *= Genoprob[thisidx][gen+1][j];
+      }
       nrep *= n_gen[thisidx];
     }
 

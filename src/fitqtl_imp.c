@@ -390,7 +390,7 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
 	  itmp1 = idx_int_q[k]; /* index for QTL in the interaction */
 	  if(Draws[itmp1][j] == 1) {
 	    /* if any genotype in this interaction is 1, 
-	       all entrys for this individual will be 0.
+	       all entries for this individual will be 0.
 	       break the loop and go to next individual */
 	    itmp2 = 0; /* a flag to indicate some genotype is 1 */
 	    break;

@@ -227,7 +227,6 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         for(j in 1:p$n.covar) {
           Z[,curcol+j] <- ZZ[[p$n.qtl+j]] <- as.matrix(covar[,p$idx.covar[j],drop=FALSE])
           colnames(Z)[curcol+j] <- colnames(ZZ[[p$n.qtl+j]]) <- names(covar)[p$idx.covar[j]]
-#        colnames(Z)[curcol+1:p$n.covar] <- names(covar)[p$idx.covar]
         }
         curcol <- curcol + p$n.covar
       }
