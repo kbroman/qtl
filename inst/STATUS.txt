@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 1/26/2008:
+Version 1.08, 1/30/2008:
 
 Major changes:
 
@@ -148,6 +148,8 @@ Minor changes:
 
   Made a slight change to plot.scantwo regarding z-limits when zlim
   is missing and allow.neg=TRUE.
+
+  Fixed a bug in scantwo perms for the use of the argument clean.scantwo.
 
   Fixed a bug in summary.cross in the case of invalid genotypes in a
   cross. 

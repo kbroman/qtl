@@ -2,9 +2,9 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-7, Karl W Broman and Hao Wu
+# copyright (c) 2001-8, Karl W Broman and Hao Wu
 #
-# last modified Nov, 2007
+# last modified Jan, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1281,7 +1281,7 @@ function(n.perm, cross, pheno.col, model,
                      verbose=FALSE, n.perm= -i, perm.strata=perm.strata,
                      assumeCondIndep=assumeCondIndep)
 
-      if(clean.output) tem <- clean.output(tem)
+      if(clean.output) tem <- clean(tem)
 
       # maxima
       temp <- subrousummaryscantwo(tem, for.perm=TRUE)
