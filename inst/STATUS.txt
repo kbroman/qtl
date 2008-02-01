@@ -105,6 +105,9 @@ Minor changes:
   Fixed a bug in effectscan for the X chromosome in the case of an
   intercross with both directions but just one sex.
 
+  Slight change to plot.geno() to make individual IDs shown rather
+  than just numbers, if they are available.
+
   Slight change to effectscan, to pass the "..." argument to the plot
   function, so that, for example, you can use the 'main' argument to
   put a title on the plot.

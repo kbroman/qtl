@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-7, Karl W Broman
+# copyright (c) 2000-8, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Nov, 2007
+# last modified Feb, 2008
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -592,15 +592,14 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     stop("Input should have class \"cross\".")
 
   cross <- subset(cross,chr=chr)
-  use.id <- FALSE
   if(!missing(ind)) {
     if(is.null(getid(cross))) cross$pheno$id <- 1:nind(cross)
     if(!is.logical(ind)) ind <- unique(ind)  
     cross <- subset(cross, ind=ind)
-    use.id <- TRUE
   }
   id <- getid(cross)
   if(is.null(id)) id <- 1:nind(cross)
+  use.id <- TRUE
      
   type <- class(cross)[1]
   
