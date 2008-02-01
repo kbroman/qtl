@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-7, Karl W Broman
-# last modified Sep, 2007
+# copyright (c) 2001-8, Karl W Broman
+# last modified Feb, 2008
 # first written Apr, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -262,7 +262,9 @@ function(cross, chr, cutoff=4, msg=TRUE)
     if(msg) cat("\tNo errorlods above cutoff.\n")
     return(invisible(NULL))
   }
-  if(all(ind==as.numeric(ind))) ind <- as.numeric(ind)
+
+  suppressWarnings(asnum <- as.numeric(ind))
+  if(!any(is.na(asnum)) && all(ind==asnum)) ind <- asnum
 
   o <- data.frame(chr=chr,id=ind,marker=mar,errorlod=lod)[order(-lod,ind),]
   rownames(o) <- 1:nrow(o)

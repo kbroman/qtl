@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 1/30/2008:
+Version 1.08, 2/1/2008:
 
 Major changes:
 
@@ -108,6 +108,10 @@ Minor changes:
   Slight change to effectscan, to pass the "..." argument to the plot
   function, so that, for example, you can use the 'main' argument to
   put a title on the plot.
+
+  Slight changes to top.errorlod() and getid() to deal with a bug for
+  the case that there is an "ID" phenotype column with names like
+  "1_F1".
 
   Added an argument to est.map: omit.uninformative.  If TRUE (which
   is the default, and which was previously the only option),

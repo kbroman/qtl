@@ -6,7 +6,7 @@
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
 #
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -2646,6 +2646,8 @@ function(cross)
     attr(id,"phenam") <- "iD"
   }
   else id <- NULL
+
+  if(is.factor(id)) id <- as.character(id)
 
   id
 }
