@@ -25,8 +25,6 @@ o In all functions taking pheno.col, allow this to be a vector of
 
 o addqtl/scanqtl too slow (maybe it's because of makeqtl?)
 
-o plotLodProfile reported to sometimes give a screwed-up figure. 
-
 o Add an explanation regarding the coding in the coefficient 
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
