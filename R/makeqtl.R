@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -548,6 +548,10 @@ function(qtl, neworder)
      !all(curorder == sort(neworder)))
     stop("neworder should be an ordering of the integers from 1 to ", qtl$n.qtl)
   
+  if(qtl$n.qtl == 1)
+    stop("Nothing to do; just one qtl.")
+
+
   if("geno" %in% names(qtl))
     qtl$geno <- qtl$geno[,neworder,]
   else
@@ -557,6 +561,12 @@ function(qtl, neworder)
   qtl$chr <- qtl$chr[neworder]
   qtl$pos <- qtl$pos[neworder]
   
+  if("lodprofile" %in% names(attributes(qtl))) {
+    lodprof <- attr(qtl, "lodprofile")
+    if(length(lodprof) == length(neworder))
+      attr(qtl, "lodprofile") <- lodprof[neworder]
+  }
+
   qtl
 }
 

@@ -2,9 +2,9 @@
 #
 # plot.scanone.R
 #
-# copyright (c) 2001-7, Karl W Broman
+# copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Sep, 2007
+# last modified Feb, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -113,7 +113,8 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
   else start <- 0
 
   maxx <- sum(len+gap)-gap
-  maxy <- max(out[,3],na.rm=TRUE)
+  if(all(is.na(out[,3]))) maxy <- 1
+  else maxy <- max(out[,3],na.rm=TRUE)
   if(second) maxy <- max(c(maxy,out2[,3]),na.rm=TRUE)
   if(third) maxy <- max(c(maxy,out3[,3]),na.rm=TRUE)
 

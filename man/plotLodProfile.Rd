@@ -49,6 +49,12 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   interest at that particular position (and all others at their fixed
   positions) to the model with the QTL of interest (and any
   interactions that include that QTL) omitted.  
+
+  Care should be take regarding the arguments \code{lwd}, \code{lty},
+  and \code{col}; if vectors are given, they should be in the order of
+  the QTL within the object, which may be different than the order in
+  which they are plotted.  (The LOD profiles are sorted by chromosome
+  and position.)
 }
 
 \examples{

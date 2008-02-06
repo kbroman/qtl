@@ -13,9 +13,6 @@ SHORT TERM:
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
 
-o Get an error if I give ylim to plotLodProfile
-  "Error in start[thechr[i]] : object is not subsettable"
-
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
 

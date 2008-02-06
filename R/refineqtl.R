@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -327,127 +327,112 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   if(any(is.na(m)))
     qtl <- dropfromqtl(qtl, index=which(is.na(m)))
 
+  # reorder qtl by position
+  if(qtl$n.qtl > 1) {
+    chrindex <- match(qtl$chr, names(attr(qtl, "map")))
+    if(any(is.na(chrindex)))
+      stop("Cannot find chr ", qtl$chr[is.na(chrindex)])
+    neworder <- order(chrindex, qtl$pos)
+    if(any(neworder != seq(qtl$n.qtl))) {
+      qtl <- reorderqtl(qtl, neworder)
+      lodprof <- attr(qtl, "lodprofile")
+    }
+  }
+
   n.qtl <- length(lodprof)
   if(length(lwd) == 1) lwd <- rep(lwd, n.qtl)
-  else if(length(lwd) != n.qtl) {
-    warning("lwd should have length 1 or ", n.qtl)
-    lwd <- rep(lwd[1], n.qtl)
+  else {
+    if(length(lwd) != n.qtl) {
+      warning("lwd should have length 1 or ", n.qtl)
+      lwd <- rep(lwd[1], n.qtl)
+    }
+    else lwd <- lwd[neworder]
   }
+  
+
   if(length(lty) == 1) lty <- rep(lty, n.qtl)
-  else if(length(lty) != n.qtl) {
-    warning("lty should have length 1 or ", n.qtl)
-    lty <- rep(lty[1], n.qtl)
+  else {
+    if(length(lty) != n.qtl) {
+      warning("lty should have length 1 or ", n.qtl)
+      lty <- rep(lty[1], n.qtl)
+    }
+    else lty <- lty[neworder]
   }
   if(length(col) == 1) col <- rep(col, n.qtl)
-  else if(length(col) != n.qtl) {
-    warning("col should have length 1 or ", n.qtl)
-    col <- rep(col[1], n.qtl)
+  else {
+    if(length(col) != n.qtl) {
+      warning("col should have length 1 or ", n.qtl)
+      col <- rep(col[1], n.qtl)
+    }
+    else col <- col[neworder]
   }
 
   map <- attr(qtl, "map")
   if(is.null(map))
     stop("Input qtl object should contain the genetic map.")
   
-  qtlnam <- names(lodprof)
-  m <- match(qtlnam, qtl$name)
-  if(!all(is.na(m))) {
-    if(any(is.na(m))) {
-      warning("QTL ", paste(qtlnam[is.na(m)], collapse=" "), " not understood.")
-      qtlnam <- qtlnam[!is.na(m)]
-      lodprof <- lodprof[!is.na(m)]
-      m <- m[!is.na(m)]
-    }
-  }
-  else {
-    m <- match(qtlnam, qtl$altname)
-    if(any(is.na(m))) {
-      warning("QTL ", paste(qtlnam[is.na(m)], collapse=" "), " not understood.")
-      qtlnam <- qtlnam[!is.na(m)]
-      lodprof <- lodprof[!is.na(m)]
-      m <- m[!is.na(m)]
-    }
-  }
-
-  tempscan <- cbind(lodprof[[1]], mark=1)
-  if(length(lodprof) > 1)
-    for(i in 2:length(lodprof)) 
-      tempscan <- rbind(tempscan, cbind(lodprof[[i]], mark=i))
-  tempscan[,3] <- NA
-  rownames(tempscan) <- paste("c", tempscan[,1], ".loc", 1:nrow(tempscan), sep="")
-
-  thechr <- as.character(unique(tempscan[,1]))
+  thechr <- unique(qtl$chr)
   orderedchr <- names(map)
+  chr2keep <- which(!is.na(match(orderedchr, thechr)))
 
-  m <- match(thechr, orderedchr)
-  if(any(is.na(m))) {
-    if(sum(is.na(m)) > 1)
-      stop("Can't find chromosomes ", paste(thechr[is.na(m)], sep=" "), " in map.")
-    else
-      stop("Can't find chromosome ", thechr[is.na(m)], " in map.")
+  tempscan <- NULL
+  for(i in chr2keep) {
+    temp <- data.frame(chr=orderedchr[i],
+                       pos=as.numeric(map[[i]]),
+                       lod=NA)
+    rownames(temp) <- names(map[[i]])
+    tempscan <- rbind(tempscan, temp)
   }
-    
-  for(i in thechr) {
-    if(is.matrix(map[[i]])) map[[i]] <- map[[i]][1,]
-      
-    nm <- length(map[[i]])
-    thismap <- data.frame(chr=rep(i, nm), pos=as.numeric(map[[i]]),
-                          lod=rep(NA, nm), mark=rep(-1, nm))
-    rownames(thismap) <- names(map[[i]])
-    tempscan <- rbind(tempscan, thismap)
-  }
-    
-  o <- order(match(tempscan[,1],  orderedchr), tempscan[,2])
-  tempscan <- tempscan[o,]
-
   class(tempscan) <- c("scanone", "data.frame")
 
   if(missing(chr)) chr <- thechr
-  dontskip <- which(!is.na(match(thechr, chr)))
+  dontskip <- which(!is.na(match(qtl$chr, chr)))
+  if(length(dontskip)==0)
+    stop("Nothing to plot.")
   
-  temp <- tempscan
-  for(i in seq(along=lodprof))
-    temp[temp[,4]==i,3] <- lodprof[[i]][,3]
-
-  dots <- list(...)
-
-  temp <- temp[!is.na(match(temp[,1], chr)),]
-  begend <- matrix(unlist(tapply(temp[,2],temp[,1],range)),ncol=2,byrow=TRUE)
-  rownames(begend) <- unique(temp[,1])
+  ymax <- max(sapply(lodprof[dontskip], function(a) max(a[,3], na.rm=TRUE)))
+  begend <- matrix(unlist(tapply(tempscan[,2],tempscan[,1],range)),ncol=2,byrow=TRUE)
+  rownames(begend) <- unique(tempscan[,1])
   begend <- begend[as.character(chr),,drop=FALSE]
   len <- begend[,2]-begend[,1]
   if(length(chr)==1) start <- 0
   else start <- c(0,cumsum(len+gap))-c(begend[,1],0)
   names(start) <- chr
 
+  dots <- list(...)
 
   if("ylim" %in% names(dots)) {
-    plot.scanone(temp, chr=chr, incl.markers=incl.markers, gap=gap,
+    plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                  mtick=mtick, show.marker.names=show.marker.names,
                  alternate.chrid=alternate.chrid, col="white", ...)
   }
   else {
     if(qtl.labels)
-      ylim <- c(0, max(temp[,3], na.rm=TRUE)+1)
+      ylim <- c(0, ymax+1)
     else
-      ylim <- c(0, max(temp[,3], na.rm=TRUE))
+      ylim <- c(0, ymnax)
 
-    plot.scanone(temp, chr=chr, incl.markers=incl.markers, gap=gap,
+    plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                  mtick=mtick, show.marker.names=show.marker.names,
                  alternate.chrid=alternate.chrid, col="white", ylim=ylim,
                  ...)
   }
 
   for(i in dontskip) {
-    temp <- tempscan
-    temp[temp[,4]==i,3] <- lodprof[[i]][,3]
-    temp <- temp[temp[,4]>0,]
+    temp <- rbind(tempscan[tempscan[,1] != qtl$chr[i],],
+                  lodprof[[i]])
+    
+    temp <- temp[order(match(temp[,1], orderedchr), temp[,2]),]
+    class(temp) <- c("scanone", "data.frame")
+
     plot.scanone(temp, chr=chr, incl.markers=FALSE, gap=gap, add=TRUE,
                  col=col[i], lwd=lwd[i], lty=lty[i], ...)
     
     if(qtl.labels) {
       maxlod <- max(temp[,3], na.rm=TRUE) 
-      maxpos <- temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[thechr[i]]
-      d <- min(c(0.5, diff(par("usr")[3:4]*0.03)))
+      maxpos <- temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]]
+      d <- min(c(1, diff(par("usr")[3:4]*0.05)))
+
       text(maxpos, maxlod + d, names(lodprof)[i], col=col[i], font=(lwd[i]>1)+1, ...)
     }
   }
