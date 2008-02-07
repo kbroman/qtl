@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -22,14 +22,30 @@
 # analysis.
 ######################################################################
 addint <-
-function(pheno, qtl, covar=NULL, formula, method=c("imp","hk"),
+function(cross, pheno.col=1, qtl, covar=NULL, formula,
+         method=c("imp","hk"),
          qtl.only=FALSE, verbose=TRUE)
 {
+  if( !sum(class(cross) == "cross"))
+    stop("The cross argument must be an object of class \"cross\".")
+    
   if( !sum(class(qtl) == "qtl") )
     stop("The qtl argument must be an object of class \"qtl\".")
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("addint can take just one phenotype; only the first will be used")
+  }
+    
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar) && nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
 
@@ -135,18 +151,18 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp","hk"),
   }
 
   # fit base model
-  thefit0 <- fitqtl(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                    method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE)
+  thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(int2test.alt, c("df", "Type III SS", "LOD", "%var",
                                         "F value", "Pvalue(Chi2)", "Pvalue(F)"))
 
   for(k in seq(along=int2test)) {
-    thefit1 <- fitqtl(pheno=pheno, qtl=qtl, covar=covar,
-                      formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
-                      method=method, dropone=FALSE, get.ests=FALSE,
-                      run.checks=FALSE)
+    thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
+                            formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
+                            method=method, dropone=FALSE, get.ests=FALSE,
+                            run.checks=FALSE)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
@@ -355,6 +371,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
 
   # check phenotypes and covariates; drop ind'ls with missing values
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("addqtl can take just one phenotype; only the first will be used")
+  }
+    
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
@@ -376,9 +397,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
 
   # fit the base model
-  lod0 <- fitqtl(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                 method=method, dropone=FALSE, get.ests=FALSE,
-                 run.checks=FALSE)$result.full[1,4]
+  lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+                       method=method, dropone=FALSE, get.ests=FALSE,
+                       run.checks=FALSE)$result.full[1,4]
 
   results <- NULL
   for(i in chr) {
@@ -673,6 +694,10 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
 
   # check phenotypes and covariates; drop ind'ls with missing values
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("addpair can take just one phenotype; only the first will be used")
+  }
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
@@ -694,9 +719,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
 
   # fit the base model
-  lod0 <- fitqtl(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                 method=method, dropone=FALSE, get.ests=FALSE,
-                 run.checks=FALSE)$result.full[1,4]
+  lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+                       method=method, dropone=FALSE, get.ests=FALSE,
+                       run.checks=FALSE)$result.full[1,4]
 
   gmap <- NULL
 

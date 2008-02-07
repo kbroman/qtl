@@ -177,23 +177,22 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   lastout <- vector("list", length(curpos))
   names(lastout) <- qtl$name[tovary]
 
-  if(keeplodprofile) # do drop-one analysis
-    basefit <- fitqtl(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
-                      method=method, dropone=TRUE, get.ests=FALSE,
-                      run.checks=FALSE)
-  else if(verbose)
-    basefit <- fitqtl(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
-                      method=method, dropone=FALSE, get.ests=FALSE,
-                      run.checks=FALSE)
-
-
-  if(verbose) {
-    origlod <- curlod <- thisitlod <- basefit$result.full[1,4]
-    origpos <- curpos
-  }
-
   for(i in 1:maxit) {
     
+    if(keeplodprofile) # do drop-one analysis
+      basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
+                              method=method, dropone=TRUE, get.ests=FALSE,
+                              run.checks=FALSE)
+    else if(verbose)
+      basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
+                              method=method, dropone=FALSE, get.ests=FALSE,
+                              run.checks=FALSE)
+
+    if(verbose && i==1) {
+      origlod <- curlod <- thisitlod <- basefit$result.full[1,4]
+      origpos <- curpos
+    }
+
     if(verbose) cat("Iteration", i, "\n")
     o <- sample(lc)
 
@@ -251,6 +250,9 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       break
     }
     curpos <- newpos
+
+    reducedqtl <- replaceqtl(cross, reducedqtl, seq(length(curpos)),
+                             reducedqtl$chr, curpos, reducedqtl$name)
   }
 
   if(verbose) {
@@ -289,6 +291,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 
     rn <- rownames(dropresult)
     qn <- names(lastout)
+
     for(i in seq(along=lastout)) {
       lastout[[i]] <- lastout[[i]] - (max(lastout[[i]]) - dropresult[rn==qn[i],3])
       pos <- as.numeric(matrix(unlist(strsplit(names(lastout[[i]]), "@")),byrow=TRUE,ncol=2)[,2])
@@ -410,7 +413,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     if(qtl.labels)
       ylim <- c(0, ymax+1)
     else
-      ylim <- c(0, ymnax)
+      ylim <- c(0, ymax)
 
     plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                  mtick=mtick, show.marker.names=show.marker.names,

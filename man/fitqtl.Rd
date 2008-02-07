@@ -9,11 +9,16 @@
 }
 
 \usage{
-fitqtl(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
+fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
        dropone=TRUE, get.ests=FALSE, run.checks=TRUE)
 }
 \arguments{
- \item{pheno}{Phenotype data (a numeric vector).}
+ \item{cross}{An object of class \code{cross}. See
+   \code{\link[qtl]{read.cross}} for details.}
+ \item{pheno.col}{Column number in the phenotype matrix which should be
+   used as the phenotype.  This can be a vector of integers; for methods
+   \code{"hk"} and \code{"imp"} this can be considerably faster than doing
+   them one at a time.}
  \item{qtl}{An object of class \code{qtl}, as output from
    \code{\link[qtl]{makeqtl}}.} 
  \item{covar}{A data.frame of covariates.  These must be strictly
@@ -112,21 +117,21 @@ qtl <- makeqtl(fake.f2, qc, qp)
 
 # fit model with 3 interacting QTLs interacting
 # (performing a drop-one-term analysis)
-lod <- fitqtl(fake.f2$pheno[,1], qtl, formula=y~Q1*Q2*Q3)
+lod <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1*Q2*Q3)
 summary(lod)
 
 \dontrun{
 # fit an additive QTL model
-lod.add <- fitqtl(fake.f2$pheno[,1], qtl, formula=y~Q1+Q2+Q3)
+lod.add <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3)
 summary(lod.add)
 
 # fit the model including sex as an interacting covariate
 Sex <- data.frame(Sex=fake.f2$pheno$sex)
-lod.sex <- fitqtl(fake.f2$pheno[,1], qtl, formula=y~Q1*Q2*Q3*Sex, cov=Sex)
+lod.sex <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1*Q2*Q3*Sex, cov=Sex)
 summary(lod.sex)
 
 # fit the same with an additive model
-lod.sex.add <- fitqtl(fake.f2$pheno[,1], qtl, formula=y~Q1+Q2+Q3+Sex, cov=Sex)
+lod.sex.add <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3+Sex, cov=Sex)
 summary(lod.sex.add)
 }}
 

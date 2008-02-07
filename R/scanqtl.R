@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -22,6 +22,18 @@ scanqtl <-
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("scanqtl can take just one phenotype; only the first will be used")
+  }
+    
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar) && nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
 
@@ -71,16 +83,6 @@ scanqtl <-
     stop("Input chr and pos must have the same length")
   # note that input chr is a vector and pos is a list
 
-  # check the input covariate, if any
-  if(!is.null(covar)) {
-    if(nrow(covar) != nind(cross))
-      stop("Input covariate has wrong size")
-  }
-  # check the input pheno.col
-  if(pheno.col < 1 || pheno.col > nphe(cross))
-    stop("pheno.col should be between 1 and ", nphe(cross))
-  pheno <- cross$pheno[,pheno.col]
-  
   method <- match.arg(method)
 
   ichr <- match(chr, names(cross$geno))
@@ -259,9 +261,9 @@ scanqtl <-
     else
       qtl <- makeqtl(cross, chr=chr, pos=unlist(pos), what="prob")
       
-    result <- fitqtl(cross$pheno[,pheno.col], qtl, covar=covar,
-                     formula=formula, method=method, dropone=FALSE,
-                     get.ests=FALSE, run.checks=FALSE)
+    result <- fitqtlengine(pheno, qtl, covar=covar,
+                           formula=formula, method=method, dropone=FALSE,
+                           get.ests=FALSE, run.checks=FALSE)
     result <- result[[1]][1,4]
     names(result) <- "LOD"
     class(result) <- "scanqtl"
@@ -349,9 +351,9 @@ scanqtl <-
     # end of Karl's 8/23/05 addition
 
     # fit QTL, don't do drop one at a time
-    fit <- fitqtl(cross$pheno[,pheno.col], qtl=qtl.obj, covar=covar,
-                  formula=formula, method=method, dropone=FALSE,
-                  get.ests=FALSE, run.checks=FALSE)
+    fit <- fitqtlengine(pheno, qtl=qtl.obj, covar=covar,
+                        formula=formula, method=method, dropone=FALSE,
+                        get.ests=FALSE, run.checks=FALSE)
   
     if(verbose && ((i-1) %% n.prnt) == 0)
         cat("    ", i,"/", n.loop, "\n")

@@ -6,7 +6,7 @@
 #
 # http://www.rqtl.org
 #
-# 15 January 2008
+# 7 February 2008
 ##############################################################
 
 save.image()
@@ -125,7 +125,7 @@ pos <- c(50, 76, 30, 70, 20)
 qtl <- makeqtl(hyper, chr, pos)
 
 my.formula <- y ~ Q1 + Q2 + Q3 + Q4 + Q5 + Q4:Q5
-out.fitqtl <- fitqtl(hyper$pheno[,1], qtl, formula=my.formula)
+out.fitqtl <- fitqtl(hyper, qtl=qtl, formula=my.formula)
 summary(out.fitqtl)
 
 ls()
@@ -344,14 +344,13 @@ plot(out2.c4 - out2sub, allow.neg=TRUE, lower="cond-int")
 qc <- c(1, 1, 4, 6, 15)
 qp <- c(43.3, 78.3, 30.0, 62.5, 18.0)
 qtl <- makeqtl(hyper, chr=qc, pos=qp)
-phe <- pull.pheno(hyper, 1)
 
 myformula <- y ~ Q1+Q2+Q3+Q4+Q5 + Q4:Q5
 
-out.fq <- fitqtl(phe, qtl, formula = myformula)
+out.fq <- fitqtl(hyper, qtl=qtl, formula = myformula)
 summary(out.fq)
 
-out.fq <- fitqtl(phe, qtl, formula = myformula, drop=FALSE, get.ests=TRUE)
+out.fq <- fitqtl(hyper, qtl=qtl, formula = myformula, drop=FALSE, get.ests=TRUE)
 summary(out.fq)
 
 revqtl <- refineqtl(hyper, qtl=qtl, formula = myformula)
@@ -360,7 +359,7 @@ revqtl
 
 plot(revqtl)
 
-out.fq2 <- fitqtl(phe, revqtl, formula=myformula)
+out.fq2 <- fitqtl(hyper, qtl=revqtl, formula=myformula)
 summary(out.fq2)
 
 out1.c4r <- addqtl(hyper, qtl=revqtl, formula=y~Q3)
@@ -384,7 +383,7 @@ out.2more <- addpair(hyper, qtl=revqtl, formula=myformula, chr=c(2,5,7,15))
 
 plot(out.2more, lower="cond-int")
 
-out.ai <- addint(phe, qtl=revqtl, formula=myformula)
+out.ai <- addint(hyper, qtl=revqtl, formula=myformula)
 out.ai
 
 qtl2 <- addtoqtl(hyper, revqtl, 7, 53.6)

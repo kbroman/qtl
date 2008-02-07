@@ -46,7 +46,7 @@ options(width=87, digits=3, scipen=4)
 {fontsize=\footnotesize, baselinestretch=0.75}
 
 \textbf{\large New functions for exploring multiple-QTL models} \\
-Karl W Broman, 16 January 2008
+Karl W Broman, 7 February 2008
 
 \bigskip
 
@@ -172,15 +172,15 @@ par(mar=c(4.1,4.1,4.1,0.1), cex.axis=0.8, cex.main=1, cex=0.7)
 \end{figure}
 
 We may now use \code{fitqtl} to fit the model (with QTL in fixed
-positions); \code{fitqtl} requires a column of phenotypes, rather than
-a cross object, and so we use \code{pull.pheno} to pull out the data
-for the first phenotype, blood pressure.  Note that we use
+positions). (In previous versions of R/qtl, \code{fitqtl} required a
+column of phenotypes, rather than a cross object, but this has been
+revised to make calls to \code{fitqtl} more like those to
+\code{scanone}, \code{scantwo}, and \code{scanqtl}.)  Note that we use
 \code{Q3*Q4} to indicate that QTL 3 and 4 should interact.  We could
 also have written the formula as \verb|y~Q1+Q2+Q3+Q4+Q3:Q4|.  See the
 help file for \code{formula} for more information.
 <<fitqtl1>>=
-phe <- pull.pheno(hyper, 1)
-out.fq <- fitqtl(phe, qtl=qtl, formula=y~Q1+Q2+Q3*Q4)
+out.fq <- fitqtl(hyper, qtl=qtl, formula=y~Q1+Q2+Q3*Q4)
 summary(out.fq)
 @ 
 
@@ -223,7 +223,7 @@ The loci on chr 1 and 4 changed position very slightly.  Let us use
 \code{fitqtl} to assess the improvement in fit; we'll skip the
 drop-one analysis.
 <<fitqtl2>>=
-out.fq2 <- fitqtl(phe, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, dropone=FALSE)
+out.fq2 <- fitqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, dropone=FALSE)
 summary(out.fq2)
 @ 
 
@@ -289,12 +289,11 @@ other possible pairwise interactions, and will compare the base model
 (with the four QTL and just the 6$\times$15 interaction) to the model
 with the additional interaction included.
 
-The syntax of the function is similar to that of \code{fitqtl}, taking
-a phenotype, QTL object, and model formula.  The output is a table of
-results similar to that provided by the drop-one analysis of
-\code{fitqtl}. 
+The syntax of the function is similar to that of \code{fitqtl}.  The
+output is a table of results similar to that provided by the drop-one
+analysis of \code{fitqtl}.
 <<addint>>=
-addint(phe, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
+addint(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
 @ 
 
 None of the interactions is particularly interesting.
@@ -302,7 +301,7 @@ None of the interactions is particularly interesting.
 Note the difference in the results if we use as the formula
 \code{y~Q1+Q2+Q3+Q4} (that is, omitting the 6$\times$15 interaction.
 <<addint2>>=
-addint(phe, qtl=rqtl, formula=y~Q1+Q2+Q3+Q4)
+addint(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3+Q4)
 @ 
 
 The 6$\times$15 interaction is also tested, and the LOD scores for the
@@ -315,9 +314,7 @@ interaction added.
 
 We may use the \code{addqtl} function to scan for an additional QTL,
 to be added to the model.  By default, the new QTL is strictly
-additive.  The syntax of \code{addqtl} is similar to that of
-\code{refineqtl}: it requires the cross object, \code{hyper}, as well
-as a QTL object and a formula.
+additive.  
 <<addqtl,eval=FALSE>>=
 out.aq <- addqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
 @ 

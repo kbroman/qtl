@@ -38,7 +38,7 @@ University of Wisconsin -- Madison
 \href{http://www.rqtl.org}{http://www.rqtl.org}
 \vspace{2mm}
 
-15 January 2008 % the date
+7 February 2008 % the date
 
 \rule{7.0in}{1mm} 
 \end{center}
@@ -862,7 +862,7 @@ QTL, and allowing the QTL on chr 6 and 15 to interact.
 
 \usercolor
 \verb|my.formula <- y ~ Q1 + Q2 + Q3 + Q4 + Q5 + Q4:Q5| \\ 
-\verb|out.fitqtl <- fitqtl(hyper$pheno[,1], qtl, formula=my.formula)| \\ %$
+\verb|out.fitqtl <- fitqtl(hyper, qtl=qtl, formula=my.formula)| \\ %$
 \verb|summary(out.fitqtl)|
 \normalcolor
 
@@ -1583,13 +1583,10 @@ the 7$\times$15 interaction is not.
   One must first pull out the data on fixed QTL locations using
   \verb-makeqtl-.  We will consider the possibility of two QTL on
   chr 1, but will ignore the putative QTL on chr 7.
-  Also note that \verb-fitqtl- takes a vector of phenotypes as input,
-  and so we pull that from the \verb-hyper- data to make things simpler.
 
 \usercolor \verb|qc <- c(1, 1, 4, 6, 15)| \\
 \verb|qp <- c(43.3, 78.3, 30.0, 62.5, 18.0)| \\
-\verb|qtl <- makeqtl(hyper, chr=qc, pos=qp)| \\
-\verb|phe <- pull.pheno(hyper, 1)| \normalcolor %$
+\verb|qtl <- makeqtl(hyper, chr=qc, pos=qp)| \normalcolor 
 
   We also create a ``formula'' which indicates which QTL are to be
   included in the fit and which interact; the colon (:) indicates an
@@ -1601,7 +1598,7 @@ the 7$\times$15 interaction is not.
   get a summary of the results.  
 
 \usercolor
-\verb|out.fq <- fitqtl(phe, qtl, formula = myformula)| \\
+\verb|out.fq <- fitqtl(hyper, qtl=qtl, formula = myformula)| \\
 \verb|summary(out.fq)|
 \normalcolor
 
@@ -1622,7 +1619,7 @@ indicate 2 degrees of freedom.
   estimated effects.
 
 \usercolor
-\verb|out.fq <- fitqtl(phe, qtl, formula = myformula, drop=FALSE, get.ests=TRUE)| \\
+\verb|out.fq <- fitqtl(hyper, qtl=qtl, formula = myformula, drop=FALSE, get.ests=TRUE)| \\
 \verb|summary(out.fq)|
 \normalcolor
 
@@ -1657,7 +1654,7 @@ overall LOD score should have increased slightly.  (For me, it
 increased from 23.0 to 23.7.)
 
 \usercolor
-\verb|out.fq2 <- fitqtl(phe, revqtl, formula=myformula)| \\
+\verb|out.fq2 <- fitqtl(hyper, qtl=revqtl, formula=myformula)| \\
 \verb|summary(out.fq2)|
 \normalcolor
 
@@ -1677,8 +1674,7 @@ increased from 23.0 to 23.7.)
   been observed.
 
   The \verb-addqtl- function is much like \verb-fitqtl-, taking a QTL
-  object and formula as arguments.  Rather than a phenotype column,
-  though, it needs the full cross object.  If the formula is omitted,
+  object and formula as arguments.  If the formula is omitted,
   all loci are assumed to be additive.  The additional QTL to be
   scanned may be included in the formula; if there are 5 QTL in the
   input QTL object, refer to the new QTL as \verb-Q6-.  This allows a
@@ -1784,12 +1780,10 @@ Again, there's nothing particularly exciting.
 
 \item Another function of interest is \verb-addint-, for testing the
   addition of each possible pairwise interactions, one at a time, to a
-  multiple-QTL model.  Use of \verb-addint- is similar to
-  \verb-fitqtl-, in that a phenotype column should be provided, rather
-  than a cross object.
+  multiple-QTL model.  
 
 \usercolor
-\verb|out.ai <- addint(phe, qtl=revqtl, formula=myformula)| \\
+\verb|out.ai <- addint(hyper, qtl=revqtl, formula=myformula)| \\
 \verb|out.ai|
 \normalcolor
 

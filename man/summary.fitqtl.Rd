@@ -45,7 +45,7 @@ qtl <- makeqtl(fake.f2, qc, qp)
 
 # fit model with 3 interacting QTLs interacting
 # (performing a drop-one-term analysis)
-lod <- fitqtl(fake.f2$pheno[,1], qtl, formula=y~Q1*Q2*Q3)
+lod <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1*Q2*Q3)
 summary(lod)
 }
 

@@ -251,7 +251,7 @@ function(cross, qtl, indextodrop, chr, pos, qtl.name)
 
   qtl$n.gen[indextodrop] <- newqtl$n.gen
 
-  attr(qtl, "lodprofiles") <- NULL
+  attr(qtl, "lodprofile") <- NULL
 
   qtl
 }
@@ -302,7 +302,7 @@ function(cross, qtl, chr, pos, qtl.name)
     stop("Mismatch in no. individuals")
   qtl$n.gen <- c(qtl$n.gen, newqtl$n.gen)
 
-  attr(qtl, "lodprofiles") <- NULL
+  attr(qtl, "lodprofile") <- NULL
 
   qtl
 }
@@ -392,7 +392,7 @@ function(qtl, index, chr, pos, qtl.name)
   if("prob" %in% names(qtl))
     qtl$prob <- qtl$prob[idx]
 
-  attr(qtl, "lodprofiles") <- NULL
+  attr(qtl, "lodprofile") <- NULL
 
   qtl
 }

@@ -2,13 +2,13 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-7, Hao Wu and Karl W. Broman
-# last modified Dec, 2007
+# copyright (c) 2002-8, Hao Wu and Karl W. Broman
+# last modified Feb, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
 # Part of the R/qtl package
-# Contains: fitqtl, parseformula, summary.fitqtl,
+# Contains: fitqtl, fitqtlengine, parseformula, summary.fitqtl,
 #           print.summary.fitqtl, mybinaryrep, deparseqtlformula
 #
 ######################################################################
@@ -22,15 +22,30 @@
 ######################################################################
 
 fitqtl <-
-function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
+function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
          dropone=TRUE, get.ests=FALSE, run.checks=TRUE)
 {
   # some input checking stuff in here
+  if( !sum(class(cross) == "cross"))
+    stop("The cross argument must be an object of class \"cross\".")
+    
   if( !sum(class(qtl) == "qtl") )
     stop("The qtl argument must be an object of class \"qtl\".")
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("fitqtl can take just one phenotype; only the first will be used")
+  }
+    
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar) && nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
 
@@ -55,6 +70,16 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     }
   }
 
+  fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+               method=method, dropone=dropone, get.ests=get.ests,
+               run.checks=run.checks, cross.attr=attributes(cross))
+}
+  
+
+fitqtlengine <-
+function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
+         dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr)
+{
   # local variables
   n.ind <- qtl$n.ind # number of individuals
   n.qtl <- qtl$n.qtl # number of selected markers
@@ -208,8 +233,24 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     ests <- z$ests
 
     ests.cov <- matrix(z$ests.cov,ncol=sizefull)
-    if(any(qtl$n.gen[p$idx.qtl]>=4)) 
-      warning("Estimated QTL effects not yet made meaningful for this case.\n   ")
+    if(any(qtl$n.gen[p$idx.qtl]>=4)) {
+      # just attach rownames for this case
+      thenames <- "Intercept"
+
+      if(length(p$idx.qtl) > 0) { # qtl names
+        
+        
+      }
+
+      if(p$n.covar > 0) {
+        covnames <- colnames(covar)[p$idx.covar]
+        thenames <- c(thenames, covnames)
+      }
+      
+
+      # warning("Estimated QTL effects not yet made meaningful for this case.\n   ")
+
+    }
     else {
       X <- matrix(z$design.mat,ncol=sizefull)
       Z <- matrix(0,nrow=n.ind,ncol=sizefull)
@@ -520,19 +561,6 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     
   }  ## if(dropone)
       
-#  else {
-    # don't do drop one at at time
-    # output the lod, pvar and df for this model
-#    result <- matrix(rep(0,4),1,4)
-#    result[1] <- z$lod
-#    result[2] <- 100*(1 - exp(-2*z$lod*log(10)/n.ind))
-#    result[3] <- z$df
-#    result[4] <- 1 - pchisq(2*log(10)*z$lod, z$df)
-#    rownames(result) <- "Full"
-#    colnames(result) <- c("LOD", "%var", "df", "Pvalue")
-#  }
-
-  
   if(get.ests) 
     output$ests <- list(ests=ests, covar=ests.cov)
 
@@ -541,6 +569,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   attr(output, "formula") <- deparseQTLformula(formula)
   attr(output, "type") <- qtl$type
   attr(output, "nind") <- length(pheno)
+#  attr(output, "design.mat") <- matrix(z$design.mat, nrow=n.ind)
   output
 
 }

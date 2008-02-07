@@ -6,9 +6,12 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 2/6/2008:
+Version 1.08, 2/7/2008:
 
 Major changes:
+
+  fitqtl now takes a cross object and pheno.col (as with scanone,
+  scantwo and scanqtl), rather than a column of phenotypes.
 
   Implemented Haley-Knott regression for the fit of multiple-QTL
   models in fitqtl and scanqtl.

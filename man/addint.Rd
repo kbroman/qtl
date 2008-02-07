@@ -9,11 +9,16 @@
 }
 
 \usage{
-addint(pheno, qtl, covar=NULL, formula, method=c("imp","hk"),
+addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
        qtl.only=FALSE, verbose=TRUE)
 }
 \arguments{
- \item{pheno}{Phenotype data (a numeric vector).}
+ \item{cross}{An object of class \code{cross}. See
+   \code{\link[qtl]{read.cross}} for details.}
+ \item{pheno.col}{Column number in the phenotype matrix which should be
+   used as the phenotype.  This can be a vector of integers; for methods
+   \code{"hk"} and \code{"imp"} this can be considerably faster than doing
+   them one at a time.}
  \item{qtl}{An object of class \code{qtl}, as output from
    \code{\link[qtl]{makeqtl}}.} 
  \item{covar}{A data.frame of covariates.  These must be strictly
@@ -85,7 +90,7 @@ fake.f2 <- sim.geno(fake.f2, n.draws=8, step=2, err=0.001)
 qtl <- makeqtl(fake.f2, qc, qp)
 
 # try all possible pairwise interactions, one at a time
-addint(fake.f2$pheno[,1], qtl, formula=y~Q1+Q2+Q3)
+addint(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3)
 }
 
 \seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
