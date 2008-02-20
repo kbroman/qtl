@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 2/7/2008:
+Version 1.08, 2/20/2008:
 
 Major changes:
 
@@ -119,6 +119,10 @@ Minor changes:
   the case that there is an "ID" phenotype column with names like
   "1_F1".
 
+  Fixed some code in scanqtl regarding dropping individuals with
+  missing phenotypes and/or covariates that really slowed things
+  down.  Revised the analogous code in fitqtl.
+
   Added an argument to est.map: omit.uninformative.  If TRUE (which
   is the default, and which was previously the only option),
   individuals with fewer than two typed markers are omitted.  This was
@@ -129,6 +133,9 @@ Minor changes:
   tryallpositions().
 
   read.cross now prints the cross type at the end.
+
+  read.cross with format="mm" gives a more explicit warning message if
+  phenotypes are to be treated as missing.
 
   Revised summary.qtl to also indicate the number of imputations, in
   the case that the qtl object contains them.

@@ -126,23 +126,24 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     # check phenotypes and covariates; drop ind'ls with missing values
     if(!is.null(covar)) phcovar <- cbind(pheno, covar)
     else phcovar <- as.data.frame(pheno)
-    hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
-    if(all(hasmissing))
-      stop("All individuals are missing phenotypes or covariates.")
-
-    pheno <- pheno[!hasmissing]
-    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
-
-    if(method=="imp") 
-      qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
-    else
-      qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
-
-    qtl$n.ind <- sum(!hasmissing)
-    n.ind <- sum(!hasmissing)
+    if(any(is.na(phcovar))) {
+      if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
+      else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+      if(all(hasmissing))
+        stop("All individuals are missing phenotypes or covariates.")
+      if(any(hasmissing)) {
+        warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
+        pheno <- pheno[!hasmissing]
+        qtl$n.ind <- sum(!hasmissing)
+        if(method=="imp")
+          qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
+        else
+          qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
+      
+        if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+      }
+    }
   }
-
-
 
   # parse the input formula
   p <- parseformula(formula, qtl$altname, colnames(covar))
@@ -234,12 +235,25 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
     ests.cov <- matrix(z$ests.cov,ncol=sizefull)
     if(any(qtl$n.gen[p$idx.qtl]>=4)) {
+      type <- cross.attr$class[1]
+      if(type == "4way")
+        genotypes <- c("AC","BC","AD","BD")
+      else {
+        genotypes <- cross.attr$genotypes
+        if(is.null(genotypes))
+          genotypes <- as.character(1:max(qtl$n.gen))
+      }
+
       # just attach rownames for this case
       thenames <- "Intercept"
 
       if(length(p$idx.qtl) > 0) { # qtl names
-        
-        
+        qtlnames <- vector("list", length(p$idx.qtl))
+        names(qtlnames) <- paste("Q", 1:length(p$idx.qtl), sep="")
+        for(i in seq(along=p$idx.qtl)) {
+          qtlnames[[i]] <- paste(qtl$name[p$idx.qtl[i]], genotypes[2:qtl$n.gen[p$idx.qtl[i]]], sep=".")
+          thenames <- c(thenames, qtlnames[[i]])
+        }
       }
 
       if(p$n.covar > 0) {
@@ -247,8 +261,38 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         thenames <- c(thenames, covnames)
       }
       
+      if(p$n.int > 0) { # interactions
+        if(!is.matrix(p$formula.intmtx)) {
+          nam <- names(p$formula.intmtx)
+          p$formula.intmtx <- matrix(p$formula.intmtx, nrow=p$n.int)
+          colnames(p$formula.intmtx) <- nam
+        }
 
-      # warning("Estimated QTL effects not yet made meaningful for this case.\n   ")
+        for(i in 1:p$n.int) {
+          wh <- which(p$formula.intmtx[i,]==1)
+          nam <- colnames(p$formula.intmtx)[wh]
+
+          if(length(grep("^Q[0-9]+$", nam[1])) > 0)
+            curnam <- qtlnames[[nam[1]]]
+          else
+            curnam <- nam[1]
+          
+          for(j in 2:length(nam)) {
+            if(length(grep("Q[0-9]+", nam[j])) > 0)
+              curnam <- paste(curnam, qtlnames[[nam[j]]], sep=".")
+            else
+              curnam <- paste(curnam, nam[j], sep=".")
+          }
+          thenames <- c(thenames, curnam)
+        }
+      }
+
+      if(length(thenames) ==length(ests)) {
+        names(ests) <- thenames
+        dimnames(ests.cov) <- list(thenames, thenames)
+      }
+      else 
+        warning("Estimated QTL effects not yet made meaningful for this case.\n   ")
 
     }
     else {

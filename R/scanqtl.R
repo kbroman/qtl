@@ -13,9 +13,9 @@
 ######################################################################
 
 scanqtl <-
-  function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
-           method=c("imp", "hk"),
-           incl.markers=FALSE, verbose=TRUE)
+function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
+         method=c("imp", "hk"),
+         incl.markers=FALSE, verbose=TRUE)
 {
   if(!any(class(cross) == "cross")) 
     stop("Input should have class \"cross\".")
@@ -144,14 +144,20 @@ scanqtl <-
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- as.data.frame(pheno)
-  hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
-  if(all(hasmissing))
-    stop("All individuals are missing phenotypes or covariates.")
-  cross <- subset(cross, ind=!hasmissing)
-  pheno <- pheno[!hasmissing]
-  if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
-  sexpgm <- getsex(cross)
+  else phcovar <- pheno
+  if(any(is.na(phcovar))) {
+    if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
+    else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+    if(all(hasmissing))
+      stop("All individuals are missing phenotypes or covariates.")
+    if(any(hasmissing)) {
+      warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
+      cross <- subset(cross, ind=!hasmissing)
+      pheno <- pheno[!hasmissing]
+      if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+    }
+    sexpgm <- getsex(cross)
+  }
 
   # find the chromosome with multiple QTLs
   # indices for chromosomes with multiple QTLs

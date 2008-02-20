@@ -8,7 +8,7 @@
 }
 
 \usage{
-addtoqtl(cross, qtl, chr, pos, qtl.name)
+addtoqtl(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
 }
 
 \arguments{
@@ -23,6 +23,7 @@ addtoqtl(cross, qtl, chr, pos, qtl.name)
    drop-one-term ANOVA table in \code{\link[qtl]{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a
    QTL on Chromsome 1 at 10 cM.} 
+ \item{drop.lod.profile}{If TRUE, remove any LOD profiles from the object.}
 }
 
 \value{

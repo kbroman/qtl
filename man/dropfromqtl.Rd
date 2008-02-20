@@ -8,7 +8,7 @@
 }
 
 \usage{
-dropfromqtl(qtl, index, chr, pos, qtl.name)
+dropfromqtl(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ dropfromqtl(qtl, index, chr, pos, qtl.name)
  \item{pos}{Vector (of same length as \code{chr}) indicating the
    positions of the QTL to be dropped.}
  \item{qtl.name}{Vector specifying the names of the QTL to be dropped.}
+ \item{drop.lod.profile}{If TRUE, remove any LOD profiles from the object.}
 }
 
 \details{

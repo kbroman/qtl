@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o revise read.cross with format="mm" to deal with ril by selfing
+  and/or sib mating
+
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
 

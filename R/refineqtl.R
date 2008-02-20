@@ -328,7 +328,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   
   m <- match(qtl$name, names(lodprof))
   if(any(is.na(m)))
-    qtl <- dropfromqtl(qtl, index=which(is.na(m)))
+    qtl <- dropfromqtl(qtl, index=which(is.na(m)), drop.lod.profile=FALSE)
 
   # reorder qtl by position
   if(qtl$n.qtl > 1) {

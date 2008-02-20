@@ -73,18 +73,22 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
   else phcovar <- as.data.frame(pheno)
-  hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
-  if(all(hasmissing))
-    stop("All individuals are missing phenotypes or covariates.")
-  if(any(hasmissing)) {
-    pheno <- pheno[!hasmissing]
-    qtl$n.ind <- sum(!hasmissing)
-    if(method=="imp")
-      qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
-    else
-      qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
+  if(any(is.na(phcovar))) {
+    if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
+    else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+    if(all(hasmissing))
+      stop("All individuals are missing phenotypes or covariates.")
+    if(any(hasmissing)) {
+      warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
+      pheno <- pheno[!hasmissing]
+      qtl$n.ind <- sum(!hasmissing)
+      if(method=="imp")
+        qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
+      else
+        qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
-    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+      if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+    }
   }
 
   # number of covarariates
@@ -370,30 +374,35 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     else covar <- covar[,!is.na(m),drop=FALSE]
   }
 
-  # check phenotypes and covariates; drop ind'ls with missing values
+  # phenotype column
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
     warning("addqtl can take just one phenotype; only the first will be used")
   }
-    
+   
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
+
+  # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
   else phcovar <- as.data.frame(pheno)
-  hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
-  if(all(hasmissing))
-    stop("All individuals are missing phenotypes or covariates.")
-  if(any(hasmissing)) {
-    cross <- subset(cross, ind=!hasmissing)
-    pheno <- pheno[!hasmissing]
-    qtl$n.ind <- sum(!hasmissing)
-    if(method=="imp")
-      qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
-    else
-      qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
+  if(any(is.na(phcovar))) {
+    if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
+    else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+    if(all(hasmissing))
+      stop("All individuals are missing phenotypes or covariates.")
+    if(any(hasmissing)) {
+      warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
+      pheno <- pheno[!hasmissing]
+      qtl$n.ind <- sum(!hasmissing)
+      if(method=="imp")
+        qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
+      else
+        qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
-    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+      if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+    }
   }
 
   # fit the base model
@@ -693,7 +702,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     else covar <- covar[,!is.na(m),drop=FALSE]
   }
 
-  # check phenotypes and covariates; drop ind'ls with missing values
+  # phenotype column
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
     warning("addpair can take just one phenotype; only the first will be used")
@@ -701,21 +710,26 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
+
+  # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
   else phcovar <- as.data.frame(pheno)
-  hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
-  if(all(hasmissing))
-    stop("All individuals are missing phenotypes or covariates.")
-  if(any(hasmissing)) {
-    cross <- subset(cross, ind=!hasmissing)
-    pheno <- pheno[!hasmissing]
-    qtl$n.ind <- sum(!hasmissing)
-    if(method=="imp")
-      qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
-    else
-      qtl$prob <- lapply(qtl$geno, function(a) a[!hasmissing,,drop=FALSE])
-
-    if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+  if(any(is.na(phcovar))) {
+    if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
+    else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+    if(all(hasmissing))
+      stop("All individuals are missing phenotypes or covariates.")
+    if(any(hasmissing)) {
+      warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
+      pheno <- pheno[!hasmissing]
+      qtl$n.ind <- sum(!hasmissing)
+      if(method=="imp")
+        qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
+      else
+        qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
+      
+      if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+    }
   }
 
   # fit the base model

@@ -215,7 +215,7 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
 #
 ######################################################################
 replaceqtl <-
-function(cross, qtl, indextodrop, chr, pos, qtl.name)
+function(cross, qtl, indextodrop, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
   if(class(qtl) != "qtl")
     stop("qtl should have class \"qtl\".")
@@ -251,7 +251,8 @@ function(cross, qtl, indextodrop, chr, pos, qtl.name)
 
   qtl$n.gen[indextodrop] <- newqtl$n.gen
 
-  attr(qtl, "lodprofile") <- NULL
+  if(drop.lod.profile)
+    attr(qtl, "lodprofile") <- NULL
 
   qtl
 }
@@ -264,7 +265,7 @@ function(cross, qtl, indextodrop, chr, pos, qtl.name)
 ######################################################################
 
 addtoqtl <-
-function(cross, qtl, chr, pos, qtl.name)
+function(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
   if(class(qtl) != "qtl")
     stop("qtl should have class \"qtl\".")
@@ -302,7 +303,8 @@ function(cross, qtl, chr, pos, qtl.name)
     stop("Mismatch in no. individuals")
   qtl$n.gen <- c(qtl$n.gen, newqtl$n.gen)
 
-  attr(qtl, "lodprofile") <- NULL
+  if(drop.lod.profile)
+    attr(qtl, "lodprofile") <- NULL
 
   qtl
 }
@@ -313,7 +315,7 @@ function(cross, qtl, chr, pos, qtl.name)
 #
 ######################################################################
 dropfromqtl <-
-function(qtl, index, chr, pos, qtl.name)
+function(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
   if(class(qtl) != "qtl")
     stop("qtl should have class \"qtl\".")
@@ -392,7 +394,8 @@ function(qtl, index, chr, pos, qtl.name)
   if("prob" %in% names(qtl))
     qtl$prob <- qtl$prob[idx]
 
-  attr(qtl, "lodprofile") <- NULL
+  if(drop.lod.profile)
+    attr(qtl, "lodprofile") <- NULL
 
   qtl
 }
