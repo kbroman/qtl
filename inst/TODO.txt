@@ -13,6 +13,9 @@ SHORT TERM:
 o revise read.cross with format="mm" to deal with ril by selfing
   and/or sib mating
 
+o For any of the read.cross formats, if phenotypes are dropped as
+  missing, give an informative warning.
+
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
 

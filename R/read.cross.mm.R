@@ -2,8 +2,8 @@
 #
 # read.cross.mm.R
 #
-# copyright (c) 2000-6, Karl W Broman
-# last modified Oct, 2006
+# copyright (c) 2000-8, Karl W Broman
+# last modified Feb, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -164,12 +164,13 @@ function(dir,rawfile,mapfile,estimate.map=TRUE)
             newna <- is.na(numerp)
             wh <- !oldna & newna
             if(any(wh)) {
-              if(sum(wh) > 1) {
-                themessage <- paste("The values", paste("\"", p[wh], "\"", sep="", collapse=" "))
+              droppedasmissing <- unique(p[wh])
+              if(length(droppedasmissing) > 1) {
+                themessage <- paste("The values", paste("\"", droppedasmissing, "\"", sep="", collapse=" "))
                 themessage <- paste(themessage, " for phenotype \"", phenames[cur.phe], "\" were", sep="")
               }
               else {
-                themessage <- paste("The value \"", p[wh], "\" ", sep="")
+                themessage <- paste("The value \"", droppedasmissing, "\" ", sep="")
                 themessage <- paste(themessage, " for phenotype \"", phenames[cur.phe], "\" was", sep="")
               }
               themessage <- paste(themessage, "interpreted as missing.")

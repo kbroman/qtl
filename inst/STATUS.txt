@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 2/20/2008:
+Version 1.08, 2/21/2008:
 
 Major changes:
 
@@ -60,6 +60,10 @@ Minor changes:
 
   Added a function pull.pheno for pulling out the data for a phenotype
   or phenotypes.
+
+  Added a function countXO for counting the number of obligate
+  crossovers for each individual across the genome or on individual
+  chromosomes.  
 
   Added a function plot.qtl, for plotting the locations of QTL in a
   qtl object against the genetic map.

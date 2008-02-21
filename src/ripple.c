@@ -2,9 +2,9 @@
  * 
  * ripple.c
  *
- * copyright (c) 2002-6, Karl W Broman
+ * copyright (c) 2002-8, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Feb, 2008
  * first written Mar, 2002
  *
  * Licensed under the GNU General Public License version 2 (June, 1991)
@@ -256,12 +256,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(1);
     case 3: *curgen=3; return(1);
     case 4: *curgen=4; return(2);
+
     case 5: return(0);
     case 6: *curgen=2; return(1);
     case 7: return(0);
     case 8: *curgen=3; return(1);
+
     case 9: return(0);
     case 10: *curgen=10; return(1);
+
+    case 11: *curgen=10; return(1);
+    case 12: return(0);
+    case 13: return(0);
+    case 14: return(0);
     }
   case 2: 
     switch(nextgen) {
@@ -269,12 +276,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: return(0);
     case 3: *curgen=3; return(2);
     case 4: *curgen=4; return(1);
+
     case 5: *curgen=1; return(1);
     case 6: return(0);
     case 7: return(0);
     case 8: *curgen=4; return(1);
+
     case 9: *curgen=9; return(1);
     case 10: return(0);
+
+    case 11: return(0);
+    case 12: *curgen=9; return(1);
+    case 13: return(0);
+    case 14: return(0);
     }
   case 3: 
     switch(nextgen) {
@@ -282,12 +296,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(2);
     case 3: return(0);
     case 4: *curgen=4; return(1);
+
     case 5: return(0);
     case 6: *curgen=4; return(1);
     case 7: *curgen=1; return(1);
     case 8: return(0);
+
     case 9: *curgen=9; return(1);
     case 10: return(0);
+
+    case 11: return(0);
+    case 12: return(0);
+    case 13: *curgen=9; return(1);
+    case 14: return(0);
     }
   case 4: 
     switch(nextgen) {
@@ -295,12 +316,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(1);
     case 3: *curgen=3; return(1);
     case 4: return(0);
+
     case 5: *curgen=3; return(1);
     case 6: return(0);
-    case 7: *curgen=4; return(1);
+    case 7: *curgen=2; return(1);
     case 8: return(0);
+
     case 9: return(0);
     case 10: *curgen=10; return(1);
+
+    case 11: return(0);
+    case 12: return(0);
+    case 13: return(0);
+    case 14: *curgen=10; return(1);
     }
   case 5: 
     switch(nextgen) {
@@ -308,12 +336,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(1);
     case 3: *curgen=3; return(0);
     case 4: *curgen=4; return(1);
+
     case 5: return(0);
     case 6: *curgen=6; return(1);
-    case 7: *curgen=2; return(0);
+    case 7: *curgen=1; return(0);
     case 8: *curgen=3; return(0);
+
     case 9: *curgen=1; return(0);
     case 10: *curgen=3; return(0);
+
+    case 11: *curgen=3; return(0);
+    case 12: return(0);
+    case 13: *curgen=1; return(0);
+    case 14: return(0);
     }
   case 6: 
     switch(nextgen) {
@@ -321,12 +356,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(0);
     case 3: *curgen=3; return(1);
     case 4: *curgen=4; return(0);
+
     case 5: *curgen=5; return(1);
     case 6: return(0);
     case 7: *curgen=2; return(0);
     case 8: *curgen=4; return(0);
+
     case 9: *curgen=4; return(0);
-    case 10: *curgen=2; return(1);
+    case 10: *curgen=2; return(0);
+
+    case 11: return(0);
+    case 12: *curgen=4; return(0);
+    case 13: return(0);
+    case 14: *curgen=2; return(0);
     }
   case 7: 
     switch(nextgen) {
@@ -334,12 +376,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(0);
     case 3: *curgen=3; return(1);
     case 4: *curgen=4; return(1);
+
     case 5: *curgen=1; return(0);
     case 6: *curgen=2; return(0);
     case 7: return(0);
     case 8: *curgen=8; return(1);
+
     case 9: *curgen=1; return(0);
     case 10: *curgen=2; return(0);
+
+    case 11: *curgen=2; return(0);
+    case 12: *curgen=1; return(0);
+    case 13: return(0);
+    case 14: return(0);
     }
   case 8: 
     switch(nextgen) {
@@ -347,12 +396,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(1);
     case 3: *curgen=3; return(0);
     case 4: *curgen=4; return(0);
+
     case 5: *curgen=3; return(0);
     case 6: *curgen=4; return(0);
     case 7: *curgen=7; return(1);
     case 8: return(0);
+
     case 9: *curgen=4; return(0);
     case 10: *curgen=3; return(0);
+
+    case 11: return(0);
+    case 12: return(0);
+    case 13: *curgen=4; return(0);
+    case 14: *curgen=3; return(0);
     }
   case 9: 
     switch(nextgen) {
@@ -360,12 +416,19 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(1);
     case 3: *curgen=3; return(1);
     case 4: *curgen=4; return(0);
+
     case 5: *curgen=1; return(0);
     case 6: *curgen=4; return(0);
     case 7: *curgen=1; return(0);
     case 8: *curgen=4; return(0);
+
     case 9: *curgen=9; return(0);
     case 10: *curgen=10; return(1);
+
+    case 11: *curgen=4; return(0);
+    case 12: return(0);
+    case 13: return(0);
+    case 14: *curgen=1; return(0);
     }
   case 10: 
     switch(nextgen) {
@@ -373,12 +436,99 @@ int countxo_4way(int *curgen, int nextgen)
     case 2: *curgen=2; return(0);
     case 3: *curgen=3; return(0);
     case 4: *curgen=4; return(1);
-    case 5: *curgen=4; return(0);
+
+    case 5: *curgen=3; return(0);
     case 6: *curgen=2; return(0);
-    case 7: *curgen=4; return(0);
-    case 8: *curgen=2; return(0);
-    case 9: *curgen=0; return(1);
+    case 7: *curgen=2; return(0);
+    case 8: *curgen=3; return(0);
+
+    case 9: *curgen=9; return(1);
+    case 10: return(0);
+
+    case 11: return(0);
+    case 12: *curgen=3; return(0);
+    case 13: *curgen=2; return(0);
+    case 14: return(0);
+    }
+  case 11: 
+    switch(nextgen) {
+    case 1: *curgen=1; return(1);
+    case 2: *curgen=2; return(0);
+    case 3: *curgen=3; return(0);
+    case 4: *curgen=4; return(0);
+
+    case 5: *curgen=3; return(0);
+    case 6: *curgen=6; return(0);
+    case 7: *curgen=2; return(0);
+    case 8: *curgen=8; return(0);
+
+    case 9: *curgen=4; return(0);
     case 10: *curgen=10; return(0);
+
+    case 11: return(0);
+    case 12: *curgen=8; return(0);
+    case 13: *curgen=6; return(0);
+    case 14: *curgen=10; return(0);
+    }
+  case 12: 
+    switch(nextgen) {
+    case 1: *curgen=1; return(0);
+    case 2: *curgen=2; return(1);
+    case 3: *curgen=3; return(0);
+    case 4: *curgen=4; return(0);
+
+    case 5: *curgen=5; return(0);
+    case 6: *curgen=4; return(0);
+    case 7: *curgen=1; return(0);
+    case 8: *curgen=8; return(0);
+
+    case 9: *curgen=9; return(0);
+    case 10: *curgen=3; return(0);
+
+    case 11: *curgen=8; return(0);
+    case 12: return(0);
+    case 13: *curgen=9; return(0);
+    case 14: *curgen=5; return(0);
+    }
+  case 13: 
+    switch(nextgen) {
+    case 1: *curgen=1; return(0);
+    case 2: *curgen=2; return(0);
+    case 3: *curgen=3; return(1);
+    case 4: *curgen=4; return(0);
+
+    case 5: *curgen=1; return(0);
+    case 6: *curgen=6; return(0);
+    case 7: *curgen=7; return(0);
+    case 8: *curgen=4; return(0);
+
+    case 9: *curgen=9; return(0);
+    case 10: *curgen=2; return(0);
+
+    case 11: *curgen=6; return(0);
+    case 12: *curgen=9; return(0);
+    case 13: return(0);
+    case 14: *curgen=7; return(0);
+    }
+  case 14: 
+    switch(nextgen) {
+    case 1: *curgen=1; return(0);
+    case 2: *curgen=2; return(0);
+    case 3: *curgen=3; return(0);
+    case 4: *curgen=4; return(1);
+
+    case 5: *curgen=5; return(0);
+    case 6: *curgen=2; return(0);
+    case 7: *curgen=7; return(0);
+    case 8: *curgen=3; return(0);
+
+    case 9: *curgen=1; return(0);
+    case 10: *curgen=10; return(0);
+
+    case 11: *curgen=10; return(0);
+    case 12: *curgen=5; return(0);
+    case 13: *curgen=7; return(0);
+    case 14: return(0);
     }
   default: return(0); /* shouldn't get here */
   }
