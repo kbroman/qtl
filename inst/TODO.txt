@@ -26,8 +26,6 @@ o In all functions taking pheno.col, allow this to be a vector of
   character strings.  Maybe also allow it to be a vector of actual
   phenotype values.
 
-o addqtl/scanqtl too slow (maybe it's because of makeqtl?)
-
 o Add an explanation regarding the coding in the coefficient 
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
