@@ -2,8 +2,8 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-7, Karl W Broman
-# last modified Oct, 2007
+# copyright (c) 2000-8, Karl W Broman
+# last modified Feb, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -122,10 +122,28 @@ function(dir, file, na.strings=c("-","NA"),
   # Fix up phenotypes
   sw2numeric <-
     function(x) {
-      pattern <- "^[ \t]*-*[0-9]*[.]*[0-9]*[ \t]*$"
+      wh1 <- is.na(x)
       n <- sum(!is.na(x))
-      if(length(grep(pattern,as.character(x[!is.na(x)])))==n)
-        return(as.numeric(as.character(x)))
+      y <- suppressWarnings(as.numeric(as.character(x)))
+      wh2 <- is.na(y)
+      m <- sum(!is.na(y))
+      if(n==m || (n-m) < 2 || (n-m) < n*0.05) {
+        if(sum(!wh1 & wh2) > 0) {
+          u <- unique(as.character(x[!wh1 & wh2]))
+          if(length(u) > 1) {
+            themessage <- paste("The phenotype values", paste("\"", u, "\"", sep="", collapse=" "))
+                themessage <- paste(themessage, " were", sep="")
+              }
+              else {
+                themessage <- paste("The phenotype value \"", u, "\" ", sep="")
+                themessage <- paste(themessage, " was", sep="")
+              }
+              themessage <- paste(themessage, "interpreted as missing.")
+              warning(themessage)
+
+        }
+        return(y)
+      }
       else return(x)
     }
   pheno <- data.frame(lapply(pheno, sw2numeric))

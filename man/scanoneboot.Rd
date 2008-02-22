@@ -22,7 +22,8 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
  \item{chr}{Indicates the chromosomes for which the bootstrap should be
    performed.} 
  \item{pheno.col}{Column number in the phenotype matrix which should be
-   used as the phenotype.  This should be a single number.}
+   used as the phenotype.  One may also give a character string matching
+   a phenotype name.}  
  \item{model}{The phenotypic model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
  \item{method}{Indicates whether to use the EM algorithm, 

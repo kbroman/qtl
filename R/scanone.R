@@ -2,9 +2,9 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-7, Karl W Broman
+# copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Aug, 2007
+# last modified Feb, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -42,6 +42,18 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(missing(verbose)) {
     if(!missing(n.perm) && n.perm > 0) verbose <- TRUE
     else verbose <- FALSE
+  }
+
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(any(is.na(num))) {
+      if(sum(is.na(num)) > 1) 
+        stop("Couldn't identify phenotypes ", paste(paste("\"", pheno.col[is.na(num)], "\"", sep=""),
+                                                    collapse=" "))
+      else 
+        stop("Couldn't identify phenotype \"", pheno.col[is.na(num)], "\"")
+    }
+    pheno.col <- num
   }
 
   if(any(pheno.col < 1 | pheno.col > nphe(cross)))

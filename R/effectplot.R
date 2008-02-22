@@ -2,9 +2,9 @@
 #
 # effectplot.R
 #
-# copyright (c) 2002-7, Hao Wu and Karl W. Broman
+# copyright (c) 2002-8, Hao Wu and Karl W. Broman
 # 
-# Last modified Dec, 2007
+# Last modified Feb, 2008
 # first written Jul, 2002
 #
 # Modified by Hao Wu Feb 2005 for the following:
@@ -26,8 +26,21 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
 {
   if(!sum(class(cross) == "cross")) 
     stop("The first input variable must be an object of class cross")
-  if(pheno.col > nphe(cross)) 
-    stop("Input pheno.col is wrong")
+
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("effectplot can take just one phenotype; only the first will be used")
+  }
+    
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
 
   var.flag <- match.arg(var.flag)
 

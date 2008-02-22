@@ -19,7 +19,8 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
 \arguments{
   \item{cross}{An object of class \code{cross}.}
   \item{pheno.col}{Column number in the phenotype matrix which to be
-    drawn in the plot.}
+    drawn in the plot.  One may also give a character string matching
+   a phenotype name.}
   \item{chr}{Chromosome(s) to be drawn in the plot (optional).}
   \item{get.se}{If TRUE, estimated standard errors are calculated.}
   \item{draw}{If TRUE, draw the figure.}

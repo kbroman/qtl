@@ -2,9 +2,9 @@
 #
 # effectscan.R
 #
-# copyright (c) 2003-7, Karl W. Broman
+# copyright (c) 2003-8, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Nov, 2007
+# last modified Feb, 2008
 # first written Jan, 2003
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -22,6 +22,21 @@ function(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
   mtick <- match.arg(mtick)
   if(type == "4way")
     stop("effect scan not working for 4-way cross yet.")
+
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("effectscan can take just one phenotype; only the first will be used")
+  }
+    
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
 
   pheno <- cross$pheno[,pheno.col]
   wh <- is.na(pheno)

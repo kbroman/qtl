@@ -28,6 +28,13 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     warning("scanqtl can take just one phenotype; only the first will be used")
   }
     
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
   if(pheno.col < 1 | pheno.col > nphe(cross))
     stop("pheno.col values should be between 1 and the no. phenotypes")
 

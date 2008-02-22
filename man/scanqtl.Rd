@@ -17,7 +17,8 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix to be
-   used as the phenotype.}
+   used as the phenotype.  One may also give a character string matching
+   a phenotype name.}
  \item{chr}{Vector indicating the chromosome for each QTL.}
  \item{pos}{List indicating the positions or intervals on the chromosome
    to be scanned.  Each element should be either a single number (for a

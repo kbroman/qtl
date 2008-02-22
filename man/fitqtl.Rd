@@ -16,9 +16,8 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
-   used as the phenotype.  This can be a vector of integers; for methods
-   \code{"hk"} and \code{"imp"} this can be considerably faster than doing
-   them one at a time.}
+   used as the phenotype.  One may also give a character string matching
+   a phenotype name.}
  \item{qtl}{An object of class \code{qtl}, as output from
    \code{\link[qtl]{makeqtl}}.} 
  \item{covar}{A data.frame of covariates.  These must be strictly

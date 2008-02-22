@@ -1088,6 +1088,21 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
     stop("Input should have class \"cross\".")
   type <- class(cross)[1]
 
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("plot.pxg can take just one phenotype; only the first will be used")
+  }
+    
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
+
   if(missing(pch)) pch <- par("pch")
   if(missing(ylab)) ylab <-  colnames(cross$pheno)[pheno.col] 
 
@@ -1307,8 +1322,17 @@ function(x, pheno.col=1, ...)
   if(!any(class(x) == "cross"))
     stop("Input should have class \"cross\".")
 
-  if(length(pheno.col) > 1)
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
     warning("Ignoring all but the first element in pheno.col.")
+  }
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
   if(pheno.col < 1 | pheno.col > nphe(x))
     warning("pheno.col should be between 1 and ", nphe(x))
 

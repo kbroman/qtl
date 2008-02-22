@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
 #
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -53,6 +53,18 @@ function(cross, chr, pheno.col=1,
   if(missing(n.perm)) n.perm <- 0
 
   fullmap <- pull.map(cross)
+
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(any(is.na(num))) {
+      if(sum(is.na(num)) > 1) 
+        stop("Couldn't identify phenotypes ", paste(paste("\"", pheno.col[is.na(num)], "\"", sep=""),
+                                                    collapse=" "))
+      else 
+        stop("Couldn't identify phenotype \"", pheno.col[is.na(num)], "\"")
+    }
+    pheno.col <- num
+  }
 
   if(any(pheno.col < 1 | pheno.col > nphe(cross)))
     stop("pheno.col values should be between 1 and the no. phenotypes")

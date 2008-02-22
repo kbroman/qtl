@@ -18,7 +18,8 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
  \item{chr}{Optional vector indicating the chromosomes to be scanned.
    If missing, all chromosomes are scanned.}
  \item{pheno.col}{Column number in the phenotype matrix to be
-   used as the phenotype.}
+   used as the phenotype.  One may also give a character string matching
+   a phenotype name.}
  \item{qtl}{An object of class \code{qtl}, as output from
    \code{\link[qtl]{makeqtl}}.} 
  \item{covar}{A data.frame of covariates.  These must be strictly

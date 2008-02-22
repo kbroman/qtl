@@ -18,7 +18,8 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix to be
-   used as the phenotype.}
+   used as the phenotype.  One may also give a character string matching
+   the phenotype name.}
  \item{qtl}{A QTL object, as produced by \code{\link[qtl]{makeqtl}},
    containing the positions of the QTL.  Provide either \code{qtl} or
    the pair \code{chr} and \code{pos}.}

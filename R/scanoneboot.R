@@ -4,7 +4,7 @@
 #
 # copyright (c) 2007-8, Karl W Broman
 # 
-# last modified Jan, 2008
+# last modified Feb, 2008
 # first written Apr, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -33,6 +33,12 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   
   if(length(pheno.col) > 1)
     stop("pheno.col should indicate a single phenotype")
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
 

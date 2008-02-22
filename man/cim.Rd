@@ -22,7 +22,8 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
-   used as the phenotype.}
+   used as the phenotype.  One may also give a character string matching
+   a phenotype name.}
  \item{n.marcovar}{Number of marker covariates to use.}
  \item{window}{Window size, in cM.}
  \item{method}{Indicates whether to use the EM algorithm, 

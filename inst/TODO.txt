@@ -10,21 +10,17 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o revised rqtltour to indicate that "pheno.col" can be the name of a
+  phenotype rather than just a numeric index.
+
 o revise read.cross with format="mm" to deal with ril by selfing
   and/or sib mating
-
-o For any of the read.cross formats, if phenotypes are dropped as
-  missing, give an informative warning.
 
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
 
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
-
-o In all functions taking pheno.col, allow this to be a vector of
-  character strings.  Maybe also allow it to be a vector of actual
-  phenotype values.
 
 o Add an explanation regarding the coding in the coefficient 
   estimates in fitqtl().  Add text to the help file for

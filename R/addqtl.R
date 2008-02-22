@@ -40,6 +40,13 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     warning("addint can take just one phenotype; only the first will be used")
   }
     
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
   if(pheno.col < 1 | pheno.col > nphe(cross))
     stop("pheno.col values should be between 1 and the no. phenotypes")
 
@@ -380,6 +387,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     warning("addqtl can take just one phenotype; only the first will be used")
   }
    
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
@@ -706,6 +720,12 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
     warning("addpair can take just one phenotype; only the first will be used")
+  }
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
   }
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))

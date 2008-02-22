@@ -6,9 +6,14 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 2/21/2008:
+Version 1.08, 2/22/2008:
 
 Major changes:
+
+  For all functions taking a "pheno.col" argument (including scanone
+  and scantwo), this argument can now be a character string indicating
+  the name of a phenotype. (Previously, it had to be a numeric index
+  indicating the phenotype).
 
   fitqtl now takes a cross object and pheno.col (as with scanone,
   scantwo and scanqtl), rather than a column of phenotypes.
@@ -138,8 +143,9 @@ Minor changes:
 
   read.cross now prints the cross type at the end.
 
-  read.cross with format="mm" gives a more explicit warning message if
-  phenotypes are to be treated as missing.
+  read.cross (with format="mm" or one of the "csv" formats) gives a
+  more explicit warning message if phenotypes are to be treated as
+  missing.
 
   Revised summary.qtl to also indicate the number of imputations, in
   the case that the qtl object contains them.

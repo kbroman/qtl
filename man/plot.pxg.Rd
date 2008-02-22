@@ -17,7 +17,8 @@ plot.pxg(x, marker, pheno.col=1, jitter=1, infer=TRUE,
     \code{\link[qtl]{read.cross}} for details. }
   \item{marker}{Marker name (a character string; can be a vector).}
   \item{pheno.col}{Column number in the phenotype matrix which should be
-   used as the phenotype.}
+   used as the phenotype.  One may also give a character string matching
+   a phenotype name.}
   \item{jitter}{A positive number indicating how much to spread out the
     points horizontally.  (Larger numbers correspond to greater spread.)}
   \item{infer}{If TRUE, missing genotypes are filled in with a single

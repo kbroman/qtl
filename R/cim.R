@@ -2,9 +2,9 @@
 #
 # cim.R
 #
-# copyright (c) 2007, Karl W Broman
+# copyright (c) 2008, Karl W Broman
 # 
-# last modified Nov, 2007
+# last modified Feb, 2008
 # first written Jan, 2007
 #
 # Licensed under the GNU General Public License version 2 (June, 1991)
@@ -32,6 +32,21 @@ function(cross, pheno.col=1, n.marcovar=3, window=10,
   map.function <- match.arg(map.function)
 
   type <- class(cross)[1]
+
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(any(is.na(num))) {
+      if(sum(is.na(num)) > 1) 
+        stop("Couldn't identify phenotypes ", paste(paste("\"", pheno.col[is.na(num)], "\"", sep=""),
+                                                    collapse=" "))
+      else 
+        stop("Couldn't identify phenotype \"", pheno.col[is.na(num)], "\"")
+    }
+    pheno.col <- num
+  }
+
+  if(any(pheno.col < 1 | pheno.col > nphe(cross)))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
 
   y <- cross$pheno[,pheno.col]
   if(any(is.na(y))) {
