@@ -580,6 +580,8 @@ function(cross, chr)
                    paste("not", temp[2]),
                    paste("not", temp[3]),
                    paste("not", temp[4]))
+
+    gen.names[5:8] <- substr(temp[c(1,2,1,3)], c(1,1,2,2), c(1,1,2,2))
   }
   else stop("Unknown cross type: ",type)
     
@@ -990,13 +992,17 @@ function(x, chr, ind, ...)
     }
 
     if("rf" %in% names(x)) { # pull out part of rec fracs
-      n.mar <- nmar(x)
-      n.chr <- n.chr
-      wh <- rbind(c(0,cumsum(n.mar)[-n.chr])+1,cumsum(n.mar))
-      dimnames(wh) <- list(NULL, names(n.mar))
-      wh <- wh[,chr,drop=FALSE]
-      wh <- unlist(apply(wh,2,function(a) a[1]:a[2]))
-      x$rf <- x$rf[wh,wh]
+      if(totmar(x) != ncol(x$rf))
+        x <- clean(x)
+      else {
+        n.mar <- nmar(x)
+        n.chr <- n.chr
+        wh <- rbind(c(0,cumsum(n.mar)[-n.chr])+1,cumsum(n.mar))
+        dimnames(wh) <- list(NULL, names(n.mar))
+        wh <- wh[,chr,drop=FALSE]
+        wh <- unlist(apply(wh,2,function(a) a[1]:a[2]))
+        x$rf <- x$rf[wh,wh]
+      }
     }
 
     x$geno <- x$geno[chr]

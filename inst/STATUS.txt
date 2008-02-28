@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 2/22/2008:
+Version 1.08, 2/28/2008:
 
 Major changes:
 
@@ -180,6 +180,9 @@ Minor changes:
 
   Fixed a bug in summary.cross in the case of invalid genotypes in a
   cross. 
+
+  Fixed a slight bug in subset.cross regarding the recombination
+  fractions from est.rf().
 
   Fixed slight bugs in effectplot and reviseXdata regarding the X
   chromosome in an intercross with both sexes and one cross direction.
