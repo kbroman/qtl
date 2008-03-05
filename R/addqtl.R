@@ -397,6 +397,8 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar) && nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
@@ -731,6 +733,8 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar) && nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)

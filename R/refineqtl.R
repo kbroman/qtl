@@ -116,6 +116,8 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   if(pheno.col < 1 || pheno.col > nphe(cross))
     stop("pheno.col should be between 1 and ", nphe(cross))
   pheno <- cross$pheno[,pheno.col]
+  if(!is.null(covar) && nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
   else phcovar <- as.data.frame(pheno)
   hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
