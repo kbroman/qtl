@@ -11,7 +11,8 @@
 \usage{
 plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
                qtl.labels=TRUE, mtick=c("line", "triangle"),
-               show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
+               show.marker.names=FALSE, alternate.chrid=FALSE,
+               add=FALSE, \dots)
 
 }			    
 \arguments{
@@ -32,6 +33,7 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
+  \item{add}{If TRUE, add curves to a current plot.}
   \item{\dots}{Passed to the function \code{\link[graphics]{plot}} when it
     is called.}
 }

@@ -334,7 +334,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 plotLodProfile <-
 function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
          qtl.labels=TRUE, mtick=c("line", "triangle"),
-         show.marker.names=FALSE, alternate.chrid=FALSE, ...)
+         show.marker.names=FALSE, alternate.chrid=FALSE, add=FALSE, ...)
 {
   if(!("qtl" %in% class(qtl)))
     stop("Input qtl is not a qtl object")
@@ -421,21 +421,23 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
   dots <- list(...)
 
-  if("ylim" %in% names(dots)) {
-    plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
-                 mtick=mtick, show.marker.names=show.marker.names,
-                 alternate.chrid=alternate.chrid, col="white", ...)
-  }
-  else {
-    if(qtl.labels)
-      ylim <- c(0, ymax+1)
-    else
-      ylim <- c(0, ymax)
+  if(!add) {
+    if("ylim" %in% names(dots)) {
+      plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
+                   mtick=mtick, show.marker.names=show.marker.names,
+                   alternate.chrid=alternate.chrid, col="white", ...)
+    }
+    else {
+      if(qtl.labels)
+        ylim <- c(0, ymax+1)
+      else
+        ylim <- c(0, ymax)
 
-    plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
-                 mtick=mtick, show.marker.names=show.marker.names,
-                 alternate.chrid=alternate.chrid, col="white", ylim=ylim,
-                 ...)
+      plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
+                   mtick=mtick, show.marker.names=show.marker.names,
+                   alternate.chrid=alternate.chrid, col="white", ylim=ylim,
+                   ...)
+    }
   }
 
   for(i in dontskip) {
