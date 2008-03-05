@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Feb, 2008
+# last modified Mar, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -416,6 +416,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
         qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
       if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+      cross <- subset(cross, ind=!hasmissing)
     }
   }
 
@@ -749,6 +750,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
         qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
       if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+      cross <- subset(cross, ind=!hasmissing)
     }
   }
 
