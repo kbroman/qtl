@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Feb, 2008
+# last modified Mar, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -141,7 +141,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       if(any(hasmissing)) {
         warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
         pheno <- pheno[!hasmissing]
-        qtl$n.ind <- sum(!hasmissing)
+        n.ind <- qtl$n.ind <- sum(!hasmissing)
         if(method=="imp")
           qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
         else

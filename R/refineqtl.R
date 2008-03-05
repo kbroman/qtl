@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified Feb, 2008
+# last modified Mar, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -138,9 +138,13 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     qtl$n.ind <- sum(!hasmissing)
   }
 
-  # if missing formula, include just the additive QTL
-  if(missing(formula)) 
-    formula <- as.formula(paste("y ~", paste(qtl$altname, collapse="+")))
+  # if missing formula, include the additive QTL plus all covariates
+  if(missing(formula)) {
+    formula <- paste("y ~", paste(qtl$altname, collapse="+"))
+    if(!is.null(covar))
+      formula <- paste(formula, "+", paste(colnames(covar), collapse="+"))
+    formula <- as.formula(formula)
+  }
   formula <- checkformula(formula, qtl$altname, colnames(covar))
 
   # identify which QTL are in the model formula
@@ -190,7 +194,6 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   names(lastout) <- qtl$name[tovary]
 
   for(i in 1:maxit) {
-    
     if(keeplodprofile) # do drop-one analysis
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=TRUE, get.ests=FALSE,

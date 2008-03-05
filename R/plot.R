@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-8, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Feb, 2008
+# last modified Mar, 2008
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1327,7 +1327,7 @@ function(x, pheno.col=1, ...)
     warning("Ignoring all but the first element in pheno.col.")
   }
   if(is.character(pheno.col)) {
-    num <- find.pheno(cross, pheno.col)
+    num <- find.pheno(x, pheno.col)
     if(is.na(num)) 
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
