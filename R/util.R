@@ -6,7 +6,7 @@
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
 #
-# last modified Feb, 2008
+# last modified Mar, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -2049,9 +2049,11 @@ function(cross, marker, newchr, newpos)
       cross$geno[[chr]]$map <- cross$geno[[chr]]$map[-pos]
   }
 
+
   if(missing(newpos)) {
     # add marker to end of new chromosome
     n.mar <- nmar(cross)[newchr]
+
     cross$geno[[newchr]]$data <- cbind(cross$geno[[newchr]]$data,g)
     colnames(cross$geno[[newchr]]$data)[n.mar+1] <- marker
   
@@ -2157,6 +2159,7 @@ function(cross, marker, newchr, newpos)
 
     cross$rf <- rf
   }
+
 
   if(!delchr) thechr <- c(chr,newchr)
   else thechr <- newchr
@@ -2687,6 +2690,7 @@ function(cross, marker)
     pos2 <- unlist(lapply(map, function(a) a[2,]))
     onemap <- FALSE
     output <- cbind(output, pos2=rep(NA, length(marker)))
+    colnames(output)[2:3] <- c("pos.female","pos.male")
   }
   
   mnam <- colnames(pull.geno(cross))
