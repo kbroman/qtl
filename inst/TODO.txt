@@ -10,14 +10,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o add an "add" argument to plotLodProfile
-
 o allow pheno.col to be a vector of phenotype values (if its length
   matches the number of individuals in the cross and is > n.phe)
 
-o revise subset.scantwo so that chr argument need not be given
-
-o revised rqtltour to indicate that "pheno.col" can be the name of a
+o revise rqtltour to indicate that "pheno.col" can be the name of a
   phenotype rather than just a numeric index.
 
 o revise read.cross with format="mm" to deal with ril by selfing

@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
 #
-# last modified Jan, 2008
+# last modified Apr, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -708,33 +708,35 @@ function(x, chr, lodcolumn, ...)
       x$scanoneX <- x$scanoneX[,lodcolumn]
   }
 
-  a <- unique(x$map[,1])
-  if(is.numeric(chr) && all(chr < 0)) 
-    chr <- a[chr]
-  else chr <- a[match(chr,a)]
+  if(!missing(chr)) {
+    a <- unique(x$map[,1])
+    if(is.numeric(chr) && all(chr < 0)) 
+      chr <- a[chr]
+    else chr <- a[match(chr,a)]
 
-  wh <- x$map[,1] %in% chr
+    wh <- x$map[,1] %in% chr
 
-  x$map <- x$map[wh,,drop=FALSE]
+    x$map <- x$map[wh,,drop=FALSE]
 
-  if(length(dim(x$lod))==2)
-    x$lod <- x$lod[wh,wh,drop=FALSE]
-  else 
-    x$lod <- x$lod[wh,wh,,drop=FALSE]
+    if(length(dim(x$lod))==2)
+      x$lod <- x$lod[wh,wh,drop=FALSE]
+    else 
+      x$lod <- x$lod[wh,wh,,drop=FALSE]
 
-  if(!is.null(x$scanoneX))
-    x$scanoneX <- x$scanoneX[wh]
+    if(!is.null(x$scanoneX))
+      x$scanoneX <- x$scanoneX[wh]
 
-  if("fullmap" %in% names(attributes(x))) {
-    fmap <- attr(x, "fullmap")
-    fmap <- fmap[chr]
-    attr(x, "fullmap") <- fmap
+    if("fullmap" %in% names(attributes(x))) {
+      fmap <- attr(x, "fullmap")
+      fmap <- fmap[chr]
+      attr(x, "fullmap") <- fmap
+    }
+
+    df <- attr(x, "df")
+    if(any(!is.na(match(c("AX","XX"), rownames(df)))) &&
+       all(!x$map$xchr))
+      attr(x, "df") <- df["AA",,drop=FALSE]
   }
-
-  df <- attr(x, "df")
-  if(any(!is.na(match(c("AX","XX"), rownames(df)))) &&
-     all(!x$map$xchr))
-    attr(x, "df") <- df["AA",,drop=FALSE]
 
   x
 }
