@@ -4,7 +4,7 @@
 #
 # copyright (c) 2008, Karl W Broman
 # 
-# last modified Feb, 2008
+# last modified Apr, 2008
 # first written Jan, 2007
 #
 # Licensed under the GNU General Public License version 2 (June, 1991)
@@ -55,7 +55,7 @@ function(cross, pheno.col=1, n.marcovar=3, window=10,
   }
 
   if(!missing(n.perm) && n.perm > 0) {
-    results <- rep(NA, n.perm)
+    results <- matrix(ncol=1, nrow=n.perm)
     for(i in 1:n.perm) {
       o <- sample(length(y))
       y <- y[o]
@@ -63,9 +63,9 @@ function(cross, pheno.col=1, n.marcovar=3, window=10,
       temp <- cim(cross, pheno.col=pheno.col, n.marcovar=n.marcovar,
                   window=window, method=method, imp.method=imp.method,
                   error.prob=error.prob, map.function=map.function)
-      results[i] <- max(temp[,3], na.rm=TRUE)
+      results[i,1] <- max(temp[,3], na.rm=TRUE)
     }
-    class(results) <- "scanoneperm"
+    class(results) <- c("scanoneperm", "matrix")
     return(results)
   }
 

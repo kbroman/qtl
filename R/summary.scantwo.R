@@ -748,7 +748,7 @@ function(x, chr, lodcolumn, ...)
 summary.scantwoperm <-
 function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
 {
-  if(class(object)[1] != "scantwoperm")
+  if(!any(class(object) == "scantwoperm"))
     stop("Input should have class \"scantwoperm\".")
 
   out <- lapply(object, apply, 2, quantile, 1-alpha)
@@ -826,7 +826,7 @@ function(...)
   dots <- list(...)
   if(length(dots)==1) return(dots[[1]])
   for(i in seq(along=dots)) {
-    if(class(dots[[i]])[1] != "scantwoperm")
+    if(!any(class(dots[[i]]) == "scantwoperm"))
       stop("Input should have class \"scantwoperm\".")
   }
 

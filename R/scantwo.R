@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
 #
-# last modified Feb, 2008
+# last modified Apr, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1306,7 +1306,7 @@ function(n.perm, cross, pheno.col, model,
 
   ## make result
   attr(perm.result,"method") <- method
-  class(perm.result) <- "scantwoperm"
+  class(perm.result) <- c("scantwoperm", "list")
 
   ## add column names
   for(i in 1:length(perm.result))

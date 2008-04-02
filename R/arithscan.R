@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-7, Karl W Broman
-# last modified Sep, 2007
+# copyright (c) 2005-8, Karl W Broman
+# last modified Apr, 2008
 # first written Mar, 2005
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -137,8 +137,9 @@ function(e1, e2)
       e1$X <- -e1$X
     }
     else {
+      theclass <- class(e1)
       e1 <- -unclass(e1)
-      class(e1) <- "scanoneperm"
+      class(e1) <- theclass
     }
 
     if(!is.null(df1))
@@ -173,12 +174,13 @@ function(e1, e2)
     e1$X[!is.na(e1$X) & abs(e1$X) < 1e-6] <- 0
   }
   else {
+    theclass <- class(e1)
     e1 <- unclass(e1) - unclass(e2)
 
     # zero out small stuff
     e1[!is.na(e1) & abs(e1) < 1e-6] <- 0
 
-    class(e1) <- "scanoneperm"
+    class(e1) <- theclass
   }
 
   if(!is.null(df1) && !is.null(df2)) {
@@ -224,8 +226,9 @@ function(e1, e2)
     e1$X <- e1$X + e2$X
   }
   else {
+    theclass <- class(e1)
     e1 <- unclass(e1) + unclass(e2)
-    class(e1) <- "scanoneperm"
+    class(e1) <- theclass
   }
 
   if(!is.null(df1) && !is.null(df2)) {

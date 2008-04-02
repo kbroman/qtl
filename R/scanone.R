@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Feb, 2008
+# last modified Apr, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -731,7 +731,11 @@ function(cross, pheno.col=1, model=c("normal","binary","2part","np"),
   attr(res,"model") <- model
   attr(res,"type") <- class(cross)[1]
 
-  class(res) <- "scanoneperm"
+  if(any(chr.type=="X") && any(chr.type=="A") && perm.Xsp)
+    class(res) <- c("scanoneperm", "list")
+  else
+    class(res) <- c("scanoneperm", "matrix")
+    
   res
 }
 

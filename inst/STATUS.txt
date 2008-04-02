@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 3/7/2008:
+Version 1.08, 4/2/2008:
 
 Major changes:
 
@@ -175,6 +175,9 @@ Minor changes:
 
   Made a slight change to plot.scantwo regarding z-limits when zlim
   is missing and allow.neg=TRUE.
+
+  The objects of class "scanoneperm" and "scantwoperm" now have a
+  secondary class (either "matrix" or "list")
 
   Fixed a bug in scantwo perms for the use of the argument clean.scantwo.
 
