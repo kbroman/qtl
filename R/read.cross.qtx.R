@@ -2,8 +2,8 @@
 #
 # read.cross.qtx.R
 #
-# copyright (c) 2000-4, Karl W Broman
-# last modified Apr, 2004
+# copyright (c) 2000-8, Karl W Broman
+# last modified Apr, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -183,12 +183,12 @@ function(dir, file, estimate.map=TRUE)
 
   if(length(ugeno)==2) { # backcross
     # Fix if coded as A:B rather than A:H (RI lines)
-    if(all(ugeno==1 || ugeno==3)) {
+    if(all(ugeno==1 | ugeno==3)) {
       for(i in 1:length(geno))
         geno[[i]]$data[geno[[i]]$data == 3] <- 2
     }
     # Fix if coded as H:B rather than A:H (other backcross)
-    else if(all(ugeno==2 || ugeno==3)) {
+    else if(all(ugeno==2 | ugeno==3)) {
       for(i in 1:length(geno))
         geno[[i]]$data[geno[[i]]$data == 3] <- 1
     }

@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.08, 4/2/2008:
+Version 1.08, 4/3/2008:
 
 Major changes:
 
@@ -113,6 +113,9 @@ Minor changes:
   In the getsex() function, for pulling out sex and pgm for all
   individuals, we now attempt to infer the status of individuals with
   missing information.  Warnings are given.
+
+  Fixed a bug in read.cross.qtx, concerning the case that genotypes
+  are like H:B or A:B, and need to be converted to A:H.
 
   Fixed a bug in effectscan for the X chromosome in the case of an
   intercross with both directions but just one sex.
