@@ -10,6 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o read.cross is slow loading when there are *lots* of phenotypes
+
+o scantwoperm: include the single-qtl perm results
+
+o qtl object containing a formula: print it with the object
+
 o warnings regarding degrees of freedom
 
 o allow pheno.col to be a vector of phenotype values (if its length
