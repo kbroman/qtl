@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Feb, 2008
+# last modified Apr, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -163,8 +163,8 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
       pheno <- pheno[!hasmissing]
       if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
     }
-    sexpgm <- getsex(cross)
   }
+  sexpgm <- getsex(cross)
 
   # find the chromosome with multiple QTLs
   # indices for chromosomes with multiple QTLs

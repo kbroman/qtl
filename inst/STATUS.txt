@@ -6,18 +6,12 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 4/3/2008:
+Version 1.08-56, 4/8/2008:
 
-Major changes:
-
-  None
-
-Minor changes:
-
-  None
+  Fixed a bug in scanqtl.
 
 
-Version 1.08, 4/3/2008:
+Version 1.08-55, 4/3/2008:
 
 Major changes:
 
