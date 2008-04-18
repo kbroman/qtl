@@ -232,7 +232,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
           low <- max(linkedpos[linkedpos < newpos[j]])
         else low <- -Inf
         if(any(linkedpos > newpos[j]))
-          high <- max(linkedpos[linkedpos > newpos[j]])
+          high <- min(linkedpos[linkedpos > newpos[j]])
         else high <- Inf
         
         thispos[[j]] <- c(low, high)

@@ -16,7 +16,10 @@ many details as possible and possibly example data, to Karl Broman,
 Version 1.09 bugs:
 
    1. LOD curves from plotLodProfile are misaligned in the case of
-      linked QTL. [Fixed in Version 1.09.]
+      linked QTL.  [Fixed in Version 1.09.]
+
+   2. refineqtl doesn't use the correct range in the case of more than
+      two QTL on a chromosome. [Fixed in Version 1.09.]
 
 
 Version 1.06 bugs:
