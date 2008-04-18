@@ -4,12 +4,20 @@ Bugs and bug fixes for R/qtl
 This file is intended to contain known bugs in the R/qtl package,
 version by version.  The bugs marked with ">>" are not yet fixed.  See
 STATUS.txt for further information on changes to the package.  
-The list is not comprehensive.
+
+The list is not comprehensive.  I don't do a terribly good job of
+keeping track of things I find and fix.
 
 If you find a potential bug in R/qtl, please send an email, with as
 many details as possible and possibly example data, to Karl Broman,
 <kbroman@biostat.wisc.edu>.
 ----------------------------------------------------------------------
+
+Version 1.09 bugs:
+
+   1. LOD curves from plotLodProfile are misaligned in the case of
+      linked QTL. [Fixed in Version 1.09.]
+
 
 Version 1.06 bugs:
 

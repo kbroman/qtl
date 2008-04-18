@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified Mar, 2008
+# last modified Apr, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -441,7 +441,9 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   }
 
   for(i in dontskip) {
-    temp <- rbind(tempscan[tempscan[,1] != qtl$chr[i],],
+    temp <- rbind(tempscan[tempscan[,1] != qtl$chr[i] |
+                           (tempscan[,1] == qtl$chr[i] & (tempscan[,2] < min(lodprof[[i]][,2]) |
+                                      tempscan[,2] > max(lodprof[[i]][,2]))),],
                   lodprof[[i]])
     
     temp <- temp[order(match(temp[,1], orderedchr), temp[,2]),]

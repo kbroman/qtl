@@ -9,7 +9,7 @@
 # 
 # Part of the R/qtl package
 # Contains: fitqtl, fitqtlengine, parseformula, summary.fitqtl,
-#           print.summary.fitqtl, mybinaryrep, deparseqtlformula
+#           print.summary.fitqtl, mybinaryrep, deparseQTLformula
 #
 ######################################################################
 

@@ -10,6 +10,16 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o pull all of the genoprob and imputation information out of 
+  the qtl objects and replace it with indices to the information
+  in the cross object.  (This stuff takes up too much space!)
+
+o formulas: allow to be character strings, and convert them
+  automatically
+
+o whenever saving a formula as an attribute, make it a character
+  string. 
+
 o read.cross is slow loading when there are *lots* of phenotypes
 
 o scantwoperm: include the single-qtl perm results

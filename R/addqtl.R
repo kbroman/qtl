@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Mar, 2008
+# last modified Apr, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -940,6 +940,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 reviseqtlnuminformula <-
 function(formula, oldnum, newnum)
 {
+  if(is.character(formula))
+    formula <- as.formula(formula)
+
   if(length(oldnum) != length(newnum))
     stop("oldnum and newnum must be the same length.")
 

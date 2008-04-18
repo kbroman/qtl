@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09-1, 4/9/2008:
+Version 1.09-2, 4/18/2008:
 
 Major changes:
 
@@ -14,7 +14,10 @@ Major changes:
 
 Minor changes:
 
-  None yet.
+  Fixed a bug in plotLodProfile for the case of linked QTL.
+
+  Slight change to the internal function reviseqtlnuminformula(),
+  so that the input formula can be a character string.
 
 
 Version 1.08-56, 4/8/2008:
