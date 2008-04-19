@@ -13,7 +13,7 @@ many details as possible and possibly example data, to Karl Broman,
 <kbroman@biostat.wisc.edu>.
 ----------------------------------------------------------------------
 
-Version 1.09 bugs:
+Version 1.08 bugs:
 
    1. LOD curves from plotLodProfile are misaligned in the case of
       linked QTL.  [Fixed in Version 1.09.]
