@@ -25,7 +25,8 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
    specific position) or a pair of numbers (for an interval).}
  \item{covar}{A data frame of covariates.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
-   indicating the model to be fitted.  QTLs are indicated as \code{Q1},
+   indicating the model to be fitted.  (It can also be the character
+   string representation of a formula.)  QTLs are indicated as \code{Q1},
    \code{Q2}, etc.  Covariates are indicated by their names in \code{covar}.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}

@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Apr, 2008
+# last modified May, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -55,6 +55,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+
+  # allow formula to be a character string
+  if(!missing(formula) && is.character(formula))
+    formula <- as.formula(formula)
 
   if(method=="imp") {
     if(!("geno" %in% names(qtl))) {
@@ -219,6 +223,10 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), incl.markers=TRUE, verbose=FALSE)
 {
   method <- match.arg(method)
+
+  # allow formula to be a character string
+  if(!missing(formula) && is.character(formula))
+    formula <- as.formula(formula)
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
@@ -519,6 +527,10 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), incl.markers=FALSE, verbose=TRUE)
 {
   method <- match.arg(method)
+
+  # allow formula to be a character string
+  if(!missing(formula) && is.character(formula))
+    formula <- as.formula(formula)
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")

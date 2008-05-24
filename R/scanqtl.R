@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Apr, 2008
+# last modified May, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -43,6 +43,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+
+  # allow formula to be a character string
+  if(!missing(formula) && is.character(formula))
+    formula <- as.formula(formula)
 
   if(method=="imp") {
     if(!("draws" %in% names(cross$geno[[1]]))) {

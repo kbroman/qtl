@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
 #
-# last modified Apr, 2008
+# last modified May, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1255,7 +1255,8 @@ function(n.perm, cross, pheno.col, model,
                         "fv1"=temp,
                         "int"=temp,
                         "add"=temp,
-                        "av1"=temp)
+                        "av1"=temp,
+                        "one"=temp)
       
     ## permutation loop
     for(i in 1:n.perm) {
@@ -1297,7 +1298,7 @@ function(n.perm, cross, pheno.col, model,
 
       # maxima
       temp <- subrousummaryscantwo(tem, for.perm=TRUE)
-      for(j in 1:5) perm.result[[j]][i,] <- temp[[j]]
+      for(j in 1:6) perm.result[[j]][i,] <- temp[[j]]
 
       if("df" %in% names(attributes(tem))) 
         attr(perm.result, "df") <- revisescantwodf(attr(tem, "df"))

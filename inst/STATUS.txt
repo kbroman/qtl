@@ -6,13 +6,28 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 5/14/2008:
+Version 1.09, 5/23/2008:
 
 Major changes:
 
   None yet.
 
 Minor changes:
+
+  Permutation results obtained via scantwo now include the maximum LOD
+  score from a single-QTL scan.  This is not used in summary.scantwo,
+  but is included for completeness.
+
+  We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
+  character string representations of formulas.  (They are then
+  converted.) 
+
+  Slight change in the way refineqtl determines convergence, to try to
+  avoid unnecessary iterations.
+
+  A more meaningful error message is given in makeqtl in the case that
+  multiple markers are at identical positions, so that qtl locations
+  cannot be determined.
 
   Fixed a bug in read.cross with format="csvs" or "csvsr" for the case
   that there are individuals with phenotypes but no genotypes.
@@ -27,7 +42,8 @@ Minor changes:
   so that the input formula can be a character string.
 
   Fixed slight bug in scanone and scantwo [any(weights)<=0 changed to
-  any(weights<=0)]
+  any(weights<=0)].  Fixed a similar bug in plot.geno [any(errors)
+  changed to any(errors != 0)].
 
 
 Version 1.08-56, 4/8/2008:

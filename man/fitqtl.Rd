@@ -23,9 +23,10 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
  \item{covar}{A data.frame of covariates.  These must be strictly
    numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
-   indicating the model to be fitted.  QTLs are referred to as
+   indicating the model to be fitted.  (It can also be the character
+   string representation of a formula.)  QTLs are referred to as
    \code{Q1}, \code{Q2}, etc.  Covariates are referred to by their names
-   in the data frame \code{covar}.} 
+   in the data frame \code{covar}.  } 
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{dropone}{If TRUE, do drop-one-term analysis.}

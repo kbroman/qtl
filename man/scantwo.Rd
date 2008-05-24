@@ -143,7 +143,7 @@ linkage to the X chromosome.  (See the help file for
   direction as additive covariates, which is needed for a proper
   calculation of conditional LOD scores. 
 
-  If \code{n.perm} is specified, the function returns a list with five
+  If \code{n.perm} is specified, the function returns a list with six
   different LOD scores from each of the permutation replicates. 
   First, the maximum LOD score for the full model (two QTLs plus an
   interaction).  Second, for each pair of
@@ -152,10 +152,14 @@ linkage to the X chromosome.  (See the help file for
   this across chromosome pairs.  Third, for each pair of chromosomes we
   take the difference between the maximum full LOD and the maximum
   additive LOD, and then maximize this across chromosome pairs.  Fourth,
-  the maximum LOD score for the additive QTL model.  Finally, for each
+  the maximum LOD score for the additive QTL model.  Fifth, for each
   pair of chromosomes, we take the difference between the additive LOD
   and the maximum single-QTL LOD for those two chromosomes, and then
-  maximize this across chromosome pairs.
+  maximize this across chromosome pairs.  Finally, the maximum
+  single-QTL LOD score (that is, from a single-QTL scan).  The latter is
+  not used in \code{\link[qtl]{summary.scantwo}}, but does get
+  calculated at each permutation, so we include it for the sake of
+  completeness. 
 }
 
 \references{

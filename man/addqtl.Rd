@@ -25,7 +25,8 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
  \item{covar}{A data.frame of covariates.  These must be strictly
    numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
-   indicating the model to be fitted.  QTLs are referred to as
+   indicating the model to be fitted.  (It can also be the character
+   string representation of a formula.)  QTLs are referred to as
    \code{Q1}, \code{Q2}, etc.  Covariates are referred to by their names
    in the data frame \code{covar}.  If the new QTL is not included in
    the formula, its main effect is added.}

@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-8, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Mar, 2008
+# last modified May, 2008
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -748,7 +748,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       segments(map,u[3],map,u[3]-1/2)
       segments(map,u[4],map,u[4]+1/2)
   
-      if(any(errors)) {
+      if(any(errors != 0)) {
         ind <- rep(1:n.ind,length(map));ind[errors!=1]<-NA
         points(x,ind-jit,pch=0,col=color[6],cex=cex+0.4,lwd=2)
         points(x,ind+jit,pch=0,col=color[6],cex=cex+0.4,lwd=2)
@@ -830,7 +830,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       segments(u[1],map,(u[1]+1)/2,map)
       segments(u[2],map,(n.ind+u[2])/2,map)
   
-      if(any(errors)) {
+      if(any(errors != 0)) {
         ind <- rep(1:n.ind,length(map));ind[errors!=1]<-NA
         points(ind-jit,y,pch=0,col=color[6],cex=cex+0.4,lwd=2)
         points(ind+jit,y,pch=0,col=color[6],cex=cex+0.4,lwd=2)
@@ -891,7 +891,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       segments(map,u[3],map,u[3]-1/2)
       segments(map,u[4],map,u[4]+1/2)
   
-      if(any(errors)) {
+      if(any(errors != 0)) {
         ind <- rep(1:n.ind,length(map));ind[errors!=1]<-NA
         points(x,ind,pch=0,col=color[6],cex=cex+0.4,lwd=2)
       }
@@ -942,7 +942,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       segments(u[1],map,(u[1]+1)/2,map)
       segments(u[2],map,(n.ind+u[2])/2,map)
   
-      if(any(errors)) {
+      if(any(errors != 0)) {
         ind <- rep(1:n.ind,length(map));ind[errors!=1]<-NA
         points(ind,y,pch=0,col=color[6],cex=cex+0.4,lwd=2)
       }
@@ -953,6 +953,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   }
   invisible()
 }
+
 ######################################################################
 #
 # plot.info: Plot the proportion of missing information in the

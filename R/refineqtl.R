@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified Apr, 2008
+# last modified May, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -26,11 +26,15 @@
 ######################################################################
 refineqtl <-
 function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
-         method=c("imp", "hk"), verbose=TRUE, maxit=10,
+         method=c("imp", "hk"), verbose=TRUE, maxit=10, 
          incl.markers=TRUE, keeplodprofile=FALSE)
 {
   method <- match.arg(method)
   
+  # allow formula to be a character string
+  if(!missing(formula) && is.character(formula))
+    formula <- as.formula(formula)
+
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
 
@@ -91,6 +95,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     }
   }
 
+
   if(!all(chr %in% names(cross$geno)))
     stop("Chr ", paste(unique(chr[!(chr %in% cross$geno)]), sep=" "),
          " not found in cross.")
@@ -99,6 +104,12 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   else scanqtl.verbose <- FALSE
 
   cross <- subset(cross, chr=as.character(unique(chr))) # pull out just those chromosomes
+
+  # minimum distance between pseudomarkers
+  map <- attr(qtl, "map")
+  if(is.null(map))
+    stop("Input qtl object should contain the genetic map.")
+  mind <- min(sapply(map, function(a) { if(is.matrix(a)) a <- a[1,]; min(diff(a)) }))/2
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(length(pheno.col) > 1) {
@@ -262,7 +273,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       thisitlod <- curlod
     }
 
-    if(all(curpos == newpos)) {
+    if(max(abs(curpos - newpos)) < mind) {
       converged <- TRUE
       break
     }

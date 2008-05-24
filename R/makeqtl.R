@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Feb, 2008
+# last modified May, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -95,6 +95,8 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
 
       # locate this marker (given chromosome and position)
       marker.idx <- locatemarker(map, i.pos, i.chr, flag="draws")
+      if(length(marker.idx) > 1) 
+        stop("Multiple markers at the same position; run jittermap.")
       
       # if everything is all right, take the genotype
       geno[,i,] <- cross$geno[[i.chr]]$draws[,marker.idx,]
@@ -149,6 +151,8 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
 
       # locate this marker (given chromosome and position)
       marker.idx <- locatemarker(map, i.pos, i.chr, flag="prob")
+      if(length(marker.idx) > 1) 
+        stop("Multiple markers at the same position; run jittermap.")
 
       # take genoprob
       if(chrtype[i.chr] == "X") { # fix X chromosome probs

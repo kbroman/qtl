@@ -31,7 +31,8 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    \code{qtl} is provided, this should not be.}
  \item{covar}{A data frame of covariates.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
-   indicating the model to be fitted.  QTLs are indicated as \code{Q1},
+   indicating the model to be fitted.  (It can also be the character
+   string representation of a formula.)  QTLs are indicated as \code{Q1},
    \code{Q2}, etc.  Covariates are indicated by their names in \code{covar}.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}

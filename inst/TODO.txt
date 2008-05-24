@@ -10,36 +10,24 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o refineqtl: if no change in first iteration, still seem to do a
-  second one.
-
-o addqtl (and refineqtl?) have problems if there are multiple markers
-  on top of one another; identify this in advance and give an
-  error/warning message.  [See Laura Shannon's data.]
-
-o get scanone and scantwo to work with a single marker on a
-  chromosome. 
-
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)
 
-o formulas: allow to be character strings, and convert them
-  automatically
-
-o whenever saving a formula as an attribute, make it a character
-  string. 
-
-o read.cross is slow loading when there are *lots* of phenotypes
-
-o scantwoperm: include the single-qtl perm results
-
 o qtl object containing a formula: print it with the object
-
-o warnings regarding degrees of freedom
 
 o allow pheno.col to be a vector of phenotype values (if its length
   matches the number of individuals in the cross and is > n.phe)
+
+o In plot.geno, allow use of xlim and ylim; also do this in
+  plot.scanoneperm and plot.scantwoperm.
+
+o Incorporate the code to do stepwise model search with the new
+  penalized LOD criteria.
+
+o read.cross is slow loading when there are *lots* of phenotypes
+
+o warnings regarding degrees of freedom often seem unnecessary
 
 o revise rqtltour to indicate that "pheno.col" can be the name of a
   phenotype rather than just a numeric index.
@@ -50,9 +38,6 @@ o revise read.cross with format="mm" to deal with ril by selfing
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
 
-o In plot.geno, allow use of xlim and ylim; also do this in
-  plot.scanoneperm and plot.scantwoperm.
-
 o Add an explanation regarding the coding in the coefficient 
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
@@ -62,6 +47,9 @@ o FAQ: - constructing covariate matrices
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o get scanone and scantwo to work with a single marker on a
+  chromosome. 
 
 o Fix convergence problems in scanone with method="ehk", especially
   in the case of covariates and interactions. 
