@@ -10,6 +10,16 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o refineqtl: if no change in first iteration, still seem to do a
+  second one.
+
+o addqtl (and refineqtl?) have problems if there are multiple markers
+  on top of one another; identify this in advance and give an
+  error/warning message.  [See Laura Shannon's data.]
+
+o get scanone and scantwo to work with a single marker on a
+  chromosome. 
+
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)

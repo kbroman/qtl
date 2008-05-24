@@ -6,13 +6,16 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 4/18/2008:
+Version 1.09, 5/14/2008:
 
 Major changes:
 
   None yet.
 
 Minor changes:
+
+  Fixed a bug in read.cross with format="csvs" or "csvsr" for the case
+  that there are individuals with phenotypes but no genotypes.
 
   Fixed a bug in refineqtl for the case of linked QTL.  (Incorrect
   limits for the search intervals were used.)
@@ -22,6 +25,9 @@ Minor changes:
 
   Slight change to the internal function reviseqtlnuminformula(),
   so that the input formula can be a character string.
+
+  Fixed slight bug in scanone and scantwo [any(weights)<=0 changed to
+  any(weights<=0)]
 
 
 Version 1.08-56, 4/8/2008:

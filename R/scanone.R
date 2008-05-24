@@ -170,7 +170,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     else 
       if(length(weights) != nind(cross))
         stop("weights should either be NULL or a vector of length n.ind")
-    if(any(weights) <= 0)
+    if(any(weights <= 0))
       stop("weights should be entirely positive")
     weights <- sqrt(weights)
   }

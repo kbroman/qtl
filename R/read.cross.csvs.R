@@ -3,7 +3,7 @@
 # read.cross.csvs.R
 #
 # copyright (c) 2006-8, Karl W Broman
-# last modified Feb, 2008
+# last modified May, 2008
 # first written Oct, 2005
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -140,7 +140,10 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
     if(any(is.na(mpg))) {
       n.add <- sum(is.na(mpg))
       genind <- c(genind, pheind[is.na(mpg)])
-      gen <- rbind(gen, matrix(rep(NA, n.add*ncol(gen)), ncol=ncol(gen)))
+
+      genadd <- matrix(rep(NA, n.add*ncol(gen)), ncol=ncol(gen))
+      colnames(genadd) <- colnames(gen)
+      gen <- rbind(gen, genadd)
 
       warning(n.add, " individuals with phenotypes but no genotypes\n    ", paste(pheind[is.na(mpg)], collapse="|"), "\n")
     }
