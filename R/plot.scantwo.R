@@ -2,8 +2,8 @@
 #
 # plot.scantwo.R
 #
-# copyright (c) 2001-7, Karl W Broman, Hao Wu and Brian Yandell
-# last modified Dec, 2007
+# copyright (c) 2001-8, Karl W Broman, Hao Wu and Brian Yandell
+# last modified Jun, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -221,10 +221,16 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
 #  }
 
   # save old par parameters, to restore them on exit
-  old.mar <- par("mar")
-  old.las <- par("las")
-  old.mfrow <- par("mfrow")
-  on.exit(par(las = old.las, mar = old.mar, mfrow = old.mfrow))
+  if(zscale) {
+    old.mar <- par("mar")
+    old.mfrow <- par("mfrow")
+    old.las <- par("las")
+    on.exit(par(las = old.las, mar = old.mar, mfrow = old.mfrow))
+  }
+  else {
+    old.las <- par("las")
+    on.exit(par(las = old.las))
+  }
   par(las = 1)
   if(zscale) {
     dots <- list(...)
@@ -280,7 +286,7 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
   }
 
   # add contours if requested
-  if(any(contours) > 0) {
+  if(any(contours > 0)) {
     if(is.logical(contours))
       contours = 1.5
     tmp = lod
@@ -354,7 +360,7 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
       par(mar = c(5, 2, 4, 2) + 0.1)
 
     colorstep <- (zlim.jnt-lo)/255
-    image(x = 1:1, y = seq(lo, zlim.jnt, colorstep), z = matrix(c(1:256), 1, 256),
+    image(x = 1:1, y = seq(lo, zlim.jnt, colorstep), z = matrix(1:256, 1, 256),
           zlim = c(1, 256), ylab = "", xlab = "", 
           xaxt = "n", yaxt = "n", col = cols)
 

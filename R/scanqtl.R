@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified May, 2008
+# last modified Jun, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -240,10 +240,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
       end <- pos[[i]][2]
       # replace pos[[i]] (a range) by the marker positions within the range
       # extend the position to the nearest markers outside the ranges
-      tmp <- which( (map - start)<0 )
+      tmp <- which( (map - start)<=0 )
       if(length(tmp) != 0) # starting position is after the first marker
         start <- map[max(tmp)]
-      tmp <- which( (end-map) < 0 )
+      tmp <- which( (end-map) <= 0 )
       if(length(tmp) != 0) # ending position is before the last marker
         end <- map[min(tmp)]
       pos[[i]] <- as.vector( map[(map>=start)&(map<=end)] )

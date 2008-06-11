@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 5/23/2008:
+Version 1.09, 6/11/2008:
 
 Major changes:
 
@@ -21,6 +21,14 @@ Minor changes:
   We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
   character string representations of formulas.  (They are then
   converted.) 
+
+  Slight change to scanqtl to avoid going just outside the defined
+  intervals (specifically, so that refineqtl and plotLodProfile do not
+  go just past the flanking QTL).
+
+  Slight change in plot.scantwo to avoid affecting par("mfrow") or
+  par("mar") in the case zscale=FALSE.  Also fixed a slight bug
+  regarding "any(contours)>0" vs "any(contours>0)".
 
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
