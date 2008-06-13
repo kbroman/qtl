@@ -33,6 +33,10 @@ Minor changes:
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
 
+  Fixed a bug in scanone permutations in the case of a single
+  covariate with some individuals with missing phenotypes and/or
+  covariates. 
+
   A more meaningful error message is given in makeqtl in the case that
   multiple markers are at identical positions, so that qtl locations
   cannot be determined.

@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Apr, 2008
+# last modified Jun, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -835,6 +835,9 @@ function(n.perm, cross, pheno.col, model,
 
     addcovarp <- addcovar
     intcovarp <- intcovar
+    if(!is.null(addcovar)) addcovarp <- as.matrix(addcovarp)
+    if(!is.null(intcovar)) intcovarp <- as.matrix(intcovarp)
+    
     if(model=="2part") res <- matrix(ncol=3*n.phe,nrow=n.perm)
     else res <- matrix(0, n.perm, n.phe)
 
