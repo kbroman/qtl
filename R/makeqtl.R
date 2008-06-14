@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified May, 2008
+# last modified Jun, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -442,6 +442,11 @@ function(x, ...)
 summary.qtl <-
 function(object, ...)
 {
+  if(is.null(object) || length(object) == 0) {
+    class(object) <- "summary.qtl"
+    return(object)
+  }
+
   if("geno" %in% names(object)) {
     type <- "draws"
     n.draws <- dim(object$geno)[3]
@@ -455,6 +460,11 @@ function(object, ...)
   if(type=="draws") attr(output, "n.draws") <- n.draws
   class(output) <- c("summary.qtl", "data.frame")
 
+  if("formula" %in% names(attributes(object))) 
+    attr(output, "formula") <- attr(object, "formula")
+  if("pLOD" %in% names(attributes(object)))
+    attr(output, "pLOD") <- attr(object, "pLOD")
+
   output
 }
 
@@ -462,14 +472,28 @@ function(object, ...)
 print.summary.qtl <-
 function(x, ...)
 {
-  type <- attr(x, "type")
-  if(type=="draws")
-    thetext <- paste("imputed genotypes, with", attr(x, "n.draws"), "imputations.")
-  else thetext <- "genotype probabilities."
+  if(is.null(x) || length(x) == 0) {
+    cat("  Null QTL model\n")
+  }
+  else {
+    type <- attr(x, "type")
+    if(type=="draws")
+      thetext <- paste("imputed genotypes, with", attr(x, "n.draws"), "imputations.")
+    else thetext <- "genotype probabilities."
   
-  cat("  QTL object containing", thetext, "\n\n")
+    cat("  QTL object containing", thetext, "\n\n")
 
-  print.data.frame(x, digits=5)
+    print.data.frame(x, digits=5)
+  }
+
+  if("formula" %in% names(attributes(x))) {
+    form <- attr(x, "formula")
+    if(!is.character(form)) form <- deparseQTLformula(form)
+    cat("\n  Formula: ", form, "\n")
+  }
+
+  if("pLOD" %in% names(attributes(x)))
+    cat("\n  pLOD: ", round(attr(x, "pLOD"),3), "\n")
 }
 
 ######################################################################

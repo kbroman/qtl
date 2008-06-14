@@ -6,13 +6,17 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/11/2008:
+Version 1.09, 6/14/2008:
 
 Major changes:
 
   None yet.
 
 Minor changes:
+
+  The print and summary function for QTL objects now will print the
+  formula and penalized LOD ("pLOD") if they exist as attributes.
+  They also take into account the case of a null QTL model.
 
   Permutation results obtained via scantwo now include the maximum LOD
   score from a single-QTL scan.  This is not used in summary.scantwo,
@@ -32,6 +36,8 @@ Minor changes:
 
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
+
+  Fixed a bug in add.threshold for the case of multiple phenotypes.
 
   Fixed a bug in scanone permutations in the case of a single
   covariate with some individuals with missing phenotypes and/or

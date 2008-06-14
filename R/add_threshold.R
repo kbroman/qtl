@@ -2,9 +2,9 @@
 #
 # add_threshold.R
 #
-# copyright (c) 2006-7, Karl W Broman, Johns Hopkins University
+# copyright (c) 2006-8, Karl W Broman, Johns Hopkins University
 #
-# last modified Oct, 2007
+# last modified Jun, 2007
 # first written Dec, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -45,9 +45,15 @@ function(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, ...)
     
   thr <- summary(perms, alpha=alpha)
 
-  if(length(thr) == 1) 
+
+  if(!is.list(thr)) {
+    if(any(lodcolumn < 1 | lodcolumn > length(thr)))
+      stop("lodcolumn should be between 1 and ", length(thr))
     abline(h=thr[lodcolumn], ...)
+  }
   else {
+    if(any(lodcolumn < 1 | lodcolumn > length(thr$A)))
+      stop("lodcolumn should be between 1 and ", length(thr$A))
     a <- thr$A[lodcolumn]
     x <- thr$X[lodcolumn]
     noX <- FALSE
