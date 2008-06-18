@@ -10,6 +10,8 @@
 # Part of the R/qtl package
 # Contains: makeqtl, replaceqtl, addtoqtl, dropfromqtl, locatemarker
 #           print.qtl, summary.qtl, print.summary.qtl, reorderqtl
+#           plot.qtl
+#           print.compactqtl, summary.compactqtl, print.summary.compactqtl
 #
 ######################################################################
 
@@ -506,6 +508,9 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
   if(!("qtl" %in% class(x)))
     stop("input should be a qtl object")
 
+  if(length(x) == 0) 
+    stop("  There are no QTL to plot.")
+
   map <- attr(x, "map")
   if(is.null(map))
     stop("qtl object doesn't contain a genetic map.")
@@ -599,6 +604,40 @@ function(qtl, neworder)
   }
 
   qtl
+}
+
+# print compact version of QTL object
+print.compactqtl <-
+function(x, ...)   
+{
+  print(summary(x))
+}
+
+summary.compactqtl <-
+function(object, ...)
+{
+  class(object) <- c("summary.compactqtl", "list")
+  object
+}
+
+print.summary.compactqtl <-
+function(x, ...)
+{
+  if(is.null(x) || length(x) == 0) 
+    cat("Null QTL model\n")
+  else {
+    temp <- as.data.frame(x)
+    rownames(temp) <- paste("Q", 1:nrow(temp), sep="")
+    print.data.frame(temp)
+  }
+  if("formula" %in% names(attributes(x))) {
+    form <- attr(x, "formula")
+    if(!is.character(form)) form <- deparseQTLformula(form)
+    cat("  Formula: ", form, "\n")
+  }
+
+  if("pLOD" %in% names(attributes(x)))
+    cat("  pLOD: ", round(attr(x, "pLOD"),3), "\n")
 }
 
 # end of makeqtl.R

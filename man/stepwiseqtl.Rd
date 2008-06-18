@@ -141,12 +141,17 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     \item With a fixed QTL model in hand:
     \enumerate{
       \item Scan for an additional additive QTL.
+
       \item For each QTL in the current model, scan for an additional
       interacting QTL.
-      \item If there are \eqn{\ge}{>=} 2 QTL in the current model, consider adding
-      one of the possible pairwise interactions.
-      \item If \code{scan.pairs=TRUE} perform a two-dimensional, two-QTL scan, seeking to
-      add a pair of novel QTL, either additive or interacting.
+
+      \item If there are \eqn{\ge}{>=} 2 QTL in the current model,
+      consider adding one of the possible pairwise interactions.
+
+      \item If \code{scan.pairs=TRUE} perform a two-dimensional, two-QTL
+      scan, seeking to add a pair of novel QTL, either additive or
+      interacting.
+
       \item Step to the model that gives the largest value for the model
       comparison criterion, among those considered at the current step.
       }
@@ -178,9 +183,6 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   experience suggests that they are not necessary; important linked or
   interacting QTL pairs can be picked up in the forward selection to a
   large model, and will be retained in the backward elimination phase.
-      
-  The algorithm 
-
 }
 
 \value{
@@ -198,9 +200,12 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
   If \code{keeptrace=TRUE}, the output will contain an attribute
   \code{"trace"} containing information on the best model at each step
-  of forward and backward elimination.  This is a list of lists, each of
-  which contains a vector of chromosome IDs and positions for the QTL, a
-  formula defining the model, and the penalized LOD score.
+  of forward and backward elimination.  This is a list of objects of
+  class \code{"compactqtl"}, which is similar to a QTL object (as
+  produced by \code{\link[qtl]{makeqtl}}) but containing just 
+  a vector of chromosome IDs and positions for the QTL.  Each will also
+  have attributes \code{"formula"} (containing the model formula) and
+  \code{"pLOD"} (containing the penalized LOD score.
 }
 
 \references{
@@ -242,7 +247,7 @@ thetrace <- attr(outsw, "trace")
 # plot of these
 par(mfrow=c(3,3))
 for(i in seq(along=thetrace))
-  plotModel(thetrace[[i]], main=paste("pLOD =",round(thetrace[[i]]$pLOD, 2)))
+  plotModel(thetrace[[i]], main=paste("pLOD =",round(attr(thetrace[[i]],"pLOD"), 2)))
 }
 
 \seealso{ \code{\link[qtl]{calc.penalties}},

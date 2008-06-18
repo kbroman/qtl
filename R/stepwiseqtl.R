@@ -299,9 +299,13 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       cat("** new best ** (pLOD increased by ", round(curplod, 4), ")\n", sep="")
   }
 
-  if(keeptrace) 
-    thetrace <- list("0"=list(chr=qtl$chr, pos=qtl$pos, formula=deparseQTLformula(formula),
-                              pLOD=curplod))
+  if(keeptrace) {
+    temp <- list(chr=qtl$chr, pos=qtl$pos)
+    attr(temp, "formula") <- deparseQTLformula(formula)
+    attr(temp, "pLOD") <- curplod
+    class(temp) <- c("compactqtl", "list")
+    thetrace <- list("0"=temp)
+  }
 
   if(verbose)
     cat("    no.qtl = ", n.qtl, "  pLOD =", curplod, "  formula:",
@@ -485,11 +489,13 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     }
 
     if(keeptrace) {
-      temp <- list(list(chr=qtl$chr, pos=qtl$pos, formula=deparseQTLformula(formula),
-                        pLOD=curplod))
+      temp <- list(chr=qtl$chr, pos=qtl$pos)
+      attr(temp, "formula") <- deparseQTLformula(formula)
+      attr(temp, "pLOD") <- curplod
+      class(temp) <- c("compactqtl", "list")
+      temp <- list(temp)
       names(temp) <- i
       thetrace <- c(thetrace, temp)
-      cat("****: ", i, length(qtl$chr), curplod, "\n")
     }
 
     if(n.qtl >= max.qtl) break
@@ -589,8 +595,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     }
 
     if(keeptrace) {
-      temp <- list(list(chr=qtl$chr, pos=qtl$pos, formula=deparseQTLformula(formula),
-                        pLOD=curplod))
+      temp <- list(chr=qtl$chr, pos=qtl$pos)
+      attr(temp, "formula") <- deparseQTLformula(formula)
+      attr(temp, "pLOD") <- curplod
+      class(temp) <- c("compactqtl", "list")
+      temp <- list(temp)
       names(temp) <- i
       thetrace <- c(thetrace, temp)
     }

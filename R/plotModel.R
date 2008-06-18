@@ -37,14 +37,17 @@ function(qtl, formula, circrad.rel=0.25, circrad.abs,
         else formula <- NULL
       }
     }
-    if(chronly) qtl <- qtl$chr
-    else {
-      if("name" %in% names(qtl))
-        qtl <- qtl$name
+    if(length(qtl)>0) {
+
+      if(chronly) qtl <- qtl$chr
       else {
-        if("pos" %in% names(qtl)) 
-          qtl <- paste(qtl$chr, roundqtlpos(qtl$pos, 1), sep="@")
-        else qtl <- qtl$chr
+        if("name" %in% names(qtl))
+          qtl <- qtl$name
+        else {
+          if("pos" %in% names(qtl)) 
+            qtl <- paste(qtl$chr, roundqtlpos(qtl$pos, 1), sep="@")
+          else qtl <- qtl$chr
+        }
       }
     }
   }
@@ -71,7 +74,7 @@ function(qtl, formula, circrad.rel=0.25, circrad.abs,
        xaxs="i", yaxs="i", xlim=c(-1.5,1.5), ylim=c(-1.5,1.5),
        ...)
 
-  if(!is.null(qtl)) {
+  if(!is.null(qtl) && length(qtl) > 0) {
     radloc <- rev(seq(pi/2, 2.5*pi, len=nqtl+1)[-1])
     xloc <- cos(radloc)
     yloc <- sin(radloc)

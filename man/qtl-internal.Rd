@@ -55,12 +55,14 @@
 \alias{parseformula}
 \alias{plot.effectscan}
 \alias{print.addint}
+\alias{print.compactqtl}
 \alias{print.cross}
 \alias{print.map}
 \alias{print.qtl}
 \alias{print.scanoneboot}
 \alias{print.scantwo}
 \alias{print.summary.addpair}
+\alias{print.summary.compactqtl}
 \alias{print.summary.cross}
 \alias{print.summary.fitqtl}
 \alias{print.summary.map}
@@ -104,6 +106,7 @@
 \alias{subrousummaryscantwo}
 \alias{summary.scantwocondensed}
 \alias{summary.addint}
+\alias{summary.compactqtl}
 \alias{vbscan}
 \alias{write.cross.csv}
 \alias{write.cross.gary}
@@ -185,12 +188,14 @@ parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)
 \method{print}{addint}(x, \dots)
+\method{print}{compactqtl}(x, \dots)
 \method{print}{cross}(x, \dots)
 \method{print}{map}(x, \dots)
 \method{print}{qtl}(x, \dots)
 \method{print}{scanoneboot}(x, \dots)
 \method{print}{scantwo}(x, \dots)
 \method{print}{summary.addpair}(x, \dots)
+\method{print}{summary.compactqtl}(x, \dots)
 \method{print}{summary.cross}(x, \dots)
 \method{print}{summary.fitqtl}(x, \dots)
 \method{print}{summary.map}(x, \dots)
@@ -267,6 +272,7 @@ subrousummaryscantwo(object, for.perm=FALSE)
          perms, alphas, lodcolumn=1, pvalues=FALSE,
          df=FALSE, allpairs=TRUE, \dots)
 \method{summary}{addint}(object, \dots)
+\method{summary}{compactqtl}(object, \dots)
 vbscan(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
        tol=1e-4)
 write.cross.csv(cross, filestem="data", digits=5, rotate=FALSE,

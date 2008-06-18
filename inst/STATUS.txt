@@ -22,6 +22,12 @@ Major changes:
   plotModel() is a new function for creating a simple graphical
   representation of a QTL model.
 
+  We also define a new class, "compactqtl", for defining the trace
+  through model space in stepwiseqtl() (if called with the argument
+  keeptrace=TRUE).  This is similar to the class "qtl" (of QTL objects
+  created by the makeqtl() function), but containing just chromosome
+  IDs and positions of QTL.
+
 Minor changes:
 
   The print and summary function for QTL objects now will print the
