@@ -22,6 +22,7 @@ c.scanoneperm           Combine data from scanone permutations
 c.scantwoperm           Combine data from scantwo permutations
 calc.errorlod           Identify likely genotyping errors
 calc.genoprob           Calculate conditional genotype probabilities
+calc.penalties          Calculate LOD penalties
 cbind.scanoneperm       Combine columns from multiple scanone
                         permutation results
 checkAlleles            Identify markers with switched alleles
@@ -94,6 +95,7 @@ plot.scantwo            Plot LOD scores for a two-dimensional genome
 plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
                         scan
 plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
+plotModel               Plot a QTL model
 pull.geno               Pull out the genotype data from a cross
 pull.map                Pull out the genetic map from a cross
 pull.pheno              Pull out phenotype data from a cross
@@ -115,6 +117,7 @@ scantwo                 Two-dimensional genome scan with a two-QTL
 sim.cross               Simulate a QTL experiment
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map
+stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
 subset.cross            Subsetting data for QTL experiment
 subset.scanone          Subsetting the results of a genome scan

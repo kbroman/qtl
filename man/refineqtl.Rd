@@ -71,6 +71,11 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
  
 \value{
   An object of class \code{qtl}, with QTL placed in their new positions.
+
+  If \code{keeplodprofile=TRUE}, LOD profiles from the last pass through
+  the refinement algorithm are retained as an attribute,
+  \code{"lodprofile"}, to the object.  These may be plotted with
+  \code{\link[qtl]{plotLodProfile}}.  
 }
 
 \references{
@@ -98,6 +103,7 @@ rqtl <- refineqtl(fake.bc, qtl=qtl, method="hk")
 
 \seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
   \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{addtoqtl}},
-  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{replaceqtl}} }
+  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{replaceqtl}},
+  \code{link[qtl]{plotLodProfile}} }
 
 \keyword{utilities}

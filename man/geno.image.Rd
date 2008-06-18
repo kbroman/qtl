@@ -34,7 +34,7 @@ geno.image(x, chr, reorder=FALSE, main="Genotype data",
   Uses \code{\link[graphics]{image}} to plot a grid with the genotype
   data.  The genotypes AA, AB, BB are displayed in the colors red, blue,
   and green, respectively.  In an intercross, if there are genotypes
-  ``not BB'' and ``not AA'', these are displayed in purple and orange,
+  "not BB" and "not AA", these are displayed in purple and orange,
   respectively.  White pixels indicate missing data.
 }
 

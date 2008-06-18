@@ -2,13 +2,13 @@
 #
 # read.cross.R
 #
-# copyright (c) 2000-7, Karl W Broman
-# last modified Dec, 2007
+# copyright (c) 2000-8, Karl W Broman
+# last modified Jun, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
 # Part of the R/qtl package
-# Contains: read.cross, fixXgeno.bc, fixXgeno.f2
+# Contains: read.cross, fixXgeno.bc, fixXgeno.f2, asnumericwithdec
 #           [See read.cross.csv.R, read.cross.mm.R, read.cross.qtx.R,
 #            qtlcart_io.R, read.cross.gary.R, and read.cross.karl.R
 #            for the format-specific functions.]
@@ -425,6 +425,18 @@ function(cross)
   else cross <- subset(cross,chr= -xchr) # <- omit the X chr completely
 
   cross
+}
+
+
+######################################################################
+# convert character to numeric, using dec as the decimal point
+######################################################################
+asnumericwithdec <-
+function(x, dec=".")
+{
+  if(dec==".") x <- as.numeric(x)
+  else x <- sapply(strsplit(x, ","), function(a) as.numeric(paste(a, collapse=".")))
+  x
 }
 
 # end of read.cross.R

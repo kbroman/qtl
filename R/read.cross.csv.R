@@ -3,12 +3,12 @@
 # read.cross.csv.R
 #
 # copyright (c) 2000-8, Karl W Broman
-# last modified Feb, 2008
+# last modified Jun, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
 # Part of the R/qtl package
-# Contains: read.cross.csv
+# Contains: read.cross.csv 
 #           [See read.cross.R for the main read.cross function.]
 #
 ######################################################################
@@ -34,6 +34,13 @@ function(dir, file, na.strings=c("-","NA"),
   }
 
   args <- list(...)
+
+  # if user wants to use comma for decimal point, we need
+  if(length(args) > 0 && "dec" %in% names(args)) {
+    dec <- args[["dec"]]
+  }
+  else dec <- "."
+
   # read the data file
   if(length(args) < 1 || !("sep" %in% names(args))) {
     # "sep" not in the "..." argument and so take sep=","
@@ -77,7 +84,7 @@ function(dir, file, na.strings=c("-","NA"),
   # Is map included?  yes if first n.phe columns in row 3 are all blank
   if(all(!is.na(data[3,1:n.phe]) & data[3,1:n.phe]=="")) {
     map.included <- TRUE
-    map <- as.numeric(unlist(data[3,-(1:n.phe)]))
+    map <- asnumericwithdec(unlist(data[3,-(1:n.phe)]), dec=dec)
     if(any(is.na(map))) 
       stop("There are missing marker positions.")
     nondatrow <- 3
@@ -121,10 +128,10 @@ function(dir, file, na.strings=c("-","NA"),
 
   # Fix up phenotypes
   sw2numeric <-
-    function(x) {
+    function(x, dec) {
       wh1 <- is.na(x)
       n <- sum(!is.na(x))
-      y <- suppressWarnings(as.numeric(as.character(x)))
+      y <- suppressWarnings(asnumericwithdec(as.character(x), dec))
       wh2 <- is.na(y)
       m <- sum(!is.na(y))
       if(n==m || (n-m) < 2 || (n-m) < n*0.05) {
@@ -146,7 +153,7 @@ function(dir, file, na.strings=c("-","NA"),
       }
       else return(x)
     }
-  pheno <- data.frame(lapply(pheno, sw2numeric))
+  pheno <- data.frame(lapply(pheno, sw2numeric, dec=dec))
 
   # re-order the markers by chr and position
   # try to figure out the chr labels

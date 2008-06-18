@@ -6,11 +6,21 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/14/2008:
+Version 1.09, 6/18/2008:
 
 Major changes:
 
-  None yet.
+  Added a function stepwiseqtl() for performing forward/backward
+  selection to identify a multiple QTL model, with model choice made
+  via a penalized LOD score, with separate penalties on main effects
+  and interactions.
+
+  calc.penalties() uses permutation results for a 2-dimensional, 2-QTL
+  scan to derive penalties for the penalized LOD scores used by
+  stepwiseqtl(). 
+
+  plotModel() is a new function for creating a simple graphical
+  representation of a QTL model.
 
 Minor changes:
 
@@ -36,6 +46,9 @@ Minor changes:
 
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
+
+  Fixed a bug in read.cross with format "csv" (or "csvs" or "csvr" or
+  "csvsr") so that dec="," can be used as an argument.  
 
   Fixed a bug in add.threshold for the case of multiple phenotypes.
 

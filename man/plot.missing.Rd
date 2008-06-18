@@ -34,7 +34,7 @@ plot.missing(x, chr, reorder=FALSE, main="Missing genotypes",
   Uses \code{\link[graphics]{image}} to plot a grid with black pixels where the
   genotypes are missing.  For intercross and 4-way cross data, gray
   pixels are plotted for the partially missing genotypes (for example,
-  ``not AA'').
+  "not AA").
 }
 
 \value{None.}

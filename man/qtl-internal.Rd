@@ -1,12 +1,16 @@
 \name{qtl-internal}
 \alias{adjust.rf.ri}
+\alias{asnumericwithdec}
 \alias{calc.genoprob.special}
 \alias{calc.pairprob}
+\alias{calc.plod}
 \alias{checkcovar}
 \alias{checkformula}
+\alias{checkStepwiseqtlStart}
 \alias{clean}
 \alias{condense}
 \alias{convert}
+\alias{countqtlterms}
 \alias{create.map}
 \alias{deparseQTLformula}
 \alias{discan}
@@ -85,6 +89,7 @@
 \alias{ripple.perm1}
 \alias{ripple.perm2}
 \alias{ripple.perm.sub}
+\alias{roundqtlpos}
 \alias{scanone.perm}
 \alias{scanone.perm.engine}
 \alias{scanoneXnull}
@@ -114,16 +119,20 @@
 
 \usage{
 adjust.rf.ri(r, type=c("self","sib"), chrtype=c("A","X"), expand=TRUE)
+asnumericwithdec(x, dec=".")
 calc.genoprob.special(cross, error.prob=0.0001,
                       map.function=c("haldane","kosambi","c-f","morgan"))
 calc.pairprob(cross, step=0, off.end=0, error.prob=0.0001, 
               map.function=c("haldane","kosambi","c-f","morgan"), map,
               assumeCondIndep=FALSE)
+calc.plod(lod, nterms, type=c("f2","bc"), penalties)
 checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
 checkformula(formula, qtl.name, covar.name)
+checkStepwiseqtlStart(qtl, formula, covar=NULL)
 clean(object)
 condense(object)
 convert(object)
+countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula)
 discan(cross, pheno, method=c("em","mr"),
@@ -216,6 +225,7 @@ reviseXdata(type=c("f2","bc"), expandX=c("simple","standard","full"),
 ripple.perm1(n)
 ripple.perm2(n)
 ripple.perm.sub(x, mat)
+roundqtlpos(x, digits = 1)
 scanone.perm(cross, pheno.col=1, model=c("normal","binary","2part","np"),
              method=c("em","imp","hk","ehk","mr","mr-imp","mr-argmax"),
              addcovar=NULL, intcovar=NULL, weights=NULL,
