@@ -806,8 +806,14 @@ function(perms, alpha=0.05)
   if(!("one" %in% names(qu)))
     stop("You need to re-run scantwo permutations with R/qtl version >= 1.09.")
 
-  penalties <- c(qu[["one"]], qu[["int"]], qu[["fv1"]]-qu[["one"]])
-  names(penalties) <- c("main","heavy", "light")
+  if(length(alpha)>1) {
+    penalties <- cbind(qu[["one"]], qu[["int"]], qu[["fv1"]]-qu[["one"]])
+    colnames(penalties) <- c("main","heavy", "light")
+  }
+  else {
+    penalties <- c(qu[["one"]], qu[["int"]], qu[["fv1"]]-qu[["one"]])
+    names(penalties) <- c("main","heavy", "light")
+  }
   penalties
 }
 

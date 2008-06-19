@@ -39,7 +39,7 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
 		 double *lod, int *df, double *ests, double *ests_covar,
 		 double *design_mat)
 {
-  double ***Genoprob, **Cov;
+  double ***Genoprob=0, **Cov;
   int tot_gen, i, j, curpos;
 
   /* reorganize genotype probabilities */
@@ -175,7 +175,7 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* local variables */
   int i, j, k, *jpvt, ny, idx_col, n_qc, n_int_col, job, outerrep;
   double *work, *qty, *qraux, *coef, *resid, tol, sigmasq, **X;
-  int n_int_q, *idx_int_q;
+  int n_int_q, *idx_int_q=0;
   int nrep, thisidx, gen, totrep, thecol, rep;
   /* return variable */
   double rss_full;

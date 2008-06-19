@@ -195,7 +195,7 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
     }
 
     # make qtl names
-    qtl.name <- paste( paste("Chr",chr,sep=""), round(pos,dig), sep="@")
+    qtl.name <- paste( paste(chr,sep=""), round(pos,dig), sep="@")
   }
 
   # output object
@@ -551,7 +551,7 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
 
   if(is.matrix(map[[1]])) whchr <- whchr - 0.3
 
-  if(length(grep("^Chr.+@[0-9\\.]+$", x$name)) == length(x$name))
+  if(length(grep("^.+@[0-9\\.]+$", x$name)) == length(x$name))
     x$name <- x$altname
 
   if(horizontal) {

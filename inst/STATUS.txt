@@ -34,6 +34,9 @@ Minor changes:
   formula and penalized LOD ("pLOD") if they exist as attributes.
   They also take into account the case of a null QTL model.
 
+  Revised makeqtl so that QTL names are of the form "1@15.0" rather
+  than "Chr1@15.0"; the "Chr" seemed gratuitous.
+
   Permutation results obtained via scantwo now include the maximum LOD
   score from a single-QTL scan.  This is not used in summary.scantwo,
   but is included for completeness.
