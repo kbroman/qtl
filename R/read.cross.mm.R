@@ -3,7 +3,7 @@
 # read.cross.mm.R
 #
 # copyright (c) 2000-8, Karl W Broman
-# last modified Feb, 2008
+# last modified Jun, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -88,12 +88,10 @@ function(dir,rawfile,mapfile,estimate.map=TRUE)
 
     if(flag == 0) {
       flag <- 1
-      type <- a[4] # a[length(a)]
-      if(type == "intercross") type <- "f2"
-      else if(type == "backcross") type <- "bc"
+      if(!is.na(match("intercross", a))) type <- "f2"
+      else if(!is.na(match("backcross", a))) type <- "bc"
       else 
-        stop("File indicates invalid cross type: ", type,
-                     ".")
+        stop("File indicates invalid cross type: ", a[length(a)], ".")
     }
     else if(flag == 1) {
       flag <- 2

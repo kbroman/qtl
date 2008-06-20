@@ -59,6 +59,9 @@ Minor changes:
   Fixed a bug in read.cross with format "csv" (or "csvs" or "csvr" or
   "csvsr") so that dec="," can be used as an argument.  
 
+  Fixed a potential bug in read.cross with format "mm" for pulling out
+  the cross type.
+
   Fixed a bug in add.threshold for the case of multiple phenotypes.
 
   Fixed a bug in scanone permutations in the case of a single
