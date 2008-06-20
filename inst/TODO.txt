@@ -16,6 +16,9 @@ o allow pheno.col to be a vector of phenotype values (if its length
 o revise rqtltour to indicate that "pheno.col" can be the name of a
   phenotype rather than just a numeric index.
 
+o Add information on stepwiseqtl and related functions to the
+  tutorial.  
+
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)

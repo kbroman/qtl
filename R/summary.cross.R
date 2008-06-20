@@ -9,7 +9,7 @@
 # 
 # Part of the R/qtl package
 # Contains: summary.cross, print.summary.cross, nind, nchr, nmar,
-#           totmar, nphe, nmissing, print.cross, chrlen
+#           totmar, nphe, nmissing, ntyped, print.cross, chrlen
 #
 ######################################################################
 
@@ -397,6 +397,21 @@ function(cross,what=c("ind","mar"))
   n.missing
 }
 
+
+# like nmissing, but for the opposite value
+ntyped <-
+function(cross, what=c("ind","mar"))
+{
+  if(!any(class(cross) == "cross"))
+    stop("Input should have class \"cross\".")
+
+  what <- match.arg(what)
+
+  if(what=="ind") n <- totmar(cross)
+  else n <- nind(cross)
+
+  n - nmissing(cross, what)
+}
 
 # "print" method for cross object
 #

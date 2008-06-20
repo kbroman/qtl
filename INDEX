@@ -75,6 +75,7 @@ max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 nmissing                Number of missing genotypes
+ntyped                  Number of genotypes
 plot.cross              Plot various features of a cross object
 plot.errorlod           Plot grid of error LOD values
 plot.geno               Plot observed genotypes, flagging likely errors

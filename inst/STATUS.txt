@@ -35,6 +35,9 @@ Major changes:
 
 Minor changes:
 
+  Added a function ntyped() which is just like nmissing() except it
+  gives the opposite thing (no. genotypes per individual or marker).
+
   The print and summary function for QTL objects now will print the
   formula and penalized LOD ("pLOD") if they exist as attributes.
   They also take into account the case of a null QTL model.
