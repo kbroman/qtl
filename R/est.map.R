@@ -3,7 +3,7 @@
 # est.map.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Jan, 2008
+# last modified Jun, 2008
 # first written Apr, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -86,7 +86,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
       else                              # X chromsome 
         cfunc <- "est_map_bc"
     }
-    else if(type == "bc" || type=="riself" || type=="risib") {
+    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") {
       one.map <- TRUE
       cfunc <- "est_map_bc"
     }

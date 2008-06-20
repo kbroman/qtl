@@ -2,9 +2,9 @@
 #
 # summary.scantwo.old.R
 #
-# copyright (c) 2001-7, Karl W Broman, Hao Wu, and Brian Yandell
+# copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
 #
-# last modified Sep, 2007
+# last modified Jun, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -109,7 +109,7 @@ function (object, thresholds = c(0, 0, 0), lodcolumn=1,
 
   # calculate the degree of freedom
   if(crosstype == "bc" || crosstype == "riself" || crosstype == 
-      "risib") {
+      "risib" || crosstype=="dh") {
     df.int <- 1
     df.add <- 1
   }

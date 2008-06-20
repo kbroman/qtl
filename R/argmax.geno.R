@@ -2,8 +2,8 @@
 #
 # argmax.geno.R
 #
-# copyright (c) 2001-7, Karl W Broman
-# last modified Sep, 2007
+# copyright (c) 2001-8, Karl W Broman
+# last modified Jun, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -61,7 +61,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       else                              # X chromsome 
         cfunc <- "argmax_geno_bc"
     }
-    else if(type=="bc" || type=="riself" || type=="risib") {
+    else if(type=="bc" || type=="dh" || type=="riself" || type=="risib") {
       cfunc <- "argmax_geno_bc"
       one.map <- TRUE
     }

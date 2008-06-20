@@ -3,7 +3,7 @@
 # est.rf.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Jan, 2008
+# last modified Jun, 2008
 # first written Apr, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -56,7 +56,7 @@ function(cross, maxit=10000, tol=1e-6)
   # which type of cross is this?
   if(type == "f2")
     cfunc <- "est_rf_f2"
-  else if(type == "bc" || type=="risib" || type=="riself") 
+  else if(type == "bc" || type=="risib" || type=="riself" || type=="dh") 
     cfunc <- "est_rf_bc"
   else if(type == "4way") 
     cfunc <- "est_rf_4way"
@@ -65,7 +65,7 @@ function(cross, maxit=10000, tol=1e-6)
 
   Geno[is.na(Geno)] <- 0
   
-  if(type=="bc" || type=="risib" || type=="riself")
+  if(type=="bc" || type=="risib" || type=="riself" || type=="dh")
     z <- .C(cfunc,
             as.integer(n.ind),         # number of individuals
             as.integer(n.mar),         # number of markers
@@ -97,7 +97,7 @@ function(cross, maxit=10000, tol=1e-6)
   }
 
   # check for alleles switches
-  if(type == "risib" || type=="riself" || type=="f2" || type=="bc") {
+  if(type == "risib" || type=="riself" || type=="f2" || type=="bc" || type=="dh") {
     out <- checkAlleles(cross, 5, FALSE)
     if(!is.null(out)) {
       out <- as.character(out[,1])
@@ -261,7 +261,7 @@ function(cross, threshold=3, verbose=TRUE)
 
   type <- class(cross)[1]
   if(type != "f2" && type != "bc" &&
-     type != "risib" && type != "riself")
+     type != "risib" && type != "riself" && type != "dh")
     stop("checkAlleles not available for cross type ", type, ".")
     
   # drop X chromosome

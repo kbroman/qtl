@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-7, Karl W Broman
-# last modified Dec, 2007
+# copyright (c) 2001-8, Karl W Broman
+# last modified Jun, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -27,7 +27,7 @@ function(object,...)
   type <- class(object)[1]
 
   if(type != "f2" && type != "bc" && type != "4way" &&
-     type != "riself" && type != "risib" && type != "cc") 
+     type != "riself" && type != "risib" && type != "cc" && type != "dh") 
     stop("Cross type ", type, " is not suppoted.")
 
   if(type=="cc") {
@@ -47,7 +47,7 @@ function(object,...)
     temp <- getgenonames("f2", "A", cross.attr=attributes(object))
     names(typings) <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type=="bc" || type=="riself" || type=="risib") {
+  else if(type=="bc" || type=="riself" || type=="risib" || type=="dh") {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:2))
     names(typings) <- getgenonames(type, "A", cross.attr=attributes(object))
   }
@@ -149,7 +149,7 @@ function(object,...)
             paste(names(x)[x>1], collapse="  "))
 
   # check genotype data
-  if(type=="bc" || type=="riself" || type=="risib") {
+  if(type=="bc" || type=="riself" || type=="risib" || type=="dh") {
     # Invalid genotypes?
     if(any(!is.na(Geno) & Geno != 1 & Geno != 2)) { 
       u <- unique(as.numeric(Geno))
@@ -281,6 +281,7 @@ function(x,...)
   else if(x$type=="4way") cat("    4-way cross\n\n")
   else if(x$type=="riself") cat("    RI strains via selfing\n\n")
   else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
+  else if(x$type=="dh") cat("    Doubled haploids\n\n")
   else cat(paste("    cross", x$type, "\n\n",sep=" "))
 
   cat("    No. individuals:   ", x$n.ind,"\n\n")

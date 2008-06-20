@@ -3,7 +3,7 @@
 # xchr.R
 #
 # copyright (c) 2004-8, Karl W Broman
-# last modified Jan, 2008
+# last modified Jun, 2008
 # first written Apr, 2004
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -123,7 +123,7 @@ function(cross)
 # used in discan, effectplot, plot.pxg, scanone, scantwo, vbscan, reviseXdata
 # cross.attr gives the cross attributes
 getgenonames <-
-function(type=c("f2","bc","riself","risib","4way","special"),
+function(type=c("f2","bc","riself","risib","4way","dh","special"),
          chrtype=c("A","X"), expandX=c("simple","standard","full"),
          sexpgm, cross.attr)
 {  
@@ -157,7 +157,7 @@ function(type=c("f2","bc","riself","risib","4way","special"),
     if(length(pgm)>0) pgm <- pgm[!is.na(pgm)]
   }
 
-  if(type=="riself" || type=="risib") 
+  if(type=="riself" || type=="risib" || type=="dh") 
     gen.names <- tempgn[c(1,3)]
 
   else if(type == "4way") {
@@ -731,7 +731,7 @@ function(type, sexpgm)
   sex <- sexpgm$sex
   pgm <- sexpgm$pgm
 
-  if(type == "risib" || type=="riself") type <- "bc"
+  if(type == "risib" || type=="riself" || type=="dh") type <- "bc"
 
   ### first figure out sex/pgm pattern
 

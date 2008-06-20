@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-7, Karl W Broman
-# last modified Sep, 2007
+# copyright (c) 2001-8, Karl W Broman
+# last modified Jun, 2008
 # first written Oct, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -125,7 +125,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
         func <- "R_ripple_f2"
       else func <- "R_ripple_bc"        # X chromsome  
     }
-    else if(type == "bc" || type=="riself" || type=="risib") func <- "R_ripple_bc"
+    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_ripple_bc"
     else if(type == "4way") func <- "R_ripple_4way"
     else 
       stop("ripple not available for cross ", type)

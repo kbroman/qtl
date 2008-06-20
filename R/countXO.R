@@ -3,7 +3,7 @@
 # countXO.R
 #
 # copyright (c) 2008, Karl W Broman
-# last modified Feb, 2008
+# last modified Jun, 2008
 # first written Feb, 2008
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -40,7 +40,7 @@ function(cross, chr, bychr=FALSE)
       func <- "R_countXO_f2"
     else func <- "R_countXO_bc"        # X chromsome  
   }
-  else if(type == "bc" || type=="riself" || type=="risib") func <- "R_countXO_bc"
+  else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_countXO_bc"
   else if(type == "4way") func <- "R_countXO_4way"
   else 
     stop("ripple not available for cross ", type)

@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/18/2008:
+Version 1.09, 6/20/2008:
 
 Major changes:
 
@@ -27,6 +27,11 @@ Major changes:
   keeptrace=TRUE).  This is similar to the class "qtl" (of QTL objects
   created by the makeqtl() function), but containing just chromosome
   IDs and positions of QTL.
+
+  Added an additional cross type, "dh", for doubled haploids.  This is
+  treated like a backcross, though genotypes will be indicated as
+  homozygotes.  Changed a whole bunch of functions very slightly to
+  accommodate this. 
 
 Minor changes:
 

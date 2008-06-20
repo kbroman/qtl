@@ -2,8 +2,8 @@
 #
 # calc.pairprob.R
 #
-# copyright (c) 2001-7, Karl W Broman
-# last modified NOV, 2007
+# copyright (c) 2001-8, Karl W Broman
+# last modified Jun, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -92,7 +92,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     else gen.names <- c("g1","g2")
     one.map <- TRUE
   }
-  else if(type == "riself" || type=="risib") {
+  else if(type == "riself" || type=="risib" || type=="dh") {
     cfunc <- "calc_pairprob_bc"
     n.gen <- 2
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))

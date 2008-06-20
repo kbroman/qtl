@@ -117,12 +117,9 @@ o Revise plot.rf so that it can have different color schemes, as in
 
 o Simpler methods to get at interesting bits in the est.rf results.
 
-o Add cross type "dh" for doubled haploids.  Treat this just like
-  a backcross, but with different genotype labels.
-
-  Actually, should revise read.cross so that if all genotypes are 
+o Revise read.cross so that if all genotypes are 
   AA and BB, the thing is called DH by default.  Maybe add an 
-  argument to read.cross so that one may specify the cross type.
+  argument to read.cross so that one may specify the cross type?
 
 o Finish off the work to get coefficient estimates by imputation in
   fitqtl for the X chromosome in BC and F2. 

@@ -4,7 +4,7 @@
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
 # 
-# Last modified Feb, 2008
+# Last modified Jun, 2008
 # first written Jul, 2002
 #
 # Modified by Hao Wu Feb 2005 for the following:
@@ -173,14 +173,6 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     }
     else { # otherwise, generate a standard one
       geno1 <- getgenonames(type, "A", cross.attr=attributes(cross))
-#      if(type == "bc") 
-#        geno1 <- c("AA", "AB")
-#      else if(type == "f2")
-#        geno1 <- c("AA", "AB", "BB")
-#      else if(type == "riself" || type == "risib") 
-#        geno1 <- c("AA", "BB")
-#      else if(type == "4way") 
-#        geno1 <- c("AC", "BC", "AD", "BD")
       if(length(levels(tmpf)) > length(geno1)) 
         geno1 <- c(geno1, rep("?", length(levels(tmpf)) - 
                               length(geno1)))
@@ -213,14 +205,6 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
       }
       else { # otherwise, generate a standard one
         geno2 <- getgenonames(type, "A", cross.attr=attributes(cross))
-#        if(type == "bc") 
-#          geno2 <- c("AA", "AB")
-#        else if(type == "f2")
-#          geno2 <- c("AA", "AB", "BB")
-#        else if(type == "riself" || type == "risib") 
-#          geno2 <- c("AA", "BB")
-#        else if(type == "4way") 
-#          geno2 <- c("AC", "BC", "AD", "BD")
         if(length(levels(tmpf)) > length(geno2)) 
            geno2 <- c(geno2, rep("?", length(levels(tmpf)) - 
                                  length(geno2)))

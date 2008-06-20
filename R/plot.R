@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-8, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified May, 2008
+# last modified Jun, 2008
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -50,7 +50,7 @@ function(x, chr, reorder=FALSE, main="Missing genotypes",
   type <- class(cross)[1]
   g <- t(Geno[o,])
   g[is.na(g)] <- 0
-  if(type == "bc" || type=="risib" || type=="riself") 
+  if(type == "bc" || type=="risib" || type=="riself" || type=="bc") 
     g[g > 0] <- 1
   else if(type=="f2") {
     g[g > 0 & g < 4] <- 1

@@ -6,7 +6,7 @@
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
 #
-# last modified Mar, 2008
+# last modified Jun, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -79,7 +79,7 @@ function(cross, map)
     mnames2 <- unlist(lapply(map, function(a) colnames(a)))
     n.mar2 <- n.mar2/2
   }
-  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib") {
+  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh") {
     mnames <- unlist(lapply(cross$geno, function(a) names(a$map)))
     mnames2 <- unlist(lapply(map, function(a) names(a)))
   }
@@ -562,7 +562,7 @@ function(cross, chr)
     temp <- getgenonames("f2", "A", cross.attr=attributes(cross))
     gen.names <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type == "bc" || type == "risib" || type=="riself") {
+  else if(type == "bc" || type == "risib" || type=="riself" || type=="dh") {
     n.gen <- 2
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
   }
@@ -598,7 +598,7 @@ function(cross, chr)
   rownames(results) <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
   pval <- rep(NA,nrow(results))
-  if(type=="bc" || type=="risib" || type=="riself") {
+  if(type=="bc" || type=="risib" || type=="riself" || type=="dh") {
     sexpgm <- getsex(cross)
     if(type == "bc" && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
       for(i in which(allchrtype=="A")) {
@@ -2508,7 +2508,7 @@ function(cross)
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
 
-  if(type != "bc" && type != "f2" && type != "riself" && type != "risib")
+  if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh")
     stop("locate.xo only working for backcross, intercross or RI strains.")
 
   map <- cross$geno[[1]]$map

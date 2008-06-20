@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-7, Karl W Broman and Hao Wu
-# last modified Sep, 2007
+# copyright (c) 2001-8, Karl W Broman and Hao Wu
+# last modified Jun, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -75,9 +75,9 @@ function(cross, filestem="data", digits=5)
   n.mar <- nmar(cross)
   
   type <- class(cross)[1]
-  if(type=="riself" || type=="risib") type <- "bc"
+  if(type=="riself" || type=="risib" || type=="dh") type <- "bc"
   if(type != "f2" && type != "bc")
-    stop("write.cross.mm only works for intercross, backcross and RI data.")
+    stop("write.cross.mm only works for intercross, backcross, doubled haploid and RI data.")
 
   # write genotype and phenotype data
   file <- paste(filestem, ".raw", sep="")

@@ -3,7 +3,7 @@
 # errorlod.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Feb, 2008
+# last modified Jun, 2008
 # first written Apr, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -50,7 +50,7 @@ function(cross, error.prob=0.01,
   for(i in 1:n.chr) {
 
     chr.type <- class(cross$geno[[i]])
-    if(type=="bc" || type=="risib" || type=="riself")
+    if(type=="bc" || type=="risib" || type=="riself" || type=="dh")
       cfunc <- "calc_errorlod_bc"
     else if(type=="f2") {
       if(chr.type=="A") cfunc <- "calc_errorlod_f2"

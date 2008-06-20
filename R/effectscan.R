@@ -4,7 +4,7 @@
 #
 # copyright (c) 2003-8, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Feb, 2008
+# last modified Jun, 2008
 # first written Jan, 2003
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -77,7 +77,7 @@ function(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
     }
     else marnam <- names(map)
 
-    if(type == "risib" || type=="riself") {
+    if(type == "risib" || type=="riself" || type=="dh") {
       mapping <- rbind(c(+1, -1),
                        c(+1, +1))
       colnames(mapping) <- c("intercept","a")
