@@ -822,7 +822,7 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
 
       if(n_mei != 0 && flag == 1) {
 	flag = 0;
-	/* begin EM algorithm; start with cur_rf = 0.5 */
+	/* begin EM algorithm; start with cur_rf = 0.01 */
 	for(s=0, cur_rf=0.01; s < maxit; s++) {
 	  next_rf = 0.0; 
 	  for(i=0; i<n_ind; i++) {

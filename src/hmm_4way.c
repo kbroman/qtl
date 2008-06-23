@@ -2,9 +2,9 @@
  * 
  * hmm_4way.c
  * 
- * copyright (c) 2001-7, Karl W Broman
+ * copyright (c) 2001-8, Karl W Broman
  * 
- * last modified Oct, 2007
+ * last modified Jun, 2008
  * first written Feb, 2001
  *
  * Licensed under the GNU General Public License version 2 (June, 1991)
@@ -402,7 +402,7 @@ double nrec2_4way(int obs1, int obs2, double rf)
     }
   case 10: 
     switch(obs2) {
-    case 10: return(1.0);
+    case 10: return(2.0*rf*rf/(rf*rf+(1.0-rf)*(1.0-rf)));
     case 12: case 13: return(2.0*rf*(2.0-rf)/(2.0-(1.0-rf)*(1.0-rf)-rf*rf));
     case 11: case 14: return(rf*(1.0+rf)/(1.0-rf*(1.0-rf)));
     }

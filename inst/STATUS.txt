@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/20/2008:
+Version 1.09, 6/23/2008:
 
 Major changes:
 
@@ -63,6 +63,8 @@ Minor changes:
 
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
+
+  Fixed a bug in est.rf for 4-way crosses.
 
   Fixed a bug in read.cross with format "csv" (or "csvs" or "csvr" or
   "csvsr") so that dec="," can be used as an argument.  
