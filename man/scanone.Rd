@@ -359,9 +359,12 @@ summary(out.hk, perms=permo, alpha=0.05)
 
 ####################
 # scan with square-root of phenotype
+#   (Note that pheno.col can be a vector of phenotype values)
 ####################
-out.sqrt <- scanone(hyper, pheno.col=sqrt(hyper$pheno[,1]))
-plot(out.hk, out.sqrt, col=c("blue","red"))
+out.sqrt <- scanone(hyper, pheno.col=sqrt(pull.pheno(hyper, 1)))
+plot(out.em - out.sqrt, ylim=c(-0.1,0.1),
+     ylab="Difference in LOD")
+abline(h=0, lty=2, col="gray")
 
 
 ####################
@@ -439,10 +442,8 @@ summary(permo)
 ###################
 # Binary model
 ###################
-listeria <- subset(listeria, ind=!is.na(listeria$pheno[,1]))
-listeria$pheno[,2] <- rep(0,nind(listeria))
-listeria$pheno[listeria$pheno[,1]==264,2] <- 1
-out.bin <- scanone(listeria, pheno.col=2, model="binary")
+binphe <- as.numeric(pull.pheno(listeria,1)==264)
+out.bin <- scanone(listeria, pheno.col=binphe, model="binary")
 summary(out.bin, thr=3)
 
 # Plot LOD for binary model with LOD(p) from 2-part model
@@ -450,9 +451,9 @@ plot(out.bin, out.2p, lodcolumn=c(1,2), lty=1, col=c("black", "red"),
      chr=c(1,5,13))
 
 # Permutation test
-\dontrun{permo <- scanone(listeria, pheno.col=2, model="binary",
+\dontrun{permo <- scanone(listeria, pheno.col=binphe, model="binary",
                  n.perm=1000)
-}\dontshow{permo <- scanone(listeria, pheno.col=2, model="binary",
+}\dontshow{permo <- scanone(listeria, pheno.col=binphe, model="binary",
                  n.perm=3)
 }
 
@@ -466,11 +467,14 @@ data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=c(2,5,10))}
 plot(fake.bc)
 fake.bc <- calc.genoprob(fake.bc, step=2.5)
+
 # genome scans without covariates
 out.nocovar <- scanone(fake.bc)
+
 # genome scans with covariates
-ac <- fake.bc$pheno[,c("sex","age")]
-ic <- fake.bc$pheno[,"sex"]
+ac <- pull.pheno(fake.bc, c("sex","age"))
+ic <- pull.pheno(fake.bc, "sex")
+
 out.covar <- scanone(fake.bc, pheno.col=1,
                      addcovar=ac, intcovar=ic)
 summary(out.nocovar, thr=3)

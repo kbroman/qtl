@@ -35,7 +35,7 @@ fake.f2.B <- subset(fake.f2, ind = -c(1,5,10))
 fake.f2.C <- subset(fake.f2, chr=1:5, ind=1:50)
 
 data(listeria)
-y <- listeria$pheno[,1]
+y <- pull.pheno(listeria, 1)
 listeriaB <- subset(listeria, ind = (!is.na(y) & y < 264))
 }
 

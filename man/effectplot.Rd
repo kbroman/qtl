@@ -86,7 +86,7 @@ effectplot(fake.f2, pheno.col=1, mname1=mname)
 # note that "sex" must be a phenotype name here
 effectplot(fake.f2, mname1="sex", geno1=c("F","M"))
 # alternatively:
-sex <- fake.f2$pheno[,2]
+sex <- pull.pheno(fake.f2, "sex")
 effectplot(fake.f2, mname1="Sex", mark1=sex, geno1=c("F","M"))
 
 ########################################
@@ -107,11 +107,11 @@ effectplot(fake.f2, mname1=pmnames[1], mname2=pmnames[2])
 mname <- find.marker(fake.f2, 13, 24) # marker D13M254
 # sex and a marker
 effectplot(fake.f2, mname1=mname, mname2="Sex",
-           mark2=fake.f2$pheno$sex, geno2=c("F","M"))
+           mark2=sex, geno2=c("F","M"))
 
 # Same as above, switch role of sex and the marker
 # sex and marker
-effectplot(fake.f2, mname1="Sex", mark1=fake.f2$pheno$sex,
+effectplot(fake.f2, mname1="Sex", mark1=sex,
            geno1=c("F","M"), mname2=mname)
 
 # X chromosome marker

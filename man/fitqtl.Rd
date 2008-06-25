@@ -130,7 +130,7 @@ lod.add <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3)
 summary(lod.add)
 
 # fit the model including sex as an interacting covariate
-Sex <- data.frame(Sex=fake.f2$pheno$sex)
+Sex <- data.frame(Sex=pull.pheno(fake.f2, "sex"))
 lod.sex <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1*Q2*Q3*Sex, cov=Sex)
 summary(lod.sex)
 

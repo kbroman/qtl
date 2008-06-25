@@ -41,8 +41,8 @@ data(fake.bc)
 fake.bc <- calc.genoprob(fake.bc, step=2.5)
 
 # covariates
-ac <- fake.bc$pheno[,c("sex","age")]
-ic <- fake.bc$pheno[,"sex"]
+ac <- pull.pheno(fake.bc, c("sex","age"))
+ic <- pull.pheno(fake.bc, "sex")
 
 # scan with additive but not the interactive covariate
 out.acovar <- scanone(fake.bc, addcovar=ac)

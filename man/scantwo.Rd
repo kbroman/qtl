@@ -213,8 +213,10 @@ summary(out.2dim, perms=permo.2dim, pvalues=TRUE,
 data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=16:17)}
 fake.bc <- calc.genoprob(fake.bc, step=10)
-ac <- fake.bc$pheno[,c("sex","age")]
-ic <- fake.bc$pheno[,"sex"]
+
+ac <- pull.pheno(fake.bc, c("sex","age"))
+ic <- pull.pheno(fake.bc, "sex")
+
 out <- scantwo(fake.bc, method="hk", pheno.col=1,
                addcovar=ac, intcovar=ic)
 plot(out)

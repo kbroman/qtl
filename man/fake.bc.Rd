@@ -41,8 +41,8 @@ fake.bc <- calc.genoprob(fake.bc, step=2.5)
 out.nocovar <- scanone(fake.bc, pheno.col=1:2)
 
 # genome scans with covariates
-ac <- fake.bc$pheno[,c("sex","age")]
-ic <- fake.bc$pheno[,"sex"]
+ac <- pull.pheno(fake.bc, c("sex","age"))
+ic <- pull.pheno(fake.bc, "sex")
 out.covar <- scanone(fake.bc, pheno.col=1:2,
                       addcovar=ac, intcovar=ic)
 

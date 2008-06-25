@@ -167,7 +167,7 @@ summary(out.2dim, thresholds=c(0, Inf, 4, Inf, Inf), what="int")
 \dontrun{operm.2dimA <- scantwo(fake.f2, method="hk", n.perm=500)
 operm.2dimB <- scantwo(fake.f2, method="hk", n.perm=500)
 operm.2dim <- c(operm.2dimA, operm.2dimB)}
-\dontshow{strata <- fake.f2$pheno$sex + fake.f2$pheno$pgm*2
+\dontshow{strata <- pull.pheno(fake.f2, "sex") + pull.pheno(fake.f2, "pgm")*2
 operm.2dim <- scantwo(fake.f2, method="hk", n.perm=100, perm.strata=strata)}
 
 # estimated LOD thresholds
