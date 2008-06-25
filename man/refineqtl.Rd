@@ -19,7 +19,11 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    \code{\link[qtl]{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix to be
    used as the phenotype.  One may also give a character string matching
-   the phenotype name.}
+   the phenotype name.  Finally, one may give a numeric vector of
+   phenotypes, in which case it must have the length equal to the number
+   of individuals in the cross, and there must be either non-integers or
+   values < 1 or > no. phenotypes; this last case may be useful for studying
+   transformations.}
  \item{qtl}{A QTL object, as produced by \code{\link[qtl]{makeqtl}},
    containing the positions of the QTL.  Provide either \code{qtl} or
    the pair \code{chr} and \code{pos}.}

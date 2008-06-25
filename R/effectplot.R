@@ -27,6 +27,11 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
   if(!sum(class(cross) == "cross")) 
     stop("The first input variable must be an object of class cross")
 
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
     warning("effectplot can take just one phenotype; only the first will be used")

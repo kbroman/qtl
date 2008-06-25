@@ -39,6 +39,7 @@
 \alias{imf.k}
 \alias{imf.m}
 \alias{imf.stahl}
+\alias{LikePheVector}
 \alias{locatemarker}
 \alias{locate.xo}
 \alias{makeSSmap}
@@ -171,6 +172,7 @@ imf.h(r)
 imf.k(r)
 imf.m(r)
 imf.stahl(r, m=0, p=0, tol=1e-12, maxit=1000)
+LikePheVector(pheno, n.ind, n.phe)
 locatemarker(map, pos, chr, flag)
 locate.xo(cross)
 makeSSmap(cross)

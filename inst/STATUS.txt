@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/23/2008:
+Version 1.09, 6/25/2008:
 
 Major changes:
 
@@ -32,6 +32,15 @@ Major changes:
   treated like a backcross, though genotypes will be indicated as
   homozygotes.  Changed a whole bunch of functions very slightly to
   accommodate this. 
+
+  The argument pheno.col in many functions can now be a vector of
+  numeric phenotypes.  This could be useful for studying the results
+  with various transformations of a phenotype.  The vector has to be
+  numeric, has to have the length equal to the number of individuals
+  in the cross, and has to contain either non-integers or values
+  outside the range 1,2,3,...n.phe.  (The revised functions are
+  scanone, scantwo, addqtl, addint, addpair, cim, effectplot, fitqtl,
+  plot.pxg, plot.pheno, refineqtl, scanoneboot, scanqtl, stepwiseqtl.)
 
 Minor changes:
 

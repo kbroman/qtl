@@ -4,7 +4,7 @@
 #
 # copyright (c) 2008, Karl W Broman
 # 
-# last modified Apr, 2008
+# last modified Jun, 2008
 # first written Jan, 2007
 #
 # Licensed under the GNU General Public License version 2 (June, 1991)
@@ -32,6 +32,11 @@ function(cross, pheno.col=1, n.marcovar=3, window=10,
   map.function <- match.arg(map.function)
 
   type <- class(cross)[1]
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
 
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)

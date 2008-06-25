@@ -10,11 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o allow pheno.col to be a vector of phenotype values (if its length
-  matches the number of individuals in the cross and is > n.phe)
-
 o revise rqtltour to indicate that "pheno.col" can be the name of a
-  phenotype rather than just a numeric index.
+  phenotype rather than just a numeric index. (Also, that it can be a
+  vector of numeric phenotypes.)
+
+  Look also at help files; can some of the examples be simplified,
+  using the numeric vector of phenotypes in the call to scanone etc?
 
 o Add information on stepwiseqtl and related functions to the
   tutorial.  

@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified May, 2008
+# last modified Jun, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -34,6 +34,11 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
 
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
@@ -230,6 +235,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
 
   if(method=="imp") {
     if(!("geno" %in% names(qtl))) {
@@ -534,6 +544,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
 
   if(method=="imp") {
     if(!("geno" %in% names(qtl))) {

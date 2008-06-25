@@ -28,7 +28,11 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    used as the phenotype.  This can be a vector of integers; for methods
    \code{"hk"} and \code{"imp"} this can be considerably faster than doing
    them one at a time.  One may also give character strings matching
-   the phenotype names.}
+   the phenotype names.  Finally, one may give a numeric vector of
+   phenotypes, in which case it must have the length equal to the number
+   of individuals in the cross, and there must be either non-integers or
+   values < 1 or > no. phenotypes; this last case may be useful for studying
+   transformations.}
  \item{model}{The phenotypic model: the usual normal model or a model for
    binary traits.}
  \item{method}{Indicates whether to use the

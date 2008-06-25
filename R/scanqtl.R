@@ -23,6 +23,11 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
 
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
     warning("scanqtl can take just one phenotype; only the first will be used")

@@ -39,9 +39,17 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   dfA <- -1
   dfX <- parXa <- -1
 
+  if(!missing(chr)) cross <- subset(cross, chr)
+  if(missing(n.perm)) n.perm <- 0
+
   if(missing(verbose)) {
     if(!missing(n.perm) && n.perm > 0) verbose <- TRUE
     else verbose <- FALSE
+  }
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
   }
 
   if(is.character(pheno.col)) {
@@ -58,9 +66,6 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 
   if(any(pheno.col < 1 | pheno.col > nphe(cross)))
     stop("pheno.col values should be between 1 and the no. phenotypes")
-
-  if(!missing(chr)) cross <- subset(cross, chr)
-  if(missing(n.perm)) n.perm <- 0
 
   if(length(pheno.col)==1 && n.perm>=0) use <- "complete.obs"
 

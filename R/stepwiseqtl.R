@@ -56,6 +56,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
   if(!missing(chr)) cross <- subset(cross, chr)
 
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
   if(!missing(qtl)) { # start f.s. at somewhere other than the null
     # check that chromosomes were retained, otherwise give error
     m <- is.na(match(qtl$chr, names(cross$geno)))

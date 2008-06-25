@@ -1089,6 +1089,11 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
     stop("Input should have class \"cross\".")
   type <- class(cross)[1]
 
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
     warning("plot.pxg can take just one phenotype; only the first will be used")
@@ -1322,6 +1327,11 @@ function(x, pheno.col=1, ...)
 {
   if(!any(class(x) == "cross"))
     stop("Input should have class \"cross\".")
+
+  if(LikePheVector(pheno.col, nind(x), nphe(x))) {
+    x$pheno <- cbind(pheno.col, x$pheno)
+    pheno.col <- 1
+  }
 
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]

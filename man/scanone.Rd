@@ -26,7 +26,11 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    used as the phenotype.  This can be a vector of integers; for methods
    \code{"hk"} and \code{"imp"} this can be considerably faster than doing
    them one at a time.  One may also give a character strings matching
-   the phenotype names.}
+   the phenotype names.  Finally, one may give a numeric vector of
+   phenotypes, in which case it must have the length equal to the number
+   of individuals in the cross, and there must be either non-integers or
+   values < 1 or > no. phenotypes; this last case may be useful for studying
+   transformations.}
  \item{model}{The phenotypic model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
  \item{method}{Indicates whether to use the EM algorithm, 
@@ -351,6 +355,13 @@ summary(permo, alpha=c(0.05, 0.10))
 
 # Results above the 0.05 threshold
 summary(out.hk, perms=permo, alpha=0.05)
+
+
+####################
+# scan with square-root of phenotype
+####################
+out.sqrt <- scanone(hyper, pheno.col=sqrt(hyper$pheno[,1]))
+plot(out.hk, out.sqrt, col=c("blue","red"))
 
 
 ####################

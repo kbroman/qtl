@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
 #
-# last modified May, 2008
+# last modified Jun, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -42,6 +42,11 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
   dfAAf <- dfAAa <- dfAA1 <- -1
   dfAXf <- dfAXa <- dfAX1 <- -1
   dfXXf <- dfXXa <- dfXX1 <- -1

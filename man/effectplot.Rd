@@ -18,7 +18,11 @@ effectplot(cross, pheno.col=1, mname1, mark1, geno1, mname2, mark2,
   \item{cross}{An object of class \code{cross}.}
   \item{pheno.col}{Column number in the phenotype matrix to be
     drawn in the plot.  One may also give a character string matching
-   a phenotype name.}
+   a phenotype name. Finally, one may give a numeric vector of
+   phenotypes, in which case it must have the length equal to the number
+   of individuals in the cross, and there must be either non-integers or
+   values < 1 or > no. phenotypes; this last case may be useful for studying
+   transformations.}
   \item{mname1}{Name for the first marker or pseudomarker.}
   \item{mark1}{Genotype data for the first marker.  If unspecified,
     genotypes will be taken from the data in the input cross object,

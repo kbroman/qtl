@@ -25,7 +25,7 @@
 #           convert, convert.scanone, convert.scantwo
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
-#           find.markerpos, geno.crosstab
+#           find.markerpos, geno.crosstab, LikePheVector
 #
 ######################################################################
 
@@ -2714,6 +2714,21 @@ function(cross, marker)
   }
 
   output
+}
+
+
+######################################################################
+# utility function for determining whether pheno.col (as argument
+# to scanone etc) can be interpreted as a vector of phenotypes,
+# versus a vector of phenotype columns
+######################################################################
+LikePheVector <-
+function(pheno, n.ind, n.phe)
+{
+  if(is.numeric(pheno) && length(pheno)==n.ind &&
+     any(pheno < 1 | pheno > n.phe | pheno!=round(pheno)))
+    return(TRUE)
+  FALSE
 }
 
 

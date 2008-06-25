@@ -22,7 +22,11 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    search for QTL.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give character strings matching
-   the phenotype names.}
+   the phenotype names.  Finally, one may give a numeric vector of
+   phenotypes, in which case it must have the length equal to the number
+   of individuals in the cross, and there must be either non-integers or
+   values < 1 or > no. phenotypes; this last case may be useful for studying
+   transformations.}
  \item{qtl}{Optional QTL object (of class \code{"qtl"}, as created by
    \code{\link[qtl]{makeqtl}}) to use as a starting point.}
  \item{formula}{Optional formula to define the QTL model to be used as a

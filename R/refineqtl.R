@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified May, 2008
+# last modified Jun, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -37,6 +37,11 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar))
     stop("covar should be a data.frame")
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
 
   if(!missing(qtl) && (!missing(chr) || !missing(pos) || !missing(qtl.name)))
     warning("qtl argument is provided, and so chr, pos and qtl.name are ignored.")

@@ -23,7 +23,11 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    performed.} 
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give a character string matching
-   a phenotype name.}  
+   a phenotype name.  Finally, one may give a numeric vector of
+   phenotypes, in which case it must have the length equal to the number
+   of individuals in the cross, and there must be either non-integers or
+   values < 1 or > no. phenotypes; this last case may be useful for studying
+   transformations.}  
  \item{model}{The phenotypic model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
  \item{method}{Indicates whether to use the EM algorithm, 

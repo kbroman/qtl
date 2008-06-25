@@ -4,7 +4,7 @@
 #
 # copyright (c) 2007-8, Karl W Broman
 # 
-# last modified Feb, 2008
+# last modified Jun, 2008
 # first written Apr, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -31,6 +31,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     cross <- subset(cross, 1)
   }
   
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
   if(length(pheno.col) > 1)
     stop("pheno.col should indicate a single phenotype")
   if(is.character(pheno.col)) {
