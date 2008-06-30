@@ -290,7 +290,7 @@ function(x,...)
   header <- "                       "
   width <- options("width")$width
 
-  cat("    Percent phenotyped: ")
+  cat("    Percent phenotyped:")
 
   ######################################################################
   # function to print things nicely
@@ -299,9 +299,9 @@ function(x,...)
       {
         nleft <- width - nchar(header)
         nsep <- nchar(sep)
-        if(length(thetext) < 2) cat(thetext, "\n")
+        if(length(thetext) < 2) cat("", thetext, "\n", sep=sep)
         else {
-          z <- thetext[1]
+          z <- paste("", thetext[1], sep=sep, collapse=sep)
           for(j in 2:length(thetext)) {
             if(nchar(z) + nsep + nchar(thetext[j]) > nleft) {
               cat(z, "\n")
@@ -322,19 +322,19 @@ function(x,...)
 
   cat("    No. chromosomes:   ", x$n.chr,"\n")
   if(!is.null(x$autosomes)) {
-    cat("        Autosomes:      ")
+    cat("        Autosomes:     ")
     printnicely(x$autosomes, header, width)
   }
   if(!is.null(x$Xchr)) {
-    cat("        X chr:          ")
+    cat("        X chr:         ")
     printnicely(x$Xchr, header, width)
   }
   cat("\n")
   cat("    Total markers:     ", sum(x$n.mar), "\n")
   cat("    No. markers:       ")
-  printnicely(x$mar, header, width)
+  printnicely(x$n.mar, header, width)
   cat("    Percent genotyped: ", round((1-x$missing.gen)*100,1), "\n")
-  cat("    Genotypes (%):      ")
+  cat("    Genotypes (%):    ")
   geno <- paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":")
   header <- "                      "
   printnicely(geno, header, width, "  ")
