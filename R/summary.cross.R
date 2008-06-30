@@ -286,20 +286,58 @@ function(x,...)
 
   cat("    No. individuals:   ", x$n.ind,"\n\n")
   cat("    No. phenotypes:    ", x$n.phe,"\n")
-  cat("    Percent phenotyped:", round((1-x$missing.phe)*100,1), "\n\n")
+  
+  header <- "                       "
+  width <- options("width")$width
+
+  cat("    Percent phenotyped: ")
+
+  ######################################################################
+  # function to print things nicely
+  printnicely <-
+    function(thetext, header, width, sep=" ")
+      {
+        nleft <- width - nchar(header)
+        nsep <- nchar(sep)
+        if(length(thetext) < 2) cat(thetext, "\n")
+        else {
+          z <- thetext[1]
+          for(j in 2:length(thetext)) {
+            if(nchar(z) + nsep + nchar(thetext[j]) > nleft) {
+              cat(z, "\n")
+              nleft <- width
+              z <- paste(header, thetext[j], sep=sep)
+            }
+            else {
+              z <- paste(z, thetext[j], sep=sep)
+            }
+          }
+          cat(z, "\n")
+        }
+      }
+  ######################################################################
+  
+  printnicely(round((1-x$missing.phe)*100,1), header, width)
+  cat("\n")
+
   cat("    No. chromosomes:   ", x$n.chr,"\n")
-  if(!is.null(x$autosomes))
-    cat("        Autosomes:     ", paste(x$autosomes, collapse=" "), "\n")
-  if(!is.null(x$Xchr))
-    cat("        X chr:         ", paste(x$Xchr, collapse=" "), "\n")
+  if(!is.null(x$autosomes)) {
+    cat("        Autosomes:      ")
+    printnicely(x$autosomes, header, width)
+  }
+  if(!is.null(x$Xchr)) {
+    cat("        X chr:          ")
+    printnicely(x$Xchr, header, width)
+  }
   cat("\n")
   cat("    Total markers:     ", sum(x$n.mar), "\n")
-  cat("    No. markers:       ", x$n.mar, "\n")
+  cat("    No. markers:       ")
+  printnicely(x$mar, header, width)
   cat("    Percent genotyped: ", round((1-x$missing.gen)*100,1), "\n")
-  cat("    Genotypes (%):     ", 
-      paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":", collapse="  "),
-      "\n")
-#  cat("\n")
+  cat("    Genotypes (%):      ")
+  geno <- paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":")
+  header <- "                      "
+  printnicely(geno, header, width, "  ")
 }
 
 

@@ -197,9 +197,14 @@ function(x, chr, what=c("both","lod","rf"),
   }
 
 
-  if(what=="lod") title(main="Pairwise LOD scores")
-  else if(what=="rf") title(main="Recombination fractions")
-  else title("Pairwise recombination fractions and LOD scores")
+  dots <- list(...)
+  if("main" %in% names(dots))
+    title(main=dots$main)
+  else {
+    if(what=="lod") title(main="Pairwise LOD scores")
+    else if(what=="rf") title(main="Recombination fractions")
+    else title("Pairwise recombination fractions and LOD scores")
+  }
 
   invisible()
 }

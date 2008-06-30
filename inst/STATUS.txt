@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/25/2008:
+Version 1.09, 6/30/2008:
 
 Major changes:
 
@@ -61,6 +61,10 @@ Minor changes:
   Changed some of the examples in the help files to use pull.pheno in
   place of references to cross$pheno.
 
+  Revised summary.cross so that it pays attention to options("width")
+  and prints things more nicely if there are loads and loads of
+  phenotypes or whatever.
+
   We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
   character string representations of formulas.  (They are then
   converted.) 
@@ -75,6 +79,15 @@ Minor changes:
 
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
+
+  The title of the plot produced by plot.rf can now be modified by
+  including the argument 'main' in the call.
+
+  In plot.geno, if chr is missing, we plot the genotypes for the first
+  chromosome. 
+
+  In geno.crosstab, changed the column and row labels for missing data
+  from "NA" to "-".
 
   Fixed a bug in est.rf for 4-way crosses.
 

@@ -591,6 +591,8 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
+  if(missing(chr)) chr <- names(cross$geno)[1]
+
   cross <- subset(cross,chr=chr)
   if(!missing(ind)) {
     if(is.null(getid(cross))) cross$pheno$id <- 1:nind(cross)

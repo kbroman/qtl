@@ -26,7 +26,8 @@ plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
      axis labels, so that they may be more easily distinguished.}
   \item{zmax}{Maximum LOD score plotted; values above this are all
     thresholded at this value.}
-  \item{\dots}{Ignored at this point.}
+  \item{\dots}{Generally ignored, but you can include \code{main} to
+  change or omit the title of the figure.}
 }
 
 \value{None.}

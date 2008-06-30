@@ -810,8 +810,8 @@ function(cross, mname1, mname2)
   g1[is.na(g1)] <- 0
   g2[is.na(g2)] <- 0
 
-  g1names <- c("NA", getgenonames(crosstype, chrtype[1], "full", getsex(cross), attributes(cross)))
-  g2names <- c("NA", getgenonames(crosstype, chrtype[2], "full", getsex(cross), attributes(cross)))
+  g1names <- c("-", getgenonames(crosstype, chrtype[1], "full", getsex(cross), attributes(cross)))
+  g2names <- c("-", getgenonames(crosstype, chrtype[2], "full", getsex(cross), attributes(cross)))
   
   g1 <- as.character(g1)
   g2 <- as.character(g2)
