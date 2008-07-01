@@ -282,7 +282,6 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       converged <- TRUE
       break
     }
-    curpos <- newpos
 
     reducedqtl <- replaceqtl(cross, reducedqtl, seq(length(curpos)),
                              reducedqtl$chr, curpos, reducedqtl$name)
@@ -297,7 +296,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   if(!converged) warning("Didn't converge.")
   
   # do the qtl have custom names?
-  g <- grep("^Chr.+@[0-9\\.]+$", qtl$name)
+  g <- grep("^.+@[0-9\\.]+$", qtl$name)
   if(length(g) == length(qtl$name)) thenames <- NULL
   else thenames <- qtl$name
 
