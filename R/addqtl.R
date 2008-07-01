@@ -650,6 +650,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     newformula2 <- as.formula(paste(formula, " + Q", n.qtl+1,
                                     " + Q", n.qtl+2, sep=""))
     formula <- as.formula(formula)
+    scanbothways <- FALSE
   }
   else { # formula given
     newqtl <- paste("Q", n.qtl+1:2, sep="")

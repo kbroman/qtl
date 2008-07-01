@@ -89,6 +89,8 @@ Minor changes:
   In geno.crosstab, changed the column and row labels for missing data
   from "NA" to "-".
 
+  Fixed a bug in addpair if the formula is missing.
+
   Fixed a bug in est.rf for 4-way crosses.
 
   Fixed a bug in read.cross with format "csv" (or "csvs" or "csvr" or
