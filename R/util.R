@@ -1797,7 +1797,12 @@ function(results, chr, drop=1.5, lodcolumn=1, expandtomarkers=FALSE)
   if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
     stop("Argument lodcolumn misspecified.")
 
-  results <- results[results[,1]==chr,]
+  if(missing(chr)) {
+    if(length(unique(results[,1]))>1)
+      stop("Give a chromosome ID.")
+  }
+  else
+    results <- results[results[,1]==chr,]
 
   if(all(is.na(results[,lodcolumn+2]))) return(NULL)
 
@@ -1847,7 +1852,12 @@ function(results, chr, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
   if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
     stop("Argument lodcolumn misspecified.")
 
-  results <- results[results[,1]==chr,]
+  if(missing(chr)) {
+    if(length(unique(results[,1]))>1)
+      stop("Give a chromosome ID.")
+  }
+  else
+    results <- results[results[,1]==chr,]
   
   if(all(is.na(results[,lodcolumn+2]))) return(NULL)
   

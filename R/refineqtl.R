@@ -334,8 +334,26 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     names(lastout) <- qtl$name[tovary]
   }
 
-  if(keeplodprofile) 
+  if(keeplodprofile) {
+    # make the profiles scanone objects
+    for(i in seq(along=lastout)) {
+      class(lastout[[i]]) <- c("scanone", "data.frame")
+      thechr <- qtl$chr[i]
+      if(method=="imp") 
+        detailedmap <- attr(cross$geno[[thechr]]$draws,"map")
+      else
+        detailedmap <- attr(cross$geno[[thechr]]$prob,"map")
+    
+      r <- range(lastout[[i]][,2])
+      rn <- names(detailedmap)[detailedmap>=r[1] & detailedmap<=r[2]]
+      o <- grep("^loc-*[0-9]+",rn)
+      if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
+        rn[o] <- paste("c",thechr,".",rn[o],sep="")
+      if(length(rn) == nrow(lastout[[i]])) rownames(lastout[[i]]) <- rn
+    }
+
     attr(qtl, "lodprofile") <- lastout
+  }
   
   qtl
 }

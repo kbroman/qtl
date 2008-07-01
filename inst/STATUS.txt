@@ -58,6 +58,10 @@ Minor changes:
   Revised makeqtl so that QTL names are of the form "1@15.0" rather
   than "Chr1@15.0"; the "Chr" seemed gratuitous.
 
+  The LOD profiles returned by refineqtl (with keeplodprofile=TRUE)
+  are now of class scanone, so one can use lodint or bayesint to get
+  approximate confidence intervals for QTL location.
+
   Changed some of the examples in the help files to use pull.pheno in
   place of references to cross$pheno.
 
@@ -68,6 +72,9 @@ Minor changes:
   We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
   character string representations of formulas.  (They are then
   converted.) 
+
+  Modified lodint and bayesint so that the chromosome argument is not
+  needed if the scanone results concern just a single chromosome.
 
   Slight change to scanqtl to avoid going just outside the defined
   intervals (specifically, so that refineqtl and plotLodProfile do not
