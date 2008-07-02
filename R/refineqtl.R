@@ -291,7 +291,6 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   if(verbose) {
     cat("overall pos:", origpos, "->", newpos, "\n")
     cat("LOD increase overall: ", round(curlod - origlod, 3), "\n")
-    thisitlod <- curlod
   }
 
   if(!converged) warning("Didn't converge.")
@@ -355,6 +354,10 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     attr(qtl, "lodprofile") <- lastout
   }
   
+  # if there's a pLOD attribute, revise it
+  if("pLOD" %in% names(attributes(qtl)) && curlod > origlod)
+    attr(qtl,"pLOD") <- attr(qtl,"pLOD") + curlod - origlod
+
   qtl
 }
 
