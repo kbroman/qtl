@@ -221,7 +221,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
                               method=method, dropone=FALSE, get.ests=FALSE,
                               run.checks=FALSE)
 
-    if(verbose && i==1) {
+    if(i==1) {
       origlod <- curlod <- thisitlod <- basefit$result.full[1,4]
       origpos <- curpos
     }
@@ -268,15 +268,15 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       if(verbose) {
         cat(" Q", j, " pos: ", curpos[j], " -> ", newpos[j], "\n", sep="")
         cat("    LOD increase: ", round(max(out) - curlod, 3), "\n")
-        curlod <- max(out)
       }
+      curlod <- max(out)
     }
 
     if(verbose) {
       cat("all pos:", curpos, "->", newpos, "\n")
       cat("LOD increase at this iteration: ", round(curlod - thisitlod, 3), "\n")
-      thisitlod <- curlod
     }
+    thisitlod <- curlod
 
     if(max(abs(curpos - newpos)) < mind) {
       converged <- TRUE
