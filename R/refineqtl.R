@@ -216,7 +216,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=TRUE, get.ests=FALSE,
                               run.checks=FALSE)
-    else if(verbose)
+    else 
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=FALSE, get.ests=FALSE,
                               run.checks=FALSE)
