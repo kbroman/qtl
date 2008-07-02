@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/1/2008:
+Version 1.09, 7/2/2008:
 
 Major changes:
 
@@ -100,6 +100,9 @@ Minor changes:
 
   In geno.crosstab, changed the column and row labels for missing data
   from "NA" to "-".
+
+  Made a slight change to plot.pxg regarding the locations of the
+  genotype labels on the x-axis.
 
   Fixed a bug in addpair if the formula is missing.
 

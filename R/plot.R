@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-8, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1286,8 +1286,11 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 #  text(1:length(observed), u[3] - diff(u[3:4]) * 0.05, tmp, xpd = TRUE, 
 #       cex = ifelse(n.mark==1, 1, 0.8))
   cxaxis <- par("cex.axis") 
+  
+  theline <- length(marker)-1
   axis(side=1, at=1:length(observed), labels=tmp,
-       cex=ifelse(n.mark==1, cxaxis, cxaxis*0.8))
+       cex=ifelse(n.mark==1, cxaxis, cxaxis*0.8),
+       tick=FALSE, line=theline)
 
   invisible(data)
 

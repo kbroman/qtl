@@ -86,6 +86,18 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     }
   }
   
+  if(qtl$n.ind != nind(cross)) {
+    warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    if(method=="imp")
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    else
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+  }
+  if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+  }    
+
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
   else phcovar <- as.data.frame(pheno)
@@ -107,7 +119,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     }
   }
 
-  # number of covarariates
+  # number of covariates
   if( is.null(covar) ) n.covar <- 0
   else n.covar <- ncol(covar)
 
