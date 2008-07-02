@@ -3,7 +3,7 @@
 #
 # copyright (c) 2007-8, Karl W Broman
 # 
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -278,7 +278,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       if(verbose) cat(" ---Refining positions\n")
       rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                         covar=covar, formula=formula, method=method,
-                        verbose=verbose.scan, incl.markers=incl.markers)
+                        verbose=verbose.scan, incl.markers=incl.markers,
+                        keeplodprofile=FALSE)
       if(any(rqtl$pos != qtl$pos)) { # updated positions
         if(verbose) cat(" ---  Moved a bit\n")
       }
@@ -463,7 +464,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       if(verbose) cat(" ---Refining positions\n")
       rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                         covar=covar, formula=formula, method=method,
-                        verbose=verbose.scan, incl.markers=incl.markers)
+                        verbose=verbose.scan, incl.markers=incl.markers,
+                        keeplodprofile=FALSE)
       if(any(rqtl$pos != qtl$pos)) { # updated positions
         if(verbose) cat(" ---  Moved a bit\n")
         qtl <- rqtl
@@ -576,7 +578,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       if(!is.null(qtl)) {
         rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                           covar=covar, formula=formula, method=method,
-                          verbose=verbose.scan, incl.markers=incl.markers)
+                          verbose=verbose.scan, incl.markers=incl.markers,
+                          keeplodprofile=FALSE)
         if(any(rqtl$pos != qtl$pos)) { # updated positions
           if(verbose) cat(" ---  Moved a bit\n")
           qtl <- rqtl
@@ -732,6 +735,7 @@ function(lod, nterms, type=c("f2","bc"), penalties)
 countqtlterms <-
 function(formula, ignore.covar=TRUE)
 {
+  if(is.character(formula)) formula <- as.formula(formula)
   factors <- attr(terms(formula), "factors")[-1,,drop=FALSE]
   if(any(factors > 1))  {
     warning("some formula terms > 1; may be a problem with the formula:\n    ", deparseQTLformula(formula))

@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -27,7 +27,7 @@
 refineqtl <-
 function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
          method=c("imp", "hk"), verbose=TRUE, maxit=10, 
-         incl.markers=TRUE, keeplodprofile=FALSE)
+         incl.markers=TRUE, keeplodprofile=TRUE)
 {
   method <- match.arg(method)
   

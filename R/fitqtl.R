@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -883,6 +883,8 @@ function(n)
 ######################################################################
 deparseQTLformula <-
 function(formula)
+{
+  if(is.character(formula)) return(formula)
   paste(as.character(formula)[c(2,1,3)], collapse=" ")
-
+}
 # end of fitqtl.R

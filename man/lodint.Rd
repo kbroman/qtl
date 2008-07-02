@@ -8,21 +8,26 @@
   using output from scanone.
 }
 
-\usage{lodint(results, chr, drop=1.5, lodcolumn=1, expandtomarkers=FALSE)}
+\usage{lodint(results, chr, qtl.index, drop=1.5, lodcolumn=1, expandtomarkers=FALSE)}
 
 \arguments{
- \item{results}{Output from \code{\link[qtl]{scanone}}.}
- \item{chr}{A chromosome ID.}
+ \item{results}{Output from \code{\link[qtl]{scanone}}, or a qtl object
+ as output from \code{\link[qtl]{refineqtl}}.}
+ \item{chr}{A chromosome ID (if input \code{results} are from
+ \code{\link[qtl]{scanone}}.} 
+ \item{qtl.index}{Numeric index for a QTL (if input \code{results} are
+ from \code{\link[qtl]{refineqtl}}.} 
  \item{drop}{LOD units to drop to form the interval.}
- \item{lodcolumn}{An integer, or vector of 3 integers, indicating which
-   of the LOD score columns should be plotted (generally this is 1).}
+ \item{lodcolumn}{An integer indicating which
+   of the LOD score columns should be considered (if input
+ \code{results} are from \code{\link[qtl]{scanone}}).}
  \item{expandtomarkers}{If TRUE, the interval is expanded to the nearest
    flanking markers.}
 }
 
 \value{
-  An object of class \code{scanone}, like the input, indicating the
-  position with the maximum LOD, and indicating approximate endpoints
+  An object of class \code{scanone} indicating the
+  estimated QTL position and the approximate endpoints
   for the LOD support interval.
 }
 

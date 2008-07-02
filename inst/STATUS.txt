@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 6/30/2008:
+Version 1.09, 7/1/2008:
 
 Major changes:
 
@@ -42,6 +42,18 @@ Major changes:
   scanone, scantwo, addqtl, addint, addpair, cim, effectplot, fitqtl,
   plot.pxg, plot.pheno, refineqtl, scanoneboot, scanqtl, stepwiseqtl.)
 
+  lodint and bayesint were revised to accept qtl objects output by
+  refineqtl (with keeplodprofile=TRUE).  An additional argument,
+  qtl.index, was added to indicate for which QTL (within such qtl
+  objects) the approximate confidence intervals should be derived.
+  For scanone output, the functions were modified so that, if the
+  results concern just a single chromosome, the chromosome argument is
+  not needed.
+
+  In refineqtl, the default for the argument keeplodprofile is now
+  TRUE.  The LOD profiles returned by refineqtl are now of class
+  "scanone".
+
 Minor changes:
 
   Permutation results obtained via scantwo now include the maximum LOD
@@ -58,10 +70,6 @@ Minor changes:
   Revised makeqtl so that QTL names are of the form "1@15.0" rather
   than "Chr1@15.0"; the "Chr" seemed gratuitous.
 
-  The LOD profiles returned by refineqtl (with keeplodprofile=TRUE)
-  are now of class scanone, so one can use lodint or bayesint to get
-  approximate confidence intervals for QTL location.
-
   Changed some of the examples in the help files to use pull.pheno in
   place of references to cross$pheno.
 
@@ -72,9 +80,6 @@ Minor changes:
   We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
   character string representations of formulas.  (They are then
   converted.) 
-
-  Modified lodint and bayesint so that the chromosome argument is not
-  needed if the scanone results concern just a single chromosome.
 
   Slight change to scanqtl to avoid going just outside the defined
   intervals (specifically, so that refineqtl and plotLodProfile do not

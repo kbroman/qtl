@@ -12,7 +12,7 @@
 \usage{
 refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
           method=c("imp","hk"), verbose=TRUE, maxit=10,
-          incl.markers=TRUE, keeplodprofile=FALSE)
+          incl.markers=TRUE, keeplodprofile=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See

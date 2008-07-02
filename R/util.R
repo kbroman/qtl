@@ -6,7 +6,7 @@
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
 #
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1789,20 +1789,50 @@ function(cross, pheno.col)
 # lodint: function to get lod support interval
 ######################################################################
 lodint <-
-function(results, chr, drop=1.5, lodcolumn=1, expandtomarkers=FALSE)
+function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
+         expandtomarkers=FALSE)
 {
-  if(!any(class(results) == "scanone"))
-    stop("Input must have class \"scanone\".")
-
-  if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
-    stop("Argument lodcolumn misspecified.")
-
-  if(missing(chr)) {
-    if(length(unique(results[,1]))>1)
-      stop("Give a chromosome ID.")
+  if(!("scanone" %in% class(results))) {
+    if(!("qtl" %in% class(results))) 
+      stop("Input must have class \"scanone\" or \"qtl\".")
+    else {
+      if(!("lodprofile" %in% names(attributes(results)))) 
+        stop("qtl object needs to be produced by refineqtl with keeplodprofile=TRUE.")
+      else { # qtl object
+        if(lodcolumn != 1) {
+          warning("lod column ignored if input is a qtl object.")
+          lodcolumn <- 1
+        }
+        results <- attr(results, "lodprofile")
+        if(missing(qtl.index)) {
+          if(length(results)==1) 
+            results <- results[[1]]
+          else 
+            stop("You must specify qtl.index.")
+        }
+        else {
+          if(qtl.index < 1 || qtl.index > length(results))
+            stop("qtl.index misspecified.")
+          results <- results[[qtl.index]]
+        }
+        chr <- results[1,1]
+      }
+    }
   }
-  else
-    results <- results[results[,1]==chr,]
+  else {
+    if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
+      stop("Argument lodcolumn misspecified.")
+
+    if(missing(chr)) {
+      if(length(unique(results[,1]))>1)
+        stop("Give a chromosome ID.")
+    }
+    else {
+      if(is.na(match(chr, results[,1])))
+        stop("Chromosome misspecified.")
+      results <- results[results[,1]==chr,]
+    }
+  }
 
   if(all(is.na(results[,lodcolumn+2]))) return(NULL)
 
@@ -1844,23 +1874,52 @@ function(results, chr, drop=1.5, lodcolumn=1, expandtomarkers=FALSE)
 # bayesint: function to get Bayesian probability interval
 ######################################################################
 bayesint <-
-function(results, chr, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
+function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
 {
-  if(!any(class(results) == "scanone"))
-    stop("Input should have class \"scanone\".")
-
-  if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
-    stop("Argument lodcolumn misspecified.")
-
-  if(missing(chr)) {
-    if(length(unique(results[,1]))>1)
-      stop("Give a chromosome ID.")
+  if(!("scanone" %in% class(results))) {
+    if(!("qtl" %in% class(results))) 
+      stop("Input must have class \"scanone\" or \"qtl\".")
+    else {
+      if(!("lodprofile" %in% names(attributes(results)))) 
+        stop("qtl object needs to be produced by refineqtl with keeplodprofile=TRUE.")
+      else { # qtl object
+        if(lodcolumn != 1) {
+          warning("lod column ignored if input is a qtl object.")
+          lodcolumn <- 1
+        }
+        results <- attr(results, "lodprofile")
+        if(missing(qtl.index)) {
+          if(length(results)==1) 
+            results <- results[[1]]
+          else 
+            stop("You must specify qtl.index.")
+        }
+        else {
+          if(qtl.index < 1 || qtl.index > length(results))
+            stop("qtl.index misspecified.")
+          results <- results[[qtl.index]]
+        }
+        chr <- results[1,1]
+      }
+    }
   }
-  else
-    results <- results[results[,1]==chr,]
-  
+  else {
+    if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
+      stop("Argument lodcolumn misspecified.")
+
+    if(missing(chr)) {
+      if(length(unique(results[,1]))>1)
+        stop("Give a chromosome ID.")
+    }
+    else {
+      if(is.na(match(chr, results[,1])))
+        stop("Chromosome misspecified.")
+      results <- results[results[,1]==chr,]
+    }
+  }
+
   if(all(is.na(results[,lodcolumn+2]))) return(NULL)
-  
+
   loc <- results[,2]
   width <- diff(( c(loc[1],loc) + c(loc, loc[length(loc)]) )/ 2)
   
