@@ -28,7 +28,7 @@ function(object,...)
 
   if(type != "f2" && type != "bc" && type != "4way" &&
      type != "riself" && type != "risib" && type != "cc" && type != "dh") 
-    stop("Cross type ", type, " is not suppoted.")
+    stop("Cross type ", type, " is not supported.")
 
   if(type=="cc") {
     cat("A Collaborative cross\n")
