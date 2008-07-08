@@ -842,7 +842,7 @@ print.summary.fitqtl <- function(x, ...)
   cat("----------------------------------  \n")
   cat("Model formula:")
   w <- options("width")[[1]]
-  printQTLformulanicely(attr(x, "formula"), "                   ", w-5, w)
+  printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
   cat("\n\n")
   print(x$result.full, quote=FALSE, na.print="")
   cat("\n")

@@ -493,8 +493,7 @@ function(x, ...)
     if(!is.character(form)) form <- deparseQTLformula(form)
     cat("\n  Formula:")
     w <- options("width")[[1]]
-    printQTLformulanicely(form, "               ", w-5, w)
-    cat("\n")
+    printQTLformulanicely(form, "               ", w+5, w)
   }
 
   if("pLOD" %in% names(attributes(x)))
@@ -638,8 +637,7 @@ function(x, ...)
     if(!is.character(form)) form <- deparseQTLformula(form)
     cat("  Formula:")
     w <- options("width")[[1]]
-    printQTLformulanicely(form, "               ", w-5, w)
-    cat("\n")
+    printQTLformulanicely(form, "               ", w+5, w)
   }
 
   if("pLOD" %in% names(attributes(x)))

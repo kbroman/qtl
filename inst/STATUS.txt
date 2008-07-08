@@ -81,8 +81,8 @@ Minor changes:
   character string representations of formulas.  (They are then
   converted.) 
 
-  Slight change to summary.fitqtl so that very long formulas are split
-  across multiple lines.
+  Slight change to summary.fitqtl and summary.addint so that very long
+  formulas are split across multiple lines.
 
   Slight change to scanqtl to avoid going just outside the defined
   intervals (specifically, so that refineqtl and plotLodProfile do not

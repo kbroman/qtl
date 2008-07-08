@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -214,11 +214,15 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 print.addint <-
 function(x, ...)
 {
- cat("Model formula is: ", attr(x, "formula"), "\n\n")
- cat("Add one pairwise interaction at a time table:\n")
- cat("--------------------------------------------\n")
- printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
- cat("\n")
+  cat("Model formula:")
+  w <- options("width")[[1]]
+  printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
+  cat("\n\n")
+
+  cat("Add one pairwise interaction at a time table:\n")
+  cat("--------------------------------------------\n")
+  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+  cat("\n")
 }
 
 summary.addint <- function(object, ...) object
