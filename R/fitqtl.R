@@ -125,7 +125,6 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     formula <- as.formula(formula)
   }
 
-  print(formula)
   # check input formula
   if(run.checks) {
     formula <- checkformula(formula, qtl$altname, colnames(covar))
@@ -907,6 +906,7 @@ function(formula, reorderterms=FALSE)
     }
     return(paste("y ~ ", paste(factors, collapse=" + "), sep=""))
   }
+
 
   if(is.character(formula)) return(formula)
   paste(as.character(formula)[c(2,1,3)], collapse=" ")
