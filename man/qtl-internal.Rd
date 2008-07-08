@@ -74,6 +74,7 @@
 \alias{print.summary.scantwo}
 \alias{print.summary.scantwo.old}
 \alias{print.summary.scantwoperm}
+\alias{printQTLformulanicely}
 \alias{qtlformulasymmetric}
 \alias{read.cro.qtlcart}
 \alias{read.cross.csv}
@@ -138,7 +139,7 @@ condense(object)
 convert(object)
 countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
-deparseQTLformula(formula)
+deparseQTLformula(formula, reorderterms=FALSE)
 discan(cross, pheno, method=c("em","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
        verbose=FALSE, give.warnings=TRUE)
@@ -208,6 +209,7 @@ parseformula(formula, qtl.dimname, covar.dimname)
 \method{print}{summary.scantwo}(x, \dots)
 \method{print}{summary.scantwo.old}(x, \dots)
 \method{print}{summary.scantwoperm}(x, \dots)
+printQTLformulanicely(formula, header, width, width2, sep=" ")
 qtlformulasymmetric(formula, qtlnum1, qtlnum2)
 read.cro.qtlcart(file)
 read.cross.csv(dir, file, na.strings=c("-","NA"),

@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -491,7 +491,10 @@ function(x, ...)
   if("formula" %in% names(attributes(x))) {
     form <- attr(x, "formula")
     if(!is.character(form)) form <- deparseQTLformula(form)
-    cat("\n  Formula: ", form, "\n")
+    cat("\n  Formula:")
+    w <- options("width")[[1]]
+    printQTLformulanicely(form, "              ", w-4, w)
+    cat("\n")
   }
 
   if("pLOD" %in% names(attributes(x)))
@@ -633,7 +636,10 @@ function(x, ...)
   if("formula" %in% names(attributes(x))) {
     form <- attr(x, "formula")
     if(!is.character(form)) form <- deparseQTLformula(form)
-    cat("  Formula: ", form, "\n")
+    cat("  Formula:")
+    w <- options("width")[[1]]
+    printQTLformulanicely(form, "              ", w-4, w)
+    cat("\n")
   }
 
   if("pLOD" %in% names(attributes(x)))

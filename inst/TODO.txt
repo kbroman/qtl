@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o When printing formulas (e.g. in fitqtl) make use of options("width")
+  to split them across multiple lines if necessary.
+
 o In stepwiseqtl, reorder the formula at the end, so that it's
   Q1+Q2+Q3... rather than, e.g., Q3+Q1+Q2...
 

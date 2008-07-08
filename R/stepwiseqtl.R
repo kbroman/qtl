@@ -652,6 +652,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   if(keeptrace)
     attr(curbest, "trace") <- thetrace
 
+  attr(curbest, "formula") <- deparseQTLformula(attr(curbest, "formula"), TRUE)
+
   curbest
 }
   

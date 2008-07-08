@@ -10,6 +10,7 @@
 # Part of the R/qtl package
 # Contains: fitqtl, fitqtlengine, parseformula, summary.fitqtl,
 #           print.summary.fitqtl, mybinaryrep, deparseQTLformula
+#           printQTLformulanicely
 #
 ######################################################################
 
@@ -124,6 +125,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     formula <- as.formula(formula)
   }
 
+  print(formula)
   # check input formula
   if(run.checks) {
     formula <- checkformula(formula, qtl$altname, colnames(covar))
@@ -839,7 +841,10 @@ print.summary.fitqtl <- function(x, ...)
   # print ANOVA table for full model
   cat("Full model result\n")
   cat("----------------------------------  \n")
-  cat( paste("Model formula is: ", attr(x, "formula"), "\n\n") )
+  cat("Model formula:")
+  w <- options("width")[[1]]
+  printQTLformulanicely(attr(x, "formula"), "                  ", w-4, w)
+  cat("\n\n")
   print(x$result.full, quote=FALSE, na.print="")
   cat("\n")
   
@@ -882,9 +887,55 @@ function(n)
 # deparseQTLformula: turn QTL formula into a string
 ######################################################################
 deparseQTLformula <-
-function(formula)
+function(formula, reorderterms=FALSE)
 {
+  if(reorderterms) {
+    if(is.character(formula)) formula <- as.formula(formula)
+    factors <- colnames(attr(terms(formula), "factors"))
+    wh <- grep("^[Qq][0-9]+$", factors)
+    if(length(wh)>0)
+      factors[wh] <- paste("Q", sort(as.numeric(substr(factors[wh], 2, nchar(factors[wh])))), sep="")
+    wh <- grep(":", factors)
+    if(length(wh)>0) {
+      temp <- strsplit(factors[wh], ":")
+      temp <- sapply(temp, function(a) {
+        wh <- grep("^[Qq][0-9]+$", a)
+        if(any(wh)) a[wh] <- paste("Q", sort(as.numeric(substr(a[wh], 2, nchar(a[wh])))), sep="")
+        paste(a[order(is.na(match(seq(along=a),wh)))], collapse=":")
+      })
+      factors[wh] <- temp
+    }
+    return(paste("y ~ ", paste(factors, collapse=" + "), sep=""))
+  }
+
   if(is.character(formula)) return(formula)
   paste(as.character(formula)[c(2,1,3)], collapse=" ")
 }
+
+printQTLformulanicely <-
+function(formula, header, width, width2, sep=" ")
+{
+  if(!is.character(formula)) formula <- deparseQTLformula(formula)
+  thetext <- unlist(strsplit(formula, " "))
+
+  if(missing(width2)) width2 <- width
+  nleft <- width - nchar(header)
+  nsep <- nchar(sep)
+  if(length(thetext) < 2) cat("", thetext, "\n", sep=sep)
+  else {
+    z <- paste("", thetext[1], sep=sep, collapse=sep)
+    for(j in 2:length(thetext)) {
+      if(nchar(z) + nsep + nchar(thetext[j]) > nleft) {
+        cat(z, "\n")
+        nleft <- width2
+        z <- paste(header, thetext[j], sep=sep)
+      }
+      else {
+        z <- paste(z, thetext[j], sep=sep)
+      }
+    }
+    cat(z, "\n")
+  }
+}
+
 # end of fitqtl.R
