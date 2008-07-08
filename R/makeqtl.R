@@ -493,7 +493,7 @@ function(x, ...)
     if(!is.character(form)) form <- deparseQTLformula(form)
     cat("\n  Formula:")
     w <- options("width")[[1]]
-    printQTLformulanicely(form, "              ", w-4, w)
+    printQTLformulanicely(form, "               ", w-5, w)
     cat("\n")
   }
 
@@ -638,7 +638,7 @@ function(x, ...)
     if(!is.character(form)) form <- deparseQTLformula(form)
     cat("  Formula:")
     w <- options("width")[[1]]
-    printQTLformulanicely(form, "              ", w-4, w)
+    printQTLformulanicely(form, "               ", w-5, w)
     cat("\n")
   }
 
