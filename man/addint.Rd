@@ -10,7 +10,7 @@
 
 \usage{
 addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
-       qtl.only=FALSE, verbose=TRUE)
+       qtl.only=FALSE, verbose=TRUE, pvalues=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -37,6 +37,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
    interactions with covariates).}
  \item{verbose}{If TRUE, will print a message if there are no
    interactions to test.}
+ \item{pvalues}{If FALSE, don't include p-values in the summary.}
 }
 
 \details{

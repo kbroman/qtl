@@ -1325,6 +1325,7 @@ function(n.perm, cross, pheno.col, model,
 revisescantwodf <-
 function(df)
 {
+  if(is.null(df)) return(NULL)
   full <- df[,"full"]
   add <- df[,"add"]
   one <- df[,"one"]

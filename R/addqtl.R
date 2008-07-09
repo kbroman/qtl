@@ -23,8 +23,8 @@
 ######################################################################
 addint <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"),
-         qtl.only=FALSE, verbose=TRUE)
+         method=c("imp","hk"), qtl.only=FALSE, verbose=TRUE,
+         pvalues=TRUE)
 {
   if( !sum(class(cross) == "cross"))
     stop("The cross argument must be an object of class \"cross\".")
@@ -208,6 +208,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   results <- as.data.frame(results)
   class(results) <- c("addint", "data.frame")
   attr(results, "formula") <- deparseQTLformula(formula)
+  attr(results, "pvalues") <- pvalues
   results
 }
 
@@ -221,7 +222,15 @@ function(x, ...)
 
   cat("Add one pairwise interaction at a time table:\n")
   cat("--------------------------------------------\n")
-  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+  pval <- attr(x, "pvalues")
+  if(is.null(pval) || pval) 
+    printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+  else {
+    z <- x
+    z <- z[,-ncol(z)+(0:1)]
+    printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
+  }
+    
   cat("\n")
 }
 

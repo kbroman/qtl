@@ -8,10 +8,11 @@
 }
 
 \usage{
-\method{summary}{fitqtl}(object, \dots)
+\method{summary}{fitqtl}(object, pvalues=TRUE, \dots)
 }
 \arguments{
  \item{object}{Output from \code{\link[qtl]{fitqtl}}.}
+ \item{pvalues}{If FALSE, don't include p-values in the summary.}
  \item{\dots}{Ignored at this point.}
 }
 
@@ -30,7 +31,7 @@
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 
-\author{Hao Wu}
+\author{Hao Wu; Karl W Broman, \email{kbroman@biostat.wisc.edu}}
 
 \examples{
 data(fake.f2)

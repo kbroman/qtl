@@ -809,7 +809,7 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
 #
 #####################################################################
 summary.fitqtl <-
-function(object, ...)
+function(object, pvalues=TRUE, ...)
 {
   if(!any(class(object) == "fitqtl")) 
     stop("Input should have class \"fitqtl\".")
@@ -821,6 +821,7 @@ function(object, ...)
     object$ests <- cbind(est=ests, SE=se, t=ests/se)
   }
   class(object) <- "summary.fitqtl"
+  attr(object, "pvalues") <- pvalues
   object
 }
 
@@ -844,7 +845,15 @@ print.summary.fitqtl <- function(x, ...)
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
   cat("\n\n")
-  print(x$result.full, quote=FALSE, na.print="")
+  
+  pval <- attr(x, "pvalues")
+  if(is.null(pval) || pval)
+    print(x$result.full, quote=FALSE, na.print="")
+  else {
+    z <- x$result.full
+    z <- z[,-ncol(z)+(0:1)]
+    print(z, quote=FALSE, na.print="")
+  }
   cat("\n")
   
   # print ANOVA table for dropping one at a time analysis (if any)
@@ -854,7 +863,14 @@ print.summary.fitqtl <- function(x, ...)
     cat("----------------------------------  \n")
     # use printCoefmat instead of print.data.frame
     # make sure the last column is P value
-    printCoefmat(x$result.drop, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+    pval <- attr(x, "pvalues")
+    if(is.null(pval) || pval)
+      printCoefmat(x$result.drop, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+    else {
+      z <- x$result.drop
+      z <- z[,-ncol(z)+(0:1)]
+      printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
+    }
     cat("\n")
   }
 
