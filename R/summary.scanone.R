@@ -2,9 +2,9 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-7, Karl W Broman
+# copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Sep, 2007
+# last modified Jul, 2008
 # first written Sep, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -456,7 +456,11 @@ function(..., labels)
        any(df[[i]] != df[[1]]))
       flag <- 1
   }
-  if(flag) warning("Mismatch in degrees of freedom; may cause problems.")
+  if(flag) {
+    warning("Mismatch in degrees of freedom; may cause problems.")
+    df <- NULL
+  }
+  else df <- df[[1]]
 
   if(!missing(labels)) {
     if(length(labels)==1)
@@ -493,6 +497,7 @@ function(..., labels)
     result <- cbind(result, dots[[i]][,-(1:2),drop=FALSE])
 
   class(result) <- cl
+  attr(result, "df") <- df
   result
 }
 
@@ -627,10 +632,14 @@ function(...)
   flag <- 0
   for(i in 2:length(df)) {
     if(length(df[[i]]) != length(df[[1]]) ||
-       any(df[[i]] != df[[1]]))
+       any(df[[i]] != df[[1]])) 
       flag <- 1
   }
-  if(flag) warning("Mismatch in degrees of freedom; may cause problems.")
+  if(flag) {
+    warning("Mismatch in degrees of freedom; may cause problems.")
+    df <- NULL
+  }
+  else df <- df[[1]]
 
   if("xchr" %in% names(attributes(dots[[1]]))) {
     xchr <- lapply(dots, attr, "xchr")
@@ -668,6 +677,7 @@ function(...)
       result <- rbind(result, dots[[i]])
     class(result) <- "scanoneperm"
   }
+  attr(result, "df") <- df
   result
 }
 
@@ -692,7 +702,11 @@ function(..., labels)
        any(df[[i]] != df[[1]]))
       flag <- 1
   }
-  if(flag) warning("Mismatch in degrees of freedom; may cause problems.")
+  if(flag) {
+    warning("Mismatch in degrees of freedom; may cause problems.")
+    df <- NULL
+  }
+  else df <- df[[1]]
 
   if(!missing(labels)) {
     if(length(labels)==1)
@@ -766,6 +780,7 @@ function(..., labels)
     }
     class(result) <- "scanoneperm"
   }
+  attr(result, "df") <- df
   result
 }
 

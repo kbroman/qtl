@@ -2,9 +2,9 @@
  * 
  * hmm_bc.c
  * 
- * copyright (c) 2001-7, Karl W Broman
+ * copyright (c) 2001-8, Karl W Broman
  *
- * last modified Oct, 2007
+ * last modified Jul, 2008
  * first written Feb, 2001
  *
  * Licensed under the GNU General Public License version 2 (June, 1991)
@@ -152,7 +152,7 @@ void est_rf_bc(int *n_ind, int *n_mar, int *geno, double *rf)
       }
       
       if(a != 0) { /* at least one informative meiosis */ 
-	if(b > a/2) b = a/2;
+	/*	if(b > a/2) b = a/2; */
 
 	Rf[j1][j2] = (double)b/(double)a;
 	if(b==0) /* no recombinations */

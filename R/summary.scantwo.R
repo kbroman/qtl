@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
 #
-# last modified May, 2008
+# last modified Jul, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -848,6 +848,18 @@ function(...)
     }
   }
   if(flag) warning("Mismatch in column names; input may not be consistent.\n")
+
+  df <- lapply(dots, attr, "df")
+  flag <- 0
+  for(i in 2:length(df)) {
+    if(length(df[[i]]) != length(df[[1]]) ||
+       any(df[[i]] != df[[1]])) 
+      flag <- 1
+  }
+  if(flag) {
+    warning("Mismatch in degrees of freedom; may cause problems.")
+    attr(dots[[1]], "df") <- NULL
+  }
 
   dots[[1]]
 }

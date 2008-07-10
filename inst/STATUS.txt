@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/7/2008:
+Version 1.09, 7/10/2008:
 
 Major changes:
 
@@ -66,6 +66,9 @@ Minor changes:
   Added a function ntyped() which is just like nmissing() except it
   gives the opposite thing (no. genotypes per individual or marker).
 
+  est.rf, for a backcross, had been replacing estimated rec frac > 0.5
+  with 0.5.  This is no longer done.
+
   The print and summary function for QTL objects now will print the
   formula and penalized LOD ("pLOD") if they exist as attributes.
   They also take into account the case of a null QTL model.
@@ -110,9 +113,15 @@ Minor changes:
   Made a slight change to plot.pxg regarding the locations of the
   genotype labels on the x-axis.
 
+  Revised print.map so that it doesn't print the log likelihood
+  attribute. 
+
   Fixed a bug in addpair if the formula is missing.
 
   Fixed a bug in est.rf for 4-way crosses.
+
+  Fixed a bug in c.scanoneperm, c.scanone, and c.scantwoperm regarding
+  the "df" (degrees of freedom) attributes.
 
   Fixed a bug in read.cross with format "csv" (or "csvs" or "csvr" or
   "csvsr") so that dec="," can be used as an argument.  

@@ -2650,6 +2650,9 @@ function(object, amount=1e-6) # x is either a cross object or a map
 print.map <-
 function(x, ...)
 {  
+  for(i in seq(along=x))
+    attr(x[[i]], "loglik") <- NULL
+
   if(length(x) == 1)
     print(unclass(x[[1]]))
   else
