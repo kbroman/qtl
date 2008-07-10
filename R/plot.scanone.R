@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Feb, 2008
+# last modified Jul, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -201,7 +201,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
     # plot lines or triangles at marker positions
     if(!add) {
       nam <- dimnames(out)[[1]][out[,1]==chr[i]]
-      wh.genoprob <- grep("^c[0-9A-Za-z]+\\.loc-*[0-9]+", nam)
+      wh.genoprob <- grep("^c.+\\.loc-*[0-9]+", nam)
       if(length(wh.genoprob)==0) wh.genoprob <- seq(along=nam)
       else wh.genoprob <- (seq(along=nam))[-wh.genoprob]
       pos <- out[out[,1]==chr[i],2][wh.genoprob]+start[i]
