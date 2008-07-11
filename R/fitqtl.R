@@ -834,7 +834,7 @@ function(object, pvalues=TRUE, ...)
 print.summary.fitqtl <- function(x, ...)
 {
   cat("\n")
-  cat("\t\tfitqtl Summary\n\n")
+  cat("\t\tfitqtl summary\n\n")
   meth <- attr(x, "method")
   if(meth=="imp") meth <- "multiple imputation"
   else if(meth=="hk") meth <- "Haley-Knott regression"
