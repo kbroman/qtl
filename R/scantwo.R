@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
 #
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -458,8 +458,8 @@ function(cross, chr, pheno.col=1,
       }
 
       # print the current working pair
-      if(verbose) cat(paste(" (", names(cross$geno)[i], ",",
-                          names(cross$geno)[j],")\n",sep=""))
+      if(verbose) cat(" (", names(cross$geno)[i], ",",
+                          names(cross$geno)[j],")\n",sep="")
 
       if(method=="imp") {
         z <- .C("R_scantwo_imp",

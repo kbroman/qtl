@@ -103,6 +103,9 @@ Minor changes:
 
   Slight change to plot.scanone so that the chr argument can be logical.
 
+  Simplied code for 'cat' statements in many places; we'd used
+  cat(paste(...)) and the call to paste wasn't needed.
+
   The title of the plot produced by plot.rf can now be modified by
   including the argument 'main' in the call.
 

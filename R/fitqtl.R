@@ -835,8 +835,11 @@ print.summary.fitqtl <- function(x, ...)
 {
   cat("\n")
   cat("\t\tSummary for fit QTL\n\n")
-  cat( paste("Method is: ", attr(x, "method"), "\n") )
-  cat( paste("Number of observations: ", attr(x, "nind"), "\n\n") )
+  meth <- attr(x, "method")
+  if(meth=="imp") meth <- "multiple imputation"
+  else if(meth=="hk") meth <- "Haley-Knott regression"
+  cat("Method is:", meth, "\n")
+  cat("Number of observations :", attr(x, "nind"), "\n\n")
 
   # print ANOVA table for full model
   cat("Full model result\n")

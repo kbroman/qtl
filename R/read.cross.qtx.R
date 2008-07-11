@@ -3,7 +3,7 @@
 # read.cross.qtx.R
 #
 # copyright (c) 2000-8, Karl W Broman
-# last modified Apr, 2008
+# last modified Jul, 2008
 # first written Aug, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -57,7 +57,7 @@ function(dir, file, estimate.map=TRUE)
   ind <- x[(ind.beg+2):(ind.end-1)]
   if(length(ind) != n.ind)
     stop("Problem with individual IDs ({pgy}).")
-  cat(paste("\t", n.ind, "  individuals\n",sep=""))
+  cat("\t", n.ind, " individuals\n", sep="")
 
   # determine if individuals can be viewed as numbers
   g <- grep("^[0-9\\.]+$", ind)
@@ -83,11 +83,11 @@ function(dir, file, estimate.map=TRUE)
       pheno[[i]] <- as.numeric(temp)
     }
     pheno <- cbind(as.data.frame(pheno),ind=ind)
-    cat(paste("\t", length(pheno), "  phenotypes\n",sep=""))
+    cat("\t", length(pheno), " phenotypes\n",sep="")
   }
   else {
     pheno <- data.frame(ind=ind)
-    cat(paste("\t", 0, "  phenotypes\n",sep=""))
+    cat("\t", 0, "  phenotypes\n",sep="")
   }
 
   # chromosomes
@@ -101,7 +101,7 @@ function(dir, file, estimate.map=TRUE)
   has.loci <- rep(TRUE,length(chr.beg))
   map.offset <- rep(0,length(chr.beg))
 
-  cat(paste("\t", length(chr.beg), "  chromosomes\n",sep=""))
+  cat("\t", length(chr.beg), "  chromosomes\n",sep="")
 
   for(i in 1:length(chr.beg)) {
     z <- x[chr.beg[i]:chr.end[i]]
@@ -200,7 +200,7 @@ function(dir, file, estimate.map=TRUE)
   else type <- "f2"
 
   totmar <- sum(sapply(geno,function(a) ncol(a$data)))
-  cat(paste("\t", totmar, "  total markers\n",sep=""))
+  cat("\t", totmar, "  total markers\n",sep="")
 
   cross <- list(geno=geno,pheno=pheno)
   class(cross) <- c(type,"cross")

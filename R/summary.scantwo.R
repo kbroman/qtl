@@ -799,9 +799,9 @@ function(x, ...)
     dimnames(x) <- list(rn, nam)
 
     if(is.null(phe))
-      cat(paste("(", n.perm, " permutations)", sep=""), "\n")
+      cat("(", n.perm, " permutations)\n", sep="")
     else 
-      cat(phe, paste("(", n.perm, " permutations)", sep=""), "\n")
+      cat(phe, " (", n.perm, " permutations)\n", sep="")
     print(x, digits=3)
   }
   else {
@@ -814,7 +814,7 @@ function(x, ...)
         y[,j] <- x[[j]][,i]
       dimnames(y) <- list(rn, nam)
 
-      cat(phe[i], paste("(", n.perm, " permutations)", sep=""), "\n")
+      cat(phe[i], " (", n.perm, " permutations)\n", sep="")
       print(y, digits=3)
       if(i != nc) cat("\n")
     }

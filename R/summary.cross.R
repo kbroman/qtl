@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -282,7 +282,7 @@ function(x,...)
   else if(x$type=="riself") cat("    RI strains via selfing\n\n")
   else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
   else if(x$type=="dh") cat("    Doubled haploids\n\n")
-  else cat(paste("    cross", x$type, "\n\n",sep=" "))
+  else cat("    cross", x$type, "\n\n",sep=" ")
 
   cat("    No. individuals:   ", x$n.ind,"\n\n")
   cat("    No. phenotypes:    ", x$n.phe,"\n")
