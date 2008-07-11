@@ -4,7 +4,7 @@
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
 # 
-# Last modified Jun, 2008
+# Last modified Jul, 2008
 # first written Jul, 2002
 #
 # Modified by Hao Wu Feb 2005 for the following:
@@ -420,7 +420,7 @@ function (cross, mname)
   # determine marker type - it could be a marker, a pseudomarker or a phenotype
   mar.type <- "none"
   # regular expression pattern for a pseudomarker names
-  pm.pattern <- "c[0-9,X]*\\.loc.*" # pseudomarker names will be like "c1.loc10"
+  pm.pattern <- "^c.*\\.loc.*$" # pseudomarker names will be like "c1.loc10"
   if(mname %in% names(cross$pheno)) { # this is a phenotype
     mar.type <- "pheno"
     idx.pos <- which(mname==names(cross$pheno))
@@ -428,13 +428,13 @@ function (cross, mname)
   else if(length(grep(pm.pattern, mname)) > 0) { # like "c1.loc10", this is a pseudomarker
     # note that the column names for draws is like "loc10",
     # so I need to take the part after "." in mname
-    tmp <- unlist(strsplit(mname, "\\."))
-    chr <- substr(tmp[1],2,nchar(tmp[1])) # this will be like 1 or "X"
+    tmp <- unlist(strsplit(mname, "loc"))
+    chr <- substr(tmp[1],2,nchar(tmp[1])-1) # this will be like 1 or "X"
     if( !(chr %in% names(cross$geno)) )
       stop("Couldn't find marker ", mname)
     mar.type <- "pm"
     chrtype <- class(cross$geno[[chr]])
-    pm.name <- paste(tmp[-1],collapse=".") # this will be like loc10
+    pm.name <- paste("loc", tmp[2],sep="") # this will be like loc10
     idx.pos <- which(pm.name==colnames(cross$geno[[chr]]$draws))
     if(length(idx.pos) == 0)
       stop("Couldn't find marker ", mname)

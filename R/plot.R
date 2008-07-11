@@ -1287,10 +1287,10 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 #       cex = ifelse(n.mark==1, 1, 0.8))
   cxaxis <- par("cex.axis") 
   
-  theline <- length(marker)-1
+#  theline <- length(marker)-1
   axis(side=1, at=1:length(observed), labels=tmp,
        cex=ifelse(n.mark==1, cxaxis, cxaxis*0.8),
-       tick=FALSE, line=theline)
+       tick=FALSE, line = (length(marker)-1)/2)
 
   invisible(data)
 

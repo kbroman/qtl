@@ -277,8 +277,6 @@ function(object, thresholds,
      "df" %in% names(attributes(perms))) {
     df.o <- attr(out, "df")
     df.p <- attr(perms, "df")
-    print(df.o)
-    print(df.p)
     if(length(df.o) != length(df.p) ||
        any(df.o != df.p))
       warning("Degrees of freedom in input object and perms do not match.")
