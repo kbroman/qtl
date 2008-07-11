@@ -77,6 +77,8 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
   # pull out desired chromosomes
   if(missing(chr) || length(chr)==0) 
     chr <- unique(as.character(out[,1]))
+  else if(is.logical(chr))
+    chr <- unique(as.character(out[,1]))[chr]
   else if(all(chr < 0)) { 
     a <- sort(unique(out[,1]))
     chr <- a[-match(-chr,a)]

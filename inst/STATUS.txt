@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/10/2008:
+Version 1.09, 7/11/2008:
 
 Major changes:
 
@@ -100,6 +100,8 @@ Minor changes:
 
   Slight change in the way refineqtl determines convergence, to try to
   avoid unnecessary iterations.
+
+  Slight change to plot.scanone so that the chr argument can be logical.
 
   The title of the plot produced by plot.rf can now be modified by
   including the argument 'main' in the call.
