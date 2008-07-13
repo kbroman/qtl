@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jun, 2008
+# last modified Jul, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -346,6 +346,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
         if(pos.tmp[kk] != current.pos[kk]) {
           u <- abs(pos.tmp[kk]-pos[[kk]])
           w <- indices[[kk]][u==min(u)]
+          if(length(w) > 1) {
+            warning("Confused about QTL positions.  You should probably run jittermap to ensure that no two markers conincide.")
+            w <- sample(w, 1)
+          }
           if(method=="imp")
             qtl.obj$geno[,kk,] <- cross$geno[[ichr[kk]]]$draws[,w,]
           else

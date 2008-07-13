@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/11/2008:
+Version 1.09, 7/12/2008:
 
 Major changes:
 
@@ -105,6 +105,9 @@ Minor changes:
 
   Simplied code for 'cat' statements in many places; we'd used
   cat(paste(...)) and the call to paste wasn't needed.
+
+  Fixed an error in scanqtl that arose if there are multiple markers
+  at the same position.  Now give a warning message.
 
   The title of the plot produced by plot.rf can now be modified by
   including the argument 'main' in the call.
