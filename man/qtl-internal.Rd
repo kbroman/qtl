@@ -146,7 +146,7 @@ discan(cross, pheno, method=c("em","mr"),
 dropfromqtlformula(formula, qtlnum)
 dropXcol(type=c("f2","bc"), sexpgm, cross.attr)
 effectplot.getmark(cross, mname)
-effectplot.calmeanse(pheno, mark1, mark2, ndraws, var.flag=c("pooled", "group"))
+effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled", "group"))
 expandf2covar(thecovar)
 fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
              dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr)
