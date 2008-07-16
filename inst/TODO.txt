@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In deparseQTLformula, order the pairwise intx'ns, too.
-
 o revise rqtltour to indicate that "pheno.col" can be the name of a
   phenotype rather than just a numeric index. (Also, that it can be a
   vector of numeric phenotypes.)
@@ -39,12 +37,7 @@ o For the stepwiseqtl function:
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
 
-o warnings regarding degrees of freedom often seem unnecessary
-
 o read.cross is slow loading when there are *lots* of phenotypes
-
-o revise read.cross with format="mm" to deal with ril by selfing
-  and/or sib mating
 
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
@@ -58,6 +51,9 @@ o FAQ: - constructing covariate matrices
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o revise read.cross with format="mm" to deal with ril by selfing
+  and/or sib mating
 
 o Batch permutations: study relationship between time and size of
   batches.  Perhaps do batches not all at once but in pieces.

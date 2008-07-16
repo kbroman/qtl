@@ -34,10 +34,8 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     stop("The qtl argument must be an object of class \"qtl\".")
 
   if(!is.null(covar) && !is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) {
+    if(is.matrix(covar) && is.numeric(covar)) 
       covar <- as.data.frame(covar)
-      warning("converting covar to a data.frame")
-    }
     else stop("covar should be a data.frame")
   }
 

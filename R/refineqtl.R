@@ -36,10 +36,8 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     formula <- as.formula(formula)
 
   if(!is.null(covar) && !is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) {
+    if(is.matrix(covar) && is.numeric(covar)) 
       covar <- as.data.frame(covar)
-      warning("converting covar to a data.frame")
-    }
     else stop("covar should be a data.frame")
   }
 

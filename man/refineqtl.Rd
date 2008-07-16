@@ -33,7 +33,8 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    is provided, this should not be.}
  \item{qtl.name}{Optional user-specified name for each QTL.  If
    \code{qtl} is provided, this should not be.}
- \item{covar}{A data frame of covariates.}
+ \item{covar}{A matrix or data.frame of covariates.  These must be
+   strictly numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are indicated as \code{Q1},

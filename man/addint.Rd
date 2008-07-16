@@ -24,8 +24,8 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
    \code{\link[qtl]{makeqtl}}.} 
- \item{covar}{A data.frame of covariates.  These must be strictly
-   numeric.} 
+ \item{covar}{A matrix or data.frame of covariates.  These must be
+   strictly numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are referred to as

@@ -27,7 +27,8 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
  \item{pos}{List indicating the positions or intervals on the chromosome
    to be scanned.  Each element should be either a single number (for a
    specific position) or a pair of numbers (for an interval).}
- \item{covar}{A data frame of covariates.}
+ \item{covar}{A matrix or data.frame of covariates.  These must be
+   strictly numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are indicated as \code{Q1},
