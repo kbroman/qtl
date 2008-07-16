@@ -105,7 +105,10 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
         mname2 <- "Marker 2"
     }
   }
-  else mark2 <- NULL
+  else {
+    mark2 <- NULL
+    geno2 <- NULL
+  }
   ### till now, mark1 and mark2 are genotype data in matrix
   
   ########################################################
@@ -230,7 +233,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
   # the output will be a data frame. For two-marker case,
   # the rows corresponding to the first marker and the columns
   # corresponding to the second marker
-  result <- effectplot.calmeanse(pheno, mark1, mark2, ndraws, var.flag)
+  result <- effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag)
   means <- result$Means
   ses <- result$SEs
   
@@ -267,7 +270,6 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     colnames(result$SEs) <- paste(mname2, geno2, sep = ".")
   }
 
-  
   # calculate lo's and hi's for plot
   lo <- means - ses
   hi <- means + ses
@@ -309,14 +311,14 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     
     # x axis limits
     if(is.null(mark2)) { # one marker
-      u <- sort(unique(as.vector(mark1)))
+      u <- seq(along=geno1)
       d <- diff(u[1:2])
-      xlimits <- c(min(mark1) - d/4, max(mark1) + d/4)
+      xlimits <- c(min(u) - d/4, max(u) + d/4)
     }
     else { # two markers
-      u <- sort(unique(as.vector(mark2)))
+      u <- seq(along=geno2)
       d <- diff(u[1:2])
-      xlimits <- c(min(mark2) - d/4, max(mark2) + d/4)
+      xlimits <- c(min(u) - d/4, max(u) + d/4)
     }
 
     ## fix of x limits
@@ -517,7 +519,9 @@ function (cross, mname)
 # if ndraws > 1 (has pseudomarker),
 # loop thru the draws
 ##############################################
-effectplot.calmeanse <- function(pheno, mark1, mark2, ndraws, var.flag=c("pooled","group")) {
+effectplot.calmeanse <-
+function(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled","group"))
+{
   # local variables
   nind <- length(pheno) 
   # method to calculate variances for estimated QTL effects
@@ -528,18 +532,18 @@ effectplot.calmeanse <- function(pheno, mark1, mark2, ndraws, var.flag=c("pooled
   
   if(is.null(mark2)) { # if mark2 is missing
     if(ndraws > 1) { # more than one draws
-      mark1.level <- levels(as.factor(mark1)) # level for mark1
+      mark1.level <- seq(along=geno1) # level for mark1
       # init 
       means.all <- matrix(NA, nrow=ndraws, ncol=length(mark1.level))
-      colnames(means.all) <- sort(unique(as.vector(mark1)))
+      colnames(means.all) <- mark1.level
       vars.all <- matrix(NA, nrow=ndraws, ncol=length(mark1.level))
-      colnames(vars.all) <- sort(unique(as.vector(mark1)))
+      colnames(vars.all) <- mark1.level
       weight <- rep(0, ndraws) # weight for draws
       # loop thru draws
       for(i in 1:ndraws) {
         mark1.tmp <- mark1[,i] # data for current draw
         # fit a regression - this is used to calculate the weights
-        mark1.factor <- as.factor(mark1.tmp)
+        mark1.factor <- factor(mark1.tmp, mark1.level)
         lm.tmp <- lm(pheno~mark1.factor-1)
         rss <- sum(lm.tmp$residuals^2)
         # compute the weight
@@ -572,7 +576,7 @@ effectplot.calmeanse <- function(pheno, mark1, mark2, ndraws, var.flag=c("pooled
         ses <- tapply(pheno, mark1, function(a) sd(a, na.rm = TRUE)/sqrt(sum(!is.na(a))))
       }
       else { # use pooled variance
-        mark1.factor <- as.factor(mark1)
+        mark1.factor <- factor(mark1, seq(along=geno1))
         lm.tmp <- lm(pheno~mark1.factor-1)
         rss <- sum(lm.tmp$residuals^2)
         ses <- tapply(mark1, mark1, function(a) sqrt(rss/nind/length(a)))
@@ -582,21 +586,21 @@ effectplot.calmeanse <- function(pheno, mark1, mark2, ndraws, var.flag=c("pooled
   
   else { # with mark2
     if(ndraws > 1) {
-      mark1.level <- levels(as.factor(mark1)) # level for mark1
-      mark2.level <- levels(as.factor(mark2)) # level for mark2
+      mark1.level <- seq(along=geno1) # level for mark1
+      mark2.level <- seq(along=geno2) # level for mark2
       # init 
       means.all <- array(NA, c(length(mark1.level), length(mark2.level), ndraws))
-      dimnames(means.all) <- list(sort(unique(as.vector(mark1))), sort(unique(as.vector(mark2))), NULL)
+      dimnames(means.all) <- list(mark1.level, mark2.level, NULL)
       vars.all <- array(NA, c(length(mark1.level), length(mark2.level), ndraws))
-      dimnames(vars.all) <- list(sort(unique(as.vector(mark1))), sort(unique(as.vector(mark2))), NULL)
+      dimnames(vars.all) <- list(mark1.level, mark2.level, NULL)
       weight <- rep(0, ndraws) # weight for draws
       # loop thru draws
       for(i in 1:ndraws) {
         mark1.tmp <- mark1[,i] # data for current draw
         mark2.tmp <- mark2[,i]
         # fit a regression - this is used to calculate the weights
-        mark1.factor <- as.factor(mark1.tmp)
-        mark2.factor <- as.factor(mark2.tmp)
+        mark1.factor <- factor(mark1.tmp, mark1.level)
+        mark2.factor <- factor(mark2.tmp, mark2.level)
         lm.tmp <- lm(pheno~mark1.factor+mark2.factor+1)
         rss <- sum(lm.tmp$residuals^2)
         # compute the weight
@@ -631,8 +635,8 @@ effectplot.calmeanse <- function(pheno, mark1, mark2, ndraws, var.flag=c("pooled
         ses <- tapply(pheno, list(mark1, mark2), function(a) sd(a, na.rm = TRUE)/sqrt(sum(!is.na(a))))
       }
       else {# use pooled variance
-        mark1.factor <- as.factor(mark1)
-        mark2.factor <- as.factor(mark2)
+        mark1.factor <- factor(mark1, seq(along=geno1))
+        mark2.factor <- factor(mark2, seq(along=geno2))
         lm.tmp <- lm(pheno~mark1.factor+mark2.factor-1)
         rss <- sum(lm.tmp$residuals^2)
         ses <- tapply(mark1, list(mark1, mark2), function(a) sqrt(rss/nind/length(a)))

@@ -96,6 +96,9 @@ Minor changes:
   The output of fitqtl now includes an element "lod" containing the
   LOD score from the fit of the full model.  
 
+  Fixed a bug in effectplot in the case the that not all possible
+  genotypes are observed in the imputations.
+
   Slight change to summary.fitqtl and summary.addint so that very long
   formulas are split across multiple lines.
 
