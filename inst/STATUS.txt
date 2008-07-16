@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/12/2008:
+Version 1.09, 7/16/2008:
 
 Major changes:
 
@@ -92,6 +92,9 @@ Minor changes:
   converted.) 
 
   Added a function cbind.scanone (which is identical to c.scanone).
+
+  The output of fitqtl now includes an element "lod" containing the
+  LOD score from the fit of the full model.  
 
   Slight change to summary.fitqtl and summary.addint so that very long
   formulas are split across multiple lines.

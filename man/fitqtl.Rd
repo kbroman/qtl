@@ -65,15 +65,16 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
 }
 
 \section{Value}{
-  An object of class \code{fitqtl}. It may contains as many as three fields:
+  An object of class \code{fitqtl}. It may contains as many as four fields:
   \enumerate{
-    \item result.full is the ANOVA table as a matrix for the full model
+    \item \code{result.full} is the ANOVA table as a matrix for the full model
     result. It contains the degree of freedom (df), Sum of squares (SS),
     mean square (MS), LOD score (LOD), percentage of variance explained
     (\%var) and P value (Pvalue).
 
+    \item \code{lod} is the LOD score from the fit of the full model.
 
-    \item result.drop is a drop-one-term ANOVA table as a matrix. It
+    \item \code{result.drop} is a drop-one-term ANOVA table as a matrix. It
     contains degrees of freedom (df), Type III sum of squares (Type III
     SS), LOD score(LOD), percentage of variance explained (\%var), F
     statistics (F value),  and P values for chi square (Pvalue(chi2))
@@ -86,14 +87,13 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     the F values and the P values are approximations calculated from the
     LOD score.
 
-    \item ests contains the estimated QTL effects and standard errors.  
+    \item \code{ests} contains the estimated QTL effects and standard errors.  
 
   \bold{The part to get estimated QTL effects is fully working only for
     the case of autosomes in a backcross or intercross.
     In other cases the values returned are based on a
     design matrix that is convenient for calculations but not easily
     interpreted.}
-    
   }
 }
 

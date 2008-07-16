@@ -628,6 +628,8 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   if(get.ests) 
     output$ests <- list(ests=ests, covar=ests.cov)
 
+  output$lod <- output$result.full[1,4]
+
   class(output) <- "fitqtl"
   attr(output, "method") <- method
   attr(output, "formula") <- deparseQTLformula(formula)

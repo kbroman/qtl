@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o effectplot when some genotypes are not observed; the labels get
+  screwed up.
+
 o revise rqtltour to indicate that "pheno.col" can be the name of a
   phenotype rather than just a numeric index. (Also, that it can be a
   vector of numeric phenotypes.)
