@@ -236,6 +236,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
   result <- effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag)
   means <- result$Means
   ses <- result$SEs
+
   
   # assign column and row names
   if(is.null(mark2)) {
@@ -571,7 +572,15 @@ function(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled","group")
       ses <- sqrt(meanvar+varmean)
     }
     else { # ndraws is 1
+      u <- sort(unique(mark1))
+      if(any(!(u %in% seq(along=geno1)))) {
+        newmark1 <- mark1
+        for(i in seq(along=u)) 
+          newmark1[mark1==u[i]] <- i
+        mark1 <- newmark1
+      }
       means <- tapply(pheno, mark1, mean, na.rm = TRUE)
+
       if(var.flag == "group") { # use group variance
         ses <- tapply(pheno, mark1, function(a) sd(a, na.rm = TRUE)/sqrt(sum(!is.na(a))))
       }
@@ -588,6 +597,25 @@ function(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled","group")
     if(ndraws > 1) {
       mark1.level <- seq(along=geno1) # level for mark1
       mark2.level <- seq(along=geno2) # level for mark2
+
+      u <- sort(unique(as.numeric(mark1)))
+      if(any(!(u %in% seq(along=geno1)))) {
+        newmark1 <- mark1
+        for(i in seq(along=u)) 
+          for(j in 1:ncol(mark2)) 
+            newmark1[mark1[,j]==u[i],j] <- i
+        mark1 <- newmark1
+      }
+
+      u <- sort(unique(as.numeric(mark2)))
+      if(any(!(u %in% seq(along=geno2)))) {
+        newmark2 <- mark2
+        for(i in seq(along=u)) 
+          for(j in 1:ncol(mark2)) 
+            newmark2[mark2[,j]==u[i],j] <- i
+        mark2 <- newmark2
+      }
+
       # init 
       means.all <- array(NA, c(length(mark1.level), length(mark2.level), ndraws))
       dimnames(means.all) <- list(mark1.level, mark2.level, NULL)
@@ -630,14 +658,30 @@ function(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled","group")
       ses <- sqrt(meanvar+varmean)
     }
     else { # ndraws is 1
+      u <- sort(unique(mark1))
+      if(any(!(u %in% seq(along=geno1)))) {
+        newmark1 <- mark1
+        for(i in seq(along=u)) 
+          newmark1[mark1==u[i]] <- i
+        mark1 <- newmark1
+      }
+
+      u <- sort(unique(mark2))
+      if(any(!(u %in% seq(along=geno2)))) {
+        newmark2 <- mark2
+        for(i in seq(along=u)) 
+          newmark2[mark2==u[i]] <- i
+        mark2 <- newmark2
+      }
+      mark1 <- factor(mark1, seq(along=geno1))
+      mark2 <- factor(mark2, seq(along=geno2))
+
       means <- tapply(pheno, list(mark1, mark2), mean, na.rm = TRUE)
       if(var.flag=="group") { # use group variance
         ses <- tapply(pheno, list(mark1, mark2), function(a) sd(a, na.rm = TRUE)/sqrt(sum(!is.na(a))))
       }
       else {# use pooled variance
-        mark1.factor <- factor(mark1, seq(along=geno1))
-        mark2.factor <- factor(mark2, seq(along=geno2))
-        lm.tmp <- lm(pheno~mark1.factor+mark2.factor-1)
+        lm.tmp <- lm(pheno~mark1+mark2-1)
         rss <- sum(lm.tmp$residuals^2)
         ses <- tapply(mark1, list(mark1, mark2), function(a) sqrt(rss/nind/length(a)))
       }
