@@ -1,5 +1,6 @@
 \name{c.scanone}
 \alias{c.scanone}
+\alias{cbind.scanone}
 
 \title{Combine columns from multiple scanone results}
 
@@ -10,6 +11,7 @@
 
 \usage{
 \method{c}{scanone}(\dots, labels)
+\method{cbind}{scanone}(\dots, labels)
 }
 
 \arguments{

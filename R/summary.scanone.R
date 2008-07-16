@@ -501,6 +501,8 @@ function(..., labels)
   result
 }
 
+cbind.scanone <- c.scanone
+
 grab.arg.names <-
 function(...)
 {

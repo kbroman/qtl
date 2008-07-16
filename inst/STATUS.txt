@@ -56,6 +56,10 @@ Major changes:
 
 Minor changes:
 
+  Covariates (argument covar) in fitqtl, scanqtl, addqtl, addpair,
+  addint, and refineqtl can now be a numeric matrix (with column
+  names), and not just a data.frame.
+
   Permutation results obtained via scantwo now include the maximum LOD
   score from a single-QTL scan.  This is not used in summary.scantwo,
   but is included for completeness.
@@ -86,6 +90,8 @@ Minor changes:
   We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
   character string representations of formulas.  (They are then
   converted.) 
+
+  Added a function cbind.scanone (which is identical to c.scanone).
 
   Slight change to summary.fitqtl and summary.addint so that very long
   formulas are split across multiple lines.

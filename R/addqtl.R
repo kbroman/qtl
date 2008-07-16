@@ -32,8 +32,13 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   if( !sum(class(qtl) == "qtl") )
     stop("The qtl argument must be an object of class \"qtl\".")
 
-  if(!is.null(covar) && !is.data.frame(covar))
-    stop("covar should be a data.frame")
+  if(!is.null(covar) && !is.data.frame(covar)) {
+    if(is.matrix(covar) && is.numeric(covar)) {
+      covar <- as.data.frame(covar)
+      warning("converting covar to a data.frame")
+    }
+    else stop("covar should be a data.frame")
+  }
 
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
@@ -258,8 +263,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(!missing(formula) && is.character(formula))
     formula <- as.formula(formula)
 
-  if(!is.null(covar) && !is.data.frame(covar))
-    stop("covar should be a data.frame")
+  if(!is.null(covar) && !is.data.frame(covar)) {
+    if(is.matrix(covar) && is.numeric(covar)) {
+      covar <- as.data.frame(covar)
+      warning("converting covar to a data.frame")
+    }
+    else stop("covar should be a data.frame")
+  }
 
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
@@ -567,8 +577,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(!missing(formula) && is.character(formula))
     formula <- as.formula(formula)
 
-  if(!is.null(covar) && !is.data.frame(covar))
-    stop("covar should be a data.frame")
+  if(!is.null(covar) && !is.data.frame(covar)) {
+    if(is.matrix(covar) && is.numeric(covar)) {
+      covar <- as.data.frame(covar)
+      warning("converting covar to a data.frame")
+    }
+    else stop("covar should be a data.frame")
+  }
 
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
