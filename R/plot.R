@@ -232,22 +232,40 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
 {
   dots <- list(...)
   if("main" %in% names(dots)) {
-    themain <- dots[["main"]]
+    themain <- dots$main
     usemaindefault <- FALSE
   }
   else usemaindefault <- TRUE
 
   if("xlim" %in% names(dots)) {
-    xlim <- dots[["xlim"]]
+    xlim <- dots$xlim
     usexlimdefault <- FALSE
   }
   else usexlimdefault <- TRUE
   
   if("ylim" %in% names(dots)) {
-    ylim <- dots[["ylim"]]
+    ylim <- dots$ylim
     useylimdefault <- FALSE
   }
   else useylimdefault <- TRUE
+
+  if("xlab" %in% names(dots)) 
+    xlab <- dots$xlab
+  else {
+    if(horizontal)
+      xlab <- "Location (cM)"
+    else
+      xlab <- "Chromosome"
+  }
+
+  if("ylab" %in% names(dots)) 
+    ylab <- dots$ylab
+  else {
+    if(horizontal)
+      ylab <- "Chromosome"
+    else
+      ylab <- "Location (cM)"
+  }
 
   map <- x
   # figure out if the input is a cross (containing a map)
@@ -329,7 +347,7 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
       if(usexlimdefault) xlim <- c(0,maxlen)
       if(useylimdefault) ylim <- rev(thelim)
       plot(0,0,type="n",xlim=xlim, ylim=ylim,yaxs="i",
-	   xlab="Location (cM)", ylab="Chromosome", yaxt="n")
+	   xlab=xlab, ylab=ylab, yaxt="n")
       a <- par("usr")
       
       for(i in 1:n.chr) {
@@ -367,7 +385,7 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
       if(usexlimdefault) xlim <- thelim
       if(useylimdefault) ylim <- c(maxlen, 0)
       plot(0,0,type="n",ylim=ylim,xlim=xlim,xaxs="i",
-	   ylab="Location (cM)", xlab="Chromosome", xaxt="n")
+           xlab=xlab, ylab=ylab, xaxt="n")
       
       a <- par("usr")
       
@@ -439,7 +457,7 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
       if(usexlimdefault) xlim <- thelim
       if(useylimdefault) ylim <- c(maxloc, 0)
       plot(0,0,type="n",ylim=ylim,xlim=xlim, xaxs="i",
-           ylab="Location (cM)", xlab="Chromosome", xaxt="n")
+           xlab=xlab, ylab=ylab, xaxt="n")
 
       a <- par("usr")
     
@@ -486,7 +504,7 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
       if(usexlimdefault) xlim <- c(0,maxloc)
       if(useylimdefault) ylim <- rev(thelim)
       plot(0,0,type="n",xlim=xlim,ylim=ylim,
-           xlab="Location (cM)", ylab="Chromosome", yaxt="n", yaxs="i")
+           xlab=xlab, ylab=ylab, yaxt="n", yaxs="i")
 
       a <- par("usr")
     

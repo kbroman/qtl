@@ -100,7 +100,11 @@ Minor changes:
   genotypes are observed in the imputations.
 
   Slight change in plot.scanone so that one may use xlab as an
-  argument. 
+  argument.  Similarly changed plot.map so that one may use xlab and
+  ylab to change the x- and y-axis labels.  Similarly changed
+  plot.scantwo so that one may use xlab and/or ylab to change the x-
+  and y-axis labels. (In plot.scantwo, if just one of xlab or ylab is
+  given, the other is assumed to be the same.)
 
   Slight change to summary.fitqtl and summary.addint so that very long
   formulas are split across multiple lines.

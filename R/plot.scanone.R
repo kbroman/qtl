@@ -144,6 +144,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
           plot(0,0,ylim=ylim,xlim=xlim,type="n",
                xlab="Map position (cM)",...)
         }
+      }
       else {
         if("xlab" %in% names(dots)) {
           plot(0,0,ylim=ylim,xlim=xlim,type="n",
@@ -155,6 +156,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
                xlab="Map position (cM)",ylab=dimnames(out)[[2]][3],
                ...)
         }
+      }
     }
     else {
       if("ylab" %in% names(dots)) {

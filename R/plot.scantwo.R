@@ -46,6 +46,7 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
     return(invisible(NULL))
   }
     
+
   chr <- as.character(unique(x$map[,1]))
 
   addpair <- attr(x, "addpair")
@@ -232,9 +233,8 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
     on.exit(par(las = old.las))
   }
   par(las = 1)
+  dots <- list(...)
   if(zscale) {
-    dots <- list(...)
-
     if("layout" %in% names(dots))
       layout(dots[["layout"]][[1]],dots[["layout"]][[2]])
     else
@@ -262,14 +262,30 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
   }
   else lo.int <- lo <- 0
     
+  if("xlab" %in% names(dots)) {
+    xlab <- dots$xlab
+    if("ylab" %in% names(dots))
+      ylab <- dots$ylab
+    else ylab <- xlab
+  }
+  else { 
+    if("ylab" %in% names(dots))
+      xlab <- ylab <- dots$ylab
+    else {
+      if(length(chr) > 1)
+        xlab <- ylab <- "Chromosome"
+      else
+        xlab <- ylab <- "Location (cM)"
+    }
+  }
 
   if(length(chr) > 1)
-    image(1:ncol(lod), 1:nrow(lod), lod, ylab = "Chromosome", 
-          xlab = "Chromosome", zlim = c(lo, zlim.jnt), col = cols,
+    image(1:ncol(lod), 1:nrow(lod), lod, ylab = ylab,
+          xlab = xlab, zlim = c(lo, zlim.jnt), col = cols,
           xaxt = "n", yaxt = "n")
   else
-    image(map[,2], map[,2], lod, ylab = "Position (cM)", 
-          xlab = "Position (cM)", zlim = c(lo, zlim.jnt), col = cols)
+    image(map[,2], map[,2], lod, ylab = ylab,
+          xlab = xlab, zlim = c(lo, zlim.jnt), col = cols)
           
   # plot point at maximum, if requested
   if(point.at.max) {
