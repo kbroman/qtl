@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/16/2008:
+Version 1.09, 7/17/2008:
 
 Major changes:
 
@@ -98,6 +98,9 @@ Minor changes:
 
   Fixed a bug in effectplot in the case the that not all possible
   genotypes are observed in the imputations.
+
+  Slight change in plot.scanone so that one may use xlab as an
+  argument. 
 
   Slight change to summary.fitqtl and summary.addint so that very long
   formulas are split across multiple lines.

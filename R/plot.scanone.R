@@ -136,22 +136,49 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
   if(!add) {
     if(onechr) {
       
-      if("ylab" %in% names(dots))
-        plot(0,0,ylim=ylim,xlim=xlim,type="n",
-             xlab="Map position (cM)",...)
-      else 
-        plot(0,0,ylim=ylim,xlim=xlim,type="n",
-             xlab="Map position (cM)",ylab=dimnames(out)[[2]][3],
-             ...)
+      if("ylab" %in% names(dots)) {
+        if("xlab" %in% names(dots)) {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",...)
+        }
+        else {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",
+               xlab="Map position (cM)",...)
+        }
+      else {
+        if("xlab" %in% names(dots)) {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",
+               ylab=dimnames(out)[[2]][3],
+               ...)
+        }
+        else {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",
+               xlab="Map position (cM)",ylab=dimnames(out)[[2]][3],
+               ...)
+        }
     }
     else {
-      if("ylab" %in% names(dots))
-        plot(0,0,ylim=ylim,xlim=xlim,type="n",xaxt="n",
-             xlab="Chromosome", xaxs="i", ...)
-      else
-        plot(0,0,ylim=ylim,xlim=xlim,type="n",xaxt="n",
-             xlab="Chromosome",ylab=dimnames(out)[[2]][3], xaxs="i",
-             ...)
+      if("ylab" %in% names(dots)) {
+        if("xlab" %in% names(dots)) {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",xaxt="n",
+               xaxs="i", ...)
+        }
+        else {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",xaxt="n",
+               xlab="Chromosome", xaxs="i", ...)
+        }
+      }
+      else {
+        if("xlab" %in% names(dots)) {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",xaxt="n",
+               ylab=dimnames(out)[[2]][3], xaxs="i",
+               ...)
+        }
+        else {
+          plot(0,0,ylim=ylim,xlim=xlim,type="n",xaxt="n",
+               xlab="Chromosome",ylab=dimnames(out)[[2]][3], xaxs="i",
+               ...)
+        }
+      }
     }
   }
 
