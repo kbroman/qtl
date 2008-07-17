@@ -132,7 +132,8 @@ Minor changes:
   including the argument 'main' in the call.
 
   In plot.geno, if chr is missing, we plot the genotypes for the first
-  chromosome. 
+  chromosome. Changed the label "Position (cM)" to "Location (cM)"
+  (just for consistency across functions).
 
   In geno.crosstab, changed the column and row labels for missing data
   from "NA" to "-".

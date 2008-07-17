@@ -700,7 +700,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     ddata[!is.na(data) & (data==5 | data==6)] <- NA
 
     if(horizontal) {
-      plot(0,0,type="n",xlab="Position (cM)",ylab="Individual",
+      plot(0,0,type="n",xlab="Location (cM)",ylab="Individual",
            main=paste("Chromosome",names(cross$geno)[1]),
            ylim=c(n.ind+1,0),xlim=c(0,max(map)), yaxt="n", yaxs="i")
       segments(0, 1:n.ind-jit, max(map), 1:n.ind-jit)
@@ -780,7 +780,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       }
     }
     else {
-      plot(0,0,type="n",ylab="Position (cM)",xlab="Individual",
+      plot(0,0,type="n",ylab="Location (cM)",xlab="Individual",
            main=paste("Chromosome",names(cross$geno)[1]),
            xlim=c(0,n.ind+1),ylim=c(max(map),0), xaxt="n", xaxs="i")
 
@@ -868,7 +868,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   else {
 
     if(horizontal) {
-      plot(0,0,type="n",xlab="Position (cM)",ylab="Individual",
+      plot(0,0,type="n",xlab="Location (cM)",ylab="Individual",
            main=paste("Chromosome",names(cross$geno)[1]),
            ylim=c(n.ind+0.5,0.5),xlim=c(0,max(map)), yaxt="n")
       segments(0, 1:n.ind, max(map), 1:n.ind)
@@ -919,7 +919,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       if(include.xo) points(xoloc$loc,xoloc$ind,pch=4,col="blue",lwd=2)
     }
     else {
-      plot(0,0,type="n",ylab="Position (cM)",xlab="Individual",
+      plot(0,0,type="n",ylab="Location (cM)",xlab="Individual",
            main=paste("Chromosome",names(cross$geno)[1]),
            xlim=c(0.5,n.ind+0.5),ylim=c(max(map),0), xaxt="n")
       segments(1:n.ind,0,1:n.ind,max(map))
