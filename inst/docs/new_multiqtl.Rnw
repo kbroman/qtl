@@ -39,6 +39,11 @@
 options(width=87, digits=3, scipen=4)
 @ 
 
+% function (to be used later) to round numbers in a nicer way.
+<<myround,echo=FALSE,results=hide>>=
+source("myround.R")
+@
+
 % Change S input/output font size
 \DefineVerbatimEnvironment{Sinput}{Verbatim}
 {fontsize=\footnotesize, baselinestretch=0.75}
@@ -46,19 +51,24 @@ options(width=87, digits=3, scipen=4)
 {fontsize=\footnotesize, baselinestretch=0.75}
 
 \textbf{\large New functions for exploring multiple-QTL models} \\
-Karl W Broman, 7 February 2008
+Karl W Broman, 7 February 2008 \\
+(minor revisions 28 May 2008; further revised
+18 July 2008 to discuss \code{stepwiseqtl})
 
 \bigskip
 
-R/qtl version 1.08 includes a number of new functions to simplify the
-exploration of multiple-QTL models.  
+R/qtl version 1.08 included a number of new functions to simplify the
+exploration of multiple-QTL models.  In R/qtl version 1.09, the
+function \code{stepwiseqtl} was added to perform a stepwise selection
+to identify the multiple-QTL model optimizing a penalized LOD score.
 
 The ``Brief tour of R/qtl'' document contains a brief description of
-these functions (see Example 5 in that document); here, we provide a more thorough
-explanation. 
+these functions (see Example 5 in that document); here, we provide a
+more thorough explanation.
 
 \bigskip
 \textbf{\large Introduction}
+\nopagebreak
 
 Let us begin with a brief overview of the changes.
 The basic functions remain \code{makeqtl} (for creating a QTL object),
@@ -89,7 +99,7 @@ The next important addition is \code{refineqtl}, which uses an
 iterative algorithm to refine the locations of QTL in a multiple-QTL
 model, with the aim of obtaining the maximum likelihood estimates of
 the QTL positions.  If the function is called with 
-\code{keeplodprofile=TRUE}, one may use another new function,
+\code{keeplodprofile=TRUE} (which is the default), one may use another new function,
 \code{plotLodProfile}, to plot the LOD profiles for each QTL, in the
 context of the multiple-QTL model, as is commonly used in multiple
 interval mapping.  
@@ -97,7 +107,7 @@ interval mapping.
 The function \code{addint} may be used to test all possible pairwise
 interactions among the QTL in a multiple-QTL model.
 
-Finally, we added several functions for manipulating a QTL object
+We added several functions for manipulating a QTL object
 (created by \code{makeqtl}).  
 The function \code{addtoqtl} is used to add additional QTL to an
 object, \code{dropfromqtl} is used to remove QTL from an object, 
@@ -105,8 +115,15 @@ object, \code{dropfromqtl} is used to remove QTL from an object,
 \code{reorderqtl} is used to change the order the loci within the QTL
 object. 
 
+Finally, the function \code{stepwiseqtl} may be used to perform a
+stepwise search for the multiple-QTL model optimizing a penalized LOD
+score criterion.  The function \code{calc.penalties} can be used to
+calculate the penalties for \code{stepwise}, using the output of a
+permutation test with \code{scantwo}.
+
 \bigskip
 \textbf{\large \code{makeqtl} and \code{fitqtl}}
+\nopagebreak
 
 We'll look at the \code{hyper} data as an example.  These data are
 from Sugiyama et al. (Genomics 71:70--71, 2001), and concern blood
@@ -123,12 +140,15 @@ data(hyper)
 
 We will use the multiple imputation approach, and so we first run
 \code{sim.geno} to perform the imputations.  We'll use 128
-imputations; more is always better, but it slows the work down
-considerably.  
+imputations; this is insufficient for the current data, which has
+extensive missing genotype information, but suffices to illustrate the
+methods.  In practice, it is a good idea to repeat the analysis with
+independent imputations.  If the results are much changed, increase
+the number of imputations.
 <<simgeno,eval=FALSE>>=
 hyper <- sim.geno(hyper, step=2, n.draws=128, err=0.001)
 @ 
-<<runsimgeno,echo=FALSE>>=
+<<runsimgeno,echo=FALSE,results=hide>>=
 file <- "Rcache/simgeno.RData"
 if(file.exists(file)) {
   load(file)
@@ -196,6 +216,7 @@ for all of these loci as well as the interaction.
 
 \bigskip
 \textbf{\large \code{refineqtl} and \code{plotLodProfile}}
+\nopagebreak
 
 Let us explore the use of \code{refineqtl}, which allows us to
 get improved estimates of the locations of the QTL.  We use
@@ -203,7 +224,7 @@ get improved estimates of the locations of the QTL.  We use
 <<refineqtl,eval=FALSE>>=
 rqtl <- refineqtl(hyper, qtl=qtl, formula=y~Q1+Q2+Q3*Q4, verbose=FALSE)
 @ 
-<<runrefineqtl,echo=FALSE>>=
+<<runrefineqtl,echo=FALSE,results=hide>>=
 file <- "Rcache/refineqtl.RData"
 if(file.exists(file)) {
   load(file)
@@ -228,16 +249,14 @@ summary(out.fq2)
 @ 
 
 The LOD score comparing the full model to the null model has increased
-by \Sexpr{round(out.fq2[[1]][1,4] - out.fq[[1]][1,4],1)}, from
-\Sexpr{round(out.fq[[1]][1,4],1)} to \Sexpr{round(out.fq2[[1]][1,4],1)}.  
+by \Sexpr{myround(out.fq2[[1]][1,4] - out.fq[[1]][1,4],1)}, from
+\Sexpr{myround(out.fq[[1]][1,4],1)} to \Sexpr{myround(out.fq2[[1]][1,4],1)}.  
 
 If \code{refineqtl} is run with the argument
-\code{keeplodprofile=TRUE}, one saves the LOD traces at that last
-iteration, which can then be plotted with \code{plotLodProfile}, as
-follows. See Fig.~\ref{fig:lodprofile}.
+\code{keeplodprofile=TRUE} (which is the default), the LOD traces at
+that last iteration are saved, which can then be plotted with
+\code{plotLodProfile}, as follows. See Fig.~\ref{fig:lodprofile}.
 <<lodprofile,eval=FALSE>>=
-rqtl <- refineqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, verbose=FALSE, 
-                  keeplodprofile=TRUE)
 plotLodProfile(rqtl)
 @ 
 
@@ -245,14 +264,6 @@ plotLodProfile(rqtl)
 \begin{figure}
 \centering
 <<plotlodprofile,fig=TRUE,echo=FALSE,height=4>>=
-file <- "Rcache/lodprofile.RData"
-if(file.exists(file)) {
-  load(file)
-} else {
-  rqtl <- refineqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4, verbose=FALSE, 
-                    keeplodprofile=TRUE)
-  save(rqtl, file=file)
-}
 par(mar=c(4.1,4.1,4.1,0.1), cex=0.8)
 plotLodProfile(rqtl)
 @ 
@@ -280,6 +291,7 @@ location of the other QTL in the model.
 
 \bigskip
 \textbf{\large \code{addint}}
+\nopagebreak
 
 The function \code{addint} is used to test, one at a time, all
 possible pairwise interactions between QTL that are not already
@@ -299,7 +311,7 @@ addint(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
 None of the interactions is particularly interesting.
 
 Note the difference in the results if we use as the formula
-\code{y~Q1+Q2+Q3+Q4} (that is, omitting the 6$\times$15 interaction.
+\code{y~Q1+Q2+Q3+Q4} (that is, omitting the 6$\times$15 interaction).
 <<addint2>>=
 addint(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3+Q4)
 @ 
@@ -311,6 +323,7 @@ interaction added.
 
 \bigskip
 \textbf{\large \code{addqtl}}
+\nopagebreak
 
 We may use the \code{addqtl} function to scan for an additional QTL,
 to be added to the model.  By default, the new QTL is strictly
@@ -318,7 +331,7 @@ additive.
 <<addqtl,eval=FALSE>>=
 out.aq <- addqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4)
 @ 
-<<runnaddqtl,echo=FALSE>>=
+<<runnaddqtl,echo=FALSE,results=hide>>=
 file <- "Rcache/addqtl.RData"
 if(file.exists(file)) {
   load(file)
@@ -336,7 +349,7 @@ score with \code{max.scanone}.
 max(out.aq)
 @ 
 
-And we may plot the results with \code{plot.scanone}; see Fig.~\ref{fig:addqtl}
+And we may plot the results with \code{plot.scanone}; see Fig.~\ref{fig:addqtl}.
 <<plotaddqtl,eval=FALSE>>=
 plot(out.aq)
 @ 
@@ -360,7 +373,7 @@ an additional QTL interacting with the chr 15 locus.
 out.aqi <- addqtl(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3*Q4+Q4*Q5)
 @ 
 
-<<runaddqtlint,echo=FALSE>>=
+<<runaddqtlint,echo=FALSE,results=hide>>=
 file <- "Rcache/addqtlint.RData"
 if(file.exists(file)) {
   load(file)
@@ -389,7 +402,7 @@ par(mar=c(4.1,4.1,4.1,0.1))
 Also of interest are the LOD scores for the interaction between the
 chr 15 locus and the new locus being scanned, which are the
 differences between the LOD scores in \code{out.aqi} and \code{out.aq}.
-See Fig.~\ref{fig:addqtlint2}
+See Fig.~\ref{fig:addqtlint2}.
 <<plotaddqtlint2,eval=FALSE>>=
 plot(out.aqi - out.aq)
 @ 
@@ -410,6 +423,7 @@ There is nothing particularly exciting in either of these plots.
 
 \bigskip
 \textbf{\large \code{addpair}}
+\nopagebreak
 
 The function \code{addpair} is similar to \code{addqtl}, but performs
 a two-dimensional scan to seek a pair of QTL to add.  By default,
@@ -432,7 +446,7 @@ on chromosome 1.
 <<addpair,eval=FALSE>>=
 out.ap <- addpair(hyper, qtl=rqtl, chr=1, formula=y~Q2+Q3*Q4, verbose=FALSE)
 @ 
-<<runaddpair,echo=FALSE>>=
+<<runaddpair,echo=FALSE,results=hide>>=
 file <- "Rcache/addpair.RData"
 if(file.exists(file)) {
   load(file)
@@ -450,7 +464,8 @@ summary(out.ap)
 
 There is little evidence for an interaction, and the LOD score comparing
 the model with two additive QTL on chr 1 to that with a single QTL on chr 1 
-is 1.64, indicating relatively weak evidence for a second QTL on chr 1.
+is \Sexpr{myround(summary(out.ap)[[11]],2)}, indicating relatively weak
+evidence for a second QTL on chr 1. 
 
 Let us also plot the results.  We'll focus on the evidence for a 
 second QTL on the chromosome, displaying $\lod_{fv1}$ (evidence for a 
@@ -498,7 +513,7 @@ To save time, we will focus just on chromosomes 7 and 15.
 out.ap2 <- addpair(hyper, qtl=rqtl, formula=y~Q1+Q2+Q3+Q5*Q6+Q3:Q5, chr=c(7,15),
                    verbose=FALSE)
 @ 
-<<runaddpair2,echo=FALSE>>=
+<<runaddpair2,echo=FALSE,results=hide>>=
 file <- "Rcache/addpair2.RData"
 if(file.exists(file)) {
   load(file)
@@ -536,7 +551,7 @@ Note that, because of the lack of symmetry in the formula we used in
 \code{c7:c15} (in which the chr 7 locus interacts with the chr 6
 locus) and \code{c15:c7} (in which the chr 15 locus interacts with the
 chr 6 locus).  The \code{c15:c7} row is most interesting, but
-\code{lod.2v1a} is \Sexpr{round(summary(out.ap2)[3,7],2)}, indicating little
+\code{lod.2v1a} is \Sexpr{myround(summary(out.ap2)[3,7],2)}, indicating little
 evidence for a chr 7 locus.  (Note that \code{lod.2v1a} here concerns
 both the chr 7 locus and the 7$\times$15 interaction.)
 
@@ -588,6 +603,7 @@ Note that the \code{lower} and \code{upper} arguments to
 
 \bigskip
 \textbf{\large \code{addtoqtl}, \code{dropfromqtl}, and \code{replaceqtl}}
+\nopagebreak
 
 Our analysis of the \code{hyper} data, above, did not indicate much
 evidence for any further QTL.  If we had seen evidence for additional
@@ -603,7 +619,7 @@ that was previously created.  For example, if we were satisfied with the evidenc
 an additional QTL on chr 1, it could be added to the QTL object
 \code{rqtl} as follows.
 <<addtoqtl>>=
-rqtl <- addtoqtl(hyper, rqtl, 1, 73.3)
+rqtl <- addtoqtl(hyper, rqtl, 1, 43.3)
 rqtl
 @ 
 
@@ -612,17 +628,19 @@ though one also provides the QTL object to which additional QTL are to
 be added.
 
 If we want to move the first QTL on chromosome 1 to a different
-position (say to 43.3 cM rather than 67.8 cM), we may use
+position (say to 73.3 cM rather than 67.8 cM), we may use
 \code{replaceqtl}, as follows.
 <<replaceqtl>>=
-rqtl <- replaceqtl(hyper, rqtl, 1, 1, 43.3)
+rqtl <- replaceqtl(hyper, rqtl, 1, 1, 73.3)
 rqtl
 @ 
 
 If we wish to reorder the QTL (e.g., according to their map positions), 
-we may use \code{reorderqtl}, as follows. 
+we may use \code{reorderqtl}, as follows.  The argument
+\code{neworder} is to indicate the new order for the QTL.  If missing,
+the QTL will be ordered by chromosome and position within a chromosome.
 <<reorderqtl>>=
-rqtl <- reorderqtl(rqtl, c(1,5,2:4))
+rqtl <- reorderqtl(rqtl, c(5,1:4))
 rqtl
 @ 
 
@@ -631,5 +649,149 @@ Finally, \code{dropfromqtl} is used to drop a locus from a QTL object.
 rqtl <- dropfromqtl(rqtl, 2)
 rqtl
 @ 
+
+\bigskip
+\textbf{\large \code{stepwiseqtl}}
+\nopagebreak
+
+With the function \code{stepwiseqtl}, one may perform a
+forward/backward stepwise search algorithm find the multiple-QTL model
+optimizing a penalized LOD score criterion.  The penalized LOD score
+for a model is the LOD score comparing the model to the null model
+(with no QTL), with a penalty subtracted for each main effect and 
+separate penalties subtracted for each pairwise interactions among
+QTL. 
+
+We consider models with possible pairwise interactions among QTL but
+no higher-order interactions allowed.  A hierarchy is enforced in
+which the inclusion of an interaction requires the inclusion of each
+of the corresponding main effects.  Such a model may be represented by
+a graph in which vertices (dots) represent QTL and edges (line
+segments between the dots) represent interactions between QTL.  
+
+In the penalized LOD score considered by \code{stepwiseqtl}, we allow
+two penalties on interactions, a light penalty and a heavy penalty.
+Each disconnected component of a model is allowed one light
+interaction penalty; all other interactions are assigned the heavy
+penalty.
+
+The three penalties may be calculed from permutation results with
+\code{scantwo}, using the function \code{calc.penalties}.  We will use
+default penalties derived by computer simulation: (2.69, 2.62, 1.19)
+for a mouse backcross, or (3.52, 4.28, 2.69) for a mouse intercross.
+(The penalties are in the order (main, heavy interaction, light
+interaction).)
+
+First, let us apply \code{stepwiseqtl}, considering only additive QTL
+models (with \code{additive.only=TRUE}.  The algorithm performs
+forward selection up to a model with a given number of QTL (specified
+by the argument \code{max.qtl}; we'll use 6), followed by backward
+elimination.
+<<stepqtl1, eval=FALSE>>=
+stepout1 <- stepwiseqtl(hyper, additive.only=TRUE, max.qtl=6,
+                        verbose=FALSE)
+@ 
+<<runstepqtl1,echo=FALSE,results=hide>>=
+file <- "Rcache/stepqtl1.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<stepqtl1>>
+  save(stepout1, file=file)
+}
+@ 
+
+The output is a QTL object; type the name to view the chosen model.
+<<printstepqtl1>>=
+stepout1
+@ 
+We obtain a model with two QTL, with one on each of chr 1 and 4.
+
+Now let's re-run the analysis, allowing for the possibility of
+interactions among the QTL.  If \code{stepwiseqtl} is called with
+\code{keeptrace=TRUE}, the sequence of models from the stepwise
+selection is retatined as an attribute.
+<<stepqtl2, eval=FALSE>>=
+stepout2 <- stepwiseqtl(hyper, max.qtl=6, keeptrace=TRUE,
+                        verbose=FALSE)
+@ 
+<<runstepqtl2,echo=FALSE,results=hide>>=
+file <- "Rcache/stepqtl2.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<stepqtl2>>
+  save(stepout2, file=file)
+}
+@ 
+
+The chosen model contains QTL on chr 1, 4, 6 and 15, with the QTL on 6
+and 15 interacting.
+<<printstepqtl2>>=
+stepout2
+@ 
+
+Since we called \code{stepwiseqtl} with the argument
+\code{keeptrace=TRUE}, the sequence of models visited by
+\code{stepwiseqtl} are retained as an \emph{attribute} (called
+\code{"trace"}) of the output, \code{stepout2}.  Attributes are a way
+of hiding additional information within an object.  The entire set of
+attributes for an object may be obtained with the \code{attributes}
+function.  It is often useful to just look at the names of the
+attributes.
+<<attributenames>>=
+names(attributes(stepout2))
+@ 
+
+Individual attributes may be obtained with the \code{attr} function.
+So we can pull out the trace of models with the
+following.  This is a long list, with each component being a compact
+representation of a QTL model, and so we will print just the first of
+them.
+<<thetrace>>=
+thetrace <- attr(stepout2, "trace")
+thetrace[[1]]
+@ 
+
+It is nicer to look at a sequence of pictures rather than a long list
+of models.  The function \code{plotModel} may be used to plot a
+graphical representation of a model, with nodes (i.e., dots)
+representing QTL and edges (i.e., line segments connecting two nodes)
+representing pairwise interactions among QTL.  The argument
+\code{chronly} is used to print just the chromosome ID for each QTL
+(rather than chromosome and position).  The penalized LOD score for
+each model is saved as an attribute, \code{"pLOD"}; we include them in
+the title of each subplot, but this requires another call to
+\code{attr}.
+<<traceplot,eval=FALSE>>=
+par(mfrow=c(4,3))
+for(i in seq(along=thetrace))
+  plotModel(thetrace[[i]], chronly=TRUE,
+            main=paste(i, ": pLOD =", 
+              round(attr(thetrace[[i]], "pLOD"), 2)))
+@ 
+
+\begin{figure}
+\centering
+<<plottraceplot,fig=TRUE,echo=FALSE,height=9>>=
+par(mar=c(0.6,0.1,2.1,0.6))
+<<traceplot>>
+@ 
+\caption{The sequence of models visited by the forward/backward search
+  of \code{stepwiseqtl}, with the \code{hyper}
+  data.\label{stepwiseqtltrace}} 
+\end{figure}
+
+As seen in Fig.~\ref{stepwiseqtltrace}, our chosen model is
+identified immediately (at step 4).  Note that the model at step 3
+(with additive QTL on chr 1, 4 and 6) has a lower penalized LOD score
+than the model at step 2 (with just the chr 1 and 4 QTL), but then the
+inclusion of the chr 15 QTL and the 6 $\times$ 15 interaction gave the
+largest penalized LOD score, among all models visited.  With the addition
+of a QTL on chr 5 (at step 5), the pLOD decreased somewhat; the LOD
+score for the model increased, but not as much as the main effect
+penalty.
+
+
 
 \end{document}

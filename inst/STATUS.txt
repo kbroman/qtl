@@ -6,14 +6,18 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.09, 7/17/2008:
+Version 1.09, 7/18/2008:
 
 Major changes:
 
   Added a function stepwiseqtl() for performing forward/backward
   selection to identify a multiple QTL model, with model choice made
   via a penalized LOD score, with separate penalties on main effects
-  and interactions.
+  and interactions.  
+
+  The documents "Brief tour of R/qtl" and "New functions for exploring
+  multiple-QTL models" were revised to discuss the stepwiseqtl
+  function. 
 
   calc.penalties() uses permutation results for a 2-dimensional, 2-QTL
   scan to derive penalties for the penalized LOD scores used by
@@ -21,12 +25,6 @@ Major changes:
 
   plotModel() is a new function for creating a simple graphical
   representation of a QTL model.
-
-  We also define a new class, "compactqtl", for defining the trace
-  through model space in stepwiseqtl() (if called with the argument
-  keeptrace=TRUE).  This is similar to the class "qtl" (of QTL objects
-  created by the makeqtl() function), but containing just chromosome
-  IDs and positions of QTL.
 
   Added an additional cross type, "dh", for doubled haploids.  This is
   treated like a backcross, though genotypes will be indicated as
@@ -51,8 +49,8 @@ Major changes:
   not needed.
 
   In refineqtl, the default for the argument keeplodprofile is now
-  TRUE.  The LOD profiles returned by refineqtl are now of class
-  "scanone".
+  TRUE.  The LOD profiles contained in the output of refineqtl are now
+  of class "scanone".
 
 Minor changes:
 
@@ -96,7 +94,16 @@ Minor changes:
   The output of fitqtl now includes an element "lod" containing the
   LOD score from the fit of the full model.  
 
-  Fixed a bug in effectplot in the case the that not all possible
+  In reorderqtl, if the argument neworder is not provided, the QTL are
+  ordered by chromosome and then by position within a chromosome.
+
+  We define a new class, "compactqtl", for defining the trace through
+  model space in stepwiseqtl() (if called with the argument
+  keeptrace=TRUE).  This is similar to the class "qtl" (of QTL objects
+  created by the makeqtl() function), but containing just chromosome
+  IDs and positions of QTL.
+
+  Fixed a bug in effectplot in the case that not all possible
   genotypes are observed in the imputations.
 
   Slight change in plot.scanone so that one may use xlab as an

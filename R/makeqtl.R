@@ -579,7 +579,15 @@ function(qtl, neworder)
   if(class(qtl) != "qtl")
     stop("qtl should have class \"qtl\".")
 
-  if(missing(neworder)) return(qtl)
+  if(missing(neworder)) {
+    if(!("map" %in% names(attributes(qtl))))
+      stop("No map in the qtl object; you must provide argument 'neworder'.")
+    chr <- names(attr(qtl, "map"))
+    thechr <- match(qtl$chr, chr)
+    if(any(is.na(thechr)))
+      stop("Chr ", paste(qtl$chr[is.na(thechr)], " "), " not found.")
+    neworder <- order(thechr, qtl$pos)
+  }
 
   curorder <- seq(qtl$n.qtl)
   if(length(neworder) != qtl$n.qtl ||

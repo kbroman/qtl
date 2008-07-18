@@ -38,7 +38,7 @@ University of Wisconsin -- Madison
 \href{http://www.rqtl.org}{http://www.rqtl.org}
 \vspace{2mm}
 
-20 June 2008 % the date
+18 July 2008 % the date
 
 \rule{7.0in}{1mm} 
 \end{center}
@@ -70,7 +70,7 @@ genome scans and two-QTL, two-dimensional genome scans, by interval
 mapping (with the EM algorithm), Haley-Knott regression, and multiple
 imputation. All of this may be done in the presence of covariates
 (such as sex, age or treatment). One may also fit higher-order QTL models
-by multiple imputation.
+by multiple imputation and Haley-Knott regression.
 
 R/qtl is distributed as source code for Unix or compiled code for
 Windows or Mac OS X.  R/qtl is released under the GNU General Public
@@ -286,7 +286,9 @@ position \\
 & reorderqtl & Reorder the QTL in a QTL object \\
 & cim & A (relatively crude) implementation of Composite Interval
 Mapping \\
-
+& stepwiseqtl & Stepwise selection for multiple QTL \\
+& calc.penalties & Calculate penalties for use with stepwiseqtl \\
+& plotModel & Plot a graphical representation of a multiple-QTL model \\
 \hline
 \end{tabular} 
 \newpage
@@ -401,7 +403,8 @@ kindly provided by Bev Paigen and Gary Churchill.
 \item First, get access to the data, see that it is in your
 workspace, and view its help file.  These data are included with the
 R/qtl package, and so you can get access to the data with the function
-\verb-data()-.  
+\verb-data()-.  (Remember that you first need to load the R/qtl
+package via \verb-library(qtl)-.)
 
 \usercolor \verb|data(hyper)| \\
 \verb|ls()| \\
@@ -543,8 +546,8 @@ in error.  Error LOD scores $<$ 4 can probably be ignored.
 
 Note that the results will be different, depending on whether you used
 \verb-replace.map- above.  If you did, you will get an indication of
-potential errors on chr 16.  If you didn't, you will get an
-indication of potential errors on chr 1, 11 and 17.
+potential errors on chr 16 (and a few on chr 13).  If you didn't, you will get a very long
+list of potential errors on chr 1, 11, 15, 16 and 17.
 
 \item The function \verb-plot.geno- may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
@@ -1079,7 +1082,7 @@ infection.
 
 \item Investigate genotyping errors; nothing gets flagged with a
   cutoff of 4, but one genotype is indicated with error LOD
-  $\sim$3.6. 
+  $\sim$3.8. 
 
 \usercolor 
 \verb|listeria <- calc.errorlod(listeria, error.prob=0.01)| \\
@@ -1120,11 +1123,13 @@ For this model, only the EM algorithm has been implemented so far.
 \verb|out.2p <- scanone(listeria, pheno.col=3, model="2part", upper=TRUE)|
 \normalcolor
 
-Note that, because this model has three extra parameters, the
+Note the use of the argument \verb-pheno.col- to indicate the
+phenotype column to use for the analysis.  We can also refer to the
+phenotype column by name: \verb-pheno.col="logSurv"-.
+
+Because the two-part model has three extra parameters, the
 appropriate LOD threshold is higher---around 4.5 rather than 3.5.  The
-three different LOD curves are in columns 3--5 of the output.  We can
-use the \verb-lodcolumn- argument to \verb-plot.scanone- to plot these
-other LOD scores.
+three different LOD curves are in columns 3--5 of the output.  
 
 \usercolor
 \verb|summary(out.2p)| \\
@@ -1208,6 +1213,17 @@ LOD($p$).
 \verb|plot(out.p, out.2p, lodcolumn=c(1,2), chr=c(1,5,13,15), col=c("blue","red"))|
 \normalcolor
 
+The argument \verb-pheno.col- in \verb-scanone- can actually take a
+vector of numeric phenotype values, and not just an indicator to a
+phenotype column, and so we could have performed the binary trait
+analysis without first pasting the binary phenotype into the
+\verb-listeria- object, as follows.
+
+\usercolor
+\verb|out.p.alt <- scanone(listeria, pheno.col=as.numeric(listeria$pheno$T264==264),|\\
+\verb|                     model="binary")|
+\normalcolor
+
 \item A further approach is to use a non-parametric form of interval
 mapping.  R/qtl uses an extension of the Kruskal-Wallis test
 statistic.  Use \verb-scanone- with \verb-model="np"-.  In this case,
@@ -1256,6 +1272,7 @@ QTL mapping.  We consider some simulated backcross data.
 \normalcolor
 
 \item Perform genome scans for the two phenotypes without covariates.
+Here we consider two phenotypes, scanned individually.
 
 \usercolor
 \verb|fake.bc <- calc.genoprob(fake.bc, step=2.5)| \\
@@ -1736,7 +1753,7 @@ results.
 Again, things have not changed dramatically.
 
 \item The most interesting use of \verb-addqtl- and \verb-addpair- is
-  to scan from additional loci, starting with our five-QTL model (with
+  to scan for additional loci, starting with our five-QTL model (with
   the loci on 6 and 15 interacting).
 
   First, we scan for an additional additive QTL.
@@ -1833,7 +1850,59 @@ interaction is not tested.
 \verb|qtl5|
 \normalcolor
 
-\item Finally, note that all of the above could be performed using
+\item Finally, we consider an automated model selection procedure with
+  a stepwise search algorithm, using the function \verb-stepwiseqtl-.
+  The function seeks to optimize a penalized LOD score criterion,
+  which is the LOD score for a model (relative to the null model with
+  no QTL) with penalties on each QTL main effect and a separate
+  penalty on interactions.  
+
+  Actually, we include include two penalties on interactions, a light
+  penalty and a heavy penalty.  We focus on models with possible
+  pairwise interactions among QTL, and with a hierarchical
+  structure in which the inclusion of an interaction term requires
+  the inclusion of both of the corresponding main effects terms.  Such
+  a model may be represented by a graph in which vertices (dots)
+  represent QTL and edges (line segments between the dots) represent
+  interactions between QTL.  In the penalized LOD score considered by
+  \verb-stepwiseqtl-, each disconnected component of a model is
+  allowed one light interaction penalty; all other interactions are
+  assigned the heavy penalty.  
+
+  The three penalties may be calculed from permutation results with
+  \verb-scantwo-, using the function \verb-calc.penalties-.  We will
+  use default penalties derived by computer simulation: (2.69, 2.62,
+  1.19) for a mouse backcross, or (3.52, 4.28, 2.69) for a mouse
+  intercross.  (The penalties are in the order (main, heavy
+  interaction, light interaction).)
+
+  First, let us apply \verb-stepwiseqtl-, considering only additive
+  QTL models (with \verb-additive.only=TRUE-.  The algorithm performs
+  forward selection up to a model with a given number of QTL
+  (specified by the argument \verb-max.qtl-; we'll use 6), followed by
+  backward elimination.
+
+\usercolor
+\verb|stepout.a <- stepwiseqtl(hyper, additive.only=TRUE, max.qtl=6)| \\
+\verb|stepout.a|
+\normalcolor
+
+   I obtained a model with two QTL, with one QTL on each of chr 1 and
+   4.
+
+   Now let's re-run the analysis, allowing for the possibility of
+   interactions among the QTL.
+
+\usercolor
+\verb|stepout.i <- stepwiseqtl(hyper, max.qtl=6)| \\
+\verb|stepout.i|
+\normalcolor
+
+  I obtained a model with four QTL, including one on each of chr 1,
+  4, 6 and 15, and including an interaction between the loci on chr 6
+  and 15. 
+
+\item Note that all of the above could be performed using
   Haley-Knott regression rather than multiple imputation.  Just three
   changes need to be made.  
 

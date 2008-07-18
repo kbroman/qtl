@@ -14,7 +14,9 @@ reorderqtl(qtl, neworder)
 \arguments{
  \item{qtl}{A qtl object, as created by \code{\link[qtl]{makeqtl}}.}
  \item{neworder}{A vector containing the positive integers up to the
-   number of QTL in \code{qtl}, indicating the new order for the QTL.}
+   number of QTL in \code{qtl}, indicating the new order for the QTL.
+   If missing, the QTL are ordered by chromosome and then by their
+   position within a chromosome.}
 }
 
 
@@ -42,6 +44,10 @@ fake.f2 <- sim.geno(fake.f2, n.draws=4)
 qtl <- makeqtl(fake.f2, qc, qp, what="draws")
 
 qtl <- reorderqtl(qtl, c(2,3,1))
+qtl
+
+qtl <- reorderqtl(qtl)
+qtl
 }
 
 \seealso{ \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{fitqtl}},

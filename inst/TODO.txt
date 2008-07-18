@@ -10,19 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o effectplot when some genotypes are not observed; the labels get
-  screwed up.
-
-o revise rqtltour to indicate that "pheno.col" can be the name of a
-  phenotype rather than just a numeric index. (Also, that it can be a
-  vector of numeric phenotypes.)
-
-  Look also at help files; can some of the examples be simplified,
-  using the numeric vector of phenotypes in the call to scanone etc?
-
-o Add information on stepwiseqtl and related functions to the
-  tutorial.  
-
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)

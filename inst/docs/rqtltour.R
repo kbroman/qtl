@@ -6,7 +6,7 @@
 #
 # http://www.rqtl.org
 #
-# 20 June 2008
+# 18 July 2008
 ##############################################################
 
 save.image()
@@ -231,6 +231,9 @@ plot(out.mu, out.2p, lodcolumn=c(1,3), chr=c(1,5,13,15), col=c("blue","red"))
 out.p <- scanone(listeria, pheno.col=5, model="binary")
 plot(out.p, out.2p, lodcolumn=c(1,2), chr=c(1,5,13,15), col=c("blue","red"))
 
+out.p.alt <- scanone(listeria, pheno.col=as.numeric(listeria$pheno$T264==264),
+                     model="binary")
+
 out.np1 <- scanone(listeria, model="np", ties.random=TRUE)
 out.np2 <- scanone(listeria, model="np", ties.random=FALSE)
 
@@ -398,6 +401,12 @@ qtl4
 
 qtl5 <- reorderqtl(qtl4, c(1:4,6,5))
 qtl5
+
+stepout.a <- stepwiseqtl(hyper, additive.only=TRUE, max.qtl=6)
+stepout.a
+
+stepout.i <- stepwiseqtl(hyper, max.qtl=6)
+stepout.i
 
 ############################################################
 # Example 6: Internal data structure

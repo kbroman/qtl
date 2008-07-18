@@ -33,9 +33,9 @@ function(cross, error.prob=0.01,
 
   # don't let error.prob be exactly zero (or >1)
   if(error.prob < 1e-50) error.prob <- 1e-50
-  if(error.prob > 1) {
-    error.prob <- 1-1e-50
-    warning("error.prob shouldn't be > 1!")
+  if(error.prob > 0.5) {
+    error.prob <- 0.5
+    warning("error.prob shouldn't be > 0.5.")
   }
 
   # map function
