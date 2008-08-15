@@ -15,8 +15,12 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{If specified, only selected chromosomes are used.}
- \item{m}{Interference parameter (a non-negative integer); if
+ \item{chr}{Optional vector indicating the chromosomes to consider.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
+\item{m}{Interference parameter (a non-negative integer); if
    unspecified, this is estimated.}
  \item{p}{The proportion of chiasmata coming from the no interference
    mechanism in the Stahl model (0 <= p <= 1).  p=0 gives the chi-square

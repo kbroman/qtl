@@ -20,8 +20,11 @@
     \code{\link[qtl]{scanone}}.}
   \item{x2}{Optional second \code{scanone} object.}
   \item{x3}{Optional third \code{scanone} object.}
-  \item{chr}{Optional vector specifying which chromosomes to plot. (The
-    chromosomes must be specified by name.)}
+  \item{chr}{Optional vector indicating the chromosomes to plot.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
   \item{lodcolumn}{An integer, or vector of 3 integers, indicating which
     of the LOD score columns should be plotted (generally this is 1).}
   \item{incl.markers}{Indicate whether to plot line segments at the

@@ -16,7 +16,9 @@ plot.geno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 \arguments{
   \item{x}{An object of class \code{cross}.  See
     \code{\link[qtl]{read.cross}} for details. }
-  \item{chr}{Chromosome number to plot.}
+  \item{chr}{The chromosome to plot.  Only one chromosome is
+  allowed. (This should be a character string referring to the
+  chromosomes by name.)} 
   \item{ind}{Vector of individuals to plot.  If missing, all individuals
     are plotted.}
   \item{include.xo}{If TRUE, plot X's in intervals having a

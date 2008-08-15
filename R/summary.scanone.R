@@ -3,7 +3,6 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# 
 # last modified Aug, 2008
 # first written Sep, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
@@ -363,32 +362,17 @@ function(object, chr, lodcolumn=1, df=FALSE, na.rm=TRUE, ...)
   if(lodcolumn < 1 || lodcolumn+2 > ncol(object))
     stop("Argument lodcolumn misspecified.")
 
-  if(missing(chr)) {
-    maxlod <- max(object[,lodcolumn+2],na.rm=TRUE)
-    wh <- which(!is.na(object[,lodcolumn+2]) & object[,lodcolumn+2]==maxlod)
-    if(length(wh) > 1) wh <- sample(wh, 1)
-    object <- object[wh,]
+  if(!missing(chr)) object <- subset(object, chr=chr)
 
-    object[,1] <- factor(as.character(unique(object[,1])))
-
-    attr(object, "df") <- thedf
-    return(summary.scanone(object, threshold=0, lodcolumn=lodcolumn, df=df))
-  }
-  else {
-    res <- NULL
-    for(i in seq(along=chr)) {
-      temp <- object[object[,1]==chr[i],]
-      maxlod <- max(temp[,lodcolumn+2],na.rm=TRUE)
-      wh <- which(!is.na(temp[,lodcolumn+2]) & temp[,lodcolumn+2]==maxlod)
-      if(length(wh) > 1) wh <- sample(wh, 1)
-      temp <- temp[wh,]
-      res <- rbind(res,temp)
-    }
-
-    res[,1] <- factor(as.character(unique(res[,1])))
-    attr(res, "df") <- thedf
-    return(summary.scanone(res,threshold=0,lodcolumn=lodcolumn, df=df))
-  }
+  maxlod <- max(object[,lodcolumn+2],na.rm=TRUE)
+  wh <- which(!is.na(object[,lodcolumn+2]) & object[,lodcolumn+2]==maxlod)
+  if(length(wh) > 1) wh <- sample(wh, 1)
+  object <- object[wh,]
+  
+  object[,1] <- factor(as.character(unique(object[,1])))
+  attr(object, "df") <- thedf
+  
+  summary.scanone(object,threshold=0,lodcolumn=lodcolumn, df=df)
 }
 
 ######################################################################
@@ -409,8 +393,12 @@ function(x, chr, lodcolumn, ...)
 
   y <- x
 
-  if(!missing(chr)) 
-    x <- x[x[,1] %in% chr,]
+  if(!missing(chr)) {
+    chr <- matchchr(chr, unique(x[,1]))
+    x <- x[!is.na(match(x[,1],chr)), ,drop=FALSE]
+    thechr <- as.character(x[,1])
+    x[,1] <- factor(thechr, levels=unique(thechr))
+  }
 
   if(!missing(lodcolumn)) {
     if(any(lodcolumn>0) && any(lodcolumn<0))

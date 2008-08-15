@@ -24,7 +24,11 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
     slashes (\code{"/"}) or double backslashes (\code{"\\\\"}) to
     specify directory trees.} 
   \item{chr}{A vector specifying for which chromosomes genotype data
-    should be written.}
+    should be written.  This should be a vector of character strings
+  referring to chromosomes by name; numeric values are converted to
+  strings.  Refer to chromosomes with a preceding \code{-} to have all
+  chromosomes but those considered.  A logical (TRUE/FALSE) vector may
+  also be used.} 
   \item{digits}{Number of digits to which phenotype values should be
     rounded.}
 }

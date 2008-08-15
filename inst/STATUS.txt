@@ -10,9 +10,22 @@ Version 1.10, 8/15/2008:
 
 Major changes:
 
-  None yet.
+  Revised the way that the 'chr' argument in functions such as
+  scanone, scantwo, etc., to give greater consitency.  Numbers are
+  interpreted as character strings to be matched to the chromosome
+  names.  Negative numbers and character strings that start with "-"
+  are interpreted as omitting the corresponding chromosomes, matched
+  by name.  One may also use a logical vector (TRUE/FALSE), of the
+  same length as there are chromosomes, indicating which chromosomes
+  are to be considered.  So if an object has three chromosomes named
+  "1", "3", "4", using chr=2 will result in an error, while chr=3 will
+  give the second chromosome (named "3").
 
 Minor changes:
+
+  summary.cross now checks for duplicate chromosome names and
+  chromosome names that start with '-', either of which would cause
+  major problems.
 
   Fixed a slight problem in c.cross: if maps are not precisely the
   same, we don't try to combine the genotype probabilities.

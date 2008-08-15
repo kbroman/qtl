@@ -17,7 +17,8 @@ makeqtl(cross, chr, pos, qtl.name, what=c("draws","prob"))
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{Vector indicating the chromosome for each QTL.}
+ \item{chr}{Vector indicating the chromosome for each QTL. (These should
+   be character strings referring to the chromosomes by name.)}
  \item{pos}{Vector (of same length as \code{chr}) indicating the
    positions on the chromosome to be taken. If there is no marker or
    pseudomarker at a position, the nearest position is used.}

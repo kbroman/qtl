@@ -57,17 +57,6 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     pos <- qtl$pos
   }
   else { # chr and pos provided
-    if(is.numeric(chr)) {
-      if(!any(is.na(match(chr, names(cross$geno)))))
-        chr <- as.character(chr)
-      else {
-        if(any(chr) < 1 || chr > nchr(cross))
-          stop("chr argument misspecified.")
-        else
-          chr <- names(cross$geno)[chr]
-      }
-    }
-
     if(missing(qtl.name)) {
       if(method=="imp")
         qtl <- makeqtl(cross, chr=chr, pos=pos, what="draws")

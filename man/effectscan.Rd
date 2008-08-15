@@ -21,7 +21,11 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
   \item{pheno.col}{Column number in the phenotype matrix which to be
     drawn in the plot.  One may also give a character string matching
    a phenotype name.}
-  \item{chr}{Chromosome(s) to be drawn in the plot (optional).}
+  \item{chr}{Optional vector indicating the chromosomes to be drawn in
+  the plot. This should be a vector of character strings referring to
+  chromosomes by name; numeric values are converted to strings.  Refer
+  to chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
   \item{get.se}{If TRUE, estimated standard errors are calculated.}
   \item{draw}{If TRUE, draw the figure.}
   \item{gap}{Gap separating chromosomes (in cM).}

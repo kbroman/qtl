@@ -17,8 +17,11 @@ plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
 \arguments{
   \item{x}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
-  \item{chr}{Vector specifying which chromosomes to plot
-  (optional)}
+  \item{chr}{Optional vector indicating the chromosomes to plot.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
   \item{what}{Indicate whether to plot LOD scores, recombination
                fractions or both.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is

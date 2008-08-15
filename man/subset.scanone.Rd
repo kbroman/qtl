@@ -15,7 +15,11 @@
 \arguments{
  \item{x}{An object of class \code{scanone}, output from
    \code{\link[qtl]{scanone}}.}
- \item{chr}{A character vector specifying which chromosomes to keep.}
+ \item{chr}{Optional vector specifying which chromosomes to keep.
+ This should be a vector of character strings referring to
+ chromosomes by name; numeric values are converted to strings.  Refer to
+ chromosomes with a preceding \code{-} to have all chromosomes but those
+ considered.  A logical (TRUE/FALSE) vector may also be used.} 
  \item{lodcolumn}{A vector specifying which LOD columns to keep (or, if
    negative), omit.  These should be between 1 and the number of LOD
    columns in the input \code{x}.}

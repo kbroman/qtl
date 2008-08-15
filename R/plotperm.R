@@ -3,7 +3,6 @@
 # plotperm.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# 
 # last modified Jan, 2008
 # first written Dec, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)

@@ -18,8 +18,11 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 \arguments{
   \item{qtl}{An object of class \code{"qtl"}; must have been produced by
     \code{\link[qtl]{refineqtl}} using \code{keeplodprofiles=TRUE}.}
-  \item{chr}{Optional vector specifying which chromosomes to plot. (The
-    chromosomes must be specified by name.)}
+  \item{chr}{Optional vector indicating the chromosomes to plot.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
   \item{incl.markers}{Indicate whether to plot line segments at the
   marker locations.}
   \item{gap}{Gap separating chromosomes (in cM).}

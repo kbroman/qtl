@@ -3,7 +3,6 @@
 # summary.scantwo.old.R
 #
 # copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
-#
 # last modified Jun, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)

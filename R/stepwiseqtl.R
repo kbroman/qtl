@@ -2,7 +2,6 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# 
 # last modified Jul, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)

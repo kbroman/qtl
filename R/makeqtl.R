@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -39,10 +39,8 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
   themap <- pull.map(cross)
 
   # try to interpret chr argument
-  if(!is.character(chr)) {
-    if(any(chr > nchr(cross))) chr <- as.character(chr)
-    else chr <- names(cross$geno)[chr]
-  }
+  if(!is.character(chr)) 
+    chr <- as.character(chr)
 
   # chr, pos and qtl.name must have the same length
   if(length(chr) != length(pos))
@@ -520,49 +518,42 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
   if(missing(chr)) 
     chr <- names(map)
   else {
-    whchr <- match(chr, names(map))
-    if(any(is.na(whchr))) {
-      if(sum(is.na(whchr)) > 1)
-        stop("Cannot find chromosomes ", paste(chr[is.na(whchr)], sep=" "), " in map")
-      else
-        stop("Cannot find chromosome ", chr[is.na(whchr)], " in map")
-    }
-    map <- map[whchr]
-  }
-    
-  whchr <- match(x$chr, chr)
-  if(any(is.na(whchr))) {
-    if(sum(is.na(whchr)) > 1)
-      stop("Cannot find chromosomes ", paste(x$chr[is.na(whchr)], sep=" "), " in map")
-    else
-      stop("Cannot find chromosome ", x$chr[is.na(whchr)], " in map")
+    chr <- matchchr(chr, names(map))
+    map <- map[chr]
+    class(map) <- "map"
   }
 
   if(horizontal) 
-    plot(map, chr=chr, horizontal=horizontal, shift=shift, 
+    plot.map(map, horizontal=horizontal, shift=shift, 
          show.marker.names=show.marker.names, alternate.chrid=alternate.chrid,
          ylim=c(length(map)+0.5, 0), ...)
   else
-    plot(map, chr=chr, horizontal=horizontal, shift=shift, 
+    plot.map(map, horizontal=horizontal, shift=shift, 
          show.marker.names=show.marker.names, alternate.chrid=alternate.chrid,
          xlim=c(0.5,length(map)+1), ...)
 
+  whchr <- match(x$chr, names(map))
   thepos <- x$pos
-  if(shift) 
-    thepos <- thepos - sapply(map[whchr], min)
+  thepos[is.na(whchr)] <- NA
 
-  if(is.matrix(map[[1]])) whchr <- whchr - 0.3
+  if(any(!is.na(thepos))) {
+    whchr <- whchr[!is.na(whchr)]
 
-  if(length(grep("^.+@[0-9\\.]+$", x$name)) == length(x$name))
-    x$name <- x$altname
+    if(shift) thepos <- thepos - sapply(map[whchr], min)
 
-  if(horizontal) {
-    arrows(thepos, whchr - 0.25, thepos, whchr, lwd=2, col="red", len=0.1)
-    text(thepos, whchr-0.5, x$name, col="red")
-  }
-  else {
-    arrows(whchr + 0.25, thepos, whchr, thepos, lwd=2, col="red", len=0.1)
-    text(whchr+0.5, thepos, x$name, col="red")
+    if(is.matrix(map[[1]])) whchr <- whchr - 0.3
+    
+    if(length(grep("^.+@[0-9\\.]+$", x$name)) == length(x$name))
+      x$name <- x$altname
+
+    if(horizontal) {
+      arrows(thepos, whchr - 0.25, thepos, whchr, lwd=2, col="red", len=0.1)
+      text(thepos, whchr-0.5, x$name, col="red")
+    }
+    else {
+      arrows(whchr + 0.25, thepos, whchr, thepos, lwd=2, col="red", len=0.1)
+      text(whchr+0.5, thepos, x$name, col="red")
+    }
   }
 
   invisible()

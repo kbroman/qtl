@@ -3,8 +3,7 @@
 # summary.scantwo.R
 #
 # copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
-#
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -711,10 +710,7 @@ function(x, chr, lodcolumn, ...)
   }
 
   if(!missing(chr)) {
-    a <- unique(x$map[,1])
-    if(is.numeric(chr) && all(chr < 0)) 
-      chr <- a[chr]
-    else chr <- a[match(chr,a)]
+    chr <- matchchr(chr, unique(x$map[,1]))
 
     wh <- x$map[,1] %in% chr
 

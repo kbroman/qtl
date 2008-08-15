@@ -19,8 +19,9 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{Indicates the chromosomes for which the bootstrap should be
-   performed.} 
+ \item{chr}{The chromosome to investigate.  Only one chromosome is
+  allowed. (This should be a character string referring to the
+  chromosomes by name.)}
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give a character string matching
    a phenotype name.  Finally, one may give a numeric vector of

@@ -3,7 +3,6 @@
 # discan.R
 #
 # copyright (c) 2001-7, Karl W Broman
-#
 # last modified Jul, 2007
 # first written Oct, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)

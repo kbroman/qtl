@@ -3,8 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
-#
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -55,6 +54,7 @@ function(cross, chr, pheno.col=1,
   
   # pull out chromosomes to be scanned
   if(!missing(chr)) cross <- subset(cross,chr=chr)
+  thechr <- names(cross$geno)
   if(missing(n.perm)) n.perm <- 0
 
   fullmap <- pull.map(cross)
@@ -390,7 +390,7 @@ function(cross, chr, pheno.col=1,
             reviseXdata(type, "full", sexpgm, draws=cross$geno[[i]]$draws,
                         cross.attr=attributes(cross))
         else if(method=="hk" || method=="em") {
-          oldXchr <- subset(cross, chr=i)
+          oldXchr <- subset(cross, chr=thechr[i])
           cross$geno[[i]]$prob <-
             reviseXdata(type, "full", sexpgm, prob=cross$geno[[i]]$prob,
                         cross.attr=attributes(cross))
@@ -575,7 +575,7 @@ function(cross, chr, pheno.col=1,
             else
               tmap <- create.map(cross$geno[[i]]$map, stp, oe, stpw)
 
-            temp <- calc.pairprob(subset(cross,chr=i),stp,oe,err,mf,tmap,
+            temp <- calc.pairprob(subset(cross,chr=thechr[i]),stp,oe,err,mf,tmap,
                                   assumeCondIndep=assumeCondIndep)
           }
 
@@ -776,7 +776,7 @@ function(cross, chr, pheno.col=1,
             else
               tmap <- create.map(cross$geno[[i]]$map, stp, oe, stpw)
 
-            temp <- calc.pairprob(subset(cross,chr=i),stp,oe,err,mf,tmap,
+            temp <- calc.pairprob(subset(cross,chr=thechr[i]),stp,oe,err,mf,tmap,
                                   assumeCondIndep=assumeCondIndep)
           }
 
@@ -1051,7 +1051,7 @@ function(cross, chr, pheno.col=1,
       else 
         results[wh] <- results[wh] + nllikX - nllik0
 
-      notxchr <- which(sapply(cross$geno,class)!="X")
+      notxchr <- names(cross$geno)[sapply(cross$geno,class)!="X"]
       if(length(notxchr) > 0) {
         if(verbose) cat(" --Running scanone with special X chr covariates\n")
         temp <- scanone(subset(cross,chr=notxchr),

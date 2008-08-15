@@ -3,16 +3,14 @@
 # effectplot.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# 
 # Last modified Jul, 2008
 # first written Jul, 2002
+# Licensed under the GNU General Public License version 2 (June, 1991)
 #
 # Modified by Hao Wu Feb 2005 for the following:
 # 1. function will take marker, pseudomarker or phenotype as input;
 # 2. separate functions to extract marker genodata given marker names
 # and calculate means and ses;
-# 
-# Licensed under the GNU General Public License version 2 (June, 1991)
 # 
 # Part of the R/qtl package
 # Contains: effectplot, effectplot.getmark, effectplot.calmeanse

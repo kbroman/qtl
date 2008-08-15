@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-8, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -279,8 +279,8 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
     stop("Input should have class \"cross\" or \"map\".")
 
   if(!missing(chr)) {
-    map <- map[chr]
-    if(!missing(map2)) map2 <- map2[chr]
+    map <- map[matchchr(chr, names(map))]
+    if(!missing(map2)) map2 <- map2[matchchr(chr, names(map2))]
   }
 
   sex.sp <- FALSE
@@ -610,8 +610,10 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     stop("Input should have class \"cross\".")
 
   if(missing(chr)) chr <- names(cross$geno)[1]
-
   cross <- subset(cross,chr=chr)
+  if(nchr(cross) > 1)
+    cross <- subset(cross,chr=names(cross$geno)[1])
+
   if(!missing(ind)) {
     if(is.null(getid(cross))) cross$pheno$id <- 1:nind(cross)
     if(!is.logical(ind)) ind <- unique(ind)  

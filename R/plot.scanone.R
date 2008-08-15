@@ -3,8 +3,7 @@
 # plot.scanone.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# 
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -77,20 +76,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
   # pull out desired chromosomes
   if(missing(chr) || length(chr)==0) 
     chr <- unique(as.character(out[,1]))
-  else if(is.logical(chr))
-    chr <- unique(as.character(out[,1]))[chr]
-  else if(all(chr < 0)) { 
-    a <- sort(unique(out[,1]))
-    chr <- a[-match(-chr,a)]
-  }
-
-  u <- !(chr %in% unique(out[,1]))
-  if(all(u))
-    stop("Chromosome(s) to plot were not matched to those in the scanone output.")
-  else if(any(u)) {
-    warning(paste("Chromosome(s)",chr[u],"were not found.",sep=" "))
-    chr <- chr[!u]
-  }
+  else chr <- matchchr(chr, unique(out[,1]))
 
   out <- out[!is.na(match(out[,1],chr)),]
   if(second) out2 <- out2[!is.na(match(out2[,1],chr)),]

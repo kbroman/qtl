@@ -14,8 +14,11 @@ countXO(cross, chr, bychr=FALSE)
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{The chromosomes to investigate.  If missing, all chromosomes
-   are considered.}
+ \item{chr}{Optional vector indicating the chromosomes to investigate.
+   This should be a vector of character strings referring to chromosomes
+   by name; numeric values are converted to strings.  Refer to
+   chromosomes with a preceding \code{-} to have all chromosomes but
+   those considered.  A logical (TRUE/FALSE) vector may also be used.}
  \item{bychr}{If TRUE, return counts for each individual chromosome; if
    FALSE, return the overall number across the selected chromosomes.}
 }

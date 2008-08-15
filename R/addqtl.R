@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -334,20 +334,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # look for the chr
   if(missing(chr)) chr <- names(cross$geno)
-  if(!is.character(chr)) {
-    if(is.numeric(chr) && any(chr > nchr(cross)))
-      chr <- as.character(chr)
-    else 
-      chr <- names(cross$geno)[chr]
-  }
-  thechr <- unique(c(chr, qtlchr))
-  wh <- (thechr %in% names(cross$geno))
-  if(any(!wh)) {
-    if(sum(!wh) == 1)
-      stop("Chromosome ", thechr[!wh], " not found in input cross.")
-    else
-      stop("Chromosomes ", paste(thechr[!wh], collapse=" "), " not found in input cross.")
-  }
+  else chr <- matchchr(chr, names(cross$geno))
   
   # if formula is missing, make one.
   # All QTLs and covariates will be additive by default
@@ -645,21 +632,8 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # look for the chr
   if(missing(chr)) chr <- names(cross$geno)
-  if(!is.character(chr)) {
-    if(is.numeric(chr) && any(chr > nchr(cross)))
-      chr <- as.character(chr)
-    else 
-      chr <- names(cross$geno)[chr]
-  }
-  thechr <- unique(c(chr, qtlchr))
-  wh <- (thechr %in% names(cross$geno))
-  if(any(!wh)) {
-    if(sum(!wh) == 1)
-      stop("Chromosome ", thechr[!wh], " not found in input cross.")
-    else
-      stop("Chromosomes ", paste(thechr[!wh], collapse=" "), " not found in input cross.")
-  }
-  
+  else chr <- matchchr(chr, names(cross$geno))
+
   fullmap <- pull.map(cross, chr)
 
   # if formula is missing, make one.

@@ -3,7 +3,7 @@
 # tryallpositions.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# last modified Jun, 2008
+# last modified Aug, 2008
 # first written Oct, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -27,6 +27,7 @@ function(cross, marker, chr, error.prob=0.0001,
 {
   map.function <- match.arg(map.function)
   if(missing(chr)) chr <- names(cross$geno)
+  else chr <- matchchr(chr, names(cross$geno))
   
   thechr <- find.markerpos(cross, marker)[1,1]
   if(is.na(thechr))

@@ -23,7 +23,8 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
- \item{chr}{Vector indicating the chromosome for each QTL.}
+ \item{chr}{Vector indicating the chromosome for each QTL. (These should
+   be character strings referring to the chromosomes by name.)}
  \item{pos}{List indicating the positions or intervals on the chromosome
    to be scanned.  Each element should be either a single number (for a
    specific position) or a pair of numbers (for an interval).}

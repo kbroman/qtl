@@ -15,7 +15,8 @@
  \item{cross}{An object of class \code{cross}.  See
    \code{\link[qtl]{read.cross}} for details.}
  \item{chr}{The chromosome for which the marker order is to be
-   switched.}
+   switched. Only one chromosome is allowed. (This should be a character
+ string referring to the chromosomes by name.)}
  \item{order}{A vector of numeric indices defining the new marker
    order. The vector may have length two more than the number of
    markers, for easy in use with the output of the function

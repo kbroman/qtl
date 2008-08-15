@@ -3,8 +3,7 @@
 # scanoneboot.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# 
-# last modified Jun, 2008
+# last modified Aug, 2008
 # first written Apr, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -28,7 +27,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(!missing(chr)) cross <- subset(cross, chr)
   if(nchr(cross) != 1) { # scan just one chromosome
     warning("Considering just the first chromosome (", names(cross$geno)[1], ").")
-    cross <- subset(cross, 1)
+    cross <- subset(cross, names(cross$geno)[1])
   }
   
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {

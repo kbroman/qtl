@@ -19,7 +19,11 @@
 \arguments{
   \item{x}{An object of class \code{"scantwo"}, as output by
     \code{\link[qtl]{scantwo}}.} 
-  \item{chr}{Optional vector specifying which chromosomes to plot.}
+  \item{chr}{Optional vector indicating the chromosomes to plot.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
   \item{incl.markers}{If FALSE, plot LOD scores on an evenly
     spaced grid (not including the results at the markers).}
   \item{zlim}{A vector of length 2 (optional), indicating the z limits

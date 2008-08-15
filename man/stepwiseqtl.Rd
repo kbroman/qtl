@@ -19,7 +19,11 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider in
-   search for QTL.}
+   search for QTL.  This should be a vector of character strings
+   referring to chromosomes by name; numeric values are converted to
+   strings.  Refer to chromosomes with a preceding \code{-} to have all
+   chromosomes but those considered.  A logical (TRUE/FALSE) vector may
+   also be used.} 
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give character strings matching
    the phenotype names.  Finally, one may give a numeric vector of

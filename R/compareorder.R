@@ -2,9 +2,8 @@
 #
 # compareorder.R
 #
-# copyright (c) 2007, Karl W Broman
-#
-# last modified Nov, 2007
+# copyright (c) 2007-8, Karl W Broman
+# last modified Aug, 2008
 # first written Oct, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -22,8 +21,11 @@ function(cross, chr, order, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
          maxit=4000, tol=0.0001, sex.sp=TRUE)
 {
-  if(missing(chr)) chr <- 1
-  if(length(chr) > 1) 
+  if(missing(chr)) chr <- names(cross$geno)[1]
+  if(length(chr) > 1) {
+    chr <- chr[1]
+    warning("compareorder works on a single chromosome.")
+  }
   
   map.function <- match.arg(map.function)
   cross <- subset(cross, chr)

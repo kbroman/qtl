@@ -15,8 +15,11 @@ geno.image(x, chr, reorder=FALSE, main="Genotype data",
 \arguments{
   \item{x}{An object of class \code{cross}.  See
     \code{\link[qtl]{read.cross}} for details. }
-  \item{chr}{Vector of chromosomes to plot.  If missing, plot all
-    chromosomes.}
+  \item{chr}{Optional vector indicating the chromosomes to be drawn in
+  the plot. This should be a vector of character strings referring to
+  chromosomes by name; numeric values are converted to strings.  Refer
+  to chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
   \item{reorder}{Specify whether to reorder individuals according to
   their phenotypes.
   \tabular{ll}{

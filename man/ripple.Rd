@@ -16,7 +16,9 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{The chromosome to investigate.  Only one chromosome is allowed.}
+ \item{chr}{The chromosome to investigate.  Only one chromosome is
+  allowed. (This should be a character string referring to the
+  chromosomes by name.)}
  \item{window}{Number of markers to include in the sliding window of
    permuted markers.  Larger numbers result in the comparison of a
    greater number of marker orders, but will require a considerable

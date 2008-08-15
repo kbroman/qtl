@@ -16,7 +16,9 @@ compareorder(cross, chr, order, error.prob=0.0001,
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{The chromosome to investigate.  Only one chromosome is allowed.}
+\item{chr}{The chromosome to investigate.  Only one chromosome is
+  allowed. (This should be a character string referring to the
+  chromosomes by name.)} 
 \item{order}{The alternate order of markers on the chromosome: a numeric
              vector that is a permutation of the integers from 1 to the
              number of markers on the chromosome.}

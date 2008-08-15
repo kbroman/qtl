@@ -14,8 +14,11 @@ top.errorlod(cross, chr, cutoff=4, msg=TRUE)
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{A vector specifying for which chromosomes the error LOD
-   scores should be inspected.}
+ \item{chr}{Optional vector indicating the chromosomes to consider.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
  \item{cutoff}{Only those genotypes with error LOD scores above this
    cutoff will be listed.}
  \item{msg}{If TRUE, print a message if there are no apparent errors.}

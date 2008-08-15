@@ -15,8 +15,11 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{Optional vector indicating the chromosomes to be scanned.
-   If missing, all chromosomes are scanned.}
+ \item{chr}{Optional vector indicating the chromosomes to be scanned. If
+   missing, all chromosomes are scanned. Refer to chromosomes by
+   name. Refer to chromosomes with a preceding \code{-} to have all
+   chromosomes but those considered.  A logical (TRUE/FALSE) vector may
+   also be used.} 
  \item{pheno.col}{Column number in the phenotype matrix to be
    used as the phenotype.  One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of

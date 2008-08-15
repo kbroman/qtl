@@ -3,7 +3,6 @@
 # add_threshold.R
 #
 # copyright (c) 2006-8, Karl W Broman, Johns Hopkins University
-#
 # last modified Jun, 2007
 # first written Dec, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)

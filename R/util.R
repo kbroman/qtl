@@ -5,7 +5,6 @@
 # copyright (c) 2001-8, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-#
 # last modified Aug, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
@@ -25,7 +24,8 @@
 #           convert, convert.scanone, convert.scantwo
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
-#           find.markerpos, geno.crosstab, LikePheVector
+#           find.markerpos, geno.crosstab, LikePheVector,
+#           matchchr
 #
 ######################################################################
 
@@ -875,13 +875,15 @@ function(cross, chr, order, error.prob=0.0001,
   map.function <- match.arg(map.function)
   
   # check chromosome argument
-  if(is.character(chr)) {
-    old.chr <- chr
+  if(!missing(chr)) {
+    chr <- matchchr(chr, names(cross$geno))
+    if(length(chr) > 1) {
+      warning("switch.order can deal with just one chromosome at a time")
+      chr <- chr[1]
+    }
     chr <- match(chr, names(cross$geno))
-    if(length(chr) > 1) chr <- chr[1]
-    if(is.na(chr))
-      stop("There is no chromosome named", chr)
   }
+  else chr <- 1
 
   # check order argument
   n.mar <- nmar(cross)
@@ -965,31 +967,7 @@ function(x, chr, ind, ...)
 
   # pull out relevant chromosomes
   if(!missing(chr)) {
-    if(is.logical(chr)) {
-      if(length(chr) != n.chr) 
-        stop("If logical, chr argument must have length ", n.chr)
-      chr <- sort((1:n.chr)[chr])
-    }
-        
-    if(is.numeric(chr)) {
-      # if all negative numbers, convert to positive
-      if(all(chr < 1)) chr <- sort((1:n.chr)[chr])
-      else chr <- sort(chr)
-        
-      if(any(chr < 1 | chr > n.chr))
-        stop("Chromosome numbers out of range.")
-    }
-    else {
-      if(any(!(chr %in% names(x$geno))))
-        stop("Not all chromosome names found.")
-      # convert to numeric
-      chr <- sort(match(chr,names(x$geno)))
-    }
-
-    if(length(chr) != length(unique(chr))) {
-      chr <- unique(chr)
-      warning("Dropping duplicate chromosomes")
-    }
+    chr <- matchchr(chr, names(x$geno))
 
     if("rf" %in% names(x)) { # pull out part of rec fracs
       if(totmar(x) != ncol(x$rf))
@@ -2459,13 +2437,19 @@ function( cross, chr, pos)
 
   map = pull.map(cross)
 
-  if(is.matrix(map[[1]]) && nrow(map[[1]]) > 1) 
+  if(is.matrix(map[[1]]) && nrow(map[[1]]) > 1)
     stop("This function works only for crosses with sex-averaged maps.")
 
   if(length(chr) == 1 && length(pos) > 1) {
     chr <- rep(chr,length(pos))
   }
-
+  wh <- match(chr, names(cross$geno))
+  if(any(is.na(wh))) {
+    stop("Chr ", paste(chr[is.na(wh)], collapse=", "), " not found.")
+    wh <- wh[!is.na(wh)]
+  }
+  chr <- names(cross$geno)[wh]     
+  
   marker = NULL
   for (i in seq(length(chr))) {
     tmp = map[[chr[i]]]-pos[i]
@@ -2483,7 +2467,7 @@ function( cross, chr, pos)
     }
     marker = rbind(marker,m[f[c(1:2,order(abs(tmp[f]))[1])]])
   }
-  dimnames(marker) <- list(paste("chr",chr,":",pos,sep=""),
+  dimnames(marker) <- list(paste(chr,":",pos,sep=""),
                            c("left","right","close"))
   as.data.frame(marker)
 }
@@ -2806,5 +2790,48 @@ function(pheno, n.ind, n.phe)
   FALSE
 }
 
+######################################################################
+# for matching chromosome names
+######################################################################
+matchchr <-
+function(selection, thechr)
+{
+  if(is.factor(thechr)) thechr <- as.character(thechr)
+  if(length(thechr) > length(unique(thechr)))
+    stop("Duplicate chromosome names.")
+
+  if(is.logical(selection)) {
+    if(length(selection) != length(thechr))
+      stop("Logical vector to select chromosomes is the wrong length")
+    return(thechr[selection])
+  }
+
+  if(is.numeric(selection)) selection <- as.character(selection)
+
+  if(length(selection) > length(unique(selection))) {
+    warning("Dropping duplicate chromosomes")
+    selection <- unique(selection)
+  }
+
+  g <- grep("^-", selection)
+  if(length(g) > 0 && length(g) < length(selection))
+    stop("In selecting chromosomes, all must start with '-' or none should.")
+  if(length(g) > 0) {
+    selectomit <- TRUE
+    selection <- substr(selection, 2, nchar(selection))
+  }
+  else selectomit <- FALSE
+      
+  wh <- match(selection, thechr)
+  if(any(is.na(wh))) {
+    warning("Chr ", paste(selection[is.na(wh)], collapse=", "), " not found")
+    wh <- wh[!is.na(wh)]
+  }
+  
+  if(selectomit) return(thechr[-wh])
+  thechr[sort(wh)]
+}
+
 
 # end of util.R
+

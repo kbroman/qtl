@@ -2,11 +2,9 @@
 #
 # add.cim.covar.R
 #
-# copyright (c) 2007, Karl W Broman
-# 
-# last modified Mar, 2007
-# first written mar, 2007
-#
+# copyright (c) 2007-8, Karl W Broman
+# last modified Aug, 2008
+# first written Mar, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
 # Part of the R/qtl package
@@ -26,13 +24,9 @@ function(cimresult, chr, gap=25, ...)
 {
   cimcovar <- attr(cimresult, "marker.covar.pos")
 
-  if(!missing(chr)) 
-    cimresult <- subset(cimresult, chr=chr)
-  chr <- unique(as.character(cimresult[,1]))
-  cimresult[,1] <- factor(as.character(cimresult[,1]), levels=chr)
-  
-  cimcovar <- cimcovar[cimcovar$chr %in% chr,, drop=FALSE]
+  if(!missing(chr)) cimresult <- subset(cimresult, chr=chr)
   if(nrow(cimcovar) == 0) return(invisible(NULL))
+  chr <- as.character(unique(cimresult[,1]))
 
   dots <- list(...)
   ndots <- names(dots)

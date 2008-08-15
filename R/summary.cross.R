@@ -244,6 +244,15 @@ function(object,...)
             "should have class \"X\".")
   }
 
+  if(length(chr.nam) > length(unique(chr.nam))) {
+    tab <- table(chr.nam)
+    dups <- names(tab[tab > 1])
+    warning("Duplicate chromosome names: ", paste(dups,sep=", "))
+  }
+  g <- grep("^-", chr.nam)
+  if(length(g) > 0) 
+    warning("Chromosome names shouldn't start with '-': ", paste(chr.nam[g], sep=", "))
+
   # if more than one X chromosome, print a warning
   if(sum(chr.class=="X") > 1)
     warning("More than one X chromosome: [",

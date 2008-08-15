@@ -46,6 +46,7 @@
 \alias{markerforwsel}
 \alias{markerforwself2}
 \alias{markerloglik}
+\alias{matchchr}
 \alias{max.scantwocondensed}
 \alias{mf.cf}
 \alias{mf.h}
@@ -178,6 +179,7 @@ locatemarker(map, pos, chr, flag)
 locate.xo(cross)
 makeSSmap(cross)
 markerloglik(cross, marker, error.prob=0.0001)
+matchchr(selection, thechr)
 \method{max}{scantwocondensed}(object, lodcolumn=1,
     what=c("best", "full", "add", "int"),
     df=FALSE, na.rm=TRUE, \dots)

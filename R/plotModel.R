@@ -2,7 +2,6 @@
 # plotModel.R
 #
 # copyright (c) 2008, Karl W Broman
-# 
 # last modified Jun, 2008
 # first written Apr, 2008
 # Licensed under the GNU General Public License version 2 (June, 1991)

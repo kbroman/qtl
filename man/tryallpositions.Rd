@@ -20,8 +20,11 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
    \code{\link[qtl]{read.cross}} for details.}
  \item{marker}{Character string with name of the marker to move about.}
  \item{chr}{A vector specifying which chromosomes to test for the
-   position of the marker.  This may be a logical vector, a numerical
-   vector, or a vector of character strings.}
+   position of the marker.    This should be a vector of character
+   strings referring to chromosomes by name; numeric values are
+   converted to strings.  Refer to chromosomes with a preceding \code{-}
+   to have all chromosomes but those considered.  A logical (TRUE/FALSE)
+   vector may also be used.} 
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,

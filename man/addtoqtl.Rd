@@ -15,7 +15,8 @@ addtoqtl(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{qtl}{The qtl object to which additional QTL are to be added.}
- \item{chr}{Vector indicating the chromosome for each new QTL.}
+ \item{chr}{Vector indicating the chromosome for each new QTL. (These
+ should be character strings referring to the chromosomes by name.)}
  \item{pos}{Vector (of same length as \code{chr}) indicating the
    positions on the chromosome for each new QTL. If there is no marker or
    pseudomarker at a position, the nearest position is used.}

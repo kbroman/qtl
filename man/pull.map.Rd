@@ -12,9 +12,11 @@
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
    \code{\link[qtl]{read.cross}} for details.}
- \item{chr}{An optional vector specifying which chromosomes to keep or
-   discard. This may be a logical vector, a numeric vector, or a vector
-   of character strings.} 
+ \item{chr}{Optional vector indicating the chromosomes to consider.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
 }
 
 \value{

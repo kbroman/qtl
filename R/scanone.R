@@ -3,7 +3,6 @@
 # scanone.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# 
 # last modified Jun, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)

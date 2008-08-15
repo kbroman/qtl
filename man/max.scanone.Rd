@@ -16,8 +16,11 @@
  \item{object}{An object of the form output by the function
    \code{\link[qtl]{scanone}}: a data.frame whose third column is the
    LOD score.}
- \item{chr}{Numeric or character vector indicating chromosomes
-   on which to find the maximum LOD score.}
+ \item{chr}{Optional vector indicating the chromosomes to consider.
+  This should be a vector of character strings referring to chromosomes
+  by name; numeric values are converted to strings.  Refer to
+  chromosomes with a preceding \code{-} to have all chromosomes but
+  those considered.  A logical (TRUE/FALSE) vector may also be used.}
  \item{lodcolumn}{An integer, indicating which of the LOD score columns
    should be considered in pulling out the peak (these are indexed 1,
    2, \dots).}
@@ -44,7 +47,12 @@ listeria <- calc.genoprob(listeria, step=2.5)
 out <- scanone(listeria, model="2part", upper=TRUE)
 # Maximum peak for LOD(p,mu)
 max(out)
-max(out,chr=13)
+
+# Maximum peak for LOD(p,mu) on chr 1
+max(out,chr=1)
+
+# Maximum peak for LOD(p,mu) on chromosomes other than chr 13
+max(out,chr="-13")
 
 # Maximum peak for LOD(p)
 max(out, lodcolumn=2)
