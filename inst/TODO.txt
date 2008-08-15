@@ -10,6 +10,16 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Consistency in use of chromosome names/numbers: by default,
+  interpret as character string.  Also allow negative numbers and
+  logical.  If integer, first interpret as chromosome name then as
+  index.  
+
+o consistency in naming LOD score columns (perhaps just use the 
+  phenotype name)
+
+o bug in summary with format="allpeaks" and when using threshold
+
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)
@@ -41,6 +51,13 @@ o FAQ: - constructing covariate matrices
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o Map construction: forming linkage groups, greedy algorithm to get
+  initial marker order
+
+o method for having alternative genetic maps and for storing a
+  physical map; linear interpolation for plotting scanone output in
+  Mbp. 
 
 o revise read.cross with format="mm" to deal with ril by selfing
   and/or sib mating

@@ -4,7 +4,7 @@
 #
 # copyright (c) 2001-8, Karl W Broman
 # 
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Sep, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -236,16 +236,20 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
     }
     else keep <- seq(along=thechr)
 
-    pos <- pos[keep,,drop=FALSE]
-    lod <- lod[keep,,drop=FALSE]
-    thechr <- thechr[keep]
-    result <- as.data.frame(matrix(ncol=ncol.object*2+1,nrow=length(keep)))
-    names(result)[1] <- "chr"
-    names(result)[(1:ncol.object)*2] <- "pos"
-    names(result)[(1:ncol.object)*2+1] <- names(object)[-(1:2)]
-    result[,1] <- thechr
-    result[,(1:ncol.object)*2] <- pos
-    result[,(1:ncol.object)*2+1] <- lod
+    if(is.null(keep)) 
+      result <- object[NULL,,drop=FALSE]
+    else {
+      pos <- pos[keep,,drop=FALSE]
+      lod <- lod[keep,,drop=FALSE]
+      thechr <- thechr[keep]
+      result <- as.data.frame(matrix(ncol=ncol.object*2+1,nrow=length(keep)))
+      names(result)[1] <- "chr"
+      names(result)[(1:ncol.object)*2] <- "pos"
+      names(result)[(1:ncol.object)*2+1] <- names(object)[-(1:2)]
+      result[,1] <- thechr
+      result[,(1:ncol.object)*2] <- pos
+      result[,(1:ncol.object)*2+1] <- lod
+    }
   }    
 
   if(pvalues && nrow(result) > 0) { # get p-values and add to the results

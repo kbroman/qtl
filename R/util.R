@@ -6,7 +6,7 @@
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
 #
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1132,13 +1132,15 @@ function(...)
   chr <- names(x$geno)
   n.mar <- nmar(x)
   marnam <- unlist(lapply(x$geno,function(b) colnames(b$data)))
+  marpos <- unlist(lapply(x$geno,function(b) b$map))
 
   map.mismatch <- 0
   for(i in 2:n.args) {
     y <- args[[i]]
     y.marnam <- unlist(lapply(y$geno, function(b) colnames(b$data)))
+    y.marpos <- unlist(lapply(y$geno, function(b) b$map))
     if(chr != names(y$geno) || any(n.mar != nmar(y)) ||
-       any(marnam != y.marnam)) {
+       any(marnam != y.marnam) || any(marpos != y.marpos)) {
       map.mismatch <- 1
       break
     }
@@ -1271,6 +1273,7 @@ function(...)
           for(i in 1:n.args) {
             wh <- prev + 1:n.ind[i]
             prev <- prev + n.ind[i]
+            
             if(classes[i]=="f2") 
               geno[[j]]$prob[wh,,] <- args[[i]]$geno[[j]]$prob
             else # backcross
