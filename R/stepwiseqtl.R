@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# last modified Jul, 2008
+# last modified Aug, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -807,10 +807,33 @@ function(formula, ignore.covar=TRUE)
 # calculate penalties for pLOD using scantwo permutation results.
 ######################################################################
 calc.penalties <-
-function(perms, alpha=0.05)
+function(perms, alpha=0.05, lodcolumn)
 {
   if(missing(perms) || !("scantwoperm" %in% class(perms)))
     stop("You must include permutation results from scantwo.")
+
+  if(missing(lodcolumn)) {
+    if(is.matrix(perms[[1]]) && ncol(perms[[1]]) > 1)
+      lodcolumn <- 1:ncol(perms[[1]])
+    else lodcolumn <- 1
+  }
+
+  if(length(lodcolumn)>1) {
+    result <- NULL
+    for(i in seq(along=lodcolumn)) {
+      temp <- calc.penalties(perms, alpha, lodcolumn[i])
+      result <- rbind(result, temp)
+    }
+    dimnames(result) <- list(colnames(perms[[1]])[lodcolumn], names(temp))
+    return(result)
+  }
+
+  if(is.matrix(perms[[1]]) && ncol(perms[[1]]) >1) {
+    if(lodcolumn < 1 || lodcolumn > ncol(perms[[1]]))
+      stop("lodcolumn misspecified")
+    for(i in seq(along=perms))
+      perms[[i]] <- perms[[i]][,lodcolumn,drop=FALSE]
+  }
 
   qu <- summary(perms, alpha=alpha)
   if(!("one" %in% names(qu)))

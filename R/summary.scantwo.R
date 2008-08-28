@@ -13,9 +13,7 @@
 #           summary.scantwoperm, print.summary.scantwoperm
 #           condense.scantwo, summary.scantwocondensed
 #           max.scantwocondensed, print.summary.addpair
-#
-######################################################################
-
+#           rbind.scantwoperm, c.scantwoperm, subset.scantwoperm
 ######################################################################
 #
 # summarize the result from scantwo
@@ -876,6 +874,26 @@ function(object)
 
 summary.scantwocondensed <- summary.scantwo
 max.scantwocondensed <- max.scantwo
+
+
+##############################
+# subset.scantwoperm: pull out a set of lodcolumns
+##############################
+subset.scantwoperm <-
+function(x, lodcolumn=1, ...)
+{
+  if(is.matrix(x[[1]]) & ncol(x[[1]]) > 1) {
+    if((is.logical(lodcolumn) && length(lodcolumn) != ncol(x[[1]])) ||
+       (!is.logical(lodcolumn) && ((any(lodcolumn > 0) && any(lodcolumn > ncol(x[[1]]) | lodcolumn < 1)) ||
+       (any(lodcolumn < 0) && any(lodcolumn < -ncol(x[[1]]) | lodcolumn > -1)))))
+      stop("lodcolumn misspecified.")
+    cl <- class(x)
+    x <- lapply(x, function(a,b) a[,b,drop=FALSE], lodcolumn)
+    class(x) <- cl
+  }
+  else stop("No need to subset; just one column.")
+  x
+}
 
 
 # end of summary.scantwo.R

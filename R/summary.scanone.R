@@ -12,7 +12,7 @@
 #           max.scanone, c.scanone, subset.scanone,
 #           summary.scanoneperm, print.summary.scanoneperm
 #           c.scanoneperm, rbind.scanoneperm, cbind.scanoneperm
-#           grab.arg.names
+#           grab.arg.names, subset.scantwoperm
 #
 ######################################################################
 
@@ -779,7 +779,39 @@ function(..., labels)
 }
 
 
-  
+##############################
+# subset.scanoneperm: pull out a set of lodcolumns
+##############################
+subset.scanoneperm <-
+function(x, lodcolumn=1, ...)
+{
+  if(is.list(x)) {
+    if(is.matrix(x[[1]]) & ncol(x[[1]]) > 1) {
+      if((is.logical(lodcolumn) && length(lodcolumn) != ncol(x[[1]])) ||
+         (!is.logical(lodcolumn) && ((any(lodcolumn > 0) && any(lodcolumn > ncol(x[[1]]) | lodcolumn < 1)) ||
+         (any(lodcolumn < 0) && any(lodcolumn < -ncol(x[[1]])) | lodcolumn > -1))))
+        stop("lodcolumn misspecified.")
+      cl <- class(x)
+      x <- lapply(x, function(a,b) a[,b,drop=FALSE], lodcolumn)
+      class(x) <- cl
+    }
+    else stop("No need to subset; just one column.")
+  }
+  else {
+    if(is.matrix(x) & ncol(x > 1)) {
+      if((is.logical(lodcolumn) && length(lodcolumn) != ncol(x)) ||
+         (!is.logical(lodcolumn) && ((any(lodcolumn > 0) && any(lodcolumn > ncol(x) | lodcolumn < 1)) ||
+         (any(lodcolumn < 0) && any(lodcolumn < -ncol(x) | lodcolumn > -1)))))
+        stop("lodcolumn misspecified.")
+      cl <- class(x)
+      x <- x[,lodcolumn,drop=FALSE]
+      class(x) <- cl
+    }
+    else stop("No need to subset; just one column.")
+  }
+  x
+}
+
 
 
 # end of summary.scanone.R

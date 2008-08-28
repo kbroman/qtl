@@ -9,11 +9,15 @@
   from a two-dimensional, two-QTL scan (obtained by \code{\link[qtl]{scantwo}}).
 }
 
-\usage{calc.penalties(perms, alpha=0.05)}
+\usage{calc.penalties(perms, alpha=0.05, lodcolumn)}
 
 \arguments{
  \item{perms}{Permutation results from \code{\link[qtl]{scantwo}}.}
  \item{alpha}{Significance level.}
+ \item{lodcolumn}{If the scantwo permutation results contain LOD scores for
+    multiple phenotypes, this argument indicates which to use in the
+    summary.  This may be a vector.  If missing, penalties for all
+ phenotypes are calculated.}
 }
 
 \details{
@@ -41,7 +45,9 @@
 
 \value{
   Vector of three values indicating the penalty on main
-  effects and heavy and light penalties on interactions.  
+  effects and heavy and light penalties on interactions,
+  or a matrix of such results, with each row corresponding to a
+  different phenotype.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

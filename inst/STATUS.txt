@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 8/15/2008:
+Version 1.10, 8/28/2008:
 
 Major changes:
 
@@ -22,6 +22,15 @@ Major changes:
   give the second chromosome (named "3").
 
 Minor changes:
+
+  Added functions subset.scanoneperm and subset.scantwoperm for
+  pulling out selected LOD columns in the case that permutation tests
+  were run with multiple phenotypes.
+
+  Revised calc.penalties so that it can deal with the case of scantwo
+  permutations for multiple phenotypes: Added an argument "lodcolumn"
+  for selecting the phenotype; if missing, penalties for all phenotype
+  are calculated.
 
   summary.cross now checks for duplicate chromosome names and
   chromosome names that start with '-', either of which would cause

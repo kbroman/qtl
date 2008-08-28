@@ -122,7 +122,10 @@ stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
 subset.cross            Subsetting data for QTL experiment
 subset.scanone          Subsetting the results of a genome scan
+subset.scanoneperm      Subsetting permutation test results
 subset.scantwo          Subsetting the results of a 2-d genome scan
+subset.scantwoperm      Subsetting two-dimensional permutation test
+                        results
 summary.cross           Print summary of QTL experiment
 summary.fitqtl          Summary of fit of qtl model
 summary.map             Print summary of a genetic map
