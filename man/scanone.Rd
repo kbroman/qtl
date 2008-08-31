@@ -390,7 +390,7 @@ summary(operm.strat)
 # X-specific permutations
 ####################
 data(fake.f2)
-\dontshow{fake.f2 <- subset(fake.f2, chr=18:20)}
+\dontshow{fake.f2 <- subset(fake.f2, chr=c(18:19,"X"))}
 fake.f2 <- calc.genoprob(fake.f2, step=2.5)
 
 # genome scan

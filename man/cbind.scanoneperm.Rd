@@ -38,7 +38,7 @@
 \examples{
 data(fake.f2)
 fake.f2 <- calc.genoprob(fake.f2)
-\dontshow{fake.f2 <- subset(fake.f2, chr=18:20)}
+\dontshow{fake.f2 <- subset(fake.f2, chr=c(18:19,"X"))}
 operm1 <- scanone(fake.f2, method="hk", n.perm=10, perm.Xsp=TRUE)
 operm2 <- scanone(fake.f2, method="em", n.perm=5, perm.Xsp=TRUE)
 

@@ -48,8 +48,8 @@ out <- scanone(listeria, model="2part", upper=TRUE)
 # Maximum peak for LOD(p,mu)
 max(out)
 
-# Maximum peak for LOD(p,mu) on chr 1
-max(out,chr=1)
+# Maximum peak for LOD(p,mu) on chr 5
+max(out,chr=5)
 
 # Maximum peak for LOD(p,mu) on chromosomes other than chr 13
 max(out,chr="-13")
