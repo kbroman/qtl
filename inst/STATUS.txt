@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 8/28/2008:
+Version 1.10, 8/30/2008:
 
 Major changes:
 
@@ -35,6 +35,10 @@ Minor changes:
   summary.cross now checks for duplicate chromosome names and
   chromosome names that start with '-', either of which would cause
   major problems.
+
+  Fixed a couple of bugs in refineqtl, one concerning convergence and
+  the other concerning dropping individuals with missing covariates or
+  phenotypes in the case that there is just one covariate.
 
   Fixed a slight problem in c.cross: if maps are not precisely the
   same, we don't try to combine the genotype probabilities.
