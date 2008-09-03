@@ -10,16 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Consistency in use of chromosome names/numbers: by default,
-  interpret as character string.  Also allow negative numbers and
-  logical.  If integer, first interpret as chromosome name then as
-  index.  
-
-o consistency in naming LOD score columns (perhaps just use the 
-  phenotype name)
-
-o bug in summary with format="allpeaks" and when using threshold
-
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)
