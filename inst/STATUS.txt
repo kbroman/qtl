@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 8/30/2008:
+Version 1.10, 9/2/2008:
 
 Major changes:
 
@@ -35,6 +35,10 @@ Minor changes:
   summary.cross now checks for duplicate chromosome names and
   chromosome names that start with '-', either of which would cause
   major problems.
+
+  Slight change to countqtlterms(), used by stepwiseqtl(), to skip the
+  parsing of interactions in the case that there are 0 or 1
+  interactions; this might speed things up slightly.
 
   Fixed a couple of bugs in refineqtl, one concerning convergence and
   the other concerning dropping individuals with missing covariates or

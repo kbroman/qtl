@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# last modified Aug, 2008
+# last modified Sep, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -763,10 +763,13 @@ function(formula, ignore.covar=TRUE)
   nmain <- sum(nterm==1)
 
   if(all(nterm==1))
-    return(c(main=nmain, intH=0, intL=0))
+    return(c(main=nmain, intH=0, intL=0, inttot=0))
 
   n.int <- sum(nterm==2)
   
+  if(n.int <=1) # 0 or 1 interactions, so no need to figure them out
+    return(c(main=nmain, intH=0, intL=n.int, inttot=n.int))
+
   factors <- factors[,nterm==2, drop=FALSE]
 
   wh <- apply(factors, 2, function(a) which(a==1))
