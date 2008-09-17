@@ -3,7 +3,7 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Aug, 2008
+# last modified Sep, 2008
 # first written Sep, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -459,9 +459,11 @@ function(..., labels)
       labels <- rep(labels, length(dots))
     if(length(labels) != length(dots))
       stop("labels needs to be the same length as the number of objects input.")
+    gavelabels <- TRUE
   }
   else {
     labels <- grab.arg.names(...)
+    gavelabels <- FALSE
   }
 
   nr <- sapply(dots, nrow)
@@ -478,15 +480,22 @@ function(..., labels)
   }
   cl <- class(dots[[1]])
 
-  for(i in 1:length(dots)) {
-    colnames(dots[[i]])[-(1:2)] <- paste(colnames(dots[[i]])[-(1:2)], labels[i], sep=".")
-    dots[[i]] <- as.data.frame(dots[[i]])
+  thenam <- unlist(lapply(dots, function(a) colnames(a)[-(1:2)]))
+  if(length(unique(thenam)) == length(thenam))
+    repeats <- FALSE
+  else repeats <- TRUE
+
+  if(repeats || gavelabels) {
+    for(i in 1:length(dots)) {
+      colnames(dots[[i]])[-(1:2)] <- paste(colnames(dots[[i]])[-(1:2)], labels[i], sep=".")
+      dots[[i]] <- as.data.frame(dots[[i]])
+    }
   }
 
   result <- dots[[1]]
 
   for(i in 2:length(dots)) 
-    result <- cbind(result, dots[[i]][,-(1:2),drop=FALSE])
+    result <- cbind(as.data.frame(result), as.data.frame(dots[[i]][,-(1:2),drop=FALSE]))
 
   class(result) <- cl
   attr(result, "df") <- df
@@ -707,9 +716,11 @@ function(..., labels)
       labels <- rep(labels, length(dots))
     if(length(labels) != length(dots))
       stop("labels needs to be the same length as the number of objects input.")
+    gavelabels <- TRUE
   }
   else {
     labels <- grab.arg.names(...)
+    gavelabels <- FALSE
   }
 
 
@@ -742,12 +753,24 @@ function(..., labels)
                                              nrow=mnr-nr[i]))
     }
 
-    colnames(dots[[1]]$A) <- paste(colnames(dots[[1]]$A),labels[1],sep=".")
-    colnames(dots[[1]]$X) <- paste(colnames(dots[[1]]$X),labels[1],sep=".")
+    thenamA <- unlist(lapply(dots, function(a) colnames(a$A)))
+    thenamX <- unlist(lapply(dots, function(a) colnames(a$X)))
+    if(length(unique(thenamA)) == length(thenamA) &&
+       length(unique(thenamX)) == length(thenamX))
+      repeats <- FALSE
+    else repeats <- TRUE
+
+    if(repeats || gavelabels) {
+      colnames(dots[[1]]$A) <- paste(colnames(dots[[1]]$A),labels[1],sep=".")
+      colnames(dots[[1]]$X) <- paste(colnames(dots[[1]]$X),labels[1],sep=".")
+      for(i in 2:length(dots)) {
+        colnames(dots[[i]]$A) <- paste(colnames(dots[[i]]$A),labels[i],sep=".")
+        colnames(dots[[i]]$X) <- paste(colnames(dots[[i]]$X),labels[i],sep=".")
+      }
+    }
+
     result <- dots[[1]]
     for(i in 2:length(dots)) {
-      colnames(dots[[i]]$A) <- paste(colnames(dots[[i]]$A),labels[i],sep=".")
-      colnames(dots[[i]]$X) <- paste(colnames(dots[[i]]$X),labels[i],sep=".")
       result$A <- cbind(result$A, dots[[i]]$A)
       result$X <- cbind(result$X, dots[[i]]$X)
     }
@@ -766,12 +789,20 @@ function(..., labels)
                                              nrow=mnr-nr[i]))
     }
 
-    colnames(dots[[1]]) <- paste(colnames(dots[[1]]),labels[1],sep=".")
-    result <- dots[[1]]
-    for(i in 2:length(dots)) {
-      colnames(dots[[i]]) <- paste(colnames(dots[[i]]), labels[i], sep=".")
-      result <- cbind(result, dots[[i]])
+    thenam <- unlist(lapply(dots, colnames))
+    if(length(unique(thenam)) == length(thenam))
+      repeats <- FALSE
+    else repeats <- TRUE
+
+    if(repeats || gavelabels) {
+      colnames(dots[[1]]) <- paste(colnames(dots[[1]]),labels[1],sep=".")
+      for(i in 2:length(dots)) 
+        colnames(dots[[i]]) <- paste(colnames(dots[[i]]), labels[i], sep=".")
     }
+    result <- dots[[1]]
+    for(i in 2:length(dots)) 
+      result <- cbind(result, dots[[i]])
+
     class(result) <- "scanoneperm"
   }
   attr(result, "df") <- df

@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 9/2/2008:
+Version 1.10, 9/17/2008:
 
 Major changes:
 
@@ -22,6 +22,11 @@ Major changes:
   give the second chromosome (named "3").
 
 Minor changes:
+
+  Revised the way in which LOD score columns are renamed in c.scanone
+  and cbind.scanoneperm. If labels are given, these are appended to
+  the end of the names, but if labels are not given and there are no
+  repeats in the column names, the column names are left as they were.
 
   Added functions subset.scanoneperm and subset.scantwoperm for
   pulling out selected LOD columns in the case that permutation tests

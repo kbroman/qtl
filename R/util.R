@@ -5,7 +5,7 @@
 # copyright (c) 2001-8, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2008
+# last modified Sep, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -2826,6 +2826,7 @@ function(selection, thechr)
   if(any(is.na(wh))) {
     warning("Chr ", paste(selection[is.na(wh)], collapse=", "), " not found")
     wh <- wh[!is.na(wh)]
+    if(length(wh) == 0) return(thechr)
   }
   
   if(selectomit) return(thechr[-wh])
