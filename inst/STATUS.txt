@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 9/17/2008:
+Version 1.10, 9/18/2008:
 
 Major changes:
 
@@ -20,6 +20,13 @@ Major changes:
   are to be considered.  So if an object has three chromosomes named
   "1", "3", "4", using chr=2 will result in an error, while chr=3 will
   give the second chromosome (named "3").
+
+  Added an argument 'batchsize' to scanone and scantwo, so that in the
+  case that multiple phenotypes (or permutations) are to be run as a
+  batch (with method "hk" or "imp"), they can be run in smaller
+  batches (indicated by batchsize).  This can speed things up quite a
+  bit in the case of a very large number of phenotypes (or
+  permutations). 
 
 Minor changes:
 
@@ -40,6 +47,9 @@ Minor changes:
   summary.cross now checks for duplicate chromosome names and
   chromosome names that start with '-', either of which would cause
   major problems.
+
+  Revised summary.cross so that, if the phenotype data are missing
+  column names, an error is given.
 
   Slight change to countqtlterms(), used by stepwiseqtl(), to skip the
   parsing of interactions in the case that there are 0 or 1

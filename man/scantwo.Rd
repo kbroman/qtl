@@ -16,7 +16,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
         incl.markers=FALSE, clean.output=FALSE,
         maxit=4000, tol=1e-4,
         verbose=TRUE, n.perm, perm.strata=NULL,
-        assumeCondIndep=FALSE)
+        assumeCondIndep=FALSE, batchsize=250)
 }
 
 \arguments{
@@ -83,6 +83,8 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
  \item{assumeCondIndep}{If TRUE, assume conditional independence of QTL
    genotypes given marker genotypes.  This is an approximation, but it
    may speed things up.}
+ \item{batchsize}{The number of phenotypes (or permutations) to be run
+   as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
 }
 
 \details{

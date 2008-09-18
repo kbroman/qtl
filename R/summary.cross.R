@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Jul, 2008
+# last modified Sep, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -143,7 +143,11 @@ function(object,...)
   if(!is.data.frame(object$pheno)) 
     warning("Phenotypes should be a data.frame.")
 
+  if(is.null(colnames(object$pheno)))
+    stop("Phenotype data needs column names")
+
   x <- table(colnames(object$pheno))
+
   if(any(x > 1)) 
     warning("Some phenotypes have the same name:\n",
             paste(names(x)[x>1], collapse="  "))

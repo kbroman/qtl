@@ -243,11 +243,11 @@ scanone.perm(cross, pheno.col=1, model=c("normal","binary","2part","np"),
              use=c("all.obs", "complete.obs"), upper=FALSE,
              ties.random=FALSE, start=NULL, maxit=4000,
              tol=1e-4, n.perm=1000, perm.Xsp=FALSE, perm.strata=NULL,
-             verbose=TRUE)
+             verbose=TRUE, batchsize=250)
 scanone.perm.engine(n.perm, cross, pheno.col, model,
                     method, addcovar, intcovar, weights, use,
                     upper, ties.random, start, maxit, tol,
-                    verbose, perm.strata)
+                    verbose, perm.strata, batchsize=250)
 scanoneXnull(type, sexpgm)
 scantwo.perm(cross, pheno.col=1, model=c("normal","binary"),
              method=c("em","imp","hk","mr","mr-imp","mr-argmax"),
@@ -255,11 +255,13 @@ scantwo.perm(cross, pheno.col=1, model=c("normal","binary"),
              use=c("all.obs", "complete.obs"),
              incl.markers=FALSE, clean.output=FALSE,
              maxit=4000, tol=1e-4, verbose=FALSE,
-             n.perm=1000, perm.strata, assumeCondIndep=FALSE)
+             n.perm=1000, perm.strata, assumeCondIndep=FALSE,
+             batchsize=250)
 scantwo.perm.engine(n.perm, cross, pheno.col, model,
                     method, addcovar, intcovar, weights, use,
                     incl.markers, clean.output, maxit, tol, verbose,
-                    perm.strata, assumeCondIndep=FALSE)
+                    perm.strata, assumeCondIndep=FALSE,
+                    batchsize=250)
 sim.bcg(n.ind, map, m, p,
         map.function=c("haldane","kosambi","c-f","morgan"))
 sim.cc(parents, n.ril=1, type=c("sibmating", "selfing"),

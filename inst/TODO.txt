@@ -52,9 +52,6 @@ o method for having alternative genetic maps and for storing a
 o revise read.cross with format="mm" to deal with ril by selfing
   and/or sib mating
 
-o Batch permutations: study relationship between time and size of
-  batches.  Perhaps do batches not all at once but in pieces.
-
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 

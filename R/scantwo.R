@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-8, Karl W Broman and Hao Wu
-# last modified Aug, 2008
+# last modified Sep, 2008
 # first written Nov, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -32,8 +32,10 @@ function(cross, chr, pheno.col=1,
          use=c("all.obs", "complete.obs"),
          incl.markers=FALSE, clean.output=FALSE,
          maxit=4000, tol=1e-4, verbose=TRUE, n.perm,
-         perm.strata=NULL, assumeCondIndep=FALSE)
+         perm.strata=NULL, assumeCondIndep=FALSE,
+         batchsize=250)
 {
+  if(batchsize < 1) stop("batchsize must be >= 1.")
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
@@ -129,7 +131,8 @@ function(cross, chr, pheno.col=1,
                       clean.output=clean.output,
                       maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                       perm.strata=perm.strata,
-                      assumeCondIndep=assumeCondIndep)
+                      assumeCondIndep=assumeCondIndep,
+                      batchsize=batchsize)
     temp <- array(dim=c(nrow(output$lod), ncol(output$lod), n.phe))
     temp[,,1] <- output$lod
     output$lod <- temp
@@ -141,7 +144,8 @@ function(cross, chr, pheno.col=1,
                       clean.output=clean.output,
                       maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                       perm.strata=perm.strata,
-                      assumeCondIndep=assumeCondIndep)
+                      assumeCondIndep=assumeCondIndep,
+                      batchsize=batchsize)
       output$lod[,,i] <- temp$lod
       if(!is.null(output$scanoneX))
         output$scanoneX <- cbind(output$scanoneX, temp$scanoneX)
@@ -159,7 +163,8 @@ function(cross, chr, pheno.col=1,
                         use=use, incl.markers=incl.markers, clean.output=clean.output,
                         maxit=maxit,
                         tol=tol, verbose=verbose, n.perm=n.perm,
-                        perm.strata=perm.strata))
+                        perm.strata=perm.strata,
+                        batchsize=batchsize))
   }
 
 
@@ -462,7 +467,43 @@ function(cross, chr, pheno.col=1,
                           names(cross$geno)[j],")\n",sep="")
 
       if(method=="imp") {
-        z <- .C("R_scantwo_imp",
+        if(n.phe > batchsize) {
+          firstcol <- 1
+          z <- NULL
+          while(firstcol <= n.phe) {
+            thiscol <- firstcol + 0:(batchsize-1)
+            thiscol <- thiscol[thiscol <= n.phe]
+            thisz <- .C("R_scantwo_imp",
+                        as.integer(n.ind),
+                        as.integer(i==j),
+                        as.integer(n.pos[i]),
+                        as.integer(n.pos[j]),
+                        as.integer(n.gen[i]),
+                        as.integer(n.gen[j]),
+                        as.integer(n.draws),
+                        as.integer(cross$geno[[i]]$draws[,keep.pos[[i]],]),
+                        as.integer(cross$geno[[j]]$draws[,keep.pos[[j]],]),
+                        as.double(ac),
+                        as.integer(n.ac),
+                        as.double(ic),
+                        as.integer(n.ic),
+                        as.double(pheno[,thiscol]),
+                        as.integer(length(thiscol)),
+                        as.double(weights),
+                        result=as.double(rep(0,2*n.pos[i]*n.pos[j]*length(thiscol))),
+                        as.integer(n.col2drop),
+                        as.integer(col2drop),
+                        PACKAGE="qtl")
+            firstcol <- firstcol + batchsize
+            if(is.null(z)) 
+              z <- array(NA, dim=c(n.pos[i], n.pos[j], 2*n.phe))
+            thisz$result <- array(thisz$result, dim=c(n.pos[i], n.pos[j], 2*length(thiscol)))
+            z[,,thiscol] <- thisz$result[,,1:length(thiscol)]
+            z[,,n.phe+thiscol] <- thisz$result[,,length(thiscol)+1:length(thiscol)]
+          }
+        }
+        else {
+          z <- .C("R_scantwo_imp",
                 as.integer(n.ind),
                 as.integer(i==j),
                 as.integer(n.pos[i]),
@@ -483,8 +524,8 @@ function(cross, chr, pheno.col=1,
                 as.integer(n.col2drop),
                 as.integer(col2drop),
                 PACKAGE="qtl")
-        z <- array(z$result,dim=c(n.pos[i], n.pos[j], 2*n.phe)) # rearrange the result 
-
+          z <- array(z$result,dim=c(n.pos[i], n.pos[j], 2*n.phe)) # rearrange the result 
+        }
         # update the final result matrix
         if(i == j) { # on same chromosome
           if(n.phe > 1)
@@ -508,7 +549,7 @@ function(cross, chr, pheno.col=1,
             # full lod
             results[wh.col[[i]],wh.col[[j]],] <- z[,,1:n.phe]
             # epistasis lod - need to reshape the matrix
-            results[wh.col[[j]],wh.col[[i]],] <- array(z[,,(n.phe+1):(2*n.phe)],
+            results[wh.col[[j]],wh.col[[i]],] <- array(z[,,1:n.phe+n.phe],
                                                        c(n.pos[j],n.pos[i], n.phe))
           }
           else { # only one phenotype, result is a matrix
@@ -601,23 +642,59 @@ function(cross, chr, pheno.col=1,
           if(verbose>1) cat("  --Done.\n")
 
           if(method=="hk") {
-            z <- .C("R_scantwo_1chr_hk", 
-                    as.integer(n.ind),
-                    as.integer(n.pos[i]),
-                    as.integer(n.gen[i]),
-                    as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
-                    as.double(temp),
-                    as.double(ac),
-                    as.integer(n.ac),
-                    as.double(ic),
-                    as.integer(n.ic),
-                    as.double(pheno),
-                    as.integer(n.phe),
-                    as.double(weights),
-                    result=as.double(rep(0,n.pos[i]^2*n.phe)),
-                    as.integer(n.col2drop),
-                    as.integer(col2drop),
-                    PACKAGE="qtl")
+            if(n.phe > batchsize) {
+              firstcol <- 1
+              z <- NULL
+              while(firstcol <= n.phe) {
+                thiscol <- firstcol + 0:(batchsize-1)
+                thiscol <- thiscol[thiscol <= n.phe]
+
+                thisz <- .C("R_scantwo_1chr_hk", 
+                        as.integer(n.ind),
+                        as.integer(n.pos[i]),
+                        as.integer(n.gen[i]),
+                        as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                        as.double(temp),
+                        as.double(ac),
+                        as.integer(n.ac),
+                        as.double(ic),
+                        as.integer(n.ic),
+                        as.double(pheno[,thiscol]),
+                        as.integer(length(thiscol)),
+                        as.double(weights),
+                        result=as.double(rep(0,n.pos[i]^2*length(thiscol))),
+                        as.integer(n.col2drop),
+                        as.integer(col2drop),
+                        PACKAGE="qtl")
+                
+                firstcol <- firstcol + batchsize
+                if(is.null(z)) {
+                  z <- thisz
+                  z$result <- array(NA, dim=c(n.pos[i], n.pos[i], n.phe))
+                }
+                z$result[,,thiscol] <- array(thisz$result, dim=c(n.pos[i], n.pos[i], length(thiscol)))
+              }
+            }
+            else {
+              z <- .C("R_scantwo_1chr_hk", 
+                      as.integer(n.ind),
+                      as.integer(n.pos[i]),
+                      as.integer(n.gen[i]),
+                      as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                      as.double(temp),
+                      as.double(ac),
+                      as.integer(n.ac),
+                      as.double(ic),
+                      as.integer(n.ic),
+                      as.double(pheno),
+                      as.integer(n.phe),
+                      as.double(weights),
+                      result=as.double(rep(0,n.pos[i]^2*n.phe)),
+                      as.integer(n.col2drop),
+                      as.integer(col2drop),
+                      PACKAGE="qtl")
+            }
+
             ## fill results matrix
             if(n.phe == 1) 
               results[wh.col[[i]],wh.col[[i]]] <-
@@ -657,24 +734,61 @@ function(cross, chr, pheno.col=1,
         
         else {
           if(method=="hk") {
-            z <- .C("R_scantwo_2chr_hk",
-                    as.integer(n.ind),
-                    as.integer(n.pos[i]),
-                    as.integer(n.pos[j]),
-                    as.integer(n.gen[i]),
-                    as.integer(n.gen[j]),
-                    as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
-                    as.double(cross$geno[[j]]$prob[,keep.pos[[j]],]),
-                    as.double(ac),
-                    as.integer(n.ac),
-                    as.double(ic),
-                    as.integer(n.ic),
-                    as.double(pheno),
-                    as.integer(n.phe),
-                    as.double(weights),
-                    full=as.double(rep(0,n.pos[i]*n.pos[j]*n.phe)),
-                    int=as.double(rep(0,n.pos[i]*n.pos[j]*n.phe)),
-                    PACKAGE="qtl")
+            if(n.phe > batchsize) {
+              firstcol <- 1
+              z <- NULL
+              while(firstcol <= n.phe) {
+                thiscol <- firstcol + 0:(batchsize-1)
+                thiscol <- thiscol[thiscol <= n.phe]
+
+                thisz <- .C("R_scantwo_2chr_hk",
+                            as.integer(n.ind),
+                            as.integer(n.pos[i]),
+                            as.integer(n.pos[j]),
+                            as.integer(n.gen[i]),
+                            as.integer(n.gen[j]),
+                            as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                            as.double(cross$geno[[j]]$prob[,keep.pos[[j]],]),
+                            as.double(ac),
+                            as.integer(n.ac),
+                            as.double(ic),
+                            as.integer(n.ic),
+                            as.double(pheno[,thiscol]),
+                            as.integer(length(thiscol)),
+                            as.double(weights),
+                            full=as.double(rep(0,n.pos[i]*n.pos[j]*length(thiscol))),
+                            int=as.double(rep(0,n.pos[i]*n.pos[j]*length(thiscol))),
+                            PACKAGE="qtl")
+                
+                firstcol <- firstcol + batchsize
+                if(is.null(z)) {
+                  z <- thisz
+                  z$full <- z$int <- array(NA, dim=c(n.pos[j], n.pos[i], n.phe))
+                }
+                z$full[,,thiscol] <- array(thisz$full, dim=c(n.pos[j], n.pos[i], length(thiscol)))
+                z$int[,,thiscol] <- array(thisz$int, dim=c(n.pos[j], n.pos[i], length(thiscol)))
+              }
+            }
+            else {
+              z <- .C("R_scantwo_2chr_hk",
+                      as.integer(n.ind),
+                      as.integer(n.pos[i]),
+                      as.integer(n.pos[j]),
+                      as.integer(n.gen[i]),
+                      as.integer(n.gen[j]),
+                      as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                      as.double(cross$geno[[j]]$prob[,keep.pos[[j]],]),
+                      as.double(ac),
+                      as.integer(n.ac),
+                      as.double(ic),
+                      as.integer(n.ic),
+                      as.double(pheno),
+                      as.integer(n.phe),
+                      as.double(weights),
+                      full=as.double(rep(0,n.pos[i]*n.pos[j]*n.phe)),
+                      int=as.double(rep(0,n.pos[i]*n.pos[j]*n.phe)),
+                      PACKAGE="qtl")
+            }
             ## reorgnize results
             if(n.phe == 1) {
               results[wh.col[[j]],wh.col[[i]]] <-
@@ -1139,7 +1253,7 @@ function(cross, pheno.col=1, model=c("normal","binary"),
          incl.markers=FALSE, clean.output=FALSE,
          maxit=4000, tol=1e-4, verbose=FALSE,
          n.perm=1000, perm.strata,
-         assumeCondIndep=FALSE)
+         assumeCondIndep=FALSE, batchsize=250)
 {
   method <- match.arg(method)
   model <- match.arg(model)
@@ -1151,7 +1265,7 @@ function(cross, pheno.col=1, model=c("normal","binary"),
                       incl.markers=incl.markers, clean.output=clean.output,
                       maxit=maxit, tol=tol, verbose=verbose,
                       perm.strata=perm.strata,
-                      assumeCondIndep=assumeCondIndep)
+                      assumeCondIndep=assumeCondIndep, batchsize=batchsize)
 
 }
 
@@ -1166,7 +1280,7 @@ function(n.perm, cross, pheno.col, model,
          method, addcovar, intcovar, weights, use,
          incl.markers, clean.output,
          maxit, tol, verbose, perm.strata,
-         assumeCondIndep=FALSE)
+         assumeCondIndep=FALSE, batchsize=250)
 {
   ## local variables
   n.phe <- length(pheno.col)
@@ -1234,7 +1348,8 @@ function(n.perm, cross, pheno.col, model,
                    clean.output=clean.output,
                    maxit=maxit, tol=tol,verbose=FALSE, n.perm=-1,
                    perm.strata=perm.strata,
-                   assumeCondIndep=assumeCondIndep)
+                   assumeCondIndep=assumeCondIndep,
+                   batchsize=batchsize)
     if(clean.output) tem <- clean(tem)
 
     ## find the maximum LOD on each permutation
@@ -1297,7 +1412,8 @@ function(n.perm, cross, pheno.col, model,
                      incl.markers=incl.markers, clean.output=clean.output,
                      maxit=maxit, tol=tol,
                      verbose=FALSE, n.perm= -i, perm.strata=perm.strata,
-                     assumeCondIndep=assumeCondIndep)
+                     assumeCondIndep=assumeCondIndep,
+                     batchsize=batchsize)
 
       if(clean.output) tem <- clean(tem)
 

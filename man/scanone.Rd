@@ -15,7 +15,8 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         addcovar=NULL, intcovar=NULL, weights=NULL,
         use=c("all.obs", "complete.obs"), upper=FALSE,
         ties.random=FALSE, start=NULL, maxit=4000,
-        tol=1e-4, n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose)
+        tol=1e-4, n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose,
+        batchsize=250)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -85,6 +86,8 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    strata.}
  \item{verbose}{In the case \code{n.perm} is specified, display
    information about the progress of the permutation tests.}
+ \item{batchsize}{The number of phenotypes (or permutations) to be run
+   as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
 }
 
 \section{Models}{
