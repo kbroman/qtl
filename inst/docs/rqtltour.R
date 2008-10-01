@@ -1,8 +1,8 @@
 ##############################################################
 # R code for "A brief tour of R/qtl"
 #
-# Karl W Broman
-# Department of Biostatistics, Johns Hopkins University
+# Karl W Broman, kbroman.wisc.edu
+# University of Wisconsin Madison
 #
 # http://www.rqtl.org
 #
