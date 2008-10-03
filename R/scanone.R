@@ -391,6 +391,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         firstcol <- 1
         z <- NULL
         while(firstcol <= n.phe) {
+          if(verbose > 2) cat("chr", names(cross$geno)[i], "phe", firstcol, "...\n")
           thiscol <- firstcol + 0:(batchsize-1)
           thiscol <- thiscol[thiscol <= n.phe]
           thisz <- .C("R_scanone_imp",
@@ -439,6 +440,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         firstcol <- 1
         z <- NULL
         while(firstcol <= n.phe) {
+          if(verbose > 2) cat("chr", names(cross$geno)[i], "phe", firstcol, "...\n")
           thiscol <- firstcol + 0:(batchsize-1)
           thiscol <- thiscol[thiscol <= n.phe]
           thisz <- .C("R_scanone_hk",
