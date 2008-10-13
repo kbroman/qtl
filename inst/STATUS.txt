@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/2/2008:
+Version 1.10, 10/13/2008:
 
 Major changes:
 
@@ -50,6 +50,15 @@ Minor changes:
 
   Revised summary.cross so that, if the phenotype data are missing
   column names, an error is given.
+
+  Revised est.map so that the chromosomes are given classes "A" or "X"
+  according to the chromosome types in the input cross object.
+
+  Added a function convert2sa for converting a sex-specific map object
+  to a sex-averaged map object by pulling out the female marker
+  locations (and issuing a warning if the female and male locations
+  are very different).  This is useful for plotting a simpler version
+  of a map estimated for a 4-way cross via est.map with sex.sp=FALSE.
 
   Slight change to countqtlterms(), used by stepwiseqtl(), to skip the
   parsing of interactions in the case that there are 0 or 1

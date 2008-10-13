@@ -3,7 +3,7 @@
 # est.map.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# last modified Oct, 2008
 # first written Apr, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -215,6 +215,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
       attr(newmap[[i]],"loglik") <- z$loglik
     }
 
+    class(newmap[[i]]) <- chrtype[i]
   } # end loop over chromosomes
 
   class(newmap) <- "map"

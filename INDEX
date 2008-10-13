@@ -39,6 +39,8 @@ convert.scanone         Convert output from scanone for R/qtl version
                         0.98
 convert.scantwo         Convert output from scantwo for R/qtl version
                         1.03 and earlier
+convert2sa              Convert a sex-specific map to a sex-averaged
+                        one.
 countXO                 Count number of obligate crossovers for each
                         individual
 drop.markers            Drop a set of markers

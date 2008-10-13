@@ -5,7 +5,7 @@
 # copyright (c) 2001-8, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Sep, 2008
+# last modified Oct, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -25,7 +25,7 @@
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
-#           matchchr
+#           matchchr, convert2sa
 #
 ######################################################################
 
@@ -2833,6 +2833,35 @@ function(selection, thechr)
   thechr[sort(wh)]
 }
 
+######################################################################
+# convert2sa
+#
+# convert a sex-specific maps to a sex-averaged one.
+# We pull out just the female map, and give a warning if the male and
+# female maps are too different
+######################################################################
+convert2sa <-
+function(map, tol=1e-4)
+{  
+  if(!("map" %in% class(map)))
+     stop("Input should have class 'map'.")
+
+  if(!is.matrix(map[[1]]))
+    stop("Input map doesn't seem to be a sex-specific map.")
+
+  theclass <- sapply(map, class)
+
+  fem <- lapply(map, function(a) a[1,])
+
+  dif <- sapply(map, function(a) { a <- apply(a, 1, diff); max(abs(apply(a, 1, diff))) })
+  if(max(dif) > tol)
+    warning("Female and male inter-marker distances differ by as much as ", max(dif), ".")
+
+  for(i in seq(along=theclass)) class(fem[[i]]) <- theclass[i]
+  
+  class(fem) <- "map"
+  fem
+}
 
 # end of util.R
 
