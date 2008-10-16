@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/13/2008:
+Version 1.10, 10/16/2008:
 
 Major changes:
 
@@ -73,6 +73,9 @@ Minor changes:
 
   Fixed a bug in summary.scanone with format="allpeaks" for the case
   that there are no peaks meeting the threshold/alpha.
+
+  Fixed a bug in switch.order related to the change in references to
+  chromosomes.  
 
 
 Version 1.09, 7/18/2008:

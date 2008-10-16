@@ -881,6 +881,7 @@ function(cross, chr, order, error.prob=0.0001,
       warning("switch.order can deal with just one chromosome at a time")
       chr <- chr[1]
     }
+    cchr <- chr
     chr <- match(chr, names(cross$geno))
   }
   else chr <- 1
@@ -926,13 +927,13 @@ function(cross, chr, order, error.prob=0.0001,
 
   # re-estimate rec fracs for re-ordered chromosome
   if(flag==1) {
-    temp <- est.rf(subset(cross, chr=chr))$rf
+    temp <- est.rf(subset(cross, chr=cchr))$rf
     rf[oldcols,oldcols] <- temp
     cross$rf <- rf
   }
 
   # re-estimate map
-  newmap <- est.map(subset(cross,chr=chr),
+  newmap <- est.map(subset(cross,chr=cchr),
                     error.prob=error.prob, map.function=map.function,
                     maxit=maxit, tol=tol, sex.sp=sex.sp)
 
