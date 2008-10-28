@@ -58,6 +58,12 @@ Minor changes:
   genotypes in an intercross or 4-way cross.  Added an argument so
   that (by default) columns and rows with no data will not be printed.
 
+  Revised comparegeno to have the option what="both", the result has
+  the proportion of matches in the lower triangle and the number of
+  matches in the upper triangle.  Also, now if what="proportion" the
+  diagonal has all missing values (rather than all 1's); otherwise the
+  diagonal contains the number of typed markers for each individual.
+
   Added a function convert2sa for converting a sex-specific map object
   to a sex-averaged map object by pulling out the female marker
   locations (and issuing a warning if the female and male locations

@@ -8,18 +8,25 @@
   individuals, to look for unusually closely related individuals.
 }
 
-\usage{comparegeno(cross, what=c("proportion","number"))}
+\usage{comparegeno(cross, what=c("proportion","number","both"))}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
    \code{\link[qtl]{read.cross}} for details.}
  \item{what}{Indicates whether to return the proportion or number of matching
-genotypes.}
+genotypes (or both).}
 }
 
 \value{
   A matrix whose (i,j)th element is the proportion or number of matching
-genotypes for individuals i and j.
+  genotypes for individuals i and j.
+
+  If called with \code{what="both"}, the lower triangle contains the
+  proportion and the upper triangle contains the number.
+
+  If called with \code{what="proportion"}, the diagonal contains missing
+  values.  Otherwise, the diagonal contains the number of typed markers
+  for each individual.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

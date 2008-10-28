@@ -2569,7 +2569,7 @@ function(cross, verbose=TRUE)
 # comparegeno
 ######################################################################
 comparegeno <-
-function(cross, what=c("proportion","number"))
+function(cross, what=c("proportion","number", "both"))
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -2587,8 +2587,21 @@ function(cross, what=c("proportion","number"))
           n.missing=as.integer(rep(0,n.ind^2)),
           PACKAGE="qtl")
 
-  if(what=="number") return(matrix(z$n.match,n.ind,n.ind))
-  else return(matrix(z$n.match/(n.mar-z$n.missing),n.ind,n.ind))
+  if(what=="number") {
+    z <- matrix(z$n.match,n.ind,n.ind)
+  }
+  else {
+    if(what=="proportion") {
+      z <- matrix(z$n.match/(n.mar-z$n.missing),n.ind,n.ind)
+      diag(z) <- NA
+    }
+    else {
+      prop <- matrix(z$n.match/(n.mar-z$n.missing),n.ind,n.ind)
+      z <- matrix(z$n.match,n.ind,n.ind)
+      z[lower.tri(z)] <- prop[lower.tri(z)]
+    }
+  }
+  z
 }
   
           

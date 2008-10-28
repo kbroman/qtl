@@ -10,10 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o revise comparegeno so that the diagonal has all missing values
-  Make lower triangle proportions and upper triangle numbers?
-  (Or have that as an option?)
-
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)
