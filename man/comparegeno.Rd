@@ -41,11 +41,10 @@ n.ind <- nind(listeria)
 image(1:n.ind, 1:n.ind, output, col=gray((0:99)/99),
       breaks=seq(0,1,len=101))
 
-# histogram of the off-diagonal values
-upper <- output[upper.tri(output)]
-hist(upper, breaks=150,
+# histogram 
+hist(output, breaks=150, prob=TRUE,
      xlab="Proportion of matching genotypes")
-rug(upper)
+rug(output)
 }
 
 \seealso{ \code{\link[qtl]{nmissing}} }
