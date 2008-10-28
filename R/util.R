@@ -779,7 +779,7 @@ function(dat, tol=1e-6, maxit=10000, verbose=FALSE)
 # with the markers specified by name
 ######################################################################
 geno.crosstab <-
-function(cross, mname1, mname2)
+function(cross, mname1, mname2, eliminate.zeros=TRUE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -810,9 +810,58 @@ function(cross, mname1, mname2)
   g1[is.na(g1)] <- 0
   g2[is.na(g2)] <- 0
 
-  g1names <- c("-", getgenonames(crosstype, chrtype[1], "full", getsex(cross), attributes(cross)))
-  g2names <- c("-", getgenonames(crosstype, chrtype[2], "full", getsex(cross), attributes(cross)))
+  g1names <- getgenonames(crosstype, chrtype[1], "full", getsex(cross), attributes(cross))
+  g2names <- getgenonames(crosstype, chrtype[2], "full", getsex(cross), attributes(cross))
   
+  if(chrtype[1] != "X") {
+    if(crosstype == "f2") 
+      g1names <- c(g1names, paste("not", g1names[c(3,1)]))
+    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh") {
+    }
+    else if(crosstype == "4way") {
+      temp <- g1names
+      g1names <- c(temp,
+                   paste(temp[c(1,3)], collapse="/"),
+                   paste(temp[c(2,4)], collapse="/"),
+                   paste(temp[c(1,2)], collapse="/"),
+                   paste(temp[c(3,4)], collapse="/"),
+                   paste(temp[c(1,4)], collapse="/"),
+                   paste(temp[c(2,3)], collapse="/"),
+                   paste("not", temp[1]),
+                   paste("not", temp[2]),
+                   paste("not", temp[3]),
+                   paste("not", temp[4]))
+
+      g1names[5:8] <- substr(temp[c(1,2,1,3)], c(1,1,2,2), c(1,1,2,2))
+    }
+    else stop("Unknown cross type: ",crosstype)
+  }
+  if(chrtype[2] != "X") {
+    if(crosstype == "f2") 
+      g2names <- c(g2names, paste("not", g2names[c(3,1)]))
+    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh") {
+    }
+    else if(crosstype == "4way") {
+      temp <- g2names
+      g2names <- c(temp,
+                   paste(temp[c(1,3)], collapse="/"),
+                   paste(temp[c(2,4)], collapse="/"),
+                   paste(temp[c(1,2)], collapse="/"),
+                   paste(temp[c(3,4)], collapse="/"),
+                   paste(temp[c(1,4)], collapse="/"),
+                   paste(temp[c(2,3)], collapse="/"),
+                   paste("not", temp[1]),
+                   paste("not", temp[2]),
+                   paste("not", temp[3]),
+                   paste("not", temp[4]))
+
+      g2names[5:8] <- substr(temp[c(1,2,1,3)], c(1,1,2,2), c(1,1,2,2))
+    }
+    else stop("Unknown cross type: ",crosstype)
+  }
+  g1names <- c("-", g1names)
+  g2names <- c("-", g2names)
+
   g1 <- as.character(g1)
   g2 <- as.character(g2)
 
@@ -830,6 +879,14 @@ function(cross, mname1, mname2)
   
   tab <- table(g1, g2)
   names(attributes(tab)$dimnames) <- c(mname1, mname2)
+
+  if(eliminate.zeros) { # eliminate rows and columns with no data (but always include missing data row and column)
+    rs <- apply(tab, 1, sum); rs[1] <- 1
+    tab <- tab[rs>0,,drop=FALSE]
+    cs <- apply(tab, 2, sum); cs[1] <- 1
+    tab <- tab[,cs>0,drop=FALSE]
+  }
+
   tab
 }
 

@@ -8,7 +8,7 @@
 }
 
 \usage{
-geno.crosstab(cross, mname1, mname2)
+geno.crosstab(cross, mname1, mname2, eliminate.zeros=TRUE)
 }
 
 \arguments{
@@ -16,6 +16,8 @@ geno.crosstab(cross, mname1, mname2)
    \code{\link[qtl]{read.cross}} for details.}
  \item{mname1}{The name of the first marker (as a character string).}
  \item{mname2}{The name of the second marker (as a character string).}
+ \item{eliminate.zeros}{If TRUE, don't show the rows and columns that
+ have no data.}
 }
 
 \value{

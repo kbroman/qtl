@@ -192,6 +192,20 @@ o Include widgets for getting more easy access to the data.
 o Allow phenotypes on multiple individuals (esp for recombinant inbred
   lines). 
 
+o 2 traits vs genotype at one QTL (with regression lines)
+
+o eQTL-related stuff:
+  
+  - Omitting markers with duplicate data (retaining info and having
+    flat LOD curve through such regions?)
+
+  - Compressing calc.genoprob results (simpler version of locations,
+    or just the grid)
+
+  - Mb positions within cross object; multiple genetic maps
+  
+  - Positions in phenotype object + other annotations
+
 ----------------------------------------------------------------------
 
 LONG TERM:

@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/16/2008:
+Version 1.10, 10/28/2008:
 
 Major changes:
 
@@ -53,6 +53,10 @@ Minor changes:
 
   Revised est.map so that the chromosomes are given classes "A" or "X"
   according to the chromosome types in the input cross object.
+
+  Revised geno.crosstab to deal consider partially informative
+  genotypes in an intercross or 4-way cross.  Added an argument so
+  that (by default) columns and rows with no data will not be printed.
 
   Added a function convert2sa for converting a sex-specific map object
   to a sex-averaged map object by pulling out the female marker
