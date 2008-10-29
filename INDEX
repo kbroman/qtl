@@ -73,6 +73,7 @@ listeria                Data on Listeria monocytogenes susceptibility
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map
+markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome

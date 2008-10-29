@@ -67,6 +67,9 @@ Minor changes:
   diagonal has all missing values (rather than all 1's); otherwise the
   diagonal contains the number of typed markers for each individual.
 
+  Revised movemarker so that one can move a marker onto a totally new
+  chromosome. 
+
   Added a function convert2sa for converting a sex-specific map object
   to a sex-averaged map object by pulling out the female marker
   locations (and issuing a warning if the female and male locations

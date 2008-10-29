@@ -2154,14 +2154,14 @@ function(cross, marker, newchr, newpos)
   if(is.na(oldindex)) stop(marker, " not found.\n")
   if(length(oldindex) > 1) stop(marker, " found multiple times.\n")
 
-  if(!(newchr %in% names(cross$geno)))
-    stop("Chromosome ", newchr, " not found.\n")
-
   chr <- chr[oldindex]
   pos <- pos[oldindex]
 
   # pull out genotype data
   g <- cross$geno[[chr]]$data[,pos]
+
+  chrtype <- class(cross$geno[[chr]])
+  mapmatrix <- is.matrix(cross$geno[[chr]]$map)
 
   # delete marker
   if(nmar(cross)[chr] == 1)  { # only marker on that chromosome, so drop the chromosome
@@ -2177,6 +2177,26 @@ function(cross, marker, newchr, newpos)
       cross$geno[[chr]]$map <- cross$geno[[chr]]$map[-pos]
   }
 
+
+  if(!(newchr %in% names(cross$geno))) { # create a new chromosome
+    n <- length(cross$geno)
+    cross$geno[[n+1]] <- list("data"=as.matrix(g),
+                              "map"=as.numeric(0))
+    names(cross$geno)[n+1] <- newchr
+    class(cross$geno[[n+1]]) <- chrtype
+    colnames(cross$geno[[n+1]]$data) <- marker
+    if(mapmatrix) {
+      if(missing(newpos)) newpos <- 0
+      cross$geno[[n+1]]$map <- matrix(newpos, ncol=1, nrow=2)
+      colnames(cross$geno[[n+1]]$map) <- marker
+    }
+    else {
+      if(missing(newpos)) newpos <- 0
+      cross$geno[[n+1]]$map <- newpos
+      names(cross$geno[[n+1]]$map) <- marker
+    }
+    return(cross)
+  }
 
   if(missing(newpos)) {
     # add marker to end of new chromosome
