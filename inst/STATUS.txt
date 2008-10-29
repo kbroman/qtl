@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/28/2008:
+Version 1.10, 10/29/2008:
 
 Major changes:
 
@@ -44,6 +44,9 @@ Minor changes:
   for selecting the phenotype; if missing, penalties for all phenotype
   are calculated.
 
+  Added a function markernames for pulling the marker names out of a
+  cross object (as one long vector).
+
   summary.cross now checks for duplicate chromosome names and
   chromosome names that start with '-', either of which would cause
   major problems.
@@ -73,6 +76,9 @@ Minor changes:
   Slight change to countqtlterms(), used by stepwiseqtl(), to skip the
   parsing of interactions in the case that there are 0 or 1
   interactions; this might speed things up slightly.
+
+  Slight changes in ripple and bayesint, changing use of rev(order(.))
+  to order(., decreasing=TRUE)
 
   Fixed a couple of bugs in refineqtl, one concerning convergence and
   the other concerning dropping individuals with missing covariates or

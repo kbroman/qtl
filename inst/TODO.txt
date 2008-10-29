@@ -10,6 +10,26 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o plot.rf is very slow in the case of many markers.
+
+o Map construction: forming linkage groups, greedy algorithm to get
+  initial marker order
+
+o In plot.geno, allow use of xlim and ylim; also do this in
+  plot.scanoneperm and plot.scantwoperm.
+
+o Add an explanation regarding the coding in the coefficient 
+  estimates in fitqtl().  Add text to the help file for
+  summary.fitqtl(). 
+
+o FAQ: - constructing covariate matrices
+
+----------------------------------------------------------------------
+
+MEDIUM-SHORT TERM:
+
+o read.cross is slow loading when there are *lots* of phenotypes
+
 o pull all of the genoprob and imputation information out of 
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)
@@ -24,30 +44,14 @@ o For the stepwiseqtl function:
    - it'd be nice to be able to easily make a plot of the final model
      plus information about all models that are one term away
 
-o In plot.geno, allow use of xlim and ylim; also do this in
-  plot.scanoneperm and plot.scantwoperm.
-
-o read.cross is slow loading when there are *lots* of phenotypes
-
-o make various functions work appropriately with class "special"
-  (eg, plot and summary)
-
-o Add an explanation regarding the coding in the coefficient 
-  estimates in fitqtl().  Add text to the help file for
-  summary.fitqtl(). 
-
-o FAQ: - constructing covariate matrices
-
-----------------------------------------------------------------------
-
-MEDIUM-SHORT TERM:
-
-o Map construction: forming linkage groups, greedy algorithm to get
-  initial marker order
+o plots of segregation ratios at markers
 
 o method for having alternative genetic maps and for storing a
   physical map; linear interpolation for plotting scanone output in
   Mbp. 
+
+o make various functions work appropriately with class "special"
+  (eg, plot and summary)
 
 o revise read.cross with format="mm" to deal with ril by selfing
   and/or sib mating
@@ -67,8 +71,6 @@ o cM coordinates in scantwo plot for multiple chromosomes: Fix
 o Plotting scanone results for *many* phenotypes as an image plot.
   (Perhaps threshold the really high LODs and eliminate curves that
   fail to meet a given threshold.)
-
-o plots of segregation ratios at markers
 
 o lodint/bayesint as option to summary.scanone.
 

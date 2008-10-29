@@ -3,7 +3,7 @@
 # ripple.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# last modified Oct, 2008
 # first written Oct, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -112,7 +112,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     loglik <- (loglik - loglik[1])/log(10)
 
     # sort orders by lod
-    o <- rev(order(loglik[-1])+1)
+    o <- order(loglik[-1], decreasing=TRUE)+1
 
     # create output 
     orders <- cbind(orders,LOD=loglik,chrlen)[c(1,o),]

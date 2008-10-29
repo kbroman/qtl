@@ -10,7 +10,7 @@
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
 # Part of the R/qtl package
-# Contains: pull.map, replace.map, c.cross, create.map,
+# Contains: pull.map, markernames, replace.map, c.cross, create.map,
 #           clean, clean.cross, drop.nullmarkers,
 #           drop.markers, geno.table, genotab.em
 #           mf.k, mf.h, imf.k, imf.h, mf.cf, imf.cf, mf.m, imf.m,
@@ -51,6 +51,26 @@ function(cross, chr)
   class(a) <- "map"
 
   a
+}
+
+######################################################################
+#
+# markernames
+#
+# pull out the marker names for selected chromosomes as one big vector
+#
+######################################################################
+
+markernames <- 
+function(cross, chr)
+{
+  if(!any(class(cross) == "cross"))
+    stop("Input should have class \"cross\".")
+
+  if(!missing(chr)) cross <- subset(cross, chr=chr)
+  temp <- unlist(lapply(cross$geno, function(a) colnames(a$data)))
+  names(temp) <- NULL
+  temp
 }
 
 ######################################################################
@@ -1965,7 +1985,7 @@ function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
   area <- 10^results[,lodcolumn+2]*width
   area <- area/sum(area)
   
-  o <- rev(order(results[,lodcolumn+2]))
+  o <- order(results[,lodcolumn+2], decreasing=TRUE)
   
   cs <- cumsum(area[o])
   
