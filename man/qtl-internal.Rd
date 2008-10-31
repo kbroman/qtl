@@ -54,6 +54,7 @@
 \alias{mf.m}
 \alias{mf.stahl}
 \alias{mybinaryrep}
+\alias{orderMarkers.sub}
 \alias{parseformula}
 \alias{plot.effectscan}
 \alias{print.addint}
@@ -189,6 +190,7 @@ mf.k(d)
 mf.m(d)
 mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
+orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
 parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)

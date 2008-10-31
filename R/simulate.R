@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-6, Karl W Broman
-# last modified Sep, 2006
+# copyright (c) 2001-8, Karl W Broman
+# last modified Oct, 2008
 # first written Apr, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -152,6 +152,9 @@ function(map, model=NULL, n.ind=100, type=c("f2","bc","4way"),
   # store genotype data as integers
   for(i in 1:nchr(cross))
     storage.mode(cross$geno[[i]]$data) <- "integer"
+
+  if(is.null(names(cross$geno)))
+    names(cross$geno) <- 1:length(cross$geno)
 
   cross
 }

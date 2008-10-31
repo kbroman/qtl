@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Sep, 2008
+# last modified Oct, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -242,6 +242,11 @@ function(object,...)
   if(!all(chr.class == "A" | chr.class == "X"))
     warning("Each chromosome should have class \"A\" or \"X\".")
   chr.nam <- names(object$geno)
+  if(is.null(chr.nam)) {
+    warning("The chromosome names are missing.")
+    chr.nam <- as.character(1:length(chr.class))
+  }
+    
   if(any(chr.class=="A" & (chr.nam=="X" | chr.nam=="x"))) {
     wh <- which(chr.nam=="X" | chr.nam=="x")
     warning("Chromosome \"", chr.nam[wh], "\" has class \"A\" but probably ",

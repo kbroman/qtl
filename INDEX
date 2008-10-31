@@ -64,6 +64,7 @@ find.pseudomarker       Find the pseudomarker closest to a specified
                         position
 fitqtl                  Fit a multiple-QTL model
 fitstahl                Fit Stahl interference model
+formLinkageGroups       Partition markers into linkage groups
 geno.crosstab           Create table of two-locus genotypes
 geno.image              Plot grid of genotype data
 geno.table              Create table of genotype distributions
@@ -79,6 +80,8 @@ max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 nmissing                Number of missing genotypes
 ntyped                  Number of genotypes
+orderMarkers            Find an initial order for markers within
+                        chromosomes
 plot.cross              Plot various features of a cross object
 plot.errorlod           Plot grid of error LOD values
 plot.geno               Plot observed genotypes, flagging likely errors

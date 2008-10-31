@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/29/2008:
+Version 1.10, 10/20/2008:
 
 Major changes:
 
@@ -26,7 +26,14 @@ Major changes:
   batch (with method "hk" or "imp"), they can be run in smaller
   batches (indicated by batchsize).  This can speed things up quite a
   bit in the case of a very large number of phenotypes (or
-  permutations). 
+  permutations).
+
+  Added two functions for the de novo construction of a genetic map.
+  formLinkageGroups uses pairwise marker linkage information
+  (calculated with est.rf) to partition markers into linkage groups.
+  orderMarkers uses a quick but not very good algorithm for ordering
+  the markers on a chromosome (minimizing the number of obligate
+  crossovers).  
 
 Minor changes:
 
@@ -69,6 +76,12 @@ Minor changes:
 
   Revised movemarker so that one can move a marker onto a totally new
   chromosome. 
+
+  Revised sim.cross so that if the input map object has no chromosome
+  names, the chromosomes still have names.  
+
+  Revised summary.cross to give a warning if the chromosomes are not
+  named. 
 
   Added a function convert2sa for converting a sex-specific map object
   to a sex-averaged map object by pulling out the female marker

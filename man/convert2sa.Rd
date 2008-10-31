@@ -36,7 +36,8 @@ convert2sa(map, tol=1e-4)
 
 \examples{
 data(fake.4way)
-\dontrun{fake.4way <- subset(fake.4way, chr=18:19)}
+\dontrun{fake.4way <- subset(fake.4way, chr="-X")}
+\dontshow{fake.4way <- subset(fake.4way, chr=18:19)}
 nm <- est.map(fake.4way, sex.sp=FALSE)
 plot(convert2sa(nm))
 }

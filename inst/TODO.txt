@@ -10,11 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o plot.rf is very slow in the case of many markers.
-
-o Map construction: forming linkage groups, greedy algorithm to get
-  initial marker order
-
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
 
@@ -30,20 +25,6 @@ MEDIUM-SHORT TERM:
 
 o read.cross is slow loading when there are *lots* of phenotypes
 
-o pull all of the genoprob and imputation information out of 
-  the qtl objects and replace it with indices to the information
-  in the cross object.  (This stuff takes up too much space!)
-
-o For the stepwiseqtl function:
-   - should be able to save all models with plod within some value
-     of the best model 
-   - QTL x covariate interactions in countterms
-   - it'd be nice to be able to have all models that are one term
-     away from the optimal model (maybe this could be a separate
-     function) 
-   - it'd be nice to be able to easily make a plot of the final model
-     plus information about all models that are one term away
-
 o plots of segregation ratios at markers
 
 o method for having alternative genetic maps and for storing a
@@ -52,9 +33,6 @@ o method for having alternative genetic maps and for storing a
 
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
-
-o revise read.cross with format="mm" to deal with ril by selfing
-  and/or sib mating
 
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
@@ -89,17 +67,6 @@ o pairprob at markers + putative QTL?  For linked loci in scanqtl by
 o Allow plot.geno (or other cases in which subset.cross is used to
   pull out individuals) to refer to individual IDs.
 
-o findpeaks() function, for finding multiple maxima on a chromosome
-  in scanone results.
-
-o incorporate revised code from Steffen Moeller.
-
-o Tabbing in "allpheno" from summary.scanone output looks odd...maybe
-  use spaces? [Gary reported this, but I've not been able to reproduce
-  this problem.] 
-
-o X chromosome in cim().
-
 o Include Bjarke's code on eHK for scantwo.
 
 o Go through all of the various plot functions and make sure that
@@ -125,17 +92,32 @@ o Finish off the work to get coefficient estimates by imputation in
 o Revise c.cross so that you can combine crosses even if there are
   different numbers of chromosomes
 
-o Ensure consistency in use of chromosome numbers vs names/IDs when
-  plotting results of genome scans, subsetting crosses, and so forth
-  (sometimes #'s taken as indices and sometimes as names).
-
 o Documentation on RI lines.
 
 ----------------------------------------------------------------------
 
 MEDIUM TERM:
 
+o pull all of the genoprob and imputation information out of 
+  the qtl objects and replace it with indices to the information
+  in the cross object.  (This stuff takes up too much space!)
+
+o For the stepwiseqtl function:
+   - should be able to save all models with plod within some value
+     of the best model 
+   - QTL x covariate interactions in countterms
+   - it'd be nice to be able to have all models that are one term
+     away from the optimal model (maybe this could be a separate
+     function) 
+   - it'd be nice to be able to easily make a plot of the final model
+     plus information about all models that are one term away
+
+o revise read.cross with format="mm" to deal with ril by selfing
+  and/or sib mating
+
 o covariates with 2part model in scanone
+
+o X chromosome in cim().
 
 o Analysis of censored phenotypes.
 
@@ -160,32 +142,26 @@ o scanone() with model="2part" gives NAs as LOD scores if there
   then you have great segregation distortion if you look at only
   the dead individuals, and so you can't estimate both means.
 
-o In MIM: allow return of SEs of effects.  Write coef.mim, resid.mim,
-  and dev.mim to pull out the est'd coefficients, the residuals, and
-  the "deviance" (2 * ln likelihood).
-
 o Incorporate the DIRECT algorithm stuff from Hao
 
 o scanone with additive alleles at QTL
 
 o Pull out results for an interval from scanone.
 
-o Modify the map expansion for RI lines for the X chromosome.
-  [really need to add additional functions for mapping, as
-   the marginal genotype distribution is 2:1 rather than 1:1]
-  --the transition matrix is not symmetric 
-  Pr(BB|AA) = 2r/(1+4r) and Pr(AA|BB) = 4r/(1+4r)
+o Add additional HMM functions for the X chr in RIL, as the marginal
+  genotype distribution is 2:1 rather than 1:1 and the transition
+  matrix is not symmetric Pr(BB|AA) = 2r/(1+4r) and Pr(AA|BB) =
+  4r/(1+4r)
 
 o Ability to get at the individual contributions to the LOD score? 
 
 o Incorporate code from Brian Yandell, Fei Zou and Amy Jin on
   semi-parametric QTL mapping methods.
 
-o Add appropriate functions to analyze advanced intercrosses (AILs). 
+o Add appropriate functions to analyze advanced intercrosses (AILs)
+  and advanced backcross (BCn). 
 
 o Analysis of binary traits by imputation
-
-o Include widgets for getting more easy access to the data.
 
 o Allow phenotypes on multiple individuals (esp for recombinant inbred
   lines). 
@@ -207,8 +183,6 @@ o eQTL-related stuff:
 ----------------------------------------------------------------------
 
 LONG TERM:
-
-o HMM stuff for BCn data.
 
 o "embarassing parallel" processing for permutation tests (Rmpi, snow)
 
