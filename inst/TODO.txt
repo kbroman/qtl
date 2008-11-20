@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o write replacemap.scanone and replacemap.scantwo.
+  Use a single subroutine, say interpolatemap, to be used by both  
+
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
 

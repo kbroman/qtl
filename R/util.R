@@ -75,60 +75,6 @@ function(cross, chr)
 
 ######################################################################
 #
-# replace.map
-#
-# replace the map portion of a cross object with a list defining a map
-#
-######################################################################
-
-replace.map <-
-function(cross, map)
-{
-  if(!any(class(cross) == "cross")) 
-    stop("Input should have class \"cross\".")
-
-  n.chr <- nchr(cross) 
-  n.mar <- nmar(cross)
-
-  n.chr2 <- length(map)
-  n.mar2 <- sapply(map,length)
-
-  type <- class(cross)[1]
-  if(type=="4way") {
-    mnames <- unlist(lapply(cross$geno, function(a) colnames(a$map)))
-    mnames2 <- unlist(lapply(map, function(a) colnames(a)))
-    n.mar2 <- n.mar2/2
-  }
-  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh") {
-    mnames <- unlist(lapply(cross$geno, function(a) names(a$map)))
-    mnames2 <- unlist(lapply(map, function(a) names(a)))
-  }
-  else 
-    stop("Cross type ", type, " not yet supported.")
-
-  # check that things line up properly
-  if(n.chr != n.chr2)
-    stop("Numbers of chromosomes don't match.")
-  if(any(names(cross$geno) != names(map)))
-    stop("Chromosome names don't match.")
-  if(any(n.mar != n.mar2))
-    stop("Number of markers don't match.")
-  if(any(mnames != mnames2)) 
-    stop("Marker names don't match.")
-
-  # proceed if no errors
-  for(i in 1:length(cross$geno)) {
-    cross$geno[[i]]$map <- map[[i]]
-    if(is.matrix(map[[i]]))
-      class(cross$geno[[i]]$map) <- "matrix"
-    else class(cross$geno[[i]]$map) <- "numeric"
-  }
-
-  cross
-}
-
-######################################################################
-#
 # create.map
 #
 # create a new map with inserted inter-marker locations

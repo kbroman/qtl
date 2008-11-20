@@ -39,6 +39,8 @@
 \alias{imf.k}
 \alias{imf.m}
 \alias{imf.stahl}
+\alias{interpmap}
+\alias{interpmap4scantwo}
 \alias{LikePheVector}
 \alias{locatemarker}
 \alias{locate.xo}
@@ -88,6 +90,7 @@
 \alias{read.cross.qtx}
 \alias{read.map.qtlcart}
 \alias{read.maps.mm}
+\alias{replacemap}
 \alias{revisecovar}
 \alias{reviseqtlnuminformula}
 \alias{revisescantwodf}
@@ -175,6 +178,8 @@ imf.h(r)
 imf.k(r)
 imf.m(r)
 imf.stahl(r, m=0, p=0, tol=1e-12, maxit=1000)
+interpmap(oldmap, newmap)
+interpmap4scantwo(output, newmap)
 LikePheVector(pheno, n.ind, n.phe)
 locatemarker(map, pos, chr, flag)
 locate.xo(cross)
@@ -230,6 +235,7 @@ read.cross.qtlcart(dir, crofile, mapfile)
 read.cross.qtx(dir, file, estimate.map=TRUE)
 read.map.qtlcart(file)
 read.maps.mm(mapsfile)
+replacemap(object, map)
 revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)
 revisescantwodf(df)

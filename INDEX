@@ -112,6 +112,10 @@ read.cross              Read data for a QTL experiment
 refineqtl               Refine the positions of QTL
 reorderqtl              Reorder the QTL in a qtl object.
 replace.map             Replace the genetic map of a cross
+replacemap.scanone      Replace the genetic map in QTL mapping results
+                        with an alternate map
+replacemap.scantwo      Replace the genetic map in QTL mapping results
+                        with an alternate map
 replaceqtl              Replace a QTL in a qtl object with a different
                         position.
 ripple                  Compare marker orders

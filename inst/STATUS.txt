@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/20/2008:
+Version 1.10, 10/30/2008:
 
 Major changes:
 
@@ -36,6 +36,12 @@ Major changes:
   crossovers).  
 
 Minor changes:
+
+  Added a function replacemap.cross, which is the same as the long
+  extant function replace.map.  This is so that I can create similar
+  functions replacemap.scanone and replacemap.scantwo, which will
+  enable one to plot scanone or scantwo results relative to a physical
+  map.
 
   Revised the way in which LOD score columns are renamed in c.scanone
   and cbind.scanoneperm. If labels are given, these are appended to

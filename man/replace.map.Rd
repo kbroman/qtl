@@ -1,5 +1,6 @@
 \name{replace.map}
 \alias{replace.map}
+\alias{replacemap.cross}
 
 \title{Replace the genetic map of a cross}
 
@@ -7,11 +8,15 @@
   Replace the map portion of a cross object.
 }
 
-\usage{replace.map(cross, map)}
+\usage{
+replace.map(cross, map)
+\method{replacemap}{cross}(object, map)
+}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
    \code{\link[qtl]{read.cross}} for details.}
+ \item{object}{Same as \code{cross}.}
  \item{map}{A list containing the new genetic map.  This must be the
    same length and with the same marker names as that contained in
    \code{cross}. }
