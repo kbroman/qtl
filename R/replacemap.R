@@ -180,7 +180,7 @@ function(output, newmap)
 
   m <- match(omapnam, nmapnam)
   if(any(is.na(m))) {
-    u <- ochrnam[is.na(m)]
+    u <- omapnam[is.na(m)]
     stop("Chr ", paste(u, collapse=" "), " not found in new map")
   }
 

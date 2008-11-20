@@ -49,6 +49,5 @@ out.rev <- replacemap(out, origmap)
 
 \seealso{ \code{\link[qtl]{replacemap.cross}},
   \code{\link[qtl]{est.map}}, \code{\link[qtl]{replacemap.scantwo}} }
-}
 
 \keyword{manip}
