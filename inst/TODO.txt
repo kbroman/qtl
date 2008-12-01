@@ -12,6 +12,8 @@ SHORT TERM:
 
 o Error in the case of missing data in stepwiseqtl?
 
+o Print information about chr and position of new QTL in stepwiseqtl
+
 o qtl x covar interactions in stepwiseqtl
 
 o special treatment of X chromosome in scanone and in stepwiseqtl?
