@@ -43,6 +43,7 @@ data(hyper)
 origmap <- pull.map(hyper)
 newmap <- est.map(hyper)
 hyper <- replacemap(hyper, newmap)
+hyper <- calc.genoprob(hyper, step=0)
 out <- scantwo(hyper, method="hk")
 out.rev <- replacemap(out, origmap)
 }

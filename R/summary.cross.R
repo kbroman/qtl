@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# last modified Dec, 2008
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -376,8 +376,12 @@ function(object)
 nchr <-
 function(object)
 {
-  if(!any(class(object) == "cross"))
-    stop("Input should have class \"cross\".")
+  cl <- class(object)
+  if(!("cross" %in% cl || "map" %in% cl))
+    stop("Input should have class \"cross\" or \"map\".")
+
+  if("map" %in% cl)
+    return(length(object))
 
   length(object$geno)
 }
@@ -385,8 +389,15 @@ function(object)
 nmar <- 
 function(object)
 {
-  if(!any(class(object) == "cross"))
-    stop("Input should have class \"cross\".")
+  cl <- class(object)
+  if(!("cross" %in% cl || "map" %in% cl))
+    stop("Input should have class \"cross\" or \"map\".")
+
+  if("map" %in% cl) {
+    if(is.matrix(object[[1]]))
+      return(sapply(object, function(x) ncol(x)))
+    else return(sapply(object, function(x) length(x)))
+  }
 
   if(!is.matrix(object$geno[[1]]$map))
     n.mar1 <- sapply(object$geno, function(x) length(x$map))
@@ -402,8 +413,16 @@ function(object)
 totmar <-
 function(object)
 {
-  if(!any(class(object) == "cross"))
-    stop("Input should have class \"cross\".")
+  cl <- class(object)
+  if(!("cross" %in% cl || "map" %in% cl))
+    stop("Input should have class \"cross\" or \"map\".")
+
+  if("map" %in% cl) {
+    if(is.matrix(object[[1]]))
+      return(sum(sapply(object, function(x) ncol(x))))
+    else return(sum(sapply(object, function(x) length(x))))
+  }
+
 
   if(!is.matrix(object$geno[[1]]$map))
     totmar1 <- sum(sapply(object$geno, function(x) length(x$map)))

@@ -78,7 +78,14 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
+nchr                    Determine the number of chromosomes
+nind                    Determine the number of individuals QTL
+                        experiment
+nmar                    Determine the numbers of markers on each
+                        chromosome
 nmissing                Number of missing genotypes
+nphe                    Determine the number of phenotypes QTL
+                        experiment
 ntyped                  Number of genotypes
 orderMarkers            Find an initial order for markers within
                         chromosomes
@@ -151,5 +158,6 @@ summary.scantwo.old     Summarize the results of a two-dimensional
 summary.scantwoperm     LOD thresholds from scantwo permutation results
 switch.order            Switch the order of markers on a chromosome
 top.errorlod            List genotypes with large error LOD scores
+totmar                  Determine the total number of markers
 tryallpositions         Test all possible positions for a marker
 write.cross             Write data for a QTL experiment to a file

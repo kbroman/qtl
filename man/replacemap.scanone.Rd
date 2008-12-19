@@ -43,6 +43,7 @@ data(fake.f2)
 origmap <- pull.map(fake.f2)
 newmap <- est.map(fake.f2)
 fake.f2 <- replacemap(fake.f2, newmap)
+fake.f2 <- calc.genoprob(fake.f2, step=2.5)
 out <- scanone(fake.f2, method="hk")
 out.rev <- replacemap(out, origmap)
 }

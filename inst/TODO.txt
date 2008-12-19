@@ -18,9 +18,6 @@ o qtl x covar interactions in stepwiseqtl
 
 o special treatment of X chromosome in scanone and in stepwiseqtl?
 
-o write replacemap.scanone and replacemap.scantwo.
-  Use a single subroutine, say interpolatemap, to be used by both  
-
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
 

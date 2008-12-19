@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 10/30/2008:
+Version 1.10, 12/19/2008:
 
 Major changes:
 
@@ -42,6 +42,11 @@ Minor changes:
   functions replacemap.scanone and replacemap.scantwo, which will
   enable one to plot scanone or scantwo results relative to a physical
   map.
+
+  Revised the functions nchr, nmar, totmar, so that they work for map
+  objects as well as cross objects.  Separated the help files for
+  nind, nmar, totmar, nphe, nchr from the summary.cross help file, so
+  that the use of the revised functions can be explained.
 
   Revised the way in which LOD score columns are renamed in c.scanone
   and cbind.scanoneperm. If labels are given, these are appended to
