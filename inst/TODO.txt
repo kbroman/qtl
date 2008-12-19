@@ -10,7 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Error in the case of missing data in stepwiseqtl?
+o The output of stepwiseqtl eliminates individuals with missing
+  phenotype/covariate information, and so can't be immediately plugged
+  back into fitqtl or refineqtl.
 
 o Print information about chr and position of new QTL in stepwiseqtl
 
