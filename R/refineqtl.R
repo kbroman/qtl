@@ -56,9 +56,6 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     stop("Provide either qtl or both chr and pos.")
 
   if(!missing(qtl)) {
-    if(qtl$n.ind != nind(cross))
-      stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
-
     chr <- qtl$chr
     pos <- qtl$pos
   }

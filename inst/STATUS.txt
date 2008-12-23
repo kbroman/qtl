@@ -35,6 +35,9 @@ Major changes:
   the markers on a chromosome (minimizing the number of obligate
   crossovers).  
 
+  Added a function addcovarint, which is similar to addint, but adds
+  one QTL x covariate interaction at a time.
+
 Minor changes:
 
   Added a function replacemap.cross, which is the same as the long

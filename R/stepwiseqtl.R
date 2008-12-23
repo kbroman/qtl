@@ -64,9 +64,6 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     if( !("qtl" %in% class(qtl)) )
       stop("The qtl argument must be an object of class \"qtl\".")
 
-    if(qtl$n.ind != nind(cross))
-      stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
-
     # check that chromosomes were retained, otherwise give error
     m <- is.na(match(qtl$chr, names(cross$geno)))
     if(any(m)) {
@@ -124,6 +121,18 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   }
   if(method=="imp") qtlmethod <- "draws"
   else qtlmethod <- "prob"
+
+  if(!missing(qtl) && qtl$n.ind != nind(cross)) {
+    warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    if(method=="imp")
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    else
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+  }
+  if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+  }    
 
   # check that qtl object matches the method
   if(!startatnull) {

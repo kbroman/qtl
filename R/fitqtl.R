@@ -33,9 +33,6 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
 
-  if(qtl$n.ind != nind(cross))
-    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
-
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
       covar <- as.data.frame(covar)
@@ -92,6 +89,18 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
         stop("The qtl object needs to be created with makeqtl with what=\"prob\".")
     }
   }
+
+  if(qtl$n.ind != nind(cross)) {
+    warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    if(method=="imp")
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    else
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+  }
+  if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+  }    
 
   fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                method=method, dropone=dropone, get.ests=get.ests,

@@ -59,6 +59,7 @@
 \alias{orderMarkers.sub}
 \alias{parseformula}
 \alias{plot.effectscan}
+\alias{print.addcovarint}
 \alias{print.addint}
 \alias{print.compactqtl}
 \alias{print.cross}
@@ -112,6 +113,7 @@
 \alias{sim.ril}
 \alias{subrousummaryscantwo}
 \alias{summary.scantwocondensed}
+\alias{summary.addcovarint}
 \alias{summary.addint}
 \alias{summary.compactqtl}
 \alias{vbscan}
@@ -199,6 +201,7 @@ orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
 parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)
+\method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)
 \method{print}{cross}(x, \dots)
@@ -287,6 +290,7 @@ subrousummaryscantwo(object, for.perm=FALSE)
          what=c("best", "full", "add", "int"),
          perms, alphas, lodcolumn=1, pvalues=FALSE,
          df=FALSE, allpairs=TRUE, \dots)
+\method{summary}{addcovarint}(object, \dots)
 \method{summary}{addint}(object, \dots)
 \method{summary}{compactqtl}(object, \dots)
 vbscan(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,

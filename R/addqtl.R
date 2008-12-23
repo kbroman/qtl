@@ -11,6 +11,7 @@
 # Contains: addint, print.addint, addqtl, addpair,
 #           reviseqtlnuminformula, qtlformulasymmetric
 #           dropfromqtlformula
+#           addcovarint, print.addcovarint, summary.addcovarint
 #
 ######################################################################
 
@@ -31,9 +32,6 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
-
-  if(qtl$n.ind != nind(cross))
-    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
@@ -265,9 +263,6 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
-
-  if(qtl$n.ind != nind(cross))
-    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -573,9 +568,6 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
-
-  if(qtl$n.ind != nind(cross))
-    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -1084,5 +1076,233 @@ function(formula, qtlnum)
   as.formula(paste("y ~ ", paste(theterms[-todrop], collapse=" + "), sep=""))
 }
 
+
+
+######################################################################
+# addcovarint
+#
+# Try adding each QTL x covariate interaction (that is not
+# already in the formula), and give results similar to the drop-one
+# analysis.  
+######################################################################
+addcovarint <-
+function(cross, pheno.col=1, qtl, covar=NULL, formula, icovar,
+         method=c("imp","hk"), verbose=TRUE, pvalues=TRUE)
+{
+  if( !("cross" %in% class(cross)) )
+    stop("The cross argument must be an object of class \"cross\".")
+    
+  if( !("qtl" %in% class(qtl)) )
+    stop("The qtl argument must be an object of class \"qtl\".")
+
+  if(missing(covar) || is.null(covar))
+    stop("Must include covariate data frame.")
+  if(!is.data.frame(covar)) {
+    if(is.matrix(covar) && is.numeric(covar)) 
+      covar <- as.data.frame(covar)
+    else stop("covar should be a data.frame")
+  }
+
+  if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
+    cross$pheno <- cbind(pheno.col, cross$pheno)
+    pheno.col <- 1
+  }
+
+  if(length(pheno.col) > 1) {
+    pheno.col <- pheno.col[1]
+    warning("addcovarint can take just one phenotype; only the first will be used")
+  }
+    
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(is.na(num)) 
+      stop("Couldn't identify phenotype \"", pheno.col, "\"")
+    pheno.col <- num
+  }
+
+  if(pheno.col < 1 | pheno.col > nphe(cross))
+    stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  pheno <- cross$pheno[,pheno.col]
+  if(nrow(covar) != length(pheno))
+    stop("nrow(covar) != no. individuals in cross.")
+
+  if(missing(icovar))
+    stop("Must include icovar (the covariate to consider in interactions)")
+  if(!is.character(icovar) || any(is.na(match(icovar, colnames(covar)))))
+    stop("icovar must be a vector of character strings corresonding to columns in covar.")
+
+  method <- match.arg(method)
+
+  # allow formula to be a character string
+  if(!missing(formula) && is.character(formula))
+    formula <- as.formula(formula)
+
+  if(method=="imp") {
+    if(!("geno" %in% names(qtl))) {
+      if("prob" %in% names(qtl)) {
+        warning("The qtl object doesn't contain imputations; using method=\"hk\".")
+        method <- "hk"
+      }
+      else
+        stop("The qtl object needs to be created with makeqtl with what=\"draws\".")
+    }
+  }
+  else {
+    if(!("prob" %in% names(qtl))) {
+      if("geno" %in% names(qtl)) {
+        warning("The qtl object doesn't contain QTL genotype probabilities; using method=\"imp\".")
+        method <- "imp"
+      }
+      else
+        stop("The qtl object needs to be created with makeqtl with what=\"prob\".")
+    }
+  }
+  
+  if(qtl$n.ind != nind(cross)) {
+    warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    if(method=="imp")
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    else
+      qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+  }
+  if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
+    qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+  }    
+
+  # check phenotypes and covariates; drop ind'ls with missing values
+  phcovar <- cbind(pheno, covar)
+  if(any(is.na(phcovar))) {
+    if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
+    else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+    if(all(hasmissing))
+      stop("All individuals are missing phenotypes or covariates.")
+    if(any(hasmissing)) {
+      warning("Dropping ", sum(hasmissing), " individuals with missing phenotypes.\n")
+      pheno <- pheno[!hasmissing]
+      qtl$n.ind <- sum(!hasmissing)
+      if(method=="imp")
+        qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
+      else
+        qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
+      
+      covar <- covar[!hasmissing,,drop=FALSE]
+    }
+  }
+
+  # number of covariates
+  n.covar <- ncol(covar)
+
+  # if formula is missing, build one
+  # all QTLs and covarariates will be additive by default
+  n.qtl <- qtl$n.qtl
+  if(missing(formula)) {
+    tmp.Q <- paste("Q", 1:n.qtl, sep="") # QTL term names
+    formula <- "y~Q1"
+    if(n.qtl > 1) 
+      for (i in 2:n.qtl) 
+        formula <- paste(formula, tmp.Q[i], sep="+")
+    if (n.covar) { # if covarariate is not empty
+      tmp.C <- colnames(covar) # covarariate term names
+      for(i in 1:n.covar)
+        formula <- paste(formula, tmp.C[i], sep="+")
+    }
+    formula <- as.formula(formula)
+  }
+
+  # check input formula
+  formula <- checkformula(formula, qtl$altname, colnames(covar))
+
+  # make sure icovar is in the formula
+  m <- is.na(match(icovar, rownames(attr(terms(formula), "factors"))))
+  if(any(m)) 
+    formula <- as.formula(paste(deparseQTLformula(formula), "+",
+                                paste(icovar[m], collapse="+"), sep=""))
+
+  # look for interactions that haven't been added
+  factors <- attr(terms(formula), "factors")
+  if(sum(factors[1,])==0) factors <- factors[-1,]
+
+  # replace QTL altnames (Q1 etc) with real names (chr1@20 etc)
+  fn <- fn.alt <- rownames(factors)
+  qan <- qtl$altname
+  qn <- qtl$name
+  m <- match(fn, qan)
+  fn.alt[!is.na(m)] <- qn[m[!is.na(m)]]
+
+  theqtl <- fn[fn != fn.alt]
+  theqtl.alt <- fn.alt[fn != fn.alt]
+
+  theint <- theint.alt <- NULL
+  for(i in icovar) {
+    theint <- c(theint, paste(theqtl, ":", i, sep=""))
+    theint.alt <- c(theint.alt, paste(theqtl.alt, ":", i, sep=""))
+  }
+
+  wh <- match(theint, colnames(factors))
+  theint <- theint[is.na(wh)]
+  theint.alt <- theint.alt[is.na(wh)]
+
+  n2test <- length(theint)
+
+  if(n2test == 0) {
+    if(verbose) cat("No QTL x covariate interactions to add.\n")
+    return(NULL)
+  }
+
+  # fit base model
+  thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE)
+
+  results <- matrix(ncol=7, nrow=n2test)
+  dimnames(results) <- list(theint.alt, c("df", "Type III SS", "LOD", "%var",
+                                        "F value", "Pvalue(Chi2)", "Pvalue(F)"))
+
+  for(k in seq(along=theint)) {
+    thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
+                            formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
+                            method=method, dropone=FALSE, get.ests=FALSE,
+                            run.checks=FALSE)
+
+    results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
+    results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
+    results[k,3] <- thefit1$result.full[1,4] - thefit0$result.full[1,4]
+    results[k,4] <- results[k,2] / thefit1$result.full[3,2]*100
+    results[k,5] <- (results[k,2]/results[k,1])/thefit1$result.full[2,3]
+    results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
+    results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
+  }
+                    
+  results <- as.data.frame(results)
+  class(results) <- c("addcovarint", "data.frame")
+  attr(results, "formula") <- deparseQTLformula(formula)
+  attr(results, "pvalues") <- pvalues
+  results
+}
+
+print.addcovarint <-
+function(x, ...)
+{
+  cat("Model formula:")
+  w <- options("width")[[1]]
+  printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
+  cat("\n\n")
+
+  cat("Add one QTL x covar interaction at a time table:\n")
+  cat("--------------------------------------------\n")
+  pval <- attr(x, "pvalues")
+  if(is.null(pval) || pval) 
+    printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+  else {
+    z <- x
+    z <- z[,-ncol(z)+(0:1)]
+    printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
+  }
+    
+  cat("\n")
+}
+
+summary.addcovarint <- function(object, ...) object
 
 # end of addqtl.R
