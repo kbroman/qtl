@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-8, Karl W. Broman
-# last modified Aug, 2008
+# last modified Dec, 2008
 # first written Jun, 2006
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -31,6 +31,9 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 {
   method <- match.arg(method)
   
+  if( !("cross" %in% class(cross)) )
+    stop("The cross argument must be an object of class \"cross\".")
+    
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
     formula <- as.formula(formula)
@@ -53,6 +56,9 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     stop("Provide either qtl or both chr and pos.")
 
   if(!missing(qtl)) {
+    if(qtl$n.ind != nind(cross))
+      stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
+
     chr <- qtl$chr
     pos <- qtl$pos
   }

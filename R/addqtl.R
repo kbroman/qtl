@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Aug, 2008
+# last modified Dec, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -26,11 +26,14 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), qtl.only=FALSE, verbose=TRUE,
          pvalues=TRUE)
 {
-  if( !sum(class(cross) == "cross"))
+  if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
     
-  if( !sum(class(qtl) == "qtl") )
+  if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
+
+  if(qtl$n.ind != nind(cross))
+    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
@@ -256,6 +259,15 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), incl.markers=TRUE, verbose=FALSE)
 {
   method <- match.arg(method)
+
+  if( !("cross" %in% class(cross)) )
+    stop("The cross argument must be an object of class \"cross\".")
+    
+  if( !("qtl" %in% class(qtl)) )
+    stop("The qtl argument must be an object of class \"qtl\".")
+
+  if(qtl$n.ind != nind(cross))
+    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -555,6 +567,15 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), incl.markers=FALSE, verbose=TRUE)
 {
   method <- match.arg(method)
+
+  if( !("cross" %in% class(cross)) )
+    stop("The cross argument must be an object of class \"cross\".")
+    
+  if( !("qtl" %in% class(qtl)) )
+    stop("The qtl argument must be an object of class \"qtl\".")
+
+  if(qtl$n.ind != nind(cross))
+    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))

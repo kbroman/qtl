@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-8, Karl W Broman
-# last modified Sep, 2008
+# last modified Dec, 2008
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -50,7 +50,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
          additive.only=FALSE, scan.pairs=FALSE, penalties,
          keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE)
 {
-  if(!any(class(cross) == "cross")) 
+  if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
 
   if(!missing(chr)) cross <- subset(cross, chr)
@@ -61,6 +61,12 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   }
 
   if(!missing(qtl)) { # start f.s. at somewhere other than the null
+    if( !("qtl" %in% class(qtl)) )
+      stop("The qtl argument must be an object of class \"qtl\".")
+
+    if(qtl$n.ind != nind(cross))
+      stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
+
     # check that chromosomes were retained, otherwise give error
     m <- is.na(match(qtl$chr, names(cross$geno)))
     if(any(m)) {

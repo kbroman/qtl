@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jul, 2008
+# last modified Dec, 2008
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -27,11 +27,14 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
          dropone=TRUE, get.ests=FALSE, run.checks=TRUE)
 {
   # some input checking stuff in here
-  if( !sum(class(cross) == "cross"))
+  if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
     
-  if( !sum(class(qtl) == "qtl") )
+  if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
+
+  if(qtl$n.ind != nind(cross))
+    stop("Mismatch in no. individuals in cross (", nind(cross), ") and qtl (", qtl$n.ind, ")")
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
