@@ -142,16 +142,14 @@ w <- qtlgeno[,2]==2 & qtlgeno[,4]==2
 phe[w] <- phe[w] - 1
 fakebc$pheno[,1] <- phe
 
-# imputations
-\dontrun{fakebc <- sim.geno(fakebc, step=2.5, n.draws=32)}
-\dontshow{fakebc <- sim.geno(fakebc, step=10, n.draws=8)}
+fake.f2 <- calc.genoprob(fake.f2, step=2, err=0.001)
 
 # base model has QTLs on chr 17 and 18
-qtl <- makeqtl(fakebc, chr=c("17", "18"), pos=c(40,30))
+qtl <- makeqtl(fakebc, chr=c("17", "18"), pos=c(40,30), what="prob")
 
 # scan for an additional pair of QTL, one interacting with the locus 
 #     on 17 and one interacting with the locus on 18
-out.ap <- addpair(fakebc, qtl=qtl, formula = y~Q1*Q3 + Q2*Q4)
+out.ap <- addpair(fakebc, qtl=qtl, formula = y~Q1*Q3 + Q2*Q4, method="hk")
 
 max(out.ap)
 summary(out.ap)

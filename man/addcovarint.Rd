@@ -37,7 +37,7 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
    Haley-Knott regression.}
  \item{verbose}{If TRUE, will print a message if there are no
    interactions to test.}
- \item{pvalues}{If FALSE, don't include p-values in the summary.}
+ \item{pvalues}{If FALSE, p-values will not be included in the results.}
 }
 
 \details{
