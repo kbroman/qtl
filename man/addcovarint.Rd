@@ -98,7 +98,7 @@ covar <- data.frame(sex=fake.f2$pheno$sex)
 
 # try all possible QTL x sex interactions, one at a time
 addcovarint(fake.f2, pheno.col=1, qtl, covar, "sex", y~Q1+Q2+Q3,
-            covar=covar, method="hk")
+            method="hk")
 }
 
 \seealso{ \code{\link[qtl]{addint}}, \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},

@@ -1086,7 +1086,7 @@ function(formula, qtlnum)
 # analysis.  
 ######################################################################
 addcovarint <-
-function(cross, pheno.col=1, qtl, covar=NULL, formula, icovar,
+function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
          method=c("imp","hk"), verbose=TRUE, pvalues=TRUE)
 {
   if( !("cross" %in% class(cross)) )
@@ -1129,6 +1129,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, icovar,
 
   if(missing(icovar))
     stop("Must include icovar (the covariate to consider in interactions)")
+
   if(!is.character(icovar) || any(is.na(match(icovar, colnames(covar)))))
     stop("icovar must be a vector of character strings corresonding to columns in covar.")
 

@@ -4,6 +4,8 @@
 add.cim.covar           Indicate marker covariates from composite
                         interval mapping
 add.threshold           Add significance threshold to plot
+addcovarint             Add QTL x covariate interaction to a
+                        multiple-QTL model
 addint                  Add pairwise interaction to a multiple-QTL
                         model
 addpair                 Scan for an additional pair of QTL in a
