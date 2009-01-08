@@ -1,12 +1,12 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-8, Karl W Broman
+copyright (c) 2001-9, Karl W Broman
 Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 12/23/2008:
+Version 1.10, 1/8/2009:
 
 Major changes:
 
@@ -106,6 +106,9 @@ Minor changes:
   Slight change to countqtlterms(), used by stepwiseqtl(), to skip the
   parsing of interactions in the case that there are 0 or 1
   interactions; this might speed things up slightly.
+
+  Fixed a slight with plotModel; the lines indicating interactions
+  were a bit askew.
 
   Slight changes in ripple and bayesint, changing use of rev(order(.))
   to order(., decreasing=TRUE)

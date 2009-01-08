@@ -1,8 +1,8 @@
 ######################################################################
 # plotModel.R
 #
-# copyright (c) 2008, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2008-9, Karl W Broman
+# last modified January, 2009
 # first written Apr, 2008
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -105,33 +105,13 @@ function(qtl, formula, circrad.rel=0.25, circrad.abs,
       for(i in intxn) {
         thisint <- strsplit(i, ":")[[1]]
         theseqtl <- as.numeric(substr(thisint, 2, nchar(thisint)))
-
-        thex <- xloc[theseqtl]
-        they <- yloc[theseqtl]
-        m <- diff(they)/diff(thex)
-        dx <- circrad.abs[1]*cos(atan(m))
-        dy <- circrad.abs[2]*sin(atan(m))
-
-        if(thex[1] > thex[2]) {
-          dx <- dx * c(-1,1)
-          dy <- dy * c(-1,1)
-        }
-        else {
-          dx <- dx * c(1,-1)
-          dy <- dy * c(1,-1)
-        }
-
-        if(thex[1] < thex[2]) thex <- thex + dx
-        else thex <- thex + dx
-        if(they[1] < they[2]) they <- they + dy
-        else they <- they + dy
-
-        lines(thex, they, lwd=2)
+        lines(xloc[theseqtl], yloc[theseqtl], lwd=2)
       }
     }
 
-    for(i in seq(along=xloc))
-      lines(xloc[i]+cos(rad)*circrad.abs[1], yloc[i]+sin(rad)*circrad.abs[2], lwd=2)
+    for(i in seq(along=xloc)) 
+      polygon(xloc[i]+cos(rad)*circrad.abs[1], yloc[i]+sin(rad)*circrad.abs[2], col="white", border="black", lwd=2)
+
     text(xloc, yloc, qtl, cex=cex.name)
   }
   

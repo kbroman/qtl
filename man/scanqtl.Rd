@@ -116,7 +116,7 @@ image(chr1, chr8, t(result), las=1, col=rev(rainbow(256,start=0,end=2/3)))
 
 # do the same, allowing the QTLs on chr 1 and 13 to interact
 result2 <- scanqtl(fake.f2, pheno.col=1, chr=qc, pos=pos,
-                   formula=y~Q1+Q2+Q3+Q1:Q3)
+                   formula=y~Q1+Q2+Q3+Q1:Q3, method="hk")
 # image plot
 image(chr1, chr8, t(result2), las=1, col=rev(rainbow(256,start=0,end=2/3)))
 }
