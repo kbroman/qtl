@@ -12,7 +12,8 @@ SHORT TERM:
 
 o qtl x covar interactions in stepwiseqtl
 
-o special treatment of X chromosome in scanone and in stepwiseqtl?
+o special treatment of X chromosome in scantwo permutations and in
+  stepwiseqtl 
 
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
