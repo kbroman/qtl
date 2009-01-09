@@ -6,12 +6,12 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.10, 1/8/2009:
+Version 1.10, 1/9/2009:
 
 Major changes:
 
-  Revised the way that the 'chr' argument in functions such as
-  scanone, scantwo, etc., to give greater consitency.  Numbers are
+  Revised the way that the 'chr' argument is treated in functions such
+  as scanone, scantwo, etc., to give greater consitency.  Numbers are
   interpreted as character strings to be matched to the chromosome
   names.  Negative numbers and character strings that start with "-"
   are interpreted as omitting the corresponding chromosomes, matched
@@ -40,11 +40,16 @@ Major changes:
 
 Minor changes:
 
+  Created functions replacemap.scanone and replacemap.scantwo, which
+  enable one to plot scanone or scantwo results relative to another
+  map (with positions interpolated based on marker locations).  These
+  can be used, for example, so that one may plot scanone or scantwo
+  results relative to a physical map.  
+   
   Added a function replacemap.cross, which is the same as the long
-  extant function replace.map.  This is so that I can create similar
-  functions replacemap.scanone and replacemap.scantwo, which will
-  enable one to plot scanone or scantwo results relative to a physical
-  map.
+  extant function replace.map.  This was so that I could the functions
+  replacemap.scanone and replacemap.scantwo (see above).  All can be
+  used with the 'generic' function replacemap.
 
   Revised the functions nchr, nmar, totmar, so that they work for map
   objects as well as cross objects.  Separated the help files for
@@ -78,21 +83,22 @@ Minor changes:
   Revised est.map so that the chromosomes are given classes "A" or "X"
   according to the chromosome types in the input cross object.
 
-  Revised geno.crosstab to deal consider partially informative
-  genotypes in an intercross or 4-way cross.  Added an argument so
-  that (by default) columns and rows with no data will not be printed.
+  Revised geno.crosstab to deal with partially informative genotypes
+  in an intercross or 4-way cross.  Added an argument so that (by
+  default) columns and rows with no data will not be printed.
 
-  Revised comparegeno to have the option what="both", the result has
-  the proportion of matches in the lower triangle and the number of
-  matches in the upper triangle.  Also, now if what="proportion" the
-  diagonal has all missing values (rather than all 1's); otherwise the
-  diagonal contains the number of typed markers for each individual.
+  Revised comparegeno to have the option what="both", through which
+  the result has the proportion of matches in the lower triangle and
+  the number of matches in the upper triangle.  Also, now if
+  what="proportion" the diagonal has all missing values (rather than
+  all 1's); otherwise the diagonal contains the number of typed
+  markers for each individual.
 
   Revised movemarker so that one can move a marker onto a totally new
   chromosome. 
 
   Revised sim.cross so that if the input map object has no chromosome
-  names, the chromosomes still have names.  
+  names, the chromosomes in the output cross object still have names.
 
   Revised summary.cross to give a warning if the chromosomes are not
   named. 
