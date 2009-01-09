@@ -1063,7 +1063,6 @@ function(x, chr, ind, ...)
         stop("ind should be logical or numeric")
       if(all(ind < 0))
         ind <- (1:n.ind)[ind]
-      cat("hi\n")
       if(any(ind < 1 | ind > n.ind))
         stop("individuals outside 1 and ", n.ind)
     }
