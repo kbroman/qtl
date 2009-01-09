@@ -21,6 +21,14 @@ Major changes:
   "1", "3", "4", using chr=2 will result in an error, while chr=3 will
   give the second chromosome (named "3").
 
+  Also revised the way that the 'ind' argument is treated in
+  subset.cross and plot.geno, in the case that the input cross
+  contains individual identifiers in the phenotype data.  The 'ind'
+  argument can still be a logical vector, but otherwise we first seek
+  to match the values against individual identifiers.  For identifiers
+  that are character strings, one may use "-" at the beginning of each
+  to indicate all individuals except those given.
+
   Added an argument 'batchsize' to scanone and scantwo, so that in the
   case that multiple phenotypes (or permutations) are to be run as a
   batch (with method "hk" or "imp"), they can be run in smaller

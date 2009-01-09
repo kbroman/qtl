@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-8, Karl W Broman
+# copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2008
+# last modified Jan, 2009
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -1017,17 +1017,56 @@ function(x, chr, ind, ...)
         stop("If logical, ind argument must have length ", n.ind)
       ind <- (1:n.ind)[ind]
     }
-        
-    if(is.numeric(ind)) {
-      ind <- ind[!is.na(ind)]
 
-      # if all negative numbers, convert to positive
-      if(all(ind < 1)) ind <- (1:n.ind)[ind]
-        
-      if(any(ind < 1 | ind > n.ind))
-        stop("Individual numbers out of range.")
+    theid <- getid(x)
+
+    if(!is.null(theid)) { # cross has individual IDs
+      if(is.numeric(ind)) {
+        if(all(ind < 0)) {
+          ind <- -ind
+          if(any(is.na(match(ind, theid)))) # treat as numbers
+            ind <- (1:n.ind)[-ind]
+          else
+            ind <- ind[-match(ind, theid)]
+        }
+        else {
+          if(all(!is.na(match(ind, theid))))
+            ind <- match(ind, theid)
+          else {
+            if(any(ind < 1 | ind > n.ind))
+              stop("individuals outside 1 and ", n.ind)
+          }
+        }
+      }
+      else {
+        ind <- as.character(ind)
+        if(all(substr(ind, 1,1) == "-")) {
+          ind <- substr(ind, 2, nchar(ind))
+          m <- match(ind, theid)
+          if(all(is.na(m)))
+            stop("No matching individuals.")
+          if(any(is.na(m)))
+            warning("Individuals not found: ", paste(ind[is.na(m)]))
+          ind <- (1:n.ind)[-m[!is.na(m)]]
+        }
+        else  {
+          m <- match(ind, theid)
+          if(any(is.na(m)))
+            warning("Individuals not found: ", paste(ind[is.na(m)], collapse=" "))
+          ind <- m[!is.na(m)]
+        }
+      }
+      ind <- ind[!is.na(ind)]
     }
-    else stop("ind argument must be either logical or numeric.")
+    else { # no individual IDs
+      if(!is.numeric(ind))
+        stop("ind should be logical or numeric")
+      if(all(ind < 0))
+        ind <- (1:n.ind)[ind]
+      cat("hi\n")
+      if(any(ind < 1 | ind > n.ind))
+        stop("individuals outside 1 and ", n.ind)
+    }
     # Note: ind should now be a numeric vector
 
     if(length(ind) == 0)
