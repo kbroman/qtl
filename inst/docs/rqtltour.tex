@@ -38,7 +38,7 @@ University of Wisconsin -- Madison
 \href{http://www.rqtl.org}{http://www.rqtl.org}
 \vspace{2mm}
 
-18 July 2008 % the date
+9 January 2009 % the date
 
 \rule{7.0in}{1mm} 
 \end{center}
@@ -1578,7 +1578,7 @@ the 7$\times$15 interaction is not.
 
   The sort of plots we made before remain interesting.
 
-\usercolor \verb|plot(out2.c4, chr=c(1,4,6,7,15))| \\
+\usercolor \verb|plot(out2.c4)| \\
 \verb|plot(out2.c4, chr=1, lower="cond-int")| \\
 \verb|plot(out2.c4, chr=c(6,15), lower="cond-int")| \\
 \verb|plot(out2.c4, chr=c(7,15), lower="cond-int")| \normalcolor
@@ -1837,8 +1837,7 @@ interaction is not tested.
   position.  One must provide the index of the QTL to be replaced.
 
 \usercolor
-\verb|qtl4 <- replaceqtl(hyper, qtl3, indextodrop=1, chr=1, pos=50)|
-\\
+\verb|qtl4 <- replaceqtl(hyper, qtl3, indextodrop=1, chr=1, pos=50)| \\
 \verb|qtl4|
 \normalcolor
 
@@ -1846,7 +1845,7 @@ interaction is not tested.
   QTL object.
 
 \usercolor
-\verb|qtl5 <- reorderqtl(qtl4, c(1:4,6,5))| \\
+\verb|qtl5 <- reorderqtl(qtl4, c(1:3,5,4))| \\
 \verb|qtl5|
 \normalcolor
 

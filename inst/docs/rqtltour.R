@@ -6,7 +6,7 @@
 #
 # http://www.rqtl.org
 #
-# 18 July 2008
+# 9 January 2009
 ##############################################################
 
 save.image()
@@ -336,7 +336,7 @@ summary(out2.c4, thr=c(6.0, 4.7, Inf, 4.7, 2.6))
 summary( subset(out2.c4, chr=1) )
 summary( subset(out2.c4, chr=c(7,15)) )
 
-plot(out2.c4, chr=c(1,4,6,7,15))
+plot(out2.c4)
 plot(out2.c4, chr=1, lower="cond-int")
 plot(out2.c4, chr=c(6,15), lower="cond-int")
 plot(out2.c4, chr=c(7,15), lower="cond-int")
@@ -396,10 +396,9 @@ qtl3 <- dropfromqtl(qtl2, index=2)
 qtl3
 
 qtl4 <- replaceqtl(hyper, qtl3, indextodrop=1, chr=1, pos=50)
-
 qtl4
 
-qtl5 <- reorderqtl(qtl4, c(1:4,6,5))
+qtl5 <- reorderqtl(qtl4, c(1:3,5,4))
 qtl5
 
 stepout.a <- stepwiseqtl(hyper, additive.only=TRUE, max.qtl=6)

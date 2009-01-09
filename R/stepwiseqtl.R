@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-8, Karl W Broman
-# last modified Dec, 2008
+# copyright (c) 2007-9, Karl W Broman
+# last modified Jan, 2009
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -129,7 +129,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     else
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
   }
-  if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+
+  if(!missing(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
   }    
