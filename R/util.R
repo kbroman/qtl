@@ -1014,7 +1014,7 @@ function(x, chr, ind, ...)
     if(is.logical(ind)) {
       ind[is.na(ind)] <- FALSE
       if(length(ind) != n.ind) 
-        stop("If logical, ind argument must have length ", n.ind)
+        stop("ind argument has wrong length (", length(ind), "; should be ", n.ind, ")")
       ind <- (1:n.ind)[ind]
     }
 
@@ -1024,8 +1024,11 @@ function(x, chr, ind, ...)
       if(is.numeric(ind)) {
         if(all(ind < 0)) {
           ind <- -ind
-          if(any(is.na(match(ind, theid)))) # treat as numbers
+          if(any(is.na(match(ind, theid)))) { # treat as numbers
+            if(any(ind < 1 | ind > n.ind))
+              stop("individuals outside 1 and ", n.ind)
             ind <- (1:n.ind)[-ind]
+          }
           else
             ind <- ind[-match(ind, theid)]
         }
@@ -1060,7 +1063,7 @@ function(x, chr, ind, ...)
     }
     else { # no individual IDs
       if(!is.numeric(ind))
-        stop("ind should be logical or numeric")
+        stop("In the absense of individual IDs, ind should be logical or numeric.")
       if(all(ind < 0))
         ind <- (1:n.ind)[ind]
       if(any(ind < 1 | ind > n.ind))
