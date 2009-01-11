@@ -218,12 +218,13 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
 \references{
   Manichaikul, A., Moon, J. Y., Sen, \'S, Yandell, B. S. and Broman,
-  K. W. (in prep) A model selection approach for the identification of
-  quantitative trait loci in experimental crosses allowing epistasis.
+  K. W. (2009) A model selection approach for the identification of
+  quantitative trait loci in experimental crosses, allowing
+  epistasis. \emph{Genetics}, to appear.
 
   Broman,  K. W. and Speed, T. P. (2002) A model selection approach for the
   identification of quantitative trait loci in experimental crosses (with
-  discussion). \emph{J Roy Stat Soc B} \bold{64}, 641--656, 731--775
+  discussion). \emph{J Roy Stat Soc B} \bold{64}, 641--656, 731--775.
 
   Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping
   quantitative trait loci in line crosses using flanking markers.

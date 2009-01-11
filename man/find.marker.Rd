@@ -27,7 +27,7 @@
 }
 
 \details{
-  Provide one of \code{pos} or \index{index}.
+  Provide one of \code{pos} or \code{index}.
 
   If the input \code{chr} has length one, it is expanded to the same
   length as the input \code{pos} or \code{index}.

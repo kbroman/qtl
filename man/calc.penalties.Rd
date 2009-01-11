@@ -69,8 +69,9 @@ calc.penalties(permo.2dim)
 
 \references{
   Manichaikul, A., Moon, J. Y., Sen, \'S, Yandell, B. S. and Broman,
-  K. W. (in prep) A model selection approach for the identification of
-  quantitative trait loci in experimental crosses allowing epistasis.
+  K. W. (2009) A model selection approach for the identification of
+  quantitative trait loci in experimental crosses, allowing
+  epistasis. \emph{Genetics}, to appear.
 }
 
 \seealso{ \code{\link[qtl]{scantwo}}, \code{\link[qtl]{stepwiseqtl}} }
