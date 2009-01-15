@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-8, Karl W Broman
+# copyright (c) 2000-9, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Aug, 2008
+# last modified Jan, 2009
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -277,6 +277,9 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
   
   if(!any(class(map)=="map")  || (!missing(map2) && !any(class(map2) == "map")))
     stop("Input should have class \"cross\" or \"map\".")
+
+  if(!missing(map2) && is.matrix(map[[1]]) != is.matrix(map2[[1]]))
+      stop("Maps must be both sex-specific or neither sex-specific.")
 
   if(!missing(chr)) {
     map <- map[matchchr(chr, names(map))]

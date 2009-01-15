@@ -6,6 +6,18 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
+Version 1.11, 1/15/2009:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added a more clear error message in plot.map in the case that a
+  sex-specific map and a sex-averaged map are input.
+
+
 Version 1.10, 1/11/2009:
 
 Major changes:
