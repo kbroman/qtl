@@ -2,8 +2,8 @@
 #
 # makeqtl.R
 #
-# copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Aug, 2008
+# copyright (c) 2002-9, Hao Wu and Karl W. Broman
+# last modified Feb, 2009
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -547,12 +547,12 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
       x$name <- x$altname
 
     if(horizontal) {
-      arrows(thepos, whchr - 0.25, thepos, whchr, lwd=2, col="red", len=0.1)
-      text(thepos, whchr-0.5, x$name, col="red")
+      arrows(thepos, whchr - 0.35, thepos, whchr, lwd=2, col="red", len=0.05)
+      text(thepos, whchr-0.4, x$name, col="red", adj=c(0.5,0))
     }
     else {
-      arrows(whchr + 0.25, thepos, whchr, thepos, lwd=2, col="red", len=0.1)
-      text(whchr+0.5, thepos, x$name, col="red")
+      arrows(whchr + 0.35, thepos, whchr, thepos, lwd=2, col="red", len=0.05)
+      text(whchr+0.4, thepos, x$name, col="red", adj=c(0,0.5))
     }
   }
 

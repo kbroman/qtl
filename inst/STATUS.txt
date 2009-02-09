@@ -17,6 +17,9 @@ Minor changes:
   Added a more clear error message in plot.map in the case that a
   sex-specific map and a sex-averaged map are input.
 
+  Slight change in plot.qtl, regarding placement of text and size of
+  arrows. 
+
 
 Version 1.10, 1/11/2009:
 
