@@ -6,7 +6,7 @@
 #
 # http://www.rqtl.org
 #
-# 9 January 2009
+# 10 February 2009
 ##############################################################
 
 save.image()
@@ -395,7 +395,7 @@ qtl2
 qtl3 <- dropfromqtl(qtl2, index=2)
 qtl3
 
-qtl4 <- replaceqtl(hyper, qtl3, indextodrop=1, chr=1, pos=50)
+qtl4 <- replaceqtl(hyper, qtl3, index=1, chr=1, pos=50)
 qtl4
 
 qtl5 <- reorderqtl(qtl4, c(1:3,5,4))

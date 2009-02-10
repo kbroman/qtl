@@ -9,20 +9,20 @@
 }
 
 \usage{
-replaceqtl(cross, qtl, indextodrop, chr, pos, qtl.name, drop.lod.profile=TRUE)
+replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 }
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
  \item{qtl}{A qtl object, as created by \code{\link[qtl]{makeqtl}}.}
- \item{indextodrop}{Numeric index indicating the QTL to be replaced.}
- \item{chr}{Vector (of same length as \code{indextodrop}) indicating the
+ \item{index}{Numeric index indicating the QTL to be replaced.}
+ \item{chr}{Vector (of same length as \code{index}) indicating the
    chromosomes for the new QTL.} 
- \item{pos}{Vector (of same length as \code{indextodrop}) indicating the
+ \item{pos}{Vector (of same length as \code{index}) indicating the
    positions for the new QTL. If there is no marker or pseudomarker at a
  position, the nearest position is used.} 
- \item{qtl.name}{Optional vector (of same length as \code{indextodrop})
+ \item{qtl.name}{Optional vector (of same length as \code{index})
    of user-specified names for each new QTL, used in the
    drop-one-term ANOVA table in \code{\link[qtl]{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a

@@ -219,18 +219,18 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
 #
 ######################################################################
 replaceqtl <-
-function(cross, qtl, indextodrop, chr, pos, qtl.name, drop.lod.profile=TRUE)
+function(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
   if(class(qtl) != "qtl")
     stop("qtl should have class \"qtl\".")
 
-  if(any(indextodrop < 1 | indextodrop > qtl$n.qtl))
-    stop("indextodrop should be between 1 and ", qtl$n.qtl)
+  if(any(index < 1 | index > qtl$n.qtl))
+    stop("index should be between 1 and ", qtl$n.qtl)
 
-  if(length(indextodrop) != length(chr) || length(indextodrop) != length(pos))
-    stop("indextodrop, chr, and pos should all have the same length.")
-  if(!missing(qtl.name) && length(indextodrop) != length(qtl.name))
-    stop("indextodrop and qtl.name should have the same length.")
+  if(length(index) != length(chr) || length(index) != length(pos))
+    stop("index, chr, and pos should all have the same length.")
+  if(!missing(qtl.name) && length(index) != length(qtl.name))
+    stop("index and qtl.name should have the same length.")
     
   if("geno" %in% names(qtl)) what <- "draws"
   else what <- "prob"
@@ -241,19 +241,19 @@ function(cross, qtl, indextodrop, chr, pos, qtl.name, drop.lod.profile=TRUE)
     newqtl <- makeqtl(cross, chr, pos, qtl.name=qtl.name, what=what)
   
   if(what=="draws") {
-    qtl$geno[,indextodrop,] <- newqtl$geno
+    qtl$geno[,index,] <- newqtl$geno
   }
   else {
-    qtl$prob[indextodrop] <- newqtl$prob
+    qtl$prob[index] <- newqtl$prob
   }
 
-  qtl$name[indextodrop] <- newqtl$name
-  qtl$chr[indextodrop] <- newqtl$chr
-  qtl$pos[indextodrop] <- newqtl$pos
+  qtl$name[index] <- newqtl$name
+  qtl$chr[index] <- newqtl$chr
+  qtl$pos[index] <- newqtl$pos
 
   if(qtl$n.ind != newqtl$n.ind) stop("Mismatch in no. individuals")
 
-  qtl$n.gen[indextodrop] <- newqtl$n.gen
+  qtl$n.gen[index] <- newqtl$n.gen
 
   if(drop.lod.profile)
     attr(qtl, "lodprofile") <- NULL

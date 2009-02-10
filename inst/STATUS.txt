@@ -14,6 +14,9 @@ Major changes:
 
 Minor changes:
 
+  In replaceqtl, changed the argument "indextodrop" to just "index",
+  as in dropfromqtl.
+
   Added a more clear error message in plot.map in the case that a
   sex-specific map and a sex-averaged map are input.
 
