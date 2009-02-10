@@ -2,8 +2,8 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-8, Hao Wu and Karl W. Broman
-# last modified Dec, 2008
+# copyright (c) 2007-9, Karl W. Broman
+# last modified Feb, 2009
 # first written Nov, 2007
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -222,7 +222,7 @@ function(x, ...)
   cat("Model formula:")
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
-  cat("\n\n")
+  cat("\n")
 
   cat("Add one pairwise interaction at a time table:\n")
   cat("--------------------------------------------\n")
@@ -1288,7 +1288,7 @@ function(x, ...)
   cat("Model formula:")
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
-  cat("\n\n")
+  cat("\n")
 
   cat("Add one QTL x covar interaction at a time table:\n")
   cat("--------------------------------------------\n")

@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Dec, 2008
+# copyright (c) 2002-9, Hao Wu and Karl W. Broman
+# last modified Feb, 2009
 # first written Apr, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -864,7 +864,7 @@ print.summary.fitqtl <- function(x, ...)
   cat("Model formula:")
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
-  cat("\n\n")
+  cat("\n")
   
   pval <- attr(x, "pvalues")
   if(is.null(pval) || pval)

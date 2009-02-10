@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.11, 1/15/2009:
+Version 1.11, 2/10/2009:
 
 Major changes:
 
@@ -19,6 +19,9 @@ Minor changes:
 
   Slight change in plot.qtl, regarding placement of text and size of
   arrows. 
+
+  In summary.fitqtl, print.addint, and print.addcovarint, eliminated
+  an extraneous blank line after the model formula.
 
 
 Version 1.10, 1/11/2009:
