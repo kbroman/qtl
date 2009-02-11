@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-9, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Jan, 2009
+# last modified Feb, 2009
 # first written Mar, 2000
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -689,6 +689,13 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     }
   }
 
+  # check for 'main' in the ...
+  args <- list(...)
+  if("main" %in% names(args))
+    themain <- args$main
+  else
+    themain <- paste("Chromosome",names(cross$geno)[1])
+
   if(type=="4way") {
     jit <- 0.15
     mdata <- data
@@ -706,7 +713,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
     if(horizontal) {
       plot(0,0,type="n",xlab="Location (cM)",ylab="Individual",
-           main=paste("Chromosome",names(cross$geno)[1]),
+           main=themain,
            ylim=c(n.ind+1,0),xlim=c(0,max(map)), yaxt="n", yaxs="i")
       segments(0, 1:n.ind-jit, max(map), 1:n.ind-jit)
       segments(0, 1:n.ind+jit, max(map), 1:n.ind+jit)
@@ -786,7 +793,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     }
     else {
       plot(0,0,type="n",ylab="Location (cM)",xlab="Individual",
-           main=paste("Chromosome",names(cross$geno)[1]),
+           main=themain,
            xlim=c(0,n.ind+1),ylim=c(max(map),0), xaxt="n", xaxs="i")
 
       segments(1:n.ind-jit, 0, 1:n.ind-jit, max(map))
@@ -874,7 +881,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
     if(horizontal) {
       plot(0,0,type="n",xlab="Location (cM)",ylab="Individual",
-           main=paste("Chromosome",names(cross$geno)[1]),
+           main=themain,
            ylim=c(n.ind+0.5,0.5),xlim=c(0,max(map)), yaxt="n")
       segments(0, 1:n.ind, max(map), 1:n.ind)
       if(use.id) axis(side=2, at=1:n.ind, labels=id)
@@ -925,7 +932,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     }
     else {
       plot(0,0,type="n",ylab="Location (cM)",xlab="Individual",
-           main=paste("Chromosome",names(cross$geno)[1]),
+           main=themain,
            xlim=c(0.5,n.ind+0.5),ylim=c(max(map),0), xaxt="n")
       segments(1:n.ind,0,1:n.ind,max(map))
       if(use.id) axis(side=1, at=1:n.ind, labels=id)
@@ -1069,35 +1076,69 @@ function(x,chr,method=c("both","entropy","variance"), step=1,
 
   class(results) <- c("scanone","data.frame")
 
-  # check whether gap was included as an argument
   args <- list(...)
+  # check whether main was included as an argument
+  if("main" %in% names(args)) hasmain <- TRUE
+  else hasmain <- FALSE
+
+  # check whether gap was included as an argument
   if(!("gap" %in% names(args))) {
-    if(method==0)
-      plot.scanone(results,ylim=c(0,1),gap=gap,
-                   main="Missing information",
-                   alternate.chrid=alternate.chrid,...)
-    else if(method==1)
-      plot.scanone(results,ylim=c(0,1),gap=gap,
-                   main="Missing information",
-                   alternate.chrid=alternate.chrid,...)
-    else if(method==2)
-      plot.scanone(results,results,lodcolumn=1:2,ylim=c(0,1),gap=gap,
-                   main="Missing information",
-                   alternate.chrid=alternate.chrid,...)
+    if(method==0) {
+      if(hasmain)
+        plot.scanone(results,ylim=c(0,1),gap=gap,
+                     alternate.chrid=alternate.chrid,...)
+      else
+        plot.scanone(results,ylim=c(0,1),gap=gap,
+                     main="Missing information",
+                     alternate.chrid=alternate.chrid,...)
+    }
+    else if(method==1) {
+      if(hasmain)
+        plot.scanone(results,ylim=c(0,1),gap=gap,
+                     alternate.chrid=alternate.chrid,...)
+      else
+        plot.scanone(results,ylim=c(0,1),gap=gap,
+                     main="Missing information",
+                     alternate.chrid=alternate.chrid,...)
+    }
+    else if(method==2) {
+      if(hasmain) 
+        plot.scanone(results,results,lodcolumn=1:2,ylim=c(0,1),gap=gap,
+                     alternate.chrid=alternate.chrid,...)
+      else
+        plot.scanone(results,results,lodcolumn=1:2,ylim=c(0,1),gap=gap,
+                     main="Missing information",
+                     alternate.chrid=alternate.chrid,...)
+    }
   }
   else { # gap was included in ...
-    if(method==0)
-      plot.scanone(results,ylim=c(0,1),
-                   main="Missing information",
-                   alternate.chrid=alternate.chrid,...)
-    else if(method==1)
-      plot.scanone(results,ylim=c(0,1),
-                   main="Missing information",
-                   alternate.chrid=alternate.chrid,...)
-    else if(method==2)
-      plot.scanone(results,results,lodcolumn=1:2,ylim=c(0,1),
-                   main="Missing information",
-                   alternate.chrid=alternate.chrid,...)
+    if(method==0) {
+      if(hasmain)
+        plot.scanone(results,ylim=c(0,1),
+                     alternate.chrid=alternate.chrid,...)
+      else
+        plot.scanone(results,ylim=c(0,1),
+                     main="Missing information",
+                     alternate.chrid=alternate.chrid,...)
+    }
+    else if(method==1) {
+      if(hasmain)
+        plot.scanone(results,ylim=c(0,1),
+                     alternate.chrid=alternate.chrid,...)
+      else
+        plot.scanone(results,ylim=c(0,1),
+                     main="Missing information",
+                     alternate.chrid=alternate.chrid,...)
+    }
+    else if(method==2) {
+      if(hasmain)
+        plot.scanone(results,results,lodcolumn=1:2,ylim=c(0,1),
+                     alternate.chrid=alternate.chrid,...)
+      else
+        plot.scanone(results,results,lodcolumn=1:2,ylim=c(0,1),
+                     main="Missing information",
+                     alternate.chrid=alternate.chrid,...)
+    }
   }
 
   invisible(results)

@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.11, 2/10/2009:
+Version 1.11, 2/11/2009:
 
 Major changes:
 
@@ -14,11 +14,17 @@ Major changes:
 
 Minor changes:
 
+  In dropfromqtl, addtoqtl, replaceqtl, and reorderqtl, attributes
+  "formula" and "pLOD" are now stripped.
+
   In replaceqtl, changed the argument "indextodrop" to just "index",
   as in dropfromqtl.
 
   Added a more clear error message in plot.map in the case that a
   sex-specific map and a sex-averaged map are input.
+
+  In plot.info and plot.geno, we now allow one to use main as an
+  argument for producing a self-defined title.
 
   Slight change in plot.qtl, regarding placement of text and size of
   arrows. 

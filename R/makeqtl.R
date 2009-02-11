@@ -307,6 +307,9 @@ function(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
     stop("Mismatch in no. individuals")
   qtl$n.gen <- c(qtl$n.gen, newqtl$n.gen)
 
+  attr(qtl, "formula") <- NULL
+  attr(qtl, "pLOD") <- NULL
+
   if(drop.lod.profile)
     attr(qtl, "lodprofile") <- NULL
 
@@ -397,6 +400,9 @@ function(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
   }
   if("prob" %in% names(qtl))
     qtl$prob <- qtl$prob[idx]
+
+  attr(qtl, "formula") <- NULL
+  attr(qtl, "pLOD") <- NULL
 
   if(drop.lod.profile)
     attr(qtl, "lodprofile") <- NULL
@@ -556,6 +562,9 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
     }
   }
 
+  attr(qtl, "formula") <- NULL
+  attr(qtl, "pLOD") <- NULL
+
   invisible()
 }
 
@@ -598,6 +607,9 @@ function(qtl, neworder)
   qtl$chr <- qtl$chr[neworder]
   qtl$pos <- qtl$pos[neworder]
   
+  attr(qtl, "formula") <- NULL
+  attr(qtl, "pLOD") <- NULL
+
   if("lodprofile" %in% names(attributes(qtl))) {
     lodprof <- attr(qtl, "lodprofile")
     if(length(lodprof) == length(neworder))
