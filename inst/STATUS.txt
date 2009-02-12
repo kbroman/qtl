@@ -14,6 +14,12 @@ Major changes:
 
 Minor changes:
 
+  Revised write.cross so that it may write doubled haploid (type "dh")
+  data. 
+
+  Fixed a problem with movemarker regarding the treatment of
+  chromsome names.
+
   In dropfromqtl, addtoqtl, replaceqtl, and reorderqtl, attributes
   "formula" and "pLOD" are now stripped.
 

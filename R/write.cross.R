@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-8, Karl W Broman and Hao Wu
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman and Hao Wu
+# last modified Feb, 2009
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -191,8 +191,8 @@ write.cross.csv <-
 function(cross, filestem="data", digits=5, rotate=FALSE, split=FALSE)
 {
   type <- class(cross)[1]
-  if(type != "f2" && type != "bc" && type != "riself" && type != "risib")
-    stop("write.cross.csv only works for intercross, backcross and RI data.")
+  if(type != "f2" && type != "bc" && type != "riself" && type != "risib" && type != "dh")
+    stop("write.cross.csv only works for intercross, backcross, RI, and doubled haploid data.")
 
   if(!split) 
     file <- paste(filestem, ".csv", sep="")
@@ -226,6 +226,8 @@ function(cross, filestem="data", digits=5, rotate=FALSE, split=FALSE)
                  paste(alle[2],alle[2],sep=""),
                  paste("not ", alle[2],alle[2],sep=""),
                  paste("not ", alle[1],alle[1],sep=""))
+
+    if(type=="dh") alleles[2:3] <- alleles[3:2]
   }
   else alleles <- c("A","H","B","D","C")
 

@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jan, 2009
+# last modified Feb, 2009
 # first written Feb, 2001
 # Licensed under the GNU General Public License version 2 (June, 1991)
 # 
@@ -2164,6 +2164,7 @@ function(cross, marker, newchr, newpos)
       cross$geno[[chr]]$map <- cross$geno[[chr]]$map[-pos]
   }
 
+  if(is.numeric(newchr)) newchr <- as.character(newchr)
 
   if(!(newchr %in% names(cross$geno))) { # create a new chromosome
     n <- length(cross$geno)
