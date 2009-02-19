@@ -193,7 +193,7 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
     }
 
     # make qtl names
-    qtl.name <- paste( paste(chr,sep=""), round(pos,dig), sep="@")
+    qtl.name <- paste( paste(chr,sep=""), charround(pos,dig), sep="@")
   }
 
   # output object
