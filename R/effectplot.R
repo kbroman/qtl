@@ -2,8 +2,8 @@
 #
 # effectplot.R
 #
-# copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# Last modified Jul, 2008
+# copyright (c) 2002-9, Hao Wu and Karl W. Broman
+# Last modified Feb, 2009
 # first written Jul, 2002
 # Licensed under the GNU General Public License version 2 (June, 1991)
 #
@@ -65,15 +65,35 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
   # if marker genodata were given, this will be skipped
   ####################################################
   
+  # used for alternative print name for pseudomarkers
+  pm.pattern <- "^c.*\\.loc.*$" # pseudomarker names will be like "c1.loc10"
+  dig <- 1
+  step <- attr(cross$geno[[1]]$draws, "step")
+  if(!is.null(step)) {
+    if(step > 0) dig <- max(dig, -floor(log10(step)))
+  }
+  else {
+    stepw <- attr(cross$geno[[1]]$draws, "stepwidth")
+    if(!is.null(stepw) && stepw > 0) dig <- max(dig, -floor(log10(stepw)))
+  }
 
+  printname1 <- printname2 <- NULL
   # Get marker 1 genotype data
   if(missing(mark1)) { # no data given
     if(missing(mname1)) # no marker data or marker name, have to stop
       stop("Either mname1 or mark1 must be specified.")
     # get marker data according to marker name
     tmp <- effectplot.getmark(cross, mname1)
+    tmptmp <- attr(tmp, "mname")
+    if(!is.null(tmptmp)) mname1 <- tmptmp
     mark1 <- tmp$mark
     gennames1 <- tmp$genname
+
+    # perhaps alternative print name
+    if(length(grep(pm.pattern, mname1))>0) {
+      tmp <- find.pseudomarkerpos(cross, mname1, "draws")
+      printname1 <- paste(tmp[1,1], charround(tmp[1,2],dig), sep="@")
+    }
   }
   else {
     # make mark1 a matrix if it's not
@@ -84,14 +104,23 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     if(missing(mname1)) 
       mname1 <- "Marker 1"
   }
+  if(is.null(printname1)) printname1 <- mname1
 
   # Deal with marker 2
   if(!missing(mname2) || !missing(mark2)) {
     if(missing(mark2)) {
       # get marker data according to marker name
       tmp <- effectplot.getmark(cross, mname2)
+      tmptmp <- attr(tmp, "mname")
+      if(!is.null(tmptmp)) mname2 <- tmptmp
       mark2 <- tmp$mark
       gennames2 <- tmp$genname
+
+      # perhaps alternative print name
+      if(length(grep(pm.pattern, mname2))>0) {
+        tmp <- find.pseudomarkerpos(cross, mname2, "draws")
+        printname2 <- paste(tmp[1,1], charround(tmp[1,2],dig), sep="@")
+      }
     }
     else { # mark2 data is given
       # make mark2 a matrix if it's not
@@ -102,6 +131,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
       if(missing(mname2)) 
         mname2 <- "Marker 2"
     }
+    if(is.null(printname2)) printname2 <- mname2
   }
   else {
     mark2 <- NULL
@@ -235,7 +265,6 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
   means <- result$Means
   ses <- result$SEs
 
-  
   # assign column and row names
   if(is.null(mark2)) {
     if(length(means) != length(geno1)) {
@@ -245,8 +274,8 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
       else geno1 <- c(geno1, rep("?", length(means) - length(geno1)))
       ngen1 <- length(geno1)
     }
-    names(result$Means) <- paste(mname1, geno1, sep = ".")
-    names(result$SEs) <- paste(mname1, geno1, sep = ".")
+    names(result$Means) <- paste(printname1, geno1, sep = ".")
+    names(result$SEs) <- paste(printname1, geno1, sep = ".")
   }
   else {
     if(nrow(means) != length(geno1)) {
@@ -263,10 +292,10 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
       else geno2 <- c(geno2, rep("?", ncol(means) - length(geno2)))
       ngen2 <- length(geno2)
     }
-    rownames(result$Means) <- paste(mname1, geno1, sep = ".")
-    colnames(result$Means) <- paste(mname2, geno2, sep = ".")
-    rownames(result$SEs) <- paste(mname1, geno1, sep = ".")
-    colnames(result$SEs) <- paste(mname2, geno2, sep = ".")
+    rownames(result$Means) <- paste(printname1, geno1, sep = ".")
+    colnames(result$Means) <- paste(printname2, geno2, sep = ".")
+    rownames(result$SEs) <- paste(printname1, geno1, sep = ".")
+    colnames(result$SEs) <- paste(printname2, geno2, sep = ".")
   }
 
   # calculate lo's and hi's for plot
@@ -296,9 +325,9 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     # plot title
     if(missing(main)) {
       if(is.null(mark2)) 
-        main <- paste("Effect plot for", mname1)
-      else main <- paste("Interaction plot for", mname1, "and", 
-                         mname2)
+        main <- paste("Effect plot for", printname1)
+      else main <- paste("Interaction plot for", printname1, "and", 
+                         printname2)
     }
 
     # y axis limits
@@ -325,7 +354,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     xlimits <- c(1 - d/4, length(u) + d/4)
 
     if(is.null(mark2)) { # single marker
-      if(missing(xlab)) xlab <- mname1
+      if(missing(xlab)) xlab <- printname1
       if(missing(ylab)) ylab <- names(cross$pheno)[pheno.col]
       if(missing(col)) col <- "black"
 
@@ -352,7 +381,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
       axis(side=1, at=1:ngen1, labels=geno1)
     }
     else { # two markers
-      if(missing(xlab)) xlab <- mname2
+      if(missing(xlab)) xlab <- printname2
       if(missing(ylab)) ylab <- names(cross$pheno)[pheno.col]
       # plot the first genotype of marker 1
       plot(1:ngen2, means[1, ], main = main, xlab = xlab, 
@@ -395,7 +424,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
         y.leg2 <- a[4] - diff(a[3:4]) * 0.03
         legend(x.leg, y.leg, geno1, lty = 1, pch = 1, col = col, 
                cex = 1, xjust = 0.5)
-        if(missing(legend.lab)) legend.lab <- mname1
+        if(missing(legend.lab)) legend.lab <- printname1
         text(x.leg, y.leg2, legend.lab)
       }
     }
@@ -417,6 +446,18 @@ function (cross, mname)
   # return variables
   mark <- NULL
   gennames <- NULL
+
+  # for pseudomarkers refered to as "1@10.5":
+  #    - check that it is not a phenotype or marker name
+  #    - otherwise convert to the usual name via find.pseudomarker
+  pmalt.pattern <- "@-*[0-9]+" # alternate way to refer to a pseudomarker ("1@10.5")
+  if(length(grep(pmalt.pattern, mname))>0 && 
+    !(mname %in% names(cross$pheno) || mname %in% colnames(pull.geno(cross)))) {      
+    ss <- unlist(strsplit(mname, "@"))
+    if(!(ss[1] %in% names(cross$geno)))
+      stop("Don't understand the marker name ", mname)
+    mname <- find.pseudomarker(cross, ss[1], as.numeric(ss[2]), "draws")
+  }
 
   # determine marker type - it could be a marker, a pseudomarker or a phenotype
   mar.type <- "none"
@@ -441,7 +482,6 @@ function (cross, mname)
       stop("Couldn't find marker ", mname)
     else if(length(idx.pos)>1) # take the first one for multiple markers with the same name
       idx.pos <- idx.pos[1]
-    
   }
   else { # this is a real marker name but it could be a observed or imputed 
     for(i in 1:length(cross$geno)) {
@@ -509,7 +549,9 @@ function (cross, mname)
     mark <- matrix(mark, ncol=1)
   
   # return
-  list(mark=mark, gennames=gennames)
+  ret <- list(mark=mark, gennames=gennames)
+  attr(ret, "mname") <- mname
+  ret
 }
 
 ##############################################

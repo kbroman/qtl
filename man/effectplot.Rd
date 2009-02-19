@@ -23,7 +23,10 @@ effectplot(cross, pheno.col=1, mname1, mark1, geno1, mname2, mark2,
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
-  \item{mname1}{Name for the first marker or pseudomarker.}
+  \item{mname1}{Name for the first marker or pseudomarker.
+  Pseudomarkers (that is, non-marker positions on the imputation grid)
+  may be referred to in a form like \code{"5@30.3"}, for position 30.3
+  on chromosome 5.}
   \item{mark1}{Genotype data for the first marker.  If unspecified,
     genotypes will be taken from the data in the input cross object,
     using the name specified in \code{mname1}.}
@@ -100,6 +103,10 @@ mname2 <- find.marker(fake.f2, 13, 24) # marker D13M254
 effectplot(fake.f2, mname1=mname1, mname2=mname2)
 
 ### plot two pseudomarkers
+#####  refer to pseudomarkers by their positions
+effectplot(fake.f2, mname1="1@35", mname2="13@25")
+
+#####  alternatively, find their names via find.pseudomarker
 pmnames <- find.pseudomarker(fake.f2, chr=c(1, 13), c(35, 25))
 effectplot(fake.f2, mname1=pmnames[1], mname2=pmnames[2])
 

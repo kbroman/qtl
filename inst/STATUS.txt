@@ -10,7 +10,11 @@ Version 1.11, 2/19/2009:
 
 Major changes:
 
-  None.
+  Revised effectplot so that one may refer to "pseudomarkers" by their
+  chromosome and position with a construction like "5@32.8", rather
+  than having to first call find.pseudomarker to get the name.  Also,
+  in the actual plot, we use the form "5@32.8" rather than, for
+  example, "c5.loc47".
 
 Minor changes:
 
@@ -19,6 +23,11 @@ Minor changes:
 
   Fixed a problem with movemarker regarding the treatment of
   chromsome names.
+
+  Slight change to makeqtl so that QTL names of the form "5@30.0" have
+  ending 0's left in, if appropriate (so that if one QTL is referred
+  to as "1@12.23", then another like "5@30" will be given as
+  "5@30.00", so that all have equal precision.
 
   Added a function find.pseudomarkerpos for finding the position
   corresponding to a "pseudomarker" name (similar to find.markerpos).
