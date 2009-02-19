@@ -12,8 +12,7 @@ SHORT TERM:
 
 o Revise effectplot plot to (a) allow use of things like "1@50.3" to
   indicate pseudomarkers and (b) in the plot, give name of
-  pseudomarkers as in the above.  Also write a find.pseudomarkerpos
-  function.  
+  pseudomarkers as in the above.  
 
 o qtl x covar interactions in stepwiseqtl
 

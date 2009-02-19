@@ -2876,6 +2876,75 @@ function(cross, marker)
 
 
 ######################################################################
+# find the chromosome and position of a vector of pseudomarkers
+######################################################################
+find.pseudomarkerpos <-
+function(cross, marker, where=c("draws","prob"))
+{
+  if(length(marker) != length(unique(marker))) {
+    warning("Dropping duplicate pseudomarker names.")
+    marker <- unique(marker)
+  }
+
+  output <- data.frame(chr=rep("", length(marker)),
+                       pos=rep(NA, length(marker)))
+  output$chr <- as.character(output$chr)
+  rownames(output) <- marker
+  
+  where <- match.arg(where)
+  if(where=="draws" && !("draws" %in% names(cross$geno[[1]]))) 
+      stop("You'll need to first run sim.geno")
+  if(where=="prob" && !("prob" %in% names(cross$geno[[1]])))
+      stop("You'll need to first run calc.genoprob")
+      
+  themap <- vector("list", nchr(cross))
+  names(themap) <- names(cross$geno)
+  for(i in 1:nchr(cross)) {
+    if(where=="draws") 
+      themap[[i]] <- attr(cross$geno[[i]]$draws, "map")
+    else
+      themap[[i]] <- attr(cross$geno[[i]]$prob, "map")
+  }
+
+  chr <- rep(names(themap), sapply(themap, length))
+  if(!is.matrix(themap[[1]])) {
+    pmar <- unlist(lapply(themap, names))
+    pos <- unlist(themap)
+    onemap <- TRUE
+  }
+  else {
+    pos <- unlist(lapply(themap, function(a) a[1,]))
+    pos2 <- unlist(lapply(themap, function(a) a[2,]))
+    onemap <- FALSE
+    pmar <- unlist(lapply(themap, colnames))
+    output <- cbind(output, pos2=rep(NA, length(marker)))
+    colnames(output)[2:3] <- c("pos.female","pos.male")
+  }
+  whnotmarker <- grep("^loc-*[0-9]*", pmar)
+  pmar[whnotmarker] <- paste("c", chr[whnotmarker], ".", pmar[whnotmarker], sep="")
+  
+  for(i in seq(along=marker)) {
+    wh <- match(marker[i], pmar)
+    if(is.na(wh)) {
+      output[i,1] <- NA
+      output[i,2] <- NA
+    }
+    else {
+      if(length(wh) > 1) {
+        warning("Pseudomarker ", marker[i], " found multiple times.")
+        wh <- sample(wh, 1)
+      }
+      output[i,1] <- chr[wh]
+      output[i,2] <- pos[wh]
+      if(!onemap) output[i,3] <- pos2[wh]
+    }
+  }
+
+  output
+}
+
+
+######################################################################
 # utility function for determining whether pheno.col (as argument
 # to scanone etc) can be interpreted as a vector of phenotypes,
 # versus a vector of phenotype columns

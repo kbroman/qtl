@@ -19,6 +19,7 @@
 \alias{effectplot.getmark}
 \alias{effectplot.calmeanse}
 \alias{expandf2covar}
+\alias{find.pseudomarkerpos}
 \alias{fitqtlengine}
 \alias{fitstahl.estp}
 \alias{fitstahl.este}
@@ -155,6 +156,7 @@ dropXcol(type=c("f2","bc"), sexpgm, cross.attr)
 effectplot.getmark(cross, mname)
 effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled", "group"))
 expandf2covar(thecovar)
+find.pseudomarkerpos(cross, marker, where=c("draws", "prob"))
 fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
              dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr)
 fitstahl.estp(cross, error.prob=0.0001, m=0, tol=1e-4, maxit=4000)

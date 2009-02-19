@@ -6,7 +6,7 @@ Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
 ----------------------------------------------------------------------
 
-Version 1.11, 2/11/2009:
+Version 1.11, 2/19/2009:
 
 Major changes:
 
@@ -19,6 +19,9 @@ Minor changes:
 
   Fixed a problem with movemarker regarding the treatment of
   chromsome names.
+
+  Added a function find.pseudomarkerpos for finding the position
+  corresponding to a "pseudomarker" name (similar to find.markerpos).
 
   In dropfromqtl, addtoqtl, replaceqtl, and reorderqtl, attributes
   "formula" and "pLOD" are now stripped.
