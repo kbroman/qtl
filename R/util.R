@@ -25,7 +25,7 @@
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
-#           matchchr, convert2sa
+#           matchchr, convert2sa, charround
 #
 ######################################################################
 
@@ -3029,6 +3029,31 @@ function(map, tol=1e-4)
   
   class(fem) <- "map"
   fem
+}
+
+# round as character string, ensuring ending 0's are kept.
+charround <-
+function(x, digits=1)
+{
+  if(digits < 1) 
+    stop("This is intended for the case digits >= 1.")
+  
+  y <- as.character(round(x, digits))
+
+  z <- strsplit(y, "\\.")
+  sapply(z, function(a, digits)
+         {
+           if(length(a) == 1)
+             b <- paste(a[1], ".", paste(rep("0", digits),collapse=""), sep="")
+           else {
+             if(nchar(a[2]) == digits)
+               b <- paste(a, collapse=".")
+             else
+               b <- paste(a[1], ".", a[2],
+                          paste(rep("0", digits - nchar(a[2])), collapse=""),
+                          sep="")
+           }
+         }, digits)
 }
 
 # end of util.R

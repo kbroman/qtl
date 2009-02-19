@@ -23,6 +23,9 @@ Minor changes:
   Added a function find.pseudomarkerpos for finding the position
   corresponding to a "pseudomarker" name (similar to find.markerpos).
 
+  Added an internal function charround() for rounding numbers, turning
+  them into character strings with ending 0's preserved.
+
   In dropfromqtl, addtoqtl, replaceqtl, and reorderqtl, attributes
   "formula" and "pLOD" are now stripped.
 

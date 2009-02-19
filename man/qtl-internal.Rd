@@ -4,6 +4,7 @@
 \alias{calc.genoprob.special}
 \alias{calc.pairprob}
 \alias{calc.plod}
+\alias{charround}
 \alias{checkcovar}
 \alias{checkformula}
 \alias{checkStepwiseqtlStart}
@@ -139,6 +140,7 @@ calc.pairprob(cross, step=0, off.end=0, error.prob=0.0001,
               map.function=c("haldane","kosambi","c-f","morgan"), map,
               assumeCondIndep=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
+charround(x, digits=1)
 checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
 checkformula(formula, qtl.name, covar.name)
 checkStepwiseqtlStart(qtl, formula, covar=NULL)
