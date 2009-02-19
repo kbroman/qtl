@@ -10,6 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Revise effectplot plot to (a) allow use of things like "1@50.3" to
+  indicate pseudomarkers and (b) in the plot, give name of
+  pseudomarkers as in the above.  Also write a find.pseudomarkerpos
+  function.  
+
 o qtl x covar interactions in stepwiseqtl
 
 o special treatment of X chromosome in scantwo permutations and in
