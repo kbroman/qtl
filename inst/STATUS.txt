@@ -2,8 +2,20 @@
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
 copyright (c) 2001-9, Karl W Broman
-Licensed under the GNU General Public License version 2 (June, 1991)
 http://www.rqtl.org
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License, as
+    published by the Free Software Foundation; either version 2 of
+    the License, or (at your option) any later version. 
+
+    This program is distributed in the hope that it will be useful,
+    but without any warranty; without even the implied warranty of
+    merchantability or fitness for a particular purpose.  See the
+    GNU General Public License for more details.
+
+    A copy of the GNU General Public License is available at
+    http://www.r-project.org/Licenses/
 ----------------------------------------------------------------------
 
 Version 1.11, 2/19/2009:
@@ -17,6 +29,9 @@ Major changes:
   example, "c5.loc47".
 
 Minor changes:
+
+  Revised the software license statements throughout the source code
+  (and above), for clarity and consistency.
 
   Revised write.cross so that it may write doubled haploid (type "dh")
   data. 
