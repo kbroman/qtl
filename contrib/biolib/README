@@ -1,0 +1,4 @@
+This directory contains information for creating a shared library that can be
+linked against C and SWIG mappings for Perl, Ruby etc.
+
+See the BioLib project at http://biolib.open-bio.org/ for more information.
