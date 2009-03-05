@@ -71,6 +71,9 @@ Minor changes:
   In summary.fitqtl, print.addint, and print.addcovarint, eliminated
   an extraneous blank line after the model formula.
 
+  Added code from Pjotr Prins enabling R/qtl to be linked against Perl
+  and Ruby, as part of biolib.
+
 
 Version 1.10, 1/11/2009:
 
