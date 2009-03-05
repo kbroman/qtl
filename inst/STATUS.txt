@@ -18,7 +18,7 @@ http://www.rqtl.org
     http://www.r-project.org/Licenses/
 ----------------------------------------------------------------------
 
-Version 1.11, 2/19/2009:
+Version 1.11, 3/5/2009:
 
 Major changes:
 
@@ -49,6 +49,9 @@ Minor changes:
 
   Added an internal function charround() for rounding numbers, turning
   them into character strings with ending 0's preserved.
+
+  Fixed a slight bug in lodint() regarding the case of multiple
+  positions sharing the maximum LOD score.
 
   In dropfromqtl, addtoqtl, replaceqtl, and reorderqtl, attributes
   "formula" and "pLOD" are now stripped.

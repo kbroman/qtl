@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Feb, 2009
+# last modified Mar, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1914,10 +1914,21 @@ function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
   }
 
   rn <- rownames(results)[c(o[1],w,o[2])]
+
   # look for duplicate rows
+  if(length(w)>1 && rn[length(rn)]==rn[length(rn)-1]) w <- w[-length(w)]
+  else if(length(w)>1 && rn[2]==rn[1]) w <- w[-1]
+  rn <- rownames(results)[c(o[1],w,o[2])]
+  
+  # look for more duplicate rows
   if(any(table(rn)> 1)) {
-    rn[2] <- paste(rn[2], "")
-    if(rn[1] == rn[3]) rn[3] <- paste(rn[3], " ")
+    tab <- table(rn)
+    temp <- which(tab>1)
+    for(j in temp) {
+      z <- which(rn==names(tab)[j])
+      for(k in 2:length(z)) 
+        rn[z[k:length(z)]] <- paste(rn[z[k:length(z)]], " ", sep="")
+    }
   }
 
   results <- results[c(o[1],w,o[2]),]
