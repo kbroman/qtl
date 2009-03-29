@@ -10,10 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Revise effectplot plot to (a) allow use of things like "1@50.3" to
-  indicate pseudomarkers and (b) in the plot, give name of
-  pseudomarkers as in the above.  
-
 o qtl x covar interactions in stepwiseqtl
 
 o special treatment of X chromosome in scantwo permutations and in
@@ -26,11 +22,20 @@ o Add an explanation regarding the coding in the coefficient
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
 
+o In summary.scanone (and I suppose summary.scantwo), allow the
+  scanone output to have multiple columns but the perms to have just
+  one (e.g. for the case of rank-based analyses).  Ensure that the
+  perms are "recycled" and that the lodcolumn argument is treated
+  appropriately.
+
 o FAQ: - constructing covariate matrices
 
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o Better way to make use of ... in plot functions that allows
+  unmentioned defaults.
 
 o read.cross is slow loading when there are *lots* of phenotypes
 

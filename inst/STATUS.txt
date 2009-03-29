@@ -18,7 +18,7 @@ http://www.rqtl.org
     http://www.r-project.org/Licenses/
 ----------------------------------------------------------------------
 
-Version 1.11, 3/5/2009:
+Version 1.11, 3/29/2009:
 
 Major changes:
 
