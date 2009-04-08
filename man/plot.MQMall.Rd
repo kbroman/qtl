@@ -33,7 +33,6 @@ plot.MQMall(result = NULL, type = "C")
 }
 }
 \examples{
-	library(MQMpackage)			#load the MQM library
 	data(multitrait)
 	result <- scanMQMall(multitrait)
 	plot.MQMall(result,"P")

@@ -33,7 +33,6 @@ MQMCofactorsEach(cross = NULL, each = 3)
 }
 }
 \examples{
-library(MQMpackage)
 qtl <- c(3,15,3,7)						# QTL at chromosome 3
 data(map10)							# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross

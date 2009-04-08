@@ -36,7 +36,6 @@ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gm
 	}
 }
 \examples{
-	library(MQMpackage)
 	qtl <- c(3,15,3,7)							# QTL at chromosome 3
 	data(map10)								# Mouse genome
 	cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross

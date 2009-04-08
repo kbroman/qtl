@@ -1,6 +1,6 @@
 \name{scanMQMall}
 \alias{scanMQMall}
-
+\alias{mqmall}
 \title{ 
 	scanMQMall - Multitrait analysis of a cross object 
 }
@@ -57,7 +57,6 @@
 
 \examples{
 	#Doing a multitrait analysis
-	library(MQMpackage)
 	data(multitrait)
 	cof <- MQMCofactorsEach(multitrait,3)
 	result <- scanMQMall(multitrait,cofactors=cof,doLOG=1,b_size=3)

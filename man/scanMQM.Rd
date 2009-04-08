@@ -1,6 +1,6 @@
 \name{scanMQM}
 \alias{scanMQM}
-
+\alias{mqm}
 \title{ 
 	scanMQM - Multiple qtl mapping for inbred crosses 
 }
@@ -70,7 +70,6 @@ The phenotype under consideration is specified by the pheno.col argument of the 
 }
 \examples{
 #Simulated F2 Population
-library(MQMpackage)
 f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
@@ -78,7 +77,6 @@ f2result <- scanMQM(f2cross)				# Do a MQM scan of the genome
 lodint(f2result,chr=3)					# LOD interval of the QTL on chr 3
 
 #Simulated BC Population
-library(MQMpackage)
 bcqtl <- c(3,15,2)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 bccross <- sim.cross(map10,bcqtl,n=100,type="bc")	# Simulate a BC Cross

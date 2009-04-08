@@ -1,6 +1,5 @@
 \name{MQMpackage-package}
 \alias{MQMpackage}
-\alias{MQM}
 \docType{package}
 \title{
 	Tool for analyzing QTLs in experimental crosses
@@ -17,9 +16,8 @@
 }
 \details{
 	\tabular{ll}{
-	Package: \tab MQMpackage\cr
-	Version: \tab 1.0\cr
-	Date: \tab 30 January 2009\cr
+	Package: \tab MQMpackage, subpackage of the R/QTL package\cr
+	Date: \tab 2008-2009\cr
 	Depends: \tab R (>= 1.8.0), qtl\cr
 	License: \tab GPL version 2 or later\cr
 	LazyLoad: \tab yes\cr
@@ -40,7 +38,7 @@
 	ResultsFromMolgenis     ResultsFromMolgenis - Helperfunction to retrieve results from a molgenis database
 	ResultsToMolgenis       ResultsToMolgenis - Helperfunction to store results into a molgenis database
 	multitrait              Crossobject from R/QTL with multiple traits
-	PipelineMolgenis		Automatic MQM-QTL analysis for Molgenis database systems	
+	PipelineMolgenis	Automatic MQM-QTL analysis for Molgenis database systems	
 	}
 	Normal layout of MQM-QTL analysis
 	\itemize{
@@ -94,7 +92,6 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 	}
 }
 \examples{
-	library(MQMpackage)
 	data(multitrait)
 	mt_est <- MQMaugment(multitrait)
 	result <- scanMQM(mt_est)

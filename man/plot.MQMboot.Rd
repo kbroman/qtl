@@ -31,7 +31,6 @@ plot.MQMboot(result = NULL,\dots)
 }
 \examples{
 #Simulated F2 Population
-	library(MQMpackage)
 	f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
 	data(map10)                                             # Mouse genome
 	f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross

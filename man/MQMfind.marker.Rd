@@ -36,7 +36,6 @@ MQMfind.marker(cross = NULL, scanMQMres = NULL, perm = NULL, alpha = 0.05)
 }
 }
 \examples{
-library(MQMpackage)
 data(multitrait)				#Use the multitrait dataset
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
 result <- bootstrapMQM(multitrait,cofactors=cof,pheno.col=7,n.run=50,b_size=20,doLOG=1)	# Bootstrap 200 runs in batches of 20
