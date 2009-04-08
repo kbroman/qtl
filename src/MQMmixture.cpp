@@ -3,8 +3,11 @@
  * MQMmixture.cpp
  *
  * copyright (c) 2009 Danny Arends
- * last modified Mrt, 2009
+ * last modified Apr, 2009
  * first written Feb, 2009
+ *
+ * Original version R.C Janssen
+ * first written <2000 (unknown)
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License, as
