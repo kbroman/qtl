@@ -258,8 +258,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				}
 				why <- sim.geno(cross)
 				if(!is.null(qc) && model_present){
-					qtlplot <- makeqtl(why, qc, qp, qn, what="draws")
-					plot(qtlplot)
+					lala <- makeqtl(why, qc, qp, qn, what="draws")
+					plotqtlchr(lala)
 				}else{
 					op <- par(mfrow = c(1,1))
 				}
@@ -314,6 +314,5 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 
 #res <- scanMQM(cross,cof)
 #plot(res)
-
 
 # end of scanMQM.R
