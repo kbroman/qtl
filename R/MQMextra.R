@@ -54,7 +54,7 @@ paper.plotHYPER <- function(){
 	bb <- cim(hyper)
 	cc <- scanone(hyper)
 	plot(aa,bb,cc,chr=c(1,4,6),col=c("black","blue","red"),lwd=c(2,2,1),lty=c(1,6,1),main="Comparison QTL methodes: Dataset Hyper",ylab="LOD score")
-	legend("topright",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
+	legend("topleft",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
 }
 
 paper.plotListeria <- function(){
@@ -65,7 +65,7 @@ paper.plotListeria <- function(){
 	bb <- cim(listeria)
 	cc <- scanone(listeria)
 	plot(aa,bb,cc,chr=c(1,5,6,13),col=c("black","blue","red"),lwd=c(2,2,1),lty=c(1,6,1),main="Comparison QTL methodes: Dataset Listeria",ylab="LOD score")
-	legend("topright",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
+	legend("left",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
 }
 
 paper.plotBristle3 <- function(){
