@@ -47,6 +47,7 @@ extern "C"
 
 double Lnormal(double residual, double variance)
 {      double Likelihood;
+	//EXTRA: VARIANCE OR SD;
        Likelihood=exp(-pow(residual/sqrt(variance),2.0)/2.0 - log(sqrt(2.0*acos(-1.0)*variance)));
        return Likelihood;
 }

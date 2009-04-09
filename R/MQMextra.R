@@ -46,6 +46,42 @@ extra <- function(a,b,x){
 	
 }
 
+paper.plotHYPER <- function(){
+	data(hyper)
+	hyper <- fill.geno(hyper)
+	cof <- MQMCofactorsEach(hyper,3)
+	aa <- scanMQM(fill.geno(hyper),cof,step.size=2,step.max=150,step.min=0,windowsize=2)
+	bb <- cim(hyper)
+	cc <- scanone(hyper)
+	plot(aa,bb,cc,chr=c(1,4,6),col=c("black","blue","red"),lwd=c(2,2,1),lty=c(1,6,1),main="Comparison QTL methodes: Dataset Hyper",ylab="LOD score")
+	legend("topright",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
+}
+
+paper.plotListeria <- function(){
+	data(listeria)
+	listeria <- fill.geno(listeria)
+	cof <- MQMCofactorsEach(listeria,2)
+	aa <- scanMQM(fill.geno(listeria),cof,step.size=2,step.max=100,step.min=0,windowsize=2)
+	bb <- cim(listeria)
+	cc <- scanone(listeria)
+	plot(aa,bb,cc,chr=c(1,5,6,13),col=c("black","blue","red"),lwd=c(2,2,1),lty=c(1,6,1),main="Comparison QTL methodes: Dataset Listeria",ylab="LOD score")
+	legend("topright",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
+}
+
+paper.plotBristle3 <- function(){
+	data(bristle3)
+	bristle3 <- fill.geno(bristle3)
+	cof <- MQMCofactorsEach(bristle3,3)
+	aa <- scanMQMall(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=2)
+	bb <- cim(bristle3)
+	cc <- scanone(bristle3)
+	op <- par(mfrow = c(1,3))
+	plot(aa,col=c("black"),lwd=c(2,2,1),lty=c(1,6,1),main="MQM: Dataset Bristle3",ylab="LOD score")
+	plot(bb,col=c("blue"),lwd=c(2,2,1),lty=c(1,6,1),main="CIM: Dataset Bristle3",ylab="LOD score")
+	plot(cc,col=c("red"),lwd=c(2,2,1),lty=c(1,6,1),main="MR: Dataset Bristle3",ylab="LOD score")
+	aa <- scanMQMall(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=2)
+	plot.MQMnice(aa)
+}
 
 Lnormal <- function(res,vari){
   ret <- NULL
