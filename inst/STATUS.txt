@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 4/9/2009:
+Version 1.12, 4/10/2009:
 
 Major changes:
 
@@ -27,6 +27,9 @@ Minor changes:
 
   Revised the software license to the GNU General Public License,
   version 3.
+
+  Minor change in plot.cross so that if one types plot(mycross, mymap)
+  it is shipped to plot.map rather than giving an error message.
 
   Revised the R/qtl tutorial to refer specifically to the GPL v3.
 

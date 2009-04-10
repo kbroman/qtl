@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-9, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Feb, 2009
+# last modified Apr, 2009
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -572,7 +572,15 @@ plot.cross <-
 function (x, auto.layout = TRUE, pheno.col,
           alternate.chrid=TRUE, ...) 
 {
-  if(!any(class(x) == "cross")) 
+  # look to see whether this should really be shipped to plot.map
+  if("map" %in% class(auto.layout) &&
+     ("map" %in% class(x) || "cross" %in% class(x))) {
+    plot.map(x, auto.layout, alternate.chrid=alternate.chrid, ...)
+    return(invisible())
+  }
+
+  # make sure this is a cross
+  if("cross" %in% class(x))
     stop("Input should have class \"cross\".")
 
   old.yaxt <- par("yaxt")
