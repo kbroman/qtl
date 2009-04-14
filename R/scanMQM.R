@@ -145,6 +145,12 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				ourcat("ERROR: # Cofactors != # Markers\n",a=verbose)		
 			}else{
 				ourcat("INFO:",length(cofactors),"Cofactors received to be analyzed\n",a=verbose)
+				if((sum(cofactors) > n.ind-10 && dominance==0)){
+					ourstop("INFO: Cofactors don't look okay for use without dominance\n",a=verbose)
+				}
+				if((sum(cofactors)*2 > n.ind-10 && dominance==1)){
+					ourstop("INFO: Cofactors don't look okay for use with dominance\n",a=verbose)
+				}				
 				if(sum(cofactors) > 0){
 					ourcat("INFO: Doing backward elimination of selected cofactors.\n",a=verbose)
 					backward <- 1;

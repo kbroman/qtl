@@ -106,8 +106,8 @@ MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=TRUE){
 	n.mark <- ncol(geno)
 	
 	ourcat("INFO: Found",individuals,"individuals in the cross object.\n",a=verbose)
-	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom.\n",a=verbose)
-
+	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom (no Dominance).\n",a=verbose)
+	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)/2," (each =",ceiling(sum(n.mark)/(individuals-10))/2,") leaves 10 Degrees of Freedom (Dominance).\n",a=verbose)
 
 	if(each > n.mark){
       ourstop("Not enough markers to place cofactors at.")

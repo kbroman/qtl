@@ -18,8 +18,8 @@ extra <- function(a,b,x){
 		res3 <- NULL
 		for(y in 1:10){
 			aa <- .C("R_Lnorm",as.double(x),as.double(y))
-			bb <- dnorm(x,0,y)
-			cc <- Lnormal(x,y)
+			bb <- dnorm(x,0,sqrt(y))
+			cc <- Lnormal(x,sqrt(y))
 			res <- c(res,aa[2][[1]])
 			res2 <- c(res2,bb)
 			res3 <- c(res3,cc)
@@ -72,7 +72,7 @@ paper.plotBristle3 <- function(){
 	data(bristle3)
 	bristle3 <- fill.geno(bristle3)
 	cof <- MQMCofactorsEach(bristle3,3)
-	aa <- scanMQMall(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=5)
+	aa <- scanMQM(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=5)
 	bb <- cim(bristle3,window=5)
 	cc <- scanone(bristle3)
 	op <- par(mfrow = c(1,3))

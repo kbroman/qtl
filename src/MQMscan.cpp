@@ -44,21 +44,31 @@ extern "C"
 #include "MQMreDefine.h"
 
 #include "util.h"
-
-double Lnormal(double residual, double variance)
-{      double Likelihood;
-	//EXTRA: VARIANCE OR SD;
-       Likelihood=exp(-pow(residual/sqrt(variance),2.0)/2.0 - log(sqrt(2.0*acos(-1.0)*variance)));
-       return Likelihood;
+double absdouble(double x)
+{
+//{      double z; z= (x<0 ? -x : x); return z;}
+	return fabs(x);
 }
 
-double absdouble(double x)
-{      double z; z= (x<0 ? -x : x); return z;}
+
+double Lnormal(double residual, double variance){
+	//double Likelihood,likelyhood;
+	//Likelihood=exp(-pow(residual/sqrt(variance),2.0)/2.0 - log(sqrt(2.0*acos(-1.0)*variance)));
+	//if(absdouble(Likelihood-likelyhood)>0.05){
+	//Rprintf("ERROR: Lnormal error\n");
+	//}
+	//return likelyhood;
+	return dnorm(residual,0,sqrt(variance),0);
+}
+
+
 
 int mod(int a, int b)
-{      int c;
-       c= a/b;
-       return a-b*c;
+{      
+	return a%b;
+	//int c;
+    //c= a/b;
+    //return a-b*c;
 }
 
 /**********************************************************************

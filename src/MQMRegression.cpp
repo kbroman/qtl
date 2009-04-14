@@ -176,8 +176,8 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
      ivector indx;
      indx= newivector(dimx);
      /* solve equations */
-  //   Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
-  //   printmatrix(XtWX,dimx,dimx);
+    // Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
+    // printmatrix(XtWX,dimx,dimx);
 //	 for (jj=0; jj<dimx; jj++){
 //		Rprintf("%f",indx);
 //	 }
