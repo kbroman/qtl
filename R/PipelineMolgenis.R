@@ -61,7 +61,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 		outcome <- NULL
 		library(snow)
 		cl <- makeCluster(n.clusters)
-		clusterEvalQ(cl, library(MQMpackage))
+		clusterEvalQ(cl, library(qtl))
 		outcome <- parLapply(cl,1:num_traits, snowCore,each=each,all_data=all_data,name=name,DBpath=DBpath)
 		stopCluster(cl)
 		end <- proc.time()
