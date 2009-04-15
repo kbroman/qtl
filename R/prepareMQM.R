@@ -336,7 +336,7 @@ MQMfind.marker <- function(cross=NULL,scanMQM=NULL,perm=NULL,alpha=0.05){
 loadMOUSE <- function(pheno=c(1:10),gr1=NULL,gr2=NULL){
 	
 	setwd("D:/test/Illumina")
-	library(MQMpackage)
+	library(qtl)
 	if(gr1==gr2){
 		ourstop("Cannot compare groups with themselves.\n")
 	}

@@ -34,7 +34,6 @@
 
 #setwd("D:/")
 #library(qtl)
-#library(MQMpackage)
 #cross <- read.cross("csv","","Test.csv")
 
 bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
@@ -106,7 +105,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}			
 				cl <- makeCluster(n.clusters)
-				clusterEvalQ(cl, library(MQMpackage))
+				clusterEvalQ(cl, library(qtl))
 				res <- parLapply(cl,boots, snowCoreBOOT,all_data=cross,cofactors=cofactors,parametric=parametric,...)
 				stopCluster(cl)
 				results <- c(results,res)

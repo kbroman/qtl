@@ -19,7 +19,6 @@
 
 #setwd("D:/")
 #library(qtl)
-#library(MQMpackage)
 #dyn.load("scanMQM.dll")
 #cross <- read.cross("csv","","Test.csv")
 #cof <- MQMCofactorsEach(cross,10)
