@@ -1,0 +1,107 @@
+#####################################################################
+#
+# MQMsnow.R
+#
+# copyright (c) 2009, Danny Arends
+# last modified Apr, 2009
+# first written Apr, 2009
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU General Public License, as
+#     published by the Free Software Foundation; either version 2 of
+#     the License, or (at your option) any later version. 
+# 
+#     This program is distributed in the hope that it will be useful,
+#     but without any warranty; without even the implied warranty of
+#     merchantability or fitness for a particular purpose.  See the
+#     GNU General Public License for more details.
+# 
+#     A copy of the GNU General Public License is available at
+#     http://www.r-project.org/Licenses/
+#
+# Part of the R/qtl package
+# Contains: MQMsnow
+#
+######################################################################
+
+
+snowCoreALL <- function(x,all_data,cofactors,Funktie,...){
+	b <- proc.time()
+	result <- NULL
+	num_traits <- nphe(all_data)
+	cat("------------------------------------------------------------------\n")
+	cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
+	cat("------------------------------------------------------------------\n")
+	if("cofactors" %in% names(formals(Funktie))){
+		result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=F,...)
+	}else{
+		if("verbose" %in% names(formals(Funktie))){
+			result <- Funktie(cross=all_data,pheno.col=x,verbose=F,...)
+		}else{
+			result <- Funktie(cross=all_data,pheno.col=x,...)
+		}
+	}
+	e <- proc.time()
+	cat("------------------------------------------------------------------\n")
+	cat("INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
+	cat("INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
+	cat("------------------------------------------------------------------\n")
+	result
+}
+
+
+snowCoreBOOT <- function(x,all_data,cofactors,Funktie,parametric,...){
+	b <- proc.time()
+	if(!parametric){
+		neworder <- sample(nind(all_data))			
+		all_data$pheno[[1]] <- all_data$pheno[[1]][neworder]
+	}else{	
+		pheno <- all_data$pheno[[1]]
+		variance <- var(pheno,na.rm = TRUE)
+		for(j in 1:nind(all_data)) {
+			all_data$pheno[[1]][j] <- runif(1)*(variance^0.5)
+		}
+	}
+	if("cofactors" %in% names(formals(Funktie))){
+		result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
+	}else{
+		if("verbose" %in% names(formals(Funktie))){
+			result <- Funktie(cross=all_data,pheno.col=1,verbose=F,...)
+		}else{
+			result <- Funktie(cross=all_data,pheno.col=1,...)
+		}
+	}
+	e <- proc.time()
+	cat("------------------------------------------------------------------\n")
+	cat("INFO: Done with bootstrap\n")
+	cat("INFO: Calculation took:",round((e-b)[3], digits=3)," seconds\n")
+	cat("------------------------------------------------------------------\n")
+	result
+}
+
+
+snowCore <- function(x,each,all_data,name,DBpath,...){
+	num_traits <- nphe(all_data)
+	b <- NULL
+	e <- NULL
+	b <- proc.time()
+	r_string <- NULL
+	r_string <- paste("------------------------------------------------------------------\n")
+	r_string <- paste(r_string,"INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
+	r_string <- paste(r_string,"------------------------------------------------------------------\n")
+	if(each>1){
+		cof <- MQMCofactorsEach(all_data,each)
+		result <- scanMQM(all_data,cof,pheno.col=x,plot=F,verbose=F,...)
+	}else{
+		result <- scanMQM(all_data,pheno.col=x,plot=F,verbose=F,...)
+	}
+	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=F),TRUE)
+	e <- proc.time()
+	r_string <- paste("------------------------------------------------------------------\n")
+	r_string <- paste(r_string,"INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
+	r_string <- paste(r_string,"INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
+	r_string <- paste(r_string,"------------------------------------------------------------------\n")
+	r_string
+}
+
+# end of MQMsnow.R

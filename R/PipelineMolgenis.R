@@ -106,31 +106,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 	}
 }
 
-snowCore <- function(x,each,all_data,name,DBpath,...){
-	num_traits <- nphe(all_data)
-	b <- NULL
-	e <- NULL
-	b <- proc.time()
-	r_string <- NULL
-	r_string <- paste("------------------------------------------------------------------\n")
-	r_string <- paste(r_string,"INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
-	r_string <- paste(r_string,"------------------------------------------------------------------\n")
-	if(each>1){
-		cof <- MQMCofactorsEach(all_data,each)
-		result <- scanMQM(all_data,cof,pheno.col=x,plot=F,verbose=F,...)
-	}else{
-		result <- scanMQM(all_data,pheno.col=x,plot=F,verbose=F,...)
-	}
-	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=F),TRUE)
-	e <- proc.time()
-	r_string <- paste("------------------------------------------------------------------\n")
-	r_string <- paste(r_string,"INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
-	r_string <- paste(r_string,"INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
-	r_string <- paste(r_string,"------------------------------------------------------------------\n")
-	r_string
-}
-
 #x=1:num_traits
 #paste("script_",x,".R",sep="")
 
-
+# end of pipelineMolgenis.R

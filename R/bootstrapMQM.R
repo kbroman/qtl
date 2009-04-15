@@ -180,35 +180,6 @@ MQMpermObject <- function(MQMbootresult = NULL){
 	}
 }
 
-snowCoreBOOT <- function(x,all_data,cofactors,Funktie,parametric,...){
-	b <- proc.time()
-	if(!parametric){
-		neworder <- sample(nind(all_data))			
-		all_data$pheno[[1]] <- all_data$pheno[[1]][neworder]
-	}else{	
-		pheno <- all_data$pheno[[1]]
-		variance <- var(pheno,na.rm = TRUE)
-		for(j in 1:nind(all_data)) {
-			all_data$pheno[[1]][j] <- runif(1)*(variance^0.5)
-		}
-	}
-	if("cofactors" %in% names(formals(Funktie))){
-		result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
-	}else{
-		if("verbose" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=1,verbose=F,...)
-		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,...)
-		}
-	}
-	e <- proc.time()
-	cat("------------------------------------------------------------------\n")
-	cat("INFO: Done with bootstrap\n")
-	cat("INFO: Calculation took:",round((e-b)[3], digits=3)," seconds\n")
-	cat("------------------------------------------------------------------\n")
-	result
-}
-
 #result <- bootstrapMQM(cross)
 
 # end of bootstrapMQM.R

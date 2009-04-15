@@ -156,29 +156,4 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 	}
 }
 
-snowCoreALL <- function(x,all_data,cofactors,Funktie,...){
-	b <- proc.time()
-	result <- NULL
-	num_traits <- nphe(all_data)
-	cat("------------------------------------------------------------------\n")
-	cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
-	cat("------------------------------------------------------------------\n")
-	if("cofactors" %in% names(formals(Funktie))){
-		result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=F,...)
-	}else{
-		if("verbose" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=x,verbose=F,...)
-		}else{
-			result <- Funktie(cross=all_data,pheno.col=x,...)
-		}
-	}
-	e <- proc.time()
-	cat("------------------------------------------------------------------\n")
-	cat("INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
-	cat("INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
-	cat("------------------------------------------------------------------\n")
-	result
-}
-
-
 # end of scanMQMall.R
