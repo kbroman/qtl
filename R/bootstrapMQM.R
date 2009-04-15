@@ -36,7 +36,7 @@
 #library(qtl)
 #cross <- read.cross("csv","","Test.csv")
 
-bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
+bootstrapMQM <- function(cross= NULL,cofactors = NULL,FUN=scanMQM,pheno.col=1,step.size=5.0,
 					step.min=-20.0,step.max=220.0,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,parametric=0,plot=TRUE,...)
 {
 	
@@ -106,7 +106,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 				}			
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, library(qtl))
-				res <- parLapply(cl,boots, snowCoreBOOT,all_data=cross,cofactors=cofactors,parametric=parametric,...)
+				res <- parLapply(cl,boots, snowCoreBOOT,all_data=cross,cofactors=cofactors,FUN=FUN,parametric=parametric,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -137,7 +137,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,step.size=5.0,
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				res <- lapply(boots, snowCoreBOOT,all_data=cross,cofactors=cofactors,parametric=parametric,...)
+				res <- lapply(boots, snowCoreBOOT,all_data=cross,cofactors=cofactors,FUN=FUN,parametric=parametric,...)
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"MQMmulti")
@@ -191,7 +191,7 @@ MQMpermObject <- function(MQMbootresult = NULL){
 	}
 }
 
-snowCoreBOOT <- function(x,all_data,cofactors,parametric,...){
+snowCoreBOOT <- function(x,all_data,cofactors,FUN,parametric,...){
 	b <- proc.time()
 	if(!parametric){
 		neworder <- sample(nind(all_data))			
@@ -203,7 +203,7 @@ snowCoreBOOT <- function(x,all_data,cofactors,parametric,...){
 			all_data$pheno[[1]][j] <- runif(1)*(variance^0.5)
 		}
 	}
-	result <- scanMQM(all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
+	result <- FUN(all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
 	e <- proc.time()
 	cat("------------------------------------------------------------------\n")
 	cat("INFO: Done with bootstrap\n")
