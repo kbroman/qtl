@@ -1,9 +1,9 @@
 Package: qtl
-Version: 1.11-12
-Date: 29 March 2009
+Version: 1.12-2
+Date: 10 April 2009
 Title: Tools for analyzing QTL experiments
 Author: Karl W Broman <kbroman@biostat.wisc.edu> and Hao Wu, with ideas from Gary Churchill and Saunak Sen and contributions from Brian Yandell
 Maintainer: Karl W Broman <kbroman@biostat.wisc.edu>
 Description: Analysis of experimental crosses to identify genes (called quantitative trait loci, QTLs) contributing to variation in quantitative traits.
-License: GPL (>=2)
+License: GPL-3
 URL: http://www.rqtl.org
