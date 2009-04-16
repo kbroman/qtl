@@ -17,13 +17,20 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 4/10/2009:
+Version 1.12, 4/16/2009:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  In the output of c.cross, there is a numeric phenotype "cross" that
+  indicates which individuals are from which cross, as a single
+  column. 
+
+  Fixed a few problems in c.cross regarding the attributes to
+  QTL genotype probabilities and imputated genotypes
 
   Revised the software license to the GNU General Public License,
   version 3.

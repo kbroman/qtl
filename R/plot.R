@@ -580,7 +580,7 @@ function (x, auto.layout = TRUE, pheno.col,
   }
 
   # make sure this is a cross
-  if("cross" %in% class(x))
+  if(!("cross" %in% class(x)))
     stop("Input should have class \"cross\".")
 
   old.yaxt <- par("yaxt")

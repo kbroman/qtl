@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o In c.cross, include an argument for "flipping" a backcross, so that
+  a backcross to (AxB)xB can be combined with an intercross
+
 o In plot of output from addpair with a special formula, we need just
   one set of numbers on the color scale.
 
