@@ -86,6 +86,20 @@ function(cross, chr)
 
 ######################################################################
 #
+# chrnames
+#
+# pull out the chrnames for a cross
+#
+######################################################################
+
+chrnames <- 
+function(cross)
+{
+  names(cross$geno)
+}
+
+######################################################################
+#
 # create.map
 #
 # create a new map with inserted inter-marker locations

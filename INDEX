@@ -29,6 +29,7 @@ cbind.scanoneperm       Combine columns from multiple scanone
                         permutation results
 checkAlleles            Identify markers with switched alleles
 chrlen                  Chromosome lengths in QTL experiment
+chrnames                Pull out the chromosome names from a cross
 cim                     Composite interval mapping
 clean.cross             Remove derived data
 clean.scantwo           Clean up scantwo output
