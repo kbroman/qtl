@@ -11,7 +11,7 @@
    }
 }
 \usage{
-	bootstrap(cross = NULL, Funktie=scanone, pheno.col = 1, multiC=TRUE, n.run=10, n.clusters = 2, method = 0,\dots)
+	bootstrap(cross = NULL, Funktie=scanone, method = 0, pheno.col = 1, multiC=TRUE, n.run=10, n.clusters = 2,\dots)
 	bootstrapcim(cross = NULL,\dots)
 	bootstrapmqm(cross = NULL,\dots)
 }
@@ -19,12 +19,12 @@
 \arguments{
 	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
 	\item{Funcktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
+	\item{method}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric ) } 
+	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
 	\item{multiC}{ Use multicore (if available)}  
 	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
 	\item{n.clusters}{ Number of child processes to split the job into }
 	\item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
-	\item{method}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric ) }  
-	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
 	\item{\dots}{Parameters passed through to the scanone, cim or mqm functions}
 }
 \details{
@@ -43,13 +43,18 @@
 \seealso{
 	\itemize{
 	\item \code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link{scanall}} - Function called to analyse multiple traits in the cross object
+	\item \code{\link{scanone}} - Function called to do single trait analysis
+	\item \code{\link{cim}} - Function called to do single trait analysis
+	\item \code{\link{mqm}} - Function called to do single trait analysis
 	}
 }
 \examples{
 data(multitrait)				#Use the multitrait dataset
+result <- bootstrap(multitrait,pheno.col=7, b_size=5)
+result <- bootstrapcim(multitrait,pheno.col=7, b_size=5)
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-f2result <- bootstrap(multitrait,Funktie=mqm,n.run=50,b_size=20,cofactors=cof,pheno.col=7,doLOG=1)	# Bootstrap 200 runs in batches of 20
+f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b_size=5,verbose=F)	# Bootstrap 200 runs in batches of 20
 
 #EXTRA
 f2perm <- MQMpermObject(f2result)			#Create a permutation object
