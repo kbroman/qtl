@@ -21,12 +21,11 @@
 #     http://www.r-project.org/Licenses/
 #
 # Part of the R/qtl package
-# Contains: scanMQMall, snowCoreALL
+# Contains: scanall, snowCoreALL
 #
 ######################################################################
 
-scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
-					step.min=-20.0,step.max=220.0,n.clusters=2,b_size=10,FF=0,plot=TRUE,verbose=TRUE,...){
+scanall <- function(cross= NULL,Funktie=scanone,multiC=T,n.clusters=2,b_size=10,FF=0,...,plot=TRUE,verbose=TRUE){
 
 	
 	if(is.null(cross)){
@@ -35,27 +34,16 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		start <- proc.time()
 		n.pheno <- nphe(cross)
-		cat("------------------------------------------------------------------\n")
-		cat("Starting MQM multitrait analysis\n")
+		ourline()
+		cat("Starting R/QTL multitrait analysis\n")
 		cat("Number of phenotypes:",n.pheno,"\n")
 		cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
-		cat("------------------------------------------------------------------\n")		
+		ourline()	
 		
 		result <- NULL	 	#BATCH result variable
 		res <- NULL			#GLOBAL result variable
 		
 		all_data <- fill.geno(cross)
-		#Some tests from scanMQM repeated here so they are not hidden when using snow
-		if((step.min+step.size) > step.max){
-				ourstop("Surrent Step settings (step.min/step.max) would crash the algorithm")
-		}
-		if(step.min>0){
-				ourstop("Step.min needs to be smaller than 0")
-		}		
-		if(step.size < 1){
-				ourstop("Step.size needs to be larger than 1")
-		}
-		
 		
 		bootstraps <- 1:n.pheno
 		batches <- length(bootstraps) %/% b_size
@@ -63,11 +51,14 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 		if(last.batch.num > 0){
 			batches = batches+1
 		}
+		
+		#INIT TIME VARS
 		SUM <- 0
 		AVG <- 0
 		LEFT <- 0
+
 		#TEST FOR SNOW CAPABILITIES
-		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]]){
+		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]] && multiC){
 			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			library(snow)
 			for(x in 1:(batches)){
@@ -82,12 +73,12 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, library(MQMpackage))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,cofactors=cofactors,Funktie=scanMQM,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.MQMnice(temp)
+					plot.nice(temp)
 				}
 				res <- c(res,result)
 				end <- proc.time()
@@ -113,11 +104,11 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				result <- lapply(cl,boots, FUN=snowCoreALL,all_data=all_data,cofactors=cofactors,Funktie=scanMQM,...)
+				result <- lapply(boots, FUN=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.MQMnice(temp)
+					plot.nice(temp)
 				}
 				res <- c(res,result)				
 				end <- proc.time()
@@ -154,6 +145,14 @@ scanMQMall <- function(cross= NULL,cofactors = NULL,step.size=5.0,
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
+}
+
+scancim <- function(...){
+	scanall(...,Funktie=cim)
+}
+
+scanmqm <- function(...){
+	scanall(...,Funktie=mqm)
 }
 
 # end of scanMQMall.R

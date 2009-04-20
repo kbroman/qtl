@@ -1,22 +1,24 @@
-\name{plot.MQMall}
-\alias{plot.MQMall}
+\name{plot.all}
+\alias{plot.all}
 
 \title{ 
-	plot.MQMall - Plotting routine to display the results from a scanMQMall / bootstrapMQM scan 
+	plot.all - Plotting routine to display the results from a scanall / bootstrap scan 
 }
 \description{
-  Plotting routine to display the results from a scanMQMall scan or a bootstrapMQM, in either a contourmap or a multiple QTL plot from R/QTL plot.scanone
+  Plotting routine to display the results from a scanall scan or a bootstrap, in either a contourmap or a multiple QTL plot from R/QTL plot.scanone
 }
 \usage{
-plot.MQMall(result = NULL, type = "C")
+plot.all(result = NULL, type = "C", theta = 30, phi = 15)
 }
 
 \arguments{
-  \item{result}{ Result object from scanMQMall }
-  \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot  }
+  \item{result}{ Result object from scanall }
+  \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot, "D" for a 3D plot  }
+  \item{theta}{ Horizontal axis rotation in a 3D plot}
+  \item{phi}{ Vertical axis rotation in a 3D plot}
 }
 \details{
-  ~~ If necessary, more details than the description above ~~ 
+
 }
 \value{
 	No return, plotting routine
@@ -28,15 +30,15 @@ plot.MQMall(result = NULL, type = "C")
 }
 \seealso{ 
 \itemize{
-	\item \code{\link{scanMQMall}} - Function called to do multiple trait analysis
-	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link{scanall}} - Function called to analyse multiple traits in the cross object
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for MQM
 }
 }
 \examples{
 	data(multitrait)
-	result <- scanMQMall(multitrait)
-	plot.MQMall(result,"P")
-	plot.MQMall(result,"C")
+	result <- mqmall(multitrait)
+	plot.all(result,"P")
+	plot.all(result,"C")
 	
 }
 \references{

@@ -20,7 +20,7 @@
 #     http://www.r-project.org/Licenses/
 #
 # Part of the R/qtl package
-# Contains: bootstrapMQM - Main function for bootstrap analysis
+# Contains: bootstrap - Main function for bootstrap analysis
 # Contains: MQMpermObject - Helperfunction to create permObjects (R/QTL format)
 # Contains: snowCoreBOOT - Helperfunction to execute bootstrapping on a R-Term
 #
@@ -28,7 +28,7 @@
 
 ######################################################################
 #
-# bootstrapMQM: Shuffles phenotype or does parametric bootstrapping of scanMQM
+# bootstrap: Shuffles phenotype or does parametric bootstrapping of scanMQM
 #
 ######################################################################
 
@@ -36,7 +36,7 @@
 #library(qtl)
 #cross <- read.cross("csv","","Test.csv")
 
-bootstrapMQM <- function(cross= NULL,cofactors = NULL,Funktie=scanMQM,pheno.col=1,multiC=T,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,parametric=0,plot=TRUE,...)
+bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=T,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=TRUE,...)
 {
 	
 	if(is.null(cross)){
@@ -51,7 +51,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Funktie=scanMQM,pheno.col=
 		cat("------------------------------------------------------------------\n")		
 		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
 		b <- proc.time()		
-		if(!parametric){
+		if(!method){
 			cat("INFO: Shuffleling traits between individuals.\n")
 		}else{
 			cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
@@ -66,7 +66,7 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Funktie=scanMQM,pheno.col=
 
 		#Scan the original
 		cross <- fill.geno(cross)
-		res0 <- lapply(1, FUN=snowCoreALL,all_data=cross,cofactors=cofactors,Funktie=Funktie,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all_data=cross,Funktie=Funktie,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.run)
@@ -95,13 +95,13 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Funktie=scanMQM,pheno.col=
 				}			
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, library(qtl))
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,cofactors=cofactors,Funktie=Funktie,parametric=parametric,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.MQMboot(temp)
+					plot.boot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -126,12 +126,12 @@ bootstrapMQM <- function(cross= NULL,cofactors = NULL,Funktie=scanMQM,pheno.col=
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,cofactors=cofactors,Funktie=Funktie,parametric=parametric,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.MQMboot(temp)
+					plot.boot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -180,6 +180,6 @@ MQMpermObject <- function(MQMbootresult = NULL){
 	}
 }
 
-#result <- bootstrapMQM(cross)
-
-# end of bootstrapMQM.R
+#result <- bootstrap(cross)
+# tiff(object, file="namemeplease.tiff" res=300, unit="in", width=6, height=6)
+# end of bootstrap.R

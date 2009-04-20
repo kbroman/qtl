@@ -38,7 +38,7 @@ If u find anything wrong with the algorithm please notify me at: \email{Danny.Ar
 }
 \examples{
 cMol <- CrossFromMolgenis()				#Make a crossobject from the database
-result <- scanMQMall(cMol)				#Basic execution of scanMQMall
+result <- mqmall(cMol)				#Basic execution of QTL scanning using MQM method
 ResultsToMolgenis(result,"QTL-mqm")			#Store the result from MQM into molgenis database
 r_res <- ResultsFromMolgenis("QTL-mqm")		#Store the result from MQM into molgenis database
 

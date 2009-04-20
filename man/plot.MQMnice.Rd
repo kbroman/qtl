@@ -1,17 +1,17 @@
-\name{plot.MQMnice}
-\alias{plot.MQMnice}
+\name{plot.nice}
+\alias{plot.nice}
 
-\title{ plot.MQMnice - Plotting routine to display the results from a bootstrapMQM or scanMQMall scan  }
+\title{ plot.nice - Plotting routine to display the results from a bootstrap or scanall scan  }
 
 \description{
-	Plotting routine to display the results from a bootstrapMQM or scanMQMall scan
+	Plotting routine to display the results from a bootstrap or scanall scan
 }
 \usage{
-plot.MQMnice(result = NULL,\dots)
+plot.nice(result = NULL,\dots)
 }
 
 \arguments{
-  \item{result}{ Result object from scanMQMall }
+  \item{result}{ Result object from scanall }
   \item{\dots}{ Extra argument passed to the polyplot methode of R. Brouwer. Use legendloc=1 to plot legend outside of plotting area }   
 }
 \details{
@@ -26,8 +26,8 @@ plot.MQMnice(result = NULL,\dots)
 }
 \seealso{ 
 \itemize{
-	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
-	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link{scanall}} - Function called to analyse multiple traits
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for MQM
 }
 }
 \examples{
@@ -35,8 +35,8 @@ plot.MQMnice(result = NULL,\dots)
 	f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
 	data(map10)                                             # Mouse genome
 	f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
-	f2result <- bootstrapMQM(f2cross)                       # Bootstrap MQM to obtain confidence intervals
-	plot.MQMnice(f2result)									# Use the nice plotting methodes
+	f2result <- bootstrap(f2cross,Funktie=MQM)             # Bootstrap MQM to obtain confidence intervals
+	plot.nice(f2result)									# Use the nice plotting methodes
 }
 \keyword{ QTL }
 \keyword{ Mapping }

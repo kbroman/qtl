@@ -31,14 +31,14 @@ MQMfind.marker(cross = NULL, scanMQMres = NULL, perm = NULL, alpha = 0.05)
 \itemize{
 	\item \code{\link[qtl]{find.marker}} - R/QTL find.marker routine
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
 	\item \code{\link{MQMpermObject}} - Function called to convert MQMbootstrap into an scanoneperm object
 }
 }
 \examples{
 data(multitrait)				#Use the multitrait dataset
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-result <- bootstrapMQM(multitrait,cofactors=cof,pheno.col=7,n.run=50,b_size=20,doLOG=1)	# Bootstrap 200 runs in batches of 20
+result <- bootstrap(multitrait,Funktie=mqm,cofactors=cof,pheno.col=7,n.run=50,b_size=20,doLOG=1)	# Bootstrap 200 runs in batches of 20
 f2perm <- MQMpermObject(result)				#Create a permutation object
 summary(f2perm)				#What LOD score is considered significant ?
 marker <- MQMfind.marker(f2cross,result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)

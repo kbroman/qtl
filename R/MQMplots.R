@@ -101,7 +101,7 @@ polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par(
 	invisible()															# return the plot
 }
 
-plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15,...){
+plot.all <- function(result = NULL, type="C", theta=30, phi=15,...){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	if(class(result)[2] == "MQMmulti"){
 		if(type=="C"){
@@ -162,7 +162,7 @@ plot.MQMall <- function(result = NULL, type="C", theta=30, phi=15,...){
 	}
 }
 
-plot.MQMboot <- function(result = NULL,...){
+plot.boot <- function(result = NULL,...){
 	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
@@ -199,7 +199,7 @@ plot.MQMboot <- function(result = NULL,...){
 	}	
 }
 
-plot.MQMnice <- function(result = NULL,...){
+plot.nice <- function(result = NULL,...){
 	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	matrix <- NULL
 	names <- NULL
@@ -232,7 +232,7 @@ plot.MQMnice <- function(result = NULL,...){
 	}
 }
 
-plot.MQMone <- function(result = NULL,result2 = NULL, extended=0,...){
+plot.one <- function(result = NULL,result2 = NULL, extended=0,...){
 	#Helperfunction to show scanone objects made by doing scanMQM runs
 	if(any(class(result) == "scanone")){
 		info_c <- result

@@ -62,8 +62,8 @@ The phenotype under consideration is specified by the pheno.col argument of the 
 \itemize{
 	\item \code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
 	\item \code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
-	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for MQM
 	\item \link[qtl]{scanone} - R/QTL main scanning function
 	\item \link[qtl]{cim} - Composite interval mapping in R/QTL
 }

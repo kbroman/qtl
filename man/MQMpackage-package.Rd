@@ -29,8 +29,8 @@
 	Index:
 	\preformatted{
 	scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
-	scanMQMall              scanMQMall - Multitrait analysis of a cross object
-	bootstrapMQM		bootstrapMQM - Bootstrapping approach to obtain estimates of QTL significance
+	scanall					scanall - Function called to analytse multiple traits in the cross object
+	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
 	MQMaugment              MQMaugment - Missing data augmentation routine for MQM
 	MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
 	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
@@ -87,7 +87,7 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 	\itemize{
 	\item	\code{\link{MQMaugment}} - Dataaugmentation routine to estimate missing data
 	\item	\code{\link{scanMQM}} - Function called to do single trait analysis
-	\item	\code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
 	\item \code{\link{PipelineMolgenis}} - Automatic MQM-QTL analysis for Molgenis database systems		
 	}
 }

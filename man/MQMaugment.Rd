@@ -32,7 +32,7 @@ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gm
 \seealso{
 	\itemize{
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
 \examples{

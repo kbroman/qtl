@@ -25,7 +25,7 @@
 ######################################################################
 
 
-snowCoreALL <- function(x,all_data,cofactors,Funktie,...){
+snowCoreALL <- function(x,all_data,Funktie,...){
 	b <- proc.time()
 	result <- NULL
 	num_traits <- nphe(all_data)
@@ -33,13 +33,11 @@ snowCoreALL <- function(x,all_data,cofactors,Funktie,...){
 	cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
 	cat("------------------------------------------------------------------\n")
 	if("cofactors" %in% names(formals(Funktie))){
-		result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=F,...)
-	}else{
-		if("verbose" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=x,verbose=F,...)
-		}else{
-			result <- Funktie(cross=all_data,pheno.col=x,...)
+		if(exists("cofactors")){
+			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=F,...)
 		}
+	}else{
+		result <- Funktie(cross=all_data,pheno.col=x,...)
 	}
 	e <- proc.time()
 	cat("------------------------------------------------------------------\n")
@@ -50,9 +48,10 @@ snowCoreALL <- function(x,all_data,cofactors,Funktie,...){
 }
 
 
-snowCoreBOOT <- function(x,all_data,cofactors,Funktie,parametric,...){
+snowCoreBOOT <- function(x,all_data,Funktie,method,...){
 	b <- proc.time()
-	if(!parametric){
+	result <- NULL
+	if(!method){
 		neworder <- sample(nind(all_data))			
 		all_data$pheno[[1]] <- all_data$pheno[[1]][neworder]
 	}else{	
@@ -63,13 +62,11 @@ snowCoreBOOT <- function(x,all_data,cofactors,Funktie,parametric,...){
 		}
 	}
 	if("cofactors" %in% names(formals(Funktie))){
-		result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
-	}else{
-		if("verbose" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=1,verbose=F,...)
-		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,...)
+		if(exists("cofactors")){
+			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
 		}
+	}else{
+		result <- Funktie(cross=all_data,pheno.col=1,...)
 	}
 	e <- proc.time()
 	cat("------------------------------------------------------------------\n")

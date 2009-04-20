@@ -28,6 +28,6 @@
 }
 \examples{
 	data(multitrait)						#Load dataset
-	result <- scanMQMall(multitrait,doLOG=1)	#Analyse all 24 traits
+	result <- scanall(multitrait,Funktie=mqm,doLOG=1)	#Analyse all 24 traits
 }
 \keyword{datasets}

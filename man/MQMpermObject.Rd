@@ -6,11 +6,11 @@
 	Function to convert MQMmulti objects into a scanoneperm object from R/QTL, this allows us to use the R/QTL methods of permutation analysis
 }
 \usage{
-MQMpermObject(MQMbootresult = NULL)
+MQMpermObject(bootresult = NULL)
 }
 
 \arguments{
-  \item{MQMbootresult}{ MQMmulti object obtained by bootstrapMQM }
+  \item{bootresult}{ MQMmulti object obtained by using the function \link{bootstrap} }
 }
 \details{
 
@@ -25,7 +25,7 @@ MQMpermObject(MQMbootresult = NULL)
 }
 \seealso{ 
 \itemize{
-	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
 	\item \link[qtl]{summary.scanoneperm} - Summary of a QTL object
 }
 }
@@ -33,7 +33,7 @@ MQMpermObject(MQMbootresult = NULL)
 f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-f2result <- bootstrapMQM(f2cross)			# Bootstrap MQM mapping on the f2cross
+f2result <- bootstrap(f2cross,Funktie=mqm)			# Bootstrap MQM mapping on the f2cross
 f2perm <- MQMpermObject(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 

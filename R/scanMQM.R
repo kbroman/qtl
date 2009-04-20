@@ -63,7 +63,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
-			ourstop("For multiple phenotype analysis use the function: 'scanMQMall'.\n")	
+			ourstop("For multiple phenotype analysis use the function: 'scanall'.\n")	
 		}
 		if(pheno.col != 1){
 			ourcat("INFO: Selected phenotype ",pheno.col,".\n",a=verbose)
@@ -297,7 +297,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			}
 			#No error do plot 2
 			if(!e){
-				plot.MQMone(qtl)
+				plot.one(qtl)
 			}else{
 				plot(qtl,lwd=1)
 				grid(max(qtl$chr),5)
@@ -315,6 +315,10 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 	}else{
 		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
+}
+
+mqm <- function(...){
+	scanMQM(...)
 }
 
 #res <- scanMQM(cross,cof)

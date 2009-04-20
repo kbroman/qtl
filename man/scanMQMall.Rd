@@ -1,39 +1,31 @@
-\name{scanMQMall}
-\alias{scanMQMall}
+\name{scanall}
+\alias{scanall}
 \alias{mqmall}
+\alias{cimall}
 \title{ 
-	scanMQMall - Multitrait analysis of a cross object 
+	scanall - Multitrait analysis of a cross object 
 }
 
 \description{
-	Uses MQMaugment and scanMQM to scan for QTL's for each phenotype in the cross object.
+	Uses scanone, cim, or mqm to scan for QTL's for each phenotype in the cross object.
 }
 \usage{
-	scanMQMall(cross = NULL, cofactors = NULL, doLOG = 0,REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.clusters = 10,doLOG=0,est.map=0,dominance=0,FF=0)
+	scanall(cross = NULL, Funktie=scanone, n.clusters = 2,b_size=10, plot=TRUE, verbose=TRUE,\dots)
+	cimall(cross = NULL, Funktie=cim, n.clusters = 2,b_size=10, plot=TRUE, verbose=TRUE,\dots)
+	mqmall(cross = NULL, Funktie=mqm, n.clusters = 2,b_size=10, plot=TRUE, verbose=TRUE,\dots)
 }
 
 \arguments{
   \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
-  \item{doLOG}{ Indicate if the algorithm can LOG transform traits with variation > 10.000 (DEFAULT 0 = off | 1 = on) }  
-  \item{REMLorML}{ Lets the algorithm use reduced maximum likelyhood (0) or Maximum likelyhood (1) }
-  \item{alfa}{ Global p-value (0<= alfa <= 1) }
-  \item{em.iter}{ Maximum number of iterations EM algorithm }
-  \item{windowsize}{ windowsize used when mappingQTL locations }
-  \item{step.size}{ Step.size used for the generation of output QTL }
-  \item{step.min}{ Begin this many Cm before the chromosome }
-  \item{step.max}{ Maximum length in Cm }
-  \item{doLOG}{ Indicate if the algorithm should LOG transform traitdata (DEFAULT 0 = off | 1 = on) }    
-  \item{est.map}{ Reestimation of the marker locations on the genetic map before mapping QTLs (no map is returned the old map remains in the cross object }
-  \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
-  \item{FF}{ Print an output file at the end of scanning in Frank.Format (file="frank.out") (DEFAULT 0 = no | 1 = yes) }  
-  \item{forceRIL}{ Should we force the cross as a RIL, this option removed AB genotypes and replaces them with BB ? ( 0= NO  (DEFAULT)/ 1= YES) }  
+  \item{Funcktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)} 
+  \item{multiC}{ Use multicore (if available)}
   \item{n.clusters}{ Number of child processes to split the job into }
   \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
+  \item{\dots}{Parameters passed through to the scanone,cim or mqm functions}
 }
 
 \details{
-  Uses MQMaugment and scanMQM to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
+  Uses the function specified by the Funktie parameter to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
   The snow library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
 }
 
@@ -59,7 +51,7 @@
 	#Doing a multitrait analysis
 	data(multitrait)
 	cof <- MQMCofactorsEach(multitrait,3)
-	result <- scanMQMall(multitrait,cofactors=cof,doLOG=1,b_size=3)
+	result <- scanall(multitrait,Funktie=mqm,cofactors=cof,doLOG=1,b_size=3)
 
 }
 \references{

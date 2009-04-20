@@ -79,9 +79,16 @@ paper.plotBristle3 <- function(){
 	plot(aa,col=c("black"),lwd=c(2,2,1),lty=c(1,6,1),main="MQM: Dataset Bristle3",ylab="LOD score")
 	plot(bb,col=c("blue"),lwd=c(2,2,1),lty=c(1,6,1),main="CIM: Dataset Bristle3",ylab="LOD score")
 	plot(cc,col=c("red"),lwd=c(2,2,1),lty=c(1,6,1),main="MR: Dataset Bristle3",ylab="LOD score")
-	aa <- scanMQMall(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=2)
-	plot.MQMnice(aa)
+	aa <- mqmall(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=2)
+	plot.nice(aa)
 }
+
+#paper.plotBootstrap{
+#	data(multitrait)
+#	m <- fill.geno(multitrait)
+#	cof <- MQMCofactorsEach(m,3)
+#	aa <- bootstrap(m,cof,pheno.col=6,step.size=5,step.min=0,windowsize=10,n.run=100)
+#}
 
 Lnormal <- function(res,vari){
   ret <- NULL

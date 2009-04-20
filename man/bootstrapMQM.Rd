@@ -1,37 +1,29 @@
-\name{bootstrapMQM}
-\alias{bootstrapMQM}
-\alias{permutateMQM}
+\name{bootstrap}
+\alias{bootstrap}
+\alias{permutate}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ bootstrapMQM - Bootstrapping approach to obtain estimates of QTL LOD score significance }
+\title{ bootstrap - randomization approaches to obtain estimates of QTL LOD score significance }
 \description{
-   Bootstrapping approach to obtain estimates of QTL significance
+   randomization approaches to obtain estimates of QTL significance
 }
 \usage{
-bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.02, em.iter = 1000, windowsize = 25, step.size = 5, step.min = -20, step.max = 220, n.run = 10, file = "MQM_output.txt", doLOG = 0, est.map = 0, dominance = 0, n.clusters = 2, parametric = 0)
+bootstrap(cross = NULL, Funktie=scanone, pheno.col = 1, n.run=10, n.clusters = 2, method = 0,\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
-  \item{n.run}{ Number of bootstrapping runs (DEFAULT=10) }
-  \item{parametric}{ What kind of bootstrapping should be done ( 0= Random Shuffle (DEFAULT)/ 1= Parametric bootstrapping ) }  
-  \item{Phenot}{ Phenotype to do thepull from the cross object }
-  \item{REMLorML}{ Lets the algorithm use reduced maximum likelyhood (0) or Maximum likelyhood (1) }
-  \item{alfa}{ Global p-value (0<= alfa <= 1) }
-  \item{em.iter}{ Maximum number of iterations EM algorithm }
-  \item{windowsize}{ Windowsize used when mappingQTL locations }
-  \item{step.size}{ Step.size used for the generation of output QTL }
-  \item{step.min}{ Begin this many Cm before the chromosome }
-  \item{step.max}{ Maximum length in Cm }
-  \item{doLOG}{ Indicate if the algorithm can LOG transform traits with variation > 10.000 (DEFAULT 0 = off | 1 = on) }
-  \item{est.map}{ Reestimation of the genetic map (est.rf in R/QTL) }
-  \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }
+  \item{Funcktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
+  \item{multiC}{ Use multicore (if available)}  
+  \item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
   \item{n.clusters}{ Number of child processes to split the job into }
   \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
+  \item{method}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric bootstrapping ) }  
+  \item{pheno.col}{ Phenotype to do thepull from the cross object }
+
   
 }
 \details{
-  scanMQM to scan for QTL's in bootstrapped data. It is recomended to also install the snow library.
+  Analysis of scanone, cim or mqm to scan for QTL's in shuffled/randomized data. It is recomended to also install the snow library.
   The snow library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
 }
 \value{
@@ -46,13 +38,13 @@ bootstrapMQM(cross = NULL, cofactors = NULL, Phenot = 1, REMLorML = 0, alfa = 0.
 \seealso{
 	\itemize{
 	\item \code{\link{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
+	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
 \examples{
 data(multitrait)				#Use the multitrait dataset
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-f2result <- bootstrapMQM(multitrait,cofactors=cof,pheno.col=7,n.run=50,b_size=20,doLOG=1)	# Bootstrap 200 runs in batches of 20
+f2result <- bootstrap(multitrait,Funktie=mqm,n.run=50,b_size=20,cofactors=cof,pheno.col=7,doLOG=1)	# Bootstrap 200 runs in batches of 20
 
 #EXTRA
 f2perm <- MQMpermObject(f2result)			#Create a permutation object

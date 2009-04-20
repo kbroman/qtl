@@ -1,13 +1,13 @@
-\name{plot.MQMone}
-\alias{plot.MQMone}
+\name{plot.one}
+\alias{plot.one}
 
-\title{ plot.MQMone - Plotting routine to display the results from a MQMscan  }
+\title{ plot.one - Plotting routine to display the results from a QTL scan  }
 
 \description{
   Plotting routine to display the results from a MQMscan
 }
 \usage{
-plot.MQMone(result = NULL, result2=NULL, extended = 0,\dots)
+plot.one(result = NULL, result2=NULL, extended = 0,\dots)
 }
 
 \arguments{
@@ -41,7 +41,7 @@ plot.MQMone(result = NULL, result2=NULL, extended = 0,\dots)
 	data(map10)                                             # Mouse genome
 	f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 	f2result <- scanMQM(f2cross)                    	   # Do a MQM scan of the genome
-	plot.MQMone(f2result)									#Use our fancy plotting routine
+	plot.one(f2result)									#Use our fancy plotting routine
 }
 
 \keyword{ QTL }

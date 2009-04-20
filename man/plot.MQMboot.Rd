@@ -1,17 +1,17 @@
-\name{plot.MQMboot}
-\alias{plot.MQMboot}
+\name{plot.boot}
+\alias{plot.boot}
 
-\title{ plot.MQMboot - Plotting routine to display the results from a bootstrapMQM scan  }
+\title{ plot.boot - Plotting routine to display the results from a bootstrap scan  }
 
 \description{
-	Plotting routine to display the results from a bootstrapMQM scan 
+	Plotting routine to display the results from a bootstrap scan 
 }
 \usage{
-plot.MQMboot(result = NULL,\dots)
+plot.boot(result = NULL,\dots)
 }
 
 \arguments{
-  \item{result}{ Result object from scanMQMall }
+  \item{result}{ Result object from scanall }
   \item{\dots}{ Extra argument passed to the polyplot methode of R. Brouwer }    
 }
 \details{
@@ -26,7 +26,7 @@ plot.MQMboot(result = NULL,\dots)
 }
 \seealso{ 
 \itemize{
-	\item \code{\link{bootstrapMQM}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm
 }
 }
 \examples{
@@ -34,8 +34,8 @@ plot.MQMboot(result = NULL,\dots)
 	f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
 	data(map10)                                             # Mouse genome
 	f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
-	f2result <- bootstrapMQM(f2cross)                       # Bootstrap MQM to obtain confidence intervals
-	plot.MQMboot(f2result)									# Use the nice bootstrap plotting methodes
+	f2result <- bootstrap(f2cross)               	        # Bootstrap to obtain confidence intervals
+	plot.boot(f2result)									# Use the nice bootstrap plotting methodes
 }
 \keyword{ QTL }
 \keyword{ Mapping }

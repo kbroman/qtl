@@ -9,7 +9,7 @@
 ResultsToMolgenis(intervalQTLmap = NULL, name = NULL, DBpath = NULL, Fupdate = 0)
 }
 \arguments{
-  \item{intervalQTLmap}{ Results from either scanone, scanMQM or scanMQMall }
+  \item{intervalQTLmap}{ Results from either scanone, scanall }
   \item{name}{ Name of the table to store the results in }
   \item{Trait_num}{ Analysis is stored in this column in the database. This parameter is used for \link{PipelineMolgenis} }
   \item{DBpath}{ Path to the molgenis database }
@@ -43,7 +43,7 @@ If u find anything wrong with the algorithm please notify me at: \email{Danny.Ar
 }
 \examples{
 cMol <- CrossFromMolgenis()			#Make a crossobject from the database
-result <- scanMQMall(cMol)			#Basic execution of scanMQMall
+result <- scanall(cMol,Funktie=mqm)			#Basic execution of scanall using mqm
 ResultsToMolgenis(result,"QTL-mqm")	#Store the result from MQM into molgenis database
 }
 \references{

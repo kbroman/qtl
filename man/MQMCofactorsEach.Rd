@@ -29,7 +29,7 @@ MQMCofactorsEach(cross = NULL, each = 3)
 \seealso{ 
 \itemize{
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanMQMall}} - Function called to do multiple trait analysis
+	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
 }
 }
 \examples{
