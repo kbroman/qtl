@@ -34,15 +34,15 @@ ourcat <- function(...,a=TRUE){
 }
 
 ourstop <- function(...){
-	library(tools)
-	parents <- sys.calls()
+	#library(tools)
+	#library(tools)
+	#parents <- sys.calls()
 	ourline()
-	cat("ERROR: Detected in function: '",as.character(as.call(parents[[1]])),"'\n",sep="")	
-	ourline()
-	db <- Rd_db("MQMpackage")
-	db <- lapply(db, function(txt) Rd_parse(text = txt))
-	data <- lapply(db, "[[", "data")
-	p_Rd <- paste(as.character(parents[[1]]),".Rd",sep="")
+	#cat("ERROR: Detected in function: '",as.character(as.call(parents[[1]])),"'\n",sep="")	
+	#db <- Rd_db("MQMpackage")
+	#db <- lapply(db, function(txt) Rd_parse(text = txt))
+	#data <- lapply(db, "[[", "data")
+	#p_Rd <- paste(as.character(parents[[1]]),".Rd",sep="")
 	#if(!is.null(data[[p_Rd]]$tags) && "examples" %in% data[[p_Rd]]$tags){
 	#	ourline()
 	#	cat("ERROR: Some examples on how-to use this function from the helpfiles\n")
@@ -53,6 +53,7 @@ ourstop <- function(...){
 	#	ourline()
 	#}
 	stop(...)
+	ourline()
 }
 
 ourline <- function(){
