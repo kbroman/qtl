@@ -42,8 +42,11 @@
 \seealso{ 
 	\itemize{
 	\item \code{\link{multitrait}} - Dataset used in the example analysis
+	\item \code{\link{fill.geno}} - Augmentationroutine to estimate missing data	
 	\item \code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
-	\item \code{\link{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link{scanone}} - Function called to do single trait analysis
+	\item \code{\link{cim}} - Function called to do single trait analysis
+	\item \code{\link{mqm}} - Function called to do single trait analysis
 	}
 }
 
