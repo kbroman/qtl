@@ -58,6 +58,11 @@
 	cof <- MQMCofactorsEach(multitrait,3)
 	result <- mqmall(multitrait,cofactors=cof,doLOG=1,b_size=5)
 
+	#FUNNY, run at own risk: 3D QTL screensaver
+	phi<-0
+	while(T){
+		plot.all(result,"D",phi);phi<- phi+10;Sys.sleep(0.01)
+	}
 }
 \references{
 	\itemize{
