@@ -4,23 +4,28 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ bootstrap - randomization approaches to obtain estimates of QTL LOD score significance }
 \description{
-   randomization approaches to obtain estimates of QTL significance
+   Using different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
+   \itemize{
+   \item Random redistribution of traits (method=0)
+   \item Random redistribution of simulated trait values (method=1)
+   }
 }
 \usage{
-bootstrap(cross = NULL, Funktie=scanone, pheno.col = 1, n.run=10, n.clusters = 2, method = 0,\dots)
+	bootstrap(cross = NULL, Funktie=scanone, pheno.col = 1, multiC=TRUE, n.run=10, n.clusters = 2, method = 0,\dots)
+	bootstrapcim(cross = NULL,\dots)
+	bootstrapmqm(cross = NULL,\dots)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{Funcktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
-  \item{multiC}{ Use multicore (if available)}  
-  \item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
-  \item{n.clusters}{ Number of child processes to split the job into }
-  \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
-  \item{method}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric bootstrapping ) }  
-  \item{pheno.col}{ Phenotype to do thepull from the cross object }
-
-  
+	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
+	\item{Funcktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
+	\item{multiC}{ Use multicore (if available)}  
+	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
+	\item{n.clusters}{ Number of child processes to split the job into }
+	\item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
+	\item{method}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric ) }  
+	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
+	\item{\dots}{Parameters passed through to the scanone, cim or mqm functions}
 }
 \details{
   Analysis of scanone, cim or mqm to scan for QTL's in shuffled/randomized data. It is recomended to also install the snow library.

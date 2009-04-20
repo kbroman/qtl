@@ -1,10 +1,10 @@
 #####################################################################
 #
-# scanMQMall.R
-# Alias: mqmall
+# scanall.R
+# Alias: scanall, cimall, mqmall
 #
 # copyright (c) 2009, Danny Arends
-# last modified Apr, 2009
+# last modified Mrt, 2009
 # first written Feb, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -21,9 +21,17 @@
 #     http://www.r-project.org/Licenses/
 #
 # Part of the R/qtl package
-# Contains: scanall, snowCoreALL
+# Contains: scanall, cimall, mqmall
 #
 ######################################################################
+
+cimall <- function(...){
+	scanall(...,Funktie=cim)
+}
+
+mqmall <- function(...){
+	scanall(...,Funktie=mqm)
+}
 
 scanall <- function(cross= NULL,Funktie=scanone,multiC=T,n.clusters=2,b_size=10,FF=0,...,plot=TRUE,verbose=TRUE){
 
@@ -147,12 +155,5 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=T,n.clusters=2,b_size=10,
 	}
 }
 
-scancim <- function(...){
-	scanall(...,Funktie=cim)
-}
 
-scanmqm <- function(...){
-	scanall(...,Funktie=mqm)
-}
-
-# end of scanMQMall.R
+# end of scanall.R

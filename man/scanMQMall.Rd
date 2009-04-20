@@ -10,9 +10,9 @@
 	Uses scanone, cim, or mqm to scan for QTL's for each phenotype in the cross object.
 }
 \usage{
-	scanall(cross = NULL, Funktie=scanone, n.clusters = 2,b_size=10, plot=TRUE, verbose=TRUE,\dots)
-	cimall(cross = NULL, Funktie=cim, n.clusters = 2,b_size=10, plot=TRUE, verbose=TRUE,\dots)
-	mqmall(cross = NULL, Funktie=mqm, n.clusters = 2,b_size=10, plot=TRUE, verbose=TRUE,\dots)
+	scanall(cross = NULL, Funktie=scanone, n.clusters = 2,multiC=TRUE, b_size=10, plot=TRUE, verbose=TRUE,\dots)
+	cimall(cross = NULL,\dots)
+	mqmall(cross = NULL,\dots)
 }
 
 \arguments{
@@ -21,7 +21,7 @@
   \item{multiC}{ Use multicore (if available)}
   \item{n.clusters}{ Number of child processes to split the job into }
   \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
-  \item{\dots}{Parameters passed through to the scanone,cim or mqm functions}
+  \item{\dots}{Parameters passed through to the scanone, cim or mqm functions}
 }
 
 \details{
@@ -30,7 +30,7 @@
 }
 
 \value{
-  Returns a MQMmulti object. This object is a list of scanone objects that can be plotted using plot.scanone(result[[trait]])
+  Returns a MQMmulti object. This object is a list of scanone objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{plot.all(result)}
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu}  }
@@ -50,8 +50,10 @@
 \examples{
 	#Doing a multitrait analysis
 	data(multitrait)
+	result <- scanall(multitrait, b_size=5)
+	result <- cimall(multitrait, b_size=5)
 	cof <- MQMCofactorsEach(multitrait,3)
-	result <- scanall(multitrait,Funktie=mqm,cofactors=cof,doLOG=1,b_size=3)
+	result <- mqmall(multitrait,cofactors=cof,doLOG=1,b_size=5)
 
 }
 \references{
