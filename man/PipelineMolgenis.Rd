@@ -43,7 +43,7 @@ PipelineMolgenis(DBmarkerID, DBtraitID, name = "MQMResults", DBpath, each = 0, n
 \seealso{ 
 \itemize{
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
+	\item \code{\link{scanall}} - Function called to do single trait analysis
 	\item \code{\link{ResultsToMolgenis}} - Function called to store results to a molgenis database
 	\item \code{\link{PipelineMolgenis}} - Automatic MQM-QTL analysis for Molgenis database systems	
 }

@@ -1,7 +1,9 @@
 \name{bootstrap}
 \alias{bootstrap}
+\alias{bootstrapcim}
+\alias{bootstrapmqm}
 \alias{permutate}
-%- Also NEED an '\alias' for EACH other topic documented here.
+
 \title{ bootstrap - randomization approaches to obtain estimates of QTL LOD score significance }
 \description{
    Using different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:

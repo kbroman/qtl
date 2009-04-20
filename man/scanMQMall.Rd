@@ -17,7 +17,7 @@
 
 \arguments{
   \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{Funktie}{ Function to use when mappingQTL's (either scanone,cim, mqm or your own mapping function). Easier call the interface implementing the function under interest} 
+  \item{Funktie}{ Function to use when mappingQTL's (either scanone,cim, mqm or your own mapping function). An easier way is to call the interface implementing the function under interest} 
   \item{multiC}{ Use multicore (if available)}
   \item{n.clusters}{ Number of child processes to split the job into }
   \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }

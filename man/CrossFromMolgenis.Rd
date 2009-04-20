@@ -36,14 +36,14 @@ If u find anything wrong with the algorithm please notify me at: \email{Danny.Ar
 \seealso{ 
 \itemize{
 	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanMQMall}} - Function called to do single trait analysis
+	\item \code{\link{mqmall}} - Function called to do multitrait MQM analysis
 	\item \code{\link{ResultsToMolgenis}} - Function called to store results to a molgenis database
 	\item \code{\link{PipelineMolgenis}} - Automatic MQM-QTL analysis for Molgenis database systems	
 }
 }
 \examples{
 cMol <- CrossFromMolgenis()			#Make a crossobject from the database
-result <- mqmall(cMol)			#Basic execution of scanMQMall
+result <- mqmall(cMol)			#Basic execution of scanall using the MQM algorithm
 ResultsToMolgenis(result,"QTL-mqm")	#Store the result from MQM into molgenis database
 }
 \references{

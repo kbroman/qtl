@@ -83,6 +83,7 @@ ResultsToMolgenis <- function(intervalQTLmap=NULL,name="MQMresultsTest",Trait_nu
 	
 	aaa <- find.data(name=name,.verbose=verbose)
 	colnam <- colnames(intervalQTLmap[[j]])[3]
+	cat(colnam,"\n")
 	trait_name <- find.trait(name=substr(colnam,5,nchar(colnames(intervalQTLmap[[1]])[3])),.verbose=verbose)
 	if(!dim(aaa)[1]){
 		#No find, so we'll create one

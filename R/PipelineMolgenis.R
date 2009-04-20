@@ -30,7 +30,7 @@
 #
 ######################################################################
 
-PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=0,n.clusters=2,...){
+PipelineMolgenis <- function(DBmarkerID,DBtraitID,multiC=TRUE,name="MQMResults",DBpath,each=0,n.clusters=2,...){
 	cat("------------------------------------------------------------------\n")
 	cat("Starting Molgenis <-> MQM <-> Molgenis automated pipeline\n")
 	cat("INFO: Molgenisserver:",DBpath,"\n")
@@ -55,7 +55,7 @@ PipelineMolgenis <- function(DBmarkerID,DBtraitID,name="MQMResults",DBpath,each=
 	AVG <- 0
 	LEFT <- 0
 	#TEST FOR SNOW CAPABILITIES
-	if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]])){
+	if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]]) && multiC){
 		start <- proc.time()
 		cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 		outcome <- NULL

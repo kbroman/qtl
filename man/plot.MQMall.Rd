@@ -39,6 +39,8 @@ plot.all(result = NULL, type = "C", theta = 30, phi = 15)
 	result <- mqmall(multitrait)
 	plot.all(result,"P")
 	plot.all(result,"C")
+	plot.all(result,"I")
+	plot.all(result,"D")
 	
 }
 \references{
