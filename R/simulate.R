@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -113,10 +113,13 @@ function(len=rep(100,20), n.mar=10, anchor.tel=TRUE, include.x=TRUE,
 ######################################################################
 
 sim.cross <-
-function(map, model=NULL, n.ind=100, type=c("f2","bc","4way"),
+function(map, model=NULL, n.ind=100,
+         type=c("f2", "bc", "4way", "risib", "riself",
+           "ri4sib", "ri4self", "ri8sib", "ri8self"),
          error.prob=0, missing.prob=0, partial.missing.prob=0,
          keep.qtlgeno=TRUE, keep.errorind=TRUE, m=0, p=0,
-         map.function=c("haldane","kosambi","c-f","morgan"))
+         map.function=c("haldane","kosambi","c-f","morgan"),
+         founderGeno, random.cross=TRUE)
 {
   type <- match.arg(type)
   map.function <- match.arg(map.function)
@@ -126,6 +129,23 @@ function(map, model=NULL, n.ind=100, type=c("f2","bc","4way"),
   if(error.prob > 1) {
     error.prob <- 1-1e-50
     warning("error.prob shouldn't be > 1!")
+  }
+
+  if(type=="risib" || type=="riself") {
+    if(type=="risib") type <- "sibmating"
+    else type <- "selfing"
+    cross <- sim.ril(map, n.ind, type, "2", m=m, p=p)
+    cross$cross <- NULL
+    return(cross)
+  }
+  if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+    if(substr(type, 4, nchar(type))=="self") crosstype <- "selfing"
+    else crosstype <- "sibmating"
+    n.str <- substr(type, 3, 3)
+    cross <- sim.ril(map, n.ind, crosstype, n.str, m=m, p=p,
+                     random.cross=random.cross)
+    cross <- convertMWril(cross, founderGeno)
+    return(cross)
   }
 
   # sort the model matrix

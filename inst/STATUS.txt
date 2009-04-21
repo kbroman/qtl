@@ -24,7 +24,9 @@ Major changes:
   Added the ability to simulate RIL and multiple-strain RIL in the
   sim.cross function.  For the case of multiple-strain RIL, one needs
   genotype data on the founder strains, which may be simulated with
-  the new function simFounderSnps.  
+  the new function simFounderSnps.  The encoding of genotypes in
+  multiple-strain RIL is quite complicated.  See the help file for
+  sim.cross.  
 
 Minor changes:
 

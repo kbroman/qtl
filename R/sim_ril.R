@@ -33,7 +33,8 @@
 # m = interference parameter (0 is no interference)
 ######################################################################
 sim.ril <-
-function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
+function(map, n.ril=1, type=c("sibmating", "selfing"),
+         n.str=c("2","4","8"),
          m=0, p=0, random.cross=TRUE)
 {
   type <- match.arg(type)
@@ -58,6 +59,8 @@ function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
   if(!selfing && class(omap[[length(omap)]])=="X")
     include.x <- TRUE
   else include.x <- FALSE
+
+  if(n.str==2) random.cross <- FALSE
 
   x <- .C("R_sim_ril",
           as.integer(n.chr),
