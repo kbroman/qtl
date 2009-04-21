@@ -26,7 +26,8 @@
  *
  * Contains: R_sim_ril, sim_ril, 
  *           allocate_individual, reallocate_individual, 
- *           copy_individual, cross, meiosis, sim_cc, R_sim_cc
+ *           copy_individual, cross, meiosis, 
+ *           convertMWril, R_convertMWril
  *  
  **********************************************************************/
 
@@ -120,28 +121,27 @@ void meiosis(double L, int m, double p, int *maxwork, double **work,
 
 /**********************************************************************
  * 
- * sim_cc    Use the result of sim_all_ril with n_str=8 plus data on
- *           the SNP genotypes of the 8 parental strains to create 
- *           real SNP data for the Collaborative Cross
+ * convertMWril    Convert RIL genotypes using genotypes in founders
+ *                 (and the cross types).  [for a single chr]
  *
  * n_ril     Number of RILs to simulate
- * tot_mar   Total number of markers
+ * n_mar     Number of markers
+ * n_str     Number of founder strains
  *
- * Parents   SNP data for the 8 parental lines [dim tot_mar x 8]
+ * Parents   SNP data for the founder strains [dim n_mar x n_str]
  * 
  * Geno      On entry, the detailed genotype data; on exit, the 
- *           SNP data written bitwise.
+ *           SNP data written bitwise. [dim n_ril x n_mar]
  * 
- * error_prob  Probability of genotyping error
- * missing_prob  Probability a genotype will be missing
+ * Cross     The crosses [n_ril x n_str]
  *
  **********************************************************************/
-void sim_cc(int n_ril, int tot_mar, int **Parents, int **Geno,
-	    double error_prob, double missing_prob);
+void convertMWril(int n_ril, int n_mar, int n_str, 
+		  int **Parents, int **Geno, int **Crosses);
 
-/* wrapper for calling sim_cc from R */
-void R_sim_cc(int *n_ril, int *tot_mar, int *parents, int *geno,
-	      double *error_prob, double *missing_prob);
+/* wrapper for calling convertMWril from R */
+void R_convertMWril(int *n_ril, int *n_mar, int *n_str, 
+		    int *parents, int *geno, int *crosses);
 
 /* end of simulate_ril.h */
 

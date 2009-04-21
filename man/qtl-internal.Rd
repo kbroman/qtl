@@ -11,6 +11,7 @@
 \alias{clean}
 \alias{condense}
 \alias{convert}
+\alias{convertMWril}
 \alias{countqtlterms}
 \alias{create.map}
 \alias{deparseQTLformula}
@@ -108,7 +109,6 @@
 \alias{scantwo.perm}
 \alias{scantwo.perm.engine}
 \alias{sim.bcg}
-\alias{sim.cc}
 \alias{sim.cross.4way}
 \alias{sim.cross.bc}
 \alias{sim.cross.f2}
@@ -147,6 +147,7 @@ checkStepwiseqtlStart(qtl, formula, covar=NULL)
 clean(object)
 condense(object)
 convert(object)
+convertMWril(cross, parents)
 countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
@@ -279,8 +280,6 @@ scantwo.perm.engine(n.perm, cross, pheno.col, model,
                     batchsize=250)
 sim.bcg(n.ind, map, m, p,
         map.function=c("haldane","kosambi","c-f","morgan"))
-sim.cc(parents, n.ril=1, type=c("sibmating", "selfing"),
-       error.prob=0, missing.prob=0, m=0, p=0, step=0)
 sim.cross.4way(map, model, n.ind, error.prob, missing.prob,
                partial.missing.prob, keep.errorind, m, p, map.function)
 sim.cross.bc(map, model, n.ind, error.prob, missing.prob,

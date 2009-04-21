@@ -26,7 +26,8 @@
  *
  * Contains: R_sim_ril, sim_ril, 
  *           allocate_individual, reallocate_individual, 
- *           copy_individual, docross, meiosis, sim_cc, R_sim_cc
+ *           copy_individual, docross, meiosis, 
+ *           convertMWril, R_convertMWril
  *  
  **********************************************************************/
 
@@ -549,58 +550,72 @@ void R_meiosis(double *L, int *m, double *p, int *maxwork, double *work,
 
 /**********************************************************************
  * 
- * sim_cc    Use the result of sim_all_ril with n_str=8 plus data on
- *           the SNP genotypes of the 8 parental strains to create 
- *           real SNP data for the Collaborative Cross
+ * convertMWril    Convert RIL genotypes using genotypes in founders
+ *                 (and the cross types).  [for a single chr]
  *
  * n_ril     Number of RILs to simulate
- * tot_mar   Total number of markers
+ * n_mar     Number of markers
+ * n_str     Number of founder strains
  *
- * Parents   SNP data for the 8 parental lines [dim tot_mar x 8]
+ * Parents   SNP data for the founder strains [dim n_mar x n_str]
  * 
  * Geno      On entry, the detailed genotype data; on exit, the 
- *           SNP data written bitwise.
+ *           SNP data written bitwise. [dim n_ril x n_mar]
  * 
- * error_prob  Probability of genotyping error
- * missing_prob  Probability a genotype will be missing
+ * Crosses   The crosses [n_ril x n_str]
  *
  **********************************************************************/
-void sim_cc(int n_ril, int tot_mar, int **Parents, int **Geno,
-	    double error_prob, double missing_prob)
+void convertMWril(int n_ril, int n_mar, int n_str, 
+		  int **Parents, int **Geno, int **Crosses)
 {
   int i, j, k, temp;
 
   for(i=0; i<n_ril; i++) {
     R_CheckUserInterrupt(); /* check for ^C */
 
-    for(j=0; j<tot_mar; j++) {
-      temp = Parents[Geno[j][i]-1][j];
-      if(unif_rand() < error_prob)  /* switch the SNP genotype */
-	temp = 1-temp;
+    for(j=0; j<n_mar; j++) {
 
-      Geno[j][i] = 0;
-      if(unif_rand() > missing_prob) {/* no error; convert to bit string */
-	for(k=0; k<8; k++) 
-	  if(temp == Parents[k][j]) Geno[j][i] += (1<<k);
+      Rprintf("geno = %d\n", Geno[j][i]);
+      Rprintf("cross =");
+      for(k=0; k<n_str; k++) 
+	Rprintf(" %d", Crosses[k][i]);
+      Rprintf("\n");
+      Rprintf("parents =");
+      for(k=0; k<n_str; k++) 
+	Rprintf(" %d", Parents[k][j]);
+      Rprintf("\n");
+
+      if(Geno[j][i] < 1 || Geno[j][i] > n_str) {
+	warning("Error in RIL genotype: line %d at marker %d\n", i+1, j+1);
+	Geno[j][i] = 0;
       }
+      else {
+	temp = Parents[Geno[j][i]-1][j]; /* SNP genotype of RIL i at marker j */
+
+	Geno[j][i] = 0;
+	for(k=0; k<n_str; k++) 
+	  if(temp == Parents[Crosses[k][i]-1][j]) 
+	    Geno[j][i] += (1 << k);
+      }
+
+      Rprintf("newgeno = %d\n\n", Geno[j][i]);
+
     }
   }
 }
 
-/* wrapper for calling sim_cc from R */
-void R_sim_cc(int *n_ril, int *tot_mar, int *parents, int *geno,
-	      double *error_prob, double *missing_prob)
+/* wrapper for calling convertMWril from R */
+void R_convertMWril(int *n_ril, int *n_mar, int *n_str, 
+		    int *parents, int *geno, int *crosses)
 {
-  int **Parents, **Geno;
+  int **Parents, **Geno, **Crosses;
 
-  reorg_geno(*tot_mar, 8, parents, &Parents);
-  reorg_geno(*n_ril, *tot_mar, geno, &Geno);
+  reorg_geno(*n_mar, *n_str, parents, &Parents);
+  reorg_geno(*n_ril, *n_mar, geno, &Geno);
+  reorg_geno(*n_ril, *n_str, crosses, &Crosses);
 
-  GetRNGstate();
+  convertMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses);
 
-  sim_cc(*n_ril, *tot_mar, Parents, Geno, *error_prob, *missing_prob);
-
-  PutRNGstate();
 }
 
 /* end of simulate_ril.c */

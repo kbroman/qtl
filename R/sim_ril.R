@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: sim.ril, sim.cc
+# Contains: sim.ril, simulateFounderSnps, convertMWril
 #
 ######################################################################
 
@@ -34,11 +34,12 @@
 ######################################################################
 sim.ril <-
 function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
-         m=0, p=0, random.cross=FALSE)
+         m=0, p=0, random.cross=TRUE)
 {
   type <- match.arg(type)
   if(type=="sibmating") selfing <- 0
   else selfing <- 1
+  if(is.numeric(n.str)) n.str <- as.character(n.str)
   n.str <- as.numeric(match.arg(n.str))
   n.chr <- length(map)
   n.mar <- sapply(map,length)
@@ -89,116 +90,117 @@ function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
   pheno <- data.frame(line=1:n.ril)
   x <- list(geno=geno,pheno=pheno,cross=cross)
 
+  # ri[n][sib/self]un: un = genotypes not yet transformed
   if(type=="sibmating") {
     if(n.str=="2")
       class(x) <- c("risib","cross")
     else
-      class(x) <- c(paste("ri", n.str, "sib",sep=""),"cross")
+      class(x) <- c(paste("ri", n.str, "sibun",sep=""),"cross")
   }
   else {
     if(n.str=="2")
       class(x) <- c("riself","cross")
     else
-      class(x) <- c(paste("ri", n.str, "self",sep=""),"cross")
+      class(x) <- c(paste("ri", n.str, "selfun",sep=""),"cross")
   }
   
   x
 }
 
-  
 ######################################################################
-# sim.cc: Simulate the collaborative cross
+# simFounderSnps
 #
-# parents = Parental snp data, with genetic map
-#           list with elements being chromosomes
-#           each chromosome is a list with data=matrix n_mar x 8, 
-#              map = vector of marker positions
+# Simulate founder snp genotypes for a multiple-strain RIL
 #
-# n.ril = number of lines to simulate
+# map = genetic map of markers (used just to get no. markers per chr)
 #
-# error_prob = probability of genotyping error
-# missing_prob = probability a genotype is missing
+# n.str = number of founder strains (4 or 8)
 #
-# m = interference parameter (0 is no interference)
-#
-# step = step size for intermediate loci to be simulated
+# pat.freq = frequency of SNP genotype patterns (length n.str/2 + 1)
+#            (monoallelic, snp unique to a founder,
+#             snp present in 2 founder,
+#             [for 8 founders: snp in 3/8, snp in 4/8] )
 ######################################################################
-sim.cc <-
-function(parents, n.ril=1, type=c("sibmating", "selfing"),
-         error.prob=0, missing.prob=0, m=0, p=0, step=0)
+simFounderSnps <-
+function(map, n.str=c("4","8"), pat.freq)
 {
-  type <- match.arg(type)
-  map <- lapply(parents, function(a) a$map)
-  markers <- vector("list",length(map))
-  if(step<1e-8) {
-    fmap <- map
-    for(i in 1:length(map))
-      markers[[i]] <- rep(TRUE,length(map[[i]]))
+  if(is.numeric(n.str)) n.str <- as.character(n.str)
+  n.str <- as.numeric(match.arg(n.str))
+ 
+  if(missing(pat.freq)) {
+    if(n.str==8) pat.freq <- c(0, 0.4, 0.3, 0.2, 0.1)
+    else pat.freq <- c(0, 0.7, 0.3)
   }
-  else {
-    fmap <- vector("list",map)
-    for(i in 1:length(map)) {
-      fmap[[i]] <- create.map(map[[i]],step,0)
-      class(fmap[[i]]) <- class(map[[i]])
-      markers[[i]] <- map[[i]] %in% fmap[[i]]
-      if(sum(markers[[i]]) != length(map[[i]]))
-        warning("problem: screw up regarding create_map")
-    }
+    
+  if(length(pat.freq) < n.str/2+1)
+    pat.freq <- c(pat.freq, rep(0, n.str/2+1 - length(pat.freq)))
+  else pat.freq <- pat.freq[1:(n.str/2+1)]
+  pat.freq <- pat.freq/sum(pat.freq)
+
+  n.mar <- sapply(map, length)
+  output <- vector("list", length(map))
+  names(output) <- names(map)
+  for(i in seq(along=map)) {
+    thepat <- sample(seq(length(pat.freq))-1, n.mar[i], prob=pat.freq, repl=TRUE)
+    output[[i]] <- matrix(0, ncol=n.str, nrow=n.mar[i])
+    for(j in seq(along=thepat))
+      output[[i]][j,sample(1:n.str, thepat[j])] <- 1
   }
-
-  if(m < 0) stop("Must have m >= 0.")
-  if(p < 0 || p > 1) stop("Must have 0 <= p <= 1.")
-  if(p == 1) {
-    p <- 0
-    m <- 0
-  }
-
-  cc <- sim.ril(fmap, n.ril, type, "8", m, p, TRUE)
-  cc$truth <- cc$geno
-  g <- pull.geno(cc)[,unlist(markers)]
-  pg <- NULL
-  for(i in 1:length(parents))
-    pg <- rbind(pg,parents[[i]]$data)
-
-  res <- .C("R_sim_cc",
-            as.integer(n.ril), # no. ril
-            as.integer(ncol(g)), # no. markers
-            as.integer(pg), # SNP data on parents
-            g=as.integer(g), # genotype data on rils
-            as.double(error.prob), # error prob
-            as.double(missing.prob), # missing data prob
-            PACKAGE="qtl")$g
-
-  n.mar <- sapply(map,length)
-
-  g <- matrix(res,nrow=n.ril)
   
-  # function for picking out the locations of breakpoints in the "truth"
-  tempf <-
-    function(a,b)  
-      { 
-        wh <- which(diff(a) != 0)
-        x <- a[c(1,wh+1,length(a))]
-        y <- c(b[1],(b[wh] + b[wh+1])/2,b[length(b)])
-        y <- rbind(x,y)
-        colnames(y) <- NULL
-        y
-      }
+  output
+}
+  
+######################################################################
+# convertMWril: Convert multiple-strain RIL genotypes using parental data
+#
+# parents = Parental genotype data, with genetic map
+#           list with elements being chromosomes
+#           each chromosome is a matrix n.mar x n.str, 
+######################################################################
+convertMWril <- 
+function(cross, parents) 
+{
+  crosstype <- class(cross)[1]
+  n.str.by.crosstype <- as.numeric(substr(crosstype, 3, 3))
+  un <- substr(crosstype, nchar(crosstype)-1, nchar(crosstype))
+  if(un != "un")
+    stop("cross appears to have already been converted.")
+  class(cross)[1] <- substr(crosstype, 1, nchar(crosstype)-2)
 
-  # get genotype data back into cross
-  cur <- 0
-  for(i in seq(along=n.mar)) {
-    cc$geno[[i]]$data <- g[,cur+(1:n.mar[i])]
-    cc$geno[[i]]$map <- map[[i]]
-    colnames(cc$geno[[i]]$data) <- names(map[[i]])
-    cur <- cur + n.mar[i]
+  n.ril <- nind(cross)
+  thecrosses <- cross$cross
+  n.str <- ncol(thecrosses)
+  if(n.str != ncol(parents[[1]]))
+    stop("Different numbers of founders in cross and parents.")
+  if(n.str != n.str.by.crosstype)
+    stop("Confusion regarding no. founders within cross.")
+  if(length(parents) != nchr(cross))
+    stop("Different numbers of chromosomes in cross and parents.")
 
-    # turn "truth" into a more compact form
-    cc$truth[[i]] <- apply(cc$truth[[i]]$data,1,tempf,cc$truth[[i]]$map)
+  n.mar <- nmar(cross)
+  n.mar2 <- sapply(parents, nrow)
+  if(any(n.mar != n.mar2))
+    stop("Different numbers of markers in cross and parents.")
+
+  for(i in 1:nchr(cross)) {
+    newgeno <-
+      .C("R_convertMWril",
+         as.integer(n.ril),        # no. ril
+         as.integer(n.mar[i]),     # no. markers
+         as.integer(n.str),        # no. founders
+         as.integer(parents[[i]]), # SNP data on parents (n.mar x n.str)
+         g=as.integer(cross$geno[[i]]$data), # SNP data on RIL (n.ril x n.mar)
+         as.integer(thecrosses),   # the crosses (n.ril x n.str)
+         PACKAGE="qtl")$g
+
+    # replace 0's with missing values
+    newgeno[newgeno==0] <- 0
+    newgeno <- matrix(newgeno, n.ril, n.mar[i])
+    colnames(newgeno) <- colnames(cross$geno[[i]]$data)
+    cross$geno[[i]]$data <- newgeno
   }
 
-  class(cc) <- c("cc","cross")
-  cc
+  cross
 }
 
 # end of sim_ril.R
