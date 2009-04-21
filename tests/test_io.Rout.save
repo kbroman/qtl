@@ -1,6 +1,6 @@
 
-R version 2.6.1 (2007-11-26)
-Copyright (C) 2007 The R Foundation for Statistical Computing
+R version 2.9.0 (2009-04-17)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -60,7 +60,8 @@ Type 'q()' to quit R.
 	 1  phenotypes
  --Cross type: f2 
 Warning message:
-In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+In fixXgeno.f2(cross, alleles) :
+   --Assuming that all individuals are female.
 
 > csv2 <- read.cross("csv", "", "listeria2.csv", estimate=FALSE)
  --Read the following data:
@@ -69,7 +70,8 @@ In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
 	 1  phenotypes
  --Cross type: f2 
 Warning message:
-In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+In fixXgeno.f2(cross, alleles) :
+   --Assuming that all individuals are female.
 
 > 
 > # Read mapmaker format
@@ -81,7 +83,8 @@ In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
 	Number of phenotypes:   1 
  --Cross type: f2 
 Warning message:
-In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+In fixXgeno.f2(cross, alleles) :
+   --Assuming that all individuals are female.
 
 > mm2 <- read.cross("mm", "", "listeria.raw", "listeria2.map", estimate=FALSE)
  --Read the following data:
@@ -91,7 +94,8 @@ In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
 	Number of phenotypes:   1 
  --Cross type: f2 
 Warning message:
-In fixXgeno.f2(cross) :  --Assuming that all individuals are female.
+In fixXgeno.f2(cross, alleles) :
+   --Assuming that all individuals are female.
 
 > 
 > ##############################

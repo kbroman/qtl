@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In fixXgeno.f2, for female genotypes to be omitted, use the allele
-  labels, if available, rather than the generic A and B.
-
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
