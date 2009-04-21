@@ -1,10 +1,10 @@
 /**********************************************************************
  * 
- * simulate_cc.h
+ * simulate_ril.h
  *
- * copyright (c) 2005-6, Karl W Broman
+ * copyright (c) 2005-9, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Apr, 2009
  * first written Mar, 2005
  *
  *     This program is free software; you can redistribute it and/or
@@ -93,6 +93,8 @@ void reallocate_individual(struct individual *ind, int old_max_seg,
  **********************************************************************/
 void copy_individual(struct individual *from, struct individual *to);
 
+/* void print_ind(struct individual ind); */
+
 void docross(struct individual par1, struct individual par2,
 	     struct individual *kid, double L, int m,
 	     double p, int isX, int *maxwork, double **work);
@@ -141,5 +143,5 @@ void sim_cc(int n_ril, int tot_mar, int **Parents, int **Geno,
 void R_sim_cc(int *n_ril, int *tot_mar, int *parents, int *geno,
 	      double *error_prob, double *missing_prob);
 
-/* end of simulate_cc.h */
+/* end of simulate_ril.h */
 

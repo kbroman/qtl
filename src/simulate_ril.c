@@ -1,10 +1,10 @@
 /**********************************************************************
  * 
- * simulate_cc.c
+ * simulate_ril.c
  *
- * copyright (c) 2005-6, Karl W Broman
+ * copyright (c) 2005-9, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Apr, 2009
  * first written Mar, 2005
  *
  *     This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@
 #include <R_ext/PrtUtil.h>
 #include <R_ext/Utils.h>
 #include "util.h"
-#include "simulate_cc.h"
+#include "simulate_ril.h"
 
 /* wrapper for sim_ril, to be called from R */
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
@@ -85,7 +85,7 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  **********************************************************************/
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
-	     int random_cross, int selfing, int *cross, int *ril) 
+	     int random_cross, int selfing, int *cross, int *ril)
 {
   int i, j, k, ngen, tot_mar, curseg;
   struct individual par1, par2, kid1, kid2;
@@ -118,7 +118,8 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
       maxlen =  Map[i][n_mar[i]-1];
 
   /* allocate space for individuals */
-  max_xo = (int)qpois(1e-10, maxlen/100.0, 0, 0)*3;
+  max_xo = (int)qpois(1e-10, maxlen/100.0, 0, 0)*6;
+  if(!selfing) max_xo *= 5;
   allocate_individual(&par1, max_xo);
   allocate_individual(&par2, max_xo);
   allocate_individual(&kid1, max_xo);
@@ -146,23 +147,23 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
       }
       else if(n_str==4) {
 	par1.allele[0][0] = 1;
-	par1.allele[0][1] = 2;
+	par1.allele[1][0] = 2;
 	par2.allele[0][0] = 3;
-	par2.allele[0][1] = 4;
+	par2.allele[1][0] = 4;
       }
       else { /* 8 strain case */
 	par1.allele[0][0] = 1;
-	par1.allele[0][1] = 2;
+	par1.allele[1][0] = 2;
 	par2.allele[0][0] = 3;
-	par2.allele[0][1] = 4;
+	par2.allele[1][0] = 4;
 
 	docross(par1, par2, &kid1, chrlen, m, p, 0, 
 	      &maxwork, &work);
 
 	par1.allele[0][0] = 5;
-	par1.allele[0][1] = 6;
+	par1.allele[1][0] = 6;
 	par2.allele[0][0] = 7;
-	par2.allele[0][1] = 8;
+	par2.allele[1][0] = 8;
 
 	docross(par1, par2, &kid2, chrlen, m, p, isX,
 	      &maxwork, &work);
@@ -267,13 +268,18 @@ void allocate_individual(struct individual *ind, int max_seg)
 void reallocate_individual(struct individual *ind, int old_max_seg, 
 			   int new_max_seg)
 {
+  int j;
   (*ind).max_segments = new_max_seg;
   (*ind).allele[0] = (int *)S_realloc((char *)(*ind).allele[0], 2*new_max_seg, 
 				     2*old_max_seg, sizeof(int));
   (*ind).allele[1] = (*ind).allele[0] + new_max_seg;
+  for(j=0; j<old_max_seg; j++) 
+    (*ind).allele[1][j] = (*ind).allele[0][old_max_seg+j];
   (*ind).xoloc[0] = (double *)S_realloc((char *)(*ind).xoloc[0], 2*(new_max_seg-1), 
 				      2*(old_max_seg-1), sizeof(double));
-  (*ind).xoloc[0] = (*ind).xoloc[1] + new_max_seg-1;
+  (*ind).xoloc[1] = (*ind).xoloc[0] + new_max_seg-1;
+  for(j=0; j<old_max_seg-1; j++) 
+    (*ind).xoloc[1][j] = (*ind).xoloc[0][old_max_seg-1+j];
 }
 
 /**********************************************************************
@@ -297,6 +303,35 @@ void copy_individual(struct individual *from, struct individual *to)
 }
 
 /**********************************************************************
+ * print_ind
+ *
+ * [for debugging]
+ **********************************************************************
+void print_ind(struct individual ind) 
+{  
+  int i, j;
+  Rprintf("max segments = %d\n", ind.max_segments);
+  Rprintf("\n");
+  Rprintf("no. XO(1) = %d\n", ind.n_xo[0]);
+  Rprintf("allele(1) = ");
+  for(j=0; j<ind.n_xo[0]+1; j++) Rprintf(" %d", ind.allele[0][j]);
+  Rprintf("\n");
+  Rprintf("xoloc(1) = ");
+  for(j=0; j<ind.n_xo[0]; j++) Rprintf(" %6.2f", ind.xoloc[0][j]);
+  Rprintf("\n");
+
+  Rprintf("no. XO(2) = %d\n", ind.n_xo[1]);
+  Rprintf("allele(2) = ");
+  for(j=0; j<ind.n_xo[1]+1; j++) Rprintf(" %d", ind.allele[1][j]);
+  Rprintf("\n");
+  Rprintf("xoloc(2) = ");
+  for(j=0; j<ind.n_xo[1]; j++) Rprintf(" %6.2f", ind.xoloc[1][j]);
+  Rprintf("\n\n");
+}
+***********************************************************************/
+
+
+/**********************************************************************
  * docross
  *
  * Cross two individuals and get a kid
@@ -311,6 +346,7 @@ void docross(struct individual par1, struct individual par2,
 
   /* need to reallocate? */
   i = par1.n_xo[0]+par1.n_xo[1]+n_xo;
+
   if((*kid).max_segments < i) 
     reallocate_individual(kid, (*kid).max_segments, i*2);
 
@@ -371,9 +407,10 @@ void docross(struct individual par1, struct individual par2,
 
     /* need to reallocate? */
     i = par2.n_xo[0]+par2.n_xo[1]+n_xo;
+
     if((*kid).max_segments < i) 
       reallocate_individual(kid, (*kid).max_segments, i*2);
-    
+
     if(unif_rand() < 0.5) curstrand = 0;
     else curstrand = 1;
 
@@ -566,5 +603,5 @@ void R_sim_cc(int *n_ril, int *tot_mar, int *parents, int *geno,
   PutRNGstate();
 }
 
-/* end of simulate_cc.c */
+/* end of simulate_ril.c */
 

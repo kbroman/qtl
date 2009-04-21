@@ -2,8 +2,8 @@
 #
 # sim_ril.R
 #
-# copyright (c) 2004-6, Karl W Broman
-# last modified Dec, 2006
+# copyright (c) 2004-9, Karl W Broman
+# last modified Apr, 2009
 # first written May, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 ######################################################################
 sim.ril <-
 function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
-         m=0, p=0, random.cross=TRUE)
+         m=0, p=0, random.cross=FALSE)
 {
   type <- match.arg(type)
   if(type=="sibmating") selfing <- 0
@@ -51,9 +51,10 @@ function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
     m <- 0
   }
 
+  omap <- map
   map <- lapply(map, function(a) a-min(a))
 
-  if(class(map[[length(map)]])=="X")
+  if(!selfing && class(omap[[length(omap)]])=="X")
     include.x <- TRUE
   else include.x <- FALSE
 
@@ -81,7 +82,7 @@ function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
   for(i in 1:n.chr) {
     geno[[i]]$data <- x[,cur + 1:n.mar[i],drop=FALSE]
     colnames(geno[[i]]$data) <- names(map[[i]])
-    geno[[i]]$map <- map[[i]]
+    geno[[i]]$map <- omap[[i]]
     cur <- cur + n.mar[i]
     class(geno[[i]]) <- class(map[[i]])
   }
@@ -92,13 +93,13 @@ function(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
     if(n.str=="2")
       class(x) <- c("risib","cross")
     else
-      class(x) <- c(paste("risib",n.str,sep=""),"cross")
+      class(x) <- c(paste("ri", n.str, "sib",sep=""),"cross")
   }
   else {
     if(n.str=="2")
       class(x) <- c("riself","cross")
     else
-      class(x) <- c(paste("riself",n.str,sep=""),"cross")
+      class(x) <- c(paste("ri", n.str, "self",sep=""),"cross")
   }
   
   x
