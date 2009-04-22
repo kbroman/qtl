@@ -45,13 +45,14 @@
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 	       int *n_str, int *m, double *p, int *include_x, 
 	       int *random_cross, int *selfing, int *cross, int *ril,
+	       int *origgeno,
 	       double *error_prob, double *missing_prob, int *errors)
 {
   GetRNGstate();
 
   sim_ril(*n_chr, n_mar, *n_ril, map, *n_str, *m, *p, *include_x, 
-	  *random_cross, *selfing, cross, ril, *error_prob, *missing_prob,
-	  errors);
+	  *random_cross, *selfing, cross, ril, origgeno, 
+	  *error_prob, *missing_prob, errors);
 
   PutRNGstate();
 }
@@ -85,6 +86,8 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  * ril     On output, the simulated data 
  *         (vector of length sum(n_mar) x n_ril)
  *
+ * origgeno       Like ril, but with no missing data
+ *
  * error_prob     Genotyping error probability (used nly with n_str==2)
  *
  * missing_prob   Rate of missing genotypes
@@ -95,11 +98,13 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
 	     int random_cross, int selfing, int *cross, int *ril,
+	     int *origgeno, 
 	     double error_prob, double missing_prob, int *errors)
 {
   int i, j, k, ngen, tot_mar, curseg;
   struct individual par1, par2, kid1, kid2;
-  int **Ril, **Cross, **Errors, maxwork, isX, flag, max_xo, *firstmarker;
+  int **Ril, **Cross, **Errors, **OrigGeno; 
+  int maxwork, isX, flag, max_xo, *firstmarker;
   double **Map, maxlen, chrlen, *work;
 
  /* count total number of markers */
@@ -109,6 +114,7 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
   reorg_geno(tot_mar, n_ril, ril, &Ril);
   reorg_geno(n_str, n_ril, cross, &Cross);
   reorg_geno(tot_mar, n_ril, errors, &Errors);
+  reorg_geno(tot_mar, n_ril, origgeno, &OrigGeno);
 
   /* allocate space */
   Map = (double **)R_alloc(n_chr, sizeof(double *));
@@ -248,7 +254,8 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
 	while(curseg < kid1.n_xo[0] && Map[j][k] > kid1.xoloc[0][curseg]) 
 	  curseg++;
 	  
-	Ril[i][k+firstmarker[j]] = Cross[i][kid1.allele[0][curseg]-1];
+	OrigGeno[i][k+firstmarker[j]] = 
+	  Ril[i][k+firstmarker[j]] = Cross[i][kid1.allele[0][curseg]-1];
 
 	/* simulate missing ? */
 	if(unif_rand() < missing_prob) {

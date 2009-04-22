@@ -78,6 +78,7 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
           as.integer(selfing),
           cross=as.integer(rep(0,n.ril*n.str)),
           res=as.integer(rep(0,tot.mar*n.ril)),
+          orig=as.integer(rep(0,tot.mar*n.ril)),
           as.double(error.prob),
           as.double(missing.prob),
           err=as.integer(rep(0,tot.mar*n.ril)),
@@ -85,6 +86,7 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
 
   cross <- t(matrix(x$cross,ncol=n.ril,nrow=n.str))
   err <- t(matrix(x$err,nrow=tot.mar,ncol=n.ril))
+  truegeno <- t(matrix(x$orig, nrow=tot.mar, ncol=n.ril))
   x <- t(matrix(x$res,nrow=tot.mar,ncol=n.ril))
   x[x==0] <- NA
 
@@ -95,6 +97,8 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
     geno[[i]]$data <- x[,cur + 1:n.mar[i],drop=FALSE]
     colnames(geno[[i]]$data) <- names(map[[i]])
     geno[[i]]$map <- omap[[i]]
+    if(missing.prob > 0 || (error.prob>0 && n.str==2))
+      geno[[i]]$truegeno <- truegeno[,cur+1:n.mar[i],drop=FALSE]
     if(error.prob > 0 && n.str==2) 
       geno[[i]]$errors <- err[,cur+1:n.mar[i],drop=FALSE]
 

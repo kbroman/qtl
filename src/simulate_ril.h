@@ -43,7 +43,7 @@ struct individual {
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 	       int *n_str, int *m, double *p, int *include_x, 
 	       int *random_cross, int *selfing, int *cross, int *ril,
-	       double *error_prob, double *missing_prob, 
+	       int *origgeno, double *error_prob, double *missing_prob, 
 	       int *errors);
 
 /**********************************************************************
@@ -75,6 +75,8 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  * ril     On output, the simulated data 
  *         (vector of length sum(n_mar) x n_ril)
  *
+ * origgeno       Like ril, but with no missing data
+ *
  * error_prob     Genotyping error probability (used only with n_str==2)
  *
  * missing_prob   Rate of missing genotypes
@@ -85,7 +87,7 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
 	     int random_cross, int selfing, int *cross, int *ril,
-	     double error_prob, double missing_prob, 
+	     int *origgeno, double error_prob, double missing_prob, 
 	     int *errors);
 
 /**********************************************************************

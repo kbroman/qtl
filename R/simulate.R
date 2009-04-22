@@ -151,9 +151,14 @@ function(map, model=NULL, n.ind=100,
                      error.prob=0,
                      missing.prob=missing.prob)
 
-    cross <- convertMWril(cross, founderGeno, error.prob=error.prob)
-
-    return(cross)
+    rcross <- convertMWril(cross, founderGeno, error.prob=error.prob)
+    for(i in names(cross$geno)) 
+      if(!("truegeno" %in% names(rcross$geno[[i]])))
+        rcross$geno[[i]]$truegeno <- cross$geno[[i]]$data
+    
+    # remove "un" from cross type
+    class(rcross)[1] <- substr(class(cross)[1], 1, nchar(class(cross)[1])-2)
+    return(rcross)
   }
 
   # sort the model matrix
