@@ -94,6 +94,9 @@
 \alias{read.cross.qtx}
 \alias{read.map.qtlcart}
 \alias{read.maps.mm}
+\alias{reorgRIargmax}
+\alias{reorgRIdraws}
+\alias{reorgRIgenoprob}
 \alias{replacemap}
 \alias{revisecovar}
 \alias{reviseqtlnuminformula}
@@ -243,6 +246,9 @@ read.cross.qtlcart(dir, crofile, mapfile)
 read.cross.qtx(dir, file, estimate.map=TRUE)
 read.map.qtlcart(file)
 read.maps.mm(mapsfile)
+reorgRIargmax(cross)
+reorgRIdraws(cross)
+reorgRIgenoprob(cross)
 replacemap(object, map)
 revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)

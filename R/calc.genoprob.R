@@ -188,6 +188,10 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     attr(cross$geno[[i]]$prob,"stepwidth") <- stepwidth
   } # end loop over chromosomes
 
+  # 4- and 8-way RIL: reorganize the results
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+    cross <- reorgRIgenoprob(cross)
+
   cross
 }
 

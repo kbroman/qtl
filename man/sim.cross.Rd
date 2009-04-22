@@ -116,6 +116,9 @@ sim.cross(map, model=NULL, n.ind=100,
   then the RIL genotype would be encoded \eqn{2^{2-1} + 2^{3-1} = 6}{2^(2-1) + 2^(3-1) = 6}.
   If the cross was derived by the cross (DxA)x(CxB), then the RIL
   genotype would be encoded \eqn{2^{1-1} + 2^{4-1} = 9}{2^(1-1) + 2^(4-1) = 6}.
+  These get reorganized after calls to \code{\link[qtl]{calc.genoprob}},
+  \code{\link[qtl]{sim.geno}}, or \code{\link[qtl]{argmax.geno}}, and
+  this approach simplifies the hidden Markov model (HMM) code.
 
   For the 4- and 8-way RIL, genotyping errors are simulated only if the
   founder genotypes are 0/1 SNPs.
