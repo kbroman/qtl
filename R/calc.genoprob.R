@@ -109,7 +109,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       one.map <- TRUE
       gen.names <- LETTERS[1:n.gen]
       if(xchr)
-        warning("argmax.geno not working properly for the X chromosome for 4- or 8-way RIL.")
+        warning("calc.genoprob not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else 
       stop("calc.genoprob not available for cross type ", type, ".")
@@ -278,6 +278,14 @@ function(cross, error.prob=0.0001,
       n.gen <- 4
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
+    }
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+      cfunc <- paste("calc_genoprob_special_", type, sep="")
+      n.gen <- as.numeric(substr(type, 3, 3))
+      one.map <- TRUE
+      gen.names <- LETTERS[1:n.gen]
+      if(xchr)
+        warning("calc.genoprob.special not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else 
       stop("calc.genoprob.special not available for cross type ", type, ".")

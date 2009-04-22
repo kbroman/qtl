@@ -22,8 +22,8 @@
  * C functions for the R/qtl package
  *
  * Contains: init_ri4sib, emit_ri4sib, step_ri4sib, 
- *           calc_genoprob_ri4sib, argmax_geno_ri4sib
- *           sim_geno_ri4sib
+ *           calc_genoprob_ri4sib, calc_genoprob_special_ri4sib,
+ *           argmax_geno_ri4sib, sim_geno_ri4sib
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -43,6 +43,9 @@ double step_ri4sib(int gen1, int gen2, double rf, double junk);
 void calc_genoprob_ri4sib(int *n_ind, int *n_mar, int *geno, 
 			  double *rf, double *error_prob, double *genoprob);
   
+void calc_genoprob_special_ri4sib(int *n_ind, int *n_mar, int *geno, 
+				  double *rf, double *error_prob, double *genoprob);
+
 void argmax_geno_ri4sib(int *n_ind, int *n_pos, int *geno,
 			double *rf, double *error_prob, int *argmax);
 

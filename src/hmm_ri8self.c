@@ -22,8 +22,8 @@
  * C functions for the R/qtl package
  *
  * Contains: init_ri8self, emit_ri8self, step_ri8self, 
- *           calc_genoprob_ri8self, argmax_geno_ri8self
- *           sim_geno_ri8self
+ *           calc_genoprob_ri8self, calc_genoprob_special_ri8self,
+ *           argmax_geno_ri8self, sim_geno_ri8self
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -55,7 +55,6 @@ double emit_ri8self(int obs_gen, int true_gen, double error_prob)
   else return(log(error_prob)); 
 }
     
-  
 double step_ri8self(int gen1, int gen2, double rf, double junk) 
 {
   if(gen1 == gen2) 
@@ -66,7 +65,6 @@ double step_ri8self(int gen1, int gen2, double rf, double junk)
     return(log(rf) - LN_2 - log(1.0+2.0*rf));
 }
 
-
 void calc_genoprob_ri8self(int *n_ind, int *n_mar, int *geno, 
 			   double *rf, double *error_prob, double *genoprob) 
 {
@@ -74,7 +72,13 @@ void calc_genoprob_ri8self(int *n_ind, int *n_mar, int *geno,
 		init_ri8self, emit_ri8self, step_ri8self);
 }
 
-  
+void calc_genoprob_special_ri8self(int *n_ind, int *n_mar, int *geno, 
+				   double *rf, double *error_prob, double *genoprob) 
+{
+  calc_genoprob_special(*n_ind, *n_mar, 8, geno, rf, rf, *error_prob, genoprob,
+			init_ri8self, emit_ri8self, step_ri8self);
+}
+
 void argmax_geno_ri8self(int *n_ind, int *n_pos, int *geno,
 			 double *rf, double *error_prob, int *argmax)
 {
