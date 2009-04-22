@@ -58,7 +58,10 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
 
   if(!selfing && class(omap[[length(omap)]])=="X")
     include.x <- TRUE
-  else include.x <- FALSE
+  else {
+    for(i in seq(along=omap)) class(omap[[i]]) <- "A"
+    include.x <- FALSE
+  }
 
   if(n.str==2) random.cross <- FALSE
 
@@ -96,7 +99,7 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
       geno[[i]]$errors <- err[,cur+1:n.mar[i],drop=FALSE]
 
     cur <- cur + n.mar[i]
-    class(geno[[i]]) <- class(map[[i]])
+    class(geno[[i]]) <- class(omap[[i]])
 
   }
   pheno <- data.frame(line=1:n.ril)

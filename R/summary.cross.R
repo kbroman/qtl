@@ -43,15 +43,6 @@ function(object,...)
      && type != "ri8self" && type != "ri8sib")
     stop("Cross type ", type, " is not supported.")
 
-  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" ||
-     type=="ri8sib") {
-    n.str <- substr(type, 3, 3)
-    if(substr(type, 4, nchar(type))=="sib") crosstype <- "sib-mating"
-    else crosstype <- "selfing"
-    cat(n.str, "-way RIL by ", crosstype, "\n", sep="")
-    return(NULL)
-  }
-
   # combine genotype data into one big matrix
   Geno <- pull.geno(object)
 
@@ -155,7 +146,6 @@ function(object,...)
     
   if(jitterwarning)
     warning("Some markers at the same position; use jittermap().")
-
 
   if(!is.data.frame(object$pheno)) 
     warning("Phenotypes should be a data.frame.")
@@ -310,13 +300,22 @@ function(object,...)
 print.summary.cross <-
 function(x,...)
 {
-#  cat("\n")
+  print.genotypes <- TRUE
+
   if(x$type=="f2") cat("    F2 intercross\n\n")
   else if(x$type=="bc") cat("    Backcross\n\n")
   else if(x$type=="4way") cat("    4-way cross\n\n")
   else if(x$type=="riself") cat("    RI strains via selfing\n\n")
   else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
   else if(x$type=="dh") cat("    Doubled haploids\n\n")
+  else if(x$type=="ri4self" || x$type=="ri4sib" || x$type=="ri8self" ||
+          x$type=="ri8sib") {
+    n.str <- substr(x$type, 3, 3)
+    if(substr(x$type, 4, nchar(x$type))=="sib") crosstype <- "sib-mating"
+    else crosstype <- "selfing"
+    print.genotypes <- FALSE
+    cat("    ", n.str, "-way RIL by ", crosstype, "\n\n", sep="")
+  }
   else cat("    cross", x$type, "\n\n",sep=" ")
 
   cat("    No. individuals:   ", x$n.ind,"\n\n")
@@ -369,10 +368,12 @@ function(x,...)
   cat("    No. markers:       ")
   printnicely(x$n.mar, header, width)
   cat("    Percent genotyped: ", round((1-x$missing.gen)*100,1), "\n")
-  cat("    Genotypes (%):    ")
-  geno <- paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":")
-  header <- "                      "
-  printnicely(geno, header, width, "  ")
+  if(print.genotypes) {
+    cat("    Genotypes (%):    ")
+    geno <- paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":")
+    header <- "                      "
+    printnicely(geno, header, width, "  ")
+  }
 }
 
 
