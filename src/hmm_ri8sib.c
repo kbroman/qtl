@@ -67,7 +67,7 @@ double step_ri8sib(int gen1, int gen2, double rf, double junk)
 }
 
 
-/* this is need for est.map; estimated recombination fractions on the RIL scale */
+/* this is needed for est.map; estimated recombination fractions on the RIL scale */
 double step_special_ri8sib(int gen1, int gen2, double rf, double junk) 
 {
   if(gen1 == gen2) 

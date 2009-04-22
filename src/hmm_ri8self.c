@@ -67,7 +67,7 @@ double step_ri8self(int gen1, int gen2, double rf, double junk)
     return(log(rf) - LN_2 - log(1.0+2.0*rf));
 }
 
-/* this is need for est.map; estimated recombination fractions on the RIL scale */
+/* this is needed for est.map; estimated recombination fractions on the RIL scale */
 double step_special_ri8self(int gen1, int gen2, double rf, double junk) 
 {
   double RF;
