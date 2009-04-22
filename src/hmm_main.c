@@ -536,6 +536,13 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
       else rf2[j] = rf[j];
     }
 
+    if(verbose>1) {
+      /* print estimates as we go along*/
+      Rprintf(" %4d ", it+1);
+      for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", rf[j]);
+      Rprintf("\n");
+    }
+
     /* check convergence */
     for(j=0, flag=0; j<n_mar-1; j++) {
       if(fabs(rf[j] - cur_rf[j]) > tol*(cur_rf[j]+tol*100.0) || 

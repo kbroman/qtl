@@ -21,9 +21,10 @@
  * 
  * C functions for the R/qtl package
  *
- * Contains: init_ri8sib, emit_ri8sib, step_ri8sib, 
- *           calc_genoprob_ri8sib, calc_genoprob_special_ri8sib
- *           argmax_geno_ri8sib, sim_geno_ri8sib
+ * Contains: init_ri8sib, emit_ri8sib, step_ri8sib, step_special_ri8sib,
+ *           calc_genoprob_ri8sib, calc_genoprob_special_ri8sib,
+ *           argmax_geno_ri8sib, sim_geno_ri8sib,
+ *           est_map_ri8sib,
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -42,6 +43,7 @@
 #include <R_ext/PrtUtil.h>
 #include "hmm_main.h"
 #include "hmm_ri8sib.h"
+#include "hmm_bc.h"
 
 double init_ri8sib(int true_gen)
 {
@@ -62,6 +64,16 @@ double step_ri8sib(int gen1, int gen2, double rf, double junk)
     return(log(1.0-rf)-log(1.0+6.0*rf));
   else 
     return(log(rf)-log(1.0+6.0*rf));
+}
+
+
+/* this is need for est.map; estimated recombination fractions on the RIL scale */
+double step_special_ri8sib(int gen1, int gen2, double rf, double junk) 
+{
+  if(gen1 == gen2) 
+    return(log(1.0-rf));
+  else 
+    return(log(rf)-log(7.0));
 }
 
 
@@ -94,6 +106,24 @@ void sim_geno_ri8sib(int *n_ind, int *n_pos, int *n_draws, int *geno,
 {
   sim_geno(*n_ind, *n_pos, 8, *n_draws, geno, rf, rf, *error_prob, 
 	   draws, init_ri8sib, emit_ri8sib, step_ri8sib);
+}
+
+/* for estimating map, must do things with recombination fractions on the RIL scale */
+void est_map_ri8sib(int *n_ind, int *n_mar, int *geno, double *rf, 
+		    double *error_prob, double *loglik, int *maxit, 
+		    double *tol, int *verbose)
+{
+  int i;
+
+  /* expand rf */
+  for(i=0; i< *n_mar-1; i++) rf[i] = 7.0*rf[i]/(1.0+6.0*rf[i]);
+
+  est_map(*n_ind, *n_mar, 8, geno, rf, rf, *error_prob, 
+	  init_ri8sib, emit_ri8sib, step_special_ri8sib, nrec_bc, nrec_bc,
+	  loglik, *maxit, *tol, 0, *verbose);
+
+  /* contract rf */
+  for(i=0; i< *n_mar-1; i++) rf[i] = rf[i]/(7.0-6.0*rf[i]);
 }
 
 /* end of hmm_ri8sib.c */

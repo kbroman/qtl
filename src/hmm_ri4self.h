@@ -21,9 +21,10 @@
  * 
  * C functions for the R/qtl package
  *
- * Contains: init_ri4self, emit_ri4self, step_ri4self, 
+ * Contains: init_ri4self, emit_ri4self, step_ri4self, step_special_ri4self,
  *           calc_genoprob_ri4self, calc_genoprob_special_ri4self, 
- *           argmax_geno_ri4self, sim_geno_ri4self
+ *           argmax_geno_ri4self, sim_geno_ri4self,
+ *           est_map_ri4self,
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -40,6 +41,8 @@ double emit_ri4self(int obs_gen, int true_gen, double error_prob);
   
 double step_ri4self(int gen1, int gen2, double rf, double junk);
 
+double step_special_ri4self(int gen1, int gen2, double rf, double junk);
+
 void calc_genoprob_ri4self(int *n_ind, int *n_mar, int *geno, 
 			   double *rf, double *error_prob, double *genoprob);
   
@@ -51,5 +54,9 @@ void argmax_geno_ri4self(int *n_ind, int *n_pos, int *geno,
 
 void sim_geno_ri4self(int *n_ind, int *n_pos, int *n_draws, int *geno, 
 		      double *rf, double *error_prob, int *draws);
+
+void est_map_ri4self(int *n_ind, int *n_mar, int *geno, double *rf, 
+		     double *error_prob, double *loglik, int *maxit, 
+		     double *tol, int *verbose);
 
 /* end of hmm_ri4self.h */

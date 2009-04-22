@@ -21,9 +21,10 @@
  * 
  * C functions for the R/qtl package
  *
- * Contains: init_ri8self, emit_ri8self, step_ri8self, 
+ * Contains: init_ri8self, emit_ri8self, step_ri8self, step_special_ri8self,
  *           calc_genoprob_ri8self, calc_genoprob_special_ri8self,
- *           argmax_geno_ri8self, sim_geno_ri8self
+ *           argmax_geno_ri8self, sim_geno_ri8self,
+ *           est_map_ri8self,
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -42,6 +43,7 @@
 #include <R_ext/PrtUtil.h>
 #include "hmm_main.h"
 #include "hmm_ri8self.h"
+#include "hmm_bc.h"
 
 double init_ri8self(int true_gen)
 {
@@ -63,6 +65,23 @@ double step_ri8self(int gen1, int gen2, double rf, double junk)
     return(log(rf)+log(1.0-rf)-log(1.0+2.0*rf));
   else
     return(log(rf) - LN_2 - log(1.0+2.0*rf));
+}
+
+/* this is need for est.map; estimated recombination fractions on the RIL scale */
+double step_special_ri8self(int gen1, int gen2, double rf, double junk) 
+{
+  double RF;
+
+  if(gen1 == gen2) 
+    return(log(1.0-rf));
+  else if(gen1 == gen2 - 1 || gen2 == gen1 - 1) {
+    RF = 2.0-rf-sqrt(rf*rf-5.0*rf+4.0);
+    return(log(RF)+log(1.0-RF)-log(1.0+2.0*RF));
+  }
+  else {
+    RF = 2.0-rf-sqrt(rf*rf-5.0*rf+4.0);
+    return(log(RF) - LN_2 - log(1.0+2.0*RF));
+  }
 }
 
 void calc_genoprob_ri8self(int *n_ind, int *n_mar, int *geno, 
@@ -91,6 +110,24 @@ void sim_geno_ri8self(int *n_ind, int *n_pos, int *n_draws, int *geno,
 {
   sim_geno(*n_ind, *n_pos, 8, *n_draws, geno, rf, rf, *error_prob, 
 	   draws, init_ri8self, emit_ri8self, step_ri8self);
+}
+
+/* for estimating map, must do things with recombination fractions on the RIL scale */
+void est_map_ri8self(int *n_ind, int *n_mar, int *geno, double *rf, 
+		     double *error_prob, double *loglik, int *maxit, 
+		     double *tol, int *verbose)
+{
+  int i;
+
+  /* expand rf */
+  for(i=0; i< *n_mar-1; i++) rf[i] = rf[i]*(1.0-rf[i])/(1.0+2.0*rf[i]);
+
+  est_map(*n_ind, *n_mar, 8, geno, rf, rf, *error_prob, 
+	  init_ri8self, emit_ri8self, step_special_ri8self, nrec_bc, nrec_bc,
+	  loglik, *maxit, *tol, 0, *verbose);
+
+  /* contract rf */
+  for(i=0; i< *n_mar-1; i++) rf[i] = 2.0-rf[i]-sqrt(rf[i]*rf[i]-5.0*rf[i]+4.0);
 }
 
 /* end of hmm_ri8self.c */

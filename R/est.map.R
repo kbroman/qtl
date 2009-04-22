@@ -2,8 +2,8 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
          omit.noninformative=TRUE)
 {
-  if(!any(class(cross) == "cross"))
+  if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
 
   type <- class(cross)[1]
@@ -92,7 +92,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
     # which type of cross is this?
     if(type == "f2") {
       one.map <- TRUE
-      if(chrtype[i] == "A") # autosomal
+      if(chrtype[i] != "X") # autosomal
         cfunc <- "est_map_f2"
       else                              # X chromsome 
         cfunc <- "est_map_bc"
@@ -104,6 +104,12 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
     else if(type == "4way") {
       one.map <- FALSE
       cfunc <- "est_map_4way"
+    }
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+      cfunc <- paste("est_map_", type, sep="")
+      one.map <- TRUE
+      if(chrtype[i] == "X")
+        warning("est.map not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else 
       stop("est.map not available for cross type ", type, ".")
