@@ -147,7 +147,7 @@ checkStepwiseqtlStart(qtl, formula, covar=NULL)
 clean(object)
 condense(object)
 convert(object)
-convertMWril(cross, parents)
+convertMWril(cross, parents, error.prob=0)
 countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
@@ -287,7 +287,7 @@ sim.cross.bc(map, model, n.ind, error.prob, missing.prob,
 sim.cross.f2(map, model, n.ind, error.prob, missing.prob,
              partial.missing.prob, keep.errorind, m, p, map.function)
 sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
-        m=0, p=0, random.cross=TRUE)
+        m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),

@@ -42,7 +42,9 @@ struct individual {
 /* wrapper for sim_ril, to be called from R */
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 	       int *n_str, int *m, double *p, int *include_x, 
-	       int *random_cross, int *selfing, int *cross, int *ril);
+	       int *random_cross, int *selfing, int *cross, int *ril,
+	       double *error_prob, double *missing_prob, 
+	       int *errors);
 
 /**********************************************************************
  * 
@@ -73,10 +75,18 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  * ril     On output, the simulated data 
  *         (vector of length sum(n_mar) x n_ril)
  *
+ * error_prob     Genotyping error probability (used only with n_str==2)
+ *
+ * missing_prob   Rate of missing genotypes
+ *
+ * errors         Error indicators (n_mar x n_ril)
+ *
  **********************************************************************/
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
-	     int random_cross, int selfing, int *cross, int *ril);
+	     int random_cross, int selfing, int *cross, int *ril,
+	     double error_prob, double missing_prob, 
+	     int *errors);
 
 /**********************************************************************
  * allocate_individual
@@ -135,13 +145,23 @@ void meiosis(double L, int m, double p, int *maxwork, double **work,
  * 
  * Cross     The crosses [n_ril x n_str]
  *
+ * all_snps  0/1 indicator of whether all parent genotypes are snps
+ *
+ * error_prob  Genotyping error probability (used only if all_snps==1)
+ *
+ * Errors      Error indicators
+ *
  **********************************************************************/
 void convertMWril(int n_ril, int n_mar, int n_str, 
-		  int **Parents, int **Geno, int **Crosses);
+		  int **Parents, int **Geno, int **Crosses, 
+		  int all_snps, double error_prob, 
+		  int **Errors);
 
 /* wrapper for calling convertMWril from R */
 void R_convertMWril(int *n_ril, int *n_mar, int *n_str, 
-		    int *parents, int *geno, int *crosses);
+		    int *parents, int *geno, int *crosses,
+		    int *all_snps, double *error_prob,
+		    int *errors);
 
 /* end of simulate_ril.h */
 

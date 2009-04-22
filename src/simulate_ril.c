@@ -44,12 +44,14 @@
 /* wrapper for sim_ril, to be called from R */
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 	       int *n_str, int *m, double *p, int *include_x, 
-	       int *random_cross, int *selfing, int *cross, int *ril)
+	       int *random_cross, int *selfing, int *cross, int *ril,
+	       double *error_prob, double *missing_prob, int *errors)
 {
   GetRNGstate();
 
   sim_ril(*n_chr, n_mar, *n_ril, map, *n_str, *m, *p, *include_x, 
-	  *random_cross, *selfing, cross, ril);
+	  *random_cross, *selfing, cross, ril, *error_prob, *missing_prob,
+	  errors);
 
   PutRNGstate();
 }
@@ -83,14 +85,21 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  * ril     On output, the simulated data 
  *         (vector of length sum(n_mar) x n_ril)
  *
+ * error_prob     Genotyping error probability (used nly with n_str==2)
+ *
+ * missing_prob   Rate of missing genotypes
+ *
+ * errors         Error indicators (n_mar x n_ril)
+ *
  **********************************************************************/
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
-	     int random_cross, int selfing, int *cross, int *ril)
+	     int random_cross, int selfing, int *cross, int *ril,
+	     double error_prob, double missing_prob, int *errors)
 {
   int i, j, k, ngen, tot_mar, curseg;
   struct individual par1, par2, kid1, kid2;
-  int **Ril, **Cross, maxwork, isX, flag, max_xo, *firstmarker;
+  int **Ril, **Cross, **Errors, maxwork, isX, flag, max_xo, *firstmarker;
   double **Map, maxlen, chrlen, *work;
 
  /* count total number of markers */
@@ -99,6 +108,7 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
 
   reorg_geno(tot_mar, n_ril, ril, &Ril);
   reorg_geno(n_str, n_ril, cross, &Cross);
+  reorg_geno(tot_mar, n_ril, errors, &Errors);
 
   /* allocate space */
   Map = (double **)R_alloc(n_chr, sizeof(double *));
@@ -239,12 +249,21 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
 	  curseg++;
 	  
 	Ril[i][k+firstmarker[j]] = Cross[i][kid1.allele[0][curseg]-1];
+
+	/* simulate missing ? */
+	if(unif_rand() < missing_prob) {
+	  Ril[i][k+firstmarker[j]] = 0;
+	}
+	else if(n_str == 2 && unif_rand() < error_prob) {
+	  /* simulate error */
+	  Ril[i][k+firstmarker[j]] = 3 - Ril[i][k+firstmarker[j]];
+	  Errors[i][k+firstmarker[j]] = 1;
+	}
       }
 
     } /* loop over chromosomes */
 
   } /* loop over lines */
-
 }
 
 /**********************************************************************
@@ -564,9 +583,16 @@ void R_meiosis(double *L, int *m, double *p, int *maxwork, double *work,
  * 
  * Crosses   The crosses [n_ril x n_str]
  *
+ * all_snps  0/1 indicator of whether all parent genotypes are snps
+ *
+ * error_prob  Genotyping error probability (used only if all_snps==1)
+ *
+ * Errors      Error indicators
+ *
  **********************************************************************/
 void convertMWril(int n_ril, int n_mar, int n_str, 
-		  int **Parents, int **Geno, int **Crosses)
+		  int **Parents, int **Geno, int **Crosses,
+		  int all_snps, double error_prob, int **Errors)
 {
   int i, j, k, temp;
 
@@ -575,22 +601,18 @@ void convertMWril(int n_ril, int n_mar, int n_str,
 
     for(j=0; j<n_mar; j++) {
 
-      Rprintf("geno = %d\n", Geno[j][i]);
-      Rprintf("cross =");
-      for(k=0; k<n_str; k++) 
-	Rprintf(" %d", Crosses[k][i]);
-      Rprintf("\n");
-      Rprintf("parents =");
-      for(k=0; k<n_str; k++) 
-	Rprintf(" %d", Parents[k][j]);
-      Rprintf("\n");
-
       if(Geno[j][i] < 1 || Geno[j][i] > n_str) {
-	warning("Error in RIL genotype: line %d at marker %d\n", i+1, j+1);
+	if(Geno[j][i] > n_str) 
+	  warning("Error in RIL genotype (%d): line %d at marker %d\n", Geno[j][i], i+1, j+1);
 	Geno[j][i] = 0;
       }
       else {
 	temp = Parents[Geno[j][i]-1][j]; /* SNP genotype of RIL i at marker j */
+
+	if(all_snps && unif_rand() < error_prob) { /* make it an error */
+	  temp = 1 - temp;
+	  Errors[j][i] = 1;
+	}
 
 	Geno[j][i] = 0;
 	for(k=0; k<n_str; k++) 
@@ -598,24 +620,27 @@ void convertMWril(int n_ril, int n_mar, int n_str,
 	    Geno[j][i] += (1 << k);
       }
 
-      Rprintf("newgeno = %d\n\n", Geno[j][i]);
-
     }
   }
 }
 
 /* wrapper for calling convertMWril from R */
 void R_convertMWril(int *n_ril, int *n_mar, int *n_str, 
-		    int *parents, int *geno, int *crosses)
+		    int *parents, int *geno, int *crosses,
+		    int *all_snps, double *error_prob, 
+		    int *errors)
 {
-  int **Parents, **Geno, **Crosses;
+  int **Parents, **Geno, **Crosses, **Errors;
 
   reorg_geno(*n_mar, *n_str, parents, &Parents);
   reorg_geno(*n_ril, *n_mar, geno, &Geno);
   reorg_geno(*n_ril, *n_str, crosses, &Crosses);
+  reorg_geno(*n_ril, *n_mar, errors, &Errors);
 
-  convertMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses);
-
+  GetRNGstate();
+  convertMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses,
+	       *all_snps, *error_prob, Errors);
+  PutRNGstate();
 }
 
 /* end of simulate_ril.c */

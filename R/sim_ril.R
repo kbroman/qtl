@@ -34,8 +34,8 @@
 ######################################################################
 sim.ril <-
 function(map, n.ril=1, type=c("sibmating", "selfing"),
-         n.str=c("2","4","8"),
-         m=0, p=0, random.cross=TRUE)
+         n.str=c("2","4","8"), m=0, p=0, 
+         error.prob=0, missing.prob=0, random.cross=TRUE)
 {
   type <- match.arg(type)
   if(type=="sibmating") selfing <- 0
@@ -75,10 +75,15 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
           as.integer(selfing),
           cross=as.integer(rep(0,n.ril*n.str)),
           res=as.integer(rep(0,tot.mar*n.ril)),
+          as.double(error.prob),
+          as.double(missing.prob),
+          err=as.integer(rep(0,tot.mar*n.ril)),
           PACKAGE="qtl")
 
   cross <- t(matrix(x$cross,ncol=n.ril,nrow=n.str))
+  err <- t(matrix(x$err,nrow=tot.mar,ncol=n.ril))
   x <- t(matrix(x$res,nrow=tot.mar,ncol=n.ril))
+  x[x==0] <- NA
 
   geno <- vector("list", n.chr)
   names(geno) <- names(map)
@@ -87,8 +92,12 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
     geno[[i]]$data <- x[,cur + 1:n.mar[i],drop=FALSE]
     colnames(geno[[i]]$data) <- names(map[[i]])
     geno[[i]]$map <- omap[[i]]
+    if(error.prob > 0 && n.str==2) 
+      geno[[i]]$errors <- err[,cur+1:n.mar[i],drop=FALSE]
+
     cur <- cur + n.mar[i]
     class(geno[[i]]) <- class(map[[i]])
+
   }
   pheno <- data.frame(line=1:n.ril)
   x <- list(geno=geno,pheno=pheno,cross=cross)
@@ -161,7 +170,7 @@ function(map, n.str=c("4","8"), pat.freq)
 #           each chromosome is a matrix n.mar x n.str, 
 ######################################################################
 convertMWril <- 
-function(cross, parents) 
+function(cross, parents, error.prob=0) 
 {
   crosstype <- class(cross)[1]
   n.str.by.crosstype <- as.numeric(substr(crosstype, 3, 3))
@@ -185,22 +194,49 @@ function(cross, parents)
   if(any(n.mar != n.mar2))
     stop("Different numbers of markers in cross and parents.")
 
+  pg <- unlist(parents)
+  if(any(is.na(pg)))
+    stop("Missing parental data not allowed.")
+
+  # if positive error prob, check whether all parental data are snps
+  if(error.prob > 0) { 
+    if(all(pg==0 | pg==1)) all.snps <- TRUE
+    else {
+      if(all(pg==1 | pg==2)) { # convert to 0/1
+        parents <- lapply(parents, function(a) a - 1)
+        all.snps <- TRUE
+      }
+      else all.snps <- FALSE
+    }
+  }
+  else all.snps <- FALSE
+
+
   for(i in 1:nchr(cross)) {
-    newgeno <-
+    dat <- cross$geno[[i]]$data
+    dat[is.na(dat)] <- 0
+
+    results <-
       .C("R_convertMWril",
          as.integer(n.ril),        # no. ril
          as.integer(n.mar[i]),     # no. markers
          as.integer(n.str),        # no. founders
          as.integer(parents[[i]]), # SNP data on parents (n.mar x n.str)
-         g=as.integer(cross$geno[[i]]$data), # SNP data on RIL (n.ril x n.mar)
+         g=as.integer(dat), # SNP data on RIL (n.ril x n.mar)
          as.integer(thecrosses),   # the crosses (n.ril x n.str)
-         PACKAGE="qtl")$g
+         as.integer(all.snps),
+         as.double(error.prob),
+         err=as.integer(rep(0,n.mar[i]*n.ril)),
+         PACKAGE="qtl")
 
     # replace 0's with missing values
-    newgeno[newgeno==0] <- 0
+    newgeno <- results$g
+    newgeno[newgeno==0] <- NA
     newgeno <- matrix(newgeno, n.ril, n.mar[i])
     colnames(newgeno) <- colnames(cross$geno[[i]]$data)
     cross$geno[[i]]$data <- newgeno
+    if(error.prob > 0)
+      cross$geno[[i]]$errors <- matrix(results$err, n.ril, n.mar[i])
   }
 
   cross

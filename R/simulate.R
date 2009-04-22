@@ -131,20 +131,28 @@ function(map, model=NULL, n.ind=100,
     warning("error.prob shouldn't be > 1!")
   }
 
+  # 2-way RIL by sibmating or selfing
   if(type=="risib" || type=="riself") {
     if(type=="risib") type <- "sibmating"
     else type <- "selfing"
-    cross <- sim.ril(map, n.ind, type, "2", m=m, p=p)
+    cross <- sim.ril(map, n.ind, type, "2", m=m, p=p,
+                     error.prob=error.prob, missing.prob=missing.prob)
     cross$cross <- NULL
+
     return(cross)
   }
+  # 4- or 8-way RIL by sibmating or selfing
   if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
     if(substr(type, 4, nchar(type))=="self") crosstype <- "selfing"
     else crosstype <- "sibmating"
     n.str <- substr(type, 3, 3)
     cross <- sim.ril(map, n.ind, crosstype, n.str, m=m, p=p,
-                     random.cross=random.cross)
-    cross <- convertMWril(cross, founderGeno)
+                     random.cross=random.cross,
+                     error.prob=0,
+                     missing.prob=missing.prob)
+
+    cross <- convertMWril(cross, founderGeno, error.prob=error.prob)
+
     return(cross)
   }
 
