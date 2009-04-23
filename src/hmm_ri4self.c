@@ -24,7 +24,7 @@
  * Contains: init_ri4self, emit_ri4self, step_ri4self, step_special_ri4self,
  *           calc_genoprob_ri4self, calc_genoprob_special_ri4self, 
  *           argmax_geno_ri4self, sim_geno_ri4self,
- *           est_map_ri4self,
+ *           est_map_ri4self, nrec2_ri4self, logprec_ri4self, est_rf_ri4self
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -124,6 +124,55 @@ void est_map_ri4self(int *n_ind, int *n_mar, int *geno, double *rf,
 
   /* contract rf */
   for(i=0; i< *n_mar-1; i++) rf[i] = rf[i]/(3.0-2.0*rf[i]);
+}
+
+/* expected no. recombinants */
+double nrec2_ri4self(int obs1, int obs2, double rf)
+{
+  int n1, n2, n12, nr, and, i, nstr=4;
+
+  if(obs1==0 || obs2==0) return(-999.0); /* this shouldn't happen */
+
+  n1=n2=n12=0;
+  and = obs1 & obs2;
+  
+  /* count bits */
+  for(i=0; i<nstr; i++) {
+    if(obs1 & 1<<i) n1++; 
+    if(obs2 & 1<<i) n2++;
+    if(and  & 1<<i) n12++;
+  }
+  
+  nr = n1*n2-n12;
+  return( (double)nr*rf / (3.0*(double)n12*(1.0-rf) + (double)nr*rf) );
+}
+
+/* log [joint probability * 8] */
+double logprec_ri4self(int obs1, int obs2, double rf)
+{
+  int n1, n2, n12, nr, and, i, nstr=4;
+  
+  if(obs1==0 || obs2==0) return(-999.0); /* this shouldn't happen */
+
+  n1=n2=n12=0;
+  and = obs1 & obs2;
+  
+  /* count bits */
+  for(i=0; i<nstr; i++) {
+    if(obs1 & 1<<i) n1++;
+    if(obs2 & 1<<i) n2++;
+    if(and  & 1<<i) n12++;
+  }
+  
+  nr = n1*n2-n12;
+  return( log(3.0*(double)n12*(1.0-rf) + (double)nr*rf) );
+}
+
+void est_rf_ri4self(int *n_ind, int *n_mar, int *geno, double *rf, 
+		    int *maxit, double *tol)
+{
+  est_rf(*n_ind, *n_mar, geno, rf, nrec2_ri4self, logprec_ri4self, 
+	 *maxit, *tol, 1);
 }
 
 /* end of hmm_ri4self.c */

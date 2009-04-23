@@ -2,9 +2,9 @@
  * 
  * hmm_main.h
  *
- * copyright (c) 2001-7, Karl W Broman
+ * copyright (c) 2001-9, Karl W Broman
  *
- * last modified Nov, 2007
+ * last modified Apr, 2009
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -312,12 +312,14 @@ void calc_errorlod(int n_ind, int n_mar, int n_gen, int *geno,
  *
  * tol          Tolerance for determining convergence of the EM 
  *
+ * meioses_per  No. meioses per individual
+ *
  **********************************************************************/
 
 void est_rf(int n_ind, int n_mar, int *geno, double *rf, 
 	    double erec(int, int, double), 
 	    double logprec(int, int, double), 
-	    int maxit, double tol);
+	    int maxit, double tol, int meioses_per);
 
 /**********************************************************************
  * 

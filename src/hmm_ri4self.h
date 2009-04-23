@@ -24,7 +24,7 @@
  * Contains: init_ri4self, emit_ri4self, step_ri4self, step_special_ri4self,
  *           calc_genoprob_ri4self, calc_genoprob_special_ri4self, 
  *           argmax_geno_ri4self, sim_geno_ri4self,
- *           est_map_ri4self,
+ *           est_map_ri4self, nrec2_ri4self, logprec_ri4self, est_rf_ri4self
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -58,5 +58,14 @@ void sim_geno_ri4self(int *n_ind, int *n_pos, int *n_draws, int *geno,
 void est_map_ri4self(int *n_ind, int *n_mar, int *geno, double *rf, 
 		     double *error_prob, double *loglik, int *maxit, 
 		     double *tol, int *verbose);
+
+/* expected no. recombinants */
+double nrec2_ri4self(int obs1, int obs2, double rf);
+
+/* log [joint probability * 8] */
+double logprec_ri4self(int obs1, int obs2, double rf);
+
+void est_rf_ri4self(int *n_ind, int *n_mar, int *geno, double *rf, 
+		   int *maxit, double *tol);
 
 /* end of hmm_ri4self.h */

@@ -23,8 +23,8 @@
  *
  * Contains: init_ri4sib, emit_ri4sib, step_ri4sib, step_special_ri4sib,
  *           calc_genoprob_ri4sib, calc_genoprob_special_ri4sib,
- *           argmax_geno_ri4sib, sim_geno_ri4sib
- *           est_map_ri4sib,
+ *           argmax_geno_ri4sib, sim_geno_ri4sib,
+ *           est_map_ri4sib, nrec2_ri4sib, logprec_ri4sib, est_rf_ri4sib
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for the Collaborative Cross
@@ -58,5 +58,14 @@ void sim_geno_ri4sib(int *n_ind, int *n_pos, int *n_draws, int *geno,
 void est_map_ri4sib(int *n_ind, int *n_mar, int *geno, double *rf, 
 		    double *error_prob, double *loglik, int *maxit, 
 		    double *tol, int *verbose);
+
+/* expected no. recombinants */
+double nrec2_ri4sib(int obs1, int obs2, double rf);
+
+/* log [joint probability * 8] */
+double logprec_ri4sib(int obs1, int obs2, double rf);
+
+void est_rf_ri4sib(int *n_ind, int *n_mar, int *geno, double *rf, 
+		   int *maxit, double *tol);
 
 /* end of hmm_ri4sib.h */

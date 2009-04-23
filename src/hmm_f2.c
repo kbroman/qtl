@@ -358,7 +358,7 @@ void est_rf_f2(int *n_ind, int *n_mar, int *geno, double *rf,
 	       int *maxit, double *tol)
 {
   est_rf(*n_ind, *n_mar, geno, rf, nrec2_f2, logprec_f2, 
-	 *maxit, *tol);
+	 *maxit, *tol, 2);
 }
 
 void calc_pairprob_f2(int *n_ind, int *n_mar, int *geno, 

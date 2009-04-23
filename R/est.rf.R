@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -71,6 +71,8 @@ function(cross, maxit=10000, tol=1e-6)
     cfunc <- "est_rf_bc"
   else if(type == "4way") 
     cfunc <- "est_rf_4way"
+  else if(type=="ri8sib" || type=="ri8self" || type=="ri4sib" || type=="ri4self") 
+    cfunc <- paste("est_rf_", type, sep="")
   else 
     stop("est.rf not available for cross type ", type, ".")
 
