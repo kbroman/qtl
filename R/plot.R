@@ -287,7 +287,7 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
     map2 <- pull.map(map2)
   
   if(!any(class(map)=="map")  || (!missing(map2) && !any(class(map2) == "map")))
-    stop("Input should have class \"cross\" or \"map\".")
+    warning("Input should have class \"cross\" or \"map\".")
 
   if(!missing(map2) && is.matrix(map[[1]]) != is.matrix(map2[[1]]))
       stop("Maps must be both sex-specific or neither sex-specific.")

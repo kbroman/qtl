@@ -3067,7 +3067,7 @@ convert2sa <-
 function(map, tol=1e-4)
 {  
   if(!("map" %in% class(map)))
-     stop("Input should have class 'map'.")
+     stop("Input should have class \"map\".")
 
   if(!is.matrix(map[[1]]))
     stop("Input map doesn't seem to be a sex-specific map.")
