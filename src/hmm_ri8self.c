@@ -24,10 +24,11 @@
  * Contains: init_ri8self, emit_ri8self, step_ri8self, step_special_ri8self,
  *           calc_genoprob_ri8self, calc_genoprob_special_ri8self,
  *           argmax_geno_ri8self, sim_geno_ri8self,
- *           est_map_ri8self, nrec2_ri8self, logprec_ri8self, est_rf_ri8self
+ *           est_map_ri8self, nrec2_ri8self, logprec_ri8self, est_rf_ri8self,
+ *           marker_loglik_ri8self
  *
  * These are the init, emit, and step functions plus
- * all of the hmm wrappers for the Collaborative Cross
+ * all of the hmm wrappers for 8-way RIL by selfing.
  *
  * Genotype codes:    1-8
  * "Phenotype" codes: 0=missing; otherwise binary 1-255, with bit i
@@ -231,6 +232,13 @@ void est_rf_ri8self(int *n_ind, int *n_mar, int *geno, double *rf,
 {
   est_rf(*n_ind, *n_mar, geno, rf, nrec2_ri8self, logprec_ri8self, 
 	 *maxit, *tol, 1);
+}
+
+void marker_loglik_ri8self(int *n_ind, int *geno,
+			   double *error_prob, double *loglik)
+{
+  marker_loglik(*n_ind, 8, geno, *error_prob, init_ri8self, emit_ri8self,
+		loglik);
 }
 
 /* end of hmm_ri8self.c */

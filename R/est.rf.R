@@ -71,8 +71,11 @@ function(cross, maxit=10000, tol=1e-6)
     cfunc <- "est_rf_bc"
   else if(type == "4way") 
     cfunc <- "est_rf_4way"
-  else if(type=="ri8sib" || type=="ri8self" || type=="ri4sib" || type=="ri4self") 
+  else if(type=="ri8sib" || type=="ri8self" || type=="ri4sib" || type=="ri4self") {
     cfunc <- paste("est_rf_", type, sep="")
+    if(any(chrtype == "X"))
+      warning("est.rf not working properly for the X chromosome for 4- or 8-way RIL.")
+  }
   else 
     stop("est.rf not available for cross type ", type, ".")
 

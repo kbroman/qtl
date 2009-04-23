@@ -24,10 +24,11 @@
  * Contains: init_ri4sib, emit_ri4sib, step_ri4sib, step_special_ri4sib,
  *           calc_genoprob_ri4sib, calc_genoprob_special_ri4sib,
  *           argmax_geno_ri4sib, sim_geno_ri4sib,
- *           est_map_ri4sib, nrec2_ri4sib, logprec_ri4sib, est_rf_ri4sib
+ *           est_map_ri4sib, nrec2_ri4sib, logprec_ri4sib, est_rf_ri4sib,
+ *           marker_loglik_ri4sib
  *
  * These are the init, emit, and step functions plus
- * all of the hmm wrappers for the Collaborative Cross
+ * all of the hmm wrappers for 4-way RIL by sib mating.
  *
  * Genotype codes:    1-4
  * "Phenotype" codes: 0=missing; otherwise binary 1-15, with bit i
@@ -68,4 +69,6 @@ double logprec_ri4sib(int obs1, int obs2, double rf);
 void est_rf_ri4sib(int *n_ind, int *n_mar, int *geno, double *rf, 
 		   int *maxit, double *tol);
 
+void marker_loglik_ri4sib(int *n_ind, int *geno,
+			  double *error_prob, double *loglik);
 /* end of hmm_ri4sib.h */

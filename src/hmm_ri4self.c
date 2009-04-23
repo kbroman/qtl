@@ -24,10 +24,11 @@
  * Contains: init_ri4self, emit_ri4self, step_ri4self, step_special_ri4self,
  *           calc_genoprob_ri4self, calc_genoprob_special_ri4self, 
  *           argmax_geno_ri4self, sim_geno_ri4self,
- *           est_map_ri4self, nrec2_ri4self, logprec_ri4self, est_rf_ri4self
+ *           est_map_ri4self, nrec2_ri4self, logprec_ri4self, est_rf_ri4self,
+ *           marker_loglik_ri4self
  *
  * These are the init, emit, and step functions plus
- * all of the hmm wrappers for the Collaborative Cross
+ * all of the hmm wrappers for 4-way RIL by selfing
  *
  * Genotype codes:    1-4
  * "Phenotype" codes: 0=missing; otherwise binary 1-15, with bit i
@@ -173,6 +174,13 @@ void est_rf_ri4self(int *n_ind, int *n_mar, int *geno, double *rf,
 {
   est_rf(*n_ind, *n_mar, geno, rf, nrec2_ri4self, logprec_ri4self, 
 	 *maxit, *tol, 1);
+}
+
+void marker_loglik_ri4self(int *n_ind, int *geno,
+			   double *error_prob, double *loglik)
+{
+  marker_loglik(*n_ind, 4, geno, *error_prob, init_ri4self, emit_ri4self,
+		loglik);
 }
 
 /* end of hmm_ri4self.c */

@@ -2,8 +2,8 @@
 #
 # replacemap.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -52,7 +52,8 @@ function(object, map)
     mnames2 <- unlist(lapply(map, function(a) colnames(a)))
     n.mar2 <- n.mar2/2
   }
-  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh") {
+  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh" ||
+          type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
     mnames <- unlist(lapply(cross$geno, function(a) names(a$map)))
     mnames2 <- unlist(lapply(map, function(a) names(a)))
   }

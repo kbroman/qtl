@@ -24,10 +24,12 @@
  * Contains: init_ri8sib, emit_ri8sib, step_ri8sib, step_special_ri8sib,
  *           calc_genoprob_ri8sib, calc_genoprob_special_ri8sib,
  *           argmax_geno_ri8sib, sim_geno_ri8sib,
- *           est_map_ri8sib, nrec2_ri8sib, logprec_ri8sib, est_rf_ri8sib
+ *           est_map_ri8sib, nrec2_ri8sib, logprec_ri8sib, est_rf_ri8sib,
+ *           marker_loglik_ri8sib
  *
  * These are the init, emit, and step functions plus
- * all of the hmm wrappers for the Collaborative Cross
+ * all of the hmm wrappers for 8-way RIL by sib mating 
+ * (i.e., the Collaborative Cross).
  *
  * Genotype codes:    1-8
  * "Phenotype" codes: 0=missing; otherwise binary 1-255, with bit i
@@ -174,6 +176,13 @@ void est_rf_ri8sib(int *n_ind, int *n_mar, int *geno, double *rf,
 {
   est_rf(*n_ind, *n_mar, geno, rf, nrec2_ri8sib, logprec_ri8sib, 
 	 *maxit, *tol, 1);
+}
+
+void marker_loglik_ri8sib(int *n_ind, int *geno,
+			  double *error_prob, double *loglik)
+{
+  marker_loglik(*n_ind, 8, geno, *error_prob, init_ri8sib, emit_ri8sib,
+		loglik);
 }
 
 /* end of hmm_ri8sib.c */
