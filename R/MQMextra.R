@@ -50,8 +50,8 @@ paper.plotHYPER <- function(){
 	data(hyper)
 	hyper <- fill.geno(hyper)
 	cof <- MQMCofactorsEach(hyper,3)
-	aa <- scanMQM(fill.geno(hyper),cof,step.size=2,step.max=150,step.min=0,windowsize=5)
-	bb <- cim(hyper,window=5)
+	aa <- scanMQM(fill.geno(hyper),cof,step.size=2,step.max=150,step.min=0,windowsize=15)
+	bb <- cim(hyper,window=15)
 	cc <- scanone(hyper)
 	plot(aa,bb,cc,chr=c(1,4,6),col=c("black","blue","red"),lwd=c(2,2,1),lty=c(1,6,1),main="Comparison QTL methodes: Dataset Hyper",ylab="LOD score")
 	legend("topleft",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
@@ -61,8 +61,8 @@ paper.plotListeria <- function(){
 	data(listeria)
 	listeria <- fill.geno(listeria)
 	cof <- MQMCofactorsEach(listeria,2)
-	aa <- scanMQM(fill.geno(listeria),cof,step.size=2,step.max=100,step.min=0,windowsize=5)
-	bb <- cim(listeria,window=5)
+	aa <- scanMQM(fill.geno(listeria),cof,step.size=2,step.max=100,step.min=0,windowsize=15)
+	bb <- cim(listeria,window=15)
 	cc <- scanone(listeria)
 	plot(aa,bb,cc,chr=c(1,5,6,13),col=c("black","blue","red"),lwd=c(2,2,1),lty=c(1,6,1),main="Comparison QTL methodes: Dataset Listeria",ylab="LOD score")
 	legend("left",c("MQM","CIM","MR"),col=c("black","blue","red"),lty=c(1,6,1),lwd=c(2,2,1))
@@ -72,8 +72,8 @@ paper.plotBristle3 <- function(){
 	data(bristle3)
 	bristle3 <- fill.geno(bristle3)
 	cof <- MQMCofactorsEach(bristle3,3)
-	aa <- scanMQM(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=5)
-	bb <- cim(bristle3,window=5)
+	aa <- scanMQM(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=15)
+	bb <- cim(bristle3,window=15)
 	cc <- scanone(bristle3)
 	op <- par(mfrow = c(1,3))
 	plot(aa,col=c("black"),lwd=c(2,2,1),lty=c(1,6,1),main="MQM: Dataset Bristle3",ylab="LOD score")
@@ -81,6 +81,23 @@ paper.plotBristle3 <- function(){
 	plot(cc,col=c("red"),lwd=c(2,2,1),lty=c(1,6,1),main="MR: Dataset Bristle3",ylab="LOD score")
 	aa <- mqmall(fill.geno(bristle3),cof,step.size=2,step.max=125,step.min=0,windowsize=2)
 	plot.nice(aa)
+}
+
+paper.TestMulti(n.ind){
+	library(qtl)
+	f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
+	data(map10)                                             # Mouse genome
+	f2cross <- sim.cross(map10,f2qtl,n=350,type="f2")       # Simulate a F2 Cross
+	res <- bootstrapmqm(f2cross,n.run=50,b_size=5)
+}
+
+
+paper.TestSingle(n.ind){
+	library(qtl)
+	f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
+	data(map10)                                             # Mouse genome
+	f2cross <- sim.cross(map10,f2qtl,n=350,type="f2")       # Simulate a F2 Cross
+	res <- bootstrapmqm(f2cross,multiC=F,n.run=50,b_size=5)
 }
 
 #paper.plotBootstrap{

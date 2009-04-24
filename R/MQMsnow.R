@@ -64,9 +64,15 @@ snowCoreBOOT <- function(x,all_data,Funktie,method,...){
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
 			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
+		}else{
+			result <- Funktie(cross=all_data,pheno.col=1,plot=F,verbose=F,...)
 		}
 	}else{
-		result <- Funktie(cross=all_data,pheno.col=1,...)
+		if("plot" %in% names(formals(Funktie))){
+			result <- Funktie(cross=all_data,pheno.col=1,plot=F,...)
+		}else{
+			result <- Funktie(cross=all_data,pheno.col=1,plot=F,...)
+		}
 	}
 	e <- proc.time()
 	cat("------------------------------------------------------------------\n")
