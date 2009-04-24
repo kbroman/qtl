@@ -10,8 +10,19 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Make the output of tryallpositions an object of class "scanone", and
+  make the "interval" column the row names.
+
+o In plot.rf, allow an option to put little boxes down the diagonal,
+  so that the rf vs LOD scores are more clear.
+
+o In c.cross, include an argument for "flipping" a backcross, so that
+  a backcross to (AxB)xB can be combined with an intercross
+
 o In plot of output from addpair with a special formula, we need just
   one set of numbers on the color scale.
+
+o function to identify the XO locations (based on countXO?)
 
 o In stepwiseqtl starting from something other than the null model,
   "Starting at a model with..." shouldn't be printed if

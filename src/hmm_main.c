@@ -2,9 +2,9 @@
  * 
  * hmm_main.c
  *
- * copyright (c) 2001-8, Karl W Broman
+ * copyright (c) 2001-9, Karl W Broman
  *
- * last modified Jan, 2008
+ * last modified Apr, 2009
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -536,6 +536,13 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
       else rf2[j] = rf[j];
     }
 
+    if(verbose>1) {
+      /* print estimates as we go along*/
+      Rprintf(" %4d ", it+1);
+      for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", rf[j]);
+      Rprintf("\n");
+    }
+
     /* check convergence */
     for(j=0, flag=0; j<n_mar-1; j++) {
       if(fabs(rf[j] - cur_rf[j]) > tol*(cur_rf[j]+tol*100.0) || 
@@ -794,12 +801,14 @@ void calc_errorlod(int n_ind, int n_mar, int n_gen, int *geno,
  *
  * tol          Tolerance for determining convergence of the EM 
  *
+ * meioses_per  No. meioses per individual
+ *
  **********************************************************************/
 
 void est_rf(int n_ind, int n_mar, int *geno, double *rf, 
 	    double erec(int, int, double), 
 	    double logprec(int, int, double), 
-	    int maxit, double tol)
+	    int maxit, double tol, int meioses_per)
 {
   int i, j1, j2, s, **Geno, n_mei=0, flag=0;
   double **Rf, next_rf=0.0, cur_rf=0.0;
@@ -812,7 +821,7 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
 
     /* count number of meioses */
     for(i=0, n_mei=0; i<n_ind; i++) 
-      if(Geno[j1][i] != 0) n_mei += 2;
+      if(Geno[j1][i] != 0) n_mei += meioses_per;
     Rf[j1][j1] = (double) n_mei;
     
     R_CheckUserInterrupt(); /* check for ^C */
@@ -823,7 +832,7 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
       n_mei = flag = 0;
       for(i=0; i<n_ind; i++) {
 	if(Geno[j1][i] != 0 && Geno[j2][i] != 0) {
-	  n_mei += 2;
+	  n_mei += meioses_per;
 	  /* check if informatve */
 	  if(fabs(logprec(Geno[j1][i], Geno[j2][i], 0.5) -
 		  logprec(Geno[j1][i], Geno[j2][i], TOL)) > TOL) flag = 1;
@@ -842,9 +851,6 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
 
 	  next_rf /= (double) n_mei;
 	  
-	  /* debugging code */
-	  /*	  Rprintf("%d %d  %d   %f %f\n", j1, j2, s, cur_rf, next_rf); */
-
 	  if(fabs(next_rf - cur_rf) < tol*(cur_rf+tol*100.0)) { 
 	    flag = 1;
 	    break;

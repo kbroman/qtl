@@ -575,7 +575,7 @@ void est_rf_4way(int *n_ind, int *n_mar, int *geno, double *rf,
 	       int *maxit, double *tol)
 {
   est_rf(*n_ind, *n_mar, geno, rf, nrec2_4way, logprec_4way, 
-	 *maxit, *tol);
+	 *maxit, *tol, 2);
 }
 
 void calc_pairprob_4way(int *n_ind, int *n_mar, int *geno, 
@@ -592,7 +592,5 @@ void marker_loglik_4way(int *n_ind, int *geno,
   marker_loglik(*n_ind, 4, geno, *error_prob, init_4way, emit_4way,
 		loglik);
 }
-
-
 
 /* end of hmm_4way.c */

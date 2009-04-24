@@ -2,9 +2,9 @@
  * 
  * ripple.h
  *
- * copyright (c) 2002, Karl W Broman
+ * copyright (c) 2002-9, Karl W Broman
  *
- * last modified Mar, 2002
+ * last modified Apr, 2009
  * first written Mar, 2002
  *
  *     This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
  *
  * Contains: R_ripple_bc, R_ripple_f2, R_ripple_4way, ripple, 
  *           countxo_bc, countxo_f2, countxo_4way
+ *           R_ripple_ril48, countxo_ril48
  *  
  **********************************************************************/
 
@@ -104,7 +105,7 @@ void R_ripple_f2(int *n_ind, int *n_mar, int *geno,
  * 
  * countxo_f2
  * 
- * count no. obligate crossovers in a backcross
+ * count no. obligate crossovers in an intercross
  *
  **********************************************************************/
 
@@ -126,11 +127,33 @@ void R_ripple_4way(int *n_ind, int *n_mar, int *geno,
  * 
  * countxo_4way
  * 
- * count no. obligate crossovers in a backcross
+ * count no. obligate crossovers in a four-way cross
  *
  **********************************************************************/
 
 int countxo_4way(int *curgen, int nextgen);
+
+/**********************************************************************
+ * 
+ * R_ripple_ril48
+ *
+ * Wrapper for call from R for 4- or 8-way RIL
+ * 
+ **********************************************************************/
+
+void R_ripple_ril48(int *n_ind, int *n_mar, int *geno, 
+		    int *n_orders, int *orders,
+		    int *nxo, int *print_by);
+
+/**********************************************************************
+ * 
+ * countxo_ril48
+ * 
+ * count no. obligate crossovers in 4- or 8-way RIL
+ *
+ **********************************************************************/
+
+int countxo_ril48(int *curgen, int nextgen);
 
 /* end of ripple.h */
 

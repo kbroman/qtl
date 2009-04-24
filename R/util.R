@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Mar, 2009
+# last modified Apr, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -82,6 +82,20 @@ function(cross, chr)
   temp <- unlist(lapply(cross$geno, function(a) colnames(a$data)))
   names(temp) <- NULL
   temp
+}
+
+######################################################################
+#
+# chrnames
+#
+# pull out the chrnames for a cross
+#
+######################################################################
+
+chrnames <- 
+function(cross)
+{
+  names(cross$geno)
 }
 
 ######################################################################
@@ -1284,14 +1298,15 @@ function(...)
   # indicator of which cross
   whichcross <- matrix(0,ncol=n.args,nrow=sum(n.ind))
   colnames(whichcross) <- paste("cross",1:n.args,sep="")
+  thecross <- rep(NA, sum(n.ind))
   prev <- 0
   for(i in 1:n.args) {
     wh <- prev + 1:n.ind[i]
     prev <- prev + n.ind[i]
     whichcross[wh,i] <- 1
+    thecross[wh] <- i
   }
-  pheno <- cbind(pheno,whichcross)
-
+  pheno <- cbind(pheno,cross=thecross,whichcross)
 
   x$pheno <- pheno
 
@@ -1303,6 +1318,7 @@ function(...)
     error.prob <- sapply(args,function(a) attr(a$geno[[1]]$prob,"error.prob"))
     off.end <- sapply(args,function(a) attr(a$geno[[1]]$prob,"off.end"))
     map.function <- sapply(args,function(a) attr(a$geno[[1]]$prob,"map.function"))
+    map <- sapply(args,function(a) attr(a$geno[[1]]$prob,"map"))
     if(!any(is.na(wh)) && length(unique(step))==1 &&
        length(unique(error.prob))==1 && length(unique(off.end))==1 &&
        length(unique(map.function))==1) {
@@ -1337,10 +1353,18 @@ function(...)
       }    
   
       for(j in 1:nchr(x)) {
+        wh <- sapply(args, function(a) match("prob",names(a$geno[[j]])))
+        step <- sapply(args,function(a) attr(a$geno[[j]]$prob,"step"))
+        error.prob <- sapply(args,function(a) attr(a$geno[[j]]$prob,"error.prob"))
+        off.end <- sapply(args,function(a) attr(a$geno[[j]]$prob,"off.end"))
+        map.function <- sapply(args,function(a) attr(a$geno[[j]]$prob,"map.function"))
+        map <- sapply(args,function(a) attr(a$geno[[j]]$prob,"map"))
+
         attr(geno[[j]]$prob,"step") <- step[1]
         attr(geno[[j]]$prob,"error.prob") <- error.prob[1]
         attr(geno[[j]]$prob,"off.end") <- off.end[1]
         attr(geno[[j]]$prob,"map.function") <- map.function[1]
+        attr(geno[[j]]$prob,"map") <- map[1]
       }
     }
   
@@ -1351,6 +1375,7 @@ function(...)
     error.prob <- sapply(args,function(a) attr(a$geno[[1]]$draws,"error.prob"))
     off.end <- sapply(args,function(a) attr(a$geno[[1]]$draws,"off.end"))
     map.function <- sapply(args,function(a) attr(a$geno[[1]]$draws,"map.function"))
+    map <- sapply(args,function(a) attr(a$geno[[1]]$draws,"map"))
     ndraws <- sapply(args,function(a) dim(a$geno[[1]]$draws)[3])
     if(!any(is.na(wh)) && length(unique(step))==1 &&
        length(unique(error.prob))==1 && length(unique(off.end))==1 &&
@@ -1365,10 +1390,18 @@ function(...)
           geno[[j]]$draws[wh,,] <- args[[i]]$geno[[j]]$draws
         }
   
+        wh <- sapply(args, function(a) match("draws",names(a$geno[[j]])))
+        step <- sapply(args,function(a) attr(a$geno[[j]]$draws,"step"))
+        error.prob <- sapply(args,function(a) attr(a$geno[[j]]$draws,"error.prob"))
+        off.end <- sapply(args,function(a) attr(a$geno[[j]]$draws,"off.end"))
+        map.function <- sapply(args,function(a) attr(a$geno[[j]]$draws,"map.function"))
+        map <- sapply(args,function(a) attr(a$geno[[j]]$draws,"map"))
+
         attr(geno[[j]]$draws,"step") <- step[1]
         attr(geno[[j]]$draws,"error.prob") <- error.prob[1]
         attr(geno[[j]]$draws,"off.end") <- off.end[1]
         attr(geno[[j]]$draws,"map.function") <- map.function[1]
+        attr(geno[[j]]$draws,"map") <- map[1]
       }
     }
   }
@@ -3034,7 +3067,7 @@ convert2sa <-
 function(map, tol=1e-4)
 {  
   if(!("map" %in% class(map)))
-     stop("Input should have class 'map'.")
+     stop("Input should have class \"map\".")
 
   if(!is.matrix(map[[1]]))
     stop("Input map doesn't seem to be a sex-specific map.")

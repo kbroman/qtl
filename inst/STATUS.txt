@@ -17,13 +17,34 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 4/10/2009:
+Version 1.12, 4/23/2009:
 
 Major changes:
 
-  None.
+  Added the ability to simulate RIL and multiple-strain RIL in the
+  sim.cross function.  For the case of multiple-strain RIL, one needs
+  genotype data on the founder strains, which may be simulated with
+  the new function simFounderSnps.  The encoding of genotypes in
+  multiple-strain RIL is quite complicated.  See the help file for
+  sim.cross.  
+
+  Added the ability to deal with 4- and 8-way RIL in calc.genoprob,
+  sim.geno, argmax.geno, est.map, and ripple.
 
 Minor changes:
+
+  In the output of c.cross, there is a numeric phenotype "cross" that
+  indicates which individuals are from which cross, as a single
+  column. 
+
+  Revised fixXgeno.f2 so that warnings are given the appropriate
+  allele labels (if they are provided to read.cross).
+
+  Fixed a few problems in c.cross regarding the attributes to
+  QTL genotype probabilities and imputated genotypes
+
+  Added a function chrnames, for pulling out the chromosome names from
+  a cross.  
 
   Revised the software license to the GNU General Public License,
   version 3.
