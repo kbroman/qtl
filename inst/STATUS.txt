@@ -38,6 +38,11 @@ Minor changes:
   genetic marker, now has class "scanone", so that one may use
   plot.scanone, summary.scanone, etc.
 
+  Added an argument mark.diagonal to plot.rf(), to include black lines
+  segments around the pixels on the diagonal.  This helps to separate
+  the upper left triangle from the lower right triangle. 
+  (The default is FALSE.)
+
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single
   column. 

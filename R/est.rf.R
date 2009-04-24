@@ -129,7 +129,8 @@ function(cross, maxit=10000, tol=1e-6)
 
 plot.rf <-
 function(x, chr, what=c("both","lod","rf"),
-         alternate.chrid=FALSE, zmax=12, ...)
+         alternate.chrid=FALSE, zmax=12,
+         mark.diagonal=FALSE, ...)
 {
   if(!any(class(x) == "cross"))
     stop("Input should have class \"cross\".")
@@ -175,6 +176,12 @@ function(x, chr, what=c("both","lod","rf"),
   image(1:ncol(g),1:nrow(g),t(g),ylab="Markers",xlab="Markers",breaks=br,
         col=c("lightgray",rev(rainbow(256,start=0,end=2/3, gamma=0.6))))
   
+  if(mark.diagonal) {
+    for(i in 1:ncol(g))
+      segments(i+c(-0.5, -0.5, -0.5, +0.5), i+c(-0.5, +0.5, -0.5, -0.5),
+               i+c(-0.5, +0.5, +0.5, +0.5), i+c(+0.5, +0.5, -0.5, +0.5))
+  }
+
   # plot lines at the chromosome boundaries
   n.mar <- nmar(x)
   n.chr <- nchr(x)

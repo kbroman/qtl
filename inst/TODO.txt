@@ -12,9 +12,6 @@ SHORT TERM:
 
 o Fix bug in cim().
 
-o In plot.rf, allow an option to put little boxes down the diagonal,
-  so that the rf vs LOD scores are more clear.
-
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
