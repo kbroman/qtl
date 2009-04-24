@@ -224,7 +224,10 @@ function(cross, marker, chr, error.prob=0.0001,
     results <- rbind(results, tempres)
   } # loop over chromosomes
 
-  rownames(results) <- 1:nrow(results)
+  rownames(results) <- results$interval
+  results <- results[,-ncol(results)]
+  class(results) <- c("scanone", "data.frame")
+
   results
 }
 

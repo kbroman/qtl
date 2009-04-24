@@ -12,9 +12,6 @@ SHORT TERM:
 
 o Fix bug in cim().
 
-o Make the output of tryallpositions an object of class "scanone", and
-  make the "interval" column the row names.
-
 o In plot.rf, allow an option to put little boxes down the diagonal,
   so that the rf vs LOD scores are more clear.
 
