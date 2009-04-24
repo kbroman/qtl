@@ -97,6 +97,7 @@
 \alias{reorgRIargmax}
 \alias{reorgRIdraws}
 \alias{reorgRIgenoprob}
+\alias{reorgRIpairprob}
 \alias{replacemap}
 \alias{revisecovar}
 \alias{reviseqtlnuminformula}
@@ -249,6 +250,7 @@ read.maps.mm(mapsfile)
 reorgRIargmax(cross)
 reorgRIdraws(cross)
 reorgRIgenoprob(cross)
+reorgRIpairprob(cross, pairprob)
 replacemap(object, map)
 revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)

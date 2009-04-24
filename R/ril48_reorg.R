@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: reorgRIgenoprob, reorgRIdraws, reorgRIimp
+# Contains: reorgRIgenoprob, reorgRIdraws, reorgRIimp, reorgRIpairprob
 #
 ######################################################################
 
@@ -209,6 +209,65 @@ function(cross)
   }
 
   cross
+}
+
+######################################################################
+# reorgRIpairprob
+#
+# For 4- and 8-way RIL, reorganize the results of calc.pairprob
+# using the information on the order of the founder strains in each
+# cross.
+######################################################################
+
+reorgRIpairprob <-
+function(cross, pairprob)
+{
+  crosses <- cross$cross
+  flag <- 0
+  for(i in 1:ncol(crosses)) {
+    if(any(crosses[,i] != i)) {
+      flag <- 1
+      break
+    }
+  }
+  if(!flag) return(pairprob) # no need to reorder
+
+  crosstype <- class(cross)[1]
+  if(crosstype != "ri4sib" && crosstype != "ri4self" &&
+     crosstype != "ri8sib" && crosstype != "ri8self")
+    stop("reorgRIargmax not appropriate for cross type ", crosstype)
+  
+  n.str <- as.numeric(substr(crosstype[i], 3, 3))
+  n.ind <- nind(cross)
+  thedim <- dim(pairprob)
+
+  chrtype <- class(cross$geno[[1]])
+  if(chrtype == "X") 
+    warning("reorgRIpairprob not working properly for the X chromosome.")
+    
+  att <- attributes(pairprob)
+  if(thedim[1] != n.ind)
+    stop("Mismatch between no. individuals in cross and in pairprob.")
+
+  if(thedim[3] != n.str || thedim[4] != n.str) 
+    stop("Mismatch between no. founder strains in cross and in pairprob.")
+
+  n.mar <- nmar(cross)[1]
+  if(n.mar*(n.mar-1)/2 != thedim[2])
+    stop("Mismatch between no. markers in cross and in pairprob.")
+    
+  pairprob <- .C("R_reorgRIpairprob",
+                 as.integer(n.ind),
+                 as.integer(n.mar), # no. prob
+                 as.integer(n.str),
+                 pairprob=as.double(pairprob),
+                 as.integer(crosses),
+                 PACKAGE="qtl")$pairprob
+  pairprob <- array(pairprob, dim=thedim)
+  for(j in names(att))
+      attr(pairprob, j) <- att[[j]]
+
+  pairprob
 }
 
 # end of ril48_reorg.R

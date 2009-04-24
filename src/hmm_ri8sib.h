@@ -25,7 +25,8 @@
  *           calc_genoprob_ri8sib, calc_genoprob_special_ri8sib,
  *           argmax_geno_ri8sib, sim_geno_ri8sib,
  *           est_map_ri8sib, nrec2_ri8sib, logprec_ri8sib, est_rf_ri8sib,
- *           marker_loglik_ri8sib
+ *           marker_loglik_ri8sib, calc_pairprob_ri8sib, 
+ *           errorlod_ri8sib, calc_errorlod_ri8sib
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 8-way RIL by sib mating 
@@ -72,5 +73,15 @@ void est_rf_ri8sib(int *n_ind, int *n_mar, int *geno, double *rf,
 
 void marker_loglik_ri8sib(int *n_ind, int *geno,
 			  double *error_prob, double *loglik);
+
+void calc_pairprob_ri8sib(int *n_ind, int *n_mar, int *geno, 
+			  double *rf, double *error_prob, 
+			  double *genoprob, double *pairprob);
+
+double errorlod_ri8sib(int obs, double *prob, double error_prob);
+
+void calc_errorlod_ri8sib(int *n_ind, int *n_mar, int *geno, 
+			  double *error_prob, double *genoprob, 
+			  double *errlod);
 
 /* end of hmm_ri8sib.h */

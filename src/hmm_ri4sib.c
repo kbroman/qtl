@@ -25,7 +25,8 @@
  *           calc_genoprob_ri4sib, calc_genoprob_special_ri4sib,
  *           argmax_geno_ri4sib, sim_geno_ri4sib,
  *           est_map_ri4sib, nrec2_ri4sib, logprec_ri4sib, est_rf_ri4sib,
- *           marker_loglik_ri4sib
+ *           marker_loglik_ri4sib, calc_pairprob_ri8sib, 
+ *           errorlod_ri8sib, calc_errorlod_ri8sib
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 4-way RIL by sib mating.
@@ -179,6 +180,43 @@ void marker_loglik_ri4sib(int *n_ind, int *geno,
 {
   marker_loglik(*n_ind, 4, geno, *error_prob, init_ri4sib, emit_ri4sib,
 		loglik);
+}
+
+void calc_pairprob_ri4sib(int *n_ind, int *n_mar, int *geno, 
+			  double *rf, double *error_prob, 
+			  double *genoprob, double *pairprob) 
+{
+  calc_pairprob(*n_ind, *n_mar, 4, geno, rf, rf, *error_prob, genoprob,
+		pairprob, init_ri4sib, emit_ri4sib, step_ri4sib);
+}
+
+double errorlod_ri4sib(int obs, double *prob, double error_prob)
+{
+  double p=0.0, temp;
+  int n=0, i;
+
+  if(obs==0 || (obs == (1<<4) - 1)) return(0.0);
+  for(i=0; i<4; i++) {
+    if(obs & 1<<i) p += prob[i];
+    else n++;
+  }
+  if(n==0 || n==4) return(0.0); /* shouldn't happen */
+  
+  p = (1.0-p)/p;
+  temp = (double)n*error_prob/3.0;
+
+  p *= (1.0 - temp)/temp;
+
+  if(p < TOL) return(-12.0);
+  else return(log10(p));
+}
+
+void calc_errorlod_ri4sib(int *n_ind, int *n_mar, int *geno, 
+		      double *error_prob, double *genoprob, 
+		      double *errlod)
+{
+  calc_errorlod(*n_ind, *n_mar, 4, geno, *error_prob, genoprob,
+		errlod, errorlod_ri4sib);
 }
 
 /* end of hmm_ri4sib.c */

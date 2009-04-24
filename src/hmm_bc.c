@@ -2,9 +2,9 @@
  * 
  * hmm_bc.c
  * 
- * copyright (c) 2001-8, Karl W Broman
+ * copyright (c) 2001-9, Karl W Broman
  *
- * last modified Jul, 2008
+ * last modified Apr, 2009
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -116,7 +116,7 @@ double errorlod_bc(int obs, double *prob, double error_prob)
   double p=0.0;
 
   switch(obs) {
-  case 0: p=1.0; break;
+  case 0: return(0.0);
   case 1: p=prob[0]; break;
   case 2: p=prob[1]; break;
   }

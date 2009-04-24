@@ -25,7 +25,8 @@
  * and sim.geno, for 4- and 8-way RIL
  *
  * Contains: R_reorgRIgenoprob, reorgRIgenoprob, 
- *           R_reorgRIdraws, reorgRIdraws
+ *           R_reorgRIdraws, reorgRIdraws,
+ *           R_reorgRIpairprob, reorgRIpairprob
  *  
  **********************************************************************/
 
@@ -108,5 +109,52 @@ void R_reorgRIdraws(int *n_ind, int *n_mar, int *n_str, int *n_draws,
   
   reorgRIdraws(*n_ind, *n_mar, *n_str, *n_draws, Draws, Crosses);
 }
+
+/**********************************************************************
+ * reorgRIpairprob
+ * 
+ * For 4- and 8-way RIL, reorganize the QTL the results of calc.pairprob
+ * using the information on the order of the founder strains in each
+ * cross.
+ **********************************************************************/
+void reorgRIpairprob(int n_ind, int n_mar, int n_str,
+		     double *****PairProb, int **Crosses)
+{
+  int i, j1, j2, k1, k2;
+  double **temp;
+
+  allocate_dmatrix(n_str, n_str, &temp);
+
+  for(i=0; i<n_ind; i++) {
+    for(j1=0; j1<n_mar-1; j1++) {
+      for(j2=(j1+1); j2<n_mar; j2++) {
+
+	for(k1=0; k1<n_str; k1++) 
+	  for(k2=0; k2<n_str; k2++) 
+	    temp[k1][k2] = PairProb[k1][k2][j1][j2][i];
+
+	for(k1=0; k1<n_str; k1++) 
+	  for(k2=0; k2<n_str; k2++) 
+	    PairProb[Crosses[k1][i]-1][Crosses[k2][i]-1][j1][j2][i] = temp[k1][k2];
+      }
+    }
+  }
+}
+
+
+/* wrapper for R */
+void R_reorgRIpairprob(int *n_ind, int *n_mar, int *n_str,
+		       double *pairprob, int *crosses)
+{
+  double *****PairProb;
+  int **Crosses;
+
+  reorg_pairprob(*n_ind, *n_mar, *n_str, pairprob, &PairProb);
+  reorg_geno(*n_ind, *n_str, crosses, &Crosses);
+  
+  reorgRIpairprob(*n_ind, *n_mar, *n_str, PairProb, Crosses);
+}
+
+
 
 /* end of ril48_reorg.c */

@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -64,10 +64,12 @@ function(cross, error.prob=0.01,
     if(type=="bc" || type=="risib" || type=="riself" || type=="dh")
       cfunc <- "calc_errorlod_bc"
     else if(type=="f2") {
-      if(chr.type=="A") cfunc <- "calc_errorlod_f2"
+      if(chr.type!="X") cfunc <- "calc_errorlod_f2"
       else cfunc <- "calc_errorlod_bc"
     }
     else if(type=="4way") cfunc <- "calc_errorlod_4way"
+    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib")
+      cfunc <- paste("calc_errorlod_", type, sep="")
     else 
       stop("calc.errorlod not available for cross type ", type, ".")
 

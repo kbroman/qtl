@@ -25,7 +25,8 @@
  * and sim.geno, for 4- and 8-way RIL
  *
  * Contains: R_reorgRIgenoprob, reorgRIgenoprob, 
- *           R_reorgRIdraws, reorgRIdraws
+ *           R_reorgRIdraws, reorgRIdraws,
+ *           R_reorgRIpairprob, reorgRIpairprob
  *  
  **********************************************************************/
 
@@ -56,5 +57,19 @@ void reorgRIdraws(int n_ind, int n_mar, int n_str, int n_draws,
 /* wrapper for R */
 void R_reorgRIdraws(int *n_ind, int *n_mar, int *n_str, int *n_draws,
 		    int *draws, int *crosses);
+
+/**********************************************************************
+ * reorgRIpairprob
+ * 
+ * For 4- and 8-way RIL, reorganize the QTL the results of calc.pairprob
+ * using the information on the order of the founder strains in each
+ * cross.
+ **********************************************************************/
+void reorgRIpairprob(int n_ind, int n_mar, int n_str,
+		     double *****PairProb, int **Crosses);
+
+/* wrapper for R */
+void R_reorgRIpairprob(int *n_ind, int *n_mar, int *n_str,
+		       double *pairprob, int *crosses);
 
 /* end of ril48_reorg.h */

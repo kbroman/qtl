@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Fix bug in cim().
+
 o Make the output of tryallpositions an object of class "scanone", and
   make the "interval" column the row names.
 
@@ -23,6 +25,7 @@ o In plot of output from addpair with a special formula, we need just
   one set of numbers on the color scale.
 
 o function to identify the XO locations (based on countXO?)
+  [this is locate.xo, I think.]
 
 o In stepwiseqtl starting from something other than the null model,
   "Starting at a model with..." shouldn't be printed if
@@ -51,6 +54,8 @@ o FAQ: - constructing covariate matrices
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o X chromosome for 4- and 8-way RIL by sibling mating (also 2-way RIL).
 
 o Better way to make use of ... in plot functions that allows
   unmentioned defaults.

@@ -25,7 +25,8 @@
  *           calc_genoprob_ri8sib, calc_genoprob_special_ri8sib,
  *           argmax_geno_ri8sib, sim_geno_ri8sib,
  *           est_map_ri8sib, nrec2_ri8sib, logprec_ri8sib, est_rf_ri8sib,
- *           marker_loglik_ri8sib
+ *           marker_loglik_ri8sib, calc_pairprob_ri8sib, 
+ *           errorlod_ri8sib, calc_errorlod_ri8sib
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 8-way RIL by sib mating 
@@ -183,6 +184,43 @@ void marker_loglik_ri8sib(int *n_ind, int *geno,
 {
   marker_loglik(*n_ind, 8, geno, *error_prob, init_ri8sib, emit_ri8sib,
 		loglik);
+}
+
+void calc_pairprob_ri8sib(int *n_ind, int *n_mar, int *geno, 
+			  double *rf, double *error_prob, 
+			  double *genoprob, double *pairprob) 
+{
+  calc_pairprob(*n_ind, *n_mar, 8, geno, rf, rf, *error_prob, genoprob,
+		pairprob, init_ri8sib, emit_ri8sib, step_ri8sib);
+}
+
+double errorlod_ri8sib(int obs, double *prob, double error_prob)
+{
+  double p=0.0, temp;
+  int n=0, i;
+
+  if(obs==0 || (obs == (1<<8) - 1)) return(0.0);
+  for(i=0; i<8; i++) {
+    if(obs & 1<<i) p += prob[i];
+    else n++;
+  }
+  if(n==0 || n==8) return(0.0); /* shouldn't happen */
+  
+  p = (1.0-p)/p;
+  temp = (double)n*error_prob/7.0;
+
+  p *= (1.0 - temp)/temp;
+
+  if(p < TOL) return(-12.0);
+  else return(log10(p));
+}
+
+void calc_errorlod_ri8sib(int *n_ind, int *n_mar, int *geno, 
+		      double *error_prob, double *genoprob, 
+		      double *errlod)
+{
+  calc_errorlod(*n_ind, *n_mar, 8, geno, *error_prob, genoprob,
+		errlod, errorlod_ri8sib);
 }
 
 /* end of hmm_ri8sib.c */

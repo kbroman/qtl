@@ -25,7 +25,8 @@
  *           calc_genoprob_ri8self, calc_genoprob_special_ri8self,
  *           argmax_geno_ri8self, sim_geno_ri8self,
  *           est_map_ri8self, nrec2_ri8self, logprec_ri8self, est_rf_ri8self,
- *           marker_loglik_ri8self
+ *           marker_loglik_ri8self, calc_pairprob_ri8self, 
+ *           errorlod_ri8self, calc_errorlod_ri8self
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 8-way RIL by selfing.
@@ -71,6 +72,16 @@ void est_rf_ri8self(int *n_ind, int *n_mar, int *geno, double *rf,
 
 void marker_loglik_ri8self(int *n_ind, int *geno,
 			   double *error_prob, double *loglik);
+
+void calc_pairprob_ri8self(int *n_ind, int *n_mar, int *geno, 
+			   double *rf, double *error_prob, 
+			   double *genoprob, double *pairprob);
+
+double errorlod_ri8self(int obs, double *prob, double error_prob);
+
+void calc_errorlod_ri8self(int *n_ind, int *n_mar, int *geno, 
+			   double *error_prob, double *genoprob, 
+			   double *errlod);
 
 /* end of hmm_ri8self.h */
 

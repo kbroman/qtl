@@ -229,7 +229,17 @@ function(object,...)
       warning(warn)
     }
   }
-
+  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+    n.str <- as.numeric(substr(type, 3, 3))
+    if(any(!is.na(Geno) & (Geno != round(Geno) | Geno < 1 | Geno > 2^n.str-1))) {
+      u <- unique(as.numeric(Geno))
+      u <- sort(u[!is.na(u)])
+      warn <- paste("Invalid genotypes.",
+                    "\n    Observed genotypes:",
+                    paste(u, collapse=" "))
+      warning(warn)
+    }
+  }
 
   # Look for duplicate marker names
   mnames <- NULL

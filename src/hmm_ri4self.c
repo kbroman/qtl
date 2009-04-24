@@ -25,7 +25,8 @@
  *           calc_genoprob_ri4self, calc_genoprob_special_ri4self, 
  *           argmax_geno_ri4self, sim_geno_ri4self,
  *           est_map_ri4self, nrec2_ri4self, logprec_ri4self, est_rf_ri4self,
- *           marker_loglik_ri4self
+ *           marker_loglik_ri4self, calc_pairprob_ri4self, 
+ *           errorlod_ri4self, calc_errorlod_ri4self
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 4-way RIL by selfing
@@ -181,6 +182,43 @@ void marker_loglik_ri4self(int *n_ind, int *geno,
 {
   marker_loglik(*n_ind, 4, geno, *error_prob, init_ri4self, emit_ri4self,
 		loglik);
+}
+
+void calc_pairprob_ri4self(int *n_ind, int *n_mar, int *geno, 
+			  double *rf, double *error_prob, 
+			  double *genoprob, double *pairprob) 
+{
+  calc_pairprob(*n_ind, *n_mar, 4, geno, rf, rf, *error_prob, genoprob,
+		pairprob, init_ri4self, emit_ri4self, step_ri4self);
+}
+
+double errorlod_ri4self(int obs, double *prob, double error_prob)
+{
+  double p=0.0, temp;
+  int n=0, i;
+
+  if(obs==0 || (obs == (1<<4) - 1)) return(0.0);
+  for(i=0; i<4; i++) {
+    if(obs & 1<<i) p += prob[i];
+    else n++;
+  }
+  if(n==0 || n==4) return(0.0); /* shouldn't happen */
+  
+  p = (1.0-p)/p;
+  temp = (double)n*error_prob/3.0;
+
+  p *= (1.0 - temp)/temp;
+
+  if(p < TOL) return(-12.0);
+  else return(log10(p));
+}
+
+void calc_errorlod_ri4self(int *n_ind, int *n_mar, int *geno, 
+		      double *error_prob, double *genoprob, 
+		      double *errlod)
+{
+  calc_errorlod(*n_ind, *n_mar, 4, geno, *error_prob, genoprob,
+		errlod, errorlod_ri4self);
 }
 
 /* end of hmm_ri4self.c */

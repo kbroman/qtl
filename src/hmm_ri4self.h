@@ -25,7 +25,8 @@
  *           calc_genoprob_ri4self, calc_genoprob_special_ri4self, 
  *           argmax_geno_ri4self, sim_geno_ri4self,
  *           est_map_ri4self, nrec2_ri4self, logprec_ri4self, est_rf_ri4self,
- *           marker_loglik_ri4self
+ *           marker_loglik_ri4self, calc_pairprob_ri4self, 
+ *           errorlod_ri4self, calc_errorlod_ri4self
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 4-way RIL by selfing
@@ -71,5 +72,15 @@ void est_rf_ri4self(int *n_ind, int *n_mar, int *geno, double *rf,
 
 void marker_loglik_ri4self(int *n_ind, int *geno,
 			   double *error_prob, double *loglik);
+
+void calc_pairprob_ri4self(int *n_ind, int *n_mar, int *geno, 
+			   double *rf, double *error_prob, 
+			   double *genoprob, double *pairprob);
+
+double errorlod_ri4self(int obs, double *prob, double error_prob);
+
+void calc_errorlod_ri4self(int *n_ind, int *n_mar, int *geno, 
+			   double *error_prob, double *genoprob, 
+			   double *errlod);
 
 /* end of hmm_ri4self.h */
