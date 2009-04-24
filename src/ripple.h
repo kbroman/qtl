@@ -63,7 +63,7 @@
  *
  **********************************************************************/
 
-void ripple(int n_ind, int n_mar, int n_gen, int *geno,
+void ripple(int n_ind, int n_mar, int *geno,
 	    int n_orders, int *orders, int *nxo, 
 	    int print_by, int countxo(int *curgen, int nextgen));
 

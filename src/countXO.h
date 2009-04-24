@@ -2,9 +2,10 @@
  * 
  * countXO.h
  *
- * copyright (c) 2008, Karl W Broman
+ * copyright (c) 2008-9, Karl W Broman
  *
- * last modified Feb, 2008
+ * last modified Apr, 2009
+ * first written Feb, 2008
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -23,7 +24,8 @@
  * These functions are for comparing marker orders by counts of 
  * obligate crossovers
  *
- * Contains: R_countXO_bc, R_countXO_f2, R_countXO_4way, countXO
+ * Contains: R_countXO_bc, R_countXO_f2, R_countXO_4way, countXO,
+ *           R_countXO_ril48
  *  
  **********************************************************************/
 
@@ -92,6 +94,16 @@ void R_countXO_f2(int *n_ind, int *n_mar, int *geno,
 void R_countXO_4way(int *n_ind, int *n_mar, int *geno, 
 		    int *nxo);
 
+/**********************************************************************
+ * 
+ * R_countXO_ril48
+ *
+ * Wrapper for call from R for 4- or 8-way RIL by selfing or sibmating
+ * 
+ **********************************************************************/
+
+void R_countXO_ril48(int *n_ind, int *n_mar, int *geno, 
+		     int *nxo);
 
 /* end of countXO.h */
 

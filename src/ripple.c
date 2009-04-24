@@ -54,8 +54,6 @@
  *
  * n_mar    = no. markers
  *
- * n_gen    = no. possible genotypes
- *
  * geno     = genotype data [n_ind x n_mar]
  *
  * n_orders = no. different orders
@@ -74,7 +72,7 @@
  *
  **********************************************************************/
 
-void ripple(int n_ind, int n_mar, int n_gen, int *geno,
+void ripple(int n_ind, int n_mar, int *geno,
 	    int n_orders, int *orders, int *nxo, 
 	    int print_by, int countxo(int *curgen, int nextgen))
 {
@@ -117,7 +115,7 @@ void R_ripple_bc(int *n_ind, int *n_mar, int *geno,
 		 int *n_orders, int *orders,
 		 int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 2, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_bc);
 }
 
@@ -161,7 +159,7 @@ void R_ripple_f2(int *n_ind, int *n_mar, int *geno,
 		 int *n_orders, int *orders,
 		 int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 4, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_f2);
 }
 
@@ -240,7 +238,7 @@ void R_ripple_4way(int *n_ind, int *n_mar, int *geno,
 		   int *n_orders, int *orders,
 		   int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 4, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_4way);
 }
 
@@ -558,7 +556,7 @@ void R_ripple_ril48(int *n_ind, int *n_mar, int *geno,
 		    int *n_orders, int *orders,
 		    int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 4, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_ril48);
 }
 
@@ -587,7 +585,6 @@ int countxo_ril48(int *curgen, int nextgen)
     return(0);
   }
 }
-
 
 /* end of ripple.c */
 

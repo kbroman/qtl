@@ -2,8 +2,8 @@
 #
 # countXO.R
 #
-# copyright (c) 2008, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2008-9, Karl W Broman
+# last modified Apr, 2009
 # first written Feb, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -44,18 +44,7 @@ function(cross, chr, bychr=FALSE)
   if(!missing(chr)) cross <- subset(cross,chr=chr)
   chr.name <- names(cross$geno)
 
-  # which type of cross is this?
   type <- class(cross)[1]
-  if(type == "f2") {
-    if(class(cross$geno[[1]]) == "A") # autosomal
-      func <- "R_countXO_f2"
-    else func <- "R_countXO_bc"        # X chromsome  
-  }
-  else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_countXO_bc"
-  else if(type == "4way") func <- "R_countXO_4way"
-  else 
-    stop("ripple not available for cross ", type)
-
   n.ind <- nind(cross)
   n.chr <- nchr(cross)
   nxo <- matrix(0, ncol=n.chr, nrow=n.ind)
@@ -64,6 +53,27 @@ function(cross, chr, bychr=FALSE)
   dimnames(nxo) <- list(id, chr.name)
 
   for(i in 1:n.chr) {
+
+    chrtype <- class(cross$geno[[i]])
+    if(chrtype=="X") xchr <- TRUE
+    else xchr <- FALSE
+
+  # which type of cross is this?
+    if(type == "f2") {
+      if(!xchr) # autosomal
+        func <- "R_countXO_f2"
+      else func <- "R_countXO_bc"        # X chromsome  
+    }
+    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_countXO_bc"
+    else if(type == "4way") func <- "R_countXO_4way"
+    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") {
+      func <- "R_countXO_ril48"
+      if(xchr)
+        warning("countXO not working properly for the X chromosome for 4- or 8-way RIL.")
+    }
+    else 
+      stop("ripple not available for cross ", type)
+
     # data to be input
     genodat <- cross$geno[[i]]$data
     genodat[is.na(genodat)] <- 0
