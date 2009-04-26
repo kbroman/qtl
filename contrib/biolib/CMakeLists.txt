@@ -16,8 +16,8 @@ IF(NOT BUILD_LIBS)
   ENDIF(NOT IS_DIRECTORY ${CMAKE_MODULE_PATH})
 ENDIF(NOT BUILD_LIBS)
 
-FIND_PACKAGE(RLibs)     # require some Rlib functionality at runtime
-FIND_PACKAGE(BioLib)
+FIND_PACKAGE(RLibs REQUIRED)  # require some Rlib functionality at runtime
+FIND_PACKAGE(Map REQUIRED)
 
 SET(LIBNAME biolib_rqtl-${BIOLIB_VERSION})  # shared library name
 
