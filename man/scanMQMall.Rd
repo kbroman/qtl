@@ -33,7 +33,7 @@
   Returns a MQMmulti object. This object is a list of scanone objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{plot.all(result)}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu}  }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu}  }
 
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}

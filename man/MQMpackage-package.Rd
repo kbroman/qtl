@@ -61,7 +61,7 @@
 	}
 }
 \author{
-Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} ; M.A. Swertz \email{m.a.swertz@rug.nl}
+Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} ; M.A. Swertz \email{m.a.swertz@rug.nl}
 
 Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 }

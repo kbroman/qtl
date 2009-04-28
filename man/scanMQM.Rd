@@ -54,7 +54,7 @@ Afterwards the Interval mapping of the QTL model is returned to the user
 Returns a matrix with QTLscores,Informationcontent,QTL*Informationcontent for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL or plot.MQMone to also visualize the QTL*informationcontent
 The phenotype under consideration is specified by the pheno.col argument of the function.
 }
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Brohamn \email{kbroman@biostat.wisc.edu} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
