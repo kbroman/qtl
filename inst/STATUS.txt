@@ -50,6 +50,10 @@ Minor changes:
   the upper left triangle from the lower right triangle. 
   (The default is FALSE.)
 
+  Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
+  case of multiple marker covariates within a window (and >3 marker
+  covariates on that chromosome.
+
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single
   column. 

@@ -2,8 +2,8 @@
 #
 # cim.R
 #
-# copyright (c) 2008, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2009, Karl W Broman
+# last modified Apr, 2009
 # first written Jan, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -128,7 +128,7 @@ function(cross, pheno.col=1, n.marcovar=3, window=10,
  
     for(j in u) {
       wh <- which(chrpos[,1]==j)
-      pos <- sort(chrpos[wh,2]) # positions of the covariates on this chromosome
+      pos <- chrpos[wh,2] # positions of the covariates on this chromosome
 
       scanpos <- firstscan[firstscan[,1]==j,2] # positions at which the genome scan is performed
 
