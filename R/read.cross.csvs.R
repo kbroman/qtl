@@ -2,8 +2,8 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2006-8, Karl W Broman
-# last modified May, 2008
+# copyright (c) 2006-9, Karl W Broman
+# last modified Apr, 2009
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -95,11 +95,8 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
   }
 
   if(rotate) {
-    gen <- as.data.frame(t(gen))
-    for(i in 1:ncol(gen)) gen[,i] <- as.character(gen[,i])
-
-    pheno <- as.data.frame(t(pheno))
-    for(i in 1:ncol(pheno)) pheno[,i] <- as.character(pheno[,i])
+    gen <- as.data.frame(t(gen), stringsAsFactors=FALSE)
+    pheno <- as.data.frame(t(pheno), stringsAsFactors=FALSE)
   }
 
   # We must make the first column have the individual IDs

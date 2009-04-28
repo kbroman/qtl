@@ -15,7 +15,7 @@ many details as possible and possibly example data, to Karl Broman,
 
 Version 1.11 bugs:
 
-   1. Problem in cim() in the case that multiple marker covariates are
+>> 1. Problem in cim() in the case that multiple marker covariates are
       within the "window".
 
 

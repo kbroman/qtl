@@ -2,8 +2,8 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2000-9, Karl W Broman
+# last modified Apr, 2009
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -75,22 +75,13 @@ function(dir, file, na.strings=c("-","NA"),
                          blank.lines.skip=TRUE, ...)
   }
 
-  if(rotate) {
-    data <- as.data.frame(t(data))
-    for(i in 1:ncol(data)) data[,i] <- as.character(data[,i])
-  }
+  if(rotate) 
+    data <- as.data.frame(t(data), stringsAsFactors=FALSE)
 
   # determine number of phenotypes based on initial blanks in row 2
-  n <- ncol(data)
-  temp <- rep(FALSE,n)
-  for(i in 1:n) {
-    temp[i] <- all(data[2,1:i]=="")
-    if(!temp[i]) break
-  }
-
-  if(!any(temp)) # no phenotypes!
+  if(data[2,1] != "")
     stop("You must include at least one phenotype (e.g., an index).")
-  n.phe <- max((1:n)[temp])
+  n.phe <- min(which(data[2,] != ""))-1
 
   # Is map included?  yes if first n.phe columns in row 3 are all blank
   if(all(!is.na(data[3,1:n.phe]) & data[3,1:n.phe]=="")) {
@@ -120,6 +111,7 @@ function(dir, file, na.strings=c("-","NA"),
   if(length(genotypes) > 0) {
     # look for strange entries in the genotype data
     temp <- unique(as.character(data[-(1:nondatrow),-(1:n.phe),drop=FALSE]))
+
     temp <- temp[!is.na(temp)]
     wh <- !(temp %in% genotypes)
     if(any(wh)) {

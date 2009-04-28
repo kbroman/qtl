@@ -10,11 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o read.cross is slow loading when there are *lots* of phenotypes
-  [I think it has to do with as.data.frame() and as.character(); 
-  in as.data.frame(), use stringsAsFactors=FALSE, and eliminate the
-  as.character() lines.]
-
 o Fix bug in cim().
 
 o In c.cross, include an argument for "flipping" a backcross, so that
