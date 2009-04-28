@@ -573,8 +573,8 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
     }
   }
 
-  attr(qtl, "formula") <- NULL
-  attr(qtl, "pLOD") <- NULL
+  #attr(qtl, "formula") <- NULL
+  #attr(qtl, "pLOD") <- NULL
 
   invisible()
 }
