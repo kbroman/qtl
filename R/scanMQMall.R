@@ -80,7 +80,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=T,n.clusters=2,b_size=10,
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
 				cl <- makeCluster(n.clusters)
-				clusterEvalQ(cl, library(MQMpackage))
+				clusterEvalQ(cl, library(qtl))
 				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
 				stopCluster(cl)
 				if(plot){
