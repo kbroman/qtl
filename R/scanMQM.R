@@ -201,8 +201,8 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				as.integer(est.map),
 				as.integer(ctype),
 				as.integer(dominance),
-				as.integer(verbose)
-			    )
+				as.integer(verbose),
+			    PACKAGE="qtl")
 		end_2 <- proc.time()				
 		# initialize output object
 		qtl <- NULL

@@ -106,8 +106,8 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 				as.integer(maxiaug),
 				as.double(neglect),
 				as.integer(chr),
-				as.integer(ctype)
-				)
+				as.integer(ctype),
+				PACKAGE="qtl")
 		n.ind = result[[7]]
 		n.aug = result[[8]]	
 		markONchr <- 0
