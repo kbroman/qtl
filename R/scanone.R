@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Sep, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,12 +39,29 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
          addcovar=NULL, intcovar=NULL, weights=NULL,
          use=c("all.obs", "complete.obs"), upper=FALSE,
          ties.random=FALSE, start=NULL, maxit=4000, tol=1e-4,
-         n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose, batchsize=250)
+         n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose, batchsize=250,
+         n.cluster=2)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   model <- match.arg(model)
   method <- match.arg(method)
   use <- match.arg(use)
+
+  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow))) {
+    cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
+    cl <- makeCluster(n.cluster)
+    clusterSetupRNG(cl)
+    n.perm <- ceiling(n.perm/n.cluster)
+    if(missing(chr)) chr <- names(cross$geno)
+    operm <- clusterCall(cl, scanone, cross, chr, pheno.col, model, method,
+                         addcovar, intcovar, weights, use, upper, ties.random,
+                         start, maxit, tol, n.perm, perm.Xsp, perm.strata, verbose=FALSE,
+                         batchsize, n.cluster=0)
+    stopCluster(cl)
+    for(j in 2:length(operm))
+      operm[[1]] <- c(operm[[1]], operm[[j]])
+    return(operm[[1]])
+  }
 
   # to store the degrees of freedom
   dfA <- -1
@@ -111,7 +128,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     out <- scanone(cross, chr, pheno.col[1], model, method,
                    addcovar, intcovar, weights, use, upper, ties.random,
                    start, maxit, tol, n.perm, perm.Xsp, perm.strata,
-                   verbose, batchsize)
+                   verbose, batchsize, n.cluster=0)
     nc <- ncol(out)-2
     cn <- colnames(out)[-(1:2)]
     df <- attr(out, "df")
@@ -120,7 +137,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                                       method, addcovar, intcovar, weights,
                                       use, upper, ties.random, start,
                                       maxit, tol, n.perm, perm.Xsp,
-                                      perm.strata, verbose, batchsize)[,-(1:2)]
+                                      perm.strata, verbose, batchsize, n.cluster=0)[,-(1:2)]
 
     if(length(cn) > 1)
       colnames(out)[-(1:2)] <- paste(rep(cn,length(pheno.col)),
@@ -898,7 +915,8 @@ function(n.perm, cross, pheno.col, model,
     pheno.col <- 1:n.perm
     tem <- scanone(cross,,pheno.col,model,method,addcovar,
                    intcovar, weights, use, upper,ties.random,start,
-                   maxit,tol,n.perm= -1, perm.Xsp=FALSE, perm.strata, verbose=FALSE, batchsize)
+                   maxit,tol,n.perm= -1, perm.Xsp=FALSE, perm.strata, verbose=FALSE, batchsize,
+                   n.cluster=0)
 
     res <- matrix(apply(tem[,-(1:2),drop=FALSE], 2, max, na.rm=TRUE), ncol=1)
     attr(res, "df") <- attr(tem, "df")
@@ -953,7 +971,8 @@ function(n.perm, cross, pheno.col, model,
 
       tem <- scanone(cross,,pheno.col,model,method,addcovarp,
                      intcovarp,weights,use,upper,ties.random,start,
-                     maxit,tol,n.perm= -i, perm.Xsp=FALSE, perm.strata, verbose=FALSE, batchsize)
+                     maxit,tol,n.perm= -i, perm.Xsp=FALSE, perm.strata, verbose=FALSE, batchsize,
+                     n.cluster=0)
       
       res[i,] <- apply(tem[,-(1:2),drop=FALSE], 2, max, na.rm=TRUE)
 
