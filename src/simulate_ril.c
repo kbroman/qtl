@@ -576,7 +576,7 @@ void R_meiosis(double *L, int *m, double *p, int *maxwork, double *work,
 
 /**********************************************************************
  * 
- * convertMWril    Convert RIL genotypes using genotypes in founders
+ * convertMWril    Convert simulated RIL genotypes using genotypes in founders
  *                 (and the cross types).  [for a single chr]
  *
  * n_ril     Number of RILs to simulate

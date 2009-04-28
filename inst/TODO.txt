@@ -10,6 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o read.cross is slow loading when there are *lots* of phenotypes
+  [I think it has to do with as.data.frame() and as.character(); 
+  in as.data.frame(), use stringsAsFactors=FALSE, and eliminate the
+  as.character() lines.]
+
 o Fix bug in cim().
 
 o In c.cross, include an argument for "flipping" a backcross, so that
@@ -53,8 +58,6 @@ o X chromosome for 4- and 8-way RIL by sibling mating (also 2-way RIL).
 
 o Better way to make use of ... in plot functions that allows
   unmentioned defaults.
-
-o read.cross is slow loading when there are *lots* of phenotypes
 
 o plots of segregation ratios at markers
 

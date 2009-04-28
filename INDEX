@@ -119,6 +119,7 @@ pull.pheno              Pull out phenotype data from a cross
 qtl-package             Introductory comments on R/qtl
 qtlversion              Installed version of R/qtl
 read.cross              Read data for a QTL experiment
+readMWril               Read data for 4- or 8-way RIL
 refineqtl               Refine the positions of QTL
 reorderqtl              Reorder the QTL in a qtl object.
 replace.map             Replace the genetic map of a cross
