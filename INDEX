@@ -108,10 +108,6 @@ nphe                    Determine the number of phenotypes QTL
 ntyped                  Number of genotypes
 orderMarkers            Find an initial order for markers within
                         chromosomes
-plot.all                plot.all - Plotting routine to display the
-                        results from a scanall / bootstrap scan
-plot.boot               plot.boot - Plotting routine to display the
-                        results from a bootstrap scan
 plot.cross              Plot various features of a cross object
 plot.errorlod           Plot grid of error LOD values
 plot.geno               Plot observed genotypes, flagging likely errors
@@ -119,10 +115,6 @@ plot.info               Plot the proportion of missing genotype
                         information
 plot.map                Plot genetic map
 plot.missing            Plot grid of missing genotypes
-plot.nice               plot.nice - Plotting routine to display the
-                        results from a bootstrap or scanall scan
-plot.one                plot.one - Plotting routine to display the
-                        results from a QTL scan
 plot.pheno              Plot a phenotype distribution
 plot.pxg                Plot phenotypes versus marker genotypes.
 plot.qtl                Plot QTL locations
@@ -137,6 +129,13 @@ plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
                         scan
 plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plotModel               Plot a QTL model
+plotMQMall              Plotting routine to display the results from a
+                        scanall / bootstrap scan
+plotMQMboot             Plot results from a bootstrap scan
+plotMQMnice             Plot the results from a bootstrap or scanall
+                        scan
+plotMQMone              Plotting routine to display the results from a
+                        QTL scan
 pull.geno               Pull out the genotype data from a cross
 pull.map                Pull out the genetic map from a cross
 pull.pheno              Pull out phenotype data from a cross

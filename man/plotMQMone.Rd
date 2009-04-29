@@ -15,7 +15,7 @@ plotMQMone(result, result2, extended = 0 ,\dots)
   \item{result}{ Results from scanMQM of type \code{scanone}}
   \item{result2}{ Results from scanMQM of type \code{scanone} }  
   \item{extended}{ Extended plotting of the information content }
-  \item{\dots}{ Extra argument passed to the \code{\link[qtl]{plot.scanone} }  
+  \item{\dots}{ Extra argument passed to the \code{\link[qtl]{plot.scanone}} }  
 }
 
 %\details{

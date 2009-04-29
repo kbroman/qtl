@@ -45,7 +45,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
           ctype = 3
         }
 
-        if(verbose) ("INFO: Received a valid cross file type:", crosstype,".\n")
+        if(verbose) cat("INFO: Received a valid cross file type:", crosstype,".\n")
 
         # check whether the X chromosome should be dropped
         # (backcross with all one sex should be fine)
