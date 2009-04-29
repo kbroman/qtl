@@ -14,15 +14,17 @@ MQMfind.marker(cross = NULL, scanMQMres = NULL, perm = NULL, alpha = 0.05)
   \item{perm}{ a scanoneperm object }
   \item{alpha}{ Threshold value, everything with significance < alpha is reported }
 }
-\details{
 
-}
+%\details{
+%
+%}
+
 \value{
 	return a matrix with at each row a significant marker (determined from the scanoneperm object) and with columns: markername, chr and pos (Cm)
 }
-\references{ 
-
-}
+%\references{ 
+%
+%}
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} }
 \note{ 
 	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}

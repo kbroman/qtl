@@ -12,9 +12,9 @@ MQMpermObject(bootresult = NULL)
 \arguments{
   \item{bootresult}{ MQMmulti object obtained by using the function \link{bootstrap} }
 }
-\details{
-
-}
+%\details{
+%
+%}
 \value{
 	Output of the algorithm is a scanoneperm object See also: \link[qtl]{summary.scanoneperm}
 }
