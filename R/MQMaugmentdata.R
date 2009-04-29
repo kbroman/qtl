@@ -28,7 +28,7 @@
 # MQMaugmentdata:
 #
 ######################################################################
-MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=TRUE){
+MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALSE){
 	start <- proc.time()
 
         crosstype <- class(cross)[1]
@@ -81,7 +81,6 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
         geno <- pull.geno(cross)
         chr <- rep(1:nchr(cross), nmar(cross))
         dist <- unlist(pull.map(cross))
-        names(dist) <- colnames(geno)
 
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)

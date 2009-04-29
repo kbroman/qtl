@@ -7,7 +7,7 @@
   Estimates missing data; unlikely genotypes are kept when more likely than 1:Neglect
 }
 \usage{
-MQMaugment(cross, pheno.col=1, maxaug=10000, maxiaug=1000, neglect=1000, verbose=TRUE)
+MQMaugment(cross, pheno.col=1, maxaug=10000, maxiaug=1000, neglect=1000, verbose=FALSE)
 }
 
 \arguments{
@@ -66,4 +66,5 @@ result <- scanMQM(crossaug)						# Do a MQM scan of the genome
 		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
 	}
 }
+
 \keyword{ utilities }
