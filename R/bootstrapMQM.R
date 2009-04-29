@@ -44,7 +44,7 @@ bootstrapcim <- function(...){
 	bootstrap(...,Funktie=cim)
 }
 
-bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=TRUE,...)
+bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=FALSE,...)
 {
 	
 	if(is.null(cross)){
@@ -109,7 +109,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.boot(temp)
+					plotMQMboot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -139,7 +139,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.boot(temp)
+					plotMQMboot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]

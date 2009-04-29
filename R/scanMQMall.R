@@ -32,7 +32,7 @@ mqmall <- function(...){
 	scanall(...,Funktie=mqm)
 }
 
-scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=10,FF=0,...,plot=TRUE,verbose=TRUE){
+scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=10,FF=0,...,plot=FALSE,verbose=TRUE){
 
 	
 	if(is.null(cross)){
@@ -85,7 +85,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.nice(temp)
+					plotMQMnice(temp)
 				}
 				res <- c(res,result)
 				end <- proc.time()
@@ -115,7 +115,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
-					plot.nice(temp)
+					plotMQMnice(temp)
 				}
 				res <- c(res,result)				
 				end <- proc.time()

@@ -25,9 +25,9 @@ MQMfind.marker(cross = NULL, scanMQMres = NULL, perm = NULL, alpha = 0.05)
 %\references{ 
 %
 %}
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} }
+\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
 \note{ 
-	If u find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
+	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 \seealso{ 
 \itemize{

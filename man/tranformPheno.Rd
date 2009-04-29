@@ -2,10 +2,12 @@
 \alias{transformPheno}
 
 \title{Transform phenotypes in a cross object}
+
 \description{
   Transform phenotypes in a cross object; by default use a log
   transformation, though any function may be used.
 }
+
 \usage{
 transformPheno(cross, pheno.col=1, transf=log, ...)
 }
@@ -33,7 +35,7 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
   \email{kbroman@biostat.wisc.edu}}
 
 \note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
+If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 
 \seealso{ \code{\link[qtl]{scanMQM}}, \code{\link[qtl]{scanall}} }

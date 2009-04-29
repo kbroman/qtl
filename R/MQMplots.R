@@ -21,7 +21,7 @@
 #
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
-#           polyplot, plot.all, plot.boot, plot.nice, plot.nice, plot.one
+#           polyplot, plotMQMall, plotMQMboot, plotMQMnice, plotMQMone
 #
 ######################################################################
 
@@ -101,110 +101,111 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 	invisible()															# return the plot
 }
 
-plot.all <- function(result = NULL, type="C", theta=30, phi=15,...){
+plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
-	if(class(result)[2] == "MQMmulti"){
-		if(type=="C"){
-		#Countour plot
-			c <- NULL
-			for(i in 1:length(result)){
-				#Collect all the "QTL PHENO_TYPE" colums of the result
-				c <- rbind(c,result[[i]][,3])
-			}
-			c <- t(c)
-			contour(
-				x=seq(1,dim(c)[1]),
-				y=seq(1,dim(c)[2]),
-				c,
-				xlab="Markers",ylab="Trait",
-				col=rainbow((max(c)/5)+25,1,1.0,0.1),
-				nlevels=(max(c)/5)
-			)
-		}
-		if(type=="I"){
-		#Image plot
-			c <- NULL
-			for(i in 1:length(result)){
-				c <- rbind(c,result[[i]][,3])
-			}
-			c <- t(c)
-			image(x=1:dim(c)[1],y=1:dim(c)[2],c,
-				  xlab="Markers",ylab="Trait",
-				  col=rainbow((max(c)/5)+25,1,1.0,0.1),
-			)
-		
-		}
-		if(type=="D"){
-		#3D perspective plot
-			c <- NULL
-			for(i in 1:length(result)){
-				c <- rbind(c,result[[i]][,3])
-			}
-			c <- t(c)
-			persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
-				  theta = theta, phi = phi, expand = 1,
-				  col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
-		}
-		if(type=="P"){
-		#Standard plotting option, Lineplot
-			n.pheno <- length(result)
-			colors <- rainbow(n.pheno)
-			for(i in 1:n.pheno) {
-				if(i !=1 ){
-					plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
-				}else{
-					plot(result[[i]],col="black",lwd=1,...)
-				}
-			}
-		}
-	}else{
+  if(class(result)[2] != "MQMmulti")
 		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
-	}
+
+  if(type=="C"){
+    #Countour plot
+    c <- NULL
+    for(i in 1:length(result)){
+      #Collect all the "QTL PHENO_TYPE" colums of the result
+      c <- rbind(c,result[[i]][,3])
+    }
+    c <- t(c)
+    contour(
+            x=seq(1,dim(c)[1]),
+            y=seq(1,dim(c)[2]),
+            c,
+            xlab="Markers",ylab="Trait",
+            col=rainbow((max(c)/5)+25,1,1.0,0.1),
+            nlevels=(max(c)/5)
+            )
+  }
+  if(type=="I"){
+    #Image plot
+    c <- NULL
+    for(i in 1:length(result)){
+      c <- rbind(c,result[[i]][,3])
+    }
+    c <- t(c)
+    image(x=1:dim(c)[1],y=1:dim(c)[2],c,
+          xlab="Markers",ylab="Trait",
+          col=rainbow((max(c)/5)+25,1,1.0,0.1),
+          )
+    
+  }
+  if(type=="D"){
+    #3D perspective plot
+    c <- NULL
+    for(i in 1:length(result)){
+      c <- rbind(c,result[[i]][,3])
+    }
+    c <- t(c)
+    persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
+          theta = theta, phi = phi, expand = 1,
+          col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
+  }
+  if(type=="P"){
+    #Standard plotting option, Lineplot
+    n.pheno <- length(result)
+    colors <- rainbow(n.pheno)
+    for(i in 1:n.pheno) {
+      if(i !=1 ){
+        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
+      }else{
+        plot(result[[i]],col="black",lwd=1,...)
+      }
+    }
+  }
+
 }
 
-plot.boot <- function(result = NULL,...){
+plotMQMboot <- function(result, ...){
 	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
 	row1 <- NULL
 	row2 <- NULL
 	i <- 1
-	if(class(result)[2] == "MQMmulti"){		
-		for( j in 1:length( result[[i]][,3] ) ) {
-			row1 <- NULL
-			row2 <- NULL
-			for(i in 1:length( result ) ) {
-				if(i==1){
-					row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
-					names(row1) <- rep(j,(length( result )-1))
-				}else{
-					row2 <- c(row2,result[[i]][,3][j])
-				}
-			}
-			names(row2) <- rep(j,(length( result )-1))
-			matrix <- cbind(matrix,rbind(row1,row2))
-		}
+	if(class(result)[2] != "MQMmulti")		
+          ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
 
-		rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
+        for( j in 1:length( result[[i]][,3] ) ) {
+          row1 <- NULL
+          row2 <- NULL
+          for(i in 1:length( result ) ) {
+            if(i==1){
+              row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
+              names(row1) <- rep(j,(length( result )-1))
+            }else{
+              row2 <- c(row2,result[[i]][,3][j])
+            }
+          }
+          names(row2) <- rep(j,(length( result )-1))
+          matrix <- cbind(matrix,rbind(row1,row2))
+        }
+
+        rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
 		
-		#Because bootstrap only has 2 rows of data we can use black n blue
-		polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
-		#PLot some lines so we know what is significant
-		perm_temp <- MQMpermObject(result)			#Create a permutation object
-		numresults <- dim(result[[1]])[1]
-		lines(x=1:numresults,y=rep(summary(perm_temp)[1,1],numresults),col="green",lwd=2,lty=2)
-		lines(x=1:numresults,y=rep(summary(perm_temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
-	}else{
-		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
-	}	
+	#Because bootstrap only has 2 rows of data we can use black n blue
+        polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
+	#PLot some lines so we know what is significant
+        perm_temp <- MQMpermObject(result)			#Create a permutation object
+        numresults <- dim(result[[1]])[1]
+        lines(x=1:numresults,y=rep(summary(perm_temp)[1,1],numresults),col="green",lwd=2,lty=2)
+        lines(x=1:numresults,y=rep(summary(perm_temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
 }
 
-plot.nice <- function(result = NULL,...){
+plotMQMnice <- function(result, ...){
 	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
 	matrix <- NULL
 	names <- NULL
 	i <- 1
-	if(class(result)[2] == "MQMmulti"){		
+	if(class(result)[2] != "MQMmulti")		
+          ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
+
 	for( j in 1:length( result[[i]][,3] ) ) {
 		row <- NULL
 		for( i in 1:length( result ) ) {
@@ -227,41 +228,37 @@ plot.nice <- function(result = NULL,...){
 	colnames(matrix) <- c(1:dim(matrix)[2])
 	rownames(matrix) <- names
 	polyplot(matrix,...)
-	}else{
-		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
-	}
 }
 
-plot.one <- function(result = NULL,result2 = NULL, extended=0,...){
+plotMQMone <- function(result = NULL,result2 = NULL, extended=0,...){
 	#Helperfunction to show scanone objects made by doing scanMQM runs
-	if(any(class(result) == "scanone")){
-		info_c <- result
-		info_c[,3]<- info_c[,5]
-		if(extended){
-			info_l <- result
-			info_l[,3] <- result[,4]
-			plot(result,info_c,info_l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
-			grid(max(result$chr),5)
-			labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
-			legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
-		}else{
-			if (any(class(result2) == "scanone")){
-				#MAX 3 scanone objects
-				plot(result,info_c,result2,lwd=1,ylab="QTL (LOD)",...)
-				grid(max(result$chr),5)
-				labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
-				legend("topright", labels,col=c("black","blue"),lty=c(1,1))
-			}else{
-				#MAX 3 scanone objects (here we now have 2)
-				plot(result,info_c,lwd=1,ylab="QTL (LOD)",...)
-				grid(max(result$chr),5)
-				labels <- c(colnames(result)[3],colnames(result)[5])
-				legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
-			}
-		}
-	}else{
-		ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
-	}
+	if(any(class(result) != "scanone"))
+          ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+
+        info_c <- result
+        info_c[,3]<- info_c[,5]
+        if(extended){
+          info_l <- result
+          info_l[,3] <- result[,4]
+          plot(result,info_c,info_l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
+          grid(max(result$chr),5)
+          labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
+          legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
+        }else{
+          if (any(class(result2) == "scanone")){
+	    #MAX 3 scanone objects
+            plot(result,info_c,result2,lwd=1,ylab="QTL (LOD)",...)
+            grid(max(result$chr),5)
+            labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
+            legend("topright", labels,col=c("black","blue"),lty=c(1,1))
+          }else{
+	    #MAX 3 scanone objects (here we now have 2)
+            plot(result,info_c,lwd=1,ylab="QTL (LOD)",...)
+            grid(max(result$chr),5)
+            labels <- c(colnames(result)[3],colnames(result)[5])
+            legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
+          }
+        }
 }
 
 # end of MQMplots.R

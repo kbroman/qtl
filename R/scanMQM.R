@@ -26,7 +26,7 @@
 	
 scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=TRUE,forceRIL=0,verbose=TRUE){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=TRUE){
     start <- proc.time()
 	library(qtl)
 	n.run=0
@@ -297,7 +297,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			}
 			#No error do plot 2
 			if(!e){
-				plot.one(qtl)
+				plotMQMone(qtl)
 			}else{
 				plot(qtl,lwd=1)
 				grid(max(qtl$chr),5)

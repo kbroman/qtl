@@ -65,6 +65,7 @@
 \alias{ourstop}
 \alias{parseformula}
 \alias{plot.effectscan}
+\alias{polyplot}
 \alias{print.addcovarint}
 \alias{print.addint}
 \alias{print.compactqtl}
@@ -216,6 +217,10 @@ ourstop(...)
 parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)
+polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
+         par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"),
+         col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, main = NULL, xlab =
+         NULL, ylab = NULL, add=FALSE, ... ) 
 \method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)

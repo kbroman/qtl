@@ -6,7 +6,7 @@
  * last modified Apr, 2009
  * first written Feb, 2009
  *
- * Original version R.C Janssen
+ * Original version R.C Jansen
  * first written <2000 (unknown)
  *
  *     This program is free software; you can redistribute it and/or
