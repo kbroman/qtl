@@ -83,8 +83,7 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
-MQMaugment              MQMaugment - Missing data augmentation routine
-                        for MQM
+MQMaugment              Missing data augmentation routine for MQM
 MQMCofactors            MQMCofactors - Helper function to create
                         cofactors to be used with scanMQM
 MQMCofactorsEach        MQMCofactorsEach - Helper function to create
@@ -93,8 +92,6 @@ MQMfind.marker          Find the genetic markers significant after
                         bootstrapping/permutation of the data
 MQMLoadanalysis         MQMLoadanalysis - Enables loading of previous
                         MQM analysis from file
-MQMlogPheno             MQMlogPheno - Helper function to logtransform
-                        phenotypesin R/QTL cross objects
 MQMpackage              Tool for analyzing QTLs in experimental crosses
 MQMpermObject           MQMpermObject - Function to convert MQMmulti
                         objects into a scanoneperm object from R/QTL
@@ -194,5 +191,6 @@ summary.scantwoperm     LOD thresholds from scantwo permutation results
 switch.order            Switch the order of markers on a chromosome
 top.errorlod            List genotypes with large error LOD scores
 totmar                  Determine the total number of markers
+transformPheno          Transform phenotypes in a cross object
 tryallpositions         Test all possible positions for a marker
 write.cross             Write data for a QTL experiment to a file

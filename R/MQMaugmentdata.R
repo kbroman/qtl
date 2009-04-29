@@ -162,7 +162,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 		end <- proc.time()
 		cat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n")		
 		cross
-	}			
+
 }
 
 # end of MQMaugment.R
