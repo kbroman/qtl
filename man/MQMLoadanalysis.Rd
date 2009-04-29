@@ -27,8 +27,8 @@ MQMLoadanalysis(file = "MQM_output.txt")
 }
 \seealso{ 
 \itemize{
-	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 }
 }
 \examples{
@@ -39,6 +39,4 @@ result <- scanMQM(cross,file="aaa.txt")			# Do a MQM scan of the genome and save
 res_reloaded <- MQMLoadanalysis("aaa.txt")		#Reads in and plots the file aaa.txt
 }
 
-\keyword{ QTL }
-\keyword{ Mapping }
-\keyword{ Selection }
+\keyword{ IO }

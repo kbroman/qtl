@@ -23,11 +23,23 @@
   Dataset obtained from GBIC - Groningen BioInformatics Centre
 }
 \references{
-  \item Keurentijes JJB, Fu J, de Vos CHR,Lommen A, Jansen RC et al (2006), The genetics of plant metabolism. \emph{Nature Genetics.} \bold{38}, 842--849.
-  \item Alonso-Blanco C, Peeters AJ,Koornneef M, (2006), Development of an aflp based linkage map of ler,col and cvi arabidopsis \dots linbred line population. \emph{Plant J.} \bold{14/2}, 259--271.
+\itemize{
+ 
+ \item Keurentijes JJB, Fu J, de Vos CHR,Lommen A, Jansen RC et al
+ (2006), The genetics of plant metabolism. \emph{Nature Genetics.}
+ \bold{38}, 842--849. 
+ 
+ \item Alonso-Blanco C., Peeters, A. J. and Koornneef, M. (2006)
+ Development of an AFLP based linkage map of Ler, Col and Cvi
+ Arabidopsis thaliana ecotypes and construction of a Ler/Cvi recombinant
+ inbred line population. \emph{Plant J.} \bold{14}(2), 259--271.
 }
+
+}
+
 \examples{
-	data(multitrait)						#Load dataset
-	result <- scanall(multitrait,Funktie=mqm,doLOG=1)	#Analyse all 24 traits
+data(multitrait)						#Load dataset
+result <- scanall(multitrait,Funktie=mqm,doLOG=1)	#Analyse all 24 traits
 }
+
 \keyword{datasets}

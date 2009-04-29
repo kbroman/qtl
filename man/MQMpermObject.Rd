@@ -45,6 +45,4 @@ summary(f2perm)										# What LOD score is considered significant ?
 summary(f2result[[1]],alpha=0.05,perms=f2perm)		# Get significant QTL's (The first run is the original phenotype original)
 }
 
-\keyword{ QTL }
-\keyword{ Mapping }
-\keyword{ Selection }
+\keyword{ models }

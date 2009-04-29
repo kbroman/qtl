@@ -76,6 +76,5 @@
 		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
 	}
 }
-\keyword{ QTL }
-\keyword{ Mapping }
-\keyword{ Selection }
+
+\keyword{ models }

@@ -47,8 +47,5 @@ marker <- MQMfind.marker(f2cross,result[[1]],f2perm)		#Find markers with a signi
 marker								#Print it to the screen
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ QTL }
-\keyword{ Mapping }
-\keyword{ Selection }
+
+\keyword{ models }

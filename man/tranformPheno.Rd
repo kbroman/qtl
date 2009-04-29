@@ -51,4 +51,4 @@ multitrait.sqrt <- transformPheno(multitrait, pheno.col=1:nphe(multitrait),
                                   transf=sqrt)
 }
 
-\keyword{ util }
+\keyword{ utilities }
