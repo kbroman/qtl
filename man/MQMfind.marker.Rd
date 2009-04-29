@@ -52,7 +52,7 @@ cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
 result <- bootstrap(multitrait,Funktie=mqm,cofactors=cof,pheno.col=7,n.run=50,b_size=20,doLOG=1)	# Bootstrap 200 runs in batches of 20
 f2perm <- MQMpermObject(result)		        #Create a permutation object
 summary(f2perm)				        #What LOD score is considered significant ?
-marker <- MQMfind.marker(f2cross,result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)
+marker <- MQMfind.marker(multitrait,result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)
 marker						#Print it to the screen
 }
 

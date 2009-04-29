@@ -17,7 +17,7 @@
 \usage{
 	bootstrap(cross = NULL, Funktie=scanone, pheno.col=1,
 	          multiC=TRUE, n.run=10, b_size=10, file="MQM_output.txt",
-   	          n.clusters=2, method=0, plot=FALSE, \dots)
+   	          n.clusters=2, method=0, plot=FALSE, verbose=FALSE, \dots)
 	bootstrapcim(\dots)
 	bootstrapmqm(\dots)
 }
@@ -33,6 +33,7 @@
 	\item{n.clusters}{ Number of child processes to split the job into }
 	\item{method}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric ) } 
 	\item{plot}{If TRUE, make a plot}
+	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
 	  \code{\link[qtl]{scanone}}, \code{\link[qtl]{cim}} or
 	    \code{\link[qtl]{mqm}} functions} 

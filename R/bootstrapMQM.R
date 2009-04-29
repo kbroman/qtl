@@ -44,7 +44,7 @@ bootstrapcim <- function(...){
 	bootstrap(...,Funktie=cim)
 }
 
-bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=FALSE,...)
+bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=FALSE,verbose=FALSE...)
 {
 	
 	if(is.null(cross)){
@@ -52,17 +52,19 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		#Echo back the cross type
-		cat("------------------------------------------------------------------\n")
-		cat("Starting bootstrap analysis\n")
-		cat("Number of bootstrapping runs:",n.run,"\n")
-		cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
-		cat("------------------------------------------------------------------\n")		
-		cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+		if(verbose) {
+                  cat("------------------------------------------------------------------\n")
+                  cat("Starting bootstrap analysis\n")
+                  cat("Number of bootstrapping runs:",n.run,"\n")
+                  cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
+                  cat("------------------------------------------------------------------\n")		
+                  cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+                }
 		b <- proc.time()		
 		if(!method){
-			cat("INFO: Shuffleling traits between individuals.\n")
+			if(verbose) cat("INFO: Shuffleling traits between individuals.\n")
 		}else{
-			cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
+			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
 		}
 
 		#Set the Phenotype under intrest as the first
@@ -89,13 +91,15 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 		LEFT <- 0
 		#TEST FOR SNOW CAPABILITIES
 		if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]]) && multiC){
-			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+			if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			library(snow)			
 			for(x in 1:(batches)){
 				start <- proc.time()
-				ourline()
-				cat("INFO: Starting with batch",x,"/",batches,"\n")				
-				ourline()
+				if(verbose) {
+                                  ourline()
+                                  cat("INFO: Starting with batch",x,"/",batches,"\n")				
+                                  ourline()
+                                }
 				if(x==batches && last.batch.num > 0){
 					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
 				}else{
@@ -115,20 +119,24 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
 				LEFT <- AVG*(batches-x)
-				cat("INFO: Done with batch",x,"/",batches,"\n")	
-				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
-				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
-				ourline()
+                                if(verbose) {
+                                  cat("INFO: Done with batch",x,"/",batches,"\n")	
+                                  cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+                                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
+                                  ourline()
+                                }
 			}
 		}else{
-			cat("INFO: Library snow not found, so going into singlemode.\n")
+			if(verbose) cat("INFO: Library snow not found, so going into singlemode.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
-				ourline()
-				cat("INFO: Starting with batch",x,"/",batches,"\n")				
-				ourline()			
+                                if(verbose) {
+                                  ourline()
+                                  cat("INFO: Starting with batch",x,"/",batches,"\n")				
+                                  ourline()
+                                }
 				if(x==batches && last.batch.num > 0){
 					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
 				}else{
@@ -145,12 +153,14 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
 				LEFT <- AVG*(batches-x)
-				cat("INFO: Done with batch",x,"/",batches,"\n")	
-				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% b_size), digits=3),"seconds\n")
-				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")				
-				ourline()
+                                if(verbose) {
+                                  cat("INFO: Done with batch",x,"/",batches,"\n")	
+                                  cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+                                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")				
+                                  ourline()
+                                }
 			}
 		}
 		res <- c(res0,results)
@@ -159,11 +169,13 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 		e <- proc.time()
 		SUM <- (e-b)[3]
 		AVG <- SUM/(n.run+1)	
-		cat("INFO: Done with MQM bootstrap analysis\n")
-		cat("------------------------------------------------------------------\n")
-		cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
-		cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
-		cat("------------------------------------------------------------------\n")	
+                if(verbose) {
+                  cat("INFO: Done with MQM bootstrap analysis\n")
+                  cat("------------------------------------------------------------------\n")
+                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
+                  cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
+                  cat("------------------------------------------------------------------\n")
+                }
 		res
 	}else{
 		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
