@@ -35,24 +35,36 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
         if(crosstype != "f2" && crosstype != "bc" && crosstype != "riself")
           ourstop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
 
-        if(class(cross)[1] == "f2"){
+        if(crosstype == "f2"){
           ctype = 1
         }
-        if(class(cross)[1] == "bc"){
+        if(crosstype == "bc"){
           ctype = 2
         }
-        if(class(cross)[1] == "riself"){
+        if(crosstype == "riself"){
           ctype = 3
         }
 
-        ourcat("INFO: Received a valid cross file type:", crosstype,".\n",a=verbose)
+        if(verbose) ("INFO: Received a valid cross file type:", crosstype,".\n")
+
+        # check whether the X chromosome should be dropped
+        # (backcross with all one sex should be fine)
+        chrtype <- sapply(cross$geno, class)
+        if(any(chrtype == "X") && (crosstype=="f2" || 
+                 length(getgenonames(crosstype, "X", "full",
+                                     getsex(cross), attributes(cross))) != 2)) { # drop X chr
+          warning("MQM not yet available for the X chromosome; omitting chr ",
+                  paste(names(cross$geno)[chrtype == "X"], collapse=" "))
+          cross <- subset(cross, chr=(chrtype != "X"))
+        }
 
         n.ind <- nind(cross)
         n.chr <- nchr(cross)
         n.aug <- maxaug
-        ourcat("INFO: Number of individuals:",n.ind,".\n",a=verbose)
-        ourcat("INFO: Number of chr:",n.chr,".\n",a=verbose)
-
+        if(verbose) {
+          cat("INFO: Number of individuals:",n.ind,".\n")
+          cat("INFO: Number of chr:",n.chr,".\n")
+        }
         
         if(length(pheno.col) > 1) {
            warning("Only one phenotype may be considered; using the first one.")
@@ -68,11 +80,13 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 
         if(pheno.col != 1){
 			
-          ourcat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n",a=verbose)
-          ourcat("INFO: # of phenotypes in object ",nphe(cross),".\n",a=verbose)
-            if(nphe(cross) < pheno.col || pheno.col < 1){
-              ourstop("No such phenotype at column index:",pheno.col,"in cross object.\n")
-            }			
+          if(verbose) {
+            cat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n")
+            cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
+            }
+          if(nphe(cross) < pheno.col || pheno.col < 1){
+            ourstop("No such phenotype at column index:",pheno.col,"in cross object.\n")
+          }			
         }
 
 
@@ -84,7 +98,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
-		ourcat("INFO: Number of markers:",n.mark,".\n",a=verbose)
+		if(verbose) cat("INFO: Number of markers:",n.mark,".\n")
 		#Check for na genotypes and replace them with a 9
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
@@ -97,7 +111,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,pheno.col])){
-				ourcat("INFO: Dropped individual ",i ," with missing phenotype.\n",a=verbose)
+				if(verbose) cat("INFO: Dropped individual ",i ," with missing phenotype.\n")
 				dropped <- c(dropped,i) 
 				n.ind = n.ind-1
 			}
@@ -161,7 +175,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 		}
 		#RETURN THE RESULTS
 		end <- proc.time()
-		ourcat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n", a=verbose)		
+		if(verbose) cat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n")
 		cross
 
 }
