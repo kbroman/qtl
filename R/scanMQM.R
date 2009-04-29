@@ -81,7 +81,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		if(doLOG != 0){
 				#transform the cross file
-				cross <- MQMlogPheno(cross,pheno.col,verbose=verbose)
+				cross <- transformPheno(cross,pheno.col,transf=log)
 				pheno <- cross$pheno[[pheno.col]]
 		}
 		n.mark <- ncol(geno)

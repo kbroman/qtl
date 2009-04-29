@@ -6,8 +6,20 @@
 # last modified Fep, 2009
 # first written Feb, 2009
 # 
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
+# 
+#     This program is distributed in the hope that it will be useful,
+#     but without any warranty; without even the implied warranty of
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
+# 
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
+# 
 # Part of the R/qtl package
-# Contains: MQMaugment, MQMlogPheno
+# Contains: MQMaugment
 #
 ######################################################################
 
@@ -16,17 +28,8 @@
 # MQMaugmentdata:
 #
 ######################################################################
-#setwd("D:/")
-#library(qtl)
-#dyn.load("scanMQM.dll")
-#qtl <- c(3,15,3,7)							# QTL at chromosome 3
-#data(map10)									# Mouse genome
-#cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
-#data(listeria)
-
 MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10,verbose=TRUE){
 	start <- proc.time()
-	library(qtl)
 	if(is.null(cross)){
 		ourstop("No cross file. Please supply a valid cross object.")
 		return 
@@ -150,42 +153,5 @@ MQMaugment <- function(cross= NULL,pheno.col=1,maxaug=1000,maxiaug=10,neglect=10
 		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
-
-MQMlogPheno <- function(cross= NULL,pheno.col=NULL,verbose=TRUE){
-	#Helperfunction to logtransform a specific phenotype specified by the Phenot parameter
-	library(qtl)
-	if(is.null(cross)){
-		ourstop("ERROR: No cross file. Please supply a valid cross object.")
-		return 
-	}
-	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
-		if(!is.null(pheno.col)){
-			pheno <- NULL
-			logpheno <- NULL
-			pheno <- cross$pheno[[pheno.col]]
-			logpheno <- log(pheno)
-			cross$pheno[[pheno.col]] <- logpheno
-			ourcat("INFO: Phenotype:",names(cross$pheno)[pheno.col],".\n",a=verbose)
-			ourcat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n",a=verbose)
-			ourcat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n",a=verbose)
-		}else{
-			n.pheno <- nphe(cross)
-			for(i in 1:n.pheno) {
-				pheno <- cross$pheno[[i]]
-				logpheno <- log(pheno)
-				cross$pheno[[i]] <- logpheno
-				ourcat("INFO: Phenotype:",names(cross$pheno)[i],".\n",a=verbose)
-				ourcat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"Variation:",var(pheno,na.rm = TRUE),".\n",a=verbose)
-				ourcat("INFO: After LOG transformation Mean:",mean(logpheno,na.rm = TRUE),"Variation:",var(logpheno,na.rm = TRUE),".\n",a=verbose)				
-			}
-		}
-		cross
-	}else{
-		ourstop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
-	}			
-}
-
-#cross_good <- MQMaugment(cross)
-#listeria_good <- MQMaugment(listeria,maxaug=1000,maxiaug=10,neglect=10)
 
 # end of MQMaugment.R
