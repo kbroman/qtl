@@ -97,7 +97,7 @@ snowCore <- function(x,each,all_data,name,DBpath,...){
 	}else{
 		result <- scanMQM(all_data,pheno.col=x,plot=FALSE,verbose=FALSE,...)
 	}
-	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=FALSE),TRUE)
+#	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=FALSE),TRUE)
 	e <- proc.time()
 	r_string <- paste("------------------------------------------------------------------\n")
 	r_string <- paste(r_string,"INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
