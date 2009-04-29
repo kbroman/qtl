@@ -1,48 +1,61 @@
 \name{MQMaugment}
 \alias{MQMaugment}
 
-\title{ 
-	MQMaugment - Missing data augmentation routine for MQM 
-}
+\title{Missing data augmentation routine for MQM}
+
 \description{
-  Estimates missing data, unlikely genotypes are kept when more likely than 1:Neglect
+  Estimates missing data; unlikely genotypes are kept when more likely than 1:Neglect
 }
 \usage{
-MQMaugment(cross = NULL, maxaug = 10000, maxiaug = 1000, neglect = 1000)
+MQMaugment(cross, pheno.col=1, maxaug=10000, maxiaug=1000, neglect=1000, verbose=TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
-  \item{cross}{ Cross object from R/QTL }
-  \item{Phenot}{ Phenotype to pull from the cross object }  
+  \item{cross}{An object of class \code{cross}. See
+   \code{\link[qtl]{read.cross}} for details.} 
+  \item{pheno.col}{Column number in the phenotype matrix which should be
+   used as the phenotype.  This must be a single numeric index or a
+  single character string matching one of the phenotype names.}
   \item{maxaug}{ Maximum number of (total) individuals after augmentation }
   \item{maxiaug}{ Maximum augmentations per individual }
   \item{neglect}{ Genotypes considered have a higher probability of occuring then one in neglect }
+  \item{verbose}{If TRUE, tracing information is printed.}
 }
+
 \details{
 Special care has 2 be taken when setting unrealistic values.
-When the algorithm ends with an "DATASET TOO LARGE after augmentation", the crossfile could be corrupted.
+When the algorithm ends with an "DATASET TOO LARGE after augmentation",
+the cross object could be corrupted.
 }
+
 \value{
-Cross object, an object of class \code{cross} from R/QTL with 1 phenotype (indicated by setting the Phenot parameter) suitable for scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details.
-}
+  The input cross object, though with only the one phenotype indicated
+  via \code{pheno.col}, and some individuals may be omitted and many
+  will be repeated multiple times.  An added component \code{extra}
+  contains information on which individuals are retained and repeated.
+}  
+
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl}}
+
 \note{
-If u find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+If you find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
 }
+
 \seealso{
 	\itemize{
-	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
 \examples{
-	qtl <- c(3,15,3,7)							# QTL at chromosome 3
-	data(map10)								# Mouse genome
-	cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
-	cross_good <- MQMaugment(cross)						# Augmentation of the data
-	result <- scanMQM(cross_good)						# Do a MQM scan of the genome
-	
+qtl <- c(3,15,3,7)							# QTL at chromosome 3
+data(map10)								# Mouse genome
+cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
+crossaug <- MQMaugment(cross)						# Augmentation of the data
+result <- scanMQM(crossaug)						# Do a MQM scan of the genome
+
 }
+
 \references{
 	\itemize{
 		\item Jansen RC, (2007), Chapter 18 - Quantitative trait loci in inbred lines. \emph{Handbook of Stat. Genetics} 3th edition,(c) 2007 John Wiley & Sons, Ltd.
@@ -53,6 +66,4 @@ If u find anything wrong with the algorithm please notify me at: Danny.Arends@gm
 		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
 	}
 }
-\keyword{ QTL }
-\keyword{ Mapping }
-\keyword{ Selection }
+\keyword{ utilities }

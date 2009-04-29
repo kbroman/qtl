@@ -17,9 +17,12 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 4/28/2009:
+Version 1.12, 4/29/2009:
 
 Major changes:
+
+  Added code from Ritsert Jansen, Danny Arends, and Pjotr Prins,
+  implementing Ritsert Jansen's MQM mapping method.
 
   Added the ability to simulate RIL and multiple-strain RIL in the
   sim.cross function.  For the case of multiple-strain RIL, one needs
