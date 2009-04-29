@@ -44,7 +44,7 @@ bootstrapcim <- function(...){
 	bootstrap(...,Funktie=cim)
 }
 
-bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=T,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=TRUE,...)
+bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=TRUE,...)
 {
 	
 	if(is.null(cross)){

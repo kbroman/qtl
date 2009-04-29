@@ -24,8 +24,8 @@
 #
 ######################################################################
 
-polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"), col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, 
-					  main = NULL, xlab = NULL, ylab = NULL, add=F, ... ){
+polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"), col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, 
+					  main = NULL, xlab = NULL, ylab = NULL, add=FALSE, ... ){
 	#Addition by Danny Arends
 	if(legend){
 		if(legendloc){
@@ -66,9 +66,9 @@ polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par(
 		for( i in 1:length(tps)) {	# 		
 			idx <- ( 1:length( timepoints ) )[timepoints==tps[i] ]	# get the indeces of the
 			work  <- x[k, idx]
-			pmax  <- max(work[is.finite(work)], na.rm=T)
-			pmin  <- min(work[is.finite(work)], na.rm=T)
-			pmed  <- median(work[is.finite(work)], na.rm=T)
+			pmax  <- max(work[is.finite(work)], na.rm=TRUE)
+			pmin  <- min(work[is.finite(work)], na.rm=TRUE)
+			pmed  <- median(work[is.finite(work)], na.rm=TRUE)
 			
 			max_p <- append(max_p, pmax)	# 
 			min_p <- append(min_p, pmin)	#
@@ -79,7 +79,7 @@ polyplot <- function( x, type='b', legend=T,legendloc=0, labels=NULL, cex = par(
 		xp <- append(tps, rev(tps)) 
 		yp <- append(max_p, rev(min_p) )		
 			
-		polygon(xp, y=yp, col=col[k], border=F)
+		polygon(xp, y=yp, col=col[k], border=FALSE)
 		lines( x=tps, y=med_p, type='l', col=col[k] )		# add the lines if requested
 	}
 	

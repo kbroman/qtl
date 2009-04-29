@@ -198,7 +198,7 @@ loadOAT <- function(){
 	n.ind=50
 	trait <- read.table("trait.qua")
 	markers <- read.table("rflp.mar",colClasses=c("character","character"),row.names=1)
-	info <- read.table("mqm_R.txt",colClasses=c("integer","character","double"),fill=T)
+	info <- read.table("mqm_R.txt",colClasses=c("integer","character","double"),fill=TRUE)
 	n.mark=dim(markers)[1]
 	all.mark = dim(info)[1]
 	mar <- NULL
@@ -321,8 +321,8 @@ readMQMout <- function(cross = NULL, file = "mqm_out.txt", plot = TRUE,chr = 1){
 
 MQMfind.marker <- function(cross=NULL,scanMQM=NULL,perm=NULL,alpha=0.05){
 	
-	chr <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=F)$'chr'
-	pos <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=F)$'pos (Cm)'
+	chr <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=FALSE)$'chr'
+	pos <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (Cm)'
 	cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
 	ret <- NULL
 	for(i in 1:length(chr)){

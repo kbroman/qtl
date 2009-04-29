@@ -33,7 +33,7 @@ snowCoreALL <- function(x,all_data,Funktie,...){
 	cat("------------------------------------------------------------------\n")
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=F,verbose=F,...)
+			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=FALSE,verbose=FALSE,...)
 		}
 	}else{
 		result <- Funktie(cross=all_data,pheno.col=x,...)
@@ -62,15 +62,15 @@ snowCoreBOOT <- function(x,all_data,Funktie,method,...){
 	}
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=F,verbose=F,...)
+			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=FALSE,verbose=FALSE,...)
 		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,plot=F,verbose=F,...)
+			result <- Funktie(cross=all_data,pheno.col=1,plot=FALSE,verbose=FALSE,...)
 		}
 	}else{
 		if("plot" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=1,plot=F,...)
+			result <- Funktie(cross=all_data,pheno.col=1,plot=FALSE,...)
 		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,plot=F,...)
+			result <- Funktie(cross=all_data,pheno.col=1,plot=FALSE,...)
 		}
 	}
 	e <- proc.time()
@@ -93,11 +93,11 @@ snowCore <- function(x,each,all_data,name,DBpath,...){
 	r_string <- paste(r_string,"------------------------------------------------------------------\n")
 	if(each>1){
 		cof <- MQMCofactorsEach(all_data,each)
-		result <- scanMQM(all_data,cof,pheno.col=x,plot=F,verbose=F,...)
+		result <- scanMQM(all_data,cof,pheno.col=x,plot=FALSE,verbose=FALSE,...)
 	}else{
-		result <- scanMQM(all_data,pheno.col=x,plot=F,verbose=F,...)
+		result <- scanMQM(all_data,pheno.col=x,plot=FALSE,verbose=FALSE,...)
 	}
-	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=F),TRUE)
+	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=FALSE),TRUE)
 	e <- proc.time()
 	r_string <- paste("------------------------------------------------------------------\n")
 	r_string <- paste(r_string,"INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	

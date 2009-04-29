@@ -32,7 +32,7 @@ mqmall <- function(...){
 	scanall(...,Funktie=mqm)
 }
 
-scanall <- function(cross= NULL,Funktie=scanone,multiC=T,n.clusters=2,b_size=10,FF=0,...,plot=TRUE,verbose=TRUE){
+scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=10,FF=0,...,plot=TRUE,verbose=TRUE){
 
 	
 	if(is.null(cross)){
@@ -135,7 +135,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=T,n.clusters=2,b_size=10,
 			for(i in 1:length(res)){
 				cat("INFO: Saving trait",i,"in frankformat\n")
 				qtl <- res[[i]]
-				cat(colnames(qtl)[3],qtl[,3],"\n",file="out.frank",append = T)
+				cat(colnames(qtl)[3],qtl[,3],"\n",file="out.frank",append = TRUE)
 			}
 		}
 		#Return the results

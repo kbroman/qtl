@@ -56,7 +56,7 @@ data(multitrait)				#Use the multitrait dataset
 result <- bootstrap(multitrait,pheno.col=7, b_size=5)
 result <- bootstrapcim(multitrait,pheno.col=7, b_size=5)
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b_size=5,verbose=F)	# Bootstrap 200 runs in batches of 20
+f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b_size=5,verbose=FALSE)	# Bootstrap 200 runs in batches of 20
 
 #EXTRA
 f2perm <- MQMpermObject(f2result)			#Create a permutation object
