@@ -1,6 +1,6 @@
 #####################################################################
 #
-# scanall.R
+# scanMQMall.R
 # Alias: scanall, cimall, mqmall
 #
 # copyright (c) 2009, Danny Arends
@@ -155,4 +155,4 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 }
 
 
-# end of scanall.R
+# end of scanMQMall.R

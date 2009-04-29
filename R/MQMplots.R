@@ -21,6 +21,7 @@
 #
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
+#           polyplot, plot.all, plot.boot, plot.nice, plot.nice, plot.one
 #
 ######################################################################
 
@@ -263,3 +264,4 @@ plot.one <- function(result = NULL,result2 = NULL, extended=0,...){
 	}
 }
 
+# end of MQMplots.R

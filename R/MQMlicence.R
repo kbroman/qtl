@@ -7,7 +7,7 @@
 # first written Mrt, 2009
 # 
 # Part of the R/qtl package
-# Contains: MQMLicence
+# Contains: MQMLicence, MQMwindow, ourcat, ourstop, ourline
 #
 ######################################################################
 
@@ -65,5 +65,5 @@ ourline <- function(){
 
 ## Extract the metadata.
 
-
+# end of MQMLicence.R
 

@@ -20,8 +20,8 @@
 #
 # Part of the R/qtl package
 # Contains: bootstrap - Main function for bootstrap analysis
-# Contains: MQMpermObject - Helperfunction to create permObjects (R/QTL format)
-# Contains: snowCoreBOOT - Helperfunction to execute bootstrapping on a R-Term
+#           MQMpermObject - Helperfunction to create permObjects (R/QTL format)
+#           bootstrapmqm, bootstrapcim
 #
 ######################################################################
 
@@ -190,4 +190,5 @@ MQMpermObject <- function(MQMbootresult = NULL){
 
 #result <- bootstrap(cross)
 # tiff(object, file="namemeplease.tiff" res=300, unit="in", width=6, height=6)
-# end of bootstrap.R
+
+# end of bootstrapMQM.R

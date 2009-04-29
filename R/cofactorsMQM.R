@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: MQMCofactors,MQMCofactorsEach
+# Contains: MQMCofactors, MQMCofactorsEach
 #
 ######################################################################
 

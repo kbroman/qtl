@@ -7,7 +7,7 @@
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
-# Contains: MQMaugment
+# Contains: MQMaugment, MQMlogPheno
 #
 ######################################################################
 

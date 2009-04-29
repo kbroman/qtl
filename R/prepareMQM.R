@@ -20,6 +20,8 @@
 #
 # Part of the R/qtl package
 # Contains: OLD might be removed functions: MQMLoadanalysis,prepareMQM, printMQMin
+#           RunTest, RunPrelimTest, GenerateTestSets, loadOAT,
+#           readMQMout, MQMfind.marker, loadMOUSE
 #
 ######################################################################
 
