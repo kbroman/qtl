@@ -41,12 +41,13 @@ extern "C"
 #include "util.h"
 
 
-char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype){
+  char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
 	for(int i=0; i< *Nmark; i++){
 		for(int j=0; j< *Nind; j++){
 			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
-			if(Geno[i][j] > 3 && (*crosstype) != 1){
+			if(Geno[i][j] != 9 && Geno[i][j] > 3 && (*crosstype) != 1){
 				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
+				Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[i][j]);
 				(*crosstype) = 1;
 				break;
 			}
@@ -104,7 +105,7 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers){
 	}
 }
 
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo,int *crosstype){
+  void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo,int *crosstype, int *verbose){
 	int **Geno;
 	double **Pheno;
 	double **Dist;
@@ -113,7 +114,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	double **NEWPheno;
 	int **NEWIND;
 	int prior = *Nind;
-	Rprintf("INFO: Starting C-part of the dataaugmentation routine\n");
+	if(*verbose) Rprintf("INFO: Starting C-part of the dataaugmentation routine\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;
@@ -141,7 +142,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 	change_coding(Nmark,Nind,Geno,markers);
 	
 	char cross = determin_cross(Nmark,Nind,Geno,crosstype);
-	Rprintf("INFO: Filling the chromosome matrix\n");
+	if(*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
 
 	for(int i=0; i<(*Nmark); i++){
 		//Set some general information structures per marker
@@ -150,7 +151,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		chr[i] = Chromo[0][i];
 	}
 
-	Rprintf("INFO: Calculating relative genomepositions of the markers\n");
+	if(*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
     for (int j=0; j<(*Nmark); j++)
     {   
         if (j==0)
@@ -163,7 +164,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
 
-	Rprintf("INFO: Estimating recombinant frequencies\n");
+    if(*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
 	for (int j=0; j<(*Nmark); j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
@@ -177,7 +178,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		//RRprintf("recomfreq:%d,%f\n",j,r[j]);
     }
 
-	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect,cross)==1){
+	if(augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect,cross,*verbose)==1){
 		//Data augmentation finished succesfully
 		//Push it back into RQTL format
 		for (int i=0; i<(*Nmark); i++){   
@@ -208,11 +209,13 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 		Free(position);
 		Free(r);
 		Free(chr);
-		Rprintf("INFO: Data augmentation finished succesfull\n");
-		Rprintf("# Unique individuals before augmentation:%d\n",prior);
-		Rprintf("# Unique selected individuals:%d\n",*Nind);
-		Rprintf("# Marker p individual:%d\n",*Nmark);
-		Rprintf("# Individuals after augmentation:%d\n",*Naug);
+		if(*verbose) {
+		  Rprintf("INFO: Data augmentation finished succesfull\n");
+		  Rprintf("# Unique individuals before augmentation:%d\n",prior);
+		  Rprintf("# Unique selected individuals:%d\n",*Nind);
+		  Rprintf("# Marker p individual:%d\n",*Nmark);
+		  Rprintf("# Individuals after augmentation:%d\n",*Naug);
+		}
 	}else{
 		//Unsuccessfull data augmentation exit
 		*Naug = *Nind;
@@ -248,7 +251,7 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     return;
 }
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect,char crosstype){
+  int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect,char crosstype, int verbose){
 
 	int jj;
     int newNind=(*Nind);
@@ -273,8 +276,10 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
     vector newprob, newprobmax;
     newprob= newvector(*Naug);
     newprobmax= newvector(*Naug);
-	Rprintf("INFO: Crosstype determined by the algorithm:%c:\n",crosstype);
-	Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d,Maximum augmentation per individual=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
+    if(verbose) {
+      Rprintf("INFO: Crosstype determined by the algorithm:%c:\n",crosstype);
+      Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d,Maximum augmentation per individual=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect); 
+    }
     // ---- foreach individual create one in the newmarker matrix
     for (int i=0; i<(*Nind); i++)
     {   newind[iaug]=i-((*Nind)-newNind);  // index of individuals
@@ -509,7 +514,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
                    if (iaug+3>maxNaug)
                    {       
                     Rprintf("ERROR: Dataset too large after augmentation\n");
-                    Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
+                    if(verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
 					// Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
 					//Free(newy);
 					//Free(newmarker);
@@ -523,7 +528,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
              if ((iaug-saveiaug+1)>imaxNaug)
              {  newNind-= 1;
                 iaug= saveiaug-1;
-				Rprintf("INFO: Individual %d is eliminated\n",i);
+		if(verbose) Rprintf("INFO: Individual %d is eliminated\n",i);
              }
              sumprob= 0.0;
              for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];

@@ -54,7 +54,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
         ourcat("INFO: Number of chr:",n.chr,".\n",a=verbose)
 
         
-        if(length(pheno.col > 1)) {
+        if(length(pheno.col) > 1) {
            warning("Only one phenotype may be considered; using the first one.")
            pheno.col <- pheno.col[1]
          }
@@ -123,6 +123,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 				as.double(neglect),
 				as.integer(chr),
 				as.integer(ctype),
+                                as.integer(verbose),
 				PACKAGE="qtl")
 		n.ind = result$nind
 		n.aug = result$naug
@@ -160,7 +161,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 		}
 		#RETURN THE RESULTS
 		end <- proc.time()
-		cat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n")		
+		ourcat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n", a=verbose)		
 		cross
 
 }
