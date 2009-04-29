@@ -42,8 +42,8 @@
 		\item Set trait under consideration as first trait in R/QTL format
 		\item Fill in missing data using either the fill.geno or MQMaugmentdata routine
 		\item Call scanMQM to do a genomescan
-		\item Call scanMQM setting the n.run to get an estimate of ‘significant’ lod scores
-		\item Set cofactors at ‘Top scoring’ and not so ‘Top scoring’ markers
+		\item Call scanMQM setting the n.run to get an estimate of "significant" lod scores
+		\item Set cofactors at "Top scoring" and not so "Top scoring" markers
 		\item Rerun analysis with cofactors
 		\item Bootstrap analysis with cofactors to get estimates of QTL significance
 	}
@@ -72,9 +72,9 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 
 \seealso{
 	\itemize{
-	\item	\code{\link{MQMaugment}} - Dataaugmentation routine to estimate missing data
-	\item	\code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item	\code{\link[qtl]{MQMaugment}} - Dataaugmentation routine to estimate missing data
+	\item	\code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
 \examples{

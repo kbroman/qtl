@@ -16,8 +16,8 @@ addtoqtl                Add to a qtl object
 argmax.geno             Reconstruct underlying genotypes
 badorder                An intercross with misplaced markers
 bayesint                Bayesian credible interval
-bootstrap               bootstrap - randomization approaches to obtain
-                        estimates of QTL LOD score significance
+bootstrap               randomization approaches to obtain estimates of
+                        QTL LOD score significance
 bristle3                Data on bristle number in Drosophila
 bristleX                Data on bristle number in Drosophila
 c.cross                 Combine data for QTL experiments
@@ -84,17 +84,15 @@ max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 MQMaugment              Missing data augmentation routine for MQM
-MQMCofactors            MQMCofactors - Helper function to create
-                        cofactors to be used with scanMQM
-MQMCofactorsEach        MQMCofactorsEach - Helper function to create
-                        cofactors to be used with scanMQM
+MQMCofactors            Create cofactors to be used with scanMQM
+MQMCofactorsEach        Create cofactors to be used with scanMQM
 MQMfind.marker          Find the genetic markers significant after
                         bootstrapping/permutation of the data
-MQMLoadanalysis         MQMLoadanalysis - Enables loading of previous
-                        MQM analysis from file
+MQMLoadanalysis         Enables loading of previous MQM analysis from
+                        file
 MQMpackage              Tool for analyzing QTLs in experimental crosses
-MQMpermObject           MQMpermObject - Function to convert MQMmulti
-                        objects into a scanoneperm object from R/QTL
+MQMpermObject           Function to convert MQMmulti objects into a
+                        scanoneperm object
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes
@@ -153,9 +151,8 @@ replacemap.scantwo      Replace the genetic map in QTL mapping results
 replaceqtl              Replace a QTL in a qtl object with a different
                         position.
 ripple                  Compare marker orders
-scanall                 scanall - Multitrait analysis of a cross object
-scanMQM                 scanMQM - Multiple qtl mapping for inbred
-                        crosses
+scanall                 Multitrait analysis of a cross object
+scanMQM                 Multiple qtl mapping for inbred crosses
 scanone                 Genome scan with a single QTL model
 scanoneboot             Bootstrap to get interval estimate of QTL
                         location

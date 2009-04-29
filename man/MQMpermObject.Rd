@@ -1,34 +1,41 @@
 \name{MQMpermObject}
 \alias{MQMpermObject}
 
-\title{ MQMpermObject - Function to convert MQMmulti objects into a scanoneperm object from R/QTL }
+\title{Function to convert MQMmulti objects into a scanoneperm object}
+
 \description{
-	Function to convert MQMmulti objects into a scanoneperm object from R/QTL, this allows us to use the R/QTL methods of permutation analysis
+	Function to convert MQMmulti objects into a \code{scanoneperm} object, this allows us to use the R/QTL methods of permutation analysis
 }
+
 \usage{
-MQMpermObject(bootresult = NULL)
+MQMpermObject(MQMbootresult = NULL)
 }
 
 \arguments{
-  \item{bootresult}{ MQMmulti object obtained by using the function \link{bootstrap} }
+  \item{MQMbootresult}{ \code{MQMmulti} object obtained by using the function \code{\link[qtl]{bootstrap}} }
 }
+
 %\details{
 %
 %}
+
 \value{
-	Output of the algorithm is a scanoneperm object See also: \link[qtl]{summary.scanoneperm}
+	Output of the algorithm is a \code{scanoneperm} object See also: \code{\link[qtl]{summary.scanoneperm}}
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
+
 \note{ 
 	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
+
 \seealso{ 
 \itemize{
-	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
-	\item \link[qtl]{summary.scanoneperm} - Summary of a QTL object
+	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
+	\item \code{\link[qtl]{summary.scanoneperm}} - Summary of a QTL object
 }
 }
+
 \examples{
 f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome

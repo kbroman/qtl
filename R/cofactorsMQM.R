@@ -35,7 +35,7 @@
 #dyn.load("scanMQM.dll")
 #cross <- read.cross("csv","","Test.csv")
 
-MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TRUE){
+MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=FALSE){
 	if(is.null(cross)){
 		ourstop("No cross file. Please supply a valid cross object.")
 	}
@@ -89,7 +89,7 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=TR
     cofactorlist
 }
 
-MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=TRUE){
+MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=FALSE){
 	if(is.null(cross)){
       ourstop("No cross file. Please supply a valid cross object.")
 	  return 

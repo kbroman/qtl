@@ -32,7 +32,7 @@ mqmall <- function(...){
 	scanall(...,Funktie=mqm)
 }
 
-scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=10,FF=0,...,plot=FALSE,verbose=TRUE){
+scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=10,FF=0,...,plot=FALSE,verbose=FALSE){
 
 	
 	if(is.null(cross)){

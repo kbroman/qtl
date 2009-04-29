@@ -2,17 +2,17 @@
 \alias{scanall}
 \alias{mqmall}
 \alias{cimall}
-\title{ 
-	scanall - Multitrait analysis of a cross object 
-}
+
+\title{Multitrait analysis of a cross object}
 
 \description{
 	Uses scanone, cim, or mqm to scan for QTL's for each phenotype in the cross object.
 }
+
 \usage{
-	scanall(cross = NULL, Funktie=scanone, n.clusters = 2,multiC=TRUE, b_size=10, plot=TRUE, verbose=TRUE,\dots)
-	cimall(cross = NULL,\dots)
-	mqmall(cross = NULL,\dots)
+	scanall(cross = NULL, Funktie=scanone, multiC=TRUE, n.clusters = 2,b_size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
+	cimall(\dots)
+	mqmall(\dots)
 }
 
 \arguments{
@@ -21,7 +21,10 @@
   \item{multiC}{ Use multicore (if available)}
   \item{n.clusters}{ Number of child processes to split the job into }
   \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
-  \item{\dots}{Parameters passed through to the scanone, cim or mqm functions}
+  \item{FF}{ [Not sure what this is] } 
+  \item{\dots}{Parameters passed through to the \code{\link[qtl]{scanone}}, \code{\link[qtl]{cim}} or \code{\link[qtl]{mqm}} functions}
+  \item{plot}{If TRUE, plot the results}
+  \item{verbose}{If TRUE, print tracing information}
 }
 
 \details{
@@ -41,12 +44,12 @@
 
 \seealso{ 
 	\itemize{
-	\item \code{\link{multitrait}} - Dataset used in the example analysis
-	\item \code{\link{fill.geno}} - Augmentationroutine to estimate missing data	
-	\item \code{\link{MQMaugment}} - Augmentationroutine to estimate missing data
-	\item \code{\link{scanone}} - Function called to do single trait analysis
-	\item \code{\link{cim}} - Function called to do single trait analysis
-	\item \code{\link{mqm}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{multitrait}} - Dataset used in the example analysis
+	\item \code{\link[qtl]{fill.geno}} - Augmentationroutine to estimate missing data	
+	\item \code{\link[qtl]{MQMaugment}} - Augmentationroutine to estimate missing data
+	\item \code{\link[qtl]{scanone}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{cim}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{mqm}} - Function called to do single trait analysis
 	}
 }
 
@@ -64,6 +67,7 @@
 		plot.all(result,"D",phi);phi<- phi+10;Sys.sleep(0.01)
 	}
 }
+
 \references{
 	\itemize{
 		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.

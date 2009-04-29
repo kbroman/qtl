@@ -16,19 +16,12 @@
 # scanMQM: main scanning function to the MQMpackage
 #
 ######################################################################
-
-#setwd("D:/")
-#library(qtl)
-#dyn.load("scanMQM.dll")
-#cross <- read.cross("csv","","Test.csv")
-#cof <- MQMCofactorsEach(cross,10)
-	
 	
 scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=TRUE){
+					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=FALSE){
     start <- proc.time()
-	library(qtl)
+
 	n.run=0
 	if(is.null(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 

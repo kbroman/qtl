@@ -1,24 +1,29 @@
 \name{MQMCofactorsEach}
 \alias{MQMCofactorsEach}
 
-\title{ 
-	MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM 
-}
+\title{Create cofactors to be used with scanMQM} 
+
 \description{
   Return a cofactorslist formatted to be used with the scanMQM function
 }
+
 \usage{
-MQMCofactorsEach(cross = NULL, each = 3)
+MQMCofactorsEach(cross = NULL, each = 3, verbose=FALSE)
 }
+
 \arguments{
-  \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
+  \item{cross}{An object of class \code{cross}. See
+   \code{\link[qtl]{read.cross}} for details.} 
   \item{each}{ Every 'each' marker will be used as a cofactor }
+  \item{verbose}{If TRUE, print tracing information.}
 }
-\details{
-	Not available yet
-}
+
+%\details{
+%	Not available yet
+%}
+
 \value{
-	An formatted list of cofactors to be used with the scanMQM algorithm
+	An formatted list of cofactors to be used with the \code{\link[qtl]{scanMQM}} algorithm
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
@@ -26,20 +31,22 @@ MQMCofactorsEach(cross = NULL, each = 3)
 \note{ 
 	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
+
 \seealso{ 
 \itemize{
-	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 }
 }
+
 \examples{
 qtl <- c(3,15,3,7)						# QTL at chromosome 3
 data(map10)							# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
 a <- MQMCofactorsEach(cross,3)					# Set Cofactors each third marker
 result <- scanMQM(cross,a)					# Do a backward model selection
-
 }
+
 \references{
 	\itemize{
 		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.

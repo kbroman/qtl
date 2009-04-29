@@ -8,7 +8,7 @@
 }
 
 \usage{
-MQMaugment(cross, pheno.col=1, maxaug=10000, maxiaug=1000, neglect=1000, verbose=FALSE)
+MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALSE)
 }
 
 \arguments{

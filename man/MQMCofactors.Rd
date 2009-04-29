@@ -1,34 +1,45 @@
 \name{MQMCofactors}
 \alias{MQMCofactors}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{ MQMCofactors - Helper function to create cofactors to be used with scanMQM }
+
+\title{Create cofactors to be used with scanMQM }
+
 \description{
   Return a cofactorslist formatted to be used with the scanMQM function
 }
+
 \usage{
-MQMCofactors(cross = NULL, cofactors = NULL, sexfactors = NULL)
+MQMCofactors(cross = NULL, cofactors = NULL, sexfactors = NULL, verbose=FALSE)
 }
+
 \arguments{
-  \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
+  \item{cross}{An object of class \code{cross}. See
+   \code{\link[qtl]{read.cross}} for details.}
   \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
   \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
+  \item{verbose}{If TRUE, print tracing information.}
 }
-\details{
-Not available yet
-}
+
+%\details{
+%Not available yet
+%}
+
 \value{
-An formatted list of cofactors to be used with the scanMQM algorithm
+An formatted list of cofactors to be used with the \code{\link[qtl]{scanMQM}} algorithm
 }
+
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
+
 \note{ 
 	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
+
 \seealso{
 	\itemize{
-	\item \code{\link{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
+
 \examples{
 qtl <- c(3,15,3,7)						# QTL at chromosome 3
 data(map10)							# Mouse genome
@@ -37,6 +48,7 @@ a <- MQMCofactors(cross,c(20,30,80,90),c(186,187))		# Set Cofactors on marker 20
 result <- scanMQM(cross,a)					# Do a backward model selection
 
 }
+
 \references{
 	\itemize{
 		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
