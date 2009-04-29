@@ -34,11 +34,7 @@
 	MQMaugment              MQMaugment - Missing data augmentation routine for MQM
 	MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
 	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
-	CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a cross-object from a molgenis database
-	ResultsFromMolgenis     ResultsFromMolgenis - Helperfunction to retrieve results from a molgenis database
-	ResultsToMolgenis       ResultsToMolgenis - Helperfunction to store results into a molgenis database
 	multitrait              Crossobject from R/QTL with multiple traits
-	PipelineMolgenis	Automatic MQM-QTL analysis for Molgenis database systems	
 	}
 	Normal layout of MQM-QTL analysis
 	\itemize{
@@ -51,14 +47,6 @@
 		\item Rerun analysis with cofactors
 		\item Bootstrap analysis with cofactors to get estimates of QTL significance
 	}
-	The Molgenispipeline is comprised of two main parts:
-	\itemize{
-		\item 1A: Data retrieval from a molgenis database 
-		\item 1B: Formatting into a \code{cross} object. See \code{\link[qtl]{read.cross}} for details. 
-		\item 2A.1: MQM QTL Model selection, with specified cofactors
-		\item 2A.2: MQM QTL mapping using the selected model
-		\item 2B: Storage of QTLmap into the database
-	}
 }
 \author{
 Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Janssen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} ; M.A. Swertz \email{m.a.swertz@rug.nl}
@@ -70,7 +58,6 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 		\item Jansen RC, (2007), Chapter 18 - Quantitative trait loci in inbred lines. \emph{Handbook of Stat. Genetics} 3th edition,(c) 2007 John Wiley & Sons, Ltd.
 		\item Swertz MA, Jansen RC. (2007), Beyond standardization: dynamic software infrastructures for systems biology. \emph{Nat Rev Genet.} \bold{3}, 235--243.
 		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
-		\item Swertz MA, De Brock EO, Van Hijum SA, De Jong A, Buist G, Baerends RJ, Kok J, Kuipers OP, Jansen RC. (2004), Molecular Genetics Information System (MOLGENIS): alternatives in developing local experimental genomics databases. \emph{Bioinformatics},\bold{13}, 2075--2083.
 		\item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
 		\item Jansen RC, Nap JP (2001), Genetical genomics: the added value from segregation. \emph{Trends in Genetics}, \bold{17}, 388-391.
 		\item Jansen RC, Stam P (1994), High resolution of quantitative traits into multiple loci via interval mapping. \emph{Genetics}, \bold{136}, 1447-1455.
@@ -88,7 +75,6 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 	\item	\code{\link{MQMaugment}} - Dataaugmentation routine to estimate missing data
 	\item	\code{\link{scanMQM}} - Function called to do single trait analysis
 	\item \code{\link{scanall}} - Function called to analytse multiple traits in the cross object
-	\item \code{\link{PipelineMolgenis}} - Automatic MQM-QTL analysis for Molgenis database systems		
 	}
 }
 \examples{
