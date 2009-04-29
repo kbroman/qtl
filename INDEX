@@ -48,8 +48,6 @@ convert2sa              Convert a sex-specific map to a sex-averaged
                         one.
 countXO                 Count number of obligate crossovers for each
                         individual
-CrossFromMolgenis       CrossFromMolgenis - Helperfunction to create a
-                        cross-object from a molgenis database
 drop.markers            Drop a set of markers
 drop.nullmarkers        Drop markers without any genotype data
 dropfromqtl             Drop a QTL from a qtl object
@@ -113,8 +111,6 @@ nphe                    Determine the number of phenotypes QTL
 ntyped                  Number of genotypes
 orderMarkers            Find an initial order for markers within
                         chromosomes
-PipelineMolgenis        PipelineMolgenis - Automatic MQM-QTL analysis
-                        for Molgenis database systems
 plot.all                plot.all - Plotting routine to display the
                         results from a scanall / bootstrap scan
 plot.boot               plot.boot - Plotting routine to display the
@@ -160,11 +156,6 @@ replacemap.scantwo      Replace the genetic map in QTL mapping results
                         with an alternate map
 replaceqtl              Replace a QTL in a qtl object with a different
                         position.
-ResultsFromMolgenis     ResultsFromMolgenis - Helperfunction to
-                        retrieve results from a molgenis database
-ResultsToMolgenis       ResultsToMolgenis - Helperfunction to store
-                        results from a MQM-qtl run into a molgenis
-                        database
 ripple                  Compare marker orders
 scanall                 scanall - Multitrait analysis of a cross object
 scanMQM                 scanMQM - Multiple qtl mapping for inbred
