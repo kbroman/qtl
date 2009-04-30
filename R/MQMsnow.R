@@ -24,7 +24,7 @@
 ######################################################################
 
 
-snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE...){
+snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	num_traits <- nphe(all_data)
