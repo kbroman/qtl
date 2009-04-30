@@ -33,7 +33,7 @@ snowCoreALL <- function(x,all_data,Funktie,...){
 	cat("------------------------------------------------------------------\n")
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,plot=FALSE,verbose=FALSE,...)
+			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,verbose=FALSE,...)
 		}
 	}else{
 		result <- Funktie(cross=all_data,pheno.col=x,...)
@@ -62,15 +62,15 @@ snowCoreBOOT <- function(x,all_data,Funktie,method,...){
 	}
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,plot=FALSE,verbose=FALSE,...)
+			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,verbose=FALSE,...)
 		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,plot=FALSE,verbose=FALSE,...)
+			result <- Funktie(cross=all_data,pheno.col=1,verbose=FALSE,...)
 		}
 	}else{
 		if("plot" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=1,plot=FALSE,...)
+			result <- Funktie(cross=all_data,pheno.col=1,...)
 		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,plot=FALSE,...)
+			result <- Funktie(cross=all_data,pheno.col=1,...)
 		}
 	}
 	e <- proc.time()
