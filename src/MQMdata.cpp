@@ -81,7 +81,7 @@ extern "C"
 }
 
 
-void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers){
+  void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype){
 	//Change all the markers from Karl format to our own
 	for(int i=0; i< *Nmark; i++){
 		for(int j=0; j< *Nind; j++){ 
@@ -90,7 +90,8 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers){
 				markers[i][j] = '0';
 			}
 			if(Geno[i][j] == 2){				//AB
-				markers[i][j] = '1';
+			  if(crosstype!=3) markers[i][j] = '1'; // non-RIL
+			  else markers[i][j] = '2';  // RIL
 			}
 			if(Geno[i][j] == 3){				//BB
 				markers[i][j] = '2';
@@ -139,7 +140,7 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers){
 	reorg_pheno(*maxaug,1,augPheno,&NEWPheno);	 
 
 	//Change all the markers from Karl format to our own
-	change_coding(Nmark,Nind,Geno,markers);
+	change_coding(Nmark,Nind,Geno,markers, *crosstype);
 	
 	char cross = determin_cross(Nmark,Nind,Geno,crosstype);
 	if(*verbose) Rprintf("INFO: Filling the chromosome matrix\n");

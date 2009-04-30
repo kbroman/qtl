@@ -44,7 +44,7 @@ int augdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy, ivector*
 
 char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype);
 
-void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers);
+void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype);
 
 
 /*------------------------------------------------------------------------

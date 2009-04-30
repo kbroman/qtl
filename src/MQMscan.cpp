@@ -134,7 +134,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	int cof_cnt=0;
  	
    	//Change all the markers from Karl format to our own
-	change_coding(&Nmark,&Nind,Geno,markers);
+	change_coding(&Nmark,&Nind,Geno,markers, crosstype);
 
 	for(int i=0; i< Nmark; i++){
 		f1genotype[i] = 12;
