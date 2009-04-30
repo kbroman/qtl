@@ -89,7 +89,6 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 		if(multiC && n.clusters>1 && require(snow)) {
 
 			if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
-			require(snow)			
 			for(x in 1:(batches)){
 				start <- proc.time()
 				if(verbose) {
