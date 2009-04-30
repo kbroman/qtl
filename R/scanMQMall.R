@@ -41,11 +41,13 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		start <- proc.time()
 		n.pheno <- nphe(cross)
-		ourline()
-		cat("Starting R/QTL multitrait analysis\n")
-		cat("Number of phenotypes:",n.pheno,"\n")
-		cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
-		ourline()	
+		if(verbose) {
+                  ourline()
+                  cat("Starting R/QTL multitrait analysis\n")
+                  cat("Number of phenotypes:",n.pheno,"\n")
+                  cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
+                  ourline()	
+                }
 		
 		result <- NULL	 	#BATCH result variable
 		res <- NULL			#GLOBAL result variable
@@ -65,21 +67,22 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]] && multiC){
-			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
-			require(snow)
+		if(multiC && n.clusters>1 && require(snow)) {
+                  if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
-				ourline()
-				cat("INFO: Starting with batch",x,"/",batches,"\n")				
-				ourline()
+                                if(verbose) {
+                                  ourline()
+                                  cat("INFO: Starting with batch",x,"/",batches,"\n")				
+                                  ourline()
+                                }
 				if(x==batches && last.batch.num > 0){
 					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
 				cl <- makeCluster(n.clusters)
-				clusterEvalQ(cl, require(qtl)) # [karl says: is this necessary?]
+#				clusterEvalQ(cl, require(qtl)) # [karl says: is this necessary?]
 				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
 				stopCluster(cl)
 				if(plot){
@@ -92,20 +95,24 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
 				LEFT <- AVG*(batches-x)
-				cat("INFO: Done with batch",x,"/",batches,"\n")	
-				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
-				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
-				ourline()
+                                if(verbose) {
+                                  cat("INFO: Done with batch",x,"/",batches,"\n")	
+                                  cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+                                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
+                                  ourline()
+                                }
 			}
 		}else{
-			cat("INFO: Library snow not found, so going into singlemode.\n")
+			if(verbose) cat("INFO: Library snow not found, so going into singlemode.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
-				ourline()
-				cat("INFO: Starting with batch",x,"/",batches,"\n")				
-				ourline()
+				if(verbose) {
+                                  ourline()
+                                  cat("INFO: Starting with batch",x,"/",batches,"\n")				
+                                  ourline()
+                                }
 				if(x==batches && last.batch.num > 0){
 					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
 				}else{
@@ -122,20 +129,22 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
 				LEFT <- AVG*(batches-x)
-				cat("INFO: Done with batch",x,"/",batches,"\n")	
-				cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-				cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-				cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
-				cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
-				ourline()
+                                if(verbose) {
+                                  cat("INFO: Done with batch",x,"/",batches,"\n")	
+                                  cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+                                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
+                                  ourline()
+                                }
 			}
 		}
 		if(FF){
-			cat(rownames(res[[1]]),"\n",res[[1]][,1],"\n",res[[1]][,2],"\n",file="out.frank")
+			if(verbose) cat(rownames(res[[1]]),"\n",res[[1]][,1],"\n",res[[1]][,2],"\n",file="out.frank")
 			for(i in 1:length(res)){
-				cat("INFO: Saving trait",i,"in frankformat\n")
+				if(verbose) cat("INFO: Saving trait",i,"in frankformat\n")
 				qtl <- res[[i]]
-				cat(colnames(qtl)[3],qtl[,3],"\n",file="out.frank",append = TRUE)
+				if(verbose) cat(colnames(qtl)[3],qtl[,3],"\n",file="out.frank",append = TRUE)
 			}
 		}
 		#Return the results
@@ -144,10 +153,12 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 		end <- proc.time()
 		SUM <- (end-start)[3]
 		AVG <- SUM/n.pheno	
-		cat("------------------------------------------------------------------\n")
-		cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
-		cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
-		cat("------------------------------------------------------------------\n")	
+                if(verbose) {
+                  cat("------------------------------------------------------------------\n")
+                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
+                  cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
+                  cat("------------------------------------------------------------------\n")
+                }
 		res
 	}else{
 		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
