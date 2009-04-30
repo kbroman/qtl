@@ -62,10 +62,11 @@
 	result <- mqmall(multitrait,cofactors=cof,doLOG=1,b_size=5)
 
 	#FUNNY, run at own risk: 3D QTL screensaver
+\dontrun{
 	phi<-0
-	while(T){
+	while(TRUE){
 		plot.all(result,"D",phi);phi<- phi+10;Sys.sleep(0.01)
-	}
+	}}
 }
 
 \references{
