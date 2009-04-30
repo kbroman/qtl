@@ -90,8 +90,10 @@ extern "C"
 				markers[i][j] = '0';
 			}
 			if(Geno[i][j] == 2){				//AB
-			  if(crosstype!=3) markers[i][j] = '1'; // non-RIL
-			  else markers[i][j] = '2';  // RIL
+			  // [karl:] I think this needs to be changed, but my fix doesn't work.
+			  //			  if(crosstype!=3) markers[i][j] = '1'; // non-RIL
+			  //			  else markers[i][j] = '2';  // RIL
+			  markers[i][j] = '1';
 			}
 			if(Geno[i][j] == 3){				//BB
 				markers[i][j] = '2';
@@ -193,7 +195,7 @@ extern "C"
 				if(new_markers[i][j] == '1'){
 					NEW[i][j] = 2;
 				}
-				if(new_markers[i][j] == '2'){
+				if(new_markers[i][j] == '2'){  // [karl:] this might need to be changed for RIL
 					NEW[i][j] = 3;
 				}
 				if(new_markers[i][j] == '3'){
@@ -230,7 +232,7 @@ extern "C"
 				if(markers[i][j] == '1'){
 					NEW[i][j] = 2;
 				}
-				if(markers[i][j] == '2'){
+				if(markers[i][j] == '2'){ // [karl:] this might need to be changed for RIL
 					NEW[i][j] = 3;
 				}
 				if(markers[i][j] == '3'){
