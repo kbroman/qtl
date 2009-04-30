@@ -67,7 +67,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 		#TEST FOR SNOW CAPABILITIES
 		if("snow" %in% installed.packages()[1:dim(installed.packages())[1]] && multiC){
 			cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
-			library(snow)
+			require(snow)
 			for(x in 1:(batches)){
 				start <- proc.time()
 				ourline()
@@ -79,7 +79,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
 				cl <- makeCluster(n.clusters)
-				clusterEvalQ(cl, library(qtl))
+				clusterEvalQ(cl, require(qtl)) # [karl says: is this necessary?]
 				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
 				stopCluster(cl)
 				if(plot){

@@ -30,11 +30,6 @@
 #
 ######################################################################
 
-#setwd("D:/")
-#library(qtl)
-#dyn.load("scanMQM.dll")
-#cross <- read.cross("csv","","Test.csv")
-
 MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=FALSE){
 	if(is.null(cross)){
 		ourstop("No cross file. Please supply a valid cross object.")
