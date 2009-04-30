@@ -24,13 +24,15 @@
 ######################################################################
 
 
-snowCoreALL <- function(x,all_data,Funktie,...){
+snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE...){
 	b <- proc.time()
 	result <- NULL
 	num_traits <- nphe(all_data)
-	cat("------------------------------------------------------------------\n")
-	cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
-	cat("------------------------------------------------------------------\n")
+        if(verbose) {
+          cat("------------------------------------------------------------------\n")
+          cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
+          cat("------------------------------------------------------------------\n")
+        }
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
 			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,verbose=FALSE,...)
@@ -39,15 +41,17 @@ snowCoreALL <- function(x,all_data,Funktie,...){
 		result <- Funktie(cross=all_data,pheno.col=x,...)
 	}
 	e <- proc.time()
-	cat("------------------------------------------------------------------\n")
-	cat("INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
-	cat("INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
-	cat("------------------------------------------------------------------\n")
+        if(verbose) {
+          cat("------------------------------------------------------------------\n")
+          cat("INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
+          cat("INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
+          cat("------------------------------------------------------------------\n")
+        }
 	result
 }
 
 
-snowCoreBOOT <- function(x,all_data,Funktie,method,...){
+snowCoreBOOT <- function(x,all_data,Funktie,method,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	if(!method){
@@ -74,10 +78,12 @@ snowCoreBOOT <- function(x,all_data,Funktie,method,...){
 		}
 	}
 	e <- proc.time()
-	cat("------------------------------------------------------------------\n")
-	cat("INFO: Done with bootstrap\n")
-	cat("INFO: Calculation took:",round((e-b)[3], digits=3)," seconds\n")
-	cat("------------------------------------------------------------------\n")
+        if(verbose) {
+          cat("------------------------------------------------------------------\n")
+          cat("INFO: Done with bootstrap\n")
+          cat("INFO: Calculation took:",round((e-b)[3], digits=3)," seconds\n")
+          cat("------------------------------------------------------------------\n")
+        }
 	result
 }
 

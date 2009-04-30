@@ -71,7 +71,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 
 		#Scan the original
 		cross <- fill.geno(cross)
-		res0 <- lapply(1, FUN=snowCoreALL,all_data=cross,Funktie=Funktie,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all_data=cross,Funktie=Funktie,verbose=verbose,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.run)
@@ -104,7 +104,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				}			
 				cl <- makeCluster(n.clusters)
 #				clusterEvalQ(cl, require(qtl)) ## [karl says: is this necessary?]
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -139,7 +139,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)

@@ -83,7 +83,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 				}	
 				cl <- makeCluster(n.clusters)
 #				clusterEvalQ(cl, require(qtl)) # [karl says: is this necessary?]
-				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
@@ -118,7 +118,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				result <- lapply(boots, FUN=snowCoreALL,all_data=all_data,Funktie=Funktie,...)
+				result <- lapply(boots, FUN=snowCoreALL,all_data=all_data,Funktie=Funktie,verbose=verbose,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
