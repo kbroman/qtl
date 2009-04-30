@@ -53,7 +53,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			   double **QTL,vector *mapdistance,int **Chromo,int Nrun,int RMLorML, double windowsize,double stepsize,
 			   double stepmin,double stepmax,double alfa,int em,int out_Naug,int **INDlist,char reestimate,char crosstype,char dominance,int verbose)
 {    
-    if(verbose==1){Rprintf("INFO: Starting C-part of the MQM analysis\n");}
+    if(verbose){Rprintf("INFO: Starting C-part of the MQM analysis\n");}
 	int Naug;
 	int run=0;
     cvector position;
@@ -69,7 +69,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     char fitQTL='n';
 	
 	chr= newivector(Nmark);
-	if(verbose==1){
+	if(verbose){
 		Rprintf("INFO: Receiving the chromosome matrix from R\n");
 	}
 	for(int i=0; i< Nmark; i++){
@@ -80,7 +80,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		REMLorML='1';
 	}
 
-	if(verbose==1){Rprintf("INFO: Calculating relative genomepositions of the markers\n");}
+	if(verbose){Rprintf("INFO: Calculating relative genomepositions of the markers\n");}
 	for (int j=0; j<Nmark; j++){
         if (j==0)
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
@@ -92,7 +92,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
         { if (chr[j]==chr[j+1]) position[j]='L'; else position[j]='U'; }
     }
     
-	if(verbose==1){Rprintf("INFO: Estimating recombinant frequencies\n");	}
+	if(verbose){Rprintf("INFO: Estimating recombinant frequencies\n");	}
     for (int j=0; j<Nmark; j++){   
 		r[j]= 999.0;
 		if ((position[j]=='L')||(position[j]=='M')){
@@ -101,7 +101,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		//Rprintf("R[j] value: %f\n",r[j]);
     }
 	// ---- Initialize Frun and informationcontent to 0.0
-	if(verbose==1){Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");}	
+	if(verbose){Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");}	
 	int Nsteps;
 	Nsteps= chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);	
     Frun= newmatrix(Nsteps,Nrun+1);
@@ -151,11 +151,11 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
             position[jj]= position[j];
             jj++;
         }else if ((*cofactor)[j]=='1'){  
-            if(verbose==1){Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);}
+            if(verbose){Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);}
         }
     }
     Nmark= jj;
-  	if(verbose==1){Rprintf("INFO: Num markers: %d\n",Nmark);}
+  	if(verbose){Rprintf("INFO: Num markers: %d\n",Nmark);}
     for (int j=0; j<Nmark; j++){
 		r[j]= 999.0;
         if (j==0)
@@ -177,7 +177,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 			}
 		}
     }
-    if(verbose==1){Rprintf("INFO: After dropping of uninformative cofactors\n");}
+    if(verbose){Rprintf("INFO: After dropping of uninformative cofactors\n");}
     ivector newind;
     vector newy;
     cmatrix newmarker;
@@ -203,11 +203,11 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
     vector newweight;
     newweight= newvector(Naug);
     //Creation of lookup table
-		if(verbose==1){Rprintf("INFO: Creating look-up table\n");}
+		if(verbose){Rprintf("INFO: Creating look-up table\n");}
 		Mmatrix MendelM;
 		MendelM = newMmatrix(Nmark,3,2);
 		create_lookup_table(MendelM,Nmark,r,crosstype);
-		if(verbose==1){Rprintf("INFO: DONE Creating look-up table\n");}
+		if(verbose){Rprintf("INFO: DONE Creating look-up table\n");}
 	//Re-estimation of recombinant frequencies
 	double max;
 	max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype,MendelM,verbose);
@@ -216,7 +216,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		Rprintf("ERROR: Rerun the algorithm with a step.max larger than %f Cm\n",max);
 		return;
 	}else{
-       if(verbose==1){Rprintf("INFO: Reestimation of the map finished. MAX Cm: %f Cm\n",max);}
+       if(verbose){Rprintf("INFO: Reestimation of the map finished. MAX Cm: %f Cm\n",max);}
     }
 	
 	//Check if everything still is correct
@@ -287,7 +287,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
  
 	F1= inverseF(1,Nind-dimx,alfa,verbose);
 	F2= inverseF(2,Nind-dimx,alfa,verbose);
-	if(verbose==1){
+	if(verbose){
 		Rprintf("INFO: dimX:%d nInd:%d\n",dimx,Nind); 	
 		Rprintf("INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
 		Rprintf("INFO: F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
@@ -297,7 +297,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 
 	weight[0]= -1.0;
 	logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, MendelM,verbose);
-	if(verbose==1){
+	if(verbose){
 		Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
 		Rprintf("INFO: Residual variance= %f\n",variance);
 		Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
@@ -317,7 +317,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 		}
 	}
 	//QTL likelyhood for each location
-	if(verbose==1){Rprintf("INFO: Number of output datapoints: %d\n",Nsteps);}
+	if(verbose){Rprintf("INFO: Number of output datapoints: %d\n",Nsteps);}
     //ofstream fff("MQM.output", ios::out | ios::app);	
 	for (int ii=0; ii<Nsteps; ii++){ 
 		//Convert LR to LOD before sending back
@@ -339,7 +339,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, vector y,
 	Free(y);
 	Free(chr);
 	Free(selcofactor);
-	if(verbose==1){Rprintf("INFO: Analysis of data finished\n");}
+	if(verbose){Rprintf("INFO: Analysis of data finished\n");}
 	return;
 }
 
@@ -357,7 +357,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
     logL = newvector(Nmark);
     savelogL= logLfull;
     maxlogL= logLfull-10000;
-	Rprintf("INFO: Backward elimination of cofactors started\n");
+    if(verbose) Rprintf("INFO: Backward elimination of cofactors started\n");
     for (int j=0; j<Nmark; j++){
 		(*newcofactor)[j]= cofactor[j];
         Ncof+=(cofactor[j]!='0');
@@ -398,14 +398,14 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 		if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) ){   
 			savelogL= maxlogL;
 			(*newcofactor)[dropj]= '0'; Ncof-=1;
-			if(verbose==1){Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);}
+			if(verbose){Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);}
 		}else if  ( ((*newcofactor)[dropj]=='2') && (F1> 2.0*(savelogL-maxlogL)) ){   
 			savelogL= maxlogL;
 			(*newcofactor)[dropj]= '0'; 
 			Ncof-=1;
-			if(verbose==1){Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);}
+			if(verbose){Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);}
 		}else{
-			if(verbose==1){Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");}
+			if(verbose){Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");}
 			finished='y';
 			for (int j=0; j<Nmark; j++){
 				if ((*newcofactor)[j]=='1'){
@@ -414,7 +414,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 			}
         }
     }
-	if(verbose==1){
+	if(verbose){
 	Rprintf("MODEL: ----------------------:MODEL:----------------------\n");
     for (int j=0; j<Nmark; j++){
 		if ((*newcofactor)[j]!='0'){
