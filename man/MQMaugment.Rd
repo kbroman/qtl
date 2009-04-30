@@ -8,7 +8,8 @@
 }
 
 \usage{
-MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALSE)
+MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
+           forceRIL=TRUE, verbose=FALSE)
 }
 
 \arguments{
@@ -20,6 +21,7 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALS
   \item{maxaug}{ Maximum number of (total) individuals after augmentation }
   \item{maxiaug}{ Maximum augmentations per individual }
   \item{neglect}{ Genotypes considered have a higher probability of occuring then one in neglect }
+  \item{forceRIL}{If TRUE, ... [I'm not really sure why this is needed.]}
   \item{verbose}{If TRUE, tracing information is printed.}
 }
 
