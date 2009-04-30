@@ -87,29 +87,4 @@ snowCoreBOOT <- function(x,all_data,Funktie,method,verbose=FALSE,...){
 	result
 }
 
-
-snowCore <- function(x,each,all_data,name,DBpath,...){
-	num_traits <- nphe(all_data)
-	b <- NULL
-	e <- NULL
-	b <- proc.time()
-	r_string <- NULL
-	r_string <- paste("------------------------------------------------------------------\n")
-	r_string <- paste(r_string,"INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
-	r_string <- paste(r_string,"------------------------------------------------------------------\n")
-	if(each>1){
-		cof <- MQMCofactorsEach(all_data,each)
-		result <- scanMQM(all_data,cof,pheno.col=x,plot=FALSE,verbose=FALSE,...)
-	}else{
-		result <- scanMQM(all_data,pheno.col=x,plot=FALSE,verbose=FALSE,...)
-	}
-#	try(ResultsToMolgenis(result, name,(x-1),DBpath, verbose=FALSE),TRUE)
-	e <- proc.time()
-	r_string <- paste("------------------------------------------------------------------\n")
-	r_string <- paste(r_string,"INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
-	r_string <- paste(r_string,"INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
-	r_string <- paste(r_string,"------------------------------------------------------------------\n")
-	r_string
-}
-
 # end of MQMsnow.R
