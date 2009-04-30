@@ -1,6 +1,6 @@
 #####################################################################
 #
-# MQMaugmentdata.R
+# MQMaugment.R
 #
 # copyright (c) 2009, Danny Arends and Karl W. Broman
 # last modified Apr, 2009
@@ -25,7 +25,7 @@
 
 ######################################################################
 #
-# MQMaugmentdata:
+# MQMaugment:
 #
 ######################################################################
 MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,forceRIL=TRUE,verbose=FALSE){
