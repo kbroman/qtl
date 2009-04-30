@@ -54,7 +54,7 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
-  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow))) {
+  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
     cl <- makeCluster(n.cluster)
     clusterSetupRNG(cl)
