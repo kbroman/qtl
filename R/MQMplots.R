@@ -230,9 +230,9 @@ plotMQMnice <- function(result, ...){
 	polyplot(matrix,...)
 }
 
-plotMQMone <- function(result = NULL,result2 = NULL, extended=0,...){
+plotMQMone <- function(result, result2, extended=0,...){
 	#Helperfunction to show scanone objects made by doing scanMQM runs
-	if(any(class(result) != "scanone"))
+	if(!("scanone" %in% class(result)))
           ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
 
         info_c <- result
@@ -245,7 +245,7 @@ plotMQMone <- function(result = NULL,result2 = NULL, extended=0,...){
           labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
           legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
         }else{
-          if (any(class(result2) == "scanone")){
+          if (!missing(result2) && !("scanone" %in% class(result2))) {
 	    #MAX 3 scanone objects
             plot(result,info_c,result2,lwd=1,ylab="QTL (LOD)",...)
             grid(max(result$chr),5)
