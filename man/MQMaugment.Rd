@@ -52,10 +52,9 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 \examples{
 qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)								# Mouse genome
-cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)			# Simulate a Cross
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)             # Simulate a Cross (just autosomes)
 crossaug <- MQMaugment(cross)						# Augmentation of the data
 result <- scanMQM(crossaug)						# Do a MQM scan of the genome
-
 }
 
 \references{
