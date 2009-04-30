@@ -40,7 +40,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
          use=c("all.obs", "complete.obs"), upper=FALSE,
          ties.random=FALSE, start=NULL, maxit=4000, tol=1e-4,
          n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose, batchsize=250,
-         n.cluster=2)
+         n.cluster=1)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   model <- match.arg(model)

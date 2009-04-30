@@ -16,7 +16,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
         incl.markers=FALSE, clean.output=FALSE,
         maxit=4000, tol=1e-4,
         verbose=TRUE, n.perm, perm.strata=NULL,
-        assumeCondIndep=FALSE, batchsize=250, n.cluster=2)
+        assumeCondIndep=FALSE, batchsize=250, n.cluster=1)
 }
 
 \arguments{

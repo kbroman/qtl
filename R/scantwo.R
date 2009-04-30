@@ -44,7 +44,7 @@ function(cross, chr, pheno.col=1,
          incl.markers=FALSE, clean.output=FALSE,
          maxit=4000, tol=1e-4, verbose=TRUE, n.perm,
          perm.strata=NULL, assumeCondIndep=FALSE,
-         batchsize=250, n.cluster=2)
+         batchsize=250, n.cluster=1)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   if(!any(class(cross) == "cross"))
@@ -191,7 +191,7 @@ function(cross, chr, pheno.col=1,
                         maxit=maxit,
                         tol=tol, verbose=verbose, n.perm=n.perm,
                         perm.strata=perm.strata,
-                        batchsize=batchsize, n.cluster=0))
+                        batchsize=batchsize))
   }
 
 

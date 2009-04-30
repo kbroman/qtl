@@ -16,7 +16,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         use=c("all.obs", "complete.obs"), upper=FALSE,
         ties.random=FALSE, start=NULL, maxit=4000,
         tol=1e-4, n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose,
-        batchsize=250, n.cluster=2)
+        batchsize=250, n.cluster=1)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
