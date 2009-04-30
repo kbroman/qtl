@@ -67,7 +67,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if(multiC && n.clusters>1 && require(snow)) {
+		if(multiC && n.clusters>1 && suppressWarnings(require(snow,quietly=TRUE))) {
                   if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()

@@ -86,8 +86,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 		LEFT <- 0
 		#TEST FOR SNOW CAPABILITIES
 #		if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]]) && multiC){
-		if(multiC && n.clusters>1 && require(snow)) {
-
+		if(multiC && n.clusters>1 && suppressWarnings(require(snow,quietly=TRUE))) {
 			if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
