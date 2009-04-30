@@ -28,7 +28,7 @@
 # MQMaugmentdata:
 #
 ######################################################################
-MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALSE){
+MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,forceRIL=TRUE,verbose=FALSE){
 	start <- proc.time()
 
         crosstype <- class(cross)[1]
@@ -100,12 +100,23 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, 
 		n.mark <- ncol(geno)
 		if(verbose) cat("INFO: Number of markers:",n.mark,".\n")
 		#Check for na genotypes and replace them with a 9
+		Fril.replaced <- 0
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
 					geno[i,j] <- 9;
+				}else{
+					if(forceRIL && geno[i,j]==2){
+						#We have a 2 (AB) change it to a 3
+						geno[i,j] <- 3
+						Fril.replaced <- Fril.replaced+1
+					}
+				
 				}
 			}
+		}
+		if(forceRIL && Fril.replaced > 0){
+			 ourcat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n",a=verbose)
 		}
 		#check for missing phenotypes
 		dropped <- NULL
