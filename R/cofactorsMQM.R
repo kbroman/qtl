@@ -42,9 +42,11 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=FA
 	geno <- NULL
 	cofactorlist <- NULL
 	individuals <- nind(cross)
-	ourcat("INFO: Found",individuals,"individuals in the cross object.\n",a=verbose)
-	ourcat("INFO: Mamimum amount of cofactors",(individuals-10),"leaves 10 Degrees of Freedom, (No Dominance).\n",a=verbose)
-	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)/2,"leaves 10 Degrees of Freedom (Dominance).\n",a=verbose)
+        if(verbose) {
+          cat("INFO: Found",individuals,"individuals in the cross object.\n")
+          cat("INFO: Mamimum amount of cofactors",(individuals-10),"leaves 10 Degrees of Freedom, (No Dominance).\n")
+          cat("INFO: Mamimum amount of cofactors",(individuals-10)/2,"leaves 10 Degrees of Freedom (Dominance).\n")
+        }
 	for(i in 1:n.chr) {
       geno <- cbind(geno,cross$geno[[i]]$data)
 	}
@@ -100,9 +102,11 @@ MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=FALSE){
 	}
 	n.mark <- ncol(geno)
 	
-	ourcat("INFO: Found",individuals,"individuals in the cross object.\n",a=verbose)
-	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom (no Dominance).\n",a=verbose)
-	ourcat("INFO: Mamimum amount of cofactors",(individuals-10)/2," (each =",ceiling(sum(n.mark)/(individuals-10))*2,") leaves 10 Degrees of Freedom (Dominance).\n",a=verbose)
+        if(verbose) {
+          cat("INFO: Found",individuals,"individuals in the cross object.\n")
+          cat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom (no Dominance).\n")
+          cat("INFO: Mamimum amount of cofactors",(individuals-10)/2," (each =",ceiling(sum(n.mark)/(individuals-10))*2,") leaves 10 Degrees of Freedom (Dominance).\n")
+        }
 
 	if(each > n.mark){
       ourstop("Not enough markers to place cofactors at.")

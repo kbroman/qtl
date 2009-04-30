@@ -60,7 +60,6 @@
 \alias{mf.stahl}
 \alias{mybinaryrep}
 \alias{orderMarkers.sub}
-\alias{ourcat}
 \alias{ourline}
 \alias{ourstop}
 \alias{parseformula}
@@ -214,7 +213,6 @@ mf.m(d)
 mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
 orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
-ourcat(..., a=TRUE)
 ourline()
 ourstop(...)
 parseformula(formula, qtl.dimname, covar.dimname)

@@ -7,17 +7,9 @@
 # first written Mrt, 2009
 # 
 # Part of the R/qtl package
-# Contains: ourcat, ourstop, ourline
+# Contains: ourstop, ourline
 #
 ######################################################################
-
-ourcat <- function(...,a=TRUE){
-	if(a){
-		cat(...)
-	}else{
-		return
-	}
-}
 
 ourstop <- function(...){
 	ourline()

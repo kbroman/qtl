@@ -37,11 +37,13 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			ctype = 3
 		#	stop("Somethings still wrong in the algorithm, please analyse RIL as BC.")
 		}
-		ourcat("INFO: Received a valid cross file type:",class(cross)[1],".\n",a=verbose)
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
-		ourcat("INFO: Number of individuals: ",n.ind,"\n",a=verbose)
-		ourcat("INFO: Number of chromosomes: ",n.chr,"\n",a=verbose)
+		if(verbose) {
+                  cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+                  cat("INFO: Number of individuals: ",n.ind,"\n")
+                  cat("INFO: Number of chromosomes: ",n.chr,"\n")
+                }
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -59,16 +61,18 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 			ourstop("For multiple phenotype analysis use the function: 'scanall'.\n")	
 		}
 		if(pheno.col != 1){
-			ourcat("INFO: Selected phenotype ",pheno.col,".\n",a=verbose)
-			ourcat("INFO: Number of phenotypes in object ",nphe(cross),".\n",a=verbose)
-			if(nphe(cross) < pheno.col || pheno.col < 1){
-				ourstop("No such phenotype in cross object.\n")
-			}			
+                  if(verbose) {
+                    cat("INFO: Selected phenotype ",pheno.col,".\n")
+                    cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
+                  }
+                  if(nphe(cross) < pheno.col || pheno.col < 1){
+                    ourstop("No such phenotype in cross object.\n")
+                  }			
 		}
 		pheno <- cross$pheno[[pheno.col]]
 		if(var(pheno,na.rm = TRUE)> 1000){
 			if(doLOG == 0){
-				ourcat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n",a=verbose)
+				if(verbose) cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
 				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
 			}
 		}
@@ -78,7 +82,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				pheno <- cross$pheno[[pheno.col]]
 		}
 		n.mark <- ncol(geno)
-		ourcat("INFO: Number of markers:",n.mark,"\n",a=verbose)
+		if(verbose) cat("INFO: Number of markers:",n.mark,"\n")
 		Fril.replaced <- 0
 
 		for(i in 1:n.ind) {
@@ -96,14 +100,14 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				
 			}
 		}
-		if(forceRIL==1 && Fril.replaced > 0){
-			 ourcat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n",a=verbose)
+		if(verbose && forceRIL==1 && Fril.replaced > 0){
+			 cat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n")
 		}
 		#check for missing phenotypes
 		dropped <- NULL
 		for(i in 1:length(pheno)) {
 			if(is.na(pheno[i])){
-			  ourcat("INFO: Dropped individual ",i," with missing phenotype.\n",a=verbose)
+			  if(verbose) cat("INFO: Dropped individual ",i," with missing phenotype.\n")
 			  dropped <- c(dropped,i) 
 			  n.ind = n.ind-1
 			}
@@ -130,21 +134,21 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#CHECK if we have cofactors, so we can do backward elimination
 		backward <- 0;
 		if(is.null(cofactors)){
-			ourcat("INFO: No cofactors, setting cofactors to 0\n",a=verbose)
+			if(verbose) cat("INFO: No cofactors, setting cofactors to 0\n")
 			cofactors = rep(0,n.mark)
 		}else{
 			if(length(cofactors) != n.mark){
-				ourcat("ERROR: # Cofactors != # Markers\n",a=verbose)		
+				if(verbose) cat("ERROR: # Cofactors != # Markers\n")		
 			}else{
-				ourcat("INFO:",length(cofactors),"Cofactors received to be analyzed\n",a=verbose)
+				if(verbose) cat("INFO:",length(cofactors),"Cofactors received to be analyzed\n")
 				if((sum(cofactors) > n.ind-10 && dominance==0)){
-					ourstop("INFO: Cofactors don't look okay for use without dominance\n",a=verbose)
+					ourstop("INFO: Cofactors don't look okay for use without dominance\n")
 				}
 				if((sum(cofactors)*2 > n.ind-10 && dominance==1)){
-					ourstop("INFO: Cofactors don't look okay for use with dominance\n",a=verbose)
+					ourstop("INFO: Cofactors don't look okay for use with dominance\n")
 				}				
 				if(sum(cofactors) > 0){
-					ourcat("INFO: Doing backward elimination of selected cofactors.\n",a=verbose)
+					if(verbose) cat("INFO: Doing backward elimination of selected cofactors.\n")
 					backward <- 1;
 					n.run <- 0;
 				}else{
@@ -168,7 +172,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 				ourstop("Markers outside of the mapping at ",max_cm_on_map," Cm, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
-		ourcat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n",a=verbose)
+		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
 		end_1 <- proc.time()
 		result <- .C("R_scanMQM",
 				as.integer(n.ind),
@@ -228,7 +232,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 						sum <- sum+1
 					}
 				}
-				ourcat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n",a=verbose)
+				if(verbose) cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
 				plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
 			}
 			if(backward){
@@ -245,7 +249,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 					for(j in 1:aa[[i]]) {
 						#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
 						if(result$COF[sum] != 48){
-							ourcat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n",a=verbose)
+							if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
 							qc <- c(qc, as.character(names(cross$geno)[i]))
 							qp <- c(qp, as.double(unlist(new_map)[sum]))
 							qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
@@ -270,7 +274,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		#Convert to data/frame and scan.one object so we can use the standard plotting routines
 		qtl <- as.data.frame(qtl)
 		class(qtl) <- c("scanone",class(qtl)) 
-		ourcat("INFO: Saving output to file: ",file, "\n",a=verbose)
+		if(verbose) cat("INFO: Saving output to file: ",file, "\n")
 		write.table(qtl,file)
 		#Reset plotting and return the results
 		if(plot){
@@ -303,7 +307,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		  op <- par(mfrow = c(1,1))
 		}
 		end_3 <- proc.time()
-		ourcat("INFO: Calculation time (R->C,C,C-R): (",round((end_1-start)[3], digits=3), ",",round((end_2-end_1)[3], digits=3),",",round((end_3-end_2)[3], digits=3),") (in seconds)\n",a=verbose)
+		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end_1-start)[3], digits=3), ",",round((end_2-end_1)[3], digits=3),",",round((end_3-end_2)[3], digits=3),") (in seconds)\n")
 		qtl
 	}else{
 		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
@@ -313,8 +317,5 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 mqm <- function(...){
 	scanMQM(...)
 }
-
-#res <- scanMQM(cross,cof)
-#plot(res)
 
 # end of scanMQM.R
