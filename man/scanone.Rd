@@ -88,7 +88,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    information about the progress of the permutation tests.}
  \item{batchsize}{The number of phenotypes (or permutations) to be run
    as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
- \item{n.cluster}{If the package \code{snow} is available and
+ \item{n.cluster}{If the package \code{\link[snow:00Index]{snow}} is available and
    \code{n.perm} > 0, permutations are run in parallel using this number
    of nodes.}
 }
