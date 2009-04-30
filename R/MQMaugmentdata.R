@@ -116,7 +116,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,f
 			}
 		}
 		if(forceRIL && Fril.replaced > 0){
-			 ourcat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n",a=verbose)
+			 if(verbose) cat("INFO: Changed",Fril.replaced,"AB markers into BB markers.\n")
 		}
 		#check for missing phenotypes
 		dropped <- NULL
