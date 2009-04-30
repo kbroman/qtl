@@ -82,7 +82,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
 				cl <- makeCluster(n.clusters)
-#				clusterEvalQ(cl, require(qtl)) # [karl says: is this necessary?]
+				clusterEvalQ(cl, require(qtl, quietly=TRUE))
 				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){

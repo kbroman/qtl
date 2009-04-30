@@ -101,7 +101,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}			
 				cl <- makeCluster(n.clusters)
-#				clusterEvalQ(cl, require(qtl)) ## [karl says: is this necessary?]
+				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
 				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
