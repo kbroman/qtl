@@ -14,7 +14,7 @@
 ourstop <- function(...){
 	ourline()
 	stop(...)
-	ourline()
+#	ourline() [commented out, as this would never be called anyway]
 }
 
 ourline <- function(){
