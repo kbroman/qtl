@@ -40,10 +40,10 @@ INSTALLATION OF R AND R/QTL (Windows)
 
      This will download the binary from CRAN and install it.
 
-     Alternatively, you can download the "qtl.1.11-12.zip" (or the
+     Alternatively, you can download the "qtl.1.12-1.zip" (or the
      equivalent).  Then start R and select (on the menu bar)
      "Packages" and then "Install package from local zip file...".  
-     Find the file "qtl_1.11-12.zip" on your hard drive, and click 
+     Find the file "qtl_1.12-1.zip" on your hard drive, and click 
      "Open".
 
 
@@ -60,7 +60,7 @@ INSTALLATION OF R AND R/QTL (MacOS version 10.2.x and above)
      This will download the binary from CRAN and install it.
 
      Alternatively, download the compiled version of R/qtl for 
-     Mac OS X, a file like "qtl_1.11-12.tgz".  Then start R and 
+     Mac OS X, a file like "qtl_1.12-1.tgz".  Then start R and 
      select (on the menu bar) "Packages & Data" -> "Package 
      Installer".  Select "Local Binary Package" from the drop-down 
      menu at the top of the window that comes up.  Click "Install"
@@ -80,19 +80,19 @@ INSTALLATION OF R/QTL (Unix)
      This will download the binary from CRAN and install it.
 
      Alternatively, download the R/qtl source code (a file like
-     "qtl_1.11-12.tar.gz").  Go into the directory containing the
+     "qtl_1.12-1.tar.gz").  Go into the directory containing the
      file and do one of the following:
 
      a. To install R/qtl in the standard location
         (/usr/local/lib/R/library), type 
 
-            R CMD INSTALL qtl_1.11-12.tar.gz
+            R CMD INSTALL qtl_1.12-1.tar.gz
 
         You'll probably need to be superuser.
 
      b. To install the package locally, type 
 
-            R CMD INSTALL --library=/home/auser/Rlibs qtl_1.11-12.tar.gz
+            R CMD INSTALL --library=/home/auser/Rlibs qtl_1.12-1.tar.gz
 
         (where "/home/auser/Rlibs" should be replaced with the
         appropriate directory).  

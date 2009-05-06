@@ -2,22 +2,21 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2006-8, Karl W Broman
-# last modified May, 2008
+# copyright (c) 2006-9, Karl W Broman
+# last modified Apr, 2009
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
 # Contains: read.cross.csvs
@@ -96,11 +95,8 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
   }
 
   if(rotate) {
-    gen <- as.data.frame(t(gen))
-    for(i in 1:ncol(gen)) gen[,i] <- as.character(gen[,i])
-
-    pheno <- as.data.frame(t(pheno))
-    for(i in 1:ncol(pheno)) pheno[,i] <- as.character(pheno[,i])
+    gen <- as.data.frame(t(gen), stringsAsFactors=FALSE)
+    pheno <- as.data.frame(t(pheno), stringsAsFactors=FALSE)
   }
 
   # We must make the first column have the individual IDs

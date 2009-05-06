@@ -2,26 +2,25 @@
  * 
  * util.h
  *
- * copyright (c) 2001-6, Karl W Broman and Hao Wu
+ * copyright (c) 2001-9, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Feb, 2006
+ * last modified Apr, 2009
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
@@ -35,6 +34,8 @@
  *                  random_int
  *                  wtaverage, comparegeno, R_comparegeno
  *                  R_locate_xo, locate_xo, matmult, expand_col2drop
+ *                  dropcol_xpx, dropcol_xpy, dropcol_x,
+ *                  reviseMWril, R_reviseMWril
  *
  **********************************************************************/
 
@@ -314,5 +315,31 @@ void dropcol_xpx(int *n_col, int *col2drop, double *xpx);
 void dropcol_xpy(int n_col, int *col2drop, double *xpy);
 
 void dropcol_x(int *n_col, int n_row, int *col2drop, double *x);
+
+/**********************************************************************
+ * 
+ * reviseMWril    Revise genotypes for 4- or 8-way RIL 
+ *                to form encoding the founders' genotypes
+ *
+ * n_ril     Number of RILs to simulate
+ * n_mar     Number of markers
+ * n_str     Number of founder strains
+ *
+ * Parents   SNP data for the founder strains [dim n_mar x n_str]
+ * 
+ * Geno      On entry, the detailed genotype data; on exit, the 
+ *           SNP data written bitwise. [dim n_ril x n_mar]
+ * 
+ * Crosses   The crosses [n_ril x n_str]
+ *
+ **********************************************************************/
+void reviseMWril(int n_ril, int n_mar, int n_str, 
+		 int **Parents, int **Geno, int **Crosses,
+		 int missingval);
+
+/* wrapper for calling reviseMWril from R */
+void R_reviseMWril(int *n_ril, int *n_mar, int *n_str, 
+		   int *parents, int *geno, int *crosses,
+		   int *missingval);
 
 /* end of util.h */

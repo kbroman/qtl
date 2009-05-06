@@ -2,28 +2,27 @@
  * 
  * hmm_f2.c
  * 
- * copyright (c) 2001-7, Karl W Broman
+ * copyright (c) 2001-9, Karl W Broman
  *
- * last modified Oct, 2007
+ * last modified Apr, 2009
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  * 
  * C functions for the R/qtl package
  *
  * Contains: init_f2, emit_f2, step_f2, init_f2b, emit_f2b, step_f2b,
- *           calc_genoprob_f2, calc_genoprob_special_f2, sim_genoprob_f2, est_map_f2, 
+ *           calc_genoprob_f2, calc_genoprob_special_f2, sim_geno_f2, est_map_f2, 
  *           argmax_geno_f2, errorlod_f2, calc_errorlod_f2, nrec2_f2,
  *           logprec_f2, est_rf_f2, calc_pairprob_f2, marker_loglik_f2
  *
@@ -247,7 +246,7 @@ double errorlod_f2(int obs, double *prob, double error_prob)
   double p=0.0;
 
   switch(obs) {
-  case 0: p=1.0; break;
+  case 0: return(0.0);
   case 1: p=prob[0]; break;
   case 2: p=prob[1]; break;
   case 3: p=prob[2]; break;
@@ -359,7 +358,7 @@ void est_rf_f2(int *n_ind, int *n_mar, int *geno, double *rf,
 	       int *maxit, double *tol)
 {
   est_rf(*n_ind, *n_mar, geno, rf, nrec2_f2, logprec_f2, 
-	 *maxit, *tol);
+	 *maxit, *tol, 2);
 }
 
 void calc_pairprob_f2(int *n_ind, int *n_mar, int *geno, 

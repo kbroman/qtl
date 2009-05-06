@@ -2,22 +2,21 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: sim.map, sim.cross, sim.cross.bc, sim.cross.f2,
@@ -114,10 +113,13 @@ function(len=rep(100,20), n.mar=10, anchor.tel=TRUE, include.x=TRUE,
 ######################################################################
 
 sim.cross <-
-function(map, model=NULL, n.ind=100, type=c("f2","bc","4way"),
+function(map, model=NULL, n.ind=100,
+         type=c("f2", "bc", "4way", "risib", "riself",
+           "ri4sib", "ri4self", "ri8sib", "ri8self"),
          error.prob=0, missing.prob=0, partial.missing.prob=0,
          keep.qtlgeno=TRUE, keep.errorind=TRUE, m=0, p=0,
-         map.function=c("haldane","kosambi","c-f","morgan"))
+         map.function=c("haldane","kosambi","c-f","morgan"),
+         founderGeno, random.cross=TRUE)
 {
   type <- match.arg(type)
   map.function <- match.arg(map.function)
@@ -127,6 +129,36 @@ function(map, model=NULL, n.ind=100, type=c("f2","bc","4way"),
   if(error.prob > 1) {
     error.prob <- 1-1e-50
     warning("error.prob shouldn't be > 1!")
+  }
+
+  # 2-way RIL by sibmating or selfing
+  if(type=="risib" || type=="riself") {
+    if(type=="risib") type <- "sibmating"
+    else type <- "selfing"
+    cross <- sim.ril(map, n.ind, type, "2", m=m, p=p,
+                     error.prob=error.prob, missing.prob=missing.prob)
+    cross$cross <- NULL
+
+    return(cross)
+  }
+  # 4- or 8-way RIL by sibmating or selfing
+  if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+    if(substr(type, 4, nchar(type))=="self") crosstype <- "selfing"
+    else crosstype <- "sibmating"
+    n.str <- substr(type, 3, 3)
+    cross <- sim.ril(map, n.ind, crosstype, n.str, m=m, p=p,
+                     random.cross=random.cross,
+                     error.prob=0,
+                     missing.prob=missing.prob)
+
+    rcross <- convertMWril(cross, founderGeno, error.prob=error.prob)
+    for(i in names(cross$geno)) 
+      if(!("truegeno" %in% names(rcross$geno[[i]])))
+        rcross$geno[[i]]$truegeno <- cross$geno[[i]]$data
+    
+    # remove "un" from cross type
+    class(rcross)[1] <- substr(class(cross)[1], 1, nchar(class(cross)[1])-2)
+    return(rcross)
   }
 
   # sort the model matrix

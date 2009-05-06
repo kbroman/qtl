@@ -2,22 +2,21 @@
 #
 # cim.R
 #
-# copyright (c) 2008, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2009, Karl W Broman
+# last modified Apr, 2009
 # first written Jan, 2007
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: cim, markerforwsel, markerforwself2, expandf2covar
@@ -129,7 +128,7 @@ function(cross, pheno.col=1, n.marcovar=3, window=10,
  
     for(j in u) {
       wh <- which(chrpos[,1]==j)
-      pos <- sort(chrpos[wh,2]) # positions of the covariates on this chromosome
+      pos <- chrpos[wh,2] # positions of the covariates on this chromosome
 
       scanpos <- firstscan[firstscan[,1]==j,2] # positions at which the genome scan is performed
 

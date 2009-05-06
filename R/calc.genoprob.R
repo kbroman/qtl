@@ -2,22 +2,21 @@
 #
 # calc.genoprob.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: calc.genoprob
@@ -66,10 +65,14 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
     else temp.offend <- off.end
     
+    chrtype <- class(cross$geno[[i]])
+    if(chrtype=="X") xchr <- TRUE
+    else xchr <- FALSE
+
     # which type of cross is this?
     if(type == "f2") {
       one.map <- TRUE
-      if(class(cross$geno[[i]]) == "A") { # autosomal
+      if(!xchr) { # autosomal
         cfunc <- "calc_genoprob_f2"
         n.gen <- 3
         gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
@@ -83,7 +86,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     else if(type == "bc") {
       cfunc <- "calc_genoprob_bc"
       n.gen <- 2
-      if(class(cross$geno[[i]]) == "A")
+      if(!xchr)
         gen.names <- getgenonames("bc", "A", cross.attr=attributes(cross))
       else gen.names <- c("g1","g2")
       one.map <- TRUE
@@ -100,11 +103,13 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
     }
-    else if(type=="cc") {
-      cfunc <- "calc_genoprob_cc"
-      n.gen <- 8
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+      cfunc <- paste("calc_genoprob_", type, sep="")
+      n.gen <- as.numeric(substr(type, 3, 3))
       one.map <- TRUE
-      gen.names <- LETTERS[1:8]
+      gen.names <- LETTERS[1:n.gen]
+      if(xchr)
+        warning("calc.genoprob not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else 
       stop("calc.genoprob not available for cross type ", type, ".")
@@ -119,7 +124,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       map <- create.map(cross$geno[[i]]$map,step,temp.offend,stepwidth)
       rf <- mf(diff(map))
       if(type=="risib" || type=="riself")
-        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),class(cross$geno[[i]]))
+        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype)
       rf[rf < 1e-14] <- 1e-14
 
       # new genotype matrix with pseudomarkers filled in
@@ -183,6 +188,10 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     attr(cross$geno[[i]]$prob,"stepwidth") <- stepwidth
   } # end loop over chromosomes
 
+  # 4- and 8-way RIL: reorganize the results
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+    cross <- reorgRIgenoprob(cross)
+
   cross
 }
 
@@ -232,10 +241,14 @@ function(cross, error.prob=0.0001,
     if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
     else temp.offend <- off.end
     
+    chrtype <- class(cross$geno[[i]])
+    if(chrtype=="X") xchr <- TRUE
+    else xchr <- FALSE
+
     # which type of cross is this?
     if(type == "f2") {
       one.map <- TRUE
-      if(class(cross$geno[[i]]) == "A") { # autosomal
+      if(!xchr) { # autosomal
         cfunc <- "calc_genoprob_special_f2"
         n.gen <- 3
         gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
@@ -249,7 +262,7 @@ function(cross, error.prob=0.0001,
     else if(type == "bc") {
       cfunc <- "calc_genoprob_special_bc"
       n.gen <- 2
-      if(class(cross$geno[[i]]) == "A")
+      if(!xchr) 
         gen.names <- getgenonames("bc", "A", cross.attr=attributes(cross))
       else gen.names <- c("g1","g2")
       one.map <- TRUE
@@ -266,6 +279,14 @@ function(cross, error.prob=0.0001,
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
     }
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+      cfunc <- paste("calc_genoprob_special_", type, sep="")
+      n.gen <- as.numeric(substr(type, 3, 3))
+      one.map <- TRUE
+      gen.names <- LETTERS[1:n.gen]
+      if(xchr)
+        warning("calc.genoprob.special not working properly for the X chromosome for 4- or 8-way RIL.")
+    }
     else 
       stop("calc.genoprob.special not available for cross type ", type, ".")
 
@@ -279,7 +300,7 @@ function(cross, error.prob=0.0001,
       map <- create.map(cross$geno[[i]]$map,step,temp.offend,stepwidth)
       rf <- mf(diff(map))
       if(type=="risib" || type=="riself")
-        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),class(cross$geno[[i]]))
+        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype)
       rf[rf < 1e-14] <- 1e-14
 
       # new genotype matrix with pseudomarkers filled in

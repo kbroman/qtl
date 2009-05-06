@@ -2,22 +2,21 @@
 #
 # sim.geno.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: sim.geno
@@ -64,11 +63,15 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
     if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
     else temp.offend <- off.end
 
+    chrtype <- class(cross$geno[[i]])
+    if(chrtype=="X") xchr <- TRUE
+    else xchr <- FALSE
+
     # which type of cross is this?
     if(type == "f2") {
       n.gen <- 3
       one.map <- TRUE
-      if(class(cross$geno[[i]]) == "A") # autosomal
+      if(!xchr) # autosomal
         cfunc <- "sim_geno_f2"
       else                              # X chromsome
         cfunc <- "sim_geno_bc"
@@ -83,6 +86,13 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
       cfunc <- "sim_geno_4way"
       one.map <- FALSE
     }
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+      cfunc <- paste("sim_geno_", type, sep="")
+      n.gen <- as.numeric(substr(type, 3, 3))
+      one.map <- TRUE
+      if(xchr)
+        warning("sim.geno not working properly for the X chromosome for 4- or 8-way RIL.")
+    }
     else 
       stop("sim_geno not available for cross type ", type, ".")
 
@@ -96,7 +106,7 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
       map <- create.map(cross$geno[[i]]$map,step,temp.offend,stepwidth)
       rf <- mf(diff(map))
       if(type=="risib" || type=="riself")
-        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),class(cross$geno[[i]]))
+        rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype)
       rf[rf < 1e-14] <- 1e-14
 
       # new genotype matrix with pseudomarkers filled in
@@ -167,6 +177,12 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
   # store simulated genotypes as integers
   for(i in 1:nchr(cross))
     storage.mode(cross$geno[[i]]$draws) <- "integer"
+
+  return(cross)
+  
+  # 4- and 8-way RIL: reorganize the results
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+    cross <- reorgRIdraws(cross)
 
   cross
 }

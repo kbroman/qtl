@@ -10,6 +10,21 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Incorporate snow code into permutations, optionally
+
+o In c.cross, include an argument for "flipping" a backcross, so that
+  a backcross to (AxB)xB can be combined with an intercross
+
+o In plot of output from addpair with a special formula, we need just
+  one set of numbers on the color scale.
+
+o function to identify the XO locations (based on countXO?)
+  [this is locate.xo, I think.]
+
+o In stepwiseqtl starting from something other than the null model,
+  "Starting at a model with..." shouldn't be printed if
+  verbose=FALSE. 
+
 o qtl x covar interactions in stepwiseqtl
 
 o special treatment of X chromosome in scantwo permutations and in
@@ -34,10 +49,10 @@ o FAQ: - constructing covariate matrices
 
 MEDIUM-SHORT TERM:
 
+o X chromosome for 4- and 8-way RIL by sibling mating (also 2-way RIL).
+
 o Better way to make use of ... in plot functions that allows
   unmentioned defaults.
-
-o read.cross is slow loading when there are *lots* of phenotypes
 
 o plots of segregation ratios at markers
 

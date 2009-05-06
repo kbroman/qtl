@@ -2,22 +2,21 @@
 #
 # tryallpositions.R
 #
-# copyright (c) 2007-8, Karl W Broman
-# last modified Aug, 2008
+# copyright (c) 2007-9, Karl W Broman
+# last modified Apr, 2009
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: tryallpositions, markerloglik
@@ -225,7 +224,10 @@ function(cross, marker, chr, error.prob=0.0001,
     results <- rbind(results, tempres)
   } # loop over chromosomes
 
-  rownames(results) <- 1:nrow(results)
+  rownames(results) <- results$interval
+  results <- results[,-ncol(results)]
+  class(results) <- c("scanone", "data.frame")
+
   results
 }
 
@@ -277,6 +279,11 @@ function(cross, marker, error.prob=0.0001)
   }
   else if(type == "4way") {
     cfunc <- "marker_loglik_4way"
+  }
+  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+    cfunc <- paste("marker_loglik_", type, sep="")
+    if(chrtype=="X")
+      warning("markerloglik not working properly for the X chromosome for 4- or 8-way RIL.")
   }
   else 
     stop("markerloglik not available for cross type ", type, ".")

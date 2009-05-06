@@ -1,24 +1,23 @@
 /**********************************************************************
  * 
- * simulate_cc.h
+ * simulate_ril.h
  *
- * copyright (c) 2005-6, Karl W Broman
+ * copyright (c) 2005-9, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Apr, 2009
  * first written Mar, 2005
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
@@ -27,7 +26,8 @@
  *
  * Contains: R_sim_ril, sim_ril, 
  *           allocate_individual, reallocate_individual, 
- *           copy_individual, cross, meiosis, sim_cc, R_sim_cc
+ *           copy_individual, cross, meiosis, 
+ *           convertMWril, R_convertMWril
  *  
  **********************************************************************/
 
@@ -42,7 +42,9 @@ struct individual {
 /* wrapper for sim_ril, to be called from R */
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 	       int *n_str, int *m, double *p, int *include_x, 
-	       int *random_cross, int *selfing, int *cross, int *ril);
+	       int *random_cross, int *selfing, int *cross, int *ril,
+	       int *origgeno, double *error_prob, double *missing_prob, 
+	       int *errors);
 
 /**********************************************************************
  * 
@@ -73,10 +75,20 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  * ril     On output, the simulated data 
  *         (vector of length sum(n_mar) x n_ril)
  *
+ * origgeno       Like ril, but with no missing data
+ *
+ * error_prob     Genotyping error probability (used only with n_str==2)
+ *
+ * missing_prob   Rate of missing genotypes
+ *
+ * errors         Error indicators (n_mar x n_ril)
+ *
  **********************************************************************/
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
-	     int random_cross, int selfing, int *cross, int *ril);
+	     int random_cross, int selfing, int *cross, int *ril,
+	     int *origgeno, double error_prob, double missing_prob, 
+	     int *errors);
 
 /**********************************************************************
  * allocate_individual
@@ -93,6 +105,8 @@ void reallocate_individual(struct individual *ind, int old_max_seg,
  * copy_individual
  **********************************************************************/
 void copy_individual(struct individual *from, struct individual *to);
+
+/* void print_ind(struct individual ind); */
 
 void docross(struct individual par1, struct individual par2,
 	     struct individual *kid, double L, int m,
@@ -119,28 +133,37 @@ void meiosis(double L, int m, double p, int *maxwork, double **work,
 
 /**********************************************************************
  * 
- * sim_cc    Use the result of sim_all_ril with n_str=8 plus data on
- *           the SNP genotypes of the 8 parental strains to create 
- *           real SNP data for the Collaborative Cross
+ * convertMWril    Convert RIL genotypes using genotypes in founders
+ *                 (and the cross types).  [for a single chr]
  *
  * n_ril     Number of RILs to simulate
- * tot_mar   Total number of markers
+ * n_mar     Number of markers
+ * n_str     Number of founder strains
  *
- * Parents   SNP data for the 8 parental lines [dim tot_mar x 8]
+ * Parents   SNP data for the founder strains [dim n_mar x n_str]
  * 
  * Geno      On entry, the detailed genotype data; on exit, the 
- *           SNP data written bitwise.
+ *           SNP data written bitwise. [dim n_ril x n_mar]
  * 
- * error_prob  Probability of genotyping error
- * missing_prob  Probability a genotype will be missing
+ * Cross     The crosses [n_ril x n_str]
+ *
+ * all_snps  0/1 indicator of whether all parent genotypes are snps
+ *
+ * error_prob  Genotyping error probability (used only if all_snps==1)
+ *
+ * Errors      Error indicators
  *
  **********************************************************************/
-void sim_cc(int n_ril, int tot_mar, int **Parents, int **Geno,
-	    double error_prob, double missing_prob);
+void convertMWril(int n_ril, int n_mar, int n_str, 
+		  int **Parents, int **Geno, int **Crosses, 
+		  int all_snps, double error_prob, 
+		  int **Errors);
 
-/* wrapper for calling sim_cc from R */
-void R_sim_cc(int *n_ril, int *tot_mar, int *parents, int *geno,
-	      double *error_prob, double *missing_prob);
+/* wrapper for calling convertMWril from R */
+void R_convertMWril(int *n_ril, int *n_mar, int *n_str, 
+		    int *parents, int *geno, int *crosses,
+		    int *all_snps, double *error_prob,
+		    int *errors);
 
-/* end of simulate_cc.h */
+/* end of simulate_ril.h */
 

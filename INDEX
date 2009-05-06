@@ -29,6 +29,7 @@ cbind.scanoneperm       Combine columns from multiple scanone
                         permutation results
 checkAlleles            Identify markers with switched alleles
 chrlen                  Chromosome lengths in QTL experiment
+chrnames                Pull out the chromosome names from a cross
 cim                     Composite interval mapping
 clean.cross             Remove derived data
 clean.scantwo           Clean up scantwo output
@@ -118,6 +119,7 @@ pull.pheno              Pull out phenotype data from a cross
 qtl-package             Introductory comments on R/qtl
 qtlversion              Installed version of R/qtl
 read.cross              Read data for a QTL experiment
+readMWril               Read data for 4- or 8-way RIL
 refineqtl               Refine the positions of QTL
 reorderqtl              Reorder the QTL in a qtl object.
 replace.map             Replace the genetic map of a cross
@@ -137,6 +139,7 @@ scantwo                 Two-dimensional genome scan with a two-QTL
 sim.cross               Simulate a QTL experiment
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map
+simFounderSnps          Simulate founder SNPs for a multiple-strain RIL
 stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
 subset.cross            Subsetting data for QTL experiment

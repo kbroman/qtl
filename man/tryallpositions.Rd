@@ -44,7 +44,10 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
 }
 
 \value{
-  A data.frame with each row being a possible position for the marker.
+  A data frame (actually, an object of class \code{"scanone"}, so that
+  one may use \code{\link[qtl]{plot.scanone}},
+  \code{\link[qtl]{summary.scanone}}, etc.) with each row being a
+  possible position for the marker. 
   The first two columns are the chromosome ID and position.  The third
   column is a LOD score comparing the hypotheses that the marker in that
   position versus the hypothesis that it is not linked to that chromosome.
@@ -56,8 +59,7 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
   additional column, with the estimated genetic length of the respective
   chromosome, when the marker is in that position.
 
-  A final column contains a character string indicating the nearest
-  flanking markers for each interval.
+  The row names indicate the nearest flanking markers for each interval.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

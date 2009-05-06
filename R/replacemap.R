@@ -2,22 +2,21 @@
 #
 # replacemap.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: replace.map, replacemap, replacemap.cross, 
@@ -53,7 +52,8 @@ function(object, map)
     mnames2 <- unlist(lapply(map, function(a) colnames(a)))
     n.mar2 <- n.mar2/2
   }
-  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh") {
+  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh" ||
+          type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
     mnames <- unlist(lapply(cross$geno, function(a) names(a$map)))
     mnames2 <- unlist(lapply(map, function(a) names(a)))
   }

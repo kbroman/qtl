@@ -2,22 +2,22 @@
  * 
  * countXO.c
  *
- * copyright (c) 2008, Karl W Broman
+ * copyright (c) 2008-9, Karl W Broman
  *
- * last modified Feb, 2008
+ * last modified Apr, 2009
+ * first written Feb, 2008
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
@@ -25,6 +25,7 @@
  * obligate crossovers
  *
  * Contains: R_countXO_bc, R_countXO_f2, R_countXO_4way, countXO
+ *           R_countXO_ril48
  *  
  **********************************************************************/
 
@@ -135,6 +136,19 @@ void R_countXO_4way(int *n_ind, int *n_mar, int *geno,
   countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_4way);
 }
 
+/**********************************************************************
+ * 
+ * R_countXO_ril48
+ *
+ * Wrapper for call from R for 4- or 8-way RIL by selfing or sibmating
+ * 
+ **********************************************************************/
+
+void R_countXO_ril48(int *n_ind, int *n_mar, int *geno, 
+		    int *nxo)
+{
+  countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_ril48);
+}
 
 /* end of countXO.c */
 

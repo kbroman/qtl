@@ -2,22 +2,21 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: est.rf, plot.rf, checkAlleles
@@ -72,6 +71,11 @@ function(cross, maxit=10000, tol=1e-6)
     cfunc <- "est_rf_bc"
   else if(type == "4way") 
     cfunc <- "est_rf_4way"
+  else if(type=="ri8sib" || type=="ri8self" || type=="ri4sib" || type=="ri4self") {
+    cfunc <- paste("est_rf_", type, sep="")
+    if(any(chrtype == "X"))
+      warning("est.rf not working properly for the X chromosome for 4- or 8-way RIL.")
+  }
   else 
     stop("est.rf not available for cross type ", type, ".")
 
@@ -125,7 +129,8 @@ function(cross, maxit=10000, tol=1e-6)
 
 plot.rf <-
 function(x, chr, what=c("both","lod","rf"),
-         alternate.chrid=FALSE, zmax=12, ...)
+         alternate.chrid=FALSE, zmax=12,
+         mark.diagonal=FALSE, ...)
 {
   if(!any(class(x) == "cross"))
     stop("Input should have class \"cross\".")
@@ -171,6 +176,12 @@ function(x, chr, what=c("both","lod","rf"),
   image(1:ncol(g),1:nrow(g),t(g),ylab="Markers",xlab="Markers",breaks=br,
         col=c("lightgray",rev(rainbow(256,start=0,end=2/3, gamma=0.6))))
   
+  if(mark.diagonal) {
+    for(i in 1:ncol(g))
+      segments(i+c(-0.5, -0.5, -0.5, +0.5), i+c(-0.5, +0.5, -0.5, -0.5),
+               i+c(-0.5, +0.5, +0.5, +0.5), i+c(+0.5, +0.5, -0.5, +0.5))
+  }
+
   # plot lines at the chromosome boundaries
   n.mar <- nmar(x)
   n.chr <- nchr(x)

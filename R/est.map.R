@@ -2,22 +2,21 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: est.map
@@ -35,7 +34,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
          omit.noninformative=TRUE)
 {
-  if(!any(class(cross) == "cross"))
+  if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
 
   type <- class(cross)[1]
@@ -93,7 +92,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
     # which type of cross is this?
     if(type == "f2") {
       one.map <- TRUE
-      if(chrtype[i] == "A") # autosomal
+      if(chrtype[i] != "X") # autosomal
         cfunc <- "est_map_f2"
       else                              # X chromsome 
         cfunc <- "est_map_bc"
@@ -105,6 +104,12 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
     else if(type == "4way") {
       one.map <- FALSE
       cfunc <- "est_map_4way"
+    }
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+      cfunc <- paste("est_map_", type, sep="")
+      one.map <- TRUE
+      if(chrtype[i] == "X")
+        warning("est.map not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else 
       stop("est.map not available for cross type ", type, ".")

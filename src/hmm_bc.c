@@ -2,23 +2,22 @@
  * 
  * hmm_bc.c
  * 
- * copyright (c) 2001-8, Karl W Broman
+ * copyright (c) 2001-9, Karl W Broman
  *
- * last modified Jul, 2008
+ * last modified Apr, 2009
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
@@ -117,7 +116,7 @@ double errorlod_bc(int obs, double *prob, double error_prob)
   double p=0.0;
 
   switch(obs) {
-  case 0: p=1.0; break;
+  case 0: return(0.0);
   case 1: p=prob[0]; break;
   case 2: p=prob[1]; break;
   }

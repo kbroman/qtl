@@ -2,22 +2,21 @@
 #
 # calc.pairprob.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Apr, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: calc.pairprob
@@ -41,6 +40,9 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
          map, assumeCondIndep=FALSE)
 {
+  # which type of cross is this?
+  type <- class(cross)[1]
+
   if(assumeCondIndep) { # assume conditional independence of QTL given markers
     if(!("prob" %in% names(cross$geno[[1]]))) {
       cross <- calc.genoprob(subset(cross, chr=1), step=step, off.end=off.end,
@@ -51,7 +53,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     n.pos <- dim(prob)[2]
     n.gen <- dim(prob)[3]
 
-    if(n.pos < 2) stop("Must have > 1 position.")
+    if(n.pos < 2) return(NULL)
 
     z <- .C("R_calc_pairprob_condindep",
             as.integer(n.ind),
@@ -60,7 +62,10 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
             as.double(prob),
             pairprob=as.double(rep(0,n.ind*choose(n.pos, 2)*n.gen*n.gen)),
             PACKAGE="qtl")
-    return(array(z$pairprob, dim=c(n.ind,n.pos*(n.pos-1)/2,n.gen,n.gen)))
+
+    pairprob <- array(z$pairprob, dim=c(n.ind,n.pos*(n.pos-1)/2,n.gen,n.gen))
+
+    return(pairprob)
   }
 
   if(step==0 && off.end > 0) step <- off.end*2
@@ -81,11 +86,14 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
   n.ind <- nind(cross)
   n.chr <- nchr(cross)
 
-  # which type of cross is this?
-  type <- class(cross)[1]
+  # type of chromosome?
+  chrtype <- class(cross$geno[[1]])
+  if(chrtype=="X") xchr <- TRUE
+  else xchr <- FALSE
+
   if(type == "f2") {
     one.map <- TRUE
-    if(class(cross$geno[[1]]) == "A") { # autosomal
+    if(!xchr) { # autosome
       cfunc <- "calc_pairprob_f2"
       n.gen <- 3
       gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
@@ -99,7 +107,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
   else if(type == "bc") {
     cfunc <- "calc_pairprob_bc"
     n.gen <- 2
-    if(class(cross$geno[[1]]) == "A")
+    if(!xchr) # autosome
       gen.names <- getgenonames("bc", "A", cross.attr=attributes(cross))
     else gen.names <- c("g1","g2")
     one.map <- TRUE
@@ -115,6 +123,14 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     n.gen <- 4
     one.map <- FALSE
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
+  }
+  else if(type == "ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") {
+    cfunc <- paste("calc_pairprob_", type, sep="")
+    n.gen <- as.numeric(substr(type, 3, 3))
+    one.map <- TRUE
+    gen.names <- LETTERS[1:n.gen]
+    if(xchr)
+      warning("calc.pairprob not working properly for the X chromosome for 4- or 8-way RIL.")
   }
   else 
     stop("calc.pairprob not available for cross type ", type, ".")
@@ -183,7 +199,13 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
             PACKAGE="qtl")
   }
   
-  array(z$pairprob, dim=c(n.ind,n.pos*(n.pos-1)/2,n.gen,n.gen))
+  pairprob <- array(z$pairprob, dim=c(n.ind,n.pos*(n.pos-1)/2,n.gen,n.gen))
+
+  # 4- and 8-way RIL: reorganize the results
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+    pairprob <- reorgRIpairprob(cross, pairprob)
+
+  pairprob
 }
 
 # end of calc.pairprob.R

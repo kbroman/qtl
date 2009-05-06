@@ -4,21 +4,20 @@
 #
 # copyright (c) 2000-9, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Feb, 2009
+# last modified Apr, 2009
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
 # Contains: plot.missing, plot.map, plot.cross, plot.geno, plot.info,
@@ -288,7 +287,7 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
     map2 <- pull.map(map2)
   
   if(!any(class(map)=="map")  || (!missing(map2) && !any(class(map2) == "map")))
-    stop("Input should have class \"cross\" or \"map\".")
+    warning("Input should have class \"cross\" or \"map\".")
 
   if(!missing(map2) && is.matrix(map[[1]]) != is.matrix(map2[[1]]))
       stop("Maps must be both sex-specific or neither sex-specific.")
@@ -573,7 +572,15 @@ plot.cross <-
 function (x, auto.layout = TRUE, pheno.col,
           alternate.chrid=TRUE, ...) 
 {
-  if(!any(class(x) == "cross")) 
+  # look to see whether this should really be shipped to plot.map
+  if("map" %in% class(auto.layout) &&
+     ("map" %in% class(x) || "cross" %in% class(x))) {
+    plot.map(x, auto.layout, alternate.chrid=alternate.chrid, ...)
+    return(invisible())
+  }
+
+  # make sure this is a cross
+  if(!("cross" %in% class(x)))
     stop("Input should have class \"cross\".")
 
   old.yaxt <- par("yaxt")

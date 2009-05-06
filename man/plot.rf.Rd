@@ -11,7 +11,7 @@
 
 \usage{
 plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
-        zmax=12, \dots)
+        zmax=12, mark.diagonal=FALSE, \dots)
 }
 
 \arguments{
@@ -29,6 +29,9 @@ plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
      axis labels, so that they may be more easily distinguished.}
   \item{zmax}{Maximum LOD score plotted; values above this are all
     thresholded at this value.}
+  \item{mark.diagonal}{If TRUE, include black line segments around the
+  pixels along the diagonal, to better separate the upper left triangle
+  from the lower right triangle.}
   \item{\dots}{Generally ignored, but you can include \code{main} to
   change or omit the title of the figure.}
 }

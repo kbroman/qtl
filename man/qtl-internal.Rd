@@ -11,6 +11,7 @@
 \alias{clean}
 \alias{condense}
 \alias{convert}
+\alias{convertMWril}
 \alias{countqtlterms}
 \alias{create.map}
 \alias{deparseQTLformula}
@@ -93,6 +94,10 @@
 \alias{read.cross.qtx}
 \alias{read.map.qtlcart}
 \alias{read.maps.mm}
+\alias{reorgRIargmax}
+\alias{reorgRIdraws}
+\alias{reorgRIgenoprob}
+\alias{reorgRIpairprob}
 \alias{replacemap}
 \alias{revisecovar}
 \alias{reviseqtlnuminformula}
@@ -108,7 +113,6 @@
 \alias{scantwo.perm}
 \alias{scantwo.perm.engine}
 \alias{sim.bcg}
-\alias{sim.cc}
 \alias{sim.cross.4way}
 \alias{sim.cross.bc}
 \alias{sim.cross.f2}
@@ -147,6 +151,7 @@ checkStepwiseqtlStart(qtl, formula, covar=NULL)
 clean(object)
 condense(object)
 convert(object)
+convertMWril(cross, parents, error.prob=0)
 countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
@@ -169,7 +174,7 @@ fitstahl.estpe(cross, m=0, tol=1e-4, maxit=4000)
 fitstahl.estpe.sub(x, cross, m=0, thetol=1e-4, maxit=4000)
 fixX4write(geno,sex,pgm,crosstype)
 fixXgeno.bc(cross)
-fixXgeno.f2(cross)
+fixXgeno.f2(cross, alleles)
 markerforwsel(x, y, maxsize=7)
 markerforwself2(x, y, maxsize=7)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
@@ -242,6 +247,10 @@ read.cross.qtlcart(dir, crofile, mapfile)
 read.cross.qtx(dir, file, estimate.map=TRUE)
 read.map.qtlcart(file)
 read.maps.mm(mapsfile)
+reorgRIargmax(cross)
+reorgRIdraws(cross)
+reorgRIgenoprob(cross)
+reorgRIpairprob(cross, pairprob)
 replacemap(object, map)
 revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)
@@ -279,8 +288,6 @@ scantwo.perm.engine(n.perm, cross, pheno.col, model,
                     batchsize=250)
 sim.bcg(n.ind, map, m, p,
         map.function=c("haldane","kosambi","c-f","morgan"))
-sim.cc(parents, n.ril=1, type=c("sibmating", "selfing"),
-       error.prob=0, missing.prob=0, m=0, p=0, step=0)
 sim.cross.4way(map, model, n.ind, error.prob, missing.prob,
                partial.missing.prob, keep.errorind, m, p, map.function)
 sim.cross.bc(map, model, n.ind, error.prob, missing.prob,
@@ -288,7 +295,7 @@ sim.cross.bc(map, model, n.ind, error.prob, missing.prob,
 sim.cross.f2(map, model, n.ind, error.prob, missing.prob,
              partial.missing.prob, keep.errorind, m, p, map.function)
 sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
-        m=0, p=0, random.cross=TRUE)
+        m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),

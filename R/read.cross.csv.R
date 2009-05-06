@@ -2,22 +2,21 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2000-9, Karl W Broman
+# last modified Apr, 2009
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU General Public License, as
-#     published by the Free Software Foundation; either version 2 of
-#     the License, or (at your option) any later version. 
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
 # 
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
-#     merchantability or fitness for a particular purpose.  See the
-#     GNU General Public License for more details.
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
 # 
-#     A copy of the GNU General Public License is available at
-#     http://www.r-project.org/Licenses/
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
 # Contains: read.cross.csv 
@@ -76,22 +75,13 @@ function(dir, file, na.strings=c("-","NA"),
                          blank.lines.skip=TRUE, ...)
   }
 
-  if(rotate) {
-    data <- as.data.frame(t(data))
-    for(i in 1:ncol(data)) data[,i] <- as.character(data[,i])
-  }
+  if(rotate) 
+    data <- as.data.frame(t(data), stringsAsFactors=FALSE)
 
   # determine number of phenotypes based on initial blanks in row 2
-  n <- ncol(data)
-  temp <- rep(FALSE,n)
-  for(i in 1:n) {
-    temp[i] <- all(data[2,1:i]=="")
-    if(!temp[i]) break
-  }
-
-  if(!any(temp)) # no phenotypes!
+  if(data[2,1] != "")
     stop("You must include at least one phenotype (e.g., an index).")
-  n.phe <- max((1:n)[temp])
+  n.phe <- min(which(data[2,] != ""))-1
 
   # Is map included?  yes if first n.phe columns in row 3 are all blank
   if(all(!is.na(data[3,1:n.phe]) & data[3,1:n.phe]=="")) {
@@ -121,6 +111,7 @@ function(dir, file, na.strings=c("-","NA"),
   if(length(genotypes) > 0) {
     # look for strange entries in the genotype data
     temp <- unique(as.character(data[-(1:nondatrow),-(1:n.phe),drop=FALSE]))
+
     temp <- temp[!is.na(temp)]
     wh <- !(temp %in% genotypes)
     if(any(wh)) {

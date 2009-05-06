@@ -4,19 +4,77 @@ Revision history for the R/qtl package
 copyright (c) 2001-9, Karl W Broman
 http://www.rqtl.org
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License, as
-    published by the Free Software Foundation; either version 2 of
-    the License, or (at your option) any later version. 
-
+    The R/qtl package is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License,
+    version 3, as published by the Free Software Foundation.
+    
     This program is distributed in the hope that it will be useful,
     but without any warranty; without even the implied warranty of
-    merchantability or fitness for a particular purpose.  See the
-    GNU General Public License for more details.
-
-    A copy of the GNU General Public License is available at
-    http://www.r-project.org/Licenses/
+    merchantability or fitness for a particular purpose.  See the GNU
+    General Public License for more details.
+    
+    A copy of the GNU General Public License, version 3, is available
+    at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
+
+Version 1.12, 4/28/2009:
+
+Major changes:
+
+  Added the ability to simulate RIL and multiple-strain RIL in the
+  sim.cross function.  For the case of multiple-strain RIL, one needs
+  genotype data on the founder strains, which may be simulated with
+  the new function simFounderSnps.  The encoding of genotypes in
+  multiple-strain RIL is quite complicated.  See the help file for
+  sim.cross.  
+
+  Added the ability to deal with 4- and 8-way RIL in calc.genoprob,
+  sim.geno, argmax.geno, est.map, ripple, est.rf, tryallpositions,
+  calc.pairprob, and calc.errorlod.
+
+  Added a function, readMWril, for reading data on 4- or 8-way RIL.
+
+  Fixed a minor problem in read.cross, with format="csv", in the case
+  of many phenotypes that resulted in *really* slow data import.  (To
+  read a file with 200 individuals and 1500 phenotypes, it would take
+  about 60 seconds and now takes about 2 seconds.)
+
+Minor changes:
+
+  The output of tryallpositions, for testing possible positions for a
+  genetic marker, now has class "scanone", so that one may use
+  plot.scanone, summary.scanone, etc.
+
+  Added an argument mark.diagonal to plot.rf(), to include black lines
+  segments around the pixels on the diagonal.  This helps to separate
+  the upper left triangle from the lower right triangle. 
+  (The default is FALSE.)
+
+  Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
+  case of multiple marker covariates within a window (and >3 marker
+  covariates on that chromosome.
+
+  In the output of c.cross, there is a numeric phenotype "cross" that
+  indicates which individuals are from which cross, as a single
+  column. 
+
+  Revised fixXgeno.f2 so that warnings are given the appropriate
+  allele labels (if they are provided to read.cross).
+
+  Fixed a few problems in c.cross regarding the attributes to
+  QTL genotype probabilities and imputated genotypes
+
+  Added a function chrnames, for pulling out the chromosome names from
+  a cross.  
+
+  Revised the software license to the GNU General Public License,
+  version 3.
+
+  Minor change in plot.cross so that if one types plot(mycross, mymap)
+  it is shipped to plot.map rather than giving an error message.
+
+  Revised the R/qtl tutorial to refer specifically to the GPL v3.
+
 
 Version 1.11, 3/29/2009:
 

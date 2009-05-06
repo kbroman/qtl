@@ -1,24 +1,23 @@
 /**********************************************************************
  * 
- * simulate_cc.c
+ * simulate_ril.c
  *
- * copyright (c) 2005-6, Karl W Broman
+ * copyright (c) 2005-9, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Apr, 2009
  * first written Mar, 2005
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
@@ -27,7 +26,8 @@
  *
  * Contains: R_sim_ril, sim_ril, 
  *           allocate_individual, reallocate_individual, 
- *           copy_individual, docross, meiosis, sim_cc, R_sim_cc
+ *           copy_individual, docross, meiosis, 
+ *           convertMWril, R_convertMWril
  *  
  **********************************************************************/
 
@@ -39,17 +39,20 @@
 #include <R_ext/PrtUtil.h>
 #include <R_ext/Utils.h>
 #include "util.h"
-#include "simulate_cc.h"
+#include "simulate_ril.h"
 
 /* wrapper for sim_ril, to be called from R */
 void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
 	       int *n_str, int *m, double *p, int *include_x, 
-	       int *random_cross, int *selfing, int *cross, int *ril)
+	       int *random_cross, int *selfing, int *cross, int *ril,
+	       int *origgeno,
+	       double *error_prob, double *missing_prob, int *errors)
 {
   GetRNGstate();
 
   sim_ril(*n_chr, n_mar, *n_ril, map, *n_str, *m, *p, *include_x, 
-	  *random_cross, *selfing, cross, ril);
+	  *random_cross, *selfing, cross, ril, origgeno, 
+	  *error_prob, *missing_prob, errors);
 
   PutRNGstate();
 }
@@ -83,14 +86,25 @@ void R_sim_ril(int *n_chr, int *n_mar, int *n_ril, double *map,
  * ril     On output, the simulated data 
  *         (vector of length sum(n_mar) x n_ril)
  *
+ * origgeno       Like ril, but with no missing data
+ *
+ * error_prob     Genotyping error probability (used nly with n_str==2)
+ *
+ * missing_prob   Rate of missing genotypes
+ *
+ * errors         Error indicators (n_mar x n_ril)
+ *
  **********************************************************************/
 void sim_ril(int n_chr, int *n_mar, int n_ril, double *map, 
 	     int n_str, int m, double p, int include_x, 
-	     int random_cross, int selfing, int *cross, int *ril) 
+	     int random_cross, int selfing, int *cross, int *ril,
+	     int *origgeno, 
+	     double error_prob, double missing_prob, int *errors)
 {
   int i, j, k, ngen, tot_mar, curseg;
   struct individual par1, par2, kid1, kid2;
-  int **Ril, **Cross, maxwork, isX, flag, max_xo, *firstmarker;
+  int **Ril, **Cross, **Errors, **OrigGeno; 
+  int maxwork, isX, flag, max_xo, *firstmarker;
   double **Map, maxlen, chrlen, *work;
 
  /* count total number of markers */
@@ -99,6 +113,8 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
 
   reorg_geno(tot_mar, n_ril, ril, &Ril);
   reorg_geno(n_str, n_ril, cross, &Cross);
+  reorg_geno(tot_mar, n_ril, errors, &Errors);
+  reorg_geno(tot_mar, n_ril, origgeno, &OrigGeno);
 
   /* allocate space */
   Map = (double **)R_alloc(n_chr, sizeof(double *));
@@ -119,7 +135,8 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
       maxlen =  Map[i][n_mar[i]-1];
 
   /* allocate space for individuals */
-  max_xo = (int)qpois(1e-10, maxlen/100.0, 0, 0)*3;
+  max_xo = (int)qpois(1e-10, maxlen/100.0, 0, 0)*6;
+  if(!selfing) max_xo *= 5;
   allocate_individual(&par1, max_xo);
   allocate_individual(&par2, max_xo);
   allocate_individual(&kid1, max_xo);
@@ -147,23 +164,23 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
       }
       else if(n_str==4) {
 	par1.allele[0][0] = 1;
-	par1.allele[0][1] = 2;
+	par1.allele[1][0] = 2;
 	par2.allele[0][0] = 3;
-	par2.allele[0][1] = 4;
+	par2.allele[1][0] = 4;
       }
       else { /* 8 strain case */
 	par1.allele[0][0] = 1;
-	par1.allele[0][1] = 2;
+	par1.allele[1][0] = 2;
 	par2.allele[0][0] = 3;
-	par2.allele[0][1] = 4;
+	par2.allele[1][0] = 4;
 
 	docross(par1, par2, &kid1, chrlen, m, p, 0, 
 	      &maxwork, &work);
 
 	par1.allele[0][0] = 5;
-	par1.allele[0][1] = 6;
+	par1.allele[1][0] = 6;
 	par2.allele[0][0] = 7;
-	par2.allele[0][1] = 8;
+	par2.allele[1][0] = 8;
 
 	docross(par1, par2, &kid2, chrlen, m, p, isX,
 	      &maxwork, &work);
@@ -237,13 +254,23 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
 	while(curseg < kid1.n_xo[0] && Map[j][k] > kid1.xoloc[0][curseg]) 
 	  curseg++;
 	  
-	Ril[i][k+firstmarker[j]] = Cross[i][kid1.allele[0][curseg]-1];
+	OrigGeno[i][k+firstmarker[j]] = 
+	  Ril[i][k+firstmarker[j]] = Cross[i][kid1.allele[0][curseg]-1];
+
+	/* simulate missing ? */
+	if(unif_rand() < missing_prob) {
+	  Ril[i][k+firstmarker[j]] = 0;
+	}
+	else if(n_str == 2 && unif_rand() < error_prob) {
+	  /* simulate error */
+	  Ril[i][k+firstmarker[j]] = 3 - Ril[i][k+firstmarker[j]];
+	  Errors[i][k+firstmarker[j]] = 1;
+	}
       }
 
     } /* loop over chromosomes */
 
   } /* loop over lines */
-
 }
 
 /**********************************************************************
@@ -268,13 +295,18 @@ void allocate_individual(struct individual *ind, int max_seg)
 void reallocate_individual(struct individual *ind, int old_max_seg, 
 			   int new_max_seg)
 {
+  int j;
   (*ind).max_segments = new_max_seg;
   (*ind).allele[0] = (int *)S_realloc((char *)(*ind).allele[0], 2*new_max_seg, 
 				     2*old_max_seg, sizeof(int));
   (*ind).allele[1] = (*ind).allele[0] + new_max_seg;
+  for(j=0; j<old_max_seg; j++) 
+    (*ind).allele[1][j] = (*ind).allele[0][old_max_seg+j];
   (*ind).xoloc[0] = (double *)S_realloc((char *)(*ind).xoloc[0], 2*(new_max_seg-1), 
 				      2*(old_max_seg-1), sizeof(double));
-  (*ind).xoloc[0] = (*ind).xoloc[1] + new_max_seg-1;
+  (*ind).xoloc[1] = (*ind).xoloc[0] + new_max_seg-1;
+  for(j=0; j<old_max_seg-1; j++) 
+    (*ind).xoloc[1][j] = (*ind).xoloc[0][old_max_seg-1+j];
 }
 
 /**********************************************************************
@@ -298,6 +330,35 @@ void copy_individual(struct individual *from, struct individual *to)
 }
 
 /**********************************************************************
+ * print_ind
+ *
+ * [for debugging]
+ **********************************************************************
+void print_ind(struct individual ind) 
+{  
+  int i, j;
+  Rprintf("max segments = %d\n", ind.max_segments);
+  Rprintf("\n");
+  Rprintf("no. XO(1) = %d\n", ind.n_xo[0]);
+  Rprintf("allele(1) = ");
+  for(j=0; j<ind.n_xo[0]+1; j++) Rprintf(" %d", ind.allele[0][j]);
+  Rprintf("\n");
+  Rprintf("xoloc(1) = ");
+  for(j=0; j<ind.n_xo[0]; j++) Rprintf(" %6.2f", ind.xoloc[0][j]);
+  Rprintf("\n");
+
+  Rprintf("no. XO(2) = %d\n", ind.n_xo[1]);
+  Rprintf("allele(2) = ");
+  for(j=0; j<ind.n_xo[1]+1; j++) Rprintf(" %d", ind.allele[1][j]);
+  Rprintf("\n");
+  Rprintf("xoloc(2) = ");
+  for(j=0; j<ind.n_xo[1]; j++) Rprintf(" %6.2f", ind.xoloc[1][j]);
+  Rprintf("\n\n");
+}
+***********************************************************************/
+
+
+/**********************************************************************
  * docross
  *
  * Cross two individuals and get a kid
@@ -312,6 +373,7 @@ void docross(struct individual par1, struct individual par2,
 
   /* need to reallocate? */
   i = par1.n_xo[0]+par1.n_xo[1]+n_xo;
+
   if((*kid).max_segments < i) 
     reallocate_individual(kid, (*kid).max_segments, i*2);
 
@@ -372,9 +434,10 @@ void docross(struct individual par1, struct individual par2,
 
     /* need to reallocate? */
     i = par2.n_xo[0]+par2.n_xo[1]+n_xo;
+
     if((*kid).max_segments < i) 
       reallocate_individual(kid, (*kid).max_segments, i*2);
-    
+
     if(unif_rand() < 0.5) curstrand = 0;
     else curstrand = 1;
 
@@ -513,59 +576,79 @@ void R_meiosis(double *L, int *m, double *p, int *maxwork, double *work,
 
 /**********************************************************************
  * 
- * sim_cc    Use the result of sim_all_ril with n_str=8 plus data on
- *           the SNP genotypes of the 8 parental strains to create 
- *           real SNP data for the Collaborative Cross
+ * convertMWril    Convert simulated RIL genotypes using genotypes in founders
+ *                 (and the cross types).  [for a single chr]
  *
  * n_ril     Number of RILs to simulate
- * tot_mar   Total number of markers
+ * n_mar     Number of markers
+ * n_str     Number of founder strains
  *
- * Parents   SNP data for the 8 parental lines [dim tot_mar x 8]
+ * Parents   SNP data for the founder strains [dim n_mar x n_str]
  * 
  * Geno      On entry, the detailed genotype data; on exit, the 
- *           SNP data written bitwise.
+ *           SNP data written bitwise. [dim n_ril x n_mar]
  * 
- * error_prob  Probability of genotyping error
- * missing_prob  Probability a genotype will be missing
+ * Crosses   The crosses [n_ril x n_str]
+ *
+ * all_snps  0/1 indicator of whether all parent genotypes are snps
+ *
+ * error_prob  Genotyping error probability (used only if all_snps==1)
+ *
+ * Errors      Error indicators
  *
  **********************************************************************/
-void sim_cc(int n_ril, int tot_mar, int **Parents, int **Geno,
-	    double error_prob, double missing_prob)
+void convertMWril(int n_ril, int n_mar, int n_str, 
+		  int **Parents, int **Geno, int **Crosses,
+		  int all_snps, double error_prob, int **Errors)
 {
   int i, j, k, temp;
 
   for(i=0; i<n_ril; i++) {
     R_CheckUserInterrupt(); /* check for ^C */
 
-    for(j=0; j<tot_mar; j++) {
-      temp = Parents[Geno[j][i]-1][j];
-      if(unif_rand() < error_prob)  /* switch the SNP genotype */
-	temp = 1-temp;
+    for(j=0; j<n_mar; j++) {
 
-      Geno[j][i] = 0;
-      if(unif_rand() > missing_prob) {/* no error; convert to bit string */
-	for(k=0; k<8; k++) 
-	  if(temp == Parents[k][j]) Geno[j][i] += (1<<k);
+      if(Geno[j][i] < 1 || Geno[j][i] > n_str) {
+	if(Geno[j][i] > n_str) 
+	  warning("Error in RIL genotype (%d): line %d at marker %d\n", Geno[j][i], i+1, j+1);
+	Geno[j][i] = 0;
       }
+      else {
+	temp = Parents[Geno[j][i]-1][j]; /* SNP genotype of RIL i at marker j */
+
+	if(all_snps && unif_rand() < error_prob) { /* make it an error */
+	  temp = 1 - temp;
+	  Errors[j][i] = 1;
+	}
+
+	Geno[j][i] = 0;
+	for(k=0; k<n_str; k++) 
+	  if(temp == Parents[Crosses[k][i]-1][j]) 
+	    Geno[j][i] += (1 << k);
+      }
+
     }
   }
 }
 
-/* wrapper for calling sim_cc from R */
-void R_sim_cc(int *n_ril, int *tot_mar, int *parents, int *geno,
-	      double *error_prob, double *missing_prob)
+/* wrapper for calling convertMWril from R */
+void R_convertMWril(int *n_ril, int *n_mar, int *n_str, 
+		    int *parents, int *geno, int *crosses,
+		    int *all_snps, double *error_prob, 
+		    int *errors)
 {
-  int **Parents, **Geno;
+  int **Parents, **Geno, **Crosses, **Errors;
 
-  reorg_geno(*tot_mar, 8, parents, &Parents);
-  reorg_geno(*n_ril, *tot_mar, geno, &Geno);
+  reorg_geno(*n_mar, *n_str, parents, &Parents);
+  reorg_geno(*n_ril, *n_mar, geno, &Geno);
+  reorg_geno(*n_ril, *n_str, crosses, &Crosses);
+  reorg_geno(*n_ril, *n_mar, errors, &Errors);
 
   GetRNGstate();
-
-  sim_cc(*n_ril, *tot_mar, Parents, Geno, *error_prob, *missing_prob);
-
+  convertMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses,
+	       *all_snps, *error_prob, Errors);
   PutRNGstate();
 }
 
-/* end of simulate_cc.c */
+/* end of simulate_ril.c */
 

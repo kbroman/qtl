@@ -2,23 +2,22 @@
  * 
  * ripple.c
  *
- * copyright (c) 2002-8, Karl W Broman
+ * copyright (c) 2002-9, Karl W Broman
  *
- * last modified Feb, 2008
+ * last modified Apr, 2009
  * first written Mar, 2002
  *
  *     This program is free software; you can redistribute it and/or
- *     modify it under the terms of the GNU General Public License, as
- *     published by the Free Software Foundation; either version 2 of
- *     the License, or (at your option) any later version. 
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  * 
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
- *     merchantability or fitness for a particular purpose.  See the
- *     GNU General Public License for more details.
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
  * 
- *     A copy of the GNU General Public License is available at
- *     http://www.r-project.org/Licenses/
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
@@ -27,6 +26,7 @@
  *
  * Contains: R_ripple_bc, R_ripple_f2, R_ripple_4way, ripple, 
  *           countxo_bc, countxo_f2, countxo_4way
+ *           R_ripple_ril48, countxo_ril48
  *  
  **********************************************************************/
 
@@ -54,8 +54,6 @@
  *
  * n_mar    = no. markers
  *
- * n_gen    = no. possible genotypes
- *
  * geno     = genotype data [n_ind x n_mar]
  *
  * n_orders = no. different orders
@@ -74,7 +72,7 @@
  *
  **********************************************************************/
 
-void ripple(int n_ind, int n_mar, int n_gen, int *geno,
+void ripple(int n_ind, int n_mar, int *geno,
 	    int n_orders, int *orders, int *nxo, 
 	    int print_by, int countxo(int *curgen, int nextgen))
 {
@@ -117,7 +115,7 @@ void R_ripple_bc(int *n_ind, int *n_mar, int *geno,
 		 int *n_orders, int *orders,
 		 int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 2, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_bc);
 }
 
@@ -161,7 +159,7 @@ void R_ripple_f2(int *n_ind, int *n_mar, int *geno,
 		 int *n_orders, int *orders,
 		 int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 4, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_f2);
 }
 
@@ -170,7 +168,7 @@ void R_ripple_f2(int *n_ind, int *n_mar, int *geno,
  * 
  * countxo_f2
  * 
- * count no. obligate crossovers in a backcross
+ * count no. obligate crossovers in an intecross
  *
  **********************************************************************/
 
@@ -240,7 +238,7 @@ void R_ripple_4way(int *n_ind, int *n_mar, int *geno,
 		   int *n_orders, int *orders,
 		   int *nxo, int *print_by)
 {
-  ripple(*n_ind, *n_mar, 4, geno, *n_orders, orders, nxo,
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
 	 *print_by, countxo_4way);
 }
 
@@ -249,7 +247,7 @@ void R_ripple_4way(int *n_ind, int *n_mar, int *geno,
  * 
  * countxo_4way
  * 
- * count no. obligate crossovers in a backcross
+ * count no. obligate crossovers in a four-way cross
  *
  **********************************************************************/
 
@@ -542,6 +540,49 @@ int countxo_4way(int *curgen, int nextgen)
     case 14: return(0);
     }
   default: return(0); /* shouldn't get here */
+  }
+}
+
+
+/**********************************************************************
+ * 
+ * R_ripple_ril48
+ *
+ * Wrapper for call from R for 4- or 8-way RIL
+ * 
+ **********************************************************************/
+
+void R_ripple_ril48(int *n_ind, int *n_mar, int *geno, 
+		    int *n_orders, int *orders,
+		    int *nxo, int *print_by)
+{
+  ripple(*n_ind, *n_mar, geno, *n_orders, orders, nxo,
+	 *print_by, countxo_ril48);
+}
+
+
+/**********************************************************************
+ * 
+ * countxo_ril48
+ * 
+ * count no. obligate crossovers in 4- or 8-way RIL
+ *
+ **********************************************************************/
+
+int countxo_ril48(int *curgen, int nextgen) 
+{
+  int and;
+
+  if(nextgen == 0) return(0);
+
+  and = *curgen & nextgen;
+  if(and == 0) {
+    *curgen = nextgen; 
+    return(1);
+  }
+  else {
+    *curgen = and;
+    return(0);
   }
 }
 
