@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-8, Karl W Broman and Hao Wu
-# last modified Sep, 2008
+# copyright (c) 2001-9, Karl W Broman and Hao Wu
+# last modified Apr, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ function(cross, chr, pheno.col=1,
          incl.markers=FALSE, clean.output=FALSE,
          maxit=4000, tol=1e-4, verbose=TRUE, n.perm,
          perm.strata=NULL, assumeCondIndep=FALSE,
-         batchsize=250)
+         batchsize=250, n.cluster=1)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   if(!any(class(cross) == "cross"))
@@ -54,6 +54,22 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
+  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
+    cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
+    cl <- makeCluster(n.cluster)
+    clusterSetupRNG(cl)
+    n.perm <- ceiling(n.perm/n.cluster)
+    if(missing(chr)) chr <- names(cross$geno)
+    operm <- clusterCall(cl, scantwo, cross, chr, pheno.col, model, method,
+                         addcovar, intcovar, weights, incl.markers, clean.output,
+                         maxit, tol, verbose=FALSE, n.perm, perm.strata, 
+                         assumeCondIndep, batchsize, n.cluster=0)
+    stopCluster(cl)
+    for(j in 2:length(operm))
+      operm[[1]] <- c(operm[[1]], operm[[j]])
+    return(operm[[1]])
+  }
+
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
     pheno.col <- 1
@@ -143,7 +159,7 @@ function(cross, chr, pheno.col=1,
                       maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                       perm.strata=perm.strata,
                       assumeCondIndep=assumeCondIndep,
-                      batchsize=batchsize)
+                      batchsize=batchsize, n.cluster=0)
     temp <- array(dim=c(nrow(output$lod), ncol(output$lod), n.phe))
     temp[,,1] <- output$lod
     output$lod <- temp
@@ -156,7 +172,7 @@ function(cross, chr, pheno.col=1,
                       maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                       perm.strata=perm.strata,
                       assumeCondIndep=assumeCondIndep,
-                      batchsize=batchsize)
+                      batchsize=batchsize, n.cluster=0)
       output$lod[,,i] <- temp$lod
       if(!is.null(output$scanoneX))
         output$scanoneX <- cbind(output$scanoneX, temp$scanoneX)
@@ -1360,7 +1376,7 @@ function(n.perm, cross, pheno.col, model,
                    maxit=maxit, tol=tol,verbose=FALSE, n.perm=-1,
                    perm.strata=perm.strata,
                    assumeCondIndep=assumeCondIndep,
-                   batchsize=batchsize)
+                   batchsize=batchsize, n.cluster=0)
     if(clean.output) tem <- clean(tem)
 
     ## find the maximum LOD on each permutation
@@ -1424,7 +1440,7 @@ function(n.perm, cross, pheno.col, model,
                      maxit=maxit, tol=tol,
                      verbose=FALSE, n.perm= -i, perm.strata=perm.strata,
                      assumeCondIndep=assumeCondIndep,
-                     batchsize=batchsize)
+                     batchsize=batchsize, n.cluster=0)
 
       if(clean.output) tem <- clean(tem)
 
