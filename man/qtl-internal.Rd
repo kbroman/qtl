@@ -60,8 +60,11 @@
 \alias{mf.stahl}
 \alias{mybinaryrep}
 \alias{orderMarkers.sub}
+\alias{ourline}
+\alias{ourstop}
 \alias{parseformula}
 \alias{plot.effectscan}
+\alias{polyplot}
 \alias{print.addcovarint}
 \alias{print.addint}
 \alias{print.compactqtl}
@@ -117,6 +120,8 @@
 \alias{sim.cross.bc}
 \alias{sim.cross.f2}
 \alias{sim.ril}
+\alias{snowCoreALL}
+\alias{snowCoreBOOT}
 \alias{subrousummaryscantwo}
 \alias{summary.scantwocondensed}
 \alias{summary.addcovarint}
@@ -207,9 +212,15 @@ mf.m(d)
 mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
 orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
+ourline()
+ourstop(...)
 parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)
+polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
+         par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"),
+         col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, main = NULL, xlab =
+         NULL, ylab = NULL, add=FALSE, ... ) 
 \method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)
@@ -296,6 +307,8 @@ sim.cross.f2(map, model, n.ind, error.prob, missing.prob,
              partial.missing.prob, keep.errorind, m, p, map.function)
 sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
         m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
+snowCoreALL(x, all_data, Funktie, verbose=FALSE, \dots)
+snowCoreBOOT(x, all_data, Funktie, method, verbose=FALSE, \dots)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),
