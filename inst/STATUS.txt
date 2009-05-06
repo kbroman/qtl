@@ -39,6 +39,10 @@ Major changes:
   read a file with 200 individuals and 1500 phenotypes, it would take
   about 60 seconds and now takes about 2 seconds.)
 
+  Added the ability to have scanone and scantwo permutations run in
+  parallel, if the snow package is installed.  The added argument
+  n.cluster indicates the number of parallel nodes to use.
+
 Minor changes:
 
   The output of tryallpositions, for testing possible positions for a

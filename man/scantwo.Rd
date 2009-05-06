@@ -16,7 +16,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
         incl.markers=FALSE, clean.output=FALSE,
         maxit=4000, tol=1e-4,
         verbose=TRUE, n.perm, perm.strata=NULL,
-        assumeCondIndep=FALSE, batchsize=250)
+        assumeCondIndep=FALSE, batchsize=250, n.cluster=1)
 }
 
 \arguments{
@@ -85,6 +85,9 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    may speed things up.}
  \item{batchsize}{The number of phenotypes (or permutations) to be run
    as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
+ \item{n.cluster}{If the package \code{\link[snow:00Index]{snow}} is available and
+   \code{n.perm} > 0, permutations are run in parallel using this number
+   of nodes.}
 }
 
 \details{
