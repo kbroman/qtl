@@ -178,17 +178,13 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
 		    if ((position[j]=='L')||(position[j]=='U')){
 				for (i=0; i<Naug; i++){
 					calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
-					//calc_ii= probnew(MendelM,loci,r,i,j,'1',crosstype,1,0,1);
 					Ploci[i]*= calc_i;
-					//Rprintf("DEBUG: Prob vs ProbNew: %f %f\n",calc_i,calc_ii);
 				}
 			}
 		    if ((position[j]=='L')||(position[j]=='M')){
 				for (i=0; i<Naug; i++){
 					calc_i = prob(loci,r,i,j,loci[j+1][i],'F',0,0,0);
-					//calc_ii = probnew(MendelM,loci,r,i,j,loci[j+1][i],'F',0,0,0);
 					Ploci[i]*= calc_i;
-					//Rprintf("DEBUG: Prob vs ProbNew: %f %f\n",calc_i,calc_ii);
 				}
 			}
 		}
@@ -206,9 +202,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
              for (i=0; i<Naug; i++)
              {  
 				calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
-				//calc_ii= probnew(MendelM,loci,r,i,j,'1',crosstype,1,0,1);
                 Ploci[i]*= calc_i; Ploci[i+Naug]*= calc_i; Ploci[i+2*Naug]*= calc_i;
-				//Rprintf("DEBUG: Prob vs ProbNew: %f %f\n",calc_i,calc_ii);
              }
              else
              for (i=0; i<Naug; i++)
@@ -224,41 +218,31 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           {  if ((cofactor[j]<='1')&&(cofactor[j+1]<='1'))
              for (i=0; i<Naug; i++){  
 				calc_i = prob(loci,r,i,j,loci[j+1][i],crosstype,0,0,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j,loci[j+1][i],crosstype,0,0,0);
                 Ploci[i]*= calc_i; Ploci[i+Naug]*= calc_i; Ploci[i+2*Naug]*= calc_i;
-				//Rprintf("DEBUG: Prob vs ProbNew: %f %f\n",calc_i,calc_ii);
              }
              else if (cofactor[j]<='1') // locus j+1 == QTL
              for (i=0; i<Naug; i++)
              {  // QTL=='0' What is the prob of finding an '0' at J=1
 				calc_i = prob(loci,r,i,j,'0',crosstype,1,0,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j,'0',crosstype,1,0,0);
                 Ploci[i]*= calc_i;
                 // QTL=='1'
                 calc_i = prob(loci,r,i,j,'1',crosstype,1,0,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j,'1',crosstype,1,0,0);
                 Ploci[i+Naug]*= calc_i;
                 // QTL=='2'
                 calc_i = prob(loci,r,i,j,'2',crosstype,1,0,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j,'2',crosstype,1,0,0);
                 Ploci[i+2*Naug]*= calc_i;
-				//Rprintf("DEBUG: Prob vs ProbNew: %f %f\n",calc_i,calc_ii);
              }
              else // locus j == QTL
              for (i=0; i<Naug; i++)
              {  // QTL=='0'
                 calc_i = prob(loci,r,i,j+1,'0',crosstype,1,-1,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j+1,'0',crosstype,1,-1,0);
                 Ploci[i]*= calc_i;
                 // QTL=='1'
 				calc_i = prob(loci,r,i,j+1,'1',crosstype,1,-1,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j+1,'1',crosstype,1,-1,0);
                 Ploci[i+Naug]*= calc_i;
                 // QTL=='2'
                 calc_i = prob(loci,r,i,j+1,'2',crosstype,1,-1,0);
-				//calc_ii = probnew(MendelM,loci,r,i,j+1,'2',crosstype,1,-1,0);
                 Ploci[i+2*Naug]*= calc_i;
-				//Rprintf("DEBUG: Prob vs ProbNew: %f %f\n",calc_i,calc_ii);
              }
           }
 	 }
