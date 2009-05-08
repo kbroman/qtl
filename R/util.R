@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Apr, 2009
+# last modified May, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -774,6 +774,14 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
+
+  if(missing(mname2) && length(mname1)>1) {
+    mname2 <- mname1[2]
+    mname1 <- mname1[1]
+  }
+
+  if(length(mname1) > 1 || length(mname2) > 1)
+    stop("mname1 and mname2 should both have lenght 1, or mname1 should have length 2 and mname1 should be missing.")
 
   if(mname1==mname2)
     stop("You must give two distinct marker names.")

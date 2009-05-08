@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/6/2009:
+Version 1.12, 5/8/2009:
 
 Major changes:
 
@@ -53,6 +53,9 @@ Minor changes:
   segments around the pixels on the diagonal.  This helps to separate
   the upper left triangle from the lower right triangle. 
   (The default is FALSE.)
+
+  In geno.crosstab, the first argument (mname1) can now be a vector
+  with the two marker names; in this case, mname2 should be missing.
 
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
