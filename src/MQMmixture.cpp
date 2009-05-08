@@ -45,7 +45,7 @@
     ignorance of unlikely genotypes*/
 double rmixture(cmatrix marker, vector weight, vector r,
               cvector position, ivector ind,
-              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype, Mmatrix MendelM,int verbose){   
+              int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype,int verbose){   
 	int i,j;
     int iem= 0;
     double Nrecom, oldr=0.0, newr, rdelta=1.0;
@@ -140,7 +140,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
               vector y, ivector ind, int Nind, int Naug,
               int Nloci,
-              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,Mmatrix MendelM,int verbose){
+              double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,int verbose){
 	//if(verbose==1){Rprintf("QTLmixture called\n");}
     int iem= 0, newNaug, i, j;
     char varknown, biasadj='n';
