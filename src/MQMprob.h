@@ -20,13 +20,8 @@
  *
  * C external functions used by the MQM algorithm
  * Contains (stabile): prob, start_prob, probright
- * Contains (unstabile): create_lookup_table, probnew
  *
  **********************************************************************/
-
-void create_lookup_table(double ***MendelM,int Nmark,vector r,char crosstype);
-
-double probnew(double ***MendelM,cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start);
 
 double probright(char c, int jloc, cvector imarker, vector r, cvector position,char crosstype);
 

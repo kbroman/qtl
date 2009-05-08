@@ -20,7 +20,6 @@
  *
  * C external functions used by the MQM algorithm
  * Contains (stabile): prob, start_prob, probright
- * Contains (unstabile): create_lookup_table, probnew
  *
  **********************************************************************/
  
@@ -53,58 +52,6 @@ double start_prob(char crosstype,char c){
 		break;
 	}
 	return 0.0;
-}
-
-void create_lookup_table(double ***MendelM,int Nmark,vector r,char crosstype){
-
-	switch(crosstype){
-		case 'F':
-			for(int i=0; i< Nmark; i++){
-				MendelM[i][0][0] = (1.0-r[i])*(1.0-r[i]);
-				MendelM[i][1][0] = r[i]*(1.0-r[i]);
-				MendelM[i][1][1] = 2.0*r[i]*(1.0-r[i]);
-				MendelM[i][2][0] = r[i]*r[i];
-			}
-		break;
-		case 'R':
-			for(int i=0; i< Nmark; i++){
-				MendelM[i][0][0] = 1.0-r[i];
-				MendelM[i][1][0] = 0;
-				MendelM[i][2][0] = r[i];
-			}
-		break;
-		case 'B':
-			for(int i=0; i< Nmark; i++){
-				MendelM[i][0][0] = 1.0-r[i];
-				MendelM[i][1][0] = r[i];
-				MendelM[i][2][0] = 0;
-			}
-		break;			
-	}
-}
-
-double probnew(double ***MendelM,cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
-	if(start){
-		return start_prob(crosstype,loci[j][i]);
-	}
-	char compareto;
-	int index;
-	int Nrecom;
-	
-	if(JorC==1){
-		//Rprintf("C %d %d\n",i,j);
-		compareto = c;
-	}else{
-		//Rprintf("loci[j+1][i] %d\n",j);
-		compareto = loci[j+1][i];
-	}
-	if ((crosstype=='F')&&(loci[j][i]=='1')&&(compareto=='1')){
-		index = 1;
-	}else{
-		index = 0;
-	}
-	Nrecom = absdouble((double)loci[j][i]-(double)compareto);
-	return MendelM[j+ADJ][Nrecom][index];
 }
 
 double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start){
