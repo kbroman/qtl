@@ -151,7 +151,7 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 		class(res) <- c(class(res),"MQMmulti")
 		#All done now plot the results
 		end <- proc.time()
-		SUM <- (end-start)[3]
+		SUM <- SUM + (end-start)[3]
 		AVG <- SUM/n.pheno	
                 if(verbose) {
                   cat("------------------------------------------------------------------\n")

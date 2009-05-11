@@ -55,9 +55,11 @@ snowCoreBOOT <- function(x,all_data,Funktie,method,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	if(!method){
+		//random permutation
 		neworder <- sample(nind(all_data))			
 		all_data$pheno[[1]] <- all_data$pheno[[1]][neworder]
-	}else{	
+	}else{
+		//parametric
 		pheno <- all_data$pheno[[1]]
 		variance <- var(pheno,na.rm = TRUE)
 		for(j in 1:nind(all_data)) {
