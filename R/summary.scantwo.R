@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Aug, 2008
+# copyright (c) 2001-9, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified May, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -623,12 +623,12 @@ function(object, lodcolumn=1,
 #
 # sets LOD scores that are missing or < 0 to 0
 # If full LOD < add've LOD, set full = add've
-# sets LOD scores for pairs of positions that are not separated
-#     by a marker to 0.
+# sets LOD scores, for pairs of positions that are not separated
+#     by n.mar markers and distance cM, to 0
 ###################################################################### 
 
 clean.scantwo <-
-function(object)
+function(object, n.mar=1, distance=0, ...)
 {
   if(class(object)[1] != "scantwo")
     stop("Input should have class \"scantwo\".")
@@ -648,7 +648,7 @@ function(object)
     {
       out <- x
       for(i in seq(along=x))
-          out[i] <- sum((z >= x[i] & z <= y[i]) | (z <= x[i] & z >= y[i])) +
+          out[i] <- sum((z > x[i] & z < y[i]) | (z < x[i] & z > y[i])) +
             (x[i] == y[i])
           out
     }
@@ -658,10 +658,14 @@ function(object)
     m <- map[map[,1]==names(fmap)[i],2]
     idx <- 1:length(m)+last
     last <- last + length(m)
+
+    toclean <- (outer(m, m, subrou, fmap[[i]]) < n.mar) | (abs(outer(m, m, "-")) <distance)
+    diag(toclean) <- FALSE
+    
     if(length(dim(lod))==3) # case of multiple phenotypes
-      lod[idx,idx,][outer(m, m, subrou, fmap[[i]])==0] <- 0
+      lod[idx,idx,][toclean] <- 0
     else
-      lod[idx,idx][outer(m, m, subrou, fmap[[i]])==0] <- 0
+      lod[idx,idx][toclean] <- 0
   }
 
   # if full LOD < add've LOD, set full = add've
@@ -686,8 +690,6 @@ function(object)
 
   object
 }
-
-
 
 ######################################################################
 #

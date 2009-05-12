@@ -319,7 +319,7 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 # clean functions
 ######################################################################
 clean <-
-function(object)
+function(object, ...)
   UseMethod("clean")
 
 
@@ -334,7 +334,7 @@ function(object)
 ######################################################################
 
 clean.cross <-
-function(object)
+function(object, ...)
 {
   if(!any(class(object) == "cross"))
     stop("Input should have class \"cross\".")

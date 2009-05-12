@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/8/2009:
+Version 1.12, 5/11/2009:
 
 Major changes:
 
@@ -56,6 +56,12 @@ Minor changes:
 
   In geno.crosstab, the first argument (mname1) can now be a vector
   with the two marker names; in this case, mname2 should be missing.
+
+  Revised clean.scantwo so that, by default, positions must have at
+  least one marker *in between* them.  Added arguments n.mar
+  (no. markers that must separate two positions) and distance (cM
+  distance between two positions).  These arguments were also added to
+  scantwo (as clean.nmar and clean.distance).
 
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
