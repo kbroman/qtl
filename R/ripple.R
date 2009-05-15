@@ -34,7 +34,7 @@
 ripple <-
 function(cross, chr, window=4, method=c("countxo","likelihood"),
          error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
-         maxit=4000, tol=1e-4, sex.sp=TRUE, verbose=TRUE)
+         maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE)
 {
   if(!any(class(cross) == "cross")) 
     stop("Input should have class \"cross\".")
