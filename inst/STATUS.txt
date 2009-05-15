@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/11/2009:
+Version 1.12, 5/15/2009:
 
 Major changes:
 
@@ -66,6 +66,9 @@ Minor changes:
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
   covariates on that chromosome.
+
+  Revised ripple() to give a warning message if the chr argument is
+  not provided.
 
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single

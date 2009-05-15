@@ -3,7 +3,7 @@
 # ripple.R
 #
 # copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# last modified May, 2009
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,6 +40,10 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     stop("Input should have class \"cross\".")
 
   # pull out relevant chromosome
+  if(missing(chr)) {
+    chr <- names(cross$geno)[1]
+    warning("chr argument not provided; assuming you want chr ", chr)
+  }
   if(length(chr) > 1)
     stop("ripple only works for one chromosome at a time.")
   cross <- subset(cross,chr=chr)
