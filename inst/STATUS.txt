@@ -70,6 +70,9 @@ Minor changes:
   Revised ripple() to give a warning message if the chr argument is
   not provided.
 
+  In compareorder() and switch.order(), changed the default value for
+  the tol argument to 1e-6 (as in est.map). 
+
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single
   column. 

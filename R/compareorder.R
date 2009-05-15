@@ -2,8 +2,8 @@
 #
 # compareorder.R
 #
-# copyright (c) 2007-8, Karl W Broman
-# last modified Aug, 2008
+# copyright (c) 2007-9, Karl W Broman
+# last modified May, 2009
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 compareorder <-
 function(cross, chr, order, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         maxit=4000, tol=0.0001, sex.sp=TRUE)
+         maxit=4000, tol=1e-6, sex.sp=TRUE)
 {
   if(missing(chr)) chr <- names(cross$geno)[1]
   if(length(chr) > 1) {
