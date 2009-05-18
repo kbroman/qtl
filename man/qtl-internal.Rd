@@ -122,6 +122,7 @@
 \alias{summary.addcovarint}
 \alias{summary.addint}
 \alias{summary.compactqtl}
+\alias{testchr}
 \alias{vbscan}
 \alias{write.cross.csv}
 \alias{write.cross.gary}
@@ -307,6 +308,7 @@ subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{addcovarint}(object, \dots)
 \method{summary}{addint}(object, \dots)
 \method{summary}{compactqtl}(object, \dots)
+testchr(selection, thechr)
 vbscan(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
        tol=1e-4)
 write.cross.csv(cross, filestem="data", digits=5, rotate=FALSE,

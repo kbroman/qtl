@@ -44,8 +44,12 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     chr <- names(cross$geno)[1]
     warning("chr argument not provided; assuming you want chr ", chr)
   }
-  if(length(chr) > 1)
-    stop("ripple only works for one chromosome at a time.")
+  else {
+    if(length(chr) > 1)
+      stop("ripple only works for one chromosome at a time.")
+    if(!testchr(chr, names(cross$geno)))
+      stop("Chr ", chr, "not found.")
+  }
   cross <- subset(cross,chr=chr)
   chr.name <- names(cross$geno)[1]
 

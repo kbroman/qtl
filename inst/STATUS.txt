@@ -76,6 +76,10 @@ Minor changes:
   Slight change in compareorder() so that the order argument can be of
   length n.mar+2, but with only the first n.mar items considered.
 
+  Slight change in checks of chr argument in ripple and switch.order;
+  added a function testchr for checking that a chromosome argument is
+  okay. 
+
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single
   column. 
