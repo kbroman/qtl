@@ -42,11 +42,13 @@ function(cross, chr, order, error.prob=0.0001,
   cross <- subset(cross, chr)
 
   if(length(order) != totmar(cross)) {
-    if(length(order) == totmar(cross)+1)
-      order <- order[-length(order)]
+    if(length(order) == totmar(cross)+1 || length(order) == totmar(cross)+2)
+      order <- order[1:totmar(cross)]
     else
       stop("Argument 'order' should have length ", totmar(cross))
   }
+  if(any(is.na(match(1:totmar(cross), order))))
+    stop("order should be a permutation of the numbers 1, 2, ..., ", totmar(cross))
 
   orig <- est.map(cross, error.prob=error.prob, map.function=map.function,
                   maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)

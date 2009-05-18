@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/15/2009:
+Version 1.12, 5/18/2009:
 
 Major changes:
 
@@ -72,6 +72,9 @@ Minor changes:
 
   In compareorder(), switch.order(), and ripple(), changed the default
   value for the tol argument to 1e-6 (as in est.map). 
+
+  Slight change in compareorder() so that the order argument can be of
+  length n.mar+2, but with only the first n.mar items considered.
 
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single
