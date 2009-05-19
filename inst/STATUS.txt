@@ -79,6 +79,9 @@ Minor changes:
   case of multiple marker covariates within a window (and >3 marker
   covariates on that chromosome.
 
+  Fixed a bug in summary.scantwo in case that scanoneX component is
+  numeric(0) and not NULL, which resulted in a major crash.
+
   Fixed a bug in addpair() in the case that the user gives a formula
   that includes one but not both of the new QTL.
 

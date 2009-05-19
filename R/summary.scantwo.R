@@ -333,7 +333,7 @@ function(object, for.perm=FALSE)
   if(length(dim(lod)) == 3) n.phe <- dim(lod)[3]
 
   if(!("scanoneX" %in% names(object)) ||
-     is.null(object$scanoneX)) {
+     is.null(object$scanoneX) || length(object$scanoneX)==0) {
     if(n.phe==1) scanoneX <- diag(lod)
     else {
       scanoneX <- diag(lod[,,1])
