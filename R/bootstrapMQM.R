@@ -31,7 +31,7 @@
 #
 ######################################################################
 
-FDRpermutation <- function(cross=NULL, Funktie=scanall, threshold=3.0, n.perm = 5, verbose=TRUE, ...){
+FDRpermutation <- function(cross=NULL, Funktie=scanall, threshold=5.0, n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	res <- Funktie(cross,...)
 	above_in_real <- 0
