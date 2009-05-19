@@ -8,12 +8,13 @@
 }
 
 \usage{
-\method{clean}{cross}(object)
+\method{clean}{cross}(object, \dots)
 }
 
 \arguments{
  \item{object}{An object of class \code{cross}.  See
    \code{\link[qtl]{read.cross}} for details.}
+ \item{\dots}{Ignored at this point.}
 }
 
 \value{

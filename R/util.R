@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Apr, 2009
+# last modified May, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
-#           matchchr, convert2sa, charround
+#           matchchr, convert2sa, charround, testchr
 #
 ######################################################################
 
@@ -319,7 +319,7 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 # clean functions
 ######################################################################
 clean <-
-function(object)
+function(object, ...)
   UseMethod("clean")
 
 
@@ -334,7 +334,7 @@ function(object)
 ######################################################################
 
 clean.cross <-
-function(object)
+function(object, ...)
 {
   if(!any(class(object) == "cross"))
     stop("Input should have class \"cross\".")
@@ -775,6 +775,14 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
+  if(missing(mname2) && length(mname1)>1) {
+    mname2 <- mname1[2]
+    mname1 <- mname1[1]
+  }
+
+  if(length(mname1) > 1 || length(mname2) > 1)
+    stop("mname1 and mname2 should both have lenght 1, or mname1 should have length 2 and mname1 should be missing.")
+
   if(mname1==mname2)
     stop("You must give two distinct marker names.")
 
@@ -915,7 +923,7 @@ function(d)
 switch.order <-
 function(cross, chr, order, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         maxit=4000, tol=1e-4, sex.sp=TRUE)
+         maxit=4000, tol=1e-6, sex.sp=TRUE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -923,16 +931,19 @@ function(cross, chr, order, error.prob=0.0001,
   map.function <- match.arg(map.function)
   
   # check chromosome argument
-  if(!missing(chr)) {
-    chr <- matchchr(chr, names(cross$geno))
-    if(length(chr) > 1) {
-      warning("switch.order can deal with just one chromosome at a time")
-      chr <- chr[1]
-    }
-    cchr <- chr
-    chr <- match(chr, names(cross$geno))
+  if(missing(chr)) {
+    chr <- names(cross$geno)[1]
+    warning("Assuming you mean chromosome ", chr)
   }
-  else chr <- 1
+  else {
+    if(length(chr) > 1) {
+      chr <- chr[1]
+      warning("switch.order can deal with just one chromosome at a time; assuming you want chr ", chr)
+    }
+    if(!testchr(chr, names(cross$geno)))
+       stop("Chr ", chr, " not found.")
+  }
+  chr <- matchchr(chr, names(cross$geno))
 
   # check order argument
   n.mar <- nmar(cross)
@@ -975,13 +986,13 @@ function(cross, chr, order, error.prob=0.0001,
 
   # re-estimate rec fracs for re-ordered chromosome
   if(flag==1) {
-    temp <- est.rf(subset(cross, chr=cchr))$rf
+    temp <- est.rf(subset(cross, chr=chr))$rf
     rf[oldcols,oldcols] <- temp
     cross$rf <- rf
   }
 
   # re-estimate map
-  newmap <- est.map(subset(cross,chr=cchr),
+  newmap <- est.map(subset(cross,chr=chr),
                     error.prob=error.prob, map.function=map.function,
                     maxit=maxit, tol=tol, sex.sp=sex.sp)
 
@@ -3054,6 +3065,52 @@ function(selection, thechr)
   
   if(selectomit) return(thechr[-wh])
   thechr[sort(wh)]
+}
+
+######################################################################
+# check that chromosomes match appropriately
+# TRUE = chr okay
+# FALSE = problem
+######################################################################
+testchr <-
+function(selection, thechr)
+{
+  if(is.factor(thechr)) thechr <- as.character(thechr)
+  if(length(thechr) > length(unique(thechr))) {
+#    warning("Duplicate chromosome names.")
+    return(FALSE)
+  }
+
+  if(is.logical(selection)) {
+    if(length(selection) != length(thechr)) {
+#      warning("Logical vector to select chromosomes is the wrong length")
+      return(FALSE)
+    }
+    return(TRUE)
+  }
+
+  if(is.numeric(selection)) selection <- as.character(selection)
+
+  if(length(selection) > length(unique(selection))) {
+#    warning("Dropping duplicate chromosomes")
+    selection <- unique(selection)
+  }
+
+  g <- grep("^-", selection)
+  if(length(g) > 0 && length(g) < length(selection)) {
+#    stop("In selecting chromosomes, all must start with '-' or none should.")
+    return(FALSE)
+  }
+  if(length(g) > 0) {
+    selectomit <- TRUE
+    selection <- substr(selection, 2, nchar(selection))
+  }
+  else selectomit <- FALSE
+      
+  wh <- match(selection, thechr)
+  if(any(is.na(wh))) return(FALSE)
+
+  TRUE
 }
 
 ######################################################################
