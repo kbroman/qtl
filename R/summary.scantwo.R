@@ -143,8 +143,10 @@ function(object, thresholds,
         if(all(ncp==1)) onepermcol <- TRUE
         else onepermcol <- FALSE
         if(any(ncp != d[3])) {
-          if(onepermcol) 
-            warning("Just one column of permutation results; reusing for all LOD score columns.")
+          if(onepermcol)  {
+            if(lodcolumn > 1)
+              warning("Just one column of permutation results; assuming they apply to all LOD score columns.")
+          }
           else
             stop("perms have different numbers of columns as object input.\n")
         }
