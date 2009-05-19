@@ -15,9 +15,6 @@ o In c.cross, include an argument for "flipping" a backcross, so that
 
 o plot of genotype frequencies / P-values
 
-o In plot of output from addpair with a special formula, we need just
-  one set of numbers on the color scale.
-
 o function to identify the XO locations (based on countXO?)
   [this is locate.xo, I think.]
 

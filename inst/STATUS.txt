@@ -72,6 +72,9 @@ Minor changes:
   scantwoperm2scanoneperm, for pulling the scanone permutations out of
   the scantwo permutations.
 
+  In plots of output from addpair with a special formula, plot.scantwo
+  now gives just one set of numbers on the color scale.
+
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
   covariates on that chromosome.
