@@ -76,6 +76,9 @@ Minor changes:
   case of multiple marker covariates within a window (and >3 marker
   covariates on that chromosome.
 
+  Fixed a bug in addpair() in the case that the user gives a formula
+  that includes one but not both of the new QTL.
+
   Revised ripple() to give a warning message if the chr argument is
   not provided.
 

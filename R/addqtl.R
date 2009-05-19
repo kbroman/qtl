@@ -695,6 +695,8 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     # are either of the new QTL in the formula?
     g <- c(grep(paste("^[Qq]", n.qtl+1, "$", sep=""), theterms),
            grep(paste("^[Qq]", n.qtl+2, "$", sep=""), theterms))
+    g1 <- grep(paste("^[Qq]", n.qtl+1, "$", sep=""), theterms)
+    g2 <- grep(paste("^[Qq]", n.qtl+2, "$", sep=""), theterms)
     if(length(g) == 0)  { # no; add to formula
       newformula1 <- as.formula(paste(deparseQTLformula(formula), "+ Q", n.qtl+1,
                                       " + Q", n.qtl+2, " + Q", n.qtl+1,
@@ -704,6 +706,12 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       scanbothways <- FALSE
     }
     else { # need a version without them
+      # first make sure that *both* terms are in the formula
+      if(length(g1)==0) # add Q1
+        formula <- as.formula(paste(deparseQTLformula(formula), "+ Q", n.qtl+1, sep=""))
+      if(length(g2)==0) # add Q2
+        formula <- as.formula(paste(deparseQTLformula(formula), "+ Q", n.qtl+2, sep=""))
+
       newformula1 <- formula
       newformula2 <- NULL
       
