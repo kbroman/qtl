@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Sep, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified May, 2009
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -49,8 +49,12 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
   if(format != "onepheno" && !missing(lodcolumn))
     warning("lodcolumn ignored except when format=\"onepheno\".")
 
-  if(!missing(perms) && !any(class(perms) == "scanoneperm"))
-    warning("perms need to be in scanoneperm format.")
+  if(!missing(perms)) {
+    if("scantwoperm" %in% class(perms))
+      perms <- scantwoperm2scanoneperm(perms)
+    else if(!("scanoneperm" %in% class(perms)))
+      warning("perms need to be in scanoneperm format.")
+  }
 
   # check input
   if(missing(perms) && !missing(alpha))

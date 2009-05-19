@@ -36,7 +36,8 @@
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
-#           matchchr, convert2sa, charround, testchr
+#           matchchr, convert2sa, charround, testchr,
+#           scantwoperm2scanoneperm
 #
 ######################################################################
 
@@ -3167,6 +3168,25 @@ function(x, digits=1)
            }
          }, digits)
 }
+
+######################################################################
+# scantwoperm2scanoneperm
+#
+# pull out the scanone permutations from scantwo permutation results,
+# so that one may use the scantwo perms in calls to summary.scanone
+######################################################################
+scantwoperm2scanoneperm <-
+function(scantwoperms)
+{
+  if(!("scantwoperm" %in% class(scantwoperms)))
+    stop("Input must have class \"scantwoperm\".")
+  if(!("one" %in% names(scantwoperms)))
+    stop("Input doesn't contain scanone permutation results.")
+  scanoneperms <- scantwoperms$one
+  class(scanoneperms) <- c("scanoneperm")
+  scanoneperms
+}
+
 
 # end of util.R
 

@@ -112,6 +112,7 @@
 \alias{scanoneXnull}
 \alias{scantwo.perm}
 \alias{scantwo.perm.engine}
+\alias{scantwoperm2scanoneperm}
 \alias{sim.bcg}
 \alias{sim.cross.4way}
 \alias{sim.cross.bc}
@@ -290,6 +291,7 @@ scantwo.perm.engine(n.perm, cross, pheno.col, model,
                     maxit, tol, verbose,
                     perm.strata, assumeCondIndep=FALSE,
                     batchsize=250)
+scantwoperm2scanoneperm(scantwoperms)
 sim.bcg(n.ind, map, m, p,
         map.function=c("haldane","kosambi","c-f","morgan"))
 sim.cross.4way(map, model, n.ind, error.prob, missing.prob,

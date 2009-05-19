@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/18/2009:
+Version 1.12, 5/19/2009:
 
 Major changes:
 
@@ -62,6 +62,11 @@ Minor changes:
   (no. markers that must separate two positions) and distance (cM
   distance between two positions).  These arguments were also added to
   scantwo (as clean.nmar and clean.distance).
+
+  Revised summary.scanoneperm so that the perms argument can be
+  scantwo permutations results; added an internal utility function,
+  scantwoperm2scanoneperm, for pulling the scanone permutations out of
+  the scantwo permutations.
 
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
