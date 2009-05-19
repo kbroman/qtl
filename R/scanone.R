@@ -51,6 +51,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
     cl <- makeCluster(n.cluster)
     clusterSetupRNG(cl)
+    clusterEvalQ(cl, require(qtl, quietly=TRUE))
     n.perm <- ceiling(n.perm/n.cluster)
     if(missing(chr)) chr <- names(cross$geno)
     operm <- clusterCall(cl, scanone, cross, chr, pheno.col, model, method,
