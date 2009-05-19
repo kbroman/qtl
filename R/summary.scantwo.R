@@ -341,6 +341,8 @@ function(object, for.perm=FALSE)
     }
   }
   else scanoneX <- object$scanoneX
+  if(length(scanoneX) != nrow(lod))
+    stop("scanoneX component has length ", length(scanoneX), " but should have length ", nrow(lod))
 
   n.chrpair <- n.chr*(n.chr+1)/2
 

@@ -82,6 +82,9 @@ Minor changes:
   Fixed a bug in summary.scantwo in case that scanoneX component is
   numeric(0) and not NULL, which resulted in a major crash.
 
+  Revised +.scantwo and -.scantwo so that if the scanoneX component in
+  the input is NULL, the output has scanoneX that is NULL.
+
   Fixed a bug in addpair() in the case that the user gives a formula
   that includes one but not both of the new QTL.
 
