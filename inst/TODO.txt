@@ -37,12 +37,6 @@ o Add an explanation regarding the coding in the coefficient
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
 
-o In summary.scanone (and I suppose summary.scantwo), allow the
-  scanone output to have multiple columns but the perms to have just
-  one (e.g. for the case of rank-based analyses).  Ensure that the
-  perms are "recycled" and that the lodcolumn argument is treated
-  appropriately.
-
 o FAQ: - constructing covariate matrices
 
 ----------------------------------------------------------------------

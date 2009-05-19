@@ -140,15 +140,21 @@ function(object, thresholds,
     if(length(d)==3) {
       if(!missing(perms)) {
         ncp <- sapply(perms, ncol)
-        if(any(ncp != d[3]))
-          stop("perms have different numbers of columns as object input.\n")
+        if(all(ncp==1)) onepermcol <- TRUE
+        else onepermcol <- FALSE
+        if(any(ncp != d[3])) {
+          if(onepermcol) 
+            warning("Just one column of permutation results; reusing for all LOD score columns.")
+          else
+            stop("perms have different numbers of columns as object input.\n")
+        }
       }
       
       if(lodcolumn < 1 || lodcolumn > d[3])
         stop("lodcolumn must be between 1 and ", d[3])
       
       object$lod <- object$lod[,,lodcolumn]
-      if(!missing(perms))
+      if(!missing(perms) && !onepermcol)
         perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
     }
   }
@@ -157,8 +163,14 @@ function(object, thresholds,
       d <- ncol(object$pos1.jnt)
       if(!missing(perms)) {
         ncp <- sapply(perms, ncol)
-        if(any(ncp != d))
-          stop("perms have different numbers of columns as object input.\n")
+        if(all(ncp==1)) onepermcol <- TRUE
+        else onepermcol <- FALSE
+        if(any(ncp != d[3])) {
+          if(onepermcol) 
+            warning("Just one column of permutation results; reusing for all LOD score columns.")
+          else
+            stop("perms have different numbers of columns as object input.\n")
+        }
       }
       
       if(lodcolumn < 1 || lodcolumn > d)
@@ -167,7 +179,7 @@ function(object, thresholds,
       for(i in 3:length(object))
         object[[i]] <- object[[i]][,lodcolumn]
 
-      if(!missing(perms))
+      if(!missing(perms) && !onepermcol)
         perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
     }
   }

@@ -86,8 +86,26 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
       cn.perms <- colnames(perms)
     }
 
-    if(ncol.object != ncol.perms)
-      stop("scanone input has different number of LOD columns as perms input.")
+    if(ncol.object != ncol.perms) {
+      if(ncol.perms==1) { # reuse the multiple columns
+        origperms <- perms
+        if("xchr" %in% names(attributes(perms))) {
+          for(j in 2:ncol.object) {
+            perms$A <- cbind(perms$A, origperms$A)
+            perms$X <- cbind(perms$X, origperms$X)
+          }
+          cn.perms <- colnames(perms$A) <- colnames(perms$X) <- cn.object
+        }
+        else {
+          for(j in 2:ncol.object)
+            perms <- cbind(perms, origperms)
+          cn.perms <- colnames(perms) <- cn.object
+        }
+        warning("Just one column of permutation results; reusing for all LOD score columns.")
+      }
+      else 
+        stop("scanone input has different number of LOD columns as perms input.")
+    }
     if(!all(cn.object == cn.perms))
       warning("Column names in scanone input do not match those in perms input.")
   }

@@ -63,7 +63,11 @@ Minor changes:
   distance between two positions).  These arguments were also added to
   scantwo (as clean.nmar and clean.distance).
 
-  Revised summary.scanoneperm so that the perms argument can be
+  Revised summary.scanone and summary.scantwo so that the perms
+  argument can contain a single column of permutation results, in
+  which case they are assumed to apply to any  LOD score columns. 
+
+  Revised summary.scanone so that the perms argument can be
   scantwo permutations results; added an internal utility function,
   scantwoperm2scanoneperm, for pulling the scanone permutations out of
   the scantwo permutations.
