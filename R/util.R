@@ -1330,7 +1330,7 @@ function(...)
     error.prob <- sapply(args,function(a) attr(a$geno[[1]]$prob,"error.prob"))
     off.end <- sapply(args,function(a) attr(a$geno[[1]]$prob,"off.end"))
     map.function <- sapply(args,function(a) attr(a$geno[[1]]$prob,"map.function"))
-    map <- sapply(args,function(a) attr(a$geno[[1]]$prob,"map"))
+    map <- lapply(args,function(a) attr(a$geno[[1]]$prob,"map"))
     if(!any(is.na(wh)) && length(unique(step))==1 &&
        length(unique(error.prob))==1 && length(unique(off.end))==1 &&
        length(unique(map.function))==1) {
@@ -1370,13 +1370,13 @@ function(...)
         error.prob <- sapply(args,function(a) attr(a$geno[[j]]$prob,"error.prob"))
         off.end <- sapply(args,function(a) attr(a$geno[[j]]$prob,"off.end"))
         map.function <- sapply(args,function(a) attr(a$geno[[j]]$prob,"map.function"))
-        map <- sapply(args,function(a) attr(a$geno[[j]]$prob,"map"))
+        map <- lapply(args,function(a) attr(a$geno[[j]]$prob,"map"))
 
         attr(geno[[j]]$prob,"step") <- step[1]
         attr(geno[[j]]$prob,"error.prob") <- error.prob[1]
         attr(geno[[j]]$prob,"off.end") <- off.end[1]
         attr(geno[[j]]$prob,"map.function") <- map.function[1]
-        attr(geno[[j]]$prob,"map") <- map[1]
+        attr(geno[[j]]$prob,"map") <- map[[1]]
       }
     }
   
@@ -1387,7 +1387,7 @@ function(...)
     error.prob <- sapply(args,function(a) attr(a$geno[[1]]$draws,"error.prob"))
     off.end <- sapply(args,function(a) attr(a$geno[[1]]$draws,"off.end"))
     map.function <- sapply(args,function(a) attr(a$geno[[1]]$draws,"map.function"))
-    map <- sapply(args,function(a) attr(a$geno[[1]]$draws,"map"))
+    map <- lapply(args,function(a) attr(a$geno[[1]]$draws,"map"))
     ndraws <- sapply(args,function(a) dim(a$geno[[1]]$draws)[3])
     if(!any(is.na(wh)) && length(unique(step))==1 &&
        length(unique(error.prob))==1 && length(unique(off.end))==1 &&
@@ -1407,13 +1407,13 @@ function(...)
         error.prob <- sapply(args,function(a) attr(a$geno[[j]]$draws,"error.prob"))
         off.end <- sapply(args,function(a) attr(a$geno[[j]]$draws,"off.end"))
         map.function <- sapply(args,function(a) attr(a$geno[[j]]$draws,"map.function"))
-        map <- sapply(args,function(a) attr(a$geno[[j]]$draws,"map"))
+        map <- lapply(args,function(a) attr(a$geno[[j]]$draws,"map"))
 
         attr(geno[[j]]$draws,"step") <- step[1]
         attr(geno[[j]]$draws,"error.prob") <- error.prob[1]
         attr(geno[[j]]$draws,"off.end") <- off.end[1]
         attr(geno[[j]]$draws,"map.function") <- map.function[1]
-        attr(geno[[j]]$draws,"map") <- map[1]
+        attr(geno[[j]]$draws,"map") <- map[[1]]
       }
     }
   }

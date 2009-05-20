@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/19/2009:
+Version 1.12, 5/20/2009:
 
 Major changes:
 
@@ -74,6 +74,8 @@ Minor changes:
 
   In plots of output from addpair with a special formula, plot.scantwo
   now gives just one set of numbers on the color scale.
+
+  Fixed a bug in c.cross regarding "map" attributes in $prob or $draws.
 
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
