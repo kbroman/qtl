@@ -60,6 +60,8 @@ est.rf                  Estimate pairwise recombination fractions
 fake.4way               Simulated data for a 4-way cross
 fake.bc                 Simulated data for a backcross
 fake.f2                 Simulated data for an F2 intercross
+FDRpermutation          Estimates of FDR when doing multiple trait QTL
+                        analysis
 fill.geno               Fill holes in genotype data
 find.flanking           Find flanking markers for a specified position
 find.marker             Find marker closest to a specified position

@@ -8,15 +8,13 @@
 }
 
 \usage{
-	bootstrap(cross = NULL, Funktie=scanall, threshold=5.0, n.perm=10, verbose=FALSE, \dots)
-	bootstrapcim(\dots)
-	bootstrapmqm(\dots)
+	FDRpermutation(cross = NULL, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=FALSE, \dots)
 }
 
 \arguments{
 	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
 	\item{Funktie}{ Function to use when mappingQTL's (either scanall,cimall or mqmall)}
-	\item{threshold}{ False discovery rate is calculated for peaks above this LOD threshold (DEFAULT=5) }
+	\item{thresholds}{ False discovery rate is calculated for peaks above these LOD thresholds (DEFAULT=Range from 1 to 20, using 10 thresholds) }
 	\item{n.perm}{ Number of permutation runs (DEFAULT=10, should be 1000 to 5000) }
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
@@ -31,7 +29,7 @@
 }
 
 \value{
-	Returns a FDR that would be obtained when usiung the specified threshold
+	Returns a matrix with FP FN and FDR for the selected thresholds
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }
@@ -65,12 +63,7 @@ result <- FDRpermutation(multitrait, threshold=10.0, n.perm=5)	#Calculate the th
 		\item Jansen RC (1993), Interval mapping of multiple quantitative trait loci. \emph{Genetics}, \bold{135}, 205--211.
 		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
 		\item Bruno M. Tesson1, Ritsert C. Jansen (2009) Chapter 3.7. Determining the significance threshold \emph{eQTL Analysis in Mice and Rats} \bold{1}, 20--25
- 
-
-
-
-
-	}
+ 	}
 }
 
 \keyword{ models }

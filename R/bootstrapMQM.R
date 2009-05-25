@@ -31,34 +31,44 @@
 #
 ######################################################################
 
-FDRpermutation <- function(cross=NULL, Funktie=scanall, threshold=5.0, n.perm = 10, verbose=TRUE, ...){
+FDRpermutation <- function(cross=NULL, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
+	results <- NULL
+	above_in_real_res <- NULL
 	res <- Funktie(cross,...)
-	above_in_real <- 0
-	for(x in 1:nphe(multitrait)){
-		above_in_real = above_in_real + sum(res[[x]][,3] > threshold)
+	for(threshold in thresholds){
+		above_in_real <- 0
+		for(x in 1:nphe(multitrait)){
+			above_in_real = above_in_real + sum(res[[x]][,3] > threshold)
+		}
+		above_in_real_res <- c(above_in_real_res,above_in_real)
 	}
 	perm <- cross
 	if(verbose){cat("QTL's above threshold:",above_in_real,"\n")}
-	above_in_perm_res <- NULL
+	above_in_perm_res <- rep(0,length(thresholds))
 	for(x in 1:n.perm){
 		if(verbose){cat("Starting permutation",x,"\n")}
+		perm_res <- NULL
+		
 		neworder <- sample(nind(cross))
 		for(chr in 1:nchr(cross)){
 			perm$geno[[1]]$data <- perm$geno[[1]]$data[neworder,]
 		}
 		res <- Funktie(perm,...)
-		above_in_perm <- 0
-		for(y in 1:nphe(multitrait)){
-			above_in_perm = above_in_perm + sum(res[[y]][,3] > threshold)
+		for(threshold in thresholds){
+			above_in_perm <- 0
+			for(y in 1:nphe(multitrait)){
+				above_in_perm = above_in_perm + sum(res[[y]][,3] > threshold)
+			}
+			perm_res <- c(perm_res,above_in_perm)
+			#if(verbose){cat("Permutation",x,"QTL's above threshold:",above_in_perm,"\n")}
 		}
-		above_in_perm_res <- c(above_in_perm_res,above_in_perm)
-		if(verbose){cat("Permutation",x,"QTL's above threshold:",above_in_perm,"\n")}
+		above_in_perm_res <- above_in_perm_res+perm_res
 	}
-	if(verbose){cat("Done permutating\nMean number of QTL's above threshold",mean(above_in_perm_res),"\n")}
-	if(verbose){cat("FDR at threshold",threshold,":",mean(above_in_perm_res)/above_in_real,"\n")}
-	returnvalue <- mean(above_in_perm_res)/above_in_real
-	returnvalue
+	above_in_perm_res <- above_in_perm_res/n.perm
+	results <- cbind(above_in_real_res,above_in_perm_res,above_in_perm_res/above_in_real_res)
+	rownames(results) <- thresholds
+	results
 }
 
 
