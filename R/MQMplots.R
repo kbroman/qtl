@@ -25,6 +25,64 @@
 #
 ######################################################################
 
+CisTransPlot <- function(x,cross){
+	if(is.null(cross$locations)){
+		stop("Please add trait locations to the cross file\n")
+	}
+	locations <- NULL
+	nlocations <- NULL
+	nx <- NULL
+	if(any(class(result) == "MQMmulti")){
+		for( k in 1:length( x ) ) {
+			cat("starting phenotype",rownames(locs[[k]]),"\n")
+			loc <- cross$locations[[k]]
+			rownames(loc) <- k
+			locations <- rbind(locations,loc)
+		}
+		#order using chromosomes
+		chrrearange <- order(locations[,1])
+		nlocations <- locations[chrrearange,]
+		#order using chr
+		cmrearange <- order(locations[,2])		
+		nlocations <- locations[cmrearange,]
+		orderedQTLs <- NULL
+		for(y in as.numeric(rownames(nlocations))){
+			cat("Retrieving QTL profile",y,"\n")
+			qtl <- x[[y]][,3]
+			cat(qtl)
+			orderedQTLs <- rbind(orderedQTLs,qtl)
+		}
+		image(x=1:nrow(orderedQTLs),y=1:ncol(orderedQTLs),z=orderedQTLs)
+	}else{
+		stop("invalid object supplied\n")
+	}
+}
+
+addloctocross <- function(cross,locfile="location.txt"){
+	setwd("d:/")
+	locations <- read.table(locfile,row.names=1,header=TRUE)
+	cat("Phenotypes in cross:",nphe(cross))
+	cat("Phenotypes in file:",nrow(locations))
+	if(max(as.numeric(rownames(locations))) != nphe(cross)){
+		stop("ID's of traits in file are larger than # of traits in crossfile.") 	
+	}
+	if(nphe(cross)==nrow(locations)){
+		locs <- vector(mode = "list", length = nphe(cross))
+		for(x in as.numeric(rownames(locations))){
+			if(names(cross$pheno)[x] == locations[x,1]){
+				locs[[x]] <- locations[x,2:3]
+				rownames(locs[[x]]) <- locations[x,1]
+			}else{
+				warning("Mismatch between name of trait in cross & file")
+			}
+		}
+	}else{
+		stop("Number of traits in cross & file don't match.") 	
+	}
+	cross$locations <- locs
+}
+
+
 polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"), col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, 
 					  main = NULL, xlab = NULL, ylab = NULL, add=FALSE, ... ){
 	#Addition by Danny Arends
@@ -104,7 +162,7 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
   if(class(result)[2] != "MQMmulti")
-		ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
+		stop("Wrong type of result file, please supply a valid MQMmulti object.") 
 
   if(type=="C"){
     #Countour plot
