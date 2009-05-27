@@ -25,7 +25,7 @@
 #
 ######################################################################
 
-CisTransPlot <- function(x,cross,threshold=5,...){
+CisTransPlot <- function(x,cross,threshold=5,pch=22,cex=0.5, ...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
@@ -65,7 +65,7 @@ CisTransPlot <- function(x,cross,threshold=5,...){
 			aa <- locz[bmatrix[j,]]
 			trait_locz <- c(trait_locz,chr_breaks[locations[j,1]] + locations[j,2])
 			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
-			points(values,...)
+			points(values,pch=pch,cex=cex,...)
 		}
 		chr_breaks <- c(chr_breaks,sum_map)
 		axis(1,at=chr_breaks,F)
