@@ -25,44 +25,63 @@
 #
 ######################################################################
 
-CisTransPlot <- function(x,cross){
+CisTransPlot <- function(x,cross,threshold=5,...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
 	locations <- NULL
-	nlocations <- NULL
-	nx <- NULL
-	if(any(class(result) == "MQMmulti")){
-		for( k in 1:length( x ) ) {
-			cat("starting phenotype",rownames(locs[[k]]),"\n")
+	if(any(class(x) == "MQMmulti")){
+		sum_map <- 0
+		chr_breaks <- NULL
+		for(j in 1:nchr(cross)){
+			l_chr <- max(x[[1]][x[[1]][,1]==j,2])
+			chr_breaks <- c(chr_breaks,sum_map)
+			sum_map <- sum_map+l_chr
+		}
+		sum_map <- ceiling(sum_map)
+		cat("Total maplength:",sum_map," Cm in ",nchr(cross),"Chromosomes\nThe lengths are:",chr_breaks,"\n")		
+		for( k in 1:length(x) ) {
 			loc <- cross$locations[[k]]
 			rownames(loc) <- k
 			locations <- rbind(locations,loc)
 		}
-		#order using chromosomes
-		chrrearange <- order(locations[,1])
-		nlocations <- locations[chrrearange,]
-		#order using chr
-		cmrearange <- order(locations[,2])		
-		nlocations <- locations[cmrearange,]
-		orderedQTLs <- NULL
-		for(y in as.numeric(rownames(nlocations))){
-			cat("Retrieving QTL profile",y,"\n")
+		QTLs <- NULL
+		for(y in 1:nrow(locations)){
 			qtl <- x[[y]][,3]
-			cat(qtl)
-			orderedQTLs <- rbind(orderedQTLs,qtl)
+			QTLs <- rbind(QTLs,qtl)
 		}
-		image(x=1:nrow(orderedQTLs),y=1:ncol(orderedQTLs),z=orderedQTLs)
+		colnames(QTLs) <- rownames(x[[1]])
+		axi <- 1:sum_map
+		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTL's above threshold:",threshold),xlab="Markers (in Cm)",ylab="Traits (in Cm)",xaxt="n",yaxt="n")
+		bmatrix <- QTLs>threshold
+		locz <- NULL
+		for(marker in 1:ncol(QTLs)){
+			pos <- find.markerpos(cross, colnames(QTLs)[marker])
+			locz <- c(locz,round(chr_breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
+		}
+		trait_locz <- NULL
+		for(j in 1:nrow(QTLs)){
+			values <- rep(NA,sum_map)
+			aa <- locz[bmatrix[j,]]
+			trait_locz <- c(trait_locz,chr_breaks[locations[j,1]] + locations[j,2])
+			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
+			points(values,...)
+		}
+		chr_breaks <- c(chr_breaks,sum_map)
+		axis(1,at=chr_breaks,F)
+		axis(2,at=chr_breaks,F)
+		axis(1,at=locz,line=1,pch=24)
+		axis(2,at=seq(0,sum_map,25),line=1)
 	}else{
 		stop("invalid object supplied\n")
 	}
 }
 
-addloctocross <- function(cross,locfile="location.txt"){
+addloctocross <- function(cross,locfile="locations.txt"){
 	setwd("d:/")
 	locations <- read.table(locfile,row.names=1,header=TRUE)
-	cat("Phenotypes in cross:",nphe(cross))
-	cat("Phenotypes in file:",nrow(locations))
+	cat("Phenotypes in cross:",nphe(cross),"\n")
+	cat("Phenotypes in file:",nrow(locations),"\n")
 	if(max(as.numeric(rownames(locations))) != nphe(cross)){
 		stop("ID's of traits in file are larger than # of traits in crossfile.") 	
 	}
@@ -73,13 +92,14 @@ addloctocross <- function(cross,locfile="location.txt"){
 				locs[[x]] <- locations[x,2:3]
 				rownames(locs[[x]]) <- locations[x,1]
 			}else{
-				warning("Mismatch between name of trait in cross & file")
+				warning("Mismatch between name of trait in cross & file.\n")
 			}
 		}
 	}else{
 		stop("Number of traits in cross & file don't match.") 	
 	}
 	cross$locations <- locs
+	cross
 }
 
 
