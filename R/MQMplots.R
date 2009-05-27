@@ -25,7 +25,7 @@
 #
 ######################################################################
 
-CisTransPlot <- function(x,cross,threshold=5,pch=22,cex=0.5, ...){
+CisTransPlot <- function(x,cross,threshold=5,onlyPEEK=TRUE,highPEEK=FALSE,pch=22,cex=0.5, ...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
@@ -39,7 +39,7 @@ CisTransPlot <- function(x,cross,threshold=5,pch=22,cex=0.5, ...){
 			sum_map <- sum_map+l_chr
 		}
 		sum_map <- ceiling(sum_map)
-		cat("Total maplength:",sum_map," Cm in ",nchr(cross),"Chromosomes\nThe lengths are:",chr_breaks,"\n")		
+		cat("Total maplength:",sum_map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr_breaks,"\n")		
 		for( k in 1:length(x) ) {
 			loc <- cross$locations[[k]]
 			rownames(loc) <- k
@@ -52,8 +52,40 @@ CisTransPlot <- function(x,cross,threshold=5,pch=22,cex=0.5, ...){
 		}
 		colnames(QTLs) <- rownames(x[[1]])
 		axi <- 1:sum_map
-		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTL's above threshold:",threshold),xlab="Markers (in Cm)",ylab="Traits (in Cm)",xaxt="n",yaxt="n")
+		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		bmatrix <- QTLs>threshold
+		pmatrix <- NULL
+		for(j in 1:nrow(QTLs)){
+			temp <- as.vector(bmatrix[j,])
+			tempv <- QTLs[j,]
+			value = 0
+			index = -1
+			for(l in 1:length(temp)){
+				if(temp[l]){
+					if( tempv[l] > value){
+						#New highest marker set the old index to false
+						if(index != -1){
+							temp[index] <- FALSE
+						}
+						#and store the new one
+						value = tempv[l]
+						index <- l
+					}else{				
+					#Lower marker
+						temp[l] <- FALSE
+					}
+				}else{
+					index = -1
+					value = 0
+				}
+			}
+			if(onlyPEEK){
+				bmatrix[j,] <- temp
+			}
+			if(highPEEK){
+				pmatrix <- rbind(pmatrix,temp)
+			}
+		}
 		locz <- NULL
 		for(marker in 1:ncol(QTLs)){
 			pos <- find.markerpos(cross, colnames(QTLs)[marker])
@@ -65,8 +97,17 @@ CisTransPlot <- function(x,cross,threshold=5,pch=22,cex=0.5, ...){
 			aa <- locz[bmatrix[j,]]
 			trait_locz <- c(trait_locz,chr_breaks[locations[j,1]] + locations[j,2])
 			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
-			points(values,pch=pch,cex=cex,...)
+			points(values,pch=pch,cex=cex)
 		}
+		if(highPEEK){
+		for(j in 1:nrow(QTLs)){
+			values <- rep(NA,sum_map)
+			aa <- locz[pmatrix[j,]]
+			trait_locz <- c(trait_locz,chr_breaks[locations[j,1]] + locations[j,2])
+			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
+			points(values,pch=24,cex=1.25*cex,col="black",bg="red")
+		}
+		}		
 		chr_breaks <- c(chr_breaks,sum_map)
 		axis(1,at=chr_breaks,F)
 		axis(2,at=chr_breaks,F)
@@ -78,7 +119,6 @@ CisTransPlot <- function(x,cross,threshold=5,pch=22,cex=0.5, ...){
 }
 
 addloctocross <- function(cross,locfile="locations.txt"){
-	setwd("d:/")
 	locations <- read.table(locfile,row.names=1,header=TRUE)
 	cat("Phenotypes in cross:",nphe(cross),"\n")
 	cat("Phenotypes in file:",nrow(locations),"\n")
