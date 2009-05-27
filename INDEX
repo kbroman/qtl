@@ -8,6 +8,7 @@ addcovarint             Add QTL x covariate interaction to a
                         multiple-QTL model
 addint                  Add pairwise interaction to a multiple-QTL
                         model
+addloctocross           Adds phenotypes location into a cross object
 addpair                 Scan for an additional pair of QTL in a
                         multiple-QTL model
 addqtl                  Scan for an additional QTL in a multiple-QTL
@@ -33,6 +34,8 @@ checkAlleles            Identify markers with switched alleles
 chrlen                  Chromosome lengths in QTL experiment
 chrnames                Pull out the chromosome names from a cross
 cim                     Composite interval mapping
+CisTransPlot            Plotting routine to show cis and trans QTL
+                        information
 clean.cross             Remove derived data
 clean.scantwo           Clean up scantwo output
 comparecrosses          Compare two cross objects.
@@ -78,6 +81,7 @@ geno.table              Create table of genotype distributions
 hyper                   Data on hypertension
 jittermap               Jitter marker positions in a genetic map
 listeria                Data on Listeria monocytogenes susceptibility
+locations               Distances for the multitrait dataset
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map

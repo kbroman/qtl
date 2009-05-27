@@ -118,8 +118,10 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEEK=TRUE,highPEEK=FALSE,pch=22
 	}
 }
 
-addloctocross <- function(cross,locfile="locations.txt"){
-	locations <- read.table(locfile,row.names=1,header=TRUE)
+addloctocross <- function(cross,locations=NULL,locfile="locations.txt"){
+	if(is.null(locations)){
+		locations <- read.table(locfile,row.names=1,header=TRUE)
+	}
 	cat("Phenotypes in cross:",nphe(cross),"\n")
 	cat("Phenotypes in file:",nrow(locations),"\n")
 	if(max(as.numeric(rownames(locations))) != nphe(cross)){
