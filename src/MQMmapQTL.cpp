@@ -37,7 +37,7 @@ extern "C"
 #include "MQMscan.h"
 #include "MQMdata.h"
 #include "MQMmixture.h"
-#include "MQMRegression.h"
+#include "MQMregression.h"
 #include "MQMreDefine.h"
 
 /* mapQTL */

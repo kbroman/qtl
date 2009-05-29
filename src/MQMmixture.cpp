@@ -37,7 +37,7 @@
 #include "MQMscan.h"
 #include "MQMdata.h"
 #include "MQMprob.h"
-#include "MQMRegression.h"
+#include "MQMregression.h"
 #include "MQMreDefine.h"
 
 /* ML estimation of recombination frequencies via EM;

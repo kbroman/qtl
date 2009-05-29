@@ -34,7 +34,7 @@
 #include "MQMscan.h"
 #include "MQMdata.h"
 #include "MQMprob.h"
-#include "MQMRegression.h"
+#include "MQMregression.h"
 #include "MQMreDefine.h"
 
 /* regression of trait on multiple cofactors  y=xb+e with weight w
