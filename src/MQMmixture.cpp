@@ -156,7 +156,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     Ploci= newvector(newNaug);	
 	#ifndef ALONE
 		R_CheckUserInterrupt(); /* check for ^C */
-		R_ProcessEvents();
+		//R_ProcessEvents();
 		R_FlushConsole();
 	#endif	
     if ((REMLorML=='0')&&(varknown=='n')){ 

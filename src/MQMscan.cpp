@@ -198,7 +198,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	if(verbose==1){Rprintf("INFO: All done in C returning to R\n");}
 	 #ifndef ALONE
 	 R_CheckUserInterrupt(); /* check for ^C */
-	 R_ProcessEvents(); /*  Try not to crash windows etc*/
+	// R_ProcessEvents(); /*  Try not to crash windows etc*/
 	 R_FlushConsole();
 	 #endif
 	return;

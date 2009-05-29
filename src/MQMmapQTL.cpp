@@ -125,7 +125,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 			//Rprintf("TEST MQMmapQTL\n");
 			R_CheckUserInterrupt(); /* check for ^C */
 			R_FlushConsole();
-			R_ProcessEvents(); /*  Try not to crash windows etc*/
+			//R_ProcessEvents(); /*  Try not to crash windows etc*/
 		#endif
          while (nextinterval=='n')
          { // step 1:

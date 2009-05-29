@@ -385,7 +385,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 	#ifndef ALONE
 		//Rprintf("TEST BW\n");
 		R_CheckUserInterrupt(); /* check for ^C */
-		R_ProcessEvents(); /*  Try not to crash windows etc*/
+		//R_ProcessEvents(); /*  Try not to crash windows etc*/
 		R_FlushConsole();
 	#endif
 		if  ( ((*newcofactor)[dropj]=='1') && ( F2> 2.0*(savelogL-maxlogL)) ){   
