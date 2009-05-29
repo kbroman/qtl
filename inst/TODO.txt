@@ -12,6 +12,10 @@ SHORT TERM:
 
 o Fix bug regarding X chromosome in fitqtl.
 
+o Analysis of binary traits by "hk" in scanone/two.
+
+o Implementation of binary traits in fitqtl, etc., with method="hk"
+
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
