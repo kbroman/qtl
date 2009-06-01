@@ -22,7 +22,7 @@
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
 #           polyplot, plotMQMall, plotMQMboot, plotMQMnice, plotMQMone
-#
+#           CisTransPlot, addloctocross 
 ######################################################################
 
 CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){

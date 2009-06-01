@@ -48,7 +48,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	CisTransPlot(results,multiloc,5,F,T)
+	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
 }
 
 %\references{
