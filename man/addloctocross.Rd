@@ -45,11 +45,14 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 }
 
 \examples{
-	data(multitrait)								# Mouse genome
+% See the help file for CisTransPlot
+\dontrun{
+	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
 	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
+}
 }
 
 %\references{

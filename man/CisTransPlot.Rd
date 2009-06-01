@@ -44,7 +44,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 }
 
 \examples{
-	data(multitrait)								# Mouse genome
+	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
