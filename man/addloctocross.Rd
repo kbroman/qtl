@@ -40,7 +40,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{CisTransPlot}} - Function called to analytse multiple traits in the cross object
+		\item \code{\link[qtl]{CisTransPlot}} - Function called to analyze multiple traits in the cross object
 	}
 }
 
@@ -49,7 +49,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	CisTransPlot(results,multiloc,5,F,T)
+	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
 }
 
 %\references{
