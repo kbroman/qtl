@@ -8,7 +8,7 @@
 }
 
 \usage{
-	addloctocross(cross,locations=NULLmlocfile="locations.txt")
+	addloctocross(cross,locations=NULL, locfile="locations.txt")
 }
 
 \arguments{

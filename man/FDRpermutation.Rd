@@ -8,7 +8,7 @@
 }
 
 \usage{
-	FDRpermutation(cross = NULL, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=FALSE, \dots)
+	FDRpermutation(cross = NULL, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=TRUE, \dots)
 }
 
 \arguments{
