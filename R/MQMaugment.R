@@ -106,7 +106,7 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,f
 				if(is.na(geno[i,j])){
 					geno[i,j] <- 9;
 				}else{
-					if(forceRIL && geno[i,j]==2){
+					if(forceRIL && ctype != 2 && geno[i,j]==2){
 						#We have a 2 (AB) change it to a 3
 						geno[i,j] <- 3
 						Fril.replaced <- Fril.replaced+1
