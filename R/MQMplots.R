@@ -224,6 +224,10 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 	invisible()															# return the plot
 }
 
+getThird <- function(x){
+	x[,3]
+}
+
 plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
 	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
   if(class(result)[2] != "MQMmulti")
@@ -231,11 +235,8 @@ plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
 
   if(type=="C"){
     #Countour plot
-    c <- NULL
-    for(i in 1:length(result)){
-      #Collect all the "QTL PHENO_TYPE" colums of the result
-      c <- rbind(c,result[[i]][,3])
-    }
+    temp <- lapply(result,getThird)
+	c <- do.call("rbind",temp)
     c <- t(c)
     contour(
             x=seq(1,dim(c)[1]),
@@ -248,11 +249,9 @@ plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
   }
   if(type=="I"){
     #Image plot
-    c <- NULL
-    for(i in 1:length(result)){
-      c <- rbind(c,result[[i]][,3])
-    }
-    c <- t(c)
+    temp <- lapply(result,getThird)
+	c <- do.call("rbind",temp)
+	c <- t(c)
     image(x=1:dim(c)[1],y=1:dim(c)[2],c,
           xlab="Markers",ylab="Trait",
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
@@ -261,10 +260,8 @@ plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
   }
   if(type=="D"){
     #3D perspective plot
-    c <- NULL
-    for(i in 1:length(result)){
-      c <- rbind(c,result[[i]][,3])
-    }
+    temp <- lapply(result,getThird)
+	c <- do.call("rbind",temp)
     c <- t(c)
     persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
           theta = theta, phi = phi, expand = 1,
