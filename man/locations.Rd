@@ -4,7 +4,7 @@
 \docType{data}
 
 \title{ 
-	Distances for the multitrait dataset
+	Genetic locations of traits for the multitrait dataset
 }
 
 \description{
@@ -29,7 +29,7 @@
 \itemize{
  
  \item Keurentijes JJB, Fu J, de Vos CHR,Lommen A, Jansen RC et al
- (2006), The genetics of plant metabolism. \emph{Nature Genetics.}
+ (2006), The genetics of plant metabolism. \emph{Nature Genetics}
  \bold{38}, 842--849. 
  
  \item Alonso-Blanco C., Peeters, A. J. and Koornneef, M. (2006)
@@ -41,11 +41,16 @@
 }
 
 \examples{
-	data(multitrait)								# Mouse genome
+% See the help file for CisTransPlot
+\dontrun{
+	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	CisTransPlot(results,multiloc,5,F,T)
+	CisTransPlot(results,multiloc, 5, FALSE, TRUE)
 }
+}
+
+\seealso{\code{\link[qtl]{multitrait}} }
 
 \keyword{datasets}

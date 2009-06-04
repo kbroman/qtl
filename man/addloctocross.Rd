@@ -8,7 +8,7 @@
 }
 
 \usage{
-	addloctocross(cross,locations=NULLmlocfile="locations.txt")
+	addloctocross(cross,locations=NULL, locfile="locations.txt")
 }
 
 \arguments{
@@ -40,16 +40,19 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{CisTransPlot}} - Function called to analytse multiple traits in the cross object
+		\item \code{\link[qtl]{CisTransPlot}} - Function called to analyze multiple traits in the cross object
 	}
 }
 
 \examples{
-	data(multitrait)								# Mouse genome
+% See the help file for CisTransPlot
+\dontrun{
+	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	CisTransPlot(results,multiloc,5,F,T)
+	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
+}
 }
 
 %\references{

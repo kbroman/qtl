@@ -4,7 +4,7 @@
 #
 # copyright polyplot (c) 2009, Rutger Brouwer
 # copyright other functions (c) 2009, Danny Arends
-# last modified Mrt, 2009
+# last modified Jun, 2009
 # first written Feb, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -22,10 +22,10 @@
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
 #           polyplot, plotMQMall, plotMQMboot, plotMQMnice, plotMQMone
-#
+#           CisTransPlot, addloctocross 
 ######################################################################
 
-CisTransPlot <- function(x,cross,threshold=5,onlyPEEK=TRUE,highPEEK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
@@ -79,10 +79,10 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEEK=TRUE,highPEEK=FALSE,cisare
 					value = 0
 				}
 			}
-			if(onlyPEEK){
+			if(onlyPEAK){
 				bmatrix[j,] <- temp
 			}
-			if(highPEEK){
+			if(highPEAK){
 				pmatrix <- rbind(pmatrix,temp)
 			}
 		}
@@ -99,7 +99,7 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEEK=TRUE,highPEEK=FALSE,cisare
 			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
 			points(values,pch=pch,cex=cex)
 		}
-		if(highPEEK){
+		if(highPEAK){
 		for(j in 1:nrow(QTLs)){
 			values <- rep(NA,sum_map)
 			aa <- locz[pmatrix[j,]]
@@ -112,8 +112,8 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEEK=TRUE,highPEEK=FALSE,cisare
 		points(axi+(cisarea/2),type="l",col="green")
 		points(axi-(cisarea/2),type="l",col="green")
 		chr_breaks <- c(chr_breaks,sum_map)
-		axis(1,at=chr_breaks,F)
-		axis(2,at=chr_breaks,F)
+		axis(1,at=chr_breaks,labels=FALSE)
+		axis(2,at=chr_breaks,labels=FALSE)
 		axis(1,at=locz,line=1,pch=24)
 		axis(2,at=seq(0,sum_map,25),line=1)
 	}else{
