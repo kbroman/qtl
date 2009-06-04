@@ -40,6 +40,7 @@ snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE,...){
 	}else{
 		result <- Funktie(cross=all_data,pheno.col=x,...)
 	}
+	colnames(result)[3] <- paste("lod",names(cross$pheno)[x])
 	e <- proc.time()
         if(verbose) {
           cat("------------------------------------------------------------------\n")
