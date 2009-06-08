@@ -148,7 +148,11 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=2,b_size=
 			}
 		}
 		#Return the results
+		if(length(res) > 1){
 		class(res) <- c(class(res),"MQMmulti")
+		}else{
+		class(res) <- c(class(res),"scanone")
+		}
 		#All done now plot the results
 		end <- proc.time()
 		SUM <- SUM + (end-start)[3]
