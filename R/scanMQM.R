@@ -91,7 +91,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 					ourstop("Missing genotype information, please estimate unknown data, before running scanMQM.\n")
 					geno[i,j] <- 9
 				}else{
-					if(forceRIL && geno[i,j]==2){
+					if(forceRIL && ctype != 2 && geno[i,j]==2){
 					#We have a 2 (AB) change it to a 3
 					geno[i,j] <- 3
 					Fril.replaced <- Fril.replaced+1
