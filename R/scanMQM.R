@@ -306,6 +306,17 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		if(plot){
 		  op <- par(mfrow = c(1,1))
 		}
+		
+		for( x in 1:nchr(cross)){
+			#Remove pseudomarkers from the dataset and scale to the chromosome
+			to_remove <- NULL
+			chr_length <- max(cross$geno[[x]]$map)
+			markers_on_chr <- which(qtl[,1]==x)
+			to_remove <- markers_on_chr[which(qtl[markers_on_chr,2] > chr_length+step.size)]
+			to_remove <- c(to_remove,markers_on_chr[which(qtl[markers_on_chr,2] < 0)])
+			qtl <- qtl[-to_remove,]
+		}
+		
 		end_3 <- proc.time()
 		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end_1-start)[3], digits=3), ",",round((end_2-end_1)[3], digits=3),",",round((end_3-end_2)[3], digits=3),") (in seconds)\n")
 		qtl
