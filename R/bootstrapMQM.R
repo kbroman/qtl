@@ -82,7 +82,7 @@ bootstrapcim <- function(...){
 #
 ######################################################################
 
-bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,method=0,plot=FALSE,verbose=FALSE,...)
+bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=2,bootmethod=0,plot=FALSE,verbose=FALSE,...)
 {
 	
 	if(is.null(cross)){
@@ -99,7 +99,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
                   cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
                 }
 		b <- proc.time()		
-		if(!method){
+		if(!bootmethod){
 			if(verbose) cat("INFO: Shuffleling traits between individuals.\n")
 		}else{
 			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
@@ -145,7 +145,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				}			
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -180,7 +180,7 @@ bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=
 				}else{
 					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,Funktie=Funktie,method=method,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
