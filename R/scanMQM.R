@@ -275,7 +275,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		qtl <- as.data.frame(qtl)
 		class(qtl) <- c("scanone",class(qtl)) 
 		if(verbose) cat("INFO: Saving output to file: ",file, "\n")
-		write.table(qtl,file)
+		#write.table(qtl,file)
 		#Reset plotting and return the results
 		if(plot){
 			info_c <- qtl

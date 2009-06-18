@@ -52,10 +52,10 @@ snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE,...){
 }
 
 
-snowCoreBOOT <- function(x,all_data,Funktie,method,verbose=FALSE,...){
+snowCoreBOOT <- function(x,all_data,Funktie,bootmethod,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
-	if(!method){
+	if(!bootmethod){
 		#random permutation
 		neworder <- sample(nind(all_data))			
 		all_data$pheno[[1]] <- all_data$pheno[[1]][neworder]
