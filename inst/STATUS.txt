@@ -78,6 +78,9 @@ Minor changes:
   Fixed a bug in plot.scanone that shows up if the "chr" column is not
   a factor.  Now we convert the column to a factor in advance.
 
+  Fixed a bug in stepwiseqtl in the case that the inferred model
+  contains no QTL; deparseQTLformula needs to deal with the NULL case.
+
   Fixed a bug in c.cross regarding "map" attributes in $prob or $draws.
 
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
