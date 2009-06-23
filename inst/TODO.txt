@@ -10,6 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o function for getting x axis location in scanone picture (maybe also
+  scantwo picture)
+
+o subset.map for pulling out selected chromosomes and still having a
+  map object.  Can this be done with [ ] ?
+
 o Fix bug regarding X chromosome in fitqtl.
 
 o Analysis of binary traits by "hk" in scanone/two.
@@ -22,7 +28,7 @@ o In c.cross, include an argument for "flipping" a backcross, so that
 o plot of genotype frequencies / P-values
 
 o function to identify the XO locations (based on countXO?)
-  [this is locate.xo, I think.]
+  [this is locate.xo, I think, but just for a single chromosome.]
 
 o In stepwiseqtl starting from something other than the null model,
   "Starting at a model with..." shouldn't be printed if

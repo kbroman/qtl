@@ -2,8 +2,8 @@
 #
 # plot.scanone.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Aug, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified Jun, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,6 +39,8 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
      (!missing(x2) && !any(class(x2) == "scanone")) ||
      (!missing(x3) && !any(class(x3) == "scanone")))
     stop("Input should have class \"scanone\".")
+
+  if(!is.factor(x$chr)) x$chr <- factor(x$chr, levels=unique(x$chr))
 
   dots <- list(...)
 

@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/20/2009:
+Version 1.12, 6/23/2009:
 
 Major changes:
 
@@ -74,6 +74,9 @@ Minor changes:
 
   In plots of output from addpair with a special formula, plot.scantwo
   now gives just one set of numbers on the color scale.
+
+  Fixed a bug in plot.scanone that shows up if the "chr" column is not
+  a factor.  Now we convert the column to a factor in advance.
 
   Fixed a bug in c.cross regarding "map" attributes in $prob or $draws.
 
