@@ -49,6 +49,10 @@ Minor changes:
   rows=chromosomes and columns=individuals.  See the examples in the
   help file for subset.cross.
 
+  Added a utility function, findDupMarkers, for identifying groups of
+  markers with identical genotype data.  (This is useful for reducing
+  the genotype data in the case of a very high marker density.)
+
   Added a utility function, xaxisloc.scanone, for finding x-axis
   locations for given genomic positions in a plot of scanone results
   (useful for adding annotations, such as text or arrows).

@@ -65,6 +65,7 @@ find.markerpos          Find position of a marker.
 find.pheno              Find column number for a particular phenotype.
 find.pseudomarker       Find the pseudomarker closest to a specified
                         position
+findDupMarkers          Find markers with identical genotype data
 fitqtl                  Fit a multiple-QTL model
 fitstahl                Fit Stahl interference model
 formLinkageGroups       Partition markers into linkage groups

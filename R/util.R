@@ -37,7 +37,8 @@
 #           qtlversion, locate.xo, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
-#           scantwoperm2scanoneperm
+#           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
+#           findDupMarkers
 #
 ######################################################################
 
@@ -3216,6 +3217,121 @@ function(x, ...)
 function(x, chr, ind)
   subset(x, chr, ind)
 
+
+######################################################################
+# findDupMarkers
+#
+# find markers whose genotype data is identical to another marker
+# (which thus might be dropped, as extraneous)
+#
+# chr          (Optional) set of chromosomes to consider
+#
+# exact.only   If TRUE, look for markers with the same genotypes
+#                       and the same pattern of missing data
+#              If FALSE, also identify markers whose observed
+#                        genotypes match another marker, with no
+#                        observed genotypes for which the other is
+#                        missing
+#                      
+# adjacent.only   If TRUE, only consider adjacent markers
+######################################################################
+
+findDupMarkers <-
+function(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
+{
+  if(!missing(chr)) cross <- subset(cross, chr=chr)
+
+  g <- pull.geno(cross)
+  markers <- colnames(g)
+  markerloc <- lapply(nmar(cross), function(a) 1:a)
+  if(length(markerloc) > 1) {
+    for(j in 2:length(markerloc))
+      markerloc[[j]] <- markerloc[[j]] + max(markerloc[[j-1]]) + 10
+  }
+  markerloc <- unlist(markerloc)
+
+  if(exact.only) {
+    g[is.na(g)] <- 0
+
+    # genotype data patterns
+    pat <- apply(g, 2, paste, collapse="")
+
+    # table of unique values
+    tab <- table(pat)
+
+    # no duplicates; return
+    if(all(tab == 1)) return(NULL)
+    
+    wh <- which(tab > 1)
+    theloc <- themar <- vector("list", length(wh))
+    for(i in seq(along=wh)) {
+      themar[[i]] <- names(pat)[pat==names(tab)[wh[i]]]
+      theloc[[i]] <- markerloc[pat==names(tab)[wh[i]]]
+    }
+
+    if(adjacent.only) {
+      extraloc <- list()
+      extramar <- list()
+      for(i in seq(along=theloc)) {
+        d <- diff(theloc[[i]]) # look for adjacency
+        if(any(d>1)) { # split into adjacent groups
+          temp <- which(d>1)
+          first <- c(1, temp+1)
+          last <- c(temp, length(theloc[[i]]))
+          for(j in 2:length(first)) {
+            extraloc[[length(extraloc)+1]] <- theloc[[i]][first[j]:last[j]]
+            extramar[[length(extramar)+1]] <- themar[[i]][first[j]:last[j]]
+          }
+          themar[[i]] <- themar[[i]][first[1]:last[1]]
+          theloc[[i]] <- theloc[[i]][first[1]:last[1]]
+        }
+      }
+      themar <- c(themar, extramar)
+      theloc <- c(theloc, extraloc)
+
+      nm <- sapply(themar, length)
+      if(all(nm==1)) return(NULL) # nothing left
+      themar <- themar[nm>1]
+      theloc <- theloc[nm>1]
+    }
+
+    # order by first locus
+    o <- order(sapply(theloc, min))
+    themar <- themar[o]
+
+    randompics <- sapply(themar, function(a) sample(length(a), 1))
+    for(i in seq(along=themar)) {
+      names(themar)[i] <- themar[[i]][randompics[i]]
+      themar[[i]] <- themar[[i]][-randompics[i]]
+    }
+
+  }
+  else {
+    themar <- NULL
+
+    ntyp <- ntyped(cross, "mar")
+    o <- order(ntyp, decreasing=TRUE)
+
+    g[is.na(g)] <- 0
+    z <- .C("R_findDupMarkers_notexact",
+            as.integer(nrow(g)),  
+            as.integer(ncol(g)),
+            as.integer(g),
+            as.integer(o),
+            as.integer(markerloc),
+            as.integer(adjacent.only),
+            result=as.integer(rep(0,length(o))),
+            PACKAGE="qtl")
+    if(all(z$result==0)) return(NULL)
+    u <- unique(z$result[z$result != 0])
+    themar <- vector("list", length(u))
+    names(themar) <- colnames(g)[u]
+    for(i in seq(along=themar)) 
+      themar[[i]] <- colnames(g)[z$result==u[i]]
+  }
+
+  themar
+}
 
 # end of util.R
 
