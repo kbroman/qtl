@@ -143,6 +143,7 @@ simFounderSnps          Simulate founder SNPs for a multiple-strain RIL
 stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
 subset.cross            Subsetting data for QTL experiment
+subset.map              Subsetting chromosomes for a genetic map
 subset.scanone          Subsetting the results of a genome scan
 subset.scanoneperm      Subsetting permutation test results
 subset.scantwo          Subsetting the results of a 2-d genome scan

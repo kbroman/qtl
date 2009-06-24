@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o subset.map for pulling out selected chromosomes and still having a
-  map object.  Can this be done with [ ] ?
-
 o Fix bug regarding X chromosome in fitqtl.
 
 o Analysis of binary traits by "hk" in scanone/two.
@@ -26,10 +23,6 @@ o plot of genotype frequencies / P-values
 
 o function to identify the XO locations (based on countXO?)
   [this is locate.xo, I think, but just for a single chromosome.]
-
-o In stepwiseqtl starting from something other than the null model,
-  "Starting at a model with..." shouldn't be printed if
-  verbose=FALSE. 
 
 o qtl x covar interactions in stepwiseqtl
 

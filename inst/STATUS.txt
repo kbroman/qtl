@@ -45,9 +45,16 @@ Major changes:
 
 Minor changes:
 
+  You can now subset crosses with brackets, [ ], as with a matrix with
+  rows=chromosomes and columns=individuals.  See the examples in the
+  help file for subset.cross.
+
   Added a utility function, xaxisloc.scanone, for finding x-axis
   locations for given genomic positions in a plot of scanone results
   (useful for adding annotations, such as text or arrows).
+
+  Added functions subset.map and `[.map` for pulling out selected
+  chromosomes from a map object.
 
   The output of tryallpositions, for testing possible positions for a
   genetic marker, now has class "scanone", so that one may use

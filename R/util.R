@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified May, 2009
+# last modified Jun, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3186,6 +3186,35 @@ function(scantwoperms)
   class(scanoneperms) <- c("scanoneperm")
   scanoneperms
 }
+
+
+######################################################################
+# subset.map
+######################################################################
+subset.map <-
+function(x, ...)
+{
+  cl <- class(x)
+  x <- x[...]
+  class(x) <- cl
+  x
+}
+
+`[.map` <-
+function(x, ...)
+{
+  x <- unclass(x)[...]
+  class(x) <- "map"
+  x
+}
+
+
+######################################################################
+# subset.cross with [ ]
+######################################################################
+`[.cross` <-
+function(x, chr, ind)
+  subset(x, chr, ind)
 
 
 # end of util.R
