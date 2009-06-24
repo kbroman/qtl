@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o function for getting x axis location in scanone picture (maybe also
-  scantwo picture)
-
 o subset.map for pulling out selected chromosomes and still having a
   map object.  Can this be done with [ ] ?
 
@@ -47,6 +44,9 @@ o Add an explanation regarding the coding in the coefficient
   summary.fitqtl(). 
 
 o FAQ: - constructing covariate matrices
+
+o function for getting x axis location in scantwo picture (like the
+  new xaxisloc.scanone)
 
 ----------------------------------------------------------------------
 

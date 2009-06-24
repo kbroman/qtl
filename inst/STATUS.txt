@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 6/23/2009:
+Version 1.12, 6/24/2009:
 
 Major changes:
 
@@ -44,6 +44,10 @@ Major changes:
   n.cluster indicates the number of parallel nodes to use.
 
 Minor changes:
+
+  Added a utility function, xaxisloc.scanone, for finding x-axis
+  locations for given genomic positions in a plot of scanone results
+  (useful for adding annotations, such as text or arrows).
 
   The output of tryallpositions, for testing possible positions for a
   genetic marker, now has class "scanone", so that one may use

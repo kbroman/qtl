@@ -82,7 +82,7 @@ plot(out.hk, chr=13, show.marker.names=TRUE)
 
 \seealso{ \code{\link[qtl]{scanone}},
   \code{\link[qtl]{summary.scanone}}, \code{\link[graphics]{par}},
-  \code{\link[grDevices]{colors}} }
+  \code{\link[grDevices]{colors}}, \code{\link[qtl]{add.threshold}}, \code{\link[qtl]{xaxisloc.scanone}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

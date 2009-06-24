@@ -166,3 +166,4 @@ top.errorlod            List genotypes with large error LOD scores
 totmar                  Determine the total number of markers
 tryallpositions         Test all possible positions for a marker
 write.cross             Write data for a QTL experiment to a file
+xaxisloc.scanone        Get x-axis locations in scanone plot.
