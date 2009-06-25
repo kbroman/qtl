@@ -32,13 +32,15 @@ mqmall <- function(...) {
 	scanall(...,Funktie=mqm)
 }
 
-scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=0,...,plot=FALSE,verbose=FALSE){
+scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=0,...,plot=FALSE,verbose=FALSE){
 
 	
-	if(is.null(cross)){
+	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
-	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
+	if(!(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"))
+		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+        
 		start <- proc.time()
 		n.pheno <- nphe(cross)
 		if(verbose) {
@@ -52,7 +54,9 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=
 		result <- NULL	 	#BATCH result variable
 		res <- NULL			#GLOBAL result variable
 		
-		all_data <- fill.geno(cross)
+        # we shouldn't do fill.geno here!
+	#	all_data <- fill.geno(cross)
+        all_data <- cross
 		
 		bootstraps <- 1:n.pheno
 		batches <- length(bootstraps) %/% b_size
@@ -164,9 +168,6 @@ scanall <- function(cross= NULL,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=
                   cat("------------------------------------------------------------------\n")
                 }
 		res
-	}else{
-		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
-	}
 }
 
 

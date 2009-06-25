@@ -47,6 +47,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
+        multiloc <- calc.genoprob(multiloc, step=5)
 	results <- scanall(multiloc)
 	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
 }
