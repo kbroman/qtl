@@ -2426,6 +2426,7 @@ function(object, ...)
   
   n.chr <- length(map)
   chrnames <- names(map)
+  if(is.null(chrnames)) chrnames <- 1:length(map)
   if(is.matrix(map[[1]])) { # sex-specific map
     sexsp <- TRUE
     n.mar <- sapply(map,ncol)
