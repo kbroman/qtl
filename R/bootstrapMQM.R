@@ -29,21 +29,21 @@
 FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
-	above_in_real_res <- NULL
+	above.in.real.res <- NULL
 	res <- Funktie(cross,...)
 	for(threshold in thresholds){
-		above_in_real <- 0
+		above.in.real <- 0
 		for(x in 1:nphe(cross)){
-			above_in_real = above_in_real + sum(res[[x]][,3] > threshold)
+			above.in.real = above.in.real + sum(res[[x]][,3] > threshold)
 		}
-		above_in_real_res <- c(above_in_real_res,above_in_real)
+		above.in.real.res <- c(above.in.real.res,above.in.real)
 	}
 	perm <- cross
-	if(verbose){cat("QTL's above threshold:",above_in_real,"\n")}
-	above_in_perm_res <- rep(0,length(thresholds))
+	if(verbose){cat("QTL's above threshold:",above.in.real,"\n")}
+	above.in.perm.res <- rep(0,length(thresholds))
 	for(x in 1:n.perm){
 		if(verbose){cat("Starting permutation",x,"\n")}
-		perm_res <- NULL
+		perm.res <- NULL
 		
 		neworder <- sample(nind(cross))
 		for(chr in 1:nchr(cross)){
@@ -51,17 +51,17 @@ FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,1
 		}
 		res <- Funktie(perm,...)
 		for(threshold in thresholds){
-			above_in_perm <- 0
+			above.in.perm <- 0
 			for(y in 1:nphe(cross)){
-				above_in_perm = above_in_perm + sum(res[[y]][,3] > threshold)
+				above.in.perm = above.in.perm + sum(res[[y]][,3] > threshold)
 			}
-			perm_res <- c(perm_res,above_in_perm)
-			#if(verbose){cat("Permutation",x,"QTL's above threshold:",above_in_perm,"\n")}
+			perm.res <- c(perm.res,above.in.perm)
+			#if(verbose){cat("Permutation",x,"QTL's above threshold:",above.in.perm,"\n")}
 		}
-		above_in_perm_res <- above_in_perm_res+perm_res
+		above.in.perm.res <- above.in.perm.res+perm.res
 	}
-	above_in_perm_res <- above_in_perm_res/n.perm
-	results <- cbind(above_in_real_res,above_in_perm_res,above_in_perm_res/above_in_real_res)
+	above.in.perm.res <- above.in.perm.res/n.perm
+	results <- cbind(above.in.real.res,above.in.perm.res,above.in.perm.res/above.in.real.res)
 	rownames(results) <- thresholds
 	results
 }
@@ -82,7 +82,7 @@ bootstrapcim <- function(...){
 #
 ######################################################################
 
-bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
+bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
 {
 	
 	if(missing(cross))
@@ -94,7 +94,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_s
                   cat("------------------------------------------------------------------\n")
                   cat("Starting bootstrap analysis\n")
                   cat("Number of bootstrapping runs:",n.run,"\n")
-                  cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
+                  cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
                   cat("------------------------------------------------------------------\n")		
                   cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
                 }
@@ -108,18 +108,18 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_s
 		#Set the Phenotype under intrest as the first
 		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 
-		if(n.clusters > b_size){
+		if(n.clusters > b.size){
 				ourstop("Please have more items in a batch then clusters assigned per batch")
 		}
 
 		#Scan the original
 		cross <- fill.geno(cross)
-		res0 <- lapply(1, FUN=snowCoreALL,all_data=cross,Funktie=Funktie,verbose=verbose,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,Funktie=Funktie,verbose=verbose,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.run)
-		batches <- length(bootstraps) %/% b_size
-		last.batch.num <- length(bootstraps) %% b_size
+		batches <- length(bootstraps) %/% b.size
+		last.batch.num <- length(bootstraps) %% b.size
 		results <- NULL
 		if(last.batch.num > 0){
 			batches = batches+1
@@ -139,13 +139,13 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_s
                                   ourline()
                                 }
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
+					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}			
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all_data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -161,7 +161,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_s
                                   cat("INFO: Done with batch",x,"/",batches,"\n")	
                                   cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
                                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
                                   cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
                                   ourline()
                                 }
@@ -176,11 +176,11 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_s
                                   ourline()
                                 }
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
+					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all_data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
@@ -195,7 +195,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_s
                                   cat("INFO: Done with batch",x,"/",batches,"\n")	
                                   cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
                                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% b.size), digits=3),"seconds\n")
                                   cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")				
                                   ourline()
                                 }

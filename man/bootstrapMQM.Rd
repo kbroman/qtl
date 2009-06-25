@@ -16,7 +16,7 @@
 
 \usage{
 	bootstrap(cross, Funktie=scanone, pheno.col=1,
-	          multiC=TRUE, n.run=10, b_size=10, file="MQM_output.txt",
+	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
    	          n.clusters=1, bootmethod=0, plot=FALSE, verbose=FALSE, \dots)
 	bootstrapcim(\dots)
 	bootstrapmqm(\dots)
@@ -28,7 +28,7 @@
 	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
 	\item{multiC}{ Use multicore (if available)}  
 	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
-	\item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
+	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size # of traits per job }
         \item{file}{File name (?)}
 	\item{n.clusters}{ Number of child processes to split the job into }
 	\item{bootmethod}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric ) } 
@@ -67,10 +67,10 @@
 
 \examples{
 data(multitrait)				#Use the multitrait dataset
-result <- bootstrap(multitrait,pheno.col=7, b_size=5)
-result <- bootstrapcim(multitrait,pheno.col=7, b_size=5)
+result <- bootstrap(multitrait,pheno.col=7, b.size=5)
+result <- bootstrapcim(multitrait,pheno.col=7, b.size=5)
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b_size=5,verbose=FALSE)	# Bootstrap 200 runs in batches of 20
+f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)	# Bootstrap 200 runs in batches of 20
 
 #EXTRA
 f2perm <- MQMpermObject(f2result)			#Create a permutation object

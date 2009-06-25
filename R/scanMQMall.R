@@ -32,7 +32,7 @@ mqmall <- function(...) {
 	scanall(...,Funktie=mqm)
 }
 
-scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=0,...,plot=FALSE,verbose=FALSE){
+scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=0,...,plot=FALSE,verbose=FALSE){
 
 	
 	if(missing(cross)){
@@ -47,7 +47,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=
                   ourline()
                   cat("Starting R/QTL multitrait analysis\n")
                   cat("Number of phenotypes:",n.pheno,"\n")
-                  cat("Batchsize:",b_size," & n.clusters:",n.clusters,"\n")
+                  cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
                   ourline()	
                 }
 		
@@ -55,12 +55,12 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=
 		res <- NULL			#GLOBAL result variable
 		
         # we shouldn't do fill.geno here!
-	#	all_data <- fill.geno(cross)
-        all_data <- cross
+	#	all.data <- fill.geno(cross)
+        all.data <- cross
 		
 		bootstraps <- 1:n.pheno
-		batches <- length(bootstraps) %/% b_size
-		last.batch.num <- length(bootstraps) %% b_size
+		batches <- length(bootstraps) %/% b.size
+		last.batch.num <- length(bootstraps) %% b.size
 		if(last.batch.num > 0){
 			batches = batches+1
 		}
@@ -81,13 +81,13 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=
                                   ourline()
                                 }
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
+					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all_data=all_data,Funktie=Funktie,verbose=verbose,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,Funktie=Funktie,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
@@ -103,7 +103,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=
                                   cat("INFO: Done with batch",x,"/",batches,"\n")	
                                   cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
                                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
                                   cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
                                   ourline()
                                 }
@@ -118,11 +118,11 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=
                                   ourline()
                                 }
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b_size*(x-1))+1):((b_size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b_size*(x-1))+1):(b_size*(x-1)+b_size)]
+					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}	
-				result <- lapply(boots, FUN=snowCoreALL,all_data=all_data,Funktie=Funktie,verbose=verbose,...)
+				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,Funktie=Funktie,verbose=verbose,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"MQMmulti")
@@ -137,7 +137,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b_size=10,FF=
                                   cat("INFO: Done with batch",x,"/",batches,"\n")	
                                   cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
                                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b_size), digits=3),"seconds\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
                                   cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
                                   ourline()
                                 }

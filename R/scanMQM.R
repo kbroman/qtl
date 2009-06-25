@@ -175,13 +175,13 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		if(step.size < 1){
 			ourstop("Step.size needs to be larger than 1")
 		}
-		max_cm_on_map <- max(unlist(pull.map(cross)))
-		if(step.max < max_cm_on_map){
-				ourstop("Markers outside of the mapping at ",max_cm_on_map," Cm, please set parameter step.max larger than this value.")		
+		max.cm.on.map <- max(unlist(pull.map(cross)))
+		if(step.max < max.cm.on.map){
+				ourstop("Markers outside of the mapping at ",max.cm.on.map," Cm, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
-		end_1 <- proc.time()
+		end.1 <- proc.time()
 		result <- .C("R_scanMQM",
 				as.integer(n.ind),
                 as.integer(n.mark),
@@ -208,7 +208,7 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 				as.integer(dominance),
 				as.integer(verbose),
 			    PACKAGE="qtl")
-		end_2 <- proc.time()				
+		end.2 <- proc.time()				
 		# initialize output object
 		qtl <- NULL
 		info <- NULL
@@ -231,25 +231,25 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 				}
 			}
 			if(est.map){
-				new_map <- pull.map(cross)
+				new.map <- pull.map(cross)
 				aa <- nmar(cross)
 				sum <- 1
 				for(i in 1:length(aa)) {
 					for(j in 1:aa[[i]]) {
-						new_map[[i]][j] <- result$DIST[sum]
+						new.map[[i]][j] <- result$DIST[sum]
 						sum <- sum+1
 					}
 				}
 				if(verbose) cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
-				plot.map(pull.map(cross), new_map,main="Supplied map versus re-estimated map")
+				plot.map(pull.map(cross), new.map,main="Supplied map versus re-estimated map")
 			}
 			if(backward){
 				if(!est.map){
-					new_map <- pull.map(cross)
+					new.map <- pull.map(cross)
 				}
 				aa <- nmar(cross)			
 				sum <- 1
-				model_present <- 0
+				model.present <- 0
 				qc <- NULL
 				qp <- NULL
 				qn <- NULL
@@ -257,17 +257,17 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 					for(j in 1:aa[[i]]) {
 						#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
 						if(result$COF[sum] != 48){
-							if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new_map)[sum])," Cm\n")
+							if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
 							qc <- c(qc, as.character(names(cross$geno)[i]))
-							qp <- c(qp, as.double(unlist(new_map)[sum]))
-							qn <- c(qn, substr(names(unlist(new_map))[sum],3,nchar(names(unlist(new_map))[sum])))
-							model_present <- 1
+							qp <- c(qp, as.double(unlist(new.map)[sum]))
+							qn <- c(qn, substr(names(unlist(new.map))[sum],3,nchar(names(unlist(new.map))[sum])))
+							model.present <- 1
 						}
 						sum <- sum+1
 					}
 				}
 				why <- sim.geno(cross)
-				if(!is.null(qc) && model_present){
+				if(!is.null(qc) && model.present){
 					QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
 					plot(QTLmodel)
 				}else{
@@ -286,17 +286,17 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		#write.table(qtl,file)
 		#Reset plotting and return the results
 		if(plot){
-			info_c <- qtl
+			info.c <- qtl
 			#Check for errors in the information content IF err we can't do a second plot
 			e <- 0
 			for(i in 1:ncol(qtl)){
-				if(is.na(info_c[i,5])){
+				if(is.na(info.c[i,5])){
 					e<- 1
 				}
-				if(is.infinite(info_c[i,5])){
+				if(is.infinite(info.c[i,5])){
 					e<- 1
 				}
-				if(is.null(info_c[i,5])){
+				if(is.null(info.c[i,5])){
 					e<- 1
 				}
 			}
@@ -317,16 +317,16 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		
 		for( x in 1:nchr(cross)){
 			#Remove pseudomarkers from the dataset and scale to the chromosome
-			to_remove <- NULL
-			chr_length <- max(cross$geno[[x]]$map)
-			markers_on_chr <- which(qtl[,1]==x)
-			to_remove <- markers_on_chr[which(qtl[markers_on_chr,2] > chr_length+step.size)]
-			to_remove <- c(to_remove,markers_on_chr[which(qtl[markers_on_chr,2] < 0)])
-			qtl <- qtl[-to_remove,]
+			to.remove <- NULL
+			chr.length <- max(cross$geno[[x]]$map)
+			markers.on.chr <- which(qtl[,1]==x)
+			to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
+			to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
+			qtl <- qtl[-to.remove,]
 		}
 		
-		end_3 <- proc.time()
-		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end_1-start)[3], digits=3), ",",round((end_2-end_1)[3], digits=3),",",round((end_3-end_2)[3], digits=3),") (in seconds)\n")
+		end.3 <- proc.time()
+		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
 		qtl
 	}else{
 		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")

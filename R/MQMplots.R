@@ -31,15 +31,15 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 	}
 	locations <- NULL
 	if(any(class(x) == "MQMmulti")){
-		sum_map <- 0
-		chr_breaks <- NULL
+		sum.map <- 0
+		chr.breaks <- NULL
 		for(j in 1:nchr(cross)){
-			l_chr <- max(x[[1]][x[[1]][,1]==j,2])
-			chr_breaks <- c(chr_breaks,sum_map)
-			sum_map <- sum_map+l_chr
+			l.chr <- max(x[[1]][x[[1]][,1]==j,2])
+			chr.breaks <- c(chr.breaks,sum.map)
+			sum.map <- sum.map+l.chr
 		}
-		sum_map <- ceiling(sum_map)
-		cat("Total maplength:",sum_map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr_breaks,"\n")		
+		sum.map <- ceiling(sum.map)
+		cat("Total maplength:",sum.map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr.breaks,"\n")		
 		for( k in 1:length(x) ) {
 			loc <- cross$locations[[k]]
 			rownames(loc) <- k
@@ -51,7 +51,7 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 			QTLs <- rbind(QTLs,qtl)
 		}
 		colnames(QTLs) <- rownames(x[[1]])
-		axi <- 1:sum_map
+		axi <- 1:sum.map
 		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		bmatrix <- QTLs>threshold
 		pmatrix <- NULL
@@ -89,33 +89,33 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 		locz <- NULL
 		for(marker in 1:ncol(QTLs)){
 			pos <- find.markerpos(cross, colnames(QTLs)[marker])
-			locz <- c(locz,round(chr_breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
+			locz <- c(locz,round(chr.breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
 		}
-		trait_locz <- NULL
+		trait.locz <- NULL
 		for(j in 1:nrow(QTLs)){
-			values <- rep(NA,sum_map)
+			values <- rep(NA,sum.map)
 			aa <- locz[bmatrix[j,]]
-			trait_locz <- c(trait_locz,chr_breaks[locations[j,1]] + locations[j,2])
-			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
+			trait.locz <- c(trait.locz,chr.breaks[locations[j,1]] + locations[j,2])
+			values[aa] = chr.breaks[locations[j,1]] + locations[j,2]
 			points(values,pch=pch,cex=cex)
 		}
 		if(highPEAK){
 		for(j in 1:nrow(QTLs)){
-			values <- rep(NA,sum_map)
+			values <- rep(NA,sum.map)
 			aa <- locz[pmatrix[j,]]
-			trait_locz <- c(trait_locz,chr_breaks[locations[j,1]] + locations[j,2])
-			values[aa] = chr_breaks[locations[j,1]] + locations[j,2]
+			trait.locz <- c(trait.locz,chr.breaks[locations[j,1]] + locations[j,2])
+			values[aa] = chr.breaks[locations[j,1]] + locations[j,2]
 			points(values,pch=24,cex=1.25*cex,col="black",bg="red")
 		}
 		}
 		points(axi,type="l")		
 		points(axi+(cisarea/2),type="l",col="green")
 		points(axi-(cisarea/2),type="l",col="green")
-		chr_breaks <- c(chr_breaks,sum_map)
-		axis(1,at=chr_breaks,labels=FALSE)
-		axis(2,at=chr_breaks,labels=FALSE)
+		chr.breaks <- c(chr.breaks,sum.map)
+		axis(1,at=chr.breaks,labels=FALSE)
+		axis(2,at=chr.breaks,labels=FALSE)
 		axis(1,at=locz,line=1,pch=24)
-		axis(2,at=seq(0,sum_map,25),line=1)
+		axis(2,at=seq(0,sum.map,25),line=1)
 	}else{
 		stop("invalid object supplied\n")
 	}
@@ -184,9 +184,9 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 	plot.window(xlim=xlim, ylim=ylim, log="")							# add the plot windows size
 	grid()
 	for( k in 1:nrow( x ) ) {
-		max_p  <- NULL			# the expression of the maximum
-		min_p  <- NULL			#
-		med_p  <- NULL			#
+		max.p  <- NULL			# the expression of the maximum
+		min.p  <- NULL			#
+		med.p  <- NULL			#
 		for( i in 1:length(tps)) {	# 		
 			idx <- ( 1:length( timepoints ) )[timepoints==tps[i] ]	# get the indeces of the
 			work  <- x[k, idx]
@@ -194,17 +194,17 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 			pmin  <- min(work[is.finite(work)], na.rm=TRUE)
 			pmed  <- median(work[is.finite(work)], na.rm=TRUE)
 			
-			max_p <- append(max_p, pmax)	# 
-			min_p <- append(min_p, pmin)	#
-			med_p <- append(med_p, pmed)	#
+			max.p <- append(max.p, pmax)	# 
+			min.p <- append(min.p, pmin)	#
+			med.p <- append(med.p, pmed)	#
 		}
-		lines( x=tps, y=max_p, type='l', col=col[k] )		# add the lines if requested		
-		lines( x=tps, y=min_p, type='l', col=col[k] )		# add the lines if requested
+		lines( x=tps, y=max.p, type='l', col=col[k] )		# add the lines if requested		
+		lines( x=tps, y=min.p, type='l', col=col[k] )		# add the lines if requested
 		xp <- append(tps, rev(tps)) 
-		yp <- append(max_p, rev(min_p) )		
+		yp <- append(max.p, rev(min.p) )		
 			
 		polygon(xp, y=yp, col=col[k], border=FALSE)
-		lines( x=tps, y=med_p, type='l', col=col[k] )		# add the lines if requested
+		lines( x=tps, y=med.p, type='l', col=col[k] )		# add the lines if requested
 	}
 	
 	
@@ -312,10 +312,10 @@ plotMQMboot <- function(result, ...){
 	#Because bootstrap only has 2 rows of data we can use black n blue
         polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	#PLot some lines so we know what is significant
-        perm_temp <- MQMpermObject(result)			#Create a permutation object
+        perm.temp <- MQMpermObject(result)			#Create a permutation object
         numresults <- dim(result[[1]])[1]
-        lines(x=1:numresults,y=rep(summary(perm_temp)[1,1],numresults),col="green",lwd=2,lty=2)
-        lines(x=1:numresults,y=rep(summary(perm_temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
+        lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
+        lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
 }
 
 plotMQMnice <- function(result, ...){
@@ -355,25 +355,25 @@ plotMQMone <- function(result, result2, extended=0,...){
 	if(!("scanone" %in% class(result)))
           ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
 
-        info_c <- result
-        info_c[,3]<- info_c[,5]
+        info.c <- result
+        info.c[,3]<- info.c[,5]
         if(extended){
-          info_l <- result
-          info_l[,3] <- result[,4]
-          plot(result,info_c,info_l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
+          info.l <- result
+          info.l[,3] <- result[,4]
+          plot(result,info.c,info.l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
           grid(max(result$chr),5)
           labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
           legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
         }else{
           if (!missing(result2) && !("scanone" %in% class(result2))) {
 	    #MAX 3 scanone objects
-            plot(result,info_c,result2,lwd=1,ylab="QTL (LOD)",...)
+            plot(result,info.c,result2,lwd=1,ylab="QTL (LOD)",...)
             grid(max(result$chr),5)
             labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
             legend("topright", labels,col=c("black","blue"),lty=c(1,1))
           }else{
 	    #MAX 3 scanone objects (here we now have 2)
-            plot(result,info_c,lwd=1,ylab="QTL (LOD)",...)
+            plot(result,info.c,lwd=1,ylab="QTL (LOD)",...)
             grid(max(result$chr),5)
             labels <- c(colnames(result)[3],colnames(result)[5])
             legend("topright", labels,col=c("black","blue"),lty=c(1,1))			

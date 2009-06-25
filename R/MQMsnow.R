@@ -24,27 +24,27 @@
 ######################################################################
 
 
-snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE,...){
+snowCoreALL <- function(x,all.data,Funktie,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
-	num_traits <- nphe(all_data)
+	num.traits <- nphe(all.data)
         if(verbose) {
           cat("------------------------------------------------------------------\n")
-          cat("INFO: Starting analysis of trait (",x,"/",num_traits,")\n")
+          cat("INFO: Starting analysis of trait (",x,"/",num.traits,")\n")
           cat("------------------------------------------------------------------\n")
         }
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=x,verbose=FALSE,...)
+			result <- Funktie(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=FALSE,...)
 		}
 	}else{
-		result <- Funktie(cross=all_data,pheno.col=x,...)
+		result <- Funktie(cross=all.data,pheno.col=x,...)
 	}
-	colnames(result)[3] <- paste("lod",names(all_data$pheno)[x])
+	colnames(result)[3] <- paste("lod",names(all.data$pheno)[x])
 	e <- proc.time()
         if(verbose) {
           cat("------------------------------------------------------------------\n")
-          cat("INFO: Done with the analysis of trait (",x,"/",num_traits,")\n")	
+          cat("INFO: Done with the analysis of trait (",x,"/",num.traits,")\n")	
           cat("INFO: Calculation of trait",x,"took:",round((e-b)[3], digits=3)," seconds\n")
           cat("------------------------------------------------------------------\n")
         }
@@ -52,32 +52,32 @@ snowCoreALL <- function(x,all_data,Funktie,verbose=FALSE,...){
 }
 
 
-snowCoreBOOT <- function(x,all_data,Funktie,bootmethod,verbose=FALSE,...){
+snowCoreBOOT <- function(x,all.data,Funktie,bootmethod,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	if(!bootmethod){
 		#random permutation
-		neworder <- sample(nind(all_data))			
-		all_data$pheno[[1]] <- all_data$pheno[[1]][neworder]
+		neworder <- sample(nind(all.data))			
+		all.data$pheno[[1]] <- all.data$pheno[[1]][neworder]
 	}else{
 		#parametric permutation
-		pheno <- all_data$pheno[[1]]
+		pheno <- all.data$pheno[[1]]
 		variance <- var(pheno,na.rm = TRUE)
-		for(j in 1:nind(all_data)) {
-			all_data$pheno[[1]][j] <- rnorm(1)*(variance^0.5)
+		for(j in 1:nind(all.data)) {
+			all.data$pheno[[1]][j] <- rnorm(1)*(variance^0.5)
 		}
 	}
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all_data,cofactors=cofactors,pheno.col=1,verbose=FALSE,...)
+			result <- Funktie(cross=all.data,cofactors=cofactors,pheno.col=1,verbose=FALSE,...)
 		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,verbose=FALSE,...)
+			result <- Funktie(cross=all.data,pheno.col=1,verbose=FALSE,...)
 		}
 	}else{
 		if("plot" %in% names(formals(Funktie))){
-			result <- Funktie(cross=all_data,pheno.col=1,...)
+			result <- Funktie(cross=all.data,pheno.col=1,...)
 		}else{
-			result <- Funktie(cross=all_data,pheno.col=1,...)
+			result <- Funktie(cross=all.data,pheno.col=1,...)
 		}
 	}
 	e <- proc.time()

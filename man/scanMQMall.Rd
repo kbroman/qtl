@@ -10,7 +10,7 @@
 }
 
 \usage{
-	scanall(cross, Funktie=scanone, multiC=TRUE, n.clusters = 1,b_size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
+	scanall(cross, Funktie=scanone, multiC=TRUE, n.clusters = 1,b.size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
 	cimall(\dots)
 	mqmall(\dots)
 }
@@ -20,7 +20,7 @@
   \item{Funktie}{ Function to use when mappingQTL's (either scanone,cim, mqm or your own mapping function). An easier way is to call the interface implementing the function under interest} 
   \item{multiC}{ Use multicore (if available)}
   \item{n.clusters}{ Number of child processes to split the job into }
-  \item{b_size}{ Batch size. The entire set is split in jobs. Each job contains b_size # of traits per job }
+  \item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size # of traits per job }
   \item{FF}{ [Not sure what this is] } 
   \item{\dots}{Parameters passed through to the \code{\link[qtl]{scanone}}, \code{\link[qtl]{cim}} or \code{\link[qtl]{mqm}} functions}
   \item{plot}{If TRUE, plot the results}
@@ -57,11 +57,11 @@
 	#Doing a multitrait analysis
 	data(multitrait)
         multitrait <- calc.genoprob(multitrait)
-	result <- scanall(multitrait, b_size=5)
-	result <- cimall(multitrait, b_size=5)
+	result <- scanall(multitrait, b.size=5)
+	result <- cimall(multitrait, b.size=5)
 	cof <- MQMCofactorsEach(multitrait,3)
         multitrait <- fill.geno(multitrait)
-	result <- mqmall(multitrait,cofactors=cof,doLOG=1,b_size=5)
+	result <- mqmall(multitrait,cofactors=cof,doLOG=1,b.size=5)
 
 	#FUNNY, run at own risk: 3D QTL screensaver
 \dontrun{
