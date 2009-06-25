@@ -3,7 +3,7 @@
 # scanMQM.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Fep, 2009
+# last modified Jun, 2009
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
@@ -17,7 +17,7 @@
 #
 ######################################################################
 	
-scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
+scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=FALSE){
     start <- proc.time()
@@ -141,7 +141,7 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		
 		#CHECK if we have cofactors, so we can do backward elimination
 		backward <- 0;
-		if(is.null(cofactors)){
+		if(missing(cofactors)){
 			if(verbose) cat("INFO: No cofactors, setting cofactors to 0\n")
 			cofactors = rep(0,n.mark)
 		}else{

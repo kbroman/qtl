@@ -8,7 +8,7 @@
 }
 
 \usage{
-MQMCofactorsEach(cross = NULL, each = 3, verbose=FALSE)
+MQMCofactorsEach(cross, each = 3, verbose=FALSE)
 }
 
 \arguments{

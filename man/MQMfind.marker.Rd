@@ -8,7 +8,7 @@
 }
 
 \usage{
-MQMfind.marker(cross = NULL, scanMQM = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
+MQMfind.marker(cross, scanMQM = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
 }
 
 \arguments{

@@ -3,7 +3,7 @@
 # MQMCofactors.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Apr, 2009
+# last modified Jun, 2009
 # first written Feb, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,13 +30,12 @@
 #
 ######################################################################
 
-MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=FALSE){
-	if(is.null(cross)){
+MQMCofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
+	if(missing(cross))
 		ourstop("No cross file. Please supply a valid cross object.")
-	}
-	if(is.null(cofactors)){
+
+	if(missing(cofactors))
 		ourstop("Cofactors to set. Please supply a list of markers to serve as cofactors.")
-	}
 		
 	n.chr <- nchr(cross)
 	geno <- NULL
@@ -61,14 +60,15 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=FA
 		ourstop("Trying to set a non-existent marker as a cofactor.")	  
 	}
 	
-	if(!is.null(sexfactors)){
+	if(!missing(sexfactors)){
 		if(max(sexfactors) > n.mark){
 			ourstop("Trying to set a non-existent marker as a sexfactor.")
 		}
 		if(min(sexfactors) <= 0){
 			ourstop("Trying to set a non-existent marker as a sexfactor.")
 		}
-	}	
+	}
+        else sexfactors <- NULL
 
     cofactorlist <- rep(0,n.mark)
 	for(i in 1:length(cofactors)) {
@@ -86,11 +86,9 @@ MQMCofactors <- function(cross= NULL,cofactors = NULL,sexfactors=NULL,verbose=FA
     cofactorlist
 }
 
-MQMCofactorsEach <- function(cross = NULL,each = 3,verbose=FALSE){
-	if(is.null(cross)){
-      ourstop("No cross file. Please supply a valid cross object.")
-	  return 
-	}
+MQMCofactorsEach <- function(cross,each = 3,verbose=FALSE){
+	if(missing(cross))
+          ourstop("No cross file. Please supply a valid cross object.")
 
 	individuals <- nind(cross)
 	n.chr <- nchr(cross)

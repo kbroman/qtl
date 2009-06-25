@@ -10,7 +10,7 @@
 }
 
 \usage{
-	scanall(cross = NULL, Funktie=scanone, multiC=TRUE, n.clusters = 1,b_size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
+	scanall(cross, Funktie=scanone, multiC=TRUE, n.clusters = 1,b_size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
 	cimall(\dots)
 	mqmall(\dots)
 }
@@ -56,9 +56,11 @@
 \examples{
 	#Doing a multitrait analysis
 	data(multitrait)
+        multitrait <- calc.genoprob(multitrait)
 	result <- scanall(multitrait, b_size=5)
 	result <- cimall(multitrait, b_size=5)
 	cof <- MQMCofactorsEach(multitrait,3)
+        multitrait <- fill.geno(multitrait)
 	result <- mqmall(multitrait,cofactors=cof,doLOG=1,b_size=5)
 
 	#FUNNY, run at own risk: 3D QTL screensaver

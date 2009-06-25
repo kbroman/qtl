@@ -10,7 +10,7 @@
 }
 
 \usage{
-	scanMQM(cross = NULL, cofactors = NULL, pheno.col = 1, REMLorML = 0, 
+	scanMQM(cross, cofactors, pheno.col = 1, REMLorML = 0, 
                 alfa = 0.02, em.iter = 1000, windowsize = 25.0, step.size = 5.0, 
                 step.min = -20.0, step.max = 220.0, file = "MQM_output.txt",
                 doLOG=0, est.map=0, dominance=0, plot=FALSE, forceRIL=0, verbose=FALSE)

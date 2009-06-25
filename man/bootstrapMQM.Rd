@@ -15,7 +15,7 @@
 }
 
 \usage{
-	bootstrap(cross = NULL, Funktie=scanone, pheno.col=1,
+	bootstrap(cross, Funktie=scanone, pheno.col=1,
 	          multiC=TRUE, n.run=10, b_size=10, file="MQM_output.txt",
    	          n.clusters=1, bootmethod=0, plot=FALSE, verbose=FALSE, \dots)
 	bootstrapcim(\dots)

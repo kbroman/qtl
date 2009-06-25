@@ -42,6 +42,7 @@ plotMQMall(result, type = "C", theta = 30, phi = 15, \dots)
 
 \examples{
 data(multitrait)
+multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmall(multitrait)
 plotMQMall(result,"P")
 plotMQMall(result,"C")

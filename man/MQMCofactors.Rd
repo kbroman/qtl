@@ -8,7 +8,7 @@
 }
 
 \usage{
-MQMCofactors(cross = NULL, cofactors = NULL, sexfactors = NULL, verbose=FALSE)
+MQMCofactors(cross, cofactors, sexfactors, verbose=FALSE)
 }
 
 \arguments{

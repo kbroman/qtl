@@ -26,7 +26,7 @@
 #
 ######################################################################
 
-FDRpermutation <- function(cross=NULL, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
+FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
 	above_in_real_res <- NULL
@@ -82,12 +82,12 @@ bootstrapcim <- function(...){
 #
 ######################################################################
 
-bootstrap <- function(cross= NULL,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
+bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b_size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
 {
 	
-	if(is.null(cross)){
+	if(missing(cross))
 		ourstop("No cross file. Please supply a valid cross object.") 
-	}
+
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		#Echo back the cross type
 		if(verbose) {
