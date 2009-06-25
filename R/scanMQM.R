@@ -35,7 +35,15 @@ scanMQM <- function(cross= NULL,cofactors = NULL,pheno.col=1,REMLorML=0,
 		}
 		if(class(cross)[1] == "riself"){
 			ctype = 3
-		#	stop("Somethings still wrong in the algorithm, please analyse RIL as BC.")
+
+                        # check genotypes
+                        g <- as.numeric(pull.geno(cross))
+                        g <- sort(unique(g[!is.na(g)]))
+                        if(max(g)==2) { # convert genotypes from 1/2 to 1/3
+                          for(i in seq(along=cross$geno)) 
+                            cross$geno[[i]]$data[!is.na(cross$geno[[i]]$data) & cross$geno[[i]]$data==2] <- 3
+                        }
+
 		}
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
