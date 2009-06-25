@@ -4,7 +4,7 @@
 # Alias: scanall, cimall, mqmall
 #
 # copyright (c) 2009, Danny Arends
-# last modified Mrt, 2009
+# last modified Jun, 2009
 # first written Feb, 2009
 #
 #     This program is free software; you can redistribute it and/or
