@@ -36,6 +36,7 @@
 \alias{getid}
 \alias{getsex}
 \alias{getgenonames}
+\alias{getThird}
 \alias{grab.arg.names}
 \alias{imf.cf}
 \alias{imf.h}
@@ -188,6 +189,7 @@ getsex(cross)
 getgenonames(type=c("f2","bc","riself","risib","4way","dh","special"),
              chrtype=c("A","X"), expandX=c("simple","standard","full"),
              sexpgm, cross.attr)
+getThird(x)
 grab.arg.names(\dots)
 imf.cf(r)
 imf.h(r)
@@ -308,7 +310,7 @@ sim.cross.f2(map, model, n.ind, error.prob, missing.prob,
 sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
         m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
 snowCoreALL(x, all_data, Funktie, verbose=FALSE, \dots)
-snowCoreBOOT(x, all_data, Funktie, method, verbose=FALSE, \dots)
+snowCoreBOOT(x, all_data, Funktie, bootmethod, verbose=FALSE, \dots)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),
