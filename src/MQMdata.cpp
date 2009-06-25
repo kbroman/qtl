@@ -46,19 +46,19 @@ extern "C"
 		for(int j=0; j< *Nind; j++){
 			//Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
 			if(Geno[i][j] != 9 && Geno[i][j] > 3 && (*crosstype) != 1){
-				Rprintf("INFO: Stange genotype pattern, switching to F2\n");
+				Rprintf("INFO: Strange genotype pattern, switching to F2\n");
 				Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[i][j]);
 				(*crosstype) = 1;
 				break;
 			}
 			if(Geno[i][j] == 3 && (*crosstype) == 2){
-				Rprintf("INFO: Stange genotype pattern, switching from BC to F2\n");
+				Rprintf("INFO: Strange genotype pattern, switching from BC to F2\n");
 				(*crosstype) = 1;
 				break;
 			}
 			//IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
 			if(Geno[i][j] == 2 && (*crosstype) == 3){
-				Rprintf("INFO: Stange genotype pattern, switching from RISELF to BC\n");
+				Rprintf("INFO: Strange genotype pattern, switching from RISELF to BC\n");
 				(*crosstype) = 2;
 				break;
 			}
