@@ -11,10 +11,8 @@
 
 \usage{
 	scanall(cross = NULL, Funktie=scanone, multiC=TRUE, n.clusters = 1,b_size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
-	cimall(\dots, model = c("normal", "binary","2part", "np"),
-               method = c("em", "imp", "hk", "ehk", "mr","mr-imp", "mr-argmax"))
-	mqmall(\dots, model = c("normal", "binary","2part", "np"),
-               method = c("em", "imp", "hk", "ehk", "mr","mr-imp", "mr-argmax"))
+	cimall(\dots)
+	mqmall(\dots)
 }
 
 \arguments{

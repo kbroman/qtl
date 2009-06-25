@@ -24,11 +24,11 @@
 #
 ######################################################################
 
-cimall <- function(..., model = c("normal", "binary","2part", "np"), method = c("em", "imp", "hk", "ehk", "mr","mr-imp", "mr-argmax")){
+cimall <- function(...) {
 	scanall(...,Funktie=cim)
 }
 
-mqmall <- function(..., model = c("normal", "binary","2part", "np"), method = c("em", "imp", "hk", "ehk", "mr","mr-imp", "mr-argmax")){
+mqmall <- function(...) {
 	scanall(...,Funktie=mqm)
 }
 
