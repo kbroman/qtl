@@ -45,10 +45,11 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \examples{
 	data(multitrait)
+\dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
-        multiloc <- calc.genoprob(multiloc, step=5)
-	results <- scanall(multiloc)
+        multiloc <- calc.genoprob(multiloc)
+	results <- scanall(multiloc, method="hk")
 	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
 }
 

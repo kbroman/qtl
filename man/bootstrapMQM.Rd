@@ -67,15 +67,20 @@
 
 \examples{
 data(multitrait)				#Use the multitrait dataset
-result <- bootstrap(multitrait,pheno.col=7, b.size=5)
+\dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
+multitrait$pheno <- log(multitrait$pheno)}
+multitrait <- calc.genoprob(multitrait)
+\dontrun{result <- bootstrap(multitrait,pheno.col=7, b.size=5)
 result <- bootstrapcim(multitrait,pheno.col=7, b.size=5)
+}\dontshow{result <- bootstrap(multitrait,pheno.col=7, n.run=2, b.size=2)
+result <- bootstrapcim(multitrait,pheno.col=7, n.run=2, b.size=2)}
+multitrait <- fill.geno(multitrait)
 cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)	# Bootstrap 200 runs in batches of 20
-
+\dontrun{f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
+\dontshow{f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
 #EXTRA
 f2perm <- MQMpermObject(f2result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
-
 }
 
 \references{

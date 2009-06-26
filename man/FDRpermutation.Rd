@@ -49,7 +49,9 @@
 
 \examples{
 data(multitrait)				#Use the multitrait dataset
-result <- FDRpermutation(multitrait, threshold=10.0, n.perm=5)	#Calculate the thresholds
+\dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
+multitrait <- calc.genoprob(multitrait)
+result <- FDRpermutation(multitrait, threshold=10.0, n.perm=5, method="hk")	#Calculate the thresholds
 }
 
 \references{

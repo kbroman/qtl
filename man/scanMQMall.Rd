@@ -56,6 +56,8 @@
 \examples{
 	#Doing a multitrait analysis
 	data(multitrait)
+\dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
+multitrait$pheno <- multitrait$pheno[,1:3]}
         multitrait <- calc.genoprob(multitrait)
 	result <- scanall(multitrait, b.size=5)
 	result <- cimall(multitrait, b.size=5)

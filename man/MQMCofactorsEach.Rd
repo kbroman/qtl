@@ -42,6 +42,7 @@ MQMCofactorsEach(cross, each = 3, verbose=FALSE)
 \examples{
 qtl <- c(3,15,3,7)						# QTL at chromosome 3
 data(map10)							# Mouse genome
+\dontshow{map10 <- map10[1:5]}
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
 a <- MQMCofactorsEach(cross,3)					# Set Cofactors each third marker
 result <- scanMQM(cross,a)					# Do a backward model selection

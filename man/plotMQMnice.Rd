@@ -38,8 +38,11 @@ plotMQMnice(result, \dots)
 #Simulated F2 Population
 f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
 data(map10)                                             # Mouse genome
+\dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
-f2result <- bootstrapmqm(f2cross)                       # Bootstrap MQM to obtain confidence intervals
+f2cross <- fill.geno(f2cross)
+\dontrun{f2result <- bootstrapmqm(f2cross)                       # Bootstrap MQM to obtain confidence intervals
+}\dontshow{f2result <- bootstrapmqm(f2cross, n.run=2, b.size=2)}
 plotMQMnice(f2result)					# Use the nice plotting methodes
 }
 \keyword{ hplot }

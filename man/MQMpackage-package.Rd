@@ -79,7 +79,8 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 }
 \examples{
 	data(multitrait)
-	mt_est <- MQMaugment(multitrait)
-	result <- scanMQM(mt_est)
+\dontshow{multitrait <- subset(multitrait, chr=1:2)}        
+	mt.est <- MQMaugment(multitrait)
+	result <- scanMQM(mt.est, doLOG=1)
 	plot(result)
 }
