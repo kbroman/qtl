@@ -28,7 +28,7 @@
 # MQMaugment:
 #
 ######################################################################
-MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,forceRIL=TRUE,verbose=FALSE){
+MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,verbose=FALSE){
 	start <- proc.time()
 
         crosstype <- class(cross)[1]
@@ -100,24 +100,21 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,f
 		n.mark <- ncol(geno)
 		if(verbose) cat("INFO: Number of markers:",n.mark,".\n")
 		#Check for na genotypes and replace them with a 9
-		Fril.replaced <- 0
-		for(i in 1:n.ind) {
-			for(j in 1:n.mark) {
-				if(is.na(geno[i,j])){
-					geno[i,j] <- 9;
-				}else{
-					if(forceRIL && ctype != 2 && geno[i,j]==2){
-						#We have a 2 (AB) change it to a 3
-						geno[i,j] <- 3
-						Fril.replaced <- Fril.replaced+1
-					}
-				
-				}
-			}
-		}
-		if(forceRIL && Fril.replaced > 0){
-			 if(verbose) cat("INFO: Changed",Fril.replaced,"AB markers into BB markers.\n")
-		}
+                geno[is.na(geno)] <- 9
+                if(ctype==3) { # RIL
+                  if(any(geno==3)) { # have 3's, so replace 2's with missing values
+                    if(any(geno==2)) {
+                      n2 <- sum(geno==2)
+                      geno[geno==2] <- 9
+                      warning("Removed ", n2, " het genotypes")
+                    }
+                  }
+                  else {
+                    if(any(geno==2)) # no 3's; replace 2's with 3's.
+                      geno[geno==2] <- 3
+                  }
+                } # end if(RIL)
+
 		#check for missing phenotypes
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
