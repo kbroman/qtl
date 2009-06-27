@@ -42,7 +42,7 @@
 
 \examples{
 data(listeria)
-\dontshow{listeria <- subset(listeria,chr=c(5,13))}
+\dontshow{listeria <- subset(listeria,chr=c(5,13),ind=!is.na(listeria$pheno[,1]))}
 listeria <- calc.genoprob(listeria, step=2.5)
 out <- scanone(listeria, model="2part", upper=TRUE)
 # Maximum peak for LOD(p,mu)
