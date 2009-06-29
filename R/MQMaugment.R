@@ -28,9 +28,10 @@
 # MQMaugment:
 #
 ######################################################################
-MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,verbose=FALSE){
+MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALSE){
 	start <- proc.time()
 
+        # check for supported crosses and set ctype
         crosstype <- class(cross)[1]
         if(crosstype != "f2" && crosstype != "bc" && crosstype != "riself")
           ourstop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
@@ -65,9 +66,10 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,v
           cat("INFO: Number of individuals:",n.ind,".\n")
           cat("INFO: Number of chr:",n.chr,".\n")
         }
-        
+       
+        # select the phenotype 
         if(length(pheno.col) > 1) {
-           warning("Only one phenotype may be considered; using the first one.")
+           warning("Only one phenotype in pheno.col may be considered; using the first one.")
            pheno.col <- pheno.col[1]
          }
         if(is.character(pheno.col)) {
@@ -79,7 +81,6 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,v
         phenonaam <- colnames(cross$pheno)[pheno.col]
 
         if(pheno.col != 1){
-			
           if(verbose) {
             cat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n")
             cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
@@ -88,8 +89,6 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,v
             ourstop("No such phenotype at column index:",pheno.col,"in cross object.\n")
           }			
         }
-
-
 		out.qtl <- NULL	
 
         geno <- pull.geno(cross)
@@ -99,23 +98,25 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,v
 		pheno <- cross$pheno
 		n.mark <- ncol(geno)
 		if(verbose) cat("INFO: Number of markers:",n.mark,".\n")
-		#Check for na genotypes and replace them with a 9
-                geno[is.na(geno)] <- 9
-                if(ctype==3) { # RIL
-                  if(any(geno==3)) { # have 3's, so replace 2's with missing values
-                    if(any(geno==2)) {
-                      n2 <- sum(geno==2)
-                      geno[geno==2] <- 9
-                      warning("Removed ", n2, " het genotypes")
-                    }
-                  }
-                  else {
-                    if(any(geno==2)) # no 3's; replace 2's with 3's.
-                      geno[geno==2] <- 3
-                  }
-                } # end if(RIL)
 
-		#check for missing phenotypes
+		# Check for NA genotypes and replace them with a 9
+        geno[is.na(geno)] <- 9
+        if(ctype==3) { 
+          # RIL
+          if(any(geno==3)) { # have 3's, so replace 2's with missing values
+            if(any(geno==2)) {
+              n2 <- sum(geno==2)
+              geno[geno==2] <- 9
+              warning("Removed ", n2, " het genotypes")
+            }
+          }
+          else {
+            if(any(geno==2)) # no 3's; replace 2's with 3's.
+              geno[geno==2] <- 3
+          }
+        } # end if(RIL)
+
+		# check for missing phenotypes and drop
 		dropped <- NULL
 		for(i in 1:dim(pheno)[1]) {
 			if(is.na(pheno[i,pheno.col])){
@@ -124,7 +125,6 @@ MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,v
 				n.ind = n.ind-1
 			}
 		}
-		#throw em out
 		if(!is.null(dropped)){
 			geno <- geno[-dropped,]  
 			pheno <- pheno[-dropped,]

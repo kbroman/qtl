@@ -1,10 +1,10 @@
 \name{MQMaugment}
 \alias{MQMaugment}
 
-\title{Missing data augmentation routine for MQM}
+\title{MQM data augmentation}
 
 \description{
-  Estimates missing data; unlikely genotypes are kept when more likely than 1:Neglect
+  Estimates missing data. Unlikely genotypes are kept when more likely than the range 1:Neglect
 }
 
 \usage{
@@ -14,10 +14,10 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.} 
-  \item{pheno.col}{Column number in the phenotype matrix which should be
-   used as the phenotype.  This must be a single numeric index or a
-  single character string matching one of the phenotype names.}
+   \code{\link[qtl]{read.cross}}.} 
+  \item{pheno.col}{Column number in the phenotype matrix. This can be an index
+	number or a character string matching one of the phenotype names. If pheno.col is
+	an array the first item is used}
   \item{maxaug}{ Maximum number of (total) individuals after augmentation }
   \item{maxiaug}{ Maximum augmentations per individual }
   \item{neglect}{ Genotypes considered have a higher probability of occuring then one in neglect }
@@ -25,9 +25,6 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
 }
 
 \details{
-Special care has 2 be taken when setting unrealistic values.
-When the algorithm ends with an "DATASET TOO LARGE after augmentation",
-the cross object could be corrupted.
 }
 
 \value{
@@ -37,11 +34,13 @@ the cross object could be corrupted.
   contains information on which individuals are retained and repeated.
 }  
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl}}
+\author{Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen}
 
 \note{
-If you find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
-}
+The sex chromosome 'X' is dropped before augmentation.
+
+With unrealistic values for augmentation a warning is shown and the cross
+object may have been corrupted (FIXME).  }
 
 \seealso{
 	\itemize{
