@@ -18,9 +18,9 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
   \item{pheno.col}{Column number in the phenotype matrix. This can be an index
 	number or a character string matching one of the phenotype names. If pheno.col is
 	an array the first item is used}
-  \item{maxaug}{ Maximum number of (total) individuals after augmentation }
+  \item{maxaug}{ Maximum number of (expanded) individuals after augmentation }
   \item{maxiaug}{ Maximum augmentations per individual }
-  \item{neglect}{ Genotypes considered have a higher probability of occuring then one in neglect }
+  \item{neglect}{ Ascertain genotypes below this probability are ignored }
   \item{verbose}{If TRUE, tracing information is printed.}
 }
 
@@ -28,13 +28,13 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
 }
 
 \value{
-  The input cross object, though with only the one phenotype indicated
-  via \code{pheno.col}, and some individuals may be omitted and many
-  will be repeated multiple times.  An added component \code{extra}
-  contains information on which individuals are retained and repeated.
+	The cross object the single phenotype \code{pheno.col}, without dropped
+	individuals and with augmented individuals (many will be repeated multiple
+	times). An added component \code{extra} contains information on which
+	individuals are retained and repeated.  
 }  
 
-\author{Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen}
+\author{R.C. Jansen ; Danny Arends}
 
 \note{
 The sex chromosome 'X' is dropped before augmentation.
