@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 6/26/2009:
+Version 1.12, 6/30/2009:
 
 Major changes:
 
@@ -44,6 +44,10 @@ Major changes:
   n.cluster indicates the number of parallel nodes to use.
 
 Minor changes:
+
+  Added a CITATION file; type citation("qtl") within R to get
+  information on the citation to use in articles that make use of
+  R/qtl. 
 
   You can now subset crosses with brackets, [ ], as with a matrix with
   rows=chromosomes and columns=individuals.  See the examples in the
