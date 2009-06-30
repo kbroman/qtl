@@ -15,7 +15,7 @@
 \usage{
 readMWril(dir="", rilfile, founderfile,
           type=c("ri4self", "ri4sib", "ri8self", "ri8sib"),
-          na.strings=c("-","NA"), rotate=FALSE, ...)
+          na.strings=c("-","NA"), rotate=FALSE, \dots)
 }
 
 \arguments{
@@ -61,7 +61,7 @@ readMWril(dir="", rilfile, founderfile,
   used to generate each RIL.  
 
   The founder strains in the \code{founderfile} should be the strains
-  \code{A}, \code{B}, \code{C}, ..., as indicated in the \code{cross}
+  \code{A}, \code{B}, \code{C}, \dots, as indicated in the \code{cross}
   phenotype.  
 }
 

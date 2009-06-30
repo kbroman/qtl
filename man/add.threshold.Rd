@@ -9,7 +9,7 @@
 }
 
 \usage{
-add.threshold(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, ...)
+add.threshold(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, \dots)
 }			    
 
 \arguments{
@@ -60,7 +60,7 @@ add.threshold(out, chr=c(1,4,6,15,"X"), perms=operm, alpha=0.1,
 
 \seealso{ \code{\link[qtl]{scanone}},
   \code{\link[qtl]{plot.scanone}}, 
-  \code{\link[qtl]{summary.scanoneperm}} }
+  \code{\link[qtl]{summary.scanoneperm}}, \code{\link[qtl]{xaxisloc.scanone}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

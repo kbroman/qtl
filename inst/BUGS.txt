@@ -18,6 +18,16 @@ Version 1.11 bugs:
    1. Problem in cim() in the case that multiple marker covariates are
       within the "window". [Fixed in Version 1.12.]
 
+>> 2. fitqtl doesn't handle covariates with the X chromosome
+      appropriately in the drop-one-term analysis.  When the X
+      chromosome is omitted, the special covariates we need are also
+      omitted, and so the LOD score for the X chromosome includes the
+      effects of these special covariates.  Also, if such covariates
+      were included specifically in a call to fitqtl, the LOD score
+      attached to the X chromosome would be correct, but the model df
+      in the "full model result" is wrong, as these covariates get
+      double-counted.  
+
 
 Version 1.08 bugs:
 

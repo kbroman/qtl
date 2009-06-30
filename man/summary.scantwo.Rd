@@ -25,7 +25,9 @@
  \item{perms}{Optional permutation results used to derive thresholds or
    to calculate genome-scan-adjusted p-values.  This must be consistent
    with the \code{object} input, in that it must have the same number of
-   LOD score columns.}
+   LOD score columns, though it can have just one column of permutation
+   results, in which case they are assumed to apply to any chosen LOD
+   score column.}
  \item{alphas}{If perms are included, these are the significance levels used
    to calculate thresholds for determining which peaks to pull out.  It
    should be a vector of length 5, giving significance levels 

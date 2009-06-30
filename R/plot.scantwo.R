@@ -2,8 +2,8 @@
 #
 # plot.scantwo.R
 #
-# copyright (c) 2001-8, Karl W Broman, Hao Wu and Brian Yandell
-# last modified Jun, 2008
+# copyright (c) 2001-9, Karl W Broman, Hao Wu and Brian Yandell
+# last modified May, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -70,7 +70,9 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
       else
         zlim <- rep(max(x$lod, na.rm=TRUE), 2)
     }
+    addpair <- TRUE
   }
+  else addpair <- FALSE
 
   if(length(lower)==1 && lower == "fv1") lower <- "cond-int"
   if(length(lower)==1 && lower == "av1") lower <- "cond-add"
@@ -429,7 +431,8 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
     yloc.rev <- yloc.rev[yloc.rev >= u[3] & yloc.rev <= u[4]]
 #    segments(u[1], yloc.rev, u[1] - xlen.mar/4, yloc.rev, xpd = TRUE)
 #    text(u[1] - xlen.mar/3, yloc.rev, as.character(yloc), xpd = TRUE, adj = 1)
-    axis(side=2, at=yloc.rev, labels=yloc)
+    if(!addpair)
+      axis(side=2, at=yloc.rev, labels=yloc)
   }
 
   invisible()

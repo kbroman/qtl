@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Feb, 2009
+# last modified Jun, 2009
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -935,6 +935,7 @@ function(n)
 deparseQTLformula <-
 function(formula, reorderterms=FALSE)
 {
+  if(is.null(formula)) return(NULL)
   if(reorderterms) {
     if(is.character(formula)) formula <- as.formula(formula)
     factors <- colnames(attr(terms(formula), "factors"))

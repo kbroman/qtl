@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Apr, 2009
+# last modified Jun, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,7 +36,9 @@
 #           find.flanking, strip.partials, comparegeno
 #           qtlversion, locate.xo, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
-#           matchchr, convert2sa, charround
+#           matchchr, convert2sa, charround, testchr,
+#           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
+#           findDupMarkers
 #
 ######################################################################
 
@@ -319,7 +321,7 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 # clean functions
 ######################################################################
 clean <-
-function(object)
+function(object, ...)
   UseMethod("clean")
 
 
@@ -334,7 +336,7 @@ function(object)
 ######################################################################
 
 clean.cross <-
-function(object)
+function(object, ...)
 {
   if(!any(class(object) == "cross"))
     stop("Input should have class \"cross\".")
@@ -775,6 +777,14 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
+  if(missing(mname2) && length(mname1)>1) {
+    mname2 <- mname1[2]
+    mname1 <- mname1[1]
+  }
+
+  if(length(mname1) > 1 || length(mname2) > 1)
+    stop("mname1 and mname2 should both have lenght 1, or mname1 should have length 2 and mname1 should be missing.")
+
   if(mname1==mname2)
     stop("You must give two distinct marker names.")
 
@@ -915,7 +925,7 @@ function(d)
 switch.order <-
 function(cross, chr, order, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         maxit=4000, tol=1e-4, sex.sp=TRUE)
+         maxit=4000, tol=1e-6, sex.sp=TRUE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -923,16 +933,19 @@ function(cross, chr, order, error.prob=0.0001,
   map.function <- match.arg(map.function)
   
   # check chromosome argument
-  if(!missing(chr)) {
-    chr <- matchchr(chr, names(cross$geno))
-    if(length(chr) > 1) {
-      warning("switch.order can deal with just one chromosome at a time")
-      chr <- chr[1]
-    }
-    cchr <- chr
-    chr <- match(chr, names(cross$geno))
+  if(missing(chr)) {
+    chr <- names(cross$geno)[1]
+    warning("Assuming you mean chromosome ", chr)
   }
-  else chr <- 1
+  else {
+    if(length(chr) > 1) {
+      chr <- chr[1]
+      warning("switch.order can deal with just one chromosome at a time; assuming you want chr ", chr)
+    }
+    if(!testchr(chr, names(cross$geno)))
+       stop("Chr ", chr, " not found.")
+  }
+  chr <- matchchr(chr, names(cross$geno))
 
   # check order argument
   n.mar <- nmar(cross)
@@ -975,13 +988,13 @@ function(cross, chr, order, error.prob=0.0001,
 
   # re-estimate rec fracs for re-ordered chromosome
   if(flag==1) {
-    temp <- est.rf(subset(cross, chr=cchr))$rf
+    temp <- est.rf(subset(cross, chr=chr))$rf
     rf[oldcols,oldcols] <- temp
     cross$rf <- rf
   }
 
   # re-estimate map
-  newmap <- est.map(subset(cross,chr=cchr),
+  newmap <- est.map(subset(cross,chr=chr),
                     error.prob=error.prob, map.function=map.function,
                     maxit=maxit, tol=tol, sex.sp=sex.sp)
 
@@ -1318,7 +1331,7 @@ function(...)
     error.prob <- sapply(args,function(a) attr(a$geno[[1]]$prob,"error.prob"))
     off.end <- sapply(args,function(a) attr(a$geno[[1]]$prob,"off.end"))
     map.function <- sapply(args,function(a) attr(a$geno[[1]]$prob,"map.function"))
-    map <- sapply(args,function(a) attr(a$geno[[1]]$prob,"map"))
+    map <- lapply(args,function(a) attr(a$geno[[1]]$prob,"map"))
     if(!any(is.na(wh)) && length(unique(step))==1 &&
        length(unique(error.prob))==1 && length(unique(off.end))==1 &&
        length(unique(map.function))==1) {
@@ -1358,13 +1371,13 @@ function(...)
         error.prob <- sapply(args,function(a) attr(a$geno[[j]]$prob,"error.prob"))
         off.end <- sapply(args,function(a) attr(a$geno[[j]]$prob,"off.end"))
         map.function <- sapply(args,function(a) attr(a$geno[[j]]$prob,"map.function"))
-        map <- sapply(args,function(a) attr(a$geno[[j]]$prob,"map"))
+        map <- lapply(args,function(a) attr(a$geno[[j]]$prob,"map"))
 
         attr(geno[[j]]$prob,"step") <- step[1]
         attr(geno[[j]]$prob,"error.prob") <- error.prob[1]
         attr(geno[[j]]$prob,"off.end") <- off.end[1]
         attr(geno[[j]]$prob,"map.function") <- map.function[1]
-        attr(geno[[j]]$prob,"map") <- map[1]
+        attr(geno[[j]]$prob,"map") <- map[[1]]
       }
     }
   
@@ -1375,7 +1388,7 @@ function(...)
     error.prob <- sapply(args,function(a) attr(a$geno[[1]]$draws,"error.prob"))
     off.end <- sapply(args,function(a) attr(a$geno[[1]]$draws,"off.end"))
     map.function <- sapply(args,function(a) attr(a$geno[[1]]$draws,"map.function"))
-    map <- sapply(args,function(a) attr(a$geno[[1]]$draws,"map"))
+    map <- lapply(args,function(a) attr(a$geno[[1]]$draws,"map"))
     ndraws <- sapply(args,function(a) dim(a$geno[[1]]$draws)[3])
     if(!any(is.na(wh)) && length(unique(step))==1 &&
        length(unique(error.prob))==1 && length(unique(off.end))==1 &&
@@ -1395,13 +1408,13 @@ function(...)
         error.prob <- sapply(args,function(a) attr(a$geno[[j]]$draws,"error.prob"))
         off.end <- sapply(args,function(a) attr(a$geno[[j]]$draws,"off.end"))
         map.function <- sapply(args,function(a) attr(a$geno[[j]]$draws,"map.function"))
-        map <- sapply(args,function(a) attr(a$geno[[j]]$draws,"map"))
+        map <- lapply(args,function(a) attr(a$geno[[j]]$draws,"map"))
 
         attr(geno[[j]]$draws,"step") <- step[1]
         attr(geno[[j]]$draws,"error.prob") <- error.prob[1]
         attr(geno[[j]]$draws,"off.end") <- off.end[1]
         attr(geno[[j]]$draws,"map.function") <- map.function[1]
-        attr(geno[[j]]$draws,"map") <- map[1]
+        attr(geno[[j]]$draws,"map") <- map[[1]]
       }
     }
   }
@@ -2413,6 +2426,7 @@ function(object, ...)
   
   n.chr <- length(map)
   chrnames <- names(map)
+  if(is.null(chrnames)) chrnames <- 1:length(map)
   if(is.matrix(map[[1]])) { # sex-specific map
     sexsp <- TRUE
     n.mar <- sapply(map,ncol)
@@ -3057,6 +3071,52 @@ function(selection, thechr)
 }
 
 ######################################################################
+# check that chromosomes match appropriately
+# TRUE = chr okay
+# FALSE = problem
+######################################################################
+testchr <-
+function(selection, thechr)
+{
+  if(is.factor(thechr)) thechr <- as.character(thechr)
+  if(length(thechr) > length(unique(thechr))) {
+#    warning("Duplicate chromosome names.")
+    return(FALSE)
+  }
+
+  if(is.logical(selection)) {
+    if(length(selection) != length(thechr)) {
+#      warning("Logical vector to select chromosomes is the wrong length")
+      return(FALSE)
+    }
+    return(TRUE)
+  }
+
+  if(is.numeric(selection)) selection <- as.character(selection)
+
+  if(length(selection) > length(unique(selection))) {
+#    warning("Dropping duplicate chromosomes")
+    selection <- unique(selection)
+  }
+
+  g <- grep("^-", selection)
+  if(length(g) > 0 && length(g) < length(selection)) {
+#    stop("In selecting chromosomes, all must start with '-' or none should.")
+    return(FALSE)
+  }
+  if(length(g) > 0) {
+    selectomit <- TRUE
+    selection <- substr(selection, 2, nchar(selection))
+  }
+  else selectomit <- FALSE
+      
+  wh <- match(selection, thechr)
+  if(any(is.na(wh))) return(FALSE)
+
+  TRUE
+}
+
+######################################################################
 # convert2sa
 #
 # convert a sex-specific maps to a sex-averaged one.
@@ -3109,6 +3169,169 @@ function(x, digits=1)
                           sep="")
            }
          }, digits)
+}
+
+######################################################################
+# scantwoperm2scanoneperm
+#
+# pull out the scanone permutations from scantwo permutation results,
+# so that one may use the scantwo perms in calls to summary.scanone
+######################################################################
+scantwoperm2scanoneperm <-
+function(scantwoperms)
+{
+  if(!("scantwoperm" %in% class(scantwoperms)))
+    stop("Input must have class \"scantwoperm\".")
+  if(!("one" %in% names(scantwoperms)))
+    stop("Input doesn't contain scanone permutation results.")
+  scanoneperms <- scantwoperms$one
+  class(scanoneperms) <- c("scanoneperm")
+  scanoneperms
+}
+
+
+######################################################################
+# subset.map
+######################################################################
+subset.map <-
+function(x, ...)
+{
+  cl <- class(x)
+  x <- x[...]
+  class(x) <- cl
+  x
+}
+
+`[.map` <-
+function(x, ...)
+{
+  x <- unclass(x)[...]
+  class(x) <- "map"
+  x
+}
+
+
+######################################################################
+# subset.cross with [ ]
+######################################################################
+`[.cross` <-
+function(x, chr, ind)
+  subset(x, chr, ind)
+
+
+######################################################################
+# findDupMarkers
+#
+# find markers whose genotype data is identical to another marker
+# (which thus might be dropped, as extraneous)
+#
+# chr          (Optional) set of chromosomes to consider
+#
+# exact.only   If TRUE, look for markers with the same genotypes
+#                       and the same pattern of missing data
+#              If FALSE, also identify markers whose observed
+#                        genotypes match another marker, with no
+#                        observed genotypes for which the other is
+#                        missing
+#                      
+# adjacent.only   If TRUE, only consider adjacent markers
+######################################################################
+
+findDupMarkers <-
+function(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
+{
+  if(!missing(chr)) cross <- subset(cross, chr=chr)
+
+  g <- pull.geno(cross)
+  markers <- colnames(g)
+  markerloc <- lapply(nmar(cross), function(a) 1:a)
+  if(length(markerloc) > 1) {
+    for(j in 2:length(markerloc))
+      markerloc[[j]] <- markerloc[[j]] + max(markerloc[[j-1]]) + 10
+  }
+  markerloc <- unlist(markerloc)
+
+  if(exact.only) {
+    g[is.na(g)] <- 0
+
+    # genotype data patterns
+    pat <- apply(g, 2, paste, collapse="")
+
+    # table of unique values
+    tab <- table(pat)
+
+    # no duplicates; return
+    if(all(tab == 1)) return(NULL)
+    
+    wh <- which(tab > 1)
+    theloc <- themar <- vector("list", length(wh))
+    for(i in seq(along=wh)) {
+      themar[[i]] <- names(pat)[pat==names(tab)[wh[i]]]
+      theloc[[i]] <- markerloc[pat==names(tab)[wh[i]]]
+    }
+
+    if(adjacent.only) {
+      extraloc <- list()
+      extramar <- list()
+      for(i in seq(along=theloc)) {
+        d <- diff(theloc[[i]]) # look for adjacency
+        if(any(d>1)) { # split into adjacent groups
+          temp <- which(d>1)
+          first <- c(1, temp+1)
+          last <- c(temp, length(theloc[[i]]))
+          for(j in 2:length(first)) {
+            extraloc[[length(extraloc)+1]] <- theloc[[i]][first[j]:last[j]]
+            extramar[[length(extramar)+1]] <- themar[[i]][first[j]:last[j]]
+          }
+          themar[[i]] <- themar[[i]][first[1]:last[1]]
+          theloc[[i]] <- theloc[[i]][first[1]:last[1]]
+        }
+      }
+      themar <- c(themar, extramar)
+      theloc <- c(theloc, extraloc)
+
+      nm <- sapply(themar, length)
+      if(all(nm==1)) return(NULL) # nothing left
+      themar <- themar[nm>1]
+      theloc <- theloc[nm>1]
+    }
+
+    # order by first locus
+    o <- order(sapply(theloc, min))
+    themar <- themar[o]
+
+    randompics <- sapply(themar, function(a) sample(length(a), 1))
+    for(i in seq(along=themar)) {
+      names(themar)[i] <- themar[[i]][randompics[i]]
+      themar[[i]] <- themar[[i]][-randompics[i]]
+    }
+
+  }
+  else {
+    themar <- NULL
+
+    ntyp <- ntyped(cross, "mar")
+    o <- order(ntyp, decreasing=TRUE)
+
+    g[is.na(g)] <- 0
+    z <- .C("R_findDupMarkers_notexact",
+            as.integer(nrow(g)),  
+            as.integer(ncol(g)),
+            as.integer(g),
+            as.integer(o),
+            as.integer(markerloc),
+            as.integer(adjacent.only),
+            result=as.integer(rep(0,length(o))),
+            PACKAGE="qtl")
+    if(all(z$result==0)) return(NULL)
+    u <- unique(z$result[z$result != 0])
+    themar <- vector("list", length(u))
+    names(themar) <- colnames(g)[u]
+    for(i in seq(along=themar)) 
+      themar[[i]] <- colnames(g)[z$result==u[i]]
+  }
+
+  themar
 }
 
 # end of util.R

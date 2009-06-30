@@ -13,10 +13,11 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
         method=c("em","imp","hk","mr","mr-imp","mr-argmax"),
         addcovar=NULL, intcovar=NULL, weights=NULL,
         use=c("all.obs", "complete.obs"), 
-        incl.markers=FALSE, clean.output=FALSE,
+        incl.markers=FALSE, clean.output=FALSE, 
+        clean.nmar=1, clean.distance=0,
         maxit=4000, tol=1e-4,
         verbose=TRUE, n.perm, perm.strata=NULL,
-        assumeCondIndep=FALSE, batchsize=250)
+        assumeCondIndep=FALSE, batchsize=250, n.cluster=1)
 }
 
 \arguments{
@@ -60,10 +61,14 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    \code{stepwidth="variable"}, we force \code{incl.markers=TRUE}.}
  \item{clean.output}{If TRUE, clean the output with
    \code{\link[qtl]{clean.scantwo}}, replacing LOD scores for pairs of
-   positions that are between markers with 0.  In permutations, this
+   positions that are not well separated with 0.  In permutations, this
    will be done for each permutation replicate.  This can be important
    for the case of \code{method="em"}, as there can be difficulty with
    algorithm convergence in these regions.}
+ \item{clean.nmar}{If \code{clean.output=TRUE}, this is the number of
+ markers that must separate two positions.}
+ \item{clean.distance}{If \code{clean.output=TRUE}, this is the cM distance
+ that must separate two positions.}
  \item{maxit}{Maximum number of iterations; used
    only with method \code{"em"}.}
  \item{tol}{Tolerance value for determining convergence; used only with
@@ -85,6 +90,9 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    may speed things up.}
  \item{batchsize}{The number of phenotypes (or permutations) to be run
    as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
+ \item{n.cluster}{If the package \code{\link[snow:00Index]{snow}} is available and
+   \code{n.perm} > 0, permutations are run in parallel using this number
+   of nodes.}
 }
 
 \details{
