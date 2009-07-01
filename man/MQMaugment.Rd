@@ -9,7 +9,7 @@
 }
 
 \usage{
-MQMaugment(cross, pheno.col=1, maxind=1000, maxiaug=10, neglect=10, verbose=FALSE)
+MQMaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE)
 }
 
 \arguments{
@@ -19,7 +19,7 @@ MQMaugment(cross, pheno.col=1, maxind=1000, maxiaug=10, neglect=10, verbose=FALS
 	number or a character string matching one of the phenotype names. If pheno.col is
 	an array the first item is used}
   \item{maxind}{ Maximum number of individuals augmentation can expand to }
-  \item{maxiaug}{ Maximum number of augmentations per individual }
+  \item{maxaugind}{ Maximum number of augmentations per individual }
   \item{neglect}{ Drop certain unlikely genotypes during augmentation (neglect=1 does not drop individuals, higher values do). 
   \item{verbose}{ Be verbose }
 }
