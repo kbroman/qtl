@@ -154,7 +154,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     logP= Nloci*log(Pscale); // only for computational accuracy
 	varknown= (((*variance)==-1.0) ? 'n' : 'y' );
     Ploci= newvector(newNaug);	
-	#ifndef ALONE
+	#ifndef STANDALONE
 		R_CheckUserInterrupt(); /* check for ^C */
 		//R_ProcessEvents();
 		R_FlushConsole();

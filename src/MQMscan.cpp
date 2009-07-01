@@ -196,7 +196,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 	Free(cofactor);
 	Free(mapdistance);
 	if(verbose==1){Rprintf("INFO: All done in C returning to R\n");}
-	 #ifndef ALONE
+	 #ifndef STANDALONE
 	 R_CheckUserInterrupt(); /* check for ^C */
 	// R_ProcessEvents(); /*  Try not to crash windows etc*/
 	 R_FlushConsole();

@@ -382,7 +382,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
 				}
 			}
 		}
-	#ifndef ALONE
+	#ifndef STANDALONE
 		//Rprintf("TEST BW\n");
 		R_CheckUserInterrupt(); /* check for ^C */
 		//R_ProcessEvents(); /*  Try not to crash windows etc*/

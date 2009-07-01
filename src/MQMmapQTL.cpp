@@ -121,7 +121,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 			2. all marker-cofactors in the neighborhood of the QTL are dropped by using cM='windows' as criterium
 		*/
         nextinterval= 'n';
-		#ifndef ALONE
+		#ifndef STANDALONE
 			//Rprintf("TEST MQMmapQTL\n");
 			R_CheckUserInterrupt(); /* check for ^C */
 			R_FlushConsole();
