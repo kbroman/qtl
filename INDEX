@@ -90,7 +90,8 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
-MQMaugment              Missing data augmentation routine for MQM
+MQM                     Multiple QTL Model (MQM) mapping
+MQMaugment              MQM data augmentation
 MQMCofactors            Create cofactors to be used with scanMQM
 MQMCofactorsEach        Create cofactors to be used with scanMQM
 MQMfind.marker          Find the genetic markers significant after
