@@ -1,8 +1,10 @@
 /**********************************************************************
  * 
- * reDefine.h
+ * standalone.h
  *
- * copyright (c) 2009 Danny Arends
+ * Remap R methods for standalone/biolib version of R/qtl
+ *
+ * copyright (c) 2009 Danny Arends, Pjotr Prins, Karl Broman
  * last modified Apr, 2009
  * first written Mrt, 2009
  *
@@ -22,10 +24,16 @@
  * Contains: 
  *
  **********************************************************************/
- 
+
+#ifndef __STANDALONE_HPP
+#define __STANDALONE_HPP
+
 // #define STANDALONE - should be defined in the build system
 
 #ifdef STANDALONE
        #undef Rprintf
        #define Rprintf(args...) printf(args)
 #endif
+
+
+#endif // __STANDALONE_HPP

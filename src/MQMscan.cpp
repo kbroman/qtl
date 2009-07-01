@@ -37,10 +37,10 @@ extern "C"
 #include <R_ext/Utils.h>
 #include <math.h>
 #include <Rmath.h>
+#include "standalone.h"
 #include "MQMdata.h"
 #include "MQMsupport.h"
 #include "MQMinterfaces.h"   /*Testing */
-#include "MQMreDefine.h"
 
 #include "util.h"
 double absdouble(double x)
