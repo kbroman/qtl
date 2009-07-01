@@ -34,11 +34,11 @@
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
+#include "standalone.h"
 #include "MQMscan.h"
 #include "MQMdata.h"
 #include "MQMprob.h"
 #include "MQMregression.h"
-#include "MQMreDefine.h"
 
 /* ML estimation of recombination frequencies via EM;
     calculation of multilocus genotype probabilities;
@@ -154,7 +154,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     logP= Nloci*log(Pscale); // only for computational accuracy
 	varknown= (((*variance)==-1.0) ? 'n' : 'y' );
     Ploci= newvector(newNaug);	
-	#ifndef ALONE
+	#ifndef STANDALONE
 		R_CheckUserInterrupt(); /* check for ^C */
 		//R_ProcessEvents();
 		R_FlushConsole();

@@ -31,13 +31,13 @@ extern "C"
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
+#include "standalone.h"
 #include "MQMscan.h"
 #include "MQMdata.h"
 #include "MQMsupport.h"
 #include "MQMregression.h"
 #include "MQMmapQTL.h"
 #include "MQMmixture.h"
-#include "MQMreDefine.h"
 
 double start_prob(char crosstype,char c){
 	switch(crosstype){

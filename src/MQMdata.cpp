@@ -33,11 +33,10 @@ extern "C"
 #include <R_ext/PrtUtil.h>
 #include <R_ext/RS.h> /* for Calloc, Realloc */
 #include <R_ext/Utils.h>
+#include "standalone.h"
 #include "MQMscan.h"
 #include "MQMdata.h"
 #include "MQMprob.h"
-#include "MQMreDefine.h"
-
 #include "util.h"
 
 
@@ -516,7 +515,7 @@ extern "C"
 
                    if (iaug+3>maxNaug)
                    {       
-                    Rprintf("ERROR: Dataset too large after augmentation - your CROSS data may have been corrupted\n");
+                    Rprintf("ERROR: Dataset too large after augmentation - your CROSS data may have been corrupted\n");  // FIXME!
                     if(verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
 					// Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
 					//Free(newy);

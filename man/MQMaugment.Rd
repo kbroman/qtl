@@ -4,12 +4,12 @@
 \title{MQM data augmentation}
 
 \description{
-  Estimates missing data. Unlikely genotypes are kept when more likely than the range 1:Neglect
+  Estimates missing data by increasing marker locations and filling in 
+	genotypes based on surrounding markers and recombination frequencies. 
 }
 
 \usage{
-MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
-           verbose=FALSE)
+MQMaugment(cross, pheno.col=1, maxind=1000, maxiaug=10, neglect=10, verbose=FALSE)
 }
 
 \arguments{
@@ -18,10 +18,10 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
   \item{pheno.col}{Column number in the phenotype matrix. This can be an index
 	number or a character string matching one of the phenotype names. If pheno.col is
 	an array the first item is used}
-  \item{maxaug}{ Maximum number of (expanded) individuals after augmentation }
-  \item{maxiaug}{ Maximum augmentations per individual }
-  \item{neglect}{ Ascertain genotypes below this probability are ignored }
-  \item{verbose}{If TRUE, tracing information is printed.}
+  \item{maxind}{ Maximum number of individuals augmentation can expand to }
+  \item{maxiaug}{ Maximum number of augmentations per individual }
+  \item{neglect}{ Drop certain unlikely genotypes during augmentation (neglect=1 does not drop individuals, higher values do). 
+  \item{verbose}{ Be verbose }
 }
 
 \details{
@@ -40,10 +40,15 @@ MQMaugment(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10,
 The sex chromosome 'X' is dropped before augmentation.
 
 With unrealistic values for augmentation a warning is shown and the cross
-object may have been corrupted (FIXME).  }
+object may have been corrupted. 
+
+Warning: with lots of missing data and/or chromosome markers a neglect value larger
+than 1 may cause the routine to drop a lot of indivuals from the dataset. Try running with verbose to see how many individuals are retained in your dataset.
+}
 
 \seealso{
 	\itemize{
+	\item \code{\link[qtl]{MQM}} - MQM description
 	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}

@@ -26,3 +26,4 @@ pkg
 *.gem
 *.tgz
 *.tmp
+MQMmain.cpp
