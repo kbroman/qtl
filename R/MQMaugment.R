@@ -28,8 +28,9 @@
 # MQMaugment:
 #
 ######################################################################
-MQMaugment <- function(cross, pheno.col=1, maxaug=1000, maxiaug=10, neglect=10, verbose=FALSE){
+MQMaugment <- function(cross, pheno.col=1, maxind=1000, maxiaug=10, neglect=10, verbose=FALSE){
 	start <- proc.time()
+  maxaug = maxind   # maxaug is the maximum of individuals to augment to
 
         # check for supported crosses and set ctype
         crosstype <- class(cross)[1]
