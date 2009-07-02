@@ -27,3 +27,4 @@ pkg
 *.tgz
 *.tmp
 MQMmain.cpp
+*.orig
