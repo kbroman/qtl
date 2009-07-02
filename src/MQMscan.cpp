@@ -45,7 +45,6 @@ extern "C"
 #include "util.h"
 double absdouble(double x)
 {
-//{      double z; z= (x<0 ? -x : x); return z;}
 	return fabs(x);
 }
 
@@ -65,9 +64,6 @@ double Lnormal(double residual, double variance){
 int mod(int a, int b)
 {      
 	return a%b;
-	//int c;
-    //c= a/b;
-    //return a-b*c;
 }
 
 /**********************************************************************

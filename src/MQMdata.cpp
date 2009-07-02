@@ -116,7 +116,8 @@ extern "C"
 	double **NEWPheno;
 	int **NEWIND;
 	int prior = *Nind;
-	if(*verbose) Rprintf("INFO: Starting C-part of the dataaugmentation routine\n");
+
+	if(*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
 	ivector new_ind;
     vector new_y,r,mapdistance;
 	cvector position;
@@ -257,8 +258,9 @@ extern "C"
 
 	int jj;
     int newNind=(*Nind);
-    (*Naug)= maxNaug; /* maximum size of augmented dataset */
-	cmatrix newmarker;
+    (*Naug)= maxNaug;     // sets and returns the maximum size of augmented dataset
+    // new variables sized to maxNaug:
+	cmatrix newmarker;    
     vector newy;
     cvector imarker;
     ivector newind;
