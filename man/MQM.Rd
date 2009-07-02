@@ -25,8 +25,8 @@ Currently MQM only supports F2 / BC / RIL crosses. Also there is no special trea
 \examples{
 qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)								# Mouse genome
-cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)             # Simulate a Cross (just autosomes)
-crossaug <- MQM(cross)						# Augmentation of the data
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01) # Simulate a Cross (just autosomes)
+crossaug <- MQMaugment(cross,neglect=1)						# Augmentation of the data
 result <- scanMQM(crossaug)						# Do a MQM scan of the genome
 }
 
