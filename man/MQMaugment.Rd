@@ -20,7 +20,7 @@ MQMaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FAL
 	an array the first item is used}
   \item{maxind}{ Maximum number of individuals augmentation can expand to }
   \item{maxaugind}{ Maximum number of augmentations per individual }
-  \item{neglect}{ Drop certain unlikely genotypes during augmentation (neglect=1 does not drop individuals, higher values do). 
+  \item{neglect}{ Drop certain unlikely genotypes during augmentation (neglect=1 does not drop individuals, higher values do).}
   \item{verbose}{ Be verbose }
 }
 
