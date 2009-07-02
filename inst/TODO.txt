@@ -10,6 +10,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o In summary.map if a chromosome has just one marker, there is an
+  unnecessary warning message.  ave.spacing and max.spacing should be
+  NA. 
+ 
 o Fix bug regarding X chromosome in fitqtl.
 
 o Analysis of binary traits by "hk" in scanone/two.
