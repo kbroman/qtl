@@ -28,7 +28,7 @@
 	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
 	\item{multiC}{ Use multicore (if available)}  
 	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
-	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size # of traits per job }
+	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
         \item{file}{File name (?)}
 	\item{n.clusters}{ Number of child processes to split the job into }
 	\item{bootmethod}{ What kind of bootstrapping method should be used ( 0= Random Shuffle (DEFAULT)/ 1= Parametric ) } 

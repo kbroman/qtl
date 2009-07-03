@@ -20,7 +20,7 @@
   \item{Funktie}{ Function to use when mappingQTL's (either scanone,cim, mqm or your own mapping function). An easier way is to call the interface implementing the function under interest} 
   \item{multiC}{ Use multicore (if available)}
   \item{n.clusters}{ Number of child processes to split the job into }
-  \item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size # of traits per job }
+  \item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
   \item{FF}{ [Not sure what this is] } 
   \item{\dots}{Parameters passed through to the \code{\link[qtl]{scanone}}, \code{\link[qtl]{cim}} or \code{\link[qtl]{mqm}} functions}
   \item{plot}{If TRUE, plot the results}
