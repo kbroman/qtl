@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-8, Karl W Broman and Hao Wu
-# last modified Sep, 2008
+# copyright (c) 2001-9, Karl W Broman and Hao Wu
+# last modified May, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -41,10 +41,11 @@ function(cross, chr, pheno.col=1,
          method=c("em","imp","hk","mr","mr-imp","mr-argmax"),
          addcovar=NULL, intcovar=NULL, weights=NULL,
          use=c("all.obs", "complete.obs"),
-         incl.markers=FALSE, clean.output=FALSE,
+         incl.markers=FALSE, clean.output=FALSE, clean.nmar=1,
+         clean.distance=0,
          maxit=4000, tol=1e-4, verbose=TRUE, n.perm,
          perm.strata=NULL, assumeCondIndep=FALSE,
-         batchsize=250)
+         batchsize=250, n.cluster=1)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   if(!any(class(cross) == "cross"))
@@ -54,6 +55,25 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
+  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
+    cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
+    cl <- makeCluster(n.cluster)
+    clusterSetupRNG(cl)
+    clusterEvalQ(cl, require(qtl, quietly=TRUE))
+    n.perm <- ceiling(n.perm/n.cluster)
+    if(missing(chr)) chr <- names(cross$geno)
+    operm <- clusterCall(cl, scantwo, cross=cross, chr=chr, pheno.col=pheno.col,
+                         model=model, method=method, addcovar=addcovar, intcovar=intcovar,
+                         weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                         clean.nmar=clean.nmar, clean.distance=clean.distance,
+                         maxit=maxit, tol=tol, verbose=FALSE, n.perm=n.perm, perm.strata=perm.strata, 
+                         assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0)
+    stopCluster(cl)
+    for(j in 2:length(operm))
+      operm[[1]] <- c(operm[[1]], operm[[j]])
+    return(operm[[1]])
+  }
+
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
     pheno.col <- 1
@@ -139,11 +159,12 @@ function(cross, chr, pheno.col=1,
                       method=method, addcovar=addcovar,
                       intcovar=intcovar, weights=weights, use=use,
                       incl.markers=incl.markers,
-                      clean.output=clean.output,
+                      clean.output=clean.output, clean.nmar=clean.nmar,
+                      clean.distance=clean.distance,
                       maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                       perm.strata=perm.strata,
                       assumeCondIndep=assumeCondIndep,
-                      batchsize=batchsize)
+                      batchsize=batchsize, n.cluster=0)
     temp <- array(dim=c(nrow(output$lod), ncol(output$lod), n.phe))
     temp[,,1] <- output$lod
     output$lod <- temp
@@ -152,11 +173,12 @@ function(cross, chr, pheno.col=1,
       temp <- scantwo(cross, pheno.col=pheno.col[i], model=model, method=method,
                       addcovar=addcovar, intcovar=intcovar, weights=weights,
                       use=use, incl.markers=incl.markers,
-                      clean.output=clean.output,
+                      clean.output=clean.output, clean.nmar=clean.nmar,
+                      clean.distance=clean.distance,
                       maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                       perm.strata=perm.strata,
                       assumeCondIndep=assumeCondIndep,
-                      batchsize=batchsize)
+                      batchsize=batchsize, n.cluster=0)
       output$lod[,,i] <- temp$lod
       if(!is.null(output$scanoneX))
         output$scanoneX <- cbind(output$scanoneX, temp$scanoneX)
@@ -172,6 +194,8 @@ function(cross, chr, pheno.col=1,
     return(scantwo.perm(cross, pheno.col=pheno.col, model=model, method=method,
                         addcovar=addcovar, intcovar=intcovar, weights=weights,
                         use=use, incl.markers=incl.markers, clean.output=clean.output,
+                        clean.nmar=clean.nmar,
+                        clean.distance=clean.distance,
                         maxit=maxit,
                         tol=tol, verbose=verbose, n.perm=n.perm,
                         perm.strata=perm.strata,
@@ -1243,7 +1267,7 @@ function(cross, chr, pheno.col=1,
   attr(out, "df") <- df
 
   if(clean.output) # remove NA, 0 out positions between markers 
-    out <- clean(out)
+    out <- clean(out, clean.nmar, clean.distance)
 
   attr(out, "phenotypes") <- colnames(pheno)
   names(out$map)[2] <- "pos"
@@ -1262,6 +1286,7 @@ function(cross, pheno.col=1, model=c("normal","binary"),
          addcovar=NULL, intcovar=NULL, weights=NULL,
          use=c("all.obs", "complete.obs"),
          incl.markers=FALSE, clean.output=FALSE,
+         clean.nmar=1, clean.distance=0,
          maxit=4000, tol=1e-4, verbose=FALSE,
          n.perm=1000, perm.strata,
          assumeCondIndep=FALSE, batchsize=250)
@@ -1274,6 +1299,8 @@ function(cross, pheno.col=1, model=c("normal","binary"),
                       model=model, method=method, addcovar=addcovar,
                       intcovar=intcovar, weights=weights, use=use,
                       incl.markers=incl.markers, clean.output=clean.output,
+                      clean.nmar=clean.nmar,
+                      clean.distance=clean.distance,
                       maxit=maxit, tol=tol, verbose=verbose,
                       perm.strata=perm.strata,
                       assumeCondIndep=assumeCondIndep, batchsize=batchsize)
@@ -1289,7 +1316,7 @@ function(cross, pheno.col=1, model=c("normal","binary"),
 scantwo.perm.engine <-
 function(n.perm, cross, pheno.col, model,
          method, addcovar, intcovar, weights, use,
-         incl.markers, clean.output,
+         incl.markers, clean.output, clean.nmar=1, clean.distance=0,
          maxit, tol, verbose, perm.strata,
          assumeCondIndep=FALSE, batchsize=250)
 {
@@ -1356,12 +1383,13 @@ function(n.perm, cross, pheno.col, model,
     tem <- scantwo(cross, pheno.col=pheno.col, model=model, method=method,
                    addcovar=addcovar, intcovar=intcovar, weights=weights,
                    use=use, incl.markers=incl.markers,
-                   clean.output=clean.output,
+                   clean.output=clean.output, clean.nmar=clean.nmar,
+                   clean.distance=clean.distance,
                    maxit=maxit, tol=tol,verbose=FALSE, n.perm=-1,
                    perm.strata=perm.strata,
                    assumeCondIndep=assumeCondIndep,
-                   batchsize=batchsize)
-    if(clean.output) tem <- clean(tem)
+                   batchsize=batchsize, n.cluster=0)
+    if(clean.output) tem <- clean(tem, clean.nmar, clean.distance)
 
     ## find the maximum LOD on each permutation
     perm.result <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
@@ -1420,13 +1448,14 @@ function(n.perm, cross, pheno.col, model,
       tem <- scantwo(cross,  pheno.col=pheno.col, model=model, 
                      method=method, addcovar=addcovarp, intcovar=intcovarp,
                      weights=weights, use=use, 
-                     incl.markers=incl.markers, clean.output=clean.output,
+                     incl.markers=incl.markers, clean.output=clean.output, 
+                     clean.nmar=clean.nmar, clean.distance=clean.distance,
                      maxit=maxit, tol=tol,
                      verbose=FALSE, n.perm= -i, perm.strata=perm.strata,
                      assumeCondIndep=assumeCondIndep,
-                     batchsize=batchsize)
+                     batchsize=batchsize, n.cluster=0)
 
-      if(clean.output) tem <- clean(tem)
+      if(clean.output) tem <- clean(tem, clean.nmar, clean.distance)
 
       # maxima
       temp <- subrousummaryscantwo(tem, for.perm=TRUE)

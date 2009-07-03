@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-8, Karl W Broman
-# last modified Apr, 2008
+# copyright (c) 2005-9, Karl W Broman
+# last modified May, 2009
 # first written Mar, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -290,7 +290,12 @@ function(e1, e2)
     stop("input arguments do not conform.")
 
   e1$lod <- e1$lod - e2$lod
-  if(e1x) e1$scanoneX <- e1$scanoneX - e2$scanoneX
+  if(e1x) {
+    if(is.null(e1$scanoneX) && is.null(e2$scanoneX))
+      e1$scanoneX <- NULL
+    else 
+      e1$scanoneX <- e1$scanoneX - e2$scanoneX
+  }
   
   if(!is.null(df1) && !is.null(df2)) {
     if(length(df1) != length(df2))
@@ -332,7 +337,12 @@ function(e1, e2)
     stop("input arguments do not conform.")
 
   e1$lod <- e1$lod + e2$lod
-  if(e1x) e1$scanoneX <- e1$scanoneX + e2$scanoneX
+  if(e1x) {
+    if(is.null(e1$scanoneX) && is.null(e2$scanoneX))
+      e1$scanoneX <- NULL
+    else 
+      e1$scanoneX <- e1$scanoneX + e2$scanoneX
+  }
   
   if(!is.null(df1) && !is.null(df2)) {
     if(length(df1) != length(df2))

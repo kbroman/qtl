@@ -16,7 +16,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         use=c("all.obs", "complete.obs"), upper=FALSE,
         ties.random=FALSE, start=NULL, maxit=4000,
         tol=1e-4, n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose,
-        batchsize=250)
+        batchsize=250, n.cluster=1)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -88,6 +88,9 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    information about the progress of the permutation tests.}
  \item{batchsize}{The number of phenotypes (or permutations) to be run
    as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
+ \item{n.cluster}{If the package \code{\link[snow:00Index]{snow}} is available and
+   \code{n.perm} > 0, permutations are run in parallel using this number
+   of nodes.}
 }
 
 \section{Models}{
@@ -427,7 +430,7 @@ plot(out.imp, out.hk, out.em, chr=c(1,4), lty=1,
 # Two-part Model
 ###################
 data(listeria)
-\dontshow{listeria <- subset(listeria,chr=c(1,5,13))}
+\dontshow{listeria <- subset(listeria,chr=c(1,5,13),ind=!is.na(listeria$pheno[,1]))}
 listeria <- calc.genoprob(listeria,step=2.5)
 out.2p <- scanone(listeria, model="2part", upper=TRUE)
 summary(out.2p, thr=c(5,3,3), format="allpeaks")

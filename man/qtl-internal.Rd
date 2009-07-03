@@ -116,6 +116,7 @@
 \alias{scanoneXnull}
 \alias{scantwo.perm}
 \alias{scantwo.perm.engine}
+\alias{scantwoperm2scanoneperm}
 \alias{sim.bcg}
 \alias{sim.cross.4way}
 \alias{sim.cross.bc}
@@ -128,6 +129,7 @@
 \alias{summary.addcovarint}
 \alias{summary.addint}
 \alias{summary.compactqtl}
+\alias{testchr}
 \alias{vbscan}
 \alias{write.cross.csv}
 \alias{write.cross.gary}
@@ -154,7 +156,7 @@ charround(x, digits=1)
 checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
 checkformula(formula, qtl.name, covar.name)
 checkStepwiseqtlStart(qtl, formula, covar=NULL)
-clean(object)
+clean(object, \dots)
 condense(object)
 convert(object)
 convertMWril(cross, parents, error.prob=0)
@@ -290,15 +292,19 @@ scantwo.perm(cross, pheno.col=1, model=c("normal","binary"),
              method=c("em","imp","hk","mr","mr-imp","mr-argmax"),
              addcovar=NULL, intcovar=NULL, weights=NULL,
              use=c("all.obs", "complete.obs"),
-             incl.markers=FALSE, clean.output=FALSE,
+             incl.markers=FALSE, clean.output=FALSE, 
+             clean.nmar=1, clean.distance=0,
              maxit=4000, tol=1e-4, verbose=FALSE,
              n.perm=1000, perm.strata, assumeCondIndep=FALSE,
              batchsize=250)
 scantwo.perm.engine(n.perm, cross, pheno.col, model,
                     method, addcovar, intcovar, weights, use,
-                    incl.markers, clean.output, maxit, tol, verbose,
+                    incl.markers, clean.output,  
+                    clean.nmar=1, clean.distance=0,
+                    maxit, tol, verbose,
                     perm.strata, assumeCondIndep=FALSE,
                     batchsize=250)
+scantwoperm2scanoneperm(scantwoperms)
 sim.bcg(n.ind, map, m, p,
         map.function=c("haldane","kosambi","c-f","morgan"))
 sim.cross.4way(map, model, n.ind, error.prob, missing.prob,
@@ -319,6 +325,7 @@ subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{addcovarint}(object, \dots)
 \method{summary}{addint}(object, \dots)
 \method{summary}{compactqtl}(object, \dots)
+testchr(selection, thechr)
 vbscan(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
        tol=1e-4)
 write.cross.csv(cross, filestem="data", digits=5, rotate=FALSE,

@@ -53,6 +53,6 @@ fake.f2 <- est.rf(fake.f2)
 checkAlleles(fake.f2)
 }
 
-\seealso{ \code{\link[qtl]{est.rf}}, \code{\link[qtl]{geno.table}} }
+\seealso{ \code{\link[qtl]{est.rf}}, \code{\link[qtl]{geno.crosstab}} }
 
 \keyword{utilities}

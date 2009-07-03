@@ -4,6 +4,7 @@
 \title{Multiple QTL Model (MQM) mapping}
 
 \description{
+Overview of the MQM mapping functions.
 }
 
 \usage{

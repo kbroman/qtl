@@ -1,5 +1,6 @@
 \name{subset.cross}
 \alias{subset.cross}
+\alias{[.cross}
 
 \title{Subsetting data for QTL experiment}
 
@@ -10,6 +11,7 @@
 
 \usage{
 \method{subset}{cross}(x, chr, ind, \dots)
+\method{[}{cross}(x, chr, ind)
 }
 
 \arguments{
@@ -76,8 +78,13 @@ listeriaB <- subset(listeria, ind = (!is.na(y) & y < 264))
 listeria$pheno$ID <- paste("mouse", 1:nind(listeria), sep="")
 listeriaC <- subset(listeria, ind=c("mouse1","mouse11","mouse21"))
 listeriaD <- subset(listeria, ind=c("-mouse1","-mouse11","-mouse21"))
+
+# you can also use brackets (like matrix with rows=chromosomes and columns=individuals)
+temp <- listeria[c("5","13"),]  # chr 5 and 13
+temp <- listeria[ , 1:10]       # first ten individuals
+temp <- listeria[5, 1:10]       # chr 5 for first ten individuals
 }
 
-\seealso{ \code{\link[qtl]{pull.map}}, \code{\link[qtl]{drop.markers}} }
+\seealso{ \code{\link[qtl]{pull.map}}, \code{\link[qtl]{drop.markers}}, \code{\link[qtl]{subset.map}} }
 
 \keyword{manip}

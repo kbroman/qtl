@@ -2,8 +2,8 @@
 #
 # compareorder.R
 #
-# copyright (c) 2007-8, Karl W Broman
-# last modified Aug, 2008
+# copyright (c) 2007-9, Karl W Broman
+# last modified May, 2009
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 compareorder <-
 function(cross, chr, order, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         maxit=4000, tol=0.0001, sex.sp=TRUE)
+         maxit=4000, tol=1e-6, sex.sp=TRUE)
 {
   if(missing(chr)) chr <- names(cross$geno)[1]
   if(length(chr) > 1) {
@@ -42,11 +42,13 @@ function(cross, chr, order, error.prob=0.0001,
   cross <- subset(cross, chr)
 
   if(length(order) != totmar(cross)) {
-    if(length(order) == totmar(cross)+1)
-      order <- order[-length(order)]
+    if(length(order) == totmar(cross)+1 || length(order) == totmar(cross)+2)
+      order <- order[1:totmar(cross)]
     else
       stop("Argument 'order' should have length ", totmar(cross))
   }
+  if(any(is.na(match(1:totmar(cross), order))))
+    stop("order should be a permutation of the numbers 1, 2, ..., ", totmar(cross))
 
   orig <- est.map(cross, error.prob=error.prob, map.function=map.function,
                   maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
