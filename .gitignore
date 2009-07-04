@@ -28,3 +28,6 @@ pkg
 *.tmp
 MQMmain.cpp
 *.orig
+src/standalone.lst
+src/standalone.patch
+src/sMQM
