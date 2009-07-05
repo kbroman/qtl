@@ -42,7 +42,7 @@ extern "C" {
   char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
     for (int i=0; i< *Nmark; i++) {
       for (int j=0; j< *Nind; j++) {
-        //Some lame ass checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
+        //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
         if (Geno[i][j] != 9 && Geno[i][j] > 3 && (*crosstype) != 1) {
           Rprintf("INFO: Strange genotype pattern, switching to F2\n");
           Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[i][j]);
@@ -54,7 +54,7 @@ extern "C" {
           (*crosstype) = 1;
           break;
         }
-        //IF we have a RIL and find AB then Rqtl messed up, so we have a BC genotype
+        //IF we have a RIL and find AB then the set is messed up; we have a BC genotype
         if (Geno[i][j] == 2 && (*crosstype) == 3) {
           Rprintf("INFO: Strange genotype pattern, switching from RISELF to BC\n");
           (*crosstype) = 2;
@@ -80,7 +80,7 @@ extern "C" {
 
 
   void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
-    //Change all the markers from Karl format to our own
+    // Change all the genotypes from default R/qtl format to MQM internal
     for (int i=0; i< *Nmark; i++) {
       for (int j=0; j< *Nind; j++) {
         markers[i][j] = '9';
