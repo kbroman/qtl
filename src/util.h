@@ -1,5 +1,5 @@
 /**********************************************************************
- * 
+ *
  * util.h
  *
  * copyright (c) 2001-9, Karl W Broman and Hao Wu
@@ -13,12 +13,12 @@
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
  *     merchantability or fitness for a particular purpose.  See the GNU
  *     General Public License, version 3, for more details.
- * 
+ *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
@@ -30,7 +30,7 @@
  *                  reorg_pairprob, allocate_int,
  *                  allocate_alpha, reorg_draws, allocate_double,
  *                  sample_int, allocate_imatrix, allocate_dmatrix
- *                  reorg_errlod, double_permute, int_permute, 
+ *                  reorg_errlod, double_permute, int_permute,
  *                  random_int
  *                  wtaverage, comparegeno, R_comparegeno
  *                  R_locate_xo, locate_xo, matmult, expand_col2drop
@@ -43,35 +43,35 @@
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
 inline int mod(int a, int b) {
-    return a%b;
-  }
+  return a%b;
+}
 
 /**********************************************************************
- * 
+ *
  * addlog
  *
  * Calculate addlog(a,b) = log[exp(a) + exp(b)]
  *
  * This makes use of the function log1p(x) = log(1+x) provided
- * in R's math library.   
+ * in R's math library.
  *
  **********************************************************************/
 double addlog(double a, double b);
-		       
+
 /**********************************************************************
- * 
+ *
  * subtrlog
  *
  * Calculate subtrlog(a,b) = log[exp(a) - exp(b)]
  *
  * This makes use of the function log1p(x) = log(1+x) provided
- * in R's math library.  
+ * in R's math library.
  *
  **********************************************************************/
 double subtrlog(double a, double b);
 
 /**********************************************************************
- * 
+ *
  * reorg_geno
  *
  * Reorganize the genotype data so that it is a doubly indexed array
@@ -85,10 +85,10 @@ double subtrlog(double a, double b);
 void reorg_geno(int n_ind, int n_pos, int *geno, int ***Geno);
 
 /**********************************************************************
- * 
+ *
  * reorg_genoprob
  *
- * Reorganize the genotype probability data so that it is a triply 
+ * Reorganize the genotype probability data so that it is a triply
  * indexed array rather than a single long vector
  *
  * Afterwards, genoprob indexed like Genoprob[gen][mar][ind]
@@ -96,30 +96,30 @@ void reorg_geno(int n_ind, int n_pos, int *geno, int ***Geno);
  * Allocation done by R_alloc, so that R does the cleanup.
  *
  **********************************************************************/
-void reorg_genoprob(int n_ind, int n_pos, int n_gen, 
-		    double *genoprob, double ****Genoprob);
+void reorg_genoprob(int n_ind, int n_pos, int n_gen,
+                    double *genoprob, double ****Genoprob);
 
 /**********************************************************************
- * 
+ *
  * reorg_pairprob
  *
- * Reorganize the joint genotype probabilities so that they form a 
+ * Reorganize the joint genotype probabilities so that they form a
  * quintuply indexed array rather than a single long vector
  *
- * Afterwards, pairprob indexed like 
+ * Afterwards, pairprob indexed like
  *    Pairprob[gen1][gen2][pos1][pos2][ind] with pos2 > pos1
- * 
+ *
  * You *must* refer to cases with pos2 > pos1, as cases with
  * pos2 <= pos1 point off into the ether.
  *
  * Allocation done by R_alloc, so that R does the cleanup.
  *
  **********************************************************************/
-void reorg_pairprob(int n_ind, int n_pos, int n_gen, 
-		    double *pairprob, double ******Pairprob);
+void reorg_pairprob(int n_ind, int n_pos, int n_gen,
+                    double *pairprob, double ******Pairprob);
 
 /**********************************************************************
- * 
+ *
  * allocate_alpha
  *
  * Allocate space for alpha and beta matrices
@@ -132,10 +132,10 @@ void reorg_pairprob(int n_ind, int n_pos, int n_gen,
 void allocate_alpha(int n_pos, int n_gen, double ***alpha);
 
 /**********************************************************************
- * 
+ *
  * reorg_draws
  *
- * Reorganize the simulated genotypes so that it is a triply 
+ * Reorganize the simulated genotypes so that it is a triply
  * indexed array rather than a single long vector
  *
  * Afterwards, draws indexed like Draws[repl][mar][ind]
@@ -143,11 +143,11 @@ void allocate_alpha(int n_pos, int n_gen, double ***alpha);
  * Allocation done by R_alloc, so that R does the cleanup.
  *
  **********************************************************************/
-void reorg_draws(int n_ind, int n_pos, int n_draws, 
-		 int *draws, int ****Draws);
+void reorg_draws(int n_ind, int n_pos, int n_draws,
+                 int *draws, int ****Draws);
 
 /**********************************************************************
- * 
+ *
  * allocate_double
  *
  * Allocate space for a vector of doubles
@@ -158,7 +158,7 @@ void reorg_draws(int n_ind, int n_pos, int n_draws,
 void allocate_double(int n, double **vector);
 
 /**********************************************************************
- * 
+ *
  * allocate_int
  *
  * Allocate space for a vector of ints
@@ -169,7 +169,7 @@ void allocate_double(int n, double **vector);
 void allocate_int(int n, int **vector);
 
 /**********************************************************************
- * 
+ *
  * allocate_dmatrix
  *
  * Allocate space for a matrix of doubles
@@ -180,7 +180,7 @@ void allocate_int(int n, int **vector);
 void allocate_dmatrix(int n_row, int n_col, double ***matrix);
 
 /**********************************************************************
- * 
+ *
  * allocate_imatrix
  *
  * Allocate space for a matrix of ints
@@ -191,7 +191,7 @@ void allocate_dmatrix(int n_row, int n_col, double ***matrix);
 void allocate_imatrix(int n_row, int n_col, int ***matrix);
 
 /**********************************************************************
- * 
+ *
  * sample_int
  *
  * Make a single draw from (1, ..., n) with probs (p_0, ..., p_(n-1))
@@ -200,7 +200,7 @@ void allocate_imatrix(int n_row, int n_col, int ***matrix);
 int sample_int(int n, double *p);
 
 /**********************************************************************
- * 
+ *
  * reorg_errlod
  *
  * Just like reorg_geno(), only for a matrix of doubles.
@@ -213,14 +213,14 @@ int sample_int(int n, double *p);
 void reorg_errlod(int n_ind, int n_mar, double *errlod, double ***Errlod);
 
 /**********************************************************************
- * 
+ *
  * double_permute
  *
  *   This function randomly permutes a vector of doubles
- *   
+ *
  * Input:
- * 
- *   array = vector of doubles; on output, it contains a random 
+ *
+ *   array = vector of doubles; on output, it contains a random
  *           permutation of the input vector
  *
  *   len   = length of the vector
@@ -229,14 +229,14 @@ void reorg_errlod(int n_ind, int n_mar, double *errlod, double ***Errlod);
 void double_permute(double *array, int len);
 
 /**********************************************************************
- * 
+ *
  * int_permute
  *
  *   This function randomly permutes a vector of int
- *   
+ *
  * Input:
- * 
- *   array = vector of int; on output, it contains a random 
+ *
+ *   array = vector of int; on output, it contains a random
  *           permutation of the input vector
  *
  *   len   = length of the vector
@@ -245,13 +245,13 @@ void double_permute(double *array, int len);
 void int_permute(int *array, int len);
 
 /**********************************************************************
- * 
+ *
  * random_int
- *   
+ *
  * Generates a random int integer between "low" and "high", inclusive.
  *
  *  Input:
- * 
+ *
  *    low
  *
  *    high
@@ -268,51 +268,51 @@ double wtaverage(double *LOD, int n_draws);
 
 /**********************************************************************
  * comparegeno
- * 
+ *
  * Count number of matches in the genotypes for all pairs of
  * individuals.
  *
  * Input:
- *   
+ *
  **********************************************************************/
-void comparegeno(int **Geno, int n_ind, int n_mar, 
-		 int **N_Match, int **N_Missing);
+void comparegeno(int **Geno, int n_ind, int n_mar,
+                 int **N_Match, int **N_Missing);
 
 /**********************************************************************
  * R_comparegeno: wrapper for R
  **********************************************************************/
-void R_comparegeno(int *geno, int *n_ind, int *n_mar, 
-		   int *n_match, int *n_missing);
+void R_comparegeno(int *geno, int *n_ind, int *n_mar,
+                   int *n_match, int *n_missing);
 
 void R_locate_xo(int *n_ind, int *n_mar, int *type,
-		 int *geno, double *map, 
-		 double *location, int *nseen);
+                 int *geno, double *map,
+                 double *location, int *nseen);
 
 /* Note: type ==0 for backcross and ==1 for intercross */
 void locate_xo(int n_ind, int n_mar, int type, int **Geno,
-	       double *map, double **Location, 
-	       int *nseen);
+               double *map, double **Location,
+               int *nseen);
 
 /* multiply two matrices - I'm using dgemm from lapack here */
 void matmult(double *result, double *a, int nrowa,
              int ncola, double *b, int ncolb);
 /* multiply two matrices - I'm using dgemm from lapack here */
 void matmult2(double *result, double *a, int nrowa,
-             int ncola, double *b, int ncolb);
+              int ncola, double *b, int ncolb);
 
 
 /**********************************************************************
- * 
+ *
  * expand_col2drop
  *
- * Used in scantwo_1chr_em for the X chromosome, to figure out 
+ * Used in scantwo_1chr_em for the X chromosome, to figure out
  * what columns to drop in the presence of covariates when certain
  * genotype columns must be dropped
  *
  **********************************************************************/
 
-void expand_col2drop(int n_gen, int n_addcov, int n_intcov, 
-		     int *col2drop, int *allcol2drop);
+void expand_col2drop(int n_gen, int n_addcov, int n_intcov,
+                     int *col2drop, int *allcol2drop);
 
 void dropcol_xpx(int *n_col, int *col2drop, double *xpx);
 
@@ -321,8 +321,8 @@ void dropcol_xpy(int n_col, int *col2drop, double *xpy);
 void dropcol_x(int *n_col, int n_row, int *col2drop, double *x);
 
 /**********************************************************************
- * 
- * reviseMWril    Revise genotypes for 4- or 8-way RIL 
+ *
+ * reviseMWril    Revise genotypes for 4- or 8-way RIL
  *                to form encoding the founders' genotypes
  *
  * n_ril     Number of RILs to simulate
@@ -330,20 +330,20 @@ void dropcol_x(int *n_col, int n_row, int *col2drop, double *x);
  * n_str     Number of founder strains
  *
  * Parents   SNP data for the founder strains [dim n_mar x n_str]
- * 
- * Geno      On entry, the detailed genotype data; on exit, the 
+ *
+ * Geno      On entry, the detailed genotype data; on exit, the
  *           SNP data written bitwise. [dim n_ril x n_mar]
- * 
+ *
  * Crosses   The crosses [n_ril x n_str]
  *
  **********************************************************************/
-void reviseMWril(int n_ril, int n_mar, int n_str, 
-		 int **Parents, int **Geno, int **Crosses,
-		 int missingval);
+void reviseMWril(int n_ril, int n_mar, int n_str,
+                 int **Parents, int **Geno, int **Crosses,
+                 int missingval);
 
 /* wrapper for calling reviseMWril from R */
-void R_reviseMWril(int *n_ril, int *n_mar, int *n_str, 
-		   int *parents, int *geno, int *crosses,
-		   int *missingval);
+void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
+                   int *parents, int *geno, int *crosses,
+                   int *missingval);
 
 /* end of util.h */
