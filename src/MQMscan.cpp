@@ -42,15 +42,11 @@ extern "C" {
 #include "MQMinterfaces.h"   /*Testing */
 
 #include "util.h"
-  double absdouble(double x) {
-    return fabs(x);
-  }
-
 
   double Lnormal(double residual, double variance) {
     //double Likelihood,likelyhood;
     //Likelihood=exp(-pow(residual/sqrt(variance),2.0)/2.0 - log(sqrt(2.0*acos(-1.0)*variance)));
-    //if(absdouble(Likelihood-likelyhood)>0.05){
+    //if(fabs(Likelihood-likelyhood)>0.05){
     //Rprintf("ERROR: Lnormal error\n");
     //}
     //return likelyhood;

@@ -75,7 +75,7 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				if(start){
 					return (loci[j][i]=='1' ? 0.5 : 0.25);
 				}			
-				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
+				Nrecom= fabs((double)loci[j][i]-(double)compareto);
 				if ((loci[j][i]=='1')&&(compareto=='1')){
 					//Rprintf("SCase %c <-> %c:\n",compareto,loci[j][i]);
 					calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
@@ -102,7 +102,7 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				if(compareto=='1' && JorC){
 					return 0.0; // No chance in hell finding a 1 in an RIL
 				}
-				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
+				Nrecom= fabs((double)loci[j][i]-(double)compareto);
 				if(Nrecom==0){
 					//No recombination has a chance of r[j]
 					calc_i = 1.0-r[j+ADJ];
@@ -118,7 +118,7 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
 				if(compareto=='2' && JorC){
 					return 0.0; // No chance in hell finding a 2 in a BC
 				}
-				Nrecom= absdouble((double)loci[j][i]-(double)compareto);
+				Nrecom= fabs((double)loci[j][i]-(double)compareto);
 				if(Nrecom==0){
 					//No recombination has a chance of r[j]
 					calc_i =  (1.0-r[j+ADJ]);
@@ -147,7 +147,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
 				return r[jloc]*r[jloc]+(1.0-r[jloc])*(1.0-r[jloc]);
 			}else{
 				//The number of recombinations between observed marker and the next marker
-				nrecom = absdouble(c-imarker[jloc+1]);
+				nrecom = fabs(c-imarker[jloc+1]);
 				if(nrecom==0){
 					//No recombination			
 					return (1.0-r[jloc])*(1.0-r[jloc]);
@@ -222,7 +222,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
 					return 0.0;
 				}
 				if ((imarker[jloc+1]=='0')||(imarker[jloc+1]=='2')){
-					nrecom = absdouble(c-imarker[jloc+1]);
+					nrecom = fabs(c-imarker[jloc+1]);
 					if(nrecom==0){
 						return (1.0-r[jloc]);
 					}else{
@@ -244,7 +244,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
 					return 0.0;
 				}
 				if ((imarker[jloc+1]=='0')||(imarker[jloc+1]=='1')){
-					nrecom = absdouble(c-imarker[jloc+1]);
+					nrecom = fabs(c-imarker[jloc+1]);
 					if(nrecom==0){
 						return 1.0-r[jloc];
 					}else{

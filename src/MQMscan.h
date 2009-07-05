@@ -24,7 +24,6 @@
  **********************************************************************/
 
 double Lnormal(double residual, double variance);
-double absdouble(double x);
 int mod(int a, int b);
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno);
 void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);

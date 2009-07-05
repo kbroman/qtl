@@ -91,7 +91,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
            {   if ((position[j]=='L')||(position[j]=='M'))
                {  newr= 0.0;
                   for (i=0; i<Naug; i++)
-                  {   Nrecom= absdouble((double)marker[j][i]-marker[j+1][i]);
+                  {   Nrecom= fabs((double)marker[j][i]-marker[j+1][i]);
                       if ((marker[j][i]=='1')&&(marker[j+1][i]=='1'))
                          Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
                       newr+= Nrecom*weight[i];
@@ -308,7 +308,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   (*weight)[i+2*Naug]/=indweight[ind[i]];
               }
            }
-           delta= absdouble(logL-oldlogL);
+           delta= fabs(logL-oldlogL);
            oldlogL= logL;
      }
      //Rprintf("EM Finished\n");
