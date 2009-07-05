@@ -2,7 +2,8 @@
  *
  * MQMmixture.h
  *
- * copyright (c) 2009 Danny Arends
+ * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ *
  * last modified Apr, 2009
  * first written Feb, 2009
  *

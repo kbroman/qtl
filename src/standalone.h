@@ -4,7 +4,8 @@
  *
  * Remap R methods for standalone/biolib version of R/qtl
  *
- * copyright (c) 2009 Danny Arends, Pjotr Prins, Karl Broman
+ * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ *
  * last modified Apr, 2009
  * first written Mrt, 2009
  *

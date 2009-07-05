@@ -2,11 +2,10 @@
  *
  * MQMaugment.cpp
  *
- * copyright (c) 2009 Danny Arends
+ * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  * last modified Apr, 2009
  * first written Feb, 2009
  *
- * Original version R.C Jansen
  * first written <2000 (unknown)
  *
  *     This program is free software; you can redistribute it and/or

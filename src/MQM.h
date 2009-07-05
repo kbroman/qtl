@@ -4,7 +4,8 @@
  *
  * Master include file for common MQM headers
  *
- * copyright (c) 2009 Danny Arends, Pjotr Prins, Karl Broman
+ * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
+ *
  * last modified July, 2009
  * first written July, 2009
  *
