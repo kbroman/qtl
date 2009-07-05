@@ -54,11 +54,6 @@ extern "C" {
   }
 
 
-
-  int mod(int a, int b) {
-    return a%b;
-  }
-
   /**********************************************************************
   void reorg_geno(int n_ind, int n_pos, int *geno, int ***Geno)
   {

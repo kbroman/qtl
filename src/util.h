@@ -42,6 +42,10 @@
 /* Macro for getting maximum */
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
+inline int mod(int a, int b) {
+    return a%b;
+  }
+
 /**********************************************************************
  * 
  * addlog
