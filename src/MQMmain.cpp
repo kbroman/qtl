@@ -271,6 +271,10 @@ extern "C" {
     for (int m=0; m<nMark; m++) {
       Rprintf("%5d%3d%9.3f\n",m,chr[m],mapdistance[m]);
     }
+    // Output (augmented) QTL info
+    for (int q=0; q<something; q++) {
+      Rprintf("%5d%10.5f\n",q,QTL[0][q]);
+    }
     return 0;
   }
 
