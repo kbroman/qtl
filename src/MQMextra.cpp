@@ -24,11 +24,11 @@
 
 #include "MQM.h"
 
-  void R_Lnorm(double *a,double *b) {
-    Rprintf("Lnormal with parameters: (%f,%f)\n",*a,*b);
-    double *ans;
-    *ans = Lnormal(*a,*b);
-    Rprintf("Result: %f\n",*ans);
-    b = ans;
-  }
+void R_Lnorm(double *a,double *b) {
+  Rprintf("Lnormal with parameters: (%f,%f)\n",*a,*b);
+  double *ans;
+  *ans = Lnormal(*a,*b);
+  Rprintf("Result: %f\n",*ans);
+  b = ans;
+}
 
