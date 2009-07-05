@@ -20,164 +20,16 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
+ * Data augmentation routines
  *
  **********************************************************************/
 
 #include "MQM.h"
 
-void R_augdata(int *geno, double *dist, double *pheno, int *auggeno, 
-               double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
-               *chromo, int *crosstype, int *verbose) {
-  int **Geno;
-  double **Pheno;
-  double **Dist;
-  int **NEW;
-  int **Chromo;
-  double **NEWPheno;
-  int **NEWIND;
-  int prior = *Nind;
-
-  if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
-  ivector new_ind;
-  vector new_y, r, mapdistance;
-  cvector position;
-  cmatrix markers, new_markers;
-  ivector chr;
-
-  markers= newcmatrix(*Nmark, *Nind);
-  new_markers= newcmatrix(*Nmark, *maxaug);
-  r = newvector(*Nmark);
-  mapdistance = newvector(*Nmark);
-  position= newcvector(*Nmark);
-  chr= newivector(*Nmark);
-
-  //Reorganise the pointers into arrays, Singletons are just cast into the function
-  reorg_geno(*Nind, *Nmark, geno, &Geno);
-  reorg_int(*Nmark, 1, chromo, &Chromo);
-  reorg_pheno(*Nind, *Npheno, pheno, &Pheno);
-  reorg_pheno(*Nmark, 1, dist, &Dist);
-
-  reorg_int(*maxaug, *Nmark, auggeno, &NEW);
-  reorg_int((*maxiaug)*(*Nind), 1, augIND, &NEWIND);
-  reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
-
-  //Change all the markers from Karl format to our own
-  change_coding(Nmark, Nind, Geno, markers, *crosstype);
-
-  char cross = determin_cross(Nmark, Nind, Geno, crosstype);
-  if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
-
-  for (int i=0; i<(*Nmark); i++) {
-    //Set some general information structures per marker
-    mapdistance[i]=999.0;
-    mapdistance[i]=Dist[0][i];
-    chr[i] = Chromo[0][i];
-  }
-
-  if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
-  for (int j=0; j<(*Nmark); j++) {
-    if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
-    } else if (j==(*Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
-    } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
-    } else {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
-    }
-  }
-
-  if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
-  for (int j=0; j<(*Nmark); j++) {
-    r[j]= 999.0;
-    if ((position[j]=='L')||(position[j]=='M')) {
-      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
-      if (r[j]<0) {
-        Rprintf("ERROR: Recombination frequency is negative\n");
-        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
-        return;
-      }
-    }
-    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
-  }
-
-  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxaug, *maxiaug, *neglect, cross, *verbose)==1) {
-    //Data augmentation finished succesfully
-    //Push it back into RQTL format
-    for (int i=0; i<(*Nmark); i++) {
-      for (int j=0; j<(*Naug); j++) {
-        NEWPheno[0][j] = new_y[j];
-        NEWIND[0][j] = new_ind[j];
-        NEW[i][j] = 9;
-        if (new_markers[i][j] == '0') {
-          NEW[i][j] = 1;
-        }
-        if (new_markers[i][j] == '1') {
-          NEW[i][j] = 2;
-        }
-        if (new_markers[i][j] == '2') {  // [karl:] this might need to be changed for RIL
-          NEW[i][j] = 3;
-        }
-        if (new_markers[i][j] == '3') {
-          NEW[i][j] = 5;
-        }
-        if (new_markers[i][j] == '4') {
-          NEW[i][j] = 4;
-        }
-      }
-    }
-    delcmatrix(new_markers);
-    delcmatrix(markers);
-    Free(mapdistance);
-    Free(position);
-    Free(r);
-    Free(chr);
-    if (*verbose) {
-      Rprintf("INFO: Data augmentation finished succesfull\n");
-      Rprintf("# Unique individuals before augmentation:%d\n", prior);
-      Rprintf("# Unique selected individuals:%d\n", *Nind);
-      Rprintf("# Marker p individual:%d\n", *Nmark);
-      Rprintf("# Individuals after augmentation:%d\n", *Naug);
-    }
-  } else {
-    //Unsuccessfull data augmentation exit
-    *Naug = *Nind;
-    for (int i=0; i<(*Nmark); i++) {
-      for (int j=0; j<(*Naug); j++) {
-        NEWPheno[0][j] = Pheno[0][j];
-        NEW[i][j] = 9;
-        if (markers[i][j] == '0') {
-          NEW[i][j] = 1;
-        }
-        if (markers[i][j] == '1') {
-          NEW[i][j] = 2;
-        }
-        if (markers[i][j] == '2') { // [karl:] this might need to be changed for RIL
-          NEW[i][j] = 3;
-        }
-        if (markers[i][j] == '3') {
-          NEW[i][j] = 5;
-        }
-        if (markers[i][j] == '4') {
-          NEW[i][j] = 4;
-        }
-      }
-    }
-    delcmatrix(new_markers);
-    delcmatrix(markers);
-    Free(mapdistance);
-    Free(position);
-    Free(r);
-    Free(chr);
-    Rprintf("Data augmentation failed\n");
-  }
-  return;
-}
+/*
+ * Augment/expand the dataset by adding additional marker positions.
+ *
+ */
 
 int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, int Nmark, cvector position,
@@ -480,3 +332,163 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
   Free(imarker);
   return 1;
 }
+
+/*
+ * The R interfact to data augmentation
+ */
+
+void R_augdata(int *geno, double *dist, double *pheno, int *auggeno, 
+               double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
+               int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
+               *chromo, int *crosstype, int *verbose) {
+  int **Geno;
+  double **Pheno;
+  double **Dist;
+  int **NEW;
+  int **Chromo;
+  double **NEWPheno;
+  int **NEWIND;
+  int prior = *Nind;
+
+  if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
+  ivector new_ind;
+  vector new_y, r, mapdistance;
+  cvector position;
+  cmatrix markers, new_markers;
+  ivector chr;
+
+  markers= newcmatrix(*Nmark, *Nind);
+  new_markers= newcmatrix(*Nmark, *maxaug);
+  r = newvector(*Nmark);
+  mapdistance = newvector(*Nmark);
+  position= newcvector(*Nmark);
+  chr= newivector(*Nmark);
+
+  //Reorganise the pointers into arrays, Singletons are just cast into the function
+  reorg_geno(*Nind, *Nmark, geno, &Geno);
+  reorg_int(*Nmark, 1, chromo, &Chromo);
+  reorg_pheno(*Nind, *Npheno, pheno, &Pheno);
+  reorg_pheno(*Nmark, 1, dist, &Dist);
+
+  reorg_int(*maxaug, *Nmark, auggeno, &NEW);
+  reorg_int((*maxiaug)*(*Nind), 1, augIND, &NEWIND);
+  reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
+
+  //Change all the markers from R/qtl format to MQM internal
+  change_coding(Nmark, Nind, Geno, markers, *crosstype);
+
+  char cross = determin_cross(Nmark, Nind, Geno, crosstype);
+  if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
+
+  for (int i=0; i<(*Nmark); i++) {
+    //Set some general information structures per marker
+    mapdistance[i]=999.0;
+    mapdistance[i]=Dist[0][i];
+    chr[i] = Chromo[0][i];
+  }
+
+  if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
+  for (int j=0; j<(*Nmark); j++) {
+    if (j==0) {
+      if (chr[j]==chr[j+1]) position[j]='L';
+      else position[j]='U';
+    } else if (j==(*Nmark-1)) {
+      if (chr[j]==chr[j-1]) position[j]='R';
+      else position[j]='U';
+    } else if (chr[j]==chr[j-1]) {
+      if (chr[j]==chr[j+1]) position[j]='M';
+      else position[j]='R';
+    } else {
+      if (chr[j]==chr[j+1]) position[j]='L';
+      else position[j]='U';
+    }
+  }
+
+  if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
+  for (int j=0; j<(*Nmark); j++) {
+    r[j]= 999.0;
+    if ((position[j]=='L')||(position[j]=='M')) {
+      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+      if (r[j]<0) {
+        Rprintf("ERROR: Recombination frequency is negative\n");
+        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
+        return;
+      }
+    }
+    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
+  }
+
+  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxaug, *maxiaug, *neglect, cross, *verbose)==1) {
+    //Data augmentation finished succesfully
+    //Push it back into RQTL format
+    for (int i=0; i<(*Nmark); i++) {
+      for (int j=0; j<(*Naug); j++) {
+        NEWPheno[0][j] = new_y[j];
+        NEWIND[0][j] = new_ind[j];
+        NEW[i][j] = 9;
+        if (new_markers[i][j] == '0') {
+          NEW[i][j] = 1;
+        }
+        if (new_markers[i][j] == '1') {
+          NEW[i][j] = 2;
+        }
+        if (new_markers[i][j] == '2') {  // [karl:] this might need to be changed for RIL
+          NEW[i][j] = 3;
+        }
+        if (new_markers[i][j] == '3') {
+          NEW[i][j] = 5;
+        }
+        if (new_markers[i][j] == '4') {
+          NEW[i][j] = 4;
+        }
+      }
+    }
+    delcmatrix(new_markers);
+    delcmatrix(markers);
+    Free(mapdistance);
+    Free(position);
+    Free(r);
+    Free(chr);
+    if (*verbose) {
+      Rprintf("INFO: Data augmentation finished succesfull\n");
+      Rprintf("# Unique individuals before augmentation:%d\n", prior);
+      Rprintf("# Unique selected individuals:%d\n", *Nind);
+      Rprintf("# Marker p individual:%d\n", *Nmark);
+      Rprintf("# Individuals after augmentation:%d\n", *Naug);
+    }
+  } else {
+    //Unsuccessfull data augmentation exit
+    *Naug = *Nind;
+    for (int i=0; i<(*Nmark); i++) {
+      for (int j=0; j<(*Naug); j++) {
+        NEWPheno[0][j] = Pheno[0][j];
+        NEW[i][j] = 9;
+        if (markers[i][j] == '0') {
+          NEW[i][j] = 1;
+        }
+        if (markers[i][j] == '1') {
+          NEW[i][j] = 2;
+        }
+        if (markers[i][j] == '2') { // [karl:] this might need to be changed for RIL
+          NEW[i][j] = 3;
+        }
+        if (markers[i][j] == '3') {
+          NEW[i][j] = 5;
+        }
+        if (markers[i][j] == '4') {
+          NEW[i][j] = 4;
+        }
+      }
+    }
+    delcmatrix(new_markers);
+    delcmatrix(markers);
+    Free(mapdistance);
+    Free(position);
+    Free(r);
+    Free(chr);
+    Rprintf("Data augmentation failed\n");
+  }
+  return;
+}
+
+

@@ -425,7 +425,7 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 
   int cof_cnt=0;
 
-  //Change all the markers from Karl format to our own
+  //Change all the markers from R/qtl format to MQM internal
   change_coding(&Nmark,&Nind,Geno,markers, crosstype);
 
   for (int i=0; i< Nmark; i++) {
@@ -525,7 +525,7 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
   int **Cofactors;
   int **INDlist;
 
-  //Reorganise the pointers into arrays, ginletons are just cast into the function
+  //Reorganise the pointers into arrays, singletons are just cast into the function
   reorg_geno(*Nind,*Nmark,geno,&Geno);
   reorg_int(*Nmark,1,chromo,&Chromo);
   reorg_pheno(*Nmark,1,dist,&Dist);
