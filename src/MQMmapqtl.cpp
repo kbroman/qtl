@@ -22,17 +22,18 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains:
- *
  **********************************************************************/
 
 #include "MQM.h"
 
 /* mapQTL */
-double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y,
-              vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
-              double stepmin,double stepmax,char crosstype,int verbose) {
+double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, 
+              cmatrix marker, cvector position, vector mapdistance, vector y,
+              vector r, ivector ind, int Naug, double variance, char
+              printoutput, vector *informationcontent, matrix *Frun, int run,
+              char REMLorML, char fitQTL, char dominance, int em, double
+              windowsize, double stepsize, double stepmin, double stepmax, char
+              crosstype, int verbose) {
   //Rprintf("INFO: mapQTL function called.\n");
   int Nloci, j, jj, jjj=0;
   vector Fy;
@@ -73,9 +74,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
   // cout << "estimate variance in mixture model with all cofactors" << endl;
 
   variance= -1.0;
-  savelogL= 2.0*QTLmixture(marker,cofactor,r,position, y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+  savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
   if (verbose==1) {
-    Rprintf("INFO: log-likelihood of full model= %f\n",savelogL/2);
+    Rprintf("INFO: log-likelihood of full model= %f\n", savelogL/2);
   }
   Nloci= Nmark+1;
   // augment data for missing QTL observations (x 3)
@@ -246,9 +247,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
         if (baseNoQTLModel!=0) { // new base no-QTL model
           if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '2';
           else QTLcofactor[j+1]= '2';
-          // Rprintf("INFO: Before base model\n",QTLlikelihood/-2);
-          QTLlikelihood= -2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight0,REMLorML,fitQTL,dominance,crosstype,verbose);
-          // Rprintf("INFO: log-likelihood of NO QTL model= %f\n",QTLlikelihood/-2);
+          // Rprintf("INFO: Before base model\n", QTLlikelihood/-2);
+          QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, verbose);
+          // Rprintf("INFO: log-likelihood of NO QTL model= %f\n", QTLlikelihood/-2);
           weight0[0]= -1.0;
           savebaseNoQTLModel= QTLlikelihood;
           if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '0';
@@ -262,10 +263,10 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
         if ((position[j]=='L')&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '3';
         else QTLcofactor[j+1]= '3';
         if (REMLorML=='1') weight[0]= -1.0;
-        QTLlikelihood+=2.0*QTLmixture(QTLloci,QTLcofactor,QTLr,QTLposition,y,ind,Nind,Naug,Nloci,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+        QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
         //this is the place we error at, because the likelyhood is not correct.
         if (QTLlikelihood<-0.05) {
-          Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n",QTLlikelihood,savebaseNoQTLModel,j); //return 0;}
+          Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n", QTLlikelihood, savebaseNoQTLModel, j); //return 0;}
         }
         maxF= (maxF<QTLlikelihood ? QTLlikelihood : maxF);
         if (run>0) (*Frun)[step][run]+= QTLlikelihood;
@@ -298,7 +299,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 
   fitQTL='n';
   /*
-  TODO Insert a methode to find the direction of the QTL, we need to know which GROUP has teh highest trait values
+  TODO To insert a method to find the direction of the QTL we need to know
+  which GROUP has the highest trait values
   */
   //for (int j=0; j<Nmark; j++){
   //	int cnt0=0;
@@ -330,16 +332,16 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
   //			direction[j] = '-';
   //		}
   //	}
-  //Rprintf("%d:DIR0:%f,DIR1:%f,DIR2:%f   -> %c\n",j,dir0,dir1,dir2,direction[j]);
+  //Rprintf("%d:DIR0:%f, DIR1:%f, DIR2:%f   -> %c\n", j, dir0, dir1, dir2, direction[j]);
   //}
   //moveQTL= stepmin;
   //int curmarker=0;
   //for(int i=0; i<step; i++){
-  //	Rprintf("step: %d CM: %f CMCurm:%f\n",i,moveQTL,mapdistance[curmarker]);
+  //	Rprintf("step: %d CM: %f CMCurm:%f\n", i, moveQTL, mapdistance[curmarker]);
   //	if(direction[curmarker] == '-'){
-  //		Rprintf("Adjusting Frun %f\n",(*Frun)[i][0]);
+  //		Rprintf("Adjusting Frun %f\n", (*Frun)[i][0]);
   //		(*Frun)[i][0] = (*Frun)[i][0] * -1.0;
-  //		Rprintf("Adjusting Frun %f\n",(*Frun)[i][0]);
+  //		Rprintf("Adjusting Frun %f\n", (*Frun)[i][0]);
   //	}
   //	if(moveQTL+stepsize > stepmax){
   //		moveQTL= stepmin;
@@ -352,7 +354,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
   //		   curmarker = curmarker+1;
   //		}
   //	}
-  //	Rprintf("step: %d marker: %d\n",i,curmarker);
+  //	Rprintf("step: %d marker: %d\n", i, curmarker);
   //}
   Free(info0);
   Free(info1);
