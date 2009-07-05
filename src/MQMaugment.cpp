@@ -25,7 +25,10 @@
 
 #include "MQM.h"
 
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo,int *crosstype, int *verbose) {
+void R_augdata(int *geno, double *dist, double *pheno, int *auggeno, 
+               double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
+               int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
+               *chromo, int *crosstype, int *verbose) {
   int **Geno;
   double **Pheno;
   double **Dist;
@@ -37,32 +40,32 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
 
   if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
   ivector new_ind;
-  vector new_y,r,mapdistance;
+  vector new_y, r, mapdistance;
   cvector position;
-  cmatrix markers,new_markers;
+  cmatrix markers, new_markers;
   ivector chr;
 
-  markers= newcmatrix(*Nmark,*Nind);
-  new_markers= newcmatrix(*Nmark,*maxaug);
+  markers= newcmatrix(*Nmark, *Nind);
+  new_markers= newcmatrix(*Nmark, *maxaug);
   r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
   position= newcvector(*Nmark);
   chr= newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
-  reorg_geno(*Nind,*Nmark,geno,&Geno);
-  reorg_int(*Nmark,1,chromo,&Chromo);
-  reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
-  reorg_pheno(*Nmark,1,dist,&Dist);
+  reorg_geno(*Nind, *Nmark, geno, &Geno);
+  reorg_int(*Nmark, 1, chromo, &Chromo);
+  reorg_pheno(*Nind, *Npheno, pheno, &Pheno);
+  reorg_pheno(*Nmark, 1, dist, &Dist);
 
-  reorg_int(*maxaug,*Nmark,auggeno,&NEW);
-  reorg_int((*maxiaug)*(*Nind),1,augIND,&NEWIND);
-  reorg_pheno(*maxaug,1,augPheno,&NEWPheno);
+  reorg_int(*maxaug, *Nmark, auggeno, &NEW);
+  reorg_int((*maxiaug)*(*Nind), 1, augIND, &NEWIND);
+  reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
 
   //Change all the markers from Karl format to our own
-  change_coding(Nmark,Nind,Geno,markers, *crosstype);
+  change_coding(Nmark, Nind, Geno, markers, *crosstype);
 
-  char cross = determin_cross(Nmark,Nind,Geno,crosstype);
+  char cross = determin_cross(Nmark, Nind, Geno, crosstype);
   if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
 
   for (int i=0; i<(*Nmark); i++) {
@@ -96,14 +99,14 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");
-        Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
+        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
         return;
       }
     }
-    //RRprintf("recomfreq:%d,%f\n",j,r[j]);
+    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
   }
 
-  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r,*maxaug,*maxiaug,*neglect,cross,*verbose)==1) {
+  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxaug, *maxiaug, *neglect, cross, *verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
@@ -136,10 +139,10 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
     Free(chr);
     if (*verbose) {
       Rprintf("INFO: Data augmentation finished succesfull\n");
-      Rprintf("# Unique individuals before augmentation:%d\n",prior);
-      Rprintf("# Unique selected individuals:%d\n",*Nind);
-      Rprintf("# Marker p individual:%d\n",*Nmark);
-      Rprintf("# Individuals after augmentation:%d\n",*Naug);
+      Rprintf("# Unique individuals before augmentation:%d\n", prior);
+      Rprintf("# Unique selected individuals:%d\n", *Nind);
+      Rprintf("# Marker p individual:%d\n", *Nmark);
+      Rprintf("# Individuals after augmentation:%d\n", *Naug);
     }
   } else {
     //Unsuccessfull data augmentation exit
@@ -176,8 +179,10 @@ void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPhen
   return;
 }
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect,char crosstype, int verbose) {
-
+int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, 
+            ivector* augind, int *Nind, int *Naug, int Nmark, cvector position,
+            vector r, int maxNaug, int imaxNaug, double neglect, char
+            crosstype, int verbose) {
   int jj;
   int newNind=(*Nind);
   (*Naug)= maxNaug;     // sets and returns the maximum size of augmented dataset
@@ -187,7 +192,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
   cvector imarker;
   ivector newind;
 
-  newmarker= newcmatrix(Nmark+1,*Naug);
+  newmarker= newcmatrix(Nmark+1, *Naug);
   newy= newvector(*Naug);
   newind= newivector(*Naug);
   imarker= newcvector(Nmark);
@@ -203,8 +208,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
   newprob= newvector(*Naug);
   newprobmax= newvector(*Naug);
   if (verbose) {
-    Rprintf("INFO: Crosstype determined by the algorithm:%c:\n",crosstype);
-    Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d,Maximum augmentation per individual=%d,Neglect=%f\n",maxNaug, imaxNaug, neglect);
+    Rprintf("INFO: Crosstype determined by the algorithm:%c:\n", crosstype);
+    Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
   }
   // ---- foreach individual create one in the newmarker matrix
   for (int i=0; i<(*Nind); i++) {
@@ -221,15 +226,15 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]=='L'||position[j]=='U')) {
-              prob1left= start_prob(crosstype,'1');
-              prob2left= start_prob(crosstype,'2');
+              prob1left= start_prob(crosstype, '1');
+              prob2left= start_prob(crosstype, '2');
             } else {
-              prob1left= prob(newmarker,r,ii,j-1,'1',crosstype,1,0,0);
-              prob2left= prob(newmarker,r,ii,j-1,'2',crosstype,1,0,0);
+              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, '2', crosstype, 1, 0, 0);
             }
 
-            prob1right= probright('1',j,imarker,r,position,crosstype);
-            prob2right= probright('2',j,imarker,r,position,crosstype);
+            prob1right= probright('1', j, imarker, r, position, crosstype);
+            prob2right= probright('2', j, imarker, r, position, crosstype);
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
@@ -270,15 +275,15 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]=='L'||position[j]=='U')) {
-              prob0left= start_prob(crosstype,'0');
-              prob1left= start_prob(crosstype,'1');
+              prob0left= start_prob(crosstype, '0');
+              prob1left= start_prob(crosstype, '1');
             } else {
-              prob0left= prob(newmarker,r,ii,j-1,'0',crosstype,1,0,0);
-              prob1left= prob(newmarker,r,ii,j-1,'1',crosstype,1,0,0);
+              prob0left= prob(newmarker, r, ii, j-1, '0', crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
             }
 
-            prob0right= probright('0',j,imarker,r,position,crosstype);
-            prob1right= probright('1',j,imarker,r,position,crosstype);
+            prob0right= probright('0', j, imarker, r, position, crosstype);
+            prob1right= probright('1', j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
 
@@ -319,18 +324,18 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]=='L'||position[j]=='U')) {
-              prob0left= start_prob(crosstype,'0');
-              prob1left= start_prob(crosstype,'1');
-              prob2left= start_prob(crosstype,'2');
+              prob0left= start_prob(crosstype, '0');
+              prob1left= start_prob(crosstype, '1');
+              prob2left= start_prob(crosstype, '2');
             } else {
-              prob0left= prob(newmarker,r,ii,j-1,'0',crosstype,1,0,0);
-              prob1left= prob(newmarker,r,ii,j-1,'1',crosstype,1,0,0);
-              prob2left= prob(newmarker,r,ii,j-1,'2',crosstype,1,0,0);
+              prob0left= prob(newmarker, r, ii, j-1, '0', crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, '2', crosstype, 1, 0, 0);
             }
 
-            prob0right= probright('0',j,imarker,r,position,crosstype);
-            prob1right= probright('1',j,imarker,r,position,crosstype);
-            prob2right= probright('2',j,imarker,r,position,crosstype);
+            prob0right= probright('0', j, imarker, r, position, crosstype);
+            prob1right= probright('1', j, imarker, r, position, crosstype);
+            prob2right= probright('2', j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
@@ -423,9 +428,9 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
           } else { // newmarker[j][ii] is observed
 
             if ((position[j]=='L'||position[j]=='U')) {
-              prob0left= start_prob(crosstype,newmarker[j][ii]);
+              prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
-              prob0left= prob(newmarker,r,ii,j-1,newmarker[j][ii],crosstype,1,0,0);
+              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
             }
 
             newprob[ii]*= prob0left;
@@ -448,7 +453,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
       if ((iaug-saveiaug+1)>imaxNaug) {
         newNind-= 1;
         iaug= saveiaug-1;
-        if (verbose) Rprintf("INFO: Individual %d is eliminated\n",i);
+        if (verbose) Rprintf("INFO: Individual %d is eliminated\n", i);
       }
       sumprob= 0.0;
       for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -459,7 +464,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, ivector*
   }
   *Naug= iaug;
   *Nind= newNind;
-  *augmarker= newcmatrix(Nmark,*Naug);
+  *augmarker= newcmatrix(Nmark, *Naug);
   *augy= newvector(*Naug);
   *augind = newivector(*Naug);
   for (int i=0; i<(*Naug); i++) {
