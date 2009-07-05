@@ -26,20 +26,9 @@
  *
  **********************************************************************/
 
-extern "C" {
+#include "MQM.h"
 
-#include <R.h>
-#include <math.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/RS.h> /* for Calloc, Realloc */
-#include <R_ext/Utils.h>
-#include "standalone.h"
-#include "MQMscan.h"
-#include "MQMdata.h"
-#include "MQMprob.h"
-#include "MQMregression.h"
-
-  /* ML estimation of recombination frequencies via EM;
+/* ML estimation of recombination frequencies via EM;
       calculation of multilocus genotype probabilities;
       ignorance of unlikely genotypes*/
   double rmixture(cmatrix marker, vector weight, vector r,
@@ -365,5 +354,3 @@ extern "C" {
     return logL;
   }
 
-}
-/* end of MQMmixture.c */

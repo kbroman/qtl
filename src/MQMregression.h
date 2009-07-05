@@ -22,7 +22,10 @@
  * Contains:
  *
  **********************************************************************/
-
+#ifdef __cplusplus
+   extern "C" {
+#endif
+      
 
 /*
  * Used regression (perhaps change it to something faster)
@@ -45,5 +48,8 @@ double gammln(double xx);
 double betai(double a, double b, double x);
 double betacf(double a, double b, double x);
 double inverseF(int df1, int df2, double alfa,int verbose);
-
+#ifdef __cplusplus
+   }
+#endif
+     
 /* end of MQMRegression.h */

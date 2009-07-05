@@ -22,6 +22,14 @@
  * Contains:
  *
  **********************************************************************/
+
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+
+
 /* ML estimation of recombination frequencies via EM;
     calculation of multilocus genotype probabilities;
     ignorance of unlikely genotypes*/
@@ -36,5 +44,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
                   double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,int verbose);
+
+       
+#ifdef __cplusplus
+  }
+#endif
 
 /* end of MQMmixture.c */

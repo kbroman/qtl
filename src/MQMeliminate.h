@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMmapQTL.h
+ * MQMsupport.h
  *
  * copyright (c) 2009 Danny Arends
  * last modified Apr, 2009
@@ -19,12 +19,22 @@
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C external functions used by the MQM algorithm
- * Contains:
+ * Contains: analyseF2, backward
  *
  **********************************************************************/
 
-double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y,
-              vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
-              double stepmin,double stepmax,char crosstype,int verbose);
+#ifdef __cplusplus
+  extern "C" {
+#endif
+     
+/* backward elimination in regression of trait on multiple cofactors routine subX haalt uit matrices voor volledige model de submatrices voor submodellen;
+   matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt; analoog vector XtWY wordt full xtwy genoemd;
+*/
+double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
+                double stepmin,double stepmax,char crosstype,int verbose);
 
-/* end of MQMmapQTL.h */
+#ifdef __cplusplus
+  }
+#endif
+     
+/* end of MQMsupport.h */

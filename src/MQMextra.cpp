@@ -1,10 +1,10 @@
 /**********************************************************************
  *
- * MQMprob.h
+ * MQMextra.cpp
  *
  * copyright (c) 2009 Danny Arends
- * last modified Feb, 2009
- * first written Feb, 2009
+ * last modified Apr, 2009
+ * first written Apr, 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -18,23 +18,17 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains (stabile): prob, start_prob, probright
+ * Contains: Extra functions for accessing internals
  *
  **********************************************************************/
 
+#include "MQM.h"
 
-#ifdef __cplusplus
-  extern "C" {
-#endif
-
-double probright(char c, int jloc, cvector imarker, vector r, cvector position,char crosstype);
-
-double prob(cmatrix loci, vector r,int i,int j,char c,char crosstype,int JorC,int ADJ,int start);
-
-double start_prob(char crosstype,char c);
-
-#ifdef __cplusplus
+  void R_Lnorm(double *a,double *b) {
+    Rprintf("Lnormal with parameters: (%f,%f)\n",*a,*b);
+    double *ans;
+    *ans = Lnormal(*a,*b);
+    Rprintf("Result: %f\n",*ans);
+    b = ans;
   }
-#endif
-/* end of MQMprob.h */
+

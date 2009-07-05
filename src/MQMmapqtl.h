@@ -1,10 +1,10 @@
 /**********************************************************************
  *
- * MQMinterfaces.cpp
+ * MQMmapQTL.h
  *
  * copyright (c) 2009 Danny Arends
  * last modified Apr, 2009
- * first written Apr, 2009
+ * first written Feb, 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -19,27 +19,20 @@
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C external functions used by the MQM algorithm
- * Contains: Several functions to expose underlying elements from the C-code to R
+ * Contains:
  *
  **********************************************************************/
 
-extern "C" {
-#include <R.h>
-#include <Rdefines.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/RS.h> /* for Calloc, Realloc */
-#include <R_ext/Utils.h>
-#include <math.h>
-#include "MQMdata.h"
-#include "MQMscan.h"
+#ifdef __cplusplus
+  extern "C" {
+#endif
 
-
-  void R_Lnorm(double *a,double *b) {
-    Rprintf("Lnormal with parameters: (%f,%f)\n",*a,*b);
-    double *ans;
-    *ans = Lnormal(*a,*b);
-    Rprintf("Result: %f\n",*ans);
-    b = ans;
+double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y,
+              vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
+              double stepmin,double stepmax,char crosstype,int verbose);
+#ifdef __cplusplus
   }
+#endif
+     
 
-}
+/* end of MQMmapQTL.h */

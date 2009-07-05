@@ -23,20 +23,7 @@
  *
  **********************************************************************/
 
-extern "C" {
-
-#include <R.h>
-#include <math.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/RS.h> /* for Calloc, Realloc */
-#include <R_ext/Utils.h>
-#include "standalone.h"
-#include "MQMscan.h"
-#include "MQMdata.h"
-#include "MQMsupport.h"
-#include "MQMregression.h"
-#include "MQMmapQTL.h"
-#include "MQMmixture.h"
+#include "MQM.h"
 
   double start_prob(char crosstype,char c) {
     switch (crosstype) {
@@ -264,6 +251,3 @@ extern "C" {
     return 1.0;
   }
 
-}
-
-/* end of MQMprob.c */

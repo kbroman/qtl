@@ -39,15 +39,7 @@
  *
  **********************************************************************/
 
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <R.h>
-#include <Rmath.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/Utils.h>
-#include "util.h"
-#include <R_ext/Lapack.h>
+#include "MQM.h"
 
 #define THRESH 200.0
 
@@ -815,5 +807,4 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
 	      *missingval);
 }
 
-/* end of util.c */
 

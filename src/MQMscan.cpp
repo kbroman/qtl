@@ -23,28 +23,8 @@
  * Contains: R_scanMQM, scanMQM
  *
  **********************************************************************/
-using namespace std;
-
-#include <fstream>
-#include <iostream>
-
-extern "C" {
-#include <R.h>
-#include <Rdefines.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/RS.h> /* for Calloc, Realloc */
-#include <R_ext/Utils.h>
-#include <math.h>
+#include "MQM.h"
 #include <Rmath.h>
-#include "standalone.h"
-#include "MQMdata.h"
-#include "MQMsupport.h"
-#include "MQMmixture.h"
-#include "MQMmapQTL.h"
-#include "MQMregression.h"
-#include "MQMinterfaces.h"   /*Testing */
-
-#include "util.h"
 
   double Lnormal(double residual, double variance) {
     //double Likelihood,likelyhood;
@@ -560,4 +540,3 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi,*verbose);
   } /* end of function R_scanMQM */
 
-}

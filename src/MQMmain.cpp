@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMscan.cpp
+ * MQMmain.cpp
  *
  * copyright (c) 2009
  *
@@ -23,26 +23,14 @@
  * Contains: R_scanMQM, scanMQM
  *
  **********************************************************************/
+
 #include <fstream>
 #include <iostream>
+ 
+
+#include "MQM.h"
 
 using namespace std;
-
-extern "C" {
-
-#include <R.h>
-#include <Rdefines.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/RS.h> /* for Calloc, Realloc */
-#include <R_ext/Utils.h>
-#include <math.h>
-#include <Rmath.h>
-#include "MQMdata.h"
-#include "MQMsupport.h"
-#include "MQMinterfaces.h"   /*Testing */
-#include "standalone.h"
-
-#include "util.h"
 
   int count_lines(const char *file) {
     //NUM: number of elements on 1 line
@@ -277,8 +265,6 @@ extern "C" {
     }
     return 0;
   }
-
-} // extern "C"
 
 #else
 #error "Is this a STANDALONE version? STANDALONE should be defined in the build system!"

@@ -39,6 +39,11 @@
  *
  **********************************************************************/
 
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
 /* Macro for getting maximum */
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 
@@ -345,5 +350,9 @@ void reviseMWril(int n_ril, int n_mar, int n_str,
 void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
                    int *parents, int *geno, int *crosses,
                    int *missingval);
+
+#ifdef __cplusplus
+  }
+#endif
 
 /* end of util.h */

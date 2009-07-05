@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMsupport.cpp
+ * MQMbackward.cpp
  *
  * copyright (c) 2009 Danny Arends
  * last modified Mrt, 2009
@@ -25,25 +25,13 @@
  * Contains:
  *
  **********************************************************************/
+/*
 using namespace std;
 #include <fstream>
 #include <iostream>
+*/
 
-extern "C" {
-
-#include <R.h>
-#include <math.h>
-#include <R_ext/PrtUtil.h>
-#include <R_ext/RS.h> /* for Calloc, Realloc */
-#include <R_ext/Utils.h>
-#include "standalone.h"
-#include "MQMscan.h"
-#include "MQMdata.h"
-#include "MQMsupport.h"
-#include "MQMregression.h"
-#include "MQMmapQTL.h"
-#include "MQMmixture.h"
-#include "MQMprob.h"
+#include "MQM.h"
 
   /* backward elimination in regression of trait on multiple cofactors
      routine subX haalt uit matrices voor volledige model de submatrices voor
@@ -151,6 +139,3 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
     return maxF;
   }
 
-}
-
-/* end of MQMsupport.c */

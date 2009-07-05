@@ -24,6 +24,10 @@
  **********************************************************************/
 
 
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
 /*------------------------------------------------------------------------
 Datastructures for matrix and vector calculus
 ------------------------------------------------------------------------ */
@@ -33,14 +37,6 @@ typedef double*  vector;
 typedef char**   cmatrix;
 typedef char*    cvector;
 typedef int*  ivector;
-
-/*
-Data augmentation routing
-*/
-
-void R_augdata(int *geno,double *dist,double *pheno,int *auggeno,double *augPheno,int *augIND,int *Nind,int *Naug,int *Nmark, int *Npheno, int *maxaug, int *maxiaug,double *neglect,int *chromo,int *crosstype, int *verbose);
-
-int augdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy, ivector* augind, int *Nind, int *Naug, int Nmark, cvector position, vector r,int maxNaug,int imaxNaug,double neglect,char crosstype, int verbose);
 
 char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype);
 
@@ -62,4 +58,9 @@ void delmatrix(matrix m);
 void delMmatrix(Mmatrix m);
 void delcmatrix(cmatrix m);
 void copyvector(vector vsource, vector vdestination, int dim);
+
+#ifdef __cplusplus
+  }
+#endif
+
 /* end of MQMdata.h */
