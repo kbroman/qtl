@@ -6,6 +6,9 @@
  * last modified Apr, 2009
  * first written Feb, 2009
  *
+ * Original version R.C Jansen
+ * first written <2000 (unknown)
+ *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
@@ -18,42 +21,49 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains (stabile): prob, start_prob, probright
+ * Probability functions used by the MQM algorithm
  *
  **********************************************************************/
 
 #include "MQM.h"
 
-double start_prob(char crosstype,char c) {
+/* Chooses the starting probability based on the experimental cross type;
+ * used by the augmentation and mixture methods
+ */
+
+double start_prob(char crosstype, char c) {
   switch (crosstype) {
-  case 'F':
+  case 'F':  // F2
     return (c=='1' ? 0.5 : 0.25);
     break;
-  case 'R':
+  case 'R':  // RIL
     return (c=='1' ? 0.0 : 0.5);
     break;
-  case 'B':
+  case 'B':  // BC
     return (c=='2' ? 0.0 : 0.5);
     break;
   }
   return 0.0;
 }
 
-double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,int ADJ,int start) {
-  //Compares loci[j][i] versus loci[j+1][i]
-  //OR if JorC is set to 1 loci[j][i] versus compareto
-  //Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
-  //Rprintf("Prob called: values:\n(i,j,ADJ)=(%d,%d,%d)\nR[j+ADJ] value: %f Loci[j][i]=%c\n",i,j,ADJ,r[j+ADJ],loci[j][i]);
+/*
+ * Return probability comparing loci[j][i] versus loci[j+1][i],
+ * OR if JorC is set to 1 loci[j][i] versus c (compareto).
+ *
+ * Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
+ */
+
+double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int JorC, int ADJ, int start) {
   double calc_i=0.0;
   double Nrecom;
   char compareto;
+  // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nR[j+ADJ] value: %f Loci[j][i]=%c\n", i, j, ADJ, r[j+ADJ], loci[j][i]);
 
   if (JorC==1) {
-    //Rprintf("C %d %d\n",i,j);
+    //Rprintf("C %d %d\n", i, j);
     compareto = c;
   } else {
-    //Rprintf("loci[j+1][i] %d\n",j);
+    //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];
   }
   switch (crosstype) {
@@ -63,23 +73,23 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
     }
     Nrecom= fabs((double)loci[j][i]-(double)compareto);
     if ((loci[j][i]=='1')&&(compareto=='1')) {
-      //Rprintf("SCase %c <-> %c:\n",compareto,loci[j][i]);
+      //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
       calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
     } else if (Nrecom==0) {
-      //Rprintf("Nrecom=0 %c <-> %c:\n",compareto,loci[j][i]);
+      //Rprintf("Nrecom=0 %c <-> %c:\n", compareto, loci[j][i]);
       calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
     } else if (Nrecom==1) {
-      //Rprintf("Nrecom=1 %c <-> %c:\n",compareto,loci[j][i]);
+      //Rprintf("Nrecom=1 %c <-> %c:\n", compareto, loci[j][i]);
       if (ADJ!=0) {
         calc_i= ((loci[j][i]=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
       } else {
         calc_i= ((compareto=='1') ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
       }
     } else {
-      //Rprintf("Nrecom=2 %c <-> %c:\n",compareto,loci[j][i]);
+      //Rprintf("Nrecom=2 %c <-> %c:\n", compareto, loci[j][i]);
       calc_i= r[j+ADJ]*r[j+ADJ];
     }
-    //Rprintf("after IF\n",j);
+    //Rprintf("after IF\n", j);
     break;
   case 'R':
     if (start) {
@@ -117,8 +127,13 @@ double prob(cmatrix loci, vector r, int i, int j,char c,char crosstype,int JorC,
   return calc_i;
 }
 
-double probright(char c, int jloc, cvector imarker, vector r, cvector position,char crosstype) {
-  //This is for an F2 population, where 'c'==1 stands for H (so it has two times higher chance than A or B
+/*
+ * Return the probability.
+ *
+ * This is for an F2 population, where 'c'==1 stands for H (so it has two times higher chance than A or B
+ */
+
+double probright(char c, int jloc, cvector imarker, vector r, cvector position, char crosstype) {
   double nrecom, prob0, prob1, prob2;
   if ((position[jloc]=='R')||(position[jloc]=='U')) {
     //We're at the end of a chromosome or an unknown marker
@@ -165,7 +180,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
         prob1= 2.0*r[jloc]*(1.0-r[jloc]);
         prob2= (1.0-r[jloc])*(1-r[jloc]);
       }
-      return prob1*probright('1',jloc+1,imarker,r,position,crosstype) + prob2*probright('2',jloc+1,imarker,r,position,crosstype);
+      return prob1*probright('1', jloc+1, imarker, r, position, crosstype) + prob2*probright('2', jloc+1, imarker, r, position, crosstype);
     } else if (imarker[jloc+1]=='4') {
       //SEMI unknown next marker known is it is not a B
       if (c=='0') {
@@ -181,7 +196,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
         prob0= r[jloc]*r[jloc];
         prob1= 2.0*r[jloc]*(1.0-r[jloc]);
       }
-      return prob0*probright('0',jloc+1,imarker,r,position,crosstype) + prob1*probright('1',jloc+1,imarker,r,position,crosstype);
+      return prob0*probright('0', jloc+1, imarker, r, position, crosstype) + prob1*probright('1', jloc+1, imarker, r, position, crosstype);
     } else {
       // Unknown next marker so estimate all posibilities (imarker[j+1]=='9')
       if (c=='0') {
@@ -200,7 +215,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
         prob1= 2.0*r[jloc]*(1.0-r[jloc]);
         prob2= (1.0-r[jloc])*(1.0-r[jloc]);
       }
-      return prob0*probright('0',jloc+1,imarker,r,position,crosstype) + prob1*probright('1',jloc+1,imarker,r,position,crosstype) + prob2*probright('2',jloc+1,imarker,r,position,crosstype);
+      return prob0*probright('0', jloc+1, imarker, r, position, crosstype) + prob1*probright('1', jloc+1, imarker, r, position, crosstype) + prob2*probright('2', jloc+1, imarker, r, position, crosstype);
     }
     break;
   case 'R':
@@ -222,7 +237,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
         prob0= r[jloc];
         prob2= (1.0-r[jloc]);
       }
-      return prob0*probright('0',jloc+1,imarker,r,position,crosstype) + prob2*probright('2',jloc+1,imarker,r,position,crosstype);
+      return prob0*probright('0', jloc+1, imarker, r, position, crosstype) + prob2*probright('2', jloc+1, imarker, r, position, crosstype);
     }
     break;
   case 'B':
@@ -244,7 +259,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position,c
         prob0= r[jloc];
         prob2= 1.0-r[jloc];
       }
-      return prob0*probright('0',jloc+1,imarker,r,position,crosstype) + prob2*probright('1',jloc+1,imarker,r,position,crosstype);
+      return prob0*probright('0', jloc+1, imarker, r, position, crosstype) + prob2*probright('1', jloc+1, imarker, r, position, crosstype);
     }
     break;
   }

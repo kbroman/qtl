@@ -21,20 +21,24 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains:
+ * Mixture functions
  *
  **********************************************************************/
 
 #include "MQM.h"
 
-/* ML estimation of recombination frequencies via EM;
-      calculation of multilocus genotype probabilities;
-      ignorance of unlikely genotypes*/
+/*
+ * ML estimation of recombination frequencies via EM; calculation of multilocus
+ * genotype probabilities; ignorance of unlikely genotypes. Called by the
+ * MQMscan.
+ *
+ * When reestimate is 'n' the method is skipped
+ */
 double rmixture(cmatrix marker, vector weight, vector r,
-                cvector position, ivector ind,
-                int Nind, int Naug, int Nmark,vector *mapdistance, char reestimate,char crosstype,int verbose) {
-  int i,j;
+                cvector position, ivector ind, int Nind, int Naug, int Nmark,
+                vector *mapdistance, char reestimate, char crosstype,
+                int verbose) {
+  int i, j;
   int iem= 0;
   double Nrecom, oldr=0.0, newr, rdelta=1.0;
   double maximum = 0.0;
@@ -65,7 +69,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
             else weight[i]*= 0.25;
         if ((position[j]=='L')||(position[j]=='M'))
           for (i=0; i<Naug; i++) {
-            double calc_i = prob(marker,r,i,j,marker[j+1][i],crosstype,0,0,0);
+            double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0, 0);
             weight[i]*=calc_i;
           }
       }
@@ -90,7 +94,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
           if (reestimate=='y' && position[j]!='R') { //only update if it isn't the last marker of a chromosome ;)
             oldr=r[j];
             r[j]= newr/(2.0*Nind);
-            rdelta+=pow(r[j]-oldr,2.0);
+            rdelta+=pow(r[j]-oldr, 2.0);
           } else rdelta+=0.0;
         }
       }
@@ -98,8 +102,8 @@ double rmixture(cmatrix marker, vector weight, vector r,
 
     /*   print new estimates of recombination frequencies */
 
-    //Rprintf("INFO: Reestimate? %c\n",reestimate);
-    //Rprintf("INFO: looping over all markers %d\n",Nmark);
+    //Rprintf("INFO: Reestimate? %c\n", reestimate);
+    //Rprintf("INFO: looping over all markers %d\n", Nmark);
     for (j=0; j<Nmark; j++) {
       if (position[j+1]=='R') {
         last_step = (*mapdistance)[j+1]-(*mapdistance)[j];
@@ -116,11 +120,11 @@ double rmixture(cmatrix marker, vector weight, vector r,
       if (maximum < (*mapdistance)[j]) {
         maximum = (*mapdistance)[j];
       }
-      //Rprintf("r(%d)= %f -> %f\n",j,r[j],(*mapdistance)[j]);
+      //Rprintf("r(%d)= %f -> %f\n", j, r[j], (*mapdistance)[j]);
     }
   }
   if (verbose==1) {
-    Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n",iem,rdelta);
+    Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n", iem, rdelta);
   }
   Free(indweight);
   return maximum;
@@ -132,7 +136,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
-                  double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,int verbose) {
+                  double *variance, int em, vector *weight, char REMLorML, char fitQTL, char dominance, char crosstype, int verbose) {
   //if(verbose==1){Rprintf("QTLmixture called\n");}
   int iem= 0, newNaug, i, j;
   char varknown, biasadj='n';
@@ -170,13 +174,13 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       //Here we have ProbLeft
       if ((position[j]=='L')||(position[j]=='U')) {
         for (i=0; i<Naug; i++) {
-          calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
+          calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
           Ploci[i]*= calc_i;
         }
       }
       if ((position[j]=='L')||(position[j]=='M')) {
         for (i=0; i<Naug; i++) {
-          calc_i = prob(loci,r,i,j,loci[j+1][i],'F',0,0,0);
+          calc_i = prob(loci, r, i, j, loci[j+1][i], 'F', 0, 0, 0);
           Ploci[i]*= calc_i;
         }
       }
@@ -194,7 +198,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         //Here we don't have any f2 dependancies anymore by using the prob function
         if (cofactor[j]<='1')
           for (i=0; i<Naug; i++) {
-            calc_i= prob(loci,r,i,j,'1',crosstype,1,0,1);
+            calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
@@ -202,40 +206,40 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         else
           for (i=0; i<Naug; i++) {
             //startvalues for each new chromosome
-            Ploci[i]*= start_prob(crosstype,'0');
-            Ploci[i+Naug]*= start_prob(crosstype,'1');
-            Ploci[i+2*Naug] *= start_prob(crosstype,'2');
+            Ploci[i]*= start_prob(crosstype, '0');
+            Ploci[i+Naug]*= start_prob(crosstype, '1');
+            Ploci[i+2*Naug] *= start_prob(crosstype, '2');
           }
         // QTL='0', '1' or'2'
       }
       if ((position[j]=='L')||(position[j]=='M')) {
         if ((cofactor[j]<='1')&&(cofactor[j+1]<='1'))
           for (i=0; i<Naug; i++) {
-            calc_i = prob(loci,r,i,j,loci[j+1][i],crosstype,0,0,0);
+            calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0);
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
           }
         else if (cofactor[j]<='1') // locus j+1 == QTL
           for (i=0; i<Naug; i++) { // QTL=='0' What is the prob of finding an '0' at J=1
-            calc_i = prob(loci,r,i,j,'0',crosstype,1,0,0);
+            calc_i = prob(loci, r, i, j, '0', crosstype, 1, 0, 0);
             Ploci[i]*= calc_i;
             // QTL=='1'
-            calc_i = prob(loci,r,i,j,'1',crosstype,1,0,0);
+            calc_i = prob(loci, r, i, j, '1', crosstype, 1, 0, 0);
             Ploci[i+Naug]*= calc_i;
             // QTL=='2'
-            calc_i = prob(loci,r,i,j,'2',crosstype,1,0,0);
+            calc_i = prob(loci, r, i, j, '2', crosstype, 1, 0, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
         else // locus j == QTL
           for (i=0; i<Naug; i++) { // QTL=='0'
-            calc_i = prob(loci,r,i,j+1,'0',crosstype,1,-1,0);
+            calc_i = prob(loci, r, i, j+1, '0', crosstype, 1, -1, 0);
             Ploci[i]*= calc_i;
             // QTL=='1'
-            calc_i = prob(loci,r,i,j+1,'1',crosstype,1,-1,0);
+            calc_i = prob(loci, r, i, j+1, '1', crosstype, 1, -1, 0);
             Ploci[i+Naug]*= calc_i;
             // QTL=='2'
-            calc_i = prob(loci,r,i,j+1,'2',crosstype,1,-1,0);
+            calc_i = prob(loci, r, i, j+1, '2', crosstype, 1, -1, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
       }
@@ -259,7 +263,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   //Rprintf("Weights done\n");
   //Rprintf("Individual->trait->cofactor->weight\n");
   //for (int j=0; j<Nind; j++){
-  //  Rprintf("%d->%f,%d,%f %f\n",j,y[j],cofactor[j],(*weight)[j],Ploci[j]);
+  //  Rprintf("%d->%f, %d, %f %f\n", j, y[j], cofactor[j], (*weight)[j], Ploci[j]);
   //}
   double logL=0;
   vector indL;
@@ -269,7 +273,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     if (varknown=='n') *variance=-1.0;
     //Rprintf("Checkpoint_b\n");
     logL= regression(Nind, Nloci, cofactor, loci, y,
-                     weight, ind, Naug, variance, Fy, biasadj,fitQTL,dominance);
+                     weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance);
     logL=0.0;
     //Rprintf("regression ready\n");
     for (i=0; i<Nind; i++) indL[i]= 0.0;
@@ -309,7 +313,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     *variance=-1.0;
     biasadj='y';
     logL= regression(Nind, Nloci, cofactor, loci, y,
-                     weight, ind, Naug, variance, Fy, biasadj,fitQTL,dominance);
+                     weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance);
     logL=0.0;
     for (int _i=0; _i<Nind; _i++) indL[_i]= 0.0;
     if (fitQTL=='n')
@@ -345,7 +349,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     }
   }
   //for (i=0; i<Nind; i++){
-  //    Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n",i,Ploci[i],Fy[i],indL[i],log(indL[i]),log(indL[i])-logP);
+  //    Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
   //}
   Free(Fy);
   Free(Ploci);
