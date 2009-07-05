@@ -1,0 +1,161 @@
+MQM standalone version
+INFO: Loading settings from file
+nInd: 180
+nPheno: 120
+SMin: -20
+SMax: 220
+SSiz: 5
+WSiz: 10
+A: 0.050000
+Miter: 1000
+# Starting backward elimination of 7 cofactors
+# of individuals: 180
+# of markers: 117
+Genotypes done 180 1
+Phenotype done 180 1
+Positions done 117
+Chromosomes done 117 -> # 5 Chromosomes
+Starting phenotype: 0
+INFO: Starting C-part of the MQM analysis
+INFO: Receiving the chromosome matrix from R
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Initialize Frun and informationcontent to 0.0
+INFO: Num markers: 117
+INFO: After dropping of uninformative cofactors
+INFO: recombination parameters are not re-estimated
+INFO: Re-estimation of the genetic map took 0 iterations, to reach a rdelta of 1.000000
+INFO: Reestimation of the map finished. MAX Cm: 0.000000 Cm
+INFO: Prob=0.049643 Alfa=0.050000
+INFO: Prob=0.050932 Alfa=0.050000
+INFO: dimX:1 nInd:180
+INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa
+INFO: F(3.906250,1,179)=0.050000
+INFO: F(3.027344,2,179)=0.050000
+INFO: Log-likelihood of full model= -8847.557271
+INFO: Residual variance= 28972781.109373
+INFO: Trait mean= 4327.088889 
+INFO: Trait variation= 28972781.109373
+INFO: Backward elimination of cofactors started
+MODEL: ----------------------:MODEL:----------------------
+MODEL: --------------------:END MODEL:--------------------
+INFO: log-likelihood of full model= -8847.557271
+INFO: Number of output datapoints: 245
+INFO: Analysis of data finished
+    0  1    0.000
+    1  1    6.398
+    2  1   10.786
+    3  1   12.913
+    4  1   15.059
+    5  1   21.846
+    6  1   23.802
+    7  1   27.749
+    8  1   31.212
+    9  1   41.271
+   10  1   42.345
+   11  1   52.082
+   12  1   59.115
+   13  1   62.502
+   14  1   67.112
+   15  1   73.166
+   16  1   78.859
+   17  1   82.554
+   18  1   84.414
+   19  1   88.617
+   20  1   95.126
+   21  1  102.114
+   22  1  105.304
+   23  1  112.183
+   24  1  115.914
+   25  1  118.105
+   26  1  121.434
+   27  1  126.083
+   28  2    0.000
+   29  2    7.159
+   30  2   14.072
+   31  2   16.718
+   32  2   18.809
+   33  2   22.450
+   34  2   26.742
+   35  2   31.125
+   36  2   35.255
+   37  2   39.845
+   38  2   44.939
+   39  2   48.396
+   40  2   53.563
+   41  2   58.773
+   42  2   62.854
+   43  2   67.085
+   44  2   71.548
+   45  2   75.140
+   46  2   80.717
+   47  3    0.000
+   48  3    2.707
+   49  3    7.136
+   50  3   11.737
+   51  3   16.259
+   52  3   18.463
+   53  3   21.535
+   54  3   26.798
+   55  3   29.533
+   56  3   32.691
+   57  3   36.220
+   58  3   39.207
+   59  3   41.622
+   60  3   45.555
+   61  3   48.037
+   62  3   50.789
+   63  3   55.937
+   64  3   59.731
+   65  3   64.254
+   66  3   70.887
+   67  3   73.401
+   68  3   75.971
+   69  3   79.250
+   70  3   81.744
+   71  3   83.226
+   72  4    0.000
+   73  4    7.328
+   74  4    9.027
+   75  4   13.229
+   76  4   19.933
+   77  4   22.034
+   78  4   26.461
+   79  4   32.200
+   80  4   35.109
+   81  4   40.680
+   82  4   46.056
+   83  4   51.029
+   84  4   54.656
+   85  4   60.696
+   86  4   64.629
+   87  4   69.388
+   88  4   76.565
+   89  4   84.002
+   90  5    0.000
+   91  5    3.080
+   92  5    7.506
+   93  5   12.385
+   94  5   14.454
+   95  5   18.612
+   96  5   20.625
+   97  5   24.900
+   98  5   29.579
+   99  5   35.356
+  100  5   39.922
+  101  5   42.944
+  102  5   46.152
+  103  5   52.090
+  104  5   57.195
+  105  5   61.382
+  106  5   64.989
+  107  5   70.194
+  108  5   76.141
+  109  5   79.313
+  110  5   82.620
+  111  5   86.441
+  112  5   88.929
+  113  5   96.313
+  114  5   98.283
+  115  5  104.240
+  116  5  111.507
