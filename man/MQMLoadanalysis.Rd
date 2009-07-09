@@ -28,10 +28,6 @@ Returns a matrix with QTLscores for each location on the chromosome, which can b
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 
-\note{ 	
-	If you find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
-}
-
 \seealso{ 
 \itemize{
 	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis

@@ -4,7 +4,7 @@
 \title{Create cofactors to be used with scanMQM} 
 
 \description{
-  Return a cofactorslist formatted to be used with the scanMQM function
+  Return a list of cofactors ready to be used with the scanMQM function
 }
 
 \usage{
@@ -28,14 +28,11 @@ MQMCofactorsEach(cross, each = 3, verbose=FALSE)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{MQM}} - MQM main information
+	\item \code{\link[qtl]{scanMQM}} - Single trait analysis
+	\item \code{\link[qtl]{scanall}} - Analyse multiple traits 
 }
 }
 
@@ -46,17 +43,6 @@ data(map10)							# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
 a <- MQMCofactorsEach(cross,3)					# Set Cofactors each third marker
 result <- scanMQM(cross,a)					# Do a backward model selection
-}
-
-\references{
-	\itemize{
-		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
-		\item Jansen RC, Nap JP (2001), Genetical genomics: the added value from segregation. \emph{Trends in Genetics}, \bold{17}, 388--391.
-		\item Jansen RC, Stam P (1994), High resolution of quantitative traits into multiple loci via interval mapping. \emph{Genetics}, \bold{136}, 1447--1455.
-		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
-		\item Jansen RC (1993), Interval mapping of multiple quantitative trait loci. \emph{Genetics}, \bold{135}, 205--211.
-		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
-	}
 }
 
 \keyword{ models }

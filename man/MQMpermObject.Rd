@@ -4,7 +4,7 @@
 \title{Function to convert MQMmulti objects into a scanoneperm object}
 
 \description{
-	Function to convert MQMmulti objects into a \code{scanoneperm} object, this allows us to use the R/QTL methods of permutation analysis
+	Function to convert MQMmulti objects into a \code{scanoneperm} object, this allows the use of R/QTL methods for permutation analysis that do not support MQM's internal structure.
 }
 
 \usage{
@@ -24,10 +24,6 @@ MQMpermObject(MQMbootresult = NULL)
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
-
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
 
 \seealso{ 
 \itemize{

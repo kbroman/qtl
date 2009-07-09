@@ -24,10 +24,6 @@ plotMQMboot(result, \dots)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} }
 
-\note{ 	
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
 \seealso{ 
 \itemize{
 	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm

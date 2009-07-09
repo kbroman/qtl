@@ -29,10 +29,6 @@ plotMQMall(result, type = "C", theta = 30, phi = 15, \dots)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
 \seealso{ 
 \itemize{
 	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object

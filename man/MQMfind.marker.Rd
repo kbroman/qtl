@@ -1,7 +1,7 @@
 \name{MQMfind.marker}
 \alias{MQMfind.marker}
 
-\title{ Find the genetic markers significant after bootstrapping/permutation of the data }
+\title{ Find the significant markers after bootstrapping/permutation }
 
 \description{
  Find the genetic markers significant after bootstrapping/permutation of the data
@@ -33,13 +33,9 @@ MQMfind.marker(cross, scanMQM = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
 
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{find.marker}} - R/QTL find.marker routine
+	\item \code{\link[qtl]{MQM}} MQM description
 	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
 	\item \code{\link[qtl]{MQMpermObject}} - Function called to convert MQMbootstrap into an scanoneperm object

@@ -27,7 +27,15 @@
 #include "MQM.h"
 
 /*
- * Augment/expand the dataset by adding additional marker positions.
+ * Augment/expand the dataset by adding additional marker positions. Inputs are
+ * number of markers Nmark, the marker matrix, position vector, recombinations
+ * r.  The neglect parameter drops individuals from the dataset (the value
+ * should be between 1..n).
+ *
+ * A new markerset is created and returned in augmarker, likewise the
+ * phenotypes are returned in augy and individuals in augind. Augmentation
+ * halts when the number of individuals maxNaug is reached. Markers are
+ * expanded up to imaxNaug.
  *
  */
 

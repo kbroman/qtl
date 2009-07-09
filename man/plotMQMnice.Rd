@@ -23,10 +23,6 @@ plotMQMnice(result, \dots)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} }
 
-\note{ 	
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
 \seealso{ 
 \itemize{
 	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits

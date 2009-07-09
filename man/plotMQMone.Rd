@@ -27,10 +27,6 @@ plotMQMone(result, result2, extended = 0 ,\dots)
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com}  }
 
-\note{ 	
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
 \seealso{ 
   \itemize{
 	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis

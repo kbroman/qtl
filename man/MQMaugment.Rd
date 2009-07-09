@@ -4,7 +4,7 @@
 \title{MQM data augmentation}
 
 \description{
-  Estimates missing data by increasing marker locations and filling in 
+  Estimates missing data by increasing the number of marker locations and filling in 
 	genotypes based on surrounding markers and recombination frequencies. 
 }
 
@@ -42,8 +42,10 @@ The sex chromosome 'X' is dropped before augmentation.
 With unrealistic values for augmentation a warning is shown and the cross
 object may have been corrupted. 
 
-Warning: with lots of missing data and/or chromosome markers a neglect value larger
-than 1 may cause the routine to drop a lot of indivuals from the dataset. Try running with verbose to see how many individuals are retained in your dataset.
+Warning: with lots of missing data and/or chromosome markers a neglect value
+larger than 1 may cause the routine to drop a lot of indivuals from the
+dataset. Try running with verbose to see how many individuals are retained in
+the dataset.  
 }
 
 \seealso{
