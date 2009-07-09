@@ -346,6 +346,10 @@ dat1 <- read.cross("csv", dir="Mydata", file="mydata.csv")
 dat2 <- read.cross("csvs", dir="Mydata", genfile="mydata_gen.csv",
                    phefile="mydata_phe.csv")
 
+# you can read files directly from the internet
+datweb <- read.cross("csv", "http://www.rqtl.org/sampledata",
+                     "listeria.csv")
+
 # Mapmaker format
 dat3 <- read.cross("mm", dir="Mydata", file="mydata.raw",
                    mapfile="mydata.map")
