@@ -32,7 +32,7 @@ using namespace std;
 #include <iostream>
 */
 
-#include "MQM.h"
+#include "mqm.h"
 
 /* backward elimination in regression of trait on multiple cofactors
    routine subX haalt uit matrices voor volledige model de submatrices voor

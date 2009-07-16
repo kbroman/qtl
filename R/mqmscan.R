@@ -1,6 +1,6 @@
 #####################################################################
 #
-# scanMQM.R
+# mqmscan.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Jun, 2009
@@ -96,7 +96,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
-					ourstop("Missing genotype information, please estimate unknown data, before running scanMQM.\n")
+					ourstop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 					geno[i,j] <- 9
 				}else{
 					if(forceRIL && ctype != 2 && geno[i,j]==2){
@@ -182,7 +182,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
 		end.1 <- proc.time()
-		result <- .C("R_scanMQM",
+		result <- .C("R_mqmscan",
 				as.integer(n.ind),
                 as.integer(n.mark),
 				as.integer(1),    # 1 phenotype
@@ -337,4 +337,4 @@ mqm <- function(...){
 	mqmscan(...)
 }
 
-# end of scanMQM.R
+# end of mqmscan.R

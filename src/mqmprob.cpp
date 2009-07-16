@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMprob.cpp
+ * mqmprob.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -26,7 +26,7 @@
  *
  **********************************************************************/
 
-#include "MQM.h"
+#include "mqm.h"
 
 /* Chooses the starting probability based on the experimental cross type;
  * used by the augmentation and mixture methods

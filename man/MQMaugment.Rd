@@ -1,5 +1,5 @@
-\name{MQMaugment}
-\alias{MQMaugment}
+\name{mqmaugment}
+\alias{mqmaugment}
 
 \title{MQM data augmentation}
 
@@ -9,7 +9,7 @@
 }
 
 \usage{
-MQMaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE)
+mqmaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE)
 }
 
 \arguments{
@@ -60,7 +60,7 @@ the dataset.
 qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)								# Mouse genome
 cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)             # Simulate a Cross (just autosomes)
-crossaug <- MQMaugment(cross)						# Augmentation of the data
+crossaug <- mqmaugment(cross)						# Augmentation of the data
 result <- mqmscan(crossaug)						# Do a MQM scan of the genome
 }
 

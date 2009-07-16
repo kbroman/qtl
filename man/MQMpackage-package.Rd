@@ -31,7 +31,7 @@
 	mqmscan                 mqmscan - Multiple QTL mapping for F2 crosses
 	scanall					scanall - Function called to analytse multiple traits in the cross object
 	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
-	MQMaugment              MQMaugment - Missing data augmentation routine for MQM
+	mqmaugment              mqmaugment - Missing data augmentation routine for MQM
 	mqmcofactors            mqmcofactors - Helper function to create cofactors to be used with mqmscan
 	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with mqmscan
 	multitrait              Crossobject from R/QTL with multiple traits
@@ -40,7 +40,7 @@
 	\itemize{
 		\item Load in experiment using formats supported by R/QTL. See \code{\link[qtl]{read.cross}} for details.
 		\item Set trait under consideration as first trait in R/QTL format
-		\item Fill in missing data using either the fill.geno or MQMaugmentdata routine
+		\item Fill in missing data using either the fill.geno or mqmaugmentdata routine
 		\item Call mqmscan to do a genomescan
 		\item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
 		\item Set cofactors at "Top scoring" and not so "Top scoring" markers
@@ -72,7 +72,7 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 
 \seealso{
 	\itemize{
-	\item	\code{\link[qtl]{MQMaugment}} - Dataaugmentation routine to estimate missing data
+	\item	\code{\link[qtl]{mqmaugment}} - Dataaugmentation routine to estimate missing data
 	\item	\code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}
@@ -80,7 +80,7 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 \examples{
 	data(multitrait)
 \dontshow{multitrait <- subset(multitrait, chr=1:2)}        
-	mt.est <- MQMaugment(multitrait)
+	mt.est <- mqmaugment(multitrait)
 	result <- mqmscan(mt.est, doLOG=1)
 	plot(result)
 }

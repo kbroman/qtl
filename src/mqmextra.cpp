@@ -23,7 +23,7 @@
  *
  **********************************************************************/
 
-#include "MQM.h"
+#include "mqm.h"
 
 void R_Lnorm(double *a,double *b) {
   Rprintf("Lnormal with parameters: (%f,%f)\n",*a,*b);

@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMscan.h
+ * mqmscan.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -20,7 +20,7 @@
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
- * Contains: R_scanMQM, scanMQM
+ * Contains: R_mqmscan, mqmscan
  *
  **********************************************************************/
 
@@ -46,4 +46,4 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
 #endif
 
-/* end of scanMQM.h */
+/* end of mqmscan.h */

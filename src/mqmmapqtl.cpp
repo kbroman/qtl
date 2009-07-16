@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMmapQTL.cpp
+ * mqmmapqtl.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -24,7 +24,7 @@
  *
  **********************************************************************/
 
-#include "MQM.h"
+#include "mqm.h"
 
 /* mapQTL */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, 
@@ -113,7 +113,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
     */
     nextinterval= 'n';
 #ifndef STANDALONE
-    //Rprintf("TEST MQMmapQTL\n");
+    //Rprintf("TEST mqmmapqtl\n");
     R_CheckUserInterrupt(); /* check for ^C */
     R_FlushConsole();
     //R_ProcessEvents(); /*  Try not to crash windows etc*/

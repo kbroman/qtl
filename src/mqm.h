@@ -1,8 +1,8 @@
 /**********************************************************************
  *
- * MQM.h
+ * mqm.h
  *
- * Master include file for common MQM headers
+ * Master include file for common mqm.headers
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
  *
@@ -34,12 +34,12 @@
   #include "standalone.h"
   #include "util.h"
   #include "MQMdatatypes.h"
-  #include "MQMprob.h"        
-  #include "MQMmixture.h"    
-  #include "MQMregression.h"
-  #include "MQMaugment.h"
+  #include "mqmprob.h"        
+  #include "mqmmixture.h"    
+  #include "mqmregression.h"
+  #include "mqmaugment.h"
   #include "MQMeliminate.h"
-  #include "MQMmapqtl.h"  
-  #include "MQMscan.h"
+  #include "mqmmapqtl.h"  
+  #include "mqmscan.h"
 
 #endif

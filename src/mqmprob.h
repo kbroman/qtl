@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMprob.h
+ * mqmprob.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -38,4 +38,4 @@ double start_prob(char crosstype,char c);
 #ifdef __cplusplus
   }
 #endif
-/* end of MQMprob.h */
+/* end of mqmprob.h */

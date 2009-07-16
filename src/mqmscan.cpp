@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMscan.cpp
+ * mqmscan.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -20,10 +20,10 @@
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
- * Contains: R_scanMQM, scanMQM
+ * Contains: R_mqmscan, mqmscan
  *
  **********************************************************************/
-#include "MQM.h"
+#include "mqm.h"
 #include <Rmath.h>
 
 double Lnormal(double residual, double variance) {
@@ -76,7 +76,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
 /*
  * analyseF2 - analyse one F2/RIL/BC family
  *
- * This is the main controller - called by scanMQM
+ * This is the main controller - called by mqmscan
  *
  */
 
@@ -403,12 +403,12 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
 /**********************************************************************
  *
- * scanMQM
+ * mqmscan
  *
  *
  **********************************************************************/
 
-void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
+void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
              double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
              double Windowsize,double Steps,
              double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype,int domi,int verbose) {
@@ -502,17 +502,17 @@ void scanMQM(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   R_FlushConsole();
 #endif
   return;
-}  /* end of function scanMQM */
+}  /* end of function mqmscan */
 
 
 
 /**********************************************************************
  *
- * R_scanMQM
+ * R_mqmscan
  *
  **********************************************************************/
 
-void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
+void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                int *geno,int *chromo, double *dist, double *pheno,
                int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
                double *windowsize,double *steps,
@@ -536,6 +536,6 @@ void R_scanMQM(int *Nind,int *Nmark,int *Npheno,
   reorg_int(*out_Naug,1,indlist,&INDlist);
   //Done with reorganising lets start executing
 
-  scanMQM(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi,*verbose);
-} /* end of function R_scanMQM */
+  mqmscan(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi,*verbose);
+} /* end of function R_mqmscan */
 

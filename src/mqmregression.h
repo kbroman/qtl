@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMRegression.h
+ * mqmregression.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -53,4 +53,4 @@ double inverseF(int df1, int df2, double alfa,int verbose);
    }
 #endif
      
-/* end of MQMRegression.h */
+/* end of mqmregression.h */

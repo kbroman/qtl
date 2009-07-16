@@ -41,7 +41,7 @@ Normal layout of MQM-QTL analysis
 \itemize{
 \item Load in experiment using formats supported by R/QTL
 \item Set trait under consideration as first trait in R/QTL format
-\item Fill in missing data using either the fill.geno or MQMaugmentdata routine
+\item Fill in missing data using either the fill.geno or mqmaugmentdata routine
 \item Call mqmscan to do a genomescan
 \item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
 \item Set cofactors at "Top scoring" and not so "Top scoring" markers
@@ -72,7 +72,7 @@ The phenotype under consideration is specified by the pheno.col argument of the 
 
 \seealso{
 \itemize{
-	\item \code{\link[qtl]{MQMaugment}} - Augmentationroutine to estimate missing data
+	\item \code{\link[qtl]{mqmaugment}} - Augmentationroutine to estimate missing data
 	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for MQM

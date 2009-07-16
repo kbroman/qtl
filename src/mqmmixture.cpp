@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMmixture.cpp
+ * mqmmixture.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -26,12 +26,12 @@
  *
  **********************************************************************/
 
-#include "MQM.h"
+#include "mqm.h"
 
 /*
  * ML estimation of recombination frequencies via EM; calculation of multilocus
  * genotype probabilities; ignorance of unlikely genotypes. Called by the
- * MQMscan.
+ * mqmscan.
  *
  * When reestimate is 'n' the method is skipped
  */

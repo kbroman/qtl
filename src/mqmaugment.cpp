@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMaugment.cpp
+ * mqmaugment.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  * last modified Apr, 2009
@@ -24,7 +24,7 @@
  *
  **********************************************************************/
 
-#include "MQM.h"
+#include "mqm.h"
 
 /*
  * Augment/expand the dataset by adding additional marker positions. Inputs are

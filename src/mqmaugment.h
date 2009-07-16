@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMaugment.h
+ * mqmaugment.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
  *

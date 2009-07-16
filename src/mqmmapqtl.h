@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMmapQTL.h
+ * mqmmapqtl.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -36,4 +36,4 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatri
 #endif
      
 
-/* end of MQMmapQTL.h */
+/* end of mqmmapqtl.h */

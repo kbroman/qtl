@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMRegression.cpp
+ * mqmregression.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -23,7 +23,7 @@
  * Contains: regression
  *
  **********************************************************************/
-#include "MQM.h"
+#include "mqm.h"
 #include <Rmath.h>
 
 

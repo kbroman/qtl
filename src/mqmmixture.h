@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMmixture.h
+ * mqmmixture.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -51,4 +51,4 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   }
 #endif
 
-/* end of MQMmixture.c */
+/* end of mqmmixture.c */
