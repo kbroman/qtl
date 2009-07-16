@@ -1,6 +1,6 @@
 #####################################################################
 #
-# MQMutil.R
+# mqmutil.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Apr, 2009
@@ -21,5 +21,5 @@ ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
 }
 
-# end of MQMutil.R
+# end of mqmutil.R
 

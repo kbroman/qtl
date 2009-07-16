@@ -1,6 +1,6 @@
 #####################################################################
 #
-# MQMCofactors.R
+# mqmcofactors.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Jun, 2009
@@ -19,18 +19,18 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: MQMCofactors, MQMCofactorsEach
+# Contains: mqmcofactors, mqmcofactorsEach
 #
 ######################################################################
 
 ######################################################################
 #
-# MQMCofactors: Prepares a cofactor list to use with mqmscan
-# MQMCofactorsEach: Prepares a cofactor list to use with mqmscan
+# mqmcofactors: Prepares a cofactor list to use with mqmscan
+# mqmcofactorsEach: Prepares a cofactor list to use with mqmscan
 #
 ######################################################################
 
-MQMCofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
+mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
 	if(missing(cross))
 		ourstop("No cross file. Please supply a valid cross object.")
 
@@ -86,7 +86,7 @@ MQMCofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
     cofactorlist
 }
 
-MQMCofactorsEach <- function(cross,each = 3,verbose=FALSE){
+mqmcofactorsEach <- function(cross,each = 3,verbose=FALSE){
 	if(missing(cross))
           ourstop("No cross file. Please supply a valid cross object.")
 
@@ -124,6 +124,6 @@ MQMCofactorsEach <- function(cross,each = 3,verbose=FALSE){
 	cofactorlist
 }
 
-#a <- MQMCofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
+#a <- mqmcofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
 
-# end of cofactorsMQM.R
+# end of mqmcofactors.R

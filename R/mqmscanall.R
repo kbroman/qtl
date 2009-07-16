@@ -91,8 +91,8 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 				stopCluster(cl)
 				if(plot){
 					temp <- result
-					class(temp) <- c(class(temp),"MQMmulti")
-					plotMQMnice(temp)
+					class(temp) <- c(class(temp),"mqmmulti")
+					mqmplotnice(temp)
 				}
 				res <- c(res,result)
 				end <- proc.time()
@@ -125,8 +125,8 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,Funktie=Funktie,verbose=verbose,...)
 				if(plot){
 					temp <- result
-					class(temp) <- c(class(temp),"MQMmulti")
-					plotMQMnice(temp)
+					class(temp) <- c(class(temp),"mqmmulti")
+					mqmplotnice(temp)
 				}
 				res <- c(res,result)				
 				end <- proc.time()
@@ -153,7 +153,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 		}
 		#Return the results
 		if(length(res) > 1){
-		class(res) <- c(class(res),"MQMmulti")
+		class(res) <- c(class(res),"mqmmulti")
 		}else{
 		class(res) <- c(class(res),"scanone")
 		}

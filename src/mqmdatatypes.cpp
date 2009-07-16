@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMdatatypes.cpp
+ * mqmdatatypes.cpp
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
@@ -204,4 +204,4 @@ extern "C" {
 
 }
 
-/* end of MQMdata.c */
+/* end of mqmdata.c */

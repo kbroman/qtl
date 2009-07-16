@@ -1,6 +1,6 @@
 #####################################################################
 #
-# prepareMQM.R
+# mqmprepare.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Fep, 2009
@@ -19,11 +19,11 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: MQMLoadanalysis, MQMfind.marker
+# Contains: mqmloadanalysis, mqmfind.marker
 #
 ######################################################################
 
-MQMLoadanalysis <- function(file="MQM_output.txt"){
+mqmloadanalysis <- function(file="MQM_output.txt"){
 	data <- read.table(file)
 	class(data) <- c("scanone",class(data))
 	plot(data)
@@ -31,7 +31,7 @@ MQMLoadanalysis <- function(file="MQM_output.txt"){
 }
 
 
-MQMfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
+mqmfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
 	
 	chr <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'chr'
 	pos <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (Cm)'
@@ -46,4 +46,4 @@ MQMfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE
 
 
 
-# end of prepareMQM.R
+# end of mqmprepare.R

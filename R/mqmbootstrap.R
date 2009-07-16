@@ -1,6 +1,6 @@
 #####################################################################
 #
-# bootstrapMQM.R
+# mqmbootstrap.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Jun, 2009
@@ -20,8 +20,8 @@
 #
 # Part of the R/qtl package
 # Contains: bootstrap - Main function for bootstrap analysis
-#           MQMpermObject - Helperfunction to create permObjects (R/QTL format)
-#           bootstrapmqm, bootstrapcim
+#           mqmpermObject - Helperfunction to create permObjects (R/QTL format)
+#           mqmbootstrap, bootstrapcim
 #           FDRpermutation
 #
 ######################################################################
@@ -68,7 +68,7 @@ FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,1
 
 
 
-bootstrapmqm <- function(...){
+mqmbootstrap <- function(...){
 	bootstrap(...,Funktie=mqm)
 }
 
@@ -150,8 +150,8 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				results <- c(results,res)
 				if(plot){
 					temp <- c(res0,results)
-					class(temp) <- c(class(temp),"MQMmulti")
-					plotMQMboot(temp)
+					class(temp) <- c(class(temp),"mqmmulti")
+					mqmplotboot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -184,8 +184,8 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
-					class(temp) <- c(class(temp),"MQMmulti")
-					plotMQMboot(temp)
+					class(temp) <- c(class(temp),"mqmmulti")
+					mqmplotboot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -202,8 +202,8 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 			}
 		}
 		res <- c(res0,results)
-		#Set the class of the result to MQMmulti (so we can use our plotting routines)
-		class(res) <- c(class(res),"MQMmulti")
+		#Set the class of the result to mqmmulti (so we can use our plotting routines)
+		class(res) <- c(class(res),"mqmmulti")
 		e <- proc.time()
 		SUM <- (e-b)[3]
 		AVG <- SUM/(n.run+1)	
@@ -220,12 +220,12 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 	}
 }
 
-MQMpermObject <- function(MQMbootresult = NULL){
-	if(class(MQMbootresult)[2] == "MQMmulti"){
+mqmpermObject <- function(mqmbootresult = NULL){
+	if(class(mqmbootresult)[2] == "mqmmulti"){
 		result <- NULL
 		names <- NULL
-		for(i in 2:length(MQMbootresult)) {
-			result <- rbind(result,max(MQMbootresult[[i]][,3]))
+		for(i in 2:length(mqmbootresult)) {
+			result <- rbind(result,max(mqmbootresult[[i]][,3]))
 			names <- c(names,i-1)
 		}
 		result <- as.matrix(result)
@@ -234,11 +234,11 @@ MQMpermObject <- function(MQMbootresult = NULL){
 		class(result) <- c("scanoneperm",class(result))
 		result
 	}else{
-		ourstop("PLease supply a valid resultobject (MQMmulti).")
+		ourstop("PLease supply a valid resultobject (mqmmulti).")
 	}
 }
 
 #result <- bootstrap(cross)
 # tiff(object, file="namemeplease.tiff" res=300, unit="in", width=6, height=6)
 
-# end of bootstrapMQM.R
+# end of mqmbootstrap.R

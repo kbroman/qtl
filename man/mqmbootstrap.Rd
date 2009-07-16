@@ -1,7 +1,7 @@
 \name{bootstrap}
 \alias{bootstrap}
 \alias{bootstrapcim}
-\alias{bootstrapmqm}
+\alias{mqmbootstrap}
 \alias{permutate}
 
 \title{randomization approaches to obtain estimates of QTL LOD score significance }
@@ -19,7 +19,7 @@
 	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
    	          n.clusters=1, bootmethod=0, plot=FALSE, verbose=FALSE, \dots)
 	bootstrapcim(\dots)
-	bootstrapmqm(\dots)
+	mqmbootstrap(\dots)
 }
 
 \arguments{
@@ -46,7 +46,7 @@
 }
 
 \value{
-	Returns a MQMmulti object. this object is a list of scanone objects that can be plotted using \code{plot.scanone(result[[trait]])}
+	Returns a mqmmulti object. this object is a list of scanone objects that can be plotted using \code{plot.scanone(result[[trait]])}
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }
@@ -71,11 +71,11 @@ result <- bootstrapcim(multitrait,pheno.col=7, b.size=5)
 }\dontshow{result <- bootstrap(multitrait,pheno.col=7, n.run=2, b.size=2)
 result <- bootstrapcim(multitrait,pheno.col=7, n.run=2, b.size=2)}
 multitrait <- fill.geno(multitrait)
-cof <- MQMCofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
-\dontrun{f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
-\dontshow{f2result <- bootstrapmqm(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
+cof <- mqmcofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
+\dontrun{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
+\dontshow{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
 #EXTRA
-f2perm <- MQMpermObject(f2result)			#Create a permutation object
+f2perm <- mqmpermObject(f2result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
 }
 

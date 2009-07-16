@@ -1,5 +1,5 @@
-\name{plotMQMone}
-\alias{plotMQMone}
+\name{mqmplotone}
+\alias{mqmplotone}
 
 \title{Plotting routine to display the results from a QTL scan  }
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-plotMQMone(result, result2, extended = 0 ,\dots)
+mqmplotone(result, result2, extended = 0 ,\dots)
 }
 
 \arguments{
@@ -41,7 +41,7 @@ data(map10)                                             # Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- mqmaugment(f2cross)
 f2result <- mqmscan(f2cross)                    	# Do a MQM scan of the genome
-plotMQMone(f2result)					# Use our fancy plotting routine
+mqmplotone(f2result)					# Use our fancy plotting routine
 }
 
 \keyword{ hplot }

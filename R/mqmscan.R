@@ -13,7 +13,7 @@
 
 ######################################################################
 #
-# mqmscan: main scanning function to the MQMpackage
+# mqmscan: main scanning function to the mqmpackage
 #
 ######################################################################
 	
@@ -302,7 +302,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 			}
 			#No error do plot 2
 			if(!e){
-				plotMQMone(qtl)
+				mqmplotone(qtl)
 			}else{
 				plot(qtl,lwd=1)
 				grid(max(qtl$chr),5)

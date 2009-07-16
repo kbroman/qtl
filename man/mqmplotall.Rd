@@ -1,5 +1,5 @@
-\name{plotMQMall}
-\alias{plotMQMall}
+\name{mqmplotall}
+\alias{mqmplotall}
 
 \title{Plotting routine to display the results from a scanall / bootstrap scan}
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-plotMQMall(result, type = "C", theta = 30, phi = 15, \dots)
+mqmplotall(result, type = "C", theta = 30, phi = 15, \dots)
 }
 
 \arguments{
@@ -42,10 +42,10 @@ data(multitrait)
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmall(multitrait, doLOG=1)
-plotMQMall(result,"P")
-plotMQMall(result,"C")
-plotMQMall(result,"I")
-plotMQMall(result,"D")
+mqmplotall(result,"P")
+mqmplotall(result,"C")
+mqmplotall(result,"I")
+mqmplotall(result,"D")
 }
 
 \references{

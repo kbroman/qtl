@@ -33,12 +33,12 @@
   // #include <R_ext/Utils.h>
   #include "standalone.h"
   #include "util.h"
-  #include "MQMdatatypes.h"
+  #include "mqmdatatypes.h"
   #include "mqmprob.h"        
   #include "mqmmixture.h"    
   #include "mqmregression.h"
   #include "mqmaugment.h"
-  #include "MQMeliminate.h"
+  #include "mqmeliminate.h"
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
 

@@ -12,7 +12,7 @@
 }
 
 \arguments{
-  \item{x}{An object of class \code{MQMmulti}. See \code{\link[qtl]{scanall}} for details.} 
+  \item{x}{An object of class \code{mqmmulti}. See \code{\link[qtl]{scanall}} for details.} 
   \item{cross}{An object of class \code{cross}. See \code{\link[qtl]{read.cross}} for details.} 
   \item{threshold}{ Threshold value in LOD, QTLscores below this threshold are ignored }
   \item{onlyPEAK}{ Plot only the peak markers ? (TRUE/FALSE) (Peak markers are markers that have a QTL likelyhood above \code{threshold} and higher than other markers in the same section) }

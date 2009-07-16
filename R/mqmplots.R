@@ -1,6 +1,6 @@
 #####################################################################
 #
-# MQMplots.R
+# mqmplots.R
 #
 # copyright polyplot (c) 2009, Rutger Brouwer
 # copyright other functions (c) 2009, Danny Arends
@@ -21,7 +21,7 @@
 #
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
-#           polyplot, plotMQMall, plotMQMboot, plotMQMnice, plotMQMone
+#           polyplot, mqmplotall, mqmplotboot, mqmplotnice, mqmplotone
 #           CisTransPlot, addloctocross 
 ######################################################################
 
@@ -30,7 +30,7 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 		stop("Please add trait locations to the cross file\n")
 	}
 	locations <- NULL
-	if(any(class(x) == "MQMmulti")){
+	if(any(class(x) == "mqmmulti")){
 		sum.map <- 0
 		chr.breaks <- NULL
 		for(j in 1:nchr(cross)){
@@ -228,10 +228,10 @@ getThird <- function(x){
 	x[,3]
 }
 
-plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
-	#Helperfunction to plot MQMmulti objects made by doing multiple mqmscan runs (in a LIST)
-  if(class(result)[2] != "MQMmulti")
-		stop("Wrong type of result file, please supply a valid MQMmulti object.") 
+mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
+	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
+  if(class(result)[2] != "mqmmulti")
+		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
 
   if(type=="C"){
     #Countour plot
@@ -282,15 +282,15 @@ plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
 
 }
 
-plotMQMboot <- function(result, ...){
-	#Helperfunction to show MQMmulti objects made by doing multiple mqmscan runs (in a LIST)
+mqmplotboot <- function(result, ...){
+	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
 	row1 <- NULL
 	row2 <- NULL
 	i <- 1
-	if(class(result)[2] != "MQMmulti")		
-          ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
+	if(class(result)[2] != "mqmmulti")		
+          ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
 
         for( j in 1:length( result[[i]][,3] ) ) {
           row1 <- NULL
@@ -312,19 +312,19 @@ plotMQMboot <- function(result, ...){
 	#Because bootstrap only has 2 rows of data we can use black n blue
         polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	#PLot some lines so we know what is significant
-        perm.temp <- MQMpermObject(result)			#Create a permutation object
+        perm.temp <- mqmpermObject(result)			#Create a permutation object
         numresults <- dim(result[[1]])[1]
         lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
         lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
 }
 
-plotMQMnice <- function(result, ...){
-	#Helperfunction to show MQMmulti objects made by doing multiple mqmscan runs (in a LIST)
+mqmplotnice <- function(result, ...){
+	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	matrix <- NULL
 	names <- NULL
 	i <- 1
-	if(class(result)[2] != "MQMmulti")		
-          ourstop("Wrong type of result file, please supply a valid MQMmulti object.") 
+	if(class(result)[2] != "mqmmulti")		
+          ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
 
 	for( j in 1:length( result[[i]][,3] ) ) {
 		row <- NULL
@@ -350,7 +350,7 @@ plotMQMnice <- function(result, ...){
 	polyplot(matrix,...)
 }
 
-plotMQMone <- function(result, result2, extended=0,...){
+mqmplotone <- function(result, result2, extended=0,...){
 	#Helperfunction to show scanone objects made by doing mqmscan runs
 	if(!("scanone" %in% class(result)))
           ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
@@ -381,4 +381,4 @@ plotMQMone <- function(result, result2, extended=0,...){
         }
 }
 
-# end of MQMplots.R
+# end of mqmplots.R

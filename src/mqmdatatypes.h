@@ -1,6 +1,6 @@
 /**********************************************************************
  *
- * MQMdatatypes.h
+ * mqmdatatypes.h
  *
  * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
  *
@@ -64,4 +64,4 @@ void copyvector(vector vsource, vector vdestination, int dim);
   }
 #endif
 
-/* end of MQMdata.h */
+/* end of mqmdata.h */

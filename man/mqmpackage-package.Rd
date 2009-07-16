@@ -1,5 +1,5 @@
-\name{MQMpackage-package}
-\alias{MQMpackage}
+\name{mqmpackage-package}
+\alias{mqmpackage}
 \docType{package}
 \title{
 	Tool for analyzing QTLs in experimental crosses
@@ -16,7 +16,7 @@
 }
 \details{
 	\tabular{ll}{
-	Package: \tab MQMpackage, subpackage of the R/QTL package\cr
+	Package: \tab mqmpackage, subpackage of the R/QTL package\cr
 	Date: \tab 2008-2009\cr
 	Depends: \tab R (>= 1.8.0), qtl\cr
 	License: \tab GPL version 2 or later\cr
@@ -33,7 +33,7 @@
 	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
 	mqmaugment              mqmaugment - Missing data augmentation routine for MQM
 	mqmcofactors            mqmcofactors - Helper function to create cofactors to be used with mqmscan
-	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with mqmscan
+	mqmcofactorsEach        mqmcofactorsEach - Helper function to create cofactors to be used with mqmscan
 	multitrait              Crossobject from R/QTL with multiple traits
 	}
 	Normal layout of MQM-QTL analysis

@@ -1,18 +1,18 @@
-\name{MQMpermObject}
-\alias{MQMpermObject}
+\name{mqmpermObject}
+\alias{mqmpermObject}
 
-\title{Function to convert MQMmulti objects into a scanoneperm object}
+\title{Function to convert mqmmulti objects into a scanoneperm object}
 
 \description{
-	Function to convert MQMmulti objects into a \code{scanoneperm} object, this allows the use of R/QTL methods for permutation analysis that do not support MQM's internal structure.
+	Function to convert mqmmulti objects into a \code{scanoneperm} object, this allows the use of R/QTL methods for permutation analysis that do not support MQM's internal structure.
 }
 
 \usage{
-MQMpermObject(MQMbootresult = NULL)
+mqmpermObject(mqmbootresult = NULL)
 }
 
 \arguments{
-  \item{MQMbootresult}{ \code{MQMmulti} object obtained by using the function \code{\link[qtl]{bootstrap}} }
+  \item{mqmbootresult}{ \code{mqmmulti} object obtained by using the function \code{\link[qtl]{bootstrap}} }
 }
 
 %\details{
@@ -39,7 +39,7 @@ data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 \dontrun{f2result <- bootstrap(f2cross,Funktie=mqm)			# Bootstrap MQM mapping on the f2cross
 }\dontshow{f2result <- bootstrap(f2cross,Funktie=mqm, n.run=2, b.size=2)}
-f2perm <- MQMpermObject(f2result)			# Create a permutation object
+f2perm <- mqmpermObject(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 }
 

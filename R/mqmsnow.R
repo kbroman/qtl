@@ -1,6 +1,6 @@
 #####################################################################
 #
-# MQMsnow.R
+# mqmsnow.R
 #
 # copyright (c) 2009, Danny Arends
 # last modified Mrt, 2009
@@ -90,4 +90,4 @@ snowCoreBOOT <- function(x,all.data,Funktie,bootmethod,verbose=FALSE,...){
 	result
 }
 
-# end of MQMsnow.R
+# end of mqmsnow.R
