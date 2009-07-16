@@ -28,12 +28,12 @@
 
 	Index:
 	\preformatted{
-	scanMQM                 scanMQM - Multiple QTL mapping for F2 crosses
+	mqmscan                 mqmscan - Multiple QTL mapping for F2 crosses
 	scanall					scanall - Function called to analytse multiple traits in the cross object
 	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
 	MQMaugment              MQMaugment - Missing data augmentation routine for MQM
-	MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with scanMQM
-	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with scanMQM
+	MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with mqmscan
+	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with mqmscan
 	multitrait              Crossobject from R/QTL with multiple traits
 	}
 	Normal layout of MQM-QTL analysis
@@ -41,8 +41,8 @@
 		\item Load in experiment using formats supported by R/QTL. See \code{\link[qtl]{read.cross}} for details.
 		\item Set trait under consideration as first trait in R/QTL format
 		\item Fill in missing data using either the fill.geno or MQMaugmentdata routine
-		\item Call scanMQM to do a genomescan
-		\item Call scanMQM setting the n.run to get an estimate of "significant" lod scores
+		\item Call mqmscan to do a genomescan
+		\item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
 		\item Set cofactors at "Top scoring" and not so "Top scoring" markers
 		\item Rerun analysis with cofactors
 		\item Bootstrap analysis with cofactors to get estimates of QTL significance
@@ -73,7 +73,7 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 \seealso{
 	\itemize{
 	\item	\code{\link[qtl]{MQMaugment}} - Dataaugmentation routine to estimate missing data
-	\item	\code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item	\code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
@@ -81,6 +81,6 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 	data(multitrait)
 \dontshow{multitrait <- subset(multitrait, chr=1:2)}        
 	mt.est <- MQMaugment(multitrait)
-	result <- scanMQM(mt.est, doLOG=1)
+	result <- mqmscan(mt.est, doLOG=1)
 	plot(result)
 }

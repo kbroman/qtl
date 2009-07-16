@@ -1,10 +1,10 @@
 \name{MQMCofactors}
 \alias{MQMCofactors}
 
-\title{Create cofactors to be used with scanMQM }
+\title{Create cofactors to be used with mqmscan }
 
 \description{
-  Return a cofactorslist formatted to be used with the scanMQM function
+  Return a cofactorslist formatted to be used with the mqmscan function
 }
 
 \usage{
@@ -24,7 +24,7 @@ MQMCofactors(cross, cofactors, sexfactors, verbose=FALSE)
 %}
 
 \value{
-An formatted list of cofactors to be used with the \code{\link[qtl]{scanMQM}} algorithm
+An formatted list of cofactors to be used with the \code{\link[qtl]{mqmscan}} algorithm
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
@@ -35,7 +35,7 @@ An formatted list of cofactors to be used with the \code{\link[qtl]{scanMQM}} al
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 	}
 }
@@ -45,7 +45,7 @@ qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
 a <- MQMCofactors(cross,c(20,30,80,90),c(186,187))	# Set Cofactors on marker 20,30,80 & 90 and sexfactors on 186,187
-result <- scanMQM(cross,a)				# Do a backward model selection
+result <- mqmscan(cross,a)				# Do a backward model selection
 }
 
 \references{

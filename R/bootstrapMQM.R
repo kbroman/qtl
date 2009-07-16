@@ -78,7 +78,7 @@ bootstrapcim <- function(...){
 
 ######################################################################
 #
-# bootstrap: Shuffles phenotype or does parametric bootstrapping of scanMQM
+# bootstrap: Shuffles phenotype or does parametric bootstrapping of mqmscan
 #
 ######################################################################
 

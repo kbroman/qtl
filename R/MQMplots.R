@@ -229,7 +229,7 @@ getThird <- function(x){
 }
 
 plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
-	#Helperfunction to plot MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
+	#Helperfunction to plot MQMmulti objects made by doing multiple mqmscan runs (in a LIST)
   if(class(result)[2] != "MQMmulti")
 		stop("Wrong type of result file, please supply a valid MQMmulti object.") 
 
@@ -283,7 +283,7 @@ plotMQMall <- function(result, type="C", theta=30, phi=15, ...){
 }
 
 plotMQMboot <- function(result, ...){
-	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
+	#Helperfunction to show MQMmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
 	row1 <- NULL
@@ -319,7 +319,7 @@ plotMQMboot <- function(result, ...){
 }
 
 plotMQMnice <- function(result, ...){
-	#Helperfunction to show MQMmulti objects made by doing multiple scanMQM runs (in a LIST)
+	#Helperfunction to show MQMmulti objects made by doing multiple mqmscan runs (in a LIST)
 	matrix <- NULL
 	names <- NULL
 	i <- 1
@@ -351,7 +351,7 @@ plotMQMnice <- function(result, ...){
 }
 
 plotMQMone <- function(result, result2, extended=0,...){
-	#Helperfunction to show scanone objects made by doing scanMQM runs
+	#Helperfunction to show scanone objects made by doing mqmscan runs
 	if(!("scanone" %in% class(result)))
           ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
 

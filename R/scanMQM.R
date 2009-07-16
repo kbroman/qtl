@@ -7,17 +7,17 @@
 # first written Feb, 2009
 # 
 # Part of the R/qtl package
-# Contains: scanMQM
+# Contains: mqmscan
 #
 ######################################################################
 
 ######################################################################
 #
-# scanMQM: main scanning function to the MQMpackage
+# mqmscan: main scanning function to the MQMpackage
 #
 ######################################################################
 	
-scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
+mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=FALSE){
     start <- proc.time()
@@ -134,7 +134,7 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		#	ourcat("INFO: Individuals after augmentation",cross$extra$augIND,".\n",a=verbose)
 			extra2 <- cross$extra$augIND
 		}else{
-			#No augmentation so just set extra1 to be Nind (Naug internally of scanMQM)
+			#No augmentation so just set extra1 to be Nind (Naug internally of mqmscan)
 			extra1 <- n.ind
 			extra2 <- 0:n.ind
 		}
@@ -334,7 +334,7 @@ scanMQM <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 }
 
 mqm <- function(...){
-	scanMQM(...)
+	mqmscan(...)
 }
 
 # end of scanMQM.R

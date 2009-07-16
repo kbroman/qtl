@@ -12,7 +12,7 @@
 }
 
 \arguments{
-	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
+	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and mqmscan from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
 	\item{Funktie}{ Function to use when mappingQTL's (either scanall,cimall or mqmall)}
 	\item{thresholds}{ False discovery rate is calculated for peaks above these LOD thresholds (DEFAULT=Range from 1 to 20, using 10 thresholds) }
 	\item{n.perm}{ Number of permutation runs (DEFAULT=10, should be 1000 to 5000) }

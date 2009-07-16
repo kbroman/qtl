@@ -31,10 +31,10 @@ MQMLoadanalysis <- function(file="MQM_output.txt"){
 }
 
 
-MQMfind.marker <- function(cross,scanMQM=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
+MQMfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
 	
-	chr <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=FALSE)$'chr'
-	pos <- summary(scanMQM,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (Cm)'
+	chr <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'chr'
+	pos <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (Cm)'
 	if(verbose) cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
 	ret <- NULL
 	for(i in 1:length(chr)){

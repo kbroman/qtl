@@ -23,7 +23,7 @@
 }
 
 \arguments{
-	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and scanMQM from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
+	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and mqmscan from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
 	\item{Funktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
 	\item{multiC}{ Use multicore (if available)}  

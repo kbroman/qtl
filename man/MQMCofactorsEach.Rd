@@ -1,10 +1,10 @@
 \name{MQMCofactorsEach}
 \alias{MQMCofactorsEach}
 
-\title{Create cofactors to be used with scanMQM} 
+\title{Create cofactors to be used with mqmscan} 
 
 \description{
-  Return a list of cofactors ready to be used with the scanMQM function
+  Return a list of cofactors ready to be used with the mqmscan function
 }
 
 \usage{
@@ -23,7 +23,7 @@ MQMCofactorsEach(cross, each = 3, verbose=FALSE)
 %}
 
 \value{
-	An formatted list of cofactors to be used with the \code{\link[qtl]{scanMQM}} algorithm
+	An formatted list of cofactors to be used with the \code{\link[qtl]{mqmscan}} algorithm
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
@@ -31,7 +31,7 @@ MQMCofactorsEach(cross, each = 3, verbose=FALSE)
 \seealso{ 
 \itemize{
 	\item \code{\link[qtl]{MQM}} - MQM main information
-	\item \code{\link[qtl]{scanMQM}} - Single trait analysis
+	\item \code{\link[qtl]{mqmscan}} - Single trait analysis
 	\item \code{\link[qtl]{scanall}} - Analyse multiple traits 
 }
 }
@@ -42,7 +42,7 @@ data(map10)							# Mouse genome
 \dontshow{map10 <- map10[1:5]}
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
 a <- MQMCofactorsEach(cross,3)					# Set Cofactors each third marker
-result <- scanMQM(cross,a)					# Do a backward model selection
+result <- mqmscan(cross,a)					# Do a backward model selection
 }
 
 \keyword{ models }

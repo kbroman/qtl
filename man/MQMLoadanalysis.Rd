@@ -30,7 +30,7 @@ Returns a matrix with QTLscores for each location on the chromosome, which can b
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{scanMQM}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
 }
 }
@@ -40,7 +40,7 @@ Returns a matrix with QTLscores for each location on the chromosome, which can b
 qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
-result <- scanMQM(cross,file="aaa.txt")			# Do a MQM scan of the genome and save it to aaa.txt
+result <- mqmscan(cross,file="aaa.txt")			# Do a MQM scan of the genome and save it to aaa.txt
 res_reloaded <- MQMLoadanalysis("aaa.txt")		#Reads in and plots the file aaa.txt
 }
 }

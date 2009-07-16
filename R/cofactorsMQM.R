@@ -25,8 +25,8 @@
 
 ######################################################################
 #
-# MQMCofactors: Prepares a cofactor list to use with scanMQM
-# MQMCofactorsEach: Prepares a cofactor list to use with scanMQM
+# MQMCofactors: Prepares a cofactor list to use with mqmscan
+# MQMCofactorsEach: Prepares a cofactor list to use with mqmscan
 #
 ######################################################################
 

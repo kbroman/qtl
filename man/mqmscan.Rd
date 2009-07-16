@@ -1,5 +1,5 @@
-\name{scanMQM}
-\alias{scanMQM}
+\name{mqmscan}
+\alias{mqmscan}
 \alias{mqm}
 
 \title{Multiple qtl mapping for inbred crosses}
@@ -10,7 +10,7 @@
 }
 
 \usage{
-	scanMQM(cross, cofactors, pheno.col = 1, REMLorML = 0, 
+	mqmscan(cross, cofactors, pheno.col = 1, REMLorML = 0, 
                 alfa = 0.02, em.iter = 1000, windowsize = 25.0, step.size = 5.0, 
                 step.min = -20.0, step.max = 220.0, file = "MQM_output.txt",
                 doLOG=0, est.map=0, dominance=0, plot=FALSE, forceRIL=0, verbose=FALSE)
@@ -42,8 +42,8 @@ Normal layout of MQM-QTL analysis
 \item Load in experiment using formats supported by R/QTL
 \item Set trait under consideration as first trait in R/QTL format
 \item Fill in missing data using either the fill.geno or MQMaugmentdata routine
-\item Call scanMQM to do a genomescan
-\item Call scanMQM setting the n.run to get an estimate of "significant" lod scores
+\item Call mqmscan to do a genomescan
+\item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
 \item Set cofactors at "Top scoring" and not so "Top scoring" markers
 \item Rerun analysis with cofactors
 \item Bootstrap analysis with cofactors to get estimates of QTL significance
@@ -86,14 +86,14 @@ The phenotype under consideration is specified by the pheno.col argument of the 
 f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-f2result <- scanMQM(f2cross)				# Do a MQM scan of the genome
+f2result <- mqmscan(f2cross)				# Do a MQM scan of the genome
 lodint(f2result,chr=3)					# LOD interval of the QTL on chr 3
 
 #Simulated BC Population
 bcqtl <- c(3,15,2)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 bccross <- sim.cross(map10,bcqtl,n=100,type="bc")	# Simulate a BC Cross
-bcresult <- scanMQM(bccross)				# Do a MQM scan of the genome
+bcresult <- mqmscan(bccross)				# Do a MQM scan of the genome
 }
 
 \keyword{ models }
