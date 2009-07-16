@@ -40,7 +40,7 @@
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{MQMCofactors}} - Learn how to set Cofactors for the MQM algorithm
+	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
 	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object (
 	\item \code{\link[qtl]{cimall}} - Function called to analyse multiple traits in the cross object (Using CIM)
 	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object (Using MQM)

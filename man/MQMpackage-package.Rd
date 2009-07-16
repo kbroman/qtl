@@ -32,7 +32,7 @@
 	scanall					scanall - Function called to analytse multiple traits in the cross object
 	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
 	MQMaugment              MQMaugment - Missing data augmentation routine for MQM
-	MQMCofactors            MQMCofactors - Helper function to create cofactors to be used with mqmscan
+	mqmcofactors            mqmcofactors - Helper function to create cofactors to be used with mqmscan
 	MQMCofactorsEach        MQMCofactorsEach - Helper function to create cofactors to be used with mqmscan
 	multitrait              Crossobject from R/QTL with multiple traits
 	}
