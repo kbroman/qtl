@@ -4,16 +4,26 @@
 \title{Multiple QTL Model (MQM) mapping}
 
 \description{
-Overview of the MQM mapping functions.
+Overview of the MQM mapping functions
 }
 
 \usage{
 }
 
+\section{Introduction}{
+MQM is an implementation of multiple QTL model mapping (or Marker-QTL-Marker)
+as described by Ritsert Jansen (see references below). A genome scan is
+performed by moving a QTL along the chromosomes while using a preselected set
+of markers as cofactors. If the QTL gets close to a cofactor the cofactor gets
+dropped. The backward elimination procedure starts with a multiple-regression
+model on an augmented dataset, using a full set of cofactors evenly spread over
+the genome. A maximum likelihood (ML) approach is used for cofactor selection.
+}
+
 \author{R.C. Jansen ; Danny Arends ; Karl Broman \email{kbroman@biostat.wisc.edu} ; Pjotr Prins}
 
 \note{
-Currently MQM only supports F2 / BC / RIL crosses. Also there is no special treatment of sex chromosomes at this point.
+Currently MQM only supports F2 / BC / RIL crosses. Also there is no special treatment of sex chromosomes, at this point.
 }
 
 \seealso{
