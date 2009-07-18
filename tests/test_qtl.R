@@ -42,4 +42,4 @@ result <- scanMQM(augmentedcross)
 if (round(result[5,5]*1000) != 153) stop("MQM gives an unexpected result (1)")
 if (round(max(result[,5])*1000) != 5467) stop("MQM gives an unexpected result (2)")
 
-cat("Tests succesfully run!")
+cat("test_qtl.R tests succesfully run!")
