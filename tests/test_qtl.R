@@ -35,10 +35,10 @@ test = round(mr[15,]$lod*1000)
 cat(mr[15,]$lod,test)
 if (test != 966) stop("scanone_mr gives an incorrect result")
 
-augmentedcross <- MQMaugment(listeria,neglect=1)
+augmentedcross <- mqmaugment(listeria,neglect=1)
 if (nind(augmentedcross)!=116) stop("Number of individuals incorrect")
 
-result <- scanMQM(augmentedcross)
+result <- mqmscan(augmentedcross)
 if (round(result[5,5]*1000) != 153) stop("MQM gives an unexpected result (1)")
 if (round(max(result[,5])*1000) != 5467) stop("MQM gives an unexpected result (2)")
 

@@ -92,16 +92,24 @@ max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 MQM                     Multiple QTL Model (MQM) mapping
-MQMaugment              MQM data augmentation
-MQMCofactors            Create cofactors to be used with scanMQM
-MQMCofactorsEach        Create cofactors to be used with scanMQM
-MQMfind.marker          Find the genetic markers significant after
+mqmaugment              MQM data augmentation
+mqmcofactors            Create cofactors to be used with scanMQM
+mqmcofactorseach        Create cofactors to be used with scanMQM
+mqmfind.marker          Find the genetic markers significant after
                         bootstrapping/permutation of the data
-MQMLoadanalysis         Enables loading of previous MQM analysis from
+mqmloadanalysis         Enables loading of previous MQM analysis from
                         file
-MQMpackage              Tool for analyzing QTLs in experimental crosses
-MQMpermObject           Function to convert MQMmulti objects into a
+mqmpackage              Tool for analyzing QTLs in experimental crosses
+mqmpermObject           Function to convert MQMmulti objects into a
                         scanoneperm object
+mqmplotall              Plotting routine to display the results from a
+                        scanall / bootstrap scan
+mqmplotboot             Plot results from a bootstrap scan
+mqmplotnice             Plot the results from a bootstrap or scanall
+                        scan
+mqmplotone              Plotting routine to display the results from a
+                        QTL scan
+mqmscan                 Multiple qtl mapping for inbred crosses
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes
@@ -136,13 +144,6 @@ plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
                         scan
 plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plotModel               Plot a QTL model
-plotMQMall              Plotting routine to display the results from a
-                        scanall / bootstrap scan
-plotMQMboot             Plot results from a bootstrap scan
-plotMQMnice             Plot the results from a bootstrap or scanall
-                        scan
-plotMQMone              Plotting routine to display the results from a
-                        QTL scan
 pull.geno               Pull out the genotype data from a cross
 pull.map                Pull out the genetic map from a cross
 pull.pheno              Pull out phenotype data from a cross
@@ -161,7 +162,6 @@ replaceqtl              Replace a QTL in a qtl object with a different
                         position.
 ripple                  Compare marker orders
 scanall                 Multitrait analysis of a cross object
-scanMQM                 Multiple qtl mapping for inbred crosses
 scanone                 Genome scan with a single QTL model
 scanoneboot             Bootstrap to get interval estimate of QTL
                         location
