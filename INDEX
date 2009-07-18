@@ -1,9 +1,5 @@
-+.scanone               Arithmetic Operators for scanone and scantwo
-                        results
-+.scanoneperm           Arithmetic Operators for permutation results
 add.cim.covar           Indicate marker covariates from composite
                         interval mapping
-add.threshold           Add significance threshold to plot
 addcovarint             Add QTL x covariate interaction to a
                         multiple-QTL model
 addint                  Add pairwise interaction to a multiple-QTL
@@ -13,6 +9,7 @@ addpair                 Scan for an additional pair of QTL in a
                         multiple-QTL model
 addqtl                  Scan for an additional QTL in a multiple-QTL
                         model
+add.threshold           Add significance threshold to plot
 addtoqtl                Add to a qtl object
 argmax.geno             Reconstruct underlying genotypes
 badorder                An intercross with misplaced markers
@@ -21,15 +18,12 @@ bootstrap               randomization approaches to obtain estimates of
                         QTL LOD score significance
 bristle3                Data on bristle number in Drosophila
 bristleX                Data on bristle number in Drosophila
-c.cross                 Combine data for QTL experiments
-c.scanone               Combine columns from multiple scanone results
-c.scanoneperm           Combine data from scanone permutations
-c.scantwoperm           Combine data from scantwo permutations
 calc.errorlod           Identify likely genotyping errors
 calc.genoprob           Calculate conditional genotype probabilities
 calc.penalties          Calculate LOD penalties
 cbind.scanoneperm       Combine columns from multiple scanone
                         permutation results
+c.cross                 Combine data for QTL experiments
 checkAlleles            Identify markers with switched alleles
 chrlen                  Chromosome lengths in QTL experiment
 chrnames                Pull out the chromosome names from a cross
@@ -43,17 +37,20 @@ comparegeno             Compare individuals' genotype data
 compareorder            Compare two orderings of markers on a
                         chromosome
 condense.scantwo        Condense the output from a 2-d genome scan
+convert2sa              Convert a sex-specific map to a sex-averaged
+                        one.
 convert.scanone         Convert output from scanone for R/qtl version
                         0.98
 convert.scantwo         Convert output from scantwo for R/qtl version
                         1.03 and earlier
-convert2sa              Convert a sex-specific map to a sex-averaged
-                        one.
 countXO                 Count number of obligate crossovers for each
                         individual
+c.scanone               Combine columns from multiple scanone results
+c.scanoneperm           Combine data from scanone permutations
+c.scantwoperm           Combine data from scantwo permutations
+dropfromqtl             Drop a QTL from a qtl object
 drop.markers            Drop a set of markers
 drop.nullmarkers        Drop markers without any genotype data
-dropfromqtl             Drop a QTL from a qtl object
 effectplot              Plot phenotype means against genotypes at one
                         or two markers.
 effectscan              Plot estimated QTL effects across the whole
@@ -66,13 +63,13 @@ fake.f2                 Simulated data for an F2 intercross
 FDRpermutation          Estimates of FDR when doing multiple trait QTL
                         analysis
 fill.geno               Fill holes in genotype data
+findDupMarkers          Find markers with identical genotype data
 find.flanking           Find flanking markers for a specified position
 find.marker             Find marker closest to a specified position
 find.markerpos          Find position of a marker.
 find.pheno              Find column number for a particular phenotype.
 find.pseudomarker       Find the pseudomarker closest to a specified
                         position
-findDupMarkers          Find markers with identical genotype data
 fitqtl                  Fit a multiple-QTL model
 fitstahl                Fit Stahl interference model
 formLinkageGroups       Partition markers into linkage groups
@@ -93,14 +90,14 @@ max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 MQM                     Multiple QTL Model (MQM) mapping
 mqmaugment              MQM data augmentation
-mqmcofactors            Create cofactors to be used with scanMQM
-mqmcofactorseach        Create cofactors to be used with scanMQM
-mqmfind.marker          Find the genetic markers significant after
-                        bootstrapping/permutation of the data
+mqmcofactors            Create cofactors to be used with mqmscan
+mqmcofactorsEach        Create cofactors to be used with mqmscan
+mqmfind.marker          Find the significant markers after
+                        bootstrapping/permutation
 mqmloadanalysis         Enables loading of previous MQM analysis from
                         file
 mqmpackage              Tool for analyzing QTLs in experimental crosses
-mqmpermObject           Function to convert MQMmulti objects into a
+mqmpermObject           Function to convert mqmmulti objects into a
                         scanoneperm object
 mqmplotall              Plotting routine to display the results from a
                         scanall / bootstrap scan
@@ -128,8 +125,10 @@ plot.errorlod           Plot grid of error LOD values
 plot.geno               Plot observed genotypes, flagging likely errors
 plot.info               Plot the proportion of missing genotype
                         information
+plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plot.map                Plot genetic map
 plot.missing            Plot grid of missing genotypes
+plotModel               Plot a QTL model
 plot.pheno              Plot a phenotype distribution
 plot.pxg                Plot phenotypes versus marker genotypes.
 plot.qtl                Plot QTL locations
@@ -142,8 +141,6 @@ plot.scantwo            Plot LOD scores for a two-dimensional genome
                         scan
 plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
                         scan
-plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
-plotModel               Plot a QTL model
 pull.geno               Pull out the genotype data from a cross
 pull.map                Pull out the genetic map from a cross
 pull.pheno              Pull out phenotype data from a cross
@@ -161,17 +158,20 @@ replacemap.scantwo      Replace the genetic map in QTL mapping results
 replaceqtl              Replace a QTL in a qtl object with a different
                         position.
 ripple                  Compare marker orders
-scanall                 Multitrait analysis of a cross object
+rqtl                    R/qtl
 scanone                 Genome scan with a single QTL model
++.scanone               Arithmetic Operators for scanone and scantwo
+                        results
 scanoneboot             Bootstrap to get interval estimate of QTL
                         location
++.scanoneperm           Arithmetic Operators for permutation results
 scanqtl                 General QTL scan
 scantwo                 Two-dimensional genome scan with a two-QTL
                         model
 sim.cross               Simulate a QTL experiment
+simFounderSnps          Simulate founder SNPs for a multiple-strain RIL
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map
-simFounderSnps          Simulate founder SNPs for a multiple-strain RIL
 stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
 subset.cross            Subsetting data for QTL experiment
