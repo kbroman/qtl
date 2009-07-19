@@ -304,7 +304,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   vector weight;
   ivector ind;
-  marker= newcmatrix(Nmark,Naug);
+  marker= newcmatrix(Nmark+1,Naug);
   y= newvector(Naug);
   ind= newivector(Naug);
   weight= newvector(Naug);
