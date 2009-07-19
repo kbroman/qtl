@@ -155,8 +155,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   if (verbose) {
     Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");
   }
-  int Nsteps;
-  Nsteps= chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
+  const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
   informationcontent= newvector(Nsteps);
   for (int i=0; i<Nrun+1; i++) {
@@ -395,7 +394,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(ind);
   Free(r);
   Free(informationcontent);
-  Free(Frun);
+  freematrix((void **)Frun,Nsteps);
   delcmatrix(marker,Nmark+1);
   Free(y);
   Free(chr);
