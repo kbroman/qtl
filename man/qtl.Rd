@@ -1,9 +1,10 @@
 \name{rqtl}
 \alias{rqtl}
 
-\title{R/qtl}
+\title{qtl}
 
 \description{
+R/qtl package description
 }
 
 \section{Introduction}{
