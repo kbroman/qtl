@@ -55,6 +55,8 @@ Mmatrix newMmatrix(int rows, int cols,int depth);
 void   printmatrix(matrix m, int rows, int cols);
 void   printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);
+void freematrix(void **m);
+void freevector(void *v);
 void delmatrix(matrix m);
 void delMmatrix(Mmatrix m);
 void delcmatrix(cmatrix m);

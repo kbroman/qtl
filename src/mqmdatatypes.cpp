@@ -189,6 +189,10 @@ cmatrix newcmatrix(int rows, int cols) {
   return m;
 }
 
+void freevector(void *v) {
+  Free(v);
+}
+
 void freematrix(void **m) {
   int rows = sizeof(m)/(sizeof(void *));
   for (int i=0; i<rows; i++) {
