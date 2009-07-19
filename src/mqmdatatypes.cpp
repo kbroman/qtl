@@ -189,19 +189,24 @@ cmatrix newcmatrix(int rows, int cols) {
   return m;
 }
 
-void delmatrix(matrix m) {
-
+void freematrix(void **m) {
+  int rows = sizeof(m)/(sizeof(void *));
+  for (int i=0; i<rows; i++) {
+    Free(m[i]);
+  }
   Free(m);
+}
+
+void delmatrix(matrix m) {
+  freematrix((void**)m);
 }
 
 void delMmatrix(Mmatrix m) {
-
-  Free(m);
+  freematrix((void**)m);
 }
 
 void delcmatrix(cmatrix m) {
-
-  Free(m);
+  freematrix((void **)m);
 }
 
 void copyvector(vector vsource, vector vdestination, int dim) {
