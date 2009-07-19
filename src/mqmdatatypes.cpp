@@ -67,7 +67,6 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
   return cross;
 }
 
-
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
   // Change all the genotypes from default R/qtl format to MQM internal
   for (int i=0; i< *Nmark; i++) {
@@ -95,9 +94,21 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstyp
   }
 }
 
+/* 
+ * Allocate a memory block using the 'safe' R method calloc_init, but with
+ * guarantee all data has been zeroed
+ */
+
+void *calloc_init(size_t num, size_t size) {
+  void *buf;
+  buf = R_chk_calloc(num,size);
+  if (buf) memset(buf,0,num*size);
+  return buf;
+}
+
 vector newvector(int dim) {
   vector v;
-  v = (double *)Calloc(dim, double);
+  v = (double *)calloc_init(dim, sizeof(double));
   if (v==NULL) {
     warning("Not enough memory for new vector of dimension %d",(dim+1));
   }
@@ -106,7 +117,7 @@ vector newvector(int dim) {
 
 ivector newivector(int dim) {
   ivector v;
-  v = (int *)Calloc(dim, int);
+  v = (int *)calloc_init(dim, sizeof(int));
   if (v==NULL) {
     warning("Not enough memory for new vector of dimension %d",(dim+1));
   }
@@ -115,7 +126,7 @@ ivector newivector(int dim) {
 
 cvector newcvector(int dim) {
   cvector v;
-  v = (char *)Calloc(dim, char);
+  v = (char *)calloc_init(dim, sizeof(char));
   if (v==NULL) {
     warning("Not enough memory for new vector of dimension %d",(dim+1));
   }
@@ -124,7 +135,7 @@ cvector newcvector(int dim) {
 
 matrix newmatrix(int rows, int cols) {
   matrix m;
-  m = (double **)Calloc(rows, double*);
+  m = (double **)calloc_init(rows, sizeof(double*));
   if (m==NULL) {
     warning("Not enough memory for new double matrix");
   }
@@ -136,7 +147,7 @@ matrix newmatrix(int rows, int cols) {
 
 Mmatrix newMmatrix(int rows, int cols,int depth) {
   Mmatrix m;
-  m = (double ***)Calloc(rows, double**);
+  m = (double ***)calloc_init(rows, sizeof(double**));
   if (m==NULL) {
     warning("Not enough memory for new double matrix");
   }
@@ -168,7 +179,7 @@ void printcmatrix(cmatrix m, int rows, int cols) {
 
 cmatrix newcmatrix(int rows, int cols) {
   cmatrix m;
-  m = (char **)Calloc(rows, char*);
+  m = (char **)calloc_init(rows, sizeof(char*));
   if (m==NULL) {
     warning("Not enough memory for new char matrix");
   }
