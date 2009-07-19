@@ -356,6 +356,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   //	}
   //	Rprintf("step: %d marker: %d\n", i, curmarker);
   //}
+  freevector(direction);
   Free(info0);
   Free(info1);
   Free(info2);

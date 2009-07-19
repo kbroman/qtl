@@ -47,7 +47,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
   vector indweight;
   indweight = newvector(Nind);
   vector distance;
-  distance= newvector(Nmark+1);
+  distance = newvector(Nmark+1);
 
   if (reestimate=='n') {
     if (verbose==1) {
@@ -128,6 +128,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
     Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n", iem, rdelta);
   }
   Free(indweight);
+  freevector(distance);
   return maximum;
 }
 
