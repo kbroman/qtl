@@ -103,6 +103,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   char REMLorML='0';
   char fitQTL='n';
 
+  // The chr vector contains the chromosome number for every marker
   chr= newivector(Nmark);
   if (verbose) {
     Rprintf("INFO: Receiving the chromosome matrix from R\n");
@@ -115,20 +116,26 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     REMLorML='1';
   }
 
+  // Create an array of marker positions - each marker is one of LMRU (left,
+  // middle, right, unknown/single)
   if (verbose) {
     Rprintf("INFO: Calculating relative genomepositions of the markers\n");
   }
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
+      // first marker is 'L'; if single marker 'U'
       if (chr[j]==chr[j+1]) position[j]='L';
       else position[j]='U';
     } else if (j==(Nmark-1)) {
+      // Last marker is 'R'; if single marker 'U'
       if (chr[j]==chr[j-1]) position[j]='R';
       else position[j]='U';
-    } else if (chr[j]==chr[j-1]) {
+    } else if (chr[j]==chr[j-1]) { // marker on the left is on the same chromosome
+      //  'M' the marker to the right is on the same chromosome, otherwise 'R'
       if (chr[j]==chr[j+1]) position[j]='M';
       else position[j]='R';
-    } else {
+    } else { // marker on the left is not on the same chromosome
+      // 'L' if marker to the right is on the same chromosome, otherwise 'U'
       if (chr[j]==chr[j+1]) position[j]='L';
       else position[j]='U';
     }
