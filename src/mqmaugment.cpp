@@ -37,6 +37,7 @@
  * halts when the number of individuals maxNaug is reached. Markers are
  * expanded up to imaxNaug.
  *
+ * returns 1 on success, 0 on failure.
  */
 
 int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, 
@@ -44,6 +45,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
             const cvector position,
             vector r, const int maxNaug, const int imaxNaug, const double neglect, 
             const char crosstype, const int verbose) {
+  int retvalue = 0;
   int jj;
   int newNind=(*Nind);
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
@@ -53,21 +55,21 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
   cvector imarker;
   ivector newind;
 
-  newmarker= newcmatrix(Nmark+1, *Naug);
-  newy= newvector(*Naug);
-  newind= newivector(*Naug);
+  newmarker= newcmatrix(Nmark+1, maxNaug);
+  newy= newvector(maxNaug);
+  newind= newivector(maxNaug);
   imarker= newcvector(Nmark);
 
-  int iaug=0;      // iaug keeps track of current augmented individual
-  int maxiaug=0;   // highest reached(?)
-  int saveiaug=0;  // previous iaug
+  int iaug =0;      // iaug keeps track of current augmented individual
+  int maxiaug =0;   // highest reached(?)
+  int saveiaug = 0; // previous iaug
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
   prob0right, prob1right, prob2right;
   double probmax;
   vector newprob, newprobmax;
-  newprob= newvector(*Naug);
-  newprobmax= newvector(*Naug);
+  newprob= newvector(maxNaug);
+  newprobmax= newvector(maxNaug);
   if (verbose) {
     Rprintf("INFO: Crosstype determined by the algorithm:%c:\n", crosstype);
     Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
@@ -102,7 +104,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
             if (ii==saveiaug) probmax= (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
             if (prob1>prob2) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '2';
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
@@ -117,7 +119,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
               newprob[ii]= newprob[ii]*prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '1';
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
@@ -151,7 +153,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
             if (ii==saveiaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
             if (prob1>prob0) {
               if (probmax/(newprob[ii]*prob0)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '0';
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
@@ -166,7 +168,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
               newprob[ii]*= prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '1';
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
@@ -207,7 +209,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
             }
             if ((prob2>prob1)&&(prob2>prob0)) {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '1';
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
@@ -218,7 +220,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '0';
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
@@ -234,7 +236,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
 
             } else if ((prob1>prob2)&&(prob1>prob0)) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '2';
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
@@ -245,7 +247,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '0';
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
@@ -260,7 +262,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
               newprob[ii]*= prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '1';
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
@@ -271,7 +273,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob2)<neglect) {
-                iaug++;
+                if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= '2';
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
@@ -299,16 +301,8 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
           }
 
           if (iaug+3>maxNaug) {
-            Rprintf("ERROR: Dataset too large after augmentation - your CROSS data may have been corrupted\n");  // FIXME!
-            if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
-            // Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
-            //Free(newy);
-            //Free(newmarker);
-            //Free(newind);
-            //Free(newprob);
-            //Free(newprobmax);
-            //Free(imarker);
-            return 0;
+            Rprintf("ERROR: augmentation (should not be reached)\n");  
+            goto bailout;
           }
         }
       if ((iaug-saveiaug+1)>imaxNaug) {
@@ -320,7 +314,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
       for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
       for (int ii=saveiaug; ii<=iaug; ii++) newprob[ii]/= sumprob;
     }
-    iaug++;
+    if (++iaug >= maxNaug) goto bailout;
     saveiaug=iaug;
   }
   *Naug = iaug;
@@ -333,13 +327,19 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
     (*augind)[i]= newind[i];
     for (int j=0; j<Nmark; j++) (*augmarker)[j][i]= newmarker[j][i];
   }
+  goto cleanup;
+bailout:
+  Rprintf("ERROR: Dataset too large after augmentation\n");
+  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
+  retvalue = 0;
+cleanup:
   Free(newy);
   Free(newmarker);
   Free(newind);
   Free(newprob);
   Free(newprobmax);
   Free(imarker);
-  return 1;
+  return retvalue;
 }
 
 /*
