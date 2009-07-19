@@ -32,3 +32,5 @@ src/standalone.lst
 src/standalone.patch
 src/sMQM
 tests/junk*
+tools
+mqm
