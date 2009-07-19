@@ -40,12 +40,13 @@
  */
 
 int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, 
-            ivector* augind, int *Nind, int *Naug, int Nmark, cvector position,
-            vector r, int maxNaug, int imaxNaug, double neglect, char
-            crosstype, int verbose) {
+            ivector* augind, int *Nind, int *Naug, const int Nmark, 
+            const cvector position,
+            vector r, const int maxNaug, const int imaxNaug, const double neglect, 
+            const char crosstype, const int verbose) {
   int jj;
   int newNind=(*Nind);
-  (*Naug)= maxNaug;     // sets and returns the maximum size of augmented dataset
+  (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
   cmatrix newmarker;
   vector newy;
@@ -322,10 +323,10 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
     iaug++;
     saveiaug=iaug;
   }
-  *Naug= iaug;
-  *Nind= newNind;
-  *augmarker= newcmatrix(Nmark, *Naug);
-  *augy= newvector(*Naug);
+  *Naug = iaug;
+  *Nind = newNind;
+  *augmarker = newcmatrix(Nmark, *Naug);
+  *augy = newvector(*Naug);
   *augind = newivector(*Naug);
   for (int i=0; i<(*Naug); i++) {
     (*augy)[i]= newy[i];
