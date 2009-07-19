@@ -50,16 +50,18 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   matrix XtWX;
   cmatrix Xt;
   vector XtWY;
-  int dimx=1, j, jj;
+  unsigned int dimx=1;
+  int j, jj;
   for (int j=0; j<Nmark; j++)
     if (cofactor[j]=='1') dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
     else if (cofactor[j]=='2') {
       dimx+=1;
     }
 
-  XtWX= newmatrix(dimx+2, dimx+2);
-  Xt= newcmatrix(dimx+2, Naug);
-  XtWY= newvector(dimx+2);
+  const int dimx_alloc = dimx+2;
+  XtWX= newmatrix(dimx_alloc, dimx_alloc);
+  Xt  = newcmatrix(dimx_alloc, Naug);
+  XtWY= newvector(dimx_alloc);
   dimx=1;
   for (j=0; j<Nmark; j++)
     if ((cofactor[j]=='1')||(cofactor[j]=='3')) dimx+= (dominance=='y' ? 2 : 1);
@@ -304,11 +306,11 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   Free(indL);
   Free(indx);
   Free(xtQTL);
-  delmatrix(XtWX);
-  delcmatrix(Xt);
+  delmatrix(XtWX,dimx_alloc);
+  delcmatrix(Xt,dimx_alloc);
   Free(fit);
   Free(resi);
-  Free(XtWY);
+  freevector((void *)XtWY);
   return (double)logL;
 }
 

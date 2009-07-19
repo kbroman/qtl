@@ -193,24 +193,23 @@ void freevector(void *v) {
   Free(v);
 }
 
-void freematrix(void **m) {
-  int rows = sizeof(m)/(sizeof(void *));
+void freematrix(void **m, size_t rows) {
   for (int i=0; i<rows; i++) {
     Free(m[i]);
   }
   Free(m);
 }
 
-void delmatrix(matrix m) {
-  freematrix((void**)m);
+void delmatrix(matrix m, size_t rows) {
+  freematrix((void**)m,rows);
 }
 
-void delMmatrix(Mmatrix m) {
-  freematrix((void**)m);
+void delMmatrix(Mmatrix m, size_t rows) {
+  freematrix((void**)m,rows);
 }
 
-void delcmatrix(cmatrix m) {
-  freematrix((void **)m);
+void delcmatrix(cmatrix m, size_t rows) {
+  freematrix((void **)m,rows);
 }
 
 void copyvector(vector vsource, vector vdestination, int dim) {

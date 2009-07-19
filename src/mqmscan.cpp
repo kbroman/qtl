@@ -323,7 +323,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     if  (diff>1)
       for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
   }
-  delcmatrix(newmarker);
+  delcmatrix(newmarker,Nmark);
   Free(newy);
   Free(newind);
   Free(newweight);
@@ -396,7 +396,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(r);
   Free(informationcontent);
   Free(Frun);
-  delcmatrix(marker);
+  delcmatrix(marker,Nmark+1);
   Free(y);
   Free(chr);
   Free(selcofactor);
@@ -425,7 +425,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   cvector cofactor;
   vector mapdistance;
 
-  markers= newcmatrix(Nmark,Nind);
+  markers= newcmatrix(Nmark+1,Nind);
   f1genotype = newivector(Nmark);
   cofactor= newcvector(Nmark);
   mapdistance= newvector(Nmark);
@@ -496,7 +496,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     }
   }
   //Rprintf("Starting Cleanup\n");
-  delcmatrix(markers);
+  delcmatrix(markers,Nmark+1);
   Free(f1genotype);
   Free(cofactor);
   Free(mapdistance);

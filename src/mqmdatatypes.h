@@ -55,11 +55,11 @@ Mmatrix newMmatrix(int rows, int cols,int depth);
 void   printmatrix(matrix m, int rows, int cols);
 void   printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);
-void freematrix(void **m);
+void freematrix(void **m, size_t rows);
 void freevector(void *v);
-void delmatrix(matrix m);
-void delMmatrix(Mmatrix m);
-void delcmatrix(cmatrix m);
+void delmatrix(matrix m, size_t rows);
+void delMmatrix(Mmatrix m, size_t rows);
+void delcmatrix(cmatrix m, size_t rows);
 void copyvector(vector vsource, vector vdestination, int dim);
 
 #ifdef __cplusplus

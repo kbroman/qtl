@@ -451,8 +451,8 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delcmatrix(new_markers);
-    delcmatrix(markers);
+    delcmatrix(new_markers,*Nmark);
+    delcmatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);
@@ -488,8 +488,8 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delcmatrix(new_markers);
-    delcmatrix(markers);
+    delcmatrix(new_markers,*Nmark);
+    delcmatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);
