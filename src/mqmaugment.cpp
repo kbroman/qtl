@@ -76,8 +76,8 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;
   int newNind = nind0;
-  for (int i=0; i<(nind0); i++) {
-    newind[iaug]=i-((nind0)-newNind);  // index of individuals
+  for (int i=0; i<nind0; i++) {
+    newind[iaug]=i-(nind0-newNind);  // index of individuals
     newy[iaug]= y[i];               // cvariance
     newprob[iaug]= 1.0;
     probmax= 1.0;
@@ -112,7 +112,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -127,7 +127,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '2';
@@ -161,7 +161,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -176,7 +176,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '0';
@@ -217,7 +217,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
@@ -228,7 +228,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '2';
@@ -244,7 +244,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
@@ -255,7 +255,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -270,7 +270,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob2)<neglect) {
@@ -281,7 +281,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((nind0)-newNind);
+                newind[iaug]=i-(nind0-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '0';
@@ -382,7 +382,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   reorg_pheno(*Nmark, 1, dist, &Dist);
 
   reorg_int(*maxaug, *Nmark, auggeno, &NEW);
-  reorg_int((*maxiaug)*(nind0), 1, augIND, &NEWIND);
+  reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
   reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
 
   //Change all the markers from R/qtl format to MQM internal
