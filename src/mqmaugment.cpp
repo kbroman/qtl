@@ -77,7 +77,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;
   int newNind = nind0;
-  int saveiaug = 0;                    // previous iaug
+  int previaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
     // ---- for every individual:
     const int dropped = nind0-newNind;
@@ -90,9 +90,9 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
       newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
     for (int j=0; j<Nmark; j++) {
       // ---- for every marker:
-      const int maxiaug = iaug;
-      if ((maxiaug-saveiaug)<=imaxNaug)  // within bounds for individual?
-        for (int ii=saveiaug; ii<=maxiaug; ii++) {
+      const int maxiaug = iaug;          // fixate maxiaug
+      if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
+        for (int ii=previaug; ii<=maxiaug; ii++) {
           if (newmarker[j][ii]=='3') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
@@ -109,7 +109,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
-            if (ii==saveiaug) probmax = (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
+            if (ii==previaug) probmax = (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
             if (prob1>prob2) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
@@ -158,7 +158,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
 
-            if (ii==saveiaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
+            if (ii==previaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
             if (prob1>prob0) {
               if (probmax/(newprob[ii]*prob0)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
@@ -210,7 +210,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
-            if (ii==saveiaug) {
+            if (ii==previaug) {
               if ((prob2>prob1)&&(prob2>prob0)) probmax= newprob[ii]*prob2;
               else if ((prob1>prob0)&&(prob1>prob2)) probmax= newprob[ii]*prob1;
               else probmax= newprob[ii]*prob0;
@@ -313,17 +313,17 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             goto bailout;
           }
         }
-      if ((iaug-saveiaug+1)>imaxNaug) {
+      if ((iaug-previaug+1)>imaxNaug) {
         newNind-= 1;
-        iaug= saveiaug-1;
-        if (verbose) Rprintf("INFO: Individual %d is eliminated\n", i);
+        iaug= previaug-1;
+        if (verbose) Rprintf("INFO: Individual %d has been dropped\n", i);
       }
       sumprob= 0.0;
-      for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
-      for (int ii=saveiaug; ii<=iaug; ii++) newprob[ii]/= sumprob;
+      for (int ii=previaug; ii<=iaug; ii++) sumprob+= newprob[ii];
+      for (int ii=previaug; ii<=iaug; ii++) newprob[ii]/= sumprob;
     }
     if (++iaug >= maxNaug) goto bailout;
-    saveiaug=iaug;
+    previaug=iaug;
   }
   *Naug = iaug;
   *Nind = newNind;
