@@ -64,7 +64,6 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
 
   int iaug     = 0;     // iaug keeps track of current augmented individual
   // int maxiaug  = 0;     // highest reached(?)
-  // int saveiaug = 0;     // previous iaug
   // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
@@ -78,6 +77,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;
   int newNind = nind0;
+  int saveiaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
     // ---- for every individual:
     const int dropped = nind0-newNind;
@@ -86,7 +86,6 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
     newy[iaug]    = y[i];              // cvariance
     newprob[iaug] = 1.0;
     double probmax = 1.0;
-    int saveiaug = 0;                  // previous iaug
     for (int j=0; j<Nmark; j++) 
       newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
     for (int j=0; j<Nmark; j++) {
