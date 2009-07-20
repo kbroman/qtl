@@ -27,10 +27,11 @@
 #include "mqm.h"
 
 /*
- * Augment/expand the dataset by adding additional marker positions. Inputs are
- * number of markers Nmark, the marker matrix, position vector, recombinations
- * r.  The neglect parameter drops individuals from the dataset (the value
- * should be between 1..n).
+ * Augment/expand the dataset by adding additional (likely) genotypes.
+ *
+ * Inputs are number of markers Nmark, the marker matrix, position vector,
+ * recombinations r.  The neglect parameter drops individuals from the dataset
+ * (the value should be between 1..n).
  *
  * A new markerset is created and returned in augmarker, likewise the
  * phenotypes are returned in augy and individuals in augind. Augmentation
@@ -97,7 +98,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
           if (newmarker[j][ii]=='3') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob1left= start_prob(crosstype, '1');
               prob2left= start_prob(crosstype, '2');
             } else {
@@ -146,7 +147,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
           } else if (newmarker[j][ii]=='4') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, '0');
               prob1left= start_prob(crosstype, '1');
             } else {
@@ -192,10 +193,10 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
               newprob[ii]*= prob0left;
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
-          } else if (newmarker[j][ii]=='9') {
+          } else if (newmarker[j][ii]==MMISSING) {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, '0');
               prob1left= start_prob(crosstype, '1');
               prob2left= start_prob(crosstype, '2');
@@ -299,7 +300,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else { // newmarker[j][ii] is observed
 
-            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
               prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
@@ -410,16 +411,16 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   for (int j=0; j<(*Nmark); j++) {
     if (j==0) {
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     } else if (j==(*Nmark-1)) {
       if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) {
       if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
       else position[j]=MRIGHT;
     } else {
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     }
   }
 

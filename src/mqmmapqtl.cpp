@@ -170,7 +170,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
           nextinterval= 'y';
           moveQTL= stepmin;
         }
-      } else if (position[j]==MUNKNOWN) {
+      } else if (position[j]==MUNLINKED) {
         QTLposition[j]= MLEFT;
         QTLposition[j+1]= MRIGHT; //position[j] ?? MRIGHT ?
         QTLr[j]= 0.0;

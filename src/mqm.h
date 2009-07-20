@@ -42,11 +42,16 @@
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
 
-const unsigned char MLEFT='L';
-const unsigned char MRIGHT='R';
-const unsigned char MMIDDLE='M';
-const unsigned char MUNKNOWN='U';
-
-const unsigned char MMISSING='9';
+const unsigned char MLEFT     ='L';
+const unsigned char MRIGHT    ='R';
+const unsigned char MMIDDLE   ='M';
+const unsigned char MUNLINKED ='U';
+ 
+const unsigned char MA       = '0';  // Homozygous parent A
+const unsigned char MB       = '1';  // Homyzygous parent B
+const unsigned char MH       = '2';  // Heterozygous
+const unsigned char MNOTA    = '3';  // Not A
+const unsigned char MNOTB    = '4';  // Not B 
+const unsigned char MMISSING = '9';  // Uknown
 
 #endif

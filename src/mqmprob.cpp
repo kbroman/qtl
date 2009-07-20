@@ -136,7 +136,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
 
 double probright(char c, int jloc, cvector imarker, vector r, cvector position, char crosstype) {
   double nrecom, prob0, prob1, prob2;
-  if ((position[jloc]==MRIGHT)||(position[jloc]==MUNKNOWN)) {
+  if ((position[jloc]==MRIGHT)||(position[jloc]==MUNLINKED)) {
     //We're at the end of a chromosome or an unknown marker
     return 1.0;
   }
@@ -199,7 +199,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position, 
       }
       return prob0*probright('0', jloc+1, imarker, r, position, crosstype) + prob1*probright('1', jloc+1, imarker, r, position, crosstype);
     } else {
-      // Unknown next marker so estimate all posibilities (imarker[j+1]=='9')
+      // Unknown next marker so estimate all posibilities (imarker[j+1]==MMISSING)
       if (c=='0') {
         //Observed marker is an A
         prob0= (1.0-r[jloc])*(1.0-r[jloc]);

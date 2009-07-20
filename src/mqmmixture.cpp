@@ -64,7 +64,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
       /* calculate weights = conditional genotype probabilities */
       for (i=0; i<Naug; i++) weight[i]=1.0;
       for (j=0; j<Nmark; j++) {
-        if ((position[j]==MLEFT)||(position[j]==MUNKNOWN))
+        if ((position[j]==MLEFT)||(position[j]==MUNLINKED))
           for (i=0; i<Naug; i++)
             if (marker[j][i]=='1') weight[i]*= 0.5;
             else weight[i]*= 0.25;
@@ -174,7 +174,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       for (i=0; i<Naug; i++)
         Ploci[i]*= Pscale;
       //Here we have ProbLeft
-      if ((position[j]==MLEFT)||(position[j]==MUNKNOWN)) {
+      if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
           calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
           Ploci[i]*= calc_i;
@@ -196,7 +196,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         Ploci[i+2*Naug]*= Pscale;
         // only for computational accuracy; see use of logP
       }
-      if ((position[j]==MLEFT)||(position[j]==MUNKNOWN)) {
+      if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         //Here we don't have any f2 dependancies anymore by using the prob function
         if (cofactor[j]<='1')
           for (i=0; i<Naug; i++) {

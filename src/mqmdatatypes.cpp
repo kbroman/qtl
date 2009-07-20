@@ -71,7 +71,7 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstyp
   // Change all the genotypes from default R/qtl format to MQM internal
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
-      markers[i][j] = '9';
+      markers[i][j] = MMISSING;
       if (Geno[i][j] == 1) {				//AA
         markers[i][j] = '0';
       }

@@ -123,21 +123,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
-      // first marker is MLEFT; if single marker MUNKNOWN
+      // first marker is MLEFT; if single marker MUNLINKED
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     } else if (j==(Nmark-1)) {
-      // Last marker is MRIGHT; if single marker MUNKNOWN
+      // Last marker is MRIGHT; if single marker MUNLINKED
       if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) { // marker on the left is on the same chromosome
       //  MMIDDLE the marker to the right is on the same chromosome, otherwise MRIGHT
       if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
       else position[j]=MRIGHT;
     } else { // marker on the left is not on the same chromosome
-      // MLEFT if marker to the right is on the same chromosome, otherwise MUNKNOWN
+      // MLEFT if marker to the right is on the same chromosome, otherwise MUNLINKED
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     }
   }
 
@@ -216,16 +216,16 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     r[j]= 999.0;
     if (j==0) {
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     } else if (j==(Nmark-1)) {
       if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) {
       if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
       else position[j]=MRIGHT;
     } else {
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNKNOWN;
+      else position[j]=MUNLINKED;
     }
   }
   for (int j=0; j<Nmark; j++) {
