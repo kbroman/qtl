@@ -37,8 +37,11 @@
  * halts when the number of individuals maxNaug is reached. Markers are
  * expanded up to imaxNaug.
  *
- * returns 1 on success, 0 on failure. marker, Nind, Naug, augy, augind are 
- * changed to reflect the newly augmented dataset.
+ * returns 1 on success, 0 on failure. marker, Nind, Naug, augy, augind are
+ * changed to reflect the newly augmented dataset. Nind may be smaller because
+ * of dropped individuals.
+ *
+ * FIXME: increasing the buffers for augmentation can automatic
  */
 
 int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
@@ -54,19 +57,18 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
   cvector imarker;
   ivector newind;
 
-  newmarker= newcmatrix(Nmark+1, maxNaug);
-  newy= newvector(maxNaug);
-  newind= newivector(maxNaug);
-  imarker= newcvector(Nmark);
+  newmarker = newcmatrix(Nmark+1, maxNaug);  // augmented marker matrix
+  newy      = newvector(maxNaug);            // phenotypes
+  newind    = newivector(maxNaug);           // individuals index
+  imarker   = newcvector(Nmark);             
 
-  int iaug = 0;     // iaug keeps track of current augmented individual
-  int maxiaug = 0;  // highest reached(?)
-  int saveiaug = 0; // previous iaug
+  int iaug     = 0;     // iaug keeps track of current augmented individual
+  int maxiaug  = 0;     // highest reached(?)
+  int saveiaug = 0;     // previous iaug
   // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
   prob0right, prob1right, prob2right;
-  double probmax;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
   if (verbose) {
@@ -77,10 +79,13 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
   const int nind0 = *Nind;
   int newNind = nind0;
   for (int i=0; i<nind0; i++) {
-    newind[iaug]=i-(nind0-newNind);  // index of individuals
-    newy[iaug]= y[i];               // cvariance
-    newprob[iaug]= 1.0;
-    probmax= 1.0;
+    // ---- for every individual:
+    const int dropped = nind0-newNind;
+    const int iidx = i - dropped;
+    newind[iaug]  = iidx;            // iidx corrects for dropped individuals
+    newy[iaug]    = y[i];            // cvariance
+    newprob[iaug] = 1.0;
+    double probmax = 1.0;
     for (int j=0; j<Nmark; j++) newmarker[j][iaug]=marker[j][i];
     for (int j=0; j<Nmark; j++) {
       maxiaug=iaug;
@@ -102,7 +107,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
-            if (ii==saveiaug) probmax= (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
+            if (ii==saveiaug) probmax = (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
             if (prob1>prob2) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
@@ -112,7 +117,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -127,14 +132,14 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '2';
               newprobmax[ii]= newprob[ii]*prob2;
               newprob[ii]*= prob2left;
             }
-            probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
+            probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]=='4') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
@@ -161,7 +166,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -176,7 +181,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '0';
@@ -217,7 +222,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
@@ -228,7 +233,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '2';
@@ -244,7 +249,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
@@ -255,7 +260,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -270,7 +275,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob2)<neglect) {
@@ -281,7 +286,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-(nind0-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '0';
