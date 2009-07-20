@@ -37,7 +37,7 @@ double start_prob(char crosstype, char c) {
   case 'F':  // F2
     return (c=='1' ? 0.5 : 0.25);
     break;
-  case RIGHT:  // RIL
+  case MRIGHT:  // RIL
     return (c=='1' ? 0.0 : 0.5);
     break;
   case 'B':  // BC
@@ -92,7 +92,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
     }
     //Rprintf("after IF\n", j);
     break;
-  case RIGHT:
+  case MRIGHT:
     if (start) {
       return 0.5;
     }
@@ -136,7 +136,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
 
 double probright(char c, int jloc, cvector imarker, vector r, cvector position, char crosstype) {
   double nrecom, prob0, prob1, prob2;
-  if ((position[jloc]==RIGHT)||(position[jloc]==UNKNOWN)) {
+  if ((position[jloc]==MRIGHT)||(position[jloc]==MUNKNOWN)) {
     //We're at the end of a chromosome or an unknown marker
     return 1.0;
   }
@@ -219,7 +219,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position, 
       return prob0*probright('0', jloc+1, imarker, r, position, crosstype) + prob1*probright('1', jloc+1, imarker, r, position, crosstype) + prob2*probright('2', jloc+1, imarker, r, position, crosstype);
     }
     break;
-  case RIGHT:
+  case MRIGHT:
     if (c=='1') {
       return 0.0;
     }

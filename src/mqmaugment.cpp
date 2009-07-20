@@ -93,10 +93,11 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
+          // ---- walk from previous augmented to current augmented genotype
           if (newmarker[j][ii]=='3') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
               prob1left= start_prob(crosstype, '1');
               prob2left= start_prob(crosstype, '2');
             } else {
@@ -145,7 +146,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
           } else if (newmarker[j][ii]=='4') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
               prob0left= start_prob(crosstype, '0');
               prob1left= start_prob(crosstype, '1');
             } else {
@@ -194,7 +195,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
           } else if (newmarker[j][ii]=='9') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
               prob0left= start_prob(crosstype, '0');
               prob1left= start_prob(crosstype, '1');
               prob2left= start_prob(crosstype, '2');
@@ -298,7 +299,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else { // newmarker[j][ii] is observed
 
-            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
+            if ((position[j]==MLEFT||position[j]==MUNKNOWN)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
               prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
@@ -408,24 +409,24 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
   for (int j=0; j<(*Nmark); j++) {
     if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]=LEFT;
-      else position[j]=UNKNOWN;
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNKNOWN;
     } else if (j==(*Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]=RIGHT;
-      else position[j]=UNKNOWN;
+      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
+      else position[j]=MUNKNOWN;
     } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]=MIDDLE;
-      else position[j]=RIGHT;
+      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
+      else position[j]=MRIGHT;
     } else {
-      if (chr[j]==chr[j+1]) position[j]=LEFT;
-      else position[j]=UNKNOWN;
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNKNOWN;
     }
   }
 
   if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
   for (int j=0; j<(*Nmark); j++) {
     r[j]= 999.0;
-    if ((position[j]==LEFT)||(position[j]==MIDDLE)) {
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");

@@ -42,9 +42,11 @@
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
 
-const unsigned char LEFT='L';
-const unsigned char RIGHT='R';
-const unsigned char MIDDLE='M';
-const unsigned char UNKNOWN='U';
+const unsigned char MLEFT='L';
+const unsigned char MRIGHT='R';
+const unsigned char MMIDDLE='M';
+const unsigned char MUNKNOWN='U';
+
+const unsigned char MMISSING='9';
 
 #endif

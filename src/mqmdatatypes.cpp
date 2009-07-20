@@ -62,7 +62,7 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
     cross = 'B';
   }
   if ((*crosstype) == 3) {
-    cross = RIGHT;
+    cross = MRIGHT;
   }
   return cross;
 }
