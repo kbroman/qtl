@@ -30,6 +30,9 @@
 /* regression of trait on multiple cofactors  y=xb+e with weight w
 *							(xtwx)b=(xtw)y
 *							b=inv(xtwx)(xtw)y
+*
+* performs weighted regression of trait on genotype (QTL and cofactors) for
+* augmented data
 */
 
 double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,

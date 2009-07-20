@@ -31,7 +31,9 @@
 /*
  * ML estimation of recombination frequencies via EM; calculation of multilocus
  * genotype probabilities; ignorance of unlikely genotypes. Called by the
- * mqmscan.
+ * mqmscan.  maximum-likelihood estimation of recombination frequencies via the
+ * EM algorithm, using multilocus information (default: the recombination
+ * frequencies are not estimated but taken from mqm.in)
  *
  * When reestimate is 'n' the method is skipped
  */
@@ -133,7 +135,9 @@ double rmixture(cmatrix marker, vector weight, vector r,
 }
 
 
-/* ML estimation of parameters in mixture model via EM;
+/* ML estimation of parameters in mixture model via EM; maximum-likelihood
+ * estimation of parameters in the mixture model via the EM algorithm, using
+ * multilocus information, but assuming known recombination frequencies
 */
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,

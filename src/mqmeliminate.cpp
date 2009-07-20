@@ -36,8 +36,10 @@ using namespace std;
 
 /* backward elimination in regression of trait on multiple cofactors
    routine subX haalt uit matrices voor volledige model de submatrices voor
-   submodellen; matrices XtWX en Xt van volledig model worden genoemd
-   fullxtwx en fullxt; analoog vector XtWY wordt full xtwy genoemd;
+   submodellen; matrices XtWX en Xt van volledig model worden genoemd fullxtwx
+   en fullxt; analoog vector XtWY wordt full xtwy genoemd; selects "important"
+   cofactors in weighted regression of trait on genotype (cofactors) using the
+   augmented data
 */
 double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
                 vector y, vector weight, int* ind, int Naug, double logLfull,

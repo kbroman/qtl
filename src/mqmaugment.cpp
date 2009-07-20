@@ -28,14 +28,22 @@
 
 /*
  * Augment/expand the dataset by adding additional (likely) genotypes.
+ * genotypic marker information is incomplete when
+ *           - marker scores are missing or dominant, or
+ *           - markers are non-segregating but you want to assume a
+ *             segregating QTL on top of this marker (~very closely linked),
+ *             and all likely possible configurations are generated 
  *
  * Inputs are number of markers Nmark, the marker matrix, position vector,
  * recombinations r.  The neglect parameter drops individuals from the dataset
  * (the value should be between 1..n).
  *
+ * The neglect parameter drops genotypes. E.g. for neglect=100  eliminate
+ * genotypes 100 times less likely than the most likely configuration.
+ *
  * A new markerset is created and returned in augmarker, likewise the
  * phenotypes are returned in augy and individuals in augind. Augmentation
- * halts when the number of individuals maxNaug is reached. Markers are
+ * halts when the number of individuals maxNaug is reached. Individuals are
  * expanded up to imaxNaug.
  *
  * returns 1 on success, 0 on failure. marker, Nind, Naug, augy, augind are
@@ -84,7 +92,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
     newind[iaug]  = iidx;              // iidx corrects for dropped individuals
-    newy[iaug]    = y[i];              // cvariance
+    newy[iaug]    = y[i];              // cvariance (phenotype)
     newprob[iaug] = 1.0;
     double probmax = 1.0;
     for (int j=0; j<Nmark; j++) 

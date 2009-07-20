@@ -26,7 +26,10 @@
 
 #include "mqm.h"
 
-/* mapQTL */
+/* 
+ * mapQTL moves a QTL along the chromosome and calculated at each map position
+ * the QTL likelihood. Uses either all cofactors, or selected cofactors only
+ */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, 
               cmatrix marker, cvector position, vector mapdistance, vector y,
               vector r, ivector ind, int Naug, double variance, char
