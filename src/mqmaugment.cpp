@@ -63,8 +63,8 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
   imarker   = newcvector(Nmark);             
 
   int iaug     = 0;     // iaug keeps track of current augmented individual
-  int maxiaug  = 0;     // highest reached(?)
-  int saveiaug = 0;     // previous iaug
+  // int maxiaug  = 0;     // highest reached(?)
+  // int saveiaug = 0;     // previous iaug
   // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
@@ -82,13 +82,16 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
     // ---- for every individual:
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
-    newind[iaug]  = iidx;            // iidx corrects for dropped individuals
-    newy[iaug]    = y[i];            // cvariance
+    newind[iaug]  = iidx;              // iidx corrects for dropped individuals
+    newy[iaug]    = y[i];              // cvariance
     newprob[iaug] = 1.0;
     double probmax = 1.0;
-    for (int j=0; j<Nmark; j++) newmarker[j][iaug]=marker[j][i];
+    int saveiaug = 0;                  // previous iaug
+    for (int j=0; j<Nmark; j++) 
+      newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
     for (int j=0; j<Nmark; j++) {
-      maxiaug=iaug;
+      // ---- for every marker:
+      const int maxiaug = iaug;
       if ((maxiaug-saveiaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=saveiaug; ii<=maxiaug; ii++) {
           if (newmarker[j][ii]=='3') {
