@@ -88,7 +88,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
           if (newmarker[j][ii]=='3') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]=='L'||position[j]=='U')) {
+            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
               prob1left= start_prob(crosstype, '1');
               prob2left= start_prob(crosstype, '2');
             } else {
@@ -137,7 +137,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
           } else if (newmarker[j][ii]=='4') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]=='L'||position[j]=='U')) {
+            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
               prob0left= start_prob(crosstype, '0');
               prob1left= start_prob(crosstype, '1');
             } else {
@@ -186,7 +186,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
           } else if (newmarker[j][ii]=='9') {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]=='L'||position[j]=='U')) {
+            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
               prob0left= start_prob(crosstype, '0');
               prob1left= start_prob(crosstype, '1');
               prob2left= start_prob(crosstype, '2');
@@ -290,7 +290,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else { // newmarker[j][ii] is observed
 
-            if ((position[j]=='L'||position[j]=='U')) {
+            if ((position[j]==LEFT||position[j]==UNKNOWN)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
               prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
@@ -399,24 +399,24 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
   for (int j=0; j<(*Nmark); j++) {
     if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=LEFT;
+      else position[j]=UNKNOWN;
     } else if (j==(*Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
+      if (chr[j]==chr[j-1]) position[j]=RIGHT;
+      else position[j]=UNKNOWN;
     } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
+      if (chr[j]==chr[j+1]) position[j]=MIDDLE;
+      else position[j]=RIGHT;
     } else {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=LEFT;
+      else position[j]=UNKNOWN;
     }
   }
 
   if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
   for (int j=0; j<(*Nmark); j++) {
     r[j]= 999.0;
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==LEFT)||(position[j]==MIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");

@@ -123,21 +123,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
-      // first marker is 'L'; if single marker 'U'
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      // first marker is LEFT; if single marker UNKNOWN
+      if (chr[j]==chr[j+1]) position[j]=LEFT;
+      else position[j]=UNKNOWN;
     } else if (j==(Nmark-1)) {
-      // Last marker is 'R'; if single marker 'U'
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
+      // Last marker is RIGHT; if single marker UNKNOWN
+      if (chr[j]==chr[j-1]) position[j]=RIGHT;
+      else position[j]=UNKNOWN;
     } else if (chr[j]==chr[j-1]) { // marker on the left is on the same chromosome
-      //  'M' the marker to the right is on the same chromosome, otherwise 'R'
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
+      //  MIDDLE the marker to the right is on the same chromosome, otherwise RIGHT
+      if (chr[j]==chr[j+1]) position[j]=MIDDLE;
+      else position[j]=RIGHT;
     } else { // marker on the left is not on the same chromosome
-      // 'L' if marker to the right is on the same chromosome, otherwise 'U'
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      // LEFT if marker to the right is on the same chromosome, otherwise UNKNOWN
+      if (chr[j]==chr[j+1]) position[j]=LEFT;
+      else position[j]=UNKNOWN;
     }
   }
 
@@ -146,7 +146,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==LEFT)||(position[j]==MIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
     }
     //Rprintf("R[j] value: %f\n",r[j]);
@@ -177,21 +177,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       dropj='n';
     } else if ((*cofactor)[j]=='0') {
       dropj='y';
-    } else if (position[j]=='L') {
+    } else if (position[j]==LEFT) {
       // (cofactor[j]!='0') cofactor at non-segregating marker
       // test whether next segregating marker is nearby (<20cM)
       dropj='y';
       if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
-      else if (position[j+1]!='R')
+      else if (position[j+1]!=RIGHT)
         if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+2],11)!=0)) dropj='n';
-    } else if (position[j]=='M') {
+    } else if (position[j]==MIDDLE) {
       dropj='y';
       if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
       else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
-    } else if (position[j]=='R') {
+    } else if (position[j]==RIGHT) {
       dropj='y';
       if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
-      else if (position[j-1]!='L')
+      else if (position[j-1]!=LEFT)
         if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
     }
     if (dropj=='n') {
@@ -215,21 +215,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
     if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=LEFT;
+      else position[j]=UNKNOWN;
     } else if (j==(Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
+      if (chr[j]==chr[j-1]) position[j]=RIGHT;
+      else position[j]=UNKNOWN;
     } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
+      if (chr[j]==chr[j+1]) position[j]=MIDDLE;
+      else position[j]=RIGHT;
     } else {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=LEFT;
+      else position[j]=UNKNOWN;
     }
   }
   for (int j=0; j<Nmark; j++) {
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==LEFT)||(position[j]==MIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");
@@ -280,7 +280,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   //Check if everything still is correct
   for (int j=0; j<Nmark; j++) {
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==LEFT)||(position[j]==MIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");
