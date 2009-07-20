@@ -103,19 +103,19 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
           // ---- walk from previous augmented to current augmented genotype
-          if (newmarker[j][ii]=='3') {
+          if (newmarker[j][ii]==MNOTAA) {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
-              prob1left= start_prob(crosstype, '1');
-              prob2left= start_prob(crosstype, '2');
+              prob1left= start_prob(crosstype, MBB);
+              prob2left= start_prob(crosstype, MH);
             } else {
-              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, '2', crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
             }
 
-            prob1right= probright('1', j, imarker, r, position, crosstype);
-            prob2right= probright('2', j, imarker, r, position, crosstype);
+            prob1right= probright(MBB, j, imarker, r, position, crosstype);
+            prob2right= probright(MH, j, imarker, r, position, crosstype);
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
@@ -123,7 +123,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             if (prob1>prob2) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '2';
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -132,13 +132,13 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '1';
+              newmarker[j][ii]= MBB;
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]= newprob[ii]*prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '1';
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -147,24 +147,24 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '2';
+              newmarker[j][ii]= MH;
               newprobmax[ii]= newprob[ii]*prob2;
               newprob[ii]*= prob2left;
             }
             probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
-          } else if (newmarker[j][ii]=='4') {
+          } else if (newmarker[j][ii]==MNOTBB) {
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
-              prob0left= start_prob(crosstype, '0');
-              prob1left= start_prob(crosstype, '1');
+              prob0left= start_prob(crosstype, MAA);
+              prob1left= start_prob(crosstype, MBB);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, '0', crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
             }
 
-            prob0right= probright('0', j, imarker, r, position, crosstype);
-            prob1right= probright('1', j, imarker, r, position, crosstype);
+            prob0right= probright(MAA, j, imarker, r, position, crosstype);
+            prob1right= probright(MBB, j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
 
@@ -172,7 +172,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             if (prob1>prob0) {
               if (probmax/(newprob[ii]*prob0)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '0';
+                newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -181,13 +181,13 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '1';
+              newmarker[j][ii]= MBB;
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '1';
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -196,7 +196,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '0';
+              newmarker[j][ii]= MAA;
               newprobmax[ii]= newprob[ii]*prob0;
               newprob[ii]*= prob0left;
             }
@@ -205,18 +205,18 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
-              prob0left= start_prob(crosstype, '0');
-              prob1left= start_prob(crosstype, '1');
-              prob2left= start_prob(crosstype, '2');
+              prob0left= start_prob(crosstype, MAA);
+              prob1left= start_prob(crosstype, MBB);
+              prob2left= start_prob(crosstype, MH);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, '0', crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, '2', crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
             }
 
-            prob0right= probright('0', j, imarker, r, position, crosstype);
-            prob1right= probright('1', j, imarker, r, position, crosstype);
-            prob2right= probright('2', j, imarker, r, position, crosstype);
+            prob0right= probright(MAA, j, imarker, r, position, crosstype);
+            prob1right= probright(MBB, j, imarker, r, position, crosstype);
+            prob2right= probright(MH, j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
@@ -228,7 +228,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             if ((prob2>prob1)&&(prob2>prob0)) {
               if (probmax/(newprob[ii]*prob1)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '1';
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -239,7 +239,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '0';
+                newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -248,14 +248,14 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '2';
+              newmarker[j][ii]= MH;
               newprobmax[ii]= newprob[ii]*prob2;
               newprob[ii]*= prob2left;
 
             } else if ((prob1>prob2)&&(prob1>prob0)) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '2';
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -266,7 +266,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '0';
+                newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -275,13 +275,13 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '1';
+              newmarker[j][ii]= MBB;
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '1';
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -292,7 +292,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
               }
               if (probmax/(newprob[ii]*prob2)<neglect) {
                 if (++iaug >= maxNaug) goto bailout;
-                newmarker[j][iaug]= '2';
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
                 for (jj=0; jj<Nmark; jj++) {
@@ -301,7 +301,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '0';
+              newmarker[j][ii]= MAA;
               newprobmax[ii]= newprob[ii]*prob0;
               newprob[ii]*= prob0left;
             }
@@ -454,19 +454,19 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
         NEWPheno[0][j] = new_y[j];
         NEWIND[0][j] = new_ind[j];
         NEW[i][j] = 9;
-        if (new_markers[i][j] == '0') {
+        if (new_markers[i][j] == MAA) {
           NEW[i][j] = 1;
         }
-        if (new_markers[i][j] == '1') {
+        if (new_markers[i][j] == MBB) {
           NEW[i][j] = 2;
         }
-        if (new_markers[i][j] == '2') {  // [karl:] this might need to be changed for RIL
+        if (new_markers[i][j] == MH) {  // [karl:] this might need to be changed for RIL
           NEW[i][j] = 3;
         }
-        if (new_markers[i][j] == '3') {
+        if (new_markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
         }
-        if (new_markers[i][j] == '4') {
+        if (new_markers[i][j] == MNOTBB) {
           NEW[i][j] = 4;
         }
       }
@@ -491,19 +491,19 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
       for (int j=0; j<(*Naug); j++) {
         NEWPheno[0][j] = Pheno[0][j];
         NEW[i][j] = 9;
-        if (markers[i][j] == '0') {
+        if (markers[i][j] == MAA) {
           NEW[i][j] = 1;
         }
-        if (markers[i][j] == '1') {
+        if (markers[i][j] == MBB) {
           NEW[i][j] = 2;
         }
-        if (markers[i][j] == '2') { // [karl:] this might need to be changed for RIL
+        if (markers[i][j] == MH) { // [karl:] this might need to be changed for RIL
           NEW[i][j] = 3;
         }
-        if (markers[i][j] == '3') {
+        if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
         }
-        if (markers[i][j] == '4') {
+        if (markers[i][j] == MNOTBB) {
           NEW[i][j] = 4;
         }
       }

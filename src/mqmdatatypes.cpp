@@ -67,28 +67,31 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
   return cross;
 }
 
+/*
+ * Change all the genotypes from default R/qtl format to MQM internal
+ */
+
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
-  // Change all the genotypes from default R/qtl format to MQM internal
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
       markers[i][j] = MMISSING;
       if (Geno[i][j] == 1) {				//AA
-        markers[i][j] = '0';
+        markers[i][j] = MAA;
       }
       if (Geno[i][j] == 2) {				//AB
         // [karl:] I think this needs to be changed, but my fix doesn't work.
-        //			  if(crosstype!=3) markers[i][j] = '1'; // non-RIL
-        //			  else markers[i][j] = '2';  // RIL
-        markers[i][j] = '1';
+        //			  if(crosstype!=3) markers[i][j] = MBB; // non-RIL
+        //			  else markers[i][j] = MH;  // RIL
+        markers[i][j] = MBB;
       }
       if (Geno[i][j] == 3) {				//BB
-        markers[i][j] = '2';
+        markers[i][j] = MH;
       }
-      if (Geno[i][j] == 4) {				//AA of AB
-        markers[i][j] = '4';
+      if (Geno[i][j] == 4) {				//AA or AB
+        markers[i][j] = MNOTBB;
       }
-      if (Geno[i][j] == 5) {				//BB of AB
-        markers[i][j] = '3';
+      if (Geno[i][j] == 5) {				//BB or AB
+        markers[i][j] = MNOTAA;
       }
     }
   }

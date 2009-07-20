@@ -94,13 +94,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   cvector position;
   vector informationcontent;
   //char dominance='n';
-  //char perm_simu='1';
+  //char perm_simu=MBB;
   ivector chr;
   matrix Frun;
   vector r;
   r= newvector(Nmark);
   position= newcvector(Nmark);
-  char REMLorML='0';
+  char REMLorML=MAA;
   char fitQTL='n';
 
   // The chr vector contains the chromosome number for every marker
@@ -113,7 +113,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
 
   if (RMLorML == 1) {
-    REMLorML='1';
+    REMLorML=MBB;
   }
 
   // Create an array of marker positions - each marker is one of LMRU (left,
@@ -175,10 +175,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   for (int j=0; j<Nmark; j++) {
     if (mod(f1genotype[j],11)!=0) {
       dropj='n';
-    } else if ((*cofactor)[j]=='0') {
+    } else if ((*cofactor)[j]==MAA) {
       dropj='y';
     } else if (position[j]==MLEFT) {
-      // (cofactor[j]!='0') cofactor at non-segregating marker
+      // (cofactor[j]!=MAA) cofactor at non-segregating marker
       // test whether next segregating marker is nearby (<20cM)
       dropj='y';
       if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
@@ -202,7 +202,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       r[jj]= r[j];
       position[jj]= position[j];
       jj++;
-    } else if ((*cofactor)[j]=='1') {
+    } else if ((*cofactor)[j]==MBB) {
       if (verbose) {
         Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
       }
@@ -336,9 +336,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   int dimx=1;
   for (int j=0; j<Nmark; j++) {
-    if ((*cofactor)[j]=='1') {
+    if ((*cofactor)[j]==MBB) {
       dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-    } else if ((*cofactor)[j]=='2') {
+    } else if ((*cofactor)[j]==MH) {
       dimx+=1;  /* sex of the mouse */
     }
   }
@@ -369,10 +369,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   // ---- Write output / send it back to R
   //Cofactors that made it to the final model
   for (int j=0; j<Nmark; j++) {
-    if (selcofactor[j]=='1') {
-      (*cofactor)[j]='1';
+    if (selcofactor[j]==MBB) {
+      (*cofactor)[j]=MBB;
     } else {
-      (*cofactor)[j]='0';
+      (*cofactor)[j]=MAA;
     }
   }
   //QTL likelyhood for each location
@@ -439,13 +439,13 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     //receiving mapdistances
     mapdistance[i]=999.0;
     mapdistance[i]=Dist[0][i];
-    cofactor[i] = '0';
+    cofactor[i] = MAA;
     if (Cofactors[0][i] == 1) {
-      cofactor[i] = '1';
+      cofactor[i] = MBB;
       cof_cnt++;
     }
     if (Cofactors[0][i] == 2) {
-      cofactor[i] = '2';
+      cofactor[i] = MH;
       cof_cnt++;
     }
     if (cof_cnt+10 > Nind) {

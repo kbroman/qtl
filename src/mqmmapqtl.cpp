@@ -186,8 +186,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         nextinterval= 'y';
         moveQTL= stepmin;
       }
-      if (nextinterval=='n') { // QTLcofactor[j]= '0';
-        // QTLcofactor[j+1]= '0';
+      if (nextinterval=='n') { // QTLcofactor[j]= MAA;
+        // QTLcofactor[j+1]= MAA;
         for (jj=0; jj<j; jj++) {
           QTLposition[jj]= position[jj];
           QTLr[jj]= r[jj];
@@ -206,35 +206,35 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         // step 2:
         //  Rprintf("DEBUG testing STEP 2");
         if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) {
-          QTLcofactor[j]= '0';
+          QTLcofactor[j]= MAA;
           QTLcofactor[j+1]=
-            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? '0' : selcofactor[j]);
+            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? MAA : selcofactor[j]);
         } else {
-          QTLcofactor[j+1]= '0';
+          QTLcofactor[j+1]= MAA;
           QTLcofactor[j]=
-            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? '0' : selcofactor[j]);
+            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? MAA : selcofactor[j]);
         }
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
           jjj=j+2;
           while (QTLposition[jjj]==MMIDDLE) {
             if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j]))
               QTLcofactor[jjj]=
-                (((QTLmapdistance[jjj]-QTLmapdistance[j])<windowsize) ? '0' : QTLcofactor[jjj]);
+                (((QTLmapdistance[jjj]-QTLmapdistance[j])<windowsize) ? MAA : QTLcofactor[jjj]);
             else
               QTLcofactor[jjj]=
-                (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? '0' : QTLcofactor[jjj]);
+                (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? MAA : QTLcofactor[jjj]);
             jjj++;
           }
           QTLcofactor[jjj]=
-            (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? '0' : QTLcofactor[jjj]);
+            (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? MAA : QTLcofactor[jjj]);
         }
         if ((position[j]==MMIDDLE)||(position[j]==MRIGHT)) {
           jjj=j-1;
           while (QTLposition[jjj]==MMIDDLE) {
-            QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? '0' : QTLcofactor[jjj]);
+            QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? MAA : QTLcofactor[jjj]);
             jjj--;
           }
-          QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? '0' : QTLcofactor[jjj]);
+          QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? MAA : QTLcofactor[jjj]);
         }
 
         // fit no-QTL model at current map position (cofactors only)
@@ -248,24 +248,24 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         }
         //  Rprintf("fitting NO-QTL model\n");
         if (baseNoQTLModel!=0) { // new base no-QTL model
-          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '2';
-          else QTLcofactor[j+1]= '2';
+          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MH;
+          else QTLcofactor[j+1]= MH;
           // Rprintf("INFO: Before base model\n", QTLlikelihood/-2);
           QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, verbose);
           // Rprintf("INFO: log-likelihood of NO QTL model= %f\n", QTLlikelihood/-2);
           weight0[0]= -1.0;
           savebaseNoQTLModel= QTLlikelihood;
-          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '0';
-          else QTLcofactor[j+1]= '0';
+          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MAA;
+          else QTLcofactor[j+1]= MAA;
           for (jj=0; jj<Nloci; jj++) saveQTLcofactor[jj]= QTLcofactor[jj];
         } else
           QTLlikelihood= savebaseNoQTLModel;
 
         // fit QTL-model (plus cofactors) at current map position
-        // '3'= QTL
-        if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= '3';
-        else QTLcofactor[j+1]= '3';
-        if (REMLorML=='1') weight[0]= -1.0;
+        // MNOTAA= QTL
+        if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MNOTAA;
+        else QTLcofactor[j+1]= MNOTAA;
+        if (REMLorML==MBB) weight[0]= -1.0;
         QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
         //this is the place we error at, because the likelyhood is not correct.
         if (QTLlikelihood<-0.05) {
@@ -313,15 +313,15 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   //	dir1= 0.0; // Qq
   //	dir2= 0.0; // QQ
   //	for (int i=0; i<Naug; i++){
-  //		if(QTLloci[j][i]=='0'){
+  //		if(QTLloci[j][i]==MAA){
   //			dir0 += y[i];
   //			cnt0 += 1;
   //		}
-  //		if(QTLloci[j][i]=='1'){
+  //		if(QTLloci[j][i]==MBB){
   //			dir1 += y[i];
   //			cnt1 += 1;
   //		}
-  //		if(QTLloci[j][i]=='2'){
+  //		if(QTLloci[j][i]==MH){
   //			dir2 += y[i];
   //			cnt2 += 1;
   //		}

@@ -68,7 +68,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
       for (j=0; j<Nmark; j++) {
         if ((position[j]==MLEFT)||(position[j]==MUNLINKED))
           for (i=0; i<Naug; i++)
-            if (marker[j][i]=='1') weight[i]*= 0.5;
+            if (marker[j][i]==MBB) weight[i]*= 0.5;
             else weight[i]*= 0.25;
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE))
           for (i=0; i<Naug; i++) {
@@ -90,7 +90,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
           newr= 0.0;
           for (i=0; i<Naug; i++) {
             Nrecom= fabs((double)marker[j][i]-marker[j+1][i]);
-            if ((marker[j][i]=='1')&&(marker[j+1][i]=='1'))
+            if ((marker[j][i]==MBB)&&(marker[j+1][i]==MBB))
               Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
             newr+= Nrecom*weight[i];
           }
@@ -161,10 +161,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   //R_ProcessEvents();
   R_FlushConsole();
 #endif
-  if ((REMLorML=='0')&&(varknown=='n')) {
+  if ((REMLorML==MAA)&&(varknown=='n')) {
 //		Rprintf("INFO: REML\n");
   }
-  if (REMLorML=='1') {
+  if (REMLorML==MBB) {
 //		Rprintf("INFO: ML\n");
     varknown='n';
     biasadj='n';
@@ -180,7 +180,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       //Here we have ProbLeft
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
-          calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
+          calc_i= prob(loci, r, i, j, MBB, crosstype, 1, 0, 1);
           Ploci[i]*= calc_i;
         }
       }
@@ -202,9 +202,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         //Here we don't have any f2 dependancies anymore by using the prob function
-        if (cofactor[j]<='1')
+        if (cofactor[j]<=MBB)
           for (i=0; i<Naug; i++) {
-            calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
+            calc_i= prob(loci, r, i, j, MBB, crosstype, 1, 0, 1);
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
@@ -212,40 +212,40 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         else
           for (i=0; i<Naug; i++) {
             //startvalues for each new chromosome
-            Ploci[i]*= start_prob(crosstype, '0');
-            Ploci[i+Naug]*= start_prob(crosstype, '1');
-            Ploci[i+2*Naug] *= start_prob(crosstype, '2');
+            Ploci[i]*= start_prob(crosstype, MAA);
+            Ploci[i+Naug]*= start_prob(crosstype, MBB);
+            Ploci[i+2*Naug] *= start_prob(crosstype, MH);
           }
-        // QTL='0', '1' or'2'
+        // QTL=MAA, MBB orMH
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-        if ((cofactor[j]<='1')&&(cofactor[j+1]<='1'))
+        if ((cofactor[j]<=MBB)&&(cofactor[j+1]<=MBB))
           for (i=0; i<Naug; i++) {
             calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0);
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
           }
-        else if (cofactor[j]<='1') // locus j+1 == QTL
-          for (i=0; i<Naug; i++) { // QTL=='0' What is the prob of finding an '0' at J=1
-            calc_i = prob(loci, r, i, j, '0', crosstype, 1, 0, 0);
+        else if (cofactor[j]<=MBB) // locus j+1 == QTL
+          for (i=0; i<Naug; i++) { // QTL==MAA What is the prob of finding an MAA at J=1
+            calc_i = prob(loci, r, i, j, MAA, crosstype, 1, 0, 0);
             Ploci[i]*= calc_i;
-            // QTL=='1'
-            calc_i = prob(loci, r, i, j, '1', crosstype, 1, 0, 0);
+            // QTL==MBB
+            calc_i = prob(loci, r, i, j, MBB, crosstype, 1, 0, 0);
             Ploci[i+Naug]*= calc_i;
-            // QTL=='2'
-            calc_i = prob(loci, r, i, j, '2', crosstype, 1, 0, 0);
+            // QTL==MH
+            calc_i = prob(loci, r, i, j, MH, crosstype, 1, 0, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
         else // locus j == QTL
-          for (i=0; i<Naug; i++) { // QTL=='0'
-            calc_i = prob(loci, r, i, j+1, '0', crosstype, 1, -1, 0);
+          for (i=0; i<Naug; i++) { // QTL==MAA
+            calc_i = prob(loci, r, i, j+1, MAA, crosstype, 1, -1, 0);
             Ploci[i]*= calc_i;
-            // QTL=='1'
-            calc_i = prob(loci, r, i, j+1, '1', crosstype, 1, -1, 0);
+            // QTL==MBB
+            calc_i = prob(loci, r, i, j+1, MBB, crosstype, 1, -1, 0);
             Ploci[i+Naug]*= calc_i;
-            // QTL=='2'
-            calc_i = prob(loci, r, i, j+1, '2', crosstype, 1, -1, 0);
+            // QTL==MH
+            calc_i = prob(loci, r, i, j+1, MH, crosstype, 1, -1, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
       }
@@ -314,7 +314,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   }
   //Rprintf("EM Finished\n");
   // bias adjustment after finished ML estimation via EM
-  if ((REMLorML=='0')&&(varknown=='n')) {
+  if ((REMLorML==MAA)&&(varknown=='n')) {
     // RRprintf("Checkpoint_c\n");
     *variance=-1.0;
     biasadj='y';
