@@ -34,7 +34,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
                int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
                *chromo, int *crosstype, int *verbose);
 
-int augdata(cmatrix marker, vector y, cmatrix *augmarker, vector *augy,
+int augdata(const cmatrix marker, const vector y, cmatrix *augmarker, vector *augy,
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position,
             vector r, const int maxNaug, const int imaxNaug, const double neglect, 

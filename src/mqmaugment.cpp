@@ -37,17 +37,16 @@
  * halts when the number of individuals maxNaug is reached. Markers are
  * expanded up to imaxNaug.
  *
- * returns 1 on success, 0 on failure.
+ * returns 1 on success, 0 on failure. marker, Nind, Naug, augy, augind are 
+ * changed to reflect the newly augmented dataset.
  */
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, 
+int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
-            const cvector position,
-            vector r, const int maxNaug, const int imaxNaug, const double neglect, 
-            const char crosstype, const int verbose) {
+            const cvector position, vector r, const int maxNaug, const int imaxNaug, 
+            const double neglect, const char crosstype, const int verbose) {
   int retvalue = 0;
   int jj;
-  int newNind=(*Nind);
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
   cmatrix newmarker;
@@ -60,23 +59,25 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
   newind= newivector(maxNaug);
   imarker= newcvector(Nmark);
 
-  int iaug =0;      // iaug keeps track of current augmented individual
-  int maxiaug =0;   // highest reached(?)
+  int iaug = 0;     // iaug keeps track of current augmented individual
+  int maxiaug = 0;  // highest reached(?)
   int saveiaug = 0; // previous iaug
+  // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
   prob0right, prob1right, prob2right;
   double probmax;
-  vector newprob, newprobmax;
-  newprob= newvector(maxNaug);
-  newprobmax= newvector(maxNaug);
+  vector newprob = newvector(maxNaug);
+  vector newprobmax = newvector(maxNaug);
   if (verbose) {
     Rprintf("INFO: Crosstype determined by the algorithm:%c:\n", crosstype);
     Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
   }
   // ---- foreach individual create one in the newmarker matrix
-  for (int i=0; i<(*Nind); i++) {
-    newind[iaug]=i-((*Nind)-newNind);  // index of individuals
+  const int nind0 = *Nind;
+  int newNind = nind0;
+  for (int i=0; i<(nind0); i++) {
+    newind[iaug]=i-((nind0)-newNind);  // index of individuals
     newy[iaug]= y[i];               // cvariance
     newprob[iaug]= 1.0;
     probmax= 1.0;
@@ -111,7 +112,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -126,7 +127,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '2';
@@ -160,7 +161,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -175,7 +176,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '0';
@@ -216,7 +217,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
@@ -227,7 +228,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '2';
@@ -243,7 +244,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
@@ -254,7 +255,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '1';
@@ -269,7 +270,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob2)<neglect) {
@@ -280,7 +281,7 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=i-((nind0)-newNind);
                 newy[iaug]=y[i];
               }
               newmarker[j][ii]= '0';
@@ -357,7 +358,8 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   int **Chromo;
   double **NEWPheno;
   int **NEWIND;
-  int prior = *Nind;
+  const int nind0 = *Nind;
+  int prior = nind0;
 
   if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
   ivector new_ind;
@@ -366,7 +368,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   cmatrix markers, new_markers;
   ivector chr;
 
-  markers= newcmatrix(*Nmark, *Nind);
+  markers= newcmatrix(*Nmark, nind0);
   new_markers= newcmatrix(*Nmark, *maxaug);
   r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
@@ -374,13 +376,13 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   chr= newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
-  reorg_geno(*Nind, *Nmark, geno, &Geno);
+  reorg_geno(nind0, *Nmark, geno, &Geno);
   reorg_int(*Nmark, 1, chromo, &Chromo);
-  reorg_pheno(*Nind, *Npheno, pheno, &Pheno);
+  reorg_pheno(nind0, *Npheno, pheno, &Pheno);
   reorg_pheno(*Nmark, 1, dist, &Dist);
 
   reorg_int(*maxaug, *Nmark, auggeno, &NEW);
-  reorg_int((*maxiaug)*(*Nind), 1, augIND, &NEWIND);
+  reorg_int((*maxiaug)*(nind0), 1, augIND, &NEWIND);
   reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
 
   //Change all the markers from R/qtl format to MQM internal
@@ -461,13 +463,13 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
     if (*verbose) {
       Rprintf("INFO: Data augmentation finished succesfull\n");
       Rprintf("# Unique individuals before augmentation:%d\n", prior);
-      Rprintf("# Unique selected individuals:%d\n", *Nind);
+      Rprintf("# Unique selected individuals:%d\n", nind0);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
     }
   } else {
     //Unsuccessfull data augmentation exit
-    *Naug = *Nind;
+    *Naug = nind0;
     for (int i=0; i<(*Nmark); i++) {
       for (int j=0; j<(*Naug); j++) {
         NEWPheno[0][j] = Pheno[0][j];
