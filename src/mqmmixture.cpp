@@ -31,7 +31,9 @@
 /*
  * ML estimation of recombination frequencies via EM; calculation of multilocus
  * genotype probabilities; ignorance of unlikely genotypes. Called by the
- * mqmscan.
+ * mqmscan.  maximum-likelihood estimation of recombination frequencies via the
+ * EM algorithm, using multilocus information (default: the recombination
+ * frequencies are not estimated but taken from mqm.in)
  *
  * When reestimate is 'n' the method is skipped
  */
@@ -64,11 +66,11 @@ double rmixture(cmatrix marker, vector weight, vector r,
       /* calculate weights = conditional genotype probabilities */
       for (i=0; i<Naug; i++) weight[i]=1.0;
       for (j=0; j<Nmark; j++) {
-        if ((position[j]=='L')||(position[j]=='U'))
+        if ((position[j]==MLEFT)||(position[j]==MUNLINKED))
           for (i=0; i<Naug; i++)
-            if (marker[j][i]=='1') weight[i]*= 0.5;
+            if (marker[j][i]==MH) weight[i]*= 0.5;
             else weight[i]*= 0.25;
-        if ((position[j]=='L')||(position[j]=='M'))
+        if ((position[j]==MLEFT)||(position[j]==MMIDDLE))
           for (i=0; i<Naug; i++) {
             double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0, 0);
             weight[i]*=calc_i;
@@ -84,15 +86,15 @@ double rmixture(cmatrix marker, vector weight, vector r,
         weight[i]/=indweight[ind[i]];
       }
       for (j=0; j<Nmark; j++) {
-        if ((position[j]=='L')||(position[j]=='M')) {
+        if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
           newr= 0.0;
           for (i=0; i<Naug; i++) {
             Nrecom= fabs((double)marker[j][i]-marker[j+1][i]);
-            if ((marker[j][i]=='1')&&(marker[j+1][i]=='1'))
+            if ((marker[j][i]==MH)&&(marker[j+1][i]==MH))
               Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
             newr+= Nrecom*weight[i];
           }
-          if (reestimate=='y' && position[j]!='R') { //only update if it isn't the last marker of a chromosome ;)
+          if (reestimate=='y' && position[j]!=MRIGHT) { //only update if it isn't the last marker of a chromosome ;)
             oldr=r[j];
             r[j]= newr/(2.0*Nind);
             rdelta+=pow(r[j]-oldr, 2.0);
@@ -106,11 +108,11 @@ double rmixture(cmatrix marker, vector weight, vector r,
     //Rprintf("INFO: Reestimate? %c\n", reestimate);
     //Rprintf("INFO: looping over all markers %d\n", Nmark);
     for (j=0; j<Nmark; j++) {
-      if (position[j+1]=='R') {
+      if (position[j+1]==MRIGHT) {
         last_step = (*mapdistance)[j+1]-(*mapdistance)[j];
       }
-      if (position[j]!='L') {
-        if (position[j]!='R') {
+      if (position[j]!=MLEFT) {
+        if (position[j]!=MRIGHT) {
           (*mapdistance)[j]= -50*log(1-2.0*r[j])+(*mapdistance)[j-1];
         } else {
           (*mapdistance)[j]= (*mapdistance)[j-1]+last_step;
@@ -133,7 +135,9 @@ double rmixture(cmatrix marker, vector weight, vector r,
 }
 
 
-/* ML estimation of parameters in mixture model via EM;
+/* ML estimation of parameters in mixture model via EM; maximum-likelihood
+ * estimation of parameters in the mixture model via the EM algorithm, using
+ * multilocus information, but assuming known recombination frequencies
 */
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
@@ -157,10 +161,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   //R_ProcessEvents();
   R_FlushConsole();
 #endif
-  if ((REMLorML=='0')&&(varknown=='n')) {
+  if ((REMLorML==MAA)&&(varknown=='n')) {
 //		Rprintf("INFO: REML\n");
   }
-  if (REMLorML=='1') {
+  if (REMLorML==MH) {
 //		Rprintf("INFO: ML\n");
     varknown='n';
     biasadj='n';
@@ -174,13 +178,13 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       for (i=0; i<Naug; i++)
         Ploci[i]*= Pscale;
       //Here we have ProbLeft
-      if ((position[j]=='L')||(position[j]=='U')) {
+      if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
-          calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
+          calc_i= prob(loci, r, i, j, MH, crosstype, 1, 0, 1);
           Ploci[i]*= calc_i;
         }
       }
-      if ((position[j]=='L')||(position[j]=='M')) {
+      if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         for (i=0; i<Naug; i++) {
           calc_i = prob(loci, r, i, j, loci[j+1][i], 'F', 0, 0, 0);
           Ploci[i]*= calc_i;
@@ -196,11 +200,11 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         Ploci[i+2*Naug]*= Pscale;
         // only for computational accuracy; see use of logP
       }
-      if ((position[j]=='L')||(position[j]=='U')) {
+      if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         //Here we don't have any f2 dependancies anymore by using the prob function
-        if (cofactor[j]<='1')
+        if (cofactor[j]<=MH)
           for (i=0; i<Naug; i++) {
-            calc_i= prob(loci, r, i, j, '1', crosstype, 1, 0, 1);
+            calc_i= prob(loci, r, i, j, MH, crosstype, 1, 0, 1);
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
@@ -208,40 +212,40 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         else
           for (i=0; i<Naug; i++) {
             //startvalues for each new chromosome
-            Ploci[i]*= start_prob(crosstype, '0');
-            Ploci[i+Naug]*= start_prob(crosstype, '1');
-            Ploci[i+2*Naug] *= start_prob(crosstype, '2');
+            Ploci[i]*= start_prob(crosstype, MAA);
+            Ploci[i+Naug]*= start_prob(crosstype, MH);
+            Ploci[i+2*Naug] *= start_prob(crosstype, MBB);
           }
-        // QTL='0', '1' or'2'
+        // QTL=MAA, MH orMBB
       }
-      if ((position[j]=='L')||(position[j]=='M')) {
-        if ((cofactor[j]<='1')&&(cofactor[j+1]<='1'))
+      if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
+        if ((cofactor[j]<=MH)&&(cofactor[j+1]<=MH))
           for (i=0; i<Naug; i++) {
             calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0);
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
           }
-        else if (cofactor[j]<='1') // locus j+1 == QTL
-          for (i=0; i<Naug; i++) { // QTL=='0' What is the prob of finding an '0' at J=1
-            calc_i = prob(loci, r, i, j, '0', crosstype, 1, 0, 0);
+        else if (cofactor[j]<=MH) // locus j+1 == QTL
+          for (i=0; i<Naug; i++) { // QTL==MAA What is the prob of finding an MAA at J=1
+            calc_i = prob(loci, r, i, j, MAA, crosstype, 1, 0, 0);
             Ploci[i]*= calc_i;
-            // QTL=='1'
-            calc_i = prob(loci, r, i, j, '1', crosstype, 1, 0, 0);
+            // QTL==MH
+            calc_i = prob(loci, r, i, j, MH, crosstype, 1, 0, 0);
             Ploci[i+Naug]*= calc_i;
-            // QTL=='2'
-            calc_i = prob(loci, r, i, j, '2', crosstype, 1, 0, 0);
+            // QTL==MBB
+            calc_i = prob(loci, r, i, j, MBB, crosstype, 1, 0, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
         else // locus j == QTL
-          for (i=0; i<Naug; i++) { // QTL=='0'
-            calc_i = prob(loci, r, i, j+1, '0', crosstype, 1, -1, 0);
+          for (i=0; i<Naug; i++) { // QTL==MAA
+            calc_i = prob(loci, r, i, j+1, MAA, crosstype, 1, -1, 0);
             Ploci[i]*= calc_i;
-            // QTL=='1'
-            calc_i = prob(loci, r, i, j+1, '1', crosstype, 1, -1, 0);
+            // QTL==MH
+            calc_i = prob(loci, r, i, j+1, MH, crosstype, 1, -1, 0);
             Ploci[i+Naug]*= calc_i;
-            // QTL=='2'
-            calc_i = prob(loci, r, i, j+1, '2', crosstype, 1, -1, 0);
+            // QTL==MBB
+            calc_i = prob(loci, r, i, j+1, MBB, crosstype, 1, -1, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
       }
@@ -310,7 +314,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   }
   //Rprintf("EM Finished\n");
   // bias adjustment after finished ML estimation via EM
-  if ((REMLorML=='0')&&(varknown=='n')) {
+  if ((REMLorML==MAA)&&(varknown=='n')) {
     // RRprintf("Checkpoint_c\n");
     *variance=-1.0;
     biasadj='y';

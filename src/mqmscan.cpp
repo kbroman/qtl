@@ -94,13 +94,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   cvector position;
   vector informationcontent;
   //char dominance='n';
-  //char perm_simu='1';
+  //char perm_simu=MH;
   ivector chr;
   matrix Frun;
   vector r;
   r= newvector(Nmark);
   position= newcvector(Nmark);
-  char REMLorML='0';
+  char REMLorML=MAA;
   char fitQTL='n';
 
   // The chr vector contains the chromosome number for every marker
@@ -113,7 +113,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
 
   if (RMLorML == 1) {
-    REMLorML='1';
+    REMLorML=MH;
   }
 
   // Create an array of marker positions - each marker is one of LMRU (left,
@@ -123,21 +123,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
-      // first marker is 'L'; if single marker 'U'
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      // first marker is MLEFT; if single marker MUNLINKED
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNLINKED;
     } else if (j==(Nmark-1)) {
-      // Last marker is 'R'; if single marker 'U'
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
+      // Last marker is MRIGHT; if single marker MUNLINKED
+      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
+      else position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) { // marker on the left is on the same chromosome
-      //  'M' the marker to the right is on the same chromosome, otherwise 'R'
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
+      //  MMIDDLE the marker to the right is on the same chromosome, otherwise MRIGHT
+      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
+      else position[j]=MRIGHT;
     } else { // marker on the left is not on the same chromosome
-      // 'L' if marker to the right is on the same chromosome, otherwise 'U'
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      // MLEFT if marker to the right is on the same chromosome, otherwise MUNLINKED
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNLINKED;
     }
   }
 
@@ -146,7 +146,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
     }
     //Rprintf("R[j] value: %f\n",r[j]);
@@ -175,23 +175,23 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   for (int j=0; j<Nmark; j++) {
     if (mod(f1genotype[j],11)!=0) {
       dropj='n';
-    } else if ((*cofactor)[j]=='0') {
+    } else if ((*cofactor)[j]==MAA) {
       dropj='y';
-    } else if (position[j]=='L') {
-      // (cofactor[j]!='0') cofactor at non-segregating marker
+    } else if (position[j]==MLEFT) {
+      // (cofactor[j]!=MAA) cofactor at non-segregating marker
       // test whether next segregating marker is nearby (<20cM)
       dropj='y';
       if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
-      else if (position[j+1]!='R')
+      else if (position[j+1]!=MRIGHT)
         if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+2],11)!=0)) dropj='n';
-    } else if (position[j]=='M') {
+    } else if (position[j]==MMIDDLE) {
       dropj='y';
       if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
       else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
-    } else if (position[j]=='R') {
+    } else if (position[j]==MRIGHT) {
       dropj='y';
       if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
-      else if (position[j-1]!='L')
+      else if (position[j-1]!=MLEFT)
         if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
     }
     if (dropj=='n') {
@@ -202,7 +202,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       r[jj]= r[j];
       position[jj]= position[j];
       jj++;
-    } else if ((*cofactor)[j]=='1') {
+    } else if ((*cofactor)[j]==MH) {
       if (verbose) {
         Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
       }
@@ -215,21 +215,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
     if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNLINKED;
     } else if (j==(Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
+      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
+      else position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
+      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
+      else position[j]=MRIGHT;
     } else {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNLINKED;
     }
   }
   for (int j=0; j<Nmark; j++) {
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");
@@ -280,7 +280,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   //Check if everything still is correct
   for (int j=0; j<Nmark; j++) {
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");
@@ -336,9 +336,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   int dimx=1;
   for (int j=0; j<Nmark; j++) {
-    if ((*cofactor)[j]=='1') {
+    if ((*cofactor)[j]==MH) {
       dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-    } else if ((*cofactor)[j]=='2') {
+    } else if ((*cofactor)[j]==MBB) {
       dimx+=1;  /* sex of the mouse */
     }
   }
@@ -369,10 +369,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   // ---- Write output / send it back to R
   //Cofactors that made it to the final model
   for (int j=0; j<Nmark; j++) {
-    if (selcofactor[j]=='1') {
-      (*cofactor)[j]='1';
+    if (selcofactor[j]==MH) {
+      (*cofactor)[j]=MH;
     } else {
-      (*cofactor)[j]='0';
+      (*cofactor)[j]=MAA;
     }
   }
   //QTL likelyhood for each location
@@ -439,13 +439,13 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     //receiving mapdistances
     mapdistance[i]=999.0;
     mapdistance[i]=Dist[0][i];
-    cofactor[i] = '0';
+    cofactor[i] = MAA;
     if (Cofactors[0][i] == 1) {
-      cofactor[i] = '1';
+      cofactor[i] = MH;
       cof_cnt++;
     }
     if (Cofactors[0][i] == 2) {
-      cofactor[i] = '2';
+      cofactor[i] = MBB;
       cof_cnt++;
     }
     if (cof_cnt+10 > Nind) {

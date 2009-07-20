@@ -27,267 +27,291 @@
 #include "mqm.h"
 
 /*
- * Augment/expand the dataset by adding additional marker positions. Inputs are
- * number of markers Nmark, the marker matrix, position vector, recombinations
- * r.  The neglect parameter drops individuals from the dataset (the value
- * should be between 1..n).
+ * Augment/expand the dataset by adding additional (likely) genotypes.
+ * genotypic marker information is incomplete when
+ *           - marker scores are missing or dominant, or
+ *           - markers are non-segregating but you want to assume a
+ *             segregating QTL on top of this marker (~very closely linked),
+ *             and all likely possible configurations are generated 
+ *
+ * Inputs are number of markers Nmark, the marker matrix, position vector,
+ * recombinations r.  The neglect parameter drops individuals from the dataset
+ * (the value should be between 1..n).
+ *
+ * The neglect parameter drops genotypes. E.g. for neglect=100  eliminate
+ * genotypes 100 times less likely than the most likely configuration.
  *
  * A new markerset is created and returned in augmarker, likewise the
  * phenotypes are returned in augy and individuals in augind. Augmentation
- * halts when the number of individuals maxNaug is reached. Markers are
+ * halts when the number of individuals maxNaug is reached. Individuals are
  * expanded up to imaxNaug.
  *
+ * returns 1 on success, 0 on failure. marker, Nind, Naug, augy, augind are
+ * changed to reflect the newly augmented dataset. Nind may be smaller because
+ * of dropped individuals.
+ *
+ * FIXME: increasing the buffers for augmentation can automatic
  */
 
-int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy, 
-            ivector* augind, int *Nind, int *Naug, int Nmark, cvector position,
-            vector r, int maxNaug, int imaxNaug, double neglect, char
-            crosstype, int verbose) {
+int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
+            ivector* augind, int *Nind, int *Naug, const int Nmark, 
+            const cvector position, vector r, const int maxNaug, const int imaxNaug, 
+            const double neglect, const char crosstype, const int verbose) {
+  int retvalue = 0;
   int jj;
-  int newNind=(*Nind);
-  (*Naug)= maxNaug;     // sets and returns the maximum size of augmented dataset
+  (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
   cmatrix newmarker;
   vector newy;
   cvector imarker;
   ivector newind;
 
-  newmarker= newcmatrix(Nmark+1, *Naug);
-  newy= newvector(*Naug);
-  newind= newivector(*Naug);
-  imarker= newcvector(Nmark);
+  newmarker = newcmatrix(Nmark+1, maxNaug);  // augmented marker matrix
+  newy      = newvector(maxNaug);            // phenotypes
+  newind    = newivector(maxNaug);           // individuals index
+  imarker   = newcvector(Nmark);             
 
-  int iaug=0;      // iaug keeps track of current augmented individual
-  int maxiaug=0;   // highest reached(?)
-  int saveiaug=0;  // previous iaug
+  int iaug     = 0;     // iaug keeps track of current augmented individual
+  // int maxiaug  = 0;     // highest reached(?)
+  // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
   prob0right, prob1right, prob2right;
-  double probmax;
-  vector newprob, newprobmax;
-  newprob= newvector(*Naug);
-  newprobmax= newvector(*Naug);
+  vector newprob = newvector(maxNaug);
+  vector newprobmax = newvector(maxNaug);
   if (verbose) {
     Rprintf("INFO: Crosstype determined by the algorithm:%c:\n", crosstype);
     Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
   }
   // ---- foreach individual create one in the newmarker matrix
-  for (int i=0; i<(*Nind); i++) {
-    newind[iaug]=i-((*Nind)-newNind);  // index of individuals
-    newy[iaug]= y[i];               // cvariance
-    newprob[iaug]= 1.0;
-    probmax= 1.0;
-    for (int j=0; j<Nmark; j++) newmarker[j][iaug]=marker[j][i];
+  const int nind0 = *Nind;
+  int newNind = nind0;
+  int previaug = 0;                    // previous iaug
+  for (int i=0; i<nind0; i++) {
+    // ---- for every individual:
+    const int dropped = nind0-newNind;
+    const int iidx = i - dropped;
+    newind[iaug]  = iidx;              // iidx corrects for dropped individuals
+    newy[iaug]    = y[i];              // cvariance (phenotype)
+    newprob[iaug] = 1.0;
+    double probmax = 1.0;
+    for (int j=0; j<Nmark; j++) 
+      newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
     for (int j=0; j<Nmark; j++) {
-      maxiaug=iaug;
-      if ((maxiaug-saveiaug)<=imaxNaug)  // within bounds for individual?
-        for (int ii=saveiaug; ii<=maxiaug; ii++) {
-          if (newmarker[j][ii]=='3') {
+      // ---- for every marker:
+      const int maxiaug = iaug;          // fixate maxiaug
+      if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
+        for (int ii=previaug; ii<=maxiaug; ii++) {
+          // ---- walk from previous augmented to current augmented genotype
+          if (newmarker[j][ii]==MNOTAA) {
+            // augment data to contain AB and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]=='L'||position[j]=='U')) {
-              prob1left= start_prob(crosstype, '1');
-              prob2left= start_prob(crosstype, '2');
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
+              prob1left= start_prob(crosstype, MH);
+              prob2left= start_prob(crosstype, MBB);
             } else {
-              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, '2', crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
             }
 
-            prob1right= probright('1', j, imarker, r, position, crosstype);
-            prob2right= probright('2', j, imarker, r, position, crosstype);
+            prob1right= probright(MH, j, imarker, r, position, crosstype);
+            prob2right= probright(MBB, j, imarker, r, position, crosstype);
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
-            if (ii==saveiaug) probmax= (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
+            if (ii==previaug) probmax = (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
             if (prob1>prob2) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '2';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '1';
+              newmarker[j][ii]= MH;
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]= newprob[ii]*prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '1';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '2';
+              newmarker[j][ii]= MBB;
               newprobmax[ii]= newprob[ii]*prob2;
               newprob[ii]*= prob2left;
             }
-            probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
-          } else if (newmarker[j][ii]=='4') {
+            probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
+          } else if (newmarker[j][ii]==MNOTBB) {
+            // augment data to contain AB and AA 
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]=='L'||position[j]=='U')) {
-              prob0left= start_prob(crosstype, '0');
-              prob1left= start_prob(crosstype, '1');
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
+              prob0left= start_prob(crosstype, MAA);
+              prob1left= start_prob(crosstype, MH);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, '0', crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
             }
 
-            prob0right= probright('0', j, imarker, r, position, crosstype);
-            prob1right= probright('1', j, imarker, r, position, crosstype);
+            prob0right= probright(MAA, j, imarker, r, position, crosstype);
+            prob1right= probright(MH, j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
 
-            if (ii==saveiaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
+            if (ii==previaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
             if (prob1>prob0) {
               if (probmax/(newprob[ii]*prob0)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '0';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '1';
+              newmarker[j][ii]= MH;
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '1';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '0';
+              newmarker[j][ii]= MAA;
               newprobmax[ii]= newprob[ii]*prob0;
               newprob[ii]*= prob0left;
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
-          } else if (newmarker[j][ii]=='9') {
+          } else if (newmarker[j][ii]==MMISSING) {
+            // augment data to contain AB, AA and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
-            if ((position[j]=='L'||position[j]=='U')) {
-              prob0left= start_prob(crosstype, '0');
-              prob1left= start_prob(crosstype, '1');
-              prob2left= start_prob(crosstype, '2');
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
+              prob0left= start_prob(crosstype, MAA);
+              prob1left= start_prob(crosstype, MH);
+              prob2left= start_prob(crosstype, MBB);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, '0', crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, '1', crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, '2', crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
             }
 
-            prob0right= probright('0', j, imarker, r, position, crosstype);
-            prob1right= probright('1', j, imarker, r, position, crosstype);
-            prob2right= probright('2', j, imarker, r, position, crosstype);
+            prob0right= probright(MAA, j, imarker, r, position, crosstype);
+            prob1right= probright(MH, j, imarker, r, position, crosstype);
+            prob2right= probright(MBB, j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
-            if (ii==saveiaug) {
+            if (ii==previaug) {
               if ((prob2>prob1)&&(prob2>prob0)) probmax= newprob[ii]*prob2;
               else if ((prob1>prob0)&&(prob1>prob2)) probmax= newprob[ii]*prob1;
               else probmax= newprob[ii]*prob0;
             }
             if ((prob2>prob1)&&(prob2>prob0)) {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '1';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '0';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '2';
+              newmarker[j][ii]= MBB;
               newprobmax[ii]= newprob[ii]*prob2;
               newprob[ii]*= prob2left;
 
             } else if ((prob1>prob2)&&(prob1>prob0)) {
               if (probmax/(newprob[ii]*prob2)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '2';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob0)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '0';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
                 newprobmax[iaug]= newprob[iaug]*prob0right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '1';
+              newmarker[j][ii]= MH;
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
               if (probmax/(newprob[ii]*prob1)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '1';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
                 newprobmax[iaug]= newprob[iaug]*prob1right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
               if (probmax/(newprob[ii]*prob2)<neglect) {
-                iaug++;
-                newmarker[j][iaug]= '2';
+                if (++iaug >= maxNaug) goto bailout;
+                newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
                 newprobmax[iaug]= newprob[iaug]*prob2right;
                 for (jj=0; jj<Nmark; jj++) {
                   if (jj!=j) newmarker[jj][iaug]=newmarker[jj][ii];
                 }
-                newind[iaug]=i-((*Nind)-newNind);
+                newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              newmarker[j][ii]= '0';
+              newmarker[j][ii]= MAA;
               newprobmax[ii]= newprob[ii]*prob0;
               newprob[ii]*= prob0left;
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else { // newmarker[j][ii] is observed
 
-            if ((position[j]=='L'||position[j]=='U')) {
+            if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
               prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
@@ -298,47 +322,45 @@ int augdata(cmatrix marker, vector y, cmatrix* augmarker, vector *augy,
           }
 
           if (iaug+3>maxNaug) {
-            Rprintf("ERROR: Dataset too large after augmentation - your CROSS data may have been corrupted\n");  // FIXME!
-            if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
-            // Better not free them, we don't know if the arrays already contain something, perhaps not... then we would segfault in R
-            //Free(newy);
-            //Free(newmarker);
-            //Free(newind);
-            //Free(newprob);
-            //Free(newprobmax);
-            //Free(imarker);
-            return 0;
+            Rprintf("ERROR: augmentation (should not be reached)\n");  
+            goto bailout;
           }
         }
-      if ((iaug-saveiaug+1)>imaxNaug) {
+      if ((iaug-previaug+1)>imaxNaug) {
         newNind-= 1;
-        iaug= saveiaug-1;
-        if (verbose) Rprintf("INFO: Individual %d is eliminated\n", i);
+        iaug= previaug-1;
+        if (verbose) Rprintf("INFO: Individual %d has been dropped\n", i);
       }
       sumprob= 0.0;
-      for (int ii=saveiaug; ii<=iaug; ii++) sumprob+= newprob[ii];
-      for (int ii=saveiaug; ii<=iaug; ii++) newprob[ii]/= sumprob;
+      for (int ii=previaug; ii<=iaug; ii++) sumprob+= newprob[ii];
+      for (int ii=previaug; ii<=iaug; ii++) newprob[ii]/= sumprob;
     }
-    iaug++;
-    saveiaug=iaug;
+    if (++iaug >= maxNaug) goto bailout;
+    previaug=iaug;
   }
-  *Naug= iaug;
-  *Nind= newNind;
-  *augmarker= newcmatrix(Nmark, *Naug);
-  *augy= newvector(*Naug);
+  *Naug = iaug;
+  *Nind = newNind;
+  *augmarker = newcmatrix(Nmark, *Naug);
+  *augy = newvector(*Naug);
   *augind = newivector(*Naug);
   for (int i=0; i<(*Naug); i++) {
     (*augy)[i]= newy[i];
     (*augind)[i]= newind[i];
     for (int j=0; j<Nmark; j++) (*augmarker)[j][i]= newmarker[j][i];
   }
+  goto cleanup;
+bailout:
+  Rprintf("ERROR: Dataset too large after augmentation\n");
+  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
+  retvalue = 0;
+cleanup:
   Free(newy);
   Free(newmarker);
   Free(newind);
   Free(newprob);
   Free(newprobmax);
   Free(imarker);
-  return 1;
+  return retvalue;
 }
 
 /*
@@ -356,7 +378,8 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   int **Chromo;
   double **NEWPheno;
   int **NEWIND;
-  int prior = *Nind;
+  const int nind0 = *Nind;
+  int prior = nind0;
 
   if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
   ivector new_ind;
@@ -365,7 +388,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   cmatrix markers, new_markers;
   ivector chr;
 
-  markers= newcmatrix(*Nmark, *Nind);
+  markers= newcmatrix(*Nmark, nind0);
   new_markers= newcmatrix(*Nmark, *maxaug);
   r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
@@ -373,13 +396,13 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   chr= newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
-  reorg_geno(*Nind, *Nmark, geno, &Geno);
+  reorg_geno(nind0, *Nmark, geno, &Geno);
   reorg_int(*Nmark, 1, chromo, &Chromo);
-  reorg_pheno(*Nind, *Npheno, pheno, &Pheno);
+  reorg_pheno(nind0, *Npheno, pheno, &Pheno);
   reorg_pheno(*Nmark, 1, dist, &Dist);
 
   reorg_int(*maxaug, *Nmark, auggeno, &NEW);
-  reorg_int((*maxiaug)*(*Nind), 1, augIND, &NEWIND);
+  reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
   reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
 
   //Change all the markers from R/qtl format to MQM internal
@@ -398,24 +421,24 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
   for (int j=0; j<(*Nmark); j++) {
     if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNLINKED;
     } else if (j==(*Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]='R';
-      else position[j]='U';
+      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
+      else position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]='M';
-      else position[j]='R';
+      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
+      else position[j]=MRIGHT;
     } else {
-      if (chr[j]==chr[j+1]) position[j]='L';
-      else position[j]='U';
+      if (chr[j]==chr[j+1]) position[j]=MLEFT;
+      else position[j]=MUNLINKED;
     }
   }
 
   if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
   for (int j=0; j<(*Nmark); j++) {
     r[j]= 999.0;
-    if ((position[j]=='L')||(position[j]=='M')) {
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Recombination frequency is negative\n");
@@ -434,19 +457,19 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
         NEWPheno[0][j] = new_y[j];
         NEWIND[0][j] = new_ind[j];
         NEW[i][j] = 9;
-        if (new_markers[i][j] == '0') {
+        if (new_markers[i][j] == MAA) {
           NEW[i][j] = 1;
         }
-        if (new_markers[i][j] == '1') {
+        if (new_markers[i][j] == MH) {
           NEW[i][j] = 2;
         }
-        if (new_markers[i][j] == '2') {  // [karl:] this might need to be changed for RIL
+        if (new_markers[i][j] == MBB) {  // [karl:] this might need to be changed for RIL
           NEW[i][j] = 3;
         }
-        if (new_markers[i][j] == '3') {
+        if (new_markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
         }
-        if (new_markers[i][j] == '4') {
+        if (new_markers[i][j] == MNOTBB) {
           NEW[i][j] = 4;
         }
       }
@@ -460,30 +483,30 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
     if (*verbose) {
       Rprintf("INFO: Data augmentation finished succesfull\n");
       Rprintf("# Unique individuals before augmentation:%d\n", prior);
-      Rprintf("# Unique selected individuals:%d\n", *Nind);
+      Rprintf("# Unique selected individuals:%d\n", nind0);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
     }
   } else {
     //Unsuccessfull data augmentation exit
-    *Naug = *Nind;
+    *Naug = nind0;
     for (int i=0; i<(*Nmark); i++) {
       for (int j=0; j<(*Naug); j++) {
         NEWPheno[0][j] = Pheno[0][j];
         NEW[i][j] = 9;
-        if (markers[i][j] == '0') {
+        if (markers[i][j] == MAA) {
           NEW[i][j] = 1;
         }
-        if (markers[i][j] == '1') {
+        if (markers[i][j] == MH) {
           NEW[i][j] = 2;
         }
-        if (markers[i][j] == '2') { // [karl:] this might need to be changed for RIL
+        if (markers[i][j] == MBB) { // [karl:] this might need to be changed for RIL
           NEW[i][j] = 3;
         }
-        if (markers[i][j] == '3') {
+        if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
         }
-        if (markers[i][j] == '4') {
+        if (markers[i][j] == MNOTBB) {
           NEW[i][j] = 4;
         }
       }

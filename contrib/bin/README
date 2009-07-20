@@ -1,0 +1,11 @@
+This directory contains standalone binaries of R/qtl (currently MQM
+implentations).
+
+run:
+
+  cd ./contrib/bin
+  cmake .
+	make 
+	make test   
+  (the binary is 'mqm').
+
