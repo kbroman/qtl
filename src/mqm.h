@@ -50,8 +50,8 @@ const unsigned char MUNLINKED ='U';
 
 // Marker genotypes (scored at marker)
 const unsigned char MAA       = '0';  // Homozygous AA
-const unsigned char MBB       = '1';  // Homyzygous BB
-const unsigned char MH        = '2';  // Heterozygous AB
+const unsigned char MH        = '1';  // Heterozygous AB 
+const unsigned char MBB       = '2';  // Homozygous BB
 const unsigned char MNOTAA    = '3';  // Not AA
 const unsigned char MNOTBB    = '4';  // Not BB 
 const unsigned char MMISSING  = '9';  // Uknown (marker genotype missing)

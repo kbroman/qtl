@@ -94,7 +94,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   cvector position;
   vector informationcontent;
   //char dominance='n';
-  //char perm_simu=MBB;
+  //char perm_simu=MH;
   ivector chr;
   matrix Frun;
   vector r;
@@ -113,7 +113,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
 
   if (RMLorML == 1) {
-    REMLorML=MBB;
+    REMLorML=MH;
   }
 
   // Create an array of marker positions - each marker is one of LMRU (left,
@@ -202,7 +202,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       r[jj]= r[j];
       position[jj]= position[j];
       jj++;
-    } else if ((*cofactor)[j]==MBB) {
+    } else if ((*cofactor)[j]==MH) {
       if (verbose) {
         Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
       }
@@ -336,9 +336,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   int dimx=1;
   for (int j=0; j<Nmark; j++) {
-    if ((*cofactor)[j]==MBB) {
+    if ((*cofactor)[j]==MH) {
       dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-    } else if ((*cofactor)[j]==MH) {
+    } else if ((*cofactor)[j]==MBB) {
       dimx+=1;  /* sex of the mouse */
     }
   }
@@ -369,8 +369,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   // ---- Write output / send it back to R
   //Cofactors that made it to the final model
   for (int j=0; j<Nmark; j++) {
-    if (selcofactor[j]==MBB) {
-      (*cofactor)[j]=MBB;
+    if (selcofactor[j]==MH) {
+      (*cofactor)[j]=MH;
     } else {
       (*cofactor)[j]=MAA;
     }
@@ -441,11 +441,11 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     mapdistance[i]=Dist[0][i];
     cofactor[i] = MAA;
     if (Cofactors[0][i] == 1) {
-      cofactor[i] = MBB;
+      cofactor[i] = MH;
       cof_cnt++;
     }
     if (Cofactors[0][i] == 2) {
-      cofactor[i] = MH;
+      cofactor[i] = MBB;
       cof_cnt++;
     }
     if (cof_cnt+10 > Nind) {

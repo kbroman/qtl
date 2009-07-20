@@ -248,8 +248,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         }
         //  Rprintf("fitting NO-QTL model\n");
         if (baseNoQTLModel!=0) { // new base no-QTL model
-          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MH;
-          else QTLcofactor[j+1]= MH;
+          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MBB;
+          else QTLcofactor[j+1]= MBB;
           // Rprintf("INFO: Before base model\n", QTLlikelihood/-2);
           QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, verbose);
           // Rprintf("INFO: log-likelihood of NO QTL model= %f\n", QTLlikelihood/-2);
@@ -265,7 +265,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         // MNOTAA= QTL
         if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MNOTAA;
         else QTLcofactor[j+1]= MNOTAA;
-        if (REMLorML==MBB) weight[0]= -1.0;
+        if (REMLorML==MH) weight[0]= -1.0;
         QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
         //this is the place we error at, because the likelyhood is not correct.
         if (QTLlikelihood<-0.05) {
@@ -317,11 +317,11 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   //			dir0 += y[i];
   //			cnt0 += 1;
   //		}
-  //		if(QTLloci[j][i]==MBB){
+  //		if(QTLloci[j][i]==MH){
   //			dir1 += y[i];
   //			cnt1 += 1;
   //		}
-  //		if(QTLloci[j][i]==MH){
+  //		if(QTLloci[j][i]==MBB){
   //			dir2 += y[i];
   //			cnt2 += 1;
   //		}

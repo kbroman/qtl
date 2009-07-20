@@ -65,18 +65,18 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
   }
   while ((Ncof>0)&&(finished=='n')) {
     for (int j=0; j<Nmark; j++) {
-      if ((*newcofactor)[j]==MBB) {
+      if ((*newcofactor)[j]==MH) {
         //Rprintf("Drop marker %d\n",j);
         (*newcofactor)[j]=MAA;
-        if (REMLorML==MBB) variance= -1.0;
+        if (REMLorML==MH) variance= -1.0;
         logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
-        (*newcofactor)[j]=MBB;
-      } else if ((*newcofactor)[j]==MH) {
+        (*newcofactor)[j]=MH;
+      } else if ((*newcofactor)[j]==MBB) {
         //Rprintf("Drop marker %d\n",j);
         (*newcofactor)[j]=MAA;
-        if (REMLorML==MBB) variance= -1.0;
+        if (REMLorML==MH) variance= -1.0;
         logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
-        (*newcofactor)[j]=MH;
+        (*newcofactor)[j]=MBB;
       } else if ((*newcofactor)[j]!=MAA) {
         Rprintf("ERROR: Something is wrong when trying to parse the newcofactorslist.\n");
       }
@@ -97,14 +97,14 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
     //R_ProcessEvents(); /*  Try not to crash windows etc*/
     R_FlushConsole();
 #endif
-    if  ( ((*newcofactor)[dropj]==MBB) && ( F2> 2.0*(savelogL-maxlogL)) ) {
+    if  ( ((*newcofactor)[dropj]==MH) && ( F2> 2.0*(savelogL-maxlogL)) ) {
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MAA;
       Ncof-=1;
       if (verbose) {
         Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %f\n",(dropj+1),savelogL);
       }
-    } else if  ( ((*newcofactor)[dropj]==MH) && (F1> 2.0*(savelogL-maxlogL)) ) {
+    } else if  ( ((*newcofactor)[dropj]==MBB) && (F1> 2.0*(savelogL-maxlogL)) ) {
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MAA;
       Ncof-=1;
@@ -117,7 +117,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
       }
       finished='y';
       for (int j=0; j<Nmark; j++) {
-        if ((*newcofactor)[j]==MBB) {
+        if ((*newcofactor)[j]==MH) {
           //Rprintf("Marker %d is selected\n",(j+1));
         }
       }

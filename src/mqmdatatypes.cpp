@@ -68,7 +68,10 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
 }
 
 /*
- * Change all the genotypes from default R/qtl format to MQM internal
+ * Change all the genotypes from default R/qtl format to MQM internal.  R/qtl
+ * uses internally { 'AA' => 1, 'H' => 2, 'BB' => 3, 'NOTBB' => 4, 'NOTAA' => 5,
+ * '-' => 'NA' }
+ *
  */
 
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
@@ -78,14 +81,14 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstyp
       if (Geno[i][j] == 1) {				//AA
         markers[i][j] = MAA;
       }
-      if (Geno[i][j] == 2) {				//AB
+      if (Geno[i][j] == 2) {				//AB (H) 
         // [karl:] I think this needs to be changed, but my fix doesn't work.
-        //			  if(crosstype!=3) markers[i][j] = MBB; // non-RIL
-        //			  else markers[i][j] = MH;  // RIL
-        markers[i][j] = MBB;
+        //			  if(crosstype!=3) markers[i][j] = MH; // non-RIL
+        //			  else markers[i][j] = MBB;  // RIL
+        markers[i][j] = MH;
       }
       if (Geno[i][j] == 3) {				//BB
-        markers[i][j] = MH;
+        markers[i][j] = MBB;
       }
       if (Geno[i][j] == 4) {				//AA or AB
         markers[i][j] = MNOTBB;
