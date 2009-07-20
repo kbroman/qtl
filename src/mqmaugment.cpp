@@ -104,6 +104,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
         for (int ii=previaug; ii<=maxiaug; ii++) {
           // ---- walk from previous augmented to current augmented genotype
           if (newmarker[j][ii]==MNOTAA) {
+            // augment data to contain AB and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
@@ -153,6 +154,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             }
             probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MNOTBB) {
+            // augment data to contain AB and AA 
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
@@ -202,6 +204,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MMISSING) {
+            // augment data to contain AB, AA and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
