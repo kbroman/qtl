@@ -94,7 +94,7 @@ void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstyp
         case 9: markers[i][j] = MMISSING;
                 break;
         default:
-                Rf_error("Unknown R/qtl genotype with value %d",Geno[i][j]);
+                error("Can not convert R/qtl genotype with value %d",Geno[i][j]);
       }
     }
   }
