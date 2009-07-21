@@ -68,64 +68,64 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
     compareto = loci[j+1][i];
   }
   switch (crosstype) {
-  case CF2:
-    if (start) {
-      return (loci[j][i]==MH ? 0.5 : 0.25);
-    }
-    Nrecom= fabs((double)loci[j][i]-(double)compareto);
-    if ((loci[j][i]==MH)&&(compareto==MH)) {
-      //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
-      calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
-    } else if (Nrecom==0) {
-      //Rprintf("Nrecom=0 %c <-> %c:\n", compareto, loci[j][i]);
-      calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
-    } else if (Nrecom==1) {
-      //Rprintf("Nrecom=1 %c <-> %c:\n", compareto, loci[j][i]);
-      if (ADJ!=0) {
-        calc_i= ((loci[j][i]==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
-      } else {
-        calc_i= ((compareto==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+    case CF2:
+      if (start) {
+        return (loci[j][i]==MH ? 0.5 : 0.25);
       }
-    } else {
-      //Rprintf("Nrecom=2 %c <-> %c:\n", compareto, loci[j][i]);
-      calc_i= r[j+ADJ]*r[j+ADJ];
-    }
-    //Rprintf("after IF\n", j);
-    break;
-  case CRIL:
-    if (start) {
-      return 0.5;
-    }
-    if (compareto==MH) {
-      warning("Strange: prob function trying to find H in RIL");
-      return 0.0; // No chance finding a 1 or H in an RIL
-    }
-    Nrecom = fabs((double)loci[j][i]-(double)compareto);
-    if (Nrecom==0) {
-      //No recombination has a chance of r[j]
-      calc_i = 1.0-r[j+ADJ];
-    } else {
-      // Recombination between markers has a chance of r[j-1]
-      calc_i = r[j+ADJ];
-    }
-    break;
-  case CBC:
-    if (start) {
-      return 0.5;
-    }
-    if (compareto==MBB) {
-      warning("Strange: prob function trying to find BB in BC");
-      return 0.0; // No chance finding a 2/BB in a BC
-    }
-    Nrecom= fabs((double)loci[j][i]-(double)compareto);
-    if (Nrecom==0) {
-      //No recombination has a chance of r[j]
-      calc_i =  (1.0-r[j+ADJ]);
-    } else {
-      // Recombination between markers has a chance of r[j-1]
-      calc_i = r[j+ADJ];
-    }
-    break;
+      Nrecom= fabs((double)loci[j][i]-(double)compareto);
+      if ((loci[j][i]==MH)&&(compareto==MH)) {
+        //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
+        calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
+      } else if (Nrecom==0) {
+        //Rprintf("Nrecom=0 %c <-> %c:\n", compareto, loci[j][i]);
+        calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
+      } else if (Nrecom==1) {
+        //Rprintf("Nrecom=1 %c <-> %c:\n", compareto, loci[j][i]);
+        if (ADJ!=0) {
+          calc_i= ((loci[j][i]==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+        } else {
+          calc_i= ((compareto==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+        }
+      } else {
+        //Rprintf("Nrecom=2 %c <-> %c:\n", compareto, loci[j][i]);
+        calc_i= r[j+ADJ]*r[j+ADJ];
+      }
+      //Rprintf("after IF\n", j);
+      break;
+    case CRIL:
+      if (start) {
+        return 0.5;
+      }
+      if (compareto==MH) {
+        warning("Strange: prob function trying to find H in RIL");
+        return 0.0; // No chance finding a 1 or H in an RIL
+      }
+      Nrecom = fabs((double)loci[j][i]-(double)compareto);
+      if (Nrecom==0) {
+        //No recombination has a chance of r[j]
+        calc_i = 1.0-r[j+ADJ];
+      } else {
+        // Recombination between markers has a chance of r[j-1]
+        calc_i = r[j+ADJ];
+      }
+      break;
+    case CBC:
+      if (start) {
+        return 0.5;
+      }
+      if (compareto==MBB) {
+        warning("Strange: prob function trying to find BB in BC");
+        return 0.0; // No chance finding a 2/BB in a BC
+      }
+      Nrecom= fabs((double)loci[j][i]-(double)compareto);
+      if (Nrecom==0) {
+        //No recombination has a chance of r[j]
+        calc_i =  (1.0-r[j+ADJ]);
+      } else {
+        // Recombination between markers has a chance of r[j-1]
+        calc_i = r[j+ADJ];
+      }
+      break;
   }
   return calc_i;
 }
