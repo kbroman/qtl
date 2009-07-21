@@ -30,11 +30,11 @@
 ######################################################################
 
 mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE) {
-  start <- proc.time()
+  starttime <- proc.time()
   maxaug = maxind   # maxaug is the maximum of individuals to augment to
   maxiaug = maxaugind
 
-# check for supported crosses and set ctype
+  # ---- check for supported crosses and set ctype
   crosstype <- class(cross)[1]
   if (crosstype != "f2" && crosstype != "bc" && crosstype != "riself")
     ourstop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
@@ -51,8 +51,9 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
 
   if (verbose) cat("INFO: Received a valid cross file type:", crosstype,".\n")
 
-# check whether the X chromosome should be dropped
-# (backcross with all one sex should be fine)
+  # ---- Check sex chromosome
+  # check whether the X chromosome should be dropped
+  # (backcross with one sex should be fine)
   chrtype <- sapply(cross$geno, class)
   if (any(chrtype == "X") && (crosstype=="f2" ||
     length(getgenonames(crosstype, "X", "full",
@@ -62,6 +63,7 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
       cross <- subset(cross, chr=(chrtype != "X"))
   }
 
+  # ---- Count
   n.ind <- nind(cross)
   n.chr <- nchr(cross)
   n.aug <- maxaug
@@ -70,8 +72,9 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
     cat("INFO: Number of chr:",n.chr,".\n")
   }
 
-# select the phenotype
+  # ---- Select the phenotype
   if (length(pheno.col) > 1) {
+    # FIXME: augment data on multiple phenotypes? See mqmaugment.Rd
     warning("Only one phenotype in pheno.col may be considered; using the first one.")
     pheno.col <- pheno.col[1]
   }
@@ -81,17 +84,19 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
       pheno.col <- num
   }
-  phenonaam <- colnames(cross$pheno)[pheno.col]
+  phenoname <- colnames(cross$pheno)[pheno.col]
 
   if (pheno.col != 1) {
     if (verbose) {
-      cat("INFO: Selected phenotype ",pheno.col," -> ",phenonaam,".\n")
+      cat("INFO: Selected phenotype ",pheno.col," -> ",phenoname,".\n")
       cat("INFO: # of phenotypes in object ",nphe(cross),".\n")
     }
     if (nphe(cross) < pheno.col || pheno.col < 1) {
       ourstop("No such phenotype at column index:",pheno.col,"in cross object.\n")
     }
   }
+
+  # ---- Genotype
   out.qtl <- NULL
 
   geno <- pull.geno(cross)
@@ -102,15 +107,15 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
   n.mark <- ncol(geno)
   if (verbose) cat("INFO: Number of markers:",n.mark,".\n")
 
-# Check for NA genotypes and replace them with a 9
+  # Check for NA genotypes and replace them with a 9
   geno[is.na(geno)] <- 9
   if (ctype==3) {
-# RIL
+    # RIL
     if (any(geno==3)) { # have 3's, so replace 2's with missing values
       if (any(geno==2)) {
         n2 <- sum(geno==2)
         geno[geno==2] <- 9
-        warning("Removed ", n2, " het genotypes")
+        warning("Removed ", n2, " genotypes")
       }
     } else {
       if (any(geno==2)) # no 3's; replace 2's with 3's.
@@ -118,7 +123,7 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
       }
   } # end if(RIL)
 
-# check for missing phenotypes and drop
+  # check for missing phenotypes and drop
   dropped <- NULL
   for(i in 1:dim(pheno)[1]) {
   if(is.na(pheno[i,pheno.col])){
@@ -131,24 +136,27 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
     geno <- geno[-dropped,]
     pheno <- pheno[-dropped,]
   }
+
+  # ---- Call data augmentation
   result <- .C("R_augmentdata",
-  as.integer(geno),
-  as.double(dist),
-  as.double(pheno[,pheno.col]),
-  augGeno=as.integer(rep(0,n.mark*maxaug)),
-  augPheno=as.double(rep(0,maxaug)),
-  augIND=as.integer(rep(0,maxiaug*n.ind)),
-  nind=as.integer(n.ind),
-  naug=as.integer(n.aug),
-  as.integer(n.mark),
-  as.integer(1),    # 1 phenotype
-  as.integer(maxaug),
-  as.integer(maxiaug),
-  as.double(neglect),
-  as.integer(chr),
-  as.integer(ctype),
-  as.integer(verbose),
-  PACKAGE="qtl")
+    as.integer(geno),
+    as.double(dist),
+    as.double(pheno[,pheno.col]),
+    augGeno=as.integer(rep(0,n.mark*maxaug)),
+    augPheno=as.double(rep(0,maxaug)),
+    augIND=as.integer(rep(0,maxiaug*n.ind)),
+    nind=as.integer(n.ind),
+    naug=as.integer(n.aug),
+    as.integer(n.mark),
+    as.integer(1),    # 1 phenotype
+    as.integer(maxaug),
+    as.integer(maxiaug),
+    as.double(neglect),
+    as.integer(chr),
+    as.integer(ctype),
+    as.integer(verbose),
+    PACKAGE="qtl")
+
   n.ind = result$nind
   n.aug = result$naug
   markONchr <- 0
@@ -175,7 +183,7 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
      colnames(matri) <- colnames(geno)[(markdone+1):(markdone+markONchr)]
     }
     cross$geno[[c]]$data <- matri
-    colnames(pheno) <- phenonaam
+    colnames(pheno) <- phenoname
     cross$pheno <- as.data.frame(pheno)
     #Store extra information (needed by the MQM algorithm) which individual was which original etc..
     cross$extra$Nind <- n.ind
@@ -183,10 +191,9 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
     cross$extra$augIND <- result[[6]][1:n.aug]
     markdone <- (markdone+markONchr)
   }
-  #RETURN THE RESULTS
-  end <- proc.time()
-  if(verbose) cat("INFO: DATA-Augmentation took: ",round((end-start)[3], digits=3)," seconds\n")
-    cross
+  # ---- RESULTS
+  endtime <- proc.time()
+  if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
+  cross  # return cross type
 }
 
-# end of mqmaugment.R

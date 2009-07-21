@@ -77,24 +77,24 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
-      markers[i][j] = MMISSING;
-      if (Geno[i][j] == 1) {				//AA
-        markers[i][j] = MAA;
-      }
-      if (Geno[i][j] == 2) {				//AB (H) 
-        // [karl:] I think this needs to be changed, but my fix doesn't work.
-        //			  if(crosstype!=3) markers[i][j] = MH; // non-RIL
-        //			  else markers[i][j] = MBB;  // RIL
-        markers[i][j] = MH;
-      }
-      if (Geno[i][j] == 3) {				//BB
-        markers[i][j] = MBB;
-      }
-      if (Geno[i][j] == 4) {				//AA or AB
-        markers[i][j] = MNOTBB;
-      }
-      if (Geno[i][j] == 5) {				//BB or AB
-        markers[i][j] = MNOTAA;
+      switch (Geno[i][j]) {
+        case 1: markers[i][j] = MAA;
+                break;
+        case 2: markers[i][j] = MH;
+          // [karl:] I think this needs to be changed, but my fix doesn't work.
+          //			  if(crosstype!=3) markers[i][j] = MH; // non-RIL
+          //			  else markers[i][j] = MBB;  // RIL
+                break;
+        case 3: markers[i][j] = MBB;
+                break;
+        case 4: markers[i][j] = MNOTBB;
+                break;
+        case 5: markers[i][j] = MNOTAA;
+                break;
+        case 9: markers[i][j] = MMISSING;
+                break;
+        default:
+                Rf_error("Unknown R/qtl genotype with value %d",Geno[i][j]);
       }
     }
   }
