@@ -17,12 +17,21 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.12, 5/18/2009:
+Version 1.13, 6/30/2009:
 
 Major changes:
 
   Added code from Ritsert Jansen, Danny Arends, and Pjotr Prins,
-  implementing Ritsert Jansen's MQM mapping method.
+  implementing Ritsert Jansen's MQM mapping method. [explain further]
+
+Minor changes:
+
+  Added a function transformPheno() for transforming a phenotype.
+
+
+Version 1.12, 6/30/2009:
+
+Major changes:
 
   Added the ability to simulate RIL and multiple-strain RIL in the
   sim.cross function.  For the case of multiple-strain RIL, one needs
@@ -48,6 +57,25 @@ Major changes:
 
 Minor changes:
 
+  Added a CITATION file; type citation("qtl") within R to get
+  information on the citation to use in articles that make use of
+  R/qtl. 
+
+  You can now subset crosses with brackets, [ ], as with a matrix with
+  rows=chromosomes and columns=individuals.  See the examples in the
+  help file for subset.cross.
+
+  Added a utility function, findDupMarkers, for identifying groups of
+  markers with identical genotype data.  (This is useful for reducing
+  the genotype data in the case of a very high marker density.)
+
+  Added a utility function, xaxisloc.scanone, for finding x-axis
+  locations for given genomic positions in a plot of scanone results
+  (useful for adding annotations, such as text or arrows).
+
+  Added functions subset.map and `[.map` for pulling out selected
+  chromosomes from a map object.
+
   The output of tryallpositions, for testing possible positions for a
   genetic marker, now has class "scanone", so that one may use
   plot.scanone, summary.scanone, etc.
@@ -66,9 +94,38 @@ Minor changes:
   distance between two positions).  These arguments were also added to
   scantwo (as clean.nmar and clean.distance).
 
+  Revised summary.scanone and summary.scantwo so that the perms
+  argument can contain a single column of permutation results, in
+  which case they are assumed to apply to any  LOD score columns. 
+
+  Revised summary.scanone so that the perms argument can be
+  scantwo permutations results; added an internal utility function,
+  scantwoperm2scanoneperm, for pulling the scanone permutations out of
+  the scantwo permutations.
+
+  In plots of output from addpair with a special formula, plot.scantwo
+  now gives just one set of numbers on the color scale.
+
+  Fixed a bug in plot.scanone that shows up if the "chr" column is not
+  a factor.  Now we convert the column to a factor in advance.
+
+  Fixed a bug in stepwiseqtl in the case that the inferred model
+  contains no QTL; deparseQTLformula needs to deal with the NULL case.
+
+  Fixed a bug in c.cross regarding "map" attributes in $prob or $draws.
+
   Fixed a bug in cim() [reported by Sandy Taylor] that occurred in the
   case of multiple marker covariates within a window (and >3 marker
   covariates on that chromosome.
+
+  Fixed a bug in summary.scantwo in case that scanoneX component is
+  numeric(0) and not NULL, which resulted in a major crash.
+
+  Revised +.scantwo and -.scantwo so that if the scanoneX component in
+  the input is NULL, the output has scanoneX that is NULL.
+
+  Fixed a bug in addpair() in the case that the user gives a formula
+  that includes one but not both of the new QTL.
 
   Revised ripple() to give a warning message if the chr argument is
   not provided.

@@ -430,7 +430,7 @@ plot(out.imp, out.hk, out.em, chr=c(1,4), lty=1,
 # Two-part Model
 ###################
 data(listeria)
-\dontshow{listeria <- subset(listeria,chr=c(1,5,13))}
+\dontshow{listeria <- subset(listeria,chr=c(1,5,13),ind=!is.na(listeria$pheno[,1]))}
 listeria <- calc.genoprob(listeria,step=2.5)
 out.2p <- scanone(listeria, model="2part", upper=TRUE)
 summary(out.2p, thr=c(5,3,3), format="allpeaks")

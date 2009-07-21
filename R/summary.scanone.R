@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-8, Karl W Broman
-# last modified Sep, 2008
+# copyright (c) 2001-9, Karl W Broman
+# last modified May, 2009
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -49,8 +49,12 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
   if(format != "onepheno" && !missing(lodcolumn))
     warning("lodcolumn ignored except when format=\"onepheno\".")
 
-  if(!missing(perms) && !any(class(perms) == "scanoneperm"))
-    warning("perms need to be in scanoneperm format.")
+  if(!missing(perms)) {
+    if("scantwoperm" %in% class(perms))
+      perms <- scantwoperm2scanoneperm(perms)
+    else if(!("scanoneperm" %in% class(perms)))
+      warning("perms need to be in scanoneperm format.")
+  }
 
   # check input
   if(missing(perms) && !missing(alpha))
@@ -82,8 +86,26 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
       cn.perms <- colnames(perms)
     }
 
-    if(ncol.object != ncol.perms)
-      stop("scanone input has different number of LOD columns as perms input.")
+    if(ncol.object != ncol.perms) {
+      if(ncol.perms==1) { # reuse the multiple columns
+        origperms <- perms
+        if("xchr" %in% names(attributes(perms))) {
+          for(j in 2:ncol.object) {
+            perms$A <- cbind(perms$A, origperms$A)
+            perms$X <- cbind(perms$X, origperms$X)
+          }
+          cn.perms <- colnames(perms$A) <- colnames(perms$X) <- cn.object
+        }
+        else {
+          for(j in 2:ncol.object)
+            perms <- cbind(perms, origperms)
+          cn.perms <- colnames(perms) <- cn.object
+        }
+        warning("Just one column of permutation results; reusing for all LOD score columns.")
+      }
+      else 
+        stop("scanone input has different number of LOD columns as perms input.")
+    }
     if(!all(cn.object == cn.perms))
       warning("Column names in scanone input do not match those in perms input.")
   }

@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-9, Karl W Broman
-# last modified Jan, 2009
+# last modified Jun, 2009
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -299,7 +299,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     }
   } # start at null
   else {
-    cat(" ---Starting at a model with", length(qtl$chr), "QTL\n")
+    if(verbose) cat(" ---Starting at a model with", length(qtl$chr), "QTL\n")
     if(refine.locations) {
       if(verbose) cat(" ---Refining positions\n")
       rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,

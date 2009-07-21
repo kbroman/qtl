@@ -140,15 +140,23 @@ function(object, thresholds,
     if(length(d)==3) {
       if(!missing(perms)) {
         ncp <- sapply(perms, ncol)
-        if(any(ncp != d[3]))
-          stop("perms have different numbers of columns as object input.\n")
+        if(all(ncp==1)) onepermcol <- TRUE
+        else onepermcol <- FALSE
+        if(any(ncp != d[3])) {
+          if(onepermcol)  {
+            if(lodcolumn > 1)
+              warning("Just one column of permutation results; assuming they apply to all LOD score columns.")
+          }
+          else
+            stop("perms have different numbers of columns as object input.\n")
+        }
       }
       
       if(lodcolumn < 1 || lodcolumn > d[3])
         stop("lodcolumn must be between 1 and ", d[3])
       
       object$lod <- object$lod[,,lodcolumn]
-      if(!missing(perms))
+      if(!missing(perms) && !onepermcol)
         perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
     }
   }
@@ -157,8 +165,14 @@ function(object, thresholds,
       d <- ncol(object$pos1.jnt)
       if(!missing(perms)) {
         ncp <- sapply(perms, ncol)
-        if(any(ncp != d))
-          stop("perms have different numbers of columns as object input.\n")
+        if(all(ncp==1)) onepermcol <- TRUE
+        else onepermcol <- FALSE
+        if(any(ncp != d[3])) {
+          if(onepermcol) 
+            warning("Just one column of permutation results; reusing for all LOD score columns.")
+          else
+            stop("perms have different numbers of columns as object input.\n")
+        }
       }
       
       if(lodcolumn < 1 || lodcolumn > d)
@@ -167,7 +181,7 @@ function(object, thresholds,
       for(i in 3:length(object))
         object[[i]] <- object[[i]][,lodcolumn]
 
-      if(!missing(perms))
+      if(!missing(perms) && !onepermcol)
         perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
     }
   }
@@ -319,7 +333,7 @@ function(object, for.perm=FALSE)
   if(length(dim(lod)) == 3) n.phe <- dim(lod)[3]
 
   if(!("scanoneX" %in% names(object)) ||
-     is.null(object$scanoneX)) {
+     is.null(object$scanoneX) || length(object$scanoneX)==0) {
     if(n.phe==1) scanoneX <- diag(lod)
     else {
       scanoneX <- diag(lod[,,1])
@@ -327,6 +341,10 @@ function(object, for.perm=FALSE)
     }
   }
   else scanoneX <- object$scanoneX
+
+  if((is.matrix(scanoneX) && nrow(scanoneX) != nrow(lod)) ||
+     (!is.matrix(scanoneX) && length(scanoneX) != nrow(lod)))
+    stop("scanoneX component has length ", length(scanoneX), " but should have length ", nrow(lod))
 
   n.chrpair <- n.chr*(n.chr+1)/2
 

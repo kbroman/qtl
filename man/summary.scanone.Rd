@@ -27,7 +27,11 @@
  \item{perms}{Optional permutation results used to derive thresholds or
    to calculate genome-scan-adjusted p-values.  This must be consistent
    with the \code{object} input, in that it must have the same number of
-   LOD score columns.}
+   LOD score columns, though it can have just one column of permutation
+   results, in which case they are reused for all LOD score columns in
+   the \code{\link[qtl]{scanone}} output, \code{object}.
+   (These can also be permutation results from
+   \code{\link[qtl]{scantwo}}, which permutations for a one-dimensional scan.)}
  \item{alpha}{If perms are included, this is the significance level used
    to calculate thresholds for determining which peaks to pull out.
    If \code{threshold} is specified, \code{alpha} should not be.}

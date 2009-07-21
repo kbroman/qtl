@@ -59,13 +59,15 @@ function(cross, chr, pheno.col=1,
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
     cl <- makeCluster(n.cluster)
     clusterSetupRNG(cl)
+    clusterEvalQ(cl, require(qtl, quietly=TRUE))
     n.perm <- ceiling(n.perm/n.cluster)
     if(missing(chr)) chr <- names(cross$geno)
-    operm <- clusterCall(cl, scantwo, cross, chr, pheno.col, model, method,
-                         addcovar, intcovar, weights, incl.markers, clean.output,
-                         clean.nmar, clean.distance,
-                         maxit, tol, verbose=FALSE, n.perm, perm.strata, 
-                         assumeCondIndep, batchsize, n.cluster=0)
+    operm <- clusterCall(cl, scantwo, cross=cross, chr=chr, pheno.col=pheno.col,
+                         model=model, method=method, addcovar=addcovar, intcovar=intcovar,
+                         weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                         clean.nmar=clean.nmar, clean.distance=clean.distance,
+                         maxit=maxit, tol=tol, verbose=FALSE, n.perm=n.perm, perm.strata=perm.strata, 
+                         assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0)
     stopCluster(cl)
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])

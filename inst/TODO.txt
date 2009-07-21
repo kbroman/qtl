@@ -10,20 +10,19 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Fix bug regarding X chromosome in fitqtl.
+
+o Analysis of binary traits by "hk" in scanone/two.
+
+o Implementation of binary traits in fitqtl, etc., with method="hk"
+
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
 o plot of genotype frequencies / P-values
 
-o In plot of output from addpair with a special formula, we need just
-  one set of numbers on the color scale.
-
 o function to identify the XO locations (based on countXO?)
-  [this is locate.xo, I think.]
-
-o In stepwiseqtl starting from something other than the null model,
-  "Starting at a model with..." shouldn't be printed if
-  verbose=FALSE. 
+  [this is locate.xo, I think, but just for a single chromosome.]
 
 o qtl x covar interactions in stepwiseqtl
 
@@ -37,13 +36,10 @@ o Add an explanation regarding the coding in the coefficient
   estimates in fitqtl().  Add text to the help file for
   summary.fitqtl(). 
 
-o In summary.scanone (and I suppose summary.scantwo), allow the
-  scanone output to have multiple columns but the perms to have just
-  one (e.g. for the case of rank-based analyses).  Ensure that the
-  perms are "recycled" and that the lodcolumn argument is treated
-  appropriately.
-
 o FAQ: - constructing covariate matrices
+
+o function for getting x axis location in scantwo picture (like the
+  new xaxisloc.scanone)
 
 ----------------------------------------------------------------------
 
@@ -199,9 +195,6 @@ o 2 traits vs genotype at one QTL (with regression lines)
 
 o eQTL-related stuff:
   
-  - Omitting markers with duplicate data (retaining info and having
-    flat LOD curve through such regions?)
-
   - Compressing calc.genoprob results (simpler version of locations,
     or just the grid)
 
