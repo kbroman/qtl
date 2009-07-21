@@ -32,17 +32,17 @@
  * used by the augmentation and mixture methods
  */
 
-double start_prob(char crosstype, char c) {
+double start_prob(const char crosstype, const char markertype) {
   switch (crosstype) {
-  case CF2:  // F2
-    return (c==MH ? 0.5 : 0.25);
-    break;
-  case CRIL:  // RIL
-    return (c==MH ? 0.0 : 0.5);
-    break;
-  case CBC:  // BC
-    return (c==MBB ? 0.0 : 0.5);
-    break;
+    case CF2:
+      return (markertype==MH ? 0.5 : 0.25);
+      break;
+    case CRIL:
+      return (markertype==MH ? 0.0 : 0.5);
+      break;
+    case CBC:
+      return (markertype==MBB ? 0.0 : 0.5);
+      break;
   }
   return 0.0;
 }
@@ -54,7 +54,7 @@ double start_prob(char crosstype, char c) {
  * Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
  */
 
-double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int JorC, int ADJ, int start) {
+double prob(const cmatrix loci, const vector r, const int i, const int j, const char c, const char crosstype, const int JorC, const int ADJ, const int start) {
   double calc_i=0.0;
   double Nrecom;
   char compareto;
@@ -134,7 +134,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
  * This is for an F2 population, where 'c'==1 stands for H (so it has two times higher chance than A or B
  */
 
-double probright(char c, int jloc, cvector imarker, vector r, cvector position, char crosstype) {
+double probright(const char c, const int jloc, const cvector imarker, const vector r, const cvector position, const char crosstype) {
   double nrecom, prob0, prob1, prob2;
   if ((position[jloc]==MRIGHT)||(position[jloc]==MUNLINKED)) {
     //We're at the end of a chromosome or an unknown marker
