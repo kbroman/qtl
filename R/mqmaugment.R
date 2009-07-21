@@ -35,18 +35,32 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
   maxiaug = maxaugind
 
   # ---- check for supported crosses and set ctype
+
+  isF2       = 1
+  isBC       = 2
+  isRIL      = 3
+
+  isAA       = 1
+  isAB       = 2
+  isH        = 2
+  isBB       = 3
+  isNOTBB    = 4
+  isNOTAA    = 5
+  isMISSING  = 9
+
   crosstype <- class(cross)[1]
-  if (crosstype != "f2" && crosstype != "bc" && crosstype != "riself")
-    ourstop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
 
   if (crosstype == "f2") {
-    ctype = 1
+    ctype = isF2
   }
-  if (crosstype == "bc") {
-    ctype = 2
+  else if (crosstype == "bc") {
+    ctype = isBC
   }
-  if (crosstype == "riself") {
-    ctype = 3
+  else if (crosstype == "riself") {
+    ctype = isRIL
+  }
+  else {
+    ourstop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
   }
 
   if (verbose) cat("INFO: Received a valid cross file type:", crosstype,".\n")
@@ -55,7 +69,7 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
   # check whether the X chromosome should be dropped
   # (backcross with one sex should be fine)
   chrtype <- sapply(cross$geno, class)
-  if (any(chrtype == "X") && (crosstype=="f2" ||
+  if (any(chrtype == "X") && (ctype == isF2 ||
     length(getgenonames(crosstype, "X", "full",
     getsex(cross), attributes(cross))) != 2)) { # drop X chr
       warning("MQM not yet available for the X chromosome; omitting chr ",
@@ -106,21 +120,21 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
   pheno <- cross$pheno
   n.mark <- ncol(geno)
   if (verbose) cat("INFO: Number of markers:",n.mark,".\n")
-
+ 
   # Check for NA genotypes and replace them with a 9
-  geno[is.na(geno)] <- 9
-  if (ctype==3) {
-    # RIL
-    if (any(geno==3)) { # have 3's, so replace 2's with missing values
-      if (any(geno==2)) {
-        n2 <- sum(geno==2)
-        geno[geno==2] <- 9
-        warning("Removed ", n2, " genotypes")
+  geno[is.na(geno)] <- isMISSING
+  if (ctype==isRIL) {
+    nH = sum(geno==isH)
+    if (nH>0) {
+      warning("RIL dataset contains", nH," heterozygous genotypes")
+      if (any(geno==isBB)) { # have 3/BB's, so replace 2/H's with missing values
+        geno[geno==isH] <- isMISSING 
+        warning("Removed heterozygous genotypes from RIL set")
+      } else {
+        warning("Converting heterozygous genotypes to BB from RIL set")
+        geno[geno==isH] <- isBB
       }
-    } else {
-      if (any(geno==2)) # no 3's; replace 2's with 3's.
-        geno[geno==2] <- 3
-      }
+    }
   } # end if(RIL)
 
   # check for missing phenotypes and drop
