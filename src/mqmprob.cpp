@@ -97,7 +97,7 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
       return 0.5;
     }
     if (compareto==MH) {
-      warning("Strange: prob function trying to find MH in RIL");
+      warning("Strange: prob function trying to find H in RIL");
       return 0.0; // No chance finding a 1 or H in an RIL
     }
     Nrecom = fabs((double)loci[j][i]-(double)compareto);
@@ -113,7 +113,8 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
     if (start) {
       return 0.5;
     }
-    if (compareto==MBB && JorC) {
+    if (compareto==MBB) {
+      warning("Strange: prob function trying to find BB in BC");
       return 0.0; // No chance finding a 2/BB in a BC
     }
     Nrecom= fabs((double)loci[j][i]-(double)compareto);
@@ -131,7 +132,8 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
 
 /*
  * Return the probability of a marker being of markertype (at jloc), using the
- * information from the right neighbouring marker.
+ * information from the right neighbouring marker and the known recombination
+ * frequencies. This function is used by augmentation.
  */
 
 double probright(const char markertype, const int jloc, const cvector imarker, const vector r, const cvector position, const char crosstype) {
@@ -236,8 +238,9 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
         return r[jloc];
       }
     } else {
-      // [pjotr:] I think this code never reached (FIXME)
+      // [pjotr:] I think this code is never reached (FIXME)
       // Both markers could have recombinated which has a very low chance
+      warning("Unreachable code");
       if (markertype==MAA) {
         prob0= (1.0-r[jloc]);
         prob2= r[jloc];
@@ -250,6 +253,7 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
     break;
   case CBC:
     if (markertype==MBB) {
+      error("Strange: encountered BB genotype in BC");
       return 0.0;
     }
     if ((imarker[jloc+1]==MAA)||(imarker[jloc+1]==MH)) {
@@ -260,7 +264,10 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
         return r[jloc];
       }
     } else {
-      if (markertype==MAA) {//Both markers could have recombinated which has a very low chance
+      // [pjotr:] I think this code is never reached (FIXME)
+      // Both markers could have recombinated which has a very low chance
+      warning("Unreachable code");
+      if (markertype==MAA) {
         prob0= 1.0-r[jloc];
         prob2= r[jloc];
       } else {
