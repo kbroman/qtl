@@ -2,8 +2,8 @@
 #
 # mqmaugment.R
 #
-# copyright (c) 2009, Danny Arends and Karl W. Broman
-# last modified Apr, 2009
+# copyright (c) 2009, Danny Arends, Pjotr Prins and Karl W. Broman
+# last modified July, 2009
 # first written Feb, 2009
 #
 #     This program is free software; you can redistribute it and/or

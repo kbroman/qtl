@@ -37,7 +37,7 @@ double start_prob(char crosstype, char c) {
   case 'F':  // F2
     return (c==MH ? 0.5 : 0.25);
     break;
-  case MRIGHT:  // RIL
+  case 'R':  // RIL
     return (c==MH ? 0.0 : 0.5);
     break;
   case 'B':  // BC
@@ -92,7 +92,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
     }
     //Rprintf("after IF\n", j);
     break;
-  case MRIGHT:
+  case 'R':
     if (start) {
       return 0.5;
     }
@@ -219,7 +219,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position, 
       return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob1*probright(MH, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
     }
     break;
-  case MRIGHT:
+  case 'R':
     if (c==MH) {
       return 0.0;
     }
