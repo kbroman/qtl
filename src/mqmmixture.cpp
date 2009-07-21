@@ -72,7 +72,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
             else weight[i]*= 0.25;
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE))
           for (i=0; i<Naug; i++) {
-            // [pjotr:] same problem described below, why define if not used?
+            // [pjotr:] same problem described below, why define if not used? FIXME
             // double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0, 0);
             double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0);
             weight[i]*=calc_i;

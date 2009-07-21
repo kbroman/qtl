@@ -66,6 +66,7 @@ char markertype, const char crosstype, const int ADJ, const int start) {
     //Rprintf("C %d %d\n", i, j);
     compareto = markertype;
   } else {
+    error("We never get here, all calls pass in the markertype");
     //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];
   }
