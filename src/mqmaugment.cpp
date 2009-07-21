@@ -105,7 +105,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
           // ---- walk from previous augmented to current augmented genotype
           if (newmarker[j][ii]==MNOTAA) {
             // augment data to contain AB and BB
-            for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
+            for (jj=0; jj<Nmark; jj++) imarker[jj] = newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob1left= start_prob(crosstype, MH);

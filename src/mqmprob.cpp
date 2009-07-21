@@ -49,12 +49,12 @@ double start_prob(const char crosstype, const char markertype) {
 
 /*
  * Return probability comparing loci[j][i] versus loci[j+1][i],
- * OR if JorC is set to 1 loci[j][i] versus c (compareto).
+ * OR if JorC is set to 1 loci[j][i] versus comparemarkertype.
  *
  * Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
  */
 
-double prob(const cmatrix loci, const vector r, const int i, const int j, const char c, const char crosstype, const int JorC, const int ADJ, const int start) {
+double prob(const cmatrix loci, const vector r, const int i, const int j, const char comparemarkertype, const char crosstype, const int JorC, const int ADJ, const int start) {
   double calc_i=0.0;
   double Nrecom;
   char compareto;
@@ -62,7 +62,7 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
 
   if (JorC==1) {
     //Rprintf("C %d %d\n", i, j);
-    compareto = c;
+    compareto = comparemarkertype;
   } else {
     //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];
@@ -96,10 +96,11 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
     if (start) {
       return 0.5;
     }
-    if (compareto==MH && JorC) {
-      return 0.0; // No chance in hell finding a 1 in an RIL
+    if (compareto==MH) {
+      warning("Strange: prob function trying to find MH in RIL");
+      return 0.0; // No chance finding a 1 or H in an RIL
     }
-    Nrecom= fabs((double)loci[j][i]-(double)compareto);
+    Nrecom = fabs((double)loci[j][i]-(double)compareto);
     if (Nrecom==0) {
       //No recombination has a chance of r[j]
       calc_i = 1.0-r[j+ADJ];
@@ -113,7 +114,7 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
       return 0.5;
     }
     if (compareto==MBB && JorC) {
-      return 0.0; // No chance in hell finding a 2 in a BC
+      return 0.0; // No chance finding a 2/BB in a BC
     }
     Nrecom= fabs((double)loci[j][i]-(double)compareto);
     if (Nrecom==0) {
@@ -129,15 +130,14 @@ double prob(const cmatrix loci, const vector r, const int i, const int j, const 
 }
 
 /*
- * Return the probability.
- *
- * This is for an F2 population, where markertype==MH stands for Heterozygous (so it has two times higher chance than AA or BB
+ * Return the probability of a marker being of markertype (at jloc), using the
+ * information from the right neighbouring marker.
  */
 
 double probright(const char markertype, const int jloc, const cvector imarker, const vector r, const cvector position, const char crosstype) {
   double nrecom, prob0, prob1, prob2;
   if ((position[jloc]==MRIGHT)||(position[jloc]==MUNLINKED)) {
-    //We're at the end of a chromosome or an unknown marker
+    //We're at the end of a chromosome or an unlinked marker
     return 1.0;
   }
   switch (crosstype) {
@@ -221,9 +221,14 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
     break;
   case CRIL:
     if (markertype==MH) {
+      error("Strange: encountered heterozygous genotype in RIL");
       return 0.0;
     }
     if ((imarker[jloc+1]==MAA)||(imarker[jloc+1]==MBB)) {
+      // markertype markerr diff nrecom
+      //   AA        AA      0     0      1-r
+      //   AA        BB     -2     2       r
+      //   BB        BB      0     0      1-r
       nrecom = fabs(markertype-imarker[jloc+1]);
       if (nrecom==0) {
         return (1.0-r[jloc]);
@@ -231,10 +236,12 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
         return r[jloc];
       }
     } else {
-      if (markertype==MAA) {//Both markers could have recombinated which has a very low chance
+      // [pjotr:] I think this code never reached (FIXME)
+      // Both markers could have recombinated which has a very low chance
+      if (markertype==MAA) {
         prob0= (1.0-r[jloc]);
         prob2= r[jloc];
-      } else {
+      } else { // MBB
         prob0= r[jloc];
         prob2= (1.0-r[jloc]);
       }
