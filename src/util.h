@@ -39,17 +39,18 @@
  *
  **********************************************************************/
 
+#ifndef __UTIL_H
+  #define __UTIL_H
 
 #ifdef __cplusplus
   extern "C" {
 #endif
 
 /* Macro for getting maximum */
-#define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#ifndef MAX
+  #define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#endif
 
-inline int mod(int a, int b) {
-  return a%b;
-}
 
 /**********************************************************************
  *
@@ -355,4 +356,5 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
   }
 #endif
 
+#endif // __UTIL_H
 /* end of util.h */

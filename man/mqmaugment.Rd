@@ -4,8 +4,17 @@
 \title{MQM data augmentation}
 
 \description{
-  Estimates missing data by increasing the number of marker locations and filling in 
-	genotypes based on surrounding markers and recombination frequencies. 
+Estimates missing data by increasing the number of marker locations and filling in 
+genotypes based on surrounding markers and recombination frequencies. 
+
+Augment/expand the dataset by adding additional (likely) genotypes.
+Genotypic marker information is incomplete when marker scores are missing or dominant, or
+markers are non-segregating but you want to assume a
+segregating QTL on top of this marker (~very closely linked),
+and all likely possible configurations are generated 
+
+A new markerset is created, likewise the Augmentation halts when the number of
+individuals maxNaug is reached. Individuals are expanded up to imaxNaug.
 }
 
 \usage{
@@ -15,12 +24,18 @@ mqmaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FAL
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}}.} 
-  \item{pheno.col}{Column number in the phenotype matrix. This can be an index
-	number or a character string matching one of the phenotype names. If pheno.col is
-	an array the first item is used}
+  \item{pheno.col}{Column number in the phenotype matrix which should be
+    used as the phenotype.  This can be a vector of integers, which index on
+    the phenotype, a string matching one phenotype name, or, when the value is
+    TRUE, all phenotypes are used.
+  }
   \item{maxind}{ Maximum number of individuals augmentation can expand to }
   \item{maxaugind}{ Maximum number of augmentations per individual }
-  \item{neglect}{ Drop certain unlikely genotypes during augmentation (neglect=1 does not drop individuals, higher values do).}
+  \item{neglect}{ Drop certain unlikely genotypes during augmentation
+  (neglect=1 does not drop individuals, higher values do). The neglect
+  parameter drops genotypes. E.g. for neglect=100  eliminate genotypes 100
+  times less likely than the most likely configuration. The dataset may be
+  reduced when there is a lot of missing data.  }
   \item{verbose}{ Be verbose }
 }
 
@@ -28,10 +43,10 @@ mqmaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FAL
 }
 
 \value{
-	The cross object the single phenotype \code{pheno.col}, without dropped
-	individuals and with augmented individuals (many will be repeated multiple
-	times). An added component \code{extra} contains information on which
-	individuals are retained and repeated.  
+  The cross object the single phenotype \code{pheno.col}, without dropped
+  individuals and with augmented individuals (many will be repeated multiple
+  times). An added component \code{extra} contains information on which
+  individuals are retained and repeated.  
 }  
 
 \author{R.C. Jansen ; Danny Arends}
@@ -49,30 +64,18 @@ the dataset.
 }
 
 \seealso{
-	\itemize{
-	\item \code{\link[qtl]{MQM}} - MQM description
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
-	}
+  \itemize{
+  \item \code{\link[qtl]{MQM}} - MQM description and references
+  \item \code{\link[qtl]{mqmscan}} - Main MQM function for trait analysis
+  }
 }
 
 \examples{
-qtl <- c(3,15,3,7)							# QTL at chromosome 3
-data(map10)								# Mouse genome
-cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)             # Simulate a Cross (just autosomes)
-crossaug <- mqmaugment(cross)						# Augmentation of the data
-result <- mqmscan(crossaug)						# Do a MQM scan of the genome
-}
-
-\references{
-	\itemize{
-		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
-		\item Jansen RC, Nap JP (2001), Genetical genomics: the added value from segregation. \emph{Trends in Genetics}, \bold{17}, 388--391.
-		\item Jansen RC, Stam P (1994), High resolution of quantitative traits into multiple loci via interval mapping. \emph{Genetics}, \bold{136}, 1447--1455.
-		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
-		\item Jansen RC (1993), Interval mapping of multiple quantitative trait loci. \emph{Genetics}, \bold{135}, 205--211.
-		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
-	}
+qtl <- c(3,15,3,7)                     # QTL at chromosome 3
+data(map10)                            # Mouse genome
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)    # Simulate a Cross (just autosomes)
+crossaug <- mqmaugment(cross)          # Augmentation of the data
+result <- mqmscan(crossaug)            # Do a MQM scan of the genome
 }
 
 \keyword{ utilities }

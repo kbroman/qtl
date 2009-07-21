@@ -29,11 +29,11 @@
   extern "C" {
 #endif
 
-double probright(char c, int jloc, cvector imarker, vector r, cvector position,char crosstype);
+double probright(const char c, const int jloc, const cvector imarker, const vector r, const cvector position,const char crosstype);
 
-double prob(cmatrix loci, vector r,int i,int j,char c,char crosstype,int JorC,int ADJ,int start);
+double prob(const cmatrix loci, const vector r, const int i, const int j, const char markertype, const char crosstype, const int ADJ, const int start);
 
-double start_prob(char crosstype,char c);
+double start_prob(const char crosstype,const char markertype);
 
 #ifdef __cplusplus
   }

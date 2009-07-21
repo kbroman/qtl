@@ -29,7 +29,7 @@
 #endif
      
 double Lnormal(double residual, double variance);
-int mod(int a, int b);
+// int mod(int a, int b);
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno);
 void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);
 
@@ -47,6 +47,11 @@ void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
                double *windowsize,double *steps,
                double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype,int *domi,int *verbose);
+
+
+inline int mod(int a, int b) {
+  return a%b;
+}
 
 #ifdef __cplusplus
   }

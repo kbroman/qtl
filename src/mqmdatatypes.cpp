@@ -28,24 +28,29 @@
 
 #include "mqm.h"
 
-char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
+/* 
+ * Determine the experimental cross type from the R/qtl dataset. Returns the
+ * type.
+ */
+
+char determine_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
       //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
       if (Geno[i][j] != 9 && Geno[i][j] > 3 && (*crosstype) != 1) {
-        Rprintf("INFO: Strange genotype pattern, switching to F2\n");
+        Rprintf("INFO: Unexpected genotype pattern, switching to F2\n");
         Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[i][j]);
         (*crosstype) = 1;
         break;
       }
       if (Geno[i][j] == 3 && (*crosstype) == 2) {
-        Rprintf("INFO: Strange genotype pattern, switching from BC to F2\n");
+        Rprintf("INFO: Unexpected genotype pattern, switching from BC to F2\n");
         (*crosstype) = 1;
         break;
       }
       //IF we have a RIL and find AB then the set is messed up; we have a BC genotype
       if (Geno[i][j] == 2 && (*crosstype) == 3) {
-        Rprintf("INFO: Strange genotype pattern, switching from RISELF to BC\n");
+        Rprintf("INFO: Unexpected genotype pattern, switching from RISELF to BC\n");
         (*crosstype) = 2;
         break;
       }
@@ -54,16 +59,18 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
     //Rprintf("\n");
   }
 
-  char cross = 'F';
-  if ((*crosstype) == 1) {
-    cross = 'F';
+  unsigned char cross = 0;
+  switch(*crosstype) {
+    case 1: cross=CF2;
+            break;
+    case 2: cross=CBC;
+            break;
+    case 3: cross=CRIL;
+            break;
+    default:
+            error("Unknown cross type %d",*crosstype);
   }
-  if ((*crosstype) == 2) {
-    cross = 'B';
-  }
-  if ((*crosstype) == 3) {
-    cross = MRIGHT;
-  }
+
   return cross;
 }
 
@@ -77,24 +84,24 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
-      markers[i][j] = MMISSING;
-      if (Geno[i][j] == 1) {				//AA
-        markers[i][j] = MAA;
-      }
-      if (Geno[i][j] == 2) {				//AB (H) 
-        // [karl:] I think this needs to be changed, but my fix doesn't work.
-        //			  if(crosstype!=3) markers[i][j] = MH; // non-RIL
-        //			  else markers[i][j] = MBB;  // RIL
-        markers[i][j] = MH;
-      }
-      if (Geno[i][j] == 3) {				//BB
-        markers[i][j] = MBB;
-      }
-      if (Geno[i][j] == 4) {				//AA or AB
-        markers[i][j] = MNOTBB;
-      }
-      if (Geno[i][j] == 5) {				//BB or AB
-        markers[i][j] = MNOTAA;
+      switch (Geno[i][j]) {
+        case 1: markers[i][j] = MAA;
+                break;
+        case 2: markers[i][j] = MH;
+          // [karl:] I think this needs to be changed, but my fix doesn't work.
+          //			  if(crosstype!=3) markers[i][j] = MH; // non-RIL
+          //			  else markers[i][j] = MBB;  // RIL
+                break;
+        case 3: markers[i][j] = MBB;
+                break;
+        case 4: markers[i][j] = MNOTBB;
+                break;
+        case 5: markers[i][j] = MNOTAA;
+                break;
+        case 9: markers[i][j] = MMISSING;
+                break;
+        default:
+                error("Can not convert R/qtl genotype with value %d",Geno[i][j]);
       }
     }
   }
