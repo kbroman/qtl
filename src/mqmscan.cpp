@@ -459,7 +459,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     reestimate = 'n';
   }
   //determine what kind of cross we have
-  char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
+  char cross = determine_cross(&Nmark,&Nind,Geno,&crosstype);
   //set dominance accordingly
   if (cross != CF2) {
     if (verbose==1) {

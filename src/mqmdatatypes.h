@@ -39,7 +39,7 @@ typedef char**   cmatrix;
 typedef char*    cvector;
 typedef int*  ivector;
 
-char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype);
+char determine_cross(int *Nmark,int *Nind,int **Geno,int *crosstype);
 
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype);
 

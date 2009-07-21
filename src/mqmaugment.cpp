@@ -408,7 +408,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, *crosstype);
 
-  char cross = determin_cross(Nmark, Nind, Geno, crosstype);
+  char cross = determine_cross(Nmark, Nind, Geno, crosstype);
   if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
 
   for (int i=0; i<(*Nmark); i++) {

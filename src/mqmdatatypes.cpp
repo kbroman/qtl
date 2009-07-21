@@ -33,7 +33,7 @@
  * type.
  */
 
-char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
+char determine_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
       //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
