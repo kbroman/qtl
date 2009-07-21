@@ -49,20 +49,22 @@ double start_prob(const char crosstype, const char markertype) {
 
 /*
  * Return probability comparing loci[j][i] versus loci[j+1][i],
- * OR if JorC is set to 1 loci[j][i] versus comparemarkertype.
+ * OR if markertype is set, loci[j][i] versus comparemarkertype. Probability
+ * is simply based on the markertypes and known recombination rate.
  *
  * Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
  */
 
-double prob(const cmatrix loci, const vector r, const int i, const int j, const char comparemarkertype, const char crosstype, const int JorC, const int ADJ, const int start) {
+double prob(const cmatrix loci, const vector r, const int i, const int j, const
+char markertype, const char crosstype, const int ADJ, const int start) {
   double calc_i=0.0;
   double Nrecom;
   char compareto;
   // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nR[j+ADJ] value: %f Loci[j][i]=%c\n", i, j, ADJ, r[j+ADJ], loci[j][i]);
 
-  if (JorC==1) {
+  if (markertype != MUNUSED) {
     //Rprintf("C %d %d\n", i, j);
-    compareto = comparemarkertype;
+    compareto = markertype;
   } else {
     //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];

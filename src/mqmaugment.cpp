@@ -111,8 +111,8 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0, 0);
             }
 
             prob1right= probright(MH, j, imarker, r, position, crosstype);
@@ -161,8 +161,8 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob0left= start_prob(crosstype, MAA);
               prob1left= start_prob(crosstype, MH);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0, 0);
             }
 
             prob0right= probright(MAA, j, imarker, r, position, crosstype);
@@ -212,9 +212,9 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0, 0);
             }
 
             prob0right= probright(MAA, j, imarker, r, position, crosstype);
@@ -314,7 +314,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0, 0);
             }
 
             newprob[ii]*= prob0left;
