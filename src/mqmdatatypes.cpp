@@ -54,15 +54,15 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
     //Rprintf("\n");
   }
 
-  char cross = 'F';
+  char cross = CF2;
   if ((*crosstype) == 1) {
-    cross = 'F';
+    cross = CF2;
   }
   if ((*crosstype) == 2) {
-    cross = 'B';
+    cross = CBC;
   }
   if ((*crosstype) == 3) {
-    cross = 'R';
+    cross = CRIL;
   }
   return cross;
 }

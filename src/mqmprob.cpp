@@ -34,13 +34,13 @@
 
 double start_prob(char crosstype, char c) {
   switch (crosstype) {
-  case 'F':  // F2
+  case CF2:  // F2
     return (c==MH ? 0.5 : 0.25);
     break;
-  case 'R':  // RIL
+  case CRIL:  // RIL
     return (c==MH ? 0.0 : 0.5);
     break;
-  case 'B':  // BC
+  case CBC:  // BC
     return (c==MBB ? 0.0 : 0.5);
     break;
   }
@@ -68,7 +68,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
     compareto = loci[j+1][i];
   }
   switch (crosstype) {
-  case 'F':
+  case CF2:
     if (start) {
       return (loci[j][i]==MH ? 0.5 : 0.25);
     }
@@ -92,7 +92,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
     }
     //Rprintf("after IF\n", j);
     break;
-  case 'R':
+  case CRIL:
     if (start) {
       return 0.5;
     }
@@ -108,7 +108,7 @@ double prob(cmatrix loci, vector r, int i, int j, char c, char crosstype, int Jo
       calc_i = r[j+ADJ];
     }
     break;
-  case 'B':
+  case CBC:
     if (start) {
       return 0.5;
     }
@@ -141,7 +141,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position, 
     return 1.0;
   }
   switch (crosstype) {
-  case 'F':
+  case CF2:
     if ((imarker[jloc+1]==MAA)||(imarker[jloc+1]==MH)||(imarker[jloc+1]==MBB)) {
       //NEXT marker is known
       if ((c==MH)&&(imarker[jloc+1]==MH)) {
@@ -219,7 +219,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position, 
       return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob1*probright(MH, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
     }
     break;
-  case 'R':
+  case CRIL:
     if (c==MH) {
       return 0.0;
     }
@@ -241,7 +241,7 @@ double probright(char c, int jloc, cvector imarker, vector r, cvector position, 
       return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
     }
     break;
-  case 'B':
+  case CBC:
     if (c==MBB) {
       return 0.0;
     }

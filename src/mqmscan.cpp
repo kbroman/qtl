@@ -461,7 +461,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   //determine what kind of cross we have
   char cross = determin_cross(&Nmark,&Nind,Geno,&crosstype);
   //set dominance accordingly
-  if (cross != 'F') {
+  if (cross != CF2) {
     if (verbose==1) {
       Rprintf("INFO: Dominance setting ignored (dominance=0)\n");
     }

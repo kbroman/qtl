@@ -42,11 +42,16 @@
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
 
+// Cross types
+const unsigned char CF2       = 'F';
+const unsigned char CBC       = 'B';
+const unsigned char CRIL      = 'R';
+
 // Marker locations/relations
-const unsigned char MLEFT     ='L';
-const unsigned char MRIGHT    ='R';
-const unsigned char MMIDDLE   ='M';
-const unsigned char MUNLINKED ='U';
+const unsigned char MLEFT     = 'L';
+const unsigned char MRIGHT    = 'R';
+const unsigned char MMIDDLE   = 'M';
+const unsigned char MUNLINKED = 'U';
 
 // Marker genotypes (scored at marker)
 const unsigned char MAA       = '0';  // Homozygous AA
