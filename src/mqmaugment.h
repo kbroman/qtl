@@ -31,7 +31,7 @@ Data augmentation routing
 
 void R_augdata(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
+               int *Npheno, int *maxind, int *maxiaug, double *neglect, int
                *chromo, int *crosstype, int *verbose);
 
 int augdata(const cmatrix marker, const vector y, cmatrix *augmarker, vector *augy,

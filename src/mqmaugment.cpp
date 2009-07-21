@@ -369,7 +369,7 @@ cleanup:
 
 void R_augdata(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
+               int *Npheno, int *maxind, int *maxiaug, double *neglect, int
                *chromo, int *crosstype, int *verbose) {
   int **Geno;
   double **Pheno;
@@ -389,7 +389,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   ivector chr;
 
   markers= newcmatrix(*Nmark, nind0);
-  new_markers= newcmatrix(*Nmark, *maxaug);
+  new_markers= newcmatrix(*Nmark, *maxind);
   r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
   position= newcvector(*Nmark);
@@ -401,9 +401,9 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   reorg_pheno(nind0, *Npheno, pheno, &Pheno);
   reorg_pheno(*Nmark, 1, dist, &Dist);
 
-  reorg_int(*maxaug, *Nmark, auggeno, &NEW);
+  reorg_int(*maxind, *Nmark, auggeno, &NEW);
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
-  reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
+  reorg_pheno(*maxind, 1, augPheno, &NEWPheno);
 
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, *crosstype);
@@ -449,7 +449,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
     //RRprintf("recomfreq:%d, %f\n", j, r[j]);
   }
 
-  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxaug, *maxiaug, *neglect, cross, *verbose)==1) {
+  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, cross, *verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
