@@ -53,7 +53,7 @@
  * FIXME: increasing the buffers for augmentation can automatic
  */
 
-int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
+int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
             const double neglect, const char crosstype, const int verbose) {
@@ -105,14 +105,14 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
           // ---- walk from previous augmented to current augmented genotype
           if (newmarker[j][ii]==MNOTAA) {
             // augment data to contain AB and BB
-            for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
+            for (jj=0; jj<Nmark; jj++) imarker[jj] = newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0, 0);
             }
 
             prob1right= probright(MH, j, imarker, r, position, crosstype);
@@ -161,8 +161,8 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
               prob0left= start_prob(crosstype, MAA);
               prob1left= start_prob(crosstype, MH);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0, 0);
             }
 
             prob0right= probright(MAA, j, imarker, r, position, crosstype);
@@ -212,9 +212,9 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 1, 0, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 1, 0, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0, 0);
+              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0, 0);
+              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0, 0);
             }
 
             prob0right= probright(MAA, j, imarker, r, position, crosstype);
@@ -314,7 +314,7 @@ int augdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *au
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 1, 0, 0);
+              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0, 0);
             }
 
             newprob[ii]*= prob0left;
@@ -367,9 +367,9 @@ cleanup:
  * The R interfact to data augmentation
  */
 
-void R_augdata(int *geno, double *dist, double *pheno, int *auggeno, 
+void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxaug, int *maxiaug, double *neglect, int
+               int *Npheno, int *maxind, int *maxiaug, double *neglect, int
                *chromo, int *crosstype, int *verbose) {
   int **Geno;
   double **Pheno;
@@ -389,7 +389,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   ivector chr;
 
   markers= newcmatrix(*Nmark, nind0);
-  new_markers= newcmatrix(*Nmark, *maxaug);
+  new_markers= newcmatrix(*Nmark, *maxind);
   r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
   position= newcvector(*Nmark);
@@ -401,14 +401,14 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
   reorg_pheno(nind0, *Npheno, pheno, &Pheno);
   reorg_pheno(*Nmark, 1, dist, &Dist);
 
-  reorg_int(*maxaug, *Nmark, auggeno, &NEW);
+  reorg_int(*maxind, *Nmark, auggeno, &NEW);
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
-  reorg_pheno(*maxaug, 1, augPheno, &NEWPheno);
+  reorg_pheno(*maxind, 1, augPheno, &NEWPheno);
 
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, *crosstype);
 
-  char cross = determin_cross(Nmark, Nind, Geno, crosstype);
+  char cross = determine_cross(Nmark, Nind, Geno, crosstype);
   if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
 
   for (int i=0; i<(*Nmark); i++) {
@@ -449,7 +449,7 @@ void R_augdata(int *geno, double *dist, double *pheno, int *auggeno,
     //RRprintf("recomfreq:%d, %f\n", j, r[j]);
   }
 
-  if (augdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxaug, *maxiaug, *neglect, cross, *verbose)==1) {
+  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, cross, *verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
