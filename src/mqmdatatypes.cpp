@@ -28,6 +28,11 @@
 
 #include "mqm.h"
 
+/* 
+ * Determine the experimental cross type from the R/qtl dataset. Returns the
+ * type.
+ */
+
 char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
@@ -54,16 +59,18 @@ char determin_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
     //Rprintf("\n");
   }
 
-  char cross = CF2;
-  if ((*crosstype) == 1) {
-    cross = CF2;
+  unsigned char cross = 0;
+  switch(*crosstype) {
+    case 1: cross=CF2;
+            break;
+    case 2: cross=CBC;
+            break;
+    case 3: cross=CRIL;
+            break;
+    default:
+            error("Unknown cross type %d",*crosstype);
   }
-  if ((*crosstype) == 2) {
-    cross = CBC;
-  }
-  if ((*crosstype) == 3) {
-    cross = CRIL;
-  }
+
   return cross;
 }
 
