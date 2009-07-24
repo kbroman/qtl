@@ -59,7 +59,7 @@ double start_prob(const char crosstype, const char markertype) {
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const char crosstype, const int ADJ) {
-  double probj =0.0;
+  double probj = 0.0;
   char compareto;
 
   const double r = rs[j+ADJ];
@@ -75,22 +75,22 @@ char checkmarker, const char crosstype, const int ADJ) {
     error("We never get here, all calls pass in the markertype");
     compareto = loci[j+1][i];
   }
-  // number of recombinations Nrecom
-  const double Nrecom = fabs((double)markertype-(double)compareto);
+  // number of recombinations recombinations
+  const double recombinations = fabs((double)markertype-(double)compareto);
   switch (crosstype) {
     case CF2:
       if ((markertype==MH)&&(compareto==MH)) {
         probj = r2 + rr2;
-      } else if (Nrecom==0) {
+      } else if (recombinations==0) {
         probj = rr2;
-      } else if (Nrecom==1) {
+      } else if (recombinations==1) {
         if (ADJ!=0) {  // FIXME: now this is not clear to me
           probj = ((markertype==MH) ? 2.0*r*rr : r*rr);
         } else {
           probj = ((compareto==MH) ? 2.0*r*rr : r*rr);
         }
       } else {
-        probj = r2;
+        probj = r2;  // two recombinations
       }
       break;
     case CRIL:
@@ -98,7 +98,7 @@ char checkmarker, const char crosstype, const int ADJ) {
         error("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
       }
-      if (Nrecom==0) {
+      if (recombinations==0) {
         probj = rr;  // no recombinations (1-r)
       } else {
         probj = r;   // recombination rate (r)
@@ -109,7 +109,7 @@ char checkmarker, const char crosstype, const int ADJ) {
         error("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
       }
-      if (Nrecom==0) {
+      if (recombinations==0) {
         probj =  rr; // no recombinations (1-r)
       } else {
         probj = r;   // recombination rate (r)
@@ -139,11 +139,11 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   const double rr2 = rr*rr;
   const char rightmarker = imarker[j+1];
 
-  // markertype markerr diff Nrecom
+  // markertype markerr diff recombinations
   //   AA        AA      0     0      1-r
   //   AA        BB     -2     2       r
   //   BB        BB      0     0      1-r
-  const double Nrecom = fabs(markertype-rightmarker);
+  const double recombinations = fabs(markertype-rightmarker);
   switch (crosstype) {
     case CF2:
       if ((rightmarker==MAA)||(rightmarker==MH)||(rightmarker==MBB)) {
@@ -153,10 +153,10 @@ double probright(const char markertype, const int j, const cvector imarker, cons
           return r2+rr2;
         } else {
           //The number of recombinations between observed marker and the next marker
-          if (Nrecom==0) {
+          if (recombinations==0) {
             //No recombination
             return rr2;
-          } else if (Nrecom==1) {
+          } else if (recombinations==1) {
             if (rightmarker==MH) {
               //the chances of having a H after 1 recombination are 2 times the chance of being either A or B
               return 2.0*r*rr;
@@ -228,7 +228,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MBB)) {
-        if (Nrecom==0) {
+        if (recombinations==0) {
           return rr;  // no recombination (1-r) 
         } else {
           return r;   // recombination (r)
@@ -253,7 +253,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MH)) {
-        if (Nrecom==0) {
+        if (recombinations==0) {
           return rr;
         } else {
           return r;
