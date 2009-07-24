@@ -57,12 +57,15 @@ double start_prob(const char crosstype, const char markertype) {
  * Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
  */
 
-double prob(const cmatrix loci, const vector r, const int i, const int j, const
+double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const char crosstype, const int ADJ) {
   double probj =0.0;
   char compareto;
 
-  const double rj = r[j+ADJ];
+  const double r = rs[j+ADJ];
+  const double r2 = r*r;
+  const double rr = 1.0-r; // right side recombination frequency
+  const double rr2 = rr*rr;
   const char markertype = loci[j][i];
   // From this point on we don't use loci, r, i, j, ADJ(!)
 
@@ -80,17 +83,17 @@ char checkmarker, const char crosstype, const int ADJ) {
   switch (crosstype) {
     case CF2:
       if ((markertype==MH)&&(compareto==MH)) {
-        probj = (rj*rj+(1.0-rj)*(1.0-rj));
+        probj = r2 + rr2;
       } else if (Nrecom==0) {
-        probj = (1.0-rj)*(1.0-rj);
+        probj = rr2;
       } else if (Nrecom==1) {
         if (ADJ!=0) {
-          probj = ((markertype==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
+          probj = ((markertype==MH) ? 2.0*r*rr : r*rr);
         } else {
-          probj = ((compareto==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
+          probj = ((compareto==MH) ? 2.0*r*rr : r*rr);
         }
       } else {
-        probj = rj*rj;
+        probj = r2;
       }
       break;
     case CRIL:
@@ -100,10 +103,10 @@ char checkmarker, const char crosstype, const int ADJ) {
       }
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
-        probj = 1.0-rj;
+        probj = rr;
       } else {
         // Recombination between markers has a chance of r[j-1]
-        probj = rj;
+        probj = r;
       }
       break;
     case CBC:
@@ -113,10 +116,10 @@ char checkmarker, const char crosstype, const int ADJ) {
       }
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
-        probj =  (1.0-rj);
+        probj =  rr;
       } else {
         // Recombination between markers has a chance of r[j-1]
-        probj = rj;
+        probj = r;
       }
       break;
     default:
