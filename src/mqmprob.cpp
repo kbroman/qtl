@@ -58,44 +58,40 @@ double start_prob(const char crosstype, const char markertype) {
  */
 
 double prob(const cmatrix loci, const vector r, const int i, const int j, const
-char markertype, const char crosstype, const int ADJ) {
+char checkmarker, const char crosstype, const int ADJ) {
   double probj =0.0;
   char compareto;
 
   const double rj = r[j+ADJ];
-  const char marker = loci[j][i];
+  const char markertype = loci[j][i];
+  // From this point on we don't use loci, r, i, j, ADJ(!)
 
   // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nrj value: %f Loci[j][i]=%c\n", i, j, ADJ, rj, loci[j][i]);
 
-  if (markertype != MUNUSED) {
+  if (checkmarker != MUNUSED) {
     //Rprintf("C %d %d\n", i, j);
-    compareto = markertype;
+    compareto = checkmarker;
   } else {
     error("We never get here, all calls pass in the markertype");
     //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];
   }
-  const double Nrecom = fabs((double)marker-(double)compareto);
+  const double Nrecom = fabs((double)markertype-(double)compareto);
   switch (crosstype) {
     case CF2:
-      if ((marker==MH)&&(compareto==MH)) {
-        //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
+      if ((markertype==MH)&&(compareto==MH)) {
         probj = (rj*rj+(1.0-rj)*(1.0-rj));
       } else if (Nrecom==0) {
-        //Rprintf("Nrecom=0 %c <-> %c:\n", compareto, loci[j][i]);
         probj = (1.0-rj)*(1.0-rj);
       } else if (Nrecom==1) {
-        //Rprintf("Nrecom=1 %c <-> %c:\n", compareto, loci[j][i]);
         if (ADJ!=0) {
-          probj = ((marker==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
+          probj = ((markertype==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
         } else {
           probj = ((compareto==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
         }
       } else {
-        //Rprintf("Nrecom=2 %c <-> %c:\n", compareto, loci[j][i]);
         probj = rj*rj;
       }
-      //Rprintf("after IF\n", j);
       break;
     case CRIL:
       if (compareto==MH) {
