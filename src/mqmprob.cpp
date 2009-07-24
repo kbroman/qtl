@@ -43,6 +43,8 @@ double start_prob(const char crosstype, const char markertype) {
     case CBC:
       return (markertype==MBB ? 0.0 : 0.5);
       break;
+    default:
+      warning("Strange: unknown crosstype in start_prob");
   }
   return 0.0;
 }
@@ -129,6 +131,8 @@ char markertype, const char crosstype, const int ADJ, const int start) {
         calc_i = r[j+ADJ];
       }
       break;
+    default:
+      warning("Strange: unknown crosstype in start_prob");
   }
   return calc_i;
 }
@@ -280,6 +284,8 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
         return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob2*probright(MH, jloc+1, imarker, r, position, crosstype);
       }
       break;
+    default:
+      warning("Strange: unknown crosstype in start_prob");
   }
   return 1.0;
 }
