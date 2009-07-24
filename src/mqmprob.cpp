@@ -138,19 +138,19 @@ char markertype, const char crosstype, const int ADJ, const int start) {
 }
 
 /*
- * Return the probability of a marker being of markertype (at jloc), using the
+ * Return the probability of a marker being of markertype (at j), using the
  * information from the right neighbouring marker and the known recombination
  * frequencies. This function is used by augmentation.
  */
 
-double probright(const char markertype, const int jloc, const cvector imarker, const vector r, const cvector position, const char crosstype) {
+double probright(const char markertype, const int j, const cvector imarker, const vector r, const cvector position, const char crosstype) {
   double nrecom, prob0, prob1, prob2;
-  if ((position[jloc]==MRIGHT)||(position[jloc]==MUNLINKED)) {
+  if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
     //We're at the end of a chromosome or an unlinked marker
     return 1.0;
   }
-  const double rj = r[jloc];
-  const char rightmarker = imarker[jloc+1];
+  const double rj = r[j];
+  const char rightmarker = imarker[j+1];
 
   switch (crosstype) {
     case CF2:
@@ -193,7 +193,7 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
           prob1= 2.0*rj*(1.0-rj);
           prob2= (1.0-rj)*(1-rj);
         }
-        return prob1*probright(MH, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
+        return prob1*probright(MH, j+1, imarker, r, position, crosstype) + prob2*probright(MBB, j+1, imarker, r, position, crosstype);
       } else if (rightmarker==MNOTBB) {
         //SEMI unknown next marker known is it is not a B
         if (markertype==MAA) {
@@ -209,7 +209,7 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
           prob0= rj*rj;
           prob1= 2.0*rj*(1.0-rj);
         }
-        return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob1*probright(MH, jloc+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob1*probright(MH, j+1, imarker, r, position, crosstype);
       } else {
         // Unknown next marker so estimate all posibilities (imarker[j+1]==MMISSING)
         if (markertype==MAA) {
@@ -228,7 +228,7 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
           prob1= 2.0*rj*(1.0-rj);
           prob2= (1.0-rj)*(1.0-rj);
         }
-        return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob1*probright(MH, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob1*probright(MH, j+1, imarker, r, position, crosstype) + prob2*probright(MBB, j+1, imarker, r, position, crosstype);
       }
       break;
     case CRIL:
@@ -258,7 +258,7 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
           prob0= rj;
           prob2= (1.0-rj);
         }
-        return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob2*probright(MBB, j+1, imarker, r, position, crosstype);
       }
       break;
     case CBC:
@@ -284,7 +284,7 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
           prob0= rj;
           prob2= 1.0-rj;
         }
-        return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob2*probright(MH, jloc+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob2*probright(MH, j+1, imarker, r, position, crosstype);
       }
       break;
     default:
