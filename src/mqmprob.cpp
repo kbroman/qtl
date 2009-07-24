@@ -60,7 +60,6 @@ double start_prob(const char crosstype, const char markertype) {
 double prob(const cmatrix loci, const vector r, const int i, const int j, const
 char markertype, const char crosstype, const int ADJ) {
   double probj =0.0;
-  double Nrecom;
   char compareto;
 
   const double rj = r[j+ADJ];
@@ -76,9 +75,9 @@ char markertype, const char crosstype, const int ADJ) {
     //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];
   }
+  const double Nrecom = fabs((double)marker-(double)compareto);
   switch (crosstype) {
     case CF2:
-      Nrecom= fabs((double)marker-(double)compareto);
       if ((marker==MH)&&(compareto==MH)) {
         //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
         probj = (rj*rj+(1.0-rj)*(1.0-rj));
@@ -103,7 +102,6 @@ char markertype, const char crosstype, const int ADJ) {
         warning("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
       }
-      Nrecom = fabs((double)marker-(double)compareto);
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
         probj = 1.0-rj;
@@ -117,7 +115,6 @@ char markertype, const char crosstype, const int ADJ) {
         warning("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
       }
-      Nrecom= fabs((double)marker-(double)compareto);
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
         probj =  (1.0-rj);
