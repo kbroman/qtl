@@ -69,14 +69,10 @@ char checkmarker, const char crosstype, const int ADJ) {
   const char markertype = loci[j][i];
   // From this point on we don't use loci, r, i, j, ADJ(!)
 
-  // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nrj value: %f Loci[j][i]=%c\n", i, j, ADJ, rj, loci[j][i]);
-
   if (checkmarker != MUNUSED) {
-    //Rprintf("C %d %d\n", i, j);
     compareto = checkmarker;
   } else {
     error("We never get here, all calls pass in the markertype");
-    //Rprintf("loci[j+1][i] %d\n", j);
     compareto = loci[j+1][i];
   }
   const double Nrecom = fabs((double)markertype-(double)compareto);
@@ -87,7 +83,7 @@ char checkmarker, const char crosstype, const int ADJ) {
       } else if (Nrecom==0) {
         probj = rr2;
       } else if (Nrecom==1) {
-        if (ADJ!=0) {
+        if (ADJ!=0) {  // FIXME: now this is not clear to me
           probj = ((markertype==MH) ? 2.0*r*rr : r*rr);
         } else {
           probj = ((compareto==MH) ? 2.0*r*rr : r*rr);
@@ -134,13 +130,16 @@ char checkmarker, const char crosstype, const int ADJ) {
  * frequencies. This function is used by augmentation.
  */
 
-double probright(const char markertype, const int j, const cvector imarker, const vector r, const cvector position, const char crosstype) {
+double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const char crosstype) {
   double nrecom, prob0, prob1, prob2;
   if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
     //We're at the end of a chromosome or an unlinked marker
     return 1.0;
   }
-  const double rj = r[j];
+  const double r = rs[j];
+  const double r2 = r*r;
+  const double rr = 1.0-r; // right side recombination frequency
+  const double rr2 = rr*rr;
   const char rightmarker = imarker[j+1];
 
   switch (crosstype) {
@@ -149,77 +148,77 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         //NEXT marker is known
         if ((markertype==MH)&&(rightmarker==MH)) {
           //special case in which we observe a H after an H then we can't know if we recombinated or not
-          return rj*rj+(1.0-rj)*(1.0-rj);
+          return r2+rr2;
         } else {
           //The number of recombinations between observed marker and the next marker
           nrecom = fabs(markertype-rightmarker);
           if (nrecom==0) {
             //No recombination
-            return (1.0-rj)*(1.0-rj);
+            return rr2;
           } else if (nrecom==1) {
             if (rightmarker==MH) {
               //the chances of having a H after 1 recombination are 2 times the chance of being either A or B
-              return 2.0*rj*(1.0-rj);
+              return 2.0*r*rr;
             } else {
               //Chance of 1 recombination
-              return rj*(1.0-rj);
+              return r*rr;
             }
           } else {
             //Both markers could have recombinated which has a very low chance
-            return rj*rj;
+            return r2;
           }
         }
       } else if (rightmarker==MNOTAA) {
         //SEMI unknown next marker known is it is not an A
         if (markertype==MAA) {
           //Observed marker is an A
-          prob1= 2.0*rj*(1.0-rj);
-          prob2= rj*rj;
+          prob1= 2.0*r*rr;
+          prob2= r2;
         } else if (markertype==MH) {
           //Observed marker is an H
-          prob1= rj*rj+(1.0-rj)*(1.0-rj);
-          prob2= rj*(1.0-rj);
+          prob1= r2+rr2;
+          prob2= r*rr;
         } else {
           //Observed marker is an B
-          prob1= 2.0*rj*(1.0-rj);
-          prob2= (1.0-rj)*(1-rj);
+          prob1= 2.0*r*rr;
+          prob2= rr2;
         }
-        return prob1*probright(MH, j+1, imarker, r, position, crosstype) + prob2*probright(MBB, j+1, imarker, r, position, crosstype);
+        return prob1*probright(MH, j+1, imarker, rs, position, crosstype) + prob2*probright(MBB, j+1, imarker, rs, position, crosstype);
       } else if (rightmarker==MNOTBB) {
         //SEMI unknown next marker known is it is not a B
         if (markertype==MAA) {
           //Observed marker is an A
-          prob0= (1.0-rj)*(1.0-rj);
-          prob1= 2.0*rj*(1.0-rj);
+          prob0= rr2;
+          prob1= 2.0*r*rr;
         } else if (markertype==MH) {
           //Observed marker is an H
-          prob0= rj*(1.0-rj);
-          prob1= rj*rj+(1.0-rj)*(1.0-rj);
+          prob0= r*rr;
+          prob1= r2+rr2;
         } else {
           //Observed marker is an B
-          prob0= rj*rj;
-          prob1= 2.0*rj*(1.0-rj);
+          prob0= r2;
+          prob1= 2.0*r*rr;
         }
-        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob1*probright(MH, j+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, rs, position, crosstype) + prob1*probright(MH, j+1, imarker, rs, position, crosstype);
       } else {
         // Unknown next marker so estimate all posibilities (imarker[j+1]==MMISSING)
         if (markertype==MAA) {
           //Observed marker is an A
-          prob0= (1.0-rj)*(1.0-rj);
-          prob1= 2.0*rj*(1.0-rj);
-          prob2= rj*rj;
+          prob0= rr2;
+          prob1= 2.0*r*rr;
+          prob2= r2;
         } else if (markertype==MH) {
           //Observed marker is an H
-          prob0= rj*(1.0-rj);
-          prob1= rj*rj+(1.0-rj)*(1.0-rj);
-          prob2= rj*(1.0-rj);
+          prob0= r*rr;
+          prob1= r2+rr2;
+          prob2= r*rr;
         } else {
           //Observed marker is an B
-          prob0= rj*rj;
-          prob1= 2.0*rj*(1.0-rj);
-          prob2= (1.0-rj)*(1.0-rj);
+          prob0= r2;
+          prob1= 2.0*r*rr;
+          prob2= rr2;
         }
-        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob1*probright(MH, j+1, imarker, r, position, crosstype) + prob2*probright(MBB, j+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, rs, position, crosstype) + prob1*probright(MH, j+1, imarker, rs, position, crosstype) + prob2*probright(MBB, j+1, imarker, rs, position, crosstype);
       }
       break;
     case CRIL:
@@ -234,22 +233,22 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         //   BB        BB      0     0      1-r
         nrecom = fabs(markertype-rightmarker);
         if (nrecom==0) {
-          return (1.0-rj);
+          return rr;
         } else {
-          return rj;
+          return r;
         }
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
         // Both markers could have recombinated which has a very low chance
         warning("Unreachable code");
         if (markertype==MAA) {
-          prob0= (1.0-rj);
-          prob2= rj;
+          prob0= rr;
+          prob2= r;
         } else { // MBB
-          prob0= rj;
-          prob2= (1.0-rj);
+          prob0= r;
+          prob2= rr;
         }
-        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob2*probright(MBB, j+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, rs, position, crosstype) + prob2*probright(MBB, j+1, imarker, rs, position, crosstype);
       }
       break;
     case CBC:
@@ -260,22 +259,22 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       if ((rightmarker==MAA)||(rightmarker==MH)) {
         nrecom = fabs(markertype-rightmarker);
         if (nrecom==0) {
-          return 1.0-rj;
+          return rr;
         } else {
-          return rj;
+          return r;
         }
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
         // Both markers could have recombinated which has a very low chance
         warning("Unreachable code");
         if (markertype==MAA) {
-          prob0= 1.0-rj;
-          prob2= rj;
+          prob0= rr;
+          prob2= r;
         } else {
-          prob0= rj;
-          prob2= 1.0-rj;
+          prob0= r;
+          prob2= rr;
         }
-        return prob0*probright(MAA, j+1, imarker, r, position, crosstype) + prob2*probright(MH, j+1, imarker, r, position, crosstype);
+        return prob0*probright(MAA, j+1, imarker, rs, position, crosstype) + prob2*probright(MH, j+1, imarker, rs, position, crosstype);
       }
       break;
     default:
