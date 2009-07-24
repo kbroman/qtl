@@ -59,7 +59,7 @@ double start_prob(const char crosstype, const char markertype) {
 
 double prob(const cmatrix loci, const vector r, const int i, const int j, const
 char markertype, const char crosstype, const int ADJ, const int start) {
-  double calc_i=0.0;
+  double probj =0.0;
   double Nrecom;
   char compareto;
   // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nR[j+ADJ] value: %f Loci[j][i]=%c\n", i, j, ADJ, r[j+ADJ], loci[j][i]);
@@ -80,20 +80,20 @@ char markertype, const char crosstype, const int ADJ, const int start) {
       Nrecom= fabs((double)loci[j][i]-(double)compareto);
       if ((loci[j][i]==MH)&&(compareto==MH)) {
         //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
-        calc_i= (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
+        probj = (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
       } else if (Nrecom==0) {
         //Rprintf("Nrecom=0 %c <-> %c:\n", compareto, loci[j][i]);
-        calc_i= (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
+        probj = (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
       } else if (Nrecom==1) {
         //Rprintf("Nrecom=1 %c <-> %c:\n", compareto, loci[j][i]);
         if (ADJ!=0) {
-          calc_i= ((loci[j][i]==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+          probj = ((loci[j][i]==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
         } else {
-          calc_i= ((compareto==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+          probj = ((compareto==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
         }
       } else {
         //Rprintf("Nrecom=2 %c <-> %c:\n", compareto, loci[j][i]);
-        calc_i= r[j+ADJ]*r[j+ADJ];
+        probj = r[j+ADJ]*r[j+ADJ];
       }
       //Rprintf("after IF\n", j);
       break;
@@ -108,10 +108,10 @@ char markertype, const char crosstype, const int ADJ, const int start) {
       Nrecom = fabs((double)loci[j][i]-(double)compareto);
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
-        calc_i = 1.0-r[j+ADJ];
+        probj = 1.0-r[j+ADJ];
       } else {
         // Recombination between markers has a chance of r[j-1]
-        calc_i = r[j+ADJ];
+        probj = r[j+ADJ];
       }
       break;
     case CBC:
@@ -125,16 +125,16 @@ char markertype, const char crosstype, const int ADJ, const int start) {
       Nrecom= fabs((double)loci[j][i]-(double)compareto);
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
-        calc_i =  (1.0-r[j+ADJ]);
+        probj =  (1.0-r[j+ADJ]);
       } else {
         // Recombination between markers has a chance of r[j-1]
-        calc_i = r[j+ADJ];
+        probj = r[j+ADJ];
       }
       break;
     default:
       warning("Strange: unknown crosstype in start_prob");
   }
-  return calc_i;
+  return probj;
 }
 
 /*
