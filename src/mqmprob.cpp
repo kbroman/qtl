@@ -75,6 +75,7 @@ char checkmarker, const char crosstype, const int ADJ) {
     error("We never get here, all calls pass in the markertype");
     compareto = loci[j+1][i];
   }
+  // number of recombinations Nrecom
   const double Nrecom = fabs((double)markertype-(double)compareto);
   switch (crosstype) {
     case CF2:
@@ -94,28 +95,24 @@ char checkmarker, const char crosstype, const int ADJ) {
       break;
     case CRIL:
       if (compareto==MH) {
-        warning("Strange: prob function trying to find H in RIL");
+        error("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
       }
       if (Nrecom==0) {
-        //No recombination has a chance of r[j]
-        probj = rr;
+        probj = rr;  // no recombinations (1-r)
       } else {
-        // Recombination between markers has a chance of r[j-1]
-        probj = r;
+        probj = r;   // recombination rate (r)
       }
       break;
     case CBC:
       if (compareto==MBB) {
-        warning("Strange: prob function trying to find BB in BC");
+        error("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
       }
       if (Nrecom==0) {
-        //No recombination has a chance of r[j]
-        probj =  rr;
+        probj =  rr; // no recombinations (1-r)
       } else {
-        // Recombination between markers has a chance of r[j-1]
-        probj = r;
+        probj = r;   // recombination rate (r)
       }
       break;
     default:
@@ -131,7 +128,7 @@ char checkmarker, const char crosstype, const int ADJ) {
  */
 
 double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const char crosstype) {
-  double nrecom, prob0, prob1, prob2;
+  double prob0, prob1, prob2;
   if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
     //We're at the end of a chromosome or an unlinked marker
     return 1.0;
@@ -142,6 +139,11 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   const double rr2 = rr*rr;
   const char rightmarker = imarker[j+1];
 
+  // markertype markerr diff Nrecom
+  //   AA        AA      0     0      1-r
+  //   AA        BB     -2     2       r
+  //   BB        BB      0     0      1-r
+  const double Nrecom = fabs(markertype-rightmarker);
   switch (crosstype) {
     case CF2:
       if ((rightmarker==MAA)||(rightmarker==MH)||(rightmarker==MBB)) {
@@ -151,11 +153,10 @@ double probright(const char markertype, const int j, const cvector imarker, cons
           return r2+rr2;
         } else {
           //The number of recombinations between observed marker and the next marker
-          nrecom = fabs(markertype-rightmarker);
-          if (nrecom==0) {
+          if (Nrecom==0) {
             //No recombination
             return rr2;
-          } else if (nrecom==1) {
+          } else if (Nrecom==1) {
             if (rightmarker==MH) {
               //the chances of having a H after 1 recombination are 2 times the chance of being either A or B
               return 2.0*r*rr;
@@ -227,15 +228,10 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MBB)) {
-        // markertype markerr diff nrecom
-        //   AA        AA      0     0      1-r
-        //   AA        BB     -2     2       r
-        //   BB        BB      0     0      1-r
-        nrecom = fabs(markertype-rightmarker);
-        if (nrecom==0) {
-          return rr;
+        if (Nrecom==0) {
+          return rr;  // no recombination (1-r) 
         } else {
-          return r;
+          return r;   // recombination (r)
         }
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
@@ -257,8 +253,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MH)) {
-        nrecom = fabs(markertype-rightmarker);
-        if (nrecom==0) {
+        if (Nrecom==0) {
           return rr;
         } else {
           return r;
