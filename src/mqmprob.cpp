@@ -62,7 +62,11 @@ char markertype, const char crosstype, const int ADJ) {
   double probj =0.0;
   double Nrecom;
   char compareto;
-  // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nR[j+ADJ] value: %f Loci[j][i]=%c\n", i, j, ADJ, r[j+ADJ], loci[j][i]);
+
+  const double rj = r[j+ADJ];
+  const char marker = loci[j][i];
+
+  // Rprintf("Prob called: values:\n(i, j, ADJ)=(%d, %d, %d)\nrj value: %f Loci[j][i]=%c\n", i, j, ADJ, rj, loci[j][i]);
 
   if (markertype != MUNUSED) {
     //Rprintf("C %d %d\n", i, j);
@@ -74,23 +78,23 @@ char markertype, const char crosstype, const int ADJ) {
   }
   switch (crosstype) {
     case CF2:
-      Nrecom= fabs((double)loci[j][i]-(double)compareto);
-      if ((loci[j][i]==MH)&&(compareto==MH)) {
+      Nrecom= fabs((double)marker-(double)compareto);
+      if ((marker==MH)&&(compareto==MH)) {
         //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
-        probj = (r[j+ADJ]*r[j+ADJ]+(1.0-r[j+ADJ])*(1.0-r[j+ADJ]));
+        probj = (rj*rj+(1.0-rj)*(1.0-rj));
       } else if (Nrecom==0) {
         //Rprintf("Nrecom=0 %c <-> %c:\n", compareto, loci[j][i]);
-        probj = (1.0-r[j+ADJ])*(1.0-r[j+ADJ]);
+        probj = (1.0-rj)*(1.0-rj);
       } else if (Nrecom==1) {
         //Rprintf("Nrecom=1 %c <-> %c:\n", compareto, loci[j][i]);
         if (ADJ!=0) {
-          probj = ((loci[j][i]==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+          probj = ((marker==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
         } else {
-          probj = ((compareto==MH) ? 2.0*r[j+ADJ]*(1.0-r[j+ADJ]) : r[j+ADJ]*(1.0-r[j+ADJ]));
+          probj = ((compareto==MH) ? 2.0*rj*(1.0-rj) : rj*(1.0-rj));
         }
       } else {
         //Rprintf("Nrecom=2 %c <-> %c:\n", compareto, loci[j][i]);
-        probj = r[j+ADJ]*r[j+ADJ];
+        probj = rj*rj;
       }
       //Rprintf("after IF\n", j);
       break;
@@ -99,13 +103,13 @@ char markertype, const char crosstype, const int ADJ) {
         warning("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
       }
-      Nrecom = fabs((double)loci[j][i]-(double)compareto);
+      Nrecom = fabs((double)marker-(double)compareto);
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
-        probj = 1.0-r[j+ADJ];
+        probj = 1.0-rj;
       } else {
         // Recombination between markers has a chance of r[j-1]
-        probj = r[j+ADJ];
+        probj = rj;
       }
       break;
     case CBC:
@@ -113,13 +117,13 @@ char markertype, const char crosstype, const int ADJ) {
         warning("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
       }
-      Nrecom= fabs((double)loci[j][i]-(double)compareto);
+      Nrecom= fabs((double)marker-(double)compareto);
       if (Nrecom==0) {
         //No recombination has a chance of r[j]
-        probj =  (1.0-r[j+ADJ]);
+        probj =  (1.0-rj);
       } else {
         // Recombination between markers has a chance of r[j-1]
-        probj = r[j+ADJ];
+        probj = rj;
       }
       break;
     default:
