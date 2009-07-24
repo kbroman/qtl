@@ -59,7 +59,6 @@ double start_prob(const char crosstype, const char markertype) {
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const char crosstype, const int ADJ) {
-  double probj = 0.0;
   char compareto;
 
   const double r = rs[j+ADJ];
@@ -77,6 +76,7 @@ char checkmarker, const char crosstype, const int ADJ) {
   }
   // number of recombinations recombinations
   const double recombinations = fabs((double)markertype-(double)compareto);
+  double probj = rr;  // default to no recombinations (1-r)
   switch (crosstype) {
     case CF2:
       if ((markertype==MH)&&(compareto==MH)) {
@@ -98,22 +98,14 @@ char checkmarker, const char crosstype, const int ADJ) {
         error("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
       }
-      if (recombinations==0) {
-        probj = rr;  // no recombinations (1-r)
-      } else {
-        probj = r;   // recombination rate (r)
-      }
+      if (recombinations) probj = r;
       break;
     case CBC:
       if (compareto==MBB) {
         error("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
       }
-      if (recombinations==0) {
-        probj =  rr; // no recombinations (1-r)
-      } else {
-        probj = r;   // recombination rate (r)
-      }
+      if (recombinations) probj = r;
       break;
     default:
       warning("Strange: unknown crosstype in start_prob");
