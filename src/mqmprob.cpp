@@ -58,7 +58,7 @@ double start_prob(const char crosstype, const char markertype) {
  */
 
 double prob(const cmatrix loci, const vector r, const int i, const int j, const
-char markertype, const char crosstype, const int ADJ, const int start) {
+char markertype, const char crosstype, const int ADJ) {
   double probj =0.0;
   double Nrecom;
   char compareto;
@@ -74,9 +74,6 @@ char markertype, const char crosstype, const int ADJ, const int start) {
   }
   switch (crosstype) {
     case CF2:
-      if (start) {
-        return (loci[j][i]==MH ? 0.5 : 0.25);
-      }
       Nrecom= fabs((double)loci[j][i]-(double)compareto);
       if ((loci[j][i]==MH)&&(compareto==MH)) {
         //Rprintf("SCase %c <-> %c:\n", compareto, loci[j][i]);
@@ -98,9 +95,6 @@ char markertype, const char crosstype, const int ADJ, const int start) {
       //Rprintf("after IF\n", j);
       break;
     case CRIL:
-      if (start) {
-        return 0.5;
-      }
       if (compareto==MH) {
         warning("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
@@ -115,9 +109,6 @@ char markertype, const char crosstype, const int ADJ, const int start) {
       }
       break;
     case CBC:
-      if (start) {
-        return 0.5;
-      }
       if (compareto==MBB) {
         warning("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
