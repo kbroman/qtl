@@ -149,81 +149,84 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
     //We're at the end of a chromosome or an unlinked marker
     return 1.0;
   }
+  const double rj = r[jloc];
+  const char rightmarker = imarker[jloc+1];
+
   switch (crosstype) {
     case CF2:
-      if ((imarker[jloc+1]==MAA)||(imarker[jloc+1]==MH)||(imarker[jloc+1]==MBB)) {
+      if ((rightmarker==MAA)||(rightmarker==MH)||(rightmarker==MBB)) {
         //NEXT marker is known
-        if ((markertype==MH)&&(imarker[jloc+1]==MH)) {
+        if ((markertype==MH)&&(rightmarker==MH)) {
           //special case in which we observe a H after an H then we can't know if we recombinated or not
-          return r[jloc]*r[jloc]+(1.0-r[jloc])*(1.0-r[jloc]);
+          return rj*rj+(1.0-rj)*(1.0-rj);
         } else {
           //The number of recombinations between observed marker and the next marker
-          nrecom = fabs(markertype-imarker[jloc+1]);
+          nrecom = fabs(markertype-rightmarker);
           if (nrecom==0) {
             //No recombination
-            return (1.0-r[jloc])*(1.0-r[jloc]);
+            return (1.0-rj)*(1.0-rj);
           } else if (nrecom==1) {
-            if (imarker[jloc+1]==MH) {
+            if (rightmarker==MH) {
               //the chances of having a H after 1 recombination are 2 times the chance of being either A or B
-              return 2.0*r[jloc]*(1.0-r[jloc]);
+              return 2.0*rj*(1.0-rj);
             } else {
               //Chance of 1 recombination
-              return r[jloc]*(1.0-r[jloc]);
+              return rj*(1.0-rj);
             }
           } else {
             //Both markers could have recombinated which has a very low chance
-            return r[jloc]*r[jloc];
+            return rj*rj;
           }
         }
-      } else if (imarker[jloc+1]==MNOTAA) {
+      } else if (rightmarker==MNOTAA) {
         //SEMI unknown next marker known is it is not an A
         if (markertype==MAA) {
           //Observed marker is an A
-          prob1= 2.0*r[jloc]*(1.0-r[jloc]);
-          prob2= r[jloc]*r[jloc];
+          prob1= 2.0*rj*(1.0-rj);
+          prob2= rj*rj;
         } else if (markertype==MH) {
           //Observed marker is an H
-          prob1= r[jloc]*r[jloc]+(1.0-r[jloc])*(1.0-r[jloc]);
-          prob2= r[jloc]*(1.0-r[jloc]);
+          prob1= rj*rj+(1.0-rj)*(1.0-rj);
+          prob2= rj*(1.0-rj);
         } else {
           //Observed marker is an B
-          prob1= 2.0*r[jloc]*(1.0-r[jloc]);
-          prob2= (1.0-r[jloc])*(1-r[jloc]);
+          prob1= 2.0*rj*(1.0-rj);
+          prob2= (1.0-rj)*(1-rj);
         }
         return prob1*probright(MH, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
-      } else if (imarker[jloc+1]==MNOTBB) {
+      } else if (rightmarker==MNOTBB) {
         //SEMI unknown next marker known is it is not a B
         if (markertype==MAA) {
           //Observed marker is an A
-          prob0= (1.0-r[jloc])*(1.0-r[jloc]);
-          prob1= 2.0*r[jloc]*(1.0-r[jloc]);
+          prob0= (1.0-rj)*(1.0-rj);
+          prob1= 2.0*rj*(1.0-rj);
         } else if (markertype==MH) {
           //Observed marker is an H
-          prob0= r[jloc]*(1.0-r[jloc]);
-          prob1= r[jloc]*r[jloc]+(1.0-r[jloc])*(1.0-r[jloc]);
+          prob0= rj*(1.0-rj);
+          prob1= rj*rj+(1.0-rj)*(1.0-rj);
         } else {
           //Observed marker is an B
-          prob0= r[jloc]*r[jloc];
-          prob1= 2.0*r[jloc]*(1.0-r[jloc]);
+          prob0= rj*rj;
+          prob1= 2.0*rj*(1.0-rj);
         }
         return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob1*probright(MH, jloc+1, imarker, r, position, crosstype);
       } else {
         // Unknown next marker so estimate all posibilities (imarker[j+1]==MMISSING)
         if (markertype==MAA) {
           //Observed marker is an A
-          prob0= (1.0-r[jloc])*(1.0-r[jloc]);
-          prob1= 2.0*r[jloc]*(1.0-r[jloc]);
-          prob2= r[jloc]*r[jloc];
+          prob0= (1.0-rj)*(1.0-rj);
+          prob1= 2.0*rj*(1.0-rj);
+          prob2= rj*rj;
         } else if (markertype==MH) {
           //Observed marker is an H
-          prob0= r[jloc]*(1.0-r[jloc]);
-          prob1= r[jloc]*r[jloc]+(1.0-r[jloc])*(1.0-r[jloc]);
-          prob2= r[jloc]*(1.0-r[jloc]);
+          prob0= rj*(1.0-rj);
+          prob1= rj*rj+(1.0-rj)*(1.0-rj);
+          prob2= rj*(1.0-rj);
         } else {
           //Observed marker is an B
-          prob0= r[jloc]*r[jloc];
-          prob1= 2.0*r[jloc]*(1.0-r[jloc]);
-          prob2= (1.0-r[jloc])*(1.0-r[jloc]);
+          prob0= rj*rj;
+          prob1= 2.0*rj*(1.0-rj);
+          prob2= (1.0-rj)*(1.0-rj);
         }
         return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob1*probright(MH, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
       }
@@ -233,27 +236,27 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
         error("Strange: encountered heterozygous genotype in RIL");
         return 0.0;
       }
-      if ((imarker[jloc+1]==MAA)||(imarker[jloc+1]==MBB)) {
+      if ((rightmarker==MAA)||(rightmarker==MBB)) {
         // markertype markerr diff nrecom
         //   AA        AA      0     0      1-r
         //   AA        BB     -2     2       r
         //   BB        BB      0     0      1-r
-        nrecom = fabs(markertype-imarker[jloc+1]);
+        nrecom = fabs(markertype-rightmarker);
         if (nrecom==0) {
-          return (1.0-r[jloc]);
+          return (1.0-rj);
         } else {
-          return r[jloc];
+          return rj;
         }
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
         // Both markers could have recombinated which has a very low chance
         warning("Unreachable code");
         if (markertype==MAA) {
-          prob0= (1.0-r[jloc]);
-          prob2= r[jloc];
+          prob0= (1.0-rj);
+          prob2= rj;
         } else { // MBB
-          prob0= r[jloc];
-          prob2= (1.0-r[jloc]);
+          prob0= rj;
+          prob2= (1.0-rj);
         }
         return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob2*probright(MBB, jloc+1, imarker, r, position, crosstype);
       }
@@ -263,23 +266,23 @@ double probright(const char markertype, const int jloc, const cvector imarker, c
         error("Strange: encountered BB genotype in BC");
         return 0.0;
       }
-      if ((imarker[jloc+1]==MAA)||(imarker[jloc+1]==MH)) {
-        nrecom = fabs(markertype-imarker[jloc+1]);
+      if ((rightmarker==MAA)||(rightmarker==MH)) {
+        nrecom = fabs(markertype-rightmarker);
         if (nrecom==0) {
-          return 1.0-r[jloc];
+          return 1.0-rj;
         } else {
-          return r[jloc];
+          return rj;
         }
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
         // Both markers could have recombinated which has a very low chance
         warning("Unreachable code");
         if (markertype==MAA) {
-          prob0= 1.0-r[jloc];
-          prob2= r[jloc];
+          prob0= 1.0-rj;
+          prob2= rj;
         } else {
-          prob0= r[jloc];
-          prob2= 1.0-r[jloc];
+          prob0= rj;
+          prob2= 1.0-rj;
         }
         return prob0*probright(MAA, jloc+1, imarker, r, position, crosstype) + prob2*probright(MH, jloc+1, imarker, r, position, crosstype);
       }
