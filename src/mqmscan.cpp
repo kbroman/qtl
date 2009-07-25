@@ -100,27 +100,20 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   vector r;
   r= newvector(Nmark);
   position= newcvector(Nmark);
-  char REMLorML=MAA;
+  bool useREML=true;
   char fitQTL='n';
 
   // The chr vector contains the chromosome number for every marker
   chr= newivector(Nmark);
-  if (verbose) {
-    Rprintf("INFO: Receiving the chromosome matrix from R\n");
-  }
+  mqminfo("Receiving the chromosome matrix from R");
   for (int i=0; i< Nmark; i++) {
     chr[i] = Chromo[0][i];
   }
-
-  if (RMLorML == 1) {
-    REMLorML=MH;
-  }
+  if (RMLorML == 1) useREML=false;  // use ML instead
 
   // Create an array of marker positions - each marker is one of LMRU (left,
   // middle, right, unknown/single)
-  if (verbose) {
-    Rprintf("INFO: Calculating relative genomepositions of the markers\n");
-  }
+  mqminfo("Calculating relative genomepositions of the markers");
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
       // first marker is MLEFT; if single marker MUNLINKED
@@ -355,16 +348,16 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
-  logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+  logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
   if (verbose) {
     Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
     Rprintf("INFO: Residual variance= %f\n",variance);
     Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
   }
   if (Backwards==1)    // use only selected cofactors
-    logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
+    logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
   if (Backwards==0) // use all cofactors
-    logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose); // printout=='n'
+    logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose); // printout=='n'
 
   // ---- Write output / send it back to R
   //Cofactors that made it to the final model

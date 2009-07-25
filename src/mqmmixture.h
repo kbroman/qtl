@@ -29,6 +29,7 @@
   extern "C" {
 #endif
 
+#include <stdbool.h>
 
 
 /* ML estimation of recombination frequencies via EM;
@@ -44,7 +45,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
-                  double *variance, int em, vector *weight,char REMLorML,char fitQTL,char dominance,char crosstype,int verbose);
+                  double *variance, int em, vector *weight, const bool useREML,char fitQTL,char dominance,char crosstype,int verbose);
 
        
 #ifdef __cplusplus

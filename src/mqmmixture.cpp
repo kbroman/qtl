@@ -144,7 +144,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
-                  double *variance, int em, vector *weight, char REMLorML, char fitQTL, char dominance, char crosstype, int verbose) {
+                  double *variance, int em, vector *weight, const bool useREML, char fitQTL, char dominance, char crosstype, int verbose) {
   //if(verbose==1){Rprintf("QTLmixture called\n");}
   int iem= 0, newNaug, i, j;
   char varknown, biasadj='n';
@@ -163,10 +163,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   //R_ProcessEvents();
   R_FlushConsole();
 #endif
-  if ((REMLorML==MAA)&&(varknown=='n')) {
+  if ((useREML)&&(varknown=='n')) {
 //		Rprintf("INFO: REML\n");
   }
-  if (REMLorML==MH) {
+  if (!useREML) {
 //		Rprintf("INFO: ML\n");
     varknown='n';
     biasadj='n';
@@ -320,7 +320,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   }
   //Rprintf("EM Finished\n");
   // bias adjustment after finished ML estimation via EM
-  if ((REMLorML==MAA)&&(varknown=='n')) {
+  if ((useREML)&&(varknown=='n')) {
     // RRprintf("Checkpoint_c\n");
     *variance=-1.0;
     biasadj='y';
