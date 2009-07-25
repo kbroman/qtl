@@ -29,9 +29,9 @@
   extern "C" {
 #endif
 
-double probright(const char c, const int jloc, const cvector imarker, const vector r, const cvector position,const char crosstype);
+double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const char crosstype);
 
-double prob(const cmatrix loci, const vector r, const int i, const int j, const char markertype, const char crosstype, const int ADJ);
+double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const char crosstype, const int ADJ);
 
 double start_prob(const char crosstype,const char markertype);
 
