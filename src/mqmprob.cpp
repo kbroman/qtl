@@ -8,7 +8,9 @@
  * first written Feb, 2009
  *
  * Original version R.C Jansen
- * first written <2000 (unknown)
+ * first written before 2000
+ *
+ * Much modified by Danny Arends and Pjotr Prins (c) 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -28,8 +30,16 @@
 
 #include "mqm.h"
 
-/* Chooses the starting probability based on the experimental cross type;
- * used by the augmentation and mixture methods
+/* Chooses the starting probability (when a marker is the first, or unlinked)
+ * based on the experimental cross type; used by the augmentation and mixture
+ * methods
+ *
+ * The start probabilities are:
+ *
+ *          MAA    MBB   MAB
+ *   F2     1/4    1/4   1/2
+ *   RIL    1/2    1/2     0
+ *   BC       0      x   1/2
  */
 
 double start_prob(const char crosstype, const char markertype) {
@@ -41,10 +51,11 @@ double start_prob(const char crosstype, const char markertype) {
       return (markertype==MH ? 0.0 : 0.5);
       break;
     case CBC:
-      return (markertype==MBB ? 0.0 : 0.5);
+      if (markertype==MBB) warning("Strange: start_prob function trying to find BB in BC");
+      return (markertype==MAA ? 0.0 : 0.5);
       break;
   }
-  return 0.0;
+  error("Should get here");
 }
 
 /*
