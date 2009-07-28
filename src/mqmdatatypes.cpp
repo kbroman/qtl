@@ -207,7 +207,7 @@ void freevector(void *v) {
 }
 
 void freematrix(void **m, size_t rows) {
-  for (int i=0; i<rows; i++) {
+  for (size_t i=0; i<rows; i++) {
     Free(m[i]);
   }
   Free(m);

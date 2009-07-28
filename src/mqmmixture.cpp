@@ -149,7 +149,6 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   int iem= 0, newNaug, i, j;
   char varknown, biasadj='n';
   double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
-  double calc_ii;
   vector indweight, Ploci, Fy;
 
   indweight= newvector(Nind);

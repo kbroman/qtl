@@ -98,7 +98,6 @@ int main(int argc,char *argv[]) {
   int nPheno=0;
   int windowsize=0;
   cnt = 0;
-  char *name;
   int maxIter;
   double alpha;
   nMark=count_lines(chrfile);

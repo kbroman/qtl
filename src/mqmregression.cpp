@@ -53,9 +53,9 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   matrix XtWX;
   cmatrix Xt;
   vector XtWY;
-  unsigned int dimx=1;
+  int dimx=1;
   int j, jj;
-  for (int j=0; j<Nmark; j++)
+  for (j=0; j<Nmark; j++)
     if (cofactor[j]==MH) dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
     else if (cofactor[j]==MBB) {
       dimx+=1;
@@ -393,7 +393,7 @@ void lusolve(matrix lu, int dim, ivector ndx, vector b) {
 
 
 double inverseF(int df1, int df2, double alfa, int verbose) {
-  double prob=0.0, prob2=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
+  double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
   int count=0;
   while ((absdiff>0.001)&&(count<100)) {
     //Rprintf("INFO df1:%d df2:%d alpha:%f\n", df1, df2, alfa);

@@ -59,6 +59,7 @@ double start_prob(const char crosstype, const char markertype) {
       warning("Strange: unknown crosstype in start_prob");
   }
   error("Should get here");
+  return NAN;
 }
 
 /*
