@@ -38,8 +38,8 @@
  *
  *          MAA    MBB   MAB
  *   F2     1/4    1/4   1/2
- *   RIL    1/2    1/2     0
- *   BC       0      x   1/2
+ *   RIL    1/2    1/2     x
+ *   BC     1/2      x   1/2
  */
 
 double start_prob(const char crosstype, const char markertype) {
@@ -48,11 +48,12 @@ double start_prob(const char crosstype, const char markertype) {
       return (markertype==MH ? 0.5 : 0.25);
       break;
     case CRIL:
-      return (markertype==MH ? 0.0 : 0.5);
+      if (markertype==MH) warning("Strange: start_prob function trying to find H in RIL");
+      return 0.5;
       break;
     case CBC:
       if (markertype==MBB) warning("Strange: start_prob function trying to find BB in BC");
-      return (markertype==MAA ? 0.0 : 0.5);
+      return (markertype==MH ? 0.5 : 0.5);
       break;
     default:
       warning("Strange: unknown crosstype in start_prob");

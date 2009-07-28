@@ -62,4 +62,10 @@ const unsigned char MNOTBB    = '4';  // Not BB
 const unsigned char MMISSING  = '9';  // Unknown (marker genotype missing)
 const unsigned char MUNUSED   = '-';  // Unused parameter
 
+#ifdef NDEBUG
+  #define info(s) 
+#else
+  #define info(s) if (verbose) { printf("INFO: "); printf(s); printf("\n"); }
+#endif
+
 #endif

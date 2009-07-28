@@ -105,7 +105,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   // The chr vector contains the chromosome number for every marker
   chr= newivector(Nmark);
-  mqminfo("Receiving the chromosome matrix from R");
+  info("Receiving the chromosome matrix from R");
   for (int i=0; i< Nmark; i++) {
     chr[i] = Chromo[0][i];
   }
@@ -113,7 +113,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   // Create an array of marker positions - each marker is one of LMRU (left,
   // middle, right, unknown/single)
-  mqminfo("Calculating relative genomepositions of the markers");
+  info("Calculating relative genomepositions of the markers");
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
       // first marker is MLEFT; if single marker MUNLINKED
