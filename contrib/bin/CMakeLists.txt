@@ -63,6 +63,8 @@ ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
 ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
 ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
 ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
+ADD_TEST(TestR_mqm_listeria1 ${RTEST} rtest test_mqm_listeria1.R)
+ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
 
 
 
