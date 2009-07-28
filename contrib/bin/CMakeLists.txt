@@ -11,6 +11,7 @@ IF ( CMAKE_BUILD_TYPE MATCHES Debug )
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 ENABLE_TESTING()
+ADD_CUSTOM_TARGET(quicktest COMMAND ctest -E "TestR")
 
 FIND_PACKAGE(RLibs)
 
@@ -48,5 +49,20 @@ add_executable (mqm
 mqmmain.cpp
 )
 
+SET(RTEST scripts/r.sh)
+SET(RTESTOUTPUT rtest/regression)
+
+ADD_CUSTOM_TARGET(testall 
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
+  COMMAND R CMD INSTALL --libs-only qtl_1.13-1.tar.gz 
+  COMMAND ctest)
+
 ADD_TEST(TestStandaloneMQM ./scripts/regression_tests.sh)
+
+ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
+ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
+ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
+ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
+
+
 

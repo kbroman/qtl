@@ -1,6 +1,7 @@
 *~
 tags
 build
+.Rbuild*
 CMakeFiles
 CMakeCache.txt
 Makefile
