@@ -9,3 +9,9 @@ run:
 	make test   
   (the binary is 'mqm').
 
+To run regression testing from the default R interpreter:
+
+  make testall
+
+which builds and installs the 'qtl' package before running the
+test scripts.
