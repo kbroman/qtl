@@ -42,26 +42,6 @@
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
 
-// Cross types
-const unsigned char CF2       = 'F';
-const unsigned char CBC       = 'B';
-const unsigned char CRIL      = 'R';
-
-// Marker locations/relations
-const unsigned char MLEFT     = 'L';
-const unsigned char MRIGHT    = 'R';
-const unsigned char MMIDDLE   = 'M';
-const unsigned char MUNLINKED = 'U';
-
-// Marker genotypes (scored at marker)
-const unsigned char MAA       = '0';  // Homozygous AA
-const unsigned char MH        = '1';  // Heterozygous AB 
-const unsigned char MBB       = '2';  // Homozygous BB
-const unsigned char MNOTAA    = '3';  // Not AA
-const unsigned char MNOTBB    = '4';  // Not BB 
-const unsigned char MMISSING  = '9';  // Unknown (marker genotype missing)
-const unsigned char MUNUSED   = '-';  // Unused parameter
-
 #ifdef STANDALONE
   #define message(type,s) { printf("%s: ",type); printf(s); printf("\n"); } 
   // #define warning(s) { message("WARNING",s); }

@@ -42,7 +42,7 @@
  *   BC     1/2      x   1/2
  */
 
-double start_prob(const char crosstype, const char markertype) {
+double start_prob(const MQMCrossType crosstype, const char markertype) {
   switch (crosstype) {
     case CF2:
       return (markertype==MH ? 0.5 : 0.25);
@@ -71,7 +71,7 @@ double start_prob(const char crosstype, const char markertype) {
  */
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
-char checkmarker, const char crosstype, const int ADJ) {
+char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   char compareto;
 
   const double r = rs[j+ADJ];
@@ -132,7 +132,7 @@ char checkmarker, const char crosstype, const int ADJ) {
  * frequencies. This function is used by augmentation.
  */
 
-double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const char crosstype) {
+double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const MQMCrossType crosstype) {
   double prob0, prob1, prob2;
   if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
     //We're at the end of a chromosome or an unlinked marker

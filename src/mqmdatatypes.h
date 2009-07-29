@@ -24,10 +24,30 @@
  *
  **********************************************************************/
 
-
 #ifdef __cplusplus
   extern "C" {
 #endif
+
+// Cross types
+typedef unsigned int RqtlCrossType;
+enum MQMCrossType { CUNKNOWN = 'U', CF2 = 'F', CBC = 'B', CRIL = 'R' };
+
+// Marker locations/relations
+const unsigned char MLEFT     = 'L';
+const unsigned char MRIGHT    = 'R';
+const unsigned char MMIDDLE   = 'M';
+const unsigned char MUNLINKED = 'U';
+
+// Marker genotypes (scored at marker)
+const unsigned char MAA       = '0';  // Homozygous AA
+const unsigned char MH        = '1';  // Heterozygous AB 
+const unsigned char MBB       = '2';  // Homozygous BB
+const unsigned char MNOTAA    = '3';  // Not AA
+const unsigned char MNOTBB    = '4';  // Not BB 
+const unsigned char MMISSING  = '9';  // Unknown (marker genotype missing)
+const unsigned char MUNUSED   = '-';  // Unused parameter
+
+
 
 /*------------------------------------------------------------------------
 Datastructures for matrix and vector calculus
@@ -39,9 +59,10 @@ typedef char**   cmatrix;
 typedef char*    cvector;
 typedef int*  ivector;
 
-char determine_cross(int *Nmark,int *Nind,int **Geno,int *crosstype);
 
-void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype);
+MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Geno, const RqtlCrossType rqtlcrosstype);
+
+void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, const MQMCrossType crosstype);
 
 
 /*------------------------------------------------------------------------

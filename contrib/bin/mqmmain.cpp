@@ -252,7 +252,8 @@ int main(int argc,char *argv[]) {
   //Rprintf("INFO: Cofactors %d\n",sum);
 
   Rprintf("Starting phenotype: %d\n",phenotype);
-  analyseF2(nInd, nMark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0,verbose);
+
+  analyseF2(nInd, nMark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,CF2,0,verbose);
 
   // Output marker info
   for (int m=0; m<nMark; m++) {

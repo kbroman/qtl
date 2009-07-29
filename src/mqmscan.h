@@ -39,14 +39,14 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
                vector y, ivector f1genotype, int Backwards, double **QTL,vector
                *mapdistance,int **Chromo,int Nrun,int RMLorML, double
                windowsize,double stepsize, double stepmin,double stepmax,double
-               alfa,int em,int out_Naug,int **INDlist,char reestimate,char
+               alfa,int em,int out_Naug,int **INDlist,char reestimate, MQMCrossType
                crosstype,char dominance,int verbose);
 
 void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                int *geno,int *chromo, double *dist, double *pheno,
                int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
                double *windowsize,double *steps,
-               double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype,int *domi,int *verbose);
+               double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *rqtlcrosstype,int *domi,int *verbose);
 
 
 inline int mod(int a, int b) {

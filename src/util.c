@@ -39,8 +39,9 @@
  *
  **********************************************************************/
 
-#include "mqm.h"
+#include <R.h>
 #include <R_ext/BLAS.h>
+#include "util.h"
 
 #define THRESH 200.0
 

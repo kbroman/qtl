@@ -30,56 +30,44 @@
 
 /* 
  * Determine the experimental cross type from the R/qtl dataset. Returns the
- * type.
+ * type. 
  */
 
-char determine_cross(int *Nmark, int *Nind, int **Geno, int *crosstype) {
-  for (int j=0; j < *Nmark; j++) {
-    for (int i=0; i < *Nind; i++) {
+MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Geno, const RqtlCrossType rqtlcrosstype) {
+  MQMCrossType crosstype = CUNKNOWN;
+  for (int j=0; j < Nmark; j++) {
+    for (int i=0; i < Nind; i++) {
       //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
-      if (Geno[j][i] != 9 && Geno[j][i] > 3 && (*crosstype) != 1) {
+      if (Geno[j][i] != 9 && Geno[j][i] > 3 && (rqtlcrosstype) != 1) {
         Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[j][i]);
         info("Unexpected genotype pattern, switching to F2");
-        (*crosstype) = CF2;
+        crosstype = CF2;
         break;
       }
-      if (Geno[j][i] == 3 && (*crosstype) == 2) {
+      if (Geno[j][i] == 3 && (rqtlcrosstype) == 2) {
         info("Unexpected genotype pattern, switching from BC to F2");
-        (*crosstype) = CF2;
+        crosstype = CF2;
         break;
       }
       //IF we have a RIL and find AB then the set is messed up; we have a BC genotype
-      if (Geno[j][i] == 2 && (*crosstype) == 3) {
+      if (Geno[j][i] == 2 && (rqtlcrosstype) == 3) {
         info("Unexpected genotype pattern, switching from RIL to BC");
-        (*crosstype) = CBC;
+        crosstype = CBC;
         break;
       }
     }
-    switch(*crosstype) {
-      case CF2: info("F2 cross");
-                break;
-      case CRIL: info("RIL cross");
-                break;
-      case CBC: info("Back cross (BC)");
-                break;
-      default: fatal("Unknown cross");
-    }
-    return *crosstype;
   }
-
-  unsigned char cross = 0;
-  switch(*crosstype) {
-    case 1: cross=CF2;
-            break;
-    case 2: cross=CBC;
-            break;
-    case 3: cross=CRIL;
-            break;
-    default:
-            error("Unknown cross type %d",*crosstype);
+  switch(crosstype) {
+    case CF2: info("F2 cross");
+              break;
+    case CRIL: info("RIL cross");
+              break;
+    case CBC: info("Back cross (BC)");
+              break;
+    default:  Rprintf("Cross type=%d",crosstype);
+              fatal("Unknown cross");
   }
-
-  return cross;
+  return crosstype;
 }
 
 /*
@@ -89,7 +77,7 @@ char determine_cross(int *Nmark, int *Nind, int **Geno, int *crosstype) {
  *
  */
 
-void change_coding(int *Nmark, int *Nind, int **Geno, cmatrix markers, int crosstype) {
+void change_coding(int *Nmark, int *Nind, int **Geno, cmatrix markers, const MQMCrossType crosstype) {
   info("Convert codes R/qtl -> MQM");
   for (int j=0; j < *Nmark; j++) {
     for (int i=0; i < *Nind; i++) {

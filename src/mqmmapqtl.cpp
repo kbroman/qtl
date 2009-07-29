@@ -35,8 +35,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
               vector r, ivector ind, int Naug, double variance, char
               printoutput, vector *informationcontent, matrix *Frun, int run,
               char REMLorML, char fitQTL, char dominance, int em, double
-              windowsize, double stepsize, double stepmin, double stepmax, char
-              crosstype, int verbose) {
+              windowsize, double stepsize, double stepmin, double stepmax, 
+              MQMCrossType crosstype, int verbose) {
   //Rprintf("INFO: mapQTL function called.\n");
   int Nloci, j, jj, jjj=0;
   vector Fy;

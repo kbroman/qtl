@@ -56,7 +56,7 @@
 int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
-            const double neglect, const char crosstype, const int verbose) {
+            const double neglect, const MQMCrossType crosstype, const int verbose) {
   int retvalue = 0;
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
@@ -370,7 +370,7 @@ cleanup:
 void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *neglect, int
-               *chromo, int *crosstype, int *verbosep) {
+               *chromo, int *rqtlcrosstypep, int *verbosep) {
   int **Geno;
   double **Pheno;
   double **Dist;
@@ -381,6 +381,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   const int nind0 = *Nind;
   int prior = nind0;
   const int verbose = *verbosep;
+  const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
   info("Starting C-part of the data augmentation routine");
   ivector new_ind;
@@ -406,10 +407,10 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
   reorg_pheno(*maxind, 1, augPheno, &NEWPheno);
 
+  MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
-  change_coding(Nmark, Nind, Geno, markers, *crosstype);
+  change_coding(Nmark, Nind, Geno, markers, crosstype);
 
-  char cross = determine_cross(Nmark, Nind, Geno, crosstype);
   info("Filling the chromosome matrix");
 
   for (int i=0; i<(*Nmark); i++) {
@@ -450,7 +451,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     //RRprintf("recomfreq:%d, %f\n", j, r[j]);
   }
 
-  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, cross, verbose)==1) {
+  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {

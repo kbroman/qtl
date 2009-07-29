@@ -47,7 +47,7 @@ double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
                 vector r, cvector position, vector *informationcontent, vector
                 *mapdistance, matrix *Frun, int run, char REMLorML, char
                 fitQTL, char dominance, int em, double windowsize, double
-                stepsize, double stepmin, double stepmax, char crosstype, int
+                stepsize, double stepmin, double stepmax, MQMCrossType crosstype, int
                 verbose)
 
 {

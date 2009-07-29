@@ -85,7 +85,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
                double alfa, int em, int out_Naug, int **INDlist, char
-               reestimate, char crosstype, char dominance, int verbose) {
+               reestimate, MQMCrossType crosstype, char dominance, int verbose) {
   if (verbose) {
     Rprintf("INFO: Starting C-part of the MQM analysis\n");
   }
@@ -410,7 +410,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
              double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
              double Windowsize,double Steps,
-             double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype,int domi,int verbose) {
+             double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,RqtlCrossType rqtlcrosstype,int domi,int verbose) {
 
   ivector f1genotype;
   cmatrix markers;
@@ -424,8 +424,9 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 
   int cof_cnt=0;
 
+  MQMCrossType crosstype = determine_MQMCross(Nmark,Nind,(const int **)Geno,rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
-  change_coding(&Nmark,&Nind,Geno,markers, crosstype);
+  change_coding(&Nmark,&Nind,Geno,markers,crosstype);
 
   for (int i=0; i< Nmark; i++) {
     f1genotype[i] = 12;
@@ -452,9 +453,8 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     reestimate = 'n';
   }
   //determine what kind of cross we have
-  char cross = determine_cross(&Nmark,&Nind,Geno,&crosstype);
   //set dominance accordingly
-  if (cross != CF2) {
+  if (crosstype != CF2) {
     if (verbose==1) {
       Rprintf("INFO: Dominance setting ignored (dominance=0)\n");
     }
@@ -469,7 +469,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   }
 
   //WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
-  analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance,verbose);
+  analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,crosstype,dominance,verbose);
 
   if (re_estimate) {
     if (verbose==1) {
@@ -535,6 +535,6 @@ void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
   reorg_int(*out_Naug,1,indlist,&INDlist);
   //Done with reorganising lets start executing
 
-  mqmscan(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi,*verbose);
+  mqmscan(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,(RqtlCrossType)*crosstype,*domi,*verbose);
 } /* end of function R_mqmscan */
 
