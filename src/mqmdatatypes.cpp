@@ -82,6 +82,7 @@ char determine_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
  */
 
 void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, int crosstype) {
+  info("Convert codes R/qtl -> MQM");
   for (int i=0; i< *Nmark; i++) {
     for (int j=0; j< *Nind; j++) {
       switch (Geno[i][j]) {

@@ -486,7 +486,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
       Rprintf("# Unique selected individuals:%d\n", nind0);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
-      info("Data augmentation finished succesfull");
+      info("Data augmentation succesfull");
     }
   } else {
     //Unsuccessfull data augmentation exit

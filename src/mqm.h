@@ -75,7 +75,8 @@ const unsigned char MUNUSED   = '-';  // Unused parameter
 #ifdef NDEBUG
   #define info(s) 
 #else
-  #define info(s) if (verbose) { message("INFO",s); }
+  #define info(s) { message("INFO",s); }
+  #define verbose(s) if (verbose) { info(s); }
 #endif
 
 #endif // MQM_H
