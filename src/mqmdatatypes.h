@@ -31,6 +31,9 @@
 // Cross types
 typedef unsigned int RqtlCrossType;
 enum MQMCrossType { CUNKNOWN = 'U', CF2 = 'F', CBC = 'B', CRIL = 'R' };
+const RqtlCrossType RC_F2  = 1;
+const RqtlCrossType RC_BC  = 2;
+const RqtlCrossType RC_RIL = 3;
 
 // Marker locations/relations
 const unsigned char MLEFT     = 'L';

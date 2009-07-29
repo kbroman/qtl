@@ -35,6 +35,14 @@
 
 MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Geno, const RqtlCrossType rqtlcrosstype) {
   MQMCrossType crosstype = CUNKNOWN;
+  switch(rqtlcrosstype) {
+    case RC_F2: crosstype = CF2;
+                break;
+    case RC_RIL: crosstype = CRIL;
+                break;
+    case RC_BC: crosstype = CBC;
+                break;
+  }
   for (int j=0; j < Nmark; j++) {
     for (int i=0; i < Nind; i++) {
       //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
