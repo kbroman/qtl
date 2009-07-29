@@ -33,30 +33,38 @@
  * type.
  */
 
-char determine_cross(int *Nmark,int *Nind,int **Geno,int *crosstype) {
+char determine_cross(int *Nmark, int *Nind, int **Geno, int *crosstype) {
   for (int j=0; j < *Nmark; j++) {
     for (int i=0; i < *Nind; i++) {
       //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
       if (Geno[j][i] != 9 && Geno[j][i] > 3 && (*crosstype) != 1) {
-        Rprintf("INFO: Unexpected genotype pattern, switching to F2\n");
         Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[j][i]);
-        (*crosstype) = 1;
+        info("Unexpected genotype pattern, switching to F2");
+        (*crosstype) = CF2;
         break;
       }
       if (Geno[j][i] == 3 && (*crosstype) == 2) {
-        Rprintf("INFO: Unexpected genotype pattern, switching from BC to F2\n");
-        (*crosstype) = 1;
+        info("Unexpected genotype pattern, switching from BC to F2");
+        (*crosstype) = CF2;
         break;
       }
       //IF we have a RIL and find AB then the set is messed up; we have a BC genotype
       if (Geno[j][i] == 2 && (*crosstype) == 3) {
-        Rprintf("INFO: Unexpected genotype pattern, switching from RISELF to BC\n");
-        (*crosstype) = 2;
+        info("Unexpected genotype pattern, switching from RIL to BC");
+        (*crosstype) = CBC;
         break;
       }
-
     }
-    //Rprintf("\n");
+    switch(*crosstype) {
+      case CF2: info("F2 cross");
+                break;
+      case CRIL: info("RIL cross");
+                break;
+      case CBC: info("Back cross (BC)");
+                break;
+      default: fatal("Unknown cross");
+    }
+    return *crosstype;
   }
 
   unsigned char cross = 0;
