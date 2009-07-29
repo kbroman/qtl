@@ -91,7 +91,7 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
     compareto = checkmarker;
   } else {
     fatal("We never get here, all calls happen to pass in the markertype");
-    compareto = loci[j+1][i];
+    compareto = loci[j+1][i]; // FIXME
   }
 
   validate_markertype(crosstype,compareto);
@@ -117,15 +117,7 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
       }
       break;
     case CRIL:
-      if (compareto==MH) {
-        fatal("Strange: prob function trying to find H in RIL");
-      }
-      if (recombinations) prob = r;
-      break;
     case CBC:
-      if (compareto==MBB) {
-        fatal("Strange: prob function trying to find BB in BC");
-      }
       if (recombinations) prob = r;
       break;
     default:
@@ -151,6 +143,8 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   const double rr = 1.0-r; // right side recombination frequency
   const double rr2 = rr*rr;
   const char rightmarker = imarker[j+1];
+  validate_markertype(crosstype,markertype);
+  validate_markertype(crosstype,rightmarker);
 
   // markertype markerr diff recombinations
   //   AA        AA      0     0      1-r
