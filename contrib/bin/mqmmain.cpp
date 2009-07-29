@@ -267,6 +267,14 @@ int main(int argc,char *argv[]) {
 
   augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verbose);
 
+  neglect = 3;
+  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verbose);
+
+  // Output marker info
+  // for (int m=0; m<nAug; m++) {
+  //   Rprintf("%5d%s\n",m,new_markers[m]);
+  // }
+
   // ignores augmented set, for now...
   analyseF2(nInd, nMark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,CF2,0,verbose);
 
