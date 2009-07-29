@@ -370,7 +370,7 @@ cleanup:
 void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *neglect, int
-               *chromo, int *crosstype, int *verbose) {
+               *chromo, int *crosstype, int *verbosep) {
   int **Geno;
   double **Pheno;
   double **Dist;
@@ -380,8 +380,9 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   int **NEWIND;
   const int nind0 = *Nind;
   int prior = nind0;
+  const int verbose = *verbosep;
 
-  if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
+  info("Starting C-part of the data augmentation routine");
   ivector new_ind;
   vector new_y, r, mapdistance;
   cvector position;
@@ -409,7 +410,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   change_coding(Nmark, Nind, Geno, markers, *crosstype);
 
   char cross = determine_cross(Nmark, Nind, Geno, crosstype);
-  if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
+  info("Filling the chromosome matrix");
 
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
@@ -418,7 +419,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     chr[i] = Chromo[0][i];
   }
 
-  if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
+  info("Calculating relative genomepositions of the markers");
   for (int j=0; j<(*Nmark); j++) {
     if (j==0) {
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
@@ -435,21 +436,21 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     }
   }
 
-  if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
+  info("Estimating recombinant frequencies");
   for (int j=0; j<(*Nmark); j++) {
     r[j]= 999.0;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
-        Rprintf("ERROR: Recombination frequency is negative\n");
         Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
+        fatal("Recombination frequency is negative");
         return;
       }
     }
     //RRprintf("recomfreq:%d, %f\n", j, r[j]);
   }
 
-  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, cross, *verbose)==1) {
+  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, cross, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
@@ -480,12 +481,12 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(position);
     Free(r);
     Free(chr);
-    if (*verbose) {
-      Rprintf("INFO: Data augmentation finished succesfull\n");
+    if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", prior);
       Rprintf("# Unique selected individuals:%d\n", nind0);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
+      info("Data augmentation finished succesfull");
     }
   } else {
     //Unsuccessfull data augmentation exit
@@ -517,7 +518,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(position);
     Free(r);
     Free(chr);
-    Rprintf("Data augmentation failed\n");
+    fatal("Data augmentation failed");
   }
   return;
 }
