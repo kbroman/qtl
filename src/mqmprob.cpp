@@ -30,6 +30,16 @@
 
 #include "mqm.h"
 
+void validate_markertype(const MQMCrossType crosstype, const char markertype)
+{
+  if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)
+    fatal("validate_markertype: Undecided markertype");
+  if (crosstype==CRIL && markertype==MH) 
+    fatal("validate_markertype: Found markertype H (AB) in RIL");
+  if (crosstype==CBC && markertype==MBB) 
+    fatal("validate_markertype: Found markertype BB in back cross (BC)");
+}
+
 /* Chooses the starting probability (when a marker is the first, or unlinked)
  * based on the experimental cross type; used by the augmentation and mixture
  * methods
@@ -43,20 +53,14 @@
  */
 
 double start_prob(const MQMCrossType crosstype, const char markertype) {
-  if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)
-    fatal("Unknown marker in start_prob");
+  validate_markertype(crosstype,markertype);
   switch (crosstype) {
     case CF2:
       return (markertype==MH ? 0.5 : 0.25);
-      break;
     case CRIL:
-      if (markertype==MH) fatal("start_prob function trying to find H in RIL");
       return 0.5;
-      break;
     case CBC:
-      if (markertype==MBB) fatal("start_prob function trying to find BB in BC");
       return (markertype==MH ? 0.5 : 0.5);
-      break;
     default:
       fatal("Strange: unknown crosstype in start_prob");
   }
@@ -89,43 +93,45 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
     fatal("We never get here, all calls happen to pass in the markertype");
     compareto = loci[j+1][i];
   }
+
+  validate_markertype(crosstype,compareto);
+  validate_markertype(crosstype,markertype);
+
   // number of recombinations recombinations
   const double recombinations = fabs((double)markertype-(double)compareto);
-  double probj = rr;  // default to no recombinations (1-r)
+  double prob = rr;  // default to no recombinations (1-r)
   switch (crosstype) {
     case CF2:
       if ((markertype==MH)&&(compareto==MH)) {
-        probj = r2 + rr2;
+        prob = r2 + rr2;
       } else if (recombinations==0) {
-        probj = rr2;
+        prob = rr2;
       } else if (recombinations==1) {
         if (ADJ!=0) {  // FIXME: now this is not clear to me
-          probj = ((markertype==MH) ? 2.0*r*rr : r*rr);
+          prob = ((markertype==MH) ? 2.0*r*rr : r*rr);
         } else {
-          probj = ((compareto==MH) ? 2.0*r*rr : r*rr);
+          prob = ((compareto==MH) ? 2.0*r*rr : r*rr);
         }
       } else {
-        probj = r2;  // two recombinations
+        prob = r2;  // two recombinations
       }
       break;
     case CRIL:
       if (compareto==MH) {
         fatal("Strange: prob function trying to find H in RIL");
-        return 0.0; // No chance finding a 1 or H in an RIL
       }
-      if (recombinations) probj = r;
+      if (recombinations) prob = r;
       break;
     case CBC:
       if (compareto==MBB) {
         fatal("Strange: prob function trying to find BB in BC");
-        return 0.0; // No chance finding a 2/BB in a BC
       }
-      if (recombinations) probj = r;
+      if (recombinations) prob = r;
       break;
     default:
-      fatal("Strange: unknown crosstype in start_prob");
+      fatal("Strange: unknown crosstype in prob");
   }
-  return probj;
+  return prob;
 }
 
 /*
