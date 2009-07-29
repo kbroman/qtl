@@ -29,6 +29,10 @@
   extern "C" {
 #endif
 
+
+cvector locate_markers(const int nmark,const ivector chr);
+vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance);
+
 double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const MQMCrossType crosstype);
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const MQMCrossType crosstype, const int ADJ);

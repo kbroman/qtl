@@ -30,6 +30,62 @@
 
 #include "mqm.h"
 
+
+cvector locate_markers(const int nmark,const ivector chr) 
+{
+  cvector position = newcvector(nmark);
+  info("Calculating relative genomepositions of the markers");
+  for (int j=0; j<nmark; j++) {
+    if (j==0) {
+      if (chr[j]==chr[j+1]) 
+        position[j]=MLEFT;
+      else 
+        position[j]=MUNLINKED;
+    } else if (j==nmark-1) {
+      if (chr[j]==chr[j-1]) 
+        position[j]=MRIGHT;
+      else 
+        position[j]=MUNLINKED;
+    } else if (chr[j]==chr[j-1]) {
+      if (chr[j]==chr[j+1]) 
+        position[j]=MMIDDLE;
+      else 
+        position[j]=MRIGHT;
+    } else {
+      if (chr[j]==chr[j+1]) 
+        position[j]=MLEFT;
+      else 
+        position[j]=MUNLINKED;
+    }
+  }
+  return position;
+}
+
+vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance) 
+{
+  info("Estimating recombinant frequencies");
+  vector r = newvector(nmark);
+  for (int j=0; j<nmark; j++) {
+    r[j]= 999.0;
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
+      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+      if (r[j]<0) {
+        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
+        fatal("Recombination frequency is negative");
+        return NULL;
+      }
+    }
+    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
+  }
+  return r;
+}
+
+
+
+/* 
+ * Ascertain a marker is valid (AA, BB or AB) for the cross type
+ */
+
 void validate_markertype(const MQMCrossType crosstype, const char markertype)
 {
   if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)

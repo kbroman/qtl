@@ -385,16 +385,14 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
 
   info("Starting C-part of the data augmentation routine");
   ivector new_ind;
-  vector new_y, r, mapdistance;
+  vector new_y, mapdistance;
   cvector position;
   cmatrix markers, new_markers;
   ivector chr;
 
   markers= newcmatrix(*Nmark, nind0);
   new_markers= newcmatrix(*Nmark, *maxind);
-  r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
-  position= newcvector(*Nmark);
   chr= newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
@@ -420,36 +418,8 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     chr[i] = Chromo[0][i];
   }
 
-  info("Calculating relative genomepositions of the markers");
-  for (int j=0; j<(*Nmark); j++) {
-    if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    } else if (j==(*Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNLINKED;
-    } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
-      else position[j]=MRIGHT;
-    } else {
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    }
-  }
-
-  info("Estimating recombinant frequencies");
-  for (int j=0; j<(*Nmark); j++) {
-    r[j]= 999.0;
-    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
-      if (r[j]<0) {
-        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
-        fatal("Recombination frequency is negative");
-        return;
-      }
-    }
-    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
-  }
+  position = locate_markers(*Nmark,chr);
+  vector r = recombination_frequencies(*Nmark, position, mapdistance);
 
   if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
     //Data augmentation finished succesfully

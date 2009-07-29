@@ -37,20 +37,6 @@ double Lnormal(double residual, double variance) {
 }
 
 
-/**********************************************************************
-void reorg_geno(int n_ind, int n_pos, int *geno, int ***Geno)
-{
-  int i;
-
-  *Geno = (int **)R_alloc(n_pos, sizeof(int *));
-
-  (*Geno)[0] = geno;
-  for(i=1; i< n_pos; i++)
-    (*Geno)[i] = (*Geno)[i-1] + n_ind;
-
-}
-
-*/
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno) {
   int i;
 
@@ -134,9 +120,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
   }
 
-  if (verbose) {
-    Rprintf("INFO: Estimating recombinant frequencies\n");
-  }
+  info("Estimating recombinant frequencies");
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
@@ -144,10 +128,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
     //Rprintf("R[j] value: %f\n",r[j]);
   }
-  // ---- Initialize Frun and informationcontent to 0.0
-  if (verbose) {
-    Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");
-  }
+  info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
   informationcontent= newvector(Nsteps);
@@ -205,6 +186,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   if (verbose) {
     Rprintf("INFO: Num markers: %d\n",Nmark);
   }
+  // FIXME this is duplication of code above - should be a (unit tested) method
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
     if (j==0) {
@@ -225,15 +207,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
-        Rprintf("ERROR: Recombination frequency is negative\n");
         Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
+        fatal("Recombination frequency is negative");
         return;
       }
     }
   }
-  if (verbose) {
-    Rprintf("INFO: After dropping of uninformative cofactors\n");
-  }
+  info("After dropping of uninformative cofactors");
   ivector newind;
   vector newy;
   cmatrix newmarker;
@@ -392,9 +372,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(y);
   Free(chr);
   Free(selcofactor);
-  if (verbose) {
-    Rprintf("INFO: Analysis of data finished\n");
-  }
+  info("Analysis of data finished");
   return;
 }
 
