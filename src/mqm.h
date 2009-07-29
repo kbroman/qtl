@@ -62,10 +62,20 @@ const unsigned char MNOTBB    = '4';  // Not BB
 const unsigned char MMISSING  = '9';  // Unknown (marker genotype missing)
 const unsigned char MUNUSED   = '-';  // Unused parameter
 
+#ifdef STANDALONE
+  #define message(type,s) { printf("%s: ",type); printf(s); printf("\n"); } 
+  // #define warning(s) { message("WARNING",s); }
+  #define fatal(s) { message("FATAL",s); exit(127); }
+#else
+  #define message(type,s) { R_ShowMessage(s); }
+  // #define warning(s) { Rf_warning(s); }
+  #define fatal(s) { Rf_error(s); }
+#endif
+
 #ifdef NDEBUG
   #define info(s) 
 #else
-  #define info(s) if (verbose) { printf("INFO: "); printf(s); printf("\n"); }
+  #define info(s) if (verbose) { message("INFO",s); }
 #endif
 
-#endif
+#endif // MQM_H
