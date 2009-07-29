@@ -40,6 +40,7 @@ const unsigned char MLEFT     = 'L';
 const unsigned char MRIGHT    = 'R';
 const unsigned char MMIDDLE   = 'M';
 const unsigned char MUNLINKED = 'U';
+const unsigned char MUNKNOWN  = 0;
 
 // Marker genotypes (scored at marker)
 const unsigned char MAA       = '0';  // Homozygous AA

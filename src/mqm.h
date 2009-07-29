@@ -47,9 +47,9 @@
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else
-  #define message(type,s) { R_ShowMessage(s); }
+  #define message(type,s) { Rprintf("%s: %s\n",type,s); }
   // #define warning(s) { Rf_warning(s); }
-  #define fatal(s) { Rf_error(s); }
+  #define fatal(s) { message("FATAL",s); Rf_error(s); }
 #endif
 
 #ifdef NDEBUG

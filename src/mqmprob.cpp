@@ -43,22 +43,24 @@
  */
 
 double start_prob(const MQMCrossType crosstype, const char markertype) {
+  if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)
+    fatal("Unknown marker in start_prob");
   switch (crosstype) {
     case CF2:
       return (markertype==MH ? 0.5 : 0.25);
       break;
     case CRIL:
-      if (markertype==MH) warning("Strange: start_prob function trying to find H in RIL");
+      if (markertype==MH) fatal("start_prob function trying to find H in RIL");
       return 0.5;
       break;
     case CBC:
-      if (markertype==MBB) warning("Strange: start_prob function trying to find BB in BC");
+      if (markertype==MBB) fatal("start_prob function trying to find BB in BC");
       return (markertype==MH ? 0.5 : 0.5);
       break;
     default:
-      warning("Strange: unknown crosstype in start_prob");
+      fatal("Strange: unknown crosstype in start_prob");
   }
-  error("Should get here");
+  fatal("Should not get here");
   return NAN;
 }
 
@@ -84,7 +86,7 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   if (checkmarker != MUNUSED) {
     compareto = checkmarker;
   } else {
-    error("We never get here, all calls pass in the markertype");
+    fatal("We never get here, all calls happen to pass in the markertype");
     compareto = loci[j+1][i];
   }
   // number of recombinations recombinations
@@ -108,20 +110,20 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
       break;
     case CRIL:
       if (compareto==MH) {
-        error("Strange: prob function trying to find H in RIL");
+        fatal("Strange: prob function trying to find H in RIL");
         return 0.0; // No chance finding a 1 or H in an RIL
       }
       if (recombinations) probj = r;
       break;
     case CBC:
       if (compareto==MBB) {
-        error("Strange: prob function trying to find BB in BC");
+        fatal("Strange: prob function trying to find BB in BC");
         return 0.0; // No chance finding a 2/BB in a BC
       }
       if (recombinations) probj = r;
       break;
     default:
-      warning("Strange: unknown crosstype in start_prob");
+      fatal("Strange: unknown crosstype in start_prob");
   }
   return probj;
 }
@@ -229,7 +231,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CRIL:
       if (markertype==MH) {
-        error("Strange: encountered heterozygous genotype in RIL");
+        fatal("Strange: encountered heterozygous genotype in RIL");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MBB)) {
@@ -254,7 +256,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CBC:
       if (markertype==MBB) {
-        error("Strange: encountered BB genotype in BC");
+        fatal("Strange: encountered BB genotype in BC");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MH)) {
