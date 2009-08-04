@@ -4,8 +4,9 @@
 # and libraries are. It also determines what the name of the library is. This
 # code sets the following variables:
 #
-#   R_INCLUDE_PATH = path to where R.h is found
-#   R_EXECUTABLE   = full path to the R binary
+SET(R_INCLUDE_PATH "c:/Progra~1/R/r-2.9.1/include")
+SET(RBLAS_LIBRARY "c:/Progra~1/R/r-2.9.1/include/ext")
+SET(R_EXECUTABLE "c:/Progra~1/R/r-2.9.1/bin")
 #
 # R can be queried with:
 #
@@ -19,7 +20,7 @@ FIND_PROGRAM(R_EXECUTABLE R)
 IF(R_EXECUTABLE)
   GET_FILENAME_COMPONENT(R_BINPATH ${R_EXECUTABLE} PATH)  
   GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)  
-	SET(R_LIBRARY ${R_PATH}/lib/R/lib/libR.so)
+	SET(R_LIBRARY ${R_BINPATH}/bin/R.dll)
 	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
 ENDIF(R_EXECUTABLE)
 

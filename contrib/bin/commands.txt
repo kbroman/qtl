@@ -1,0 +1,44 @@
+"C:/Program Files/CMake/bin/cmake.exe" -HD:/afterholidays/rqtl-mqm/contrib/bin -BD:/afterholidays/rqtl-mqm/contrib/bin --check-build-system CMakeFiles/Makefile.cmake 0
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_start D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles/progress.make
+make -f CMakeFiles/Makefile2 all
+make -f CMakeFiles/mqm.dir/build.make CMakeFiles/mqm.dir/depend
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_depends "Unix Makefiles" D:/afterholidays/rqtl-mqm/contrib/bin D:/afterholidays/rqtl-mqm/contrib/bin D:/afterholidays/rqtl-mqm/contrib/bin D:/afterholidays/rqtl-mqm/contrib/bin D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles/mqm.dir/DependInfo.cmake --color=
+make -f CMakeFiles/mqm.dir/build.make CMakeFiles/mqm.dir/build
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 1
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmaugment.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmaugment.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmaugment.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 2
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmregression.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmregression.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmregression.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 3
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmextra.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmextra.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmextra.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 4
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmmixture.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmmixture.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmmixture.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 5
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmdatatypes.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmdatatypes.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmdatatypes.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 6
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmscan.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmscan.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmscan.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 7
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmprob.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmprob.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmprob.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 8
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmeliminate.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmeliminate.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmeliminate.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 9
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmmapqtl.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmmapqtl.cpp.obj -c D:/afterholidays/rqtl-mqm/src/mqmmapqtl.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 10
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building C object CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/util.c.obj"
+C:/Dev-Cpp/bin/gcc.exe  -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/util.c.obj   -c D:/afterholidays/rqtl-mqm/src/util.c
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 11
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --green "Building CXX object CMakeFiles/mqm.dir/mqmmain.cpp.obj"
+C:/Dev-Cpp/bin/c++.exe   -D_DEBUG -DSTANDALONE -g -I"c:/Progra~1/R/r-2.9.1/include" -I/_R/include -ID:/afterholidays/rqtl-mqm/contrib/bin/../../src   -Wall -pg -o CMakeFiles/mqm.dir/mqmmain.cpp.obj -c D:/afterholidays/rqtl-mqm/contrib/bin/mqmmain.cpp
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_echo_color --switch= --red --bold "Linking CXX executable mqm.exe"
+C:/Dev-Cpp/bin/c++.exe   -g   "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmaugment.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmregression.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmextra.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmmixture.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmdatatypes.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmscan.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmprob.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmeliminate.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/mqmmapqtl.cpp.obj" "CMakeFiles/mqm.dir/D_/afterholidays/rqtl-mqm/src/util.c.obj" "CMakeFiles/mqm.dir/mqmmain.cpp.obj"   -o mqm.exe -Wl,--out-implib,libmqm.dll.a -Wl,--major-image-version,0,--minor-image-version,0  "c:/Progra~1/R/r-2.9.1/bin/R.dll" -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_report D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles  1 2 3 4 5 6 7 8 9 10 11
+echo "Built target mqm"
+"C:/Program Files/CMake/bin/cmake.exe" -E cmake_progress_start D:/afterholidays/rqtl-mqm/contrib/bin/CMakeFiles 0
