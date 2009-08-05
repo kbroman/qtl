@@ -16,6 +16,12 @@ Phenotype done 180 1
 Positions done 117
 Chromosomes done 117 -> # 5 Chromosomes
 Starting phenotype: 0
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Crosstype determined by the algorithm:F:
+INFO: Augmentation parameters: Maximum augmentation=1000, Maximum augmentation per individual=8, Neglect=1.000000
+INFO: Crosstype determined by the algorithm:F:
+INFO: Augmentation parameters: Maximum augmentation=1000, Maximum augmentation per individual=8, Neglect=3.000000
 INFO: Starting C-part of the MQM analysis
 INFO: Receiving the chromosome matrix from R
 INFO: Calculating relative genomepositions of the markers

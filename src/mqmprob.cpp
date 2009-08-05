@@ -30,6 +30,72 @@
 
 #include "mqm.h"
 
+
+cvector locate_markers(const int nmark,const ivector chr) 
+{
+  cvector position = newcvector(nmark);
+  info("Calculating relative genomepositions of the markers");
+  for (int j=0; j<nmark; j++) {
+    if (j==0) {
+      if (chr[j]==chr[j+1]) 
+        position[j]=MLEFT;
+      else 
+        position[j]=MUNLINKED;
+    } else if (j==nmark-1) {
+      if (chr[j]==chr[j-1]) 
+        position[j]=MRIGHT;
+      else 
+        position[j]=MUNLINKED;
+    } else if (chr[j]==chr[j-1]) {
+      if (chr[j]==chr[j+1]) 
+        position[j]=MMIDDLE;
+      else 
+        position[j]=MRIGHT;
+    } else {
+      if (chr[j]==chr[j+1]) 
+        position[j]=MLEFT;
+      else 
+        position[j]=MUNLINKED;
+    }
+  }
+  return position;
+}
+
+vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance) 
+{
+  info("Estimating recombinant frequencies");
+  vector r = newvector(nmark);
+  for (int j=0; j<nmark; j++) {
+    r[j]= 999.0;
+    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
+      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+      if (r[j]<0) {
+        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
+        fatal("Recombination frequency is negative");
+        return NULL;
+      }
+    }
+    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
+  }
+  return r;
+}
+
+
+
+/* 
+ * Ascertain a marker is valid (AA, BB or AB) for the cross type
+ */
+
+void validate_markertype(const MQMCrossType crosstype, const char markertype)
+{
+  if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)
+    fatal("validate_markertype: Undecided markertype");
+  if (crosstype==CRIL && markertype==MH) 
+    fatal("validate_markertype: Found markertype H (AB) in RIL");
+  if (crosstype==CBC && markertype==MBB) 
+    fatal("validate_markertype: Found markertype BB in back cross (BC)");
+}
+
 /* Chooses the starting probability (when a marker is the first, or unlinked)
  * based on the experimental cross type; used by the augmentation and mixture
  * methods
@@ -42,23 +108,19 @@
  *   BC     1/2      x   1/2
  */
 
-double start_prob(const char crosstype, const char markertype) {
+double start_prob(const MQMCrossType crosstype, const char markertype) {
+  validate_markertype(crosstype,markertype);
   switch (crosstype) {
     case CF2:
       return (markertype==MH ? 0.5 : 0.25);
-      break;
     case CRIL:
-      if (markertype==MH) warning("Strange: start_prob function trying to find H in RIL");
       return 0.5;
-      break;
     case CBC:
-      if (markertype==MBB) warning("Strange: start_prob function trying to find BB in BC");
       return (markertype==MH ? 0.5 : 0.5);
-      break;
     default:
-      warning("Strange: unknown crosstype in start_prob");
+      fatal("Strange: unknown crosstype in start_prob");
   }
-  error("Should get here");
+  fatal("Should not get here");
   return NAN;
 }
 
@@ -71,7 +133,7 @@ double start_prob(const char crosstype, const char markertype) {
  */
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
-char checkmarker, const char crosstype, const int ADJ) {
+char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   char compareto;
 
   const double r = rs[j+ADJ];
@@ -84,46 +146,40 @@ char checkmarker, const char crosstype, const int ADJ) {
   if (checkmarker != MUNUSED) {
     compareto = checkmarker;
   } else {
-    error("We never get here, all calls pass in the markertype");
-    compareto = loci[j+1][i];
+    fatal("We never get here, all calls happen to pass in the markertype");
+    compareto = loci[j+1][i]; // FIXME
   }
+
+  validate_markertype(crosstype,compareto);
+  validate_markertype(crosstype,markertype);
+
   // number of recombinations recombinations
   const double recombinations = fabs((double)markertype-(double)compareto);
-  double probj = rr;  // default to no recombinations (1-r)
+  double prob = rr;  // default to no recombinations (1-r)
   switch (crosstype) {
     case CF2:
       if ((markertype==MH)&&(compareto==MH)) {
-        probj = r2 + rr2;
+        prob = r2 + rr2;
       } else if (recombinations==0) {
-        probj = rr2;
+        prob = rr2;
       } else if (recombinations==1) {
         if (ADJ!=0) {  // FIXME: now this is not clear to me
-          probj = ((markertype==MH) ? 2.0*r*rr : r*rr);
+          prob = ((markertype==MH) ? 2.0*r*rr : r*rr);
         } else {
-          probj = ((compareto==MH) ? 2.0*r*rr : r*rr);
+          prob = ((compareto==MH) ? 2.0*r*rr : r*rr);
         }
       } else {
-        probj = r2;  // two recombinations
+        prob = r2;  // two recombinations
       }
       break;
     case CRIL:
-      if (compareto==MH) {
-        error("Strange: prob function trying to find H in RIL");
-        return 0.0; // No chance finding a 1 or H in an RIL
-      }
-      if (recombinations) probj = r;
-      break;
     case CBC:
-      if (compareto==MBB) {
-        error("Strange: prob function trying to find BB in BC");
-        return 0.0; // No chance finding a 2/BB in a BC
-      }
-      if (recombinations) probj = r;
+      if (recombinations) prob = r;
       break;
     default:
-      warning("Strange: unknown crosstype in start_prob");
+      fatal("Strange: unknown crosstype in prob");
   }
-  return probj;
+  return prob;
 }
 
 /*
@@ -132,7 +188,7 @@ char checkmarker, const char crosstype, const int ADJ) {
  * frequencies. This function is used by augmentation.
  */
 
-double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const char crosstype) {
+double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const MQMCrossType crosstype) {
   double prob0, prob1, prob2;
   if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
     //We're at the end of a chromosome or an unlinked marker
@@ -143,6 +199,8 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   const double rr = 1.0-r; // right side recombination frequency
   const double rr2 = rr*rr;
   const char rightmarker = imarker[j+1];
+  validate_markertype(crosstype,markertype);
+  validate_markertype(crosstype,rightmarker);
 
   // markertype markerr diff recombinations
   //   AA        AA      0     0      1-r
@@ -229,7 +287,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CRIL:
       if (markertype==MH) {
-        error("Strange: encountered heterozygous genotype in RIL");
+        fatal("Strange: encountered heterozygous genotype in RIL");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MBB)) {
@@ -254,7 +312,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CBC:
       if (markertype==MBB) {
-        error("Strange: encountered BB genotype in BC");
+        fatal("Strange: encountered BB genotype in BC");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MH)) {

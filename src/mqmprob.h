@@ -29,11 +29,15 @@
   extern "C" {
 #endif
 
-double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const char crosstype);
 
-double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const char crosstype, const int ADJ);
+cvector locate_markers(const int nmark,const ivector chr);
+vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance);
 
-double start_prob(const char crosstype,const char markertype);
+double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const MQMCrossType crosstype);
+
+double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const MQMCrossType crosstype, const int ADJ);
+
+double start_prob(const MQMCrossType crosstype,const char markertype);
 
 #ifdef __cplusplus
   }

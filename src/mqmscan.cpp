@@ -37,20 +37,6 @@ double Lnormal(double residual, double variance) {
 }
 
 
-/**********************************************************************
-void reorg_geno(int n_ind, int n_pos, int *geno, int ***Geno)
-{
-  int i;
-
-  *Geno = (int **)R_alloc(n_pos, sizeof(int *));
-
-  (*Geno)[0] = geno;
-  for(i=1; i< n_pos; i++)
-    (*Geno)[i] = (*Geno)[i-1] + n_ind;
-
-}
-
-*/
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno) {
   int i;
 
@@ -85,7 +71,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
                double alfa, int em, int out_Naug, int **INDlist, char
-               reestimate, char crosstype, char dominance, int verbose) {
+               reestimate, MQMCrossType crosstype, char dominance, int verbose) {
   if (verbose) {
     Rprintf("INFO: Starting C-part of the MQM analysis\n");
   }
@@ -134,9 +120,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
   }
 
-  if (verbose) {
-    Rprintf("INFO: Estimating recombinant frequencies\n");
-  }
+  info("Estimating recombinant frequencies");
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
@@ -144,10 +128,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
     //Rprintf("R[j] value: %f\n",r[j]);
   }
-  // ---- Initialize Frun and informationcontent to 0.0
-  if (verbose) {
-    Rprintf("INFO: Initialize Frun and informationcontent to 0.0\n");
-  }
+  info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
   informationcontent= newvector(Nsteps);
@@ -205,6 +186,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   if (verbose) {
     Rprintf("INFO: Num markers: %d\n",Nmark);
   }
+  // FIXME this is duplication of code above - should be a (unit tested) method
   for (int j=0; j<Nmark; j++) {
     r[j]= 999.0;
     if (j==0) {
@@ -225,15 +207,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
-        Rprintf("ERROR: Recombination frequency is negative\n");
         Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
+        fatal("Recombination frequency is negative");
         return;
       }
     }
   }
-  if (verbose) {
-    Rprintf("INFO: After dropping of uninformative cofactors\n");
-  }
+  info("After dropping of uninformative cofactors");
   ivector newind;
   vector newy;
   cmatrix newmarker;
@@ -392,9 +372,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(y);
   Free(chr);
   Free(selcofactor);
-  if (verbose) {
-    Rprintf("INFO: Analysis of data finished\n");
-  }
+  info("Analysis of data finished");
   return;
 }
 
@@ -410,7 +388,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
              double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
              double Windowsize,double Steps,
-             double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,int crosstype,int domi,int verbose) {
+             double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,RqtlCrossType rqtlcrosstype,int domi,int verbose) {
 
   ivector f1genotype;
   cmatrix markers;
@@ -424,8 +402,9 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 
   int cof_cnt=0;
 
+  MQMCrossType crosstype = determine_MQMCross(Nmark,Nind,(const int **)Geno,rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
-  change_coding(&Nmark,&Nind,Geno,markers, crosstype);
+  change_coding(&Nmark,&Nind,Geno,markers,crosstype);
 
   for (int i=0; i< Nmark; i++) {
     f1genotype[i] = 12;
@@ -452,9 +431,8 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     reestimate = 'n';
   }
   //determine what kind of cross we have
-  char cross = determine_cross(&Nmark,&Nind,Geno,&crosstype);
   //set dominance accordingly
-  if (cross != CF2) {
+  if (crosstype != CF2) {
     if (verbose==1) {
       Rprintf("INFO: Dominance setting ignored (dominance=0)\n");
     }
@@ -469,7 +447,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   }
 
   //WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
-  analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,cross,dominance,verbose);
+  analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,crosstype,dominance,verbose);
 
   if (re_estimate) {
     if (verbose==1) {
@@ -535,6 +513,6 @@ void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
   reorg_int(*out_Naug,1,indlist,&INDlist);
   //Done with reorganising lets start executing
 
-  mqmscan(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,*crosstype,*domi,*verbose);
+  mqmscan(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,(RqtlCrossType)*crosstype,*domi,*verbose);
 } /* end of function R_mqmscan */
 

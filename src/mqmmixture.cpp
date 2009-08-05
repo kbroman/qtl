@@ -39,7 +39,7 @@
  */
 double rmixture(cmatrix marker, vector weight, vector r,
                 cvector position, ivector ind, int Nind, int Naug, int Nmark,
-                vector *mapdistance, char reestimate, char crosstype,
+                vector *mapdistance, char reestimate, MQMCrossType crosstype,
                 int verbose) {
   int i, j;
   int iem= 0;
@@ -144,7 +144,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
 double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
-                  double *variance, int em, vector *weight, const bool useREML, char fitQTL, char dominance, char crosstype, int verbose) {
+                  double *variance, int em, vector *weight, const bool useREML, char fitQTL, char dominance, MQMCrossType crosstype, int verbose) {
   //if(verbose==1){Rprintf("QTLmixture called\n");}
   int iem= 0, newNaug, i, j;
   char varknown, biasadj='n';

@@ -38,7 +38,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix *augmarker, vector
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position,
             vector r, const int maxNaug, const int imaxNaug, const double neglect, 
-            const char crosstype, const int verbose);
+            MQMCrossType crosstype, const int verbose);
 
 #ifdef __cplusplus
   }

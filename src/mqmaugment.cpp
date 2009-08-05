@@ -56,7 +56,7 @@
 int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
-            const double neglect, const char crosstype, const int verbose) {
+            const double neglect, const MQMCrossType crosstype, const int verbose) {
   int retvalue = 0;
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
@@ -370,7 +370,7 @@ cleanup:
 void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *neglect, int
-               *chromo, int *crosstype, int *verbose) {
+               *chromo, int *rqtlcrosstypep, int *verbosep) {
   int **Geno;
   double **Pheno;
   double **Dist;
@@ -380,19 +380,19 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   int **NEWIND;
   const int nind0 = *Nind;
   int prior = nind0;
+  const int verbose = *verbosep;
+  const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
-  if (*verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
+  info("Starting C-part of the data augmentation routine");
   ivector new_ind;
-  vector new_y, r, mapdistance;
+  vector new_y, mapdistance;
   cvector position;
   cmatrix markers, new_markers;
   ivector chr;
 
   markers= newcmatrix(*Nmark, nind0);
   new_markers= newcmatrix(*Nmark, *maxind);
-  r = newvector(*Nmark);
   mapdistance = newvector(*Nmark);
-  position= newcvector(*Nmark);
   chr= newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
@@ -405,11 +405,11 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
   reorg_pheno(*maxind, 1, augPheno, &NEWPheno);
 
+  MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
-  change_coding(Nmark, Nind, Geno, markers, *crosstype);
+  change_coding(Nmark, Nind, Geno, markers, crosstype);
 
-  char cross = determine_cross(Nmark, Nind, Geno, crosstype);
-  if (*verbose) Rprintf("INFO: Filling the chromosome matrix\n");
+  info("Filling the chromosome matrix");
 
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
@@ -418,38 +418,10 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     chr[i] = Chromo[0][i];
   }
 
-  if (*verbose) Rprintf("INFO: Calculating relative genomepositions of the markers\n");
-  for (int j=0; j<(*Nmark); j++) {
-    if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    } else if (j==(*Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNLINKED;
-    } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
-      else position[j]=MRIGHT;
-    } else {
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    }
-  }
+  position = locate_markers(*Nmark,chr);
+  vector r = recombination_frequencies(*Nmark, position, mapdistance);
 
-  if (*verbose) Rprintf("INFO: Estimating recombinant frequencies\n");
-  for (int j=0; j<(*Nmark); j++) {
-    r[j]= 999.0;
-    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
-      if (r[j]<0) {
-        Rprintf("ERROR: Recombination frequency is negative\n");
-        Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
-        return;
-      }
-    }
-    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
-  }
-
-  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, cross, *verbose)==1) {
+  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
@@ -480,12 +452,12 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(position);
     Free(r);
     Free(chr);
-    if (*verbose) {
-      Rprintf("INFO: Data augmentation finished succesfull\n");
+    if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", prior);
       Rprintf("# Unique selected individuals:%d\n", nind0);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
+      info("Data augmentation succesfull");
     }
   } else {
     //Unsuccessfull data augmentation exit
@@ -517,7 +489,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(position);
     Free(r);
     Free(chr);
-    Rprintf("Data augmentation failed\n");
+    fatal("Data augmentation failed");
   }
   return;
 }

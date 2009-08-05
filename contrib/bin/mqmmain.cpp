@@ -240,7 +240,7 @@ int main(int argc,char *argv[]) {
   for (int i=0; i< nMark; i++) {
     cofactor[i] = '0';
     f1genotype[i] = 12;
-    mapdistance[i]=999.0;
+    // mapdistance[i]=999.0;
     mapdistance[i]=pos[i];
   }
   for (int i=0; i< nInd; i++) {
@@ -252,7 +252,31 @@ int main(int argc,char *argv[]) {
   //Rprintf("INFO: Cofactors %d\n",sum);
 
   Rprintf("Starting phenotype: %d\n",phenotype);
-  analyseF2(nInd, nMark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,'F',0,verbose);
+
+  cmatrix new_markers;
+  vector new_y;
+  ivector new_ind;
+  int nAug, Nmark = nMark;
+  int maxind = 1000;
+  int maxiaug = 8;
+  int neglect = 1;
+  MQMCrossType crosstype = CF2;
+
+  cvector position = locate_markers(Nmark,chr);
+  vector r = recombination_frequencies(Nmark, position, mapdistance);
+
+  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verbose);
+
+  neglect = 3;
+  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verbose);
+
+  // Output marker info
+  // for (int m=0; m<nAug; m++) {
+  //   Rprintf("%5d%s\n",m,new_markers[m]);
+  // }
+
+  // ignores augmented set, for now...
+  analyseF2(nInd, nMark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,CF2,0,verbose);
 
   // Output marker info
   for (int m=0; m<nMark; m++) {

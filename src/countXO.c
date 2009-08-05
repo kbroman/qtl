@@ -39,6 +39,7 @@
 #include <R_ext/Utils.h>
 // #include "util.h"
 #include "ripple.h"
+#include "util.h"
 #include "countXO.h"
 
 /**********************************************************************
