@@ -14,66 +14,84 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main (int argc, char **argv) {
-  bool verboseflag = false;
-  int debuglevel = 0;
-  char *phenofile = NULL;
-  char *genofile = NULL;
-  char *markerfile = NULL;
-  char *coffile = NULL;
-  int index;
-  int c;
+void exitonerror(const char *msg) {
+	fprintf(stderr, msg);
+	exit(1);
+ }
+ 
+ void printoptionshelp(){
+	printf ("MQM optionshelp:\n");
+	printf ("-h      		This help\n");
+	printf ("-v      		Verbose (produce a lot of textoutput)\n");
+	printf ("-p(INT) 		DebugLevel -d0,-d1\n");
+	printf ("-p(FILE_NAME)	Phenotypes file in plain textformat\n");
+	printf ("-g(FILE_NAME)	Genotypes file in plain textformat\n");
+	printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat\n");
+	printf ("-c(FILE_NAME)	Cofactors file in plain textformat\n");
+ }
+      
+int main (int argc, char **argv){
+	//variables
+	bool verboseflag = false;
+	bool helpflag = false;
+	int debuglevel = 0;
+	char *phenofile = NULL;
+	char *genofile = NULL;
+	char *markerfile = NULL;
+	char *coffile = NULL;       
+	unsigned int index;
+	signed int c;
 
-//Parsing of arguments
-  while ((c = getopt (argc, argv, "vd:p:g:m:c:")) != -1)
-    switch (c) {
-    case 'v':
-      verboseflag = true;
-      break;
-    case 'd':
-      debuglevel = atoi(optarg);
-      break;
-    case 'p':
-      phenofile = optarg;
-      break;
-    case 'g':
-      genofile = optarg;
-      break;
-    case 'm':
-      markerfile = optarg;
-      break;
-    case 'c':
-      coffile = optarg;
-      break;
-    default:
-      fprintf (stderr, "Unknown option character '%c'.\n", optopt);
-
-    }
-  printf ("Options parsed for MQM:\n");
+//Parsing of arguments     
+while ((c = getopt (argc, argv, "vdh:p:g:m:c:")) != -1)
+switch (c)
+{
+	case 'v':
+		verboseflag = true;
+	break;
+	case 'h':
+		helpflag = true;
+	break;	
+	case 'd': 
+		debuglevel = atoi(optarg);
+	break;
+	case 'p':
+		phenofile = optarg;
+	break;
+	case 'g':
+		genofile = optarg;
+	break;             
+	case 'm':
+		markerfile = optarg;
+	break;
+	case 'c':
+		coffile = optarg;
+	break;
+	default:
+		fprintf (stderr, "Unknown option character '%c'.\n", optopt);
+}
+if(helpflag){
+	printoptionshelp();
+	return 0;
+}else{
+	printf ("Options parsed for MQM:\n");
 //Verbose & debug
-  printf ("verboseflag = %d, bflag = %d\n",verboseflag, debuglevel);
+	printf ("verboseflag = %d, debuglvl = %d\n",verboseflag, debuglevel);
 //Needed files
-  if (phenofile==NULL) {
-    fprintf (stderr, "Please supply a phenotypefile.\n");
-    return 0;
-  }
-  printf ("Phenotypes = %s\n",phenofile);
-  if (genofile==NULL) {
-    fprintf (stderr, "Please supply a genofile.\n");
-    return 0;
-  }
-  printf ("Genotypes = %s\n",genofile);
-  if (markerfile==NULL) {
-    fprintf (stderr, "Please supply a markerfile.\n");
-    return 0;
-  }
-  printf ("Markers = %s\n",markerfile);
+	if(!phenofile) exitonerror("Please supply a phenotypefile.\n");
+	printf ("Phenotypes = %s\n",phenofile);
+	if(!genofile)  exitonerror("Please supply a genofile.\n");
+	printf ("Genotypes = %s\n",genofile);
+	if(!markerfile) exitonerror("Please supply a markerfile.\n");
+	printf ("Markers = %s\n",markerfile);
 //Optional files
-  if (coffile != NULL) {
-    printf ("Cofactors = %s\n",coffile);
-  }
+	if(coffile != NULL){
+		printf ("Cofactors = %s\n",coffile);
+	}
 //Warn people for non-existing options
-  for (index = optind; index < argc; index++)
-    printf ("Non-option argument %s\n", argv[index]);
-  return 0;
+	for (index = optind; index < argc; index++){
+		printf ("Non-option argument %s\n", argv[index]);
+	}
+}
+return 0;
 }
