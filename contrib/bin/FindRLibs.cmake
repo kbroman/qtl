@@ -4,9 +4,9 @@
 # and libraries are. It also determines what the name of the library is. This
 # code sets the following variables:
 #
-SET(R_INCLUDE_PATH "c:/Progra~1/R/r-2.9.1/include")
-SET(RBLAS_LIBRARY "c:/Progra~1/R/r-2.9.1/include/ext")
-SET(R_EXECUTABLE "c:/Progra~1/R/r-2.9.1/bin")
+# SET(R_INCLUDE_PATH "c:/Progra~1/R/R-2.9.1/include")
+# SET(RBLAS_LIBRARY "c:/Progra~1/R/r-2.9.1/include/ext")
+# SET(R_EXECUTABLE "c:/Progra~1/R/r-2.9.1/bin")
 #
 # R can be queried with:
 #
@@ -15,13 +15,25 @@ SET(R_EXECUTABLE "c:/Progra~1/R/r-2.9.1/bin")
 #
 # Also pkg-config can be used with --cflags libR etc.
 
+IF(WIN32)
+  MESSAGE("Trying to find R on Windows")
+  SET(R_EXECUTABLE "C:/Program Files/R/R-2.9.1/bin/R.EXE")
+ELSE()
+  MESSAGE("Trying to find R on Unix")
+ENDIF()
+
 FIND_PROGRAM(R_EXECUTABLE R)
 
 IF(R_EXECUTABLE)
   GET_FILENAME_COMPONENT(R_BINPATH ${R_EXECUTABLE} PATH)  
   GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)  
-	SET(R_LIBRARY ${R_BINPATH}/bin/R.dll)
+  IF (WIN32)
+	SET(R_LIBRARY ${R_BINPATH}/R.DLL)
+	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/include)
+  ELSE()
+	SET(R_LIBRARY ${R_BINPATH}/bin/libR.so)
 	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
+  ENDIF()
 ENDIF(R_EXECUTABLE)
 
 # ---- Find R.h and the Rlib.so shared library
@@ -40,9 +52,16 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(RLibs DEFAULT_MSG R_LIBRARY R_INCLUDE_PATH)
 
 GET_FILENAME_COMPONENT(R_LIBRARY_PATH ${R_LIBRARY} PATH)  
 
-FIND_LIBRARY(RBLAS_LIBRARY NAMES libRblas.so PATHS 
-  ${R_LIBRARY_PATH}
-)
+IF (WIN32)
+  FIND_LIBRARY(RBLAS_LIBRARY NAMES Rblas.dll PATHS 
+    ${R_BINPATH}
+  )
+ELSE()
+  FIND_LIBRARY(RBLAS_LIBRARY NAMES libRblas.so PATHS 
+    ${R_LIBRARY_PATH}
+  )
+ELSE()
+ENDIF()
 
 MESSAGE("R_EXECUTABLE=${R_EXECUTABLE}")
 MESSAGE("R_INCLUDE_PATH=${R_INCLUDE_PATH}")
@@ -68,7 +87,7 @@ if(NOT BUILD_LIBS)
   ENDIF(APPLE)
   message("Looking for ${_LINKLIB} in ${_RLIBPATH}")
   FIND_LIBRARY(R_LIBRARY NAMES ${_LINKLIB} HINTS ${_RLIBPATH}/build ${_RLIBPATH}/src)
-  IF(NOT BIOLIB_R_LIBRARY)
+  IF(BIOLIB AND NOT BIOLIB_R_LIBRARY)
     FIND_LIBRARY(BIOLIB_R_LIBRARY NAMES ${_LINKLIB} PATHS ${_RLIBPATH}/build ${_RLIBPATH}/src)
   ENDIF()
   message("Found ${BIOLIB_R_LIBRARY}")
@@ -80,5 +99,6 @@ MARK_AS_ADVANCED(
   R_INCLUDE_PATH
   R_EXECUTABLE
   R_LIBRARY
+  RBLAS_LIBRARY
   BIOLIB_R_LIBRARY
   )

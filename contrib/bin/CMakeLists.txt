@@ -17,11 +17,13 @@ FIND_PACKAGE(RLibs)
 
 include_directories (../../src)
 add_definitions(-DSTANDALONE)
-add_definitions(-pg)
 
-set(LINK_FLAGS "-pg")
+IF(NOT WIN32)
+  add_definitions(-pg)
+  set(LINK_FLAGS "-pg")
+ENDIF()
 
-link_libraries(${R_LIBRARY})
+link_libraries(${R_LIBRARY} ${RBLAS_LIBRARY})
 
 add_executable (mqm 
 ../../src/mqmaugment.cpp    

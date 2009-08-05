@@ -26,6 +26,10 @@
 #include "mqm.h"
 #include <Rmath.h>
 
+inline int mqmmod(int a, int b) {
+  return a%b;
+}
+
 double Lnormal(double residual, double variance) {
   //double Likelihood,likelyhood;
   //Likelihood=exp(-pow(residual/sqrt(variance),2.0)/2.0 - log(sqrt(2.0*acos(-1.0)*variance)));
@@ -147,7 +151,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   //Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   //  Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
   for (int j=0; j<Nmark; j++) {
-    if (mod(f1genotype[j],11)!=0) {
+    if (mqmmod(f1genotype[j],11)!=0) {
       dropj='n';
     } else if ((*cofactor)[j]==MAA) {
       dropj='y';
@@ -155,18 +159,18 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       // (cofactor[j]!=MAA) cofactor at non-segregating marker
       // test whether next segregating marker is nearby (<20cM)
       dropj='y';
-      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
+      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mqmmod(f1genotype[j+1],11)!=0)) dropj='n';
       else if (position[j+1]!=MRIGHT)
-        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+2],11)!=0)) dropj='n';
+        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mqmmod(f1genotype[j+2],11)!=0)) dropj='n';
     } else if (position[j]==MMIDDLE) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
-      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mod(f1genotype[j+1],11)!=0)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mqmmod(f1genotype[j-1],11)!=0)) dropj='n';
+      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mqmmod(f1genotype[j+1],11)!=0)) dropj='n';
     } else if (position[j]==MRIGHT) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mod(f1genotype[j-1],11)!=0)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mqmmod(f1genotype[j-1],11)!=0)) dropj='n';
       else if (position[j-1]!=MLEFT)
-        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mod(f1genotype[j-2],11)!=0)) dropj='n';
+        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mqmmod(f1genotype[j-2],11)!=0)) dropj='n';
     }
     if (dropj=='n') {
       marker[jj]= marker[j];

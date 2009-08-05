@@ -36,3 +36,5 @@ tests/junk*
 tools
 mqm
 qtl*gz
+*.exe
+*.EXE
