@@ -21,9 +21,11 @@ add_definitions(-DSTANDALONE)
 IF(NOT WIN32)
   add_definitions(-pg)
   set(LINK_FLAGS "-pg")
+  link_libraries(${R_LIBRARY})
+ELSE()
+  link_libraries(${R_LIBRARY} ${RBLAS_LIBRARY})
 ENDIF()
 
-link_libraries(${R_LIBRARY} ${RBLAS_LIBRARY})
 
 add_executable (mqm 
 ../../src/mqmaugment.cpp    

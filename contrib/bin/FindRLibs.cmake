@@ -28,11 +28,12 @@ IF(R_EXECUTABLE)
   GET_FILENAME_COMPONENT(R_BINPATH ${R_EXECUTABLE} PATH)  
   GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)  
   IF (WIN32)
-	SET(R_LIBRARY ${R_BINPATH}/R.DLL)
-	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/include)
+    SET(R_LIBRARY ${R_BINPATH}/R.DLL)
+    SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/include)
   ELSE()
-	SET(R_LIBRARY ${R_BINPATH}/bin/libR.so)
-	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
+    SET(R_LIBRARY ${R_PATH}/lib/R/lib/libR.so)
+    # SET(RBLAS_LIBRARY ${R_PATH}/lib/R/lib/libRblas.so)
+    SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
   ENDIF()
 ENDIF(R_EXECUTABLE)
 
@@ -60,7 +61,6 @@ ELSE()
   FIND_LIBRARY(RBLAS_LIBRARY NAMES libRblas.so PATHS 
     ${R_LIBRARY_PATH}
   )
-ELSE()
 ENDIF()
 
 MESSAGE("R_EXECUTABLE=${R_EXECUTABLE}")
@@ -69,7 +69,7 @@ MESSAGE("R_LIBRARY=${R_LIBRARY}")
 MESSAGE("RBLAS_LIBRARY=${RBLAS_LIBRARY}")
 
 if(NOT EXISTS ${R_LIBRARY})
-	message(FATAL_ERROR "${R_LIBRARY} was not found (has R been built as shared library libR.so?)")
+  message(FATAL_ERROR "${R_LIBRARY} was not found (has R been built as shared library libR.so?)")
 endif(NOT EXISTS ${R_LIBRARY})
 
 # ---- find the biolib_R Clib module for mapping...
@@ -99,6 +99,6 @@ MARK_AS_ADVANCED(
   R_INCLUDE_PATH
   R_EXECUTABLE
   R_LIBRARY
-  RBLAS_LIBRARY
+  # RBLAS_LIBRARY
   BIOLIB_R_LIBRARY
   )
