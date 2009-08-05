@@ -14,13 +14,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void exitonerror(const char *msg) {
-	fprintf(stderr, msg);
-	exit(1);
- }
- 
- void printoptionshelp(){
-	printf ("MQM optionshelp:\n");
+void printoptionshelp(void){
+	printf ("Commandline switches:\n");
 	printf ("-h      		This help\n");
 	printf ("-v      		Verbose (produce a lot of textoutput)\n");
 	printf ("-p(INT) 		DebugLevel -d0,-d1\n");
@@ -29,7 +24,15 @@ void exitonerror(const char *msg) {
 	printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat\n");
 	printf ("-c(FILE_NAME)	Cofactors file in plain textformat\n");
  }
-      
+
+//Functions
+void exitonerror(const char *msg){
+	fprintf(stderr, msg);
+	printoptionshelp();
+	exit(1);
+ }
+  
+ //Main function
 int main (int argc, char **argv){
 	//variables
 	bool verboseflag = false;
@@ -43,7 +46,7 @@ int main (int argc, char **argv){
 	signed int c;
 
 //Parsing of arguments     
-while ((c = getopt (argc, argv, "vdh:p:g:m:c:")) != -1)
+while ((c = getopt (argc, argv, "vd:h:p:g:m:c:")) != -1)
 switch (c)
 {
 	case 'v':
