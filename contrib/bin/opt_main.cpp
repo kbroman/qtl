@@ -16,6 +16,45 @@
 #include <iostream>
 #include <fstream>
 
+struct algorithmsettings{
+	unsigned int nind;
+	unsigned int nmark;
+	unsigned int npheno;
+	int stepmin;
+	int stepmax;
+	unsigned int stepsize;
+	unsigned int windowsize;
+	unsigned int alpha;
+	unsigned int maxiter;
+};
+
+struct mqmalgorithmsettings loadmqmsetting(const char* filename){
+	algorithmsettings runsettings;
+	if (verbose) printf("INFO: Loading settings from file\n");
+	ifstream settingsstream(setfile, ios::in);
+	settingsstream >> runsettings.nind;
+	settingsstream >> runsettings.nmark; //NEW we dont want to guess this it has 2 be set
+	settingsstream >> runsettings.npheno;
+	settingsstream >> runsettings.stepmin;
+	settingsstream >> runsettings.stepmax;
+	settingsstream >> runsettings.stepsize;
+	settingsstream >> runsettings.windowsize;
+	settingsstream >> runsettings.alpha;
+	settingsstream >> runsettings.maxIter;
+	if (verbose) {
+	    Rprintf("number of individuals: %d\n",runsettings.nind);
+		Rprintf("number of markers: %d\n",runsettings.nind);
+	    Rprintf("number of phenotypes: %d\n",runsettings.npheno);
+	    Rprintf("stepmin: %d\n",runsettings.stepmin);
+	    Rprintf("stepmax: %d\n",runsettings.stepmax);
+	    Rprintf("stepsize: %d\n",runsettings.stepsize);
+	    Rprintf("windowsize for dropping qtls: %d\n",runsettings.windowsize);
+	    Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
+	    Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
+	}
+	return runsettings;
+}
+
 void printoptionshelp(void){
 	printf ("Commandline switches:\n");
 	printf ("-h      		This help.\n");
@@ -24,7 +63,8 @@ void printoptionshelp(void){
 	printf ("-p(FILE_NAME)	Phenotypes file in plain textformat.\n");
 	printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
 	printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat.\n");
-	printf ("-c(FILE_NAME)	Cofactors file in plain textformat.\n");
+	printf ("-s(FILE_NAME)	Settings file in plain textformat.\n");
+	printf ("-c(FILE_NAME)	Optional Cofactors file  to do backward elimination on in plain textformat.\n");
  }
 
 //Functions
@@ -52,7 +92,8 @@ int main (unsigned int argc, char **argv){
 	char *phenofile = NULL;
 	char *genofile = NULL;
 	char *markerfile = NULL;
-	char *coffile = NULL;       
+	char *coffile = NULL;
+	char *settingsfile = NULL; 	
 	unsigned int index;
 	signed int c;
 
@@ -78,6 +119,9 @@ switch (c)
 	case 'm':
 		markerfile = optarg;
 	break;
+	case 's':
+		settings = optarg;
+	break;	
 	case 'c':
 		coffile = optarg;
 	break;
@@ -101,6 +145,9 @@ if(helpflag){
 	if(!markerfile) exitonerror("Please supply a markerfile argument.\n");
 	if(!checkfileexists(genofile)) exitonerror("Markerfile not found on your filesystem.\n");
 	printf ("Markerfile = %s\n",markerfile);
+	if(!settingsfile) exitonerror("Please supply a settingsfile argument.\n");
+	if(!checkfileexists(settingsfile)) exitonerror("settingsfile not found on your filesystem.\n");
+	printf ("settingsfile = %s\n",settingsfile);	
 //Optional files
 	if(!coffile){
 		if(!checkfileexists(coffile)){
@@ -113,6 +160,8 @@ if(helpflag){
 	for (index = optind; index < argc; index++){
 		printf ("Non-option argument %s\n", argv[index]);
 	}
+//Here we know what we need so we can start reading in files with the new loader functions
+	mqmalgorithmsettings = loadmqmsetting(settingsfile);
 }
 return 0;
 }
