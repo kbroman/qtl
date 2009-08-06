@@ -31,7 +31,7 @@ struct algorithmsettings{
 struct mqmalgorithmsettings loadmqmsetting(const char* filename){
 	algorithmsettings runsettings;
 	if (verbose) printf("INFO: Loading settings from file\n");
-	ifstream settingsstream(setfile, ios::in);
+	ifstream settingsstream(filename, ios::in);
 	settingsstream >> runsettings.nind;
 	settingsstream >> runsettings.nmark; //NEW we dont want to guess this it has 2 be set
 	settingsstream >> runsettings.npheno;
@@ -54,6 +54,71 @@ struct mqmalgorithmsettings loadmqmsetting(const char* filename){
 	}
 	return runsettings;
 }
+
+cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar){
+	unsigned int cmarker = 0;
+	unsigned int cindividual = 0;
+	cmatrix genomarkers = newcmatrix(nphe)(nind);
+	ifstream myfstream(filename, ios::in);
+	while (!myfstream.eof()) {
+		if (cmarker < nmar){
+			myfstream >> genomarkers[cmarker][cindividual];
+		}else{
+			cmarker = 0;
+		}
+		cindividual++;
+    }
+	myfstream.close();
+	return genomarkers;
+}
+
+matrix readphenotype(const char* filename,const unsigned int nind,const unsigned int nphe){
+	unsigned int cphenotype = 0;
+	unsigned int cindividual = 0;
+	matrix phenovalues = newmatrix(nphe)(nind);
+	ifstream myfstream(filename, ios::in);
+	while (!myfstream.eof()) {
+		if (cphenotype < nphe){
+			myfstream >> phenovalues[cphenotype][cindividual];
+		}else{
+			cphenotype = 0;
+		}
+		cindividual++;
+    }
+	myfstream.close();
+	return phenovalues;
+}
+
+void readmarkerfile(const char* filename,const unsigned int nmar){
+	unsigned int cmarker = 0;
+    markerchr = newivector(nmar);			//chr
+	markerdistance= newvector(nmar);		//pos
+	markernames = char*[nmar];				//NEW
+	markerparent = newivector(nmar);		//f1genotype
+	ifstream myfstream(filename, ios::in);
+	while (!myfstream.eof()) {
+		myfstream >> markerchr[x];
+		myfstream >> markerdistance[x];
+		myfstream >> markernames[x];
+		markerparent[x] = 12;
+	}
+	myfstream.close();
+}
+
+unsigned int readcofactorfile(const char* filename,const unsigned int nmar){
+	unsigned int cmarker = 0;
+	unsigned int set_cofactors = 0;
+    cofactors = newcvector(nmar);
+	ifstream myfstream(filename, ios::in);
+	while (!myfstream.eof()) {
+		myfstream >> markerchr[x];
+		if(markerchr[x]) set_cofactors++;
+	}
+	myfstream.close();
+	return set_cofactors;
+}
+
+
 
 void printoptionshelp(void){
 	printf ("Commandline switches:\n");
