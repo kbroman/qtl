@@ -13,16 +13,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <iostream>
+#include <fstream>
 
 void printoptionshelp(void){
 	printf ("Commandline switches:\n");
-	printf ("-h      		This help\n");
-	printf ("-v      		Verbose (produce a lot of textoutput)\n");
-	printf ("-p(INT) 		DebugLevel -d0,-d1\n");
-	printf ("-p(FILE_NAME)	Phenotypes file in plain textformat\n");
-	printf ("-g(FILE_NAME)	Genotypes file in plain textformat\n");
-	printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat\n");
-	printf ("-c(FILE_NAME)	Cofactors file in plain textformat\n");
+	printf ("-h      		This help.\n");
+	printf ("-v      		Verbose (produce a lot of textoutput).\n");
+	printf ("-p(INT) 		DebugLevel -d0,-d1.\n");
+	printf ("-p(FILE_NAME)	Phenotypes file in plain textformat.\n");
+	printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
+	printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat.\n");
+	printf ("-c(FILE_NAME)	Cofactors file in plain textformat.\n");
  }
 
 //Functions
@@ -31,6 +33,15 @@ void exitonerror(const char *msg){
 	printoptionshelp();
 	exit(1);
  }
+ 
+ bool checkfileexists(const char *filename){
+	ifstream myfile;
+	bool exists;
+	myfile.open(filename);
+	exists = myfile.is_open();
+	myfile.close();
+	return exists;
+}
   
  //Main function
 int main (int argc, char **argv){
@@ -77,19 +88,26 @@ if(helpflag){
 	printoptionshelp();
 	return 0;
 }else{
-	printf ("Options parsed for MQM:\n");
+	printf ("Options for MQM:\n");
 //Verbose & debug
-	printf ("verboseflag = %d, debuglvl = %d\n",verboseflag, debuglevel);
+	printf ("verboseflag = %d, debuglevel = %d\n",verboseflag, debuglevel);
 //Needed files
-	if(!phenofile) exitonerror("Please supply a phenotypefile.\n");
-	printf ("Phenotypes = %s\n",phenofile);
-	if(!genofile)  exitonerror("Please supply a genofile.\n");
-	printf ("Genotypes = %s\n",genofile);
-	if(!markerfile) exitonerror("Please supply a markerfile.\n");
-	printf ("Markers = %s\n",markerfile);
+	if(!phenofile) exitonerror("Please supply a phenotypefile argument.\n");
+	if(!checkfileexists(phenofile)) exitonerror("Phenotypefile not found on your filesystem.\n");
+	printf ("Phenotypefile = %s\n",phenofile);
+	if(!genofile)  exitonerror("Please supply a genofile argument.\n");
+	if(!checkfileexists(genofile)) exitonerror("Genotypefile not found on your filesystem.\n");
+	printf ("Genotypefile = %s\n",genofile);
+	if(!markerfile) exitonerror("Please supply a markerfile argument.\n");
+	if(!checkfileexists(genofile)) exitonerror("Markerfile not found on your filesystem.\n");
+	printf ("Markerfile = %s\n",markerfile);
 //Optional files
-	if(coffile != NULL){
-		printf ("Cofactors = %s\n",coffile);
+	if(!coffile){
+		if(!checkfileexists(coffile)){
+			printf("Cofactorfile not found on your filesystem.\n");
+		}else{
+			printf ("Cofactorfile = %s\n",coffile);
+		}
 	}
 //Warn people for non-existing options
 	for (index = optind; index < argc; index++){
