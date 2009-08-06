@@ -44,7 +44,7 @@ void exitonerror(const char *msg){
 }
   
  //Main function
-int main (int argc, char **argv){
+int main (unsigned int argc, char **argv){
 	//variables
 	bool verboseflag = false;
 	bool helpflag = false;
