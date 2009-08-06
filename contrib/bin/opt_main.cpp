@@ -33,7 +33,7 @@ struct mqmalgorithmsettings loadmqmsetting(const char* filename){
 	if (verbose) printf("INFO: Loading settings from file\n");
 	ifstream settingsstream(filename, ios::in);
 	settingsstream >> runsettings.nind;
-	settingsstream >> runsettings.nmark; //NEW we dont want to guess this it has 2 be set
+	settingsstream >> runsettings.nmark; //NEW we dont want to guess this: Should be Added to testfile
 	settingsstream >> runsettings.npheno;
 	settingsstream >> runsettings.stepmin;
 	settingsstream >> runsettings.stepmax;
@@ -86,14 +86,15 @@ matrix readphenotype(const char* filename,const unsigned int nind,const unsigned
 		cindividual++;
     }
 	myfstream.close();
+	//TODO how to pass large structures or multiple arrays that we read in
 	return phenovalues;
 }
 
 void readmarkerfile(const char* filename,const unsigned int nmar){
 	unsigned int cmarker = 0;
-    markerchr = newivector(nmar);			//chr
+    markerchr = newivector(nmar);			//NEW !!! chr-> should be added to test
 	markerdistance= newvector(nmar);		//pos
-	markernames = char*[nmar];				//NEW
+	markernames = char*[nmar];				//NEW !!!
 	markerparent = newivector(nmar);		//f1genotype
 	ifstream myfstream(filename, ios::in);
 	while (!myfstream.eof()) {
@@ -102,6 +103,7 @@ void readmarkerfile(const char* filename,const unsigned int nmar){
 		myfstream >> markernames[x];
 		markerparent[x] = 12;
 	}
+	//TODO get arrays back to main
 	myfstream.close();
 }
 
@@ -115,6 +117,7 @@ unsigned int readcofactorfile(const char* filename,const unsigned int nmar){
 		if(markerchr[x]) set_cofactors++;
 	}
 	myfstream.close();
+	//TODO get array back to main
 	return set_cofactors;
 }
 
