@@ -34,6 +34,8 @@
 
 using namespace std;
 
+#ifdef STANDALONE
+
 bool checkfileexists(const char *filename){
 	ifstream myfile;
 	bool exists;
@@ -53,6 +55,12 @@ struct algorithmsettings{
 	unsigned int windowsize;
 	double alpha;
 	unsigned int maxiter;
+};
+
+struct markersinformation{
+	ivector markerchr;
+	vector markerdistance;
+	ivector markerparent;
 };
 
 struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
@@ -83,7 +91,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
 }
 
 
-cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar){
+cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar,const bool verboseflag){
 	unsigned int cmarker = 0;
 	unsigned int cindividual = 0;
 	cmatrix genomarkers = newcmatrix(nmar,nind);
@@ -91,16 +99,18 @@ cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned
 	while (!myfstream.eof()) {
 		if (cmarker < nmar){
 			myfstream >> genomarkers[cmarker][cindividual];
+			cmarker++;
 		}else{
 			cmarker = 0;
+			cindividual++;
 		}
-		cindividual++;
     }
+	if (verboseflag) Rprintf("Individuals: %d\n",cindividual);
 	myfstream.close();
 	return genomarkers;
 }
 
-matrix readphenotype(const char* filename,const unsigned int nind,const unsigned int nphe){
+matrix readphenotype(const char* filename,const unsigned int nind,const unsigned int nphe,const bool verboseflag){
 	unsigned int cphenotype = 0;
 	unsigned int cindividual = 0;
 	matrix phenovalues = newmatrix(nphe,nind);
@@ -108,18 +118,20 @@ matrix readphenotype(const char* filename,const unsigned int nind,const unsigned
 	while (!myfstream.eof()) {
 		if (cphenotype < nphe){
 			myfstream >> phenovalues[cphenotype][cindividual];
+			cphenotype++;
 		}else{
 			cphenotype = 0;
+			cindividual++;
 		}
-		cindividual++;
     }
+	if (verboseflag) Rprintf("Individuals: %d\n",cindividual);
 	myfstream.close();
-	//TODO how to pass large structures or multiple arrays that we read in
 	return phenovalues;
 }
 
-void readmarkerfile(const char* filename,const unsigned int nmar){
+struct markersinformation readmarkerfile(const char* filename,const unsigned int nmar,const bool verboseflag){
 	unsigned int cmarker = 0;
+	markersinformation info;
     ivector markerchr = newivector(nmar);			//NEW !!! chr-> should be added to test
 	vector markerdistance= newvector(nmar);			//pos
 	std::string markernames[nmar];					//NEW !!!
@@ -130,24 +142,31 @@ void readmarkerfile(const char* filename,const unsigned int nmar){
 		myfstream >> markernames[cmarker];
 		myfstream >> markerdistance[cmarker];
 		markerparent[cmarker] = 12;
+		if (verboseflag) Rprintf("marker: %s %d %f\n",markernames[cmarker].c_str(),markerchr[cmarker],markerdistance[cmarker]);
 		cmarker++;
 	}
+	if (verboseflag) Rprintf("Markers: %d\n",cmarker);
 	//TODO get arrays back to main
 	myfstream.close();
+	info.markerchr=markerchr;
+	info.markerdistance=markerdistance;
+	info.markerparent=markerparent;
+	return info;
 }
 
-unsigned int readcofactorfile(const char* filename,const unsigned int nmar){
-	if(checkfileexists(filename)){
+unsigned int readcofactorfile(const char* filename,const unsigned int nmar,const bool verboseflag){
+	if(checkfileexists(filename)){	//Because its an optional file
 		unsigned int cmarker = 0;
 		unsigned int set_cofactors = 0;
 	    cvector cofactors = newcvector(nmar);
 		ifstream myfstream(filename, ios::in);
 		while (!myfstream.eof()) {
 			myfstream >> cofactors[cmarker];
-			if(cofactors[cmarker]) set_cofactors++;
+			if(cofactors[cmarker]!='0') set_cofactors++;
 			cmarker++;
 		}
 		myfstream.close();
+		if (verboseflag) Rprintf("Cofactors/Markers: %d/%d\n",set_cofactors,cmarker);
 		return set_cofactors;
 	}else{
 		return 0;
@@ -160,6 +179,7 @@ void printoptionshelp(void){
 	printf ("-h      		This help.\n");
 	printf ("-v      		Verbose (produce a lot of textoutput).\n");
 	printf ("-p(INT) 		DebugLevel -d0,-d1.\n");
+	printf ("-t(INT) 		Phenotype under analysis.\n");
 	printf ("-p(FILE_NAME)	Phenotypes file in plain textformat.\n");
 	printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
 	printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat.\n");
@@ -175,23 +195,25 @@ void exitonerror(const char *msg){
 }
  
 
-#ifdef STANDALONE
+
 
 int main(int argc,char *argv[]) {
 	Rprintf("MQM standalone version\n");
 	bool verboseflag = false;
 	bool helpflag = false;
 	int debuglevel = 0;
+	unsigned int phenotype = 0; //analyse the first phenotype
 	char *phenofile = NULL;
 	char *genofile = NULL;
 	char *markerfile = NULL;
 	char *coffile = NULL;
 	char *settingsfile = NULL; 
 	struct algorithmsettings mqmalgorithmsettings;
+	struct markersinformation mqmmarkersinfo;
 	unsigned int index;
 	signed int c;
 	//Parsing of arguments     
-	while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:")) != -1)
+	while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:t:")) != -1)
 	switch (c)
 	{
 		case 'v':
@@ -202,6 +224,9 @@ int main(int argc,char *argv[]) {
 		break;	
 		case 'd': 
 			debuglevel = atoi(optarg);
+		break;
+		case 't':						//1 phenotype at a time
+			phenotype = atoi(optarg);
 		break;
 		case 'p':
 			phenofile = optarg;
@@ -259,7 +284,7 @@ int main(int argc,char *argv[]) {
 	
 	
 	
-  int phenotype=0;
+ // int phenotype=0;
  // int verbose=0;
  // for (int i=1; i<argc; i++) {
  //   if (!strcmp(argv[i],argv[0])) continue;
@@ -296,20 +321,20 @@ int main(int argc,char *argv[]) {
 	matrix pheno_value = newmatrix(mqmalgorithmsettings.npheno,mqmalgorithmsettings.nind);
 	cmatrix markers= newcmatrix(mqmalgorithmsettings.nmark,mqmalgorithmsettings.nind);
 	ivector INDlist= newivector(mqmalgorithmsettings.nind);
-	int stepmin = 0;
-	int stepmax = 220;
-	int stepsize = 5;
+	int stepmin = mqmalgorithmsettings.stepmin;
+	int stepmax = mqmalgorithmsettings.stepmax;
+	int stepsize = mqmalgorithmsettings.stepsize;
 
-	int cnt=0;
+	int set_cofactors=0;
 	int cInd=0; //Current individual
-	int nInd=0;
-	int nMark=0;
+	int nInd=mqmalgorithmsettings.nind;
+	int nMark=mqmalgorithmsettings.nmark;
 	int backwards=0;
-	int nPheno=0;
+	int nPheno=mqmalgorithmsettings.npheno;
 	int windowsize=0;
-	cnt = 0;
-	int maxIter;
-	double alpha;
+	//cnt = 0;
+	int maxIter=mqmalgorithmsettings.maxiter;
+	double alpha=mqmalgorithmsettings.alpha;
 	char peek_c;
 //Old declarations
 //  int sum = 0;
@@ -338,7 +363,7 @@ int main(int argc,char *argv[]) {
 //  cnt=0;
 //  cInd = 0;
   
-  markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark);
+  markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verboseflag);
   //ifstream geno(genofile, ios::in);
   //while (!geno.eof()) {
     //if (cnt < nMark) {
@@ -352,7 +377,7 @@ int main(int argc,char *argv[]) {
   //geno.close();
   if (verboseflag) Rprintf("Genotypes done\n");
   
-  pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno);
+  pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno,verboseflag);
   
  // ifstream pheno(phenofile, ios::in);
  // while (!pheno.eof()) {
@@ -368,7 +393,12 @@ int main(int argc,char *argv[]) {
  // pheno.close();
 	if (verboseflag) Rprintf("Phenotype done \n");
   
-	readmarkerfile(markerfile,mqmalgorithmsettings.nmark);
+	mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verboseflag);
+	
+	chr = mqmmarkersinfo.markerchr;
+	pos = mqmmarkersinfo.markerdistance;
+	f1genotype = mqmmarkersinfo.markerparent;
+	
 	if (verboseflag) Rprintf("marker positions done\n");
  // ifstream mpos(mposfile, ios::in);
  // while (!mpos.eof()) {
@@ -382,10 +412,10 @@ int main(int argc,char *argv[]) {
  //   }
  // }
  // mpos.close();
-	cnt = readcofactorfile(coffile,mqmalgorithmsettings.nmark);
-	if (verboseflag) Rprintf("Positions done %d\n",cnt);
+	set_cofactors = readcofactorfile(coffile,mqmalgorithmsettings.nmark,verboseflag);
+	if (verboseflag) Rprintf("Positions done %d\n",set_cofactors);
   
-  cnt = 0;
+ // cnt = 0;
  // ifstream chrstr(chrfile, ios::in);
  // int max_chr = 0;
  // while (!chrstr.eof()) {
@@ -404,8 +434,8 @@ int main(int argc,char *argv[]) {
 
   for (int i=0; i< nMark; i++) {
     cofactor[i] = '0';
-    f1genotype[i] = 12;
-    // mapdistance[i]=999.0;
+    //f1genotype[i] = 12;
+    mapdistance[i]=999.0;
     mapdistance[i]=pos[i];
   }
   for (int i=0; i< nInd; i++) {
