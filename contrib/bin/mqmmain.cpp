@@ -163,15 +163,15 @@ struct markersinformation readmarkerfile(const char* filename,const unsigned int
 	return info;
 }
 
-unsigned int readcofactorfile(const char* filename,const unsigned int nmar,const bool verboseflag){
-	if(checkfileexists(filename)){	//Because its an optional file
+unsigned int readcofactorfile(const char* filename,cvector *cofactors,const unsigned int nmar,const bool verboseflag){
+	//Cofactor is pass by value
+	if(checkfileexists(filename)){
 		unsigned int cmarker = 0;
 		unsigned int set_cofactors = 0;
-	    cvector cofactors = newcvector(nmar);
 		ifstream myfstream(filename, ios::in);
 		while (!myfstream.eof()) {
-			myfstream >> cofactors[cmarker];
-			if(cofactors[cmarker]!='0') set_cofactors++;
+			myfstream >> (*cofactors)[cmarker];
+			if((*cofactors)[cmarker]!='0') set_cofactors++;
 			cmarker++;
 		}
 		myfstream.close();
@@ -319,13 +319,7 @@ int main(int argc,char *argv[]) {
 
 		if (verboseflag) Rprintf("Markerposition file done\n");
 
-		set_cofactors = readcofactorfile(coffile,mqmalgorithmsettings.nmark,verboseflag);
-		if(set_cofactors > 0){
-			backwards = 1;
-		}
-		if (verboseflag) Rprintf("%d markers with cofactors backward elimination enabled\n",set_cofactors);
-  
-		//Determin how many chromosomes we have to enable output
+	//Determin how many chromosomes we have
 		unsigned int max_chr=0;
 		for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
 			if(max_chr<chr[m]){
@@ -333,15 +327,26 @@ int main(int argc,char *argv[]) {
 			}
 		}
 		if (verboseflag)  Rprintf("# %d Chromosomes\n",max_chr);
-  
+	//Create a QTL object holding all our output location
 		int locationsoutput = 3*max_chr*(((mqmalgorithmsettings.stepmax)-(mqmalgorithmsettings.stepmin))/ (mqmalgorithmsettings.stepsize));
 		QTL = newmatrix(1,locationsoutput);
-
+	//initialize cofactors to 0 and mapdistances to 999.0 Cm
 		for (int i=0; i< mqmalgorithmsettings.nmark; i++) {
 			cofactor[i] = '0';
 			mapdistance[i]=999.0;
 			mapdistance[i]=pos[i];
 		}
+		
+	//Danny: Cofactors are now read-in. the output with cofactors.txt set is not equal to MQM_test0.txt
+	//MQM_test0.txt says it uses cofactors but it doesn't, because they are not eliminated
+	//The message: "INFO: Marker XX is dropped, resulting in logL of reduced model = -8841.452934" is missing
+	//Also the result of MQM without cofactors is equal
+		set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verboseflag);
+		if(set_cofactors > 0){
+			backwards = 1;
+		}
+		if (verboseflag) Rprintf("%d markers with cofactors backward elimination enabled\n",set_cofactors);
+		//Initialize an empty individuals list	
 		for (int i=0; i< mqmalgorithmsettings.nind; i++) {
 			INDlist[i] = i;
 		}
