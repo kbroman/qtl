@@ -280,217 +280,113 @@ int main(int argc,char *argv[]) {
 		}
 	//Here we know what we need so we can start reading in files with the new loader functions
 		mqmalgorithmsettings = loadmqmsetting(settingsfile,verboseflag);
-	}	
-	
-	
-	
- // int phenotype=0;
- // int verbose=0;
- // for (int i=1; i<argc; i++) {
- //   if (!strcmp(argv[i],argv[0])) continue;
- //   if (argv[i][0] != '-') Rprintf("dash needed at argument");
-//    char c = toupper(argv[i][1]);
- //   if (c == 'V') {
- //     verbose =1;
- //     continue;
-//    }
-    // -argum=value
- //   if (argv[i][2]!='=') {
- //     Rprintf("equal symbol needed at argument");
- //   }
-//
- //   switch (c) {
- //   case 'T':
- //     phenotype = atoi(&argv[i][3]);
- //     break;
- //   default:
- //     Rprintf("Unknown parameter");
- //   }
- // }
-  //const char *genofile = "geno.dat";
-  //const char *phenofile = "pheno.dat";
- // const char *mposfile = "markerpos.txt";
- // const char *chrfile = "chrid.dat";
- // const char *setfile = "settings.dat";
-	double **QTL;
-	ivector f1genotype = newivector(mqmalgorithmsettings.nmark);
-	ivector chr = newivector(mqmalgorithmsettings.nmark);
-	cvector cofactor = newcvector(mqmalgorithmsettings.nmark);
-	vector mapdistance = newvector(mqmalgorithmsettings.nmark);
-	vector pos = newvector(mqmalgorithmsettings.nmark);
-	matrix pheno_value = newmatrix(mqmalgorithmsettings.npheno,mqmalgorithmsettings.nind);
-	cmatrix markers= newcmatrix(mqmalgorithmsettings.nmark,mqmalgorithmsettings.nind);
-	ivector INDlist= newivector(mqmalgorithmsettings.nind);
-	int stepmin = mqmalgorithmsettings.stepmin;
-	int stepmax = mqmalgorithmsettings.stepmax;
-	int stepsize = mqmalgorithmsettings.stepsize;
-
-	int set_cofactors=0;
-	int cInd=0; //Current individual
-	int nInd=mqmalgorithmsettings.nind;
-	int nMark=mqmalgorithmsettings.nmark;
-	int backwards=0;
-	int nPheno=mqmalgorithmsettings.npheno;
-	int windowsize=0;
-	//cnt = 0;
-	int maxIter=mqmalgorithmsettings.maxiter;
-	double alpha=mqmalgorithmsettings.alpha;
-	char peek_c;
-//Old declarations
-//  int sum = 0;
- // for (int i=0; i< nMark; i++) {
- //   setstr >> cofactor[i];
-//    if (cofactor[i] == '1') {
-//      sum++;
-//    }
-//  }
-
-//  if (sum > 0) {
- //   if (verboseflag) {
- //     Rprintf("# Starting backward elimination of %d cofactors\n",sum);
-//    }
-//    backwards = 1;
-//  } else {
-//    backwards = 0;
-//  }
- // setstr.close();
-//  if (verboseflag) {
-//    Rprintf("# of individuals: %d\n",nInd);
-//  }
-//  if (verboseflag) {
-//    Rprintf("# of markers: %d\n",nMark);
-//  }
-//  cnt=0;
-//  cInd = 0;
+		double **QTL;
+		ivector f1genotype = newivector(mqmalgorithmsettings.nmark);
+		ivector chr = newivector(mqmalgorithmsettings.nmark);
+		cvector cofactor = newcvector(mqmalgorithmsettings.nmark);
+		vector mapdistance = newvector(mqmalgorithmsettings.nmark);
+		vector pos = newvector(mqmalgorithmsettings.nmark);
+		matrix pheno_value = newmatrix(mqmalgorithmsettings.npheno,mqmalgorithmsettings.nind);
+		cmatrix markers= newcmatrix(mqmalgorithmsettings.nmark,mqmalgorithmsettings.nind);
+		ivector INDlist= newivector(mqmalgorithmsettings.nind);
+		int stepmin = mqmalgorithmsettings.stepmin;
+		int stepmax = mqmalgorithmsettings.stepmax;
+		int stepsize = mqmalgorithmsettings.stepsize;
+		int set_cofactors=0;
+		int cInd=0; //Current individual
+		int nInd=mqmalgorithmsettings.nind;
+		int nMark=mqmalgorithmsettings.nmark;
+		int backwards=0;
+		int nPheno=mqmalgorithmsettings.npheno;
+		int windowsize=0;
+		int maxIter=mqmalgorithmsettings.maxiter;
+		double alpha=mqmalgorithmsettings.alpha;
+		char peek_c;
+		markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verboseflag);
+		
+		if (verboseflag) Rprintf("Genotypes done\n");
+		
+		pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno,verboseflag);
   
-  markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verboseflag);
-  //ifstream geno(genofile, ios::in);
-  //while (!geno.eof()) {
-    //if (cnt < nMark) {
-      //geno >> markers[cnt][cInd];
-      //cnt++;
-    //} else {
-      //cnt = 0;
-      //cInd++;
-   // }
-  //}
-  //geno.close();
-  if (verboseflag) Rprintf("Genotypes done\n");
+		if (verboseflag) Rprintf("Phenotype done \n");
+
+		mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verboseflag);
+		chr = mqmmarkersinfo.markerchr;
+		pos = mqmmarkersinfo.markerdistance;
+		f1genotype = mqmmarkersinfo.markerparent;
+
+		if (verboseflag) Rprintf("marker positions done\n");
+
+		set_cofactors = readcofactorfile(coffile,mqmalgorithmsettings.nmark,verboseflag);
+
+		if (verboseflag) Rprintf("Positions done %d\n",set_cofactors);
   
-  pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno,verboseflag);
+		//Determin how many chromosomes we have to enable output
+		unsigned int max_chr=0;
+		for (int m=0; m<nMark; m++) {
+			if(max_chr<chr[m]){
+				max_chr = chr[m];
+			}
+		}
+		if (verboseflag)  Rprintf("# %d Chromosomes\n",max_chr);
   
- // ifstream pheno(phenofile, ios::in);
- // while (!pheno.eof()) {
- //   if (cnt < nPheno) {
- //     pheno >> pheno_value[cnt][cInd];
-      //Rprintf("%d,%d\n",cnt,cInd);
- //     cnt++;
- //   } else {
- //     cnt = 0;
- //     cInd++;
- //   }
- // }
- // pheno.close();
-	if (verboseflag) Rprintf("Phenotype done \n");
-  
-	mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verboseflag);
-	
-	chr = mqmmarkersinfo.markerchr;
-	pos = mqmmarkersinfo.markerdistance;
-	f1genotype = mqmmarkersinfo.markerparent;
-	
-	if (verboseflag) Rprintf("marker positions done\n");
- // ifstream mpos(mposfile, ios::in);
- // while (!mpos.eof()) {
- //   peek_c=mpos.peek();
- //   if (peek_c=='\t' || peek_c == ' ') {
- //     mpos >> pos[cnt];
-      //  Rprintf("%f\n",pos[cnt]);
- //     cnt++;
- //   } else {
- //     mpos >> peek_c;
- //   }
- // }
- // mpos.close();
-	set_cofactors = readcofactorfile(coffile,mqmalgorithmsettings.nmark,verboseflag);
-	if (verboseflag) Rprintf("Positions done %d\n",set_cofactors);
-  
- // cnt = 0;
- // ifstream chrstr(chrfile, ios::in);
- // int max_chr = 0;
- // while (!chrstr.eof()) {
-//    chrstr >> chr[cnt];
- //   if (chr[cnt] > max_chr) {
- //     max_chr = chr[cnt];
-  //  }
- //   cnt++;
- // }
-//  chrstr.close();
-  if (verboseflag) {
- //   Rprintf("Chromosomes done %d -> # %d Chromosomes\n",cnt,max_chr);
-  }
- // int something = 3*max_chr*(((stepmax)-(stepmin))/ (stepsize));
- // QTL = newmatrix(1,something);
+		int something = 3*max_chr*(((mqmalgorithmsettings.stepmax)-(mqmalgorithmsettings.stepmin))/ (mqmalgorithmsettings.stepsize));
+		QTL = newmatrix(1,something);
 
-  for (int i=0; i< nMark; i++) {
-    cofactor[i] = '0';
-    //f1genotype[i] = 12;
-    mapdistance[i]=999.0;
-    mapdistance[i]=pos[i];
-  }
-  for (int i=0; i< nInd; i++) {
-    INDlist[i] = i;
-  }
-  char estmap = 'n';
-  //reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
+		for (int i=0; i< nMark; i++) {
+			cofactor[i] = '0';
+			mapdistance[i]=999.0;
+			mapdistance[i]=pos[i];
+		}
+		for (int i=0; i< nInd; i++) {
+			INDlist[i] = i;
+		}
+		
+		char estmap = 'n';  //Should come from settingsfile
+		MQMCrossType crosstype = CF2;
+		cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
+		vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
+		
+		//<dataaugmentation>
+		//  cmatrix new_markers;
+		//  vector new_y;
+		// ivector new_ind;
+		//int nAug, Nmark = nMark;
+		// int maxind = 1000;
+		// int maxiaug = 8;
+		// int neglect = 1;
 
-  //Rprintf("INFO: Cofactors %d\n",sum);
-
- // Rprintf("Starting phenotype: %d\n",phenotype);
-
-  cmatrix new_markers;
-  vector new_y;
-  ivector new_ind;
-  int nAug, Nmark = nMark;
-  int maxind = 1000;
-  int maxiaug = 8;
-  int neglect = 1;
-  MQMCrossType crosstype = CF2;
-
-  cvector position = locate_markers(Nmark,chr);
-  vector r = recombination_frequencies(Nmark, position, mapdistance);
-
-  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
-
-  neglect = 3;
-  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
-
-  // Output marker info
-  // for (int m=0; m<nAug; m++) {
-  //   Rprintf("%5d%s\n",m,new_markers[m]);
-  // }
-
-  // ignores augmented set, for now...
-  analyseF2(nInd, nMark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,CF2,0,verboseflag);
-
-  // Output marker info
-  for (int m=0; m<nMark; m++) {
-    Rprintf("%5d%3d%9.3f\n",m,chr[m],mapdistance[m]);
-  }
-  // Output (augmented) QTL info
- // for (int q=0; q<something; q++) {
-  //  Rprintf("%5d%10.5f\n",q,QTL[0][q]);
- // }
-  freevector((void *)f1genotype);
-  freevector((void *)cofactor);
-  freevector((void *)mapdistance);
-  freematrix((void **)markers,nMark);
-  freematrix((void **)pheno_value,nPheno);
-  freevector((void *)chr);
-  freevector((void *)INDlist);
-  freevector((void *)pos);
-  freematrix((void **)QTL,1);
-  return 0;
+		//  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
+		// neglect = 3;
+		//  augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
+		// Output marker info
+		// for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
+		//	Rprintf("%d\t%f\n",m,mapdistance[m]);
+		// }
+		// </dataaugmentation>
+		
+		// ignores augmented set, for now...
+		analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,stepsize,stepmin,stepmax,alpha,maxIter,nInd,&INDlist,estmap,CF2,0,verboseflag);
+		
+		// Output marker info
+		//for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
+		//  Rprintf("%5d%3d%9.3f\n",m,chr[m],mapdistance[m]);
+		//}
+		// Output (augmented) QTL info
+		for (int q=0; q<something; q++) {
+			Rprintf("%5d%10.5f\n",q,QTL[0][q]);
+		}
+		freevector((void *)f1genotype);
+		freevector((void *)cofactor);
+		freevector((void *)mapdistance);
+		freematrix((void **)markers,nMark);
+		freematrix((void **)pheno_value,nPheno);
+		freevector((void *)chr);
+		freevector((void *)INDlist);
+		freevector((void *)pos);
+		freematrix((void **)QTL,1);
+		return 0;
+	}
 }
 
 #else
