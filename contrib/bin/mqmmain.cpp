@@ -342,27 +342,28 @@ int main(int argc,char *argv[]) {
 		}
 		
 		//<dataaugmentation>
-		//  cmatrix new_markers;
-		//  vector new_y;
-		// ivector new_ind;
-		//int nAug, Nmark = nMark;
-		// int maxind = 1000;
-		// int maxiaug = 8;
-		// int neglect = 1;
-		// cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
-		// vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-		// augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
-		// neglect = 3;
-		// augmentdata(markers, pheno_value[phenotype], &new_markers, &new_y, &new_ind, &nInd, &nAug, Nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
-		// Output marker info
-		// for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
-		//	Rprintf("%d\t%f\n",m,mapdistance[m]);
-		// }
+		cmatrix newmarkerset;
+		vector new_y;
+		ivector new_ind;
+		int nind = mqmalgorithmsettings.nind; 				//Danny: this should be const iirc because when we goto analysef2 we need to know howmany individuals we had **augmentdata touches it**
+		int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value
+		int maxind = 1000;
+		int maxiaug = 8;
+		int neglect = 1;
+		cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
+		vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
+		augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
+		if(verboseflag) Rprintf("Augmentation done\n");
+		if(verboseflag) Rprintf("INFO: settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
+		//Danny: Now to set the values we got back:
+		pheno_value[phenotype] = new_y;
+		INDlist = new_ind;
+		markers = newmarkerset;
 		// </dataaugmentation>
 		
 		// ignores augmented set, for now...
 		analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
-				  mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,mqmalgorithmsettings.nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verboseflag);
+				  mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verboseflag);
 		
 		// Output marker info
 		//for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
