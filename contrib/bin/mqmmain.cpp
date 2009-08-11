@@ -55,6 +55,7 @@ struct algorithmsettings{
 	unsigned int windowsize;
 	double alpha;
 	unsigned int maxiter;
+	char estmap;
 };
 
 struct markersinformation{
@@ -76,6 +77,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
 	settingsstream >> runsettings.windowsize;
 	settingsstream >> runsettings.alpha;
 	settingsstream >> runsettings.maxiter;
+	settingsstream >> runsettings.estmap;
 	if (verboseflag) {
 	    Rprintf("number of individuals: %d\n",runsettings.nind);
 		Rprintf("number of markers: %d\n",runsettings.nmark);
@@ -86,6 +88,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
 	    Rprintf("windowsize for dropping qtls: %d\n",runsettings.windowsize);
 	    Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
 	    Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
+		Rprintf("Re-estimating map-positions: %c\n",runsettings.estmap);
 	}
 	return runsettings;
 }
@@ -293,8 +296,6 @@ int main(int argc,char *argv[]) {
 	//Some additional variables
 		int set_cofactors=0;			//Markers set as cofactors
 		int backwards=0;				//Backward elimination ?
-		int windowsize=0;				//WindowSize (settingsfile)
-		char estmap = 'n';  			//Should come from settingsfile
 		MQMCrossType crosstype = CF2;	//Crosstype
 		
 	//Here we know what we need so we can start reading in files with the new loader functions
@@ -360,8 +361,8 @@ int main(int argc,char *argv[]) {
 		// </dataaugmentation>
 		
 		// ignores augmented set, for now...
-		analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,windowsize,
-				  mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,mqmalgorithmsettings.nind,&INDlist,estmap,crosstype,0,verboseflag);
+		analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+				  mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,mqmalgorithmsettings.nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verboseflag);
 		
 		// Output marker info
 		//for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
