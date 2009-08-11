@@ -72,7 +72,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
 	if (verboseflag) printf("INFO: Loading settings from file\n");
 	ifstream settingsstream(filename, ios::in);
 	settingsstream >> runsettings.nind;
-	settingsstream >> runsettings.nmark; //NEW we dont want to guess this: Should be Added to testfile
+	settingsstream >> runsettings.nmark;
 	settingsstream >> runsettings.npheno;
 	settingsstream >> runsettings.stepmin;
 	settingsstream >> runsettings.stepmax;
@@ -142,10 +142,10 @@ matrix readphenotype(const char* filename,const unsigned int nind,const unsigned
 struct markersinformation readmarkerfile(const char* filename,const unsigned int nmar,const bool verboseflag){
 	unsigned int cmarker = 0;
 	markersinformation info;
-    ivector markerchr = newivector(nmar);			//NEW !!! chr-> should be added to test
-	vector markerdistance= newvector(nmar);			//pos
-	std::string markernames[nmar];					//NEW !!!
-	ivector markerparent = newivector(nmar);		//f1genotype
+    ivector markerchr = newivector(nmar);
+	vector markerdistance= newvector(nmar);
+	std::string markernames[nmar];
+	ivector markerparent = newivector(nmar);		//Parental genotype
 	ifstream myfstream(filename, ios::in);
 	while (!myfstream.eof()) {
 		myfstream >> markerchr[cmarker];
@@ -156,7 +156,6 @@ struct markersinformation readmarkerfile(const char* filename,const unsigned int
 		cmarker++;
 	}
 	if (verboseflag) Rprintf("Markers: %d\n",cmarker);
-	//TODO get arrays back to main
 	myfstream.close();
 	info.markerchr=markerchr;
 	info.markerdistance=markerdistance;
@@ -181,7 +180,6 @@ unsigned int readcofactorfile(const char* filename,const unsigned int nmar,const
 	}else{
 		return 0;
 	}
-	//TODO get array back to main	
 }
 
 void printoptionshelp(void){
@@ -348,35 +346,39 @@ int main(int argc,char *argv[]) {
 			INDlist[i] = i;
 		}
 		
-		//<dataaugmentation>
+	//<dataaugmentation>
+	//Variables for the returned augmented markers,phenotype,individualmapping
 		cmatrix newmarkerset;
 		vector new_y;
 		ivector new_ind;
 		int nind = mqmalgorithmsettings.nind; 				//Danny: this should be const iirc because when we goto analysef2 we need to know howmany individuals we had **augmentdata touches it**
-		int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value
+		int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value -> Afterwards it should hold the new number of individuals
 		cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
 		vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
 		augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.maxaug, mqmalgorithmsettings.maxiaug, mqmalgorithmsettings.neglect, crosstype, verboseflag);
-		if(verboseflag) Rprintf("Augmentation done\n");
 		if(verboseflag) Rprintf("INFO: settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
-		//Danny: Now to set the values we got back:
+	//Now to set the values we got back into the variables
 		pheno_value[phenotype] = new_y;
 		INDlist = new_ind;
 		markers = newmarkerset;
-		// </dataaugmentation>
-		
-		// ignores augmented set, for now...
+	//Cleanup dataaugmentation:
+		freevector((void *)position);
+		freevector((void *)r);
+	// </dataaugmentation>
+	
+	//Missing values create an augmented set, 
 		analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
 				  mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verboseflag);
 		
-		// Output marker info
+	// Output marker info
 		//for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
 		//  Rprintf("%5d%3d%9.3f\n",m,chr[m],mapdistance[m]);
 		//}
-		// Output (augmented) QTL info
+	// Output (augmented) QTL info
 		for (int q=0; q<locationsoutput; q++) {
 			Rprintf("%5d%10.5f\n",q,QTL[0][q]);
 		}
+	//Cleanup
 		freevector((void *)f1genotype);
 		freevector((void *)cofactor);
 		freevector((void *)mapdistance);
