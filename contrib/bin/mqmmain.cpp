@@ -56,6 +56,9 @@ struct algorithmsettings{
 	double alpha;
 	unsigned int maxiter;
 	char estmap;
+	int maxaug;
+	int maxiaug;
+	int neglect;
 };
 
 struct markersinformation{
@@ -78,6 +81,9 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
 	settingsstream >> runsettings.alpha;
 	settingsstream >> runsettings.maxiter;
 	settingsstream >> runsettings.estmap;
+	settingsstream >> runsettings.maxaug;
+	settingsstream >> runsettings.maxiaug;
+	settingsstream >> runsettings.neglect;
 	if (verboseflag) {
 	    Rprintf("number of individuals: %d\n",runsettings.nind);
 		Rprintf("number of markers: %d\n",runsettings.nmark);
@@ -89,6 +95,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag){
 	    Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
 	    Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
 		Rprintf("Re-estimating map-positions: %c\n",runsettings.estmap);
+		Rprintf("Data-augmentation parameters: max:%d maxind:%d neglect:%d\n",runsettings.maxaug,runsettings.maxiaug,runsettings.neglect);
 	}
 	return runsettings;
 }
@@ -347,12 +354,9 @@ int main(int argc,char *argv[]) {
 		ivector new_ind;
 		int nind = mqmalgorithmsettings.nind; 				//Danny: this should be const iirc because when we goto analysef2 we need to know howmany individuals we had **augmentdata touches it**
 		int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value
-		int maxind = 1000;
-		int maxiaug = 8;
-		int neglect = 1;
 		cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
 		vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-		augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, maxind, maxiaug, neglect, crosstype, verboseflag);
+		augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.maxaug, mqmalgorithmsettings.maxiaug, mqmalgorithmsettings.neglect, crosstype, verboseflag);
 		if(verboseflag) Rprintf("Augmentation done\n");
 		if(verboseflag) Rprintf("INFO: settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
 		//Danny: Now to set the values we got back:
