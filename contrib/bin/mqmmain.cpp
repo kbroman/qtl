@@ -34,8 +34,6 @@
 
 using namespace std;
 
-#ifdef STANDALONE
-
 bool checkfileexists(const char *filename) {
   ifstream myfile;
   bool exists;
@@ -395,7 +393,3 @@ int main(int argc,char *argv[]) {
     return 0;
   }
 }
-
-#else
-#error "Is this a STANDALONE version? STANDALONE should be defined in the build system!"
-#endif
