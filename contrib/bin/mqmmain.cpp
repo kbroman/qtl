@@ -65,16 +65,16 @@ struct markersinformation {
   ivector markerparent;
 };
 
-struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag) {
+struct algorithmsettings loadmqmsetting(const char* filename, bool verbose) {
   algorithmsettings runsettings;
-  if (verboseflag) printf("INFO: Loading settings from file\n");
+  if (verbose) printf("INFO: Loading settings from file\n");
   ifstream instream(filename, ios::in);
   instream >> runsettings.nind >> runsettings.nmark >> runsettings.npheno;
   instream >> runsettings.stepmin >> runsettings.stepmax >> runsettings.stepsize;
   instream >> runsettings.windowsize >> runsettings.alpha;
   instream >> runsettings.maxiter >> runsettings.estmap;
   instream >> runsettings.max_totalaugment >> runsettings.max_indaugment >> runsettings.neglect_unlikely;
-  if (verboseflag) {
+  if (verbose) {
     Rprintf("number of individuals: %d\n",runsettings.nind);
     Rprintf("number of markers: %d\n",runsettings.nmark);
     Rprintf("number of phenotypes: %d\n",runsettings.npheno);
@@ -91,46 +91,46 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag) 
 }
 
 
-cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar,const bool verboseflag) {
-  unsigned int cmarker = 0;
-  unsigned int cindividual = 0;
+cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar,const bool verbose) {
+  unsigned int j = 0;  //current marker
+  unsigned int i = 0;  //current individual
   cmatrix genomarkers = newcmatrix(nmar,nind);
   ifstream myfstream(filename, ios::in);
   while (!myfstream.eof()) {
-    if (cmarker < nmar) {
-      myfstream >> genomarkers[cmarker][cindividual];
-      cmarker++;
+    if (j < nmar) {
+      myfstream >> genomarkers[j][i];
+      j++;
     } else {
-      cmarker = 0;
-      cindividual++;
+      j = 0;
+      i++;
     }
   }
-  if (verboseflag) Rprintf("Individuals: %d\n",cindividual);
+  if (verbose) Rprintf("Individuals: %d\n",i);
   myfstream.close();
   return genomarkers;
 }
 
-matrix readphenotype(const char* filename,const unsigned int nind,const unsigned int nphe,const bool verboseflag) {
-  unsigned int cphenotype = 0;
-  unsigned int cindividual = 0;
+matrix readphenotype(const char* filename,const unsigned int nind,const unsigned int nphe,const bool verbose) {
+  unsigned int p = 0;  // current phenotype
+  unsigned int i = 0;  //current individual
   matrix phenovalues = newmatrix(nphe,nind);
   ifstream myfstream(filename, ios::in);
   while (!myfstream.eof()) {
-    if (cphenotype < nphe) {
-      myfstream >> phenovalues[cphenotype][cindividual];
-      cphenotype++;
+    if (p < nphe) {
+      myfstream >> phenovalues[p][i];
+      p++;
     } else {
-      cphenotype = 0;
-      cindividual++;
+      p = 0;
+      i++;
     }
   }
-  if (verboseflag) Rprintf("Individuals: %d\n",cindividual);
+  if (verbose) Rprintf("Individuals: %d\n",i);
   myfstream.close();
   return phenovalues;
 }
 
-struct markersinformation readmarkerfile(const char* filename,const unsigned int nmar,const bool verboseflag) {
-  unsigned int cmarker = 0;
+struct markersinformation readmarkerfile(const char* filename,const unsigned int nmar,const bool verbose) {
+  unsigned int j = 0;  //current marker
   markersinformation info;
   ivector markerchr = newivector(nmar);
   vector markerdistance= newvector(nmar);
@@ -138,14 +138,14 @@ struct markersinformation readmarkerfile(const char* filename,const unsigned int
   ivector markerparent = newivector(nmar);		//Parental genotype
   ifstream myfstream(filename, ios::in);
   while (!myfstream.eof()) {
-    myfstream >> markerchr[cmarker];
-    myfstream >> markernames[cmarker];
-    myfstream >> markerdistance[cmarker];
-    markerparent[cmarker] = 12;
-    if (verboseflag) Rprintf("marker: %s %d %f\n",markernames[cmarker].c_str(),markerchr[cmarker],markerdistance[cmarker]);
-    cmarker++;
+    myfstream >> markerchr[j];
+    myfstream >> markernames[j];
+    myfstream >> markerdistance[j];
+    markerparent[j] = 12;
+    if (verbose) Rprintf("Marker: %s %d %f\n",markernames[j].c_str(),markerchr[j],markerdistance[j]);
+    j++;
   }
-  if (verboseflag) Rprintf("Markers: %d\n",cmarker);
+  if (verbose) Rprintf("Markers: %d\n",j);
   myfstream.close();
   info.markerchr=markerchr;
   info.markerdistance=markerdistance;
@@ -153,26 +153,26 @@ struct markersinformation readmarkerfile(const char* filename,const unsigned int
   return info;
 }
 
-unsigned int readcofactorfile(const char* filename,cvector *cofactors,const unsigned int nmar,const bool verboseflag) {
+unsigned int readcofactorfile(const char* filename,cvector *cofactors,const unsigned int nmar,const bool verbose) {
   //Cofactor is pass by value
   if (checkfileexists(filename)) {
-    unsigned int cmarker = 0;
-    unsigned int set_cofactors = 0;
+    unsigned int j = 0;     //current marker
+    unsigned int num = 0;   //number of co-factors encountered
     ifstream myfstream(filename, ios::in);
     while (!myfstream.eof()) {
-      myfstream >> (*cofactors)[cmarker];
-      if ((*cofactors)[cmarker]!='0') set_cofactors++;
-      cmarker++;
+      myfstream >> (*cofactors)[j];
+      if ((*cofactors)[j]!='0') num++;
+      j++;
     }
     myfstream.close();
-    if (verboseflag) Rprintf("Cofactors/Markers: %d/%d\n",set_cofactors,cmarker);
-    return set_cofactors;
+    if (verbose) Rprintf("Cofactors/Markers: %d/%d\n",num,j);
+    return num;
   } else {
     return 0;
   }
 }
 
-void printoptionshelp(void) {
+void printhelp(void) {
   printf ("Commandline switches:\n");
   printf ("-h      		This help.\n");
   printf ("-v      		Verbose (produce a lot of textoutput).\n");
@@ -186,18 +186,16 @@ void printoptionshelp(void) {
 }
 
 //Functions
-void exitonerror(const char *msg) {
+void exit_on_error(const char *msg) {
   fprintf(stderr, msg);
-  printoptionshelp();
+  printhelp();
   exit(1);
 }
 
 
-
-
 int main(int argc,char *argv[]) {
   Rprintf("MQM standalone version\n");
-  bool verboseflag = false;
+  bool verbose = false;
   bool helpflag = false;
   int debuglevel = 0;
   unsigned int phenotype = 0; //analyse the first phenotype
@@ -214,7 +212,7 @@ int main(int argc,char *argv[]) {
   while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:t:")) != -1)
     switch (c) {
     case 'v':
-      verboseflag = true;
+      verbose = true;
       break;
     case 'h':
       helpflag = true;
@@ -244,24 +242,24 @@ int main(int argc,char *argv[]) {
       fprintf (stderr, "Unknown option character '%c'.\n", optopt);
     }
   if (helpflag) {
-    printoptionshelp();
+    printhelp();
     return 0;
   } else {
     printf ("Options for MQM:\n");
     //Verbose & debug
-    printf ("verboseflag = %d, debuglevel = %d\n",verboseflag, debuglevel);
+    printf ("verbose = %d, debuglevel = %d\n",verbose, debuglevel);
     //Needed files
-    if (!phenofile) exitonerror("Please supply a phenotypefile argument.\n");
-    if (!checkfileexists(phenofile)) exitonerror("Phenotypefile not found on your filesystem.\n");
+    if (!phenofile) exit_on_error("Please supply a phenotypefile argument.\n");
+    if (!checkfileexists(phenofile)) exit_on_error("Phenotypefile not found on your filesystem.\n");
     printf ("Phenotypefile = %s\n",phenofile);
-    if (!genofile)  exitonerror("Please supply a genofile argument.\n");
-    if (!checkfileexists(genofile)) exitonerror("Genotypefile not found on your filesystem.\n");
+    if (!genofile)  exit_on_error("Please supply a genofile argument.\n");
+    if (!checkfileexists(genofile)) exit_on_error("Genotypefile not found on your filesystem.\n");
     printf ("Genotypefile = %s\n",genofile);
-    if (!markerfile) exitonerror("Please supply a markerfile argument.\n");
-    if (!checkfileexists(genofile)) exitonerror("Markerfile not found on your filesystem.\n");
+    if (!markerfile) exit_on_error("Please supply a markerfile argument.\n");
+    if (!checkfileexists(genofile)) exit_on_error("Markerfile not found on your filesystem.\n");
     printf ("Markerfile = %s\n",markerfile);
-    if (!settingsfile) exitonerror("Please supply a settingsfile argument.\n");
-    if (!checkfileexists(settingsfile)) exitonerror("settingsfile not found on your filesystem.\n");
+    if (!settingsfile) exit_on_error("Please supply a settingsfile argument.\n");
+    if (!checkfileexists(settingsfile)) exit_on_error("settingsfile not found on your filesystem.\n");
     printf ("settingsfile = %s\n",settingsfile);
     //Optional files
     if (!coffile) {
@@ -276,7 +274,7 @@ int main(int argc,char *argv[]) {
       printf ("Non-option argument %s\n", argv[index]);
     }
     //Read in settingsfile
-    mqmalgorithmsettings = loadmqmsetting(settingsfile,verboseflag);
+    mqmalgorithmsettings = loadmqmsetting(settingsfile,verbose);
     //Create large datastructures
     double **QTL;
     ivector f1genotype = newivector(mqmalgorithmsettings.nmark);
@@ -293,20 +291,20 @@ int main(int argc,char *argv[]) {
     MQMCrossType crosstype = CF2;	//Crosstype
 
     //Here we know what we need so we can start reading in files with the new loader functions
-    markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verboseflag);
+    markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verbose);
 
-    if (verboseflag) Rprintf("Genotypefile done\n");
+    if (verbose) Rprintf("Genotypefile done\n");
 
-    pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno,verboseflag);
+    pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno,verbose);
 
-    if (verboseflag) Rprintf("Phenotypefile done \n");
+    if (verbose) Rprintf("Phenotypefile done \n");
 
-    mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verboseflag);
+    mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verbose);
     chr = mqmmarkersinfo.markerchr;
     pos = mqmmarkersinfo.markerdistance;
     f1genotype = mqmmarkersinfo.markerparent;
 
-    if (verboseflag) Rprintf("Markerposition file done\n");
+    if (verbose) Rprintf("Markerposition file done\n");
 
     //Determin how many chromosomes we have
     unsigned int max_chr=0;
@@ -315,7 +313,7 @@ int main(int argc,char *argv[]) {
         max_chr = chr[m];
       }
     }
-    if (verboseflag)  Rprintf("# %d Chromosomes\n",max_chr);
+    if (verbose)  Rprintf("# %d Chromosomes\n",max_chr);
     //Create a QTL object holding all our output location
     int locationsoutput = 3*max_chr*(((mqmalgorithmsettings.stepmax)-(mqmalgorithmsettings.stepmin))/ (mqmalgorithmsettings.stepsize));
     QTL = newmatrix(1,locationsoutput);
@@ -330,10 +328,10 @@ int main(int argc,char *argv[]) {
     //MQM_test0.txt says it uses cofactors but it doesn't, because they are not eliminated
     //The message: "INFO: Marker XX is dropped, resulting in logL of reduced model = -8841.452934" is missing
     //Also the result of MQM without cofactors is equal
-    set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verboseflag);
+    set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
     if (set_cofactors > 0) {
       backwards = 1;
-      if (verboseflag) Rprintf("%d markers with cofactors. Backward elimination enabled\n",set_cofactors);
+      if (verbose) Rprintf("%d markers with cofactors. Backward elimination enabled\n",set_cofactors);
     }
     
     //Initialize an empty individuals list
@@ -350,8 +348,8 @@ int main(int argc,char *argv[]) {
     int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value -> Afterwards it should hold the new number of individuals
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verboseflag);
-    if (verboseflag) Rprintf("Settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
+    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verbose);
+    if (verbose) Rprintf("Settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
     INDlist = new_ind;
@@ -363,7 +361,7 @@ int main(int argc,char *argv[]) {
 
     //Missing values create an augmented set,
     analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
-              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verboseflag);
+              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verbose);
 
     // Output marker info
     //for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
