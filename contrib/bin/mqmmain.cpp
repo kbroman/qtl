@@ -54,9 +54,9 @@ struct algorithmsettings {
   double alpha;
   unsigned int maxiter;
   char estmap;
-  int maxaug;
-  int maxiaug;
-  int neglect;
+  int max_totalaugment;
+  int max_indaugment;
+  int neglect_unlikely;
 };
 
 struct markersinformation {
@@ -79,9 +79,9 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag) 
   settingsstream >> runsettings.alpha;
   settingsstream >> runsettings.maxiter;
   settingsstream >> runsettings.estmap;
-  settingsstream >> runsettings.maxaug;
-  settingsstream >> runsettings.maxiaug;
-  settingsstream >> runsettings.neglect;
+  settingsstream >> runsettings.max_totalaugment;
+  settingsstream >> runsettings.max_indaugment;
+  settingsstream >> runsettings.neglect_unlikely;
   if (verboseflag) {
     Rprintf("number of individuals: %d\n",runsettings.nind);
     Rprintf("number of markers: %d\n",runsettings.nmark);
@@ -93,7 +93,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag) 
     Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
     Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
     Rprintf("Re-estimating map-positions: %c\n",runsettings.estmap);
-    Rprintf("Data-augmentation parameters: max:%d maxind:%d neglect:%d\n",runsettings.maxaug,runsettings.maxiaug,runsettings.neglect);
+    Rprintf("Data-augmentation parameters: max:%d maxind:%d neglect:%d\n",runsettings.max_totalaugment,runsettings.max_indaugment,runsettings.neglect_unlikely);
   }
   return runsettings;
 }
@@ -357,7 +357,7 @@ int main(int argc,char *argv[]) {
     int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value -> Afterwards it should hold the new number of individuals
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.maxaug, mqmalgorithmsettings.maxiaug, mqmalgorithmsettings.neglect, crosstype, verboseflag);
+    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verboseflag);
     if (verboseflag) Rprintf("INFO: settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
