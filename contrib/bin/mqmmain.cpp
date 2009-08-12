@@ -68,20 +68,12 @@ struct markersinformation {
 struct algorithmsettings loadmqmsetting(const char* filename, bool verboseflag) {
   algorithmsettings runsettings;
   if (verboseflag) printf("INFO: Loading settings from file\n");
-  ifstream settingsstream(filename, ios::in);
-  settingsstream >> runsettings.nind;
-  settingsstream >> runsettings.nmark;
-  settingsstream >> runsettings.npheno;
-  settingsstream >> runsettings.stepmin;
-  settingsstream >> runsettings.stepmax;
-  settingsstream >> runsettings.stepsize;
-  settingsstream >> runsettings.windowsize;
-  settingsstream >> runsettings.alpha;
-  settingsstream >> runsettings.maxiter;
-  settingsstream >> runsettings.estmap;
-  settingsstream >> runsettings.max_totalaugment;
-  settingsstream >> runsettings.max_indaugment;
-  settingsstream >> runsettings.neglect_unlikely;
+  ifstream instream(filename, ios::in);
+  instream >> runsettings.nind >> runsettings.nmark >> runsettings.npheno;
+  instream >> runsettings.stepmin >> runsettings.stepmax >> runsettings.stepsize;
+  instream >> runsettings.windowsize >> runsettings.alpha;
+  instream >> runsettings.maxiter >> runsettings.estmap;
+  instream >> runsettings.max_totalaugment >> runsettings.max_indaugment >> runsettings.neglect_unlikely;
   if (verboseflag) {
     Rprintf("number of individuals: %d\n",runsettings.nind);
     Rprintf("number of markers: %d\n",runsettings.nmark);
@@ -341,8 +333,9 @@ int main(int argc,char *argv[]) {
     set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verboseflag);
     if (set_cofactors > 0) {
       backwards = 1;
+      if (verboseflag) Rprintf("%d markers with cofactors. Backward elimination enabled\n",set_cofactors);
     }
-    if (verboseflag) Rprintf("%d markers with cofactors backward elimination enabled\n",set_cofactors);
+    
     //Initialize an empty individuals list
     for (int i=0; i< mqmalgorithmsettings.nind; i++) {
       INDlist[i] = i;
@@ -358,7 +351,7 @@ int main(int argc,char *argv[]) {
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verboseflag);
-    if (verboseflag) Rprintf("INFO: settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
+    if (verboseflag) Rprintf("Settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
     INDlist = new_ind;
