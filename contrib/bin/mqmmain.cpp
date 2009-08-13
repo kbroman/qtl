@@ -182,7 +182,8 @@ void printhelp(void) {
   printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
   printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat.\n");
   printf ("-s(FILE_NAME)	Settings file in plain textformat.\n");
-  printf ("-c(FILE_NAME)	Optional Cofactors file  to do backward elimination on in plain textformat.\n");
+  printf ("-c(FILE_NAME)	Optional Cofactors file to do backward elimination on in plain textformat.\n");
+  printf ("-o(FILE_NAME)	Optional output file to save MQM-QTL mapping results in.\n");
 }
 
 //Functions
@@ -204,12 +205,13 @@ int main(int argc,char *argv[]) {
   char *markerfile = NULL;
   char *coffile = NULL;
   char *settingsfile = NULL;
+  char *outputfile = NULL;
   struct algorithmsettings mqmalgorithmsettings;
   struct markersinformation mqmmarkersinfo;
   unsigned int index;
   signed int c;
   //Parsing of arguments
-  while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:t:")) != -1)
+  while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:t:o:")) != -1)
     switch (c) {
     case 'v':
       verbose = true;
@@ -238,6 +240,9 @@ int main(int argc,char *argv[]) {
     case 'c':
       coffile = optarg;
       break;
+    case 'o':
+      outputfile = optarg;
+      break;      
     default:
       fprintf (stderr, "Unknown option character '%c'.\n", optopt);
     }
@@ -269,6 +274,9 @@ int main(int argc,char *argv[]) {
         printf ("Cofactorfile = %s\n",coffile);
       }
     }
+    //Check the output file
+    if (outputfile) printf("Output file specified: %s\n",outputfile);
+    if (checkfileexists(outputfile)) printf("Outputfile exists\n !!! overwriting previous outputfile !!!\n");
     //Warn people for non-existing options
     for (index = optind; index < argc; index++) {
       printf ("Non-option argument %s\n", argv[index]);
@@ -368,8 +376,10 @@ int main(int argc,char *argv[]) {
     //  Rprintf("%5d%3d%9.3f\n",m,chr[m],mapdistance[m]);
     //}
     // Output (augmented) QTL info
+
     for (int q=0; q<locationsoutput; q++) {
       Rprintf("%5d%10.5f\n",q,QTL[0][q]);
+      
     }
     //Cleanup
     freevector((void *)f1genotype);
