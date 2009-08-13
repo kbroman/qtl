@@ -210,6 +210,8 @@ int main(int argc,char *argv[]) {
   struct markersinformation mqmmarkersinfo;
   unsigned int index;
   signed int c;
+  ofstream outstream; //Could be needed when -o is set
+  
   //Parsing of arguments
   while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:t:o:")) != -1)
     switch (c) {
@@ -371,16 +373,19 @@ int main(int argc,char *argv[]) {
     analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verbose);
 
-    // Output marker info
-    //for (int m=0; m<mqmalgorithmsettings.nmark; m++) {
-    //  Rprintf("%5d%3d%9.3f\n",m,chr[m],mapdistance[m]);
-    //}
-    // Output (augmented) QTL info
-
+    // Open outputstream if specified
+    if (outputfile){
+      outstream.open(outputfile);
+    }
+    //Write final QTL profile (screen and file)
     for (int q=0; q<locationsoutput; q++) {
-      Rprintf("%5d%10.5f\n",q,QTL[0][q]);
+      if (outputfile) outstream << q << "\t" << QTL[0][q] << "\n";
+      if (verbose) Rprintf("%5d%10.5f\n",q,QTL[0][q]);
       
     }
+    //close the outputstream
+    if (outputfile) outstream.close();
+    
     //Cleanup
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
