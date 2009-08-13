@@ -137,12 +137,12 @@ struct markersinformation readmarkerfile(const char* filename,const unsigned int
   std::string markernames[nmar];
   ivector markerparent = newivector(nmar);		//Parental genotype
   ifstream myfstream(filename, ios::in);
-  while (!myfstream.eof()) {
+  while (!myfstream.eof() && j < nmar) {
     myfstream >> markerchr[j];
     myfstream >> markernames[j];
     myfstream >> markerdistance[j];
     markerparent[j] = 12;
-    if (verbose) Rprintf("Marker: %s %d %f\n",markernames[j].c_str(),markerchr[j],markerdistance[j]);
+    if (verbose) Rprintf("Marker %d: %s %d %f\n",j,markernames[j].c_str(),markerchr[j],markerdistance[j]);
     j++;
   }
   if (verbose) Rprintf("Markers: %d\n",j);
