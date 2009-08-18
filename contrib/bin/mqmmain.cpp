@@ -343,7 +343,7 @@ int main(int argc,char *argv[]) {
       cofactor[i] = '0';
       mapdistance[i]=999.0;
       mapdistance[i]=pos[i];
-      if (verbose) Rprintf("Distance %d, %f\n",i,mapdistance[i]);
+      //if (verbose) Rprintf("Distance %d, %f\n",i,mapdistance[i]);
     }
 
     //Danny: Cofactors are now read-in. the output with cofactors.txt set is not equal to MQM_test0.txt
