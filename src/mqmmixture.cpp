@@ -55,6 +55,11 @@ double rmixture(cmatrix marker, vector weight, vector r,
     if (verbose==1) {
       Rprintf("INFO: recombination parameters are not re-estimated\n");
     }
+    for (j=0; j<Nmark; j++) {
+      if (maximum < (*mapdistance)[j]) {
+        maximum = (*mapdistance)[j];
+      }
+    }
   } else {
     if (verbose==1) {
       Rprintf("INFO: recombination parameters are re-estimated\n");
