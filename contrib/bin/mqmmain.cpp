@@ -366,8 +366,8 @@ int main(int argc,char *argv[]) {
     cmatrix newmarkerset;
     vector new_y;
     ivector new_ind;
-    int nind = mqmalgorithmsettings.nind; 				//Danny: this should be const iirc because when we goto analysef2 we need to know howmany individuals we had **augmentdata touches it**
-    int augmentednind = mqmalgorithmsettings.nind;		//Danny: This is the pass by value -> Afterwards it should hold the new number of individuals
+    int nind = mqmalgorithmsettings.nind;
+    int augmentednind = mqmalgorithmsettings.nind;
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verbose);
@@ -380,7 +380,14 @@ int main(int argc,char *argv[]) {
     freevector((void *)position);
     freevector((void *)r);
     // </dataaugmentation>
-
+    // Uncomment to inspect the augmented dataset
+    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+    //    if(verbose) Rprintf("%c ",markers[m][i]);
+    //  }
+    //  if(verbose) Rprintf("\n");
+    //}
+    
     //Missing values create an augmented set,
     analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verbose);
