@@ -57,6 +57,7 @@ struct algorithmsettings {
   int max_totalaugment;
   int max_indaugment;
   int neglect_unlikely;
+  char suggestedcross;
 };
 
 struct markersinformation {
@@ -74,6 +75,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verbose) {
   instream >> runsettings.windowsize >> runsettings.alpha;
   instream >> runsettings.maxiter >> runsettings.estmap;
   instream >> runsettings.max_totalaugment >> runsettings.max_indaugment >> runsettings.neglect_unlikely;
+  instream >> runsettings.suggestedcross;
   if (verbose) {
     Rprintf("number of individuals: %d\n",runsettings.nind);
     Rprintf("number of markers: %d\n",runsettings.nmark);
@@ -85,6 +87,7 @@ struct algorithmsettings loadmqmsetting(const char* filename, bool verbose) {
     Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
     Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
     Rprintf("Re-estimating map-positions: %c\n",runsettings.estmap);
+    Rprintf("Suggested cross: %c\n",runsettings.suggestedcross);
     Rprintf("Data-augmentation parameters: max:%d maxind:%d neglect:%d\n",runsettings.max_totalaugment,runsettings.max_indaugment,runsettings.neglect_unlikely);
   }
   return runsettings;
@@ -298,8 +301,16 @@ int main(int argc,char *argv[]) {
     //Some additional variables
     int set_cofactors=0;			//Markers set as cofactors
     int backwards=0;				//Backward elimination ?
-    MQMCrossType crosstype = CF2;	//Crosstype
-
+    MQMCrossType crosstype = CUNKNOWN;
+    if(mqmalgorithmsettings.suggestedcross=='F'){
+      crosstype = CF2;	//Crosstype
+    }
+    if(mqmalgorithmsettings.suggestedcross=='B'){
+      crosstype = CBC;	//Crosstype
+    }
+    if(mqmalgorithmsettings.suggestedcross=='R'){
+      crosstype = CRIL;	//Crosstype
+    }
     //Here we know what we need so we can start reading in files with the new loader functions
     markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verbose);
 
@@ -332,6 +343,7 @@ int main(int argc,char *argv[]) {
       cofactor[i] = '0';
       mapdistance[i]=999.0;
       mapdistance[i]=pos[i];
+      if (verbose) Rprintf("Distance %d, %f\n",i,mapdistance[i]);
     }
 
     //Danny: Cofactors are now read-in. the output with cofactors.txt set is not equal to MQM_test0.txt
@@ -380,7 +392,7 @@ int main(int argc,char *argv[]) {
     //Write final QTL profile (screen and file)
     for (int q=0; q<locationsoutput; q++) {
       if (outputfile) outstream << q << "\t" << QTL[0][q] << "\n";
-      if (verbose) Rprintf("%5d%10.5f\n",q,QTL[0][q]);
+      //if (verbose) Rprintf("%5d%10.5f\n",q,QTL[0][q]);
       
     }
     //close the outputstream
