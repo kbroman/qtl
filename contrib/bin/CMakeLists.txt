@@ -62,7 +62,7 @@ ADD_CUSTOM_TARGET(testall
   COMMAND ctest)
 
 ADD_TEST(TestStandaloneMQM ./scripts/regression_tests.sh)
-
+ADD_TEST(DannyTestMQM ./regressiontests.bat)
 ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
 ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
 ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
