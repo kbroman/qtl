@@ -31,6 +31,8 @@
 #include <iostream>
 #include <fstream>
 #include "mqm.h"
+#include <getopt.h>
+
 
 using namespace std;
 
@@ -66,29 +68,29 @@ struct markersinformation {
   ivector markerparent;
 };
 
-struct algorithmsettings loadmqmsetting(const char* filename, bool verbose) {
-  algorithmsettings runsettings;
+struct algorithmsettings loadmqmsetting(const char* filename,const algorithmsettings commandline, bool verbose) {
+  algorithmsettings runsettings=commandline;
   if (verbose) printf("INFO: Loading settings from file\n");
   ifstream instream(filename, ios::in);
   instream >> runsettings.nind >> runsettings.nmark >> runsettings.npheno;
-  instream >> runsettings.stepmin >> runsettings.stepmax >> runsettings.stepsize;
-  instream >> runsettings.windowsize >> runsettings.alpha;
-  instream >> runsettings.maxiter >> runsettings.estmap;
-  instream >> runsettings.max_totalaugment >> runsettings.max_indaugment >> runsettings.neglect_unlikely;
+  //instream >> runsettings.stepmin >> runsettings.stepmax >> runsettings.stepsize;
+  //instream >> runsettings.windowsize >> runsettings.alpha;
+  //instream >> runsettings.maxiter >> runsettings.estmap;
+  //instream >> runsettings.max_totalaugment >> runsettings.max_indaugment >> runsettings.neglect_unlikely;
   instream >> runsettings.suggestedcross;
   if (verbose) {
     Rprintf("number of individuals: %d\n",runsettings.nind);
     Rprintf("number of markers: %d\n",runsettings.nmark);
     Rprintf("number of phenotypes: %d\n",runsettings.npheno);
-    Rprintf("stepmin: %d\n",runsettings.stepmin);
-    Rprintf("stepmax: %d\n",runsettings.stepmax);
-    Rprintf("stepsize: %d\n",runsettings.stepsize);
-    Rprintf("windowsize for dropping qtls: %d\n",runsettings.windowsize);
-    Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
-    Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
-    Rprintf("Re-estimating map-positions: %c\n",runsettings.estmap);
+    //Rprintf("stepmin: %d\n",runsettings.stepmin);
+    //Rprintf("stepmax: %d\n",runsettings.stepmax);
+    //Rprintf("stepsize: %d\n",runsettings.stepsize);
+    //Rprintf("windowsize for dropping qtls: %d\n",runsettings.windowsize);
+    //Rprintf("Alpha level considered to be significant: %f\n",runsettings.alpha);
+    //Rprintf("Max iterations using EM: %d\n",runsettings.maxiter);
+    //Rprintf("Re-estimating map-positions: %c\n",runsettings.estmap);
     Rprintf("Suggested cross: %c\n",runsettings.suggestedcross);
-    Rprintf("Data-augmentation parameters: max:%d maxind:%d neglect:%d\n",runsettings.max_totalaugment,runsettings.max_indaugment,runsettings.neglect_unlikely);
+    //Rprintf("Data-augmentation parameters: max:%d maxind:%d neglect:%d\n",runsettings.max_totalaugment,runsettings.max_indaugment,runsettings.neglect_unlikely);
   }
   return runsettings;
 }
@@ -196,6 +198,20 @@ void exit_on_error(const char *msg) {
   exit(1);
 }
 
+static struct option long_options[] = {
+  {"smin",  required_argument, 0, 'a'},
+  {"smax",  required_argument, 0, 'b'},
+  {"sstep",  required_argument, 0, 'n'},
+  {"alpha",  required_argument, 0, 'e'},
+  {"window",    required_argument, 0, 'f'},
+  {"maxiter",    required_argument, 0, 'q'},
+  {"estmap",    required_argument, 0, 'i'},
+  {"maugment",    required_argument, 0, 'j'},
+  {"miaugment",    required_argument, 0, 'k'},
+  {"neglect",    required_argument, 0, 'l'},
+  {0, 0, 0, 0}
+};
+
 
 int main(int argc,char *argv[]) {
   Rprintf("MQM standalone version\n");
@@ -214,9 +230,10 @@ int main(int argc,char *argv[]) {
   unsigned int index;
   signed int c;
   ofstream outstream; //Could be needed when -o is set
-  
+
+  int option_index = 0;
   //Parsing of arguments
-  while ((c = getopt (argc, argv, "vd:h:p:g:m:c:s:t:o:")) != -1)
+  while ((c = getopt_long(argc, argv, "vd:h:p:g:m:c:s:t:o:a:b:e:f:q:i:j:k:l:",long_options, &option_index)) != -1)
     switch (c) {
     case 'v':
       verbose = true;
@@ -248,9 +265,48 @@ int main(int argc,char *argv[]) {
     case 'o':
       outputfile = optarg;
       break;      
+    case 'a':
+      mqmalgorithmsettings.stepmin = atoi(optarg);
+      printf("Option (a) smin: %d\n",mqmalgorithmsettings.stepmin);
+    case 'b':
+      mqmalgorithmsettings.stepmax = atoi(optarg);
+      printf("Option (b) smax: %d\n",mqmalgorithmsettings.stepmax);
+    break;
+    case 'n':
+      mqmalgorithmsettings.stepsize = atoi(optarg);
+      printf("Option (n) ssize: %d\n",mqmalgorithmsettings.stepsize);
+    break;
+    case 'e':
+      mqmalgorithmsettings.alpha = atof(optarg);
+      printf("Option (e) alpha: %f\n",mqmalgorithmsettings.alpha);
+    break;
+    case 'f':
+      mqmalgorithmsettings.windowsize = atoi(optarg);
+      printf("Option (f) window: %d\n",mqmalgorithmsettings.windowsize);
+    break;  
+    case 'q':
+      mqmalgorithmsettings.maxiter = atoi(optarg);
+      printf("Option (q) maxiter: %d\n",mqmalgorithmsettings.maxiter);
+    break; 
+    case 'i':
+      mqmalgorithmsettings.estmap = optarg[0];
+      printf("Option (i) estmap: %d\n",mqmalgorithmsettings.estmap);
+    break; 
+    case 'j':
+      mqmalgorithmsettings.max_totalaugment = atoi(optarg);
+      printf("Option (j) max_totalaugment: %d\n",mqmalgorithmsettings.max_totalaugment);
+    break; 
+    case 'k':
+      mqmalgorithmsettings.max_indaugment = atoi(optarg);
+      printf("Option (k) max_indaugment: %d\n",mqmalgorithmsettings.max_indaugment);
+    break; 
+    case 'l':
+      mqmalgorithmsettings.neglect_unlikely = atoi(optarg);
+      printf("Option (l) neglect: %d\n",mqmalgorithmsettings.neglect_unlikely);
+    break; 
     default:
       fprintf (stderr, "Unknown option character '%c'.\n", optopt);
-    }
+  }
   if (helpflag) {
     printhelp();
     return 0;
@@ -287,7 +343,7 @@ int main(int argc,char *argv[]) {
       printf ("Non-option argument %s\n", argv[index]);
     }
     //Read in settingsfile
-    mqmalgorithmsettings = loadmqmsetting(settingsfile,verbose);
+    mqmalgorithmsettings = loadmqmsetting(settingsfile,mqmalgorithmsettings,verbose);
     //Create large datastructures
     double **QTL;
     ivector f1genotype = newivector(mqmalgorithmsettings.nmark);
