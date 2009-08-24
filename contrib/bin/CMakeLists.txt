@@ -67,7 +67,7 @@ ELSE()
   SET(MQMEXE "./mqm")
 ENDIF()
 
-ADD_TEST(TestMQMF2 ${MQMEXE} "-v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out.txt.rnew")
+ADD_TEST(TestMQMF2 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out.txt.rnew -ctest/t11/cofactors.txt)
 ADD_TEST(TestMQMF2_cmp ${CMAKE_COMMAND} -E compare_files test/t11out.txt.rnew test/t11out.txt)
 
 # ADD_TEST(DannyTestMQM ./regressiontests.bat) - move into above...
