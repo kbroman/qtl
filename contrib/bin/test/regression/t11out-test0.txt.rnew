@@ -1,4 +1,12 @@
-INFO: Calculating relative genomepositions of the markersINFO: Estimating recombinant frequenciesINFO: Receiving the chromosome matrix from RINFO: Calculating relative genomepositions of the markersINFO: Estimating recombinant frequenciesINFO: Initialize Frun and informationcontent to 0.0INFO: After dropping of uninformative cofactorsINFO: Analysis of data finished    0	   0.90161
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Receiving the chromosome matrix from R
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Initialize Frun and informationcontent to 0.0
+INFO: After dropping of uninformative cofactors
+INFO: Analysis of data finished
+    0	   0.90161
     1	   0.94263
     2	   0.87483
     3	   0.71982

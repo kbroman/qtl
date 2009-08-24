@@ -44,8 +44,10 @@
 
 #ifdef STANDALONE
   extern FILE* redirect_info;  // Redirect output for testing
-  #define message(type,s) { fprintf(redirect_info,"%s: ",type); \
-                            fprintf(redirect_info,s); printf("\n"); } 
+  #define message(type, format, ...) { \
+    fprintf(redirect_info,"%s: ",type); \
+    fprintf(redirect_info, format, ## __VA_ARGS__); \
+    fprintf(redirect_info,"\n"); } 
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else
@@ -55,9 +57,9 @@
 #endif
 
 #ifdef NDEBUG
-  #define info(s) 
+  #define info(format, ...) 
 #else
-  #define info(s) { message("INFO",s); }
+  #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
   #define verbose(s) if (verbose) { info(s); }
 #endif
 
