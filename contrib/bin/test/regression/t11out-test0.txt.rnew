@@ -1,3 +1,7 @@
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Crosstype determined by the algorithm:F:
+INFO: Augmentation parameters: Maximum augmentation=1000, Maximum augmentation per individual=8, Neglect=1.000000
 INFO: Receiving the chromosome matrix from R
 INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
