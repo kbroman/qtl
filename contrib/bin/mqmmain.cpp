@@ -446,13 +446,16 @@ int main(int argc,char *argv[]) {
     freevector((void *)position);
     freevector((void *)r);
     // </dataaugmentation>
+    
+    
     // Uncomment to inspect the augmented dataset
-    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+    for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+      for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+        validate_markertype(crosstype,markers[m][i]);
     //    if(verbose) Rprintf("%c ",markers[m][i]);
-    //  }
+      }
     //  if(verbose) Rprintf("\n");
-    //}
+    }
     
     //Missing values create an augmented set,
     analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
