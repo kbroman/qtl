@@ -1,0 +1,28 @@
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Crosstype determined by the algorithm:B:
+INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Neglect=1.000000
+INFO: Receiving the chromosome matrix from R
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: Initialize Frun and informationcontent to 0.0
+INFO: After dropping of uninformative cofactors
+INFO: Prob=0.020214 Alfa=0.020000
+INFO: Prob=0.019525 Alfa=0.020000
+INFO: dimX:19 nInd:250
+INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa
+INFO: F(5.468750,1,231)=0.020000
+INFO: F(4.003906,2,231)=0.020000
+INFO: Log-likelihood of full model= -14801.712931
+INFO: Residual variance= 128.467884
+INFO: Trait mean= 1.246800; Trait variation= 128.782580
+INFO: Marker 50 is dropped, resulting in logL of reduced model = -14801.748423
+INFO: Marker 92 is dropped, resulting in logL of reduced model = -14801.799670
+INFO: Marker 59 is dropped, resulting in logL of reduced model = -14801.854961
+INFO: Marker 97 is dropped, resulting in logL of reduced model = -14801.981235
+INFO: Marker 6 is dropped, resulting in logL of reduced model = -14802.347985
+INFO: Marker 11 is dropped, resulting in logL of reduced model = -14802.476841
+INFO: Marker 40 is dropped, resulting in logL of reduced model = -14803.816694
+INFO: Marker 95 is dropped, resulting in logL of reduced model = -14805.165782
+INFO: Marker 73 is dropped, resulting in logL of reduced model = -14806.517907
+FATAL: validate_markertype: Found markertype BB in back cross (BC)
