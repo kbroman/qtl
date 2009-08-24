@@ -5,6 +5,10 @@ INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
 INFO: Initialize Frun and informationcontent to 0.0
 INFO: After dropping of uninformative cofactors
+INFO: Log-likelihood of full model= -8841.425297
+INFO: Residual variance= 28137765.709148
+INFO: Trait mean= 4327.088889 
+INFO: Trait variation= 28972781.109373
 INFO: Analysis of data finished
     0	   0.90161
     1	   0.94263

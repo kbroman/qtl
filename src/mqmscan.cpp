@@ -333,11 +333,9 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   weight[0]= -1.0;
   logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
-  if (verbose) {
-    Rprintf("INFO: Log-likelihood of full model= %f\n",logLfull);
-    Rprintf("INFO: Residual variance= %f\n",variance);
-    Rprintf("INFO: Trait mean= %f \nINFO: Trait variation= %f\n",ymean,yvari);
-  }
+  verbose("Log-likelihood of full model= %f",logLfull);
+  verbose("Residual variance= %f",variance);
+  verbose("Trait mean= %f \nINFO: Trait variation= %f",ymean,yvari);
   if (Backwards==1)    // use only selected cofactors
     logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
   if (Backwards==0) // use all cofactors

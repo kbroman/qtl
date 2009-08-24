@@ -60,7 +60,7 @@
   #define info(format, ...) 
 #else
   #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
-  #define verbose(s) if (verbose) { info(s); }
+  #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
 #endif
 
 #endif // MQM_H
