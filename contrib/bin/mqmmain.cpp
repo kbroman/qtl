@@ -434,13 +434,14 @@ int main(int argc,char *argv[]) {
       INDlist[i] = i;
     }
 
+    int nind = mqmalgorithmsettings.nind;
+    int augmentednind = mqmalgorithmsettings.nind;
+
     //<dataaugmentation>
     //Variables for the returned augmented markers,phenotype,individualmapping
     cmatrix newmarkerset;
     vector new_y;
     ivector new_ind;
-    int nind = mqmalgorithmsettings.nind;
-    int augmentednind = mqmalgorithmsettings.nind;
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verbose);
@@ -452,8 +453,6 @@ int main(int argc,char *argv[]) {
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-    // </dataaugmentation>
-    
     
     // Uncomment to inspect the augmented dataset
     for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
