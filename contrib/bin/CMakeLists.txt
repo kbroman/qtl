@@ -61,14 +61,24 @@ ADD_CUSTOM_TARGET(testall
   COMMAND R CMD INSTALL --libs-only qtl_1.13-1.tar.gz 
   COMMAND ctest)
 
-ADD_TEST(TestStandaloneMQM ./scripts/regression_tests.sh)
-ADD_TEST(DannyTestMQM ./regressiontests.bat)
-ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
-ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
-ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
-ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
-ADD_TEST(TestR_mqm_listeria1 ${RTEST} rtest test_mqm_listeria1.R)
-ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
+IF(WIN32)
+  SET(MQMEXE "mqm.exe")
+ELSE()
+  SET(MQMEXE "./mqm")
+ENDIF()
 
+ADD_TEST(TestMQMF2 ${MQMEXE} "-v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out.txt.rnew")
+ADD_TEST(TestMQMF2_cmp ${CMAKE_COMMAND} -E compare_files test/t11out.txt.rnew test/t11out.txt)
+
+# ADD_TEST(DannyTestMQM ./regressiontests.bat) - move into above...
+
+IF(TEST_R)
+  ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
+  ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
+  ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
+  ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
+  ADD_TEST(TestR_mqm_listeria1 ${RTEST} rtest test_mqm_listeria1.R)
+  ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
+ENDIF()
 
 
