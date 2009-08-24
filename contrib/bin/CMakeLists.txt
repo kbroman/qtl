@@ -68,8 +68,9 @@ ELSE()
 ENDIF()
 
 # Older test for comparison with (older test) MQM_test0.txt
+# to only run this test use 'ctest -R test0'
 ADD_TEST(TestMQMF2_test0 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out-test0.txt.rnew -ctest/t11/cofactors.txt)
-ADD_TEST(TestMQMF2_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out-test0.txt.rnew test/regression/t11out-test0.txt)
+ADD_TEST(TestMQMF2_test0_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out-test0.txt.rnew test/regression/t11out-test0.txt)
 
 # Run T11
 ADD_TEST(TestMQMF2_T11 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out.txt.rnew)
