@@ -43,7 +43,9 @@
   #include "mqmscan.h"
 
 #ifdef STANDALONE
-  #define message(type,s) { printf("%s: ",type); printf(s); printf("\n"); } 
+  extern FILE* redirect_info;  // Redirect output for testing
+  #define message(type,s) { fprintf(redirect_info,"%s: ",type); \
+                            fprintf(redirect_info,s); printf("\n"); } 
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else

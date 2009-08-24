@@ -36,6 +36,8 @@
 
 using namespace std;
 
+FILE *redirect_info = stdout;
+
 bool checkfileexists(const char *filename) {
   ifstream myfile;
   bool exists;
@@ -239,7 +241,6 @@ int main(int argc,char *argv[]) {
   struct markersinformation mqmmarkersinfo;
   unsigned int index;
   signed int c;
-  ofstream outstream; //Could be needed when -o is set
 
   int option_index = 0;
   //Parsing of arguments
@@ -352,6 +353,12 @@ int main(int argc,char *argv[]) {
     for (index = optind; index < argc; index++) {
       printf ("Non-option argument %s\n", argv[index]);
     }
+    // Open outputstream if specified - using C type for redirection
+    FILE *fout = stdout;
+    if (outputfile){
+      fout = fopen(outputfile,"w");
+      redirect_info = fout;
+    }
     //Read in settingsfile
     mqmalgorithmsettings = loadmqmsetting(settingsfile,mqmalgorithmsettings,verbose);
     //Create large datastructures
@@ -461,18 +468,13 @@ int main(int argc,char *argv[]) {
     analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verbose);
 
-    // Open outputstream if specified
-    if (outputfile){
-      outstream.open(outputfile);
-    }
     //Write final QTL profile (screen and file)
     for (int q=0; q<locationsoutput; q++) {
-      if (outputfile) outstream << q << "\t" << QTL[0][q] << "\n";
-      //if (verbose) Rprintf("%5d%10.5f\n",q,QTL[0][q]);
-      
+      // outstream << q << "\t" << QTL[0][q] << "\n";
+      fprintf(fout,"%5d\t%10.5f\n",q,QTL[0][q]);
     }
     //close the outputstream
-    if (outputfile) outstream.close();
+    if (outputfile) fclose(fout);
     
     //Cleanup
     freevector((void *)f1genotype);
