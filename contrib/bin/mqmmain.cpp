@@ -189,6 +189,16 @@ void printhelp(void) {
   printf ("-s(FILE_NAME)	Settings file in plain textformat.\n");
   printf ("-c(FILE_NAME)	Optional Cofactors file to do backward elimination on in plain textformat.\n");
   printf ("-o(FILE_NAME)	Optional output file to save MQM-QTL mapping results in.\n");
+  printf ("--smin(INT)	Start of mapping in Cm.\n");
+  printf ("--smax(INT)	End of mapping in Cm.\n");
+  printf ("--sstep(INT)	Stepsize of mapping in Cm.\n");
+  printf ("--alpha(FLOAT)	Significance level.\n");
+  printf ("--window(INT)	Windowsize for dropping QTLs in Cm.\n");
+  printf ("--maxiter(INT)	Maximum number of EM iterations.\n");
+  printf ("--estmap(CHAR)	Reestimate marker positions y/n?.\n");
+  printf ("--maugment(INT)	Maximum size of augmented dataset.\n");
+  printf ("--miaugment(INT)	Maximum number of individual replications inside a dataset.\n");
+  printf ("--Neglect(INT)	Drop genotypes more unlikely that neglect/1000.\n");
 }
 
 //Functions
