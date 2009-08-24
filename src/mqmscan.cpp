@@ -323,19 +323,17 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   F1= inverseF(1,Nind-dimx,alfa,verbose);
   F2= inverseF(2,Nind-dimx,alfa,verbose);
-  if (verbose) {
-    Rprintf("INFO: dimX:%d nInd:%d\n",dimx,Nind);
-    Rprintf("INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
-    Rprintf("INFO: F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
-    Rprintf("INFO: F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
-  }
+  verbose("dimX:%d nInd:%d",dimx,Nind);
+  verbose("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
+  verbose("F(%f,1,%d)=%f",F1,(Nind-dimx),alfa);
+  verbose("F(%f,2,%d)=%f",F2,(Nind-dimx),alfa);
   F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
   logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
   verbose("Log-likelihood of full model= %f",logLfull);
   verbose("Residual variance= %f",variance);
-  verbose("Trait mean= %f \nINFO: Trait variation= %f",ymean,yvari);
+  verbose("Trait mean= %f; Trait variation= %f",ymean,yvari);
   if (Backwards==1)    // use only selected cofactors
     logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
   if (Backwards==0) // use all cofactors
@@ -351,9 +349,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
   }
   //QTL likelyhood for each location
-  if (verbose) {
-    Rprintf("INFO: Number of output datapoints: %d\n",Nsteps);
-  }
+  verbose("Number of output datapoints: %d",Nsteps);
+
   //ofstream fff("MQM.output", ios::out | ios::app);
   for (int ii=0; ii<Nsteps; ii++) {
     //Convert LR to LOD before sending back

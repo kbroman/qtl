@@ -79,10 +79,8 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   prob0right, prob1right, prob2right;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
-  if (verbose) {
-    Rprintf("INFO: Crosstype determined by the algorithm:%c:\n", crosstype);
-    Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
-  }
+  verbose("Crosstype determined by the algorithm:%c:", crosstype);
+  verbose("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f", maxNaug, imaxNaug, neglect);
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;
   int newNind = nind0;

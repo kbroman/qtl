@@ -403,9 +403,7 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
     else minF= halfway;
     absdiff= fabs(prob-alfa);
   }
-  if (verbose==1) {
-    Rprintf("INFO: Prob=%f Alfa=%f\n", prob, alfa);
-  }
+  verbose("Prob=%f Alfa=%f", prob, alfa);
   return halfway;
 }
 
