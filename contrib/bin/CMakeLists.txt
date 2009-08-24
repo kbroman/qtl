@@ -77,6 +77,50 @@ ADD_TEST(TestMQMF2_T11 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genoty
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T11_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out.txt.rnew test/regression/t11out.txt)
 
+# Run T12
+ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t12out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T12_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t12out.txt.rnew test/regression/t12out.txt)
+
+# Run T21
+ADD_TEST(TestMQMBC_T21 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t21out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T21_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t21out.txt.rnew test/regression/t21out.txt)
+
+# Run T22
+ADD_TEST(TestMQMBC_T22 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt -cTest/t22/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t22out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T22_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t22out.txt.rnew test/regression/t22out.txt)
+
+# Run T23
+ADD_TEST(TestMQMBC_T23 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt -cTest/t23/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t23out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMNC_T23_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t23out.txt.rnew test/regression/t23out.txt)
+
+# Run T24
+ADD_TEST(TestMQMBC_T24 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t24out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T24_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t24out.txt.rnew test/regression/t24out.txt)
+
+# Run T25
+ADD_TEST(TestMQMBC_T25 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t25out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T25_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t25out.txt.rnew test/regression/t25out.txt)
+
+# Run T31
+ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t31out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31out.txt.rnew test/regression/t31out.txt)
+
+# Run T32
+ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t32out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T32_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t32out.txt.rnew test/regression/t32out.txt)
+
+# Run T33
+ADD_TEST(TestMQMF2_T33 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt -cTest/t33/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t33out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T33_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t33out.txt.rnew test/regression/t33out.txt)
 
 # ADD_TEST(DannyTestMQM ./regressiontests.bat) - move into above...
 
