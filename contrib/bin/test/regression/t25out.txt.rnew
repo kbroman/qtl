@@ -2,4 +2,4 @@ INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
 INFO: Crosstype determined by the algorithm:B:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Neglect=2.000000
-FATAL: validate_markertype: Found markertype BB in back cross (BC)
+FATAL: Strange: encountered BB genotype in BC

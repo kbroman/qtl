@@ -109,14 +109,22 @@ void validate_markertype(const MQMCrossType crosstype, const char markertype)
  */
 
 double start_prob(const MQMCrossType crosstype, const char markertype) {
-  validate_markertype(crosstype,markertype);
+  //validate_markertype(crosstype,markertype);
   switch (crosstype) {
     case CF2:
       return (markertype==MH ? 0.5 : 0.25);
     case CRIL:
       return 0.5;
     case CBC:
-      return (markertype==MH ? 0.5 : 0.5);
+      switch (markertype) {
+      case MH:
+        return 0.5;
+      case MAA:
+        return 0.5;
+      default:
+        return 0.0;
+      }
+      //return (markertype==MH ? 0.5 : 0.5);
     default:
       fatal("Strange: unknown crosstype in start_prob");
   }
@@ -150,8 +158,8 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
     compareto = loci[j+1][i]; // FIXME
   }
 
-  validate_markertype(crosstype,compareto);
-  validate_markertype(crosstype,markertype);
+  //validate_markertype(crosstype,compareto);
+  //validate_markertype(crosstype,markertype);
 
   // number of recombinations recombinations
   const double recombinations = fabs((double)markertype-(double)compareto);
@@ -199,8 +207,8 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   const double rr = 1.0-r; // right side recombination frequency
   const double rr2 = rr*rr;
   const char rightmarker = imarker[j+1];
-  validate_markertype(crosstype,markertype);
-  validate_markertype(crosstype,rightmarker);
+  //validate_markertype(crosstype,markertype);
+  //validate_markertype(crosstype,rightmarker);
 
   // markertype markerr diff recombinations
   //   AA        AA      0     0      1-r
