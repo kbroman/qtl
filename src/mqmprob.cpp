@@ -116,7 +116,15 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
     case CRIL:
       return 0.5;
     case CBC:
-      return (markertype==MH ? 0.5 : 0.5);
+      switch (markertype) {
+      case MH:
+        return 0.5;
+      case MAA:
+        return 0.5;
+      default:
+        return 0.0;
+      }
+      //return (markertype==MH ? 0.5 : 0.5);
     default:
       fatal("Strange: unknown crosstype in start_prob");
   }
