@@ -77,17 +77,17 @@ ADD_TEST(TestMQMF2_T11 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genoty
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T11_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out.txt.rnew test/regression/t11out.txt)
 
-# Run T12
+# Run T12 Dataset 1 F2
 ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t12out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T12_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t12out.txt.rnew test/regression/t12out.txt)
 
-# Run T13
+# Run T13 
 ADD_TEST(TestMQMF2_T13 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t13out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T13_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t13out.txt.rnew test/regression/t13out.txt)
 
-# Run T21
+# Run T21 Dataset 2 BC=~ Hyper (genotypes NA -> 0)
 ADD_TEST(TestMQMBC_T21 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t21out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMBC_T21_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t21out.txt.rnew test/regression/t21out.txt)
@@ -112,7 +112,7 @@ ADD_TEST(TestMQMBC_T25 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genoty
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMBC_T25_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t25out.txt.rnew test/regression/t25out.txt)
 
-# Run T31
+# Run T31 Dataset 3 F2=~ Listeria
 ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t31out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31out.txt.rnew test/regression/t31out.txt)
