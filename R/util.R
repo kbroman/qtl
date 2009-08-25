@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jun, 2009
+# last modified Aug, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -959,8 +959,9 @@ function(cross, chr, order, error.prob=0.0001,
   if("rf" %in% names(cross)) {
     rf <- cross$rf
     # determine column within rec fracs
-    oldcols <- cumsum(c(0,n.mar))[chr]+seq(along=order)
-    newcols <- cumsum(c(0,n.mar))[chr]+order
+    whchr <- which(names(cross$geno)==chr)
+    oldcols <- cumsum(c(0,n.mar))[whchr]+seq(along=order)
+    newcols <- cumsum(c(0,n.mar))[whchr]+order
     rf[oldcols,] <- rf[newcols,]
     rf[,oldcols] <- rf[,newcols]
     colnames(rf)[oldcols] <- colnames(rf)[newcols]
