@@ -436,7 +436,14 @@ int main(int argc,char *argv[]) {
 
     int nind = mqmalgorithmsettings.nind;
     int augmentednind = mqmalgorithmsettings.nind;
-
+    // Uncomment to inspect the augmented dataset
+    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+    //    if(verbose) Rprintf("%c ",markers[m][i]);
+    //  }
+    //  if(verbose) Rprintf("\n");
+    //}
+    
     //<dataaugmentation>
     //Variables for the returned augmented markers,phenotype,individualmapping
     cmatrix newmarkerset;
@@ -455,13 +462,13 @@ int main(int argc,char *argv[]) {
     freevector((void *)r);
     
     // Uncomment to inspect the augmented dataset
-    for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-      for (int i=0; i < mqmalgorithmsettings.nind; i++) {
-        validate_markertype(crosstype,markers[m][i]);
+    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+    //    validate_markertype(crosstype,markers[m][i]);
     //    if(verbose) Rprintf("%c ",markers[m][i]);
-      }
+    //  }
     //  if(verbose) Rprintf("\n");
-    }
+    //}
     
     //Missing values create an augmented set,
     analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
