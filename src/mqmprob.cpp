@@ -204,8 +204,19 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
       }
       break;
     case CRIL:
+      if(compareto==MH) prob = 0.0;
+      if (recombinations){
+        prob = r;
+      }else{
+        prob = rr;
+      }      
     case CBC:
-      if (recombinations) prob = r;
+      if(compareto==MBB) prob = 0.0;
+      if (recombinations){
+        prob = r;
+      }else{
+        prob = rr;
+      }
       break;
     default:
       fatal("Strange: unknown crosstype in prob");
