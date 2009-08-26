@@ -120,7 +120,8 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.25;
       default:
-        fatal("Strange: unknown markertype in start_prob");
+        info("Strange: Probability requested for invalid markertype: %c",markertype);
+        return 0.0;
       }
     case CRIL:
       switch (markertype) {
@@ -131,7 +132,8 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.5;
       default:
-        fatal("Strange: unknown markertype in start_prob");
+        info("Strange: Probability requested for invalid markertype: %c",markertype);
+        return 0.0;
       }
     case CBC:
       switch (markertype) {
@@ -142,7 +144,8 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.0;
       default:
-        fatal("Strange: unknown markertype in start_prob");
+        info("Strange: Probability requested for invalid markertype: %c",markertype);
+        return 0.0;
       }
       //return (markertype==MH ? 0.5 : 0.5);
     default:
@@ -162,8 +165,8 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const MQMCrossType crosstype, const int ADJ) {
+  
   char compareto;
-
   const double r = rs[j+ADJ];
   const double r2 = r*r;
   const double rr = 1.0-r; // right side recombination frequency
@@ -182,7 +185,7 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   //validate_markertype(crosstype,markertype);
 
   // number of recombinations recombinations
-  const double recombinations = fabs((double)markertype-(double)compareto);
+  const int recombinations = fabs((double)markertype-(double)compareto);
   double prob = rr;  // default to no recombinations (1-r)
   switch (crosstype) {
     case CF2:
@@ -234,7 +237,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   //   AA        AA      0     0      1-r
   //   AA        BB     -2     2       r
   //   BB        BB      0     0      1-r
-  const double recombinations = fabs(markertype-rightmarker);
+  const int recombinations = fabs(markertype-rightmarker);
   switch (crosstype) {
     case CF2:
       if ((rightmarker==MAA)||(rightmarker==MH)||(rightmarker==MBB)) {
