@@ -463,7 +463,7 @@ int main(int argc,char *argv[]) {
     
     // Uncomment to inspect the augmented dataset
     for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-      for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+      for (int i=0; i < augmentednind; i++) {
         validate_markertype(crosstype,markers[m][i]);
         if(verbose) Rprintf("%c ",markers[m][i]);
       }
