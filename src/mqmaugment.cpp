@@ -453,7 +453,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(chr);
     if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", prior);
-      Rprintf("# Unique selected individuals:%d\n", Nind);
+      Rprintf("# Unique selected individuals:%d\n", *Nind);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
       info("Data augmentation succesfull");
