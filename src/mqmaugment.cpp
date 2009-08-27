@@ -86,6 +86,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   int newNind = nind0;
   int previaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
+    if(verbose) Rprintf("Starting individual");
     // ---- for every individual:
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
@@ -407,7 +408,12 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, crosstype);
-
+  for (int j=0; j<(*Nmark); j++) {
+    for (int i=0; i<(*Nind); i++) {
+    Rprintf("%c ",markers[j][i]);
+  }
+  Rprintf("\n");
+  }
   info("Filling the chromosome matrix");
 
   for (int i=0; i<(*Nmark); i++) {
