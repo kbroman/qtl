@@ -329,7 +329,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CRIL:
       if (markertype==MH) {
-        fatal("Strange: encountered heterozygous genotype in RIL");
+        //info("Strange: encountered heterozygous genotype in RIL");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MBB)) {
@@ -354,7 +354,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CBC:
       if (markertype==MBB) {
-        fatal("Strange: encountered BB genotype in BC");
+        //info("Strange: encountered BB genotype in BC");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MH)) {
