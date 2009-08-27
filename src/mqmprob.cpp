@@ -120,7 +120,7 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.25;
       default:
-        info("Strange: Probability requested for invalid markertype: %c",markertype);
+        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
         return 0.0;
       }
     case CRIL:
@@ -132,7 +132,7 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.5;
       default:
-        info("Strange: Probability requested for invalid markertype: %c",markertype);
+        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
         return 0.0;
       }
     case CBC:
@@ -144,7 +144,7 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.0;
       default:
-        info("Strange: Probability requested for invalid markertype: %c",markertype);
+        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
         return 0.0;
       }
       //return (markertype==MH ? 0.5 : 0.5);
