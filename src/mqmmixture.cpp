@@ -365,7 +365,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     }
   }
   for (i=0; i<Nind; i++){
-    //Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
+    Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
   }
   Free(Fy);
   Free(Ploci);
