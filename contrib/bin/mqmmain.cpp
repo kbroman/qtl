@@ -451,7 +451,7 @@ int main(int argc,char *argv[]) {
     ivector new_ind;
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verbose);
+    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     if (verbose) Rprintf("Settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
@@ -460,14 +460,19 @@ int main(int argc,char *argv[]) {
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-    
+    //for (int i=0; i < augmentednind; i++) {
+    //  if(verbose) Rprintf("Indlist:%d,%d\n",i,INDlist[i]);
+    //}
+    //for (int i=0; i < augmentednind; i++) {
+    //  if(verbose) Rprintf("traitval:%d,%f\n",i,pheno_value[phenotype][i]);
+    //}       
     // Uncomment to inspect the augmented dataset
     for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-      for (int i=0; i < augmentednind; i++) {
+      for (int i=0; i < mqmalgorithmsettings.nind; i++) {
         validate_markertype(crosstype,markers[m][i]);
-        if(verbose) Rprintf("%c ",markers[m][i]);
+    //    if(verbose) Rprintf("%c ",markers[m][i]);
       }
-      if(verbose) Rprintf("\n");
+    //  if(verbose) Rprintf("\n");
     }
     
     //Missing values create an augmented set,
