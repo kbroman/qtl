@@ -193,7 +193,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         for (i=0; i<Naug; i++) {
-          calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
+          calc_i = prob(loci, r, i, j, loci[j+1][i], CF2, 0);
           Ploci[i]*= calc_i;
         }
       }
