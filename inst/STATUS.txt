@@ -17,13 +17,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.13, 8/25/2009:
+Version 1.13, 9/1/2009:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Revised scanone for multiple phenotypes with missing data so that,
+  with method="hk" or method="imp", the phenotypes are grouped into
+  batches with matching patterns of missing data, rather than just
+  doing each one at a time.
 
   Fixed a bug in switch.order; results of est.rf were getting messed
   up.
