@@ -167,7 +167,7 @@ effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pool
 expandf2covar(thecovar)
 find.pseudomarkerpos(cross, marker, where=c("draws", "prob"))
 fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
-             dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr)
+             dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr, sexpgm)
 fitstahl.estp(cross, error.prob=0.0001, m=0, tol=1e-4, maxit=4000)
 fitstahl.estp.sub(p, cross, error.prob=0.0001, m=0, thetol=1e-4, maxit=4000)
 fitstahl.este(cross, m=0, p=0, tol=1e-4, maxit=4000)

@@ -10,13 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Revise stepwiseqtl to give information on the locations of QTL in
-  the verbose output.
-
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
-
-o Fix bug regarding X chromosome in fitqtl.
 
 o Analysis of binary traits by "hk" in scanone/two.
 

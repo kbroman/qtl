@@ -39,6 +39,15 @@ Minor changes:
   Revised summary.map to deal with the case of a single marker on a
   chromosome.  
 
+  Fixed a bug in fitqtl regarding the case of a locus on the
+  chromosome...the cited LOD scores for X chromosome loci were not
+  right.  Had to make slight modifications to scanqtl, addqtl,
+  addpair, addint, addcovarint, refineqtl.
+
+  Revised makeqtl, addtoqtl, dropfromqtl, replaceqtl, and reorderqtl
+  so that qtl objects now include a "chrtype" component, indicating
+  whether QTL are autosomal or for the X chromosome.
+
   Fixed a bug in reorderqtl; the n.gen component was not getting
   fixed.
 
