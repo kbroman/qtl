@@ -112,16 +112,39 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
   //validate_markertype(crosstype,markertype);
   switch (crosstype) {
     case CF2:
-      return (markertype==MH ? 0.5 : 0.25);
-    case CRIL:
-      return 0.5;
-    case CBC:
       switch (markertype) {
+      case MAA:
+        return 0.25;
       case MH:
         return 0.5;
+      case MBB:
+        return 0.25;
+      default:
+        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
+        return 0.0;
+      }
+    case CRIL:
+      switch (markertype) {
       case MAA:
         return 0.5;
+      case MH:
+        return 0.0;
+      case MBB:
+        return 0.5;
       default:
+        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
+        return 0.0;
+      }
+    case CBC:
+      switch (markertype) {
+      case MAA:
+        return 0.5;
+      case MH:
+        return 0.5;
+      case MBB:
+        return 0.0;
+      default:
+        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
         return 0.0;
       }
       //return (markertype==MH ? 0.5 : 0.5);
@@ -142,8 +165,8 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
 
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const MQMCrossType crosstype, const int ADJ) {
+  
   char compareto;
-
   const double r = rs[j+ADJ];
   const double r2 = r*r;
   const double rr = 1.0-r; // right side recombination frequency
@@ -162,7 +185,7 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   //validate_markertype(crosstype,markertype);
 
   // number of recombinations recombinations
-  const double recombinations = fabs((double)markertype-(double)compareto);
+  const int recombinations = fabs((double)markertype-(double)compareto);
   double prob = rr;  // default to no recombinations (1-r)
   switch (crosstype) {
     case CF2:
@@ -181,8 +204,19 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
       }
       break;
     case CRIL:
+      if(compareto==MH) prob = 0.0;
+      if (recombinations){
+        prob = r;
+      }else{
+        prob = rr;
+      }      
     case CBC:
-      if (recombinations) prob = r;
+      if(compareto==MBB) prob = 0.0;
+      if (recombinations){
+        prob = r;
+      }else{
+        prob = rr;
+      }
       break;
     default:
       fatal("Strange: unknown crosstype in prob");
@@ -214,7 +248,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   //   AA        AA      0     0      1-r
   //   AA        BB     -2     2       r
   //   BB        BB      0     0      1-r
-  const double recombinations = fabs(markertype-rightmarker);
+  const int recombinations = fabs(markertype-rightmarker);
   switch (crosstype) {
     case CF2:
       if ((rightmarker==MAA)||(rightmarker==MH)||(rightmarker==MBB)) {
@@ -295,7 +329,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CRIL:
       if (markertype==MH) {
-        fatal("Strange: encountered heterozygous genotype in RIL");
+        //info("Strange: encountered heterozygous genotype in RIL");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MBB)) {
@@ -320,7 +354,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       break;
     case CBC:
       if (markertype==MBB) {
-        fatal("Strange: encountered BB genotype in BC");
+        //info("Strange: encountered BB genotype in BC");
         return 0.0;
       }
       if ((rightmarker==MAA)||(rightmarker==MH)) {
@@ -331,6 +365,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         }
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
+        //[Danny] Code is reached in MQMaugment, We could have an unknown or semi known next marker in the cross e.g.  A A A H U U A A
         // Both markers could have recombinated which has a very low chance
         warning("Unreachable code");
         if (markertype==MAA) {
