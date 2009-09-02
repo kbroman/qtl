@@ -76,6 +76,7 @@ geno.table              Create table of genotype distributions
 hyper                   Data on hypertension
 jittermap               Jitter marker positions in a genetic map
 listeria                Data on Listeria monocytogenes susceptibility
+locateXO                Estimate locations of crossovers
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map

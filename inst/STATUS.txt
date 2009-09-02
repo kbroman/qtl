@@ -17,27 +17,13 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.13, 9/1/2009:
+Version 1.13, 9/2/2009:
 
 Major changes:
 
   None.
 
 Minor changes:
-
-  Revised scanone and scantwo for multiple phenotypes with missing
-  data so that, with method="hk" or method="imp", the phenotypes are
-  grouped into batches with matching patterns of missing data, rather
-  than just doing each one at a time.
-
-  Revised scantwo so that phenotype names are in dimnames of the lod
-  component of the output.
-
-  Added a function, c.scantwo (aka cbind.scantwo), for concatenating
-  multiple scantwo results.
-
-  Revised summary.map to deal with the case of a single marker on a
-  chromosome.  
 
   Fixed a bug in fitqtl regarding the case of a locus on the
   chromosome...the cited LOD scores for X chromosome loci were not
@@ -47,6 +33,23 @@ Minor changes:
   Revised makeqtl, addtoqtl, dropfromqtl, replaceqtl, and reorderqtl
   so that qtl objects now include a "chrtype" component, indicating
   whether QTL are autosomal or for the X chromosome.
+
+  Revised scanone and scantwo for multiple phenotypes with missing
+  data so that, with method="hk" or method="imp", the phenotypes are
+  grouped into batches with matching patterns of missing data, rather
+  than just doing each one at a time.
+
+  Added a function locateXO (formerly the internal function locate.xo)
+  to estimate the locations of crossovers on a given chromosome.
+
+  Added a function, c.scantwo (aka cbind.scantwo), for concatenating
+  multiple scantwo results.
+
+  Revised summary.map to deal with the case of a single marker on a
+  chromosome.  
+
+  Revised scantwo so that phenotype names are in dimnames of the lod
+  component of the output.
 
   Fixed a bug in reorderqtl; the n.gen component was not getting
   fixed.

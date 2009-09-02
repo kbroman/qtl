@@ -46,7 +46,6 @@
 \alias{interpmap4scantwo}
 \alias{LikePheVector}
 \alias{locatemarker}
-\alias{locate.xo}
 \alias{makeSSmap}
 \alias{markerforwsel}
 \alias{markerforwself2}
@@ -195,7 +194,6 @@ interpmap(oldmap, newmap)
 interpmap4scantwo(output, newmap)
 LikePheVector(pheno, n.ind, n.phe)
 locatemarker(map, pos, chr, flag)
-locate.xo(cross)
 makeSSmap(cross)
 markerloglik(cross, marker, error.prob=0.0001)
 matchchr(selection, thechr)

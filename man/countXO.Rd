@@ -44,6 +44,6 @@ data(hyper)
 plot(countXO(hyper))
 }
 
-\seealso{ \code{\link[qtl]{ripple}} }
+\seealso{ \code{\link[qtl]{ripple}}, \code{\link[qtl]{locateXO}} }
 
 \keyword{utilities}

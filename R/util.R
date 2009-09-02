@@ -34,7 +34,7 @@
 #           print.summary.map, find.pheno,
 #           convert, convert.scanone, convert.scantwo
 #           find.flanking, strip.partials, comparegeno
-#           qtlversion, locate.xo, jittermap, getid,
+#           qtlversion, locateXO, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
@@ -2719,22 +2719,28 @@ function()
 
 ######################################################################
 #
-# locate.xo
+# locateXO
 #
 # Locate crossovers on a single chromosome in each individual
 # Look at just the first chromosome
 # 
 ######################################################################
 
-locate.xo <-
-function(cross)
+locateXO <-
+function(cross, chr)
 {
+  if(!missing(chr)) {
+    cross <- subset(cross, chr=chr)
+    if(nchr(cross) != 1)
+      warning("locateXO works on just one chr; considering chr ", names(cross$geno)[1])
+  }
+
   geno <- cross$geno[[1]]$data
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
 
   if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh")
-    stop("locate.xo only working for backcross, intercross or RI strains.")
+    stop("locateXO only working for backcross, intercross or RI strains.")
 
   map <- cross$geno[[1]]$map
   if(is.matrix(map)) map <- map[1,]
