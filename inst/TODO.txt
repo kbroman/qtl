@@ -10,25 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In orderMarkers, should re-run est.rf or strip off the results.
-
 o Revise stepwiseqtl to give information on the locations of QTL in
   the verbose output.
 
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
 
-o reorderqtl has a bug regarding n.gen not being fixed.
-
-o Apparent bug in scantwo (with step=0):
-
-  Error in as.data.frame.default(map) : 
-    cannot coerce class "A" into a data.frame
-
-o In summary.map if a chromosome has just one marker, there is an
-  unnecessary warning message.  ave.spacing and max.spacing should be
-  NA. 
- 
 o Fix bug regarding X chromosome in fitqtl.
 
 o Analysis of binary traits by "hk" in scanone/two.

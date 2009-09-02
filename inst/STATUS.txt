@@ -36,6 +36,12 @@ Minor changes:
   Added a function, c.scantwo (aka cbind.scantwo), for concatenating
   multiple scantwo results.
 
+  Revised summary.map to deal with the case of a single marker on a
+  chromosome.  
+
+  Fixed a bug in reorderqtl; the n.gen component was not getting
+  fixed.
+
   Fixed a bug in switch.order; results of est.rf were getting messed
   up.
 

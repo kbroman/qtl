@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2009
+# last modified Sep, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2437,17 +2437,17 @@ function(object, ...)
 
     len.f <- sapply(fmap,function(a) diff(range(a)))
     len.m <- sapply(mmap,function(a) diff(range(a)))
-    avesp.f <- sapply(fmap,function(a) mean(diff(a)))
-    avesp.m <- sapply(mmap,function(a) mean(diff(a)))
-    maxsp.f <- sapply(fmap,function(a) max(diff(a)))
-    maxsp.m <- sapply(mmap,function(a) max(diff(a)))
+    avesp.f <- sapply(fmap,function(a) {if(length(a)<2) return(NA); mean(diff(a))})
+    avesp.m <- sapply(mmap,function(a) {if(length(a)<2) return(NA); mean(diff(a))})
+    maxsp.f <- sapply(fmap,function(a) {if(length(a)<2) return(NA); max(diff(a))})
+    maxsp.m <- sapply(mmap,function(a) {if(length(a)<2) return(NA); max(diff(a))})
     totlen.f <- sum(len.f)
     totlen.m <- sum(len.m)
 
-    tot.avesp.f <- mean(unlist(lapply(fmap,diff)))
-    tot.avesp.m <- mean(unlist(lapply(mmap,diff)))
-    tot.maxsp.f <- max(maxsp.f)
-    tot.maxsp.m <- max(maxsp.m)
+    tot.avesp.f <- mean(unlist(lapply(fmap,diff)), na.rm=TRUE)
+    tot.avesp.m <- mean(unlist(lapply(mmap,diff)), na.rm=TRUE)
+    tot.maxsp.f <- max(maxsp.f,na.rm=TRUE)
+    tot.maxsp.m <- max(maxsp.m,na.rm=TRUE)
                     
     output <- rbind(cbind(n.mar,len.f,len.m,avesp.f,avesp.m, maxsp.f, maxsp.m),
                     c(tot.mar,totlen.f,totlen.m,tot.avesp.f,tot.avesp.m,
@@ -2464,11 +2464,11 @@ function(object, ...)
     tot.mar <- sum(n.mar)
 
     len <- sapply(map,function(a) diff(range(a)))
-    avesp <- sapply(map,function(a) mean(diff(a)))
-    maxsp <- sapply(map,function(a) max(diff(a)))
+    avesp <- sapply(map,function(a) {if(length(a)<2) return(NA); mean(diff(a))})
+    maxsp <- sapply(map,function(a) {if(length(a)<2) return(NA); max(diff(a))})
     totlen <- sum(len)
-    tot.avesp <- mean(unlist(lapply(map,diff)))
-    tot.maxsp <- max(maxsp)
+    tot.avesp <- mean(unlist(lapply(map,diff)), na.rm=TRUE)
+    tot.maxsp <- max(maxsp, na.rm=TRUE)
                     
     output <- rbind(cbind(n.mar,len,avesp, maxsp),
                     c(tot.mar,totlen,tot.avesp, tot.maxsp))

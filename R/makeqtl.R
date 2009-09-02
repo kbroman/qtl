@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Feb, 2009
+# last modified Sep, 2009
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -617,7 +617,8 @@ function(qtl, neworder)
   qtl$name <- qtl$name[neworder]
   qtl$chr <- qtl$chr[neworder]
   qtl$pos <- qtl$pos[neworder]
-  
+  qtl$n.gen <- qtl$n.gen[neworder]
+
   attr(qtl, "formula") <- NULL
   attr(qtl, "pLOD") <- NULL
 
