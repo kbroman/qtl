@@ -193,7 +193,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         for (i=0; i<Naug; i++) {
-          calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
+          calc_i = prob(loci, r, i, j, loci[j+1][i], CF2, 0);
           Ploci[i]*= calc_i;
         }
       }
@@ -364,9 +364,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
     }
   }
-  //for (i=0; i<Nind; i++){
-  //    Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
-  //}
+  for (i=0; i<Nind; i++){
+    //Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
+  }
   Free(Fy);
   Free(Ploci);
   Free(indweight);

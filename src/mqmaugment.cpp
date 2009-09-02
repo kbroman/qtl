@@ -57,7 +57,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
             const double neglect, const MQMCrossType crosstype, const int verbose) {
-  int retvalue = 0;
+  int retvalue = 1;     //[Danny] Assume everything will go right, (it never returned a 1 OK, initialization to 0 and return
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
@@ -79,13 +79,14 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   prob0right, prob1right, prob2right;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
-  verbose("Crosstype determined by the algorithm:%c:", crosstype);
-  verbose("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f", maxNaug, imaxNaug, neglect);
+  if (verbose) Rprintf("Crosstype determined by the algorithm:%c:", crosstype);
+  if (verbose) Rprintf("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;
   int newNind = nind0;
   int previaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
+    if(verbose) Rprintf("Starting individual");
     // ---- for every individual:
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
@@ -93,6 +94,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
     newy[iaug]    = y[i];              // cvariance (phenotype)
     newprob[iaug] = 1.0;
     double probmax = 1.0;
+    if (verbose) Rprintf("individual:%d,dropped:%d\n",i,dropped);
     for (int j=0; j<Nmark; j++) 
       newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
     for (int j=0; j<Nmark; j++) {
@@ -406,7 +408,12 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, crosstype);
-
+  for (int j=0; j<(*Nmark); j++) {
+    for (int i=0; i<(*Nind); i++) {
+    Rprintf("%c ",markers[j][i]);
+  }
+  Rprintf("\n");
+  }
   info("Filling the chromosome matrix");
 
   for (int i=0; i<(*Nmark); i++) {
@@ -452,7 +459,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(chr);
     if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", prior);
-      Rprintf("# Unique selected individuals:%d\n", nind0);
+      Rprintf("# Unique selected individuals:%d\n", *Nind);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
       info("Data augmentation succesfull");

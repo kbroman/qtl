@@ -436,7 +436,14 @@ int main(int argc,char *argv[]) {
 
     int nind = mqmalgorithmsettings.nind;
     int augmentednind = mqmalgorithmsettings.nind;
-
+    // Uncomment to inspect the augmented dataset
+    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+    //    if(verbose) Rprintf("%c ",markers[m][i]);
+    //  }
+    //  if(verbose) Rprintf("\n");
+    //}
+    
     //<dataaugmentation>
     //Variables for the returned augmented markers,phenotype,individualmapping
     cmatrix newmarkerset;
@@ -444,7 +451,7 @@ int main(int argc,char *argv[]) {
     ivector new_ind;
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, verbose);
+    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     if (verbose) Rprintf("Settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
@@ -453,7 +460,12 @@ int main(int argc,char *argv[]) {
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-    
+    //for (int i=0; i < augmentednind; i++) {
+    //  if(verbose) Rprintf("Indlist:%d,%d\n",i,INDlist[i]);
+    //}
+    //for (int i=0; i < augmentednind; i++) {
+    //  if(verbose) Rprintf("traitval:%d,%f\n",i,pheno_value[phenotype][i]);
+    //}       
     // Uncomment to inspect the augmented dataset
     for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
       for (int i=0; i < mqmalgorithmsettings.nind; i++) {
@@ -464,7 +476,7 @@ int main(int argc,char *argv[]) {
     }
     
     //Missing values create an augmented set,
-    analyseF2(mqmalgorithmsettings.nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+    analyseF2(nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verbose);
 
     //Write final QTL profile (screen and file)
