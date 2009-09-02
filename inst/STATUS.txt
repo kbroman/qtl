@@ -25,10 +25,16 @@ Major changes:
 
 Minor changes:
 
-  Revised scanone for multiple phenotypes with missing data so that,
-  with method="hk" or method="imp", the phenotypes are grouped into
-  batches with matching patterns of missing data, rather than just
-  doing each one at a time.
+  Revised scanone and scantwo for multiple phenotypes with missing
+  data so that, with method="hk" or method="imp", the phenotypes are
+  grouped into batches with matching patterns of missing data, rather
+  than just doing each one at a time.
+
+  Revised scantwo so that phenotype names are in dimnames of the lod
+  component of the output.
+
+  Added a function, c.scantwo (aka cbind.scantwo), for concatenating
+  multiple scantwo results.
 
   Fixed a bug in switch.order; results of est.rf were getting messed
   up.

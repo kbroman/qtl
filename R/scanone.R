@@ -123,7 +123,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 
   # use all observations; not in a permutation test; different phenotypes have different sets of missing values
   #   -> want to do in batches, but need to define batches by the pattern of missing data
-  if(n.perm == 0 && use=="all.obs" && length(pheno.col) > 1 && (method=="hk" || method=="imp")) { 
+  if(n.perm <= 0 && use=="all.obs" && length(pheno.col) > 1 && (method=="hk" || method=="imp")) { 
     # drop individuals with missing covariates
     cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
     temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,

@@ -21,6 +21,7 @@ bristleX                Data on bristle number in Drosophila
 c.cross                 Combine data for QTL experiments
 c.scanone               Combine columns from multiple scanone results
 c.scanoneperm           Combine data from scanone permutations
+c.scantwo               Combine columns from multiple scantwo results
 c.scantwoperm           Combine data from scantwo permutations
 calc.errorlod           Identify likely genotyping errors
 calc.genoprob           Calculate conditional genotype probabilities
