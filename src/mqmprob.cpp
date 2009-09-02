@@ -155,6 +155,7 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
   return NAN;
 }
 
+
 /*
  * Return probability comparing loci[j][i] versus loci[j+1][i],
  * OR if markertype is set, loci[j][i] versus comparemarkertype. Probability
@@ -204,19 +205,16 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
       }
       break;
     case CRIL:
-      if(compareto==MH) prob = 0.0;
-      if (recombinations){
-        prob = r;
-      }else{
-        prob = rr;
-      }      
-    case CBC:
-      if(compareto==MBB) prob = 0.0;
-      if (recombinations){
-        prob = r;
-      }else{
-        prob = rr;
+      if (compareto==MH) {
+        return 0.0; // No chance finding a 1 or H in an RIL
       }
+      if (recombinations) prob = r;
+      break;
+    case CBC:
+      if (compareto==MBB) {
+        return 0.0; // No chance finding a 2/BB in a BC
+      }
+      if (recombinations) prob = r;
       break;
     default:
       fatal("Strange: unknown crosstype in prob");
