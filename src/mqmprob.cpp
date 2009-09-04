@@ -339,7 +339,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       } else {
         // [pjotr:] I think this code is never reached (FIXME)
         // Both markers could have recombinated which has a very low chance
-        warning("Unreachable code");
+        info("Unreachable code");
         if (markertype==MAA) {
           prob0= rr;
           prob2= r;
@@ -365,7 +365,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
         // [pjotr:] I think this code is never reached (FIXME)
         //[Danny] Code is reached in MQMaugment, We could have an unknown or semi known next marker in the cross e.g.  A A A H U U A A
         // Both markers could have recombinated which has a very low chance
-        warning("Unreachable code");
+        info("Unreachable code");
         if (markertype==MAA) {
           prob0= rr;
           prob2= r;
@@ -377,7 +377,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       }
       break;
     default:
-      warning("Strange: unknown crosstype in start_prob");
+      info("Strange: unknown crosstype in start_prob");
   }
   return 1.0;
 }
