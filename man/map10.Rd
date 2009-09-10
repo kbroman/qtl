@@ -25,7 +25,7 @@
   mycross <- sim.cross(map10, type="f2", n.ind=100)
 }    
 
-\seealso{ \code{\link[qtl]{sim.map}}, \code{\link[qtl]{plot.map}},
-  \code{\link[qtl]{pull.map}} }
+\seealso{ \code{\link{sim.map}}, \code{\link{plot.map}},
+  \code{\link{pull.map}} }
 
 \keyword{datasets}

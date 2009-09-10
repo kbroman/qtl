@@ -18,7 +18,7 @@ orderMarkers(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
    This should be a vector of character strings referring to chromosomes
    by name; numeric values are converted to strings.  Refer to
@@ -30,7 +30,7 @@ orderMarkers(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
    orders, but will require a considerable increase in computation
    time.}
  \item{use.ripple}{If TRUE, the initial order is refined by a call to
- the function \code{\link[qtl]{ripple}}.}
+ the function \code{\link{ripple}}.}
  \item{error.prob}{Assumed genotyping error rate used in the final
    estimated map.}
  \item{map.function}{Indicates the map function to use in the final
@@ -63,11 +63,11 @@ orderMarkers(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
   single location (among those positions) is chosen at random.
 
   If \code{use.ripple=TRUE}, the final order is passed to
-  \code{\link[qtl]{ripple}} with \code{method="countxo"} to refine the
+  \code{\link{ripple}} with \code{method="countxo"} to refine the
   marker order.  If \code{use.ripple=TRUE} and the number of markers on
   a chromosome is \eqn{\le}{<=} the argument \code{window}, the initial
   greedy algorithm is skipped and all possible marker orders are
-  compared via \code{\link[qtl]{ripple}}.
+  compared via \code{\link{ripple}}.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
@@ -79,7 +79,7 @@ revcross <- orderMarkers(listeria, chr=3, use.ripple=FALSE)
 pull.map(revcross, chr=3)
 }
 
-\seealso{ \code{\link[qtl]{formLinkageGroups}},
-  \code{\link[qtl]{ripple}}, \code{\link[qtl]{est.map}}, \code{\link[qtl]{countXO}} }
+\seealso{ \code{\link{formLinkageGroups}},
+  \code{\link{ripple}}, \code{\link{est.map}}, \code{\link{countXO}} }
 
 \keyword{utilities}

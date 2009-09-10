@@ -17,7 +17,7 @@ calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{step}{Maximum distance (in cM) between positions at which the
    genotype probabilities are calculated, though for \code{step = 0},
    probabilities are calculated only at the marker locations.}
@@ -68,7 +68,7 @@ calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001,
   cross.  Attributes \code{"error.prob"}, \code{"step"},
   \code{"off.end"}, and \code{"map.function"} are set to the values of
   the corresponding arguments, for later reference (especially by the
-  function \code{\link[qtl]{calc.errorlod}}).
+  function \code{\link{calc.errorlod}}).
 }
 
 \references{
@@ -92,7 +92,7 @@ data(fake.bc)
 }fake.bc <- calc.genoprob(fake.bc, step=0, off.end=0, err=0.01)
 }
 
-\seealso{ \code{\link[qtl]{sim.geno}}, \code{\link[qtl]{argmax.geno}},
-         \code{\link[qtl]{calc.errorlod}} }
+\seealso{ \code{\link{sim.geno}}, \code{\link{argmax.geno}},
+         \code{\link{calc.errorlod}} }
 
 \keyword{utilities}

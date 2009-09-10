@@ -5,14 +5,14 @@
 
 \description{
   Derive penalties for the penalized LOD scores (used by
-  \code{\link[qtl]{stepwiseqtl}}) on the basis of permutation results
-  from a two-dimensional, two-QTL scan (obtained by \code{\link[qtl]{scantwo}}).
+  \code{\link{stepwiseqtl}}) on the basis of permutation results
+  from a two-dimensional, two-QTL scan (obtained by \code{\link{scantwo}}).
 }
 
 \usage{calc.penalties(perms, alpha=0.05, lodcolumn)}
 
 \arguments{
- \item{perms}{Permutation results from \code{\link[qtl]{scantwo}}.}
+ \item{perms}{Permutation results from \code{\link{scantwo}}.}
  \item{alpha}{Significance level.}
  \item{lodcolumn}{If the scantwo permutation results contain LOD scores for
     multiple phenotypes, this argument indicates which to use in the
@@ -21,23 +21,23 @@
 }
 
 \details{
-  Thresholds derived from \code{\link[qtl]{scantwo}} permutations (that
+  Thresholds derived from \code{\link{scantwo}} permutations (that
   is, for a two-dimensional, two-QTL genome scan) are used to calculate
   penalties on main effects and interactions.  
 
   The main effect penalty is the 1-\code{alpha} quantile of the null
   distribution of the genome-wide maximum LOD score from a single-QTL
-  genome scan (as with \code{\link[qtl]{scanone}}).
+  genome scan (as with \code{\link{scanone}}).
 
   The "heavy" interaction penalty is the 1-\code{alpha} quantile of
   the null distribution of the maximum interaction LOD score (that is,
   the \eqn{\log_{10}}{log10} likelihood ratio comparing the best model
   with two interacting QTL to the best model with two additive QTL) from
   a two-dimensional, two-QTL genome scan (as with
-  \code{\link[qtl]{scantwo}}).
+  \code{\link{scantwo}}).
 
   The "light" interaction penality is the difference between the
-  \code{"fv1"} threshold from the \code{\link[qtl]{scantwo}}
+  \code{"fv1"} threshold from the \code{\link{scantwo}}
   permutations (that is, the 1-\code{alpha} quantile of the LOD score
   comparing the best model with two interacting QTL to the best
   single-QTL model) and the main effect penalty.
@@ -74,6 +74,6 @@ calc.penalties(permo.2dim)
   epistasis. \emph{Genetics}, to appear.
 }
 
-\seealso{ \code{\link[qtl]{scantwo}}, \code{\link[qtl]{stepwiseqtl}} }
+\seealso{ \code{\link{scantwo}}, \code{\link{stepwiseqtl}} }
 
 \keyword{utilities}

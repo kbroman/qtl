@@ -13,7 +13,7 @@
 }
 
 \arguments{
- \item{object}{Output from the function \code{\link[qtl]{scanone}}, for
+ \item{object}{Output from the function \code{\link{scanone}}, for
    R/qtl version 0.97 and earlier.}
 }
 
@@ -33,6 +33,6 @@
 \dontrun{out.new <- convert(out.old)}
 }
 
-\seealso{ \code{\link[qtl]{scanone}}, \code{\link[qtl]{convert.scantwo}} }
+\seealso{ \code{\link{scanone}}, \code{\link{convert.scantwo}} }
 
 \keyword{manip}

@@ -14,7 +14,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"scanoneboot"}, as output by
-    \code{\link[qtl]{scanoneboot}}.}
+    \code{\link{scanoneboot}}.}
   \item{\dots}{Passed to the function \code{\link[graphics]{hist}} when it
     is called.}
 }
@@ -22,7 +22,7 @@
 
 \details{
   The function plots a histogram of the bootstrap results obtained by
-  \code{\link[qtl]{scanoneboot}}.  Genetic marker locations are
+  \code{\link{scanoneboot}}.  Genetic marker locations are
   displayed by vertical lines at the bottom of the plot.
 }
 
@@ -37,8 +37,8 @@ summary(out.boot)
 plot(out.boot)
 }
 
-\seealso{ \code{\link[qtl]{scanone}},
-  \code{\link[qtl]{summary.scanoneboot}} } 
+\seealso{ \code{\link{scanone}},
+  \code{\link{summary.scanoneboot}} } 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

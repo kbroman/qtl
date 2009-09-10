@@ -17,7 +17,7 @@ argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{step}{Maximum distance (in cM) between positions at which the
    genotypes are reconstructed, though for \code{step=0}, genotypes
    are reconstructed only at the marker locations.}
@@ -92,7 +92,7 @@ data(fake.f2)
 }
   
 
-\seealso{ \code{\link[qtl]{sim.geno}}, \code{\link[qtl]{calc.genoprob}},
-\code{\link[qtl]{fill.geno}} }
+\seealso{ \code{\link{sim.geno}}, \code{\link{calc.genoprob}},
+\code{\link{fill.geno}} }
 
 \keyword{utilities}

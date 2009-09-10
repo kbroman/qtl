@@ -22,7 +22,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes for which LOD
    scores should be calculated.  This should be a vector of character
    strings referring to chromosomes by name; numeric values are
@@ -56,11 +56,11 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    including those missing some phenotypes, or just those individuals
    that have data on all selected phenotypes.}
  \item{incl.markers}{If FALSE, do calculations only at points on an
-   evenly spaced grid.  If \code{\link[qtl]{calc.genoprob}} or
-   \code{\link[qtl]{sim.geno}} were run with
+   evenly spaced grid.  If \code{\link{calc.genoprob}} or
+   \code{\link{sim.geno}} were run with
    \code{stepwidth="variable"}, we force \code{incl.markers=TRUE}.}
  \item{clean.output}{If TRUE, clean the output with
-   \code{\link[qtl]{clean.scantwo}}, replacing LOD scores for pairs of
+   \code{\link{clean.scantwo}}, replacing LOD scores for pairs of
    positions that are not well separated with 0.  In permutations, this
    will be done for each permutation replicate.  This can be important
    for the case of \code{method="em"}, as there can be difficulty with
@@ -98,8 +98,8 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
 \details{
   Standard interval mapping (\code{method="em"}) and Haley-Knott
   regression (\code{method="hk"}) require that multipoint genotype probabilities are
-  first calculated using \code{\link[qtl]{calc.genoprob}}.  The
-  imputation method uses the results of \code{\link[qtl]{sim.geno}}. 
+  first calculated using \code{\link{calc.genoprob}}.  The
+  imputation method uses the results of \code{\link{sim.geno}}. 
 
   The method \code{"em"} is standard interval mapping by the EM algorithm
   (Dempster et al. 1977; Lander and Botstein 1989).  Marker regression
@@ -136,12 +136,12 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
 \section{X chromosome}{
 The X chromosome must be treated specially in QTL mapping.
 
-As in \code{\link[qtl]{scanone}}, if both males and females are
+As in \code{\link{scanone}}, if both males and females are
 included, male hemizygotes are allowed to be different from female
 homozygotes, and the null hypothesis must be changed in order to ensure
 that sex- or pgm-differences in the phenotype do not results in spurious
 linkage to the X chromosome.  (See the help file for
-\code{\link[qtl]{scanone}}.) 
+\code{\link{scanone}}.) 
 }
 
 \value{
@@ -150,14 +150,14 @@ linkage to the X chromosome.  (See the help file for
   is a matrix of dimension [tot.pos x tot.pos]; the upper triangle
   contains the LOD scores for the additive model, and the lower triangle
   contains the LOD scores for the full model.  The diagonal contains the
-  results of \code{\link[qtl]{scanone}}. The second component of the
+  results of \code{\link{scanone}}. The second component of the
   output is a data.frame indicating the locations at which the two-QTL
   LOD scores were calculated.  The first column is the chromosome
   identifier, the second column is the position in cM, the third column
   is a 1/0 indicator for ease in later pulling out only the equally
   spaced positions, and the fourth column indicates whether the position
   is on the X chromosome or not.  The final component is a version of
-  the results of \code{\link[qtl]{scanone}} including sex and/or cross
+  the results of \code{\link{scanone}} including sex and/or cross
   direction as additive covariates, which is needed for a proper
   calculation of conditional LOD scores. 
 
@@ -175,7 +175,7 @@ linkage to the X chromosome.  (See the help file for
   and the maximum single-QTL LOD for those two chromosomes, and then
   maximize this across chromosome pairs.  Finally, the maximum
   single-QTL LOD score (that is, from a single-QTL scan).  The latter is
-  not used in \code{\link[qtl]{summary.scantwo}}, but does get
+  not used in \code{\link{summary.scantwo}}, but does get
   calculated at each permutation, so we include it for the sake of
   completeness. 
 }
@@ -236,9 +236,9 @@ out <- scantwo(fake.bc, method="hk", pheno.col=1,
 plot(out)
 }
 
-\seealso{ \code{\link[qtl]{plot.scantwo}}, \code{\link[qtl]{summary.scantwo}},
-  \code{\link[qtl]{scanone}}, \code{\link[qtl]{max.scantwo}},
-  \code{\link[qtl]{summary.scantwoperm}},
-  \code{\link[qtl]{c.scantwoperm}} }
+\seealso{ \code{\link{plot.scantwo}}, \code{\link{summary.scantwo}},
+  \code{\link{scanone}}, \code{\link{max.scantwo}},
+  \code{\link{summary.scantwoperm}},
+  \code{\link{c.scantwoperm}} }
 
 \keyword{models}

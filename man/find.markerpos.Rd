@@ -11,7 +11,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{marker}{A vector of marker names.}
 }
 
@@ -29,7 +29,7 @@ find.markerpos(hyper, "D4Mit164")
 find.markerpos(hyper, c("D4Mit164", "D1Mit94"))
 }
 
-\seealso{ \code{\link[qtl]{find.flanking}}, \code{\link[qtl]{find.marker}},
-\code{\link[qtl]{find.pseudomarker}} }
+\seealso{ \code{\link{find.flanking}}, \code{\link{find.marker}},
+\code{\link{find.pseudomarker}} }
 
 \keyword{utilities}

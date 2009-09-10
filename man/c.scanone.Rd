@@ -6,7 +6,7 @@
 
 \description{
   Concatenate the columns from different runs of
-  \code{\link[qtl]{scanone}}.
+  \code{\link{scanone}}.
 }
 
 \usage{
@@ -16,10 +16,10 @@
 
 \arguments{
  \item{\dots}{A set of objects of class \code{scanone}. These are
-   the results from  \code{\link[qtl]{scanone}} (with \code{n.perm=0}),
+   the results from  \code{\link{scanone}} (with \code{n.perm=0}),
    generally run with different phenotypes or methods.  All must 
    conform with each other, meaning that
-   \code{\link[qtl]{calc.genoprob}} and/or \code{\link[qtl]{sim.geno}}
+   \code{\link{calc.genoprob}} and/or \code{\link{sim.geno}}
    were run with the same values for \code{step} and \code{off.end} and
    with data having the same genetic map.}
  \item{labels}{A vector of character strings, of length 1 or of the same
@@ -31,9 +31,9 @@
 
 \details{
   The aim of this function is to concatenate the results from multiple
-  runs \code{\link[qtl]{scanone}}, generally for
+  runs \code{\link{scanone}}, generally for
   different phenotypes and/or methods, to be used in parallel with
-  \code{\link[qtl]{summary.scanone}}. 
+  \code{\link{summary.scanone}}. 
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
@@ -49,7 +49,7 @@ out <- c(out.hk, out.np, labels=c("hk","np"))
 plot(out, lod=1:2, col=c("blue", "red"))
 }
 
-\seealso{ \code{\link[qtl]{summary.scanone}},
-  \code{\link[qtl]{scanone}}, \code{\link[qtl]{cbind.scanoneperm}} } 
+\seealso{ \code{\link{summary.scanone}},
+  \code{\link{scanone}}, \code{\link{cbind.scanoneperm}} } 
 
 \keyword{manip}

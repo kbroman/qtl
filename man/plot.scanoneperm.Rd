@@ -14,7 +14,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"scanoneperm"}, as output by
-    \code{\link[qtl]{scanone}} when \code{n.perm} is specified.}
+    \code{\link{scanone}} when \code{n.perm} is specified.}
   \item{lodcolumn}{This indicates the LOD score column to plot.  This
     should be a single number between 1 and the number of LOD columns in 
     the object input.} 
@@ -25,7 +25,7 @@
 
 \details{
   The function plots a histogram of the permutation results obtained by
-  \code{\link[qtl]{scanone}} when \code{n.perm} is specified. If
+  \code{\link{scanone}} when \code{n.perm} is specified. If
   separate permutations were performed for the autosomes and the X
   chromosome (using \code{perm.Xsp=TRUE}), separate histograms are given.
 }
@@ -38,8 +38,8 @@ operm <- scanone(fake.bc, method="hk", n.perm=100)
 plot(operm)
 }
 
-\seealso{ \code{\link[qtl]{scanone}},
-  \code{\link[qtl]{summary.scanoneperm}} } 
+\seealso{ \code{\link{scanone}},
+  \code{\link{summary.scanoneperm}} } 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

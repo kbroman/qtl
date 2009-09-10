@@ -15,7 +15,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{The chromosome to investigate.  Only one chromosome is
   allowed. (This should be a character string referring to the
   chromosomes by name.)}
@@ -41,7 +41,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
 \details{
   For \code{method="likelihood"}, calculations are done by first
   constructing a matrix of marker orders and then making repeated calls
-  to the R function \code{\link[qtl]{est.map}}.  Of course, it would be
+  to the R function \code{\link{est.map}}.  Of course, it would be
   faster to do everything within C, but this was a lot easier to code.
 
   For \code{method="countxo"}, calculations are done within C.  
@@ -74,7 +74,7 @@ summary(rip2)
 badorder <- switch.order(badorder, 1, rip1[2,])
 }
 
-\seealso{ \code{\link[qtl]{summary.ripple}}, \code{\link[qtl]{switch.order}},
-  \code{\link[qtl]{est.map}}, \code{\link[qtl]{est.rf}} }
+\seealso{ \code{\link{summary.ripple}}, \code{\link{switch.order}},
+  \code{\link{est.map}}, \code{\link{est.rf}} }
 
 \keyword{utilities}

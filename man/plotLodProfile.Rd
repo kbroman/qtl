@@ -4,7 +4,7 @@
 \title{Plot 1-d LOD profiles for a multiple QTL model}
 
 \description{
-  Use the results of \code{\link[qtl]{refineqtl}} to plot
+  Use the results of \code{\link{refineqtl}} to plot
   one-dimensional LOD profiles for each QTL.
 }
 
@@ -17,7 +17,7 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 }			    
 \arguments{
   \item{qtl}{An object of class \code{"qtl"}; must have been produced by
-    \code{\link[qtl]{refineqtl}} using \code{keeplodprofiles=TRUE}.}
+    \code{\link{refineqtl}} using \code{keeplodprofiles=TRUE}.}
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -80,8 +80,8 @@ plotLodProfile(rqtl)
 plot(out, add=TRUE, chr=c(2,5), col="red")
 }
 
-\seealso{ \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{scanqtl}} }
+\seealso{ \code{\link{refineqtl}},
+  \code{\link{makeqtl}}, \code{\link{scanqtl}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

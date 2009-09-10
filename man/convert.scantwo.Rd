@@ -13,7 +13,7 @@
 }
 
 \arguments{
- \item{object}{Output from the function \code{\link[qtl]{scantwo}}, for
+ \item{object}{Output from the function \code{\link{scantwo}}, for
    R/qtl version 1.03 and earlier.}
 }
 
@@ -23,7 +23,7 @@
 }
 
 \details{
-  Previously, the output from \code{\link[qtl]{scantwo}} contained the
+  Previously, the output from \code{\link{scantwo}} contained the
   full and interaction LOD scores.  In R/qtl version 1.04 and later,
   the output contains the LOD scores from the full and
   additive QTL models.
@@ -35,6 +35,6 @@
 \dontrun{out2.new <- convert(out2.old)}
 }
 
-\seealso{ \code{\link[qtl]{scantwo}}, \code{\link[qtl]{convert.scanone}} }
+\seealso{ \code{\link{scantwo}}, \code{\link{convert.scanone}} }
 
 \keyword{manip}

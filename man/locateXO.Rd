@@ -13,7 +13,7 @@ locateXO(cross, chr)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Chromosome to investigate (if unspecified, the first
    chromosome is considered).
    This should be a character string referring to a chromosome
@@ -42,6 +42,6 @@ xoloc <- locateXO(hyper, chr=4)
 table(sapply(xoloc, length))
 }
 
-\seealso{ \code{\link[qtl]{countXO}} }
+\seealso{ \code{\link{countXO}} }
 
 \keyword{utilities}

@@ -14,7 +14,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of
@@ -23,7 +23,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link[qtl]{makeqtl}}.} 
+   \code{\link{makeqtl}}.} 
  \item{covar}{A matrix or data.frame of covariates.  These must be
    strictly numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
@@ -141,11 +141,11 @@ lod.sex.add <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3+Sex,
 summary(lod.sex.add)
 }}
 
-\seealso{ \code{\link[qtl]{summary.fitqtl}}, \code{\link[qtl]{makeqtl}},
-\code{\link[qtl]{scanqtl}}, \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{addtoqtl}} ,
-  \code{\link[qtl]{dropfromqtl}},
-  \code{\link[qtl]{replaceqtl}},
-  \code{\link[qtl]{reorderqtl}}}  
+\seealso{ \code{\link{summary.fitqtl}}, \code{\link{makeqtl}},
+\code{\link{scanqtl}}, \code{\link{refineqtl}},
+  \code{\link{addtoqtl}} ,
+  \code{\link{dropfromqtl}},
+  \code{\link{replaceqtl}},
+  \code{\link{reorderqtl}}}  
 
 \keyword{models}

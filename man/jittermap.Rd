@@ -12,8 +12,8 @@
 
 \arguments{
  \item{object}{Either a cross (an object of class \code{cross}; see
-   \code{\link[qtl]{read.cross}} for details) or a map (an object of
-   class \code{map}; see \code{\link[qtl]{pull.map}} for details).}
+   \code{\link{read.cross}} for details) or a map (an object of
+   class \code{map}; see \code{\link{pull.map}} for details).}
  \item{amount}{The amount by which markers should be moved.}
 }
 
@@ -31,7 +31,7 @@ data(hyper)
 hyper <- jittermap(hyper)
 }
 
-\seealso{ \code{\link[qtl]{pull.map}}, \code{\link[qtl]{replace.map}},
-  \code{\link[qtl]{summary.cross}} }
+\seealso{ \code{\link{pull.map}}, \code{\link{replace.map}},
+  \code{\link{summary.cross}} }
 
 \keyword{manip}

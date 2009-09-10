@@ -15,11 +15,11 @@ plot.geno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
-    \code{\link[qtl]{read.cross}} for details. }
+    \code{\link{read.cross}} for details. }
   \item{chr}{The chromosome to plot.  Only one chromosome is
   allowed. (This should be a character string referring to the
   chromosomes by name.)} 
-  \item{ind}{Vector of individuals to plot (passed to \code{\link[qtl]{subset.cross}}).  If missing, all individuals
+  \item{ind}{Vector of individuals to plot (passed to \code{\link{subset.cross}}).  If missing, all individuals
     are plotted.}
   \item{include.xo}{If TRUE, plot X's in intervals having a
     crossover. Not available for a 4-way cross.} 
@@ -66,8 +66,8 @@ top.errorlod(hyper,cutoff=4)
 plot.geno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
-\seealso{ \code{\link[qtl]{calc.errorlod}},
-  \code{\link[qtl]{top.errorlod}}, \code{\link[qtl]{subset.cross}} }
+\seealso{ \code{\link{calc.errorlod}},
+  \code{\link{top.errorlod}}, \code{\link{subset.cross}} }
 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

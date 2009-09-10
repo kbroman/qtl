@@ -15,7 +15,7 @@ compareorder(cross, chr, order, error.prob=0.0001,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
 \item{chr}{The chromosome to investigate.  Only one chromosome is
   allowed. (This should be a character string referring to the
   chromosomes by name.)} 
@@ -49,7 +49,7 @@ data(badorder)
 compareorder(badorder, chr=1, order=c(1:8,11,10,9,12))
 }
 
-\seealso{ \code{\link[qtl]{ripple}}, \code{\link[qtl]{switch.order}},
-  \code{\link[qtl]{movemarker}} }
+\seealso{ \code{\link{ripple}}, \code{\link{switch.order}},
+  \code{\link{movemarker}} }
 
 \keyword{utilities}

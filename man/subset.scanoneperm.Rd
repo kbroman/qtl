@@ -5,7 +5,7 @@
 
 \description{
   Pull out results for a specified set LOD columns from 
-  permutation results from \code{\link[qtl]{scanone}}.
+  permutation results from \code{\link{scanone}}.
 }
 
 \usage{
@@ -14,7 +14,7 @@
 
 \arguments{
  \item{x}{Permutation results from 
-   \code{\link[qtl]{scanone}}, run with \code{n.perm}>0.}
+   \code{\link{scanone}}, run with \code{n.perm}>0.}
  \item{lodcolumn}{A vector specifying which LOD columns to keep (or, if
    negative), omit.  These should be between 1 and the number of LOD
    columns in the input \code{x}.}
@@ -34,9 +34,9 @@ operm <- scanone(fake.bc, method="hk", pheno.col=1:2, n.perm=25)
 operm2 <- subset(operm, lodcolumn=2)
 }
 
-\seealso{ \code{\link[qtl]{summary.scanoneperm}},
-  \code{\link[qtl]{scanone}}, \code{\link[qtl]{c.scanoneperm}},
-  \code{\link[qtl]{cbind.scanoneperm}},
+\seealso{ \code{\link{summary.scanoneperm}},
+  \code{\link{scanone}}, \code{\link{c.scanoneperm}},
+  \code{\link{cbind.scanoneperm}},
   \code{\link[=c.scanoneperm]{rbind.scanoneperm}} }
 
 \keyword{manip}
