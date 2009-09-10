@@ -67,7 +67,7 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
   separate additive effects for the two sexes, and for the two
   directions within females.
 
-  There is a function \code{\link[qtl]{plot.effectscan}} that creates
+  There is an internal function \code{plot.effectscan} that creates
   the actual plot by calling \code{plot.scanone}.  In the case
   \code{get.se=TRUE}, colored regions indicate \eqn{\pm}{+/-} 1 SE.
 }

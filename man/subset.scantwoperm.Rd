@@ -36,7 +36,6 @@ operm2 <- subset(operm, lodcolumn=2)
 
 \seealso{ \code{\link[qtl]{summary.scantwoperm}},
   \code{\link[qtl]{scantwo}}, \code{\link[qtl]{c.scantwoperm}},
-  \code{\link[qtl]{cbind.scantwoperm}},
-  \code{\link[qtl]{rbind.scantwoperm}} }
+  \code{\link[=c.scantwoperm]{rbind.scantwoperm}} }
 
 \keyword{manip}

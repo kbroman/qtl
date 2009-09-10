@@ -47,6 +47,6 @@ data(fake.f2)
 fake.f2 <- switch.order(fake.f2, 1, c(1,3,2,4:7))
 }
 
-\seealso{ \code{\link[qtl]{ripple}}, \code{\link[qtl]{clean}} }
+\seealso{ \code{\link[qtl]{ripple}}, \code{\link[qtl]{clean.cross}} }
 
 \keyword{manip}

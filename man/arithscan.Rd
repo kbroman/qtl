@@ -4,7 +4,7 @@
 \alias{+.scantwo}
 \alias{-.scantwo}
 
-\title{Arithmetic Operators for scanone and scantwo results}
+\title{Arithmetic operators for scanone and scantwo results}
 
 \description{
   Add or subtract LOD scores in results

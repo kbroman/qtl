@@ -50,6 +50,6 @@ compareorder(badorder, chr=1, order=c(1:8,11,10,9,12))
 }
 
 \seealso{ \code{\link[qtl]{ripple}}, \code{\link[qtl]{switch.order}},
-  \code{\link[qtl]{move.marker}} }
+  \code{\link[qtl]{movemarker}} }
 
 \keyword{utilities}

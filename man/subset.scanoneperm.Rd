@@ -37,6 +37,6 @@ operm2 <- subset(operm, lodcolumn=2)
 \seealso{ \code{\link[qtl]{summary.scanoneperm}},
   \code{\link[qtl]{scanone}}, \code{\link[qtl]{c.scanoneperm}},
   \code{\link[qtl]{cbind.scanoneperm}},
-  \code{\link[qtl]{rbind.scanoneperm}} }
+  \code{\link[=c.scanoneperm]{rbind.scanoneperm}} }
 
 \keyword{manip}

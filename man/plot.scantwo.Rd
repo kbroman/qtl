@@ -52,7 +52,7 @@
   \item{allow.neg}{If TRUE, allow the plot of negative LOD scores; in
     this case, the z-limits are symmetric about 0.  This option is
     chiefly to allow a plot of difference between LOD scores from
-    different methods, calculated via \code{\link[qtl]{-.scantwo}}.}
+    different methods, calculated via \code{\link[=-.scantwo]{-.scantwo}}.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
@@ -153,7 +153,7 @@ plot(out2.hk - out2.em, allow.neg=TRUE)
 
 \seealso{ \code{\link[qtl]{scantwo}},
   \code{\link[qtl]{summary.scantwo}}, \code{\link[qtl]{plot.scanone}},
-  \code{\link[qtl]{-.scantwo}} }
+  \code{\link[=-.scantwo]{-.scantwo}} }
 
 \author{Hao Wu; Karl W Broman,
   \email{kbroman@biostat.wisc.edu}; Brian Yandell } 

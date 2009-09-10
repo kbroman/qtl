@@ -48,7 +48,7 @@ out <- scantwo(hyper, method="hk")
 out.rev <- replacemap(out, origmap)
 }
 
-\seealso{ \code{\link[qtl]{replacemap.cross}},
+\seealso{ \code{\link[=replace.map]{replacemap.cross}},
   \code{\link[qtl]{est.map}}, \code{\link[qtl]{replacemap.scanone}} }
 
 \keyword{manip}

@@ -30,7 +30,7 @@ plot.geno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     percent of the chromosome length) are pulled apart, so that they may
     be distinguished in the picture.}
   \item{cex}{Character expansion for the size of points in the plot.
-    Larger numbers give larger points; see \code{\link[qtl]{par}}.}
+    Larger numbers give larger points; see \code{\link[graphics]{par}}.}
   \item{\dots}{Ignored at this point.}
 }
 
