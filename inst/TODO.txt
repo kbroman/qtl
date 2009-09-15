@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Add functions convert2riself and convert2risib.  
+
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
 
