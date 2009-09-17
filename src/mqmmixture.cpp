@@ -325,6 +325,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   }
   //Rprintf("EM Finished\n");
   // bias adjustment after finished ML estimation via EM
+  //FIXME: dont use 'n' is u mean false or 'y' when true... so convert to boolean
   if ((useREML)&&(varknown=='n')) {
     // RRprintf("Checkpoint_c\n");
     *variance=-1.0;
