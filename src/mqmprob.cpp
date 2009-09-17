@@ -30,7 +30,10 @@
 
 #include "mqm.h"
 
-
+/* This function walks the marker list and determins for every position whether the marker is in the Middle, Left,Right of the chromosome
+ When there is only 1 marker on a chromosome it is defined Unlinked*/
+ 
+// FIXME Naming of function (set_relative_marker_position / findLeftRightMarkerpos)
 cvector locate_markers(const int nmark,const ivector chr) 
 {
   cvector position = newcvector(nmark);
@@ -61,8 +64,14 @@ cvector locate_markers(const int nmark,const ivector chr)
   return position;
 }
 
+/*Using haldane we calculate Recombination frequencies. Using relative marker positions and distances Return array of rec. frequencies (unknown = 999.0)*/
+//FIXME 999.0 to RFUNKNOWN
+//FIXME unsigned int als array index (uint)
+//NOTE checking for r[j] <0 (marker ordering) can ahppen at contract
 vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance) 
 {
+  // contract: if DEBUG is_valid(positionarray)
+  
   info("Estimating recombinant frequencies");
   vector r = newvector(nmark);
   for (int j=0; j<nmark; j++) {
@@ -71,7 +80,7 @@ vector recombination_frequencies(const int nmark, const cvector position, const 
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
         Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
-        fatal("Recombination frequency is negative");
+        fatal("Recombination frequency is negative, (Marker ordering problem ?)");
         return NULL;
       }
     }
@@ -106,8 +115,13 @@ void validate_markertype(const MQMCrossType crosstype, const char markertype)
  *   F2     1/4    1/4   1/2
  *   RIL    1/2    1/2     x
  *   BC     1/2      x   1/2
+ 
+ in the case of marketypes that are invalid for a cross (here: x) a probability of 0.0 is returned
+ This is because to make the code in augmentation & Regression more generic.
  */
 
+ //FIXME: Special function for special case (start_prob for regression)
+ //FIXME: MQMmarker ipv cont char en dan als index (dus in datatypes -> '0'-> 0)
 double start_prob(const MQMCrossType crosstype, const char markertype) {
   //validate_markertype(crosstype,markertype);
   switch (crosstype) {
@@ -162,8 +176,11 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
  * is simply based on the markertypes and known recombination rate.
  *
  * Specify an ADJ to adjust loci[j][i] to a specific location in the r[j+ADJ]
+ 
+ FIXME zie start_prob for the same issue with markertypes not bellong to the current cross
  */
-
+// IPV rs geven we de 'single Rec Freq' dan vervalt ADJ en kan de berekening korter en mooier
+//refactor name left_prob
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   
@@ -227,7 +244,9 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
  * information from the right neighbouring marker and the known recombination
  * frequencies. This function is used by augmentation.
  */
-
+//fixme IF to switch case
+//Split into three function !
+//markkertype -> Marker because it is a marker not a Type of marker
 double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const MQMCrossType crosstype) {
   double prob0, prob1, prob2;
   if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
@@ -249,6 +268,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
   const int recombinations = fabs(markertype-rightmarker);
   switch (crosstype) {
     case CF2:
+      //fixme smallfunction: bool is_knownMarker() ?
       if ((rightmarker==MAA)||(rightmarker==MH)||(rightmarker==MBB)) {
         //NEXT marker is known
         if ((markertype==MH)&&(rightmarker==MH)) {
@@ -287,6 +307,8 @@ double probright(const char markertype, const int j, const cvector imarker, cons
           prob1= 2.0*r*rr;
           prob2= rr2;
         }
+        //FIXME If (semi) unknown marker we need to step untill we reach a known one
+        //TESTME: What happens if a chromosome ends with unknown markers AAAAAHHHHHUUUUUUUU
         return prob1*probright(MH, j+1, imarker, rs, position, crosstype) + prob2*probright(MBB, j+1, imarker, rs, position, crosstype);
       } else if (rightmarker==MNOTBB) {
         //SEMI unknown next marker known is it is not a B
@@ -326,6 +348,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
       }
       break;
     case CRIL:
+    //FIXME: RIL case is same as BC case if we use a function is_known_marker_for_cross()
       if (markertype==MH) {
         //info("Strange: encountered heterozygous genotype in RIL");
         return 0.0;

@@ -51,6 +51,7 @@
  * of dropped individuals.
  *
  * FIXME: increasing the buffers for augmentation can automatic
+ FIXME Herhalingen naar een aparte functie (eventueel cross specific)
  */
 
 int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
