@@ -69,6 +69,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   for (j=0; j<Nmark; j++)
     if ((cofactor[j]==MH)||(cofactor[j]==MNOTAA)) dimx+= (dominance=='y' ? 2 : 1);
   cvector xtQTL; // MAA=mu; MH=cofactor; MBB=QTL (additive); MNOTAA= QTL (dominance);
+  //FIXME TO enum MQTL MCOF MSEX MDOMI
   xtQTL= newcvector(dimx);
   int jx=0;
   for (int i=0; i<Naug; i++) Xt[jx][i]= MH;

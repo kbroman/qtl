@@ -189,6 +189,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
           calc_i = start_prob(crosstype, loci[j][i]);
           Ploci[i]*= calc_i;
+          //Als Ploci > 0 en calc_i > 0 then we want to assert Ploci[] != 0
         }
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {

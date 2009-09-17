@@ -36,6 +36,10 @@ const RqtlCrossType RC_BC  = 2;
 const RqtlCrossType RC_RIL = 3;
 
 // Marker locations/relations
+
+//FIXME : Enum of relmarkerposition type
+//FIXME : Typedef relmarkerposition* relmarkerarray to replace cvector
+//FIXME : duplicate allocation of new type
 const unsigned char MLEFT     = 'L';
 const unsigned char MRIGHT    = 'R';
 const unsigned char MMIDDLE   = 'M';
@@ -55,6 +59,7 @@ const unsigned char MUNUSED   = '-';  // Unused parameter
 
 /*------------------------------------------------------------------------
 Datastructures for matrix and vector calculus
+FIXME : CamelCase for TYPEDEFS classes / structs
 ------------------------------------------------------------------------ */
 typedef double*** Mmatrix;
 typedef double** matrix;
