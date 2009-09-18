@@ -16,6 +16,13 @@ INFO: F(4.003906,2,231)=0.020000
 INFO: Log-likelihood of full model= -16394.080223
 INFO: Residual variance= 57.070010
 INFO: Trait mean= 101.611600; Trait variation= 70.959584
+INFO: Marker 92 is dropped, resulting in logL of reduced model = -16394.136683
+INFO: Marker 97 is dropped, resulting in logL of reduced model = -16394.189201
+INFO: Marker 95 is dropped, resulting in logL of reduced model = -16394.366733
+INFO: Marker 59 is dropped, resulting in logL of reduced model = -16395.089689
+INFO: Marker 6 is dropped, resulting in logL of reduced model = -16397.009061
+INFO: Marker 50 is dropped, resulting in logL of reduced model = -16399.109875
+INFO: Marker 73 is dropped, resulting in logL of reduced model = -16402.289932
 INFO: Number of output datapoints: 2020
 INFO: Analysis of data finished
     0	   0.05812
