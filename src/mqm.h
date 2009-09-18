@@ -60,9 +60,9 @@
 
 
 #ifdef WIN32
- #define info(format, ...){ message("INFO",format, ## __VA_ARGS__); }
+ #define info(format, ...){ message("INFO: ",format, ## __VA_ARGS__); }
  #define message(type, format, ...) { \
-  Rprintf(format,## __VA_ARGS__);}
+  Rprintf(type);Rprintf(format,## __VA_ARGS__);Rprintf("\n");}
 #else
 
 #ifdef NDEBUG
