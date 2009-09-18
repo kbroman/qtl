@@ -451,6 +451,7 @@ int main(int argc,char *argv[]) {
     ivector new_ind;
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
+    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error("Augmentation parameter conflict max_augmentation <= individuals");
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     if (verbose) Rprintf("Settingsnind: %d nind: %d augmentednind: %d\n",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
