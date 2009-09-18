@@ -182,13 +182,13 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       jj++;
     } else if ((*cofactor)[j]==MH) {
       if (verbose) {
-        Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
+        info("Cofactor at chr %d is dropped",chr[j]);
       }
     }
   }
   Nmark= jj;
   if (verbose) {
-    Rprintf("INFO: Num markers: %d\n",Nmark);
+    Rprintf("Num markers: %d",Nmark);
   }
   // FIXME this is duplication of code above - should be a (unit tested) method
   for (int j=0; j<Nmark; j++) {
@@ -246,12 +246,12 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   double max;
   max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype,verbose);
   if (max > stepmax) {
-    Rprintf("ERROR: Reestimation of the map put markers at: %f Cm\n",max);
-    Rprintf("ERROR: Rerun the algorithm with a step.max larger than %f Cm\n",max);
+    info("ERROR: Reestimation of the map put markers at: %f Cm",max);
+    info("ERROR: Rerun the algorithm with a step.max larger than %f Cm",max);
     return;
   } else {
     if (verbose) {
-      Rprintf("INFO: Reestimation of the map finished. MAX Cm: %f Cm\n",max);
+      Rprintf("Reestimation of the map finished. MAX Cm: %f Cm",max);
     }
   }
 
@@ -260,8 +260,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
       if (r[j]<0) {
-        Rprintf("ERROR: Recombination frequency is negative\n");
-        Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
+        info("ERROR: Recombination frequency is negative");
+        info("ERROR: Position=%d r[j]=%f",position[j], r[j]);
         return;
       }
     }
@@ -323,17 +323,17 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   F1= inverseF(1,Nind-dimx,alfa,verbose);
   F2= inverseF(2,Nind-dimx,alfa,verbose);
-  if(verbose)Rprintf("dimX:%d nInd:%d\n",dimx,Nind);
-  if(verbose)Rprintf("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa\n");
-  if(verbose)Rprintf("F(%f,1,%d)=%f\n",F1,(Nind-dimx),alfa);
-  if(verbose)Rprintf("F(%f,2,%d)=%f\n",F2,(Nind-dimx),alfa);
+  if(verbose)info("dimX:%d nInd:%d",dimx,Nind);
+  if(verbose)info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
+  if(verbose)info("F(%f,1,%d)=%f",F1,(Nind-dimx),alfa);
+  if(verbose)info("F(%f,2,%d)=%f",F2,(Nind-dimx),alfa);
   F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
   logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
-  if(verbose)Rprintf("Log-likelihood of full model= %f\n",logLfull);
-  if(verbose)Rprintf("Residual variance= %f\n",variance);
-  if(verbose)Rprintf("Trait mean= %f; Trait variation= %f\n",ymean,yvari);
+  if(verbose)info("Log-likelihood of full model= %f",logLfull);
+  if(verbose)info("Residual variance= %f",variance);
+  if(verbose)info("Trait mean= %f; Trait variation= %f",ymean,yvari);
   if (Backwards==1)    // use only selected cofactors
     logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
   if (Backwards==0) // use all cofactors
@@ -349,7 +349,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
   }
   //QTL likelyhood for each location
-  if(verbose)Rprintf("Number of output datapoints: %d\n",Nsteps);
+  if(verbose) info("Number of output datapoints: %d",Nsteps);
 
   //ofstream fff("MQM.output", ios::out | ios::app);
   for (int ii=0; ii<Nsteps; ii++) {
