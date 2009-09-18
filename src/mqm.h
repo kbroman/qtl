@@ -51,19 +51,16 @@
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else
-  #ifndef WIN32
+  #ifdef WIN32
+   #define info(format, ...){ message("INFO: ",format, ## __VA_ARGS__); }
+   #define message(type, format, ...) { \
+    Rprintf(type);Rprintf(format,## __VA_ARGS__);Rprintf("\n");}
+  #else
     #define message(type,s) { Rprintf("%s: %s\n",type,s); }
   #endif  
   // #define warning(s) { Rf_warning(s); }
   #define fatal(s) { message("FATAL",s); Rf_error(s); }
 #endif
-
-
-#ifdef WIN32
- #define info(format, ...){ message("INFO: ",format, ## __VA_ARGS__); }
- #define message(type, format, ...) { \
-  Rprintf(type);Rprintf(format,## __VA_ARGS__);Rprintf("\n");}
-#else
 
 #ifdef NDEBUG
   #define info(format, ...) 
@@ -71,5 +68,4 @@
   #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
   #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
 #endif  //ndebug
-#endif //win32
 #endif // MQM_H
