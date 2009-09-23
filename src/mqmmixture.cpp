@@ -150,7 +150,11 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
                   double *variance, int em, vector *weight, const bool useREML, char fitQTL, char dominance, MQMCrossType crosstype, int verbose) {
-  //if(verbose==1){Rprintf("QTLmixture called\n");}
+                  
+  //if(verbose==1){info("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%c domi=%c cross=%c",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);}
+  //for (int i=0; i<Naug; i++){
+  // info("%d r=%f",i,r[i]);
+  //}
   int iem= 0, newNaug, i, j;
   char varknown, biasadj='n';
   double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
@@ -162,16 +166,17 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   logP= Nloci*log(Pscale); // only for computational accuracy
   varknown= (((*variance)==-1.0) ? 'n' : 'y' );
   Ploci= newvector(newNaug);
+  
 #ifndef STANDALONE
   R_CheckUserInterrupt(); /* check for ^C */
   //R_ProcessEvents();
   R_FlushConsole();
 #endif
   if ((useREML)&&(varknown=='n')) {
-//		Rprintf("INFO: REML\n");
+		//info("INFO: REML");
   }
   if (!useREML) {
-//		Rprintf("INFO: ML\n");
+		//info("INFO: Maximum Likelyhood");
     varknown='n';
     biasadj='n';
   }
@@ -179,23 +184,28 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     Ploci[i]= 1.0;
   }
   if (fitQTL=='n') {
-    //Rprintf("FitQTL=N\n");
+    //info("fitQTL=\'n\'");
     for (j=0; j<Nloci; j++) {
       for (i=0; i<Naug; i++)
         Ploci[i]*= Pscale;
       //Here we have ProbLeft
+      if(i==1) info("Ploci=%f",Ploci[i]);
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
           // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
           calc_i = start_prob(crosstype, loci[j][i]);
           Ploci[i]*= calc_i;
+          //if(i==1) info(" STARTPROB IND1 j=%d calc_i=%f Ploci=%f",j,calc_i,Ploci[i]);
           //Als Ploci > 0 en calc_i > 0 then we want to assert Ploci[] != 0
         }
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         for (i=0; i<Naug; i++) {
-          calc_i = prob(loci, r, i, j, loci[j+1][i], CF2, 0);
+          calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
+          //if(i==1) info("c_i:%f prob_i:%f",calc_i,Ploci[i]);
+          if(calc_i == 0.0){info("!!! 0.0 returned from prob !!! R[f] == 0 Markers on top of eachother but different !!!"); calc_i=1.0;}
           Ploci[i]*= calc_i;
+          //if(i==1) info(" IND1 j=%d r[j]=%f calc_i=%f Ploci=%f (Marker:%c)",j,r[j],calc_i,Ploci[i],loci[j+1][i]);
         }
       }
     }
@@ -233,6 +243,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
             // [pjotr:] was calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0); 
             // why define markertype if it is not used? FIXME
             calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
+            if(calc_i == 0.0){info("!!! 0.0 returned from prob !!! R[f] == 0 Markers on top of eachother but different !!!"); calc_i=1.0;}
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
@@ -277,10 +288,10 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
     }
   }
-  //Rprintf("Weights done\n");
-  //Rprintf("Individual->trait->cofactor->weight\n");
+  //info("Weights done");
+  //info("Individual->trait,indweight weight Ploci");
   //for (int j=0; j<Nind; j++){
-  //  Rprintf("%d->%f, %d, %f %f\n", j, y[j], cofactor[j], (*weight)[j], Ploci[j]);
+  //  info("%d->%f,%f %f %f", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
   //}
   double logL=0;
   vector indL;
@@ -366,9 +377,9 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
     }
   }
-  for (i=0; i<Nind; i++){
+  //for (i=0; i<Nind; i++){
     //Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
-  }
+  //}
   Free(Fy);
   Free(Ploci);
   Free(indweight);
