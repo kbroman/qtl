@@ -7,22 +7,22 @@ INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
 INFO: Initialize Frun and informationcontent to 0.0
 INFO: After dropping of uninformative cofactors
-INFO: Prob=0.020214 Alfa=0.020000
-INFO: Prob=0.019525 Alfa=0.020000
-INFO: dimX:19 nInd:250
+INFO: Prob=0.020181 Alfa=0.020000
+INFO: Prob=0.019476 Alfa=0.020000
+INFO: dimX:10 nInd:250
 INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa
-INFO: F(5.468750,1,231)=0.020000
-INFO: F(4.003906,2,231)=0.020000
-INFO: Log-likelihood of full model= -16394.080223
+INFO: F(5.468750,1,240)=0.020000
+INFO: F(4.003906,2,240)=0.020000
+INFO: Log-likelihood of full model= -14699.611421
 INFO: Residual variance= 57.070010
 INFO: Trait mean= 101.611600; Trait variation= 70.959584
-INFO: Marker 92 is dropped, resulting in logL of reduced model = -16394.136683
-INFO: Marker 97 is dropped, resulting in logL of reduced model = -16394.189201
-INFO: Marker 95 is dropped, resulting in logL of reduced model = -16394.366733
-INFO: Marker 59 is dropped, resulting in logL of reduced model = -16395.089689
-INFO: Marker 6 is dropped, resulting in logL of reduced model = -16397.009061
-INFO: Marker 50 is dropped, resulting in logL of reduced model = -16399.109875
-INFO: Marker 73 is dropped, resulting in logL of reduced model = -16402.289932
+INFO: Marker 92 is dropped, resulting in logL of reduced model = -14699.667881
+INFO: Marker 97 is dropped, resulting in logL of reduced model = -14699.720399
+INFO: Marker 95 is dropped, resulting in logL of reduced model = -14699.897931
+INFO: Marker 59 is dropped, resulting in logL of reduced model = -14700.620887
+INFO: Marker 6 is dropped, resulting in logL of reduced model = -14702.540259
+INFO: Marker 50 is dropped, resulting in logL of reduced model = -14704.641073
+INFO: Marker 73 is dropped, resulting in logL of reduced model = -14707.821130
 INFO: Number of output datapoints: 2020
 INFO: Analysis of data finished
     0	   0.05812
@@ -67,8 +67,8 @@ INFO: Analysis of data finished
    39	   1.02499
    40	   0.87261
    41	   0.65985
-   42	   0.43537
-   43	   0.21959
+   42	   0.43347
+   43	   0.21940
    44	   0.15480
    45	   0.11070
    46	   0.07122
@@ -340,11 +340,11 @@ INFO: Analysis of data finished
   312	   8.97920
   313	   9.19813
   314	   9.36293
-  315	   8.70499
+  315	   8.70624
   316	   8.78746
   317	   0.46911
   318	   1.73486
-  319	   1.20709
+  319	   1.20682
   320	   1.13359
   321	   0.83654
   322	   0.84935
@@ -1038,13 +1038,13 @@ INFO: Analysis of data finished
  1010	   0.19985
  1011	   0.19932
  1012	   0.22551
- 1013	   0.07308
- 1014	   0.00003
- 1015	   0.06569
+ 1013	   0.07264
+ 1014	   0.00002
+ 1015	   0.06596
  1016	   0.20646
  1017	   0.28141
  1018	   0.28151
- 1019	   0.25084
+ 1019	   0.25049
  1020	   0.18515
  1021	   0.25229
  1022	   0.29662
@@ -1442,18 +1442,18 @@ INFO: Analysis of data finished
  1414	   1.14728
  1415	   1.14890
  1416	   1.15023
- 1417	   1.11429
+ 1417	   1.11363
  1418	   0.94174
  1419	   1.05703
  1420	   1.15103
  1421	   1.35262
  1422	   1.63933
- 1423	   1.57349
+ 1423	   1.57381
  1424	   1.60760
- 1425	   1.57109
- 1426	   1.46440
- 1427	   1.30138
- 1428	   1.10570
+ 1425	   1.57086
+ 1426	   1.46409
+ 1427	   1.30111
+ 1428	   1.10557
  1429	   0.95156
  1430	   0.93629
  1431	   0.91391
@@ -1643,7 +1643,7 @@ INFO: Analysis of data finished
  1615	   0.09628
  1616	   0.51068
  1617	   0.31879
- 1618	   0.28630
+ 1618	   0.28556
  1619	   0.12197
  1620	   0.05556
  1621	   0.00566
@@ -2087,8 +2087,8 @@ INFO: Analysis of data finished
  2059	   0.96001
  2060	   0.96637
  2061	   1.00000
- 2062	   0.96776
- 2063	   0.99459
+ 2062	   0.96754
+ 2063	   0.99463
  2064	   0.98782
  2065	   0.97404
  2066	   0.98516
@@ -2360,11 +2360,11 @@ INFO: Analysis of data finished
  2332	   0.99857
  2333	   0.99227
  2334	   0.99871
- 2335	   0.98926
+ 2335	   0.98925
  2336	   0.99438
  2337	   0.99739
  2338	   0.98627
- 2339	   0.99792
+ 2339	   0.99787
  2340	   0.99837
  2341	   0.99356
  2342	   0.98135
@@ -3058,13 +3058,13 @@ INFO: Analysis of data finished
  3030	   0.97847
  3031	   0.99800
  3032	   0.98608
- 3033	   0.97504
- 3034	   0.98866
- 3035	   0.98048
+ 3033	   0.97494
+ 3034	   0.98868
+ 3035	   0.98057
  3036	   0.98871
  3037	   0.98740
  3038	   0.97910
- 3039	   0.99291
+ 3039	   0.99280
  3040	   0.99399
  3041	   0.95470
  3042	   0.97849
@@ -3462,18 +3462,18 @@ INFO: Analysis of data finished
  3434	   0.94796
  3435	   0.96622
  3436	   0.98523
- 3437	   0.99037
+ 3437	   0.99022
  3438	   0.99725
  3439	   0.97998
  3440	   0.99091
  3441	   0.98350
  3442	   0.99347
- 3443	   0.99266
- 3444	   0.96390
- 3445	   0.93837
- 3446	   0.92720
- 3447	   0.94750
- 3448	   0.97689
+ 3443	   0.99252
+ 3444	   0.96379
+ 3445	   0.93831
+ 3446	   0.92721
+ 3447	   0.94753
+ 3448	   0.97690
  3449	   0.99542
  3450	   0.97763
  3451	   0.96069
@@ -3663,7 +3663,7 @@ INFO: Analysis of data finished
  3635	   0.58575
  3636	   0.98912
  3637	   0.99163
- 3638	   0.99029
+ 3638	   0.99019
  3639	   0.99635
  3640	   0.98691
  3641	   0.99125
