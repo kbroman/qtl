@@ -223,6 +223,7 @@ double prob_new(const double r, const char markerL,const char markerR,const MQMC
       break;
     default:
       fatal("Strange: unknown crosstype in prob");
+      return NAN;
   }
   fatal("Should not get here");
   return NAN;
@@ -295,6 +296,161 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
 //fixme IF to switch case
 //Split into three function !
 //markkertype -> Marker because it is a marker not a Type of marker
+
+bool is_knownMarker(const char marker,const MQMCrossType crosstype){
+  switch (crosstype) {
+    case CF2:
+      return ((marker==MAA)||(marker==MH)||(marker==MBB)) ? true : false;
+    break;
+    case CBC:
+      return ((marker==MAA)||(marker==MH)) ? true : false;
+    break;
+    case CRIL:
+      return ((marker==MAA)||(marker==MBB)) ? true : false;
+    break;
+    case CUNKNOWN:
+      fatal("Strange: unknown crosstype in is_knownMarker()");
+      return NAN;
+    break;
+  }
+  return NAN;
+}
+
+double probrightF2(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+  if(position[j]==MRIGHT||position[j]==MUNLINKED){
+    return 1.0;
+  }
+
+  const char markerR = imarker[j+1]; //Next marker at the right side
+  const double r = rs[j];            //Recombination freq beween markerL and markerR
+  //Internal variable holding the probability if the next rightmarker is (Semi) Unknown
+  double prob0 = 0.0;
+  double prob1 = 0.0;
+  double prob2 = 0.0;
+  //Breeding Logic (see prob_new)
+  const double r2 = r*r;
+  const double rr = 1.0-r;
+  const double rr2 = rr*rr;
+  //Number of recombinations between markerL and markerR
+  const int recombinations = fabs(markerL-markerR);
+
+  if (is_knownMarker(markerR, CF2)) {
+    if ((markerL==MH)&&(markerR==MH)) {
+      return r2+rr2; //special case in which we observe a H after an H then we can't know if we recombinated or not
+    } else {
+      if (recombinations==0) {
+        return rr2;
+      } else if (recombinations==1) {
+        return ((markerR==MH) ? 2.0*r*rr : r*rr);  
+      } else {
+        return r2;
+      }
+    }
+  } else if (markerR==MNOTAA) {  //SEMI unknown next marker known is it is not an A
+    if (markerL==MAA) {          //Observed marker is an A
+      prob1= 2.0*r*rr;
+      prob2= r2;
+    } else if (markerL==MH) {    //Observed marker is an H
+      prob1= r2+rr2;
+      prob2= r*rr;
+    } else {                     //Observed marker is an B
+      prob1= 2.0*r*rr;
+      prob2= rr2;
+    }
+    return prob1*probrightF2(MH, j+1, imarker, rs, position) + prob2*probrightF2(MBB, j+1, imarker, rs, position);
+  } else if (markerR==MNOTBB) {  //SEMI unknown next marker known is it is not a B
+    if (markerL==MAA) {          //Observed marker is an A
+      prob0= rr2;
+      prob1= 2.0*r*rr;
+    } else if (markerL==MH) {    //Observed marker is an H
+      prob0= r*rr;
+      prob1= r2+rr2;
+    } else {                     //Observed marker is an B
+      prob0= r2;
+      prob1= 2.0*r*rr;
+    }
+    return prob0*probrightF2(MAA, j+1, imarker, rs, position) + prob1*probrightF2(MH, j+1, imarker, rs, position);
+  } else {                       // Unknown next marker so estimate all posibilities
+    if (markerL==MAA) {       //Observed marker is an A
+      prob0= rr2;
+      prob1= 2.0*r*rr;
+      prob2= r2;
+    } else if (markerL==MH) { //Observed marker is an H
+      prob0= r*rr;
+      prob1= r2+rr2;
+      prob2= r*rr;
+    } else {                     //Observed marker is an B
+      prob0= r2;
+      prob1= 2.0*r*rr;
+      prob2= rr2;
+    }
+    return prob0*probrightF2(MAA, j+1, imarker, rs, position) + prob1*probrightF2(MH, j+1, imarker, rs, position) + prob2*probrightF2(MBB, j+1, imarker, rs, position);
+  }
+}
+
+
+double probrightBC(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+  if(position[j] == MRIGHT||position[j] == MUNLINKED){
+    return 1.0;
+  }
+  if (markerL == MBB) {
+    return 0.0;  //info("Strange: encountered BB genotype in BC");
+  }  
+
+  const char markerR = imarker[j+1]; //Next marker at the right side
+  const double r = rs[j];            //Recombination freq beween markerL and markerR
+  //Internal variable holding the probability if the next rightmarker is (Semi) Unknown
+  double prob0 = 0.0;
+  double prob1 = 0.0;
+  //Breeding Logic (see prob_new)
+  const double rr = 1.0-r;
+  //Number of recombinations between markerL and markerR
+  const int recombinations = fabs(markerL-markerR);
+  if (is_knownMarker(markerR, CBC)) {
+    return ((recombinations==0)? rr : r );
+  } else {
+    if (markerL==MAA) {
+      prob0= rr;
+      prob1= r;
+    } else {
+      prob0= r;
+      prob1= rr;
+    }
+    return prob0*probrightBC(MAA, j+1, imarker, rs, position) + prob1*probrightBC(MH, j+1, imarker, rs, position);
+  }
+}
+
+double probrightRIL(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+  if(position[j] == MRIGHT||position[j] == MUNLINKED){
+    return 1.0;
+  }
+  if (markerL == MH) {
+    return 0.0;  //info("Strange: encountered H genotype in RIL");
+  }  
+
+  const char markerR = imarker[j+1]; //Next marker at the right side
+  const double r = rs[j];            //Recombination freq beween markerL and markerR
+  //Internal variable holding the probability if the next rightmarker is (Semi) Unknown
+  double prob0 = 0.0;
+  double prob2 = 0.0;
+  //Breeding Logic (see prob_new)
+  const double rr = 1.0-r;
+  //Number of recombinations between markerL and markerR
+  const int recombinations = fabs(markerL-markerR);
+  if (is_knownMarker(markerR, CRIL)) {
+    return ((recombinations==0) ? rr : r);
+  } else { //Next marker is unknown
+    if (markerL==MAA) {
+      prob0= rr;
+      prob2= r;
+    } else { // MBB
+      prob0= r;
+      prob2= rr;
+    }
+    return prob0*probrightRIL(MAA, j+1, imarker, rs, position) + prob2*probrightRIL(MBB, j+1, imarker, rs, position);
+  }
+}
+
 double probright(const char markertype, const int j, const cvector imarker, const vector rs, const cvector position, const MQMCrossType crosstype) {
   double prob0, prob1, prob2;
   if ((position[j]==MRIGHT)||(position[j]==MUNLINKED)) {
