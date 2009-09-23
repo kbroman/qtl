@@ -149,6 +149,15 @@ cvector newcvector(int dim) {
   return v;
 }
 
+relmarkerarray newRelMarkerPos(int dim){
+  relmarkerarray v;
+  v = (MQMRelMarkerPos *)calloc_init(dim, sizeof(char));
+  if (v==NULL) {
+    warning("Not enough memory for the relative marker position vector with dimension %d",(dim+1));
+  }
+  return v;
+}
+
 matrix newmatrix(int rows, int cols) {
   matrix m;
   m = (double **)calloc_init(rows, sizeof(double*));
@@ -157,18 +166,6 @@ matrix newmatrix(int rows, int cols) {
   }
   for (int i=0; i<rows; i++) {
     m[i]= newvector(cols);
-  }
-  return m;
-}
-
-Mmatrix newMmatrix(int rows, int cols,int depth) {
-  Mmatrix m;
-  m = (double ***)calloc_init(rows, sizeof(double**));
-  if (m==NULL) {
-    warning("Not enough memory for new double matrix");
-  }
-  for (int i=0; i<rows; i++) {
-    m[i]= newmatrix(cols,depth);
   }
   return m;
 }
@@ -217,10 +214,6 @@ void freematrix(void **m, size_t rows) {
 }
 
 void delmatrix(matrix m, size_t rows) {
-  freematrix((void**)m,rows);
-}
-
-void delMmatrix(Mmatrix m, size_t rows) {
   freematrix((void**)m,rows);
 }
 
