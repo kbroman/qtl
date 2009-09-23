@@ -182,39 +182,38 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
 // IPV rs geven we de 'single Rec Freq' dan vervalt ADJ en kan de berekening korter en mooier
 //refactor name left_prob
 
-double prob_new(const double r, const char marker1,const char marker2,const MQMCrossType crosstype){
+
+double prob_new(const double r, const char markerL,const char markerR,const MQMCrossType crosstype){
   const double r2 = r*r;  //Double recombination
   const double rr = 1.0-r; // No recombination
   const double rr2 = rr*rr; //Double Norecombination
-  
-  const int recombinations = fabs((double)marker1-(double)marker2);
+  //Calculate the number of recombinations
+  const int recombinations = fabs((double)markerL-(double)markerR);
 
   switch (crosstype) {
     case CF2:
-      if ((marker1==MH)&&(marker2==MH)) {
-        //Special case H after H  So either double recombination or double Norecombination
-        return r2 + rr2;
+      if ((markerL==MH)&&(markerR==MH)) {
+        return r2 + rr2; //Special case H after H  So either double recombination or double Norecombination
       }else if (recombinations==0) {
         return rr2;
       }else if (recombinations==1) {
-        //If the marker was a H then we have 2 * recombination*No recombination chance otherwise just single chance
-        return ((marker1==MH) ? 2.0*r*rr : r*rr);
+        return ((markerR==MH) ? 2.0*r*rr : r*rr); //If the marker was a H then we have 2 * recombination*No recombination chance otherwise just single chance
       }else{
-        return r2;  // two recombinations
+        return r2; // two recombinations
       }
       return rr; // Not Recombinated
       break;
     case CRIL:
-      if (marker2==MH) {
+      if (markerR==MH) {
         return 0.0; // No chance finding a 1 or H in an RIL
       }
       if (recombinations){
-        return r;   //Recombinated
+        return r; //Recombinated
       }
-      return rr;  // Not Recombinated
+      return rr; // Not Recombinated
       break;
     case CBC:
-      if (marker2==MBB) {
+      if (markerR==MBB) {
         return 0.0; // No chance finding a 2/BB in a BC
       }
       if (recombinations){
