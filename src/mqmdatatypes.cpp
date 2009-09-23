@@ -177,9 +177,9 @@ void printmatrix(matrix m, int rows, int cols) {
 
   for (int r=0; r<rows; r++) {
     for (int c=0; c<cols; c++) {
-      Rprintf("%f\t",m[r][c]);
+      info("%f",m[r][c]);
     }
-    Rprintf("\n");
+    info("col done");
   }
 }
 
