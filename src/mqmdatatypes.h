@@ -64,11 +64,11 @@ const unsigned char MUNUSED   = '-';  // Unused parameter
 Datastructures for matrix and vector calculus
 FIXME : CamelCase for TYPEDEFS classes / structs
 ------------------------------------------------------------------------ */
-typedef double*** Mmatrix;
 typedef double** matrix;
 typedef double*  vector;
 typedef char**   cmatrix;
 typedef char*    cvector;
+typedef MQMRelMarkerPos* relmarkerarray;
 typedef int*  ivector;
 
 
@@ -83,15 +83,14 @@ Basic routines for matrix and vector calculus
 vector newvector(int dim);
 ivector newivector(int dim);
 cvector newcvector(int dim);
+relmarkerarray newRelMarkerPos(int dim);
 matrix newmatrix(int rows, int cols);
-Mmatrix newMmatrix(int rows, int cols,int depth);
-void   printmatrix(matrix m, int rows, int cols);
-void   printcmatrix(cmatrix m, int rows, int cols);
+void printmatrix(matrix m, int rows, int cols);
+void printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);
 void freematrix(void **m, size_t rows);
 void freevector(void *v);
 void delmatrix(matrix m, size_t rows);
-void delMmatrix(Mmatrix m, size_t rows);
 void delcmatrix(cmatrix m, size_t rows);
 void copyvector(vector vsource, vector vdestination, int dim);
 
