@@ -181,6 +181,55 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
  */
 // IPV rs geven we de 'single Rec Freq' dan vervalt ADJ en kan de berekening korter en mooier
 //refactor name left_prob
+
+double prob_new(const double r, const char marker1,const char marker2,const MQMCrossType crosstype){
+  const double r2 = r*r;  //Double recombination
+  const double rr = 1.0-r; // No recombination
+  const double rr2 = rr*rr; //Double Norecombination
+  
+  const int recombinations = fabs((double)marker1-(double)marker2);
+
+  switch (crosstype) {
+    case CF2:
+      if ((marker1==MH)&&(marker2==MH)) {
+        //Special case H after H  So either double recombination or double Norecombination
+        return r2 + rr2;
+      }else if (recombinations==0) {
+        return rr2;
+      }else if (recombinations==1) {
+        //If the marker was a H then we have 2 * recombination*No recombination chance otherwise just single chance
+        return ((marker1==MH) ? 2.0*r*rr : r*rr);
+      }else{
+        return r2;  // two recombinations
+      }
+      return rr; // Not Recombinated
+      break;
+    case CRIL:
+      if (marker2==MH) {
+        return 0.0; // No chance finding a 1 or H in an RIL
+      }
+      if (recombinations){
+        return r;   //Recombinated
+      }
+      return rr;  // Not Recombinated
+      break;
+    case CBC:
+      if (marker2==MBB) {
+        return 0.0; // No chance finding a 2/BB in a BC
+      }
+      if (recombinations){
+        return r; //Recombinated
+      }
+      return rr; // Not Recombinated
+      break;
+    default:
+      fatal("Strange: unknown crosstype in prob");
+  }
+  fatal("Should not get here");
+  return NAN;
+}
+
+
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   
