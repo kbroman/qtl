@@ -205,9 +205,15 @@ void printhelp(void) {
 
 //Functions
 void exit_on_error(const char *msg) {
-  fprintf(stderr, msg);
+  info("EXIT ERROR: %s",msg);
   printhelp();
   exit(1);
+}
+
+void exit_on_error_gracefull(const char *msg) {
+  info("EXIT ERROR: %s",msg);
+  printhelp();
+  exit(0);
 }
 
 static struct option long_options[] = {
@@ -453,7 +459,7 @@ int main(int argc,char *argv[]) {
     ivector new_ind;
     cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error("Augmentation parameter conflict max_augmentation <= individuals");
+    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     //if (verbose) info("Settingsnind: %d nind: %d augmentednind: %d",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
