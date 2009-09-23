@@ -31,6 +31,9 @@
 // Cross types
 typedef unsigned int RqtlCrossType;
 enum MQMCrossType { CUNKNOWN = 'U', CF2 = 'F', CBC = 'B', CRIL = 'R' };
+enum MQMCofactorType { NOCOFACTOR = '0', COFACTOR ='1', COSEXFACTOR = '2', QTL = '3' };
+enum MQMRelMarkerPos { MLEFT = 'L', MRIGHT = 'R', MMIDDLE = 'M', MUNKNOWN = 'U', MUNLINKED = 0 };
+
 const RqtlCrossType RC_F2  = 1;
 const RqtlCrossType RC_BC  = 2;
 const RqtlCrossType RC_RIL = 3;
@@ -40,11 +43,11 @@ const RqtlCrossType RC_RIL = 3;
 //FIXME : Enum of relmarkerposition type
 //FIXME : Typedef relmarkerposition* relmarkerarray to replace cvector
 //FIXME : duplicate allocation of new type
-const unsigned char MLEFT     = 'L';
-const unsigned char MRIGHT    = 'R';
-const unsigned char MMIDDLE   = 'M';
-const unsigned char MUNLINKED = 'U';
-const unsigned char MUNKNOWN  = 0;
+//const unsigned char MLEFT     = 'L';
+//const unsigned char MRIGHT    = 'R';
+//const unsigned char MMIDDLE   = 'M';
+//const unsigned char MUNLINKED = 'U';
+//const unsigned char MUNKNOWN  = 0;
 
 // Marker genotypes (scored at marker)
 const unsigned char MAA       = '0';  // Homozygous AA
