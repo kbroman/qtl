@@ -156,6 +156,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
   // info("%d r=%f",i,r[i]);
   //}
   int iem= 0, newNaug, i, j;
+  bool warnZeroDist=false;
   char varknown, biasadj='n';
   double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
   vector indweight, Ploci, Fy;
@@ -203,7 +204,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         for (i=0; i<Naug; i++) {
           calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
           //if(i==1) info("c_i:%f prob_i:%f",calc_i,Ploci[i]);
-          if(calc_i == 0.0){info("!!! 0.0 returned from prob !!! R[f] == 0 Markers on top of eachother but different !!!"); calc_i=1.0;}
+          if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
           Ploci[i]*= calc_i;
           //if(i==1) info(" IND1 j=%d r[j]=%f calc_i=%f Ploci=%f (Marker:%c)",j,r[j],calc_i,Ploci[i],loci[j+1][i]);
         }
@@ -243,7 +244,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
             // [pjotr:] was calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0); 
             // why define markertype if it is not used? FIXME
             calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
-            if(calc_i == 0.0){info("!!! 0.0 returned from prob !!! R[f] == 0 Markers on top of eachother but different !!!"); calc_i=1.0;}
+            if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
@@ -273,6 +274,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
     }
   }
+  if(warnZeroDist)info("!!! 0.0 from Prob !!! Markers at same Cm but different genotype !!!"); 
 //	Rprintf("INFO: Done fitting QTL's\n");
   if ((*weight)[0]== -1.0) {
     for (i=0; i<Nind; i++) indweight[i]= 0.0;
