@@ -98,11 +98,13 @@ ADD_TEST(TestMQMBC_T22 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genoty
 ADD_TEST(TestMQMBC_T22_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t22out.txt.rnew test/regression/t22out.txt)
 
 # Run T23
+#crash on est.map
 ADD_TEST(TestMQMBC_T23 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt -cTest/t23/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t23out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMNC_T23_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t23out.txt.rnew test/regression/t23out.txt)
 
 # Run T24
+#crash due to augmentation
 ADD_TEST(TestMQMBC_T24 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t24out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMBC_T24_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t24out.txt.rnew test/regression/t24out.txt)
