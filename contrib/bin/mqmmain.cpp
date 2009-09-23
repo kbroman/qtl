@@ -416,7 +416,6 @@ int main(int argc,char *argv[]) {
       cofactor[i] = '0';
       mapdistance[i]=999.0;
       mapdistance[i]=pos[i];
-      //if (verbose) Rprintf("Distance %d, %f\n",i,mapdistance[i]);
     }
 
     //Danny: Cofactors are now read-in. the output with cofactors.txt set is not equal to MQM_test0.txt
@@ -426,7 +425,10 @@ int main(int argc,char *argv[]) {
     set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
     if (set_cofactors > 0) {
       backwards = 1;
-      if (verbose) Rprintf("%d markers with cofactors. Backward elimination enabled\n",set_cofactors);
+      //if (verbose) info("%d markers with cofactors. Backward elimination enabled",set_cofactors);
+      //for (int i=0; i< mqmalgorithmsettings.nmark; i++) {
+      //  if (verbose) info("Cofactor %d -> %d\n",i,cofactor[i]);
+      //}
     }
     
     //Initialize an empty individuals list
@@ -468,17 +470,17 @@ int main(int argc,char *argv[]) {
     //  if(verbose) Rprintf("traitval:%d,%f\n",i,pheno_value[phenotype][i]);
     //}       
     // Uncomment to inspect the augmented dataset
-    for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-      for (int i=0; i < mqmalgorithmsettings.nind; i++) {
-        validate_markertype(crosstype,markers[m][i]);
-    //    if(verbose) Rprintf("%c ",markers[m][i]);
-      }
-    //  if(verbose) Rprintf("\n");
-    }
+   // for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+      //for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+       // validate_markertype(crosstype,markers[m][i]);
+        //fprintf(fout,"%c ",markers[m][i]);
+     // }
+      //fprintf(fout,"\n");
+    //}
     
     //Missing values create an augmented set,
     analyseF2(nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
-              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,0,verbose);
+              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,'n',verbose);
 
     //Write final QTL profile (screen and file)
     for (int q=0; q<locationsoutput; q++) {
