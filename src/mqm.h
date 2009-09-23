@@ -52,9 +52,9 @@
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else
   #ifdef WIN32
-   #define info(format, ...){ message("INFO: ",format, ## __VA_ARGS__); }
+   //#define info(format, ...){ message("INFO: ",format, ## __VA_ARGS__); }
    #define message(type, format, ...) { \
-    Rprintf(type);Rprintf(format,## __VA_ARGS__);Rprintf("\n");}
+    Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
   #else
     #define message(type,s) { Rprintf("%s: %s\n",type,s); }
   #endif  
