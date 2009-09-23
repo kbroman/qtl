@@ -46,9 +46,9 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   MBB: QTL at locus j, but QTL effect is not included in the model
   MNOTAA: QTL at locu j and QTL effect is included in the model
   */
-//	for (int j=0; j<Naug; j++){
-//	   Rprintf("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
-  //  }
+	//for (int j=0; j<Naug; j++){
+	//   info("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
+  //}
 
   matrix XtWX;
   cmatrix Xt;
@@ -178,12 +178,10 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   ivector indx;
   indx= newivector(dimx);
   /* solve equations */
-  // Rprintf("LUcmp equations\nPrintinf matrix XiWX\n");
-  // printmatrix(XtWX, dimx, dimx);
-//	 for (jj=0; jj<dimx; jj++){
-//		Rprintf("%f", indx);
-//	 }
-//	 Rprintf("\n");
+  //info("LUcmp equations\nPrinting matrix XiWX\ndimX=%d",dimx);
+  //printmatrix(XtWX, dimx, dimx);
+	
+
   ludcmp(XtWX, dimx, indx, &d);
 
 //	 Rprintf("LUsolve equations\nPrintinf indX\n");
