@@ -130,7 +130,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
     }
-    //Rprintf("R[j] value: %f\n",r[j]);
+    //info("%d R[j] value: %f",j,r[j]);
   }
   info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
@@ -250,15 +250,15 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     info("ERROR: Rerun the algorithm with a step.max larger than %f Cm",max);
     return;
   } else {
-    if (verbose) {
-      Rprintf("Reestimation of the map finished. MAX Cm: %f Cm",max);
-    }
+   // if (verbose) info("Reestimation of the map finished. MAX Cm: %f Cm",max);
   }
 
   //Check if everything still is correct
   for (int j=0; j<Nmark; j++) {
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
+      //Wrong
+      //info("j=%d -> Calculated Rf=%f from Distance=%f",j,r[j],(*mapdistance)[j+1]-(*mapdistance)[j]);
       if (r[j]<0) {
         info("ERROR: Recombination frequency is negative");
         info("ERROR: Position=%d r[j]=%f",position[j], r[j]);
