@@ -183,7 +183,7 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
 //refactor name left_prob
 
 
-double prob_new(const double r, const char markerL,const char markerR,const MQMCrossType crosstype){
+double left_prob(const double r, const char markerL,const char markerR,const MQMCrossType crosstype){
   const double r2 = r*r;  //Double recombination
   const double rr = 1.0-r; // No recombination
   const double rr2 = rr*rr; //Double Norecombination
@@ -316,7 +316,7 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
   return NAN;
 }
 
-double probrightF2(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+double right_prob_F2(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
   if(position[j]==MRIGHT||position[j]==MUNLINKED){
     return 1.0;
   }
@@ -357,7 +357,7 @@ double probrightF2(const char markerL, const int j, const cvector imarker, const
       prob1= 2.0*r*rr;
       prob2= rr2;
     }
-    return prob1*probrightF2(MH, j+1, imarker, rs, position) + prob2*probrightF2(MBB, j+1, imarker, rs, position);
+    return prob1*right_prob_F2(MH, j+1, imarker, rs, position) + prob2*right_prob_F2(MBB, j+1, imarker, rs, position);
   } else if (markerR==MNOTBB) {  //SEMI unknown next marker known is it is not a B
     if (markerL==MAA) {          //Observed marker is an A
       prob0= rr2;
@@ -369,7 +369,7 @@ double probrightF2(const char markerL, const int j, const cvector imarker, const
       prob0= r2;
       prob1= 2.0*r*rr;
     }
-    return prob0*probrightF2(MAA, j+1, imarker, rs, position) + prob1*probrightF2(MH, j+1, imarker, rs, position);
+    return prob0*right_prob_F2(MAA, j+1, imarker, rs, position) + prob1*right_prob_F2(MH, j+1, imarker, rs, position);
   } else {                       // Unknown next marker so estimate all posibilities
     if (markerL==MAA) {       //Observed marker is an A
       prob0= rr2;
@@ -384,12 +384,12 @@ double probrightF2(const char markerL, const int j, const cvector imarker, const
       prob1= 2.0*r*rr;
       prob2= rr2;
     }
-    return prob0*probrightF2(MAA, j+1, imarker, rs, position) + prob1*probrightF2(MH, j+1, imarker, rs, position) + prob2*probrightF2(MBB, j+1, imarker, rs, position);
+    return prob0*right_prob_F2(MAA, j+1, imarker, rs, position) + prob1*right_prob_F2(MH, j+1, imarker, rs, position) + prob2*right_prob_F2(MBB, j+1, imarker, rs, position);
   }
 }
 
 
-double probrightBC(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+double right_prob_BC(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
   if(position[j] == MRIGHT||position[j] == MUNLINKED){
     return 1.0;
   }
@@ -416,11 +416,11 @@ double probrightBC(const char markerL, const int j, const cvector imarker, const
       prob0= r;
       prob1= rr;
     }
-    return prob0*probrightBC(MAA, j+1, imarker, rs, position) + prob1*probrightBC(MH, j+1, imarker, rs, position);
+    return prob0*right_prob_BC(MAA, j+1, imarker, rs, position) + prob1*right_prob_BC(MH, j+1, imarker, rs, position);
   }
 }
 
-double probrightRIL(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+double right_prob_RIL(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
   if(position[j] == MRIGHT||position[j] == MUNLINKED){
     return 1.0;
   }
@@ -447,7 +447,7 @@ double probrightRIL(const char markerL, const int j, const cvector imarker, cons
       prob0= r;
       prob2= rr;
     }
-    return prob0*probrightRIL(MAA, j+1, imarker, rs, position) + prob2*probrightRIL(MBB, j+1, imarker, rs, position);
+    return prob0*right_prob_RIL(MAA, j+1, imarker, rs, position) + prob2*right_prob_RIL(MBB, j+1, imarker, rs, position);
   }
 }
 

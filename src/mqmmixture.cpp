@@ -80,7 +80,7 @@ double rmixture(cmatrix marker, vector weight, vector r,
             // [pjotr:] same problem described below, why define if not used? FIXME
             // double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0, 0);
             //double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0);
-            double calc_i = prob_new(r[j],marker[j][i],marker[j+1][i],crosstype);
+            double calc_i = left_prob(r[j],marker[j][i],marker[j+1][i],crosstype);
             weight[i]*=calc_i;
           }
       }
@@ -204,7 +204,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         for (i=0; i<Naug; i++) {
           //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
-          calc_i = prob_new(r[j],loci[j][i],loci[j+1][i],crosstype);
+          calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
           
           if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
           Ploci[i]*= calc_i;
@@ -245,7 +245,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
           for (i=0; i<Naug; i++) {
             // [pjotr:] was calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0); 
             // why define markertype if it is not used? FIXME
-            calc_i = prob_new(r[j],loci[j][i],loci[j+1][i],crosstype);
+            calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
             //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
             if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
             Ploci[i]*= calc_i;
@@ -255,28 +255,28 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         else if (cofactor[j]<=MH) // locus j+1 == QTL
           for (i=0; i<Naug; i++) { // QTL==MAA What is the prob of finding an MAA at J=1
             //calc_i = prob(loci, r, i, j, MAA, crosstype, 0);
-            calc_i = prob_new(r[j],loci[j][i],MAA,crosstype);
+            calc_i =left_prob(r[j],loci[j][i],MAA,crosstype);
             Ploci[i]*= calc_i;
             // QTL==MH
             //calc_i = prob(loci, r, i, j, MH, crosstype, 0);
-            calc_i = prob_new(r[j],loci[j][i],MH,crosstype);
+            calc_i = left_prob(r[j],loci[j][i],MH,crosstype);
             Ploci[i+Naug]*= calc_i;
             // QTL==MBB
             //calc_i = prob(loci, r, i, j, MBB, crosstype, 0);
-            calc_i = prob_new(r[j],loci[j][i],MBB,crosstype);
+            calc_i = left_prob(r[j],loci[j][i],MBB,crosstype);
             Ploci[i+2*Naug]*= calc_i;
           }
         else // locus j == QTL
           for (i=0; i<Naug; i++) { // QTL==MAA
-            calc_i = prob_new(r[j],MAA,loci[j+1][i],crosstype);
+            calc_i = left_prob(r[j],MAA,loci[j+1][i],crosstype);
             //calc_i = prob(loci, r, i, j+1, MAA, crosstype, -1);
             Ploci[i]*= calc_i;
             // QTL==MH
-            calc_i = prob_new(r[j],MH,loci[j+1][i],crosstype);
+            calc_i = left_prob(r[j],MH,loci[j+1][i],crosstype);
             //calc_i = prob(loci, r, i, j+1, MH, crosstype, -1);
             Ploci[i+Naug]*= calc_i;
             // QTL==MBB
-            calc_i = prob_new(r[j],MBB,loci[j+1][i],crosstype);
+            calc_i = left_prob(r[j],MBB,loci[j+1][i],crosstype);
             //calc_i = prob(loci, r, i, j+1, MBB, crosstype, -1);
             Ploci[i+2*Naug]*= calc_i;
           }
