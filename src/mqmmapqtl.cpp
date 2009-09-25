@@ -69,7 +69,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
     else if (position[j]==MMIDDLE)
       cumdistance[j]= cumdistance[j-1]-50*log(1-2.0*r[j]);
   }
-  double savelogL=999.0; // log-likelihood of model with all selected cofactors
+  double savelogL=0.0; // log-likelihood of model with all selected cofactors
 
   /* fit QTL on top of markers (full ML)   fit QTL between markers (full ML) */
   // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;

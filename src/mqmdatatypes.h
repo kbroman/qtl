@@ -37,6 +37,9 @@ enum MQMRelMarkerPos { MLEFT = 'L', MRIGHT = 'R', MMIDDLE = 'M', MUNKNOWN = 'U',
 const RqtlCrossType RC_F2  = 1;
 const RqtlCrossType RC_BC  = 2;
 const RqtlCrossType RC_RIL = 3;
+const double RFUNKNOWN = 999.0;
+const double TRAITUNKNOWN = 999.0;
+const double POSITIONUNKNOWN = 999.0;
 
 // Marker locations/relations
 

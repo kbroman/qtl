@@ -126,7 +126,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   info("Estimating recombinant frequencies");
   for (int j=0; j<Nmark; j++) {
-    r[j]= 999.0;
+    r[j]= RFUNKNOWN;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
     }
@@ -192,7 +192,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   // FIXME this is duplication of code above - should be a (unit tested) method
   for (int j=0; j<Nmark; j++) {
-    r[j]= 999.0;
+    r[j]= RFUNKNOWN;
     if (j==0) {
       if (chr[j]==chr[j+1]) position[j]=MLEFT;
       else position[j]=MUNLINKED;
@@ -270,12 +270,12 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   //We can skip this part iirc because R throws out missing phenotypes beforehand
   int oldNind=Nind;
   for (int i=0; i<oldNind; i++) {
-    Nind-= ((y[i]==999.0) ? 1 : 0);
+    Nind-= ((y[i]==TRAITUNKNOWN) ? 1 : 0);
   }
 
   int oldNaug=Naug;
   for (int i=0; i<oldNaug; i++) {
-    Naug-= ((newy[i]==999.0) ? 1 : 0);
+    Naug-= ((newy[i]==TRAITUNKNOWN) ? 1 : 0);
   }
 
   vector weight;
@@ -286,7 +286,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   weight= newvector(Naug);
   int newi=0;
   for (int i=0; i<oldNaug; i++)
-    if (newy[i]!=999.0) {
+    if (newy[i]!=TRAITUNKNOWN) {
       y[newi]= newy[i];
       ind[newi]= newind[i];
       weight[newi]= newweight[i];
@@ -408,7 +408,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   for (int i=0; i< Nmark; i++) {
     f1genotype[i] = 12;
     //receiving mapdistances
-    mapdistance[i]=999.0;
+    mapdistance[i]=POSITIONUNKNOWN;
     mapdistance[i]=Dist[0][i];
     cofactor[i] = MAA;
     if (Cofactors[0][i] == 1) {
