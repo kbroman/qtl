@@ -117,9 +117,25 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
               prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);
             }
-
-            prob1right= probright(MH, j, imarker, r, position, crosstype);
-            prob2right= probright(MBB, j, imarker, r, position, crosstype);
+            switch (crosstype) {
+              case CF2:
+                prob1right= right_prob_F2(MH, j, imarker, r, position);
+                prob2right= right_prob_F2(MBB, j, imarker, r, position);
+              break;
+              case CBC:
+                prob1right= right_prob_BC(MH, j, imarker, r, position);
+                prob2right= right_prob_BC(MBB, j, imarker, r, position);                
+              break;
+              case CRIL:
+                prob1right= right_prob_RIL(MH, j, imarker, r, position);
+                prob2right= right_prob_RIL(MBB, j, imarker, r, position);                
+              break;
+              case CUNKNOWN:
+                fatal("Strange: unknown crosstype in mqm augment()");
+              break;
+            }
+            //prob1right= probright(MH, j, imarker, r, position, crosstype);
+            //prob2right= probright(MBB, j, imarker, r, position, crosstype);
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
