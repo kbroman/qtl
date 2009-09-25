@@ -79,7 +79,8 @@ double rmixture(cmatrix marker, vector weight, vector r,
           for (i=0; i<Naug; i++) {
             // [pjotr:] same problem described below, why define if not used? FIXME
             // double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0, 0);
-            double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0);
+            //double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0);
+            double calc_i = prob_new(r[j],marker[j][i],marker[j+1][i],crosstype);
             weight[i]*=calc_i;
           }
       }
