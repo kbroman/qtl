@@ -484,7 +484,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     chr[i] = Chromo[0][i];
   }
 
-  position = locate_markers(*Nmark,chr);
+  position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
 
   if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
