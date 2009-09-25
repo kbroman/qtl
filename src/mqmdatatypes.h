@@ -31,7 +31,7 @@
 // Cross types
 typedef unsigned int RqtlCrossType;
 enum MQMCrossType { CUNKNOWN = 'U', CF2 = 'F', CBC = 'B', CRIL = 'R' };
-enum MQMCofactorType { NOCOFACTOR = '0', COFACTOR ='1', COSEXFACTOR = '2', QTL = '3' };
+enum MQMCofactorType { MNOCOF = '0', MCOF ='1', MSEX = '2', MQTL = '3' };
 enum MQMRelMarkerPos { MLEFT = 'L', MRIGHT = 'R', MMIDDLE = 'M', MUNKNOWN = 'U', MUNLINKED = '-' };
 
 const RqtlCrossType RC_F2  = 1;
