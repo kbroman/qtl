@@ -191,7 +191,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       for (i=0; i<Naug; i++)
         Ploci[i]*= Pscale;
       //Here we have ProbLeft
-      if(i==1) info("Ploci=%f",Ploci[i]);
+      //if(i==1) info("Ploci=%f",Ploci[i]);
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
           // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
