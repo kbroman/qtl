@@ -103,7 +103,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   // Create an array of marker positions - each marker is one of LMRU (left,
   // middle, right, unknown/single)
-  position = locate_markers(Nmark,chr);
+  position = relative_marker_position(Nmark,chr);
   /*info("Calculating relative genomepositions of the markers");
   for (int j=0; j<Nmark; j++) {
     if (j==0) {
@@ -124,8 +124,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       else position[j]=MUNLINKED;
     }
   } */
-
-  info("Estimating recombinant frequencies");
+  r = recombination_frequencies(Nmark, position, (*mapdistance));
+ /* info("Estimating recombinant frequencies");
   for (int j=0; j<Nmark; j++) {
     r[j]= RFUNKNOWN;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
@@ -133,6 +133,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
     //info("%d R[j] value: %f",j,r[j]);
   }
+  */
   info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
@@ -209,7 +210,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     }
   }
   */
-  position = locate_markers(Nmark,chr);
+  position = relative_marker_position(Nmark,chr);
   
   for (int j=0; j<Nmark; j++) {
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {

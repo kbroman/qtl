@@ -32,9 +32,8 @@
 
 /* This function walks the marker list and determins for every position whether the marker is in the Middle, Left,Right of the chromosome
  When there is only 1 marker on a chromosome it is defined Unlinked*/
- 
-// FIXME Naming of function (set_relative_marker_position / findLeftRightMarkerpos)
-cvector locate_markers(const int nmark,const ivector chr) 
+
+cvector relative_marker_position(const int nmark,const ivector chr) 
 {
   cvector position = newcvector(nmark);
   info("Calculating relative genomepositions of the markers");

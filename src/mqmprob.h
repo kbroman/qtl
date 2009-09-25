@@ -30,7 +30,7 @@
 #endif
 
 
-cvector locate_markers(const int nmark,const ivector chr);
+cvector relative_marker_position(const int nmark,const ivector chr);
 vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance);
 void validate_markertype(const MQMCrossType crosstype, const char markertype);
 //double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const MQMCrossType crosstype);

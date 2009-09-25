@@ -243,10 +243,8 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         if ((cofactor[j]<=MH)&&(cofactor[j+1]<=MH))
           for (i=0; i<Naug; i++) {
-            // [pjotr:] was calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0, 0, 0); 
-            // why define markertype if it is not used? FIXME
-            calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
             //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
+            calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
             if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;

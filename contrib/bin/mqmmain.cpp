@@ -457,7 +457,7 @@ int main(int argc,char *argv[]) {
     cmatrix newmarkerset;
     vector new_y;
     ivector new_ind;
-    cvector position = locate_markers(mqmalgorithmsettings.nmark,chr);
+    cvector position = relative_marker_position(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
