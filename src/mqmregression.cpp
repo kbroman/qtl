@@ -67,7 +67,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   XtWY= newvector(dimx_alloc);
   dimx=1;
   for (j=0; j<Nmark; j++)
-    if ((cofactor[j]==MH)||(cofactor[j]==MNOTAA)) dimx+= (dominance=='y' ? 2 : 1);
+    if ((cofactor[j]==MCOF)||(cofactor[j]==MQTL)) dimx+= (dominance=='y' ? 2 : 1);
   cvector xtQTL; // MAA=mu; MH=cofactor; MBB=QTL (additive); MNOTAA= QTL (dominance);
   //FIXME TO enum MQTL MCOF MSEX MDOMI
   xtQTL= newcvector(dimx);
@@ -76,12 +76,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   xtQTL[jx]= MAA;
 
   for (j=0; j<Nmark; j++)
-    if (cofactor[j]==MH) { // cofactor (not a QTL moving along the chromosome)
+    if (cofactor[j]==MCOF) { // cofactor (not a QTL moving along the chromosome)
       jx++;
-      xtQTL[jx]= MH;
+      xtQTL[jx]= MCOF;
       if (dominance=='y') {
         for (int i=0; i<Naug; i++)
-          if      (marker[j][i]==MH) {
+          if (marker[j][i]==MH) {
             Xt[jx][i]=48;  //ASCII code 47, 48 en 49 voor -1, 0, 1;
             Xt[jx+1][i]=49;
           } else if (marker[j][i]==MAA) {
@@ -104,12 +104,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
           }
         }
       }
-    } else if (cofactor[j]==MNOTAA) { // QTL
+    } else if (cofactor[j]==MQTL) { // QTL
       jx++;
-      xtQTL[jx]= MBB;
+      xtQTL[jx]= MSEX;
       if (dominance=='y') {
         jx++;
-        xtQTL[jx]= MNOTAA;
+        xtQTL[jx]= MQTL;
       }
     }
 
@@ -139,21 +139,21 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
       yi= y[i];
       //Changed <= to < to prevent chrashes, this could make calculations a tad different then before
       for (j=0; j<dimx; j++)
-        if (xtQTL[j]<=MH) {
+        if (xtQTL[j]<=MCOF) {
           xtwj= ((double)Xt[j][i]-48.0)*wi;
           XtWY[j]+= xtwj*yi;
           for (jj=0; jj<=j; jj++)
-            if (xtQTL[jj]<=MH) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
-            else if (xtQTL[jj]==MBB) // QTL: additive effect if QTL=MAA or MBB
+            if (xtQTL[jj]<=MCOF) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
+            else if (xtQTL[jj]==MSEX) // QTL: additive effect if QTL=MCOF or MSEX
             {  // QTL==MAA
               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*(*weight)[i]*(47.0-48.0);
               // QTL==MBB
               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*(*weight)[i+2*Naug]*(49.0-48.0);
-            } else // (xtQTL[jj]==MNOTAA)  QTL: dominance effect only if QTL=MH
+            } else // (xtQTL[jj]==MNOTAA)  QTL: dominance effect only if QTL=MCOF
             {  // QTL==MH
               XtWX[j][jj]+= ((double)(Xt[j][i]-48.0))*(*weight)[i+Naug]*(49.0-48.0);
             }
-        } else if (xtQTL[j]==MBB) { // QTL: additive effect if QTL=MAA or MBB
+        } else if (xtQTL[j]==MSEX) { // QTL: additive effect if QTL=MCOF or MSEX
           xtwj= -1.0*(*weight)[i]; // QTL==MAA
           XtWY[j]+= xtwj*yi;
           for (jj=0; jj<j; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
@@ -222,12 +222,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
         fit[i+Naug]= 0.0;
         fit[i+2*Naug]= 0.0;
         for (j=0; j<dimx; j++)
-          if (xtQTL[j]<=MH) {
+          if (xtQTL[j]<=MCOF) {
             calc_i =((double)Xt[j][i]-48.0)*XtWY[j];
             fit[i]+= calc_i;
             fit[i+Naug]+= calc_i;
             fit[i+2*Naug]+= calc_i;
-          } else if (xtQTL[j]==MBB) {
+          } else if (xtQTL[j]==MSEX) {
             fit[i]+=-1.0*XtWY[j];
             fit[i+2*Naug]+=1.0*XtWY[j];
           } else
@@ -263,12 +263,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
         fit[i+Naug]= 0.0;
         fit[i+2*Naug]= 0.0;
         for (j=0; j<dimx; j++)
-          if (xtQTL[j]<=MH) {
+          if (xtQTL[j]<=MCOF) {
             calc_i =((double)Xt[j][i]-48.0)*XtWY[j];
             fit[i]+= calc_i;
             fit[i+Naug]+= calc_i;
             fit[i+2*Naug]+= calc_i;
-          } else if (xtQTL[j]==MBB) {
+          } else if (xtQTL[j]==MSEX) {
             fit[i]+=-1.0*XtWY[j];
             fit[i+2*Naug]+=1.0*XtWY[j];
           } else

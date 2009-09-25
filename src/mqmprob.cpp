@@ -64,8 +64,6 @@ cvector relative_marker_position(const int nmark,const ivector chr)
 }
 
 /*Using haldane we calculate Recombination frequencies. Using relative marker positions and distances Return array of rec. frequencies (unknown = 999.0)*/
-//FIXME 999.0 to RFUNKNOWN
-//FIXME unsigned int als array index (uint)
 //NOTE checking for r[j] <0 (marker ordering) can ahppen at contract
 vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance) 
 {
@@ -73,7 +71,7 @@ vector recombination_frequencies(const int nmark, const cvector position, const 
   
   info("Estimating recombinant frequencies");
   vector r = newvector(nmark);
-  for (int j=0; j<nmark; j++) {
+  for (unsigned int j=0; j<nmark; j++) {
     r[j]= RFUNKNOWN;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
@@ -121,11 +119,11 @@ void validate_markertype(const MQMCrossType crosstype, const char markertype)
 
  //FIXME: Special function for special case (start_prob for regression)
  //FIXME: MQMmarker ipv cont char en dan als index (dus in datatypes -> '0'-> 0)
-double start_prob(const MQMCrossType crosstype, const char markertype) {
+double start_prob(const MQMCrossType crosstype, const char marker) {
   //validate_markertype(crosstype,markertype);
   switch (crosstype) {
     case CF2:
-      switch (markertype) {
+      switch (marker) {
       case MAA:
         return 0.25;
       case MH:
@@ -133,11 +131,11 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.25;
       default:
-        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
+        Rprintf("Strange: Probability requested for invalid markertype: %c",marker);
         return 0.0;
       }
     case CRIL:
-      switch (markertype) {
+      switch (marker) {
       case MAA:
         return 0.5;
       case MH:
@@ -145,11 +143,11 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.5;
       default:
-        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
+        Rprintf("Strange: Probability requested for invalid markertype: %c",marker);
         return 0.0;
       }
     case CBC:
-      switch (markertype) {
+      switch (marker) {
       case MAA:
         return 0.5;
       case MH:
@@ -157,7 +155,7 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
       case MBB:
         return 0.0;
       default:
-        Rprintf("Strange: Probability requested for invalid markertype: %c",markertype);
+        Rprintf("Strange: Probability requested for invalid markertype: %c",marker);
         return 0.0;
       }
       //return (markertype==MH ? 0.5 : 0.5);
@@ -178,8 +176,6 @@ double start_prob(const MQMCrossType crosstype, const char markertype) {
  
  FIXME zie start_prob for the same issue with markertypes not bellong to the current cross
  */
-// IPV rs geven we de 'single Rec Freq' dan vervalt ADJ en kan de berekening korter en mooier
-//refactor name left_prob
 
 
 double left_prob(const double r, const char markerL,const char markerR,const MQMCrossType crosstype){
@@ -228,7 +224,7 @@ double left_prob(const double r, const char markerL,const char markerR,const MQM
   return NAN;
 }
 
-
+/*
 double prob(const cmatrix loci, const vector rs, const int i, const int j, const
 char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   
@@ -286,6 +282,7 @@ char checkmarker, const MQMCrossType crosstype, const int ADJ) {
   }
   return prob;
 }
+*/
 
 /*
  * Return the probability of a marker being of markertype (at j), using the
@@ -510,7 +507,7 @@ double probright(const char markertype, const int j, const cvector imarker, cons
           prob1= 2.0*r*rr;
           prob2= rr2;
         }
-        //FIXME If (semi) unknown marker we need to step untill we reach a known one
+        //If we have a(semi) unknown marker we need to step untill we reach a known one
         //TESTME: What happens if a chromosome ends with unknown markers AAAAAHHHHHUUUUUUUU
         return prob1*probright(MH, j+1, imarker, rs, position, crosstype) + prob2*probright(MBB, j+1, imarker, rs, position, crosstype);
       } else if (rightmarker==MNOTBB) {
