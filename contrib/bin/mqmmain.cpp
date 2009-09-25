@@ -417,10 +417,10 @@ int main(int argc,char *argv[]) {
     //Create a QTL object holding all our output location
     int locationsoutput = 3*max_chr*(((mqmalgorithmsettings.stepmax)-(mqmalgorithmsettings.stepmin))/ (mqmalgorithmsettings.stepsize));
     QTL = newmatrix(1,locationsoutput);
-    //initialize cofactors to 0 and mapdistances to 999.0 Cm
+    //initialize cofactors to 0 and mapdistances to UNKNOWN Cm
     for (int i=0; i< mqmalgorithmsettings.nmark; i++) {
       cofactor[i] = '0';
-      mapdistance[i]=999.0;
+      mapdistance[i]=POSITIONUNKNOWN;
       mapdistance[i]=pos[i];
     }
 

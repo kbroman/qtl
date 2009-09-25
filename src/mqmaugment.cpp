@@ -479,7 +479,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
 
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
-    mapdistance[i]=999.0;
+    mapdistance[i]=POSITIONUNKNOWN;
     mapdistance[i]=Dist[0][i];
     chr[i] = Chromo[0][i];
   }

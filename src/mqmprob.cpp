@@ -75,7 +75,7 @@ vector recombination_frequencies(const int nmark, const cvector position, const 
   info("Estimating recombinant frequencies");
   vector r = newvector(nmark);
   for (int j=0; j<nmark; j++) {
-    r[j]= 999.0;
+    r[j]= RFUNKNOWN;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
       if (r[j]<0) {
