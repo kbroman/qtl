@@ -87,7 +87,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   int newNind = nind0;
   int previaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
-    if(verbose) Rprintf("Starting individual");
+    if(verbose) Rprintf("Starting individual: %d",i);
     // ---- for every individual:
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
@@ -95,7 +95,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
     newy[iaug]    = y[i];              // cvariance (phenotype)
     newprob[iaug] = 1.0;
     double probmax = 1.0;
-    if (verbose) Rprintf("individual:%d,dropped:%d\n",i,dropped);
+    //if (verbose) info("individual:%d,dropped:%d",i,dropped);
     for (int j=0; j<Nmark; j++) 
       newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
     for (int j=0; j<Nmark; j++) {
@@ -112,8 +112,10 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
+              //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob1left= prob_new(r[j-1],newmarker[j-1][ii],MH,crosstype);
+              //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
+              prob2left= prob_new(r[j-1],newmarker[j-1][ii],MBB,crosstype);
             }
 
             prob1right= probright(MH, j, imarker, r, position, crosstype);
@@ -162,8 +164,10 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob0left= start_prob(crosstype, MAA);
               prob1left= start_prob(crosstype, MH);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
+              prob0left= prob_new(r[j-1],newmarker[j-1][ii],MAA,crosstype);
+              //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob1left= prob_new(r[j-1],newmarker[j-1][ii],MH,crosstype);
             }
 
             prob0right= probright(MAA, j, imarker, r, position, crosstype);
@@ -213,11 +217,13 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
+              //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
+              prob0left= prob_new(r[j-1],newmarker[j-1][ii],MAA,crosstype);
+              //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob1left= prob_new(r[j-1],newmarker[j-1][ii],MH,crosstype);
+              //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
+              prob2left= prob_new(r[j-1],newmarker[j-1][ii],MBB,crosstype);    
             }
-
             prob0right= probright(MAA, j, imarker, r, position, crosstype);
             prob1right= probright(MH, j, imarker, r, position, crosstype);
             prob2right= probright(MBB, j, imarker, r, position, crosstype);
@@ -315,7 +321,8 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
+              //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
+              prob0left= prob_new(r[j-1],newmarker[j-1][ii],newmarker[j][ii],crosstype);
             }
 
             newprob[ii]*= prob0left;
