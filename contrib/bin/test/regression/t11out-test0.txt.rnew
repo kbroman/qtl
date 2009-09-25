@@ -6,6 +6,7 @@ INFO: Receiving the chromosome matrix from R
 INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
 INFO: Initialize Frun and informationcontent to 0.0
+INFO: Calculating relative genomepositions of the markers
 INFO: After dropping of uninformative cofactors
 INFO: Prob=0.049643 Alfa=0.050000
 INFO: Prob=0.050932 Alfa=0.050000
