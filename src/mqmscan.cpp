@@ -158,8 +158,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     } else if ((*cofactor)[j]==MNOCOF) {
       dropj='y';
     } else if (position[j]==MLEFT) {
-      // (cofactor[j]!=MAA) cofactor at non-segregating marker
-      // test whether next segregating marker is nearby (<20cM)
+      // (cofactor[j]!=MNOCOF) cofactor at non-segregating marker test whether next segregating marker is nearby (<20cM)
       dropj='y';
       if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)) dropj='n';
       else if (position[j+1]!=MRIGHT)
@@ -211,25 +210,21 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   */
   position = relative_marker_position(Nmark,chr);
-  
-  for (int j=0; j<Nmark; j++) {
-    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-      r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
-      if (r[j]<0) {
-        Rprintf("ERROR: Position=%d r[j]=%f\n",position[j], r[j]);
-        fatal("Recombination frequency is negative");
-        return;
-      }
-    }
-  }
+  r = recombination_frequencies(Nmark, position, (*mapdistance));
+
   info("After dropping of uninformative cofactors");
+  //calculate Traits mean and variance
   ivector newind;
   vector newy;
   cmatrix newmarker;
   double ymean=0.0, yvari=0.0;
-  for (int i=0; i<Nind; i++) ymean += y[i];
+  for (int i=0; i<Nind; i++){
+    ymean += y[i];
+  }
   ymean/= Nind;
-  for (int i=0; i<Nind; i++) yvari += pow(y[i]-ymean,2);
+  for (int i=0; i<Nind; i++){
+    yvari += pow(y[i]-ymean,2);
+  }  
   yvari/= (Nind-1);
   //Fix for not doing dataaugmentation, we just copy the current as the augmented and set Naug to Nind
   Naug=Nind;
@@ -247,7 +242,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   vector newweight;
   newweight= newvector(Naug);
-  //Re-estimation of recombinant frequencies
+  //Re-estimation of mapdistances if reesimate=TRUE
   double max;
   max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype,verbose);
   if (max > stepmax) {
@@ -258,19 +253,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
    // if (verbose) info("Reestimation of the map finished. MAX Cm: %f Cm",max);
   }
 
-  //Check if everything still is correct
-  for (int j=0; j<Nmark; j++) {
-    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-      r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
-      //Wrong
-      //info("j=%d -> Calculated Rf=%f from Distance=%f",j,r[j],(*mapdistance)[j+1]-(*mapdistance)[j]);
-      if (r[j]<0) {
-        info("ERROR: Recombination frequency is negative");
-        info("ERROR: Position=%d r[j]=%f",position[j], r[j]);
-        return;
-      }
-    }
-  }
+  //Check if everything still is correct positions and R[f]
+  position = relative_marker_position(Nmark,chr);
+  r = recombination_frequencies(Nmark, position, (*mapdistance));
+  
   /* eliminate individuals with missing trait values */
   //We can skip this part iirc because R throws out missing phenotypes beforehand
   int oldNind=Nind;
