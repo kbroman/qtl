@@ -127,7 +127,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (moveQTL<=mapdistance[j]) {
           QTLposition[j]= position[j];
           QTLposition[j+1]= MMIDDLE;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j]-moveQTL)));
+          QTLr[j]= recombination_frequentie((mapdistance[j]-moveQTL));
           QTLr[j+1]= r[j];
           QTLloci[j+1]= marker[j];
           QTLloci[j]= marker[Nloci-1];
@@ -138,8 +138,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         } else if (moveQTL<=mapdistance[j+1]) {
           QTLposition[j]= position[j];
           QTLposition[j+1]= MMIDDLE;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j])));
-          QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
+          QTLr[j]= recombination_frequentie((moveQTL-mapdistance[j]));
+          QTLr[j+1]= recombination_frequentie((mapdistance[j+1]-moveQTL)); //r[j];
           QTLloci[j]= marker[j];
           QTLloci[j+1]= marker[Nloci-1];
           QTLmapdistance[j]= mapdistance[j];
@@ -150,8 +150,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (moveQTL<=mapdistance[j+1]) {
           QTLposition[j]= position[j];
           QTLposition[j+1]= MMIDDLE;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
-          QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
+          QTLr[j]= recombination_frequentie((moveQTL-mapdistance[j])); //0.0;
+          QTLr[j+1]= recombination_frequentie((mapdistance[j+1]-moveQTL)); //r[j];
           QTLloci[j]= marker[j];
           QTLloci[j+1]= marker[Nloci-1];
           QTLmapdistance[j]= mapdistance[j];
@@ -162,7 +162,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (moveQTL<=stepmax) {
           QTLposition[j]= MMIDDLE;
           QTLposition[j+1]= MRIGHT;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
+          QTLr[j]= recombination_frequentie((moveQTL-mapdistance[j])); //0.0;
           QTLr[j+1]= r[j]; // note r[j]=999.0
           QTLloci[j]= marker[j];
           QTLloci[j+1]= marker[Nloci-1];
