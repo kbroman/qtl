@@ -186,18 +186,14 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
     Ploci[i]= 1.0;
   }
   if (fitQTL=='n') {
-    //info("fitQTL=\'n\'");
     for (j=0; j<Nloci; j++) {
       for (i=0; i<Naug; i++)
         Ploci[i]*= Pscale;
-      //Here we have ProbLeft
-      //if(i==1) info("Ploci=%f",Ploci[i]);
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
           // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
           calc_i = start_prob(crosstype, loci[j][i]);
           Ploci[i]*= calc_i;
-          //if(i==1) info(" STARTPROB IND1 j=%d calc_i=%f Ploci=%f",j,calc_i,Ploci[i]);
           //Als Ploci > 0 en calc_i > 0 then we want to assert Ploci[] != 0
         }
       }
@@ -213,7 +209,6 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
     }
   } else {
-//	Rprintf("FitQTL=Y\n");
     for (j=0; j<Nloci; j++) {
       for (i=0; i<Naug; i++) {
         Ploci[i]*= Pscale;
@@ -222,7 +217,6 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         // only for computational accuracy; see use of logP
       }
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
-        //Here we don't have any f2 dependancies anymore by using the prob function
         if (cofactor[j]<=MCOF)
           for (i=0; i<Naug; i++) {
             // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
