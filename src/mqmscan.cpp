@@ -31,12 +31,7 @@ inline int mqmmod(int a, int b) {
 }
 
 double Lnormal(double residual, double variance) {
-  //double Likelihood,likelyhood;
-  //Likelihood=exp(-pow(residual/sqrt(variance),2.0)/2.0 - log(sqrt(2.0*acos(-1.0)*variance)));
-  //if(fabs(Likelihood-likelyhood)>0.05){
-  //Rprintf("ERROR: Lnormal error\n");
-  //}
-  //return likelyhood;
+  //Now using R-library for Lnormal
   return dnorm(residual,0,sqrt(variance),0);
 }
 
@@ -101,39 +96,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   if (RMLorML == 1) useREML=false;  // use ML instead
 
-  // Create an array of marker positions - each marker is one of LMRU (left,
-  // middle, right, unknown/single)
+  // Create an array of marker positions - and calculate R[f] based on these locations
   position = relative_marker_position(Nmark,chr);
-  /*info("Calculating relative genomepositions of the markers");
-  for (int j=0; j<Nmark; j++) {
-    if (j==0) {
-      // first marker is MLEFT; if single marker MUNLINKED
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    } else if (j==(Nmark-1)) {
-      // Last marker is MRIGHT; if single marker MUNLINKED
-      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNLINKED;
-    } else if (chr[j]==chr[j-1]) { // marker on the left is on the same chromosome
-      //  MMIDDLE the marker to the right is on the same chromosome, otherwise MRIGHT
-      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
-      else position[j]=MRIGHT;
-    } else { // marker on the left is not on the same chromosome
-      // MLEFT if marker to the right is on the same chromosome, otherwise MUNLINKED
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    }
-  } */
   r = recombination_frequencies(Nmark, position, (*mapdistance));
- /* info("Estimating recombinant frequencies");
-  for (int j=0; j<Nmark; j++) {
-    r[j]= RFUNKNOWN;
-    if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-      r[j]= 0.5*(1.0-exp(-0.02*((*mapdistance)[j+1]-(*mapdistance)[j])));
-    }
-    //info("%d R[j] value: %f",j,r[j]);
-  }
-  */
+
   info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
@@ -191,24 +157,6 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   if (verbose) {
     Rprintf("Num markers: %d",Nmark);
   }
- /* // FIXME this is duplication of code above - should be a (unit tested) method
-  for (int j=0; j<Nmark; j++) {
-    r[j]= RFUNKNOWN;
-    if (j==0) {
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    } else if (j==(Nmark-1)) {
-      if (chr[j]==chr[j-1]) position[j]=MRIGHT;
-      else position[j]=MUNLINKED;
-    } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) position[j]=MMIDDLE;
-      else position[j]=MRIGHT;
-    } else {
-      if (chr[j]==chr[j+1]) position[j]=MLEFT;
-      else position[j]=MUNLINKED;
-    }
-  }
-  */
   position = relative_marker_position(Nmark,chr);
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
@@ -239,10 +187,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       newmarker[j][i]= marker[j][i];
     }
   }
-
+  //End fix
   vector newweight;
   newweight= newvector(Naug);
-  //Re-estimation of mapdistances if reesimate=TRUE
+  //Re-estimation of mapdistances if reestimate=TRUE
   double max;
   max = rmixture(newmarker, newweight, r, position, newind,Nind, Naug, Nmark, mapdistance,reestimate,crosstype,verbose);
   if (max > stepmax) {
@@ -294,7 +242,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(newy);
   Free(newind);
   Free(newweight);
-  //END thworing out missing phenotypes
+  //END throwing out missing phenotypes
 
   double variance=-1.0;
   double logLfull;

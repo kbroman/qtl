@@ -29,11 +29,11 @@
 #endif
      
 double Lnormal(double residual, double variance);
-// int mod(int a, int b);
+int mqmmod(int a, int b);
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno);
 void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);
 
-/* analyseF2 - analyse one F2 family */
+/* analyseF2 - analyse one F2/BC/RIL family */
 
 void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker, 
                vector y, ivector f1genotype, int Backwards, double **QTL,vector
@@ -41,14 +41,15 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
                windowsize,double stepsize, double stepmin,double stepmax,double
                alfa,int em,int out_Naug,int **INDlist,char reestimate, MQMCrossType
                crosstype,char dominance,int verbose);
-
+      
+//R calling interface
 void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                int *geno,int *chromo, double *dist, double *pheno,
                int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
                double *windowsize,double *steps,
                double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *rqtlcrosstype,int *domi,int *verbose);
 
-int mqmmod(int a, int b);
+
 
 #ifdef __cplusplus
   }
