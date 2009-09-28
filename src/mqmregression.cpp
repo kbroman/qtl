@@ -35,16 +35,28 @@
 * augmented data
 */
 
+
+int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const char dominance){
+  int dimx=1;
+  for (unsigned int j=0; j<nmark; j++){
+    if (cofactor[j]==MCOF) dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
+    else if (cofactor[j]==MSEX) {
+      dimx+=1;
+    }
+  }
+  return dimx;
+}
+
 double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
                   vector *weight, ivector ind, int Naug, double *variance,
                   vector Fy, char biasadj, char fitQTL, char dominance) {
   // Rprintf("regression IN\n");
   /*
   cofactor[j] at locus j:
-  MAA: no cofactor at locus j
-  MH: cofactor at locus j
-  MBB: QTL at locus j, but QTL effect is not included in the model
-  MNOTAA: QTL at locu j and QTL effect is included in the model
+  MNOCOF: no cofactor at locus j
+  MCOF: cofactor at locus j
+  MSEX: QTL at locus j, but QTL effect is not included in the model
+  MQTL: QTL at locu j and QTL effect is included in the model
   */
 	//for (int j=0; j<Naug; j++){
 	//   info("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
@@ -53,27 +65,24 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
   matrix XtWX;
   cmatrix Xt;
   vector XtWY;
-  int dimx=1;
+  //Calculate the dimensions of the designMatrix
+  int dimx=designmatrixdimensions(cofactor,Nmark,dominance);
   int j, jj;
-  for (j=0; j<Nmark; j++)
-    if (cofactor[j]==MH) dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-    else if (cofactor[j]==MBB) {
-      dimx+=1;
-    }
-
   const int dimx_alloc = dimx+2;
+  //Allocate structures
   XtWX= newmatrix(dimx_alloc, dimx_alloc);
   Xt  = newcmatrix(dimx_alloc, Naug);
   XtWY= newvector(dimx_alloc);
+  //Reset dimension designmatrix
   dimx=1;
-  for (j=0; j<Nmark; j++)
+  for (j=0; j<Nmark; j++){
     if ((cofactor[j]==MCOF)||(cofactor[j]==MQTL)) dimx+= (dominance=='y' ? 2 : 1);
-  cvector xtQTL; // MAA=mu; MH=cofactor; MBB=QTL (additive); MNOTAA= QTL (dominance);
-  //FIXME TO enum MQTL MCOF MSEX MDOMI
+  }
+  cvector xtQTL; 
   xtQTL= newcvector(dimx);
   int jx=0;
   for (int i=0; i<Naug; i++) Xt[jx][i]= MH;
-  xtQTL[jx]= MAA;
+  xtQTL[jx]= MNOCOF;
 
   for (j=0; j<Nmark; j++)
     if (cofactor[j]==MCOF) { // cofactor (not a QTL moving along the chromosome)
@@ -92,7 +101,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
             Xt[jx+1][i]=48;
           }
         jx++;
-        xtQTL[jx]= MH;
+        xtQTL[jx]= MCOF;
       } else {
         for (int i=0; i<Naug; i++) {
           if      (marker[j][i]==MH) {
@@ -120,9 +129,7 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
     XtWY[j]= 0.0;
     for (jj=0; jj<dimx; jj++) XtWX[j][jj]= 0.0;
   }
-
-
-  if (fitQTL=='n')
+  if (fitQTL=='n'){
     for (int i=0; i<Naug; i++) {
       yi= y[i];
       wi= (*weight)[i];
@@ -133,12 +140,12 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
         for (jj=0; jj<=j; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
       }
     }
-  else // QTL is moving along the chromosomes
+  }else{ // QTL is moving along the chromosomes
     for (int i=0; i<Naug; i++) {
       wi= (*weight)[i]+ (*weight)[i+Naug]+ (*weight)[i+2*Naug];
       yi= y[i];
       //Changed <= to < to prevent chrashes, this could make calculations a tad different then before
-      for (j=0; j<dimx; j++)
+      for (j=0; j<dimx; j++){
         if (xtQTL[j]<=MCOF) {
           xtwj= ((double)Xt[j][i]-48.0)*wi;
           XtWY[j]+= xtwj*yi;
@@ -162,40 +169,28 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
           XtWY[j]+= xtwj*yi;
           for (jj=0; jj<j; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
           XtWX[j][j]+= xtwj*1.0;
-        } else { // (xtQTL[j]==MNOTAA) QTL: dominance effect only if QTL=MH
-          xtwj= 1.0*(*weight)[i+Naug]; // QTL==MH
+        } else { // (xtQTL[j]==MQTL) QTL: dominance effect only if QTL=MCOF
+          xtwj= 1.0*(*weight)[i+Naug]; // QTL==MCOF
           XtWY[j]+= xtwj*yi;
           // j-1 is for additive effect, which is orthogonal to dominance effect
           for (jj=0; jj<j-1; jj++) XtWX[j][jj]+= xtwj*((double)Xt[jj][i]-48.0);
           XtWX[j][j]+= xtwj*1.0;
         }
+      }
     }
-  for (j=0; j<dimx; j++)
-    for (jj=j+1; jj<dimx; jj++) XtWX[j][jj]= XtWX[jj][j];
-
+  }
+  for (j=0; j<dimx; j++){
+    for (jj=j+1; jj<dimx; jj++){
+      XtWX[j][jj]= XtWX[jj][j];
+    }
+  }
 
   int d;
   ivector indx;
   indx= newivector(dimx);
   /* solve equations */
-  //info("LUcmp equations\nPrinting matrix XiWX\ndimX=%d",dimx);
-  //printmatrix(XtWX, dimx, dimx);
-	
-
   ludcmp(XtWX, dimx, indx, &d);
-
-//	 Rprintf("LUsolve equations\nPrintinf indX\n");
-  //for (jj=0; jj<dimx; jj++){
-  //	Rprintf("%f", indx);
-  //}
-  //Rprintf("\n");
-
   lusolve(XtWX, dimx, indx, XtWY);
-  // luinvert(xtwx, inv, dimx, indx);
-  //  Rprintf("Parameter Estimates\n");
-  //for (jj=0; jj<dimx; jj++){
-  //	Rprintf("%d %f\n", jj, XtWY[jj]);
-  // }
 
   long double *indL;
   // long double indL[Nind];
@@ -295,16 +290,11 @@ double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector 
       indL[ind[i]]+=(*weight)[i+Naug]*  Fy[i+Naug];
       indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
     }
-
   }
-
   for (int i=0; i<Nind; i++) {
     //Sum up log likelyhoods for each individual
-
     logL+= log(indL[i]);
   }
-  //RRprintf("LLhood: %f\n", logL);
-
   Free(indL);
   Free(indx);
   Free(xtQTL);
