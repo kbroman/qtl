@@ -294,22 +294,14 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(newy);
   Free(newind);
   Free(newweight);
+  //END thworing out missing phenotypes
 
-//    vector Fy;
-//    Fy= newvector(Naug);
   double variance=-1.0;
   double logLfull;
   cvector selcofactor;
   selcofactor= newcvector(Nmark); /* selected cofactors */
 
-  int dimx=1;
-  for (int j=0; j<Nmark; j++) {
-    if ((*cofactor)[j]==MCOF) {
-      dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-    } else if ((*cofactor)[j]==MSEX) {
-      dimx+=1;  /* sex of the mouse - when cofactor=2 we analyse an F2 cofactor as a BC cofactor*/
-    }
-  }
+  int dimx=designmatrixdimensions((*cofactor),Nmark,dominance);
   double F1, F2;
 
   F1= inverseF(1,Nind-dimx,alfa,verbose);
@@ -330,8 +322,8 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   if (Backwards==0) // use all cofactors
     logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose); // printout=='n'
 
-  // ---- Write output / send it back to R
-  //Cofactors that made it to the final model
+  //  Write output and/or send it back to R
+  // Cofactors that made it to the final model
   for (int j=0; j<Nmark; j++) {
     if (selcofactor[j]==MCOF) {
       (*cofactor)[j]=MCOF;
@@ -341,17 +333,12 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   }
   //QTL likelyhood for each location
   if(verbose) info("Number of output datapoints: %d",Nsteps);
-
-  //ofstream fff("MQM.output", ios::out | ios::app);
   for (int ii=0; ii<Nsteps; ii++) {
     //Convert LR to LOD before sending back
     QTL[0][ii] = Frun[ii][0] / 4.60517;
     QTL[0][Nsteps+ii] = informationcontent[ii];
-    //char *outline;
-    //Rprintf("LOC: %d QTL: %f INFO: %f\n",ii,QTL[0][ii],QTL[0][Nsteps+ii]);
-    //fff << outline;
   }
-  //fff.close();
+  //Free used memory
   Free(position);
   Free(weight);
   Free(ind);
