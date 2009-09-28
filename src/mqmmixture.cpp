@@ -223,7 +223,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       }
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         //Here we don't have any f2 dependancies anymore by using the prob function
-        if (cofactor[j]<=MH)
+        if (cofactor[j]<=MCOF)
           for (i=0; i<Naug; i++) {
             // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
             calc_i = start_prob(crosstype, loci[j][i]);
@@ -241,7 +241,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         // QTL=MAA, MH orMBB
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-        if ((cofactor[j]<=MH)&&(cofactor[j+1]<=MH))
+        if ((cofactor[j]<=MCOF)&&(cofactor[j+1]<=MCOF))
           for (i=0; i<Naug; i++) {
             //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
             calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
@@ -250,7 +250,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
           }
-        else if (cofactor[j]<=MH) // locus j+1 == QTL
+        else if (cofactor[j]<=MCOF) // locus j+1 == QTL
           for (i=0; i<Naug; i++) { // QTL==MAA What is the prob of finding an MAA at J=1
             //calc_i = prob(loci, r, i, j, MAA, crosstype, 0);
             calc_i =left_prob(r[j],loci[j][i],MAA,crosstype);
@@ -265,7 +265,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
             Ploci[i+2*Naug]*= calc_i;
           }
         else // locus j == QTL
-          for (i=0; i<Naug; i++) { // QTL==MAA
+          for (i=0; i<Naug; i++) { // QTL==MQTL
             calc_i = left_prob(r[j],MAA,loci[j+1][i],crosstype);
             //calc_i = prob(loci, r, i, j+1, MAA, crosstype, -1);
             Ploci[i]*= calc_i;
