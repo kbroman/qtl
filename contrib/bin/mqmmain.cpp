@@ -407,8 +407,8 @@ int main(int argc,char *argv[]) {
     if (verbose) Rprintf("Markerposition file done\n");
 
     //Determin how many chromosomes we have
-    unsigned int max_chr=0;
-    for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+    int max_chr=0;
+    for (unsigned int m=0; m < mqmalgorithmsettings.nmark; m++) {
       if (max_chr<chr[m]) {
         max_chr = chr[m];
       }
@@ -418,7 +418,7 @@ int main(int argc,char *argv[]) {
     int locationsoutput = 3*max_chr*(((mqmalgorithmsettings.stepmax)-(mqmalgorithmsettings.stepmin))/ (mqmalgorithmsettings.stepsize));
     QTL = newmatrix(1,locationsoutput);
     //initialize cofactors to 0 and mapdistances to UNKNOWN Cm
-    for (int i=0; i< mqmalgorithmsettings.nmark; i++) {
+    for (unsigned int i=0; i< mqmalgorithmsettings.nmark; i++) {
       cofactor[i] = '0';
       mapdistance[i]=POSITIONUNKNOWN;
       mapdistance[i]=pos[i];
@@ -438,7 +438,7 @@ int main(int argc,char *argv[]) {
     }
     
     //Initialize an empty individuals list
-    for (int i=0; i< mqmalgorithmsettings.nind; i++) {
+    for (unsigned int i=0; i< mqmalgorithmsettings.nind; i++) {
       INDlist[i] = i;
     }
 
