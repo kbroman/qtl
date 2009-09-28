@@ -37,10 +37,9 @@ double Lnormal(double residual, double variance) {
 
 
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno) {
+//reorganisation of doubles into a matrix
   int i;
-
   *Pheno = (double **)R_alloc(n_mar, sizeof(double *));
-
   (*Pheno)[0] = pheno;
   for (i=1; i< n_mar; i++)
     (*Pheno)[i] = (*Pheno)[i-1] + n_ind;
@@ -48,10 +47,9 @@ void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno) {
 
 
 void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
+//reorganisation of integers into a matrix
   int i;
-
   *Pheno = (int **)R_alloc(n_mar, sizeof(int *));
-
   (*Pheno)[0] = pheno;
   for (i=1; i< n_mar; i++)
     (*Pheno)[i] = (*Pheno)[i-1] + n_ind;
@@ -60,7 +58,6 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
 
 /*
  * analyseF2 - analyse one F2/RIL/BC family
- *
  * This is the main controller - called by mqmscan
  *
  */
@@ -126,18 +123,18 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     } else if (position[j]==MLEFT) {
       // (cofactor[j]!=MNOCOF) cofactor at non-segregating marker test whether next segregating marker is nearby (<20cM)
       dropj='y';
-      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)) dropj='n';
+      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj='n';
       else if (position[j+1]!=MRIGHT)
-        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)) dropj='n';
+        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<windowsize)) dropj='n';
     } else if (position[j]==MMIDDLE) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)) dropj='n';
-      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj='n';
+      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj='n';
     } else if (position[j]==MRIGHT) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj='n';
       else if (position[j-1]!=MLEFT)
-        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)) dropj='n';
+        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<windowsize)) dropj='n';
     }
     if (dropj=='n') {
       marker[jj]= marker[j];
