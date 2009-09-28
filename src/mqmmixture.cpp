@@ -192,7 +192,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
           // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
-          calc_i = start_prob(crosstype, loci[j][i]);
+          calc_i = start_prob(crosstype, (MQMMarker)loci[j][i]);
           Ploci[i]*= calc_i;
           //Als Ploci > 0 en calc_i > 0 then we want to assert Ploci[] != 0
         }
@@ -220,7 +220,7 @@ double QTLmixture(cmatrix loci, cvector cofactor, vector r, cvector position,
         if (cofactor[j]<=MCOF)
           for (i=0; i<Naug; i++) {
             // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
-            calc_i = start_prob(crosstype, loci[j][i]);
+            calc_i = start_prob(crosstype, (MQMMarker)loci[j][i]);
             Ploci[i] *= calc_i;
             Ploci[i+Naug] *= calc_i;
             Ploci[i+2*Naug] *= calc_i;
