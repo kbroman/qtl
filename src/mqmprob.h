@@ -32,6 +32,7 @@
 
 cvector relative_marker_position(const unsigned int nmark,const ivector chr);
 vector recombination_frequencies(const unsigned int nmark, const cvector position, const vector mapdistance);
+double recombination_frequentie(const double cmdistance);
 void validate_markertype(const MQMCrossType crosstype, const char markertype);
 //double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const MQMCrossType crosstype);
 

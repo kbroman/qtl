@@ -68,22 +68,24 @@ cvector relative_marker_position(const unsigned int nmark,const ivector chr)
 vector recombination_frequencies(const unsigned int nmark, const cvector position, const vector mapdistance) 
 {
   // contract: if DEBUG is_valid(positionarray)
-  
   info("Estimating recombinant frequencies");
   vector r = newvector(nmark);
   for (unsigned int j=0; j<nmark; j++) {
     r[j]= RFUNKNOWN;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
-      r[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-mapdistance[j])));
+      r[j]= recombination_frequentie((mapdistance[j+1]-mapdistance[j]));
       if (r[j]<0) {
         Rprintf("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
         fatal("Recombination frequency is negative, (Marker ordering problem ?)");
         return NULL;
       }
     }
-    //RRprintf("recomfreq:%d, %f\n", j, r[j]);
   }
   return r;
+}
+
+double recombination_frequentie(const double cmdistance){
+  return 0.5*(1.0-exp(-0.02*cmdistance));
 }
 
 
