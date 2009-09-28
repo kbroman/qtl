@@ -155,24 +155,24 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   for (int j=0; j<Nmark; j++) {
     if (mqmmod(f1genotype[j],11)!=0) {
       dropj='n';
-    } else if ((*cofactor)[j]==MAA) {
+    } else if ((*cofactor)[j]==MNOCOF) {
       dropj='y';
     } else if (position[j]==MLEFT) {
       // (cofactor[j]!=MAA) cofactor at non-segregating marker
       // test whether next segregating marker is nearby (<20cM)
       dropj='y';
-      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mqmmod(f1genotype[j+1],11)!=0)) dropj='n';
+      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)) dropj='n';
       else if (position[j+1]!=MRIGHT)
-        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)&&(mqmmod(f1genotype[j+2],11)!=0)) dropj='n';
+        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<20)) dropj='n';
     } else if (position[j]==MMIDDLE) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mqmmod(f1genotype[j-1],11)!=0)) dropj='n';
-      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)&&(mqmmod(f1genotype[j+1],11)!=0)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)) dropj='n';
+      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<20)) dropj='n';
     } else if (position[j]==MRIGHT) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)&&(mqmmod(f1genotype[j-1],11)!=0)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<20)) dropj='n';
       else if (position[j-1]!=MLEFT)
-        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)&&(mqmmod(f1genotype[j-2],11)!=0)) dropj='n';
+        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<20)) dropj='n';
     }
     if (dropj=='n') {
       marker[jj]= marker[j];
@@ -182,7 +182,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
       r[jj]= r[j];
       position[jj]= position[j];
       jj++;
-    } else if ((*cofactor)[j]==MH) {
+    } else if ((*cofactor)[j]==MCOF) {
       if (verbose) {
         info("Cofactor at chr %d is dropped",chr[j]);
       }
@@ -318,10 +318,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   int dimx=1;
   for (int j=0; j<Nmark; j++) {
-    if ((*cofactor)[j]==MH) {
+    if ((*cofactor)[j]==MCOF) {
       dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
-    } else if ((*cofactor)[j]==MBB) {
-      dimx+=1;  /* sex of the mouse */
+    } else if ((*cofactor)[j]==MSEX) {
+      dimx+=1;  /* sex of the mouse - when cofactor=2 we analyse an F2 cofactor as a BC cofactor*/
     }
   }
   double F1, F2;
@@ -347,10 +347,10 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   // ---- Write output / send it back to R
   //Cofactors that made it to the final model
   for (int j=0; j<Nmark; j++) {
-    if (selcofactor[j]==MH) {
-      (*cofactor)[j]=MH;
+    if (selcofactor[j]==MCOF) {
+      (*cofactor)[j]=MCOF;
     } else {
-      (*cofactor)[j]=MAA;
+      (*cofactor)[j]=MNOCOF;
     }
   }
   //QTL likelyhood for each location
@@ -411,17 +411,16 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   change_coding(&Nmark,&Nind,Geno,markers,crosstype);
 
   for (int i=0; i< Nmark; i++) {
-    f1genotype[i] = 12;
-    //receiving mapdistances
-    mapdistance[i]=POSITIONUNKNOWN;
-    mapdistance[i]=Dist[0][i];
-    cofactor[i] = MAA;
+    f1genotype[i] = 12;               //The parental strain for all markers
+    mapdistance[i]=POSITIONUNKNOWN;   //Mapdistances
+    mapdistance[i]=Dist[0][i];  
+    cofactor[i] = MNOCOF;             //Cofactors
     if (Cofactors[0][i] == 1) {
-      cofactor[i] = MH;
+      cofactor[i] = MCOF;
       cof_cnt++;
     }
     if (Cofactors[0][i] == 2) {
-      cofactor[i] = MBB;
+      cofactor[i] = MSEX;
       cof_cnt++;
     }
     if (cof_cnt+10 > Nind) {
