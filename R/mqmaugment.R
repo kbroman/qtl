@@ -185,10 +185,10 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
       #print(paste("Start",markdone,":End",(markdone+markONchr-1),"\n",sep=""))
       ind2 <- NULL
       pheno <- NULL
-      ind2 <- result[[4]][(1+(j*maxaug)):(n.aug+(j*maxaug))]
+      ind2 <- result$augGeno[(1+(j*maxaug)):(n.aug+(j*maxaug))]
       matri <- rbind(matri,ind2)
     }
-    pheno <- as.matrix(result[[5]][1:n.aug])
+    pheno <- as.matrix(result$augPheno[1:n.aug])
     matri <- t(matri)
     if(markdone==0){
       colnames(matri) <- colnames(geno)[markdone:(markdone+markONchr)]
@@ -202,7 +202,7 @@ mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10,
     #Store extra information (needed by the MQM algorithm) which individual was which original etc..
     cross$extra$Nind <- n.ind
     cross$extra$Naug <- n.aug
-    cross$extra$augIND <- result[[6]][1:n.aug]
+    cross$extra$augIND <- result$augIND[1:n.aug]
     markdone <- (markdone+markONchr)
   }
   # ---- RESULTS
