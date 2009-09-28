@@ -371,7 +371,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else { // newmarker[j][ii] is observed
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
-              prob0left= start_prob(crosstype, newmarker[j][ii]);
+              prob0left= start_prob(crosstype, (MQMMarker) newmarker[j][ii]);
             } else {
               //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
               prob0left= left_prob(r[j-1],newmarker[j-1][ii],newmarker[j][ii],crosstype);

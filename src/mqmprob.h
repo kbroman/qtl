@@ -42,7 +42,7 @@ double right_prob_BC(const char markerL, const int j, const cvector imarker, con
 double right_prob_RIL(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position);
 //double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const MQMCrossType crosstype, const int ADJ);
 
-double start_prob(const MQMCrossType crosstype,const char markertype);
+double start_prob(const MQMCrossType crosstype,MQMMarker markertype);
 
 #ifdef __cplusplus
   }

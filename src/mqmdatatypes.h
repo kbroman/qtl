@@ -33,6 +33,7 @@ typedef unsigned int RqtlCrossType;
 enum MQMCrossType { CUNKNOWN = 'U', CF2 = 'F', CBC = 'B', CRIL = 'R' };
 enum MQMCofactorType { MNOCOF = '0', MCOF ='1', MSEX = '2', MQTL = '3' };
 enum MQMRelMarkerPos { MLEFT = 'L', MRIGHT = 'R', MMIDDLE = 'M', MUNKNOWN = 'U', MUNLINKED = '-' };
+enum MQMMarker { MAA = '0', MH = '1', MBB = '2', MNOTAA    = '3', MNOTBB = '4',  MMISSING = '9', MUNUSED = '-'};
 
 const RqtlCrossType RC_F2  = 1;
 const RqtlCrossType RC_BC  = 2;
@@ -53,6 +54,7 @@ const double POSITIONUNKNOWN = 999.0;
 //const unsigned char MUNKNOWN  = 0;
 
 // Marker genotypes (scored at marker)
+/*
 const unsigned char MAA       = '0';  // Homozygous AA
 const unsigned char MH        = '1';  // Heterozygous AB 
 const unsigned char MBB       = '2';  // Homozygous BB
@@ -60,7 +62,7 @@ const unsigned char MNOTAA    = '3';  // Not AA
 const unsigned char MNOTBB    = '4';  // Not BB 
 const unsigned char MMISSING  = '9';  // Unknown (marker genotype missing)
 const unsigned char MUNUSED   = '-';  // Unused parameter
-
+*/
 
 
 /*------------------------------------------------------------------------
