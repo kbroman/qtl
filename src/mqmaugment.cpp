@@ -173,7 +173,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             }
             probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MNOTBB) {
-            // augment data to contain AB and AA 
+            // augment data can contain MH and MAA 
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
@@ -370,16 +370,13 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else { // newmarker[j][ii] is observed
-
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
               //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
               prob0left= left_prob(r[j-1],newmarker[j-1][ii],newmarker[j][ii],crosstype);
             }
-
             newprob[ii]*= prob0left;
-
           }
 
           if (iaug+3>maxNaug) {
@@ -502,7 +499,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
           NEW[i][j] = 2;
         }
         if (new_markers[i][j] == MBB) {  // [karl:] this might need to be changed for RIL
-          NEW[i][j] = 3;
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;
         }
         if (new_markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
