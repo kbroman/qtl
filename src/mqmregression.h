@@ -26,13 +26,14 @@
 #ifdef __cplusplus
    extern "C" {
 #endif
-      
+
+int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const char dominance);
 
 /*
- * Used regression (perhaps change it to something faster)
+ *  Used regression (perhaps change it to something faster)
  *  regression of trait on multiple cofactors  y=xb+e with weight w
-*							(xtwx)b=(xtw)y
-*							b=inv(xtwx)(xtw)y
+*	(xtwx)b=(xtw)y
+*	b=inv(xtwx)(xtw)y
  */
 
 double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj,char fitQTL,char dominance);
@@ -50,7 +51,7 @@ double betai(double a, double b, double x);
 double betacf(double a, double b, double x);
 double inverseF(int df1, int df2, double alfa,int verbose);
 #ifdef __cplusplus
-   }
+}
 #endif
      
 /* end of mqmregression.h */
