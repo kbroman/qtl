@@ -98,14 +98,16 @@ struct algorithmsettings loadmqmsetting(const char* filename,const algorithmsett
 }
 
 
-cmatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar,const bool verbose) {
+MQMMarkerMatrix readgenotype(const char* filename,const unsigned int nind,const unsigned int nmar,const bool verbose) {
   unsigned int j = 0;  //current marker
   unsigned int i = 0;  //current individual
-  cmatrix genomarkers = newcmatrix(nmar,nind);
+  MQMMarkerMatrix genomarkers = newMQMMarkerMatrix(nmar,nind);
   ifstream myfstream(filename, ios::in);
+  char c;
   while (!myfstream.eof()) {
     if (j < nmar) {
-      myfstream >> genomarkers[j][i];
+      myfstream >> c;
+      genomarkers[j][i] = (MQMMarker)c;
       j++;
     } else {
       j = 0;
@@ -375,7 +377,7 @@ int main(int argc,char *argv[]) {
     vector mapdistance = newvector(mqmalgorithmsettings.nmark);
     vector pos = newvector(mqmalgorithmsettings.nmark);
     matrix pheno_value = newmatrix(mqmalgorithmsettings.npheno,mqmalgorithmsettings.nind);
-    cmatrix markers= newcmatrix(mqmalgorithmsettings.nmark,mqmalgorithmsettings.nind);
+    MQMMarkerMatrix markers= newMQMMarkerMatrix(mqmalgorithmsettings.nmark,mqmalgorithmsettings.nind);
     ivector INDlist= newivector(mqmalgorithmsettings.nind);
     //Some additional variables
     int set_cofactors=0;			//Markers set as cofactors
@@ -454,7 +456,7 @@ int main(int argc,char *argv[]) {
     
     //<dataaugmentation>
     //Variables for the returned augmented markers,phenotype,individualmapping
-    cmatrix newmarkerset;
+    MQMMarkerMatrix newmarkerset;
     vector new_y;
     ivector new_ind;
     cvector position = relative_marker_position(mqmalgorithmsettings.nmark,chr);
@@ -476,16 +478,16 @@ int main(int argc,char *argv[]) {
     //  if(verbose) Rprintf("traitval:%d,%f\n",i,pheno_value[phenotype][i]);
     //}       
     // Uncomment to inspect the augmented dataset
-   // for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-      //for (int i=0; i < mqmalgorithmsettings.nind; i++) {
-       // validate_markertype(crosstype,markers[m][i]);
-        //fprintf(fout,"%c ",markers[m][i]);
-     // }
-      //fprintf(fout,"\n");
+    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
+    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
+    //    validate_markertype(crosstype,markers[m][i]);
+    //    fprintf(fout,"%c ",markers[m][i]);
+    //  }
+    //  fprintf(fout,"\n");
     //}
     
     //Missing values create an augmented set,
-    analyseF2(nind, mqmalgorithmsettings.nmark, &cofactor, markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+    analyseF2(nind, mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,'n',verbose);
 
     //Write final QTL profile (screen and file)

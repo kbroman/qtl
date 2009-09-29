@@ -54,7 +54,7 @@
  FIXME Herhalingen naar een aparte functie (eventueel cross specific)
  */
 
-int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
+int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
             const double neglect, const MQMCrossType crosstype, const int verbose) {
@@ -62,15 +62,15 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
-  cmatrix newmarker;
+  MQMMarkerMatrix newmarker;
   vector newy;
-  cvector imarker;
+  MQMMarkerVector imarker;
   ivector newind;
 
-  newmarker = newcmatrix(Nmark+1, maxNaug);  // augmented marker matrix
+  newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
-  imarker   = newcvector(Nmark);             
+  imarker   = newMQMMarkerVector(Nmark);             
 
   int iaug     = 0;     // iaug keeps track of current augmented individual
   // int maxiaug  = 0;     // highest reached(?)
@@ -113,9 +113,9 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob2left= start_prob(crosstype, MBB);
             } else {
               //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);
+              prob1left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MH,crosstype);
               //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
-              prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);
+              prob2left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MBB,crosstype);
             }
             switch (crosstype) {
               case CF2:
@@ -181,9 +181,9 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob1left= start_prob(crosstype, MH);
             } else {
               //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob0left= left_prob(r[j-1],newmarker[j-1][ii],MAA,crosstype);
+              prob0left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MAA,crosstype);
               //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);
+              prob1left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MH,crosstype);
             }
             switch (crosstype) {
               case CF2:
@@ -250,11 +250,11 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob2left= start_prob(crosstype, MBB);
             } else {
               //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob0left= left_prob(r[j-1],newmarker[j-1][ii],MAA,crosstype);
+              prob0left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MAA,crosstype);
               //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);
+              prob1left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MH,crosstype);
               //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
-              prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);    
+              prob2left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MBB,crosstype);    
             }
             switch (crosstype) {
               case CF2:
@@ -374,7 +374,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob0left= start_prob(crosstype, (MQMMarker) newmarker[j][ii]);
             } else {
               //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
-              prob0left= left_prob(r[j-1],newmarker[j-1][ii],newmarker[j][ii],crosstype);
+              prob0left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],(MQMMarker)newmarker[j][ii],crosstype);
             }
             newprob[ii]*= prob0left;
           }
@@ -398,7 +398,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   }
   *Naug = iaug;
   *Nind = newNind;
-  *augmarker = newcmatrix(Nmark, *Naug);
+  *augmarker = newMQMMarkerMatrix(Nmark, *Naug);
   *augy = newvector(*Naug);
   *augind = newivector(*Naug);
   for (int i=0; i<(*Naug); i++) {
@@ -445,11 +445,11 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   ivector new_ind;
   vector new_y, mapdistance;
   cvector position;
-  cmatrix markers, new_markers;
+  MQMMarkerMatrix markers, new_markers;
   ivector chr;
 
-  markers= newcmatrix(*Nmark, nind0);
-  new_markers= newcmatrix(*Nmark, *maxind);
+  markers= newMQMMarkerMatrix(*Nmark, nind0);
+  new_markers= newMQMMarkerMatrix(*Nmark, *maxind);
   mapdistance = newvector(*Nmark);
   chr= newivector(*Nmark);
 
@@ -509,8 +509,8 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delcmatrix(new_markers,*Nmark);
-    delcmatrix(markers,*Nmark);
+    delMQMMarkerMatrix(new_markers,*Nmark);
+    delMQMMarkerMatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);
@@ -546,8 +546,8 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delcmatrix(new_markers,*Nmark);
-    delcmatrix(markers,*Nmark);
+    delMQMMarkerMatrix(new_markers,*Nmark);
+    delMQMMarkerMatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);

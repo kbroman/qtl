@@ -41,7 +41,7 @@ using namespace std;
    cofactors in weighted regression of trait on genotype (cofactors) using the
    augmented data
 */
-double backward(int Nind, int Nmark, cvector cofactor, cmatrix marker,
+double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
                 vector y, vector weight, int* ind, int Naug, double logLfull,
                 double variance, double F1, double F2, cvector* newcofactor,
                 vector r, cvector position, vector *informationcontent, vector

@@ -72,6 +72,8 @@ FIXME : CamelCase for TYPEDEFS classes / structs
 typedef double** matrix;
 typedef double*  vector;
 typedef char**   cmatrix;
+typedef MQMMarker** MQMMarkerMatrix;
+typedef MQMMarker* MQMMarkerVector;
 typedef char*    cvector;
 typedef MQMRelMarkerPos* relmarkerarray;
 typedef int*  ivector;
@@ -79,7 +81,7 @@ typedef int*  ivector;
 
 MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Geno, const RqtlCrossType rqtlcrosstype);
 
-void change_coding(int *Nmark,int *Nind,int **Geno,cmatrix markers, const MQMCrossType crosstype);
+void change_coding(int *Nmark,int *Nind,int **Geno,MQMMarkerMatrix markers, const MQMCrossType crosstype);
 
 
 /*------------------------------------------------------------------------
@@ -88,15 +90,18 @@ Basic routines for matrix and vector calculus
 vector newvector(int dim);
 ivector newivector(int dim);
 cvector newcvector(int dim);
+MQMMarkerVector newMQMMarkerVector(int dim);
 relmarkerarray newRelMarkerPos(int dim);
 matrix newmatrix(int rows, int cols);
 void printmatrix(matrix m, int rows, int cols);
 void printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);
+MQMMarkerMatrix newMQMMarkerMatrix(int rows, int cols);
 void freematrix(void **m, size_t rows);
 void freevector(void *v);
 void delmatrix(matrix m, size_t rows);
 void delcmatrix(cmatrix m, size_t rows);
+void delMQMMarkerMatrix(MQMMarkerMatrix m,size_t rows);
 void copyvector(vector vsource, vector vdestination, int dim);
 
 #ifdef __cplusplus

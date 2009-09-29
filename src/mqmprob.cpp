@@ -174,7 +174,7 @@ double start_prob(const MQMCrossType crosstype, MQMMarker marker) {
  * is simply based on the markertypes and known recombination rate.
   */
 
-double left_prob(const double r, const char markerL,const char markerR,const MQMCrossType crosstype){
+double left_prob(const double r,const MQMMarker markerL,const MQMMarker markerR,const MQMCrossType crosstype){
   const double r2 = r*r;        //Double recombination
   const double rr = 1.0-r;      // No recombination
   const double rr2 = rr*rr;     //Double Norecombination
@@ -305,7 +305,7 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
  * information from the right neighbouring marker and the known recombination
  * frequencies. This function is used by augmentation.
  */ 
-double right_prob_F2(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
   if(position[j]==MRIGHT||position[j]==MUNLINKED){
     return 1.0;
   }
@@ -380,7 +380,7 @@ double right_prob_F2(const char markerL, const int j, const cvector imarker, con
 }
 
 
-double right_prob_BC(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
   if(position[j] == MRIGHT||position[j] == MUNLINKED){
     return 1.0;
   }
@@ -408,7 +408,7 @@ double right_prob_BC(const char markerL, const int j, const cvector imarker, con
   }
 }
 
-double right_prob_RIL(const char markerL, const int j, const cvector imarker, const vector rs, const cvector position){
+double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
   if(position[j] == MRIGHT||position[j] == MUNLINKED){
     return 1.0;                         //END of chromosome or only 1 marker on a chromosome
   }

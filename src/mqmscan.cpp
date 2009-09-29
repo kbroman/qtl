@@ -62,7 +62,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
  *
  */
 
-void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
+void analyseF2(int Nind, int Nmark, cvector *cofactor, MQMMarkerMatrix marker,
                vector y, ivector f1genotype, int Backwards, double **QTL,vector
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
@@ -161,7 +161,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   //calculate Traits mean and variance
   ivector newind;
   vector newy;
-  cmatrix newmarker;
+  MQMMarkerMatrix newmarker;
   double ymean=0.0, yvari=0.0;
   for (int i=0; i<Nind; i++){
     ymean += y[i];
@@ -176,7 +176,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Nind=out_Naug;
   newind= newivector(Naug);
   newy= newvector(Naug);
-  newmarker= newcmatrix(Nmark,Naug);
+  newmarker= newMQMMarkerMatrix(Nmark,Naug);
   for (int i=0; i<Naug; i++) {
     newy[i]= y[i];
     newind[i]= INDlist[0][i];
@@ -216,7 +216,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
 
   vector weight;
   ivector ind;
-  marker= newcmatrix(Nmark+1,Naug);
+  marker= newMQMMarkerMatrix(Nmark+1,Naug);
   y= newvector(Naug);
   ind= newivector(Naug);
   weight= newvector(Naug);
@@ -235,7 +235,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
     if  (diff>1)
       for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
   }
-  delcmatrix(newmarker,Nmark);
+  delMQMMarkerMatrix(newmarker,Nmark);
   Free(newy);
   Free(newind);
   Free(newweight);
@@ -290,7 +290,7 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, cmatrix marker,
   Free(r);
   Free(informationcontent);
   freematrix((void **)Frun,Nsteps);
-  delcmatrix(marker,Nmark+1);
+  delMQMMarkerMatrix(marker,Nmark+1);
   Free(y);
   Free(chr);
   Free(selcofactor);
@@ -313,11 +313,11 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
              double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,RqtlCrossType rqtlcrosstype,int domi,int verbose) {
 
   ivector f1genotype;
-  cmatrix markers;
+  MQMMarkerMatrix markers;
   cvector cofactor;
   vector mapdistance;
 
-  markers= newcmatrix(Nmark+1,Nind);
+  markers= newMQMMarkerMatrix(Nmark+1,Nind);
   f1genotype = newivector(Nmark);
   cofactor= newcvector(Nmark);
   mapdistance= newvector(Nmark);
@@ -368,7 +368,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   }
 
   //WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
-  analyseF2(Nind, Nmark, &cofactor, markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,crosstype,dominance,verbose);
+  analyseF2(Nind, Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,crosstype,dominance,verbose);
 
   if (re_estimate) {
     if (verbose==1) {
@@ -387,7 +387,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     }
   }
   //Rprintf("Starting Cleanup\n");
-  delcmatrix(markers,Nmark+1);
+  delMQMMarkerMatrix(markers,Nmark+1);
   Free(f1genotype);
   Free(cofactor);
   Free(mapdistance);
