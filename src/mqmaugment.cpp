@@ -85,7 +85,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   int newNind = nind0;
   int previaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
-    if(verbose) Rprintf("Starting individual: %d",i);
+    if(verbose) info("Start augmentation of individual: %d",i);
     // ---- for every individual:
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
@@ -371,7 +371,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
       if ((iaug-previaug+1)>imaxNaug) {
         newNind-= 1;
         iaug= previaug-1;
-        if (verbose) Rprintf("INFO: Individual %d has been dropped\n", i);
+        if (verbose) info("INFO: Individual %d has been dropped", i);
       }
       sumprob= 0.0;
       for (int ii=previaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -450,21 +450,15 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, crosstype);
-  for (int j=0; j<(*Nmark); j++) {
-    for (int i=0; i<(*Nind); i++) {
-    Rprintf("%c ",markers[j][i]);
-  }
-  Rprintf("\n");
-  }
-  info("Filling the chromosome matrix");
 
+  info("Filling the chromosome matrix");
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
     mapdistance[i]=POSITIONUNKNOWN;
     mapdistance[i]=Dist[0][i];
     chr[i] = Chromo[0][i];
   }
-
+  //Calculate positions of markers and Recombinant frequencies
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
 
@@ -483,7 +477,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
           NEW[i][j] = 2;
         }
         if (new_markers[i][j] == MBB) {  // [karl:] this might need to be changed for RIL
-          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
         }
         if (new_markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
@@ -520,7 +514,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
           NEW[i][j] = 2;
         }
         if (markers[i][j] == MBB) { // [karl:] this might need to be changed for RIL
-          NEW[i][j] = 3;
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
         }
         if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
