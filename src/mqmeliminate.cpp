@@ -45,13 +45,13 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
                 vector y, vector weight, int* ind, int Naug, double logLfull,
                 double variance, double F1, double F2, cvector* newcofactor,
                 vector r, cvector position, vector *informationcontent, vector
-                *mapdistance, matrix *Frun, int run, char REMLorML, char
-                fitQTL, char dominance, int em, double windowsize, double
+                *mapdistance, matrix *Frun, int run, char REMLorML, bool
+                fitQTL, bool dominance, int em, double windowsize, double
                 stepsize, double stepmin, double stepmax, MQMCrossType crosstype, int
                 verbose){
   int dropj=0, Ncof=0;
   double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
-  char finished='n'; //, biasadj='n';
+  bool finished=false;
   vector logL;
   logL = newvector(Nmark);
   savelogL= logLfull;
@@ -61,7 +61,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     (*newcofactor)[j]= cofactor[j];
     Ncof+=(cofactor[j]!=MNOCOF);
   }
-  while ((Ncof>0)&&(finished=='n')) {
+  while ((Ncof>0)&&(!finished)) {
     for (int j=0; j<Nmark; j++) {
       if ((*newcofactor)[j]==MCOF) {
         //See what the likelyhood is when we drop the cofactor
@@ -112,7 +112,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       if (verbose) {
         Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");
       }
-      finished='y';
+      finished=true;
       for (int j=0; j<Nmark; j++) {
         if ((*newcofactor)[j]==MCOF) {
           //Rprintf("Marker %d is selected\n",(j+1));

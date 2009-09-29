@@ -34,7 +34,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
               MQMMarkerMatrix marker, cvector position, vector mapdistance, vector y,
               vector r, ivector ind, int Naug, double variance, char
               printoutput, vector *informationcontent, matrix *Frun, int run,
-              char REMLorML, char fitQTL, char dominance, int em, double
+              char REMLorML, bool fitQTL, bool dominance, int em, double
               windowsize, double stepsize, double stepmin, double stepmax, 
               MQMCrossType crosstype, int verbose) {
   //Rprintf("INFO: mapQTL function called.\n");
@@ -83,7 +83,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   }
   Nloci= Nmark+1;
   // augment data for missing QTL observations (x 3)
-  fitQTL='y';
+  fitQTL=true;
   int newNaug;
   newNaug= 3*Naug;
   Free(weight);
@@ -299,66 +299,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
       }
     }
   }
+  fitQTL=false;
 
-  fitQTL='n';
-  /*
-  TODO To insert a method to find the direction of the QTL we need to know
-  which GROUP has the highest trait values
-  */
-  //for (int j=0; j<Nmark; j++){
-  //	int cnt0=0;
-  //	int cnt1=0;
-  //	int cnt2=0;
-  //	dir0= 0.0; // qq
-  //	dir1= 0.0; // Qq
-  //	dir2= 0.0; // QQ
-  //	for (int i=0; i<Naug; i++){
-  //		if(QTLloci[j][i]==MAA){
-  //			dir0 += y[i];
-  //			cnt0 += 1;
-  //		}
-  //		if(QTLloci[j][i]==MH){
-  //			dir1 += y[i];
-  //			cnt1 += 1;
-  //		}
-  //		if(QTLloci[j][i]==MBB){
-  //			dir2 += y[i];
-  //			cnt2 += 1;
-  //		}
-  //	}
-  //	if((cnt0+cnt1) == 0 or (cnt1+cnt2) == 0){
-  //	 direction[j] = '?';
-  //	}else{
-  //		if((dir0+dir1)/(cnt0+cnt1) < (dir1+dir2)/(cnt1+cnt2)){
-  //			direction[j] = '+';
-  //		}else{
-  //			direction[j] = '-';
-  //		}
-  //	}
-  //Rprintf("%d:DIR0:%f, DIR1:%f, DIR2:%f   -> %c\n", j, dir0, dir1, dir2, direction[j]);
-  //}
-  //moveQTL= stepmin;
-  //int curmarker=0;
-  //for(int i=0; i<step; i++){
-  //	Rprintf("step: %d CM: %f CMCurm:%f\n", i, moveQTL, mapdistance[curmarker]);
-  //	if(direction[curmarker] == '-'){
-  //		Rprintf("Adjusting Frun %f\n", (*Frun)[i][0]);
-  //		(*Frun)[i][0] = (*Frun)[i][0] * -1.0;
-  //		Rprintf("Adjusting Frun %f\n", (*Frun)[i][0]);
-  //	}
-  //	if(moveQTL+stepsize > stepmax){
-  //		moveQTL= stepmin;
-  //		curmarker = curmarker+1;
-  //	}else{
-  //		moveQTL+= stepsize;
-  //	}
-  //    if(mapdistance[curmarker] < moveQTL){
-  //		if(mapdistance[curmarker] < mapdistance[curmarker+1]){
-  //		   curmarker = curmarker+1;
-  //		}
-  //	}
-  //	Rprintf("step: %d marker: %d\n", i, curmarker);
-  //}
   freevector(direction);
   Free(info0);
   Free(info1);
