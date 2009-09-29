@@ -27,7 +27,7 @@
    extern "C" {
 #endif
 
-int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const char dominance);
+int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const bool dominance);
 
 /*
  *  Used regression (perhaps change it to something faster)
@@ -36,7 +36,7 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 *	b=inv(xtwx)(xtw)y
  */
 
-double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj,char fitQTL,char dominance);
+double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy,const bool biasadj,const bool fitQTL,const bool dominance);
 
 /*
 -----------------------------------------------------------------------

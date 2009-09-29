@@ -49,7 +49,7 @@ bool checkfileexists(const char *filename) {
 
 struct algorithmsettings {
   unsigned int nind;
-  unsigned int nmark;
+  int nmark;
   unsigned int npheno;
   int stepmin;
   int stepmax;
@@ -426,17 +426,9 @@ int main(int argc,char *argv[]) {
       mapdistance[i]=pos[i];
     }
 
-    //Danny: Cofactors are now read-in. the output with cofactors.txt set is not equal to MQM_test0.txt
-    //MQM_test0.txt says it uses cofactors but it doesn't, because they are not eliminated
-    //The message: "INFO: Marker XX is dropped, resulting in logL of reduced model = -8841.452934" is missing
-    //Also the result of MQM without cofactors is equal
     set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
     if (set_cofactors > 0) {
       backwards = 1;
-      //if (verbose) info("%d markers with cofactors. Backward elimination enabled",set_cofactors);
-      //for (int i=0; i< mqmalgorithmsettings.nmark; i++) {
-      //  if (verbose) info("Cofactor %d -> %d\n",i,cofactor[i]);
-      //}
     }
     
     //Initialize an empty individuals list
@@ -446,13 +438,6 @@ int main(int argc,char *argv[]) {
 
     int nind = mqmalgorithmsettings.nind;
     int augmentednind = mqmalgorithmsettings.nind;
-    // Uncomment to inspect the augmented dataset
-    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
-    //    if(verbose) Rprintf("%c ",markers[m][i]);
-    //  }
-    //  if(verbose) Rprintf("\n");
-    //}
     
     //<dataaugmentation>
     //Variables for the returned augmented markers,phenotype,individualmapping
@@ -463,7 +448,6 @@ int main(int argc,char *argv[]) {
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
     augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
-    //if (verbose) info("Settingsnind: %d nind: %d augmentednind: %d",mqmalgorithmsettings.nind,nind,augmentednind);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
     INDlist = new_ind;
@@ -471,34 +455,16 @@ int main(int argc,char *argv[]) {
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-    //for (int i=0; i < augmentednind; i++) {
-    //  if(verbose) Rprintf("Indlist:%d,%d\n",i,INDlist[i]);
-    //}
-    //for (int i=0; i < augmentednind; i++) {
-    //  if(verbose) Rprintf("traitval:%d,%f\n",i,pheno_value[phenotype][i]);
-    //}       
-    // Uncomment to inspect the augmented dataset
-    //for (int m=0; m < mqmalgorithmsettings.nmark; m++) {
-    //  for (int i=0; i < mqmalgorithmsettings.nind; i++) {
-    //    validate_markertype(crosstype,markers[m][i]);
-    //    fprintf(fout,"%c ",markers[m][i]);
-    //  }
-    //  fprintf(fout,"\n");
-    //}
     
-    //Missing values create an augmented set,
-    analyseF2(nind, mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
-              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,'n',verbose);
-
+    //Start scanning for QTLs
+    analyseF2(nind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
     //Write final QTL profile (screen and file)
     for (int q=0; q<locationsoutput; q++) {
       // outstream << q << "\t" << QTL[0][q] << "\n";
       fprintf(fout,"%5d\t%10.5f\n",q,QTL[0][q]);
     }
-    //close the outputstream
-    if (outputfile) fclose(fout);
     
-    //Cleanup
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
     freevector((void *)mapdistance);
@@ -508,6 +474,7 @@ int main(int argc,char *argv[]) {
     freevector((void *)INDlist);
     freevector((void *)pos);
     freematrix((void **)QTL,1);
+    if (outputfile) fclose(fout);
     return 0;
   }
 }

@@ -62,28 +62,27 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
  *
  */
 
-void analyseF2(int Nind, int Nmark, cvector *cofactor, MQMMarkerMatrix marker,
+void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker,
                vector y, ivector f1genotype, int Backwards, double **QTL,vector
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
                double alfa, int em, int out_Naug, int **INDlist, char
-               reestimate, MQMCrossType crosstype, char dominance, int verbose) {
+               reestimate, MQMCrossType crosstype, bool dominance, int verbose) {
   if (verbose) {
     Rprintf("INFO: Starting C-part of the MQM analysis\n");
   }
   int Naug;
+  int Nmark = (*nummark);
   int run=0;
   cvector position;
   vector informationcontent;
-  //char dominance='n';
-  //char perm_simu=MH;
   ivector chr;
   matrix Frun;
   vector r;
   r= newvector(Nmark);
   position= newcvector(Nmark);
   bool useREML=true;
-  char fitQTL='n';
+  bool fitQTL=false;
 
   // The chr vector contains the chromosome number for every marker
   chr= newivector(Nmark);
@@ -110,33 +109,34 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, MQMMarkerMatrix marker,
     informationcontent[ii]= 0.0;
   }
 
-  char dropj='y';
+  bool dropj=true;
   int jj=0;
   //Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
   //Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   //  Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
   for (int j=0; j<Nmark; j++) {
     if (mqmmod(f1genotype[j],11)!=0) {
-      dropj='n';
+      dropj=false;
+      //if(((*mapdistance)[j+1]-(*mapdistance)[j])<=0.0) dropj=true;
     } else if ((*cofactor)[j]==MNOCOF) {
-      dropj='y';
+      dropj=true;
     } else if (position[j]==MLEFT) {
       // (cofactor[j]!=MNOCOF) cofactor at non-segregating marker test whether next segregating marker is nearby (<20cM)
       dropj='y';
-      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj='n';
+      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
       else if (position[j+1]!=MRIGHT)
-        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<windowsize)) dropj='n';
+        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<windowsize)) dropj=false;
     } else if (position[j]==MMIDDLE) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj='n';
-      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
+      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
     } else if (position[j]==MRIGHT) {
       dropj='y';
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj='n';
+      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
       else if (position[j-1]!=MLEFT)
-        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<windowsize)) dropj='n';
+        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<windowsize)) dropj=false;
     }
-    if (dropj=='n') {
+    if (!dropj) {
       marker[jj]= marker[j];
       (*cofactor)[jj]= (*cofactor)[j];
       (*mapdistance)[jj]= (*mapdistance)[j];
@@ -144,16 +144,16 @@ void analyseF2(int Nind, int Nmark, cvector *cofactor, MQMMarkerMatrix marker,
       r[jj]= r[j];
       position[jj]= position[j];
       jj++;
-    } else if ((*cofactor)[j]==MCOF) {
-      if (verbose) {
-        info("Cofactor at chr %d is dropped",chr[j]);
+    } else{
+      if (verbose) info("Marker %d at chr %d is dropped",j,chr[j]);
+      if ((*cofactor)[j]==MCOF) {
+        if (verbose) info("Cofactor at chr %d is dropped",chr[j]);
       }
     }
   }
+  //if (verbose) info("Num markers: %d -> %d",Nmark,jj);
   Nmark= jj;
-  if (verbose) {
-    Rprintf("Num markers: %d",Nmark);
-  }
+  (*nummark) = jj;
   position = relative_marker_position(Nmark,chr);
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
@@ -359,16 +359,16 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     }
     domi = 0;
   } else {
-    domi= domi;
+    domi = domi;
   }
 
-  char dominance='n';
+  bool dominance=false;
   if (domi != 0) {
-    dominance='y';
+    dominance=true;
   }
 
   //WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
-  analyseF2(Nind, Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,crosstype,dominance,verbose);
+  analyseF2(Nind, &Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], f1genotype, Backwards,QTL,&mapdistance,Chromo,NRUN,RMLorML,Windowsize,Steps,Stepmi,Stepma,Alfa,Emiter,out_Naug,INDlist,reestimate,crosstype,dominance,verbose);
 
   if (re_estimate) {
     if (verbose==1) {

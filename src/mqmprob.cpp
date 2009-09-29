@@ -120,7 +120,6 @@ void validate_markertype(const MQMCrossType crosstype, const char markertype)
  */
 
  //FIXME: Special function for special case (start_prob for regression)
- //FIXME: MQMmarker ipv cont char en dan als index (dus in datatypes -> '0'-> 0)
 double start_prob(const MQMCrossType crosstype, MQMMarker marker) {
   //validate_markertype(crosstype,markertype);
   switch (crosstype) {

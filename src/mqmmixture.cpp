@@ -77,10 +77,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
             else weight[i]*= 0.25;
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE))
           for (i=0; i<Naug; i++) {
-            // [pjotr:] same problem described below, why define if not used? FIXME
-            // double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0, 0, 0);
-            //double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0);
-            double calc_i = left_prob(r[j],marker[j][i],marker[j+1][i],crosstype);
+            double calc_i = left_prob(r[j],marker[j][i],marker[j+1][i],crosstype);            //double calc_i = prob(marker, r, i, j, marker[j+1][i], crosstype, 0);
             weight[i]*=calc_i;
           }
       }
@@ -110,9 +107,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
         }
       }
     }
-
     /*   print new estimates of recombination frequencies */
-
     //Rprintf("INFO: Reestimate? %c\n", reestimate);
     //Rprintf("INFO: looping over all markers %d\n", Nmark);
     for (j=0; j<Nmark; j++) {
@@ -150,7 +145,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
 double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug,
                   int Nloci,
-                  double *variance, int em, vector *weight, const bool useREML, char fitQTL, char dominance, MQMCrossType crosstype, int verbose) {
+                  double *variance, int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, int verbose) {
                   
   //if(verbose==1){info("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%c domi=%c cross=%c",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);}
   //for (int i=0; i<Naug; i++){
@@ -158,118 +153,101 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   //}
   int iem= 0, newNaug, i, j;
   bool warnZeroDist=false;
-  char varknown, biasadj='n';
+  bool varknown;
+  bool biasadj=false;
   double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
   vector indweight, Ploci, Fy;
 
   indweight= newvector(Nind);
-  newNaug= (fitQTL=='n' ? Naug : 3*Naug);
+  newNaug= ((!fitQTL) ? Naug : 3*Naug);
   Fy= newvector(newNaug);
-  logP= Nloci*log(Pscale); // only for computational accuracy
-  varknown= (((*variance)==-1.0) ? 'n' : 'y' );
+  logP= Nloci*log(Pscale);                          // only for computational accuracy
+  varknown= (((*variance)==-1.0) ? false : true );
   Ploci= newvector(newNaug);
-  
-#ifndef STANDALONE
-  R_CheckUserInterrupt(); /* check for ^C */
-  //R_ProcessEvents();
-  R_FlushConsole();
-#endif
-  if ((useREML)&&(varknown=='n')) {
+  #ifndef STANDALONE
+    R_CheckUserInterrupt(); /* check for ^C */
+    //R_ProcessEvents();
+    R_FlushConsole();
+  #endif
+  if ((useREML)&&(!varknown)) {
 		//info("INFO: REML");
   }
   if (!useREML) {
 		//info("INFO: Maximum Likelyhood");
-    varknown='n';
-    biasadj='n';
+    varknown=false;
+    biasadj=false;
   }
   for (i=0; i<newNaug; i++) {
     Ploci[i]= 1.0;
   }
-  if (fitQTL=='n') {
+  if (!fitQTL) {
     for (j=0; j<Nloci; j++) {
       for (i=0; i<Naug; i++)
         Ploci[i]*= Pscale;
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
         for (i=0; i<Naug; i++) {
-          // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
-          calc_i = start_prob(crosstype, loci[j][i]);
+          calc_i = start_prob(crosstype, loci[j][i]);   // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
           Ploci[i]*= calc_i;
           //Als Ploci > 0 en calc_i > 0 then we want to assert Ploci[] != 0
         }
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         for (i=0; i<Naug; i++) {
-          //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
-          calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
           
+          calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype); //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
           if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
           Ploci[i]*= calc_i;
-          //if(i==1) info(" IND1 j=%d r[j]=%f calc_i=%f Ploci=%f (Marker:%c)",j,r[j],calc_i,Ploci[i],loci[j+1][i]);
         }
       }
     }
   } else {
     for (j=0; j<Nloci; j++) {
       for (i=0; i<Naug; i++) {
-        Ploci[i]*= Pscale;
-        Ploci[i+Naug]*= Pscale;
-        Ploci[i+2*Naug]*= Pscale;
-        // only for computational accuracy; see use of logP
+        Ploci[i]*= Pscale;           // only for computational accuracy; see use of logP
+        Ploci[i+Naug]*= Pscale;      // only for computational accuracy; see use of logP
+        Ploci[i+2*Naug]*= Pscale;    // only for computational accuracy; see use of logP
       }
       if ((position[j]==MLEFT)||(position[j]==MUNLINKED)) {
-        if (cofactor[j]<=MCOF)
+        if (cofactor[j]<=MCOF){
           for (i=0; i<Naug; i++) {
-            // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
-            calc_i = start_prob(crosstype, loci[j][i]);
+            calc_i = start_prob(crosstype, loci[j][i]);  // calc_i= prob(loci, r, i, j, MH, crosstype, 0, 1);
             Ploci[i] *= calc_i;
             Ploci[i+Naug] *= calc_i;
             Ploci[i+2*Naug] *= calc_i;
           }
-        else
+        }else{
           for (i=0; i<Naug; i++) {
-            //startvalues for each new chromosome
-            Ploci[i]*= start_prob(crosstype, MAA);
-            Ploci[i+Naug]*= start_prob(crosstype, MH);
-            Ploci[i+2*Naug] *= start_prob(crosstype, MBB);
+            Ploci[i]*= start_prob(crosstype, MAA);          //startvalue for MAA for new chromosome
+            Ploci[i+Naug]*= start_prob(crosstype, MH);      //startvalue for MH for new chromosome
+            Ploci[i+2*Naug] *= start_prob(crosstype, MBB);  //startvalue for MBB for new chromosome
           }
-        // QTL=MAA, MH orMBB
+        }
       }
       if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
         if ((cofactor[j]<=MCOF)&&(cofactor[j+1]<=MCOF))
           for (i=0; i<Naug; i++) {
-            //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
-            calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);
+            calc_i =left_prob(r[j],loci[j][i],loci[j+1][i],crosstype);  //calc_i = prob(loci, r, i, j, loci[j+1][i], crosstype, 0);
             if(calc_i == 0.0){calc_i=1.0;warnZeroDist=true;}
             Ploci[i]*= calc_i;
             Ploci[i+Naug]*= calc_i;
             Ploci[i+2*Naug]*= calc_i;
           }
         else if (cofactor[j]<=MCOF) // locus j+1 == QTL
-          for (i=0; i<Naug; i++) { // QTL==MAA What is the prob of finding an MAA at J=1
-            //calc_i = prob(loci, r, i, j, MAA, crosstype, 0);
-            calc_i =left_prob(r[j],loci[j][i],MAA,crosstype);
-            Ploci[i]*= calc_i;
-            // QTL==MH
-            //calc_i = prob(loci, r, i, j, MH, crosstype, 0);
-            calc_i = left_prob(r[j],loci[j][i],MH,crosstype);
+          for (i=0; i<Naug; i++) { // QTL==MAA || MH || MBB means: What is the prob of finding an MAA at J=1    
+            calc_i =left_prob(r[j],loci[j][i],MAA,crosstype);     //calc_i = prob(loci, r, i, j, MAA, crosstype, 0);
+            Ploci[i]*= calc_i;      
+            calc_i = left_prob(r[j],loci[j][i],MH,crosstype);     //calc_i = prob(loci, r, i, j, MH, crosstype, 0);
             Ploci[i+Naug]*= calc_i;
-            // QTL==MBB
-            //calc_i = prob(loci, r, i, j, MBB, crosstype, 0);
-            calc_i = left_prob(r[j],loci[j][i],MBB,crosstype);
+            calc_i = left_prob(r[j],loci[j][i],MBB,crosstype);    //calc_i = prob(loci, r, i, j, MBB, crosstype, 0);
             Ploci[i+2*Naug]*= calc_i;
           }
         else // locus j == QTL
           for (i=0; i<Naug; i++) { // QTL==MQTL
-            calc_i = left_prob(r[j],MAA,loci[j+1][i],crosstype);
-            //calc_i = prob(loci, r, i, j+1, MAA, crosstype, -1);
+            calc_i = left_prob(r[j],MAA,loci[j+1][i],crosstype);  //calc_i = prob(loci, r, i, j+1, MAA, crosstype, -1);
             Ploci[i]*= calc_i;
-            // QTL==MH
-            calc_i = left_prob(r[j],MH,loci[j+1][i],crosstype);
-            //calc_i = prob(loci, r, i, j+1, MH, crosstype, -1);
+            calc_i = left_prob(r[j],MH,loci[j+1][i],crosstype);   //calc_i = prob(loci, r, i, j+1, MH, crosstype, -1);
             Ploci[i+Naug]*= calc_i;
-            // QTL==MBB
-            calc_i = left_prob(r[j],MBB,loci[j+1][i],crosstype);
-            //calc_i = prob(loci, r, i, j+1, MBB, crosstype, -1);
+            calc_i = left_prob(r[j],MBB,loci[j+1][i],crosstype);  //calc_i = prob(loci, r, i, j+1, MBB, crosstype, -1);
             Ploci[i+2*Naug]*= calc_i;
           }
       }
@@ -279,7 +257,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
 //	Rprintf("INFO: Done fitting QTL's\n");
   if ((*weight)[0]== -1.0) {
     for (i=0; i<Nind; i++) indweight[i]= 0.0;
-    if (fitQTL=='n') {
+    if (!fitQTL) {
       for (i=0; i<Naug; i++) indweight[ind[i]]+=Ploci[i];
       for (i=0; i<Naug; i++) (*weight)[i]= Ploci[i]/indweight[ind[i]];
     } else {
@@ -301,14 +279,12 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   indL= newvector(Nind);
   while ((iem<em)&&(delta>1.0e-5)) {
     iem+=1;
-    if (varknown=='n') *variance=-1.0;
-    //Rprintf("Checkpoint_b\n");
+    if (!varknown) *variance=-1.0;
     logL= regression(Nind, Nloci, cofactor, loci, y,
                      weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance);
     logL=0.0;
-    //Rprintf("regression ready\n");
     for (i=0; i<Nind; i++) indL[i]= 0.0;
-    if (fitQTL=='n') // no QTL fitted
+    if (!fitQTL) // no QTL fitted
       for (i=0; i<Naug; i++) {
         (*weight)[i]= Ploci[i]*Fy[i];
         indL[ind[i]]= indL[ind[i]] + (*weight)[i];
@@ -322,7 +298,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     for (i=0; i<Nind; i++) logL+=log(indL[i])-logP;
     for (i=0; i<Nind; i++) indweight[i]= 0.0;
-    if (fitQTL=='n') {
+    if (!fitQTL) {
       for (i=0; i<Naug; i++) indweight[ind[i]]+=(*weight)[i];
       for (i=0; i<Naug; i++) (*weight)[i]/=indweight[ind[i]];
     } else {
@@ -337,18 +313,15 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
     delta= fabs(logL-oldlogL);
     oldlogL= logL;
   }
-  //Rprintf("EM Finished\n");
   // bias adjustment after finished ML estimation via EM
-  //FIXME: dont use 'n' is u mean false or 'y' when true... so convert to boolean
-  if ((useREML)&&(varknown=='n')) {
-    // RRprintf("Checkpoint_c\n");
+  if ((useREML)&&(!varknown)) {
     *variance=-1.0;
-    biasadj='y';
+    biasadj=true;
     logL= regression(Nind, Nloci, cofactor, loci, y,
                      weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance);
     logL=0.0;
     for (int _i=0; _i<Nind; _i++) indL[_i]= 0.0;
-    if (fitQTL=='n')
+    if (!fitQTL)
       for (i=0; i<Naug; i++) {
         (*weight)[i]= Ploci[i]*Fy[i];
         indL[ind[i]]+=(*weight)[i];
@@ -364,7 +337,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     for (i=0; i<Nind; i++) logL+=log(indL[i])-logP;
     for (i=0; i<Nind; i++) indweight[i]= 0.0;
-    if (fitQTL=='n') {
+    if (!fitQTL) {
       for (i=0; i<Naug; i++) indweight[ind[i]]+=(*weight)[i];
       for (i=0; i<Naug; i++) (*weight)[i]/=indweight[ind[i]];
     } else {

@@ -31,7 +31,10 @@
 /* backward elimination in regression of trait on multiple cofactors routine subX haalt uit matrices voor volledige model de submatrices voor submodellen;
    matrices XtWX en Xt van volledig model worden genoemd fullxtwx en fullxt; analoog vector XtWY wordt full xtwy genoemd;
 */
-double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, vector weight, int* ind, int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
+double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, vector weight, int* ind, 
+                int Naug, double logLfull, double variance, double F1, double F2, cvector* newcofactor, vector r, 
+                cvector position,vector *informationcontent,vector *mapdistance,matrix *Frun,int run,char REMLorML,
+                bool fitQTL,bool dominance,int em, double windowsize,double stepsize,
                 double stepmin,double stepmax,MQMCrossType crosstype,int verbose);
 
 #ifdef __cplusplus

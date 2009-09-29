@@ -36,10 +36,10 @@
 */
 
 
-int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const char dominance){
+int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const bool dominance){
   int dimx=1;
   for (unsigned int j=0; j<nmark; j++){
-    if (cofactor[j]==MCOF) dimx+= (dominance=='n' ? 1 : 2);  // per QTL only additivity !!
+    if (cofactor[j]==MCOF) dimx+= ((!dominance) ? 1 : 2);  // per QTL only additivity !!
     else if (cofactor[j]==MSEX) {
       dimx+=1;
     }
@@ -49,7 +49,7 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 
 double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y,
                   vector *weight, ivector ind, int Naug, double *variance,
-                  vector Fy, char biasadj, char fitQTL, char dominance) {
+                  vector Fy, bool biasadj, bool fitQTL, bool dominance) {
   // Rprintf("regression IN\n");
   /*
   cofactor[j] at locus j:
@@ -76,7 +76,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   //Reset dimension designmatrix
   dimx=1;
   for (j=0; j<Nmark; j++){
-    if ((cofactor[j]==MCOF)||(cofactor[j]==MQTL)) dimx+= (dominance=='y' ? 2 : 1);
+    if ((cofactor[j]==MCOF)||(cofactor[j]==MQTL)) dimx+= (dominance ? 2 : 1);
   }
   cvector xtQTL; 
   xtQTL= newcvector(dimx);
@@ -88,7 +88,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     if (cofactor[j]==MCOF) { // cofactor (not a QTL moving along the chromosome)
       jx++;
       xtQTL[jx]= MCOF;
-      if (dominance=='y') {
+      if (dominance) {
         for (int i=0; i<Naug; i++)
           if (marker[j][i]==MH) {
             Xt[jx][i]=48;  //ASCII code 47, 48 en 49 voor -1, 0, 1;
@@ -116,7 +116,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     } else if (cofactor[j]==MQTL) { // QTL
       jx++;
       xtQTL[jx]= MSEX;
-      if (dominance=='y') {
+      if (dominance) {
         jx++;
         xtQTL[jx]= MQTL;
       }
@@ -129,7 +129,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     XtWY[j]= 0.0;
     for (jj=0; jj<dimx; jj++) XtWX[j][jj]= 0.0;
   }
-  if (fitQTL=='n'){
+  if (!fitQTL){
     for (int i=0; i<Naug; i++) {
       yi= y[i];
       wi= (*weight)[i];
@@ -196,14 +196,14 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   // long double indL[Nind];
   indL = (long double *)Calloc(Nind, long double);
   int newNaug;
-  newNaug= (fitQTL=='n' ? Naug : 3*Naug);
+  newNaug= ((!fitQTL) ? Naug : 3*Naug);
   vector fit, resi;
   fit= newvector(newNaug);
   resi= newvector(newNaug);
   // cout << "Calculate residuals" << endl;
   if (*variance<0) {
     *variance= 0.0;
-    if (fitQTL=='n')
+    if (!fitQTL)
       for (int i=0; i<Naug; i++) {
         fit[i]= 0.0;
         for (j=0; j<dimx; j++)
@@ -234,8 +234,8 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
         *variance +=(*weight)[i+Naug]*pow(resi[i+Naug], 2.0);
         *variance +=(*weight)[i+2*Naug]*pow(resi[i+2*Naug], 2.0);
       }
-    *variance/= (biasadj=='n' ? Nind : Nind-dimx); // to compare results with Johan; variance/=Nind;
-    if (fitQTL=='n')
+    *variance/= (!biasadj ? Nind : Nind-dimx); // to compare results with Johan; variance/=Nind;
+    if (!fitQTL)
       for (int i=0; i<Naug; i++) Fy[i]= Lnormal(resi[i], *variance);
     else
       for (int i=0; i<Naug; i++) {
@@ -244,7 +244,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
         Fy[i+2*Naug]= Lnormal(resi[i+2*Naug], *variance);
       }
   } else {
-    if (fitQTL=='n')
+    if (!fitQTL)
       for (int i=0; i<Naug; i++) {
         fit[i]= 0.0;
         for (j=0; j<dimx; j++)
@@ -282,7 +282,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   for (int i=0; i<Nind; i++) {
     indL[i]= 0.0;
   }
-  if (fitQTL=='n') {
+  if (!fitQTL) {
     for (int i=0; i<Naug; i++) indL[ind[i]]+=(*weight)[i]*Fy[i];
   } else {
     for (int i=0; i<Naug; i++) {
