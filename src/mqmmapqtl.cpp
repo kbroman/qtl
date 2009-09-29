@@ -31,7 +31,7 @@
  * the QTL likelihood. Uses either all cofactors, or selected cofactors only
  */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, 
-              cmatrix marker, cvector position, vector mapdistance, vector y,
+              MQMMarkerMatrix marker, cvector position, vector mapdistance, vector y,
               vector r, ivector ind, int Naug, double variance, char
               printoutput, vector *informationcontent, matrix *Frun, int run,
               char REMLorML, char fitQTL, char dominance, int em, double
@@ -99,9 +99,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   QTLmapdistance= newvector(Nloci);
   cvector QTLposition;
   QTLposition= newcvector(Nloci);
-  cmatrix QTLloci;
+  MQMMarkerMatrix QTLloci;
 
-  QTLloci = (char **)Calloc(Nloci, char *);
+  QTLloci = (MQMMarkerMatrix)Calloc(Nloci, MQMMarkerVector);
 
   //  Rprintf("DEBUG testing_2");
   double moveQTL= stepmin;

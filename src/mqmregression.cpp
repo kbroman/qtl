@@ -47,7 +47,7 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
   return dimx;
 }
 
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y,
+double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y,
                   vector *weight, ivector ind, int Naug, double *variance,
                   vector Fy, char biasadj, char fitQTL, char dominance) {
   // Rprintf("regression IN\n");

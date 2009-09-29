@@ -28,7 +28,7 @@
   extern "C" {
 #endif
 
-double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, cmatrix marker, cvector position, vector mapdistance, vector y,
+double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, MQMMarkerMatrix marker, cvector position, vector mapdistance, vector y,
               vector r, ivector ind, int Naug, double variance, char printoutput,vector *informationcontent,matrix *Frun,int run,char REMLorML,char fitQTL,char dominance,int em, double windowsize,double stepsize,
               double stepmin,double stepmax,MQMCrossType crosstype,int verbose);
 #ifdef __cplusplus
