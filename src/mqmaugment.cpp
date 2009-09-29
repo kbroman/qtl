@@ -73,8 +73,6 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   imarker   = newMQMMarkerVector(Nmark);             
 
   int iaug     = 0;     // iaug keeps track of current augmented individual
-  // int maxiaug  = 0;     // highest reached(?)
-  // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
   prob0right, prob1right, prob2right;
@@ -104,23 +102,22 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
           // ---- walk from previous augmented to current augmented genotype
+          //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker
           if (newmarker[j][ii]==MNOTAA) {
-            // augment data to contain AB and BB
+            //NOTAA augment data to contain AB and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj] = newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob1left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MH,crosstype);
-              //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
-              prob2left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MBB,crosstype);
+              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);      //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);     //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
             }
             switch (crosstype) {
               case CF2:
-                prob1right= right_prob_F2(MH, j, imarker, r, position);
-                prob2right= right_prob_F2(MBB, j, imarker, r, position);
+                prob1right= right_prob_F2(MH, j, imarker, r, position);          //prob1right= probright(MH, j, imarker, r, position, crosstype);
+                prob2right= right_prob_F2(MBB, j, imarker, r, position);         //prob2right= probright(MBB, j, imarker, r, position, crosstype);
               break;
               case CBC:
                 prob1right= right_prob_BC(MH, j, imarker, r, position);
@@ -134,8 +131,6 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
                 fatal("Strange: unknown crosstype in mqm augment()");
               break;
             }
-            //prob1right= probright(MH, j, imarker, r, position, crosstype);
-            //prob2right= probright(MBB, j, imarker, r, position, crosstype);
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
@@ -173,22 +168,20 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
             }
             probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MNOTBB) {
-            // augment data can contain MH and MAA 
+            //NOTBB: augment data can contain MH and MAA 
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, MAA);
               prob1left= start_prob(crosstype, MH);
             } else {
-              //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob0left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MAA,crosstype);
-              //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob1left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MH,crosstype);
+              prob0left= left_prob(r[j-1],newmarker[j-1][ii],MAA,crosstype);  //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
+              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);   //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
             }
             switch (crosstype) {
               case CF2:
-                prob0right= right_prob_F2(MAA, j, imarker, r, position);
-                prob1right= right_prob_F2(MH, j, imarker, r, position);
+                prob0right= right_prob_F2(MAA, j, imarker, r, position);      //prob0right= probright(MAA, j, imarker, r, position, crosstype);
+                prob1right= right_prob_F2(MH, j, imarker, r, position);       //prob1right= probright(MH, j, imarker, r, position, crosstype);
               break;
               case CBC:
                 prob0right= right_prob_BC(MAA, j, imarker, r, position);
@@ -202,8 +195,6 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
                 fatal("Strange: unknown crosstype in mqm augment()");
               break;
             }
-            //prob0right= probright(MAA, j, imarker, r, position, crosstype);
-            //prob1right= probright(MH, j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
 
@@ -241,7 +232,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MMISSING) {
-            // augment data to contain AB, AA and BB
+            //UNKNOWN: augment data to contain AB, AA and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
@@ -249,18 +240,15 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob0left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MAA,crosstype);
-              //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob1left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MH,crosstype);
-              //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
-              prob2left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],MBB,crosstype);    
+              prob0left= left_prob(r[j-1],newmarker[j-1][ii],MAA,crosstype);  //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
+              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);   //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);  //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
             }
             switch (crosstype) {
               case CF2:
-                prob0right= right_prob_F2(MAA, j, imarker, r, position);
-                prob1right= right_prob_F2(MH, j, imarker, r, position);
-                prob2right= right_prob_F2(MBB, j, imarker, r, position);
+                prob0right= right_prob_F2(MAA, j, imarker, r, position); //prob0right= probright(MAA, j, imarker, r, position, crosstype);
+                prob1right= right_prob_F2(MH, j, imarker, r, position);  //prob1right= probright(MH, j, imarker, r, position, crosstype);
+                prob2right= right_prob_F2(MBB, j, imarker, r, position); //prob2right= probright(MBB, j, imarker, r, position, crosstype);
               break;
               case CBC:
                 prob0right= right_prob_BC(MAA, j, imarker, r, position);
@@ -276,10 +264,6 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
                 fatal("Strange: unknown crosstype in mqm augment()");
               break;
             }            
-            
-            //prob0right= probright(MAA, j, imarker, r, position, crosstype);
-            //prob1right= probright(MH, j, imarker, r, position, crosstype);
-            //prob2right= probright(MBB, j, imarker, r, position, crosstype);
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
@@ -369,12 +353,12 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               newprob[ii]*= prob0left;
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
-          } else { // newmarker[j][ii] is observed
+          } else {
+            //STD case we know what the next marker is nou use probleft to estimate the likelyhood of the current location
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
-              prob0left= start_prob(crosstype, (MQMMarker) newmarker[j][ii]);
+              prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
-              //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
-              prob0left= left_prob(r[j-1],(MQMMarker)newmarker[j-1][ii],(MQMMarker)newmarker[j][ii],crosstype);
+              prob0left= left_prob(r[j-1],newmarker[j-1][ii],newmarker[j][ii],crosstype); //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
             }
             newprob[ii]*= prob0left;
           }
