@@ -342,7 +342,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
       cof_cnt++;
     }
     if (cof_cnt+10 > Nind) {
-      Rprintf("ERROR: Setting this many cofactors would leave less than 10 degrees of freedom.\n");
+      Rprintf("ERROR: Setting %d cofactors would leave less than 10 degrees of freedom.\n",cof_cnt);
       return;
     }
   }
