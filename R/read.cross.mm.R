@@ -74,7 +74,7 @@ function(dir,rawfile,mapfile,estimate.map=TRUE)
     if(length(o) > 0) map <- map[-o,]
 
     # remove any leading *'s from the marker names
-    g <- grep("^\\*",map[,2],extended=FALSE)
+    g <- grep("^\\*",map[,2])
     if(length(g) > 0)
       map[g,2] <- substr(map[g,2],2,nchar(map[g,2]))
   }
@@ -90,7 +90,6 @@ function(dir,rawfile,mapfile,estimate.map=TRUE)
 #                  blank.lines.skip=TRUE,quiet=TRUE)
 #  
   for(i in 1:n.lines) {
-#    a <- strsplit(rawdata[[i]],"\\s+",extended=TRUE)[[1]]
     a <- scan(rawfile,what=character(),skip=i-1,nlines=1,
               blank.lines.skip=TRUE,quiet=TRUE)
 
@@ -341,7 +340,7 @@ function( mapsfile )
   f <- scan( mapsfile, what = "", skip = start[3],
             nlines = start[4] - start[3] - 1,
             blank.lines.skip = FALSE, quiet = TRUE)
-  chr <- grep( "^\\*", f, extended = FALSE )
+  chr <- grep( "^\\*", f)
   chrom <- substring( f[chr], 2 )
   nmark <- as.integer( f[ 1 + chr ] )
   chr <- c( chr[-1], 1 + length( f ))
