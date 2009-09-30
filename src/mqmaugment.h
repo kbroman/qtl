@@ -34,6 +34,8 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
                int *Npheno, int *maxind, int *maxiaug, double *neglect, int
                *chromo, int *crosstype, int *verbose);
 
+int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers);               
+
 int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix *augmarker, vector *augy,
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position,

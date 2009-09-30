@@ -53,6 +53,76 @@
  * FIXME: increasing the buffers for augmentation can automatic
  FIXME Herhalingen naar een aparte functie (eventueel cross specific)
  */
+ 
+int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers){
+  int augtotal=0;
+  int missingmarkers=Nmark*Nind;               //How many markers are missing for this individual
+  for(int i=0; i<Nind; i++) {
+    int augind=0;                   //How many times did we augment this individual
+    for(int j=0; j<Nmark;j++){
+      switch (markers[j][i]) {
+        case MMISSING:
+          augind=augind+3;
+        break;
+        case MNOTAA:
+          augind=augind+2;
+        break;
+        case MNOTBB:
+          augind=augind+2;
+        break;
+        default:
+          missingmarkers--; //Marker known
+        break;
+      }
+    }
+    if(augind>0){
+      augtotal+=augind;
+    }else{
+      augtotal++;
+    }
+  }
+  //info("Total of %d missing markers. MaxAugmentation: %d",missingmarkers,augtotal)
+  return (augtotal);
+}
+
+MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
+  for(int j=0;j<Nmark;j++){
+    switch (markers[j]) {
+      case MMISSING:
+        augind=augind+3;
+      break;
+      case MNOTAA:
+        augind=augind+2;
+      break;
+      case MNOTBB:
+        augind=augind+2;
+      break;
+      default:
+        missingmarkers--; //Marker known
+      break;
+    } 
+  }
+  info("Number of augmentation for individual:%d",augind);
+  MQMMarkerMatrix returnmatrix = newMQMMarkerMatrix(Nmark,augind);
+  for(int j=0;j<Nmark;j++){
+    for(int i=0;i<augind;i++){
+      switch (markers[j]) {
+        case MMISSING:
+          returnmatrix[j][i];
+        break;
+        case MNOTAA:
+          augind=augind+2;
+        break;
+        case MNOTBB:
+          if(i%2==)
+        break;
+        default:
+          returnmatrix[j][i]=matrix[j]
+        break;
+      }    
+    }
+  }
+}
 
 int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
@@ -81,26 +151,27 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
   if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f", maxNaug, imaxNaug, neglect);
   // ---- foreach individual create one in the newmarker matrix
-  const int nind0 = *Nind;
-  int newNind = nind0;
-  int previaug = 0;                    // previous iaug
+  const int nind0 = *Nind;              //Original number of individuals
+  int newNind = nind0;                  //Number of unique individuals
+  int previaug = 0;                     // previous index in newmarkers
   for (int i=0; i<nind0; i++) {
-    //if(verbose) info("Start augmentation of individual: %d",i);
-    // ---- for every individual:
-    const int dropped = nind0-newNind;
-    const int iidx = i - dropped;
-    newind[iaug]  = iidx;              // iidx corrects for dropped individuals
-    newy[iaug]    = y[i];              // cvariance (phenotype)
-    newprob[iaug] = 1.0;
-    double probmax = 1.0;
-    //if (verbose) info("individual:%d,dropped:%d",i,dropped);
-    for (int j=0; j<Nmark; j++) 
-      newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
+    //Loop through individuals
+    const int dropped = nind0-newNind;  //How many are dropped
+    const int iidx = i - dropped;       //Individuals I's new individual number based on dropped individuals
+    newind[iaug]   = iidx;              // iidx corrects for dropped individuals
+    newy[iaug]     = y[i];              // cvariance (phenotype)
+    newprob[iaug]  = 1.0;               //prop
+    double probmax = 1.0;               //current maximum probability
+
+    for (int j=0; j<Nmark; j++){ 
+      newmarker[j][iaug]=marker[j][i];    // copy markers into newmarkers for the new indidivudal under investigation
+    }
     for (int j=0; j<Nmark; j++) {
-      // ---- for every marker:
+      //Loop through markers:
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
+          //info("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
           //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker
           if (newmarker[j][ii]==MNOTAA) {
