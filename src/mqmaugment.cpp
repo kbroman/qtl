@@ -85,7 +85,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   int newNind = nind0;
   int previaug = 0;                    // previous iaug
   for (int i=0; i<nind0; i++) {
-    if(verbose) info("Start augmentation of individual: %d",i);
+    //if(verbose) info("Start augmentation of individual: %d",i);
     // ---- for every individual:
     const int dropped = nind0-newNind;
     const int iidx = i - dropped;
@@ -121,10 +121,10 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               break;
               case CBC:
                 prob1right= right_prob_BC(MH, j, imarker, r, position);
-                prob2right= 0.0;                
+                prob2right= right_prob_BC(MBB, j, imarker, r, position);                
               break;
               case CRIL:
-                prob1right= 0.0;
+                prob1right= right_prob_RIL(MH, j, imarker, r, position);
                 prob2right= right_prob_RIL(MBB, j, imarker, r, position);                
               break;
               case CUNKNOWN:
@@ -189,7 +189,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               break;
               case CRIL:
                 prob0right= right_prob_RIL(MAA, j, imarker, r, position);
-                prob1right= 0.0;               
+                prob1right= right_prob_RIL(MH, j, imarker, r, position);              
               break;
               case CUNKNOWN:
                 fatal("Strange: unknown crosstype in mqm augment()");
