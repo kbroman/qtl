@@ -440,6 +440,9 @@ int main(int argc,char *argv[]) {
     int augmentednind = mqmalgorithmsettings.nind;
     
     //<dataaugmentation>
+    //bool augdata(const int Nind, int const Nmark,const MQMMarkerMatrix markers,int *Nind, MQMMarkerMatrix *newmarkers){
+    int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
+    
     //Variables for the returned augmented markers,phenotype,individualmapping
     MQMMarkerMatrix newmarkerset;
     vector new_y;
