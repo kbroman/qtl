@@ -416,12 +416,11 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   int **Geno;
   double **Pheno;
   double **Dist;
-  int **NEW;
+  int **NEW;                      //Holds the output for the augmentdata function
   int **Chromo;
-  double **NEWPheno;
-  int **NEWIND;
-  const int nind0 = *Nind;
-  int prior = nind0;
+  double **NEWPheno;              //New phenotype vector
+  int **NEWIND;                   //New list of individuals 
+  const int nind0 = *Nind;        //Individuals we start with
   const int verbose = *verbosep;
   const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
@@ -494,7 +493,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
     Free(r);
     Free(chr);
     if (verbose) {
-      Rprintf("# Unique individuals before augmentation:%d\n", prior);
+      Rprintf("# Unique individuals before augmentation:%d\n", nind0);
       Rprintf("# Unique selected individuals:%d\n", *Nind);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
