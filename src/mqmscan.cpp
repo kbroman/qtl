@@ -117,7 +117,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   for (int j=0; j<Nmark; j++) {
     if (mqmmod(f1genotype[j],11)!=0) {
       dropj=false;
-      //if(((*mapdistance)[j+1]-(*mapdistance)[j])<=0.0) dropj=true;
+      if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0) dropj=true;
     } else if ((*cofactor)[j]==MNOCOF) {
       dropj=true;
     } else if (position[j]==MLEFT) {
@@ -127,11 +127,11 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
       else if (position[j+1]!=MRIGHT)
         if ((((*mapdistance)[j+2]-(*mapdistance)[j])<windowsize)) dropj=false;
     } else if (position[j]==MMIDDLE) {
-      dropj='y';
+      dropj=true;
       if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
       else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
     } else if (position[j]==MRIGHT) {
-      dropj='y';
+      dropj=true;
       if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
       else if (position[j-1]!=MLEFT)
         if ((((*mapdistance)[j]-(*mapdistance)[j-2])<windowsize)) dropj=false;
@@ -329,12 +329,12 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   change_coding(&Nmark,&Nind,Geno,markers,crosstype);
 
   for (int i=0; i< Nmark; i++) {
-    f1genotype[i] = 12;               //The parental strain for all markers
+    f1genotype[i] = 12;               //The parental strain for all markers, this was used to asses marker information
     mapdistance[i]=POSITIONUNKNOWN;   //Mapdistances
     mapdistance[i]=Dist[0][i];  
     cofactor[i] = MNOCOF;             //Cofactors
     if (Cofactors[0][i] == 1) {
-      cofactor[i] = MCOF;
+      cofactor[i] = MCOF;             //Set cofactor
       cof_cnt++;
     }
     if (Cofactors[0][i] == 2) {
@@ -413,8 +413,8 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
 void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                int *geno,int *chromo, double *dist, double *pheno,
                int *cofactors, int *backwards, int *RMLorML,double *alfa,int *emiter,
-               double *windowsize,double *steps,
-               double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *crosstype,int *domi,int *verbose) {
+               double *windowsize,double *steps,double *stepmi,double *stepma,
+               int *nRun, int *out_Naug, int *indlist, double *qtl, int *reestimate, int *crosstype, int *domi, int *verbose) {
   int **Geno;
   int **Chromo;
   double **Dist;
