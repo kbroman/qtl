@@ -6,6 +6,22 @@ INFO: Receiving the chromosome matrix from R
 INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
 INFO: Initialize Frun and informationcontent to 0.0
+INFO: Marker 6 at chr 1 is dropped
+INFO: Marker 15 at chr 1 is dropped
+INFO: Marker 16 at chr 1 is dropped
+INFO: Marker 17 at chr 1 is dropped
+INFO: Marker 42 at chr 4 is dropped
+INFO: Marker 48 at chr 4 is dropped
+INFO: Marker 105 at chr 11 is dropped
+INFO: Marker 107 at chr 11 is dropped
+INFO: Marker 111 at chr 11 is dropped
+INFO: Marker 133 at chr 15 is dropped
+INFO: Marker 137 at chr 15 is dropped
+INFO: Marker 139 at chr 15 is dropped
+INFO: Marker 148 at chr 16 is dropped
+INFO: Marker 150 at chr 17 is dropped
+INFO: Marker 151 at chr 17 is dropped
+INFO: Marker 154 at chr 17 is dropped
 INFO: Calculating relative genomepositions of the markers
 INFO: Estimating recombinant frequencies
 INFO: After dropping of uninformative cofactors
