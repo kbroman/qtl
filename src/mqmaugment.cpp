@@ -84,7 +84,7 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
   //info("Total of %d missing markers. MaxAugmentation: %d",missingmarkers,augtotal)
   return (augtotal);
 }
-
+/*
 MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
   for(int j=0;j<Nmark;j++){
     switch (markers[j]) {
@@ -123,6 +123,7 @@ MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
     }
   }
 }
+*/
 
 int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
