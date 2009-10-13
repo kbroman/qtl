@@ -9,12 +9,13 @@
 }
 
 \usage{
-\method{convert}{scantwo}(object)
+\method{convert}{scantwo}(object, \dots)
 }
 
 \arguments{
  \item{object}{Output from the function \code{\link{scantwo}}, for
    R/qtl version 1.03 and earlier.}
+ \item{\dots}{Ignored at this point.}
 }
 
 \value{

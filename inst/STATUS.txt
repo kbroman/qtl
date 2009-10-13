@@ -17,6 +17,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.15, 10/13/2009:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added a function convert.map for converting a genetic map from one
+  map function to another.
+
+
 Version 1.14, 9/30/2009:
 
 Major changes:

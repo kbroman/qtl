@@ -10,7 +10,13 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Add a map.function argument to read.cross.
+
+o In scanone and scantwo, if using multiple nodes, be sure to close
+  the connections on exit.
+
 o Add functions convert2riself and convert2risib.  
+  (treating all other possible cross types appropriately).
 
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.

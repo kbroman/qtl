@@ -9,12 +9,13 @@
 }
 
 \usage{
-\method{convert}{scanone}(object)
+\method{convert}{scanone}(object, \dots)
 }
 
 \arguments{
  \item{object}{Output from the function \code{\link{scanone}}, for
    R/qtl version 0.97 and earlier.}
+ \item{\dots}{Ignored at this point.}
 }
 
 \value{

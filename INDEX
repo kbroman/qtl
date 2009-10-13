@@ -39,6 +39,7 @@ comparegeno             Compare individuals' genotype data
 compareorder            Compare two orderings of markers on a
                         chromosome
 condense.scantwo        Condense the output from a 2-d genome scan
+convert.map             Change map function for a genetic map
 convert.scanone         Convert output from scanone for R/qtl version
                         0.98
 convert.scantwo         Convert output from scantwo for R/qtl version

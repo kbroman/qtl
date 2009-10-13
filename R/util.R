@@ -2504,7 +2504,7 @@ function(x, ...)
 # convert functions
 ######################################################################
 convert <-
-function(object)
+function(object, ...)
   UseMethod("convert")
 
 
@@ -2518,7 +2518,7 @@ function(object)
 #
 ######################################################################
 convert.scanone <-
-function(object)
+function(object, ...)
 {  
   if(!any(class(object) == "scanone"))
     stop("Input should have class \"scanone\".")
@@ -2546,7 +2546,7 @@ function(object)
 #                   additive QTL model
 ######################################################################
 convert.scantwo <-
-function(object)
+function(object, ...)
 {
   if(!any(class(object) == "scantwo"))
     stop("Input should have class \"scantwo\".")
@@ -2562,6 +2562,61 @@ function(object)
       lod[,,i][u] <- t(lod[,,i])[u] - lod[,,i][u]
   }
   object$lod <- lod
+  object
+}
+
+
+######################################################################
+# convert.map
+#
+# convert a genetic map from one map function to another
+######################################################################
+convert.map <-
+function(object, old.map.function=c("haldane", "kosambi", "c-f", "morgan"),
+         new.map.function=c("haldane", "kosambi", "c-f", "morgan"), ...)
+{
+  old.map.function <- match.arg(old.map.function)
+  new.map.function <- match.arg(new.map.function)
+  if(!("map" %in% class(object)))
+    stop("Input should have class \"map\".")
+
+  if(old.map.function==new.map.function) {
+    warning("old and new map functions are the same; no change.")
+    return(object)
+  }
+
+  mf <- switch(old.map.function,
+               "haldane"=mf.h,
+               "kosambi"=mf.k,
+               "c-f"=mf.cf,
+               "morgan"=mf.m)
+  imf <- switch(new.map.function,
+               "haldane"=imf.h,
+               "kosambi"=imf.k,
+               "c-f"=imf.cf,
+               "morgan"=imf.m)
+
+  if(is.matrix(object[[1]])) { # sex-specific map
+    for(i in seq(along=object)) {
+      theclass <- class(object[[i]])
+      thenames <- colnames(object[[i]])
+      for(j in 1:2) 
+        object[[i]][j,] <- cumsum(c(object[[i]][j,1], imf(mf(diff(object[[i]][j,])))))
+
+      class(object[[i]]) <- theclass
+      colnames(object[[i]]) <- thenames
+    }
+  }
+  else {
+    for(i in seq(along=object)) {
+      theclass <- class(object[[i]])
+      thenames <- names(object[[i]])
+      object[[i]] <- cumsum(c(object[[i]][1], imf(mf(diff(object[[i]])))))
+      class(object[[i]]) <- theclass
+      names(object[[i]]) <- thenames
+    }
+  }
+
   object
 }
 
