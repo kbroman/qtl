@@ -7,7 +7,7 @@
   This function takes a cross object and specified chromosome numbers
   and positions and pulls out the genotype probabilities or imputed
   genotypes at the nearest pseudomarkers, for later use by the function
-  \code{\link[qtl]{fitqtl}}. 
+  \code{\link{fitqtl}}. 
 }
 
 \usage{
@@ -16,14 +16,14 @@ makeqtl(cross, chr, pos, qtl.name, what=c("draws","prob"))
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Vector indicating the chromosome for each QTL. (These should
    be character strings referring to the chromosomes by name.)}
  \item{pos}{Vector (of same length as \code{chr}) indicating the
    positions on the chromosome to be taken. If there is no marker or
    pseudomarker at a position, the nearest position is used.}
  \item{qtl.name}{Optional user-specified name for each QTL, used in the
-   drop-one-term ANOVA table in \code{\link[qtl]{fitqtl}}.
+   drop-one-term ANOVA table in \code{\link{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a
    QTL on Chromsome 1 at 10 cM.} 
  \item{what}{Indicates whether to pull out the imputed genotypes or the
@@ -35,8 +35,8 @@ makeqtl(cross, chr, pos, qtl.name, what=c("draws","prob"))
   genotypes if they are present in the input \code{cross} object. If both
   fields are missing in the input object, the function will report an
   error. Before running this function, the user must have first run either
-  \code{\link[qtl]{sim.geno}} (for \code{what="draws"}) or
-  \code{\link[qtl]{calc.genoprob}} (for \code{what="prob"}).
+  \code{\link{sim.geno}} (for \code{what="draws"}) or
+  \code{\link{calc.genoprob}} (for \code{what="prob"}).
 }
 
 \value{
@@ -71,9 +71,9 @@ qtl <- makeqtl(fake.f2, qc, qp, what="draws")
 summary(qtl)
 }
 
-\seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{calc.genoprob}},
-  \code{\link[qtl]{sim.geno}}, \code{\link[qtl]{dropfromqtl}},
-  \code{\link[qtl]{replaceqtl}}, \code{\link[qtl]{addtoqtl}}, \code{\link[qtl]{summary.qtl}},
-  \code{\link[qtl]{reorderqtl}}  } 
+\seealso{ \code{\link{fitqtl}}, \code{\link{calc.genoprob}},
+  \code{\link{sim.geno}}, \code{\link{dropfromqtl}},
+  \code{\link{replaceqtl}}, \code{\link{addtoqtl}}, \code{\link{summary.qtl}},
+  \code{\link{reorderqtl}}  } 
 
 \keyword{utilities}

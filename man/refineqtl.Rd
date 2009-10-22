@@ -16,7 +16,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix to be
    used as the phenotype.  One may also give a character string matching
    the phenotype name.  Finally, one may give a numeric vector of
@@ -24,7 +24,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
- \item{qtl}{A QTL object, as produced by \code{\link[qtl]{makeqtl}},
+ \item{qtl}{A QTL object, as produced by \code{\link{makeqtl}},
    containing the positions of the QTL.  Provide either \code{qtl} or
    the pair \code{chr} and \code{pos}.}
  \item{chr}{Vector indicating the chromosome for each QTL; if \code{qtl}
@@ -43,7 +43,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    Haley-Knott regression.}
  \item{verbose}{If TRUE, give feedback about progress.  If
    \code{verbose} is an integer > 1, further messages from
-   \code{\link[qtl]{scanqtl}} are also displayed.}
+   \code{\link{scanqtl}} are also displayed.}
  \item{maxit}{Maximum number of iterations.}
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.}
@@ -65,7 +65,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   improvement in likelihood can be obtained.
 
   One may provide either a \code{qtl} object (as produced by
-  \code{\link[qtl]{makeqtl}}), or vectors \code{chr} and \code{pos}
+  \code{\link{makeqtl}}), or vectors \code{chr} and \code{pos}
   (and, optionally, \code{qtl.name}) indicating the positions of the
   QTL.
 
@@ -80,7 +80,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   If \code{keeplodprofile=TRUE}, LOD profiles from the last pass through
   the refinement algorithm are retained as an attribute,
   \code{"lodprofile"}, to the object.  These may be plotted with
-  \code{\link[qtl]{plotLodProfile}}.  
+  \code{\link{plotLodProfile}}.  
 }
 
 \references{
@@ -106,9 +106,9 @@ qtl <- makeqtl(fake.bc, chr=c(2,5), pos=c(32.5, 17.5), what="prob")
 rqtl <- refineqtl(fake.bc, qtl=qtl, method="hk")
 }
 
-\seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
-  \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{addtoqtl}},
-  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{replaceqtl}},
-  \code{link[qtl]{plotLodProfile}} }
+\seealso{ \code{\link{fitqtl}}, \code{\link{makeqtl}},
+  \code{\link{scanqtl}}, \code{\link{addtoqtl}},
+  \code{\link{dropfromqtl}}, \code{\link{replaceqtl}},
+  \code{\link{plotLodProfile}} }
 
 \keyword{utilities}

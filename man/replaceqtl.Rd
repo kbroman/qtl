@@ -14,8 +14,8 @@ replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
- \item{qtl}{A qtl object, as created by \code{\link[qtl]{makeqtl}}.}
+   \code{\link{read.cross}} for details.}
+ \item{qtl}{A qtl object, as created by \code{\link{makeqtl}}.}
  \item{index}{Numeric index indicating the QTL to be replaced.}
  \item{chr}{Vector (of same length as \code{index}) indicating the
    chromosomes for the new QTL.} 
@@ -24,7 +24,7 @@ replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
  position, the nearest position is used.} 
  \item{qtl.name}{Optional vector (of same length as \code{index})
    of user-specified names for each new QTL, used in the
-   drop-one-term ANOVA table in \code{\link[qtl]{fitqtl}}.
+   drop-one-term ANOVA table in \code{\link{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a
    QTL on Chromsome 1 at 10 cM.} 
  \item{drop.lod.profile}{If TRUE, remove any LOD profiles from the object.}
@@ -33,7 +33,7 @@ replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 
 \value{
   The input \code{qtl} object,
-  but with some QTL replaced by new ones.  See \code{\link[qtl]{makeqtl}} for
+  but with some QTL replaced by new ones.  See \code{\link{makeqtl}} for
   details on the format. 
 }
 
@@ -53,8 +53,8 @@ qtl <- makeqtl(fake.f2, qc, qp, what="prob")
 qtl <- replaceqtl(fake.f2, qtl, 2, 6, 48.1)
 }
 
-\seealso{ \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{fitqtl}},
-  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{addtoqtl}},
-  \code{\link[qtl]{reorderqtl}} }
+\seealso{ \code{\link{makeqtl}}, \code{\link{fitqtl}},
+  \code{\link{dropfromqtl}}, \code{\link{addtoqtl}},
+  \code{\link{reorderqtl}} }
 
 \keyword{utilities}

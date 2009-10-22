@@ -18,7 +18,7 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{The chromosome to investigate.  Only one chromosome is
   allowed. (This should be a character string referring to the
   chromosomes by name.)}
@@ -72,10 +72,10 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 \details{
   We recommend against the use of the bootstrap to derive a confidence
   interval for the location of a QTL; see Manichaikul et al. (2006).
-  Use \code{\link[qtl]{lodint}} or \code{\link[qtl]{bayesint}} instead.
+  Use \code{\link{lodint}} or \code{\link{bayesint}} instead.
 
   The bulk of the arguments are the same as for the
-  \code{\link[qtl]{scanone}} function.  A single chromosome should be
+  \code{\link{scanone}} function.  A single chromosome should be
   indicated with the \code{chr} argument; otherwise, we focus on the
   first chromosome in the input \code{cross} object.
 
@@ -87,7 +87,7 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   for each bootstrap replicate, we store only the location with maximum
   LOD score. 
 
-  Use \code{\link[qtl]{summary.scanoneboot}} to obtain the desired
+  Use \code{\link{summary.scanoneboot}} to obtain the desired
   confidence interval.
 }
 
@@ -119,8 +119,8 @@ plot(bootoutput)
 summary(bootoutput)
 }
 
-\seealso{ \code{\link[qtl]{scanone}}, \code{\link[qtl]{summary.scanoneboot}},
-  \code{\link[qtl]{plot.scanoneboot}},
-  \code{\link[qtl]{lodint}}, \code{\link[qtl]{bayesint}} }
+\seealso{ \code{\link{scanone}}, \code{\link{summary.scanoneboot}},
+  \code{\link{plot.scanoneboot}},
+  \code{\link{lodint}}, \code{\link{bayesint}} }
 
 \keyword{utilities}

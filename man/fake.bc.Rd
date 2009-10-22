@@ -5,13 +5,13 @@
 
 \description{ 
   Simulated data for a backcross, obtained using
-  \code{\link[qtl]{sim.cross}}.   
+  \code{\link{sim.cross}}.   
 } 
 
 \usage{data(fake.bc)}
 
 \format{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}}
+  An object of class \code{cross}.  See \code{\link{read.cross}}
   for details. 
 }
 
@@ -57,9 +57,9 @@ plot(out.nocovar, out.covar, chr=c(2,5,10), lod=2, col="red",
      lty=1:2, add=TRUE)
 }
 
-\seealso{ \code{\link[qtl]{sim.cross}}, \code{\link[qtl]{fake.4way}},
-  \code{\link[qtl]{fake.f2}}, \code{\link[qtl]{listeria}},
-  \code{\link[qtl]{hyper}},
-  \code{\link[qtl]{bristle3}}, \code{\link[qtl]{bristleX}} }
+\seealso{ \code{\link{sim.cross}}, \code{\link{fake.4way}},
+  \code{\link{fake.f2}}, \code{\link{listeria}},
+  \code{\link{hyper}},
+  \code{\link{bristle3}}, \code{\link{bristleX}} }
 
 \keyword{datasets}

@@ -17,7 +17,7 @@ plot.info(x, chr, method=c("both","entropy","variance"), step=1,
 
 \arguments{
  \item{x}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -39,7 +39,7 @@ plot.info(x, chr, method=c("both","entropy","variance"), step=1,
  \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
- \item{\dots}{Passed to \code{\link[qtl]{plot.scanone}}.}
+ \item{\dots}{Passed to \code{\link{plot.scanone}}.}
 }
 
 \details{
@@ -63,9 +63,9 @@ plot.info(x, chr, method=c("both","entropy","variance"), step=1,
 
   Calculations are done in C (for the sake of speed in the presence of
   little thought about programming efficiency) and the plot is created
-  by a call to \code{\link[qtl]{plot.scanone}}.
+  by a call to \code{\link{plot.scanone}}.
 
-  Note that \code{\link[qtl]{summary.scanone}} may be used to display
+  Note that \code{\link{summary.scanone}} may be used to display
   the maximum missing information on each chromosome.
 }  
 
@@ -85,8 +85,8 @@ info <- plot.info(hyper)
 summary(info)
 }
 
-\seealso{ \code{\link[qtl]{plot.scanone}},
-  \code{\link[qtl]{plot.missing}} }
+\seealso{ \code{\link{plot.scanone}},
+  \code{\link{plot.missing}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

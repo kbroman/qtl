@@ -12,7 +12,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{A vector of chromosome identifiers, or a single such.}
  \item{pos}{A vector of cM positions.}
  \item{index}{A vector of numeric indices of the markers within
@@ -49,8 +49,8 @@ find.marker(listeria, 5, index=6)
 find.marker(listeria, c(1, 5, 13), c(81, 28, 26))
 }
 
-\seealso{ \code{\link[qtl]{find.flanking}}, \code{\link[qtl]{plot.pxg}},
-  \code{\link[qtl]{find.pseudomarker}}, \code{\link[qtl]{effectplot}},
-\code{\link[qtl]{find.markerpos}} }
+\seealso{ \code{\link{find.flanking}}, \code{\link{plot.pxg}},
+  \code{\link{find.pseudomarker}}, \code{\link{effectplot}},
+\code{\link{find.markerpos}} }
 
 \keyword{utilities}

@@ -41,7 +41,7 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
 \value{
   The results are returned silently, as an object of class
   \code{"effectscan"}, which is the same as the form returned by the
-  function \code{\link[qtl]{scanone}}, though with estimated effects
+  function \code{\link{scanone}}, though with estimated effects
   where LOD scores might be.  That is, it is a data frame with the first
   two columns being chromosome ID and position (in cM), and subsequent
   columns being estimated effects, and (if \code{get.se=TRUE}) standard
@@ -49,7 +49,7 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
 }
 
 \details{
-  The results of \code{\link[qtl]{sim.geno}} are required for taking
+  The results of \code{\link{sim.geno}} are required for taking
   account of missing genotype information.
 
   For a backcross, the additive effect is estimated as the difference
@@ -67,7 +67,7 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
   separate additive effects for the two sexes, and for the two
   directions within females.
 
-  There is a function \code{\link[qtl]{plot.effectscan}} that creates
+  There is an internal function \code{plot.effectscan} that creates
   the actual plot by calling \code{plot.scanone}.  In the case
   \code{get.se=TRUE}, colored regions indicate \eqn{\pm}{+/-} 1 SE.
 }
@@ -91,7 +91,7 @@ effectscan(fake.f2, chr="13", mtick="triangle", get.se=TRUE)
 
 \author{Karl W. Broman, \email{kbroman@biostat.wisc.edu}}
 
-\seealso{ \code{\link[qtl]{effectplot}}, \code{\link[qtl]{plot.pxg}},
-  \code{\link[qtl]{sim.geno}} } 
+\seealso{ \code{\link{effectplot}}, \code{\link{plot.pxg}},
+  \code{\link{sim.geno}} } 
 
 \keyword{hplot}

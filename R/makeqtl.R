@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Feb, 2009
+# last modified Sep, 2009
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -43,6 +43,7 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
   # cross type
   type <- class(cross)[1]
   chrtype <- sapply(cross$geno, class)
+  names(chrtype) <- names(cross$geno)
   sexpgm <- getsex(cross)
   
   what <- match.arg(what)
@@ -215,6 +216,8 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
   qtl$n.qtl <- n.pos
   qtl$n.ind <- nind(cross)
   qtl$n.gen <- n.gen
+  qtl$chrtype <- chrtype[qtl$chr]
+  names(qtl$chrtype) <- NULL
 
   class(qtl) <- "qtl"
   attr(qtl, "map") <- themap
@@ -261,6 +264,7 @@ function(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
   qtl$name[index] <- newqtl$name
   qtl$chr[index] <- newqtl$chr
   qtl$pos[index] <- newqtl$pos
+  qtl$chrtype[index] <- newqtl$chrtype
 
   if(qtl$n.ind != newqtl$n.ind) stop("Mismatch in no. individuals")
 
@@ -314,6 +318,7 @@ function(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
   qtl$pos <- c(qtl$pos, newqtl$pos)
   qtl$n.qtl <- qtl$n.qtl + newqtl$n.qtl
   qtl$altname <- paste("Q", 1:qtl$n.qtl, sep="")
+  qtl$chrtype <- c(qtl$chrtype, newqtl$chrtype)
   if(qtl$n.ind != newqtl$n.ind)
     stop("Mismatch in no. individuals")
   qtl$n.gen <- c(qtl$n.gen, newqtl$n.gen)
@@ -400,6 +405,7 @@ function(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
   # result object
   qtl$name <- qtl$name[idx]
   qtl$chr <- qtl$chr[idx]
+  qtl$chrtype <- qtl$chrtype[idx]
   qtl$pos <- qtl$pos[idx]
   qtl$n.qtl <- qtl$n.qtl - length(todrop)
   qtl$altname <- paste("Q", 1:qtl$n.qtl, sep="")
@@ -617,7 +623,9 @@ function(qtl, neworder)
   qtl$name <- qtl$name[neworder]
   qtl$chr <- qtl$chr[neworder]
   qtl$pos <- qtl$pos[neworder]
-  
+  qtl$n.gen <- qtl$n.gen[neworder]
+  qtl$chrtype <- qtl$chrtype[neworder]
+
   attr(qtl, "formula") <- NULL
   attr(qtl, "pLOD") <- NULL
 

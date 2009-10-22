@@ -3,7 +3,7 @@
 # summary.scantwo.R
 #
 # copyright (c) 2001-9, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified May, 2009
+# last modified Sep, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -503,6 +503,9 @@ print.scantwo <-
 function(x, ...)
 {
   d <- dim(x$lod)
+  dn <- dimnames(x$lod)[[3]]
+  if(is.null(dn)) dn <- attr(x, "phenotypes")
+    
 
   if(nrow(x$lod) == 0)
     cat("Empty scantwo object.\n")
@@ -512,7 +515,8 @@ function(x, ...)
       print(summary(x))
     else {
       for(i in 1:d[3]) {
-        cat("Phenotype", i, "\n")
+        if(is.null(dn)) cat("Phenotype", i, "\n")
+        else cat(dn[i], "\n")
         print(summary(x, lod=i))
       }
     }
@@ -845,6 +849,87 @@ function(x, ...)
     }
   }
 }
+
+######################################################################
+# combine scantwo results ... paste the phenotype columns together
+######################################################################
+cbind.scantwo <- c.scantwo <-
+function(...)
+{
+  dots <- list(...)
+  if(length(dots)==1) return(dots[[1]])
+  for(i in seq(along=dots)) {
+    if(!any(class(dots[[i]]) == "scantwo"))
+      stop("Input should have class \"scantwo\".")
+  }
+
+  # check dimensions of LODs
+  nr <- sapply(dots, function(a) nrow(a$lod))
+  nc <- sapply(dots, function(a) ncol(a$lod))
+  nd3 <- sapply(dots, function(a) dim(a$lod)[3])
+  if(any(nr[-1]!=nr[1]) || any(nc[-1] != nc[1]))
+    stop("Input objects are not the same dimensions.")
+
+  # check maps 
+  map1 <- dots$map[[1]]
+  for(i in 2:length(dots)) {
+    if(!all(dots$map[[i]] != map1))
+      stop("Maps are not all the same.")
+  }
+
+  output <- dots[[1]]
+  nd3[is.na(nd3)] <- 1
+  output$lod <- array(dim=c(nr[1], nc[1], sum(nd3)))
+  start <- cumsum(c(0,nd3))[-length(nd3)-1]
+  end <- start+nd3
+  for(i in seq(along=dots))
+    output$lod[,,start[i]:end[i]] <- dots[[i]]$lod
+  attr(output, "phenotypes") <- unlist(lapply(dots, attr, "phenotypes"))
+  dimnames(output$lod) <- list(NULL, NULL, attr(output, "phenotypes"))
+
+  # check scanoneX
+  if(is.null(dots[[1]]$scanoneX)) {
+    for(i in 2:length(dots)) {
+      if(!is.null(dots[[i]]$scanoneX))
+        stop("Some but not all input objects have null scanoneX.")
+    }
+  }
+  else {
+    nrx <- sapply(dots, function(a) nrow(a$scanoneX))
+    if(any(nrx[-1]!=nrx[1]))
+      stop("Mismatch in scanoneX dimensions.")
+    for(i in 2:length(dots))
+      output$scanoneX <- cbind(output$scanoneX, dots[[i]]$scanoneX)
+    colnames(output$scanoneX) <- attr(output, "phenotypes")
+  }
+
+  methods <- sapply(dots, attr, "method")
+  if(length(unique(methods)) != 1)
+    attr(output, "method") <- rep(sapply(dots, attr, "method"), nd3)
+
+  fm <- lapply(dots, attr, "fullmap")
+  for(i in 2:length(fm)) {
+    if(length(fm[[1]]) != length(fm[[i]]) || !all(names(fm[[1]]) == names(fm[[i]])))
+      stop("Mismatch in \"fullmap\" attributes (1).")
+    for(j in 1:length(fm[[1]])) {
+      if(length(fm[[1]][[j]]) != length(fm[[i]][[j]]) ||
+         !all(names(fm[[1]][[j]]) == names(fm[[i]][[j]])) ||
+         max(abs(fm[[1]][[j]] - fm[[i]][[j]])) > 0.001)
+        stop("Mismatch in \"fullmap\" attributes (2).")
+    }
+  }
+
+  df <- lapply(dots, attr, "df")
+  for(i in 2:length(df)) {
+    if(length(df[[1]]) != length(df[[i]]) || any(df[[1]] != df[[i]])) {
+      warning("Mismatch in degrees of freedom.")
+      attr(output, "df") <- NULL
+    }
+  }
+    
+  output
+}
+
 
 ######################################################################
 # combine scantwoperm results ... paste the rows together

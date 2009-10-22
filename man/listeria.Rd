@@ -11,7 +11,7 @@
 \usage{data(listeria)}
 
 \format{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}}
+  An object of class \code{cross}.  See \code{\link{read.cross}}
   for details. 
 }
 
@@ -66,8 +66,8 @@ plot(out, chr=c(1,5,6,13,15), lodcolumn=1:3,
      lty=1, col=c("black","red","blue"))
 }
 
-\seealso{ \code{\link[qtl]{fake.bc}}, \code{\link[qtl]{fake.f2}},
-  \code{\link[qtl]{fake.4way}}, \code{\link[qtl]{hyper}},
-  \code{\link[qtl]{bristle3}}, \code{\link[qtl]{bristleX}} }
+\seealso{ \code{\link{fake.bc}}, \code{\link{fake.f2}},
+  \code{\link{fake.4way}}, \code{\link{hyper}},
+  \code{\link{bristle3}}, \code{\link{bristleX}} }
 
 \keyword{datasets}

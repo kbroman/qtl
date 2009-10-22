@@ -5,7 +5,7 @@
 
 \description{
   Plot the LOD curve for a genome scan with a single-QTL model (the
-  output of \code{\link[qtl]{scanone}}).
+  output of \code{\link{scanone}}).
 }
 
 \usage{
@@ -17,7 +17,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"scanone"}, as output by
-    \code{\link[qtl]{scanone}}.}
+    \code{\link{scanone}}.}
   \item{x2}{Optional second \code{scanone} object.}
   \item{x3}{Optional third \code{scanone} object.}
   \item{chr}{Optional vector indicating the chromosomes to plot.
@@ -80,9 +80,9 @@ plot(out.hk, chr=c(1,13), add=TRUE, col="slateblue")
 plot(out.hk, chr=13, show.marker.names=TRUE)
 }
 
-\seealso{ \code{\link[qtl]{scanone}},
-  \code{\link[qtl]{summary.scanone}}, \code{\link[graphics]{par}},
-  \code{\link[grDevices]{colors}}, \code{\link[qtl]{add.threshold}}, \code{\link[qtl]{xaxisloc.scanone}} }
+\seealso{ \code{\link{scanone}},
+  \code{\link{summary.scanone}}, \code{\link[graphics]{par}},
+  \code{\link[grDevices]{colors}}, \code{\link{add.threshold}}, \code{\link{xaxisloc.scanone}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

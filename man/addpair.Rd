@@ -14,7 +14,7 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to be scanned. If
    missing, all chromosomes are scanned. Refer to chromosomes by
    name. Refer to chromosomes with a preceding \code{-} to have all
@@ -28,7 +28,7 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link[qtl]{makeqtl}}.} 
+   \code{\link{makeqtl}}.} 
  \item{covar}{A matrix or data.frame of covariates.  These must be
    strictly numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
@@ -36,17 +36,17 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    string representation of a formula.)  QTLs are referred to as
    \code{Q1}, \code{Q2}, etc.  Covariates are referred to by their names
    in the data frame \code{covar}.  If the new QTL are not included in
-   the formula, a two-dimensional scan as in \code{\link[qtl]{scantwo}}
+   the formula, a two-dimensional scan as in \code{\link{scantwo}}
    is performed.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{incl.markers}{If FALSE, do calculations only at points on an
-   evenly spaced grid.  If \code{\link[qtl]{calc.genoprob}} or
-   \code{\link[qtl]{sim.geno}} were run with
+   evenly spaced grid.  If \code{\link{calc.genoprob}} or
+   \code{\link{sim.geno}} were run with
    \code{stepwidth="variable"}, we force \code{incl.markers=TRUE}.}
  \item{verbose}{If TRUE, display information about the progress of
    calculations.  If \code{verbose} is an integer > 1, further messages
-   from \code{\link[qtl]{scanqtl}} are also displayed.}
+   from \code{\link{scanqtl}} are also displayed.}
 
 }
 
@@ -61,7 +61,7 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   be included.   
 
   If neither of the two new QTL are indicated in the \code{formula}, we
-  perform a two-dimensional scan as in \code{\link[qtl]{scantwo}}.  That
+  perform a two-dimensional scan as in \code{\link{scantwo}}.  That
   is, for each pair of QTL positions, we fit two models: two
   additive QTL added to the \code{formula}, and two interacting QTL
   added to the \code{formula}.
@@ -72,10 +72,10 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   \code{formula}, a main effect for the other is added, and that
   particular model is fit, again with the positions of both QTL varying.
   Note that in this case the LOD scores are not analogous to those
-  produced by \code{\link[qtl]{scantwo}}.  Thus, there slightly modified forms
-  for the plots (produced by \code{\link[qtl]{plot.scantwo}}) and
-  summaries (produced by \code{\link[qtl]{summary.scantwo}} and
-  \code{\link[qtl]{max.scantwo}}).  In the plot, the x-axis is to be
+  produced by \code{\link{scantwo}}.  Thus, there slightly modified forms
+  for the plots (produced by \code{\link{plot.scantwo}}) and
+  summaries (produced by \code{\link{summary.scantwo}} and
+  \code{\link{max.scantwo}}).  In the plot, the x-axis is to be
   interpreted as the position of the first of the new QTL, and the
   y-axis is to be interpreted as the position of the second of the new
   QTL.  In the summaries, we give the single best pair of positions on
@@ -86,11 +86,11 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
 \section{Value}{
   An object of class \code{scantwo}, as produced by
-  \code{\link[qtl]{scantwo}}.
+  \code{\link{scantwo}}.
 
   If neither of the new QTL were indicated
   in the \code{formula}, the result is just as in
-  \code{\link[qtl]{scantwo}}, though with LOD scores relative to the
+  \code{\link{scantwo}}, though with LOD scores relative to the
   base model (omitting the new QTL).
 
   Otherwise, the results are contained in what would ordinarily be in
@@ -99,14 +99,14 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   of the second of the new QTL, and the full LOD scores corresponding to
   the case that the first of the new QTL is to the right of the second
   of the new QTL.  Because the structure of the LOD scores in this
-  case is different from those output by \code{\link[qtl]{scantwo}}, we
+  case is different from those output by \code{\link{scantwo}}, we
   include, in this case, an attribute \code{"addpair"=TRUE}.  (We also
   require results of single-dimensional scans, omitting each of the two
   new QTL from the formula, one at a time; these are included as
   attributes \code{"lod.minus1"} and \code{"lod.minus2"}.)  The
   results are then treated somewhat differently by
-  \code{\link[qtl]{summary.scantwo}}, \code{\link[qtl]{max.scantwo}},
-  and \code{\link[qtl]{plot.scantwo}}.  See the Details section.
+  \code{\link{summary.scantwo}}, \code{\link{max.scantwo}},
+  and \code{\link{plot.scantwo}}.  See the Details section.
 }
 
 \references{
@@ -156,10 +156,10 @@ summary(out.ap)
 plot(out.ap)
 }
 
-\seealso{ \code{\link[qtl]{addint}}, \code{\link[qtl]{addqtl}},
-  \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
-  \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{addtoqtl}} }  
+\seealso{ \code{\link{addint}}, \code{\link{addqtl}},
+  \code{\link{fitqtl}}, \code{\link{makeqtl}},
+  \code{\link{scanqtl}}, \code{\link{refineqtl}},
+  \code{\link{makeqtl}}, \code{\link{scantwo}},
+  \code{\link{addtoqtl}} }  
 
 \keyword{models}
