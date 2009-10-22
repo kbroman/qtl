@@ -16,7 +16,7 @@
 
 \arguments{
  \item{x}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector specifying which chromosomes to keep or discard.
    This may be a logical, numeric, or character string vector.  See
  Details, below.}
@@ -85,6 +85,6 @@ temp <- listeria[ , 1:10]       # first ten individuals
 temp <- listeria[5, 1:10]       # chr 5 for first ten individuals
 }
 
-\seealso{ \code{\link[qtl]{pull.map}}, \code{\link[qtl]{drop.markers}}, \code{\link[qtl]{subset.map}} }
+\seealso{ \code{\link{pull.map}}, \code{\link{drop.markers}}, \code{\link{subset.map}} }
 
 \keyword{manip}

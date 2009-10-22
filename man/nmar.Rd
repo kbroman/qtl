@@ -14,8 +14,8 @@ nmar(object)
 
 \arguments{
  \item{object}{An object of class \code{cross} (see
-   \code{\link[qtl]{read.cross}} for details) or \code{map} (see
- \code{\link[qtl]{sim.map}} for details).}
+   \code{\link{read.cross}} for details) or \code{map} (see
+ \code{\link{sim.map}} for details).}
 }
 
 \value{
@@ -31,11 +31,11 @@ map <- pull.map(fake.f2)
 nmar(map)
 }
 
-\seealso{ \code{\link[qtl]{read.cross}}, \code{\link[qtl]{plot.cross}},
-  \code{\link[qtl]{summary.cross}},
-  \code{\link[qtl]{nind}},
-  \code{\link[qtl]{nchr}},
-  \code{\link[qtl]{totmar}},
-  \code{\link[qtl]{nphe}} }
+\seealso{ \code{\link{read.cross}}, \code{\link{plot.cross}},
+  \code{\link{summary.cross}},
+  \code{\link{nind}},
+  \code{\link{nchr}},
+  \code{\link{totmar}},
+  \code{\link{nphe}} }
 
 \keyword{print}

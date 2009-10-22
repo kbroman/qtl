@@ -5,7 +5,7 @@
 
 \description{
   Print the estimated genome-wide LOD thresholds on the basis of
-  permutation results from \code{\link[qtl]{scantwo}} (with
+  permutation results from \code{\link{scantwo}} (with
   \code{n.perm} > 0). 
 }
 
@@ -14,7 +14,7 @@
 }
 
 \arguments{
- \item{object}{Output from the function \code{\link[qtl]{scantwo}}
+ \item{object}{Output from the function \code{\link{scantwo}}
    with \code{n.perm} > 0.}
  \item{alpha}{Genome-wide significance levels.}
  \item{df}{If TRUE, the degrees of freedom associated with the LOD
@@ -44,9 +44,9 @@ operm <- scantwo(fake.f2, n.perm=100, method="hk")
 summary(operm)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{summary.scantwo}},
-  \code{\link[qtl]{plot.scantwoperm}} } 
+\seealso{ \code{\link{scantwo}},
+  \code{\link{summary.scantwo}},
+  \code{\link{plot.scantwoperm}} } 
 
 \references{
   Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for

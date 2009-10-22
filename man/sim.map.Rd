@@ -55,7 +55,7 @@ map2 <- sim.map(c(100,90,80,40), 10, include.x=FALSE, eq.spacing=TRUE)
 plot(map2)
 }
 
-\seealso{ \code{\link[qtl]{sim.cross}}, \code{\link[qtl]{plot.map}},
-  \code{\link[qtl]{replace.map}}, \code{\link[qtl]{pull.map}} }
+\seealso{ \code{\link{sim.cross}}, \code{\link{plot.map}},
+  \code{\link{replace.map}}, \code{\link{pull.map}} }
 
 \keyword{datagen}

@@ -14,7 +14,7 @@ plot.pxg(x, marker, pheno.col=1, jitter=1, infer=TRUE,
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
-    \code{\link[qtl]{read.cross}} for details. }
+    \code{\link{read.cross}} for details. }
   \item{marker}{Marker name (a character string; can be a vector).}
   \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give a character string matching
@@ -41,7 +41,7 @@ plot.pxg(x, marker, pheno.col=1, jitter=1, infer=TRUE,
   Plots the phenotype data against the genotypes at the specified
   marker.  If infer=TRUE, the genotypes of individuals that were not
   typed is inferred based the genotypes at linked markers via a single
-  imputation from \code{\link[qtl]{sim.geno}}; these points are plotted
+  imputation from \code{\link{sim.geno}}; these points are plotted
   in red.  For each genotype, the phenotypic mean is plotted, with error
   bars at \eqn{\pm}{+/-} 1 SE.
 }
@@ -73,8 +73,8 @@ plot.pxg(fake.f2, c(mname,mname2))
 plot.pxg(fake.f2, c(mname2,mname))
 }
 
-\seealso{ \code{\link[qtl]{find.marker}}, \code{\link[qtl]{effectplot}},
-  \code{\link[qtl]{find.flanking}}, \code{\link[qtl]{effectscan}} }
+\seealso{ \code{\link{find.marker}}, \code{\link{effectplot}},
+  \code{\link{find.flanking}}, \code{\link{effectscan}} }
 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian Yandell }

@@ -12,7 +12,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{A vector specifying which phenotypes to keep or discard.
    This may be a logical vector, a numeric vector, or a vector
    of character strings (for the phenotype names). If missing, the
@@ -31,6 +31,6 @@ data(listeria)
 pull.pheno(listeria, "sex")
 }
 
-\seealso{ \code{\link[qtl]{pull.geno}}, \code{\link[qtl]{pull.map}} }
+\seealso{ \code{\link{pull.geno}}, \code{\link{pull.map}} }
 
 \keyword{utilities}

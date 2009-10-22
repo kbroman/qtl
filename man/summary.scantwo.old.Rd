@@ -5,8 +5,8 @@
 
 \description{
   Summarize the interesting aspects of the results of
-  \code{\link[qtl]{scantwo}}; this is the version of
-  \code{\link[qtl]{summary.scantwo}} that was included in R/qtl version
+  \code{\link{scantwo}}; this is the version of
+  \code{\link{summary.scantwo}} that was included in R/qtl version
   1.03 and earlier.
 }
 
@@ -17,7 +17,7 @@
 
 \arguments{
  \item{object}{An object of class \code{scantwo}, the output of the
-   function \code{\link[qtl]{scantwo}}.}
+   function \code{\link{scantwo}}.}
  \item{thresholds}{A vector of length three, giving LOD thresholds
    for the joint LOD, interaction LOD and single-QTL conditional
    LOD. Negative threshold values are taken relative to the maximum
@@ -56,7 +56,7 @@
   comparing the model with \eqn{q_1}{q1} and \eqn{q_2}{q2} acting
   additively to the model with \eqn{q_2}{q2} alone. 
 
-  In the case the results of \code{\link[qtl]{scanone}} are not
+  In the case the results of \code{\link{scanone}} are not
   available, the maximum locus pair for each chromosome is printed
   whenever its joint LOD exceeds the joint LOD threshold.
 
@@ -86,8 +86,8 @@ summary.scantwo.old(out.2dim,c(0,1000,2))
 summary.scantwo.old(out.2dim,c(0,3,1000))
 }
 
-\seealso{ \code{\link[qtl]{summary.scantwo}},
-  \code{\link[qtl]{scantwo}}, \code{\link[qtl]{plot.scantwo}}, 
-          \code{\link[qtl]{max.scantwo}} }
+\seealso{ \code{\link{summary.scantwo}},
+  \code{\link{scantwo}}, \code{\link{plot.scantwo}}, 
+          \code{\link{max.scantwo}} }
 
 \keyword{print}

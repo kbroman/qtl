@@ -14,7 +14,7 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to be scanned. If
    missing, all chromosomes are scanned. Refer to chromosomes by
    name. Refer to chromosomes with a preceding \code{-} to have all
@@ -28,7 +28,7 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link[qtl]{makeqtl}}.} 
+   \code{\link{makeqtl}}.} 
  \item{covar}{A matrix or data.frame of covariates.  These must be
    strictly numeric.} 
  \item{formula}{An object of class \code{\link[stats]{formula}}
@@ -40,12 +40,12 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{incl.markers}{If FALSE, do calculations only at points on an
-   evenly spaced grid.  If \code{\link[qtl]{calc.genoprob}} or
-   \code{\link[qtl]{sim.geno}} were run with
+   evenly spaced grid.  If \code{\link{calc.genoprob}} or
+   \code{\link{sim.geno}} were run with
    \code{stepwidth="variable"}, we force \code{incl.markers=TRUE}.}
  \item{verbose}{If TRUE, display information about the progress of
    calculations.  If \code{verbose} is an integer > 1, further messages
-   from \code{\link[qtl]{scanqtl}} are also displayed.}
+   from \code{\link{scanqtl}} are also displayed.}
 }
 
 \details{
@@ -65,7 +65,7 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
 \section{Value}{
   An object of class \code{scanone}, as produced by the
-  \code{\link[qtl]{scanone}} function.  LOD scores are relative to the
+  \code{\link{scanone}} function.  LOD scores are relative to the
   base model (with any terms that include the new QTL omitted).
 }
 
@@ -105,9 +105,9 @@ max(out2)
 plot(out2-out1)
 }
 
-\seealso{ \code{\link[qtl]{scanone}}, \code{\link[qtl]{fitqtl}},
-  \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{addtoqtl}},
-  \code{\link[qtl]{addpair}}, \code{\link[qtl]{addint}} }
+\seealso{ \code{\link{scanone}}, \code{\link{fitqtl}},
+  \code{\link{scanqtl}}, \code{\link{refineqtl}},
+  \code{\link{makeqtl}}, \code{\link{addtoqtl}},
+  \code{\link{addpair}}, \code{\link{addint}} }
 
 \keyword{models}

@@ -18,7 +18,7 @@ sim.geno(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{n.draws}{Number of simulation replicates to perform.}
  \item{step}{Maximum distance (in cM) between positions at which the
    simulated genotypes will be drawn, though for \code{step=0},
@@ -64,7 +64,7 @@ data(fake.f2)
 fake.f2 <- sim.geno(fake.f2, step=2, n.draws=8)
 }
 
-\seealso{ \code{\link[qtl]{calc.genoprob}},
-  \code{\link[qtl]{argmax.geno}} } 
+\seealso{ \code{\link{calc.genoprob}},
+  \code{\link{argmax.geno}} } 
 
 \keyword{utilities}

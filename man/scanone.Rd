@@ -20,7 +20,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes for which LOD
    scores should be calculated.  This should be a vector of character
    strings referring to chromosomes by name; numeric values are
@@ -88,7 +88,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    information about the progress of the permutation tests.}
  \item{batchsize}{The number of phenotypes (or permutations) to be run
    as a batch; used only for methods \code{"hk"} and \code{"imp"}.}
- \item{n.cluster}{If the package \code{\link[snow:00Index]{snow}} is available and
+ \item{n.cluster}{If the package \code{snow} is available and
    \code{n.perm} > 0, permutations are run in parallel using this number
    of nodes.}
 }
@@ -219,8 +219,8 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
 \details{
   Use of the EM algorithm, Haley-Knott regression, and the extended
   Haley-Knott method require that multipoint genotype probabilities are
-  first calculated using \code{\link[qtl]{calc.genoprob}}.  The
-  imputation method uses the results of \code{\link[qtl]{sim.geno}}.
+  first calculated using \code{\link{calc.genoprob}}.  The
+  imputation method uses the results of \code{\link{sim.geno}}.
 
   Individuals with missing phenotypes are dropped.
 
@@ -492,11 +492,11 @@ summary(out.covar, thr=3)
 plot(out.covar, out.nocovar, chr=c(2,5,10))
 }
 
-\seealso{ \code{\link[qtl]{plot.scanone}}, 
-  \code{\link[qtl]{summary.scanone}}, \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{calc.genoprob}}, \code{\link[qtl]{sim.geno}},
-  \code{\link[qtl]{max.scanone}},
-  \code{\link[qtl]{summary.scanoneperm}},
-  \code{\link[qtl]{-.scanone}}, \code{\link[qtl]{+.scanone}} }
+\seealso{ \code{\link{plot.scanone}}, 
+  \code{\link{summary.scanone}}, \code{\link{scantwo}},
+  \code{\link{calc.genoprob}}, \code{\link{sim.geno}},
+  \code{\link{max.scanone}},
+  \code{\link{summary.scanoneperm}},
+  \code{\link[=-.scanone]{-.scanone}}, \code{\link[=+.scanone]{+.scanone}} }
 
 \keyword{models}

@@ -14,7 +14,7 @@ plot.missing(x, chr, reorder=FALSE, main="Missing genotypes",
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
-    \code{\link[qtl]{read.cross}} for details. }
+    \code{\link{read.cross}} for details. }
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -47,7 +47,7 @@ data(fake.f2)
 plot.missing(fake.f2)
 }
 
-\seealso{ \code{\link[qtl]{plot.cross}},  \code{\link[qtl]{geno.image}},
+\seealso{ \code{\link{plot.cross}},  \code{\link{geno.image}},
   \code{\link[graphics]{image}} }
 
 

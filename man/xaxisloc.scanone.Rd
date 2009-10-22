@@ -5,7 +5,7 @@
 
 \description{
   Get x-axis locations for given cM positions on given chromosomes in a
-  plot from \code{\link[qtl]{plot.scanone}})
+  plot from \code{\link{plot.scanone}})
 }
 
 \usage{
@@ -14,16 +14,16 @@ xaxisloc.scanone(out, thechr, thepos, chr, gap=25)
 
 \arguments{
   \item{out}{An object of class \code{"scanone"}, as output by
-    \code{\link[qtl]{scanone}}.  This must be identical to what was used
-  in the call to \code{\link[qtl]{plot.scanone}}.}
+    \code{\link{scanone}}.  This must be identical to what was used
+  in the call to \code{\link{plot.scanone}}.}
   \item{thechr}{Chromosome IDs at which x-axis locations are to be determined.}
   \item{thepos}{Chromosome positions at which x-axis locations are to be
     determined.}
   \item{chr}{Optional vector specifying which chromosomes were plotted.
   This must be identical to what was used in the call to
-  \code{\link[qtl]{plot.scanone}}.} 
+  \code{\link{plot.scanone}}.} 
   \item{gap}{Gap separating chromosomes (in cM).  This must be identical
-  to what was used in the call to \code{\link[qtl]{plot.scanone}}.}
+  to what was used in the call to \code{\link{plot.scanone}}.}
 }
 
 \value{A numeric vector of x-axis locations.}
@@ -31,11 +31,11 @@ xaxisloc.scanone(out, thechr, thepos, chr, gap=25)
 \details{
   This function allows you to identify the x-axis locations in a plot of 
   genome scan results, produced by
-  \code{\link[qtl]{plot.scanone}}.  This is useful for adding
+  \code{\link{plot.scanone}}.  This is useful for adding
   annotations, such as text or arrows.
 
   The arguments \code{out}, \code{chr}, and \code{gap} must match what
-  was used in the call to \code{\link[qtl]{plot.scanone}}.
+  was used in the call to \code{\link{plot.scanone}}.
 
   The arguments \code{thechr} and \code{thepos} indicate the genomic
   positions for which x-axis locations are desired.  If they both have
@@ -59,8 +59,8 @@ text(x+35, mxout$lod, "the peak", col="blue", adj=c(0, 0.5))
 }
 
 \seealso{ 
-  \code{\link[qtl]{plot.scanone}}, 
-  \code{\link[qtl]{add.threshold}} }
+  \code{\link{plot.scanone}}, 
+  \code{\link{add.threshold}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

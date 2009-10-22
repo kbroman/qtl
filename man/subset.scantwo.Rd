@@ -5,7 +5,7 @@
 
 \description{
   Pull out a specified set of chromosomes and/or LOD columns from 
-  \code{\link[qtl]{scantwo}} output.
+  \code{\link{scantwo}} output.
 }
 
 \usage{
@@ -14,7 +14,7 @@
 
 \arguments{
  \item{x}{An object of class \code{scantwo}, output from
-   \code{\link[qtl]{scantwo}}.}
+   \code{\link{scantwo}}.}
  \item{chr}{Optional vector specifying which chromosomes to keep.
  This should be a vector of character strings referring to
  chromosomes by name; numeric values are converted to strings.  Refer to
@@ -40,7 +40,7 @@ out <- scantwo(fake.bc, method="hk", pheno.col=1:2)
 summary(subset(out, chr=18:19))
 }
 
-\seealso{ \code{\link[qtl]{summary.scantwo}},
-  \code{\link[qtl]{scantwo}} }
+\seealso{ \code{\link{summary.scantwo}},
+  \code{\link{scantwo}} }
 
 \keyword{manip}

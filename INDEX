@@ -1,4 +1,4 @@
-+.scanone               Arithmetic Operators for scanone and scantwo
++.scanone               Arithmetic operators for scanone and scantwo
                         results
 +.scanoneperm           Arithmetic Operators for permutation results
 add.cim.covar           Indicate marker covariates from composite
@@ -24,6 +24,7 @@ bristleX                Data on bristle number in Drosophila
 c.cross                 Combine data for QTL experiments
 c.scanone               Combine columns from multiple scanone results
 c.scanoneperm           Combine data from scanone permutations
+c.scantwo               Combine columns from multiple scantwo results
 c.scantwoperm           Combine data from scantwo permutations
 calc.errorlod           Identify likely genotyping errors
 calc.genoprob           Calculate conditional genotype probabilities
@@ -43,6 +44,7 @@ comparegeno             Compare individuals' genotype data
 compareorder            Compare two orderings of markers on a
                         chromosome
 condense.scantwo        Condense the output from a 2-d genome scan
+convert.map             Change map function for a genetic map
 convert.scanone         Convert output from scanone for R/qtl version
                         0.98
 convert.scantwo         Convert output from scantwo for R/qtl version
@@ -82,8 +84,7 @@ geno.table              Create table of genotype distributions
 hyper                   Data on hypertension
 jittermap               Jitter marker positions in a genetic map
 listeria                Data on Listeria monocytogenes susceptibility
-locations               Genetic locations of traits for the multitrait
-                        dataset
+locateXO                Estimate locations of crossovers
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map

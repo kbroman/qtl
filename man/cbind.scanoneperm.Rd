@@ -5,7 +5,7 @@
 
 \description{
   Concatenate the columns from different runs of
-  \code{\link[qtl]{scanone}} with \code{n.perm > 0}.
+  \code{\link{scanone}} with \code{n.perm > 0}.
 }
 
 \usage{
@@ -14,7 +14,7 @@
 
 \arguments{
  \item{\dots}{A set of objects of class \code{scanoneperm}. These are
-   the permutation results from \code{\link[qtl]{scanone}} (that is,
+   the permutation results from \code{\link{scanone}} (that is,
    when \code{n.perm > 0}), generally run with different phenotypes or
    methods.}
  \item{labels}{A vector of character strings, of length 1 or of the same
@@ -28,9 +28,9 @@
 
 \details{
   The aim of this function is to concatenate the results from multiple
-  runs of a permutation test \code{\link[qtl]{scanone}}, generally for
+  runs of a permutation test \code{\link{scanone}}, generally for
   different phenotypes and/or methods, to be used in parallel with
-  \code{\link[qtl]{c.scanone}}. 
+  \code{\link{c.scanone}}. 
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
@@ -46,8 +46,8 @@ operm <- cbind(operm1, operm2, labels=c("hk","em"))
 summary(operm)
 }
 
-\seealso{ \code{\link[qtl]{summary.scanoneperm}},
-  \code{\link[qtl]{scanone}}, \code{\link[qtl]{c.scanoneperm}},
-  \code{\link[qtl]{c.scanone}} } 
+\seealso{ \code{\link{summary.scanoneperm}},
+  \code{\link{scanone}}, \code{\link{c.scanoneperm}},
+  \code{\link{c.scanone}} } 
 
 \keyword{manip}

@@ -12,7 +12,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{what}{Indicates whether to count genotypes for each
    individual or each marker.}
 }
@@ -34,7 +34,7 @@ plot(ntyped(listeria))
 plot(ntyped(listeria, what="mar"))
 }
 
-\seealso{ \code{\link[qtl]{nmissing}},  \code{\link[qtl]{summary.cross}},
-          \code{\link[qtl]{nind}}, \code{\link[qtl]{totmar}} }
+\seealso{ \code{\link{nmissing}},  \code{\link{summary.cross}},
+          \code{\link{nind}}, \code{\link{totmar}} }
 
 \keyword{utilities}

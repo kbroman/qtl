@@ -62,7 +62,7 @@ plot.map(fake.bc, show.marker.names=TRUE)
 
 }
 
-\seealso{ \code{\link[qtl]{est.map}}, \code{\link[qtl]{plot.cross}} }
+\seealso{ \code{\link{est.map}}, \code{\link{plot.cross}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

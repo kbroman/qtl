@@ -12,7 +12,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{verbose}{If TRUE, print the number of genotypes removed.}
 }
 
@@ -30,6 +30,6 @@ listeria <- strip.partials(listeria)
 sum(nmissing(listeria))
 }
 
-\seealso{ \code{\link[qtl]{plot.missing}}, \code{\link[qtl]{plot.info}} }
+\seealso{ \code{\link{plot.missing}}, \code{\link{plot.info}} }
 
 \keyword{manip}

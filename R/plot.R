@@ -683,7 +683,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
   if(include.xo) {
     if(type != "4way") { # find crossover locations
-      xoloc <- locate.xo(cross)
+      xoloc <- locateXO(cross)
       xoloc <- data.frame(ind=rep(1:length(xoloc),sapply(xoloc,length)),
                           loc=unlist(xoloc))
     }
@@ -698,11 +698,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       dcross$geno[[1]]$data[!is.na(data) & data==3 | data==4 | data==8] <- 2
       dcross$geno[[1]]$data[!is.na(data) & data==5 | data==6 | data==9 | data==10] <- NA
 
-      mxoloc <- locate.xo(mcross)
+      mxoloc <- locateXO(mcross)
       mxoloc <- data.frame(ind=rep(1:length(mxoloc),sapply(mxoloc,length)),
                           loc=unlist(mxoloc))
 
-      dxoloc <- locate.xo(dcross)
+      dxoloc <- locateXO(dcross)
       dxoloc <- data.frame(ind=rep(1:length(dxoloc),sapply(dxoloc,length)),
                           loc=unlist(dxoloc))
     }

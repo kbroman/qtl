@@ -15,7 +15,7 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix to be
    used as the phenotype.  One may also give a character string matching
    a phenotype name.  Finally, one may give a numeric vector of
@@ -121,7 +121,7 @@ result2 <- scanqtl(fake.f2, pheno.col=1, chr=qc, pos=pos,
 image(chr1, chr8, t(result2), las=1, col=rev(rainbow(256,start=0,end=2/3)))
 }
 
-\seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
-  \code{\link[qtl]{refineqtl}} } 
+\seealso{ \code{\link{fitqtl}}, \code{\link{makeqtl}},
+  \code{\link{refineqtl}} } 
 
 \keyword{models}

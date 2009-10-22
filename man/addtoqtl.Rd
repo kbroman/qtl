@@ -13,7 +13,7 @@ addtoqtl(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{qtl}{The qtl object to which additional QTL are to be added.}
  \item{chr}{Vector indicating the chromosome for each new QTL. (These
  should be character strings referring to the chromosomes by name.)}
@@ -21,7 +21,7 @@ addtoqtl(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
    positions on the chromosome for each new QTL. If there is no marker or
    pseudomarker at a position, the nearest position is used.}
  \item{qtl.name}{Optional user-specified name for each new QTL, used in the
-   drop-one-term ANOVA table in \code{\link[qtl]{fitqtl}}.
+   drop-one-term ANOVA table in \code{\link{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a
    QTL on Chromsome 1 at 10 cM.} 
  \item{drop.lod.profile}{If TRUE, remove any LOD profiles from the object.}
@@ -29,7 +29,7 @@ addtoqtl(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
 
 \value{
   An object of class \code{qtl}, just like the input \code{qtl} object,
-  but with additional QTL added.  See \code{\link[qtl]{makeqtl}} for
+  but with additional QTL added.  See \code{\link{makeqtl}} for
   details. 
 }
 
@@ -48,8 +48,8 @@ qtl <- makeqtl(fake.f2, qc, qp, what="prob")
 qtl <- addtoqtl(fake.f2, qtl, 14, 35)
 }
 
-\seealso{ \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{fitqtl}},
-  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{replaceqtl}},
-  \code{\link[qtl]{reorderqtl}}  }
+\seealso{ \code{\link{makeqtl}}, \code{\link{fitqtl}},
+  \code{\link{dropfromqtl}}, \code{\link{replaceqtl}},
+  \code{\link{reorderqtl}}  }
 
 \keyword{utilities}

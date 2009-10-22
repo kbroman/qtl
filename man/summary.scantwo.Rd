@@ -4,7 +4,7 @@
 \title{Summarize the results of a two-dimensional genome scan}
 
 \description{
-  Summarize the interesting aspects of the results of \code{\link[qtl]{scantwo}}.
+  Summarize the interesting aspects of the results of \code{\link{scantwo}}.
 }
 
 \usage{
@@ -16,7 +16,7 @@
 
 \arguments{
  \item{object}{An object of class \code{scantwo}, the output of the
-   function \code{\link[qtl]{scantwo}}.}
+   function \code{\link{scantwo}}.}
  \item{thresholds}{A vector of length 5, giving LOD thresholds
    for the full, conditional-interactive, interaction, additive, and
    conditional-additive LOD scores. See Details, below.}
@@ -93,7 +93,7 @@
   full, cond-int, int, add, cond-add. 
 
   Thresholds may be obtained by a permutation test with
-  \code{\link[qtl]{scantwo}}, but these are extremely time-consuming.
+  \code{\link{scantwo}}, but these are extremely time-consuming.
   For a mouse backcross, we suggest the thresholds (6.0, 4.7, 4.4, 4.7,
   2.6) for the full, conditional-interactive, interaction, additive, and
   conditional-additive LOD scores, respectively.  
@@ -106,7 +106,7 @@
 
 \section{Output of addpair}{
 
-  \bold{Note} that, for output from \code{\link[qtl]{addpair}} in which the
+  \bold{Note} that, for output from \code{\link{addpair}} in which the
   new loci are indicated explicitly in the formula, the summary provided
   by \code{summary.scantwo} is somewhat special.
 
@@ -134,11 +134,11 @@
 
 \section{The older version}{
   The previous version of this function is still available, though it is
-  now named \code{\link[qtl]{summary.scantwo.old}}.
+  now named \code{\link{summary.scantwo.old}}.
 
   We much prefer the revised function.  However, while we are confident
   that this function (and the permutations in
-  \code{\link[qtl]{scantwo}}) are calculating the relevant statistics,
+  \code{\link{scantwo}}) are calculating the relevant statistics,
   the appropriate significance levels for these relatively complex
   series of statistical tests is not yet completely clear.
 }
@@ -187,7 +187,7 @@ summary(out.2dim, perms=operm.2dim, alpha=c(0.05, 0.05, 0, 0.05, 0.05),
         pvalues=TRUE)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}}, \code{\link[qtl]{plot.scantwo}},
-          \code{\link[qtl]{max.scantwo}}, \code{\link[qtl]{condense.scantwo}} }
+\seealso{ \code{\link{scantwo}}, \code{\link{plot.scantwo}},
+          \code{\link{max.scantwo}}, \code{\link{condense.scantwo}} }
 
 \keyword{print}
