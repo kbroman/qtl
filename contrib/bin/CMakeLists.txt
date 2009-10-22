@@ -56,9 +56,14 @@ mqmmain.cpp
 SET(RTEST scripts/r.sh)
 SET(RTESTOUTPUT rtest/regression)
 
-ADD_CUSTOM_TARGET(testall 
+ADD_CUSTOM_TARGET(testR
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND R CMD INSTALL --libs-only qtl_1.13-1.tar.gz 
+  COMMAND R CMD INSTALL --libs-only qtl_1.15-1.tar.gz 
+  COMMAND ctest -R TestR)
+
+ADD_CUSTOM_TARGET(testall
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
+  COMMAND R CMD INSTALL --libs-only qtl_1.15-1.tar.gz 
   COMMAND ctest)
 
 IF(WIN32)
