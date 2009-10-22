@@ -43,6 +43,7 @@
   #include "mqmscan.h"
 
 #ifdef STANDALONE
+  // Running mqm stand alone (without R)
   extern FILE* redirect_info;  // Redirect output for testing
   #define message(type, format, ...) { \
     fprintf(redirect_info,"%s: ",type); \
@@ -51,12 +52,13 @@
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else
+  // Running mqm under R
   #ifdef WIN32
-   //#define info(format, ...){ message("INFO: ",format, ## __VA_ARGS__); }
    #define message(type, format, ...) { \
     Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
   #else
-    #define message(type,s) { Rprintf("%s: %s\n",type,s); }
+   #define message(type, format, ...) { \
+    Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
   #endif  
   // #define warning(s) { Rf_warning(s); }
   #define fatal(s) { message("FATAL",s); Rf_error(s); }
