@@ -10,6 +10,21 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Bug in plot.qtl 
+
+Error in attr(qtl, "formula") <- NULL : object 'qtl' not found
+
+o Crash in stepwiseqtl:
+
+      -Starting backward deletion
+      ---Dropping 
+     Error in parse(text = x) : unexpected end of input in "y~ "
+     In addition: Warning messages:
+     1: In scanone(cross, pheno.col = pheno.col, method = method, model = "normal",  :
+       Dropped 1 additive covariates on X chromosome.
+     2: In min(thelod, na.rm = TRUE) :
+       no non-missing arguments to min; returning Inf
+
 o Bug in scantwo [within dropXcol()] for X chromosome with "risib".
 
 o lodint with multiple chr: crazy error
