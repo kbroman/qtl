@@ -51,3 +51,7 @@ cat("This is a fairly extensive model, and lowering the significance level from 
 #using the same cofactors
 cofactorlist <- mqmcofactorsEach(h_no_missing,2)
 result <- mqm(h_no_missing, cofactorlist, alfa=0.002, verbose=T, plot=T)
+
+cat("This model implicates chromosomes 1,2,4 and 5\n")
+
+
