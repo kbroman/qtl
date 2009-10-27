@@ -1,0 +1,53 @@
+cat("Chapter 12 - mqm via analysis of deviance\n\n")
+cat("We start bij analyzing the hyperset data\n")
+
+library(qtl)
+data(hyper)
+colors <- c("Black","Green")
+lines <- c(2,1)
+h_no_missing <- mqmaugment(hyper, neglect=1, verbose=T)
+result <- mqm(h_no_missing, verbose=T)
+result_compare <- scanone(h_no_missing)
+plot(result, result_compare, col=colors, lwd=lines)
+
+cat("We see 1 to 1 correspondance between the scanone function and the mqm routine when using no paramters\n")
+cat("We can now use two approaches:\n")
+cat("1) Start building a model by hand or,\n")
+cat("2) Use unsupervised backward selection on a large number of markers\n")
+cat("\n")
+cat("We'll start by first building the model by hand. We see the big peek on chromosome 4, so lets account for that by setting a cofactor at the marker nearest to the peek on chromosome 4")
+
+summary(result)
+find.marker(h_no_missing,4,30)
+toset <- which.marker(h_no_missing,"D4Mit164")
+cofactorlist <- mqmcofactors(h_no_missing,toset)
+#scan again
+result <- mqm(h_no_missing, cofactorlist, verbose=T)
+plot(result, result_compare, col=colors, lwd=lines)
+
+cat("After setting a cofactor on chromosome 4, the second peek on chromosome 1 becomes higher, so lets try adding that one too\n")
+summary(result)
+#we can combine find marker and which.marker commands and expand our toset variable
+toset <- c(toset,which.marker(h_no_missing,find.marker(h_no_missing,1,70)))
+cofactorlist <- mqmcofactors(h_no_missing,toset)
+#scan again
+result <- mqm(h_no_missing, cofactorlist, verbose=T)
+plot(result, result_compare, col=colors, lwd=lines)
+
+cat("That marker is also informative enough to be included into the model, we can continue this process of adding cofactors untill there are no more informative markers that can be included\n")
+cat("This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using strategy 2 and set cofactors every other marker. The algorithm will analyse\n)
+cat("all the markers and if found to be non explainatory drop them from the model. After selection it will scan the chromosome using the model created from the cofactors\n")
+cat("Using the plot=T we also get a graphical overview of the model\n")
+
+cofactorlist <- mqmcofactorsEach(h_no_missing,2)
+result <- mqm(h_no_missing, cofactorlist, verbose=T, plot=T)
+#We could plot also back against the scanone function.
+#plot(result, result_compare, col=colors, lwd=lines)
+
+cat("This leads to a lot of hits and multiple hits on each chromosome, because some cofactors are too close to eachother\n")
+cat("However we see that according to mqm chromosomes 1,2,4,5,6,7,11 and 14 are implicated using this method\n")
+cat("This is a fairly extensive model, and lowering the significance level from 0.02 to 0.002 could yield a more comprehensable model\n")
+
+#using the same cofactors
+cofactorlist <- mqmcofactorsEach(h_no_missing,2)
+result <- mqm(h_no_missing, cofactorlist, alfa=0.002, verbose=T, plot=T)
