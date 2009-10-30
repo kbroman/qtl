@@ -73,7 +73,7 @@ effectplot(h_no_missing, mname1="D1Mit132", mname2="D5Mit169")
 We can see that there are (no) interactions between the 2 markers D1Mit132 and D5Mit168. This is because both lines are parallel thus there is no effect (on D5Mit168) from having a certain genotype at marker D1Mit168 for eaxample. If we would see two lines non-parallel this would indicate an epistatic effect at that marker. To estimate significance of the Peeks (and perhaps exclude some more markers) we can use permutation.
 In small sets with a limited amount of traits we use bootstrap(). On large GWAS sets (gene expression etc) we use the FDRpermutation to estimate FDR across the entire set at certain lod cutoffs.
 <<fig =TRUE>>=
-results <- bootstrap(h_no_missing,mqm,cofactors=cof,plot=T,n.run=100,b.size=50)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.run=100,b.size=50)
 @
 This shows that only QTL's above XX LOD score can be trusted (at an alpha=0.05) level.
 \end{document}
