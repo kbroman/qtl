@@ -1,0 +1,1 @@
+R < SweaveIt.R --slave
