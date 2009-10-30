@@ -1,0 +1,114 @@
+
+R version 2.8.1 (2008-12-22)
+Copyright (C) 2008 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> Sweave(file="chapter12.snw")
+Writing to file chapter12.tex
+Processing code chunks ...
+ 1 : echo term verbatim
+ 2 : term verbatim eps pdf
+ 3 : echo term verbatim eps pdf
+Marker D4Mit164 is number 46 
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Marker D4Mit164 is number 46 
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+ 4 : echo term verbatim
+ 5 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+ 6 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+ 7 : echo term verbatim eps pdf
+ 8 : echo term verbatim eps pdf
+
+Error:  chunk 8 
+Error in mqmscan(...) : object "cof" not found
+In addition: Warning messages:
+1: In scanone(h_no_missing) : First running calc.genoprob.
+2: In effectplot(h_no_missing, mname1 = "D1Mit132", mname2 = "D5Mit169") :
+   -Running sim.geno.
+3: In effectplot(h_no_missing, mname1 = "D1Mit132", mname2 = "D5Mit169") :
+   -Running sim.geno.
+4: In effectplot(h_no_missing, mname1 = "D1Mit132", mname2 = "D5Mit169") :
+   -Running sim.geno.
+Execution halted
