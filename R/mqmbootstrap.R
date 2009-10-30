@@ -114,7 +114,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 
 		#Scan the original
 		#cross <- fill.geno(cross) # <- this should be done outside of this function
-		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,Funktie=Funktie,verbose=verbose)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,Funktie=Funktie,verbose=verbose,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.run)

@@ -85,6 +85,8 @@ hyper                   Data on hypertension
 jittermap               Jitter marker positions in a genetic map
 listeria                Data on Listeria monocytogenes susceptibility
 locateXO                Estimate locations of crossovers
+locations               Genetic locations of traits for the multitrait
+                        dataset
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map
