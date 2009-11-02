@@ -46,7 +46,7 @@ Filling the chromosome matrix
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
  4 : echo term verbatim
- 5 : term verbatim eps pdf
+ 5 : echo term verbatim eps pdf
  6 : echo term verbatim eps pdf
 Marker D4Mit164 is number 46 
 Back cross (BC)
@@ -75,3 +75,332 @@ Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 Analysis of data finished
  7 : echo term verbatim
+ 8 : echo term verbatim eps pdf
+ 9 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+10 : echo term verbatim eps pdf
+11 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+12 : echo term hide eps pdf
+13 : echo term verbatim eps pdf
+14 : echo term verbatim eps pdf
+15 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+
+You can now run LaTeX on 'chapter12.tex'
+There were 23 warnings (use warnings() to see them)
+> Stangle(file="chapter12.snw")
+Writing to file chapter12.R 
+> q("no")
+> proc.time()
+   user  system elapsed 
+ 301.84    0.48  304.79 

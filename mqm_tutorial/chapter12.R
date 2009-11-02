@@ -109,6 +109,6 @@ effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
 ### chunk number 15: 
 ###################################################
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.run=2,b.size=1)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.run=10,b.size=10)
 
 

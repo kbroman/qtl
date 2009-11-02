@@ -5,6 +5,7 @@
 \begin {document}
 \maketitle
 \clearpage
+\begin{Large} Missing data augmentation \end{Large}\\
 First lest go into the augmentation of missing data, before we can use the mqm function, the data should be complete (no missing markers)
 or we should augment it. The missing data augmentation routine mqmaugment() can do this for us, but we could also use multiple imputations
 to estimate the missing markersgenotypes using fill.geno() from the r/qtl package. The mqmaugment() function can only handle 1 phenotype but this will be inproved upon soon. The parameters are:
@@ -38,7 +39,7 @@ Estimating recombinant frequencies
 \end{Schunk}
 \includegraphics{chapter12-002}
 \\
-When we use a larger augment_aboveprob (so more unlikely genotypes are also consideren we see the dataset expanding in size.
+When we use a larger $augment\_aboveprob$ (so more unlikely genotypes are also consideren we see the dataset expanding in size.
 This expanded dataset can only be analysed correctly with the mqm routine, because scanone will treat duplicated individuals
 as new individuals (that improve power). MQM does not do this it treats duplicated individuals together as a single entity.
 \\
@@ -59,7 +60,8 @@ Estimating recombinant frequencies
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-003}
-\\
+\clearpage
+\begin{Large} MQM modeling and mapping \end{Large}\\
 We start bij analyzing the hyperset data this can be loaded into memory by using $data(hyper)$
 \texttt{qtl.mqm} help page into a \LaTeX{} document
 \\
@@ -99,9 +101,13 @@ Analysis of data finished
 > result_compare <- scanone(h_no_missing)
 \end{Sinput}
 \end{Schunk}
-\\
 Output of the QTLscan:
 \\
+\begin{Schunk}
+\begin{Sinput}
+> plot(result, result_compare, col = colors, lwd = lines)
+\end{Sinput}
+\end{Schunk}
 \includegraphics{chapter12-005}
 \\
 We see 1 to 1 correspondance between the scanone function and the mqm routine when using no paramters
@@ -213,3 +219,269 @@ Marker D1Mit218 is number 12
 \begin{Sinput}
 > cofactorlist <- mqmcofactors(h_no_missing, toset)
 > result <- mqm(h_no_missing, cofactorlist)
+\end{Sinput}
+\begin{Soutput}
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+\end{Soutput}
+\end{Schunk}
+That marker is also informative enough to be included into the model, we can continue this process of adding
+cofactors untill there are no more informative markers that can be included
+This could be very time consuming in the case of many QTLs underlying your trait,
+we can also explore our data using strategy 2 and set cofactors every other marker. The algorithm will analyse
+all the markers and if found to be non explainatory drop them from the model. After
+selection it will scan the chromosome using the model created from the cofactors
+Using the plot=T we also get a graphical overview of the model
+\\
+\begin{Schunk}
+\begin{Sinput}
+> plot(result, result_compare, col = colors, lwd = lines)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-008}
+Automatic scanning using cofactors at each 5th marker is done by using the $mqmcofactorsEach()$ function\\
+\begin{Schunk}
+\begin{Sinput}
+> cofactorlist <- mqmcofactorsEach(h_no_missing, 5)
+> result <- mqm(h_no_missing, cofactorlist, plot = T)
+\end{Sinput}
+\begin{Soutput}
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+\end{Soutput}
+\end{Schunk}
+\includegraphics{chapter12-009}
+Comparing back to the scanone:
+\\
+\begin{Schunk}
+\begin{Sinput}
+> plot(result, result_compare, col = colors, lwd = lines)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-010}
+\\
+This leads to a lot of hits and multiple hits on each chromosome, because some cofactors are too close to eachother
+However we see that according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated using this method
+This is a fairly extensive model, and lowering the significance level from 0.02 to 0.002 could yield a more comprehensable model
+\\
+\begin{Schunk}
+\begin{Sinput}
+> result <- mqm(h_no_missing, cofactorlist, alfa = 0.002, plot = T)
+\end{Sinput}
+\begin{Soutput}
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+\end{Soutput}
+\end{Schunk}
+\includegraphics{chapter12-011}
+\clearpage
+\begin{Large} MQM effects \end{Large}\\
+This model implicates chromosomes 1,2,4 and 5. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools
+to estimate Main effects and epistatic effects. The follwoing code will plot those 2 plots on markers D1M102 (main effect) and the interaction between this marker and D5Mit213 to show epistase or additive effect.
+\\
+\begin{Schunk}
+\begin{Sinput}
+> plot.pxg(h_no_missing, marker = "D1Mit102")
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-012}
+\\
+Possible interaction on chromosome 1
+\\
+\begin{Schunk}
+\begin{Sinput}
+> effectplot(h_no_missing, mname1 = "D1Mit19", mname2 = "D1Mit102")
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-013}
+\\
+Possible interaction between chromosome 1 and 5
+\\
+\begin{Schunk}
+\begin{Sinput}
+> effectplot(h_no_missing, mname1 = "D1Mit102", mname2 = "D5Mit213")
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-014}
+\\
+We can see that there are (no) interactions between the 2 markers D1Mit102 and D5Mit213. This is because both lines are parallel thus there is no effect (on D5Mit213) from having a certain genotype at marker D1Mit102 for eaxample. If we would see two lines non-parallel this would indicate an epistatic effect at that marker. 
+\clearpage
+\begin{Large} Significance and Thresholds \end{Large}\\
+To estimate significance of the Peeks (and perhaps exclude some more markers) we can use permutation.
+In small sets with a limited amount of traits we use bootstrap(). On large GWAS sets (gene expression etc) we use the FDRpermutation to estimate FDR across the entire set at certain lod cutoffs (We do 10 because of speed of generating the document this should be 1000 with $b.size=25 or 50$).
+\\
+\begin{Schunk}
+\begin{Sinput}
+> library(snow)
+> results <- bootstrap(h_no_missing, mqm, cofactors = cofactorlist, 
++     plot = T, n.run = 10, b.size = 10)
+\end{Sinput}
+\begin{Soutput}
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+\end{Soutput}
+\end{Schunk}
+\includegraphics{chapter12-015}
+\\
+This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+\end{document}
