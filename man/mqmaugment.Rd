@@ -18,7 +18,7 @@ individuals maxNaug is reached. Individuals are expanded up to imaxNaug.
 }
 
 \usage{
-mqmaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE)
+mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
 }
 
 \arguments{
@@ -29,11 +29,10 @@ mqmaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FAL
     the phenotype, a string matching one phenotype name, or, when the value is
     TRUE, all phenotypes are used.
   }
-  \item{maxind}{ Maximum number of individuals augmentation can expand to }
   \item{maxaugind}{ Maximum number of augmentations per individual }
-  \item{neglect}{ Drop certain unlikely genotypes during augmentation
-  (neglect=1 does not drop individuals, higher values do). The neglect
-  parameter drops genotypes. E.g. for neglect=100  eliminate genotypes 100
+  \item{augment_aboveprob}{ Augment genotypes that are above a probability of
+  occurring (ignore lower probabilities). Setting this value too high
+  may result in dropping individuals entirely. E.g. for augment_aboveprob=100 : eliminate genotypes 100
   times less likely than the most likely configuration. The dataset may be
   reduced when there is a lot of missing data.  }
   \item{verbose}{ Be verbose }
