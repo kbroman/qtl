@@ -4,14 +4,28 @@
 \author { Danny Arends, Pjotr Prins }
 \begin {document}
 \maketitle
+First lest go into the augmentation of missing data, before we can use the mqm function, the data should be complete (no missing markers)
+or we should augment it. The missing data augmentation routine mqmaugment() can do this for us, but we could also use multiple imputations
+to estimate the missing markersgenotypes using fill.geno() from the r/qtl package. The mqmaugment() function can only handle 1 phenotype but this will be inproved upon soon. The parameters  are:
+cross, pheno.col = 1 , maxaugind = 60, augment_aboveprob = 1 and verbose set this to TRUE to see what happens. Maxind sets a maximum to the size of the dataset the default is usually good enough (60 is ~ 20 missing F2 markers per individual or 30 BC markers). The augmentation routine does an all or nothing filling of the missing markers. The individual is expanded untill the augment_aboveprob: Augment genotypes that are above a probability of occurring (ignore lower probabilities). Setting this value too high may result in dropping individuals entirely.
+Lets start by simulating a dataset with some missing markers and discuss howto use the augmentation routine:
+<<fig=TRUE>>=
+library(qtl)
+data(map10)
+mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.01)
+plot.geno(mycross)
+augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
+plot.geno(augmentedcross)
+augmentedcross <- mqmaugment(mycross, augment_aboveprob=10)
+plot.geno(augmentedcross)
+@
 We start bij analyzing the hyperset data
 \texttt{qtl.mqm} help page into a \LaTeX{} document :
 <<>>=
-library(qtl)
 data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
-h_no_missing <- mqmaugment(hyper, neglect=1)
+h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
 result <- mqm(h_no_missing)
 result_compare <- scanone(h_no_missing)
 @

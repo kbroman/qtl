@@ -29,10 +29,11 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE) {
+mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE) {
   starttime <- proc.time()
-  maxaug = maxind   # maxaug is the maximum of individuals to augment to
   maxiaug = maxaugind
+  maxind=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
+  
 
   # ---- check for supported crosses and set ctype
 
