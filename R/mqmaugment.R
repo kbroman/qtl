@@ -32,7 +32,7 @@
 mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
-  maxind=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
+  maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
   
 
   # ---- check for supported crosses and set ctype
@@ -166,7 +166,7 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
     as.integer(1),    # 1 phenotype
     as.integer(maxaug),
     as.integer(maxiaug),
-    as.double(neglect),
+    as.double(augment_aboveprob),
     as.integer(chr),
     as.integer(ctype),
     as.integer(verbose),
