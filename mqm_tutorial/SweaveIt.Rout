@@ -19,6 +19,7 @@ Type 'q()' to quit R.
 Writing to file chapter12.tex
 Processing code chunks ...
  1 : echo term verbatim eps pdf
+ 2 : echo term verbatim eps pdf
 Starting C-part of the data augmentation routine
 F2 cross
 Convert codes R/qtl -> MQM
@@ -31,6 +32,7 @@ Convert codes R/qtl -> MQM
 Filling the chromosome matrix
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
+ 3 : echo term verbatim eps pdf
 Starting C-part of the data augmentation routine
 F2 cross
 Convert codes R/qtl -> MQM
@@ -43,37 +45,10 @@ Convert codes R/qtl -> MQM
 Filling the chromosome matrix
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
- 2 : echo term verbatim
- 3 : term verbatim eps pdf
- 4 : echo term verbatim eps pdf
-Marker D4Mit164 is number 46 
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Marker D4Mit164 is number 46 
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
- 5 : echo term verbatim
+ 4 : echo term verbatim
+ 5 : term verbatim eps pdf
  6 : echo term verbatim eps pdf
+Marker D4Mit164 is number 46 
 Back cross (BC)
 Convert codes R/qtl -> MQM
 Receiving the chromosome matrix from R
@@ -86,6 +61,7 @@ After dropping of uninformative cofactors
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 Analysis of data finished
+Marker D4Mit164 is number 46 
 Back cross (BC)
 Convert codes R/qtl -> MQM
 Receiving the chromosome matrix from R
@@ -98,30 +74,4 @@ After dropping of uninformative cofactors
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 Analysis of data finished
- 7 : echo term verbatim eps pdf
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
- 8 : echo term verbatim eps pdf
- 9 : echo term verbatim eps pdf
+ 7 : echo term verbatim
