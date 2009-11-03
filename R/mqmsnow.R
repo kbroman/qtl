@@ -35,7 +35,7 @@ snowCoreALL <- function(x,all.data,Funktie,verbose=FALSE,...){
         }
 	if("cofactors" %in% names(formals(Funktie))){
 		if(exists("cofactors")){
-			result <- Funktie(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=FALSE,...)
+			result <- Funktie(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=verbose,...)
 		}
 	}else{
 		result <- Funktie(cross=all.data,pheno.col=x,...)
