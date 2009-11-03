@@ -151,6 +151,7 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
     geno <- geno[-dropped,]
     pheno <- pheno[-dropped,]
   }
+  #FIXME: Add a test for chromosomes with all markers missing
 
   # ---- Call data augmentation
   result <- .C("R_augmentdata",

@@ -532,7 +532,6 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   //Calculate positions of markers and Recombinant frequencies
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
-
   if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
