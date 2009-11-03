@@ -5,13 +5,13 @@
 
 \description{ 
   Simulated data for an F2 intercross, obtained using
-  \code{\link[qtl]{sim.cross}}.   
+  \code{\link{sim.cross}}.   
 } 
 
 \usage{data(fake.f2)}
 
 \format{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}}
+  An object of class \code{cross}.  See \code{\link{read.cross}}
   for details. 
 }
 
@@ -23,7 +23,7 @@ indication of sex (0=female, 1=male) and the direction of the cross (pgm
 1=B, meaning the cross was (AxB)x(BxA)).
 
 Note that the X chromosome genotypes are coded in a special way (see
-\code{\link[qtl]{read.cross}}).  For the individuals with pgm=0, sex=0,
+\code{\link{read.cross}}).  For the individuals with pgm=0, sex=0,
 1=AA and 2=AB; for individuals with pgm=0, sex=1, 1=A and 2=B
 (hemizygous); for individuals with pgm=1, sex=0, 1=BB and 2=AB; for
 individuals with pgm=1, sex=1, 1=A and 2=B.  \bold{This requires special
@@ -43,9 +43,9 @@ summary(fake.f2)
 plot(fake.f2)
 }
 
-\seealso{ \code{\link[qtl]{sim.cross}}, \code{\link[qtl]{fake.bc}},
-  \code{\link[qtl]{fake.4way}}, \code{\link[qtl]{listeria}},
-  \code{\link[qtl]{hyper}},
-  \code{\link[qtl]{bristle3}}, \code{\link[qtl]{bristleX}} } 
+\seealso{ \code{\link{sim.cross}}, \code{\link{fake.bc}},
+  \code{\link{fake.4way}}, \code{\link{listeria}},
+  \code{\link{hyper}},
+  \code{\link{bristle3}}, \code{\link{bristleX}} } 
 
 \keyword{datasets}

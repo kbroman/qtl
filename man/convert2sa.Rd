@@ -16,7 +16,7 @@ convert2sa(map, tol=1e-4)
 \arguments{
  \item{map}{A map object with sex-specific locations (but assuming that
  the female and male maps are the same), as output by the function
- \code{\link[qtl]{est.map}} for a 4-way cross, with argument
+ \code{\link{est.map}} for a 4-way cross, with argument
  \code{sex.sp=FALSE}.}
   \item{tol}{Tolerance value for inspecting the differences between the
  female and male maps; if they differ by more than this tolerance, a
@@ -42,6 +42,6 @@ nm <- est.map(fake.4way, sex.sp=FALSE)
 plot(convert2sa(nm))
 }
 
-\seealso{ \code{\link[qtl]{est.map}}, \code{\link[qtl]{plot.map}} }
+\seealso{ \code{\link{est.map}}, \code{\link{plot.map}} }
 
 \keyword{manip}

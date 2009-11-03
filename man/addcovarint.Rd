@@ -14,7 +14,7 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of
@@ -23,7 +23,7 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link[qtl]{makeqtl}}.} 
+   \code{\link{makeqtl}}.} 
  \item{covar}{A matrix or data.frame of covariates.  These must be
    strictly numeric.} 
  \item{icovar}{Vector of character strings indicating the columns in
@@ -53,7 +53,7 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 
 \section{Value}{
   An object of class \code{addcovarint}, with results as in the
-  drop-one-term analysis from \code{\link[qtl]{fitqtl}}.  This is a data
+  drop-one-term analysis from \code{\link{fitqtl}}.  This is a data
   frame (given class \code{"addcovarint"}, with the following columns: 
   degrees of freedom (df), Type III sum of squares (Type III
   SS), LOD score(LOD), percentage of variance explained (\%var), F
@@ -101,8 +101,8 @@ addcovarint(fake.f2, pheno.col=1, qtl, covar, "sex", y~Q1+Q2+Q3,
             method="hk")
 }
 
-\seealso{ \code{\link[qtl]{addint}}, \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
-  \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{addqtl}}, \code{\link[qtl]{addpair}} }
+\seealso{ \code{\link{addint}}, \code{\link{fitqtl}}, \code{\link{makeqtl}},
+  \code{\link{scanqtl}}, \code{\link{refineqtl}},
+  \code{\link{addqtl}}, \code{\link{addpair}} }
 
 \keyword{models}

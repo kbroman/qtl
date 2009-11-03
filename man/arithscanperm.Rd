@@ -8,7 +8,7 @@
 
 \description{
   Add or subtract LOD scores in permutation results from
-  \code{\link[qtl]{scanone}} or \code{\link[qtl]{scantwo}}. 
+  \code{\link{scanone}} or \code{\link{scantwo}}. 
 }
 
 \usage{
@@ -18,14 +18,14 @@
 
 \arguments{
   \item{perm1, perm2}{Permutation results from
-    \code{\link[qtl]{scanone}} or \code{\link[qtl]{scantwo}}, on the
+    \code{\link{scanone}} or \code{\link{scantwo}}, on the
     same set of chromosomes and markers.}
 }
 
 \details{
   This is used to calculate the sum or difference of LOD scores of two
-  sets of permutation results from \code{\link[qtl]{scanone}} or
-  \code{\link[qtl]{scantwo}}.  One must be careful to ensure that the
+  sets of permutation results from \code{\link{scanone}} or
+  \code{\link{scantwo}}.  One must be careful to ensure that the
   permutations are perfectly linked, which 
   will require the use of \code{\link[base:Random]{set.seed}}.
 }

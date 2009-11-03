@@ -5,7 +5,7 @@
 
 \description{
   Pull out results for a specified set LOD columns from 
-  permutation results from \code{\link[qtl]{scantwo}}.
+  permutation results from \code{\link{scantwo}}.
 }
 
 \usage{
@@ -14,7 +14,7 @@
 
 \arguments{
  \item{x}{Permutation results from 
-   \code{\link[qtl]{scantwo}}, run with \code{n.perm}>0.}
+   \code{\link{scantwo}}, run with \code{n.perm}>0.}
  \item{lodcolumn}{A vector specifying which LOD columns to keep (or, if
    negative), omit.  These should be between 1 and the number of LOD
    columns in the input \code{x}.}
@@ -34,9 +34,8 @@ operm <- scantwo(fake.bc, method="hk", pheno.col=1:2, n.perm=5)
 operm2 <- subset(operm, lodcolumn=2)
 }
 
-\seealso{ \code{\link[qtl]{summary.scantwoperm}},
-  \code{\link[qtl]{scantwo}}, \code{\link[qtl]{c.scantwoperm}},
-  \code{\link[qtl]{cbind.scantwoperm}},
-  \code{\link[qtl]{rbind.scantwoperm}} }
+\seealso{ \code{\link{summary.scantwoperm}},
+  \code{\link{scantwo}}, \code{\link{c.scantwoperm}},
+  \code{\link[=c.scantwoperm]{rbind.scantwoperm}} }
 
 \keyword{manip}

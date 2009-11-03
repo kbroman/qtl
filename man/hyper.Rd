@@ -10,7 +10,7 @@
 \usage{data(hyper)}
 
 \format{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}}
+  An object of class \code{cross}.  See \code{\link{read.cross}}
   for details. 
 }  
 
@@ -51,8 +51,8 @@ plot.missing(hyper, reorder=TRUE)
 hyper <- drop.nullmarkers(hyper)
 }
 
-\seealso{ \code{\link[qtl]{fake.bc}}, \code{\link[qtl]{fake.f2}},
-  \code{\link[qtl]{fake.4way}}, \code{\link[qtl]{listeria}},
-  \code{\link[qtl]{bristle3}}, \code{\link[qtl]{bristleX}} } 
+\seealso{ \code{\link{fake.bc}}, \code{\link{fake.f2}},
+  \code{\link{fake.4way}}, \code{\link{listeria}},
+  \code{\link{bristle3}}, \code{\link{bristleX}} } 
 
 \keyword{datasets}

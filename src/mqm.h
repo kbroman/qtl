@@ -43,20 +43,31 @@
   #include "mqmscan.h"
 
 #ifdef STANDALONE
-  #define message(type,s) { printf("%s: ",type); printf(s); printf("\n"); } 
+  // Running mqm stand alone (without R)
+  extern FILE* redirect_info;  // Redirect output for testing
+  #define message(type, format, ...) { \
+    fprintf(redirect_info,"%s: ",type); \
+    fprintf(redirect_info, format, ## __VA_ARGS__); \
+    fprintf(redirect_info,"\n"); } 
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
 #else
-  #define message(type,s) { Rprintf("%s: %s\n",type,s); }
+  // Running mqm under R
+  #ifdef WIN32
+   #define message(type, format, ...) { \
+    Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
+  #else
+   #define message(type, format, ...) { \
+    Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
+  #endif  
   // #define warning(s) { Rf_warning(s); }
   #define fatal(s) { message("FATAL",s); Rf_error(s); }
 #endif
 
 #ifdef NDEBUG
-  #define info(s) 
+  #define info(format, ...) 
 #else
-  #define info(s) { message("INFO",s); }
-  #define verbose(s) if (verbose) { info(s); }
-#endif
-
+  #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
+  #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
+#endif  //ndebug
 #endif // MQM_H

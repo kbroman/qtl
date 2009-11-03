@@ -5,7 +5,7 @@
 \title{Combine data from scanone permutations}
 
 \description{
-  Concatenate the data for multiple runs of \code{\link[qtl]{scanone}}
+  Concatenate the data for multiple runs of \code{\link{scanone}}
   with \code{n.perm > 0}.
 }
 
@@ -16,7 +16,7 @@
 
 \arguments{
  \item{\dots}{A set of objects of class \code{scanoneperm}. These are
-   the permutation results from \code{\link[qtl]{scanone}} (that is,
+   the permutation results from \code{\link{scanone}} (that is,
    when \code{n.perm > 0}).  These must all have the same number of
    columns. (That is, they must have been created with the same number
    of phenotypes, and it is assumed that they were generated in
@@ -27,7 +27,7 @@
 
 \details{
   The aim of this function is to concatenate the results from multiple
-  runs of a permutation test \code{\link[qtl]{scanone}}, to assist with
+  runs of a permutation test \code{\link{scanone}}, to assist with
   the case that such permutations are done on multiple processors in
   parallel. 
 }
@@ -44,8 +44,8 @@ operm2 <- scanone(fake.f2, method="hk", n.perm=50, perm.Xsp=TRUE)
 operm <- c(operm1, operm2)
 }
 
-\seealso{ \code{\link[qtl]{summary.scanoneperm}},
-  \code{\link[qtl]{scanone}}, \code{\link[qtl]{cbind.scanoneperm}},
-  \code{\link[qtl]{c.scantwoperm}} }
+\seealso{ \code{\link{summary.scanoneperm}},
+  \code{\link{scanone}}, \code{\link{cbind.scanoneperm}},
+  \code{\link{c.scantwoperm}} }
 
 \keyword{manip}

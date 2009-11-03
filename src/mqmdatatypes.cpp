@@ -85,7 +85,7 @@ MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Gen
  *
  */
 
-void change_coding(int *Nmark, int *Nind, int **Geno, cmatrix markers, const MQMCrossType crosstype) {
+void change_coding(int *Nmark, int *Nind, int **Geno, MQMMarkerMatrix markers, const MQMCrossType crosstype) {
   info("Convert codes R/qtl -> MQM");
   for (int j=0; j < *Nmark; j++) {
     for (int i=0; i < *Nind; i++) {
@@ -149,6 +149,24 @@ cvector newcvector(int dim) {
   return v;
 }
 
+MQMMarkerVector newMQMMarkerVector(int dim) {
+  MQMMarkerVector v;
+  v = (MQMMarker *)calloc_init(dim, sizeof(MQMMarker));
+  if (v==NULL) {
+    warning("Not enough memory for new vector of dimension %d",(dim+1));
+  }
+  return v;
+}
+
+relmarkerarray newRelMarkerPos(int dim){
+  relmarkerarray v;
+  v = (MQMRelMarkerPos *)calloc_init(dim, sizeof(char));
+  if (v==NULL) {
+    warning("Not enough memory for the relative marker position vector with dimension %d",(dim+1));
+  }
+  return v;
+}
+
 matrix newmatrix(int rows, int cols) {
   matrix m;
   m = (double **)calloc_init(rows, sizeof(double*));
@@ -161,25 +179,13 @@ matrix newmatrix(int rows, int cols) {
   return m;
 }
 
-Mmatrix newMmatrix(int rows, int cols,int depth) {
-  Mmatrix m;
-  m = (double ***)calloc_init(rows, sizeof(double**));
-  if (m==NULL) {
-    warning("Not enough memory for new double matrix");
-  }
-  for (int i=0; i<rows; i++) {
-    m[i]= newmatrix(cols,depth);
-  }
-  return m;
-}
-
 void printmatrix(matrix m, int rows, int cols) {
 
   for (int r=0; r<rows; r++) {
     for (int c=0; c<cols; c++) {
-      Rprintf("%f\t",m[r][c]);
+      info("%f",m[r][c]);
     }
-    Rprintf("\n");
+    info("col done");
   }
 }
 
@@ -205,6 +211,19 @@ cmatrix newcmatrix(int rows, int cols) {
   return m;
 }
 
+
+MQMMarkerMatrix newMQMMarkerMatrix(int rows, int cols) {
+  MQMMarkerMatrix m;
+  m = (MQMMarkerMatrix)calloc_init(rows, sizeof(MQMMarkerVector));
+  if (m==NULL) {
+    warning("Not enough memory for new markermatrix");
+  }
+  for (int i=0; i<rows; i++) {
+    m[i]= newMQMMarkerVector(cols);
+  }
+  return m;
+}
+
 void freevector(void *v) {
   Free(v);
 }
@@ -220,13 +239,14 @@ void delmatrix(matrix m, size_t rows) {
   freematrix((void**)m,rows);
 }
 
-void delMmatrix(Mmatrix m, size_t rows) {
-  freematrix((void**)m,rows);
-}
-
 void delcmatrix(cmatrix m, size_t rows) {
   freematrix((void **)m,rows);
 }
+
+void delMQMMarkerMatrix(MQMMarkerMatrix m, size_t rows) {
+  freematrix((void **)m,rows);
+}
+
 
 void copyvector(vector vsource, vector vdestination, int dim) {
 

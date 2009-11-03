@@ -40,9 +40,9 @@ package and is also available at \url{http://www.rqtl.org/rqtltour.pdf}.
 
 A difficult first step in the use of most data analysis software is the
 import of data.  With R/qtl, one may import data in several different
-formats by use of the function \code{\link[qtl]{read.cross}}.  The
+formats by use of the function \code{\link{read.cross}}.  The
 internal data structure used by R/qtl is rather complicated, and is
-described in the help file for \code{\link[qtl]{read.cross}}.  We won't
+described in the help file for \code{\link{read.cross}}.  We won't
 discuss data import any further here, except to say that the
 comma-delimited format (\code{"csv"}) is recommended.  If you have
 trouble importing data, send an email to Karl Broman,
@@ -50,15 +50,15 @@ trouble importing data, send an email to Karl Broman,
 files.  (Such data will be kept confidential.)  Also see the sample data
 files and code at \url{http://www.rqtl.org/sampledata}.
 
-We consider the example data \code{\link[qtl]{hyper}}, an experiment on
+We consider the example data \code{\link{hyper}}, an experiment on
 hypertension in the mouse, kindly provided
 by Bev Paigen and Gary Churchill.  Use the \code{\link[utils]{data}}
 function to load the data.  
 
 \code{data(hyper)}
 
-The \code{\link[qtl]{hyper}} data set has class \code{"cross"}.  The
-function \code{\link[qtl]{summary.cross}} gives summary information
+The \code{\link{hyper}} data set has class \code{"cross"}.  The
+function \code{\link{summary.cross}} gives summary information
 on the data, and checks the data for internal consistency.  A number
 of other utility functions are available; hopefully these are
 self-explanatory.
@@ -70,11 +70,11 @@ self-explanatory.
 \code{nmar(hyper)} \cr
 \code{totmar(hyper)}
 
-The function \code{\link[qtl]{plot.cross}} gives a graphical summary of
-the data; it calls \code{\link[qtl]{plot.missing}} (to plot a matrix
-displaying missing genotypes) and \code{\link[qtl]{plot.map}} (to plot
+The function \code{\link{plot.cross}} gives a graphical summary of
+the data; it calls \code{\link{plot.missing}} (to plot a matrix
+displaying missing genotypes) and \code{\link{plot.map}} (to plot
 the genetic maps), and also displays histograms or barplots of the
-phenotypes.  The \code{\link[qtl]{plot.missing}} function can plot
+phenotypes.  The \code{\link{plot.missing}} function can plot
 individuals ordered by their phenotypes; you can see that for most
 markers, only individuals with extreme phenotypes were genotyped.
 
@@ -84,13 +84,13 @@ markers, only individuals with extreme phenotypes were genotyped.
 \code{plot.map(hyper)}
 
 Note that one marker (on chromosome 14) has no genotype data.  The
-function \code{\link[qtl]{drop.nullmarkers}} removes such markers from
+function \code{\link{drop.nullmarkers}} removes such markers from
 the data. 
 
 \code{hyper <- drop.nullmarkers(hyper)} \cr
 \code{totmar(hyper)}
 
-The function \code{\link[qtl]{est.rf}} estimates the recombination
+The function \code{\link{est.rf}} estimates the recombination
 fraction between each pair of markers, and calculates a LOD score for
 the test of \eqn{r} = 1/2.  This is useful for identifying markers that
 are placed on the wrong chromosome.  Note that since, for these data,
@@ -102,41 +102,41 @@ recombination fractions show rather odd patterns.
 \code{plot.rf(hyper, chr=c(1,4))}
 
 To re-estimate the genetic map for an experimental cross, use the
-function \code{\link[qtl]{est.map}}.  The function
-\code{\link[qtl]{plot.map}}, in addition to plotting a single map, can
+function \code{\link{est.map}}.  The function
+\code{\link{plot.map}}, in addition to plotting a single map, can
 plot the comparison of two genetic maps (as long as they are composed of
 the same numbers of chromosomes and markers per chromosome).  The
-function \code{\link[qtl]{replace.map}} map be used to replace the
+function \code{\link{replace.map}} map be used to replace the
 genetic map in a cross with a new one.
 
 \code{newmap <- est.map(hyper, error.prob=0.01, verbose=TRUE)} \cr
 \code{plot.map(hyper, newmap)} \cr
 \code{hyper <- replace.map(hyper, newmap)}
 
-The function \code{\link[qtl]{calc.errorlod}} may be used to assist in
+The function \code{\link{calc.errorlod}} may be used to assist in
 identifying possible genotyping errors; it calculates the error LOD
 scores described by Lincoln and Lander (1992).  The
-\code{\link[qtl]{calc.errorlod}} function return a modified version of
+\code{\link{calc.errorlod}} function return a modified version of
 the input cross, with error LOD scores included.  The function
-\code{\link[qtl]{top.errorlod}} prints the genotypes with values above a
+\code{\link{top.errorlod}} prints the genotypes with values above a
 cutoff (by default, the cutoff is 4.0).
 
 \code{hyper <- calc.errorlod(hyper, error.prob=0.01)} \cr
 \code{top.errorlod(hyper)} 
 
-The function \code{\link[qtl]{plot.geno}} may be used to inspect the
+The function \code{\link{plot.geno}} may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
 flagged.
 
 \code{plot.geno(hyper, chr=16, ind=c(24:34, 71:81))}
 
 Before doing QTL analyses, some intermediate calculations need to be
-performed.  The function \code{\link[qtl]{calc.genoprob}} calculates
+performed.  The function \code{\link{calc.genoprob}} calculates
 conditional genotype probabilities given the multipoint marker data.
-\code{\link[qtl]{sim.geno}} simulates sequences of genotypes from their
+\code{\link{sim.geno}} simulates sequences of genotypes from their
 joint distribution, given the observed marker data.
 
-As with \code{\link[qtl]{calc.errorlod}}, these functions return a
+As with \code{\link{calc.errorlod}}, these functions return a
 modified version of the input cross, with the intermediate calculations
 included.  The \code{step} argument indicates the density of the grid on
 which the calculations will be performed, and determines the density at
@@ -145,24 +145,24 @@ which LOD scores will be calculated.
 \code{hyper <- calc.genoprob(hyper, step=2.5, error.prob=0.01)} \cr
 \code{hyper <- sim.geno(hyper, step=2.5, n.draws=64, error.prob=0.01)} 
 
-The function \code{\link[qtl]{scanone}} performs a genome scan with a
+The function \code{\link{scanone}} performs a genome scan with a
 single QTL model.  By default, it performs standard interval mapping
 (Lander and Botstein 1989): use of a normal model and the EM algorithm.
 If one specifies \code{method="hk"}, Haley-Knott regression is performed
 (Haley and Knott 1992).  These two methods require the results from
-\code{\link[qtl]{calc.genoprob}}.
+\code{\link{calc.genoprob}}.
 
 \code{out.em <- scanone(hyper)} \cr
 \code{out.hk <- scanone(hyper, method="hk")}
 
 If one specifies \code{method="imp"}, a genome scan is performed by the
 multiple imputation method of Sen and Churchill (2001).  This method
-requires the results from \code{\link[qtl]{sim.geno}}.
+requires the results from \code{\link{sim.geno}}.
 
 \code{out.imp <- scanone(hyper, method="imp")}
 
-The output of \code{\link[qtl]{scanone}} is a data.frame with class
-\code{"scanone"}.  The function \code{\link[qtl]{plot.scanone}} may be
+The output of \code{\link{scanone}} is a data.frame with class
+\code{"scanone"}.  The function \code{\link{plot.scanone}} may be
 used to plot the results, and may plot up to three sets of results
 against each other, as long as they conform appropriately.
 
@@ -172,7 +172,7 @@ against each other, as long as they conform appropriately.
 \code{plot(out.hk, out.imp, out.em, chr=c(1,4), lty=1,} \cr
 \code{     col=c("blue","red","black"))} 
 
-The function \code{\link[qtl]{summary.scanone}} may be used to list
+The function \code{\link{summary.scanone}} may be used to list
 information on the peak LOD for each chromosome for which the LOD
 exceeds a specified threshold.
 
@@ -181,26 +181,26 @@ exceeds a specified threshold.
 \code{summary(out.hk, threshold=3)} \cr
 \code{summary(out.imp, threshold=3)}
 
-The function \code{\link[qtl]{max.scanone}} returns the maximum LOD
+The function \code{\link{max.scanone}} returns the maximum LOD
 score, genome-wide.
 
 \code{max(out.em)} \cr
 \code{max(out.hk)} \cr
 \code{max(out.imp)}
 
-One may also use \code{\link[qtl]{scanone}} to perform a permutation
+One may also use \code{\link{scanone}} to perform a permutation
 test to get a genome-wide LOD significance threshold.  
 
 \code{operm.hk <- scanone(hyper, method="hk", n.perm=1000)}
 
 The result has class \code{"scanoneperm"}.  The
-\code{\link[qtl]{summary.scanoneperm}} function may be used to calculate
+\code{\link{summary.scanoneperm}} function may be used to calculate
 LOD thresholds.
 
 \code{summary(operm.hk, alpha=0.05)}
 
 The permutation results may also be used in the
-\code{\link[qtl]{summary.scanone}} function to calculate LOD thresholds
+\code{\link{summary.scanone}} function to calculate LOD thresholds
 and genome-scan-adjusted p-values.
 
 \code{summary(out.hk, perms=operm.hk, alpha=0.05, pvalues=TRUE)}
@@ -211,12 +211,12 @@ wish you had used this if R crashes.
 
 \code{save.image()}
 
-The function \code{\link[qtl]{scantwo}} performs a two-dimensional
+The function \code{\link{scantwo}} performs a two-dimensional
 genome scan with a two-QTL model.  Methods \code{"em"}, \code{"hk"} and
-\code{"imp"} are all available.  \code{\link[qtl]{scantwo}} is
-considerably slower than \code{\link[qtl]{scanone}}, and can require a
+\code{"imp"} are all available.  \code{\link{scantwo}} is
+considerably slower than \code{\link{scanone}}, and can require a
 great deal of memory.  Thus, you may wish to re-run
-\code{\link[qtl]{calc.genoprob}} and/or \code{\link[qtl]{sim.geno}} with
+\code{\link{calc.genoprob}} and/or \code{\link{sim.geno}} with
 a more coarse grid.
 
 \code{hyper <- calc.genoprob(hyper, step=10, err=0.01)} \cr
@@ -227,7 +227,7 @@ a more coarse grid.
 \code{out2.imp <- scantwo(hyper, method="imp")}
 
 The output is an object with class \code{scantwo}.  The function
-\code{\link[qtl]{plot.scantwo}} may be used to plot the results.  The
+\code{\link{plot.scantwo}} may be used to plot the results.  The
 upper triangle contains LOD scores for tests of epistasis, while the
 lower triangle contains LOD scores for the full model.
 
@@ -235,7 +235,7 @@ lower triangle contains LOD scores for the full model.
 \code{plot(out2.em)} \cr
 \code{plot(out2.imp)}
 
-The function \code{\link[qtl]{summary.scantwo}} lists the interesting
+The function \code{\link{summary.scantwo}} lists the interesting
 aspects of the output.  For each pair of chromosomes \eqn{(k,l)}, it
 calculates the maximum LOD score for the full model, \eqn{M_f(k,l)}; a
 LOD score indicating evidence for a second QTL, allowing for epistasis),
@@ -257,12 +257,12 @@ LOD scores, and in that order.  A chromosome pair is printed if either
 
 In the latter case, the interaction LOD score will be ignored.
 
-The function \code{\link[qtl]{max.scantwo}} returns the maximum joint
+The function \code{\link{max.scantwo}} returns the maximum joint
 and additive LODs for a two-dimensional genome scan.
 
 \code{max(out2.em)}
 
-Permutation tests may also performed with \code{\link[qtl]{scantwo}};
+Permutation tests may also performed with \code{\link{scantwo}};
 it may take a few days of CPU time.  The output is a list containing the 
 maxima of the above five LOD scores for each of the imputations.  
 

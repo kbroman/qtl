@@ -31,10 +31,10 @@
  * the QTL likelihood. Uses either all cofactors, or selected cofactors only
  */
 double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, 
-              cmatrix marker, cvector position, vector mapdistance, vector y,
+              MQMMarkerMatrix marker, cvector position, vector mapdistance, vector y,
               vector r, ivector ind, int Naug, double variance, char
               printoutput, vector *informationcontent, matrix *Frun, int run,
-              char REMLorML, char fitQTL, char dominance, int em, double
+              char REMLorML, bool fitQTL, bool dominance, int em, double
               windowsize, double stepsize, double stepmin, double stepmax, 
               MQMCrossType crosstype, int verbose) {
   //Rprintf("INFO: mapQTL function called.\n");
@@ -69,7 +69,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
     else if (position[j]==MMIDDLE)
       cumdistance[j]= cumdistance[j-1]-50*log(1-2.0*r[j]);
   }
-  double savelogL=999.0; // log-likelihood of model with all selected cofactors
+  double savelogL=0.0; // log-likelihood of model with all selected cofactors
 
   /* fit QTL on top of markers (full ML)   fit QTL between markers (full ML) */
   // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
@@ -83,7 +83,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   }
   Nloci= Nmark+1;
   // augment data for missing QTL observations (x 3)
-  fitQTL='y';
+  fitQTL=true;
   int newNaug;
   newNaug= 3*Naug;
   Free(weight);
@@ -99,9 +99,9 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   QTLmapdistance= newvector(Nloci);
   cvector QTLposition;
   QTLposition= newcvector(Nloci);
-  cmatrix QTLloci;
+  MQMMarkerMatrix QTLloci;
 
-  QTLloci = (char **)Calloc(Nloci, char *);
+  QTLloci = (MQMMarkerMatrix)Calloc(Nloci, MQMMarkerVector);
 
   //  Rprintf("DEBUG testing_2");
   double moveQTL= stepmin;
@@ -127,7 +127,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (moveQTL<=mapdistance[j]) {
           QTLposition[j]= position[j];
           QTLposition[j+1]= MMIDDLE;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(mapdistance[j]-moveQTL)));
+          QTLr[j]= recombination_frequentie((mapdistance[j]-moveQTL));
           QTLr[j+1]= r[j];
           QTLloci[j+1]= marker[j];
           QTLloci[j]= marker[Nloci-1];
@@ -138,8 +138,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         } else if (moveQTL<=mapdistance[j+1]) {
           QTLposition[j]= position[j];
           QTLposition[j+1]= MMIDDLE;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j])));
-          QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
+          QTLr[j]= recombination_frequentie((moveQTL-mapdistance[j]));
+          QTLr[j+1]= recombination_frequentie((mapdistance[j+1]-moveQTL)); //r[j];
           QTLloci[j]= marker[j];
           QTLloci[j+1]= marker[Nloci-1];
           QTLmapdistance[j]= mapdistance[j];
@@ -150,8 +150,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (moveQTL<=mapdistance[j+1]) {
           QTLposition[j]= position[j];
           QTLposition[j+1]= MMIDDLE;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
-          QTLr[j+1]= 0.5*(1.0-exp(-0.02*(mapdistance[j+1]-moveQTL))); //r[j];
+          QTLr[j]= recombination_frequentie((moveQTL-mapdistance[j])); //0.0;
+          QTLr[j+1]= recombination_frequentie((mapdistance[j+1]-moveQTL)); //r[j];
           QTLloci[j]= marker[j];
           QTLloci[j+1]= marker[Nloci-1];
           QTLmapdistance[j]= mapdistance[j];
@@ -162,7 +162,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (moveQTL<=stepmax) {
           QTLposition[j]= MMIDDLE;
           QTLposition[j+1]= MRIGHT;
-          QTLr[j]= 0.5*(1.0-exp(-0.02*(moveQTL-mapdistance[j]))); //0.0;
+          QTLr[j]= recombination_frequentie((moveQTL-mapdistance[j])); //0.0;
           QTLr[j+1]= r[j]; // note r[j]=999.0
           QTLloci[j]= marker[j];
           QTLloci[j+1]= marker[Nloci-1];
@@ -206,35 +206,35 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         // step 2:
         //  Rprintf("DEBUG testing STEP 2");
         if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) {
-          QTLcofactor[j]= MAA;
+          QTLcofactor[j]= MNOCOF;
           QTLcofactor[j+1]=
-            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? MAA : selcofactor[j]);
+            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? MNOCOF : selcofactor[j]);
         } else {
-          QTLcofactor[j+1]= MAA;
+          QTLcofactor[j+1]= MNOCOF;
           QTLcofactor[j]=
-            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? MAA : selcofactor[j]);
+            (((QTLmapdistance[j+1]-QTLmapdistance[j])<windowsize) ? MNOCOF : selcofactor[j]);
         }
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
           jjj=j+2;
           while (QTLposition[jjj]==MMIDDLE) {
             if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j]))
               QTLcofactor[jjj]=
-                (((QTLmapdistance[jjj]-QTLmapdistance[j])<windowsize) ? MAA : QTLcofactor[jjj]);
+                (((QTLmapdistance[jjj]-QTLmapdistance[j])<windowsize) ? MNOCOF : QTLcofactor[jjj]);
             else
               QTLcofactor[jjj]=
-                (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? MAA : QTLcofactor[jjj]);
+                (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? MNOCOF : QTLcofactor[jjj]);
             jjj++;
           }
           QTLcofactor[jjj]=
-            (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? MAA : QTLcofactor[jjj]);
+            (((QTLmapdistance[jjj]-QTLmapdistance[j+1])<windowsize) ? MNOCOF : QTLcofactor[jjj]);
         }
         if ((position[j]==MMIDDLE)||(position[j]==MRIGHT)) {
           jjj=j-1;
           while (QTLposition[jjj]==MMIDDLE) {
-            QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? MAA : QTLcofactor[jjj]);
+            QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? MNOCOF : QTLcofactor[jjj]);
             jjj--;
           }
-          QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? MAA : QTLcofactor[jjj]);
+          QTLcofactor[jjj]= (((QTLmapdistance[j+1]-QTLmapdistance[jjj])<windowsize) ? MNOCOF : QTLcofactor[jjj]);
         }
 
         // fit no-QTL model at current map position (cofactors only)
@@ -248,23 +248,23 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         }
         //  Rprintf("fitting NO-QTL model\n");
         if (baseNoQTLModel!=0) { // new base no-QTL model
-          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MBB;
-          else QTLcofactor[j+1]= MBB;
+          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MSEX;
+          else QTLcofactor[j+1]= MSEX;
           // Rprintf("INFO: Before base model\n", QTLlikelihood/-2);
           QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, verbose);
           // Rprintf("INFO: log-likelihood of NO QTL model= %f\n", QTLlikelihood/-2);
           weight0[0]= -1.0;
           savebaseNoQTLModel= QTLlikelihood;
-          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MAA;
-          else QTLcofactor[j+1]= MAA;
+          if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MNOCOF;
+          else QTLcofactor[j+1]= MNOCOF;
           for (jj=0; jj<Nloci; jj++) saveQTLcofactor[jj]= QTLcofactor[jj];
         } else
           QTLlikelihood= savebaseNoQTLModel;
 
         // fit QTL-model (plus cofactors) at current map position
         // MNOTAA= QTL
-        if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MNOTAA;
-        else QTLcofactor[j+1]= MNOTAA;
+        if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MQTL;
+        else QTLcofactor[j+1]= MQTL;
         if (REMLorML==MH) weight[0]= -1.0;
         QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
         //this is the place we error at, because the likelyhood is not correct.
@@ -299,66 +299,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
       }
     }
   }
+  fitQTL=false;
 
-  fitQTL='n';
-  /*
-  TODO To insert a method to find the direction of the QTL we need to know
-  which GROUP has the highest trait values
-  */
-  //for (int j=0; j<Nmark; j++){
-  //	int cnt0=0;
-  //	int cnt1=0;
-  //	int cnt2=0;
-  //	dir0= 0.0; // qq
-  //	dir1= 0.0; // Qq
-  //	dir2= 0.0; // QQ
-  //	for (int i=0; i<Naug; i++){
-  //		if(QTLloci[j][i]==MAA){
-  //			dir0 += y[i];
-  //			cnt0 += 1;
-  //		}
-  //		if(QTLloci[j][i]==MH){
-  //			dir1 += y[i];
-  //			cnt1 += 1;
-  //		}
-  //		if(QTLloci[j][i]==MBB){
-  //			dir2 += y[i];
-  //			cnt2 += 1;
-  //		}
-  //	}
-  //	if((cnt0+cnt1) == 0 or (cnt1+cnt2) == 0){
-  //	 direction[j] = '?';
-  //	}else{
-  //		if((dir0+dir1)/(cnt0+cnt1) < (dir1+dir2)/(cnt1+cnt2)){
-  //			direction[j] = '+';
-  //		}else{
-  //			direction[j] = '-';
-  //		}
-  //	}
-  //Rprintf("%d:DIR0:%f, DIR1:%f, DIR2:%f   -> %c\n", j, dir0, dir1, dir2, direction[j]);
-  //}
-  //moveQTL= stepmin;
-  //int curmarker=0;
-  //for(int i=0; i<step; i++){
-  //	Rprintf("step: %d CM: %f CMCurm:%f\n", i, moveQTL, mapdistance[curmarker]);
-  //	if(direction[curmarker] == '-'){
-  //		Rprintf("Adjusting Frun %f\n", (*Frun)[i][0]);
-  //		(*Frun)[i][0] = (*Frun)[i][0] * -1.0;
-  //		Rprintf("Adjusting Frun %f\n", (*Frun)[i][0]);
-  //	}
-  //	if(moveQTL+stepsize > stepmax){
-  //		moveQTL= stepmin;
-  //		curmarker = curmarker+1;
-  //	}else{
-  //		moveQTL+= stepsize;
-  //	}
-  //    if(mapdistance[curmarker] < moveQTL){
-  //		if(mapdistance[curmarker] < mapdistance[curmarker+1]){
-  //		   curmarker = curmarker+1;
-  //		}
-  //	}
-  //	Rprintf("step: %d marker: %d\n", i, curmarker);
-  //}
   freevector(direction);
   Free(info0);
   Free(info1);

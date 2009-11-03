@@ -14,7 +14,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"qtl"}, as produced by
-    \code{\link[qtl]{makeqtl}}.} 
+    \code{\link{makeqtl}}.} 
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -28,13 +28,13 @@
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
-  \item{\dots}{Passed to \code{\link[qtl]{plot.map}}.}
+  \item{\dots}{Passed to \code{\link{plot.map}}.}
 }
 
 \value{None.}
 
 \details{
-  Creates a plot, via \code{\link[qtl]{plot.map}}, and indicates the
+  Creates a plot, via \code{\link{plot.map}}, and indicates the
   locations of the QTL in the input QTL object, \code{x}.
 }
 
@@ -51,7 +51,7 @@ qtl <- makeqtl(fake.f2, qc, qp, what="prob")
 plot(qtl)
 }
 
-\seealso{ \code{\link[qtl]{plot.map}}, \code{\link[qtl]{makeqtl}} }
+\seealso{ \code{\link{plot.map}}, \code{\link{makeqtl}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

@@ -5,7 +5,7 @@
 
 \description{
   Calculates a bootstrap confidence interval for QTL location, using the
-  bootstrap results from \code{\link[qtl]{scanoneboot}}.
+  bootstrap results from \code{\link{scanoneboot}}.
 }
 
 \usage{
@@ -13,7 +13,7 @@
 }
 
 \arguments{
- \item{object}{Output from \code{\link[qtl]{scanoneboot}}.}
+ \item{object}{Output from \code{\link{scanoneboot}}.}
  \item{prob}{Desired coverage.}
  \item{expandtomarkers}{If TRUE, the interval is expanded to the nearest
    flanking markers.}
@@ -36,7 +36,7 @@ bootoutput <- scanoneboot(fake.f2, chr=13, method="hk")
 summary(bootoutput)}
 }
 
-\seealso{ \code{\link[qtl]{scanoneboot}}, \code{\link[qtl]{plot.scanoneboot}},
-  \code{\link[qtl]{lodint}}, \code{\link[qtl]{bayesint}} }
+\seealso{ \code{\link{scanoneboot}}, \code{\link{plot.scanoneboot}},
+  \code{\link{lodint}}, \code{\link{bayesint}} }
 
 \keyword{utilities}

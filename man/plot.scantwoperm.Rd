@@ -14,7 +14,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"scantwoperm"}, as output by
-    \code{\link[qtl]{scantwo}} when \code{n.perm} is specified.}
+    \code{\link{scantwo}} when \code{n.perm} is specified.}
   \item{lodcolumn}{This indicates the LOD score column to plot.  This
     should be a single number between 1 and the number of LOD columns in 
     the object input.} 
@@ -25,7 +25,7 @@
 
 \details{
   The function plots a histogram of the permutation results obtained by
-  \code{\link[qtl]{scantwo}} when \code{n.perm} is specified. Separate
+  \code{\link{scantwo}} when \code{n.perm} is specified. Separate
   histograms are provided for the five LOD scores, \code{full},
   \code{fv1}, \code{int}, \code{add}, and \code{av1}.
 }
@@ -38,8 +38,8 @@ operm2 <- scantwo(fake.bc, method="hk", n.perm=10)
 plot(operm2)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{summary.scantwoperm}} } 
+\seealso{ \code{\link{scantwo}},
+  \code{\link{summary.scantwoperm}} } 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

@@ -4,7 +4,7 @@
 \title{Summarize the results of a genome scans}
 
 \description{
-  Print the rows of the output from \code{\link[qtl]{scanone}} that
+  Print the rows of the output from \code{\link{scanone}} that
   correspond to the maximum LOD for each chromosome, provided that they
   exceed some specified thresholds.
 }
@@ -17,7 +17,7 @@
 
 \arguments{
  \item{object}{An object output by the function
-   \code{\link[qtl]{scanone}}.}
+   \code{\link{scanone}}.}
  \item{threshold}{LOD score thresholds. Only peaks with LOD score above
    this value will be returned. This could be a single number or (for
    formats other than \code{"onepheno"}) a threshold for each LOD score
@@ -29,9 +29,9 @@
    with the \code{object} input, in that it must have the same number of
    LOD score columns, though it can have just one column of permutation
    results, in which case they are reused for all LOD score columns in
-   the \code{\link[qtl]{scanone}} output, \code{object}.
+   the \code{\link{scanone}} output, \code{object}.
    (These can also be permutation results from
-   \code{\link[qtl]{scantwo}}, which permutations for a one-dimensional scan.)}
+   \code{\link{scantwo}}, which permutations for a one-dimensional scan.)}
  \item{alpha}{If perms are included, this is the significance level used
    to calculate thresholds for determining which peaks to pull out.
    If \code{threshold} is specified, \code{alpha} should not be.}
@@ -48,7 +48,7 @@
 
 \details{
   This function is used to report loci deemed interesting from a one-QTL
-  genome scan (by \code{\link[qtl]{scanone}}).
+  genome scan (by \code{\link{scanone}}).
 
   For \code{format="onepheno"}, we focus on a single LOD score column,
   indicated by \code{lodcolumn}.  The single largest LOD score peak on
@@ -91,7 +91,7 @@
   these p-values.
 
   In the case that X-chromosome specific permutations were performed
-  (with \code{perm.Xsp=TRUE} in \code{\link[qtl]{scanone}}), autosome-
+  (with \code{perm.Xsp=TRUE} in \code{\link{scanone}}), autosome-
   and X-chromosome specific thresholds and p-values are calculated by
   the method in Broman et al. (in press).
 }
@@ -160,10 +160,10 @@ summary(out2, format="allpheno", perms=operm2, alpha=0.05, pvalues=TRUE)
 summary(out2, format="allpeaks", perms=operm2, alpha=0.05, pvalues=TRUE)
 }
 
-\seealso{ \code{\link[qtl]{scanone}}, \code{\link[qtl]{plot.scanone}},
-  \code{\link[qtl]{max.scanone}}, \code{\link[qtl]{subset.scanone}},
-  \code{\link[qtl]{c.scanone}}, \code{\link[qtl]{summary.scanoneperm}}
-  \code{\link[qtl]{c.scanoneperm}} }
+\seealso{ \code{\link{scanone}}, \code{\link{plot.scanone}},
+  \code{\link{max.scanone}}, \code{\link{subset.scanone}},
+  \code{\link{c.scanone}}, \code{\link{summary.scanoneperm}}
+  \code{\link{c.scanoneperm}} }
 
 \references{
   Broman, K. W., Sen, \'S, Owens, S. E., Manichaikul, A.,

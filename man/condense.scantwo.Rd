@@ -4,7 +4,7 @@
 \title{Condense the output from a 2-d genome scan}
 
 \description{
-  Produces a very condensed version of the output of \code{\link[qtl]{scantwo}}.
+  Produces a very condensed version of the output of \code{\link{scantwo}}.
 }
 
 \usage{
@@ -13,7 +13,7 @@
 
 \arguments{
  \item{object}{An object of class \code{scantwo}, the output of the
-   function \code{\link[qtl]{scantwo}}.}
+   function \code{\link{scantwo}}.}
 }
 
 \value{
@@ -24,8 +24,8 @@
 
 \details{
   This produces a very reduced version of the output of
-  \code{\link[qtl]{scantwo}}, for which a summary may still be created
-  via \code{\link[qtl]{summary.scantwo}}, though plots can no longer be
+  \code{\link{scantwo}}, for which a summary may still be created
+  via \code{\link{summary.scantwo}}, though plots can no longer be
   made. 
 }
 
@@ -43,7 +43,7 @@ summary(out2c, allpairs=FALSE)
 max(out2c)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}}, \code{\link[qtl]{summary.scantwo}},
-  \code{\link[qtl]{max.scantwo}} }
+\seealso{ \code{\link{scantwo}}, \code{\link{summary.scantwo}},
+  \code{\link{max.scantwo}} }
 
 \keyword{print}

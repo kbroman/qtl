@@ -56,19 +56,106 @@ mqmmain.cpp
 SET(RTEST scripts/r.sh)
 SET(RTESTOUTPUT rtest/regression)
 
-ADD_CUSTOM_TARGET(testall 
+# Test R version (updating only the C libraries)
+ADD_CUSTOM_TARGET(testR_Clibs
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND R CMD INSTALL --libs-only qtl_1.13-1.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD INSTALL --libs-only qtl_1.15-1.tar.gz 
+  COMMAND ctest -R TestR)
+
+# Test R version only
+ADD_CUSTOM_TARGET(testR
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
+  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_1.15-1.tar.gz 
+  COMMAND ctest -R TestR)
+
+# All tests, including R
+ADD_CUSTOM_TARGET(testall
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
+  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_1.15-1.tar.gz 
   COMMAND ctest)
 
-ADD_TEST(TestStandaloneMQM ./scripts/regression_tests.sh)
-ADD_TEST(DannyTestMQM ./regressiontests.bat)
-ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
-ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
-ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
-ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
-ADD_TEST(TestR_mqm_listeria1 ${RTEST} rtest test_mqm_listeria1.R)
-ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
+IF(WIN32)
+  SET(MQMEXE "mqm.exe")
+ELSE()
+  SET(MQMEXE "./mqm")
+ENDIF()
 
+# Older test for comparison with (older test) MQM_test0.txt
+# to only run this test use 'ctest -R test0'
+ADD_TEST(TestMQMF2_test0 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=-20 --smax=220 --sstep=5 --alpha=0.05 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out-test0.txt.rnew)
+ADD_TEST(TestMQMF2_test0_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out-test0.txt.rnew test/regression/t11out-test0.txt)
+
+# Run T11
+ADD_TEST(TestMQMF2_T11 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t11out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T11_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out.txt.rnew test/regression/t11out.txt)
+
+# Run T12 Dataset 1 F2
+ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t12out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T12_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t12out.txt.rnew test/regression/t12out.txt)
+
+# Run T13 
+ADD_TEST(TestMQMF2_T13 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t13out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T13_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t13out.txt.rnew test/regression/t13out.txt)
+
+# Run T21 Dataset 2 BC=~ Hyper (genotypes NA -> 0)
+ADD_TEST(TestMQMBC_T21 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t21out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T21_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t21out.txt.rnew test/regression/t21out.txt)
+
+# Run T22
+ADD_TEST(TestMQMBC_T22 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt -cTest/t22/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t22out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T22_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t22out.txt.rnew test/regression/t22out.txt)
+
+# Run T23
+#crash on est.map
+ADD_TEST(TestMQMBC_T23 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2.txt -mtest/std/markers2.txt -stest/std/settings2.txt -cTest/t23/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t23out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMNC_T23_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t23out.txt.rnew test/regression/t23out.txt)
+
+# Run T24
+#crash due to augmentation
+ADD_TEST(TestMQMBC_T24 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=1 -o test/regression/t24out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T24_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t24out.txt.rnew test/regression/t24out.txt)
+
+# Run T25
+ADD_TEST(TestMQMBC_T25 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t25out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMBC_T25_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t25out.txt.rnew test/regression/t25out.txt)
+
+# Run T31 Dataset 3 F2=~ Listeria
+ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t31out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31out.txt.rnew test/regression/t31out.txt)
+
+# Run T32
+ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t32out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T32_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t32out.txt.rnew test/regression/t32out.txt)
+
+# Run T33
+ADD_TEST(TestMQMF2_T33 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt -cTest/t33/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t33out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T33_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t33out.txt.rnew test/regression/t33out.txt)
+
+# Run T32
+ADD_TEST(TestMQMF2_T34 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=120 --miaugment=1 --neglect=1 -o test/regression/t34out.txt.rnew)
+# Immediately compare outputs against older results
+ADD_TEST(TestMQMF2_T34_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t34out.txt.rnew test/regression/t34out.txt)
+
+# ADD_TEST(DannyTestMQM ./regressiontests.bat) - move into above...
+
+IF(TEST_R)
+  ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
+  ADD_TEST(TestR_qtl ${RTEST} ../../tests test_qtl.R)
+  ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
+  ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
+  ADD_TEST(TestR_mqm_listeria1 ${RTEST} rtest test_mqm_listeria1.R)
+  ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
+ENDIF()
 
 

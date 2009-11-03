@@ -5,7 +5,7 @@
 
 \description{
   Replace the positions of LOD scores in output from
-  \code{\link[qtl]{scanone}} with values
+  \code{\link{scanone}} with values
   based on an alternative map (such as a physical map), with
   pseudomarker locations determined by linear interpolation.
 }
@@ -16,7 +16,7 @@
 
 \arguments{
  \item{object}{An object of class \code{"scanone"}, as output by the
- function \code{\link[qtl]{scanone}}.}
+ function \code{\link{scanone}}.}
  \item{map}{A list containing the alternative genetic map.  All
  chromosomes in \code{object} should have corresponding chromosomes in
  \code{map}, and markers must be in the same order in the two maps.
@@ -48,7 +48,7 @@ out <- scanone(fake.f2, method="hk")
 out.rev <- replacemap(out, origmap)
 }
 
-\seealso{ \code{\link[qtl]{replacemap.cross}},
-  \code{\link[qtl]{est.map}}, \code{\link[qtl]{replacemap.scantwo}} }
+\seealso{ \code{\link[=replace.map]{replacemap.cross}},
+  \code{\link{est.map}}, \code{\link{replacemap.scantwo}} }
 
 \keyword{manip}

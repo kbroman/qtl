@@ -30,14 +30,19 @@
 #endif
 
 
-cvector locate_markers(const int nmark,const ivector chr);
-vector recombination_frequencies(const int nmark, const cvector position, const vector mapdistance);
+cvector relative_marker_position(const unsigned int nmark,const ivector chr);
+vector recombination_frequencies(const unsigned int nmark, const cvector position, const vector mapdistance);
+double recombination_frequentie(const double cmdistance);
 void validate_markertype(const MQMCrossType crosstype, const char markertype);
-double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const MQMCrossType crosstype);
+//double probright(const char c, const int j, const cvector imarker, const vector rs, const cvector position,const MQMCrossType crosstype);
 
-double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const MQMCrossType crosstype, const int ADJ);
+double left_prob(const double r, const MQMMarker markerL,const MQMMarker markerR,const MQMCrossType crosstype);
+double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position);
+double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position);
+double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position);
+//double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const MQMCrossType crosstype, const int ADJ);
 
-double start_prob(const MQMCrossType crosstype,const char markertype);
+double start_prob(const MQMCrossType crosstype,MQMMarker markertype);
 
 #ifdef __cplusplus
   }

@@ -51,72 +51,158 @@
  * of dropped individuals.
  *
  * FIXME: increasing the buffers for augmentation can automatic
+ FIXME Herhalingen naar een aparte functie (eventueel cross specific)
  */
+ 
+int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers){
+  int augtotal=0;
+  int missingmarkers=Nmark*Nind;               //How many markers are missing for this individual
+  for(int i=0; i<Nind; i++) {
+    int augind=0;                   //How many times did we augment this individual
+    for(int j=0; j<Nmark;j++){
+      switch (markers[j][i]) {
+        case MMISSING:
+          augind=augind+3;
+        break;
+        case MNOTAA:
+          augind=augind+2;
+        break;
+        case MNOTBB:
+          augind=augind+2;
+        break;
+        default:
+          missingmarkers--; //Marker known
+        break;
+      }
+    }
+    if(augind>0){
+      augtotal+=augind;
+    }else{
+      augtotal++;
+    }
+  }
+  //info("Total of %d missing markers. MaxAugmentation: %d",missingmarkers,augtotal)
+  return (augtotal);
+}
+/*
+MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
+  for(int j=0;j<Nmark;j++){
+    switch (markers[j]) {
+      case MMISSING:
+        augind=augind+3;
+      break;
+      case MNOTAA:
+        augind=augind+2;
+      break;
+      case MNOTBB:
+        augind=augind+2;
+      break;
+      default:
+        missingmarkers--; //Marker known
+      break;
+    } 
+  }
+  info("Number of augmentation for individual:%d",augind);
+  MQMMarkerMatrix returnmatrix = newMQMMarkerMatrix(Nmark,augind);
+  for(int j=0;j<Nmark;j++){
+    for(int i=0;i<augind;i++){
+      switch (markers[j]) {
+        case MMISSING:
+          returnmatrix[j][i];
+        break;
+        case MNOTAA:
+          augind=augind+2;
+        break;
+        case MNOTBB:
+          if(i%2==)
+        break;
+        default:
+          returnmatrix[j][i]=matrix[j]
+        break;
+      }    
+    }
+  }
+}
+*/
 
-int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector *augy, 
+int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
             const double neglect, const MQMCrossType crosstype, const int verbose) {
-  int retvalue = 0;
+  int retvalue = 1;     //[Danny] Assume everything will go right, (it never returned a 1 OK, initialization to 0 and return
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
-  cmatrix newmarker;
+  MQMMarkerMatrix newmarker;
   vector newy;
-  cvector imarker;
+  MQMMarkerVector imarker;
   ivector newind;
 
-  newmarker = newcmatrix(Nmark+1, maxNaug);  // augmented marker matrix
+  newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
-  imarker   = newcvector(Nmark);             
+  imarker   = newMQMMarkerVector(Nmark);             
 
   int iaug     = 0;     // iaug keeps track of current augmented individual
-  // int maxiaug  = 0;     // highest reached(?)
-  // probabilities:
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
   prob0right, prob1right, prob2right;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
-  if (verbose) {
-    Rprintf("INFO: Crosstype determined by the algorithm:%c:\n", crosstype);
-    Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f\n", maxNaug, imaxNaug, neglect);
-  }
+  if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
+  if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f", maxNaug, imaxNaug, neglect);
   // ---- foreach individual create one in the newmarker matrix
-  const int nind0 = *Nind;
-  int newNind = nind0;
-  int previaug = 0;                    // previous iaug
+  const int nind0 = *Nind;              //Original number of individuals
+  int newNind = nind0;                  //Number of unique individuals
+  int previaug = 0;                     // previous index in newmarkers
   for (int i=0; i<nind0; i++) {
-    // ---- for every individual:
-    const int dropped = nind0-newNind;
-    const int iidx = i - dropped;
-    newind[iaug]  = iidx;              // iidx corrects for dropped individuals
-    newy[iaug]    = y[i];              // cvariance (phenotype)
-    newprob[iaug] = 1.0;
-    double probmax = 1.0;
-    for (int j=0; j<Nmark; j++) 
-      newmarker[j][iaug]=marker[j][i]; // align new markers with markers (current iaug)
+    //Loop through individuals
+    const int dropped = nind0-newNind;  //How many are dropped
+    const int iidx = i - dropped;       //Individuals I's new individual number based on dropped individuals
+    newind[iaug]   = iidx;              // iidx corrects for dropped individuals
+    newy[iaug]     = y[i];              // cvariance (phenotype)
+    newprob[iaug]  = 1.0;               //prop
+    double probmax = 1.0;               //current maximum probability
+
+    for (int j=0; j<Nmark; j++){ 
+      newmarker[j][iaug]=marker[j][i];    // copy markers into newmarkers for the new indidivudal under investigation
+    }
     for (int j=0; j<Nmark; j++) {
-      // ---- for every marker:
+      //Loop through markers:
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
+          //info("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
+          //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker
           if (newmarker[j][ii]==MNOTAA) {
-            // augment data to contain AB and BB
+            //NOTAA augment data to contain AB and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj] = newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
+              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);      //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);     //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
             }
-
-            prob1right= probright(MH, j, imarker, r, position, crosstype);
-            prob2right= probright(MBB, j, imarker, r, position, crosstype);
+            switch (crosstype) {
+              case CF2:
+                prob1right= right_prob_F2(MH, j, imarker, r, position);          //prob1right= probright(MH, j, imarker, r, position, crosstype);
+                prob2right= right_prob_F2(MBB, j, imarker, r, position);         //prob2right= probright(MBB, j, imarker, r, position, crosstype);
+              break;
+              case CBC:
+                prob1right= right_prob_BC(MH, j, imarker, r, position);
+                prob2right= right_prob_BC(MBB, j, imarker, r, position);                
+              break;
+              case CRIL:
+                prob1right= right_prob_RIL(MH, j, imarker, r, position);
+                prob2right= right_prob_RIL(MBB, j, imarker, r, position);                
+              break;
+              case CUNKNOWN:
+                fatal("Strange: unknown crosstype in mqm augment()");
+              break;
+            }
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
 
@@ -154,19 +240,33 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             }
             probmax = (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MNOTBB) {
-            // augment data to contain AB and AA 
+            //NOTBB: augment data can contain MH and MAA 
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, MAA);
               prob1left= start_prob(crosstype, MH);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob0left= left_prob(r[j-1],newmarker[j-1][ii],MAA,crosstype);  //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
+              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);   //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
             }
-
-            prob0right= probright(MAA, j, imarker, r, position, crosstype);
-            prob1right= probright(MH, j, imarker, r, position, crosstype);
+            switch (crosstype) {
+              case CF2:
+                prob0right= right_prob_F2(MAA, j, imarker, r, position);      //prob0right= probright(MAA, j, imarker, r, position, crosstype);
+                prob1right= right_prob_F2(MH, j, imarker, r, position);       //prob1right= probright(MH, j, imarker, r, position, crosstype);
+              break;
+              case CBC:
+                prob0right= right_prob_BC(MAA, j, imarker, r, position);
+                prob1right= right_prob_BC(MH, j, imarker, r, position);               
+              break;
+              case CRIL:
+                prob0right= right_prob_RIL(MAA, j, imarker, r, position);
+                prob1right= right_prob_RIL(MH, j, imarker, r, position);              
+              break;
+              case CUNKNOWN:
+                fatal("Strange: unknown crosstype in mqm augment()");
+              break;
+            }
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
 
@@ -204,7 +304,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else if (newmarker[j][ii]==MMISSING) {
-            // augment data to contain AB, AA and BB
+            //UNKNOWN: augment data to contain AB, AA and BB
             for (jj=0; jj<Nmark; jj++) imarker[jj]= newmarker[jj][ii];
 
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
@@ -212,14 +312,30 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               prob1left= start_prob(crosstype, MH);
               prob2left= start_prob(crosstype, MBB);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
-              prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
-              prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
+              prob0left= left_prob(r[j-1],newmarker[j-1][ii],MAA,crosstype);  //prob0left= prob(newmarker, r, ii, j-1, MAA, crosstype, 0);
+              prob1left= left_prob(r[j-1],newmarker[j-1][ii],MH,crosstype);   //prob1left= prob(newmarker, r, ii, j-1, MH, crosstype, 0);
+              prob2left= left_prob(r[j-1],newmarker[j-1][ii],MBB,crosstype);  //prob2left= prob(newmarker, r, ii, j-1, MBB, crosstype, 0);
             }
-
-            prob0right= probright(MAA, j, imarker, r, position, crosstype);
-            prob1right= probright(MH, j, imarker, r, position, crosstype);
-            prob2right= probright(MBB, j, imarker, r, position, crosstype);
+            switch (crosstype) {
+              case CF2:
+                prob0right= right_prob_F2(MAA, j, imarker, r, position); //prob0right= probright(MAA, j, imarker, r, position, crosstype);
+                prob1right= right_prob_F2(MH, j, imarker, r, position);  //prob1right= probright(MH, j, imarker, r, position, crosstype);
+                prob2right= right_prob_F2(MBB, j, imarker, r, position); //prob2right= probright(MBB, j, imarker, r, position, crosstype);
+              break;
+              case CBC:
+                prob0right= right_prob_BC(MAA, j, imarker, r, position);
+                prob1right= right_prob_BC(MH, j, imarker, r, position);
+                prob2right= 0.0;              
+              break;
+              case CRIL:
+                prob0right= right_prob_RIL(MAA, j, imarker, r, position);
+                prob1right= 0.0;
+                prob2right= right_prob_RIL(MBB, j, imarker, r, position);              
+              break;
+              case CUNKNOWN:
+                fatal("Strange: unknown crosstype in mqm augment()");
+              break;
+            }            
             prob0= prob0left*prob0right;
             prob1= prob1left*prob1right;
             prob2= prob2left*prob2right;
@@ -309,16 +425,14 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
               newprob[ii]*= prob0left;
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
-          } else { // newmarker[j][ii] is observed
-
+          } else {
+            //STD case we know what the next marker is nou use probleft to estimate the likelyhood of the current location
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
-              prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
+              prob0left= left_prob(r[j-1],newmarker[j-1][ii],newmarker[j][ii],crosstype); //prob0left= prob(newmarker, r, ii, j-1, newmarker[j][ii], crosstype, 0);
             }
-
             newprob[ii]*= prob0left;
-
           }
 
           if (iaug+3>maxNaug) {
@@ -329,7 +443,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
       if ((iaug-previaug+1)>imaxNaug) {
         newNind-= 1;
         iaug= previaug-1;
-        if (verbose) Rprintf("INFO: Individual %d has been dropped\n", i);
+        if (verbose) info("INFO: Individual %d has been dropped", i);
       }
       sumprob= 0.0;
       for (int ii=previaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -340,7 +454,7 @@ int augmentdata(const cmatrix marker, const vector y, cmatrix* augmarker, vector
   }
   *Naug = iaug;
   *Nind = newNind;
-  *augmarker = newcmatrix(Nmark, *Naug);
+  *augmarker = newMQMMarkerMatrix(Nmark, *Naug);
   *augy = newvector(*Naug);
   *augind = newivector(*Naug);
   for (int i=0; i<(*Naug); i++) {
@@ -374,12 +488,11 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   int **Geno;
   double **Pheno;
   double **Dist;
-  int **NEW;
+  int **NEW;                      //Holds the output for the augmentdata function
   int **Chromo;
-  double **NEWPheno;
-  int **NEWIND;
-  const int nind0 = *Nind;
-  int prior = nind0;
+  double **NEWPheno;              //New phenotype vector
+  int **NEWIND;                   //New list of individuals 
+  const int nind0 = *Nind;        //Individuals we start with
   const int verbose = *verbosep;
   const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
@@ -387,11 +500,11 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   ivector new_ind;
   vector new_y, mapdistance;
   cvector position;
-  cmatrix markers, new_markers;
+  MQMMarkerMatrix markers, new_markers;
   ivector chr;
 
-  markers= newcmatrix(*Nmark, nind0);
-  new_markers= newcmatrix(*Nmark, *maxind);
+  markers= newMQMMarkerMatrix(*Nmark, nind0);
+  new_markers= newMQMMarkerMatrix(*Nmark, *maxind);
   mapdistance = newvector(*Nmark);
   chr= newivector(*Nmark);
 
@@ -410,15 +523,14 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   change_coding(Nmark, Nind, Geno, markers, crosstype);
 
   info("Filling the chromosome matrix");
-
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
-    mapdistance[i]=999.0;
+    mapdistance[i]=POSITIONUNKNOWN;
     mapdistance[i]=Dist[0][i];
     chr[i] = Chromo[0][i];
   }
-
-  position = locate_markers(*Nmark,chr);
+  //Calculate positions of markers and Recombinant frequencies
+  position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
 
   if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
@@ -436,7 +548,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
           NEW[i][j] = 2;
         }
         if (new_markers[i][j] == MBB) {  // [karl:] this might need to be changed for RIL
-          NEW[i][j] = 3;
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
         }
         if (new_markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
@@ -446,15 +558,15 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delcmatrix(new_markers,*Nmark);
-    delcmatrix(markers,*Nmark);
+    delMQMMarkerMatrix(new_markers,*Nmark);
+    delMQMMarkerMatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);
     Free(chr);
     if (verbose) {
-      Rprintf("# Unique individuals before augmentation:%d\n", prior);
-      Rprintf("# Unique selected individuals:%d\n", nind0);
+      Rprintf("# Unique individuals before augmentation:%d\n", nind0);
+      Rprintf("# Unique selected individuals:%d\n", *Nind);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
       info("Data augmentation succesfull");
@@ -473,7 +585,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
           NEW[i][j] = 2;
         }
         if (markers[i][j] == MBB) { // [karl:] this might need to be changed for RIL
-          NEW[i][j] = 3;
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
         }
         if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
@@ -483,8 +595,8 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delcmatrix(new_markers,*Nmark);
-    delcmatrix(markers,*Nmark);
+    delMQMMarkerMatrix(new_markers,*Nmark);
+    delMQMMarkerMatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);
