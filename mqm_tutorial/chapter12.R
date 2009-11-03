@@ -109,6 +109,29 @@ effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
 ### chunk number 15: 
 ###################################################
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.run=10,b.size=10)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.clusters=2,n.run=10,b.size=10)
+
+
+###################################################
+### chunk number 16: 
+###################################################
+data(multitrait)
+multifilled <- fill.geno(multitrait)
+resall <- mqmall(multifilled,n.clusters=2,verbose=T)
+mqmplotall(resall,"I")
+
+
+###################################################
+### chunk number 17: 
+###################################################
+cofactorlist <- mqmcofactorsEach(multifilled,3)
+resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2,verbose=T)
+mqmplotall(resall,"I")
+
+
+###################################################
+### chunk number 18: 
+###################################################
+mqmplotnice(resall,legendloc=1)
 
 

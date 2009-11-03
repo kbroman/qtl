@@ -10,7 +10,7 @@ First lest go into the augmentation of missing data, before we can use the mqm f
 or we should augment it. The missing data augmentation routine mqmaugment() can do this for us, but we could also use multiple imputations
 to estimate the missing markersgenotypes using fill.geno() from the r/qtl package. The mqmaugment() function can only handle 1 phenotype but this will be inproved upon soon. The parameters are:
 $cross, pheno.col, maxaugind, augment\_aboveprob$ and verbose set this to TRUE to see what happens. $Maxind$ sets a maximum to the size of the dataset the default is usually good enough (60 is around 20 missing F2 markers per individual or 30 BC markers). The augmentation routine does an all or nothing filling of the missing markers. The individual is expanded untill the $augment\_aboveprob$: Augment genotypes that are above a probability of occurring (ignore lower probabilities). Setting this value too high may result in dropping individuals entirely.
-Lets start by simulating a dataset with some missing markers (2%) and discuss howto use the augmentation routine:
+Lets start by simulating a dataset with some missing markers (2\%) and discuss howto use the augmentation routine:
 \\
 <<fig=TRUE>>=
 library(qtl)
@@ -110,7 +110,7 @@ result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
 \clearpage
 \begin{Large} MQM effects \end{Large}\\
 This model implicates chromosomes 1,2,4 and 5. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools
-to estimate Main effects and epistatic effects. The follwoing code will plot those 2 plots on markers D1M102 (main effect) and the interaction between this marker and D5Mit213 to show epistase or additive effect.
+to estimate $main$ and $epistatic$ effects. The following code will plot those 2 plots on markers D1M102 (main effect) and the interaction between this marker and D5Mit213 to show the $main$ effect and the estimated $epistasis$ effect.
 \\
 <<fig=TRUE, results=hide>>=
 plot.pxg(h_no_missing,marker="D1Mit102")
@@ -136,8 +136,24 @@ In small sets with a limited amount of traits we use bootstrap(). On large GWAS 
 \\
 <<fig=TRUE>>=
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.run=10,b.size=10)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.clusters=2,n.run=10,b.size=10)
 @
 \\
 This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+\begin{Large} Multiple traits using MQM \end{Large}\\
+We can also use MQM unsupervised to analyse multiple traits simultaniously. We show using no-cofactors first, and then using cofactors to do backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
+<<fig=TRUE>>=
+data(multitrait)
+multifilled <- fill.geno(multitrait)
+resall <- mqmall(multifilled,n.clusters=2,verbose=T)
+mqmplotall(resall,"I")
+@
+<<fig=TRUE>>=
+cofactorlist <- mqmcofactorsEach(multifilled,3)
+resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2,verbose=T)
+mqmplotall(resall,"I")
+@
+<<fig=TRUE>>=
+mqmplotnice(resall,legendloc=1)
+@
 \end{document}

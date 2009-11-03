@@ -10,7 +10,7 @@ First lest go into the augmentation of missing data, before we can use the mqm f
 or we should augment it. The missing data augmentation routine mqmaugment() can do this for us, but we could also use multiple imputations
 to estimate the missing markersgenotypes using fill.geno() from the r/qtl package. The mqmaugment() function can only handle 1 phenotype but this will be inproved upon soon. The parameters are:
 $cross, pheno.col, maxaugind, augment\_aboveprob$ and verbose set this to TRUE to see what happens. $Maxind$ sets a maximum to the size of the dataset the default is usually good enough (60 is around 20 missing F2 markers per individual or 30 BC markers). The augmentation routine does an all or nothing filling of the missing markers. The individual is expanded untill the $augment\_aboveprob$: Augment genotypes that are above a probability of occurring (ignore lower probabilities). Setting this value too high may result in dropping individuals entirely.
-Lets start by simulating a dataset with some missing markers (2%) and discuss howto use the augmentation routine:
+Lets start by simulating a dataset with some missing markers (2\%) and discuss howto use the augmentation routine:
 \\
 \begin{Schunk}
 \begin{Sinput}
@@ -344,9 +344,19 @@ In small sets with a limited amount of traits we use bootstrap(). On large GWAS 
 \begin{Sinput}
 > library(snow)
 > results <- bootstrap(h_no_missing, mqm, cofactors = cofactorlist, 
-+     plot = T, n.run = 10, b.size = 10)
++     plot = T, verbose = T, n.clusters = 2, n.run = 10, b.size = 10)
 \end{Sinput}
 \begin{Soutput}
+------------------------------------------------------------------
+Starting bootstrap analysis
+Number of bootstrapping runs: 10 
+Batchsize: 10  & n.clusters: 2 
+------------------------------------------------------------------
+INFO: Received a valid cross file type: bc .
+INFO: Shuffleling traits between individuals.
+------------------------------------------------------------------
+INFO: Starting analysis of trait ( 1 / 1 )
+------------------------------------------------------------------
 Back cross (BC)
 Convert codes R/qtl -> MQM
 Receiving the chromosome matrix from R
@@ -359,129 +369,136 @@ After dropping of uninformative cofactors
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
+------------------------------------------------------------------
+INFO: Done with the analysis of trait ( 1 / 1 )
+INFO: Calculation of trait 1 took: 7.55  seconds
+------------------------------------------------------------------
+INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
+------------------------------------------------------------------
+INFO: Starting with batch 1 / 1 
+------------------------------------------------------------------
+INFO: Done with batch 1 / 1 
+INFO: Calculation of batch 1 took: 38.32 seconds
+INFO: Elapsed time: 0 : 0 : 38 (Hour:Min:Sec)
+INFO: Average time per batch: 38.32  per trait: 3 seconds
+INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
+------------------------------------------------------------------
+INFO: Done with MQM bootstrap analysis
+------------------------------------------------------------------
+INFO: Elapsed time: 0 : 0 : 46 (Hour:Min:Sec)
+INFO: Average time per trait: 4.17 seconds
+------------------------------------------------------------------
 \end{Soutput}
 \end{Schunk}
 \includegraphics{chapter12-015}
 \\
 This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+\begin{Large} Multiple traits using MQM \end{Large}\\
+We can also use MQM unsupervised to analyse multiple traits simultaniously. We show using no-cofactors first, and then using cofactors to do backward elimination. we see improvement int the noise to signal ratio in the in the heatmap.
+\begin{Schunk}
+\begin{Sinput}
+> data(multitrait)
+> multifilled <- fill.geno(multitrait)
+> resall <- mqmall(multifilled, n.clusters = 2, verbose = T)
+\end{Sinput}
+\begin{Soutput}
+------------------------------------------------------------------
+Starting R/QTL multitrait analysis
+Number of phenotypes: 24 
+Batchsize: 10  & n.clusters: 2 
+------------------------------------------------------------------
+INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
+------------------------------------------------------------------
+INFO: Starting with batch 1 / 3 
+------------------------------------------------------------------
+INFO: Done with batch 1 / 3 
+INFO: Calculation of batch 1 took: 7.47 seconds
+INFO: Elapsed time: 0 : 0 : 7 (Hour:Min:Sec)
+INFO: Average time per batch: 7.47  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 15 (Hour:Min:Sec)
+------------------------------------------------------------------
+------------------------------------------------------------------
+INFO: Starting with batch 2 / 3 
+------------------------------------------------------------------
+INFO: Done with batch 2 / 3 
+INFO: Calculation of batch 2 took: 6.78 seconds
+INFO: Elapsed time: 0 : 0 : 14 (Hour:Min:Sec)
+INFO: Average time per batch: 7.125  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 7 (Hour:Min:Sec)
+------------------------------------------------------------------
+------------------------------------------------------------------
+INFO: Starting with batch 3 / 3 
+------------------------------------------------------------------
+INFO: Done with batch 3 / 3 
+INFO: Calculation of batch 3 took: 5.03 seconds
+INFO: Elapsed time: 0 : 0 : 19 (Hour:Min:Sec)
+INFO: Average time per batch: 6.427  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
+------------------------------------------------------------------
+------------------------------------------------------------------
+INFO: Elapsed time: 0 : 0 : 24 (Hour:Min:Sec)
+INFO: Average time per trait: 1.013 seconds
+------------------------------------------------------------------
+\end{Soutput}
+\begin{Sinput}
+> mqmplotall(resall, "I")
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-016}
+\begin{Schunk}
+\begin{Sinput}
+> cofactorlist <- mqmcofactorsEach(multifilled, 3)
+> resall <- mqmall(multifilled, cofactors = cofactorlist, n.clusters = 2, 
++     verbose = T)
+\end{Sinput}
+\begin{Soutput}
+------------------------------------------------------------------
+Starting R/QTL multitrait analysis
+Number of phenotypes: 24 
+Batchsize: 10  & n.clusters: 2 
+------------------------------------------------------------------
+INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
+------------------------------------------------------------------
+INFO: Starting with batch 1 / 3 
+------------------------------------------------------------------
+INFO: Done with batch 1 / 3 
+INFO: Calculation of batch 1 took: 14.25 seconds
+INFO: Elapsed time: 0 : 0 : 14 (Hour:Min:Sec)
+INFO: Average time per batch: 14.25  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 28 (Hour:Min:Sec)
+------------------------------------------------------------------
+------------------------------------------------------------------
+INFO: Starting with batch 2 / 3 
+------------------------------------------------------------------
+INFO: Done with batch 2 / 3 
+INFO: Calculation of batch 2 took: 14.39 seconds
+INFO: Elapsed time: 0 : 0 : 29 (Hour:Min:Sec)
+INFO: Average time per batch: 14.32  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 14 (Hour:Min:Sec)
+------------------------------------------------------------------
+------------------------------------------------------------------
+INFO: Starting with batch 3 / 3 
+------------------------------------------------------------------
+INFO: Done with batch 3 / 3 
+INFO: Calculation of batch 3 took: 7.92 seconds
+INFO: Elapsed time: 0 : 0 : 37 (Hour:Min:Sec)
+INFO: Average time per batch: 12.187  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
+------------------------------------------------------------------
+------------------------------------------------------------------
+INFO: Elapsed time: 0 : 0 : 44 (Hour:Min:Sec)
+INFO: Average time per trait: 1.853 seconds
+------------------------------------------------------------------
+\end{Soutput}
+\begin{Sinput}
+> mqmplotall(resall, "I")
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-017}
+\begin{Schunk}
+\begin{Sinput}
+> mqmplotnice(resall, legendloc = 1)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{chapter12-018}
 \end{document}
