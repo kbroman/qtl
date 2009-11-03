@@ -14,7 +14,7 @@
 
 \arguments{
  \item{x}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{The phenotype column to plot: a numeric index, or the
    phenotype name as a character string. Alternatively, one may give a numeric vector of
    phenotypes, in which case it must have the length equal to the number
@@ -39,8 +39,8 @@ plot(fake.bc, pheno.col=1)
 plot(fake.bc, pheno.col=3)
 }
 
-\seealso{ \code{\link[qtl]{plot.cross}}, \code{\link[qtl]{plot.map}}, 
-  \code{\link[qtl]{plot.missing}}, 
+\seealso{ \code{\link{plot.cross}}, \code{\link{plot.map}}, 
+  \code{\link{plot.missing}}, 
   \code{\link[graphics]{hist}}, \code{\link[graphics]{barplot}} }
 
 

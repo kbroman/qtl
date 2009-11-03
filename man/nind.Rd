@@ -13,7 +13,7 @@ nind(object)
 
 \arguments{
  \item{object}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
 }
 
 \value{
@@ -27,11 +27,11 @@ data(fake.f2)
 nind(fake.f2)
 }
 
-\seealso{ \code{\link[qtl]{read.cross}}, \code{\link[qtl]{plot.cross}},
-  \code{\link[qtl]{summary.cross}},
-  \code{\link[qtl]{nmar}},
-  \code{\link[qtl]{nchr}},
-  \code{\link[qtl]{totmar}},
-  \code{\link[qtl]{nphe}} }
+\seealso{ \code{\link{read.cross}}, \code{\link{plot.cross}},
+  \code{\link{summary.cross}},
+  \code{\link{nmar}},
+  \code{\link{nchr}},
+  \code{\link{totmar}},
+  \code{\link{nphe}} }
 
 \keyword{print}

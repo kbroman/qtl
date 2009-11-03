@@ -23,7 +23,7 @@ readMWril(dir="", rilfile, founderfile,
     Windows, use forward slashes (\code{"/"}) or double backslashes
     (\code{"\\\\"}) to specify directory trees.}
   \item{rilfile}{Comma-delimited file for the RIL, in the \code{"csv"}
-    format described in the help file for \code{\link[qtl]{read.cross}}.}
+    format described in the help file for \code{\link{read.cross}}.}
   \item{founderfile}{File with founder strains' genotypes, in the same
   orientation as the \code{rilfile}, but with just marker names and the
   founders' marker genotypes.}
@@ -49,7 +49,7 @@ readMWril(dir="", rilfile, founderfile,
 
 \value{
   An object of class \code{cross}; see the help file for
-  \code{\link[qtl]{read.cross}} for details.
+  \code{\link{read.cross}} for details.
 
   An additional component \code{crosses} is included; this is a matrix
   indicating the crosses used to generate the RIL.
@@ -75,6 +75,6 @@ ril <- read.cross("../Data", "ril_data.csv", "founder_geno.csv", "ri4self",
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
 
-\seealso{ \code{\link[qtl]{read.cross}}, \code{\link[qtl]{sim.cross}} }
+\seealso{ \code{\link{read.cross}}, \code{\link{sim.cross}} }
 
 \keyword{IO}

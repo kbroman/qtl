@@ -17,7 +17,7 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{marker}{Character string with name of the marker to move about.}
  \item{chr}{A vector specifying which chromosomes to test for the
    position of the marker.    This should be a vector of character
@@ -45,8 +45,8 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
 
 \value{
   A data frame (actually, an object of class \code{"scanone"}, so that
-  one may use \code{\link[qtl]{plot.scanone}},
-  \code{\link[qtl]{summary.scanone}}, etc.) with each row being a
+  one may use \code{\link{plot.scanone}},
+  \code{\link{summary.scanone}}, etc.) with each row being a
   possible position for the marker. 
   The first two columns are the chromosome ID and position.  The third
   column is a LOD score comparing the hypotheses that the marker in that
@@ -70,8 +70,8 @@ tryallpositions(fake.bc, "D7M301", 7, error.prob=0, verbose=FALSE)
 }
 
 
-\seealso{ \code{\link[qtl]{est.map}}, \code{\link[qtl]{ripple}},
-  \code{\link[qtl]{est.rf}}, \code{\link[qtl]{switch.order}},
-  \code{\link[qtl]{movemarker}} }
+\seealso{ \code{\link{est.map}}, \code{\link{ripple}},
+  \code{\link{est.rf}}, \code{\link{switch.order}},
+  \code{\link{movemarker}} }
 
 \keyword{utilities}

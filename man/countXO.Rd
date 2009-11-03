@@ -13,7 +13,7 @@ countXO(cross, chr, bychr=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to investigate.
    This should be a vector of character strings referring to chromosomes
    by name; numeric values are converted to strings.  Refer to
@@ -44,6 +44,6 @@ data(hyper)
 plot(countXO(hyper))
 }
 
-\seealso{ \code{\link[qtl]{ripple}} }
+\seealso{ \code{\link{ripple}}, \code{\link{locateXO}} }
 
 \keyword{utilities}

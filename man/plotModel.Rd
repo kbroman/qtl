@@ -15,7 +15,7 @@ plotModel(qtl, formula, circrad.rel=0.25, circrad.abs,
 }			    
 
 \arguments{
-  \item{qtl}{A QTL object (as created by \code{\link[qtl]{makeqtl}}) or
+  \item{qtl}{A QTL object (as created by \code{\link{makeqtl}}) or
     vector of character strings indicating the names for the QTL.  This
   is also allowed to be a list that contains a component named
   \code{"chr"} (and, optionally, components names \code{"pos"} and
@@ -73,7 +73,7 @@ plotModel(qtl, order=c(1,3,4,2))
 plotModel(qtl, chronly=TRUE)
 }
 
-\seealso{ \code{\link[qtl]{stepwiseqtl}}, \code{\link[qtl]{makeqtl}} }
+\seealso{ \code{\link{stepwiseqtl}}, \code{\link{makeqtl}} }
 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

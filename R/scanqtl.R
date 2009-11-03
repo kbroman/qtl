@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Jul, 2008
+# last modified Sep, 2008
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -277,6 +277,9 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
   # There might be several chromosomes with multiple QTLs
   # Use one loop
   
+  sexpgm <- getsex(cross)
+  cross.attr <- attributes(cross)
+
   # number of chromosomes with multiple positions to be scanned
   n.idx.varied <- length(idx.varied) 
   n.loop <- 1 # total number of loops
@@ -299,7 +302,8 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
       
     result <- fitqtlengine(pheno, qtl, covar=covar,
                            formula=formula, method=method, dropone=FALSE,
-                           get.ests=FALSE, run.checks=FALSE)
+                           get.ests=FALSE, run.checks=FALSE, cross.attr,
+                           sexpgm)
     result <- result[[1]][1,4]
     names(result) <- "LOD"
     class(result) <- "scanqtl"
@@ -393,7 +397,8 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     # fit QTL, don't do drop one at a time
     fit <- fitqtlengine(pheno, qtl=qtl.obj, covar=covar,
                         formula=formula, method=method, dropone=FALSE,
-                        get.ests=FALSE, run.checks=FALSE)
+                        get.ests=FALSE, run.checks=FALSE,
+                        cross.attr, sexpgm)
   
     if(verbose && ((i-1) %% n.prnt) == 0)
         cat("    ", i,"/", n.loop, "\n")

@@ -4,7 +4,7 @@
 \title{Clean up scantwo output}
 
 \description{
-  In an object output from \code{\link[qtl]{scantwo}}, replaces negative
+  In an object output from \code{\link{scantwo}}, replaces negative
   and missing LOD scores with 0, and replaces LOD scores for pairs of
   positions that are not separated by \code{n.mar} markers, or that are
   less than \code{distance} cM apart, with 0.  Further, if the LOD
@@ -18,7 +18,7 @@
 
 \arguments{
  \item{object}{An object of class \code{scantwo}.  See
-   \code{\link[qtl]{scantwo}} for details.}
+   \code{\link{scantwo}} for details.}
  \item{n.mar}{}
  \item{distance}{}
  \item{\dots}{Ignored at this point.}
@@ -42,8 +42,8 @@ out2 <- clean(out2)
 out2cl2 <- clean(out2, n.mar=2, distance=5)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{summary.scantwo}} }
+\seealso{ \code{\link{scantwo}},
+  \code{\link{summary.scantwo}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

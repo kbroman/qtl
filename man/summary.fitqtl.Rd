@@ -4,14 +4,14 @@
 \title{Summary of fit of qtl model}
 
 \description{
-  Print summary information about the results of \code{\link[qtl]{fitqtl}}.
+  Print summary information about the results of \code{\link{fitqtl}}.
 }
 
 \usage{
 \method{summary}{fitqtl}(object, pvalues=TRUE, \dots)
 }
 \arguments{
- \item{object}{Output from \code{\link[qtl]{fitqtl}}.}
+ \item{object}{Output from \code{\link{fitqtl}}.}
  \item{pvalues}{If FALSE, don't include p-values in the summary.}
  \item{\dots}{Ignored at this point.}
 }
@@ -51,7 +51,7 @@ lod <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1*Q2*Q3,
 summary(lod)
 }
 
-\seealso{ \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
-\code{\link[qtl]{scanqtl}} }  
+\seealso{ \code{\link{fitqtl}}, \code{\link{makeqtl}},
+\code{\link{scanqtl}} }  
 
 \keyword{print}

@@ -23,6 +23,5 @@
   qtlversion()
 }
 
-\seealso{ \code{\link[base]{version}} }
 
 \keyword{print}

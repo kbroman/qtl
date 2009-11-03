@@ -33,6 +33,6 @@ map10 <- subset(map10, chr=1:5)
 map10 <- map10[2:3]
 }
 
-\seealso{ \code{\link[qtl]{subset.cross}} }
+\seealso{ \code{\link{subset.cross}} }
 
 \keyword{manip}

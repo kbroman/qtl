@@ -14,7 +14,7 @@ geno.image(x, chr, reorder=FALSE, main="Genotype data",
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
-    \code{\link[qtl]{read.cross}} for details. }
+    \code{\link{read.cross}} for details. }
   \item{chr}{Optional vector indicating the chromosomes to be drawn in
   the plot. This should be a vector of character strings referring to
   chromosomes by name; numeric values are converted to strings.  Refer
@@ -48,8 +48,8 @@ data(listeria)
 geno.image(listeria)
 }
 
-\seealso{ \code{\link[qtl]{plot.cross}},
-  \code{\link[qtl]{plot.missing}}, \code{\link[qtl]{plot.geno}},
+\seealso{ \code{\link{plot.cross}},
+  \code{\link{plot.missing}}, \code{\link{plot.geno}},
   \code{\link[graphics]{image}} }
 
 

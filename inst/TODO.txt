@@ -10,7 +10,16 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Fix bug regarding X chromosome in fitqtl.
+o Add a map.function argument to read.cross.
+
+o In scanone and scantwo, if using multiple nodes, be sure to close
+  the connections on exit.
+
+o Add functions convert2riself and convert2risib.  
+  (treating all other possible cross types appropriately).
+
+o Revise the help file for read.cross to make the coding of genotypes
+  more clear.
 
 o Analysis of binary traits by "hk" in scanone/two.
 
@@ -20,9 +29,6 @@ o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
 o plot of genotype frequencies / P-values
-
-o function to identify the XO locations (based on countXO?)
-  [this is locate.xo, I think, but just for a single chromosome.]
 
 o qtl x covar interactions in stepwiseqtl
 

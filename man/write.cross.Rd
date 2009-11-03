@@ -15,7 +15,7 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-    \code{\link[qtl]{read.cross}} for details.}
+    \code{\link{read.cross}} for details.}
   \item{format}{Specifies whether to write the data in comma-delimited,
     rotated comma-delimited, Mapmaker, QTL Cartographer, or Gary
     Churchill's format.} 
@@ -44,7 +44,7 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   genotype data and one for the phenotype data) for the formats
   \code{"csvs"} and \code{"csvsr"}; if \code{filestem="file"}, the two
   files will be names \code{"file_gen.csv"} and \code{"file_phe.csv"}.
-  See the help file for \code{\link[qtl]{read.cross}} for details on these formats.
+  See the help file for \code{\link{read.cross}} for details on these formats.
 
   Mapmaker format: Data is written to two files.
   Suppose \code{filestem="file"}.  Then \code{"file.raw"} will contain
@@ -95,6 +95,6 @@ write.cross(fake.bc, "gary", c(1,5,13))} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu; Brian S. Yandell}
 
-\seealso{ \code{\link[qtl]{read.cross}} }
+\seealso{ \code{\link{read.cross}} }
 
 \keyword{IO}

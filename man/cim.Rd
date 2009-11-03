@@ -20,7 +20,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of
@@ -46,7 +46,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
 
 
 \details{
-  We first use \code{\link[qtl]{fill.geno}} to impute any missing marker
+  We first use \code{\link{fill.geno}} to impute any missing marker
   genotype data, either via a simple random imputation or using the
   Viterbi algorithm.
 
@@ -57,7 +57,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
 
 \value{
   The function returns an object of the same form as the function
-  \code{\link[qtl]{scanone}}:
+  \code{\link{scanone}}:
 
   If \code{n.perm} is missing, the function returns the scan results as
   a data.frame with three columns: chromosome, position, LOD score.
@@ -99,8 +99,8 @@ plot(out, out.cim, chr=c(1,4,6,15), col=c("blue", "red"))
 add.cim.covar(out.cim, chr=c(1,4,6,15))
 }
 
-\seealso{ \code{\link[qtl]{add.cim.covar}}, \code{\link[qtl]{scanone}}, 
-  \code{\link[qtl]{summary.scanone}}, \code{\link[qtl]{plot.scanone}},
-  \code{\link[qtl]{fill.geno}}} 
+\seealso{ \code{\link{add.cim.covar}}, \code{\link{scanone}}, 
+  \code{\link{summary.scanone}}, \code{\link{plot.scanone}},
+  \code{\link{fill.geno}}} 
 
 \keyword{models}

@@ -2,9 +2,9 @@
 #
 # qtlcart_io.R
 #
-# copyright (c) 2002-7, Brian S. Yandell
+# copyright (c) 2002-9, Brian S. Yandell
 #          [with some modifications by Karl W. Broman and Hao Wu]
-# last modified Nov, 2007
+# last modified Sep, 2009
 # first written Jun, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -98,7 +98,7 @@ function (file)
   # marker positions
   tmp <- range(seq(f)[substring(f, 1, 3) == "-l "])
   s <- strsplit(f[tmp[1]], "")[[1]]
-  b <- grep("|", s, extended = FALSE)
+  b <- grep("\\|", s)
   s <- grep("0", s)
   s <- ceiling((s[length(s)] - b - 1)/nchrom)
 

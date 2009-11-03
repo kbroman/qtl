@@ -5,13 +5,13 @@
 
 \description{ 
   Simulated data for a phase-known 4-way cross, obtained using
-  \code{\link[qtl]{sim.cross}}.
+  \code{\link{sim.cross}}.
 } 
 
 \usage{data(fake.4way)}
 
 \format{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}}
+  An object of class \code{cross}.  See \code{\link{read.cross}}
   for details.  
 }
 
@@ -54,9 +54,9 @@ out.em <- scanone(fake.4way, method="em")
 plot(out.em,out.hk,chr=c(2,7))
 }
 
-\seealso{ \code{\link[qtl]{sim.cross}}, \code{\link[qtl]{fake.bc}},
-  \code{\link[qtl]{fake.f2}}, \code{\link[qtl]{listeria}},
-  \code{\link[qtl]{hyper}},
-  \code{\link[qtl]{bristle3}}, \code{\link[qtl]{bristleX}} }
+\seealso{ \code{\link{sim.cross}}, \code{\link{fake.bc}},
+  \code{\link{fake.f2}}, \code{\link{listeria}},
+  \code{\link{hyper}},
+  \code{\link{bristle3}}, \code{\link{bristleX}} }
 
 \keyword{datasets}

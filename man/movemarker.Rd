@@ -10,7 +10,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{marker}{The name of the marker to be moved (a character string).}
  \item{newchr}{The chromosome to which the marker should be moved.}
  \item{newpos}{The position (in cM) at which the marker should be
@@ -23,7 +23,7 @@
   the specified chromosome.
 
   All intermediate calculations (such as the results of
-  \code{\link[qtl]{calc.genoprob}} and \code{\link[qtl]{est.rf}}) are
+  \code{\link{calc.genoprob}} and \code{\link{est.rf}}) are
   removed. 
 }
 
@@ -36,6 +36,6 @@ badorder <- movemarker(badorder, "D2M937", 3, 48.15)
 badorder <- movemarker(badorder, "D3M160", 2, 28.83)
 }
 
-\seealso{ \code{\link[qtl]{switch.order}} }
+\seealso{ \code{\link{switch.order}} }
 
 \keyword{manip}

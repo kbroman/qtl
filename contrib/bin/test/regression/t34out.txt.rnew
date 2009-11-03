@@ -1,0 +1,3 @@
+INFO: Calculating relative genomepositions of the markers
+INFO: Estimating recombinant frequencies
+INFO: EXIT ERROR: Augmentation parameter conflict max_augmentation <= individuals

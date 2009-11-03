@@ -13,7 +13,7 @@ findDupMarkers(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector specifying which chromosomes to consider.
    This may be a logical, numeric, or character string vector.}
  \item{exact.only}{If TRUE, look only for markers that have matching
@@ -60,7 +60,7 @@ hyper <- drop.markers(hyper, unlist(dupmar.adjonly))
 totmar(hyper) # 169 markers
 }
 
-\seealso{ \code{\link[qtl]{drop.nullmarkers}},
-  \code{\link[qtl]{drop.markers}} }
+\seealso{ \code{\link{drop.nullmarkers}},
+  \code{\link{drop.markers}} }
 
 \keyword{manip}

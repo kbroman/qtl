@@ -15,7 +15,7 @@
  \item{object}{An object of class \code{map}, which is a list of
    vectors (or, for a sex-specific map, 2-row matrices), each specifying
    the locations of the markers.  The object can also be of class
-   \code{cross}, in which case the function \code{\link[qtl]{pull.map}}
+   \code{cross}, in which case the function \code{\link{pull.map}}
    is used to extract the genetic map from the object.}
  \item{\dots}{Ignored at this point.}
 }
@@ -35,7 +35,7 @@ data(map10)
 summary(map10)
 }
 
-\seealso{ \code{\link[qtl]{chrlen}}, \code{\link[qtl]{pull.map}},
-  \code{\link[qtl]{summary.cross}} } 
+\seealso{ \code{\link{chrlen}}, \code{\link{pull.map}},
+  \code{\link{summary.cross}} } 
 
 \keyword{print}

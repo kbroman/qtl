@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-8, Karl W. Broman
-# last modified Dec, 2008
+# copyright (c) 2006-9, Karl W. Broman
+# last modified Sep, 2009
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -230,15 +230,18 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   lastout <- vector("list", length(curpos))
   names(lastout) <- qtl$name[tovary]
 
+  sexpgm <- getsex(cross)
+  cross.attr <- attributes(cross)
+
   for(i in 1:maxit) {
     if(keeplodprofile) # do drop-one analysis
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=TRUE, get.ests=FALSE,
-                              run.checks=FALSE)
+                              run.checks=FALSE, cross.attr, sexpgm)
     else 
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=FALSE, get.ests=FALSE,
-                              run.checks=FALSE)
+                              run.checks=FALSE, cross.attr, sexpgm)
 
     if(i==1) {
       origlod <- curlod <- thisitlod <- basefit$result.full[1,4]

@@ -11,7 +11,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -36,7 +36,7 @@ map <- pull.map(fake.f2)
 plot(map)
 }
 
-\seealso{ \code{\link[qtl]{replace.map}}, \code{\link[qtl]{plot.map}} }
+\seealso{ \code{\link{replace.map}}, \code{\link{plot.map}} }
 
 
 \keyword{utilities}

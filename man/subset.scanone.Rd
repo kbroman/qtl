@@ -5,7 +5,7 @@
 
 \description{
   Pull out a specified set of chromosomes and/or LOD columns from 
-  \code{\link[qtl]{scanone}} output.
+  \code{\link{scanone}} output.
 }
 
 \usage{
@@ -14,7 +14,7 @@
 
 \arguments{
  \item{x}{An object of class \code{scanone}, output from
-   \code{\link[qtl]{scanone}}.}
+   \code{\link{scanone}}.}
  \item{chr}{Optional vector specifying which chromosomes to keep.
  This should be a vector of character strings referring to
  chromosomes by name; numeric values are converted to strings.  Refer to
@@ -40,7 +40,7 @@ out <- scanone(fake.bc, method="hk", pheno.col=1:2)
 summary(subset(out, chr=18:19), format="allpeaks")
 }
 
-\seealso{ \code{\link[qtl]{summary.scanone}},
-  \code{\link[qtl]{scanone}} }
+\seealso{ \code{\link{summary.scanone}},
+  \code{\link{scanone}} }
 
 \keyword{manip}

@@ -11,7 +11,12 @@ run:
 
 To run regression testing from the default R interpreter:
 
+  rm CMakeCache.txt ; cmake -DTEST_R=TRUE 
+  make testR
+
+To test all
+
   make testall
 
-which builds and installs the 'qtl' package before running the
-test scripts.
+Both build and install the 'R/qtl' package in its default location before
+running the test scripts.

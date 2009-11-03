@@ -16,7 +16,7 @@ plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
 
 \arguments{
   \item{x}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -70,8 +70,8 @@ plot.rf(badorder, what="rf")
 plot.rf(badorder, chr=2:3, what="lod")
 }
 
-\seealso{ \code{\link[qtl]{est.rf}}, \code{\link[graphics]{image}},
-  \code{\link[qtl]{badorder}}, \code{\link[qtl]{ripple}} }
+\seealso{ \code{\link{est.rf}}, \code{\link[graphics]{image}},
+  \code{\link{badorder}}, \code{\link{ripple}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
