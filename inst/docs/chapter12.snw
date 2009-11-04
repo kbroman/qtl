@@ -76,6 +76,9 @@ toset <- c(toset,which.marker(h_no_missing,find.marker(h_no_missing,1,70)))
 cofactorlist <- mqmcofactors(h_no_missing,toset)
 #scan again
 result <- mqm(h_no_missing, cofactorlist)
+\\
+<<fig=TRUE>>=
+plot(result, result_compare, col=colors, lwd=lines)
 @
 That marker is also informative enough to be included into the model, we can continue this process of adding
 cofactors untill there are no more informative markers that can be included
@@ -84,10 +87,6 @@ we can also explore our data using strategy 2 and set cofactors every other mark
 all the markers and if found to be non explainatory drop them from the model. After
 selection it will scan the chromosome using the model created from the cofactors
 Using the plot=T we also get a graphical overview of the model
-\\
-<<fig=TRUE>>=
-plot(result, result_compare, col=colors, lwd=lines)
-@
 Automatic scanning using cofactors at each 5th marker is done by using the $mqmcofactorsEach()$ function\\
 <<fig=TRUE>>=
 cofactorlist <- mqmcofactorsEach(h_no_missing,5)
@@ -109,7 +108,7 @@ result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
 @
 \clearpage
 \begin{Large} MQM effects \end{Large}\\
-This model implicates chromosomes 1,2,4 and 5. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools
+This model implicates chromosomes 1, 2, 4 and 5. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools
 to estimate $main$ and $epistatic$ effects. The following code will plot those 2 plots on markers D1M102 (main effect) and the interaction between this marker and D5Mit213 to show the $main$ effect and the estimated $epistasis$ effect.
 \\
 <<fig=TRUE, results=hide>>=
