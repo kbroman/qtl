@@ -155,22 +155,22 @@ Estimating recombinant frequencies
 Analysis of data finished
 ------------------------------------------------------------------
 INFO: Done with the analysis of trait ( 1 / 1 )
-INFO: Calculation of trait 1 took: 7.56  seconds
+INFO: Calculation of trait 1 took: 7.71  seconds
 ------------------------------------------------------------------
 INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 ------------------------------------------------------------------
 INFO: Starting with batch 1 / 1 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 1 
-INFO: Calculation of batch 1 took: 36.36 seconds
-INFO: Elapsed time: 0 : 0 : 36 (Hour:Min:Sec)
-INFO: Average time per batch: 36.36  per trait: 3 seconds
+INFO: Calculation of batch 1 took: 36.65 seconds
+INFO: Elapsed time: 0 : 0 : 37 (Hour:Min:Sec)
+INFO: Average time per batch: 36.65  per trait: 3 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 INFO: Done with MQM bootstrap analysis
 ------------------------------------------------------------------
 INFO: Elapsed time: 0 : 0 : 44 (Hour:Min:Sec)
-INFO: Average time per trait: 3.993 seconds
+INFO: Average time per trait: 4.033 seconds
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 Starting bootstrap analysis
@@ -196,22 +196,22 @@ Estimating recombinant frequencies
 Analysis of data finished
 ------------------------------------------------------------------
 INFO: Done with the analysis of trait ( 1 / 1 )
-INFO: Calculation of trait 1 took: 7.86  seconds
+INFO: Calculation of trait 1 took: 7.58  seconds
 ------------------------------------------------------------------
 INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 ------------------------------------------------------------------
 INFO: Starting with batch 1 / 1 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 1 
-INFO: Calculation of batch 1 took: 38.72 seconds
+INFO: Calculation of batch 1 took: 39.02 seconds
 INFO: Elapsed time: 0 : 0 : 39 (Hour:Min:Sec)
-INFO: Average time per batch: 38.72  per trait: 3 seconds
+INFO: Average time per batch: 39.02  per trait: 3 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 INFO: Done with MQM bootstrap analysis
 ------------------------------------------------------------------
 INFO: Elapsed time: 0 : 0 : 47 (Hour:Min:Sec)
-INFO: Average time per trait: 4.235 seconds
+INFO: Average time per trait: 4.237 seconds
 ------------------------------------------------------------------
 16 : echo term verbatim eps pdf
 ------------------------------------------------------------------
@@ -224,32 +224,32 @@ INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 INFO: Starting with batch 1 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 6.51 seconds
-INFO: Elapsed time: 0 : 0 : 7 (Hour:Min:Sec)
-INFO: Average time per batch: 6.51  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 13 (Hour:Min:Sec)
+INFO: Calculation of batch 1 took: 5.86 seconds
+INFO: Elapsed time: 0 : 0 : 6 (Hour:Min:Sec)
+INFO: Average time per batch: 5.86  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 12 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 2 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 6.08 seconds
-INFO: Elapsed time: 0 : 0 : 13 (Hour:Min:Sec)
-INFO: Average time per batch: 6.295  per trait: 0 seconds
+INFO: Calculation of batch 2 took: 5.89 seconds
+INFO: Elapsed time: 0 : 0 : 12 (Hour:Min:Sec)
+INFO: Average time per batch: 5.875  per trait: 0 seconds
 INFO: Estimated time left: 0 : 0 : 6 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 3 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 4.33 seconds
-INFO: Elapsed time: 0 : 0 : 17 (Hour:Min:Sec)
-INFO: Average time per batch: 5.64  per trait: 0 seconds
+INFO: Calculation of batch 3 took: 3.62 seconds
+INFO: Elapsed time: 0 : 0 : 15 (Hour:Min:Sec)
+INFO: Average time per batch: 5.123  per trait: 0 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 21 (Hour:Min:Sec)
-INFO: Average time per trait: 0.885 seconds
+INFO: Elapsed time: 0 : 0 : 19 (Hour:Min:Sec)
+INFO: Average time per trait: 0.791 seconds
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 Starting R/QTL multitrait analysis
@@ -261,32 +261,32 @@ INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 INFO: Starting with batch 1 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 6.47 seconds
-INFO: Elapsed time: 0 : 0 : 6 (Hour:Min:Sec)
-INFO: Average time per batch: 6.47  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 13 (Hour:Min:Sec)
+INFO: Calculation of batch 1 took: 5.44 seconds
+INFO: Elapsed time: 0 : 0 : 5 (Hour:Min:Sec)
+INFO: Average time per batch: 5.44  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 11 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 2 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 5.42 seconds
+INFO: Calculation of batch 2 took: 6.08 seconds
 INFO: Elapsed time: 0 : 0 : 12 (Hour:Min:Sec)
-INFO: Average time per batch: 5.945  per trait: 0 seconds
+INFO: Average time per batch: 5.76  per trait: 0 seconds
 INFO: Estimated time left: 0 : 0 : 6 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 3 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 3.5 seconds
+INFO: Calculation of batch 3 took: 3.87 seconds
 INFO: Elapsed time: 0 : 0 : 15 (Hour:Min:Sec)
 INFO: Average time per batch: 5.13  per trait: 0 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Elapsed time: 0 : 0 : 19 (Hour:Min:Sec)
-INFO: Average time per trait: 0.787 seconds
+INFO: Average time per trait: 0.802 seconds
 ------------------------------------------------------------------
 17 : echo term verbatim eps pdf
 ------------------------------------------------------------------
@@ -299,32 +299,32 @@ INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 INFO: Starting with batch 1 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 14.83 seconds
-INFO: Elapsed time: 0 : 0 : 15 (Hour:Min:Sec)
-INFO: Average time per batch: 14.83  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 30 (Hour:Min:Sec)
+INFO: Calculation of batch 1 took: 16.96 seconds
+INFO: Elapsed time: 0 : 0 : 17 (Hour:Min:Sec)
+INFO: Average time per batch: 16.96  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 34 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 2 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 13.95 seconds
-INFO: Elapsed time: 0 : 0 : 29 (Hour:Min:Sec)
-INFO: Average time per batch: 14.39  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 14 (Hour:Min:Sec)
+INFO: Calculation of batch 2 took: 15.44 seconds
+INFO: Elapsed time: 0 : 0 : 32 (Hour:Min:Sec)
+INFO: Average time per batch: 16.2  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 16 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 3 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 7.07 seconds
-INFO: Elapsed time: 0 : 0 : 36 (Hour:Min:Sec)
-INFO: Average time per batch: 11.95  per trait: 1 seconds
+INFO: Calculation of batch 3 took: 7.53 seconds
+INFO: Elapsed time: 0 : 0 : 40 (Hour:Min:Sec)
+INFO: Average time per batch: 13.31  per trait: 1 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 43 (Hour:Min:Sec)
-INFO: Average time per trait: 1.788 seconds
+INFO: Elapsed time: 0 : 0 : 47 (Hour:Min:Sec)
+INFO: Average time per trait: 1.977 seconds
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 Starting R/QTL multitrait analysis
@@ -336,32 +336,32 @@ INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 INFO: Starting with batch 1 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 15.23 seconds
-INFO: Elapsed time: 0 : 0 : 15 (Hour:Min:Sec)
-INFO: Average time per batch: 15.23  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 30 (Hour:Min:Sec)
+INFO: Calculation of batch 1 took: 17.33 seconds
+INFO: Elapsed time: 0 : 0 : 17 (Hour:Min:Sec)
+INFO: Average time per batch: 17.33  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 35 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 2 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 16.19 seconds
-INFO: Elapsed time: 0 : 0 : 31 (Hour:Min:Sec)
-INFO: Average time per batch: 15.71  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 16 (Hour:Min:Sec)
+INFO: Calculation of batch 2 took: 16.51 seconds
+INFO: Elapsed time: 0 : 0 : 34 (Hour:Min:Sec)
+INFO: Average time per batch: 16.92  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 17 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 3 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 6.8 seconds
-INFO: Elapsed time: 0 : 0 : 38 (Hour:Min:Sec)
-INFO: Average time per batch: 12.74  per trait: 1 seconds
+INFO: Calculation of batch 3 took: 7.78 seconds
+INFO: Elapsed time: 0 : 0 : 42 (Hour:Min:Sec)
+INFO: Average time per batch: 13.873  per trait: 1 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 45 (Hour:Min:Sec)
-INFO: Average time per trait: 1.876 seconds
+INFO: Elapsed time: 0 : 0 : 49 (Hour:Min:Sec)
+INFO: Average time per trait: 2.058 seconds
 ------------------------------------------------------------------
 18 : echo term verbatim eps pdf
 
@@ -372,4 +372,4 @@ Writing to file chapter12.R
 > q("no")
 > proc.time()
    user  system elapsed 
- 112.56    1.20  386.43 
+ 113.64    0.81  404.57 
