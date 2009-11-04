@@ -153,6 +153,7 @@ cofactorlist <- mqmcofactorsEach(multifilled,3)
 resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2,verbose=T)
 mqmplotall(resall,"I")
 @
+Use mqmplotnice to have a better graphical output (here the image window is too small, because we autogenerate).
 <<fig=TRUE>>=
 mqmplotnice(resall,legendloc=1)
 @
