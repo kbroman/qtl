@@ -41,79 +41,86 @@ plot(result, result_compare, col=colors, lwd=lines)
 ###################################################
 ### chunk number 6: 
 ###################################################
+#Summary results shows the highest lodscores per chromosome
 summary(result)
-find.marker(h_no_missing,4,30)
+#find.marker extracts the marker nearest to chr4 at 30Cm
+find.marker(h_no_missing,chr=4,pos=30)
+#which.marker translates the name into a cofacotr number
 toset <- which.marker(h_no_missing,"D4Mit164")
 cofactorlist <- mqmcofactors(h_no_missing,toset)
 #scan again
-result <- mqm(h_no_missing, cofactorlist)
-plot(result, result_compare, col=colors, lwd=lines)
+result <- mqm(h_no_missing, cofactorlist,plot=T)
 
 
 ###################################################
 ### chunk number 7: 
+###################################################
+plot(result, result_compare, col=colors, lwd=lines)
+
+
+###################################################
+### chunk number 8: 
 ###################################################
 summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
 toset <- c(toset,which.marker(h_no_missing,find.marker(h_no_missing,1,70)))
 cofactorlist <- mqmcofactors(h_no_missing,toset)
 #scan again
-result <- mqm(h_no_missing, cofactorlist)
+result <- mqm(h_no_missing, cofactorlist,plot=T)
 
 
 ###################################################
-### chunk number 8: 
+### chunk number 9: 
 ###################################################
 plot(result, result_compare, col=colors, lwd=lines)
 
 
 ###################################################
-### chunk number 9: 
+### chunk number 10: 
 ###################################################
 cofactorlist <- mqmcofactorsEach(h_no_missing,5)
 result <- mqm(h_no_missing, cofactorlist, plot=T)
 
 
 ###################################################
-### chunk number 10: 
-###################################################
-#We could plot also back against the scanone function.
-plot(result, result_compare, col=colors, lwd=lines)
-
-
-###################################################
 ### chunk number 11: 
 ###################################################
-result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
+plot(result, result_compare, col=colors, lwd=lines)
 
 
 ###################################################
 ### chunk number 12: 
 ###################################################
-plot.pxg(h_no_missing,marker="D1Mit102")
+result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
 
 
 ###################################################
 ### chunk number 13: 
 ###################################################
-effectplot(h_no_missing, mname1="D1Mit19", mname2="D1Mit102")
+plot.pxg(h_no_missing,marker="D1Mit102")
 
 
 ###################################################
 ### chunk number 14: 
 ###################################################
-effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
+effectplot(h_no_missing, mname1="D1Mit19", mname2="D1Mit102")
 
 
 ###################################################
 ### chunk number 15: 
 ###################################################
-library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.clusters=2,n.run=10,b.size=10)
+effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
 
 
 ###################################################
 ### chunk number 16: 
+###################################################
+library(snow)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.clusters=2,n.run=25,b.size=25)
+
+
+###################################################
+### chunk number 17: 
 ###################################################
 data(multitrait)
 multifilled <- fill.geno(multitrait)
@@ -122,7 +129,7 @@ mqmplotall(resall,"I")
 
 
 ###################################################
-### chunk number 17: 
+### chunk number 18: 
 ###################################################
 cofactorlist <- mqmcofactorsEach(multifilled,3)
 resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2,verbose=T)
@@ -130,7 +137,7 @@ mqmplotall(resall,"I")
 
 
 ###################################################
-### chunk number 18: 
+### chunk number 19: 
 ###################################################
 mqmplotnice(resall,legendloc=1)
 
