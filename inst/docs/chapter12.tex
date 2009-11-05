@@ -13,8 +13,9 @@ In this chapter we will go into the automatic mapping of QTLs using the mqm meth
 The method internally controls false discovery rates and lets users test extensive QTLmodels bij elimation of non-significant cofactors.
 In this chapter we will focus on the basic functions of mqm, we assume the reader knows howto load his data into R using the R/qtl $read.cross()$ 
 function.
+\\
 \begin{Large} Missing data augmentation \end{Large}\\
-First lets go into the augmentation of missing data. we start by loading the qtl library and simulating some F2 intercross data. We use plot.geno to visualze the genotypes of the individuals. we see ~2% missing values in white. The other colors stand for genotypes at a certain position for a certain animal(individual).
+First lets go into the augmentation of missing data. we start by loading the qtl library and simulating some F2 intercross data. We use plot.geno to visualze the genotypes of the individuals. we see ~2\% missing values in white. The other colors stand for genotypes at a certain position for a certain animal(individual).
 \\
 \begin{Schunk}
 \begin{Sinput}
@@ -25,7 +26,8 @@ First lets go into the augmentation of missing data. we start by loading the qtl
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-001}
-Fig 1: Plot.Geno showing the genotypes of 100 individuals with ~2% missing
+\\
+\begin{small}Fig 1: Plot.Geno showing the genotypes of 100 individuals with ~2\% missing\end{small}
 \\
 Before we can use the mqm function, the data should be complete (no missing markers). We thus have to fill in the blanks. We have two options to do this, augmentation or fill.geno. the $fill.geno()$ function fills in the most likely markers using single or multiple imputations
 to estimate the missing markersgenotypes. The first option augmentation was designed for mqm and the resulting cross object is not suited for scan.one or cim anymore. This missing data augmentation routine $mqmaugment()$ can fill in missing genotypes for us. For each missing marker it fills in all possible markers and calculates their likelyhood. When they are more likely than the $augment\_aboveprob$ parameter the augmented individual is stored in the new crossobject. The mqmaugment() function can only handle 1 phenotype, but this will be inproved upon soon. The important parameters are:
@@ -48,7 +50,8 @@ Estimating recombinant frequencies
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-002}
-Fig 2: Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment as fill.geno)
+\\
+\begin{small}Fig 2: Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment as fill.geno)\end{small}
 \\
 When we use a larger $augment\_aboveprob$ (so more unlikely genotypes are also consideren we see the dataset expanding in size.
 This expanded dataset can only be analysed correctly with the mqm routine, because scanone will treat duplicated individuals
@@ -71,11 +74,11 @@ Estimating recombinant frequencies
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-003}
-Fig 3: Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment and letting it expand the dataset)
+\\
+\begin{small}Fig 3: Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment and letting it expand the dataset)\end{small}
 \clearpage
 \begin{Large} Mqm modeling and mapping \end{Large}\\
-We start bij analyzing the hyperset data this can be loaded into memory by using $data(hyper)$. This set is an F2 mouse set with a two phenotypes bp, bloodpressure and Sex.
-\texttt{qtl.mqm} help page into a \LaTeX{} document
+We start bij analyzing the hyperset data this can be loaded into memory by using $data(hyper)$. This set is an F2 mouse set with a two phenotypes bp, bloodpressure and Sex. \texttt{qtl.mqm} help page into a \LaTeX{} document
 \\
 \begin{Schunk}
 \begin{Sinput}
@@ -121,7 +124,8 @@ If we then plot the results from both QTLscans (Black=mqm,Green=scanone):
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-005}
-Fig 4: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black,green). We see 1 to 1 correspondance between the scanone function and the mqm routine when using no parameters
+\\
+\begin{small}Fig 4: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black,green). We see 1 to 1 correspondance between the scanone function and the mqm routine when using no parameters\end{small}
 \\
 We can now use two approaches:
 1) Start building a model by hand or,\\
@@ -187,7 +191,8 @@ Analysis of data finished
 \end{Soutput}
 \end{Schunk}
 \includegraphics{chapter12-006}
-Fig 6: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164), which is kept in the model. We see the LOD score (evidence) for a second QTL on chromosome 1 increasing. Also note the QTL BP and the QTL*INFO. the info parameter is an estimation of the informationcontent present in the marker underlying the qtl.
+\\
+\begin{small}Fig 5: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164), which is kept in the model. We see the LOD score (evidence) for a second QTL on chromosome 1 increasing. Also note the QTL BP and the QTL*INFO. the info parameter is an estimation of the informationcontent present in the marker underlying the qtl.\end{small}
 \\
 The previous example shows howto set a single marker as a cofactor, and do a mqm qtl scan, the marker isn't dropped and we know that it passed initial rough thresholding to account for the user defined alpha level. We accounted here for the large peek on chromosome 4 of the mice with high blood pressure. Comparing this back to the original scanone using:
 \begin{Schunk}
@@ -196,7 +201,8 @@ The previous example shows howto set a single marker as a cofactor, and do a mqm
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-007}
-Fig 7: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When using a cofactor at chromosome 4 (D4Mit164) to account for variation explained by that marker.
+\\
+\begin{small}Fig 6: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When using a cofactor at chromosome 4 (D4Mit164) to account for variation explained by that marker.\end{small}
 \\
 The second peek on chromosome 1 at ~70 centimorgan becomes higher, so lets try adding that one to the model also and see if the model with both cofactors is even better at explaining the phenotype. We combine which.marker with find.marker for easy coding, we combine ($c$) the new cofactornumber with the one we already had in the toset variable.
 \\
@@ -253,7 +259,9 @@ Estimating recombinant frequencies
 Analysis of data finished
 \end{Soutput}
 \end{Schunk}
-Fig 8: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () we see both are included into the model.
+\begin{small}
+Fig 7: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () we see both are included into the model.
+\end{small}
 \\
 \begin{Schunk}
 \begin{Sinput}
@@ -261,7 +269,10 @@ Fig 8: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mi
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-009}
-Fig 9: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () to account for variation explained by those two markers.
+\\
+\begin{small}
+Fig 8: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () to account for variation explained by those two markers.
+\end{small}
 \\
 Because mqm internally checks that no markers are included that are less significant than the alpha level specified. This marker is also informative enough to be included into the model, we can continue this process of adding
 cofactors untill there are no more informative markers that can be included. This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using the second approach "unsupervised backward selection" on a large number of markers, and set cofactors every other marker. The algorithm will analyse all the markers and if found to be not informative enough drop them from the model. After selection it will scan the chromosome using the model created from the cofactors. We should setthe plot parameter to TRUE ($plot=T$) this way we also get a graphical overview of the model that was used for scanning. So lets set a cofactor at every fifth marker and see which chromosomes can be implicated in the high bloodpressure from which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$ function\\
@@ -286,7 +297,9 @@ Analysis of data finished
 \end{Soutput}
 \end{Schunk}
 \includegraphics{chapter12-010}
-Fig 10: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker, and backward selected them to obtain the most likely model (based on out selection of cofactors).
+\begin{small}
+Fig 9: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker, and backward selected them to obtain the most likely model (based on out selection of cofactors).
+\end{small}
 \\
 Comparing back the result to the original scanone result we see quite some striking differences:
 \\
@@ -296,10 +309,13 @@ Comparing back the result to the original scanone result we see quite some strik
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-011}
-Fig 11: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.02). We see some striking differences between the resulting QTLprofiles.
+\\
+\begin{small}
+Fig 10: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.02). We see some striking differences between the resulting QTLprofiles.
+\end{small}
 \\
 This leads to a lot of hits and multiple hits on each chromosome, because some cofactors are placed too close to eachother
-However we see in fig 11 that at an alpha of 0.02 according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated using this method
+However we see in fig 10 that at an alpha of 0.02 according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated using this method
 This is a fairly extensive model, and lowering the significance level from 0.02 to 0.002 could yield a more comprehensable model.
 \\
 \begin{Schunk}
@@ -322,7 +338,10 @@ Analysis of data finished
 \end{Soutput}
 \end{Schunk}
 \includegraphics{chapter12-012}
-Fig 12: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.002).
+\\
+\begin{small}
+Fig 11: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.002).
+\end{small}
 \clearpage
 \begin{Large} MQM effects \end{Large}\\
 The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5 as being assosiated with the high bloodpressure. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools to estimate $main$ and $epistatic$ effects. The following code will plot those 2 plots on markers "D1Mit102" (main effect) and the interaction between "D1Mit102" and "D5Mit213" to show the $main$ effect and the estimated $epistasis$ effect. These markers were chosen because they were found significant based on the mathematical distributions used by mqm. If we really want to know whats significant we should do permutation. Permutation will be discussed further on. first we want to investigate the effects.
@@ -333,7 +352,10 @@ The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5 as
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-013}
-Fig 13: main effect of marker D1Mit102.
+\\
+\begin{small}
+Fig 12: main effect of marker D1Mit102.
+\end{small}
 \\
 From the initial scans for high bloodpressure in figure 10,11,12 we could get the idea that perhaps there are 2 qtl's on chromosome 1. These could have a possible interaction that would explain the dual humped shape of the QTLprofile on chromosome 1. To investigate this we select markers
 "D1Mit19" (significant in fig 11) and "D1Mit102" (significant in fig 11 and 12)
@@ -344,7 +366,10 @@ From the initial scans for high bloodpressure in figure 10,11,12 we could get th
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-014}
-Fig 14: Effectplot to discover if there is an epistatic effect of markers D1Mit19 and D1Mit102.
+\\
+\begin{small}
+Fig 13: Effectplot to discover if there is an epistatic effect of markers D1Mit19 and D1Mit102.
+\end{small}
 \\
 If we for example are also interested in the interactionsbetween chromosome 1 and 5, we could make interactionplots between the two highest scoring markers on those chromosomes by using another effectplot
 \\
@@ -354,7 +379,10 @@ If we for example are also interested in the interactionsbetween chromosome 1 an
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-015}
-Fig 15: Effectplot to discover if there is an epistatic effect of markers D1Mit102 and D5Mit213.
+\\
+\begin{small}
+Fig 14: Effectplot to discover if there is an epistatic effect of markers D1Mit102 and D5Mit213.
+\end{small}
 \\
 We can see that there are no clear evidence for an interaction between the two markers D1Mit102 and D5Mit213. This is because both lines are parallel thus there is no effect of the genotype (on one of the loci e.g. D5Mit213) on the other loci (D1Mit102). If we would see two lines non-parallele this would indicate an epistatic effect at that marker. 
 \clearpage
@@ -392,27 +420,30 @@ Estimating recombinant frequencies
 Analysis of data finished
 ------------------------------------------------------------------
 INFO: Done with the analysis of trait ( 1 / 1 )
-INFO: Calculation of trait 1 took: 7.44  seconds
+INFO: Calculation of trait 1 took: 7.41  seconds
 ------------------------------------------------------------------
 INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 ------------------------------------------------------------------
 INFO: Starting with batch 1 / 1 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 1 
-INFO: Calculation of batch 1 took: 89.64 seconds
-INFO: Elapsed time: 0 : 1 : 30 (Hour:Min:Sec)
-INFO: Average time per batch: 89.64  per trait: 3 seconds
+INFO: Calculation of batch 1 took: 88.94 seconds
+INFO: Elapsed time: 0 : 1 : 29 (Hour:Min:Sec)
+INFO: Average time per batch: 88.94  per trait: 3 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 INFO: Done with MQM bootstrap analysis
 ------------------------------------------------------------------
-INFO: Elapsed time: 0 : 1 : 37 (Hour:Min:Sec)
-INFO: Average time per trait: 3.735 seconds
+INFO: Elapsed time: 0 : 1 : 36 (Hour:Min:Sec)
+INFO: Average time per trait: 3.706 seconds
 ------------------------------------------------------------------
 \end{Soutput}
 \end{Schunk}
 \includegraphics{chapter12-016}
-Fig 16: 25 permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+\\
+\begin{small}
+Fig 15: 25 permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+\end{small}
 \\
 \begin{Large} Multiple traits using MQM \end{Large}\\
 We can also use MQM unsupervised to analyse multiple traits simultaniously. We show using no-cofactors first, and then using cofactors to do backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
@@ -433,32 +464,32 @@ INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 INFO: Starting with batch 1 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 5.14 seconds
-INFO: Elapsed time: 0 : 0 : 5 (Hour:Min:Sec)
-INFO: Average time per batch: 5.14  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 10 (Hour:Min:Sec)
+INFO: Calculation of batch 1 took: 6.13 seconds
+INFO: Elapsed time: 0 : 0 : 6 (Hour:Min:Sec)
+INFO: Average time per batch: 6.13  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 12 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 2 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 5.28 seconds
-INFO: Elapsed time: 0 : 0 : 10 (Hour:Min:Sec)
-INFO: Average time per batch: 5.21  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 5 (Hour:Min:Sec)
+INFO: Calculation of batch 2 took: 5.3 seconds
+INFO: Elapsed time: 0 : 0 : 11 (Hour:Min:Sec)
+INFO: Average time per batch: 5.715  per trait: 0 seconds
+INFO: Estimated time left: 0 : 0 : 6 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 3 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 3.33 seconds
-INFO: Elapsed time: 0 : 0 : 14 (Hour:Min:Sec)
-INFO: Average time per batch: 4.583  per trait: 0 seconds
+INFO: Calculation of batch 3 took: 3.56 seconds
+INFO: Elapsed time: 0 : 0 : 15 (Hour:Min:Sec)
+INFO: Average time per batch: 4.997  per trait: 0 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 17 (Hour:Min:Sec)
-INFO: Average time per trait: 0.712 seconds
+INFO: Elapsed time: 0 : 0 : 19 (Hour:Min:Sec)
+INFO: Average time per trait: 0.773 seconds
 ------------------------------------------------------------------
 \end{Soutput}
 \begin{Sinput}
@@ -466,7 +497,10 @@ INFO: Average time per trait: 0.712 seconds
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-017}
-Fig 17: Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.
+\\
+\begin{small}
+Fig 16: Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.
+\end{small}
 \\
 \begin{Schunk}
 \begin{Sinput}
@@ -485,32 +519,32 @@ INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
 INFO: Starting with batch 1 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 13.42 seconds
-INFO: Elapsed time: 0 : 0 : 13 (Hour:Min:Sec)
-INFO: Average time per batch: 13.42  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 27 (Hour:Min:Sec)
+INFO: Calculation of batch 1 took: 15.35 seconds
+INFO: Elapsed time: 0 : 0 : 15 (Hour:Min:Sec)
+INFO: Average time per batch: 15.35  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 31 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 2 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 13.64 seconds
-INFO: Elapsed time: 0 : 0 : 27 (Hour:Min:Sec)
-INFO: Average time per batch: 13.53  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 14 (Hour:Min:Sec)
+INFO: Calculation of batch 2 took: 13.84 seconds
+INFO: Elapsed time: 0 : 0 : 29 (Hour:Min:Sec)
+INFO: Average time per batch: 14.595  per trait: 1 seconds
+INFO: Estimated time left: 0 : 0 : 15 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
 INFO: Starting with batch 3 / 3 
 ------------------------------------------------------------------
 INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 7.35 seconds
-INFO: Elapsed time: 0 : 0 : 34 (Hour:Min:Sec)
-INFO: Average time per batch: 11.47  per trait: 1 seconds
+INFO: Calculation of batch 3 took: 7.33 seconds
+INFO: Elapsed time: 0 : 0 : 37 (Hour:Min:Sec)
+INFO: Average time per batch: 12.173  per trait: 1 seconds
 INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
 ------------------------------------------------------------------
 ------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 42 (Hour:Min:Sec)
-INFO: Average time per trait: 1.74 seconds
+INFO: Elapsed time: 0 : 0 : 44 (Hour:Min:Sec)
+INFO: Average time per trait: 1.827 seconds
 ------------------------------------------------------------------
 \end{Soutput}
 \begin{Sinput}
@@ -518,7 +552,10 @@ INFO: Average time per trait: 1.74 seconds
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-018}
-Fig 18: Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.
+\\
+\begin{small}
+Fig 17: Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.
+\end{small}
 \\
 Use mqmplotnice to have a better graphical output.
 \begin{Schunk}
@@ -527,7 +564,10 @@ Use mqmplotnice to have a better graphical output.
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-019}
-Fig 19: Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker
+\\
+\begin{small}
+Fig 18: Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker
+\end{small}
 \\
 \section{References}
  \begin{thebibliography}{9}
