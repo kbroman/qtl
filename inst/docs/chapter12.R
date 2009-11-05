@@ -29,7 +29,6 @@ data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
 h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
-h_no_missing <- calc.errorlod()
 result <- mqm(h_no_missing)
 result_compare <- scanone(h_no_missing)
 
