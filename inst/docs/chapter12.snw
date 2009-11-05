@@ -26,11 +26,12 @@ plot.geno(mycross)
 \\
 \begin{small}Fig 1: Plot.Geno showing the genotypes of 100 individuals with ~2\% missing\end{small}
 \\
-Before we can use the mqm function, the data should be complete (no missing markers). We thus have to fill in the blanks. We have two options to do this, augmentation or fill.geno. the $fill.geno()$ function fills in the most likely markers using single or multiple imputations
+Before we can use the mqm function, the data should be complete (no missing markers). We thus have to fill in the blanks. We have two options to do this, augmentation or fill.geno. The $fill.geno()$ function fills in the most likely markers using single or multiple imputations
 to estimate the missing markersgenotypes. The first option augmentation was designed for mqm and the resulting cross object is not suited for scan.one or cim anymore. This missing data augmentation routine $mqmaugment()$ can fill in missing genotypes for us. For each missing marker it fills in all possible markers and calculates their likelyhood. When they are more likely than the $augment\_aboveprob$ parameter the augmented individual is stored in the new crossobject. The mqmaugment() function can only handle 1 phenotype, but this will be inproved upon soon. The important parameters are:
 $cross, pheno.col, maxaugind, augment\_aboveprob$ and verbose set this to TRUE to see what happens. $Maxind$ sets a maximum to the size of the dataset the default is usually good enough (60 is around 20 missing F2 markers per individual or 30 BC markers). The augmentation routine does an all or nothing filling of the missing markers. The individual is expanded untill the $augment\_aboveprob$: Augment genotypes that are above a probability of occurring (ignore lower probabilities). Setting this value too high may result in dropping individuals entirely.
 Lets start by simulating a dataset with some missing markers (2\%) and discuss howto use the augmentation routine:
 <<fig=TRUE>>=
+#warns because mqm doesnt handle the X chromosome yet
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
 plot.geno(augmentedcross)
 @
@@ -56,6 +57,7 @@ data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
 h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
+h_no_missing <- calc.errorlod()
 result <- mqm(h_no_missing)
 result_compare <- scanone(h_no_missing)
 @
