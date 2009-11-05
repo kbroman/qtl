@@ -10,6 +10,7 @@ plot.geno(mycross)
 ###################################################
 ### chunk number 2: 
 ###################################################
+#warns because mqm doesnt handle the X chromosome yet
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
 plot.geno(augmentedcross)
 
@@ -28,6 +29,7 @@ data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
 h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
+h_no_missing <- calc.errorlod()
 result <- mqm(h_no_missing)
 result_compare <- scanone(h_no_missing)
 
