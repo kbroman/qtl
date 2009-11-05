@@ -59,7 +59,6 @@ h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
 result <- mqm(h_no_missing)
 result_compare <- scanone(h_no_missing)
 @
-\\
 If we then plot the results from both QTLscans (Black=mqm,Green=scanone):
 \\
 <<fig=TRUE>>=
@@ -68,7 +67,7 @@ plot(result, result_compare, col=colors, lwd=lines)
 \\
 \begin{small}Fig 4: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black,green). We see 1 to 1 correspondance between the scanone function and the mqm routine when using no parameters\end{small}
 \\
-We can now use two approaches:
+We can now use two approaches:\\
 1) Start building a model by hand or,\\
 2) Use unsupervised backward selection on a large number of markers\\
 We will start by first building the model by hand. We see the big peek on chromosome 4 at 30 centimorgan, so lets account for that by setting a cofactor at the marker nearest to the peek on chromosome 4. This is done by the following steps:
@@ -104,7 +103,6 @@ cofactorlist <- mqmcofactors(h_no_missing,toset)
 #scan again
 result <- mqm(h_no_missing, cofactorlist,plot=T)
 @
-\\
 \begin{small}
 Fig 7: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () we see both are included into the model.
 \end{small}

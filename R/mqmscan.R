@@ -217,8 +217,8 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 			#Store the result in the qtl object
 			qtl <- rbind(qtl,c(ceiling(i/qtlAchromo),rep(seq(step.min,step.max,step.size),n.chr)[i],result$QTL[i]))
 			info <- rbind(info,result$QTL[(n.chr*qtlAchromo)+i])
-			#make names in the form: C L
-			names <- c(names,paste("C",ceiling(i/qtlAchromo),"L",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
+			#make names in the form: c L
+			names <- c(names,paste("c",ceiling(i/qtlAchromo),".loc",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
 		if(plot){
 			if(est.map && backward){
