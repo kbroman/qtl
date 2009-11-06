@@ -144,38 +144,40 @@ results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.clusters=2
 ###################################################
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-resall <- mqmall(multifilled,n.clusters=2)
+FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
 
 
 ###################################################
 ### chunk number 22: 
 ###################################################
-mqmplotall(resall,"I")
+data(multitrait)
+multifilled <- fill.geno(multitrait)
+resall <- mqmall(multifilled,n.clusters=2)
 
 
 ###################################################
 ### chunk number 23: 
+###################################################
+mqmplotall(resall,"I")
+
+
+###################################################
+### chunk number 24: 
 ###################################################
 cofactorlist <- mqmcofactorsEach(multifilled,3)
 resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
 
 
 ###################################################
-### chunk number 24: 
+### chunk number 25: 
 ###################################################
 mqmplotall(resall,"I")
 
 
 ###################################################
-### chunk number 25: 
-###################################################
-mqmplotnice(resall,legendloc=1)
-
-
-###################################################
 ### chunk number 26: 
 ###################################################
-FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+mqmplotnice(resall,legendloc=1)
 
 
 ###################################################

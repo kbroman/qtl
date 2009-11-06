@@ -300,7 +300,7 @@ Analysis of data finished
 \end{figure}
 \clearpage
 Because mqm internally checks that no markers are included that are less significant than the alpha level specified. This marker is also informative enough to be included into the model, we can continue this process of adding
-cofactors untill there are no more informative markers that can be included. This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using the second approach "unsupervised backward selection" on a large number of markers, and set cofactors every other marker. The algorithm will analyse all the markers and if found to be not informative enough drop them from the model. After selection it will scan the chromosome using the model created from the cofactors. We should setthe plot parameter to TRUE ($plot=T$) this way we also get a graphical overview of the model that was used for scanning. So lets set a cofactor at every fifth marker and see which chromosomes can be implicated in the high bloodpressure from which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$ function\\
+cofactors untill there are no more informative markers that can be included. This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using the second approach "unsupervised backward selection" on a large number of markers, and set cofactors every other marker. The algorithm will analyse all the markers and if found to be not informative enough drop them from the model. After selection it will scan the chromosome using the model created from the cofactors. We should set the plot parameter to TRUE ($plot=T$) this way we also get a graphical overview of the model that was used for scanning. So lets set a cofactor at every fifth marker and see which chromosomes can be implicated in the high bloodpressure from which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$ function\\
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
@@ -337,7 +337,6 @@ Comparing back the result to the original scanone result we see quite some strik
 \includegraphics{chapter12-015}
 \caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.02). We see some striking differences between the resulting QTLprofiles.}
 \end{figure}
-\\
 This leads to a lot of hits and multiple hits on each chromosome, because some cofactors are placed too close to eachother
 However we see in fig 10 that at an alpha of 0.02 according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated using this method
 This is a fairly extensive model, and lowering the significance level from 0.02 to 0.002 could yield a more comprehensable model.
@@ -427,6 +426,39 @@ Analysis of data finished
 \includegraphics{chapter12-020}
 \caption{25 Permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$). This is estimated from permutating a single trait. To estimate false discovery rates when scanning multiple traits we need to account for the trait correlation structure using the FDRpermutation strategy (see bellow)}
 \end{figure}
+To estimate false discovery rates we can use the function FDRpermutation. In this method we scann all the traits and count how many QTL's (markers with a LOD above) we observe when setting a certain threshold. We then permutate all the data leaving the correlationstructure between traits intact, and scan again in the permuted data, we calculate how many markers we see above our threshold (average in all runs) and use this to estimate out false discovery rate. In this small set we obtain very high FDR estimates because of the small amount of permutations and the high correlation between traits.
+\begin{Schunk}
+\begin{Sinput}
+> data(multitrait)
+> multifilled <- fill.geno(multitrait)
+> FDRpermutation(multifilled, mqmall, cofactors = cofactorlist, 
++     n.clusters = 2)
+\end{Sinput}
+\begin{Soutput}
+Calculation of FDR estimate of threshold in multitrait analysis.
+QTL's above threshold: 52 
+Starting permutation 1 
+Starting permutation 2 
+Starting permutation 3 
+Starting permutation 4 
+Starting permutation 5 
+Starting permutation 6 
+Starting permutation 7 
+Starting permutation 8 
+Starting permutation 9 
+Starting permutation 10 
+   above.in.real.res above.in.perm.res          
+1                605             382.3 0.6319008
+2                352             225.6 0.6409091
+3                259             178.0 0.6872587
+4                203             134.7 0.6635468
+5                167             105.5 0.6317365
+7                128              67.4 0.5265625
+10               100              39.8 0.3980000
+15                67              17.3 0.2582090
+20                52               9.9 0.1903846
+\end{Soutput}
+\end{Schunk}
 \section{Multiple traits using MQM}
 We can also use MQM unsupervised to analyse multiple traits simultaniously. We start by loading a new dataset. multitrait which consist of an arabidopsis RIL cross with 24 metabolites measured (phenotypes). First we start by filling in the genome by usig the fill.geno function. (mqmaugment would just augment 1 trait for us, and we want to analyse all the traits) To map back the possible regulation locations of these traits we use plain scanning of all traits (not using cofactors). Then we plot all the profiles in a heatmap. In this heatmap the colors represent the LOD score, on the x-axis the marker number and on the y-axis the traits. The traits are numbered in the plot. We show the heatmap using no-cofactors first, and then the heatmap after using cofactors and backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
 \begin{Schunk}
@@ -442,7 +474,7 @@ We can also use MQM unsupervised to analyse multiple traits simultaniously. We s
 > mqmplotall(resall, "I")
 \end{Sinput}
 \end{Schunk}
-\includegraphics{chapter12-022}
+\includegraphics{chapter12-023}
 \caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.}
 \end{figure}
 \clearpage
@@ -458,7 +490,7 @@ We can also use MQM unsupervised to analyse multiple traits simultaniously. We s
 > mqmplotall(resall, "I")
 \end{Sinput}
 \end{Schunk}
-\includegraphics{chapter12-024}
+\includegraphics{chapter12-025}
 \caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.}
 \end{figure}
 Use mqmplotnice to have a better graphical output. (Doesn't work for the generated PDF, but it will in R show u the trait profiles)
@@ -468,41 +500,9 @@ Use mqmplotnice to have a better graphical output. (Doesn't work for the generat
 > mqmplotnice(resall, legendloc = 1)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{chapter12-025}
+\includegraphics{chapter12-026}
 \caption{Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker}
 \end{figure}
-\clearpage
-To estimate false discovery rates we can use the function FDRpermutation. In this method we scann all the traits and count how many QTL's (markers with a LOD above) we observe when setting a certain threshold. We then permutate all the data leaving the correlationstructure between traits intact, and scan again in the permuted data, we calculate how many markers we see above our threshold (average in all runs) and use this to estimate out false discovery rate. In this small set we obtain very high FDR estimates because of the small amount of permutations and the high correlation between traits.
-\begin{Schunk}
-\begin{Sinput}
-> FDRpermutation(multifilled, mqmall, cofactors = cofactorlist, 
-+     n.clusters = 2)
-\end{Sinput}
-\begin{Soutput}
-Calculation of FDR estimate of threshold in multitrait analysis.
-QTL's above threshold: 44 
-Starting permutation 1 
-Starting permutation 2 
-Starting permutation 3 
-Starting permutation 4 
-Starting permutation 5 
-Starting permutation 6 
-Starting permutation 7 
-Starting permutation 8 
-Starting permutation 9 
-Starting permutation 10 
-   above.in.real.res above.in.perm.res          
-1                579             393.1 0.6789292
-2                370             253.9 0.6862162
-3                274             179.6 0.6554745
-4                215             143.1 0.6655814
-5                175             114.4 0.6537143
-7                127              82.9 0.6527559
-10                94              51.7 0.5500000
-15                62              26.0 0.4193548
-20                44              11.1 0.2522727
-\end{Soutput}
-\end{Schunk}
 \clearpage
 CisTrans plots can also be made with multiple traits, because the traits listed here are metabolites they also have a genetic location associated with them. This can be loaded by using $data(locations)$ we can then add those locations to the cross objects and plot the cis and trans effects.
 \begin{figure}[ht]
