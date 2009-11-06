@@ -1,58 +1,69 @@
-\documentclass[a4paper]{article}
+\documentclass[11pt]{article}
+\setlength{\topmargin}{-.5in}
+\setlength{\textheight}{23.5cm}
+\setlength{\textwidth}{17.0cm}
+\setlength{\oddsidemargin}{.025in}
+\setlength{\evensidemargin}{.025in}
+\setlength{\textwidth}{6.25in}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{verbatim}   % useful for program listings
+\usepackage{color}      % use if color is used in text
+\usepackage{subfigure}  % use for side-by-side figures
 \usepackage{Sweave}
 \title { Chapter 12 - automated mqm modeling via analysis of deviance }
 \author { Danny Arends, Pjotr Prins }
 \begin {document}
 \maketitle
 \clearpage
-\begin{Large} mqm \end{Large}\\
-In this chapter we will go into the automatic mapping of QTLs using the mqm method developed by Janssen et al. 1994\cite{jansen94}. This method has been added to the R/qtl\cite{broman09}\cite{broman03} package in 2009. The methode consists of three main parts:\\
+\section{MQM introduction}
+In this chapter we will go into the automatic mapping of QTLs using the mqm method developed by Janssen et al. 1994\cite{jansen94}. This method has been added to the R/qtl\cite{broman09}\cite{broman03} package in 2009. The method consists of three main parts:\\
 1) Missing data augmentation\\
 2) Backward model selection using genetic markers as cofactors\\
 3) QTL (interval) mapping using the 'most informative' model\\
 The method internally controls false discovery rates and lets users test extensive QTLmodels bij elimation of non-significant cofactors.
 In this chapter we will focus on the basic functions of mqm, we assume the reader knows howto load his data into R using the R/qtl $read.cross()$ 
 function.
-\\
-\begin{Large} Missing data augmentation \end{Large}\\
+\section{Missing data augmentation}
 First lets go into the augmentation of missing data. we start by loading the qtl library and simulating some F2 intercross data. We use plot.geno to visualze the genotypes of the individuals. we see \~2\% missing values in white. The other colors stand for genotypes at a certain position for a certain animal(individual).
-\\
-<<fig=TRUE>>=
+<<>>=
 library(qtl)
 data(map10)
 mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
+@
+\begin{figure}[h]
+<<fig=TRUE>>=
 plot.geno(mycross)
 @
-\\
-\begin{tiny}Fig 1: Plot.Geno showing the genotypes of 100 individuals with \~2\% missing\end{tiny}
-\\\\
+\caption{Plot.Geno showing the genotypes of 100 individuals with around 2\% missing}
+\end{figure}
 Before we can use the mqm function, the data should be complete (no missing markers). We thus have to fill in the blanks. We have two options to do this, augmentation or fill.geno. The $fill.geno()$ function fills in the most likely markers using single or multiple imputations
 to estimate the missing markersgenotypes. The first option augmentation was designed for mqm and the resulting cross object is not suited for scan.one or cim anymore. This missing data augmentation routine $mqmaugment()$ can fill in missing genotypes for us. For each missing marker it fills in all possible markers and calculates their likelyhood. When they are more likely than the $augment\_aboveprob$ parameter the augmented individual is stored in the new crossobject. The mqmaugment() function can only handle 1 phenotype, but this will be inproved upon soon. The important parameters are:
 $cross, pheno.col, maxaugind, augment\_aboveprob$ and verbose set this to TRUE to see what happens. $Maxind$ sets a maximum to the size of the dataset the default is usually good enough (60 is around 20 missing F2 markers per individual or 30 BC markers). The augmentation routine does an all or nothing filling of the missing markers. The individual is expanded untill the $augment\_aboveprob$: Augment genotypes that are above a probability of occurring (ignore lower probabilities). Setting this value too high may result in dropping individuals entirely.
 Lets start by simulating a dataset with some missing markers (2\%) and discuss howto use the augmentation routine:
-<<fig=TRUE>>=
+<<>>=
 #warns because mqm doesnt handle the X chromosome yet
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
+@
+\begin{figure}[h]
+<<fig=TRUE>>=
 plot.geno(augmentedcross)
 @
-\\
-\begin{tiny}Fig 2: Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment as fill.geno)\end{tiny}
-\\\\
+\caption{Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment as fill.geno)}
+\end{figure}
 When we use a larger $augment\_aboveprob$ (so more unlikely genotypes are also consideren we see the dataset expanding in size.
 This expanded dataset can only be analysed correctly with the mqm routine, because scanone will treat duplicated individuals
 as new individuals (that improve power)\cite{Dempster77}. Mqm does not do this it treats duplicated individuals together as a single entity, but because the algorithm is also aware of the other possible genotypes resulting QTLprofiles will be more accurate\cite{jansen93}.
 \\
+\begin{figure}[h]
 <<fig=TRUE>>=
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=10)
 plot.geno(augmentedcross)
 @
-\\
-\begin{tiny}
-Fig 3: Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment and letting it expand the dataset)
-\end{tiny}
-\\
+\caption{Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment and letting it expand the dataset)}
+\end{figure}
 \clearpage
-\begin{Large} Mqm modeling and mapping \end{Large}\\
+\section{Mqm modeling and mapping}
 We start bij analyzing the hyperset data this can be loaded into memory by using $data(hyper)$. This set is an F2 mouse set with a two phenotypes bp, bloodpressure and Sex. \texttt{qtl.mqm} help page into a \LaTeX{} document
 \\
 <<>>=
@@ -64,19 +75,19 @@ result <- mqm(h_no_missing)
 result_compare <- scanone(h_no_missing)
 @
 If we then plot the results from both QTLscans (Black=mqm,Green=scanone):
-\\
+\begin{figure}[h]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
-\\
-\begin{tiny}Fig 4: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black,green). We see 1 to 1 correspondance between the scanone function and the mqm routine when using no parameters\end{tiny}
-\\\\
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black,green). We see one to 
+one correspondance between the scanone function and the mqm routine when using no parameters}
+\end{figure}
 We can now use two approaches:\\
 1) Start building a model by hand or,\\
 2) Use unsupervised backward selection on a large number of markers\\
 We will start by first building the model by hand. We see the big peek on chromosome 4 at 30 centimorgan, so lets account for that by setting a cofactor at the marker nearest to the peek on chromosome 4. This is done by the following steps:
 \\
-<<fig=TRUE>>=
+<<>>=
 #Summary results shows the highest lodscores per chromosome
 summary(result)
 #find.marker extracts the marker nearest to chr4 at 30Cm
@@ -85,154 +96,150 @@ find.marker(h_no_missing,chr=4,pos=30)
 toset <- which.marker(h_no_missing,"D4Mit164")
 cofactorlist <- mqmcofactors(h_no_missing,toset)
 #scan again
+@
+\begin{figure}[h]
+<<fig=TRUE>>=
 result <- mqm(h_no_missing, cofactorlist,plot=T)
 @
 \\
-\begin{tiny}Fig 5: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164), which is kept in the model. We see the LOD score (evidence) for a second QTL on chromosome 1 increasing. Also note the QTL BP and the QTL*INFO. the info parameter is an estimation of the informationcontent present in the marker underlying the qtl.\end{tiny}
-\\\\
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164), which is kept in the model. We see the LOD score (evidence) for a second QTL on chromosome 1 increasing. Also note the QTL BP and the QTL*INFO. the info parameter is an estimation of the informationcontent present in the marker underlying the qtl.}
+\end{figure}
 The previous example shows howto set a single marker as a cofactor, and do a mqm qtl scan, the marker isn't dropped and we know that it passed initial rough thresholding to account for the user defined alpha level. We accounted here for the large peek on chromosome 4 of the mice with high blood pressure. Comparing this back to the original scanone using:
+\begin{figure}[h]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
-\\
-\begin{tiny}Fig 6: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When using a cofactor at chromosome 4 (D4Mit164) to account for variation explained by that marker.\end{tiny}
-\\\\
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When using a cofactor at chromosome 4 (D4Mit164) to account for variation explained by that marker.}
+\end{figure}
 The second peek on chromosome 1 at \~70 centimorgan becomes higher, so lets try adding that one to the model also and see if the model with both cofactors is even better at explaining the phenotype. We combine which.marker with find.marker for easy coding, we combine ($c$) the new cofactornumber with the one we already had in the toset variable.
 \\
-<<fig=TRUE>>=
+<<>>=
 summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
 toset <- c(toset,which.marker(h_no_missing,find.marker(h_no_missing,1,70)))
 cofactorlist <- mqmcofactors(h_no_missing,toset)
-#scan again
+@
+\begin{figure}[h]
+<<fig=TRUE>>=
 result <- mqm(h_no_missing, cofactorlist,plot=T)
 @
-\\
-\begin{tiny}
-Fig 7: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () we see both are included into the model.
-\end{tiny}
-\\\\
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () we see both are included into the model.}
+\end{figure}
+\begin{figure}[h]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () to account for variation explained by those two markers.}
+\end{figure}
 \\
-\begin{tiny}
-Fig 8: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () to account for variation explained by those two markers.
-\end{tiny}
-\\\\
 Because mqm internally checks that no markers are included that are less significant than the alpha level specified. This marker is also informative enough to be included into the model, we can continue this process of adding
 cofactors untill there are no more informative markers that can be included. This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using the second approach "unsupervised backward selection" on a large number of markers, and set cofactors every other marker. The algorithm will analyse all the markers and if found to be not informative enough drop them from the model. After selection it will scan the chromosome using the model created from the cofactors. We should setthe plot parameter to TRUE ($plot=T$) this way we also get a graphical overview of the model that was used for scanning. So lets set a cofactor at every fifth marker and see which chromosomes can be implicated in the high bloodpressure from which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$ function\\
+\begin{figure}[h]
 <<fig=TRUE>>=
 cofactorlist <- mqmcofactorsEach(h_no_missing,5)
 result <- mqm(h_no_missing, cofactorlist, plot=T)
 @
-\begin{tiny}
-Fig 9: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker, and backward selected them to obtain the most likely model (based on out selection of cofactors).
-\end{tiny}
-\\\\
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker, and backward selected them to obtain the most likely model (based on out selection of cofactors).
+}
+\end{figure}
 Comparing back the result to the original scanone result we see quite some striking differences:
 \\
+\begin{figure}[h]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.02). We see some striking differences between the resulting QTLprofiles.}
+\end{figure}
 \\
-\begin{tiny}
-Fig 10: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm and scanone (black, green). We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.02). We see some striking differences between the resulting QTLprofiles.
-\end{tiny}
-\\\\
 This leads to a lot of hits and multiple hits on each chromosome, because some cofactors are placed too close to eachother
 However we see in fig 10 that at an alpha of 0.02 according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated using this method
 This is a fairly extensive model, and lowering the significance level from 0.02 to 0.002 could yield a more comprehensable model.
-\\
+\begin{figure}[h]
 <<fig=TRUE>>=
 result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
 @
-\\
-\begin{tiny}
-Fig 11: QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.002).
-\end{tiny}
-\\
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.002).
+}
+\end{figure}
 \clearpage
-\begin{Large} MQM effects \end{Large}\\
+\section{MQM effects}
 The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5 as being assosiated with the high bloodpressure. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools to estimate $main$ and $epistatic$ effects. The following code will plot those 2 plots on markers "D1Mit102" (main effect) and the interaction between "D1Mit102" and "D5Mit213" to show the $main$ effect and the estimated $epistasis$ effect. These markers were chosen because they were found significant based on the mathematical distributions used by mqm. If we really want to know whats significant we should do permutation. Permutation will be discussed further on. first we want to investigate the effects.
-\\
+\begin{figure}[h]
 <<fig=TRUE, results=hide>>=
 plot.pxg(h_no_missing,marker="D1Mit102")
 @
-\\
-\begin{tiny}
-Fig 12: main effect of marker D1Mit102.
-\end{tiny}
-\\
+\caption{Main effect of marker D1Mit102.}
+\end{figure}
 From the initial scans for high bloodpressure in figure 10,11,12 we could get the idea that perhaps there are 2 qtl's on chromosome 1. These could have a possible interaction that would explain the dual humped shape of the QTLprofile on chromosome 1. To investigate this we select markers
 "D1Mit19" (significant in fig 11) and "D1Mit102" (significant in fig 11 and 12)
-\\
+\begin{figure}[h]
 <<fig=TRUE>>=
 effectplot(h_no_missing, mname1="D1Mit19", mname2="D1Mit102")
 @
-\\
-\begin{tiny}
-Fig 13: Effectplot to discover if there is an epistatic effect of markers D1Mit19 and D1Mit102.
-\end{tiny}
-\\
+\caption{Effectplot to discover if there is an epistatic effect of markers D1Mit19 and D1Mit102.}
+\end{figure}
 If we for example are also interested in the interactionsbetween chromosome 1 and 5, we could make interactionplots between the two highest scoring markers on those chromosomes by using another effectplot
-\\
+\begin{figure}[h]
 <<fig=TRUE>>=
 effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
 @
-\\
-\begin{tiny}
-Fig 14: Effectplot to discover if there is an epistatic effect of markers D1Mit102 and D5Mit213.
-\end{tiny}
-\\
+\caption{Effectplot to discover if there is an epistatic effect of markers D1Mit102 and D5Mit213.}
+\end{figure}
 We can see that there are no clear evidence for an interaction between the two markers D1Mit102 and D5Mit213. This is because both lines are parallel thus there is no effect of the genotype (on one of the loci e.g. D5Mit213) on the other loci (D1Mit102). If we would see two lines non-parallele this would indicate an epistatic effect at that marker. 
 \clearpage
-\begin{Large} Significance and Thresholds \end{Large}\\
+\section{Significance and thresholds}
 To estimate significance of the peeks ( and perhaps exclude some markers from our model ) we can use permutation. It is adviced to install the SNOW package \cite{tierney03}\cite{tierney04} to make automatic use of multiple core desktops. In small sets with a limited amount of traits we use bootstrap(). On large GWAS sets (gene expression etc) we use the FDRpermutation to estimate FDR across the entire set at certain lod cutoffs (We do 25 because of speed of generating the document this should be 1000 with $b.size=25 or 50$).
-\\
+\begin{figure}[h]
 <<fig=TRUE>>=
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.clusters=2,n.run=25,b.size=25)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 @
-\\
-\begin{tiny}
-Fig 15: 25 permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
-\end{tiny}
-\\
-\begin{Large} Multiple traits using MQM \end{Large}\\
-We can also use MQM unsupervised to analyse multiple traits simultaniously. We show using no-cofactors first, and then using cofactors to do backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
-<<fig=TRUE>>=
+\caption{25 Permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$). This is estimated from permutating a single trait. To estimate false discovery rates when scanning multiple traits we need to account for the trait correlation structure using the FDRpermutation strategy (see bellow)}
+\end{figure}
+\section{Multiple traits using MQM}
+We can also use MQM unsupervised to analyse multiple traits simultaniously. We start by loading a new dataset. multitrait which consist of an arabidopsis RIL cross with 24 metabolites measured (phenotypes). First we start by filling in the genome by usig the fill.geno function. (mqmaugment would just augment 1 trait for us, and we want to analyse all the traits) To map back the possible regulation locations of these traits we use plain scanning of all traits (not using cofactors). Then we plot all the profiles in a heatmap. In this heatmap the colors represent the LOD score, on the x-axis the marker number and on the y-axis the traits. The traits are numbered in the plot. We show the heatmap using no-cofactors first, and then the heatmap after using cofactors and backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
+<<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-resall <- mqmall(multifilled,n.clusters=2,verbose=T)
-mqmplotall(resall,"I")
+resall <- mqmall(multifilled,n.clusters=2)
 @
-\\
-\begin{tiny}
-Fig 16: Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.
-\end{tiny}
-\\
+\begin{figure}[h]
 <<fig=TRUE>>=
-cofactorlist <- mqmcofactorsEach(multifilled,3)
-resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2,verbose=T)
 mqmplotall(resall,"I")
 @
-\\
-\begin{tiny}
-Fig 17: Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.
-\end{tiny}
-\\
-Use mqmplotnice to have a better graphical output.
+\caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.}
+\end{figure}
+<<>>=
+cofactorlist <- mqmcofactorsEach(multifilled,3)
+resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
+@
+\begin{figure}[h]
+<<fig=TRUE>>=
+mqmplotall(resall,"I")
+@
+\caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.}
+\end{figure}
+Use mqmplotnice to have a better graphical output. (Doesn't work for the generated PDF, but it will in R show u the trait profiles)
+\begin{figure}[h]
 <<fig=TRUE>>=
 mqmplotnice(resall,legendloc=1)
 @
-\\
-\begin{tiny}
-Fig 18: Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker
-\end{tiny}
-\\
-\section{References}
- \begin{thebibliography}{9}
+\caption{Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker}
+\end{figure}
+To estimate false discovery rates we can use the function FDRpermutation. In this method we scann all the traits and count how many QTL's (markers with a LOD above) we observe when setting a certain threshold. We then permutate all the data leaving the correlationstructure between traits intact, and scan again in the permuted data, we calculate how many markers we see above our threshold (average in all runs) and use this to estimate out false discovery rate. In this small set we obtain very high FDR estimates because of the small amount of permutations and the high correlation between traits.
+<<>>=
+FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+@
+CisTrans plots can also be made with multiple traits, because the traits listed here are metabolites they also have a genetic location associated with them. This can be loaded by using $data(locations)$ we can then add those locations to the cross objects and plot the cis and trans effects.
+\begin{figure}[h]
+<<fig=TRUE>>=
+data(locations)
+multiloc <- addloctocross(multifilled,locations)
+CisTransPlot(resall, multiloc, 5, FALSE, TRUE)
+@
+\caption{Fig 19: Another plotting routine: CisTransPlot, available when traits also have genetic locations. We plot the locations of the traits versus the QTL peek locations (using a cutoff of 5 LOD)}
+\end{figure}
+\begin{thebibliography}{9}
 	\bibitem{broman09}
 		Broman, K.W.; 2009.
 		\emph{A brief tour of R/qtl}
