@@ -118,3 +118,79 @@ Estimating recombinant frequencies
 Analysis of data finished
 15 : echo term verbatim eps pdf
 16 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+17 : echo term hide eps pdf
+18 : echo term verbatim eps pdf
+19 : echo term verbatim eps pdf
+20 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+21 : echo term verbatim
+22 : echo term verbatim eps pdf
+23 : echo term verbatim
+24 : echo term verbatim eps pdf
+25 : echo term verbatim eps pdf
+26 : echo term verbatim
+27 : echo term verbatim eps pdf
+Phenotypes in cross: 24 
+Phenotypes in file: 24 
+Total maplength: 500  cM in  5 Chromosomes
+The lengths are: 0 130 215 300 385 
+Phenotypes in cross: 24 
+Phenotypes in file: 24 
+Total maplength: 500  cM in  5 Chromosomes
+The lengths are: 0 130 215 300 385 
+
+You can now run LaTeX on 'chapter12.tex'
+There were 22 warnings (use warnings() to see them)
+> Stangle(file="chapter12.snw")
+Writing to file chapter12.R 
+> q("no")
+> proc.time()
+   user  system elapsed 
+ 134.42    1.29  881.98 

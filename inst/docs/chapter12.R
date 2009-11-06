@@ -15,6 +15,7 @@ plot.geno(mycross)
 ###################################################
 ### chunk number 3: 
 ###################################################
+#warns because mqm doesnt handle the X chromosome yet
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
 
 
@@ -135,7 +136,7 @@ effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
 ### chunk number 20: 
 ###################################################
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.clusters=2,n.run=25,b.size=25)
+results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 
 
 ###################################################
@@ -143,32 +144,42 @@ results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,verbose=T,n.
 ###################################################
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-resall <- mqmall(multifilled,n.clusters=2,verbose=T)
-mqmplotall(resall,"I")
+resall <- mqmall(multifilled,n.clusters=2)
 
 
 ###################################################
 ### chunk number 22: 
 ###################################################
-cofactorlist <- mqmcofactorsEach(multifilled,3)
-resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2,verbose=T)
 mqmplotall(resall,"I")
 
 
 ###################################################
 ### chunk number 23: 
 ###################################################
-mqmplotnice(resall,legendloc=1)
+cofactorlist <- mqmcofactorsEach(multifilled,3)
+resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
 
 
 ###################################################
 ### chunk number 24: 
 ###################################################
-FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+mqmplotall(resall,"I")
 
 
 ###################################################
 ### chunk number 25: 
+###################################################
+mqmplotnice(resall,legendloc=1)
+
+
+###################################################
+### chunk number 26: 
+###################################################
+FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+
+
+###################################################
+### chunk number 27: 
 ###################################################
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
