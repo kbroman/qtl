@@ -89,7 +89,14 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 		locz <- NULL
 		for(marker in 1:ncol(QTLs)){
 			pos <- find.markerpos(cross, colnames(QTLs)[marker])
-			locz <- c(locz,round(chr.breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
+			if(!is.na(pos[1,1])){
+				locz <- c(locz,round(chr.breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
+			}else{
+				mark <- colnames(QTLs)[marker]
+				mchr <- substr(mark,sum(regexpr("c",mark)+attr(regexpr("c",mark),"match.length")),regexpr(".loc",mark)-1)
+				mpos <- as.numeric(substr(mark,sum(regexpr("loc",mark)+attr(regexpr("loc",mark),"match.length")),nchar(mark)))
+				locz <- c(locz,round(chr.breaks[as.numeric(mchr)] + as.numeric(mpos)))
+			}
 		}
 		trait.locz <- NULL
 		for(j in 1:nrow(QTLs)){

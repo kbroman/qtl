@@ -284,6 +284,15 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		class(qtl) <- c("scanone",class(qtl)) 
 		if(verbose) cat("INFO: Saving output to file: ",file, "\n")
 		#write.table(qtl,file)
+		for( x in 1:nchr(cross)){
+			#Remove pseudomarkers from the dataset and scale to the chromosome
+			to.remove <- NULL
+			chr.length <- max(cross$geno[[x]]$map)
+			markers.on.chr <- which(qtl[,1]==x)
+			to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
+			to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
+			qtl <- qtl[-to.remove,]
+		}		
 		#Reset plotting and return the results
 		if(plot){
 			info.c <- qtl
@@ -302,9 +311,9 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 			}
 			#No error do plot 2
 			if(!e){
-				mqmplotone(qtl)
+				mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa))
 			}else{
-				plot(qtl,lwd=1)
+				plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa),lwd=1)
 				grid(max(qtl$chr),5)
 				labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
 				legend("topright", labels,col=c("black"),lty=c(1))
@@ -313,16 +322,6 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		#Reset the plotting window to contain 1 plot (fot the next upcomming pots
 		if(plot){
 		  op <- par(mfrow = c(1,1))
-		}
-		
-		for( x in 1:nchr(cross)){
-			#Remove pseudomarkers from the dataset and scale to the chromosome
-			to.remove <- NULL
-			chr.length <- max(cross$geno[[x]]$map)
-			markers.on.chr <- which(qtl[,1]==x)
-			to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
-			to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
-			qtl <- qtl[-to.remove,]
 		}
 		
 		end.3 <- proc.time()
