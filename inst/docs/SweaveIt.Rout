@@ -171,11 +171,11 @@ Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 Analysis of data finished
 21 : echo term verbatim
-22 : echo term verbatim eps pdf
-23 : echo term verbatim
-24 : echo term verbatim eps pdf
+22 : echo term verbatim
+23 : echo term verbatim eps pdf
+24 : echo term verbatim
 25 : echo term verbatim eps pdf
-26 : echo term verbatim
+26 : echo term verbatim eps pdf
 27 : echo term verbatim eps pdf
 Phenotypes in cross: 24 
 Phenotypes in file: 24 
@@ -193,4 +193,4 @@ Writing to file chapter12.R
 > q("no")
 > proc.time()
    user  system elapsed 
- 134.42    1.29  881.98 
+ 138.28    1.40  786.14 
