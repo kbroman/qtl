@@ -235,14 +235,18 @@ getThird <- function(x){
 	x[,3]
 }
 
+getChr <- function(x){
+	x[,1]
+}
+
 mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
   if(class(result)[2] != "mqmmulti")
 		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
-
   if(type=="C"){
     #Countour plot
     temp <- lapply(result,getThird)
+	chrs <- unique(lapply(result,getChr))
 	c <- do.call("rbind",temp)
     c <- t(c)
     contour(
@@ -253,17 +257,23 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
             col=rainbow((max(c)/5)+25,1,1.0,0.1),
             nlevels=(max(c)/5)
             )
+    for(x in unique(chrs[[1]])){
+		abline(v=sum(chrs[[1]]<=x))
+	}			
   }
   if(type=="I"){
     #Image plot
     temp <- lapply(result,getThird)
+	chrs <- unique(lapply(result,getChr))
 	c <- do.call("rbind",temp)
 	c <- t(c)
     image(x=1:dim(c)[1],y=1:dim(c)[2],c,
           xlab="Markers",ylab="Trait",
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
           )
-    
+    for(x in unique(chrs[[1]])){
+		abline(v=sum(chrs[[1]]<=x))
+	}
   }
   if(type=="D"){
     #3D perspective plot

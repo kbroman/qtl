@@ -196,6 +196,12 @@ results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.clusters=2
 @
 \caption{25 Permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$). This is estimated from permutating a single trait. To estimate false discovery rates when scanning multiple traits we need to account for the trait correlation structure using the FDRpermutation strategy (see bellow)}
 \end{figure}
+To estimate false discovery rates we can use the function FDRpermutation. In this method we scann all the traits and count how many QTL's (markers with a LOD above) we observe when setting a certain threshold. We then permutate all the data leaving the correlationstructure between traits intact, and scan again in the permuted data, we calculate how many markers we see above our threshold (average in all runs) and use this to estimate out false discovery rate. In this small set we obtain very high FDR estimates because of the small amount of permutations and the high correlation between traits.
+<<>>=
+data(multitrait)
+multifilled <- fill.geno(multitrait)
+FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+@
 \section{Multiple traits using MQM}
 We can also use MQM unsupervised to analyse multiple traits simultaniously. We start by loading a new dataset. multitrait which consist of an arabidopsis RIL cross with 24 metabolites measured (phenotypes). First we start by filling in the genome by usig the fill.geno function. (mqmaugment would just augment 1 trait for us, and we want to analyse all the traits) To map back the possible regulation locations of these traits we use plain scanning of all traits (not using cofactors). Then we plot all the profiles in a heatmap. In this heatmap the colors represent the LOD score, on the x-axis the marker number and on the y-axis the traits. The traits are numbered in the plot. We show the heatmap using no-cofactors first, and then the heatmap after using cofactors and backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
 <<>>=
@@ -227,11 +233,6 @@ mqmplotnice(resall,legendloc=1)
 @
 \caption{Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker}
 \end{figure}
-\clearpage
-To estimate false discovery rates we can use the function FDRpermutation. In this method we scann all the traits and count how many QTL's (markers with a LOD above) we observe when setting a certain threshold. We then permutate all the data leaving the correlationstructure between traits intact, and scan again in the permuted data, we calculate how many markers we see above our threshold (average in all runs) and use this to estimate out false discovery rate. In this small set we obtain very high FDR estimates because of the small amount of permutations and the high correlation between traits.
-<<>>=
-FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
-@
 \clearpage
 CisTrans plots can also be made with multiple traits, because the traits listed here are metabolites they also have a genetic location associated with them. This can be loaded by using $data(locations)$ we can then add those locations to the cross objects and plot the cis and trans effects.
 \begin{figure}[ht]
