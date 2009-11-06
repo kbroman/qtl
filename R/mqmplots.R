@@ -189,7 +189,7 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 	if(is.null(xlim)) xlim = c(min(tps),max(tps))
 	plot.new()															# make a new plot
 	plot.window(xlim=xlim, ylim=ylim, log="")							# add the plot windows size
-	grid()
+	#grid()
 	for( k in 1:nrow( x ) ) {
 		max.p  <- NULL			# the expression of the maximum
 		min.p  <- NULL			#
@@ -309,30 +309,34 @@ mqmplotboot <- function(result, ...){
 	if(class(result)[2] != "mqmmulti")		
           ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
 
-        for( j in 1:length( result[[i]][,3] ) ) {
-          row1 <- NULL
-          row2 <- NULL
-          for(i in 1:length( result ) ) {
-            if(i==1){
-              row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
-              names(row1) <- rep(j,(length( result )-1))
-            }else{
-              row2 <- c(row2,result[[i]][,3][j])
-            }
-          }
-          names(row2) <- rep(j,(length( result )-1))
-          matrix <- cbind(matrix,rbind(row1,row2))
-        }
+	for( j in 1:length( result[[i]][,3] ) ) {
+	  row1 <- NULL
+	  row2 <- NULL
+	  for(i in 1:length( result ) ) {
+		if(i==1){
+		  row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
+		  names(row1) <- rep(j,(length( result )-1))
+		}else{
+		  row2 <- c(row2,result[[i]][,3][j])
+		}
+	  }
+	  names(row2) <- rep(j,(length( result )-1))
+	  matrix <- cbind(matrix,rbind(row1,row2))
+	}
 
-        rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
-		
+	rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
+	
 	#Because bootstrap only has 2 rows of data we can use black n blue
-        polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
+	polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	#PLot some lines so we know what is significant
-        perm.temp <- mqmpermObject(result)			#Create a permutation object
-        numresults <- dim(result[[1]])[1]
-        lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
-        lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
+	perm.temp <- mqmpermObject(result)			#Create a permutation object
+	numresults <- dim(result[[1]])[1]
+	lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
+	lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)	
+	chrs <- unique(lapply(result,getChr))
+    for(x in unique(chrs[[1]])){
+		abline(v=sum(chrs[[1]]<=x),lty="dashed",col="gray")
+	}	
 }
 
 mqmplotnice <- function(result, ...){
