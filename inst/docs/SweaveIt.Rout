@@ -1,6 +1,6 @@
 
-R version 2.8.1 (2008-12-22)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.1 (2009-06-26)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -18,117 +18,53 @@ Type 'q()' to quit R.
 > Sweave(file="chapter12.snw")
 Writing to file chapter12.tex
 Processing code chunks ...
- 1 : echo term verbatim eps pdf
+ 1 : echo term verbatim
  2 : echo term verbatim eps pdf
-Starting C-part of the data augmentation routine
-F2 cross
-Convert codes R/qtl -> MQM
-Filling the chromosome matrix
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Starting C-part of the data augmentation routine
-F2 cross
-Convert codes R/qtl -> MQM
-Filling the chromosome matrix
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
- 3 : echo term verbatim eps pdf
-Starting C-part of the data augmentation routine
-F2 cross
-Convert codes R/qtl -> MQM
-Filling the chromosome matrix
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Starting C-part of the data augmentation routine
-F2 cross
-Convert codes R/qtl -> MQM
-Filling the chromosome matrix
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
- 4 : echo term verbatim
+ 3 : echo term verbatim
+ 4 : echo term verbatim eps pdf
  5 : echo term verbatim eps pdf
- 6 : echo term verbatim eps pdf
-Marker D4Mit164 is number 46 
-Back cross (BC)
+Starting C-part of the data augmentation routine
+F2 cross
 Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
+Filling the chromosome matrix
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Marker D4Mit164 is number 46 
-Back cross (BC)
+Starting C-part of the data augmentation routine
+F2 cross
 Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
+Filling the chromosome matrix
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
+ 6 : echo term verbatim
  7 : echo term verbatim eps pdf
- 8 : echo term verbatim eps pdf
-Marker D1Mit218 is number 12 
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Marker D1Mit218 is number 12 
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
+ 8 : echo term verbatim
  9 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
 10 : echo term verbatim eps pdf
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-11 : echo term verbatim eps pdf
+11 : echo term verbatim
 12 : echo term verbatim eps pdf
 Back cross (BC)
 Convert codes R/qtl -> MQM
@@ -154,249 +90,31 @@ After dropping of uninformative cofactors
 Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 Analysis of data finished
-13 : echo term hide eps pdf
+13 : echo term verbatim eps pdf
 14 : echo term verbatim eps pdf
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
+Back cross (BC)
+Convert codes R/qtl -> MQM
+Receiving the chromosome matrix from R
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Initialize Frun and informationcontent to 0.0
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+After dropping of uninformative cofactors
+Calculating relative genomepositions of the markers
+Estimating recombinant frequencies
+Analysis of data finished
 15 : echo term verbatim eps pdf
 16 : echo term verbatim eps pdf
-------------------------------------------------------------------
-Starting bootstrap analysis
-Number of bootstrapping runs: 25 
-Batchsize: 25  & n.clusters: 2 
-------------------------------------------------------------------
-INFO: Received a valid cross file type: bc .
-INFO: Shuffleling traits between individuals.
-------------------------------------------------------------------
-INFO: Starting analysis of trait ( 1 / 1 )
-------------------------------------------------------------------
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-------------------------------------------------------------------
-INFO: Done with the analysis of trait ( 1 / 1 )
-INFO: Calculation of trait 1 took: 7.67  seconds
-------------------------------------------------------------------
-INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
-------------------------------------------------------------------
-INFO: Starting with batch 1 / 1 
-------------------------------------------------------------------
-INFO: Done with batch 1 / 1 
-INFO: Calculation of batch 1 took: 99.37 seconds
-INFO: Elapsed time: 0 : 1 : 39 (Hour:Min:Sec)
-INFO: Average time per batch: 99.37  per trait: 3 seconds
-INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
-------------------------------------------------------------------
-INFO: Done with MQM bootstrap analysis
-------------------------------------------------------------------
-INFO: Elapsed time: 0 : 1 : 47 (Hour:Min:Sec)
-INFO: Average time per trait: 4.117 seconds
-------------------------------------------------------------------
-------------------------------------------------------------------
-Starting bootstrap analysis
-Number of bootstrapping runs: 25 
-Batchsize: 25  & n.clusters: 2 
-------------------------------------------------------------------
-INFO: Received a valid cross file type: bc .
-INFO: Shuffleling traits between individuals.
-------------------------------------------------------------------
-INFO: Starting analysis of trait ( 1 / 1 )
-------------------------------------------------------------------
-Back cross (BC)
-Convert codes R/qtl -> MQM
-Receiving the chromosome matrix from R
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Initialize Frun and informationcontent to 0.0
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-After dropping of uninformative cofactors
-Calculating relative genomepositions of the markers
-Estimating recombinant frequencies
-Analysis of data finished
-------------------------------------------------------------------
-INFO: Done with the analysis of trait ( 1 / 1 )
-INFO: Calculation of trait 1 took: 7.72  seconds
-------------------------------------------------------------------
-INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
-------------------------------------------------------------------
-INFO: Starting with batch 1 / 1 
-------------------------------------------------------------------
-INFO: Done with batch 1 / 1 
-INFO: Calculation of batch 1 took: 90.05 seconds
-INFO: Elapsed time: 0 : 1 : 30 (Hour:Min:Sec)
-INFO: Average time per batch: 90.05  per trait: 3 seconds
-INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
-------------------------------------------------------------------
-INFO: Done with MQM bootstrap analysis
-------------------------------------------------------------------
-INFO: Elapsed time: 0 : 1 : 38 (Hour:Min:Sec)
-INFO: Average time per trait: 3.76 seconds
-------------------------------------------------------------------
-17 : echo term verbatim eps pdf
-------------------------------------------------------------------
-Starting R/QTL multitrait analysis
-Number of phenotypes: 24 
-Batchsize: 10  & n.clusters: 2 
-------------------------------------------------------------------
-INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
-------------------------------------------------------------------
-INFO: Starting with batch 1 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 6.2 seconds
-INFO: Elapsed time: 0 : 0 : 6 (Hour:Min:Sec)
-INFO: Average time per batch: 6.2  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 12 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 2 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 6.41 seconds
-INFO: Elapsed time: 0 : 0 : 13 (Hour:Min:Sec)
-INFO: Average time per batch: 6.305  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 6 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 3 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 6.88 seconds
-INFO: Elapsed time: 0 : 0 : 19 (Hour:Min:Sec)
-INFO: Average time per batch: 6.497  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 26 (Hour:Min:Sec)
-INFO: Average time per trait: 1.099 seconds
-------------------------------------------------------------------
-------------------------------------------------------------------
-Starting R/QTL multitrait analysis
-Number of phenotypes: 24 
-Batchsize: 10  & n.clusters: 2 
-------------------------------------------------------------------
-INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
-------------------------------------------------------------------
-INFO: Starting with batch 1 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 6.78 seconds
-INFO: Elapsed time: 0 : 0 : 7 (Hour:Min:Sec)
-INFO: Average time per batch: 6.78  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 14 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 2 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 6.47 seconds
-INFO: Elapsed time: 0 : 0 : 13 (Hour:Min:Sec)
-INFO: Average time per batch: 6.625  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 7 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 3 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 6.61 seconds
-INFO: Elapsed time: 0 : 0 : 20 (Hour:Min:Sec)
-INFO: Average time per batch: 6.62  per trait: 0 seconds
-INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 26 (Hour:Min:Sec)
-INFO: Average time per trait: 1.103 seconds
-------------------------------------------------------------------
-18 : echo term verbatim eps pdf
-------------------------------------------------------------------
-Starting R/QTL multitrait analysis
-Number of phenotypes: 24 
-Batchsize: 10  & n.clusters: 2 
-------------------------------------------------------------------
-INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
-------------------------------------------------------------------
-INFO: Starting with batch 1 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 14.25 seconds
-INFO: Elapsed time: 0 : 0 : 14 (Hour:Min:Sec)
-INFO: Average time per batch: 14.25  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 28 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 2 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 14.66 seconds
-INFO: Elapsed time: 0 : 0 : 29 (Hour:Min:Sec)
-INFO: Average time per batch: 14.455  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 14 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 3 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 7.64 seconds
-INFO: Elapsed time: 0 : 0 : 37 (Hour:Min:Sec)
-INFO: Average time per batch: 12.183  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 44 (Hour:Min:Sec)
-INFO: Average time per trait: 1.841 seconds
-------------------------------------------------------------------
-------------------------------------------------------------------
-Starting R/QTL multitrait analysis
-Number of phenotypes: 24 
-Batchsize: 10  & n.clusters: 2 
-------------------------------------------------------------------
-INFO: Library snow found using  2  Cores/CPU's/PC's for calculation.
-------------------------------------------------------------------
-INFO: Starting with batch 1 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 1 / 3 
-INFO: Calculation of batch 1 took: 17.14 seconds
-INFO: Elapsed time: 0 : 0 : 17 (Hour:Min:Sec)
-INFO: Average time per batch: 17.14  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 34 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 2 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 2 / 3 
-INFO: Calculation of batch 2 took: 15.32 seconds
-INFO: Elapsed time: 0 : 0 : 32 (Hour:Min:Sec)
-INFO: Average time per batch: 16.23  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 16 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Starting with batch 3 / 3 
-------------------------------------------------------------------
-INFO: Done with batch 3 / 3 
-INFO: Calculation of batch 3 took: 8.14 seconds
-INFO: Elapsed time: 0 : 0 : 41 (Hour:Min:Sec)
-INFO: Average time per batch: 13.533  per trait: 1 seconds
-INFO: Estimated time left: 0 : 0 : 0 (Hour:Min:Sec)
-------------------------------------------------------------------
-------------------------------------------------------------------
-INFO: Elapsed time: 0 : 0 : 49 (Hour:Min:Sec)
-INFO: Average time per trait: 2.031 seconds
-------------------------------------------------------------------
-19 : echo term verbatim eps pdf
-
-You can now run LaTeX on 'chapter12.tex'
-There were 24 warnings (use warnings() to see them)
-> Stangle(file="chapter12.snw")
-Writing to file chapter12.R 
-> q("no")
-> proc.time()
-   user  system elapsed 
- 130.09    0.98  597.06 
