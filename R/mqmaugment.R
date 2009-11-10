@@ -172,6 +172,7 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
     as.integer(ctype),
     as.integer(verbose),
     PACKAGE="qtl")
+	
 
   n.ind = result$nind
   n.aug = result$naug
