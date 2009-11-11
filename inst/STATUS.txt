@@ -28,6 +28,9 @@ Minor changes:
   Added a function convert.map for converting a genetic map from one
   map function to another.
 
+  Fixed an apparent bug in read.cross for format="qtlcart"; need to
+  treat negative genotype codes as missing.
+
 
 Version 1.14, 9/30/2009:
 
