@@ -21,7 +21,7 @@ ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
 }
 
-testnormal <- function(cross,pheno.col=1){
+mqmtestnormal <- function(cross,pheno.col=1){
 	if(any(rownames(installed.packages())=="nortest")){
 		library(nortest)
 		if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
