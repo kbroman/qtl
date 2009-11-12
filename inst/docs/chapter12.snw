@@ -71,9 +71,9 @@ We start bij analyzing the hyperset data this can be loaded into memory by using
 data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
-h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
-result <- mqm(h_no_missing)
-result_compare <- scanone(h_no_missing)
+hyperaug <- mqmaugment(hyper, augment_aboveprob=1)
+result <- mqm(hyperaug)
+result_compare <- scanone(hyperaug)
 @
 If we then plot the results from both QTLscans (Black=mqm,Green=scanone):
 \begin{figure}[ht]
@@ -91,16 +91,16 @@ We will start by first building the model by hand. We see the big peek on chromo
 #Summary results shows the highest lodscores per chromosome
 summary(result)
 #find.marker extracts the marker nearest to chr4 at 30Cm
-find.marker(h_no_missing,chr=4,pos=30)
+find.marker(hyperaug,chr=4,pos=30)
 #which.marker translates the name into a cofacotr number
-toset <- which.marker(h_no_missing,"D4Mit164")
-cofactorlist <- mqmcofactors(h_no_missing,toset)
+toset <- which.marker(hyperaug,"D4Mit164")
+cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
 @
 \clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(h_no_missing, cofactorlist,plot=T)
+result <- mqm(hyperaug, cofactorlist,plot=T)
 @
 \\
 \caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164), which is kept in the model. We see the LOD score (evidence) for a second QTL on chromosome 1 increasing. Also note the QTL BP and the QTL*INFO. the info parameter is an estimation of the informationcontent present in the marker underlying the qtl.}
@@ -117,12 +117,12 @@ The second peek on chromosome 1 at \~70 centimorgan becomes higher, so lets try 
 <<>>=
 summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
-toset <- c(toset,which.marker(h_no_missing,find.marker(h_no_missing,1,70)))
-cofactorlist <- mqmcofactors(h_no_missing,toset)
+toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
+cofactorlist <- mqmcofactors(hyperaug,toset)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(h_no_missing, cofactorlist,plot=T)
+result <- mqm(hyperaug, cofactorlist,plot=T)
 @
 \caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at Chromosome 1 () we see both are included into the model.}
 \end{figure}
@@ -137,8 +137,8 @@ Because mqm internally checks that no markers are included that are less signifi
 cofactors untill there are no more informative markers that can be included. This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using the second approach "unsupervised backward selection" on a large number of markers, and set cofactors every other marker. The algorithm will analyse all the markers and if found to be not informative enough drop them from the model. After selection it will scan the chromosome using the model created from the cofactors. We should set the plot parameter to TRUE ($plot=T$) this way we also get a graphical overview of the model that was used for scanning. So lets set a cofactor at every fifth marker and see which chromosomes can be implicated in the high bloodpressure from which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$ function\\
 \begin{figure}[ht]
 <<fig=TRUE>>=
-cofactorlist <- mqmcofactorsEach(h_no_missing,5)
-result <- mqm(h_no_missing, cofactorlist, plot=T)
+cofactorlist <- mqmcofactorsEach(hyperaug,5)
+result <- mqm(hyperaug, cofactorlist, plot=T)
 @
 \caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker, and backward selected them to obtain the most likely model (based on out selection of cofactors).
 }
@@ -156,7 +156,7 @@ However we see in fig 10 that at an alpha of 0.02 according to mqm chromosomes 1
 This is a fairly extensive model, and lowering the significance level from 0.02 to 0.002 could yield a more comprehensable model.
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
+result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 @
 \caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.002).
 }
@@ -166,7 +166,7 @@ result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
 The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5 as being assosiated with the high bloodpressure. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools to estimate $main$ and $epistatic$ effects. The following code will plot those 2 plots on markers "D1Mit102" (main effect) and the interaction between "D1Mit102" and "D5Mit213" to show the $main$ effect and the estimated $epistasis$ effect. These markers were chosen because they were found significant based on the mathematical distributions used by mqm. If we really want to know whats significant we should do permutation. Permutation will be discussed further on. first we want to investigate the effects.
 \begin{figure}[ht]
 <<fig=TRUE, results=hide>>=
-plot.pxg(h_no_missing,marker="D1Mit102")
+plot.pxg(hyperaug,marker="D1Mit102")
 @
 \caption{Main effect of marker D1Mit102.}
 \end{figure}
@@ -174,14 +174,14 @@ From the initial scans for high bloodpressure in figure 10,11,12 we could get th
 "D1Mit19" (significant in fig 11) and "D1Mit102" (significant in fig 11 and 12)
 \begin{figure}[ht]
 <<fig=TRUE>>=
-effectplot(h_no_missing, mname1="D1Mit19", mname2="D1Mit102")
+effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 @
 \caption{Effectplot to discover if there is an epistatic effect of markers D1Mit19 and D1Mit102.}
 \end{figure}
 If we for example are also interested in the interactionsbetween chromosome 1 and 5, we could make interactionplots between the two highest scoring markers on those chromosomes by using another effectplot
 \begin{figure}[ht]
 <<fig=TRUE>>=
-effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
+effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 @
 \caption{Effectplot to discover if there is an epistatic effect of markers D1Mit102 and D5Mit213.}
 \end{figure}
@@ -192,7 +192,7 @@ To estimate significance of the peeks ( and perhaps exclude some markers from ou
 \begin{figure}[ht]
 <<fig=TRUE>>=
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
+results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 @
 \caption{25 Permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$). This is estimated from permutating a single trait. To estimate false discovery rates when scanning multiple traits we need to account for the trait correlation structure using the FDRpermutation strategy (see bellow)}
 \end{figure}
@@ -226,7 +226,7 @@ mqmplotall(resall,"I")
 @
 \caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.}
 \end{figure}
-Use mqmplotnice to have a better graphical output. (Doesn't work for the generated PDF, but it will in R show u the trait profiles)
+Use mqmplotnice to have a better graphical output. (Doesn't work for the generated PDF, but in R it will show u the trait profiles)
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplotnice(resall,legendloc=1)
