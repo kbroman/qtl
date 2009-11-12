@@ -21,7 +21,6 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
 					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=FALSE){
     start <- proc.time()
-
 	n.run=0
 	if(is.null(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
@@ -76,6 +75,12 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                   if(nphe(cross) < pheno.col || pheno.col < 1){
                     ourstop("No such phenotype in cross object.\n")
                   }			
+		}
+		if(any(rownames(installed.packages())=="nortest")){
+			library(nortest)
+			if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
+				warning("Trait might not be normal (pearsons normallity test)\n")
+			}
 		}
 		pheno <- cross$pheno[[pheno.col]]
 		if(var(pheno,na.rm = TRUE)> 1000){
