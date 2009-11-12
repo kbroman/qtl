@@ -3,7 +3,7 @@
 # mqmutil.R
 #
 # copyright (c) 2009, Danny Arends
-# last modified Apr, 2009
+# last modified Nov, 2009
 # first written Mrt, 2009
 # 
 # Part of the R/qtl package
@@ -19,6 +19,19 @@ ourstop <- function(...){
 
 ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
+}
+
+testnormal <- function(cross,pheno.col=1){
+	if(any(rownames(installed.packages())=="nortest")){
+		library(nortest)
+		if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
+			cat("Trait distribution not normal\n")
+		}else{
+			cat("Trait distribution normal\n")
+		}
+	}else{
+		cat("Please install package: nortest\n")
+	}
 }
 
 # end of mqmutil.R
