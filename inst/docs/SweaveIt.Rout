@@ -187,10 +187,10 @@ Total maplength: 500  cM in  5 Chromosomes
 The lengths are: 0 130 215 300 385 
 
 You can now run LaTeX on 'chapter12.tex'
-There were 22 warnings (use warnings() to see them)
+There were 19 warnings (use warnings() to see them)
 > Stangle(file="chapter12.snw")
 Writing to file chapter12.R 
 > q("no")
 > proc.time()
    user  system elapsed 
- 133.50    1.28  778.04 
+ 134.68    1.15 1244.92 
