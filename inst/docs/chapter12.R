@@ -38,9 +38,9 @@ plot.geno(augmentedcross)
 data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
-h_no_missing <- mqmaugment(hyper, augment_aboveprob=1)
-result <- mqm(h_no_missing)
-result_compare <- scanone(h_no_missing)
+hyperaug <- mqmaugment(hyper, augment_aboveprob=1)
+result <- mqm(hyperaug)
+result_compare <- scanone(hyperaug)
 
 
 ###################################################
@@ -55,17 +55,17 @@ plot(result, result_compare, col=colors, lwd=lines)
 #Summary results shows the highest lodscores per chromosome
 summary(result)
 #find.marker extracts the marker nearest to chr4 at 30Cm
-find.marker(h_no_missing,chr=4,pos=30)
+find.marker(hyperaug,chr=4,pos=30)
 #which.marker translates the name into a cofacotr number
-toset <- which.marker(h_no_missing,"D4Mit164")
-cofactorlist <- mqmcofactors(h_no_missing,toset)
+toset <- which.marker(hyperaug,"D4Mit164")
+cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
 
 
 ###################################################
 ### chunk number 9: 
 ###################################################
-result <- mqm(h_no_missing, cofactorlist,plot=T)
+result <- mqm(hyperaug, cofactorlist,plot=T)
 
 
 ###################################################
@@ -79,14 +79,14 @@ plot(result, result_compare, col=colors, lwd=lines)
 ###################################################
 summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
-toset <- c(toset,which.marker(h_no_missing,find.marker(h_no_missing,1,70)))
-cofactorlist <- mqmcofactors(h_no_missing,toset)
+toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
+cofactorlist <- mqmcofactors(hyperaug,toset)
 
 
 ###################################################
 ### chunk number 12: 
 ###################################################
-result <- mqm(h_no_missing, cofactorlist,plot=T)
+result <- mqm(hyperaug, cofactorlist,plot=T)
 
 
 ###################################################
@@ -98,8 +98,8 @@ plot(result, result_compare, col=colors, lwd=lines)
 ###################################################
 ### chunk number 14: 
 ###################################################
-cofactorlist <- mqmcofactorsEach(h_no_missing,5)
-result <- mqm(h_no_missing, cofactorlist, plot=T)
+cofactorlist <- mqmcofactorsEach(hyperaug,5)
+result <- mqm(hyperaug, cofactorlist, plot=T)
 
 
 ###################################################
@@ -111,32 +111,32 @@ plot(result, result_compare, col=colors, lwd=lines)
 ###################################################
 ### chunk number 16: 
 ###################################################
-result <- mqm(h_no_missing, cofactorlist, alfa=0.002, plot=T)
+result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 
 
 ###################################################
 ### chunk number 17: 
 ###################################################
-plot.pxg(h_no_missing,marker="D1Mit102")
+plot.pxg(hyperaug,marker="D1Mit102")
 
 
 ###################################################
 ### chunk number 18: 
 ###################################################
-effectplot(h_no_missing, mname1="D1Mit19", mname2="D1Mit102")
+effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 
 
 ###################################################
 ### chunk number 19: 
 ###################################################
-effectplot(h_no_missing, mname1="D1Mit102", mname2="D5Mit213")
+effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 
 
 ###################################################
 ### chunk number 20: 
 ###################################################
 library(snow)
-results <- bootstrap(h_no_missing,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
+results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 
 
 ###################################################

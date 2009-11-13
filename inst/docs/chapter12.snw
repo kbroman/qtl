@@ -33,9 +33,9 @@ mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot.geno(mycross)
+geno.image(mycross)
 @
-\caption{Plot.Geno showing the genotypes of 100 individuals with around 2\% missing}
+\caption{geno.image showing the genotypes of 100 individuals with around 2\% missing}
 \end{figure}
 Before we can use the mqm function, the data should be complete (no missing markers). We thus have to fill in the blanks. We have two options to do this, augmentation or fill.geno. The $fill.geno()$ function fills in the most likely markers using single or multiple imputations
 to estimate the missing markersgenotypes. The first option augmentation was designed for mqm and the resulting cross object is not suited for scan.one or cim anymore. This missing data augmentation routine $mqmaugment()$ can fill in missing genotypes for us. For each missing marker it fills in all possible markers and calculates their likelyhood. When they are more likely than the $augment\_aboveprob$ parameter the augmented individual is stored in the new crossobject. The mqmaugment() function can only handle 1 phenotype, but this will be inproved upon soon. The important parameters are:
@@ -52,16 +52,16 @@ plot.geno(augmentedcross)
 @
 \caption{Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment as fill.geno)}
 \end{figure}
-When we use a larger $augment\_aboveprob$ (so more unlikely genotypes are also consideren we see the dataset expanding in size.
+When we use a larger $augment\_aboveprob$ (Thus more unlikely genotypes are also consideren we see the dataset expanding in size.
 This expanded dataset can only be analysed correctly with the mqm routine, because scanone will treat duplicated individuals
-as new individuals (that improve power)\cite{Dempster77}. Mqm does not do this it treats duplicated individuals together as a single entity, but because the algorithm is also aware of the other possible genotypes resulting QTLprofiles will be more accurate\cite{jansen93}.
+as new individuals (that improve power)\cite{Dempster77}. Mqm does not do this it treats duplicated individuals together as a single entity, but because the algorithm is also aware of the other possible genotypes resulting QTLprofiles will be more accurate \cite{jansen93}.
 \\
 \begin{figure}[ht]
 <<fig=TRUE>>=
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=10)
 plot.geno(augmentedcross)
 @
-\caption{Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment and letting it expand the dataset)}
+\caption{Plot.Geno showing the genotypes of 100 individuals with no missing values (using mqmaugment and letting it expand the dataset). There are more than 100 individuals in this plot. this is because the mqm routine expands the dataset when filling in missing markersw. Here the expansion has occured leading to 340 individuals. (average expansion 3.4 per individual)}
 \end{figure}
 \clearpage
 \section{Mqm modeling and mapping}
@@ -203,7 +203,7 @@ multifilled <- fill.geno(multitrait)
 FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
 @
 \section{Multiple traits using MQM}
-We can also use MQM unsupervised to analyse multiple traits simultaniously. We start by loading a new dataset. multitrait which consist of an arabidopsis RIL cross with 24 metabolites measured (phenotypes). First we start by filling in the genome by usig the fill.geno function. (mqmaugment would just augment 1 trait for us, and we want to analyse all the traits) To map back the possible regulation locations of these traits we use plain scanning of all traits (not using cofactors). Then we plot all the profiles in a heatmap. In this heatmap the colors represent the LOD score, on the x-axis the marker number and on the y-axis the traits. The traits are numbered in the plot. We show the heatmap using no-cofactors first, and then the heatmap after using cofactors and backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
+We can also use MQM unsupervised to analyse multiple traits simultaniously. We start by loading a new dataset (Multitrait). Multitrait is a dataset which consist of an arabidopsis RIL cross with 24 metabolites measured (phenotypes). First we start by filling in the genome by usig the fill.geno function. (mqmaugment would just augment 1 trait for us, and we want to analyse all the traits) To map back the possible regulation locations of these traits we use plain scanning of all traits (not using cofactors). Then we plot all the profiles in a heatmap. In this heatmap the colors represent the LOD score, on the x-axis the marker number and on the y-axis the traits. The traits are numbered in the plot. We show the heatmap using no-cofactors first, and then the heatmap after using cofactors and backward elimination. We see improvement in the noise to signal ratio in the in the heatmap plots.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
@@ -234,7 +234,7 @@ mqmplotnice(resall,legendloc=1)
 \caption{Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker}
 \end{figure}
 \clearpage
-CisTrans plots can also be made with multiple traits, because the traits listed here are metabolites they also have a genetic location associated with them. This can be loaded by using $data(locations)$ we can then add those locations to the cross objects and plot the cis and trans effects.
+Another plottiong option added is the CisTransPlot. This plot can be created for traits with genetic locations (like expression of a certain gene, or abundance of a certain protein). Cis means locally acting (so the location of the trait coinsides with the QTL) trans means the oposite so a QTL which is at another location then the trait under investigation. The two axis are both divided by genetic location. where the X-axis is normally the QTLlocation and the Y-axis the location of the trait. CisTrans plots can be made with multiple traits however only when the traits have a genetic location attached to them. Also a function to include these location into the cross object was created. Because the traits we are currently analyzing here are metabolites they also have a genetic location associated with them. The locations can be loaded by using $data(locations)$, after loading we can then add them to the cross objects and plot the cis and trans effects.
 \begin{figure}[ht]
 <<fig=TRUE>>=
 data(locations)
@@ -269,7 +269,7 @@ CisTransPlot(resall, multiloc, 5, FALSE, TRUE)
 	\end{tabular}
 	\label{tbl:tabel1}
 \end{table}
-
+\clearpage
 \begin{thebibliography}{9}
 	\bibitem{broman09}
 		Broman, K.W.; 2009.

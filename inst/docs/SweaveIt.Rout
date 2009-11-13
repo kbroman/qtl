@@ -193,4 +193,4 @@ Writing to file chapter12.R
 > q("no")
 > proc.time()
    user  system elapsed 
- 138.92    1.29  792.28 
+ 133.50    1.28  778.04 
