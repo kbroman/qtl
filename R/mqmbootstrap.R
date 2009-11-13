@@ -86,7 +86,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 {
 	
 	if(missing(cross))
-		ourstop("No cross file. Please supply a valid cross object.") 
+		stop("No cross file. Please supply a valid cross object.") 
 
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		#Echo back the cross type
@@ -109,7 +109,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 
 		if(n.clusters > b.size){
-				ourstop("Please have more items in a batch then clusters assigned per batch")
+				stop("Please have more items in a batch then clusters assigned per batch")
 		}
 
 		#Scan the original
@@ -216,7 +216,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
                 }
 		res
 	}else{
-		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
 }
 
@@ -234,7 +234,7 @@ mqmpermObject <- function(mqmbootresult = NULL){
 		class(result) <- c("scanoneperm",class(result))
 		result
 	}else{
-		ourstop("PLease supply a valid resultobject (mqmmulti).")
+		stop("Please supply a valid resultobject (mqmmulti).")
 	}
 }
 

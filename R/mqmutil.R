@@ -12,9 +12,7 @@
 ######################################################################
 
 ourstop <- function(...){
-	ourline()
 	stop(...)
-#	ourline() [commented out, as this would never be called anyway]
 }
 
 ourline <- function(){
@@ -36,7 +34,7 @@ mqmtestnormal <- function(cross, pheno.col=1){
 			cat("Trait distribution normal\n")
 		}
 	}else{
-		cat("Please install package: nortest\n")
+		cat("Please install package: nortest to enable testing of normality\n")
 	}
 }
 

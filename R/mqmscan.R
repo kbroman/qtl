@@ -23,7 +23,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
     start <- proc.time()
 	n.run=0
 	if(is.null(cross)){
-		ourstop("No cross file. Please supply a valid cross object.") 
+		stop("No cross file. Please supply a valid cross object.") 
 	}
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		if(class(cross)[1] == "f2"){
@@ -61,11 +61,11 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(alfa <=0 || alfa >= 1){
-			ourstop("Alfa must be between 0 and 1.\n")
+			stop("Alfa must be between 0 and 1.\n")
 		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
-			ourstop("For multiple phenotype analysis use the function: 'scanall'.\n")	
+			stop("For multiple phenotype analysis use the function: 'scanall'.\n")	
 		}
 		if(pheno.col != 1){
                   if(verbose) {
@@ -73,7 +73,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                     cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
                   }
                   if(nphe(cross) < pheno.col || pheno.col < 1){
-                    ourstop("No such phenotype in cross object.\n")
+                    stop("No such phenotype in cross object.\n")
                   }			
 		}
 		if(any(rownames(installed.packages())=="nortest")){
@@ -101,7 +101,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		for(i in 1:n.ind) {
 			for(j in 1:n.mark) {
 				if(is.na(geno[i,j])){
-					ourstop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
+					stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 					geno[i,j] <- 9
 				}else{
 					if(forceRIL && ctype != 2 && geno[i,j]==2){
@@ -155,10 +155,10 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 			}else{
 				if(verbose) cat("INFO:",length(cofactors),"Cofactors received to be analyzed\n")
 				if((sum(cofactors) > n.ind-10 && dominance==0)){
-					ourstop("INFO: Cofactors don't look okay for use without dominance\n")
+					stop("INFO: Cofactors don't look okay for use without dominance\n")
 				}
 				if((sum(cofactors)*2 > n.ind-10 && dominance==1)){
-					ourstop("INFO: Cofactors don't look okay for use with dominance\n")
+					stop("INFO: Cofactors don't look okay for use with dominance\n")
 				}				
 				if(sum(cofactors) > 0){
 					if(verbose) cat("INFO: Doing backward elimination of selected cofactors.\n")
@@ -166,23 +166,23 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 					n.run <- 0;
 				}else{
 					backward <- 0;
-					ourstop("Are u trying to give an empty cofactor list ???")
+					stop("Are u trying to give an empty cofactor list ???")
 				}
 			}
 		}
 
 		if((step.min+step.size) > step.max){
-			ourstop("Current Step setting would crash the algorithm")
+			stop("Current Step setting would crash the algorithm")
 		}
 		if(step.min>0){
-			ourstop("step.min needs to be smaller than 0")
+			stop("step.min needs to be smaller than 0")
 		}		
 		if(step.size < 1){
-			ourstop("Step.size needs to be larger than 1")
+			stop("Step.size needs to be larger than 1")
 		}
 		max.cm.on.map <- max(unlist(pull.map(cross)))
 		if(step.max < max.cm.on.map){
-				ourstop("Markers outside of the mapping at ",max.cm.on.map," Cm, please set parameter step.max larger than this value.")		
+				stop("Markers outside of the mapping at ",max.cm.on.map," Cm, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
@@ -333,7 +333,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
 		qtl
 	}else{
-		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
 }
 
