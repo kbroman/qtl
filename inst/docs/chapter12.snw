@@ -244,6 +244,32 @@ CisTransPlot(resall, multiloc, 5, FALSE, TRUE)
 \caption{Fig 19: Another plotting routine: CisTransPlot, available when traits also have genetic locations. We plot the locations of the traits versus the QTL peek locations (using a cutoff of 5 LOD)}
 \end{figure}
 \clearpage
+\section{Overview of all new (mqm) functions}
+\begin{table}[ht]
+	\caption{Added functionality}
+	\centering
+	\begin{tabular}{| l | c | }
+	\hline
+	mqmaugment:& mqm data augmentation \\
+	mqm(scan):& mqm modeling and scanning \\
+	mqmcofactors(Each):& Set cofactors at these markers (or every Each marker) \\
+	which.marker:& Change markernumbering into mqmformat \\
+	scanall:& scanall can use either mqm/scanone/cim to scan all traits \\
+	bootstrap (AKA permutate):& Single trait permutation \\
+	FDRpermutation:& Genome wide False Discovery Rates \\	
+	mqmpermObject:& Creates an R/qtl permutationobject from a bootstrap \\
+	mqmplotall:& plotting of multiple traits (MQMmulti object) \\
+	mqmplotnice:& plotting of mutiple traits (MQMmulti object) \\
+	mqmplotboot:& plot methode to show single trait permutations \\
+	mqmplotone:& plotting of single trait analysis with information content \\
+	addloctocross:& Adding genetic locations for traits \\	
+	CisTransPlot:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmtestnormal:& Tests the normallity of a trait \\ 	
+	\hline
+	\end{tabular}
+	\label{tbl:tabel1}
+\end{table}
+
 \begin{thebibliography}{9}
 	\bibitem{broman09}
 		Broman, K.W.; 2009.
