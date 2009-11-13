@@ -21,7 +21,13 @@ ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
 }
 
-mqmtestnormal <- function(cross,pheno.col=1){
+mqmtestnormal <- function(cross, pheno.col=1){
+	if(pheno.col <0 || pheno.col > nphe(cross)){
+		stop("No such phenotype (pheno.col = ",pheno.col,")")
+	}
+	if(!is.numeric(cross$pheno[[pheno.col]])){
+		stop("Please supply a numeric trait (pheno.col = ",pheno.col," is not numeric)")
+	}
 	if(any(rownames(installed.packages())=="nortest")){
 		library(nortest)
 		if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){

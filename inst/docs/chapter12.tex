@@ -102,7 +102,7 @@ We start bij analyzing the hyperset data this can be loaded into memory by using
 > data(hyper)
 > colors <- c("Black", "Green")
 > lines <- c(2, 1)
-> h_no_missing <- mqmaugment(hyper, augment_aboveprob = 1)
+> hyperaug <- mqmaugment(hyper, augment_aboveprob = 1)
 \end{Sinput}
 \begin{Soutput}
 Starting C-part of the data augmentation routine
@@ -113,7 +113,7 @@ Calculating relative genomepositions of the markers
 Estimating recombinant frequencies
 \end{Soutput}
 \begin{Sinput}
-> result <- mqm(h_no_missing)
+> result <- mqm(hyperaug)
 \end{Sinput}
 \begin{Soutput}
 Back cross (BC)
@@ -130,7 +130,7 @@ Estimating recombinant frequencies
 Analysis of data finished
 \end{Soutput}
 \begin{Sinput}
-> result_compare <- scanone(h_no_missing)
+> result_compare <- scanone(hyperaug)
 \end{Sinput}
 \end{Schunk}
 If we then plot the results from both QTLscans (Black=mqm,Green=scanone):
@@ -176,26 +176,26 @@ c19.loc0   19        0  0.700 0.950    0.665
 c20.loc40  20       40  2.044 0.910    1.860
 \end{Soutput}
 \begin{Sinput}
-> find.marker(h_no_missing, chr = 4, pos = 30)
+> find.marker(hyperaug, chr = 4, pos = 30)
 \end{Sinput}
 \begin{Soutput}
 [1] "D4Mit164"
 \end{Soutput}
 \begin{Sinput}
-> toset <- which.marker(h_no_missing, "D4Mit164")
+> toset <- which.marker(hyperaug, "D4Mit164")
 \end{Sinput}
 \begin{Soutput}
 Marker D4Mit164 is number 46 
 \end{Soutput}
 \begin{Sinput}
-> cofactorlist <- mqmcofactors(h_no_missing, toset)
+> cofactorlist <- mqmcofactors(hyperaug, toset)
 \end{Sinput}
 \end{Schunk}
 \clearpage
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> result <- mqm(h_no_missing, cofactorlist, plot = T)
+> result <- mqm(hyperaug, cofactorlist, plot = T)
 \end{Sinput}
 \begin{Soutput}
 Back cross (BC)
@@ -256,20 +256,20 @@ c19.loc45  19       45 0.4146 0.882   0.3656
 c20.loc40  20       40 1.7845 0.911   1.6255
 \end{Soutput}
 \begin{Sinput}
-> toset <- c(toset, which.marker(h_no_missing, find.marker(h_no_missing, 
+> toset <- c(toset, which.marker(hyperaug, find.marker(hyperaug, 
 +     1, 70)))
 \end{Sinput}
 \begin{Soutput}
 Marker D1Mit218 is number 12 
 \end{Soutput}
 \begin{Sinput}
-> cofactorlist <- mqmcofactors(h_no_missing, toset)
+> cofactorlist <- mqmcofactors(hyperaug, toset)
 \end{Sinput}
 \end{Schunk}
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> result <- mqm(h_no_missing, cofactorlist, plot = T)
+> result <- mqm(hyperaug, cofactorlist, plot = T)
 \end{Sinput}
 \begin{Soutput}
 Back cross (BC)
@@ -304,8 +304,8 @@ cofactors untill there are no more informative markers that can be included. Thi
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> cofactorlist <- mqmcofactorsEach(h_no_missing, 5)
-> result <- mqm(h_no_missing, cofactorlist, plot = T)
+> cofactorlist <- mqmcofactorsEach(hyperaug, 5)
+> result <- mqm(hyperaug, cofactorlist, plot = T)
 \end{Sinput}
 \begin{Soutput}
 Back cross (BC)
@@ -343,7 +343,7 @@ This is a fairly extensive model, and lowering the significance level from 0.02 
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> result <- mqm(h_no_missing, cofactorlist, alfa = 0.002, plot = T)
+> result <- mqm(hyperaug, cofactorlist, alfa = 0.002, plot = T)
 \end{Sinput}
 \begin{Soutput}
 Back cross (BC)
@@ -370,7 +370,7 @@ The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5 as
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> plot.pxg(h_no_missing, marker = "D1Mit102")
+> plot.pxg(hyperaug, marker = "D1Mit102")
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-017}
@@ -381,7 +381,7 @@ From the initial scans for high bloodpressure in figure 10,11,12 we could get th
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> effectplot(h_no_missing, mname1 = "D1Mit19", mname2 = "D1Mit102")
+> effectplot(hyperaug, mname1 = "D1Mit19", mname2 = "D1Mit102")
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-018}
@@ -391,7 +391,7 @@ If we for example are also interested in the interactionsbetween chromosome 1 an
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
-> effectplot(h_no_missing, mname1 = "D1Mit102", mname2 = "D5Mit213")
+> effectplot(hyperaug, mname1 = "D1Mit102", mname2 = "D5Mit213")
 \end{Sinput}
 \end{Schunk}
 \includegraphics{chapter12-019}
@@ -405,7 +405,7 @@ To estimate significance of the peeks ( and perhaps exclude some markers from ou
 \begin{Schunk}
 \begin{Sinput}
 > library(snow)
-> results <- bootstrap(h_no_missing, mqm, cofactors = cofactorlist, 
+> results <- bootstrap(hyperaug, mqm, cofactors = cofactorlist, 
 +     plot = T, n.clusters = 2, n.run = 25, b.size = 25)
 \end{Sinput}
 \begin{Soutput}
@@ -436,7 +436,7 @@ To estimate false discovery rates we can use the function FDRpermutation. In thi
 \end{Sinput}
 \begin{Soutput}
 Calculation of FDR estimate of threshold in multitrait analysis.
-QTL's above threshold: 52 
+QTL's above threshold: 53 
 Starting permutation 1 
 Starting permutation 2 
 Starting permutation 3 
@@ -448,15 +448,15 @@ Starting permutation 8
 Starting permutation 9 
 Starting permutation 10 
    above.in.real.res above.in.perm.res          
-1                602             383.4 0.6368771
-2                350             226.8 0.6480000
-3                257             176.5 0.6867704
-4                203             132.6 0.6532020
-5                168             104.8 0.6238095
-7                128              67.8 0.5296875
-10               100              40.3 0.4030000
-15                67              18.2 0.2716418
-20                52               9.9 0.1903846
+1                592             360.4 0.6087838
+2                348             220.6 0.6339080
+3                261             174.1 0.6670498
+4                201             127.6 0.6348259
+5                169             100.7 0.5958580
+7                128              62.1 0.4851563
+10               100              37.3 0.3730000
+15                68              16.2 0.2382353
+20                53               8.7 0.1641509
 \end{Soutput}
 \end{Schunk}
 \section{Multiple traits using MQM}
@@ -493,7 +493,7 @@ We can also use MQM unsupervised to analyse multiple traits simultaniously. We s
 \includegraphics{chapter12-025}
 \caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm cofactors at each third marker. Compared to Fig 18 the profile is clearer, meaning that the individual profiles contain less noise.}
 \end{figure}
-Use mqmplotnice to have a better graphical output. (Doesn't work for the generated PDF, but it will in R show u the trait profiles)
+Use mqmplotnice to have a better graphical output. (Doesn't work for the generated PDF, but in R it will show u the trait profiles)
 \begin{figure}[ht]
 \begin{Schunk}
 \begin{Sinput}
@@ -527,6 +527,32 @@ The lengths are: 0 130 215 300 385
 \caption{Fig 19: Another plotting routine: CisTransPlot, available when traits also have genetic locations. We plot the locations of the traits versus the QTL peek locations (using a cutoff of 5 LOD)}
 \end{figure}
 \clearpage
+\section{Overview of all new (mqm) functions}
+\begin{table}[ht]
+	\caption{Added functionality}
+	\centering
+	\begin{tabular}{| l | c | }
+	\hline
+	mqmaugment:& mqm data augmentation \\
+	mqm(scan):& mqm modeling and scanning \\
+	mqmcofactors(Each):& Set cofactors at these markers (or every Each marker) \\
+	which.marker:& Change markernumbering into mqmformat \\
+	scanall:& scanall can use either mqm/scanone/cim to scan all traits \\
+	bootstrap (AKA permutate):& Single trait permutation \\
+	FDRpermutation:& Genome wide False Discovery Rates \\	
+	mqmpermObject:& Creates an R/qtl permutationobject from a bootstrap \\
+	mqmplotall:& plotting of multiple traits (MQMmulti object) \\
+	mqmplotnice:& plotting of mutiple traits (MQMmulti object) \\
+	mqmplotboot:& plot methode to show single trait permutations \\
+	mqmplotone:& plotting of single trait analysis with information content \\
+	addloctocross:& Adding genetic locations for traits \\	
+	CisTransPlot:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmtestnormal:& Tests the normallity of a trait \\ 	
+	\hline
+	\end{tabular}
+	\label{tbl:tabel1}
+\end{table}
+
 \begin{thebibliography}{9}
 	\bibitem{broman09}
 		Broman, K.W.; 2009.
