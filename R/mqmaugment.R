@@ -200,14 +200,14 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
      colnames(matri) <- colnames(geno)[(markdone+1):(markdone+markONchr)]
     }
     cross$geno[[c]]$data <- matri
-    colnames(pheno) <- phenoname
-    cross$pheno <- as.data.frame(pheno)
-    #Store extra information (needed by the MQM algorithm) which individual was which original etc..
-    cross$extra$Nind <- n.ind
-    cross$extra$Naug <- n.aug
-    cross$extra$augIND <- result$augIND[1:n.aug]
     markdone <- (markdone+markONchr)
   }
+  colnames(pheno) <- phenoname
+  cross$pheno <- as.data.frame(pheno)
+  #Store extra information (needed by the MQM algorithm) which individual was which original etc..
+  cross$extra$Nind <- n.ind
+  cross$extra$Naug <- n.aug
+  cross$extra$augIND <- result$augIND[1:n.aug]
   # ---- RESULTS
   endtime <- proc.time()
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
