@@ -75,7 +75,7 @@ The phenotype under consideration is specified by the pheno.col argument of the 
 	\item \code{\link[qtl]{mqmaugment}} - Augmentationroutine to estimate missing data
 	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
 	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
-	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for MQM
+	\item \code{\link[qtl]{mqmbootstrap}} - Function called to estimate confidence interfalls for MQM
 	\item \code{\link[qtl]{scanone}} - R/QTL main scanning function
 	\item \code{\link[qtl]{cim}} - Composite interval mapping in R/QTL
 }

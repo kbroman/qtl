@@ -8,12 +8,11 @@
 }
 
 \usage{
-mqmplotone(result, result2, extended = 0 ,\dots)
+mqmplotone(result, extended = 0 ,\dots)
 }
 
 \arguments{
-  \item{result}{ Results from mqmscan of type \code{scanone}}
-  \item{result2}{ Results from mqmscan of type \code{scanone} }  
+  \item{result}{ Results from mqmscan of type \code{scanone}} 
   \item{extended}{ Extended plotting of the information content }
   \item{\dots}{ Extra argument passed to the \code{\link[qtl]{plot.scanone}} }  
 }
