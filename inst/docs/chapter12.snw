@@ -168,9 +168,9 @@ result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 }
 \end{figure}
 \clearpage
-We can recreate this figure from the result scanone object by using $mqmplotone(result)$ this also retrieves the model from the result object attribute $attr(result,"model")$. This fuctions can only be used with mqm scans, as they have an extra column Info, this 
+We can recreate this figure from the result scanone object by using $mqmplotone(result)$ this also retrieves the model from the result object attribute $attr(result,\"model\")$. This fuctions can only be used with mqm scans, as they have an extra column Info, this 
 is the estimated informationcontent per marker. (This is calculated from deviation of the marker distribution. e.g. in a recombinant inbred line we have most power when both groups (A and B) have 125 mice, and no power when we have 1 A versus 249 B) we 
-can multiple the estimated QTL effect by this value "to clean" the QTL profile by giving less weight to uninformative markers.
+can multiple the estimated QTL effect by this value \"to clean\" the QTL profile by giving less weight to uninformative markers.
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplotone(result)
@@ -207,7 +207,7 @@ We can see that there are no clear evidence for an interaction between the two m
 To estimate significance of the peeks ( and perhaps exclude some markers from our model ) we can use permutation. It is adviced to install the SNOW package \cite{tierney03}\cite{tierney04} to make automatic use of multiple core desktops. In small sets with a limited amount of traits we use bootstrap(). On large GWAS sets (gene expression etc) we use the FDRpermutation to estimate FDR across the entire set at certain lod cutoffs (We do 25 because of speed of generating the document this should be 1000 with $b.size=25 or 50$).
 \begin{figure}[ht]
 <<fig=TRUE>>=
-library(snow)
+require(snow)
 results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 @
 \caption{25 Permutations of the hyper dataset. This shows that only QTL's above 2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$). This is estimated from permutating a single trait. To estimate false discovery rates when scanning multiple traits we need to account for the trait correlation structure using the FDRpermutation strategy (see bellow)}
