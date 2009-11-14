@@ -135,15 +135,21 @@ plot(result, result_compare, col=colors, lwd=lines)
 \clearpage
 Because mqm internally checks that no markers are included that are less significant than the alpha level specified. This marker is also informative enough to be included into the model, we can continue this process of adding
 cofactors untill there are no more informative markers that can be included. This could be very time consuming in the case of many QTLs underlying your trait, we can also explore our data using the second approach "unsupervised backward selection" on a large number of markers, and set cofactors every other marker. The algorithm will analyse all the markers and if found to be not informative enough drop them from the model. After selection it will scan the chromosome using the model created from the cofactors. We should set the plot parameter to TRUE ($plot=T$) this way we also get a graphical overview of the model that was used for scanning. So lets set a cofactor at every fifth marker and see which chromosomes can be implicated in the high bloodpressure from which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$ function\\
+<<>>=
+cofactorlist <- mqmcofactorsEach(hyperaug,5)
+@
 \begin{figure}[ht]
 <<fig=TRUE>>=
-cofactorlist <- mqmcofactorsEach(hyperaug,5)
 result <- mqm(hyperaug, cofactorlist, plot=T)
 @
 \caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker, and backward selected them to obtain the most likely model (based on out selection of cofactors).
 }
 \end{figure}
-Comparing back the result to the original scanone result we see quite some striking differences:
+<<>>=
+attr(result,"model")
+@
+With the $attr()$ function we can get the model used in scanning from the resulting scanone object. This is only available when doing automatic backward selection. The resulting model can also be used to obtain the location (and name of the significant markers).
+Comparing back the result to the original scanone result we see quite some striking differences, some peek have higher LOD scores and some others have become less likely to be involved in the trait (lower LOD)
 \clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
