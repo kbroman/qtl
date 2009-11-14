@@ -168,6 +168,16 @@ result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 }
 \end{figure}
 \clearpage
+We can recreate this figure from the result scanone object by using $mqmplotone(result)$ this also retrieves the model from the result object attribute $attr(result,"model")$. This fuctions can only be used with mqm scans, as they have an extra column Info, this 
+is the estimated informationcontent per marker. (This is calculated from deviation of the marker distribution. e.g. in a recombinant inbred line we have most power when both groups (A and B) have 125 mice, and no power when we have 1 A versus 249 B) we 
+can multiple the estimated QTL effect by this value "to clean" the QTL profile by giving less weight to uninformative markers.
+\begin{figure}[ht]
+<<fig=TRUE>>=
+mqmplotone(result)
+@
+\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250 mice using mqm. We have set cofactors at every fifth marker for mqm, and backward selected them to obtain the most likely model (based on selection of cofactors, alpha = 0.002).
+}
+\end{figure}
 \section{MQM effects}
 The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5 as being assosiated with the high bloodpressure. If we want to investigate the effects of the peek we can use r/qtl standard plotting tools to estimate $main$ and $epistatic$ effects. The following code will plot those 2 plots on markers "D1Mit102" (main effect) and the interaction between "D1Mit102" and "D5Mit213" to show the $main$ effect and the estimated $epistasis$ effect. These markers were chosen because they were found significant based on the mathematical distributions used by mqm. If we really want to know whats significant we should do permutation. Permutation will be discussed further on. first we want to investigate the effects.
 \begin{figure}[ht]
