@@ -248,44 +248,50 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 				if(verbose) cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
 				plot.map(pull.map(cross), new.map,main="Supplied map versus re-estimated map")
 			}
-			if(backward){
-				if(!est.map){
-					new.map <- pull.map(cross)
-				}
-				aa <- nmar(cross)			
-				sum <- 1
-				model.present <- 0
-				qc <- NULL
-				qp <- NULL
-				qn <- NULL
-				for(i in 1:length(aa)) {
-					for(j in 1:aa[[i]]) {
-						#cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
-						if(result$COF[sum] != 48){
-							if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
-							qc <- c(qc, as.character(names(cross$geno)[i]))
-							qp <- c(qp, as.double(unlist(new.map)[sum]))
-							qn <- c(qn, substr(names(unlist(new.map))[sum],3,nchar(names(unlist(new.map))[sum])))
-							model.present <- 1
-						}
-						sum <- sum+1
-					}
-				}
-				why <- sim.geno(cross)
-				if(!is.null(qc) && model.present){
-					QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
-					plot(QTLmodel)
-				}else{
-					op <- par(mfrow = c(1,1))
-				}
-			}
-		}
+    }
+    if(backward){
+      if(!est.map){
+        new.map <- pull.map(cross)
+      }
+      aa <- nmar(cross)			
+      sum <- 1
+      model.present <- 0
+      qc <- NULL
+      qp <- NULL
+      qn <- NULL
+      for(i in 1:length(aa)) {
+        for(j in 1:aa[[i]]) {
+          #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
+          if(result$COF[sum] != 48){
+            if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
+            qc <- c(qc, as.character(names(cross$geno)[i]))
+            qp <- c(qp, as.double(unlist(new.map)[sum]))
+            qn <- c(qn, substr(names(unlist(new.map))[sum],3,nchar(names(unlist(new.map))[sum])))
+            model.present <- 1
+          }
+          sum <- sum+1
+        }
+      }
+      why <- sim.geno(cross,n.draws=1)
+      if(!is.null(qc) && model.present){
+        QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
+        
+        if(plot){
+          plot(QTLmodel)
+        }
+      }else{
+        op <- par(mfrow = c(1,1))
+      }
+    }
 		rownames(qtl) <- names
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[pheno.col]),"Info","QTL*INFO")
 		#Convert to data/frame and scan.one object so we can use the standard plotting routines
 		qtl <- as.data.frame(qtl)
+    if(backward && !is.null(qc) && model.present){
+      attr(qtl,"model") <- QTLmodel
+    }
 		class(qtl) <- c("scanone",class(qtl)) 
 		if(verbose) cat("INFO: Saving output to file: ",file, "\n")
 		#write.table(qtl,file)
@@ -329,7 +335,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		  op <- par(mfrow = c(1,1))
 		}
 		
-		end.3 <- proc.time()
+		end.3 <- proc.time()   
 		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
 		qtl
 	}else{
