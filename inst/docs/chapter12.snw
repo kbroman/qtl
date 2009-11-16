@@ -168,7 +168,7 @@ result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 }
 \end{figure}
 \clearpage
-We can recreate this figure from the result scanone object by using $mqmplotone(result)$ this also retrieves the model from the result object attribute $attr(result,\"model\")$. This fuctions can only be used with mqm scans, as they have an extra column Info, this 
+We can recreate this figure from the result scanone object by using $mqmplotone(result)$ this also retrieves the model from the result object attribute $attr(result,"model")$. This fuctions can only be used with mqm scans, as they have an extra column Info, this 
 is the estimated informationcontent per marker. (This is calculated from deviation of the marker distribution. e.g. in a recombinant inbred line we have most power when both groups (A and B) have 125 mice, and no power when we have 1 A versus 249 B) we 
 can multiple the estimated QTL effect by this value \"to clean\" the QTL profile by giving less weight to uninformative markers.
 \begin{figure}[ht]
