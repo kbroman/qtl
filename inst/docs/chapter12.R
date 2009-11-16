@@ -99,48 +99,65 @@ plot(result, result_compare, col=colors, lwd=lines)
 ### chunk number 14: 
 ###################################################
 cofactorlist <- mqmcofactorsEach(hyperaug,5)
-result <- mqm(hyperaug, cofactorlist, plot=T)
 
 
 ###################################################
 ### chunk number 15: 
 ###################################################
-plot(result, result_compare, col=colors, lwd=lines)
+result <- mqm(hyperaug, cofactorlist, plot=T)
 
 
 ###################################################
 ### chunk number 16: 
 ###################################################
-result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
+attr(result,"model")
 
 
 ###################################################
 ### chunk number 17: 
 ###################################################
-plot.pxg(hyperaug,marker="D1Mit102")
+plot(result, result_compare, col=colors, lwd=lines)
 
 
 ###################################################
 ### chunk number 18: 
 ###################################################
-effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
+result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 
 
 ###################################################
 ### chunk number 19: 
 ###################################################
-effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
+mqmplotone(result)
 
 
 ###################################################
 ### chunk number 20: 
 ###################################################
-library(snow)
-results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
+plot.pxg(hyperaug,marker="D1Mit102")
 
 
 ###################################################
 ### chunk number 21: 
+###################################################
+effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
+
+
+###################################################
+### chunk number 22: 
+###################################################
+effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
+
+
+###################################################
+### chunk number 23: 
+###################################################
+require(snow)
+results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
+
+
+###################################################
+### chunk number 24: 
 ###################################################
 data(multitrait)
 multifilled <- fill.geno(multitrait)
@@ -148,7 +165,7 @@ FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
 
 
 ###################################################
-### chunk number 22: 
+### chunk number 25: 
 ###################################################
 data(multitrait)
 multifilled <- fill.geno(multitrait)
@@ -156,32 +173,32 @@ resall <- mqmall(multifilled,n.clusters=2)
 
 
 ###################################################
-### chunk number 23: 
+### chunk number 26: 
 ###################################################
 mqmplotall(resall,"I")
 
 
 ###################################################
-### chunk number 24: 
+### chunk number 27: 
 ###################################################
 cofactorlist <- mqmcofactorsEach(multifilled,3)
 resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
 
 
 ###################################################
-### chunk number 25: 
+### chunk number 28: 
 ###################################################
 mqmplotall(resall,"I")
 
 
 ###################################################
-### chunk number 26: 
+### chunk number 29: 
 ###################################################
 mqmplotnice(resall,legendloc=1)
 
 
 ###################################################
-### chunk number 27: 
+### chunk number 30: 
 ###################################################
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
