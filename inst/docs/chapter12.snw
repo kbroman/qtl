@@ -11,29 +11,43 @@
 \usepackage{color}      % use if color is used in text
 \usepackage{subfigure}  % use for side-by-side figures
 \usepackage{Sweave}
+
+\newcommand{\mqm}{\emph{MQM}}
+\newcommand{\rqtl}{\emph{R/qtl}}
+\newcommand{\FIXME}{({\bf FIXME!})}
+\newcommand{\CHECK}{({\bf CHECK!})}
+
 \title { Chapter 12 - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl Broman and Ritsert Jansen }
 \begin {document}
 \maketitle
 \clearpage
-\section{MQM introduction}
-In this chapter we will go into the automatic mapping of QTLs using the mqm
-method developed by Janssen et al. 1994\cite{jansen94}. This method has been
-added to the R/qtl\cite{broman09}\cite{broman03} package in 2009. The method
-consists of three main parts:\\
-1) Missing data augmentation\\
-2) Backward model selection using genetic markers as cofactors\\
-3) QTL (interval) mapping using the 'most informative' model\\
-The method internally controls false discovery rates and lets users test
-extensive QTLmodels bij elimation of non-significant cofactors.  In this
-chapter we will focus on the basic functions of mqm, we assume the reader knows
-howto load his data into R using the R/qtl $read.cross()$ function.
-\section{Missing data augmentation}
-First lets go into the augmentation of missing data. we start by loading the
-qtl library and simulating some F2 intercross data. We use plot.geno to
-visualze the genotypes of the individuals. we see \~2\% missing values in
-white. The other colors stand for genotypes at a certain position for a certain
-animal(individual).
+
+\section{Introduction}
+
+\mqm\ allows the mapping of QTL using an automated model selection method, as
+described by R.C. Jansen\cite{jansen94}. \mqm\ is an integrated part of
+\rqtl\cite{broman09}\cite{broman03}. \mqm\ consists of a three step procedure
+consisting of (1) data augmentation, (2) backward model selection using genetic
+markers as cofactors and (3) QTL (interval) mapping using the most
+'informative' model. The method internally controls false discovery rates and
+lets users test extensive QTL models by elimation of non-significant
+cofactors\footnote{We assume the reader knows how to load his data into R using
+the R/qtl $read.cross()$ function}.
+
+\section{Data augmentation}
+
+In many cases genetic marker data is incomplete. \mqm\ automatically expands
+the dataset by adding all potential variants and attaches a likelihood to them.
+Say a genetical type is missing (unknown) at a marker location with one
+individual. Based on the values of the surrounding available markers a
+likelihood is attached to a marker being, for example, either A or B. The
+likely options are all considered in the model.
+
+For example with an F2 intercross we can visualize the genotypes of the
+individuals with plot.geno. There are 2\% missing values in white. The other
+colors stand for genotypes at a certain position for a certain individual.
+
 <<>>=
 library(qtl)
 data(map10)
@@ -43,28 +57,35 @@ mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 <<fig=TRUE>>=
 geno.image(mycross)
 @
-\caption{geno.image showing the genotypes of 100 individuals with around 2\% missing}
+\caption{geno.image showing the genotypes of 100 individuals with around 2\%
+missing data for the map10 F2 intercross}
 \end{figure}
-Before we can use the mqm function, the data should be complete (no missing
-markers). We thus have to fill in the blanks. We have two options to do this,
-augmentation or fill.geno. The $fill.geno()$ function fills in the most likely
-markers using single or multiple imputations to estimate the missing
-markersgenotypes. The first option augmentation was designed for mqm and the
-resulting cross object is not suited for scan.one or cim anymore. This missing
-data augmentation routine $mqmaugment()$ can fill in missing genotypes for us.
-For each missing marker it fills in all possible markers and calculates their
-likelyhood. When they are more likely than the $augment\_aboveprob$ parameter
-the augmented individual is stored in the new crossobject. The mqmaugment()
-function can only handle 1 phenotype, but this will be inproved upon soon. The
-important parameters are: $cross, pheno.col, maxaugind, augment\_aboveprob$ and
-verbose set this to TRUE to see what happens. $Maxind$ sets a maximum to the
-size of the dataset the default is usually good enough (60 is around 20 missing
-F2 markers per individual or 30 BC markers). The augmentation routine does an
-all or nothing filling of the missing markers. The individual is expanded
-untill the $augment\_aboveprob$: Augment genotypes that are above a probability
-of occurring (ignore lower probabilities). Setting this value too high may
-result in dropping individuals entirely.  Lets start by simulating a dataset
-with some missing markers (2\%) and discuss howto use the augmentation routine:
+
+Before we can start the next step of \mqm, the data has to be complete (no
+missing markers). There are two possibilities: (1) fill.geno and (2)
+augmentation. \rqtl's $fill.geno()$ fills in the most likely markers using
+imputations to estimate the missing marker genotypes while augmentation is
+specific to the \mqm\ procedure\footnote{Note that after augmentation the
+resulting cross object is no longer suited for scan.one or cim}. 
+
+Here we opt for \mqm's augmentation. $mqmaugment()$ can fill in missing
+genotypes for us.  For each missing marker it fills in all possible markers and
+calculates their likelihood. When they are more likely than the
+$augment\_aboveprob$ parameter the \emph{augmented} individual is stored in the
+new crossobject. At this point the $mqmaugment()$ function can only handle one
+phenotype\FIXME. 
+
+The important parameters are: $cross, pheno.col, maxaugind, augment\_aboveprob$
+and verbose. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
+per individual in a dataset. The default of 60 is usually good enough (20
+missing F2 markers or 30 BC markers per individual)\CHECK. Each individual is
+expanded (augmented) with a probability of, at least, $augment\_aboveprob$ -
+i.e. only augment genotypes that are above a probability of occurring (and drop
+lower probabilities). Note that setting this value too high may result in dropping
+individuals entirely. 
+
+Simulate the dataset with 2\% missing markers:
+
 <<>>=
 #warns because mqm doesnt handle the X chromosome yet
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
@@ -74,30 +95,29 @@ augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
 <<fig=TRUE>>=
 plot.geno(augmentedcross)
 @
-\caption{Plot.Geno showing the genotypes of 100 individuals with no missing
-values (using mqmaugment as fill.geno)}
+\caption{$plot.geno$ showing the genotypes of 100 individuals with no missing
+values (using $mqmaugment$)}
 \end{figure}
-When we use a larger $augment\_aboveprob$ (Thus more unlikely genotypes are
-also consideren we see the dataset expanding in size.  This expanded dataset
-can only be analysed correctly with the mqm routine, because scanone will treat
-duplicated individuals as new individuals (that improve
-power)\cite{Dempster77}. Mqm does not do this it treats duplicated individuals
-together as a single entity, but because the algorithm is also aware of the
-other possible genotypes resulting QTLprofiles will be more accurate
-\\
-cite{jansen93}.  \\
+
+With a lower\CHECK $augment\_aboveprob$ less likely genotypes are also
+considered and the resulting dataset will be larger. The expanded dataset can
+not be used with scanone as it treats the extra individuals as new
+individuals\cite{Dempster77}, while \mqm\ recognises expanded individuals as 
+single entities. The combined \qtl\ profiles lead to a more accurate mapping.
+cite{jansen93}. 
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=10)
 plot.geno(augmentedcross)
 @
-\caption{Plot.Geno showing the genotypes of 100 individuals with no missing
-values (using mqmaugment and letting it expand the dataset). There are more
-than 100 individuals in this plot. this is because the mqm routine expands the
-dataset when filling in missing markersw. Here the expansion has occured
-leading to 340 individuals. (average expansion 3.4 per individual)}
-\end{figure}
+\caption{$plot.geno$ showing the augmented genotypes of 100 individuals with no
+missing values. There are 340 individuals in this plot, because \mqm\ expands
+the dataset when filling in missing markers (an average expansion of 3.4 per
+individual).  \end{figure}
+
 \clearpage
+
 \section{Mqm modeling and mapping}
 We start bij analyzing the hyperset data this can be loaded into memory by
 using $data(hyper)$. This set is an F2 mouse set with a two phenotypes bp,
