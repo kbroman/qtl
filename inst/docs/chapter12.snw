@@ -13,9 +13,18 @@
 \usepackage{Sweave}
 
 \newcommand{\mqm}{\emph{MQM}}
+\newcommand{\MQM}{\mqm}
+\newcommand{\qtl}{QTL}
+\newcommand{\QTL}{\qtl}
+\newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
+\newcommand{\hyperintro}{\qtl\ profiles of the trait bp (hyper dataset, blood
+pressure) in an experiment with 250 mice using \mqm}
+\newcommand{\hyperintrocolors}{ \qtl\ profiles of the trait bp (hyper dataset,
+blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
+\scanone\ (green)}
 
 \title { Chapter 12 - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl Broman and Ritsert Jansen }
@@ -118,11 +127,13 @@ individual).  \end{figure}
 
 \clearpage
 
-\section{Mqm modeling and mapping}
-We start bij analyzing the hyperset data this can be loaded into memory by
-using $data(hyper)$. This set is an F2 mouse set with a two phenotypes bp,
-bloodpressure and Sex. \texttt{qtl.mqm} help page into a \LaTeX{} document
-\\
+\section{QTL modelling and mapping with MQM}
+
+The \emph{hyper} dataset is a F2 mouse set with two phenotypes: bloodpressure
+(bp) and sex. We run both single QTL (scanone) and MQM QTL mapping routinges:
+
+% \texttt{qtl.mqm} help page into a \LaTeX{} document
+
 <<>>=
 data(hyper)
 colors <- c("Black","Green")
@@ -131,19 +142,24 @@ hyperaug <- mqmaugment(hyper, augment_aboveprob=1)
 result <- mqm(hyperaug)
 result_compare <- scanone(hyperaug)
 @
-If we then plot the results from both QTLscans (Black=mqm,Green=scanone):
+And plot the results from both scans (black=mqm, green=scanone):
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm and scanone (black,green). We see one to one correspondance
-between the scanone function and the mqm routine when using no parameters}
+\caption{\hyperintrocolors. Both routines
+correspond one to one when using no extra parameters}
 \end{figure}
-We can now use two approaches:\\
-1) Start building a model by hand or,\\
-2) Use unsupervised backward selection on a large number of markers\\
-We will start by first building the model by hand. We see the big peek on chromosome 4 at 30 centimorgan, so lets account for that by setting a cofactor at the marker nearest to the peek on chromosome 4. This is done by the following steps:
+
+Now there is a choice of two approaches (1) build a model by hand, or
+(2) use unsupervised backward selection on a large number of markers.  
+
+We will start by building the model by hand. The plot shows a big peek on
+chromosome 4 at 30 \cM, so let's account for that by setting a cofactor
+at the marker nearest to the peek on chromosome 4. This is achieved by the
+following steps:
+
 <<>>=
 #Summary results shows the highest lodscores per chromosome
 summary(result)
@@ -160,31 +176,32 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 result <- mqm(hyperaug, cofactorlist,plot=T)
 @
 \\
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164), which is
-kept in the model. We see the LOD score (evidence) for a second QTL on
-chromosome 1 increasing. Also note the QTL BP and the QTL*INFO. the info
-parameter is an estimation of the informationcontent present in the marker
-underlying the qtl.}
+\caption{\hyperintro.  A cofactor is added at chromosome 4 (D4Mit164) and kept in the
+model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
+Note QTL BP and QTL*INFO where INFO is an estimation of the information content
+present in the marker underlying the qtl. \FIXME} 
+\label{Cofactor4}
 \end{figure}
-The previous example shows howto set a single marker as a cofactor, and do a
-mqm qtl scan, the marker isn't dropped and we know that it passed initial rough
-thresholding to account for the user defined alpha level. We accounted here for
-the large peek on chromosome 4 of the mice with high blood pressure. Comparing
-this back to the original scanone using:
+
+Figure \ref{Cofactor4} shows the effect of setting a single marker as a
+cofactor related to the large \qtl\ on chromosome 4, followed by an \mqm\ scan.
+The marker is never dropped and it passes initial rough thresholding to account
+for the, user defined, alpha level. To check this result against a single \qtl\ mapping:
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm and scanone (black, green). When using a cofactor at chromosome
-4 (D4Mit164) to account for variation explained by that marker.}
+\caption{\hyperintrocolors, after introducing a
+cofactor at chromosome 4 (D4Mit164) to account for variation explained by that
+marker.}
 \end{figure}
-The second peek on chromosome 1 at \~70 centimorgan becomes higher, so lets try
-adding that one to the model also and see if the model with both cofactors is
-even better at explaining the phenotype. We combine which.marker with
-find.marker for easy coding, we combine ($c$) the new cofactornumber with the
-one we already had in the toset variable.
+
+The second peek on chromosome 1 at 70 \cM\ increases, so try adding that to the
+model and check if the model with both cofactors is even better at explaining
+the phenotype. Combining $which.marker$ with $find.marker$, the new
+cofactornumber $c$ with the cofactor already in $toset$.
+
 \\
 <<>>=
 summary(result)
@@ -194,37 +211,34 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(hyperaug, cofactorlist,plot=T)
-@
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm. When we use a cofactor at chromosome 4 (D4Mit164) and at
-Chromosome 1 () we see both are included into the model.}
-\end{figure}
-\begin{figure}[ht]
-<<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm and scanone (black, green). When we use a cofactor at chromosome
-4 (D4Mit164) and at Chromosome 1 () to account for variation explained by those
-two markers.}
+\caption{\hyperintrocolors, after introducing a
+cofactors at chromosomes 1 and 4}
 \end{figure}
+
 \clearpage
-Because mqm internally checks that no markers are included that are less
-significant than the alpha level specified. This marker is also informative
-enough to be included into the model, we can continue this process of adding
-cofactors untill there are no more informative markers that can be included.
-This could be very time consuming in the case of many QTLs underlying your
-trait, we can also explore our data using the second approach "unsupervised
-backward selection" on a large number of markers, and set cofactors every other
-marker. The algorithm will analyse all the markers and if found to be not
-informative enough drop them from the model. After selection it will scan the
-chromosome using the model created from the cofactors. We should set the plot
-parameter to TRUE ($plot=T$) this way we also get a graphical overview of the
-model that was used for scanning. So lets set a cofactor at every fifth marker
-and see which chromosomes can be implicated in the high bloodpressure from
-which our mice suffer. We can set cofactors by using the $mqmcofactorsEach()$
-function\\
+
+\mqm\ checks that no markers are included that are less significant than the
+alpha level specified. The marker on chromosome 1 is also informative enough to
+be included into the model and we can continue this process of adding cofactors
+untill there are no more informative markers that can be included.
+
+This could be very time consuming in the case of many QTLs underlying a trait.
+\mqm\ also provides unsupervised backward selection (or elimination) on a large
+number of markers by setting cofactors at every other marker. The algorithm
+will analyse all the markers and if one is found to be not informative enough
+it drops it from the model. This step is repeated until a limited number of
+significant cofactors is left.
+
+After backwards elimination it will scan each chromosome using the model that
+includes the retained cofactors. Set the plot parameter to TRUE ($plot=T$) to
+get a graphical view of the model. Here we set a cofactor at every fifth
+marker, and assess which chromosomes may be implicated in high bloodpressure.
+Specify the cofactor at every 5 markers by using the $mqmcofactorsEach()$ function
+
+% Danny: rename function mqmcofactorsEach to mqm_set_cofactors() FIXME
+
 <<>>=
 cofactorlist <- mqmcofactorsEach(hyperaug,5)
 @
@@ -232,32 +246,34 @@ cofactorlist <- mqmcofactorsEach(hyperaug,5)
 <<fig=TRUE>>=
 result <- mqm(hyperaug, cofactorlist, plot=T)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm. We have set cofactors at every fifth marker, and backward
-selected them to obtain the most likely model (based on out selection of
-cofactors).  }
+\caption{\hyperintro, after introducing cofactors at every fifth marker and
+backward eliminatio to find the most likely model}
 \end{figure}
 <<>>=
 attr(result,"model")
 @
-With the $attr()$ function we can get the model used in scanning from the
-resulting scanone object. This is only available when doing automatic backward
-selection. The resulting model can also be used to obtain the location (and
-name of the significant markers).  Comparing back the result to the original
-scanone result we see quite some striking differences, some peek have higher
-LOD scores and some others have become less likely to be involved in the trait
-(lower LOD)
+
+% Danny: a more descriptive name for attr(), or is it R/qtl's? What about 
+% mqm_get_model_attr FIXME
+
+The $attr()$ function returns the model from the resulting $scanone$ object.
+This is only available when doing automatic backward selection. The resulting
+model can be used to obtain the location and name of the significant markers.
+When comparing the resulting scan to the original $scanone$ result there are
+some striking differences. Some \qtl\ show higher significance (LOD scores) and
+some others show lower significance and are, therefore, estimated to be less
+likely involved in this trait.
+
 \clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
 plot(result, result_compare, col=colors, lwd=lines)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm and scanone (black, green). We have set cofactors at every fifth
-marker for mqm, and backward selected them to obtain the most likely model
-(based on selection of cofactors, alpha = 0.02). We see some striking
-differences between the resulting QTLprofiles.}
+\caption{\hyperintrocolors with cofactors at every fifth
+marker for mqm, followed by backward selection
+(alpha = 0.02). The resulting profiles are clearly different }
 \end{figure}
+
 This leads to a lot of hits and multiple hits on each chromosome, because some
 cofactors are placed too close to eachother However we see in fig 10 that at an
 alpha of 0.02 according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated
@@ -267,8 +283,7 @@ significance level from 0.02 to 0.002 could yield a more comprehensable model.
 <<fig=TRUE>>=
 result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm. We have set cofactors at every fifth marker for mqm, and
+\caption{\hyperintro. We have set cofactors at every fifth marker for mqm, and
 backward selected them to obtain the most likely model (based on selection of
 cofactors, alpha = 0.002).
 }
@@ -287,8 +302,7 @@ profile by giving less weight to uninformative markers.
 <<fig=TRUE>>=
 mqmplotone(result)
 @
-\caption{QTlprofiles of the trait bp (blood pressure) in an experiment with 250
-mice using mqm. We have set cofactors at every fifth marker for mqm, and
+\caption{\hyperintro. We have set cofactors at every fifth marker for mqm, and
 backward selected them to obtain the most likely model (based on selection of
 cofactors, alpha = 0.002).
 }
