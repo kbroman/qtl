@@ -272,44 +272,57 @@ plot(result, result_compare, col=colors, lwd=lines)
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for mqm, followed by backward selection
 (alpha = 0.02). The resulting profiles are clearly different }
+\label{Backward}
 \end{figure}
 
-This leads to a lot of hits and multiple hits on each chromosome, because some
-cofactors are placed too close to eachother However we see in fig 10 that at an
-alpha of 0.02 according to mqm chromosomes 1,2,4,5,6 and (15?) are implicated
-using this method This is a fairly extensive model, and lowering the
-significance level from 0.02 to 0.002 could yield a more comprehensable model.
+% Danny: note the use of \label and \ref
+
+This results in a lot of hits with multiple hits on each chromosome. Some
+cofactors are placed too close to each other. Figure \ref{Backward} shows
+for an alpha of 0.02 chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the
+significance level from 0.02 to 0.002 may yield a more comprehensive model:
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 @
-\caption{\hyperintro. We have set cofactors at every fifth marker for mqm, and
-backward selected them to obtain the most likely model (based on selection of
-cofactors, alpha = 0.002).
+\caption{\hyperintro, with cofactors at every fifth marker, after backwards selection (alpha = 0.002).
 }
+\label{FigLowAlpha}
 \end{figure}
 \clearpage
-We can recreate this figure from the result scanone object by using
-$mqmplotone(result)$ this also retrieves the model from the result object
-attribute $attr(result,\"model\")$. This fuctions can only be used with mqm
-scans, as they have an extra column Info, this is the estimated
-informationcontent per marker. (This is calculated from deviation of the marker
-distribution. e.g. in a recombinant inbred line we have most power when both
-groups (A and B) have 125 mice, and no power when we have 1 A versus 249 B) we
-can multiple the estimated QTL effect by this value \"to clean\" the QTL
-profile by giving less weight to uninformative markers.
+
+% Danny, shouldn't we use 'elimination' rather than 'selection' for backwards elimination? At least we should be consistent FIXME
+
+Recreate this figure from resulting $scanone$ object using
+$mqmplotone(result)$. This, again, retrieves the model from the result object
+attribute $attr(result,\"model\")$. The functions can only be used with \mqm\
+scans, as they have an additinal column $Info$, which contains the estimated
+informationcontent per marker. $Info$ is calculated from the deviation of the
+marker distribution. For example, in a recombinant inbred line we have most
+power when both groups (A and B) have 125 mice, and no power when we have 1 A
+versus 249 B. Therefore we can multiple the estimated QTL effect by this value
+\"to clean\" the QTL profile by giving less weight to less informative markers.
+
+% Note 1: Don't use capitals in Info FIXME
+% Note 2: What if Karl allows Info for the scanone object? Would that not be easy
+%         to support? FIXME
+
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplotone(result)
 @
-\caption{\hyperintro. We have set cofactors at every fifth marker for mqm, and
-backward selected them to obtain the most likely model (based on selection of
-cofactors, alpha = 0.002).
+\caption{\hyperintro, with cofactors at every fifth marker, after backward selection (alpha = 0.002). Recreated figure with $mqmplotone$.
 }
 \end{figure}
+
+% PJOTR TOT HIER
+
 \section{MQM effects}
-The models generated in figure 11 and 12 implicates chromosomes 1, 2, 4 and 5
-as being assosiated with the high bloodpressure. If we want to investigate the
+
+Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5
+are associated with high bloodpressure. If we want to investigate the
 effects of the peek we can use r/qtl standard plotting tools to estimate $main$
 and $epistatic$ effects. The following code will plot those 2 plots on markers
 "D1Mit102" (main effect) and the interaction between "D1Mit102" and "D5Mit213"
