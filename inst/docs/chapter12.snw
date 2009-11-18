@@ -317,40 +317,45 @@ mqmplotone(result)
 }
 \end{figure}
 
-% PJOTR TOT HIER
-
 \section{MQM effects}
 
-Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5
-are associated with high bloodpressure. If we want to investigate the
-effects of the peek we can use r/qtl standard plotting tools to estimate $main$
-and $epistatic$ effects. The following code will plot those 2 plots on markers
-"D1Mit102" (main effect) and the interaction between "D1Mit102" and "D5Mit213"
-to show the $main$ effect and the estimated $epistasis$ effect. These markers
-were chosen because they were found significant based on the mathematical
-distributions used by mqm. If we really want to know whats significant we
-should do permutation. Permutation will be discussed further on. first we want
-to investigate the effects.
+Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5 are
+associated with high bloodpressure. If we want to investigate the
+effects of the peek we can use \rqtl\ standard plotting tools to
+estimate $main$ and $epistatic$ effects. The following code will plot
+those two plots on markers "D1Mit102" (main effect) and the
+interaction between "D1Mit102" and "D5Mit213" to show the $main$
+effect and the estimated $epistasis$. These markers are initially
+chosen because they are considered significant, based on mathematical
+distributions used by \mqm\ (we will show a better method, based on
+permutations, later).
+
+First investigate the effects.
+
 \begin{figure}[ht]
 <<fig=TRUE, results=hide>>=
 plot.pxg(hyperaug,marker="D1Mit102")
 @
 \caption{Main effect of marker D1Mit102.}
 \end{figure}
-From the initial scans for high bloodpressure in figure 10,11,12 we could get
-the idea that perhaps there are 2 qtl's on chromosome 1. These could have a
-possible interaction that would explain the dual humped shape of the QTLprofile
-on chromosome 1. To investigate this we select markers "D1Mit19" (significant
-in fig 11) and "D1Mit102" (significant in fig 11 and 12)
+The initial scans for high bloodpressure in figure \ref{Backward}
+possibly shows two \qtl\ on chromosome 1. The dual humped shape could be explained by
+an interaction.
+To investigate this we select markers "D1Mit19" (significant
+in figure \ref{10}) and "D1Mit102" (significant in figure \ref{11} and
+\ref{12})
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 @
-\caption{Effectplot to discover if there is an epistatic effect of markers D1Mit19 and D1Mit102.}
+\caption{With $effectplot$ discover a possible epistatic effect of markers D1Mit19 and D1Mit102.}
 \end{figure}
+
 If we for example are also interested in the interactionsbetween chromosome 1
 and 5, we could make interactionplots between the two highest scoring markers
 on those chromosomes by using another effectplot
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
@@ -490,7 +495,29 @@ peek locations (using a cutoff of 5 LOD)}
 	\end{tabular}
 	\label{tbl:tabel1}
 \end{table}
+
 \clearpage
+
+\section{Final notes}
+
+\subsection{Sex Chromosomes}
+
+The current version of \mqm\ does not treat the sex chromosome as a
+special case. You can treat sex as a covariate, of course, but special
+recombination rates are not considered. This will change in a future
+version.
+
+\subsection{Out of memory}
+
+When using a slack augmentation setting the matrix may grow out of
+memory. You will see the following error:
+
+Error \FIXME
+
+
+
+\clearpage
+
 \begin{thebibliography}{9}
 	\bibitem{broman09}
 		Broman, K.W.; 2009.
