@@ -400,7 +400,7 @@ mqmplotone <- function(result, extended=0,...){
     if(!is.null(attr(result,"model"))){
       plot(attr(result,"model"))
     }
-    plot(result,info.c,lwd=1,ylab="QTL (LOD)",...)
+    plot(result,lwd=1,ylab="QTL (LOD)",...)
     grid(max(result$chr),5)
     labels <- c(colnames(result)[3],colnames(result)[5])
     legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
