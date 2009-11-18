@@ -349,33 +349,40 @@ in figure \ref{10}) and "D1Mit102" (significant in figure \ref{11} and
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 @
-\caption{With $effectplot$ discover a possible epistatic effect of markers D1Mit19 and D1Mit102.}
+\caption{With $effectplot$ discover a possible epistatic effect of
+markers D1Mit19 and D1Mit102.}
+\label{epistatic1}
 \end{figure}
 
-If we for example are also interested in the interactionsbetween chromosome 1
-and 5, we could make interactionplots between the two highest scoring markers
-on those chromosomes by using another effectplot
+If we, for example, are interested in the interactions between
+chromosome 1 and 5, we could make interaction plots between the two
+highest scoring markers on those chromosomes by using another effect
+plot:
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 @
-\caption{Effectplot to discover if there is an epistatic effect of markers D1Mit102 and D5Mit213.}
+\caption{$effectplot$ for discovering an epistatic effect of markers D1Mit102 and D5Mit213}
+\label{epistatic2}
 \end{figure}
-We can see that there are no clear evidence for an interaction between the two
-markers D1Mit102 and D5Mit213. This is because both lines are parallel thus
-there is no effect of the genotype (on one of the loci e.g. D5Mit213) on the
-other loci (D1Mit102). If we would see two lines non-parallele this would
-indicate an epistatic effect at that marker. 
+
+Figure \ref{epistatic2} shows clear evidence for an interaction between the two
+markers D1Mit102 and D5Mit213, as both lines are parallel.
+
 \clearpage
-\section{Significance and thresholds} To estimate significance of the peeks (
-and perhaps exclude some markers from our model ) we can use permutation. It is
-adviced to install the SNOW package \cite{tierney03}\cite{tierney04} to make
-automatic use of multiple core desktops. In small sets with a limited amount of
-traits we use bootstrap(). On large GWAS sets (gene expression etc) we use the
-FDRpermutation to estimate FDR across the entire set at certain lod cutoffs (We
-do 25 because of speed of generating the document this should be 1000 with
-$b.size=25 or 50$).
+
+\section{Permutation test for significance} 
+
+To estimate significance of the peeks ( and perhaps exclude some
+markers from our model ) we can use permutation. It is adviced to
+install the SNOW package \cite{tierney03}\cite{tierney04} to make
+automatic use of multiple core desktops. In small sets with a limited
+amount of traits we use bootstrap(). On large GWAS sets (gene
+expression etc) we use the FDRpermutation to estimate FDR across the
+entire set at certain lod cutoffs (We do 25 because of speed of
+generating the document this should be 1000 with $b.size=25 or 50$).
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 require(snow)
