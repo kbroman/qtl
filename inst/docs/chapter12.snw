@@ -16,8 +16,10 @@
 \newcommand{\MQM}{\mqm}
 \newcommand{\qtl}{QTL}
 \newcommand{\QTL}{\qtl}
+\newcommand{\lod}{LOD}
 \newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
+\newcommand{\At}{\emph{Arabidopsis thaliana}
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
 \newcommand{\hyperintro}{\qtl\ profiles of the trait bp (hyper dataset, blood
@@ -375,51 +377,61 @@ markers D1Mit102 and D5Mit213, as both lines are parallel.
 \section{Permutation test for significance} 
 
 To estimate significance of the peeks ( and perhaps exclude some
-markers from our model ) we can use permutation. It is adviced to
-install the SNOW package \cite{tierney03}\cite{tierney04} to make
-automatic use of multiple core desktops. In small sets with a limited
-amount of traits we use bootstrap(). On large GWAS sets (gene
-expression etc) we use the FDRpermutation to estimate FDR across the
-entire set at certain lod cutoffs (We do 25 because of speed of
-generating the document this should be 1000 with $b.size=25 or 50$).
+markers from our model ) we can use a permutation test. This can be
+computationally expensive. If you have access to multiple CPUs on your
+computer you can install the SNOW package
+\cite{tierney03}\cite{tierney04}. For small sets, with a limited amount
+of traits, the $bootstrap()$ works well. For large genome wide association studies
+(GWAS) use $FDRpermutation$ to estimate the FDR across the entire
+dataset
+at certain \lod\ cutoffs (for this example we use $25$ permutations, for
+a real experiment use $1000$ with $b.size=25$ or $50$).
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 require(snow)
 results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 @
-\caption{25 Permutations of the hyper dataset. This shows that only QTL's above
-2.5 LOD score can be trusted (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
-This is estimated from permutating a single trait. To estimate false discovery
-rates when scanning multiple traits we need to account for the trait
-correlation structure using the FDRpermutation strategy (see bellow)}
+\caption{Calculate significance permuting 25 times over the hyper dataset. 
+\qtl\ with a \lod\ higher than
+2.5 LOD score can be considered significant (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+This is estimated from permuting a single trait. 
+% To estimate false discovery
+% rates when scanning multiple traits we need to account for the trait
+% correlation structure using the $FDRpermutation$ strategy (see below)}
 \end{figure}
-To estimate false discovery rates we can use the function FDRpermutation. In
-this method we scann all the traits and count how many QTL's (markers with a
-LOD above) we observe when setting a certain threshold. We then permutate all
-the data leaving the correlationstructure between traits intact, and scan again
-in the permuted data, we calculate how many markers we see above our threshold
-(average in all runs) and use this to estimate out false discovery rate. In
-this small set we obtain very high FDR estimates because of the small amount of
-permutations and the high correlation between traits.
+
+% FIXME: rename FDRpermutation to something mqm like (no capitals)
+
+For estimating false discovery rates use the function
+$FDRpermutation$\FIXME. The function scans the traits and counts
+observed \qtl\ (markers with a LOD above $x$) when setting a certain
+threshold. It permutes all the data leaving the correlation structure
+between traits intact. For this small example very high FDR estimates
+are calculated because of the small amount of permutations and the
+high correlation between traits.
+
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
 FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
 @
-\section{Multiple traits using MQM}
-We can also use MQM unsupervised to analyse multiple traits simultaniously. We
-start by loading a new dataset (Multitrait). Multitrait is a dataset which
-consist of an arabidopsis RIL cross with 24 metabolites measured (phenotypes).
-First we start by filling in the genome by usig the fill.geno function.
-(mqmaugment would just augment 1 trait for us, and we want to analyse all the
-traits) To map back the possible regulation locations of these traits we use
-plain scanning of all traits (not using cofactors). Then we plot all the
-profiles in a heatmap. In this heatmap the colors represent the LOD score, on
-the x-axis the marker number and on the y-axis the traits. The traits are
-numbered in the plot. We show the heatmap using no-cofactors first, and then
-the heatmap after using cofactors and backward elimination. We see improvement
-in the noise to signal ratio in the in the heatmap plots.
+\section{MQM and multiple traits}
+
+MQM can analyse multiple traits simultaneously. 
+Start by loading a new dataset ($multitrait$). $multitrait$
+consists of an arabidopsis RIL cross with 24 metabolites measured (phenotypes).
+
+Start by filling in the genome using the $fill.geno$ function, rather
+than $mqmaugment$, which can only handle one trait. To map back the
+possible regulatory locations of these traits use plain scanning of
+all traits (initially without cofactors). Next plot all the profiles
+in a heatmap. In this heatmap the colors represent the LOD score, on
+the x-axis the marker number and on the y-axis the traits. The traits
+are numbered in the plot. Plot heatmap without cofactors and then the
+heatmap with cofactors and backward elimination. The plots show
+improvement of the signal to noise ratio.
+
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
@@ -440,44 +452,45 @@ resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
 <<fig=TRUE>>=
 mqmplotall(resall,"I")
 @
-\caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles
-created using mqm cofactors at each third marker. Compared to Fig 18 the
-profile is clearer, meaning that the individual profiles contain less noise.}
+\caption{Heatmap of 25 metabolite expression traits in \At with profiles
+created using cofactors at each third marker. Compared to figure 18 the
+profile is clearer, because the individual profiles contain less noise.}
 \end{figure}
-Use mqmplotnice to have a better graphical output. (Doesn't work for the
-generated PDF, but in R it will show u the trait profiles)
+Use $mqmplotnice$ for more graphical output. (This does not show in the
+generated PDF, but in R it shows the trait profiles)
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplotnice(resall,legendloc=1)
 @
-\caption{Other plotting routine showing the results of scanning 25 traits using mqm cofactors at each third marker}
+\caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 \end{figure}
+
 \clearpage
-Another plottiong option added is the CisTransPlot. This plot can be created
-for traits with genetic locations (like expression of a certain gene, or
-abundance of a certain protein). Cis means locally acting (so the location of
-the trait coinsides with the QTL) trans means the oposite so a QTL which is at
-another location then the trait under investigation. The two axis are both
-divided by genetic location. where the X-axis is normally the QTLlocation and
-the Y-axis the location of the trait. CisTrans plots can be made with multiple
-traits however only when the traits have a genetic location attached to them.
-Also a function to include these location into the cross object was created.
-Because the traits we are currently analyzing here are metabolites they also
-have a genetic location associated with them. The locations can be loaded by
-using $data(locations)$, after loading we can then add them to the cross
-objects and plot the cis and trans effects.
+
+% FIXME: rename CisTransPlot to something like mqm_cistransplot
+
+The next plot is the $CisTransPlot$\FIXME.  This plot can be created
+for \qtl\ with associated genome locations (like when a, so called
+eQTL, correlates with a know microarray probe).  The
+two axis are both divided by genetic location. where the X-axis is,
+normally, the \qtl\ location and the Y-axis the location of the trait.
+To achieve the plot genomic locations need to be associated with the
+$scanone$ object.  use $data(locations)$. 
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
 CisTransPlot(resall, multiloc, 5, FALSE, TRUE)
 @
-\caption{Fig 19: Another plotting routine: CisTransPlot, available when traits
-also have genetic locations. We plot the locations of the traits versus the QTL
-peek locations (using a cutoff of 5 LOD)}
+\caption{CisTransPlot, available when \qtl\
+have associated genome locations. \qtl\ are plotted against the position on the
+genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 \end{figure}
+
 \clearpage
-\section{Overview of all new (mqm) functions}
+
+\section{Overview of all \mqm\ functions}
 \begin{table}[ht]
 	\caption{Added functionality}
 	\centering
