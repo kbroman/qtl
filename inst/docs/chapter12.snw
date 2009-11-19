@@ -19,14 +19,14 @@
 \newcommand{\lod}{LOD}
 \newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
-\newcommand{\At}{\emph{Arabidopsis thaliana}
+\newcommand{\At}{\emph{Arabidopsis thaliana}}
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
 \newcommand{\hyperintro}{\qtl\ profiles of the trait bp (hyper dataset, blood
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{ \qtl\ profiles of the trait bp (hyper dataset,
 blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
-\scanone\ (green)}
+scanone (green)}
 
 \title { Chapter 12 - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl Broman and Ritsert Jansen }
@@ -125,7 +125,8 @@ plot.geno(augmentedcross)
 \caption{$plot.geno$ showing the augmented genotypes of 100 individuals with no
 missing values. There are 340 individuals in this plot, because \mqm\ expands
 the dataset when filling in missing markers (an average expansion of 3.4 per
-individual).  \end{figure}
+individual).}
+\end{figure}
 
 \clearpage
 
@@ -177,7 +178,6 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 <<fig=TRUE>>=
 result <- mqm(hyperaug, cofactorlist,plot=T)
 @
-\\
 \caption{\hyperintro.  A cofactor is added at chromosome 4 (D4Mit164) and kept in the
 model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
 Note QTL BP and QTL*INFO where INFO is an estimation of the information content
@@ -203,8 +203,6 @@ The second peek on chromosome 1 at 70 \cM\ increases, so try adding that to the
 model and check if the model with both cofactors is even better at explaining
 the phenotype. Combining $which.marker$ with $find.marker$, the new
 cofactornumber $c$ with the cofactor already in $toset$.
-
-\\
 <<>>=
 summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
@@ -298,7 +296,7 @@ result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 
 Recreate this figure from resulting $scanone$ object using
 $mqmplotone(result)$. This, again, retrieves the model from the result object
-attribute $attr(result,\"model\")$. The functions can only be used with \mqm\
+attribute $attr(result,"model")$. The functions can only be used with \mqm\
 scans, as they have an additinal column $Info$, which contains the estimated
 informationcontent per marker. $Info$ is calculated from the deviation of the
 marker distribution. For example, in a recombinant inbred line we have most
@@ -396,9 +394,9 @@ results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.r
 \qtl\ with a \lod\ higher than
 2.5 LOD score can be considered significant (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
 This is estimated from permuting a single trait. 
-% To estimate false discovery
-% rates when scanning multiple traits we need to account for the trait
-% correlation structure using the $FDRpermutation$ strategy (see below)}
+\\ To estimate false discovery
+\\ rates when scanning multiple traits we need to account for the trait
+\\ correlation structure using the $FDRpermutation$ strategy (see below)}
 \end{figure}
 
 % FIXME: rename FDRpermutation to something mqm like (no capitals)
