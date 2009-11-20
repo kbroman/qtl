@@ -237,10 +237,10 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 			}
 			if(est.map){
 				new.map <- pull.map(cross)
-				aa <- nmar(cross)
+				chrmarkers <- nmar(cross)
 				sum <- 1
-				for(i in 1:length(aa)) {
-					for(j in 1:aa[[i]]) {
+				for(i in 1:length(chrmarkers)) {
+					for(j in 1:chrmarkers[[i]]) {
 						new.map[[i]][j] <- result$DIST[sum]
 						sum <- sum+1
 					}
@@ -253,14 +253,14 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
       if(!est.map){
         new.map <- pull.map(cross)
       }
-      aa <- nmar(cross)			
+      chrmarkers <- nmar(cross)			
       sum <- 1
       model.present <- 0
       qc <- NULL
       qp <- NULL
       qn <- NULL
-      for(i in 1:length(aa)) {
-        for(j in 1:aa[[i]]) {
+      for(i in 1:length(chrmarkers)) {
+        for(j in 1:chrmarkers[[i]]) {
           #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
           if(result$COF[sum] != 48){
             if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
@@ -286,12 +286,12 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		rownames(qtl) <- names
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
-		colnames(qtl) = c("chr","pos (Cm)",paste("QTL",colnames(cross$pheno)[pheno.col]),"Info","QTL*INFO")
+		colnames(qtl) = c("chr","pos (Cm)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
 		#Convert to data/frame and scan.one object so we can use the standard plotting routines
 		qtl <- as.data.frame(qtl)
-    if(backward && !is.null(qc) && model.present){
-      attr(qtl,"model") <- QTLmodel
-    }
+		if(backward && !is.null(qc) && model.present){
+		  attr(qtl,"mqmmodel") <- QTLmodel
+		}
 		class(qtl) <- c("scanone",class(qtl)) 
 		if(verbose) cat("INFO: Saving output to file: ",file, "\n")
 		#write.table(qtl,file)
