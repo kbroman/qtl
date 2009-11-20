@@ -250,13 +250,9 @@ result <- mqm(hyperaug, cofactorlist, plot=T)
 backward eliminatio to find the most likely model}
 \end{figure}
 <<>>=
-attr(result,"model")
+mqmgetmodel(result)
 @
-
-% Danny: a more descriptive name for attr(), or is it R/qtl's? What about 
-% mqm_get_model_attr FIXME
-
-The $attr()$ function returns the model from the resulting $scanone$ object.
+The $mqmgetmodel()$ function returns the model from the resulting $scanone$ object.
 This is only available when doing automatic backward selection. The resulting
 model can be used to obtain the location and name of the significant markers.
 When comparing the resulting scan to the original $scanone$ result there are
@@ -296,9 +292,9 @@ result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 
 Recreate this figure from resulting $scanone$ object using
 $mqmplotone(result)$. This, again, retrieves the model from the result object
-attribute $attr(result,"model")$. The functions can only be used with \mqm\
-scans, as they have an additinal column $Info$, which contains the estimated
-informationcontent per marker. $Info$ is calculated from the deviation of the
+attribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
+scans, as they have an additinal column $info$, which contains the estimated
+informationcontent per marker. $info$ is calculated from the deviation of the
 marker distribution. For example, in a recombinant inbred line we have most
 power when both groups (A and B) have 125 mice, and no power when we have 1 A
 versus 249 B. Therefore we can multiple the estimated QTL effect by this value
