@@ -1,5 +1,5 @@
-\name{FDRpermutation}
-\alias{FDRpermutation}
+\name{mqmscanfdr}
+\alias{mqmscanfdr}
 
 \title{ Estimates of FDR when doing multiple trait QTL analysis }
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-	FDRpermutation(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=TRUE, \dots)
+	mqmscanfdr(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=TRUE, \dots)
 }
 
 \arguments{
@@ -51,7 +51,7 @@
 data(multitrait)				#Use the multitrait dataset
 \dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 multitrait <- calc.genoprob(multitrait)
-result <- FDRpermutation(multitrait, threshold=10.0, n.perm=5, method="hk")	#Calculate the thresholds
+result <- mqmscanfdr(multitrait, threshold=10.0, n.perm=5)	#Calculate the thresholds
 }
 
 \references{
