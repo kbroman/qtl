@@ -38,5 +38,14 @@ mqmtestnormal <- function(cross, pheno.col=1){
 	}
 }
 
+mqmgetmodel <- function(scanresult){
+	if(!is.null(scanresult)){
+		model <- attr(scanresult,"mqmmodel")
+		model
+	}else{
+		stop("Please supply a scan result")
+	}
+}
+
 # end of mqmutil.R
 
