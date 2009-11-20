@@ -375,7 +375,7 @@ markers from our model ) we can use a permutation test. This can be
 computationally expensive. If you have access to multiple CPUs on your
 computer you can install the SNOW package
 \cite{tierney03}\cite{tierney04}. For small sets, with a limited amount
-of traits, the $bootstrap()$ works well. For large genome wide association studies
+of traits, the $mqmpermute()$ works well. For large genome wide association studies
 (GWAS) use $FDRpermutation$ to estimate the FDR across the entire
 dataset
 at certain \lod\ cutoffs (for this example we use $25$ permutations, for
@@ -384,7 +384,7 @@ a real experiment use $1000$ with $b.size=25$ or $50$).
 \begin{figure}[ht]
 <<fig=TRUE>>=
 require(snow)
-results <- bootstrap(hyperaug,mqm,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
+results <- mqmpermute(hyperaug,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=25,b.size=25)
 @
 \caption{Calculate significance permuting 25 times over the hyper dataset. 
 \qtl\ with a \lod\ higher than
@@ -495,9 +495,9 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	mqmcofactors(Each):& Set cofactors at these markers (or every Each marker) \\
 	which.marker:& Change markernumbering into mqmformat \\
 	scanall:& scanall can use either mqm/scanone/cim to scan all traits \\
-	bootstrap (AKA permutate):& Single trait permutation \\
+	bootstrap (AKA permute):& Single trait permutation \\
 	FDRpermutation:& Genome wide False Discovery Rates \\	
-	mqmpermObject:& Creates an R/qtl permutationobject from a bootstrap \\
+	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
 	mqmplotall:& plotting of multiple traits (MQMmulti object) \\
 	mqmplotnice:& plotting of mutiple traits (MQMmulti object) \\
 	mqmplotboot:& plot methode to show single trait permutations \\
