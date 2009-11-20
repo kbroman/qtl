@@ -22,10 +22,10 @@
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
 #           polyplot, mqmplotall, mqmplotboot, mqmplotnice, mqmplotone
-#           CisTransPlot, addloctocross 
+#           mqmcistransplot, addloctocross 
 ######################################################################
 
-CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+mqmcistransplot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}

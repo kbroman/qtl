@@ -460,10 +460,7 @@ mqmplotnice(resall,legendloc=1)
 \end{figure}
 
 \clearpage
-
-% FIXME: rename CisTransPlot to something like mqm_cistransplot
-
-The next plot is the $CisTransPlot$\FIXME.  This plot can be created
+The next plot is the $mqmcistransplot$.  This plot can be created
 for \qtl\ with associated genome locations (like when a, so called
 eQTL, correlates with a know microarray probe).  The
 two axis are both divided by genetic location. where the X-axis is,
@@ -475,9 +472,9 @@ $scanone$ object.  use $data(locations)$.
 <<fig=TRUE>>=
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
-CisTransPlot(resall, multiloc, 5, FALSE, TRUE)
+mqmcistransplot(resall, multiloc, 5, FALSE, TRUE)
 @
-\caption{CisTransPlot, available when \qtl\
+\caption{mqmcistransplot, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 \end{figure}
@@ -503,7 +500,7 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	mqmplotboot:& plot methode to show single trait permutations \\
 	mqmplotone:& plotting of single trait analysis with information content \\
 	addloctocross:& Adding genetic locations for traits \\	
-	CisTransPlot:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmcistransplot:& Genomewide plot of cis- and transQTLs above a threshold \\
 	mqmtestnormal:& Tests the normallity of a trait \\ 	
 	\hline
 	\end{tabular}
@@ -524,10 +521,9 @@ version.
 \subsection{Out of memory}
 
 When using a slack augmentation setting the matrix may grow out of
-memory. You will see the following error:
-
-Error \FIXME
-
+memory. You will see the following error:\\
+\\
+ERROR: Dataset too large after augmentation
 
 
 \clearpage
