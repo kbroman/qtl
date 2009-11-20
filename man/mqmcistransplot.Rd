@@ -1,5 +1,6 @@
-\name{CisTransPlot}
-\alias{CisTransPlot}
+\name{mqmcistransplot}
+\alias{mqmcistransplot}
+\alias{cistransplot}
 
 \title{Plotting routine to show cis and trans QTL information}
 
@@ -8,7 +9,7 @@
 }
 
 \usage{
-	CisTransPlot(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
+	mqmcistransplot(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
 }
 
 \arguments{
@@ -48,9 +49,9 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 \dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
-        multiloc <- calc.genoprob(multiloc)
+    multiloc <- calc.genoprob(multiloc)
 	results <- scanall(multiloc, method="hk")
-	CisTransPlot(results, multiloc, 5, FALSE, TRUE)
+	mqmcistransplot(results, multiloc, 5, FALSE, TRUE)
 }
 
 %\references{
