@@ -39,7 +39,7 @@ scanone (green)}
 \mqm\ allows the mapping of QTL using an automated model selection method, as
 described by R.C. Jansen\cite{jansen94}. \mqm\ is an integrated part of
 \rqtl\cite{broman09}\cite{broman03}. \mqm\ consists of a three step procedure
-consisting of (1) data augmentation, (2) backward model selection using genetic
+consisting of (1) data augmentation, (2) backward model elimination using genetic
 markers as cofactors and (3) QTL (interval) mapping using the most
 'informative' model. The method internally controls false discovery rates and
 lets users test extensive QTL models by elimation of non-significant
@@ -89,7 +89,8 @@ phenotype\FIXME.
 The important parameters are: $cross, pheno.col, maxaugind, augment\_aboveprob$
 and verbose. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
 per individual in a dataset. The default of 60 is usually good enough (20
-missing F2 markers or 30 BC markers per individual)\CHECK. Each individual is
+missing F2 markers or 30 BC markers per individual). However higher numbers could be needed 
+when there are more missing markers. Each individual is
 expanded (augmented) with a probability of, at least, $augment\_aboveprob$ -
 i.e. only augment genotypes that are above a probability of occurring (and drop
 lower probabilities). Note that setting this value too high may result in dropping
@@ -110,7 +111,7 @@ plot.geno(augmentedcross)
 values (using $mqmaugment$)}
 \end{figure}
 
-With a lower\CHECK $augment\_aboveprob$ less likely genotypes are also
+With a higher $augment\_aboveprob$ less likely genotypes are also
 considered and the resulting dataset will be larger. The expanded dataset can
 not be used with scanone as it treats the extra individuals as new
 individuals\cite{Dempster77}, while \mqm\ recognises expanded individuals as 
@@ -156,7 +157,7 @@ correspond one to one when using no extra parameters}
 \end{figure}
 
 Now there is a choice of two approaches (1) build a model by hand, or
-(2) use unsupervised backward selection on a large number of markers.  
+(2) use unsupervised backward elimination on a large number of markers.  
 
 We will start by building the model by hand. The plot shows a big peek on
 chromosome 4 at 30 \cM, so let's account for that by setting a cofactor
@@ -180,8 +181,7 @@ result <- mqm(hyperaug, cofactorlist,plot=T)
 @
 \caption{\hyperintro.  A cofactor is added at chromosome 4 (D4Mit164) and kept in the
 model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
-Note QTL BP and QTL*INFO where INFO is an estimation of the information content
-present in the marker underlying the qtl. \FIXME} 
+} 
 \label{Cofactor4}
 \end{figure}
 
@@ -225,7 +225,7 @@ be included into the model and we can continue this process of adding cofactors
 untill there are no more informative markers that can be included.
 
 This could be very time consuming in the case of many QTLs underlying a trait.
-\mqm\ also provides unsupervised backward selection (or elimination) on a large
+\mqm\ also provides unsupervised backward elimination (or elimination) on a large
 number of markers by setting cofactors at every other marker. The algorithm
 will analyse all the markers and if one is found to be not informative enough
 it drops it from the model. This step is repeated until a limited number of
@@ -253,7 +253,7 @@ backward eliminatio to find the most likely model}
 mqmgetmodel(result)
 @
 The $mqmgetmodel()$ function returns the model from the resulting $scanone$ object.
-This is only available when doing automatic backward selection. The resulting
+This is only available when doing automatic backward elimination. The resulting
 model can be used to obtain the location and name of the significant markers.
 When comparing the resulting scan to the original $scanone$ result there are
 some striking differences. Some \qtl\ show higher significance (LOD scores) and
@@ -266,7 +266,7 @@ likely involved in this trait.
 plot(result, result_compare, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
-marker for mqm, followed by backward selection
+marker for mqm, followed by backward elimination
 (alpha = 0.02). The resulting profiles are clearly different }
 \label{Backward}
 \end{figure}
@@ -282,13 +282,11 @@ significance level from 0.02 to 0.002 may yield a more comprehensive model:
 <<fig=TRUE>>=
 result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 @
-\caption{\hyperintro, with cofactors at every fifth marker, after backwards selection (alpha = 0.002).
+\caption{\hyperintro, with cofactors at every fifth marker, after backwards elimination (alpha = 0.002).
 }
 \label{FigLowAlpha}
 \end{figure}
 \clearpage
-
-% Danny, shouldn't we use 'elimination' rather than 'selection' for backwards elimination? At least we should be consistent FIXME
 
 Recreate this figure from resulting $scanone$ object using
 $mqmplotone(result)$. This, again, retrieves the model from the result object
@@ -309,7 +307,7 @@ versus 249 B. Therefore we can multiple the estimated QTL effect by this value
 <<fig=TRUE>>=
 mqmplotone(result)
 @
-\caption{\hyperintro, with cofactors at every fifth marker, after backward selection (alpha = 0.002). Recreated figure with $mqmplotone$.
+\caption{\hyperintro, with cofactors at every fifth marker, after backward elimination (alpha = 0.002). Recreated figure with $mqmplotone$.
 }
 \end{figure}
 
