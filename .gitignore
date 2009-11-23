@@ -46,3 +46,5 @@ qtl*gz
 *.Rout
 /inst/docs/chapter12.tex
 /inst/docs/chapter12.R
+inst/docs/chapter12.tex
+inst/docs/chapter12.R

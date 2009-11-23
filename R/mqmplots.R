@@ -373,10 +373,10 @@ mqmplotnice <- function(result, ...){
 
 mqmplotone <- function(result, extended=0,...){
 	#Helperfunction to show scanone objects made by doing mqmscan runs
-	if(!("scanone" %in% class(result))){
+  if(!("scanone" %in% class(result))){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
   }
-  if(is.null(result$"Info")){
+  if(is.null(result$"info")){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
   }
   if(is.null(attr(result,"model"))){
