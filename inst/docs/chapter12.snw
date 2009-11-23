@@ -376,7 +376,7 @@ computationally expensive. If you have access to multiple CPUs on your
 computer you can install the SNOW package
 \cite{tierney03}\cite{tierney04}. For small sets, with a limited amount
 of traits, the $mqmpermute()$ works well. For large genome wide association studies
-(GWAS) use $FDRpermutation$ to estimate the FDR across the entire
+(GWAS) use $mqmscanfdr()$ to estimate the FDR across the entire
 dataset
 at certain \lod\ cutoffs (for this example we use $25$ permutations, for
 a real experiment use $1000$ with $b.size=25$ or $50$).
@@ -390,15 +390,11 @@ results <- mqmpermute(hyperaug,cofactors=cofactorlist,plot=T,n.clusters=2,n.run=
 \qtl\ with a \lod\ higher than
 2.5 LOD score can be considered significant (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
 This is estimated from permuting a single trait. 
-\\ To estimate false discovery
-\\ rates when scanning multiple traits we need to account for the trait
-\\ correlation structure using the $FDRpermutation$ strategy (see below)}
+}
 \end{figure}
 
-% FIXME: rename FDRpermutation to something mqm like (no capitals)
-
 For estimating false discovery rates use the function
-$FDRpermutation$\FIXME. The function scans the traits and counts
+$mqmscanfdr$. The function scans the traits and counts
 observed \qtl\ (markers with a LOD above $x$) when setting a certain
 threshold. It permutes all the data leaving the correlation structure
 between traits intact. For this small example very high FDR estimates
@@ -408,7 +404,7 @@ high correlation between traits.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-FDRpermutation(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+mqmscanfdr(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
 @
 \section{MQM and multiple traits}
 
@@ -493,7 +489,7 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	which.marker:& Change markernumbering into mqmformat \\
 	scanall:& scanall can use either mqm/scanone/cim to scan all traits \\
 	bootstrap (AKA permute):& Single trait permutation \\
-	FDRpermutation:& Genome wide False Discovery Rates \\	
+	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
 	mqmplotall:& plotting of multiple traits (MQMmulti object) \\
 	mqmplotnice:& plotting of mutiple traits (MQMmulti object) \\

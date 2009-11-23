@@ -35,8 +35,6 @@ checkAlleles            Identify markers with switched alleles
 chrlen                  Chromosome lengths in QTL experiment
 chrnames                Pull out the chromosome names from a cross
 cim                     Composite interval mapping
-CisTransPlot            Plotting routine to show cis and trans QTL
-                        information
 clean.cross             Remove derived data
 clean.scantwo           Clean up scantwo output
 comparecrosses          Compare two cross objects.
@@ -65,8 +63,6 @@ est.rf                  Estimate pairwise recombination fractions
 fake.4way               Simulated data for a 4-way cross
 fake.bc                 Simulated data for a backcross
 fake.f2                 Simulated data for an F2 intercross
-FDRpermutation          Estimates of FDR when doing multiple trait QTL
-                        analysis
 fill.geno               Fill holes in genotype data
 find.flanking           Find flanking markers for a specified position
 find.marker             Find marker closest to a specified position
@@ -96,6 +92,8 @@ max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 MQM                     Multiple QTL Model (MQM) mapping
 mqmaugment              MQM data augmentation
+mqmcistransplot         Plotting routine to show cis and trans QTL
+                        information
 mqmcofactors            Create cofactors to be used with mqmscan
 mqmcofactorsEach        Create cofactors to be used with mqmscan
 mqmfind.marker          Find the significant markers after
@@ -113,6 +111,8 @@ mqmplotnice             Plot the results from a bootstrap or scanall
 mqmplotone              Plotting routine to display the results from a
                         QTL scan
 mqmscan                 Multiple qtl mapping for inbred crosses
+mqmscanfdr              Estimates of FDR when doing multiple trait QTL
+                        analysis
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes
