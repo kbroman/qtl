@@ -65,6 +65,7 @@ MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Gen
       }
     }
   }
+  /*
   switch(crosstype) {
     case CF2: info("F2 cross");
               break;
@@ -75,6 +76,7 @@ MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Gen
     default:  Rprintf("Cross type=%d",crosstype);
               fatal("Unknown cross");
   }
+  */
   return crosstype;
 }
 
@@ -86,7 +88,7 @@ MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Gen
  */
 
 void change_coding(int *Nmark, int *Nind, int **Geno, MQMMarkerMatrix markers, const MQMCrossType crosstype) {
-  info("Convert codes R/qtl -> MQM");
+  //info("Convert codes R/qtl -> MQM");
   for (int j=0; j < *Nmark; j++) {
     for (int i=0; i < *Nind; i++) {
       switch (Geno[j][i]) {

@@ -86,7 +86,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
 
   // The chr vector contains the chromosome number for every marker
   chr= newivector(Nmark);
-  info("Receiving the chromosome matrix from R");
+  //info("Receiving the chromosome matrix from R");
   for (int i=0; i< Nmark; i++) {
     chr[i] = Chromo[0][i];
   }
@@ -96,7 +96,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   position = relative_marker_position(Nmark,chr);
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
-  info("Initialize Frun and informationcontent to 0.0");
+  //info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
   informationcontent= newvector(Nsteps);
@@ -157,7 +157,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   position = relative_marker_position(Nmark,chr);
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
-  info("After dropping of uninformative cofactors");
+  //info("After dropping of uninformative cofactors");
   //calculate Traits mean and variance
   ivector newind;
   vector newy;
@@ -294,7 +294,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   Free(y);
   Free(chr);
   Free(selcofactor);
-  info("Analysis of data finished");
+  //info("Analysis of data finished");
   return;
 }
 

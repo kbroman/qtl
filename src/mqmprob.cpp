@@ -36,7 +36,7 @@
 cvector relative_marker_position(const unsigned int nmark,const ivector chr) 
 {
   cvector position = newcvector(nmark);
-  info("Calculating relative genomepositions of the markers");
+  //info("Calculating relative genomepositions of the markers");
   for (unsigned int j=0; j<nmark; j++) {
     if (j==0) {
       if (chr[j]==chr[j+1]) 
@@ -68,7 +68,7 @@ cvector relative_marker_position(const unsigned int nmark,const ivector chr)
 vector recombination_frequencies(const unsigned int nmark, const cvector position, const vector mapdistance) 
 {
   // contract: if DEBUG is_valid(positionarray)
-  info("Estimating recombinant frequencies");
+  // info("Estimating recombinant frequencies");
   vector r = newvector(nmark);
   for (unsigned int j=0; j<nmark; j++) {
     r[j]= RFUNKNOWN;
