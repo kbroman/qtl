@@ -379,7 +379,7 @@ mqmplotone <- function(result, extended=0,...){
   if(is.null(result$"info")){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
   }
-  if(is.null(attr(result,"model"))){
+  if(is.null(attr(result,"mqmmodel"))){
     op <- par(mfrow = c(1,1))
   }else{
     op <- par(mfrow = c(2,1))
@@ -387,8 +387,8 @@ mqmplotone <- function(result, extended=0,...){
   info.c <- result
   info.c[,3]<- info.c[,5]
   if(extended){
-    if(!is.null(attr(result,"model"))){
-      plot(attr(result,"model"))
+    if(!is.null(attr(result,"mqmmodel"))){
+      plot(attr(result,"mqmmodel"))
     }
     info.l <- result
     info.l[,3] <- result[,4]
@@ -397,14 +397,15 @@ mqmplotone <- function(result, extended=0,...){
     labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
     legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
   }else{
-    if(!is.null(attr(result,"model"))){
-      plot(attr(result,"model"))
+    if(!is.null(attr(result,"mqmmodel"))){
+      plot(attr(result,"mqmmodel"))
     }
     plot(result,lwd=1,ylab="QTL (LOD)",...)
     grid(max(result$chr),5)
     labels <- c(colnames(result)[3])
     legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
   }
+  op <- par(mfrow = c(1,1))
 }
 
 # end of mqmplots.R

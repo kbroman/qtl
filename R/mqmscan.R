@@ -272,72 +272,68 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
           sum <- sum+1
         }
       }
-      why <- sim.geno(cross,n.draws=1)
       if(!is.null(qc) && model.present){
+		why <- sim.geno(cross,n.draws=1)
         QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
-        
-        if(plot){
-          plot(QTLmodel)
+		if(plot){
+			plot(QTLmodel)
         }
-      }else{
-        op <- par(mfrow = c(1,1))
       }
     }
-		rownames(qtl) <- names
-		qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
-		qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
-		colnames(qtl) = c("chr","pos (Cm)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
-		#Convert to data/frame and scan.one object so we can use the standard plotting routines
-		qtl <- as.data.frame(qtl)
-		if(backward && !is.null(qc) && model.present){
-		  attr(qtl,"mqmmodel") <- QTLmodel
-		}
-		class(qtl) <- c("scanone",class(qtl)) 
-		if(verbose) cat("INFO: Saving output to file: ",file, "\n")
-		#write.table(qtl,file)
-		for( x in 1:nchr(cross)){
-			#Remove pseudomarkers from the dataset and scale to the chromosome
-			to.remove <- NULL
-			chr.length <- max(cross$geno[[x]]$map)
-			markers.on.chr <- which(qtl[,1]==x)
-			to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
-			to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
-			qtl <- qtl[-to.remove,]
-		}		
-		#Reset plotting and return the results
-		if(plot){
-			info.c <- qtl
-			#Check for errors in the information content IF err we can't do a second plot
-			e <- 0
-			for(i in 1:ncol(qtl)){
-				if(is.na(info.c[i,5])){
-					e<- 1
-				}
-				if(is.infinite(info.c[i,5])){
-					e<- 1
-				}
-				if(is.null(info.c[i,5])){
-					e<- 1
-				}
+	rownames(qtl) <- names
+	qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
+	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
+	colnames(qtl) = c("chr","pos (Cm)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
+	#Convert to data/frame and scan.one object so we can use the standard plotting routines
+	qtl <- as.data.frame(qtl)
+	if(backward && !is.null(qc) && model.present){
+	  attr(qtl,"mqmmodel") <- QTLmodel
+	}
+	class(qtl) <- c("scanone",class(qtl)) 
+	if(verbose) cat("INFO: Saving output to file: ",file, "\n")
+	#write.table(qtl,file)
+	for( x in 1:nchr(cross)){
+		#Remove pseudomarkers from the dataset and scale to the chromosome
+		to.remove <- NULL
+		chr.length <- max(cross$geno[[x]]$map)
+		markers.on.chr <- which(qtl[,1]==x)
+		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
+		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
+		qtl <- qtl[-to.remove,]
+	}		
+	#Reset plotting and return the results
+	if(plot){
+		info.c <- qtl
+		#Check for errors in the information content IF err we can't do a second plot
+		e <- 0
+		for(i in 1:ncol(qtl)){
+			if(is.na(info.c[i,5])){
+				e<- 1
 			}
-			#No error do plot 2
-			if(!e){
-				mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa))
-			}else{
-				plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa),lwd=1)
-				grid(max(qtl$chr),5)
-				labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
-				legend("topright", labels,col=c("black"),lty=c(1))
+			if(is.infinite(info.c[i,5])){
+				e<- 1
+			}
+			if(is.null(info.c[i,5])){
+				e<- 1
 			}
 		}
-		#Reset the plotting window to contain 1 plot (fot the next upcomming pots
-		if(plot){
-		  op <- par(mfrow = c(1,1))
+		#No error do plot 2
+		if(!e){
+			mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa))
+		}else{
+			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa),lwd=1)
+			grid(max(qtl$chr),5)
+			labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
+			legend("topright", labels,col=c("black"),lty=c(1))
 		}
-		
-		end.3 <- proc.time()   
-		if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
-		qtl
+	}
+	#Reset the plotting window to contain 1 plot (fot the next upcomming pots
+	if(plot){
+	  op <- par(mfrow = c(1,1))
+	}
+	end.3 <- proc.time()   
+	if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
+	qtl
 	}else{
 		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
