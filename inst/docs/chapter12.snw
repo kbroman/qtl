@@ -21,12 +21,11 @@
 \newcommand{\rqtl}{\emph{R/qtl}}
 \newcommand{\At}{\emph{Arabidopsis thaliana}}
 \newcommand{\FIXME}{({\bf FIXME!})}
-\newcommand{\CHECK}[1]{({\tt NOTE: #1})}
-\newcommand{\NOTE}{
-\newcommand{\hyperintro}{\qtl\ profiles of the trait bp (hyper dataset, blood
+\newcommand{\CHECK}{({\bf CHECK!})}
+\newcommand{\NOTE}{({\tt NOTE: #1})}
+\newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
-\newcommand{\hyperintrocolors}{ \qtl\ profiles of the trait bp (hyper dataset,
-blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
+\newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
 scanone (green)}
 
 \title { Chapter 12 - Multiple QTL Model (MQM) Analysis }
@@ -50,7 +49,8 @@ the R/qtl $read.cross()$ function}.
 At the moment \mqm\ supports experimental crosses F2, RIL and BC. Also \mqm\
 does nottreat sex chromosomes differently from autosomal - though one can
 introduce sex as a cofactor. Another limitation is that \mqm\ handles one
-phenotype at a time. Future versions of \mqm\ may improve on this.
+phenotype at a time. Finally automatic backward elimination does not consider
+marker density at locations. Future versions of \mqm\ may improve on this.
 
 \section{Data augmentation}
 
@@ -178,7 +178,7 @@ For \mqm\ analysis we can follow two approaches (1) build a model by hand, or
 (2) use unsupervised backward elimination on a large number of markers.  
 
 First we will start building the model by hand by adding cofactors. On the plot
-appears a large peek on chromosome 4 at 30 \cM, so let's account for that by
+appears a peek on chromosome 4 at 30 \cM, so let's account for that by
 setting a cofactor at the marker nearest to the peek on chromosome 4. This is
 achieved by the following steps:
 
@@ -203,8 +203,10 @@ model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
 \label{Cofactor4}
 \end{figure}
 
+\NOTE{Maybe improve explanation - also markers are 'fictional'}
+
 Figure \ref{Cofactor4} shows the effect of setting a single marker as a
-cofactor related to the large \qtl\ on chromosome 4, followed by an \mqm\ scan.
+cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.
 The marker is never dropped and it passes initial rough thresholding to account
 for the, user defined, alpha level. To check this result against a single \qtl\ mapping:
 
@@ -218,9 +220,12 @@ marker.}
 \end{figure}
 
 The second peek on chromosome 1 at 70 \cM\ increases, so try adding that to the
-model and check if the model with both cofactors is even better at explaining
-the phenotype. Combining $which.marker$ with $find.marker$, the new
-cofactornumber $c$ with the cofactor already in $toset$.
+model and check if the model with both cofactors changes the \qtl. Combining
+$which.marker$ with $find.marker$, the new cofactornumber $c$ with the cofactor
+already in $toset$.
+
+\NOTE{Is there a risk of overfitting the model?!}
+
 <<>>=
 summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
@@ -234,6 +239,8 @@ plot(result, result_compare, col=colors, lwd=lines)
 \caption{\hyperintrocolors, after introducing a
 cofactors at chromosomes 1 and 4}
 \end{figure}
+
+\NOTE{Are the two previous figures the same? YES!}
 
 \clearpage
 
@@ -273,10 +280,6 @@ mqmgetmodel(result)
 The $mqmgetmodel()$ function returns the model from the resulting $scanone$ object.
 This is only available when doing automatic backward elimination. The resulting
 model can be used to obtain the location and name of the significant markers.
-When comparing the resulting scan to the original $scanone$ result there are
-some striking differences. Some \qtl\ show higher significance (LOD scores) and
-some others show lower significance and are, therefore, estimated to be less
-likely involved in this trait.
 
 \clearpage
 \begin{figure}[ht]
@@ -291,30 +294,38 @@ marker for mqm, followed by backward elimination
 
 % Danny: note the use of \label and \ref
 
-This results in a lot of hits with multiple hits on each chromosome. Some
-cofactors are placed too close to each other. Figure \ref{Backward} shows
+This results in a lot\NOTE{A LOT?} of hits with multiple hits on each chromosome. Some
+cofactors are placed too close to each other\NOTE{SO?}. Figure \ref{Backward} shows
 for an alpha of 0.02 chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the
-significance level from 0.02 to 0.002 may yield a more comprehensive model:
+significance level from 0.02 to 0.002 may yield a more comprehensive model (\NOTE{WHY?}:
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 @
-\caption{\hyperintro, with cofactors at every fifth marker, after backwards elimination (alpha = 0.002).
+\caption{\hyperintro, intially with cofactors at every fifth marker; after backwards elimination (alpha = 0.002).
 }
 \label{FigLowAlpha}
 \end{figure}
 \clearpage
 
-Recreate this figure from resulting $scanone$ object using
-$mqmplotone(result)$. This, again, retrieves the model from the result object
+When comparing the resulting scan in figure \ref{FigLowAlpha} with the original
+$scanone$ result in figure \ref{scanone} there are some striking differences.
+Some \qtl\ show higher significance (LOD scores) and some others show lower
+significance and are, therefore, estimated to be less likely involved in this
+trait.
+
+Recreate\NOTE{?} this figure from resulting $scanone$ object using
+$mqmplotone(result)$\NOTE{This is not clear, SHOW}. This, again, retrieves the model from the result object
 attribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
 scans, as they have an additinal column $info$, which contains the estimated
-informationcontent per marker. $info$ is calculated from the deviation of the
+information content per marker. $info$ is calculated from the deviation of the
 marker distribution. For example, in a recombinant inbred line we have most
 power when both groups (A and B) have 125 mice, and no power when we have 1 A
 versus 249 B. Therefore we can multiple the estimated QTL effect by this value
 \"to clean\" the QTL profile by giving less weight to less informative markers.
+
+\NOTE{Richard says: Ignore the biological reality in favour of modeling an ideal world?}
 
 % Note 1: Don't use capitals in Info FIXME
 % Note 2: What if Karl allows Info for the scanone object? Would that not be easy
@@ -325,7 +336,7 @@ versus 249 B. Therefore we can multiple the estimated QTL effect by this value
 <<fig=TRUE>>=
 mqmplotone(result)
 @
-\caption{\hyperintro, with cofactors at every fifth marker, after backward elimination (alpha = 0.002). Recreated figure with $mqmplotone$.
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (alpha = 0.002). Figure plotted using $mqmplotone$.
 }
 \end{figure}
 
@@ -334,13 +345,15 @@ mqmplotone(result)
 Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5 are
 associated with high bloodpressure. If we want to investigate the
 effects of the peek we can use \rqtl\ standard plotting tools to
-estimate $main$ and $epistatic$ effects. The following code will plot
+visualize $main$ and $epistatic$ effects. The following code will plot
 those two plots on markers "D1Mit102" (main effect) and the
 interaction between "D1Mit102" and "D5Mit213" to show the $main$
 effect and the estimated $epistasis$. These markers are initially
 chosen because they are considered significant, based on mathematical
 distributions used by \mqm\ (we will show a better method, based on
 permutations, later).
+
+\NOTE{Why not chromosome 1 instead of 4}
 
 First investigate the effects.
 
@@ -356,6 +369,9 @@ an interaction.
 To investigate this we select markers "D1Mit19" (significant
 in figure \ref{10}) and "D1Mit102" (significant in figure \ref{11} and
 \ref{12})
+
+\NOTE{Figure labels need to be fixed}
+
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -388,14 +404,20 @@ markers D1Mit102 and D5Mit213, as both lines are parallel.
 
 To estimate significance of the peeks ( and perhaps exclude some
 markers from our model ) we can use a permutation test. This can be
-computationally expensive. If you have access to multiple CPUs on your
+computationally expensive - repeating the same test thousands of times. If you have access to multiple CPUs on your
 computer you can install the SNOW package
-\cite{tierney03}\cite{tierney04}. For small sets, with a limited amount
+\cite{tierney03}\cite{tierney04}, which allows parallel computations on multiple CPU (cores). For small sets, with a limited amount
 of traits, the $mqmpermute()$ works well. For large genome wide association studies
 (GWAS) use $mqmscanfdr()$ to estimate the FDR across the entire
 dataset
 at certain \lod\ cutoffs (for this example we use $25$ permutations, for
-a real experiment use $1000$ with $b.size=25$ or $50$).
+a real experiment use - typically - $1000$ tests with $b.size=25$ or $50$).
+
+\NOTE{What is b.size?}
+
+\NOTE{Needs better explanation; only pictures, little text}
+
+\NOTE{Only an FDR example?}
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -537,6 +559,7 @@ memory. You will see the following error:\\
 \\
 ERROR: Dataset too large after augmentation
 
+\NOTE{What to do when this happens?}
 
 \clearpage
 
