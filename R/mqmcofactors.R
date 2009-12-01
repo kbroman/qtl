@@ -108,7 +108,7 @@ mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
     cofactorlist
 }
 
-mqmcofactorsEach <- function(cross,each = 3,verbose=FALSE){
+mqmsetcofactors <- function(cross,each = 3,verbose=FALSE){
 	if(missing(cross))
           ourstop("No cross file. Please supply a valid cross object.")
 
