@@ -1,5 +1,5 @@
-\name{mqmcofactorsEach}
-\alias{mqmcofactorsEach}
+\name{mqmsetcofactors}
+\alias{mqmsetcofactors}
 
 \title{Create cofactors to be used with mqmscan} 
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmcofactorsEach(cross, each = 3, verbose=FALSE)
+mqmsetcofactors(cross, each = 3, verbose=FALSE)
 }
 
 \arguments{
@@ -41,7 +41,7 @@ qtl <- c(3,15,3,7)						# QTL at chromosome 3
 data(map10)							# Mouse genome
 \dontshow{map10 <- map10[1:5]}
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
-a <- mqmcofactorsEach(cross,3)					# Set Cofactors each third marker
+a <- mqmsetcofactors(cross,3)					# Set Cofactors each third marker
 result <- mqmscan(cross,a)					# Do a backward model selection
 }
 
