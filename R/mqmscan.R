@@ -65,7 +65,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
-			stop("For multiple phenotype analysis use the function: 'scanall'.\n")	
+			stop("For multiple phenotype analysis use the function: 'mqmall'.\n")	
 		}
 		if(pheno.col != 1){
                   if(verbose) {
