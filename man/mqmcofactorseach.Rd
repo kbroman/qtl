@@ -32,7 +32,7 @@ mqmsetcofactors(cross, each = 3, verbose=FALSE)
 \itemize{
 	\item \code{\link[qtl]{MQM}} - MQM main information
 	\item \code{\link[qtl]{mqmscan}} - Single trait analysis
-	\item \code{\link[qtl]{scanall}} - Analyse multiple traits 
+	\item \code{\link[qtl]{mqmall}} - Analyse multiple traits 
 }
 }
 

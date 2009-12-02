@@ -25,7 +25,7 @@ mqmplotnice(result, \dots)
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits
+	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits using MQM
 	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for MQM
 }
 }
