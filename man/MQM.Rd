@@ -29,7 +29,7 @@ Currently MQM only supports F2 / BC / RIL crosses. Also there is no special trea
 \seealso{
 	\itemize{
 	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
 	}
 }
 

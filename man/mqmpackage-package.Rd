@@ -29,7 +29,7 @@
 	Index:
 	\preformatted{
 	mqmscan                 mqmscan - Multiple QTL mapping for F2 crosses
-	scanall					scanall - Function called to analytse multiple traits in the cross object
+	scanall					scanall - Function called to analyse multiple traits in the cross object
 	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
 	mqmaugment              mqmaugment - Missing data augmentation routine for MQM
 	mqmcofactors            mqmcofactors - Helper function to create cofactors to be used with mqmscan
@@ -74,7 +74,7 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 	\itemize{
 	\item	\code{\link[qtl]{mqmaugment}} - Dataaugmentation routine to estimate missing data
 	\item	\code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
+	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object
 	}
 }
 \examples{

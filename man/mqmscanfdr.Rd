@@ -8,7 +8,7 @@
 }
 
 \usage{
-	mqmscanfdr(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=TRUE, \dots)
+	mqmscanfdr(cross, Funktie=mqmall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, verbose=TRUE, \dots)
 }
 
 \arguments{
@@ -23,7 +23,7 @@
 }
 
 \details{
-  Analysis of \code{\link[qtl]{scanall}}, \code{\link[qtl]{cimall}} or
+  Analysis of \code{\link[qtl]{scan.one}}, \code{\link[qtl]{cim}} or
 	    \code{\link[qtl]{mqmall}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
   The \code{snow} library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
 }
@@ -41,7 +41,7 @@
 \seealso{
 	\itemize{
 	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object (
+	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object (Using scan.one)
 	\item \code{\link[qtl]{cimall}} - Function called to analyse multiple traits in the cross object (Using CIM)
 	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object (Using MQM)
 	}

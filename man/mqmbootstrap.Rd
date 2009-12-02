@@ -54,7 +54,7 @@
 \seealso{
 	\itemize{
 	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object
+	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
 	\item \code{\link[qtl]{scanone}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{cim}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{mqm}} - Function called to do single trait analysis
