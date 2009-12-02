@@ -41,7 +41,7 @@ described by R.C. Jansen\cite{jansen94}. \mqm\ is an integrated part of
 \rqtl\cite{broman09}\cite{broman03}. \mqm\ consists of a three step procedure
 consisting of (1) data augmentation, (2) backward model elimination using genetic
 markers as cofactors and (3) QTL (interval) mapping using the most
-'informative' model. The method internally controls false discovery rates and
+'informative' model. The method internally controls false discovery rates (FDR) and
 lets users test extensive QTL models by elimation of non-significant
 cofactors\footnote{We assume the reader knows how to load his data into R using
 the R/qtl $read.cross()$ function}.
@@ -92,8 +92,7 @@ calculates their likelihood. When they are more likely than the
 $augment\_aboveprob$ parameter the \emph{augmented} individual is stored in the
 new crossobject. At this point the $mqmaugment()$ function can only handle one
 phenotype at the time even though augmentation is independent of the phenotype.
-This will be changed in upcomming releases of of the R/qtl with MQMpackage
-\NOTE{Danny is adding support for multiple phenotypes}
+This will be changed in upcomming releases of of the R/qtl with mqm.
 
 The important parameters are: $cross, pheno.col, maxaugind, augment\_aboveprob$
 and verbose. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
@@ -103,10 +102,8 @@ when there are more missing markers. Each individual is
 expanded (augmented) with a probability of, at least, $augment\_aboveprob$ -
 i.e. only augment genotypes that are above a probability of occurring (and drop
 lower probabilities). Note that setting this value too high may result in dropping
-individuals entirely. 
-
-
-
+individuals entirely. Using the verbose option to get more feedback on the augmentation routine
+is advised.
 <<>>=
 #warns because mqm doesnt handle the X chromosome yet
 augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
@@ -117,7 +114,7 @@ augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
 plot.geno(augmentedcross)
 @
 \caption{$plot.geno$ showing the genotypes of 100 individuals with no missing
-values (using $mqmaugment$). We used MQMaugment with $augment\_aboveprob=1$ this means we fill in the 
+values (using $mqmaugment$). We used mqmaugment with $augment\_aboveprob=1$ this means we fill in the 
 most likely genotypes at each marker, no expansion of the dataset takes place}
 \end{figure}
 
@@ -125,11 +122,10 @@ most likely genotypes at each marker, no expansion of the dataset takes place}
 
 With a higher $augment\_aboveprob$ value less likely genotypes are also
 considered and the resulting \emph{augmented} dataset will be larger. Unfortunately, 
-at this stage, the expanded dataset can
-not be used with scanone as it treats the extra individuals as new
+at this stage, the expanded dataset can not be used with scanone as it treats the extra individuals as new
 individuals, while \mqm\ recognises expanded individuals as 
 single entities. The (weighted) augmented individuals with all possible genotypes leads to a 
-combined \qtl\ profiles lead to a more accurate mapping.
+more accurate mapping when dealing with missing values and give a smoother \qtl\ profile, leading to a more accurate mapping.
 \cite{jansen93}. 
 
 \NOTE{Above paragraph is not clear, also below - a probability should be
@@ -524,7 +520,7 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	mqm(scan):& mqm modeling and scanning \\
 	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
 	which.marker:& Change markernumbering into mqmformat \\
-	scanall:& scanall can use either mqm/scanone/cim to scan all traits \\
+	mqmall:& mqmall to scan all traits using mqm\\
 	bootstrap (AKA permute):& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
