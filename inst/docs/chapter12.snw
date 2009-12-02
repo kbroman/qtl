@@ -220,9 +220,12 @@ marker.}
 The second peek on chromosome 1 at 70 \cM\ increases, so try adding that to the
 model and check if the model with both cofactors changes the \qtl. Combining
 $which.marker$ with $find.marker$, the new cofactornumber $c$ with the cofactor
-already in $toset$.
-
-\NOTE{Is there a risk of overfitting the model?!}
+already in $toset$. When using the function mqmcofactors or mqmsetcofactors, the 
+number of cofactors the user is trying to set is compared against the number of 
+individuals inside the cross object. If there is any danger of overfitting the 
+model the function will error and not return a cofactorlist. Also inside MQM the 
+residual degrees of freedom left are checked to make sure also 'usercreated' 
+cofactorlists do not overfit the modeling routine.
 
 <<>>=
 summary(result)
@@ -239,6 +242,7 @@ cofactors at chromosomes 1 and 4}
 \end{figure}
 
 \NOTE{Are the two previous figures the same? YES!}
+\NOTE{Danny: Almost there is a minute difference in models used but the difference is not HUGE i agree}
 
 \clearpage
 
