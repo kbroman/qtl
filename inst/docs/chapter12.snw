@@ -295,10 +295,13 @@ marker for mqm, followed by backward elimination
 
 % Danny: note the use of \label and \ref
 
-This results in a lot\NOTE{A LOT?} of hits with multiple hits on each chromosome. Some
+This mqm run results in a lot of significant markers, with even multiple hits on each chromosome. Some
 cofactors are placed too close to each other\NOTE{SO?}. Figure \ref{Backward2} shows
 for an alpha of 0.02 chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the
-significance level from 0.02 to 0.002 may yield a more comprehensive model (\NOTE{WHY?}:
+significance level from 0.02 to 0.002 may yield a smaller model. In biology extensive models 
+are sometimes prefered, but in general a simpler model is more easily understood and verified in the wetlab. 
+Increasing the significance level (and simplifying the model) also has the advantage that we can 
+be more sure of the QTLs we do report.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -316,17 +319,15 @@ Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
-Recreate\NOTE{?} this figure from resulting $scanone$ object using
-$mqmplotone(result)$\NOTE{This is not clear, SHOW}. This, again, retrieves the model from the result object
-attribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
-scans, as they have an additinal column $info$, which contains the estimated
+To replot the plots created during an mqm analysis is also possible. The figures can be reconstructed 
+from resulting $scanone$ object using $mqmplotone(result)$ see figure \ref{AutoCofactor}. This 
+retrieves the model and the QTLprofile from the result objectattribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
+scans, as they have an additinal column $info$ and contain a QTLmodel. The info column contains the estimated
 information content per marker. $info$ is calculated from the deviation of the
 marker distribution. For example, in a recombinant inbred line we have most
 power when both groups (A and B) have 125 mice, and no power when we have 1 A
 versus 249 B. Therefore we can multiple the estimated QTL effect by this value
 \"to clean\" the QTL profile by giving less weight to less informative markers.
-
-\NOTE{Richard says: Ignore the biological reality in favour of modeling an ideal world?}
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -362,10 +363,11 @@ plot.pxg(hyperaug,marker="D1Mit102")
 \end{figure}
 The initial scans for high bloodpressure in figure \ref{Backward}
 possibly shows two \qtl\ on chromosome 1. The dual humped shape could be explained by
-an interaction.
-To investigate this we select markers "D1Mit19" (significant
+an interaction between two QTLs on that chromosome. But there are other explainations 
+for these kind of curves. We can however find out if there is an interaction on chromosome 
+1 by using the effectplot function. To investigate the possible interaction we select markers "D1Mit19" (significant
 in figure \ref{Backward1}) and "D1Mit102" (significant in figure \ref{Backward2} and
-\ref{AutoCofactor})
+\ref{AutoCofactor}) and make an effectplot.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -378,7 +380,7 @@ markers D1Mit19 and D1Mit102.}
 
 If we, for example, are interested in the interactions between
 chromosome 1 and 5, we could make interaction plots between the two
-highest scoring markers on those chromosomes by using another effect
+markers with a high LOD score on those chromosomes by using the effect
 plot:
 
 \begin{figure}[ht]
@@ -390,7 +392,7 @@ effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 \end{figure}
 
 Figure \ref{epistatic1} shows some evidence for an interaction between the two
-markers D1Mit102 and D5Mit213, as both lines are non parallel.Imagine two loci x and y. Parallel lines denote 
+markers D1Mit102 and D5Mit213, as both lines are non parallel. Imagine two loci x and y influencing a trait. Parallel lines denote 
 no significant interaction between x and y. While non-parallel lines mean the genotype on location y has an effect 
 on the effect of the genotype at location x.
 
@@ -398,8 +400,7 @@ on the effect of the genotype at location x.
 
 \section{Permutation test for significance} 
 
-To estimate significance of the peeks ( and perhaps exclude some
-markers from our model ) we can use a permutation test. This can be
+To estimate significance of the peeks ( and perhaps exclude some markers from our model ) we can use a permutation test. This can be
 computationally expensive - repeating the same test thousands of times. If you have access to multiple CPUs on your
 computer you can install the SNOW package
 \cite{tierney03}\cite{tierney04}, which allows parallel computations on multiple CPU (cores). For small sets, with a limited amount
