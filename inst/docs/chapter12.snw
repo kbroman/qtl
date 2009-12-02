@@ -146,11 +146,9 @@ individual).}
 
 \section{QTL modelling and mapping with MQM}
 
-The \emph{hyper} dataset is a F2 offspring of mice with two traits in the
+The \emph{hyper} dataset is a backcrossed offspring of mice with two traits in the
 dataset: bloodpressure (bp) and sex. Here we show an example of running both
 single QTL (scanone) and \mqm\ QTL mapping routinges analysing blood pressure.
-
-\NOTE{Danny: the output shows BC - while it is an F2}
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
@@ -162,7 +160,11 @@ hyperaug <- mqmaugment(hyper, augment_aboveprob=1)
 result <- mqm(hyperaug)
 result_compare <- scanone(hyperaug)
 @
-And plot the results from both scans (black=mqm, green=scanone):
+And plot the results from both scans (black=mqm, green=scanone), When we look at the output 
+from the two methods we see that MQM doesn't have the original markers listed. This is because 
+MQM does intervall mapping. Each chromosome is divided into fictional markers spaces stepsize Cm apart. 
+A LOD score for underlying QTLs is calculated at these 'fictional' markers. Using the intervall 
+mapping approach we obtain smoother profiles than compared to markerbased mapping approaches.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -200,8 +202,6 @@ model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
 } 
 \label{Cofactor4}
 \end{figure}
-
-\NOTE{Maybe improve explanation - also markers are 'fictional'}
 
 Figure \ref{Cofactor4} shows the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.
