@@ -26,7 +26,7 @@
 #
 ######################################################################
 
-mqmscanfdr <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
+mqmscanfdr <- function(cross, Funktie=mqmall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
 	above.in.real.res <- NULL

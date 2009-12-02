@@ -1,6 +1,6 @@
 #####################################################################
 #
-# mqmscanall.R
+# scanall.R
 # Alias: scanall, cimall, mqmall
 #
 # copyright (c) 2009, Danny Arends
@@ -28,8 +28,8 @@ cimall <- function(...) {
 	scanall(...,Funktie=cim)
 }
 
-mqmall <- function(...) {
-	scanall(...,Funktie=mqm)
+mqmall <- function(cross,multiC=TRUE,n.clusters=1,b.size=10...) {
+	scanall(cross=cross,multiC=multiC,n.clusters=n.clusters,b.size=b.size,...,Funktie=mqm)
 }
 
 scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=0,...,plot=FALSE,verbose=FALSE){
@@ -171,4 +171,4 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 }
 
 
-# end of mqmscanall.R
+# end of scanall.R
