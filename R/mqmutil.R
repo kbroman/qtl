@@ -20,6 +20,7 @@ ourline <- function(){
 }
 
 mqmtestnormal <- function(cross, pheno.col=1){
+	returnval <- FALSE
 	if(pheno.col <0 || pheno.col > nphe(cross)){
 		stop("No such phenotype (pheno.col = ",pheno.col,")")
 	}
@@ -30,9 +31,12 @@ mqmtestnormal <- function(cross, pheno.col=1){
 		library(nortest)
 		if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
 			cat("Trait distribution not normal\n")
+			returnval<- FALSE
 		}else{
 			cat("Trait distribution normal\n")
+			returnval<- TRUE
 		}
+		returnval
 	}else{
 		cat("Please install package: nortest to enable testing of normality\n")
 	}
