@@ -22,7 +22,7 @@
 \newcommand{\At}{\emph{Arabidopsis thaliana}}
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
-\newcommand{\NOTE}{({\tt NOTE: #1})}
+\newcommand{\NOTE}{({\tt NOTE: })}
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
