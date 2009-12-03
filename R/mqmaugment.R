@@ -33,7 +33,10 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
-  
+  if(augment_aboveprob <= 0 || augment_aboveprob > 1){
+	stop("Error augment_aboveprob should be between 0 and 1.")
+  }
+  augment_aboveprob = 1/augment_aboveprob
 
   # ---- check for supported crosses and set ctype
 
@@ -61,7 +64,7 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
     ctype = isRIL
   }
   else {
-    ourstop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
+    stop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
   }
 
   if (verbose) cat("INFO: Received a valid cross file type:", crosstype,".\n")

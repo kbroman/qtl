@@ -299,6 +299,10 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
 
 }
 
+mqmplotpermutation <- function(...){
+	mqmplotboot(...)
+}
+
 mqmplotboot <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
