@@ -91,13 +91,15 @@ max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 MQM                     Multiple QTL Model (MQM) mapping
+mqmall                  Multitrait analysis of a cross object
 mqmaugment              MQM data augmentation
 mqmcistransplot         Plotting routine to show cis and trans QTL
                         information
 mqmcofactors            Create cofactors to be used with mqmscan
-mqmcofactorsEach        Create cofactors to be used with mqmscan
 mqmfind.marker          Find the significant markers after
                         bootstrapping/permutation
+mqmgetmodel             Retrieves selected cofactors from the results
+                        of an mqm scan
 mqmloadanalysis         Enables loading of previous MQM analysis from
                         file
 mqmpackage              Tool for analyzing QTLs in experimental crosses
@@ -113,6 +115,8 @@ mqmplotone              Plotting routine to display the results from a
 mqmscan                 Multiple qtl mapping for inbred crosses
 mqmscanfdr              Estimates of FDR when doing multiple trait QTL
                         analysis
+mqmsetcofactors         Create cofactors to be used with mqmscan
+mqmtestnormal           pearsons normality test used in mqm
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes

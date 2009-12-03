@@ -28,7 +28,7 @@ cimall <- function(...) {
 	scanall(...,Funktie=cim)
 }
 
-mqmall <- function(cross,multiC=TRUE,n.clusters=1,b.size=10...) {
+mqmall <- function(cross,multiC=TRUE,n.clusters=1,b.size=10,...) {
 	scanall(cross=cross,multiC=multiC,n.clusters=n.clusters,b.size=b.size,...,Funktie=mqm)
 }
 
