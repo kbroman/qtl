@@ -32,9 +32,9 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
   \item{maxaugind}{ Maximum number of augmentations per individual }
   \item{augment_aboveprob}{ Augment genotypes that are above a probability of
   occurring (ignore lower probabilities). Setting this value too high
-  may result in dropping individuals entirely. E.g. for augment_aboveprob=100 : eliminate genotypes 100
-  times less likely than the most likely configuration. The dataset may be
-  reduced when there is a lot of missing data.  }
+  may result in dropping individuals entirely. augment_aboveprob is a value
+  between 0 and 1.
+ }
   \item{verbose}{ Be verbose }
 }
 
