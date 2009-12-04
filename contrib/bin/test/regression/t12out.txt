@@ -1,16 +1,5 @@
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
 INFO: Crosstype determined by the algorithm:F:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Neglect=1.000000
-INFO: Receiving the chromosome matrix from R
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
-INFO: Initialize Frun and informationcontent to 0.0
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
-INFO: After dropping of uninformative cofactors
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
 INFO: Prob=0.020537 Alfa=0.020000
 INFO: Prob=0.020012 Alfa=0.020000
 INFO: dimX:12 nInd:180
@@ -31,7 +20,6 @@ INFO: Marker 7 is dropped, resulting in logL of reduced model = -8837.772260
 INFO: Marker 60 is dropped, resulting in logL of reduced model = -8840.226718
 INFO: Marker 66 is dropped, resulting in logL of reduced model = -8843.804806
 INFO: Number of output datapoints: 505
-INFO: Analysis of data finished
     0	   0.79421
     1	   0.85354
     2	   0.81624
