@@ -1,16 +1,5 @@
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
 INFO: Crosstype determined by the algorithm:F:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Neglect=2.000000
-INFO: Receiving the chromosome matrix from R
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
-INFO: Initialize Frun and informationcontent to 0.0
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
-INFO: After dropping of uninformative cofactors
-INFO: Calculating relative genomepositions of the markers
-INFO: Estimating recombinant frequencies
 INFO: Prob=0.019937 Alfa=0.020000
 INFO: Prob=0.020756 Alfa=0.020000
 INFO: dimX:1 nInd:120
@@ -21,7 +10,6 @@ INFO: Log-likelihood of full model= -9793.248394
 INFO: Residual variance= 6631.434991
 INFO: Trait mean= 148.703367; Trait variation= 6631.434991
 INFO: Number of output datapoints: 2020
-INFO: Analysis of data finished
     0	   0.21825
     1	   0.36106
     2	   0.33124
