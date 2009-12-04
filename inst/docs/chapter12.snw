@@ -90,25 +90,25 @@ because of the additional information stored}.
 Here we opt for \mqm's augmentation. The function $mqmaugment()$ can fill in
 missing genotypes for us.  For each missing marker it fills in all possible
 marker locations with all genotypes and calculates their likelihood. When they
-are more likely than the $augment\_aboveprob$ parameter the \emph{augmented}
+are more likely than the $minprob$ parameter the \emph{augmented}
 individual is stored in the new crossobject. At this point the $mqmaugment()$
 function can only handle one phenotype at the time even though augmentation is
 independent of the phenotype.  This will be changed in an upcoming release of
 R/qtl with \mqm.
 
-The important parameters are: $cross, pheno.col, maxaugind, augment\_aboveprob$
+The important parameters are: $cross, pheno.col, maxaugind, minprob$
 and verbose. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
 per individual in a dataset. The default of 60 is usually good enough (20
 missing F2 markers or 30 BC markers per individual). However higher numbers could be needed 
 when there are more missing markers. Each individual is
-expanded (augmented) with a probability of, at least, $augment\_aboveprob$ -
+expanded (augmented) with a probability of, at least, $minprob$ -
 i.e. only augment genotypes that are above a probability of occurring (and drop
 lower probabilities). Note that setting this value too low may result in dropping
 individuals entirely. Using the verbose option to get more feedback on the augmentation routine
 is advised.
 <<>>=
 #warns because mqm doesnt handle the X chromosome yet
-augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
+augmentedcross <- mqmaugment(mycross, minprob=1)
 @
 \clearpage
 \begin{figure}[ht]
@@ -116,11 +116,11 @@ augmentedcross <- mqmaugment(mycross, augment_aboveprob=1)
 plot.geno(augmentedcross)
 @
 \caption{$plot.geno$ showing the genotypes of 100 individuals with no missing
-values (using $mqmaugment$). We used mqmaugment with $augment\_aboveprob=1$ this means we fill in the 
+values (using $mqmaugment$). We used mqmaugment with $minprob=1$ this means we fill in the 
 most likely genotypes at each marker, no expansion of the dataset takes place}
 \end{figure}
 
-With a higher $augment\_aboveprob$ value less likely genotypes are also
+With a higher $minprob$ value less likely genotypes are also
 considered and the resulting \emph{augmented} dataset will be larger. Unfortunately, 
 at this stage, the expanded dataset can not be used with scanone as it treats the extra individuals as new
 individuals, while \mqm\ recognises expanded individuals as 
@@ -130,7 +130,7 @@ more accurate mapping when dealing with missing values and give a smoother \qtl\
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-augmentedcross <- mqmaugment(mycross, augment_aboveprob=0.1)
+augmentedcross <- mqmaugment(mycross, minprob=0.1)
 plot.geno(augmentedcross)
 @
 \caption{$plot.geno$ showing the augmented genotypes of 100 individuals with no
@@ -153,7 +153,7 @@ single QTL (scanone) and \mqm\ QTL mapping routinges analysing blood pressure.
 data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
-hyperaug <- mqmaugment(hyper, augment_aboveprob=1)
+hyperaug <- mqmaugment(hyper, minprob=1)
 result <- mqm(hyperaug)
 result_compare <- scanone(hyperaug)
 @
@@ -548,10 +548,10 @@ memory. You will see the following error:\\
 ERROR: Dataset too large after augmentation
 
 When this happens please reload your crossobject from file and rerun the mqmaugmentation routine with:\\
-1) set $augment\_aboveprob$ parameter higher (closer to 1)\\
+1) set $minprob$ parameter higher (closer to 1)\\
 2) allow for more augmentations per individual\\
 3) allow for more augmentations in total\\
-When dealing with a lot of missing markers (This message already shows when $augment\_aboveprob$ is equal to 1), the basic fill.geno
+When dealing with a lot of missing markers (This message already shows when $minprob$ is equal to 1), the basic fill.geno
 function from R/qtl can be used.
 
 \clearpage

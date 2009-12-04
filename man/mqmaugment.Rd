@@ -4,15 +4,15 @@
 \title{MQM data augmentation}
 
 \description{
-The function $mqmaugment()$ fills in missing genotypes. For each missing marker
-it fills in (augments) all possible genotypes and calculates their likelihood using
-information on surrounding markers and recombination frequencies. When a
-genotype is more likely than the $augment\_aboveprob$ parameter the
-\emph{augmented} individual is stored in a new crossobject.
+Fills in missing genotypes for multiple QTL model (MQM) mapping. For each
+missing marker it fills in (or 'augments') all possible genotypes and calculates
+their likelihood using information on surrounding markers and recombination
+frequencies. When a genotype is more likely than the $minprob$
+parameter the \emph{augmented} individual is stored in a new crossobject.
 }
 
 \usage{
-mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
+mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
 }
 
 \arguments{
@@ -21,19 +21,22 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
   \item{pheno.col}{Column number in the phenotype matrix which should be
     used as the phenotype.  This can be a vector of integers, which index on
     the phenotype, a string matching one phenotype name, or, when the value is
-    TRUE, all phenotypes are used.
+    TRUE, all phenotypes are used. (Note: the current implementation uses
+    one phenotype only).
   }
-  \item{maxaugind}{ Maximum number of augmentations per individual }
-  \item{augment_aboveprob}{ Augment genotypes that are above a probability of
+  \item{maxaugind}{ Maximum number of augmentations per individual. When a large
+    number of genotypes are missing the default number is quickly reached }
+  \item{minprob}{ Augment genotypes that are above a probability of
   occurring (drop the genotypes with lower probabilities). Setting this value
   too high may result in dropping individuals entirely, thereby reducing the
   information in the dataset (using the VERBOSE switch will tell you).
-  augment_aboveprob is a value between 0 and 1. For example a value of 0.5 will
+  minprob is a value between 0 and 1. For example a value of 0.5 will
   drop all genotypes that are half as likely than the most likely genotype. A
-  value of 0.1 will drop all genotypes that are less likely of ocurring 1 in
-  10, compared against the most likely genotype.
+  value of 0.1 will drop all genotypes that are less likely of ocurring than 1 in
+  10, compared against the most likely genotype. Use a value of 0.001 to be on
+  the safe side.
  }
-  \item{verbose}{ Be verbose }
+  \item{verbose}{ Verbose output }
 }
 
 \details{
@@ -42,24 +45,24 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
 \value{
   The cross object the single phenotype \code{pheno.col}, with augmented
   individuals (many will be repeated multiple times). Individuals may have been
-  dropped completely when all genotypes are below the augment_aboveprob. An
+  dropped completely when all genotypes are below the $minprob$. An
   added component to the cross object named \code{extra} contains information
   on which individuals are retained and repeated.  
 }  
 
-\author{R.C. Jansen ; modified by Pjotr Prins and Danny Arends}
+\author{Original algorithm by R.C. Jansen ; modified by Pjotr Prins and Danny Arends}
 
 \note{
-The sex chromosome 'X' is dropped before augmentation.
-
-Warning: with lots of missing data and/or chromosome markers a large
-augment_aboveprob may cause the routine to drop a lot of indivuals from the
-dataset. Run with verbose=TRUE to see how many individuals are retained in
-the dataset.  
+The sex chromosome 'X' is dropped before augmentation. This will change in a
+future version.
 
 When augmentation goes out of bounds a warning is shown and the returned
 should not be used.
 
+Warning: with lots of missing data and/or chromosome markers a large
+$minprob$ may cause the routine to drop a lot of indivuals from the
+dataset. Run with verbose=TRUE to see how many individuals are retained in
+the dataset.  
 }
 
 \seealso{
