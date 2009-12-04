@@ -84,15 +84,17 @@ missing markers). There are two possibilities: (1) fill.geno and (2)
 augmentation. \rqtl's $fill.geno()$ fills in the most likely markers using
 imputations to estimate the missing marker genotypes while augmentation is
 specific to the \mqm\ procedure\footnote{Note that after augmentation the
-resulting cross object is no longer suited for scan.one or cim}. 
+resulting cross object is no longer suitable for the use with scan.one or cim,
+because of the additional information stored}. 
 
-Here we opt for \mqm's augmentation. The function $mqmaugment()$ can fill in missing
-genotypes for us.  For each missing marker it fills in all possible markers and
-calculates their likelihood. When they are more likely than the
-$augment\_aboveprob$ parameter the \emph{augmented} individual is stored in the
-new crossobject. At this point the $mqmaugment()$ function can only handle one
-phenotype at the time even though augmentation is independent of the phenotype.
-This will be changed in upcomming releases of of the R/qtl with mqm.
+Here we opt for \mqm's augmentation. The function $mqmaugment()$ can fill in
+missing genotypes for us.  For each missing marker it fills in all possible
+marker locations with all genotypes and calculates their likelihood. When they
+are more likely than the $augment\_aboveprob$ parameter the \emph{augmented}
+individual is stored in the new crossobject. At this point the $mqmaugment()$
+function can only handle one phenotype at the time even though augmentation is
+independent of the phenotype.  This will be changed in an upcoming release of
+R/qtl with \mqm.
 
 The important parameters are: $cross, pheno.col, maxaugind, augment\_aboveprob$
 and verbose. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
