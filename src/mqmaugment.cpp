@@ -38,7 +38,7 @@
  * recombinations r.  The neglect parameter drops individuals from the dataset
  * (the value should be between 1..n).
  *
- * The neglect parameter drops genotypes. E.g. for neglect=100  eliminate
+ * The neglect parameter drops genotypes. E.g. for neglect=100 eliminate
  * genotypes 100 times less likely than the most likely configuration.
  *
  * A new markerset is created and returned in augmarker, likewise the
