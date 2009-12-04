@@ -436,7 +436,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
           }
 
           if (iaug+3>maxNaug) {
-            Rprintf("ERROR: augmentation (should not be reached)\n");  
+            Rprintf("ERROR: augmentation (this code should not be reached)\n");  
             goto bailout;
           }
         }
