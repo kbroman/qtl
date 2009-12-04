@@ -35,7 +35,7 @@ test = round(mr[15,]$lod*1000)
 cat(mr[15,]$lod,test)
 if (test != 966) stop("scanone_mr gives an incorrect result")
 
-augmentedcross <- mqmaugment(listeria,neglect=1)
+augmentedcross <- mqmaugment(listeria)
 if (nind(augmentedcross)!=116) stop("Number of individuals incorrect")
 
 result <- mqmscan(augmentedcross)
