@@ -9,13 +9,6 @@ cmake_minimum_required(VERSION 2.6)
 PROJECT(Biolib_rqtl)
 
 set (M_NAME rqtl)
-# set (M_VERSION xxx)
-
-# Temporary overrides for Windows:
-#
-# SET(R_INCLUDE_PATH "c:/Program Files/R/r-2.9.1/include")
-# SET(R_EXECUTABLE "c:/Program Files/R/r-2.9.1/bin")
-
 
 IF(NOT BUILD_LIBS)
   # Building in a local module: Set the module search path manually
@@ -29,9 +22,7 @@ ENDIF(NOT BUILD_LIBS)
 FIND_PACKAGE(Map REQUIRED)
 FIND_PACKAGE(RLibs REQUIRED)  # require some Rlib functionality at runtime
 
-# SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../../build)
-
-# INCLUDE_DIRECTORIES(../../src)
+INCLUDE_DIRECTORIES(../../src)
 # INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
 
 BUILD_CLIB()
