@@ -67,13 +67,13 @@ const unsigned char MUNUSED   = '-';  // Unused parameter
 
 /*------------------------------------------------------------------------
 Datastructures for matrix and vector calculus
-FIXME : CamelCase for TYPEDEFS classes / structs
+FIXME : CamelCase for TYPEDEFS classes / structs! So ivector should be IVector
 ------------------------------------------------------------------------ */
 typedef double** matrix;
 typedef double*  vector;
 typedef char**   cmatrix;
-typedef MQMMarker** MQMMarkerMatrix;
-typedef MQMMarker* MQMMarkerVector;
+typedef MQMMarker **MQMMarkerMatrix;
+typedef MQMMarker *MQMMarkerVector;
 typedef char*    cvector;
 typedef MQMRelMarkerPos* relmarkerarray;
 typedef int*  ivector;
