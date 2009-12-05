@@ -26,8 +26,8 @@ IF(NOT BUILD_LIBS)
   ENDIF(NOT IS_DIRECTORY ${CMAKE_MODULE_PATH})
 ENDIF(NOT BUILD_LIBS)
 
-FIND_PACKAGE(RLibs REQUIRED)  # require some Rlib functionality at runtime
 FIND_PACKAGE(Map REQUIRED)
+FIND_PACKAGE(RLibs REQUIRED)  # require some Rlib functionality at runtime
 
 # SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../../build)
 
