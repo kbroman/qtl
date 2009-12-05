@@ -1,6 +1,6 @@
-# Make file for BioLib modules 
+# Make file for the R/qtl BioLib module 
 #
-#   Usage: cmake . ; make
+#   Usage: rm CMakeCache.txt ; cmake . ; make
 #
 # this cmake file requires the full biolib source tree
 
@@ -8,13 +8,19 @@ cmake_minimum_required(VERSION 2.6)
 
 PROJECT(Biolib_rqtl)
 
-SET(R_INCLUDE_PATH "c:/Program Files/R/r-2.9.1/include")
-SET(R_EXECUTABLE "c:/Program Files/R/r-2.9.1/bin")
+set (M_NAME rqtl)
+# set (M_VERSION xxx)
+
+# Temporary overrides for Windows:
+#
+# SET(R_INCLUDE_PATH "c:/Program Files/R/r-2.9.1/include")
+# SET(R_EXECUTABLE "c:/Program Files/R/r-2.9.1/bin")
 
 
 IF(NOT BUILD_LIBS)
   # Building in a local module: Set the module search path manually
-  SET (CMAKE_MODULE_PATH ../../../../../tools/cmake-support/modules)
+  SET (MAP_ROOT ../../../../..)
+  SET (CMAKE_MODULE_PATH ${MAP_ROOT}/tools/cmake-support/modules)
   IF(NOT IS_DIRECTORY ${CMAKE_MODULE_PATH})
     MESSAGE(FATAL_ERROR "Can not find BioLib context")
   ENDIF(NOT IS_DIRECTORY ${CMAKE_MODULE_PATH})
@@ -23,12 +29,12 @@ ENDIF(NOT BUILD_LIBS)
 FIND_PACKAGE(RLibs REQUIRED)  # require some Rlib functionality at runtime
 FIND_PACKAGE(Map REQUIRED)
 
-SET(LIBNAME biolib_rqtl-${MAP_VERSION})  # shared library name
+# SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../../build)
 
-SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ../../build)
+# INCLUDE_DIRECTORIES(../../src)
+# INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
 
-INCLUDE_DIRECTORIES(../../src)
-INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
+BUILD_CLIB()
 
 ADD_LIBRARY(${LIBNAME} SHARED
 ../../src/countXO.c
@@ -133,5 +139,8 @@ ADD_LIBRARY(${LIBNAME} SHARED
 ../../src/vbscan.h
 )
 
-BUILD_CLIB()
+# ---- The following may be required for OSX
+# TARGET_LINK_LIBRARIES(${LIBNAME} ${ZLIB_NAME})
 
+
+INSTALL_CLIB()
