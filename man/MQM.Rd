@@ -11,19 +11,23 @@ Overview of the MQM mapping functions
 }
 
 \section{Introduction}{
-MQM is an implementation of multiple QTL model mapping (or Marker-QTL-Marker)
-as described by Ritsert Jansen (see references below). A genome scan is
-performed by moving a QTL along the chromosomes while using a preselected set
-of markers as cofactors. If the QTL gets close to a cofactor the cofactor gets
-dropped. The backward elimination procedure starts with a multiple-regression
-model on an augmented dataset, using a full set of cofactors evenly spread over
-the genome. A maximum likelihood (ML) approach is used for cofactor selection.
+MQM is an implementation of multiple QTL model mapping as described by
+Ritsert Jansen (see references below). A genome scan is performed by
+moving a QTL along the chromosomes while using a preselected set of
+markers as cofactors. If the QTL gets close to a cofactor the cofactor
+gets dropped. The backward elimination procedure starts with a
+multiple-regression model on an augmented dataset, using a full set of
+cofactors evenly spread over the genome. A maximum likelihood (ML)
+approach is used for cofactor selection.
 }
 
-\author{R.C. Jansen ; Danny Arends ; Karl Broman \email{kbroman@biostat.wisc.edu} ; Pjotr Prins}
+\author{
+  R.C. Jansen ; modified and extended by Danny Arends, Karl Broman
+  \email{kbroman@biostat.wisc.edu} \& Pjotr Prins
+}
 
 \note{
-Currently MQM only supports F2 / BC / RIL crosses. Also there is no special treatment of sex chromosomes, at this point.
+  \input{../inst/docs/mqm/limitations}
 }
 
 \seealso{
@@ -37,7 +41,7 @@ Currently MQM only supports F2 / BC / RIL crosses. Also there is no special trea
 qtl <- c(3,15,3,7)							# QTL at chromosome 3
 data(map10)								# Mouse genome
 cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01) # Simulate a Cross (just autosomes)
-crossaug <- mqmaugment(cross,neglect=1)						# Augmentation of the data
+crossaug <- mqmaugment(cross)						# Augmentation of the data
 result <- mqmscan(crossaug)						# Do a MQM scan of the genome
 }
 
@@ -52,4 +56,4 @@ result <- mqmscan(crossaug)						# Do a MQM scan of the genome
 	}
 }
 
-\keyword{ utilities }
+\keyword{models}
