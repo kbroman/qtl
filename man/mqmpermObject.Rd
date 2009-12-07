@@ -1,5 +1,5 @@
-\name{mqmpermObject}
-\alias{mqmpermObject}
+\name{mqmgetpermobject}
+\alias{mqmgetpermobject}
 
 \title{Function to convert mqmmulti objects into a scanoneperm object}
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmpermObject(mqmbootresult = NULL)
+mqmgetpermobject(mqmbootresult = NULL)
 }
 
 \arguments{
@@ -39,7 +39,7 @@ data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 \dontrun{f2result <- bootstrap(f2cross,Funktie=mqm)			# Bootstrap MQM mapping on the f2cross
 }\dontshow{f2result <- bootstrap(f2cross,Funktie=mqm, n.run=2, b.size=2)}
-f2perm <- mqmpermObject(f2result)			# Create a permutation object
+f2perm <- mqmgetpermobject(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 }
 
