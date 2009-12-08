@@ -1,5 +1,5 @@
 INFO: Crosstype determined by the algorithm:F:
-INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Neglect=1.000000
+INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=1.000000
 INFO: Prob=0.049643 Alfa=0.050000
 INFO: Prob=0.050932 Alfa=0.050000
 INFO: dimX:1 nInd:180

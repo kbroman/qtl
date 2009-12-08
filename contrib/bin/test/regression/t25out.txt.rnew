@@ -1,5 +1,5 @@
 INFO: Crosstype determined by the algorithm:B:
-INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Neglect=2.000000
+INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=0.500000
 INFO: INFO: Individual 92 has been dropped
 INFO: INFO: Individual 93 has been dropped
 INFO: INFO: Individual 94 has been dropped
