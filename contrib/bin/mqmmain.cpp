@@ -202,7 +202,7 @@ void printhelp(void) {
   printf ("--estmap(CHAR)	Reestimate marker positions y/n?.\n");
   printf ("--maugment(INT)	Maximum size of augmented dataset.\n");
   printf ("--miaugment(INT)	Maximum number of individual replications inside a dataset.\n");
-  printf ("--neglect(FLOAT)	Drop genotypes more unlikely that neglect.\n");
+  printf ("--minprob(FLOAT)	Drop genotypes more unlikely that minprob.\n");
 }
 
 //Functions
@@ -228,7 +228,7 @@ static struct option long_options[] = {
   {"estmap",    required_argument, 0, 'i'},
   {"maugment",    required_argument, 0, 'j'},
   {"miaugment",    required_argument, 0, 'k'},
-  {"neglect",    required_argument, 0, 'l'},
+  {"minprob",    required_argument, 0, 'l'},
   {0, 0, 0, 0}
 };
 
@@ -321,7 +321,7 @@ int main(int argc,char *argv[]) {
     break; 
     case 'l':
       mqmalgorithmsettings.neglect_unlikely = atof(optarg);
-      printf("Option (l) neglect: %f\n",mqmalgorithmsettings.neglect_unlikely);
+      printf("Option (l) minprob: %f\n",mqmalgorithmsettings.neglect_unlikely);
     break; 
     default:
       fprintf (stderr, "Unknown option character '%c'.\n", optopt);
