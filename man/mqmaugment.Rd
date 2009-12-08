@@ -4,21 +4,15 @@
 \title{MQM data augmentation}
 
 \description{
-Estimates missing data by increasing the number of marker locations and filling in 
-genotypes based on surrounding markers and recombination frequencies. 
-
-Augment/expand the dataset by adding additional (likely) genotypes.
-Genotypic marker information is incomplete when marker scores are missing or dominant, or
-markers are non-segregating but you want to assume a
-segregating QTL on top of this marker (~very closely linked),
-and all likely possible configurations are generated 
-
-A new markerset is created, likewise the Augmentation halts when the number of
-individuals maxNaug is reached. Individuals are expanded up to imaxNaug.
+Fills in missing genotypes for multiple QTL model (MQM) mapping. For each
+missing marker it fills in (or 'augments') all possible genotypes and calculates
+their likelihood using information on surrounding markers and recombination
+frequencies. When a genotype is more likely than the $minprob$
+parameter the \emph{augmented} individual is stored in a new crossobject.
 }
 
 \usage{
-mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
+mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
 }
 
 \arguments{
@@ -27,38 +21,47 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE)
   \item{pheno.col}{Column number in the phenotype matrix which should be
     used as the phenotype.  This can be a vector of integers, which index on
     the phenotype, a string matching one phenotype name, or, when the value is
-    TRUE, all phenotypes are used.
+    TRUE, all phenotypes are used. (Note: the current implementation uses
+    one phenotype only).
   }
-  \item{maxaugind}{ Maximum number of augmentations per individual }
-  \item{augment_aboveprob}{ Augment genotypes that are above a probability of
-  occurring (ignore lower probabilities). Setting this value too high
-  may result in dropping individuals entirely. E.g. for augment_aboveprob=100 : eliminate genotypes 100
-  times less likely than the most likely configuration. The dataset may be
-  reduced when there is a lot of missing data.  }
-  \item{verbose}{ Be verbose }
+  \item{maxaugind}{ Maximum number of augmentations per individual. When a large
+    number of genotypes are missing the default number is quickly reached }
+  \item{minprob}{ Augment genotypes that are above a probability of
+  occurring (drop the genotypes with lower probabilities). Setting this value
+  too high may result in dropping individuals entirely, thereby reducing the
+  information in the dataset (using the VERBOSE switch will tell you).
+  minprob is a value between 0 and 1. For example a value of 0.5 will
+  drop all genotypes that are half as likely than the most likely genotype. A
+  value of 0.1 will drop all genotypes that are less likely of ocurring than 1 in
+  10, compared against the most likely genotype. Use a value of 0.001 to be on
+  the safe side.
+ }
+  \item{verbose}{ Verbose output }
 }
 
 \details{
 }
 
 \value{
-  The cross object the single phenotype \code{pheno.col}, without dropped
-  individuals and with augmented individuals (many will be repeated multiple
-  times). An added component \code{extra} contains information on which
-  individuals are retained and repeated.  
+  The cross object the single phenotype \code{pheno.col}, with augmented
+  individuals (many will be repeated multiple times). Individuals may have been
+  dropped completely when all genotypes are below the $minprob$. An
+  added component to the cross object named \code{extra} contains information
+  on which individuals are retained and repeated.  
 }  
 
-\author{R.C. Jansen ; Danny Arends}
+\author{Original algorithm by R.C. Jansen ; modified by Pjotr Prins and Danny Arends}
 
 \note{
-The sex chromosome 'X' is dropped before augmentation.
+The sex chromosome 'X' is dropped before augmentation. This will change in a
+future version.
 
-With unrealistic values for augmentation a warning is shown and the cross
-object may have been corrupted. 
+When augmentation goes out of bounds a warning is shown and the returned
+should not be used.
 
-Warning: with lots of missing data and/or chromosome markers a neglect value
-larger than 1 may cause the routine to drop a lot of indivuals from the
-dataset. Try running with verbose to see how many individuals are retained in
+Warning: with lots of missing data and/or chromosome markers a large
+$minprob$ may cause the routine to drop a lot of indivuals from the
+dataset. Run with verbose=TRUE to see how many individuals are retained in
 the dataset.  
 }
 
