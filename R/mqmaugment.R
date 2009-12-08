@@ -29,12 +29,15 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=1, verbose=FALSE) {
+mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
   if(minprob <= 0 || minprob > 1){
 	stop("Error minprob should be a value between 0 and 1.")
+  }
+  if((sum(nmissing(cross))/ sum(nmar(cross)*nind(cross))*100)>10 && minprob!=1){
+	warning("Warning: More than 10% missing values and minprob parameter < 1\nWe might loose information by dropping individuals")
   }
   #Danny: This moved to the C-part of the algorithm
   #neglect = 1/minprob
@@ -171,13 +174,13 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=1, verbose=FALS
     as.integer(1),    # 1 phenotype
     as.integer(maxaug),
     as.integer(maxiaug),
-    as.double(neglect),
+    as.double(minprob),
     as.integer(chr),
     as.integer(ctype),
     as.integer(verbose),
     PACKAGE="qtl")
 	
-
+  n.indold = n.ind
   n.ind = result$nind
   n.aug = result$naug
   markONchr <- 0
@@ -214,6 +217,9 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=1, verbose=FALS
   cross$extra$augIND <- result$augIND[1:n.aug]
   # ---- RESULTS
   endtime <- proc.time()
+  if((n.ind/n.indold*100)<90){
+	warning("Warning: More than 10% of the original individuals dropped")
+  }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
   cross  # return cross type
 }
