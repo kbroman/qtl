@@ -125,7 +125,7 @@ MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
 }
 */
 
-int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
+int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
             const double neglect, const MQMCrossType crosstype, const int verbose) {
@@ -481,7 +481,7 @@ cleanup:
  * The R interfact to data augmentation
  */
 
-void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno, 
+void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *neglect, int
                *chromo, int *rqtlcrosstypep, int *verbosep) {
@@ -532,7 +532,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   //Calculate positions of markers and Recombinant frequencies
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
-  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
+  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
