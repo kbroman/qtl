@@ -150,7 +150,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* au
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
   if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
-  if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f", maxNaug, imaxNaug, neglect);
+  if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Minprob=%f", maxNaug, imaxNaug, minprob);
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;              //Original number of individuals
   int newNind = nind0;                  //Number of unique individuals
