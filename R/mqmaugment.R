@@ -29,14 +29,14 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, verbose=FALSE) {
+mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
-  if(augment_aboveprob <= 0 || augment_aboveprob > 1){
-	stop("Error augment_aboveprob should be between 0 and 1.")
+  if(minprob <= 0 || minprob > 1){
+	stop("Error minprob should be a value between 0 and 1.")
   }
-  augment_aboveprob = 1/augment_aboveprob
+  neglect = 1/minprob
 
   # ---- check for supported crosses and set ctype
 
@@ -170,7 +170,7 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, augment_aboveprob=1, ve
     as.integer(1),    # 1 phenotype
     as.integer(maxaug),
     as.integer(maxiaug),
-    as.double(augment_aboveprob),
+    as.double(neglect),
     as.integer(chr),
     as.integer(ctype),
     as.integer(verbose),
