@@ -31,7 +31,7 @@ Data augmentation routing
 
 void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxind, int *maxiaug, double *neglect, int
+               int *Npheno, int *maxind, int *maxiaug, double *minprob, int
                *chromo, int *crosstype, int *verbose);
 
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers);               
@@ -39,7 +39,7 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
 int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix *augmarker, vector *augy,
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position,
-            vector r, const int maxNaug, const int imaxNaug, const double neglect, 
+            vector r, const int maxNaug, const int imaxNaug, const double minprob, 
             MQMCrossType crosstype, const int verbose);
 
 #ifdef __cplusplus
