@@ -123,22 +123,22 @@ ADD_TEST(TestMQMBC_T24 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genoty
 ADD_TEST(TestMQMBC_T24_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t24out.txt.rnew test/regression/t24out.txt)
 
 # Run T25
-ADD_TEST(TestMQMBC_T25 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t25out.txt.rnew)
+ADD_TEST(TestMQMBC_T25 ${MQMEXE} -v -ptest/std/phenotypes2.txt -gtest/std/genotypes2m.txt -mtest/std/markers2.txt -stest/std/settings2.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=0.5 -o test/regression/t25out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMBC_T25_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t25out.txt.rnew test/regression/t25out.txt)
 
 # Run T31 Dataset 3 F2=~ Listeria
-ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t31out.txt.rnew)
+ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=0.5 -o test/regression/t31out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31out.txt.rnew test/regression/t31out.txt)
 
 # Run T32
-ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t32out.txt.rnew)
+ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=0.5 -o test/regression/t32out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T32_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t32out.txt.rnew test/regression/t32out.txt)
 
 # Run T33
-ADD_TEST(TestMQMF2_T33 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt -cTest/t33/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=2 -o test/regression/t33out.txt.rnew)
+ADD_TEST(TestMQMF2_T33 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt -cTest/t33/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --neglect=0.5 -o test/regression/t33out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T33_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t33out.txt.rnew test/regression/t33out.txt)
 

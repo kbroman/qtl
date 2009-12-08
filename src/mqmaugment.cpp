@@ -35,10 +35,10 @@
  *             and all likely possible configurations are generated 
  *
  * Inputs are number of markers Nmark, the marker matrix, position vector,
- * recombinations r.  The neglect parameter drops individuals from the dataset
+ * recombinations r.  The minprob parameter drops individuals from the dataset
  * (the value should be between 1..n).
  *
- * The neglect parameter drops genotypes. E.g. for neglect=100 eliminate
+ * The minprob parameter drops genotypes. E.g. for minprob=0.01 eliminate
  * genotypes 100 times less likely than the most likely configuration.
  *
  * A new markerset is created and returned in augmarker, likewise the
@@ -128,7 +128,7 @@ MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
 int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
             const cvector position, vector r, const int maxNaug, const int imaxNaug, 
-            const double neglect, const MQMCrossType crosstype, const int verbose) {
+            const double minprob, const MQMCrossType crosstype, const int verbose) {
   int retvalue = 1;     //[Danny] Assume everything will go right, (it never returned a 1 OK, initialization to 0 and return
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
@@ -137,7 +137,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* au
   vector newy;
   MQMMarkerVector imarker;
   ivector newind;
-
+  double neglect = 1.0f/minprob;
   newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
@@ -483,7 +483,7 @@ cleanup:
 
 void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxind, int *maxiaug, double *neglect, int
+               int *Npheno, int *maxind, int *maxiaug, double *minprob, int
                *chromo, int *rqtlcrosstypep, int *verbosep) {
   int **Geno;
   double **Pheno;
@@ -532,7 +532,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   //Calculate positions of markers and Recombinant frequencies
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
-  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
+  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {

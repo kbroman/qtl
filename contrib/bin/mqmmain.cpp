@@ -60,7 +60,7 @@ struct algorithmsettings {
   char estmap;
   unsigned int max_totalaugment; // always >= 0
   unsigned int max_indaugment;   // always >= 0
-  int neglect_unlikely;
+  double neglect_unlikely;
   char suggestedcross;
 };
 
@@ -202,7 +202,7 @@ void printhelp(void) {
   printf ("--estmap(CHAR)	Reestimate marker positions y/n?.\n");
   printf ("--maugment(INT)	Maximum size of augmented dataset.\n");
   printf ("--miaugment(INT)	Maximum number of individual replications inside a dataset.\n");
-  printf ("--Neglect(INT)	Drop genotypes more unlikely that neglect/1000.\n");
+  printf ("--neglect(FLOAT)	Drop genotypes more unlikely that neglect.\n");
 }
 
 //Functions
@@ -320,8 +320,8 @@ int main(int argc,char *argv[]) {
       printf("Option (k) max_indaugment: %d\n",mqmalgorithmsettings.max_indaugment);
     break; 
     case 'l':
-      mqmalgorithmsettings.neglect_unlikely = atoi(optarg);
-      printf("Option (l) neglect: %d\n",mqmalgorithmsettings.neglect_unlikely);
+      mqmalgorithmsettings.neglect_unlikely = atof(optarg);
+      printf("Option (l) neglect: %f\n",mqmalgorithmsettings.neglect_unlikely);
     break; 
     default:
       fprintf (stderr, "Unknown option character '%c'.\n", optopt);

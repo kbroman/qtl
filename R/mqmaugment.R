@@ -36,7 +36,8 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FA
   if(minprob <= 0 || minprob > 1){
 	stop("Error minprob should be a value between 0 and 1.")
   }
-  neglect = 1/minprob
+  #Danny: This moved to the C-part of the algorithm
+  #neglect = 1/minprob
 
   # ---- check for supported crosses and set ctype
 
