@@ -32,15 +32,15 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
   }
   \item{minprob}{ 
     Return individuals with augmented genotypes that are above a
-    probability of occurring.  Setting this value too high may result
+    probability of occurring.  Setting this value too low may result
     in dropping individuals entirely, thereby reducing the information
     in the dataset (using the VERBOSE switch will tell you). minprob
     is a value between 0 and 1. For example a value of 0.5 will drop
     all genotypes that are half as likely than the most likely
     genotype (individual). The default value of 0.1 will drop all
     genotypes that are less likely of ocurring than 1 in 10, compared
-    against the most likely genotype. Perhaps use a value of 0.001 to
-    be on the safe side.
+    against the most likely genotype. Use a value of 1 to fill in only the
+	most likely genotype (no augmentation, no dropping of individuals).
  }
   \item{verbose}{ Verbose output }
 }
