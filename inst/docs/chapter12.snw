@@ -19,6 +19,7 @@
 \newcommand{\lod}{LOD}
 \newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
+\newcommand{\cim}{\emph{CIM}}
 \newcommand{\At}{\emph{Arabidopsis thaliana}}
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
@@ -56,6 +57,9 @@ and scales on multi-CPU systems.
 
 \section{Data augmentation}
 
+\FIXME the augmentation procedure is still not conclusive - and therefor 
+the description below is not completely correct.
+
 Most real genetic marker data is incomplete. \mqm\ automatically
 expands the dataset by adding all potential variants and attaches a
 likelihood to them.  For example, information is missing (unknown) at
@@ -85,8 +89,7 @@ mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 geno.image(mycross)
 @
 \caption{Simulate an F2 cross with 2\% missing data starting from the
-map10 F2 intercross
-. The figure
+map10 F2 intercross. The figure
 displays genotypes of 100 individuals with around 2\%
 missing data for the map10 F2 intercross}
 \label{missing data}
@@ -100,7 +103,7 @@ using multiple imputations, estimating the missing marker genotypes.
 In contrast augmentation introduces all variants. At this stage
 $mqmaugment$ is specific to \mqm \footnote{Note that after
 augmentation the resulting cross object is no longer suitable for the
-use with scan.one or cim, because of the additional information
+use with $scan.one$ or \cim, because of the additional information
 stored}. 
 
 Here we use \mqm's augmentation. The function $mqmaugment()$ can fill in
@@ -110,7 +113,7 @@ are more likely than the $minprob$ parameter the \emph{augmented}
 individual is stored in the new $crossobject$, ready for QTL mapping.
 \footnote{Note at this point the $mqmaugment()$
 function can only handle one phenotype at the time even though augmentation is
-independent of the phenotype.  This will be changed in an upcoming release of
+independent of the phenotype. This will be changed in an upcoming release of
 R/qtl with \mqm}
 
 The important parameters are: $cross, pheno.col, maxaugind, minprob$
@@ -121,11 +124,10 @@ when there are more missing markers. Each individual is
 augmented with a probability of, at least, $minprob$ -
 i.e. only augment genotypes that of individuals that are above a probability of occurring (and drop
 the less likely cases). Note that setting this value too low may result in dropping
-individuals entirely. Using the verbose option to get more feedback on the augmentation routine
-is advised.
+individuals entirely. Use the verbose option to get more feedback on the augmentation routine.
 
 <<>>=
-#warns because mqm doesnt handle the X chromosome yet
+# displays warning because MQM ignores the X chromosome in an F2
 augmentedcross <- mqmaugment(mycross, minprob=1)
 @
 \clearpage
@@ -134,7 +136,7 @@ augmentedcross <- mqmaugment(mycross, minprob=1)
 plot.geno(augmentedcross)
 @
 \caption{$plot.geno$ showing the genotypes of 100 individuals with no missing
-values (using $mqmaugment$). We used mqmaugment with $minprob=1$ this means we fill in the 
+values ($mqmaugment$ with $minprob=1$ means we fill in the 
 most likely genotypes at each marker, no expansion of the dataset takes place}
 \end{figure}
 
