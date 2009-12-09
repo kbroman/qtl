@@ -249,15 +249,27 @@ summary(result)
 #we can combine find marker and which.marker commands and expand our toset variable
 toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
+result2 <- mqm(hyperaug, cofactorlist,plot=T)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result_compare, col=colors, lwd=lines)
+plot(result, result2, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
-cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood scores for each chromosome. The LOD scores don't seem to improve much after adding another cofactor on chromosome 4.}
+cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood scores for each chromosome. The LOD scores don't seem to 
+improve much after adding another cofactor on chromosome 4. But lets take a closer look }
+\label{twowaycomparison}
 \end{figure}
 
+\begin{figure}[ht]
+<<fig=TRUE>>=
+plot(result, result2,result_compare)
+@
+\caption{Comparison between the last scans. We see here a closeup of chromosome 1 scanned using mqm with 3 different cofactor settings
+MQM using no cofactors, MQM using a single cofactor onm chromosome 4, MQM using cofactors on chromosome 1 and 4. We see the LOD scores 
+on chromosome 1 increasing when inclusing more cofactors.
+\end{figure}
+\label{threewaycomparison}
 \clearpage
 
 \mqm\ checks that no markers are included that are less significant than the
