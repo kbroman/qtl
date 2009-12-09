@@ -11,7 +11,10 @@
 #   }
 # 
 # will inject the contents of that file - replacing the text until the next
-# closing curly brace.
+# closing curly brace. There are some other replacement commands that
+# merely replace LaTeX like macros on the next line
+#
+#   % \mqmcopyright   # default copyright
 #
 # Usage:
 #
@@ -21,6 +24,11 @@
 #
 #   ruby ./contrib/scripts/repl_inputs.rb man/*.Rd
 #
+
+REPL = 
+{ '\mqmauthors' =>
+  "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu}"
+}
 
 ARGV.each do | fn | 
 
@@ -42,6 +50,13 @@ ARGV.each do | fn |
       outbuf.push s
       outbuf.push File.new(inputfn).read
       outbuf.push "% -----^^ "+inputfn.strip+" ^^-----\n"
+    end
+    # Now check keywords
+    REPL.each do | k, v |
+      if s.strip =~ /\s#{k}\s/
+        outbuf.push v + '% '+k
+        next
+      end
     end
     input = false if input and s.strip == '}'
     outbuf.push s if !input
