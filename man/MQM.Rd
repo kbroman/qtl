@@ -22,8 +22,7 @@ approach is used for cofactor selection.
 }
 
 \author{
-  R.C. Jansen ; modified and extended by Danny Arends, Karl Broman
-  \email{kbroman@biostat.wisc.edu} \& Pjotr Prins
+  % \mqmauthors
 }
 
 \note{
