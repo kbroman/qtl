@@ -27,7 +27,8 @@ ARGV.each do | fn |
   raise "File not found #{fn}!" if !File.exist?(fn)
   print "\nParsing #{fn}..."
 
-  buf = File.new(fn).read
+  buf = nil
+  File.open(fn) { | f | buf = f.read }
   
   # parse buffer and strip between inputs
   outbuf = []
