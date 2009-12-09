@@ -4,12 +4,13 @@
 \title{MQM data augmentation}
 
 \description{
-Fills in missing genotypes for multiple QTL model (MQM) mapping. For
-each missing marker it fills in (or 'augments') all possible genotypes
-and calculates their probability using information on neighbouring
-markers and recombination frequencies. When a genotype is more likely
-than the $minprob$ parameter the \emph{augmented} list of individuals
-is returned in a new $crossobject$.
+Fills in missing genotypes for multiple QTL model (MQM) mapping. For each
+missing marker it fills in (or 'augments') all possible genotypes, thus
+creating new candidate 'individuals' and calculates their probability using
+information on neighbouring markers and recombination frequencies. When a
+genotype of an augmented genotype is less likely than the $minprob$ parameter
+it is dropped from the dataset. The \emph{augmented} list of individuals is
+returned in a new $crossobject$.  
 }
 
 \usage{
@@ -40,7 +41,7 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
     genotype (individual). The default value of 0.1 will drop all
     genotypes that are less likely of ocurring than 1 in 10, compared
     against the most likely genotype. Use a value of 1 to fill in only the
-	most likely genotype (no augmentation, no dropping of individuals).
+	most likely genotype (no augmentation, no dropping of individuals). \FIXME
  }
   \item{verbose}{ Verbose output }
 }
@@ -52,7 +53,7 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
   Returns the cross object for the single phenotype \code{pheno.col},
   with augmented individuals (many individuals from the data set will
   be repeated multiple times). Some individuals may have been dropped
-  completely when the probability falls below $minprob$. An added
+  completely when the probability falls below $minprob$. \FIXME An added
   component to the cross object named \code{extra} contains
   information on exactly which individuals are retained and repeated.  
 }  
@@ -65,10 +66,10 @@ The sex chromosome 'X' is treated like autosomes during augmentation.
 With an F2 the sex chromosome is not considered. This will change in
 a future version of MQM.
 
-When augmentation goes out of memory, a warning is given and the returned
+When augmentation runs out of memory, a warning is given and the returned
 object should not be used.
 
-With a large amount of missing data a high $minprob$ may cause the
+With a large amount of missing data a high\FIXME $minprob$ may cause the
 routine to drop a lot of indivuals from the dataset. Run with
 verbose=TRUE to verify how many individuals are retained in the
 dataset or check the return cross$extra values.
