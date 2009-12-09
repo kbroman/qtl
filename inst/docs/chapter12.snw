@@ -47,7 +47,7 @@ lets users test different QTL models by elimation of non-significant
 cofactors\footnote{We assume the reader knows how to load his data into R using
 the R/qtl $read.cross()$ function}.
 
-\input{mqm/limitations}
+\input{mqm/limitations.txt}
 
 Still, \mqm\ is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with interference of \qtl, handles missing data and
