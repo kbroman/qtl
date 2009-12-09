@@ -28,6 +28,15 @@ approach is used for cofactor selection.
 
 \note{
 % \input{"inst/docs/mqm/limitations.txt"}
+
+At the moment, MQM is limited to experimental crosses F2, RIL and BC.
+Also MQM does not treat sex chromosomes differently from autosomal
+chromosomes - though one can introduce sex as a cofactor. Another
+limitation is that MQM handles one phenotype at a time. Finally,
+automatic backward elimination currently does not consider the marker
+density at locations. Future versions of MQM may improve on this.
+
+% -----^^ inst/docs/mqm/limitations.txt ^^-----
 }
 
 \seealso{
