@@ -27,7 +27,8 @@ approach is used for cofactor selection.
 }
 
 \note{
-  \input{../inst/docs/mqm/limitations}
+    % \input{"inst/docs/mqm/limitations.tex"}
+    % \endinput
 }
 
 \seealso{
