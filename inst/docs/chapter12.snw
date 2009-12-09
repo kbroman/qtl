@@ -256,8 +256,9 @@ result2 <- mqm(hyperaug, cofactorlist,plot=T)
 plot(result, result2, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
-cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood scores for each chromosome. The LOD scores don't seem to 
-improve much after adding another cofactor on chromosome 4. But lets take a closer look }
+cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood 
+scores for each chromosome. The LOD scores don't seem to improve much after adding
+ another cofactor on chromosome 4. But lets take a closer look }
 \label{twowaycomparison}
 \end{figure}
 
@@ -265,9 +266,10 @@ improve much after adding another cofactor on chromosome 4. But lets take a clos
 <<fig=TRUE>>=
 plot(result, result2,result_compare)
 @
-\caption{Comparison between the last scans. We see here a closeup of chromosome 1 scanned using mqm with 3 different cofactor settings
-MQM using no cofactors, MQM using a single cofactor onm chromosome 4, MQM using cofactors on chromosome 1 and 4. We see the LOD scores 
-on chromosome 1 increasing when inclusing more cofactors.
+\caption{Comparison between the last scans. We see here a closeup of chromosome 1
+scanned using mqm with 3 different cofactor settings: MQM using no cofactors, 
+MQM using a single cofactor onm chromosome 4, MQM using cofactors on chromosome 1 and 4. 
+We see the LOD scores on chromosome 1 increasing when including more cofactors.
 \end{figure}
 \label{threewaycomparison}
 \clearpage
@@ -305,8 +307,9 @@ backward eliminatio to find the most likely model}
 mqmgetmodel(result)
 @
 The $mqmgetmodel()$ function returns the model from the resulting $scanone$ object.
-This is only available when doing automatic backward elimination. The resulting
-model can be used to obtain the location and name of the significant markers.
+The model will be returned in R/qtl model format and can be used with the scan.two 
+function from R/qtl. This is only available when doing automatic backward elimination. 
+The resulting model can also be used to obtain the location and name of the significant markers.
 
 \clearpage
 \begin{figure}[ht]
@@ -319,12 +322,13 @@ marker for mqm, followed by backward elimination
 \label{Backward2}
 \end{figure}
 
-This mqm run results in a lot of significant markers, with even multiple hits on each chromosome. Figure \ref{Backward2} shows
-for an alpha of 0.02 chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the
-significance level from 0.02 to 0.002 may yield a smaller model. In biology extensive models 
-are sometimes prefered, but in general a simpler model is more easily understood and verified in the wetlab. 
-Increasing the significance level (and simplifying the model) also has the advantage that we can 
-be more sure of the QTLs we do report.
+This \mqm\ QTL mapping results in a lot of significant markers, with even multiple 
+hits on each chromosome. Figure \ref{Backward2} shows us that at an alpha of 0.02 
+chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the significance level from 
+0.02 to 0.002 may yield a smaller model. In biology extensive models are sometimes 
+prefered, but in general a simpler model is more easily understood and verified in 
+the wetlab. Increasing the significance level (and simplifying the model) also has 
+the advantage that we can be more sure of the QTLs we do report.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -336,21 +340,22 @@ result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
 \end{figure}
 \clearpage
 
-When comparing the resulting scan in figure \ref{FigLowAlpha} with the original
+When comparing the \mqm\ scan in figure \ref{FigLowAlpha} with the original
 $scanone$ result in figure \ref{scanone} there are some striking differences.
 Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
-To replot the plots created during an mqm analysis is also possible. The figures can be reconstructed 
-from resulting $scanone$ object using $mqmplotone(result)$ see figure \ref{AutoCofactor}. This 
-retrieves the model and the QTLprofile from the result objectattribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
-scans, as they have an additinal column $info$ and contain a QTLmodel. The info column contains the estimated
-information content per marker. $info$ is calculated from the deviation of the
-marker distribution. For example, in a recombinant inbred line we have most
-power when both groups (A and B) have 125 mice, and no power when we have 1 A
-versus 249 B. Therefore we can multiple the estimated QTL effect by this value
-\"to clean\" the QTL profile by giving less weight to less informative markers.
+To replot the plots created during \mqm\ analysis is also possible. The figures can be 
+reconstructed from resulting $scanone$ object using $mqmplotone(result)$ see figure 
+\ref{AutoCofactor}. This retrieves the model and the QTLprofile from the result 
+objectattribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
+scans, as they have an additinal column $info$ and contain a QTLmodel. The info 
+column contains the estimated information content per marker. $info$ is calculated 
+from the deviation of the ideal marker distribution. For example, in a recombinant 
+inbred line we have most power when both groups (A and B) have 125 mice, and no power 
+when we have 1 A versus 249 B. Therefore we can multiple the estimated QTL effect by 
+this value \"to clean\" the QTL profile by giving less weight to less informative markers.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -366,7 +371,7 @@ mqmplotone(result)
 Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5 are
 associated with high bloodpressure. If we want to investigate the
 effects of the peek we can use \rqtl\ standard plotting tools to
-visualize $main$ and $epistatic$ effects. The following code will plot
+visualize $main$ and/or $epistatic$ effects. The following code will plot
 those two plots on markers "D1Mit102" (main effect) and the
 interaction between "D1Mit102" and "D5Mit213" to show the $main$
 effect and the estimated $epistasis$. These markers are initially
