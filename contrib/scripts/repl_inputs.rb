@@ -26,8 +26,8 @@
 #
 
 REPL = 
-{ '\mqmauthors' =>
-  "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu}"
+{ 'mqmauthors' =>
+  "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}"
 }
 
 ARGV.each do | fn | 
@@ -41,6 +41,7 @@ ARGV.each do | fn |
   # parse buffer and strip between inputs
   outbuf = []
   input = false
+  skipone = false
   buf.each do | s |
     if s.strip =~ /^%\s+\\input\{\"(\S+?)\"\}/
       inputfn = $1
@@ -53,13 +54,15 @@ ARGV.each do | fn |
     end
     # Now check keywords
     REPL.each do | k, v |
-      if s.strip =~ /\s#{k}\s/
-        outbuf.push v + '% '+k
+      if s.strip =~ /%\s+\\#{k}/
+        outbuf.push v + " % \\"+k+"\n"
+        skipone = true
         next
       end
     end
     input = false if input and s.strip == '}'
-    outbuf.push s if !input
+    outbuf.push s if !input and !skipone
+    skipone = false
   end
   File.open(fn,"w") do | f |
     f.print outbuf
