@@ -258,7 +258,7 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
             nlevels=(max(c)/5)
             )
     for(x in unique(chrs[[1]])){
-		abline(v=sum(chrs[[1]]<=x))
+		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}			
   }
   if(type=="I"){
@@ -272,7 +272,7 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
           )
     for(x in unique(chrs[[1]])){
-		abline(v=sum(chrs[[1]]<=x))
+		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}
   }
   if(type=="D"){
@@ -339,8 +339,8 @@ mqmplotboot <- function(result, ...){
 	lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)	
 	chrs <- unique(lapply(result,getChr))
     for(x in unique(chrs[[1]])){
-		abline(v=sum(chrs[[1]]<=x),lty="dashed",col="gray")
-	}	
+		abline(v=sum(as.numeric(chrs[[1]])<=x),lty="dashed",col="black",lwd=2)
+	}
 }
 
 mqmplotnice <- function(result, ...){
