@@ -165,7 +165,8 @@ individual).}
 
 The \emph{hyper} dataset is a backcrossed offspring of mice with two traits in the
 dataset: bloodpressure (bp) and sex. Here we show an example of running both
-single QTL (scanone) and \mqm\ QTL mapping routinges analysing blood pressure.
+single marker QTL (scanone) and \mqm\ QTL mapping routinges to analyse the blood 
+pressure trait.
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
@@ -177,11 +178,16 @@ hyperaug <- mqmaugment(hyper, minprob=1)
 result <- mqm(hyperaug)
 result_compare <- scanone(hyperaug)
 @
-And plot the results from both scans (black=mqm, green=scanone), When we look at the output 
+We start bij loading the dataset using the command $data(hyper)$. We fill in missing 
+genotypes using the mqmaugment routine discussed before. Then scan for QTLs using 
+mqmscan and scanone with default parameters. A plot comparing the two scanning methods 
+to eachother can be found in figure \ref{NoCofs}. We see that the plot of the results from both scans
+(black=mqm, green=scanone) show an almost 1 to 1 corrospandence. When we look at the output 
 from the two methods we see that MQM doesn't have the original markers listed. This is because 
-MQM does intervall mapping. Each chromosome is divided into fictional markers spaces stepsize Cm apart. 
-A LOD score for underlying QTLs is calculated at these 'fictional' markers. Using the intervall 
-mapping approach we obtain smoother profiles than compared to markerbased mapping approaches.
+MQM uses intervall mapping. Each chromosome is divided into fictional markers spaced xx Cm apart.
+The xx can be set by the user using the stepsize parameter. A LOD score for underlying QTLs is 
+calculated at these 'fictional' markers. Using the intervall mapping approach we obtain smoother 
+profiles than compared to markerbased mapping approaches (when using a small stepsize).
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -189,16 +195,19 @@ plot(result, result_compare, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors. Both routines
 correspond one to one when using no extra parameters}
+\label{NoCofs}
 \end{figure}
 
-For \mqm\ analysis we can follow two approaches (1) build a model by hand, or
+To use the automatic model selection in \mqm\ we first need to supply the algorithm with an initial model.
+This initial model can be produced in two ways: (1) Building a model by hand (Forward stepwise), or
 (2) use unsupervised backward elimination on a large number of markers.  
 
-First we will start building the model by hand by adding cofactors. On the plot
-appears a peek on chromosome 4 at 30 \cM, so let's account for that by
-setting a cofactor at the marker nearest to the peek on chromosome 4. This is
-achieved by the following steps:
-
+First it will be explained how to build the initial model by hand, using a forward stepwise approach.
+A model consists of markers we want to account for, like we would account for sex as an 
+external variable influencing our results. We start building the initial model by adding cofactors at 
+markers with high LOD scores. figure \ref{NoCofs} shows a large QTL peek on chromosome 4 at 30 \cM, 
+so let's account for that by setting a cofactor at the marker nearest to the peek on chromosome 4. 
+This is achieved by the following code and a new mqm scan is performed (figure \ref{Cofactor4}).
 <<>>=
 #Summary results shows the highest lodscores per chromosome
 summary(result)
