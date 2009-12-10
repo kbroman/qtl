@@ -139,7 +139,7 @@ values ($mqmaugment$ with $minprob=1$ means we fill in the
 most likely genotypes at each marker, no expansion of the dataset takes place}
 \end{figure}
 
-With a higher $minprob$ value less likely genotypes are also
+With a lower $minprob$ value less likely genotypes are also
 considered and the resulting \emph{augmented} dataset will be larger. Unfortunately, 
 at this stage, the expanded dataset can not be used with scanone as it treats the extra individuals as new
 individuals, while \mqm\ recognises expanded individuals as 
@@ -287,11 +287,14 @@ We see the LOD scores on chromosome 1 increasing when including more cofactors.}
 \clearpage
 
 \mqm\ checks that no markers are included that are less significant than the
-alpha level specified. The marker on chromosome 1 is also informative enough to
-be included into the model and we can continue this process of adding cofactors
-untill there are no more informative markers that can be included.
+alpha level specified by the user. The marker on chromosome 1 is also informative 
+enough to be included into the model. Thus creating a new initial model consisting 
+of cofactors on chromosome 4 and 1). This process of selection of cofactors can 
+continue untill there are no more informative markers that can be included. Practically 
+this means one keeps on adding cofactors untill the newest added cofactor gets dropped from the model.
 
-This could be very time consuming in the case of many QTLs underlying a trait.
+This manually looking into the profile and determining at which marker to set a cofactor
+could be very time consuming in the case of many QTLs underlying a trait.
 \mqm\ also provides unsupervised backward elimination (or elimination) on a large
 number of markers by setting cofactors at every other marker. The algorithm
 will analyse all the markers and if one is found to be not informative enough
