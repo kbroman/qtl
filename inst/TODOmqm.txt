@@ -1,0 +1,44 @@
+
+"To do" list for MQM part of R/qtl
+----------------------------------------------------------------------
+This file is intended to contain a list of many of the additions and
+revisions that are planned for the MQM part of the R/qtl package.  
+
+If you any additions or revisions to suggest, please send an email to
+Karl Broman, <kbroman@biostat.wisc.edu>.
+----------------------------------------------------------------------
+ 
+SHORT TERM:
+
+o Finish Manual
+
+o Adding original markers to output of mqmscan
+
+o Augmentation rewrite to use best N augmentations
+
+----------------------------------------------------------------------
+
+MEDIUM-SHORT TERM:
+
+o Finish MQM paper
+
+o Augmentation of all phenotypes at once (requires some smart handling of NA phenotypes)
+
+o Placement of cofactors for automatic backward selection (perhaps use windowsize)
+
+----------------------------------------------------------------------
+
+MEDIUM TERM:
+
+o 'Environmental' cofactors (Sex,Block,Age, etc)
+
+o Generalized Lineair Models
+
+----------------------------------------------------------------------
+
+LONG TERM:
+
+o Handling of the X-chromosome
+
+----------------------------------------------------------------------
+end of TODOmqm.txt
