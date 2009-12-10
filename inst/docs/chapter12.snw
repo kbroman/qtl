@@ -281,7 +281,7 @@ scores for each chromosome. The LOD scores don't seem to improve much after addi
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result2,result_compare)
+plot(result, result2,result_compare,chr=c(1,11,15))
 @
 \caption{Comparison between the last scans. We see here a closeup of chromosome 1
 scanned using mqm with 3 different cofactor settings: MQM using no cofactors, 
