@@ -269,9 +269,9 @@ plot(result, result2,result_compare)
 \caption{Comparison between the last scans. We see here a closeup of chromosome 1
 scanned using mqm with 3 different cofactor settings: MQM using no cofactors, 
 MQM using a single cofactor onm chromosome 4, MQM using cofactors on chromosome 1 and 4. 
-We see the LOD scores on chromosome 1 increasing when including more cofactors.
-\end{figure}
+We see the LOD scores on chromosome 1 increasing when including more cofactors.}
 \label{threewaycomparison}
+\end{figure}
 \clearpage
 
 \mqm\ checks that no markers are included that are less significant than the
