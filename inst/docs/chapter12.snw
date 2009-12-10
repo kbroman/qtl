@@ -216,11 +216,14 @@ find.marker(hyperaug,chr=4,pos=30)
 toset <- which.marker(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
+result <- mqm(hyperaug, cofactorlist)
 @
 \clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(hyperaug, cofactorlist,plot=T)
+op <- par(mfrow = c(2,1))
+plot(mqmgetmodel(result))
+plot(result)
 @
 \caption{\hyperintro.  A cofactor is added at chromosome 4 (D4Mit164) and kept in the
 model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
@@ -265,7 +268,9 @@ result2 <- mqm(hyperaug, cofactorlist,plot=T)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result2, col=colors, lwd=lines)
+op <- par(mfrow = c(2,1))
+plot(mqmgetmodel(result2))
+plot(result2, result, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood 
@@ -309,10 +314,13 @@ Specify the cofactor at every 5 markers by using the $mqmsetcofactors()$ functio
 
 <<>>=
 cofactorlist <- mqmsetcofactors(hyperaug,5)
+result <- mqm(hyperaug, cofactorlist, plot=T)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(hyperaug, cofactorlist, plot=T)
+op <- par(mfrow = c(2,1))
+plot(mqmgetmodel(result))
+plot(result)
 @
 \caption{\hyperintro, after introducing cofactors at every fifth marker and
 backward eliminatio to find the most likely model}
