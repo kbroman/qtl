@@ -130,7 +130,6 @@ individuals entirely. Use the verbose option to get more feedback on the augment
 # displays warning because MQM ignores the X chromosome in an F2
 augmentedcross <- mqmaugment(mycross, minprob=1)
 @
-\clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
 plot.geno(augmentedcross)
@@ -231,8 +230,12 @@ model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
 
 Figure \ref{Cofactor4} shows the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.
-The marker is never dropped and it passes initial rough thresholding to account
-for the, user defined, alpha level. To check this result against a single \qtl\ mapping:
+The marker is not dropped and it passes initial rough thresholding to account
+for the, user defined, alpha level. It is therefore used in the mappingphase 
+of the mqm routine. We expect LODscores to change (slightly) genomewide because 
+we account for variation already explained by the QTL on chromosome 4. We can 
+show this change in LOD scores by plotting these new results against the mqm 
+\qtl\ mapping without cofactors.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
