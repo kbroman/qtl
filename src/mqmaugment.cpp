@@ -122,10 +122,13 @@ MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
 }
 */
 
-int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
-            ivector* augind, int *Nind, int *Naug, const int Nmark, 
-            const cvector position, vector r, const int maxNaug, const int imaxNaug, 
-            const double minprob, const MQMCrossType crosstype, const int verbose) {
+int mqmaugment(const MQMMarkerMatrix marker, const vector y, 
+               MQMMarkerMatrix* augmarker, vector *augy, 
+               ivector* augind, int *Nind, int *Naug, const int Nmark, 
+               const cvector position, vector r, const int maxNaug, 
+               const int imaxNaug, const double minprob, 
+               const MQMCrossType crosstype, const int verbose) 
+{
   int retvalue = 1;     //[Danny] Assume everything will go right, (it never returned a 1 OK, initialization to 0 and return
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
