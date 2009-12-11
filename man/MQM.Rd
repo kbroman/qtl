@@ -44,6 +44,11 @@ density at locations. Future versions of MQM may improve on this.
     \item \code{\link[qtl]{MQM}} - MQM description and references
     \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
     \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
+    \item \code{\link[qtl]{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link[qtl]{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link[qtl]{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link[qtl]{scanone}} - Single QTL scanning
+
 % -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
@@ -60,9 +65,11 @@ cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
 crossaug <- mqmaugment(cross)  # Augmentation
 result <- mqmscan(crossaug)    # Scan
 
+# show LOD interval of the QTL on chr 3
+lodint(result,chr=3)
+
 cat(result$extra$Nind,'real individuals retained in dataset', \
     result$extra$Naug,'individuals augmented')
-
 
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }

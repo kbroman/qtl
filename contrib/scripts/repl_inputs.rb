@@ -36,7 +36,7 @@ REPL =
   'mqmauthors' =>
     "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}",
   'crossobject' =>
-    '\item{cross}{An object of class \code{cross}. See \code{\link{read.cross}} for details.}'
+    'An object of class \code{cross}. See \code{\link{read.cross}} for details'
 }
 
 ARGV.each do | fn | 

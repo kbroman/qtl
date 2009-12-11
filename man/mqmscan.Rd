@@ -18,7 +18,7 @@
 
 \arguments{
   \item{cross}{ 
-% \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
     }
   \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
   \item{pheno.col}{ Column number of the phenotype under analysis }    
@@ -59,11 +59,37 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \seealso{
 \itemize{
 % \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link[qtl]{MQM}} - MQM description and references
+    \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
+    \item \code{\link[qtl]{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link[qtl]{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link[qtl]{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link[qtl]{scanone}} - Single QTL scanning
+
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 }
 }
 
 \examples{
 % \input{"inst/docs/mqm/standard_example.txt"}
+data(map10)                    # Mouse dataset
+qtl <- c(3,15,3,7)             # QTL location
+
+# simulate a cross (autosomes)
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
+
+# MQM
+crossaug <- mqmaugment(cross)  # Augmentation
+result <- mqmscan(crossaug)    # Scan
+
+# show LOD interval of the QTL on chr 3
+lodint(result,chr=3)
+
+cat(result$extra$Nind,'real individuals retained in dataset', \
+    result$extra$Naug,'individuals augmented')
+
+% -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 
 \keyword{ models }
