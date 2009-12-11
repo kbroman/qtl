@@ -174,8 +174,8 @@ data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
 hyperaug <- mqmaugment(hyper, minprob=1)
-result <- mqm(hyperaug)
-result_compare <- scanone(hyperaug)
+result_nocof <- mqm(hyperaug)
+result_scanone <- scanone(hyperaug)
 @
 We start bij loading the dataset using the command $data(hyper)$. We fill in missing 
 genotypes using the mqmaugment routine discussed before. Then scan for QTLs using 
@@ -190,7 +190,7 @@ profiles than compared to markerbased mapping approaches (when using a small ste
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result_compare, col=colors, lwd=lines)
+plot(result_nocof, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors. Both routines
 correspond one to one when using no extra parameters}
@@ -209,20 +209,20 @@ so let's account for that by setting a cofactor at the marker nearest to the pee
 This is achieved by the following code and a new mqm scan is performed (figure \ref{Cofactor4}).
 <<>>=
 #Summary results shows the highest lodscores per chromosome
-summary(result)
+summary(result_nocof)
 #find.marker extracts the marker nearest to chr4 at 30Cm
 find.marker(hyperaug,chr=4,pos=30)
 #which.marker translates the name into a cofacotr number
 toset <- which.marker(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
-result <- mqm(hyperaug, cofactorlist)
+result_1 <- mqm(hyperaug, cofactorlist)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
 op <- par(mfrow = c(2,1))
-plot(mqmgetmodel(result))
-plot(result)
+plot(mqmgetmodel(result_1))
+plot(result_1)
 @
 \caption{\hyperintro.  A cofactor is added at chromosome 4 (D4Mit164) and kept in the
 model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
@@ -241,7 +241,7 @@ show this change in LOD scores by plotting these new results against the mqm
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result_compare, col=colors, lwd=lines)
+plot(result_1, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactor at chromosome 4 (D4Mit164) to account for variation explained by that
@@ -259,17 +259,17 @@ residual degrees of freedom left are checked to make sure also 'usercreated'
 cofactorlists do not overfit the modeling routine.
 
 <<>>=
-summary(result)
+summary(result_1)
 #we can combine find marker and which.marker commands and expand our toset variable
 toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
-result2 <- mqm(hyperaug, cofactorlist,plot=T)
+result_2 <- mqm(hyperaug, cofactorlist)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
 op <- par(mfrow = c(2,1))
-plot(mqmgetmodel(result2))
-plot(result2, result, col=colors, lwd=lines)
+plot(mqmgetmodel(result_2))
+plot(result_2, result_1, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood 
@@ -280,11 +280,11 @@ scores for each chromosome. The LOD scores don't seem to improve much after addi
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result2,result_compare,chr=c(1,11,15))
+plot(result_nocof, result_1, result_2,chr=c(1,11,15),col=c("black","red","blue"),lwd=c(3,2,1))
 @
 \caption{Comparison between the last scans. We see here a closeup of chromosome 1
 scanned using mqm with 3 different cofactor settings: MQM using no cofactors, 
-MQM using a single cofactor onm chromosome 4, MQM using cofactors on chromosome 1 and 4. 
+MQM using a single cofactor on chromosome 4 (Red) and MQM using cofactors on chromosome 1 and 4.(Blue) 
 We see the LOD scores on chromosome 1 increasing when including more cofactors.}
 \label{threewaycomparison}
 \end{figure}
@@ -336,7 +336,7 @@ The resulting model can also be used to obtain the location and name of the sign
 \clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result_compare, col=colors, lwd=lines)
+plot(result, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for mqm, followed by backward elimination
