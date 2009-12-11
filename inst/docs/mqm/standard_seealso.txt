@@ -1,0 +1,2 @@
+    \item \code{\link[qtl]{MQM}} - MQM description and references
+    \item \code{\link[qtl]{mqmscan}} - Main MQM function for trait analysis

@@ -26,8 +26,15 @@
 #
 
 REPL = 
-{ 'mqmauthors' =>
-  "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}"
+{ 
+  # Keywords for C/C++ headers
+  'mqmcopyright1' =>
+    " * Copyright (c) 1998-2010, Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman",
+  'license' => 
+    ' * Published under the terms of the GNU Lesser General Public License 3 (GPL3)',
+  # Keywords for R man pages
+  'mqmauthors' =>
+    "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}",
 }
 
 ARGV.each do | fn | 
@@ -45,6 +52,7 @@ ARGV.each do | fn |
   buf.each do | s |
     if s.strip =~ /^%\s+\\input\{\"(\S+?)\"\}/
       inputfn = $1
+      print "\nInjecting #{inputfn}"
       input = true
       # inject inputfn
       raise "File not found #{inputfn}!" if !File.exist?(inputfn)
