@@ -8,7 +8,9 @@ cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
 crossaug <- mqmaugment(cross)  # Augmentation
 result <- mqmscan(crossaug)    # Scan
 
+# show LOD interval of the QTL on chr 3
+lodint(result,chr=3)
+
 cat(result$extra$Nind,'real individuals retained in dataset', \
     result$extra$Naug,'individuals augmented')
-
 

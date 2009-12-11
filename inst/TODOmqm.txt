@@ -10,17 +10,28 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Finish Manual
+o Tutorial and man pages
 
-o Adding original markers to output of mqmscan
+o Add original markers to output of mqmscan
 
-o Augmentation rewrite to use best N augmentations
+o Fix naming of functions and parameters:
+  - mqmscan rename REMLorML and use boolean values (TRUE/FALSE)
+  - mqmscan rename doLOG to something like logtransform (see other R
+    examples) and use boolean
+  - mqmscan man page: better description of alpha (rename?)
+  - mqmscan rename windowsize to window.size
+  - mqmscan rename est.map to estimate.map (boolean)
+  - mqmscan dominance should be boolean
+  - mqmscan ForceRIL - wtf? - needs something more inituitive/logical
+  - mqmscan man: update return value section
 
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
 
-o Finish MQM paper
+o Augmentation rewrite to use best N augmentations
+
+o MQM paper
 
 o Augmentation of all phenotypes at once (requires some smart handling of NA phenotypes)
 
