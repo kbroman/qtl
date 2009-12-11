@@ -52,6 +52,7 @@ ARGV.each do | fn |
   buf.each do | s |
     if s.strip =~ /^%\s+\\input\{\"(\S+?)\"\}/
       inputfn = $1
+      print "\nInjecting #{inputfn}"
       input = true
       # inject inputfn
       raise "File not found #{inputfn}!" if !File.exist?(inputfn)

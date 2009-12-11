@@ -57,7 +57,7 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
 }  
 
 \author{
-% \mqmauthors
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
 \note{
@@ -77,12 +77,30 @@ results by using \code{minprob=1}.
 
 \seealso{
   \itemize{
-    % \input{inst/docs/mqm/standard_seealso.txt}
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link[qtl]{MQM}} - MQM description and references
+    \item \code{\link[qtl]{mqmscan}} - Main MQM function for trait analysis
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
   }
 }
 
 \examples{
-  % \input{inst/docs/mqm/standard_example.txt}
+% \input{"inst/docs/mqm/standard_example.txt"}
+data(map10)                    # Mouse dataset
+qtl <- c(3,15,3,7)             # QTL location
+
+# simulate a cross (autosomes)
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
+
+# MQM
+crossaug <- mqmaugment(cross)  # Augmentation
+result <- mqmscan(crossaug)    # Scan
+
+cat(result$extra$Nind,'real individuals retained in dataset', \
+    result$extra$Naug,'individuals augmented')
+
+
+% -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 
 \keyword{utilities}
