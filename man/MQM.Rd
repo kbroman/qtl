@@ -40,19 +40,31 @@ density at locations. Future versions of MQM may improve on this.
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link[qtl]{MQM}} - MQM description and references
+    \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
 
 \examples{
-data(map10)			
-# Select chromosomes
-qtl <- c(3,15,3,7)
-# Simulate
-cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01) 
-crossaug <- mqmaugment(cross)
-result <- mqmscan(crossaug)
+% \input{"inst/docs/mqm/standard_example.txt"}
+data(map10)                    # Mouse dataset
+qtl <- c(3,15,3,7)             # QTL location
+
+# simulate a cross (autosomes)
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
+
+# MQM
+crossaug <- mqmaugment(cross)  # Augmentation
+result <- mqmscan(crossaug)    # Scan
+
+cat(result$extra$Nind,'real individuals retained in dataset', \
+    result$extra$Naug,'individuals augmented')
+
+
+% -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 
 \references{
