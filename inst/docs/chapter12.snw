@@ -55,6 +55,29 @@ allows more precise detection than other methods. This tutorial will
 show how to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is fast
 and scales on multi-CPU systems.
 
+\section{A quick overview}
+
+These are the steps in an \mqm\ \qtl\ analysis
+\itemize{
+\item Load in experiment using formats supported by R/QTL
+\item Set trait under consideration as first trait in R/QTL format
+\item Fill in missing data using either the fill.geno or mqmaugmentdata routine
+\item Call mqmscan to do a genomescan
+\item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
+\item Set cofactors at "Top scoring" and not so "Top scoring" markers
+\item Rerun analysis with cofactors
+\item Bootstrap analysis with cofactors to get estimates of QTL significance
+}
+Using ML or Reduced ML the algorithm employs a backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
+\itemize{
+\item Calculating relative marker positions
+\item (Re)Estimating recombinant frequencies
+\item LOGlikelyhood estimations of the full model using all cofactors
+\item IF(Cofactors) THEN Backward elimination of cofactors & mapQTL
+\item IF(No cofactors) THEN mapQTL function
+}
+Afterwards the Interval mapping of the QTL model is returned to the user
+
 \section{Data augmentation}
 
 \FIXME the augmentation procedure is still not conclusive - and therefor 
