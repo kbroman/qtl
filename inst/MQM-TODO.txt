@@ -21,19 +21,30 @@ o Fix naming of functions and parameters:
   - mqmscan man page: better description of alpha (rename?)
   - mqmscan rename windowsize to window.size
   - mqmscan rename est.map to estimate.map (boolean)
-  - mqmscan dominance should be boolean
+  - mqmscan dominance should be boolean - and change name?
   - mqmscan ForceRIL - wtf? - needs something more inituitive/logical
-  - mqmscan man: update return value section
+    should it be there?
+  - mqmscan man: update return value section, text not clear now
+  - rename mqmcistransplot to mqmplot_cistrans - other plot names likewise
+  - R rename 'extra' component in cross object to 'mqm' or 'mqm-extra'
+  + change augmentdata to mqmaugment
+  + mqmaugment_aboveprob vs neglect (in C code)
+  - make sure all man, R and C-code functions and parameters are
+    similarly named for MQM
+
+o Merge the functions mqmscan and mqmall to one, where multiple
+  phenotypes are passed in as with scanone
 
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
 
-o Augmentation rewrite to use best N augmentations
-
 o MQM paper
 
-o Augmentation of all phenotypes at once (requires some smart handling of NA phenotypes)
+o Augmentation rewrite to use best N augmentations
+
+o Augmentation of all phenotypes at once (requires some smart handling
+  of NA phenotypes)
 
 o Placement of cofactors for automatic backward selection (perhaps use windowsize)
 
@@ -43,13 +54,12 @@ MEDIUM TERM:
 
 o 'Environmental' cofactors (Sex,Block,Age, etc)
 
-o Generalized Lineair Models
+o Generalized Lineair Models - use R version
+
+o Handling of the X-chromosome
 
 ----------------------------------------------------------------------
 
 LONG TERM:
 
-o Handling of the X-chromosome
-
 ----------------------------------------------------------------------
-end of TODOmqm.txt
