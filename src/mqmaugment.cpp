@@ -2,11 +2,10 @@
  *
  * mqmaugment.cpp
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1998-2010, Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman 
+ * Published under the terms of the GNU Lesser General Public License 3 (GPL3) 
  * last modified Apr, 2009
  * first written Feb, 2009
- *
- * first written <2000 (unknown)
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -50,8 +49,6 @@
  * changed to reflect the newly augmented dataset. Nind may be smaller because
  * of dropped individuals.
  *
- * FIXME: increasing the buffers for augmentation can automatic
- FIXME Herhalingen naar een aparte functie (eventueel cross specific)
  */
  
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers){
