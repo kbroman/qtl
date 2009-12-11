@@ -181,7 +181,7 @@ We start bij loading the dataset using the command $data(hyper)$. We fill in mis
 genotypes using the mqmaugment routine discussed before. Then scan for QTLs using 
 mqmscan and scanone with default parameters. A plot comparing the two scanning methods 
 to eachother can be found in figure \ref{NoCofs}. We see that the plot of the results from both scans
-(black=mqm, green=scanone) show an almost 1 to 1 corrospandence. When we look at the output 
+(black=mqm, green=scanone) show an almost 1 to 1 correspondence. When we look at the output 
 from the two methods we see that MQM doesn't have the original markers listed. This is because 
 MQM uses intervall mapping. Each chromosome is divided into fictional markers spaced xx Cm apart.
 The xx can be set by the user using the stepsize parameter. A LOD score for underlying QTLs is 
@@ -218,7 +218,6 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
 result <- mqm(hyperaug, cofactorlist)
 @
-\clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
 op <- par(mfrow = c(2,1))
