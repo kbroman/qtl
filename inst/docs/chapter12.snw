@@ -354,7 +354,10 @@ the advantage that we can be more sure of the QTLs we do report.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(hyperaug, cofactorlist, alfa=0.002, plot=T)
+result <- mqm(hyperaug, cofactorlist, alfa=0.002)
+op <- par(mfrow = c(2,1))
+plot(mqmgetmodel(result))
+plot(result)
 @
 \caption{\hyperintro, intially with cofactors at every fifth marker; after backwards elimination (alpha = 0.002).
 }
