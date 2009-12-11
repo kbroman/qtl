@@ -79,7 +79,8 @@ results by using \code{minprob=1}.
   \itemize{
 % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link[qtl]{MQM}} - MQM description and references
-    \item \code{\link[qtl]{mqmscan}} - Main MQM function for trait analysis
+    \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
 % -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
   }
 }
