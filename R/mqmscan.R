@@ -24,7 +24,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
   start <- proc.time()
   method <- match.arg(method)
   model <- match.arg(model)
-  step.max <- as.double(step.max+step.size)
+  step.max <- as.integer(step.max+step.size)
   #Because iirc we cannot pass booleans from R to C
   REMLorML <- 0             #We code :0 -> Restricted Maximum Likelyhood
   if(method=="ML"){
@@ -162,7 +162,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 			if(length(cofactors) != n.mark){
 				if(verbose) cat("ERROR: # Cofactors != # Markers\n")		
 			}else{
-				if(verbose) cat("INFO:",length(cofactors),"Cofactors received to be analyzed\n")
+				if(verbose) cat("INFO:",sum(cofactors!=0),"Cofactors received to be analyzed\n")
 				if((sum(cofactors) > n.ind-10 && dominance==0)){
 					stop("INFO: Cofactors don't look okay for use without dominance\n")
 				}
