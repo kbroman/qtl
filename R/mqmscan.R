@@ -79,9 +79,19 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 		if(cof.significance <=0 || cof.significance >= 1){
 			stop("cof.significance must be between 0 and 1.\n")
 		}
+    if(any(is.na(geno))){
+			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
+		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
-			stop("For multiple phenotype analysis use the function: 'mqmall'.\n")	
+      warning("For a multiple phenotype analysis use the function: 'mqmall' for improved performance.\n")
+      ##DANNY: HERE just call MQMall and pass the parameters
+      cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
+      if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
+      result <- mqmall( cross,cofactors=cofactors,method=method,model=model,
+                        cof.significance=cof.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
+                        logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose)
+			return(result)
 		}
 		if(pheno.col != 1){
       if(verbose) {
@@ -92,9 +102,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
         stop("No such phenotype in cross object.\n")
       }			
 		}
-		if(any(is.na(geno))){
-			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
-		}
+
 		if(any(rownames(installed.packages())=="nortest")){
 			library(nortest)
 			if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
@@ -166,7 +174,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 					n.run <- 0;
 				}else{
 					backward <- 0;
-					stop("Are u trying to give an empty cofactor list ???")
+					cofactors = rep(0,n.mark)
 				}
 			}
 		}
