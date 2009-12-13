@@ -17,11 +17,17 @@
 #
 ######################################################################
 	
-mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
+mqmscan <- function(cross,cofactors,pheno.col=1,method=c("REML","ML"),
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
                     step.min=-20.0,step.max=220.0,doLOG=0,est.map=0,dominance=0,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
+  method <- match.arg(method)
+  if(method=="REML"){
+    REMLorML <- 0 #Because iirc we cannot pass booleans from R to C
+  }else{          #0 -> Restricted Maximum Likelyhood
+    REMLorML <- 1 #1 -> Maximum Likelyhood
+  }
 	n.run=0
 	if(is.null(cross)){
 		stop("No cross file. Please supply a valid cross object.") 
@@ -180,9 +186,9 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 		end.1 <- proc.time()
 		result <- .C("R_mqmscan",
 				as.integer(n.ind),
-                as.integer(n.mark),
+        as.integer(n.mark),
 				as.integer(1),    # 1 phenotype
-                as.integer(geno),
+        as.integer(geno),
 				as.integer(chr),
 				DIST=as.double(dist),
 				as.double(pheno),
@@ -203,7 +209,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 				as.integer(ctype),
 				as.integer(dominance),
 				as.integer(verbose),
-			    PACKAGE="qtl")
+			  PACKAGE="qtl")
 		end.2 <- proc.time()				
 		# initialize output object
 		qtl <- NULL
