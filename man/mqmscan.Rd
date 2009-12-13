@@ -83,10 +83,14 @@
 \value{
 Returns a scanone object. This contains a matrix of three columns LODscores, 
 Informationcontent and LOD*Informationcontent for each location on the chromosome.
-If cofactors were specified the QTL model used in scanning is also returned 
-
-which can be plotted using the plot.scanone
-function of R/QTL or mqmplot_one
+The resulting scanone object itself can be visualized using the standard R/qtl 
+plotting routines (\code{\link{plot.scanone}}) or specialized function to show
+the mqm model (\code{\link{mqmplot_one}}) and QTL profile. If cofactors were 
+specified the QTL model used in scanning is also returned as a named attribute 
+of the scanone object called mqmmodel. It can be extracted from the resulting 
+scanone object by using the \code{\link{mqmgetmodel}} function or the 
+\code{\link{attr}} function. Finally the estimate.map paramter does not 
+return its re estimated genetic map.
 }
 
 \author{
