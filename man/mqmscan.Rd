@@ -9,31 +9,58 @@
 }
 
 \usage{
-	mqmscan(cross, cofactors, pheno.col = 1, REMLorML = 0, 
-          alfa = 0.02, em.iter = 1000, windowsize = 25.0, step.size = 5.0, 
-          step.min = -20.0, step.max = 220.0, file = "MQM_output.txt",
-          doLOG=0, est.map=0, dominance=0, plot=FALSE, forceRIL=0, 
-          verbose=FALSE)
+	mqmscan(cross, cofactors, pheno.col = 1, model=c("Additive","Dominance"), method=c("REML","ML"),
+          cof.significance=0.02, em.iter=1000, window.size=25.0, step.size=5.0, step.min=-20.0, step.max=max(unlist(pull.map(cross))),
+          logtransform = FALSE, estimate.map = FALSE, plot=FALSE, verbose=FALSE)
 }
 
 \arguments{
   \item{cross}{ 
-An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
+  \item{cofactors}{ List of cofactors to be analysed as cofactors in the 
+    QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
+    for backward elimination. (0:no cofactor, 1:cofactor, 2:sexfactor) 
+  }
+  \item{pheno.col}{ Column number in the phenotype matrix which should be
+    used as the phenotype.  This can be a vector of integers; One may also 
+    give a character strings matching the phenotype names.  Finally, one 
+    may give a numeric vector of phenotypeIDs. This should consist of 
+    integers with  0 < value < no. phenotypes. 
+  }
+  \item{model}{ When scanning for QTLs should haplotype dominance be considered
+    in an F2 intercross. Using the dominance model we scan for additive effects but
+    also allow an additional effect where AA+AB versus BB and AA versus AB+BB. 
+    This setting is ignored for BC and RIL populations 
+  }
+  \item{method}{ Specify which statistical method to use to estimate variance components
+    to use when QTL modeling and mapping. There are two options: Using restricted maximum
+    likelihood (default) or maximum likelihood 
+  }
+  \item{cof.significance}{ Significance level at which a cofactor is considered significant.
+    This is estimated using an analysis of deviance, and compared to the level specified by
+    the user. The cofactors that dont reach this level of statistical significance are NOT 
+    used in the mapping stage. Value between 0 and 1 }
+  \item{em.iter}{ Maximum number of iterations for the EM algorithm to converge }
+  \item{window.size}{ Window size for mapping QTL locations, this parameter is used in the interval 
+    mapping stage. When calculating LOD scores at a genomic position all cofactors 
+    within window.size are dropped to estimate the (unbiased) effect of the location under interest. 
+  }
+  \item{step.size}{ Step size used in interval mapping. A lower step.size parameter increases
+    the number of output points, this creates a smoother QTL profile
+  }
+  \item{step.min}{ Begin this many cM before the chromosome, by default we start at the genetic beginning (0cM) }
+  \item{step.max}{ Maximum mapping length in cM, by default set to the maximum genetic length
+    found in the crossobject. However when using the restimate.map parameter it could be needed
+    to increase this parameter to accomodate for the larger map internally estimated.
+  }
+  \item{logtransform}{ Indicate if the algorithm should do a logtransformation on the trait
+    data in the pheno.col
+  }    
+  \item{estimate.map}{ Should Re-estimation of the marker locations on the genetic map occur
+    before mapping QTLs. This method is deprecated rather use the \code{\link{est.map}} function
+    in R/qtl. This is because no map is returned into the crossobject. The old map remains in the cross object 
     }
-  \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
-  \item{pheno.col}{ Column number of the phenotype under analysis }    
-  \item{REMLorML}{ Use reduced maximum likelihood (0) or maximum likelihood (1) }
-  \item{alfa}{ Global p-value (0<= alfa <= 1) }
-  \item{em.iter}{ Maximum number of iterations EM algorithm }
-  \item{windowsize}{ Window size for mapping QTL locations }
-  \item{step.size}{ Step size used for the generation of output QTL }
-  \item{step.min}{ Begin this many cM before the chromosome }
-  \item{step.max}{ Maximum length in cM }
-  \item{file}{ File for raw results}
-  \item{doLOG}{ Indicate if the algorithm should LOG transform traitdata (DEFAULT 0 = off | 1 = on) }    
-  \item{est.map}{ Reestimation of the marker locations on the genetic map before mapping QTLs (no map is returned the old map remains in the cross object }
-  \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
-  \item{forceRIL}{ Should we force the cross as a RIL, this option removed AB genotypes and replaces them with BB ? ( 0= NO  (DEFAULT)/ 1= YES) }  
   \item{plot}{ plot the results (default TRUE)}
   \item{verbose}{ verbose output}
 }
