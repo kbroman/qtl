@@ -17,17 +17,22 @@
 #
 ######################################################################
 	
-mqmscan <- function(cross,cofactors,pheno.col=1,method=c("REML","ML"),
-                    alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=220.0,doLOG=0,est.map=0,dominance=0,plot=FALSE,verbose=FALSE){
+mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),method=c("REML","ML"),
+                    cof.significance=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
+                    step.min=-20.0,step.max=220.0,doLOG=0,est.map=0,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
   method <- match.arg(method)
-  if(method=="REML"){
-    REMLorML <- 0 #Because iirc we cannot pass booleans from R to C
-  }else{          #0 -> Restricted Maximum Likelyhood
-    REMLorML <- 1 #1 -> Maximum Likelyhood
+  model <- match.arg(model)
+  #Because iirc we cannot pass booleans from R to C
+  REMLorML <- 0             #We code :0 -> Restricted Maximum Likelyhood
+  if(method=="ML"){
+    REMLorML <- 1           #and 1 -> Maximum Likelyhood
   }
+  dominance <- 0            #We code :0 -> Additive model (no_dominance)
+  if(model=="Dominance"){
+    dominance <- 1          #and 1 -> Dominance model
+  }  
 	n.run=0
 	if(is.null(cross)){
 		stop("No cross file. Please supply a valid cross object.") 
@@ -67,8 +72,8 @@ mqmscan <- function(cross,cofactors,pheno.col=1,method=c("REML","ML"),
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
-		if(alfa <=0 || alfa >= 1){
-			stop("Alfa must be between 0 and 1.\n")
+		if(cof.significance <=0 || cof.significance >= 1){
+			stop("cof.significance must be between 0 and 1.\n")
 		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
@@ -195,7 +200,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,method=c("REML","ML"),
 				COF=as.integer(cofactors),
 				as.integer(backward),
 				as.integer(REMLorML),
-				as.double(alfa),
+				as.double(cof.significance),
 				as.integer(em.iter),
 				as.double(windowsize),
 				as.double(step.size),
@@ -314,9 +319,9 @@ mqmscan <- function(cross,cofactors,pheno.col=1,method=c("REML","ML"),
 		}
 		#No error do plot 2
 		if(!e){
-			mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa))
+			mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cof.significance))
 		}else{
-			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at alpha=",alfa),lwd=1)
+			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cof.significance),lwd=1)
 			grid(max(qtl$chr),5)
 			labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
 			legend("topright", labels,col=c("black"),lty=c(1))
