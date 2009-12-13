@@ -19,7 +19,7 @@
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),method=c("REML","ML"),
                     cof.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=220.0,logtransform = FALSE, est.map=0,plot=FALSE,verbose=FALSE){
+                    step.min=-20.0,step.max=220.0,logtransform = FALSE, estimate.map = FALSE,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
   method <- match.arg(method)
@@ -32,8 +32,13 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
   dominance <- 0            #We code :0 -> Additive model (no_dominance)
   if(model=="Dominance"){
     dominance <- 1          #and 1 -> Dominance model
-  }  
-	n.run=0
+  }
+  if(estimate.map){
+    estimate.map <- 1
+  }else{
+    estimate.map <- 0
+  }
+	n.run <- 0
 	if(is.null(cross)){
 		stop("No cross file. Please supply a valid cross object.") 
 	}
@@ -210,7 +215,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 				as.integer(extra1),
 				as.integer(extra2),
 				QTL=as.double(rep(0,2*n.chr*qtlAchromo)),
-				as.integer(est.map),
+				as.integer(estimate.map),
 				as.integer(ctype),
 				as.integer(dominance),
 				as.integer(verbose),
@@ -228,16 +233,16 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 			names <- c(names,paste("c",ceiling(i/qtlAchromo),".loc",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
 		if(plot){
-			if(est.map && backward){
+			if(estimate.map && backward){
 				op <- par(mfrow = c(3,1))
 			}else{
-				if(est.map || backward){
+				if(estimate.map || backward){
 					op <- par(mfrow = c(2,1))
 				}else{
 					op <- par(mfrow = c(1,1))
 				}
 			}
-			if(est.map){
+			if(estimate.map){
 				new.map <- pull.map(cross)
 				chrmarkers <- nmar(cross)
 				sum <- 1
@@ -252,7 +257,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 			}
     }
     if(backward){
-      if(!est.map){
+      if(!estimate.map){
         new.map <- pull.map(cross)
       }
       chrmarkers <- nmar(cross)			
