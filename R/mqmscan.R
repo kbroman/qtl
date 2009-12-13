@@ -19,7 +19,7 @@
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,verbose=FALSE){
+                    step.min=-20.0,step.max=220.0,doLOG=0,est.map=0,dominance=0,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
 	n.run=0
@@ -281,8 +281,6 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 	  attr(qtl,"mqmmodel") <- QTLmodel
 	}
 	class(qtl) <- c("scanone",class(qtl)) 
-	if(verbose) cat("INFO: Saving output to file: ",file, "\n")
-	#write.table(qtl,file)
 	for( x in 1:nchr(cross)){
 		#Remove pseudomarkers from the dataset and scale to the chromosome
 		to.remove <- NULL
