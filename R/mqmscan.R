@@ -19,7 +19,7 @@
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),method=c("REML","ML"),
                     cof.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=220.0,logtransform = FALSE, estimate.map = FALSE,plot=FALSE,verbose=FALSE){
+                    step.min=-20.0,step.max=max(unlist(pull.map(cross))),logtransform = FALSE, estimate.map = FALSE,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
   method <- match.arg(method)
