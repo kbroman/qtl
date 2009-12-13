@@ -18,8 +18,8 @@
 ######################################################################
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),method=c("REML","ML"),
-                    cof.significance=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=220.0,doLOG=0,est.map=0,plot=FALSE,verbose=FALSE){
+                    cof.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
+                    step.min=-20.0,step.max=220.0,logtransform = FALSE, est.map=0,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
   method <- match.arg(method)
@@ -96,12 +96,12 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 		}
 		pheno <- cross$pheno[[pheno.col]]
 		if(var(pheno,na.rm = TRUE)> 1000){
-			if(doLOG == 0){
+			if(!logtransform){
 				if(verbose) cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
 				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
 			}
 		}
-		if(doLOG != 0){
+		if(logtransform){
 				#transform the cross file
 				cross <- transformPheno(cross,pheno.col,transf=log)
 				pheno <- cross$pheno[[pheno.col]]
@@ -202,7 +202,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 				as.integer(REMLorML),
 				as.double(cof.significance),
 				as.integer(em.iter),
-				as.double(windowsize),
+				as.double(window.size),
 				as.double(step.size),
 				as.double(step.min),
 				as.double(step.max),
