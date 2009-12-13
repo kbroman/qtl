@@ -28,38 +28,50 @@
     may give a numeric vector of phenotypeIDs. This should consist of 
     integers with  0 < value < no. phenotypes. 
   }
-  \item{model}{ When scanning for QTLs should haplotype dominance be considered
-    in an F2 intercross. Using the dominance model we scan for additive effects but
-    also allow an additional effect where AA+AB versus BB and AA versus AB+BB. 
-    This setting is ignored for BC and RIL populations 
+  \item{model}{ When scanning for QTLs should haplotype dominance be 
+    considered in an F2 intercross. Using the dominance model we scan
+    for additive effects but also allow an additional effect where AA+AB
+    versus BB and AA versus AB+BB. This setting is ignored for BC and RIL 
+    populations 
   }
-  \item{method}{ Specify which statistical method to use to estimate variance components
-    to use when QTL modeling and mapping. There are two options: Using restricted maximum
-    likelihood (default) or maximum likelihood 
+  \item{method}{ Specify which statistical method to use to estimate 
+    variance components to use when QTL modeling and mapping. There
+    are two options: Using restricted maximum likelihood (default) 
+    or maximum likelihood 
   }
-  \item{cof.significance}{ Significance level at which a cofactor is considered significant.
-    This is estimated using an analysis of deviance, and compared to the level specified by
-    the user. The cofactors that dont reach this level of statistical significance are NOT 
-    used in the mapping stage. Value between 0 and 1 }
+  \item{cof.significance}{ Significance level at which a cofactor is 
+    considered significant. This is estimated using an analysis of 
+    deviance, and compared to the level specified by the user. The 
+    cofactors that dont reach this level of statistical significance 
+    are NOT used in the mapping stage. Value between 0 and 1 }
   \item{em.iter}{ Maximum number of iterations for the EM algorithm to converge }
-  \item{window.size}{ Window size for mapping QTL locations, this parameter is used in the interval 
-    mapping stage. When calculating LOD scores at a genomic position all cofactors 
-    within window.size are dropped to estimate the (unbiased) effect of the location under interest. 
+  \item{window.size}{ Window size for mapping QTL locations, 
+    this parameter is used in the interval mapping stage. When 
+    calculating LOD scores at a genomic position all cofactors 
+    within window.size are dropped to estimate the (unbiased) 
+    effect of the location under interest. 
   }
-  \item{step.size}{ Step size used in interval mapping. A lower step.size parameter increases
-    the number of output points, this creates a smoother QTL profile
+  \item{step.size}{ Step size used in interval mapping. A lower 
+    step.size parameter increases the number of output points, 
+    this creates a smoother QTL profile
   }
-  \item{step.min}{ Begin this many cM before the chromosome, by default we start at the genetic beginning (0cM) }
-  \item{step.max}{ Maximum mapping length in cM, by default set to the maximum genetic length
-    found in the crossobject. However when using the restimate.map parameter it could be needed
-    to increase this parameter to accomodate for the larger map internally estimated.
+  \item{step.min}{ Begin this many cM before the chromosome, by default we 
+    start at the genetic beginning (0cM) 
   }
-  \item{logtransform}{ Indicate if the algorithm should do a logtransformation on the trait
-    data in the pheno.col
+  \item{step.max}{ Maximum mapping length in cM, by default set 
+    to the maximum genetic length found in the crossobject. However
+    when using the restimate.map parameter it could be needed
+    to increase this parameter to accomodate for the larger map 
+    internally estimated.
+  }
+  \item{logtransform}{ Indicate if the algorithm should do a log 
+    transformation on the trait data in the pheno.col
   }    
-  \item{estimate.map}{ Should Re-estimation of the marker locations on the genetic map occur
-    before mapping QTLs. This method is deprecated rather use the \code{\link{est.map}} function
-    in R/qtl. This is because no map is returned into the crossobject. The old map remains in the cross object 
+  \item{estimate.map}{ Should Re-estimation of the marker locations 
+    on the genetic map occur before mapping QTLs. This method is 
+    deprecated rather use the \code{\link{est.map}} function in R/qtl.
+    This is because no map is returned into the crossobject. 
+    The old map remains in the cross object.
     }
   \item{plot}{ plot the results (default TRUE)}
   \item{verbose}{ verbose output}
@@ -69,11 +81,12 @@
 }
 
 \value{
-Returns a matrix with QTLscores,Informationcontent,QTL*Informationcontent for
-each location on the chromosome, which can be plotted using the plot.scanone
-function of R/QTL or plot.MQMone to also visualize the QTL*informationcontent
-The phenotype under consideration is specified by the pheno.col argument of the
-function.
+Returns a scanone object. This contains a matrix of three columns LODscores, 
+Informationcontent and LOD*Informationcontent for each location on the chromosome.
+If cofactors were specified the QTL model used in scanning is also returned 
+
+which can be plotted using the plot.scanone
+function of R/QTL or mqmplot_one
 }
 
 \author{
