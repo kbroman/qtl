@@ -52,22 +52,21 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 		if(class(cross)[1] == "riself"){
 			ctype = 3
 
-                        # check genotypes
-                        g <- as.numeric(pull.geno(cross))
-                        g <- sort(unique(g[!is.na(g)]))
-                        if(max(g)==2) { # convert genotypes from 1/2 to 1/3
-                          for(i in seq(along=cross$geno)) 
-                            cross$geno[[i]]$data[!is.na(cross$geno[[i]]$data) & cross$geno[[i]]$data==2] <- 3
-                        }
-
+    # check genotypes
+    g <- as.numeric(pull.geno(cross))
+    g <- sort(unique(g[!is.na(g)]))
+    if(max(g)==2) { # convert genotypes from 1/2 to 1/3
+      for(i in seq(along=cross$geno)) 
+        cross$geno[[i]]$data[!is.na(cross$geno[[i]]$data) & cross$geno[[i]]$data==2] <- 3
+    }
 		}
 		n.ind <- nind(cross)
 		n.chr <- nchr(cross)
 		if(verbose) {
-                  cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
-                  cat("INFO: Number of individuals: ",n.ind,"\n")
-                  cat("INFO: Number of chromosomes: ",n.chr,"\n")
-                }
+      cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+      cat("INFO: Number of individuals: ",n.ind,"\n")
+      cat("INFO: Number of chromosomes: ",n.chr,"\n")
+    }
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -85,13 +84,16 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 			stop("For multiple phenotype analysis use the function: 'mqmall'.\n")	
 		}
 		if(pheno.col != 1){
-                  if(verbose) {
-                    cat("INFO: Selected phenotype ",pheno.col,".\n")
-                    cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
-                  }
-                  if(nphe(cross) < pheno.col || pheno.col < 1){
-                    stop("No such phenotype in cross object.\n")
-                  }			
+      if(verbose) {
+        cat("INFO: Selected phenotype ",pheno.col,".\n")
+        cat("INFO: Number of phenotypes in object ",nphe(cross),".\n")
+      }
+      if(nphe(cross) < pheno.col || pheno.col < 1){
+        stop("No such phenotype in cross object.\n")
+      }			
+		}
+		if(any(is.na(geno))){
+			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 		}
 		if(any(rownames(installed.packages())=="nortest")){
 			library(nortest)
@@ -103,7 +105,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 		if(var(pheno,na.rm = TRUE)> 1000){
 			if(!logtransform){
 				if(verbose) cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
-				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: doLOG=1 to correct this error")
+				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: logtransform=1 to correct this error")
 			}
 		}
 		if(logtransform){
@@ -113,16 +115,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 		}
 		n.mark <- ncol(geno)
 		if(verbose) cat("INFO: Number of markers:",n.mark,"\n")
-		Fril.replaced <- 0
 
-		for(i in 1:n.ind) {
-			for(j in 1:n.mark) {
-				if(is.na(geno[i,j])){
-					stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
-					geno[i,j] <- 9
-				}			
-			}
-		}
 		#check for missing phenotypes
 		dropped <- NULL
 		for(i in 1:length(pheno)) {
@@ -132,7 +125,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 			  n.ind = n.ind-1
 			}
 		}
-		#throw em out
+		#Throw out missing phenotypes from phenotype vector and genotype matrix
 		if(!is.null(dropped)){
 			geno <- geno[-dropped,]  
 			pheno <- pheno[-dropped]
