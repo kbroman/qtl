@@ -15,8 +15,13 @@ o Tutorial and man pages
 o Add original markers to output of mqmscan
 
 o Fix naming of functions and parameters:
-  - mqmscan dominance/model //DANNYtoPJOTR IS MY SOLUTION OWKAY ??
+  - mqmscan: dominance/model // Danny: Better, but why capitals? See scanone. If
+      // model only has two choices (and later) maybe use a boolean?
+  - mqmscan: Same for REML/ML - here it will certainly be two choices: boolean
+  - mqmscan: better name for cof.signicance - what does it mean?
+  - mqmscan: reorder parameters so they match scanone better
   - mqmscan man: update return value section, text not clear now  ..... 33%
+  - lit list is part of MQM.Rd only - so include from there
   - rename mqmcistransplot to mqmplot_cistrans - other plot names likewise
   - R rename 'extra' component in cross object to 'mqm' or 'mqm-extra'
   + change augmentdata to mqmaugment
@@ -25,7 +30,9 @@ o Fix naming of functions and parameters:
     similarly named for MQM .... 3 %
 
 o Merge the functions mqmscan and mqmall to one, where multiple
-  phenotypes are passed in as with scanone //DANNYtoPJOTR IS MY SOLUTION OWKAY ??
+  phenotypes are passed in as with scanone // Danny: solution is OK,
+    // so why the warning if it is automatic? People should just use mqmscan
+    // as a drop-in replacement for scanone - mqmscanall is now obsolete
   
 ----------------------------------------------------------------------
 
