@@ -82,7 +82,8 @@
 
 \value{
 Returns a scanone object. This contains a matrix of three columns LODscores, 
-Informationcontent and LOD*Informationcontent for each location on the chromosome.
+Informationcontent and LOD*Informationcontent with at each row pseudomarkers
+sorted in increasing order.
 The resulting scanone object itself can be visualized using the standard R/qtl 
 plotting routines (\code{\link{plot.scanone}}) or specialized function to show
 the mqm model (\code{\link{mqmplot_one}}) and QTL profile. If cofactors were 
