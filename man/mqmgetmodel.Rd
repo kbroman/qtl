@@ -32,7 +32,8 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{addloctocross}} - Function called to analytse multiple traits in the cross object
+		\item \code{\link[qtl]{mqm}} - Genome scan with a multiple QTL model (MQM)
+    \item \code{\link[qtl]{mqmsetcofactors}} - Genome scan with a multiple QTL model (MQM)
 	}
 }
 
