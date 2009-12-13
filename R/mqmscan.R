@@ -24,6 +24,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
   start <- proc.time()
   method <- match.arg(method)
   model <- match.arg(model)
+  step.max <- as.integer(step.max+10)
   #Because iirc we cannot pass booleans from R to C
   REMLorML <- 0             #We code :0 -> Restricted Maximum Likelyhood
   if(method=="ML"){
