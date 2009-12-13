@@ -19,8 +19,9 @@
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
                     alfa=0.02,em.iter=1000,windowsize=25.0,step.size=5.0,
-					step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,forceRIL=0,verbose=FALSE){
-    start <- proc.time()
+                    step.min=-20.0,step.max=220.0,file="MQM_output.txt",doLOG=0,est.map=0,dominance=0,plot=FALSE,verbose=FALSE){
+  
+  start <- proc.time()
 	n.run=0
 	if(is.null(cross)){
 		stop("No cross file. Please supply a valid cross object.") 
@@ -103,18 +104,8 @@ mqmscan <- function(cross,cofactors,pheno.col=1,REMLorML=0,
 				if(is.na(geno[i,j])){
 					stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 					geno[i,j] <- 9
-				}else{
-					if(forceRIL && ctype != 2 && geno[i,j]==2){
-					#We have a 2 (AB) change it to a 3
-					geno[i,j] <- 3
-					Fril.replaced <- Fril.replaced+1
-					}
-				}
-				
+				}			
 			}
-		}
-		if(verbose && forceRIL==1 && Fril.replaced > 0){
-			 cat("INFO: Changed ",Fril.replaced," AB markers into BB markers.\n")
 		}
 		#check for missing phenotypes
 		dropped <- NULL
