@@ -1,5 +1,5 @@
-\name{mqmplotboot}
-\alias{mqmplotboot}
+\name{mqmplot_permutations}
+\alias{mqmplot_boot}
 
 \title{Plot results from a bootstrap scan}
 
@@ -8,19 +8,22 @@
 }
 
 \usage{
-mqmplotboot(result, \dots)
+mqmplot_permutations(result, \dots)
 }
 
 \arguments{
-  \item{result}{ Result object from scanall }
-  \item{\dots}{ Extra argument passed to the polyplot methode of R. Brouwer }    
+  \item{result}{ Resulting \code{mqmmulti} object created when performing 
+	permutation analysis. Only permutations done by the MQM algorithm \code{\link[qtl]{mqm}} 
+	can use this plotting routine.
+  }
+  \item{\dots}{ Extra argument passed to the polyplot method of R. Brouwer }    
 }
 
 %\details{
 %  ~~ If necessary, more details than the description above ~~
 %}
 
-\value{None.}
+\value{ No value returned (plotting routine) }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} }
 
