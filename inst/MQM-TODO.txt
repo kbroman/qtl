@@ -24,12 +24,7 @@ o Fix naming of functions and parameters:
   + mqmaugment_aboveprob vs neglect (in C code)
   - make sure all man, R and C-code functions and parameters are
     similarly named for MQM .... 3 %
-
-o Merge the functions mqmscan and mqmall to one, where multiple
-  phenotypes are passed in as with scanone // Danny: solution is OK,
-    // so why the warning if it is automatic? People should just use mqmscan
-    // as a drop-in replacement for scanone - mqmscanall is now obsolete
-  
+ 
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
