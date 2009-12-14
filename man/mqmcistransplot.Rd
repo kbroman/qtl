@@ -15,11 +15,22 @@
 \arguments{
   \item{x}{An object of class \code{mqmmulti}. See \code{\link[qtl]{mqmall}} for details.} 
   \item{cross}{An object of class \code{cross}. See \code{\link[qtl]{read.cross}} for details.} 
-  \item{threshold}{ Threshold value in LOD, QTLscores below this threshold are ignored }
-  \item{onlyPEAK}{ Plot only the peak markers ? (TRUE/FALSE) (Peak markers are markers that have a QTL likelyhood above \code{threshold} and higher than other markers in the same section) }
-  \item{highPEAK}{ highlight peak markers ? (TRUE/FALSE) (peak markers get 25\% increase in size and are colored red) }
-  \item{cisarea}{ Adjust the two green lines around the y=x }
-  \item{pch}{ What kind of point is plotted (22=small square) }
+  \item{threshold}{ Threshold value in LOD, Markers that have a 
+	LOD score above this threshold are plotted as small squares 
+	(see \code{pch} parameter). The markers with LODscores below
+	this threshold are not visible 
+  }
+  \item{onlyPEAK}{ Plot only the peak markers ? (TRUE/FALSE) 
+	(Peak markers are markers that have a QTL likelyhood above
+	\code{threshold} and higher than other markers in the same section) 
+  }
+  \item{highPEAK}{ Highlight peak markers ? (TRUE/FALSE). 
+	When using this option peak markers (the marker with the 
+	highest LOD score in a region above the threshold gets 
+	an 25\% increase in size and is displayed in red) 
+  }
+  \item{cisarea}{ Adjust the two green lines around the line y=x }
+  \item{pch}{ What kind of character is used in plotting of the figure (Default: 22, small square) }
   \item{cex}{ Size of the points plotted (default to 0.5 half of the original size)}
   \item{\dots}{ Extra paramters will be passed to points }
 }
@@ -40,7 +51,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{addloctocross}} - Function called to analytse multiple traits in the cross object
+		\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
 	}
 }
 
