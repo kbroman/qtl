@@ -18,7 +18,7 @@
 ######################################################################
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),method=c("REML","ML"),
-                    cof.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
+                    cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=max(unlist(pull.map(cross))),logtransform = FALSE, estimate.map = FALSE,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
@@ -77,8 +77,8 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
 			dist <- c(dist,cross$geno[[i]]$map)
 		}
-		if(cof.significance <=0 || cof.significance >= 1){
-			stop("cof.significance must be between 0 and 1.\n")
+		if(cofactor.significance <=0 || cofactor.significance >= 1){
+			stop("cofactor.significance must be between 0 and 1.\n")
 		}
     if(any(is.na(geno))){
 			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
@@ -90,7 +90,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
       if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
       result <- mqmall( cross,cofactors=cofactors,method=method,model=model,
-                        cof.significance=cof.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
+                        cofactor.significance=cofactor.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
                         logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose)
 			return(result)
 		}
@@ -207,7 +207,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 				COF=as.integer(cofactors),
 				as.integer(backward),
 				as.integer(REMLorML),
-				as.double(cof.significance),
+				as.double(cofactor.significance),
 				as.integer(em.iter),
 				as.double(window.size),
 				as.double(step.size),
@@ -326,9 +326,9 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 		}
 		#No error do plot 2
 		if(!e){
-			mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cof.significance))
+			mqmplotone(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance))
 		}else{
-			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cof.significance),lwd=1)
+			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance),lwd=1)
 			grid(max(qtl$chr),5)
 			labels <- paste("QTL",colnames(cross$pheno)[pheno.col])
 			legend("topright", labels,col=c("black"),lty=c(1))
