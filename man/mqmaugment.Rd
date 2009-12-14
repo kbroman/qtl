@@ -52,7 +52,7 @@ mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
   with augmented individuals (many individuals from the data set will
   be repeated multiple times). Some individuals may have been dropped
   completely when the probability falls below \code{minprob}. An added
-  component to the cross object named \code{extra} contains
+  component to the cross object named \code{mqm} contains
   information on exactly which individuals are retained and repeated.  
 }  
 
@@ -71,7 +71,7 @@ object should not be used.
 With a large amount of missing data, e.g. larger than 5\%, a low \code{minprob}
 may cause the routine to drop a lot of indivuals from the dataset and distort
 results. Run with \code{verbose=TRUE} to verify how many individuals are
-retained in the dataset or check the return \code{cross$extra} values. Compare
+retained in the dataset or check the return \code{cross$mqm} values. Compare
 results by using \code{minprob=1}.
 }
 
