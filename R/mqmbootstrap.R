@@ -20,7 +20,7 @@
 #
 # Part of the R/qtl package
 # Contains: bootstrap - Main function for bootstrap analysis
-#           mqmpermObject - Helperfunction to create permObjects (R/QTL format)
+#           mqmprocesspermutation - Helperfunction to create permObjects (R/QTL format)
 #           mqmbootstrap, bootstrapcim
 #           FDRpermutation
 #
@@ -226,7 +226,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 	}
 }
 
-mqmpermObject <- function(mqmbootresult = NULL){
+mqmprocesspermutation <- function(mqmpermutationresult = NULL){
 	if(class(mqmbootresult)[2] == "mqmmulti"){
 		result <- NULL
 		names <- NULL
