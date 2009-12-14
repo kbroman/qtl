@@ -84,7 +84,7 @@
 }
 
 \value{
-Returns a scanone object. This contains a matrix of three columns LODscores, 
+When scanning 1 phenotype the function returns a scanone object. This contains a matrix of three columns LODscores, 
 Informationcontent and LOD*Informationcontent with at each row pseudomarkers
 sorted in increasing order.
 The resulting scanone object itself can be visualized using the standard R/qtl 
@@ -95,6 +95,9 @@ of the scanone object called mqmmodel. It can be extracted from the resulting
 scanone object by using the \code{\link{mqmgetmodel}} function or the 
 \code{\link{attr}} function. Finally the estimate.map paramter does not 
 return its re estimated genetic map.
+When scanning multiple genotypes a \code{mqmmulti} object is created.
+This object is just a list composed of scanone objects. The results for a single
+trait can be obtained from the \code{mqmmulti} object, in scanone format.
 }
 
 \author{
