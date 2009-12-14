@@ -18,7 +18,7 @@ o Fix naming of functions and parameters:
   - mqmscan: reorder parameters so they match scanone better
   - mqmscan man: update return value section, text not clear now  ..... 45%
   - lit list is part of MQM.Rd only - so include from there
-  + change augmentdata to mqmaugment  #Where ?
+  + change augmentdata to mqmaugment  #Danny: Where ?
   - make sure all man, R and C-code functions and parameters are
     similarly named for MQM .... 6 %
  
