@@ -97,7 +97,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
   //info("Initialize Frun and informationcontent to 0.0");
-  const int Nsteps = chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
+  const int Nsteps = (int)chr[Nmark-1]*((stepmax-stepmin)/stepsize+1);
   Frun= newmatrix(Nsteps,Nrun+1);
   informationcontent= newvector(Nsteps);
   for (int i=0; i<Nrun+1; i++) {
@@ -428,7 +428,7 @@ void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
   reorg_int(*Nmark,1,chromo,&Chromo);
   reorg_pheno(*Nmark,1,dist,&Dist);
   //Here we have  the assumption that step.min is negative this needs to be split in 2
-  reorg_pheno(2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
+  reorg_pheno((int)2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
   reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
   reorg_int(*Nmark,1,cofactors,&Cofactors);
   reorg_int(*out_Naug,1,indlist,&INDlist);
