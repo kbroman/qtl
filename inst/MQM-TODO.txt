@@ -15,15 +15,12 @@ o Tutorial and man pages
 o Add original markers to output of mqmscan
 
 o Fix naming of functions and parameters:
-  - mqmscan: dominance/model // Danny: Better, but why capitals? See scanone. If
-      // model only has two choices (and later) maybe use a boolean?
   - mqmscan: reorder parameters so they match scanone better
-  - mqmscan man: update return value section, text not clear now  ..... 33%
+  - mqmscan man: update return value section, text not clear now  ..... 45%
   - lit list is part of MQM.Rd only - so include from there
-  + change augmentdata to mqmaugment
-  + mqmaugment_aboveprob vs neglect (in C code)
+  + change augmentdata to mqmaugment  #Where ?
   - make sure all man, R and C-code functions and parameters are
-    similarly named for MQM .... 3 %
+    similarly named for MQM .... 6 %
  
 ----------------------------------------------------------------------
 
