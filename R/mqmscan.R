@@ -17,18 +17,18 @@
 #
 ######################################################################
 	
-mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),method=c("REML","ML"),
+mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=max(unlist(pull.map(cross))),logtransform = FALSE, estimate.map = FALSE,plot=FALSE,verbose=FALSE){
   
   start <- proc.time()
-  method <- match.arg(method)
   model <- match.arg(model)
   step.max <- as.integer(step.max+step.size)
   #Because iirc we cannot pass booleans from R to C
-  REMLorML <- 0             #We code :0 -> Restricted Maximum Likelyhood
-  if(method=="ML"){
-    REMLorML <- 1           #and 1 -> Maximum Likelyhood
+  if(forceML){
+    forceML <- 1           #1 -> Maximum Likelyhood
+  }else{
+	forceML <- 0           #0 -> Restricted Maximum Likelyhood
   }
   dominance <- 0            #We code :0 -> Additive model (no_dominance)
   if(model=="Dominance"){
@@ -206,7 +206,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("Additive","Dominance"),
 				as.double(pheno),
 				COF=as.integer(cofactors),
 				as.integer(backward),
-				as.integer(REMLorML),
+				as.integer(forceML),
 				as.double(cofactor.significance),
 				as.integer(em.iter),
 				as.double(window.size),
