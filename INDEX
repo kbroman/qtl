@@ -103,7 +103,7 @@ mqmgetmodel             Retrieves selected cofactors from the results
 mqmloadanalysis         Enables loading of previous MQM analysis from
                         file
 mqmpackage              Tool for analyzing QTLs in experimental crosses
-mqmpermObject           Function to convert mqmmulti objects into a
+mqmpermutationresult    Function to convert mqmmulti objects into a
                         scanoneperm object
 mqmplotall              Plotting routine to display the results from a
                         scanall / bootstrap scan

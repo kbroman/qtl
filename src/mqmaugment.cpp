@@ -137,7 +137,8 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   vector newy;
   MQMMarkerVector imarker;
   ivector newind;
-  double neglect = 1.0f/minprob;
+  
+  double minprobratio = 1.0f/minprob;
   newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
@@ -146,7 +147,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   int iaug     = 0;     // iaug keeps track of current augmented individual
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
-  prob0right, prob1right, prob2right;
+  prob0right, prob1right, prob2right = 0.0f;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
   if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
@@ -208,7 +209,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
 
             if (ii==previaug) probmax = (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
             if (prob1>prob2) {
-              if (probmax/(newprob[ii]*prob2)<neglect) {
+              if (probmax/(newprob[ii]*prob2)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
@@ -223,7 +224,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]= newprob[ii]*prob1left;
             } else {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -272,7 +273,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
 
             if (ii==previaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
             if (prob1>prob0) {
-              if (probmax/(newprob[ii]*prob0)<neglect) {
+              if (probmax/(newprob[ii]*prob0)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
@@ -287,7 +288,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -345,7 +346,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
               else probmax= newprob[ii]*prob0;
             }
             if ((prob2>prob1)&&(prob2>prob0)) {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -356,7 +357,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              if (probmax/(newprob[ii]*prob0)<neglect) {
+              if (probmax/(newprob[ii]*prob0)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
@@ -372,7 +373,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
               newprob[ii]*= prob2left;
 
             } else if ((prob1>prob2)&&(prob1>prob0)) {
-              if (probmax/(newprob[ii]*prob2)<neglect) {
+              if (probmax/(newprob[ii]*prob2)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
@@ -383,7 +384,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              if (probmax/(newprob[ii]*prob0)<neglect) {
+              if (probmax/(newprob[ii]*prob0)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
@@ -398,7 +399,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -409,7 +410,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              if (probmax/(newprob[ii]*prob2)<neglect) {
+              if (probmax/(newprob[ii]*prob2)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
@@ -465,7 +466,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   goto cleanup;
 bailout:
   Rprintf("ERROR: Dataset too large after augmentation\n");
-  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
+  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or increase the parameter minprob\n");
   retvalue = 0;
 cleanup:
   Free(newy);
