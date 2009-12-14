@@ -85,8 +85,6 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		}
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
-      warning("For a multiple phenotype analysis use the function: 'mqmall' for improved performance.\n")
-      ##DANNY: HERE just call MQMall and pass the parameters
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
       if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
       result <- mqmall( cross,cofactors=cofactors,method=method,model=model,
