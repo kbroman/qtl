@@ -19,11 +19,13 @@
 	
 mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=max(unlist(pull.map(cross))),logtransform = FALSE, estimate.map = FALSE,plot=FALSE,verbose=FALSE){
+                    step.min=-20.0,step.max=max(unlist(pull.map(cross))),logtransform = FALSE,
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, multicore=TRUE, batchsize=10, n.clusters=1){
   
   start <- proc.time()
   model <- match.arg(model)
-  step.max <- as.integer(step.max+step.size)
+  step.max <- as.integer(ceiling((step.max+step.size)/step.size)*step.size)
+  cat(step.max,"\n")
   #Because iirc we cannot pass booleans from R to C
   if(forceML){
     forceML <- 1           #1 -> Maximum Likelyhood
