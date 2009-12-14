@@ -157,7 +157,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotboot(temp)
+					mqmplot_boot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -191,7 +191,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotboot(temp)
+					mqmplot_boot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]

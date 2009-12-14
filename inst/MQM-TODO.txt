@@ -20,7 +20,6 @@ o Fix naming of functions and parameters:
   - mqmscan: reorder parameters so they match scanone better
   - mqmscan man: update return value section, text not clear now  ..... 33%
   - lit list is part of MQM.Rd only - so include from there
-  - rename mqmcistransplot to mqmplot_cistrans - other plot names likewise
   + change augmentdata to mqmaugment
   + mqmaugment_aboveprob vs neglect (in C code)
   - make sure all man, R and C-code functions and parameters are

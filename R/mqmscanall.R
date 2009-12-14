@@ -92,7 +92,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotnice(temp)
+					mqmplot_nice(temp)
 				}
 				res <- c(res,result)
 				end <- proc.time()
@@ -126,7 +126,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotnice(temp)
+					mqmplot_nice(temp)
 				}
 				res <- c(res,result)				
 				end <- proc.time()

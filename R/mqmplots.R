@@ -21,11 +21,11 @@
 #
 # Part of the R/qtl package
 # Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
-#           polyplot, mqmplotall, mqmplotboot, mqmplotnice, mqmplotone
+#           polyplot, mqmplot_all, mqmplotboot, mqmplotnice, mqmplotone
 #           mqmcistransplot, addloctocross 
 ######################################################################
 
-mqmcistransplot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
@@ -239,7 +239,7 @@ getChr <- function(x){
 	x[,1]
 }
 
-mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
+mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
   if(class(result)[2] != "mqmmulti")
 		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
@@ -299,11 +299,11 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
 
 }
 
-mqmplotpermutation <- function(...){
-	mqmplotboot(...)
+mqmplot_permutations <- function(...){
+	mqmplot_boot(...)
 }
 
-mqmplotboot <- function(result, ...){
+mqmplot_boot <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
@@ -343,7 +343,7 @@ mqmplotboot <- function(result, ...){
 	}
 }
 
-mqmplotnice <- function(result, ...){
+mqmplot_nice <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	matrix <- NULL
 	names <- NULL
@@ -375,7 +375,7 @@ mqmplotnice <- function(result, ...){
 	polyplot(matrix,...)
 }
 
-mqmplotone <- function(result, extended=0,...){
+mqmplot_one <- function(result, extended=0,...){
 	#Helperfunction to show scanone objects made by doing mqmscan runs
   if(!("scanone" %in% class(result))){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
