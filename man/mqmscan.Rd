@@ -10,7 +10,7 @@
 
 \usage{
 	mqmscan(cross, cofactors, pheno.col = 1, 
-          model=c("Additive","Dominance"), method=c("REML","ML"),
+          model=c("Additive","Dominance"), forceML=false,
           cofactor.significance=0.02, em.iter=1000, 
           window.size=25.0, step.size=5.0, step.min=-20.0, step.max=max(unlist(pull.map(cross))),
           logtransform = FALSE, estimate.map = FALSE,
@@ -37,10 +37,10 @@
     versus BB and AA versus AB+BB. This setting is ignored for BC and RIL 
     populations 
   }
-  \item{method}{ Specify which statistical method to use to estimate 
-    variance components to use when QTL modeling and mapping. There
-    are two options: Using restricted maximum likelihood (default) 
-    or maximum likelihood 
+  \item{forceML}{ Specify which statistical method to use to estimate 
+    variance components to use when QTL modeling and mapping. Default 
+	usage is the Restricted maximum likelihood approach (REML). With this
+	option a user can disable REML and use maximum likelihood.
   }
   \item{cofactor.significance}{ Significance level at which a cofactor is 
     considered significant. This is estimated using an analysis of 
