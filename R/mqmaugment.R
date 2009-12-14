@@ -212,9 +212,9 @@ mqmaugment <- function(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FA
   colnames(pheno) <- phenoname
   cross$pheno <- as.data.frame(pheno)
   #Store extra information (needed by the MQM algorithm) which individual was which original etc..
-  cross$extra$Nind <- n.ind
-  cross$extra$Naug <- n.aug
-  cross$extra$augIND <- result$augIND[1:n.aug]
+  cross$mqm$Nind <- n.ind
+  cross$mqm$Naug <- n.aug
+  cross$mqm$augIND <- result$augIND[1:n.aug]
   # ---- RESULTS
   endtime <- proc.time()
   if((n.ind/n.indold*100)<90){

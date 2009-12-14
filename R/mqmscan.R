@@ -141,16 +141,16 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		}
 		
 		#CHECK for previously augmented dataset
-		if(!is.null(cross$extra)){
+		if(!is.null(cross$mqm)){
 		#	ourcat("INFO: previously augmented dataset.\n",a=verbose)			
-		#	ourcat("INFO: Individuals before augmentation",cross$extra$Nind,".\n",a=verbose)
-			extra1 <- cross$extra$Nind
-		#	ourcat("INFO: Individuals after augmentation",cross$extra$augIND,".\n",a=verbose)
-			extra2 <- cross$extra$augIND
+		#	ourcat("INFO: Individuals before augmentation",cross$mqm$Nind,".\n",a=verbose)
+			augmentedNind <- cross$mqm$Nind
+		#	ourcat("INFO: Individuals after augmentation",cross$mqm$augIND,".\n",a=verbose)
+			augmentedInd <- cross$mqm$augIND
 		}else{
-			#No augmentation so just set extra1 to be Nind (Naug internally of mqmscan)
-			extra1 <- n.ind
-			extra2 <- 0:n.ind
+			#No augmentation
+			augmentedNind <- n.ind
+			augmentedInd <- 0:n.ind
 		}
 		
 		#CHECK if we have cofactors, so we can do backward elimination
@@ -214,8 +214,8 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 				as.double(step.min),
 				as.double(step.max),
 				as.integer(n.run),
-				as.integer(extra1),
-				as.integer(extra2),
+				as.integer(augmentedNind),
+				as.integer(augmentedInd),
 				QTL=as.double(rep(0,2*n.chr*qtlAchromo)),
 				as.integer(estimate.map),
 				as.integer(ctype),
