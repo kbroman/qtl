@@ -333,7 +333,7 @@ mqmplot_boot <- function(result, ...){
 	#Because bootstrap only has 2 rows of data we can use black n blue
 	polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	#PLot some lines so we know what is significant
-	perm.temp <- mqmpermObject(result)			#Create a permutation object
+	perm.temp <- mqmprocesspermutation(result)			#Create a permutation object
 	numresults <- dim(result[[1]])[1]
 	lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
 	lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)	

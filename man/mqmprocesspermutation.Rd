@@ -1,18 +1,21 @@
-\name{mqmpermObject}
-\alias{mqmpermObject}
+\name{mqmpermutationresult}
+\alias{mqmpermutationresult}
 
 \title{Function to convert mqmmulti objects into a scanoneperm object}
 
 \description{
-	Function to convert mqmmulti objects into a \code{scanoneperm} object, this allows the use of R/QTL methods for permutation analysis that do not support MQM's internal structure.
+	Function to convert \code{mqmmulti} objects into a \code{scanoneperm} object, this allows the use of R/QTL methods for permutation analysis that do not support MQM's internal structure.
 }
 
 \usage{
-mqmpermObject(mqmbootresult = NULL)
+mqmpermutationresult(mqmpermutationresult = NULL)
 }
 
 \arguments{
-  \item{mqmbootresult}{ \code{mqmmulti} object obtained by using the function \code{\link[qtl]{bootstrap}} }
+  \item{mqmpermutationresult}{ \code{mqmmulti} object obtained 
+	after performing permutations on a single trait.using the 
+	function \code{\link[qtl]{mqmpermute}} 
+  }
 }
 
 %\details{
@@ -27,7 +30,7 @@ mqmpermObject(mqmbootresult = NULL)
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
+	\item \code{\link[qtl]{mqmpermute}} - Function called to estimate confidence interfalls for scanone,cim or mqm
 	\item \code{\link[qtl]{summary.scanoneperm}} - Summary of a QTL object
 }
 }
