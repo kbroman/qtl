@@ -20,12 +20,11 @@
 mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=max(unlist(pull.map(cross))),logtransform = FALSE,
-					estimate.map = FALSE,plot=FALSE,verbose=FALSE, multicore=TRUE, batchsize=10, n.clusters=1){
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
   
   start <- proc.time()
   model <- match.arg(model)
   step.max <- as.integer(ceiling((step.max+step.size)/step.size)*step.size)
-  cat(step.max,"\n")
   #Because iirc we cannot pass booleans from R to C
   if(forceML){
     forceML <- 1           #1 -> Maximum Likelyhood
@@ -340,6 +339,8 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 	}
 	end.3 <- proc.time()   
 	if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
+	
+	if(outputmarkers) qtl <- addmarkerstointervalmap(cross,qtl)
 	qtl
 	}else{
 		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
