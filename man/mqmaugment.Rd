@@ -14,18 +14,12 @@ of individuals is returned in a new \code{crossobject}.
 }
 
 \usage{
-mqmaugment(cross, pheno.col=1, maxaugind=60, minprob=0.1, verbose=FALSE)
+mqmaugment(cross, maxaugind=60, minprob=0.1, verbose=FALSE)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}}.} 
-  \item{pheno.col}{Column number in the phenotype matrix which should be
-    used as the phenotype. This can be a vector of integers, which index on
-    the phenotype, a string matching one phenotype name, or, when the value is
-    TRUE, all phenotypes are used. (Note: the current implementation
-    allows one phenotype only).
-  }
   \item{maxaugind}{ 
     Maximum number of augmentations per individual.  The default of 60 allows
     for 20 missing markers for an individual in a BC cross and 30 missing
