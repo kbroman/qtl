@@ -184,6 +184,7 @@ mqmaugment <- function(cross, maxaugind=60, minprob=0.1, verbose=FALSE) {
   #Store extra information (needed by the MQM algorithm) which individual was which original etc..
   cross$mqm$Nind <- n.ind
   cross$mqm$Naug <- n.aug
+  result$augIND <- result$augIND-1
   cross$mqm$augIND <- result$augIND[1:n.aug]
   # ---- RESULTS
   endtime <- proc.time()

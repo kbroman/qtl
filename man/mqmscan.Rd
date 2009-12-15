@@ -16,6 +16,7 @@
           logtransform = FALSE, estimate.map = FALSE,
           plot=FALSE, verbose=FALSE, outputmarkers=TRUE,
 		  multicore=TRUE, batchsize=10, n.clusters=1
+		  )
 }
 
 \arguments{
@@ -129,7 +130,7 @@ data(map10)                    # Mouse dataset
 qtl <- c(3,15,3,7)             # QTL location
 
 # simulate a cross (autosomes)
-cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
+cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)
 
 # MQM
 crossaug <- mqmaugment(cross)  # Augmentation
@@ -138,8 +139,9 @@ result <- mqmscan(crossaug)    # Scan
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
 
-cat(result$extra$Nind,'real individuals retained in dataset', \
-    result$extra$Naug,'individuals augmented')
+cat(result$mqm$Nind,'real individuals retained in dataset', \
+    result$mqm$Naug,'individuals augmented')
+    result$mqm$Naug,'individuals augmented')
 
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
