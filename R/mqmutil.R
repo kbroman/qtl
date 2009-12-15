@@ -19,6 +19,65 @@ ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
 }
 
+
+estimatemarkerlod <- function(interresults){
+	for(x in 1:nrow(interresults)){
+		if(is.na(interresults[x,3])){
+			y <- x
+			while(is.na(interresults[y,3])){
+				y <- y + 1
+			}
+			nY <- interresults[y,3]
+			nX <- interresults[y,2]
+			distp = interresults[x,2] - pX
+			distn = nX - interresults[x,2]
+			disttot = distn+distp
+			interresults[x,3] <- (((nY-pY)/disttot) * distp) + pY
+			interresults[x,4] <- 1
+			interresults[x,5] <- interresults[x,3]
+		}
+		pY <- interresults[x,3]		
+		pX <- interresults[x,2]		
+	}
+	interresults
+}
+
+
+addmarkerstointervalmap <- function(cross,intervalresult){
+	map <- pull.map(cross)
+	newres <- NULL
+	intervalmaploc <- 1
+	n <- NULL
+	for(chr in 1:length(map)){
+		for(mar in 1:length(map[[chr]])){
+			#cat("Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
+			while(intervalresult[intervalmaploc,2] < map[[chr]][mar]  || intervalresult[intervalmaploc,1] < chr ){
+				newres <- rbind(newres,intervalresult[intervalmaploc,])
+				n <- c(n,rownames(intervalresult)[intervalmaploc])
+				intervalmaploc <- intervalmaploc+1
+			}
+			if(intervalresult[intervalmaploc,2] == map[[chr]][mar]){
+				#cat("Markers at same location taking LOD score\n")
+				newres <- rbind(newres,c(chr,map[[chr]][mar],intervalresult[intervalmaploc,3],intervalresult[intervalmaploc,4],intervalresult[intervalmaploc,5]))
+				while(intervalresult[intervalmaploc,2] == map[[chr]][mar]){
+					intervalmaploc <- intervalmaploc+1
+				}
+			}else{
+				newres <- rbind(newres,c(chr,map[[chr]][mar],NA,NA,NA))
+			}
+			n <- c(n,names(map[[chr]])[mar])
+		}
+	}
+	if(intervalmaploc <= nrow(intervalresult)){
+		newres <- rbind(newres,intervalresult[intervalmaploc,])
+		n <- c(n,rownames(intervalresult)[intervalmaploc])
+		intervalmaploc <- intervalmaploc+1		
+	}
+	rownames(newres) <- n
+	newres <- estimatemarkerlod(newres)
+	newres
+}
+
 mqmtestnormal <- function(cross, pheno.col=1){
 	returnval <- FALSE
 	if(pheno.col <0 || pheno.col > nphe(cross)){
