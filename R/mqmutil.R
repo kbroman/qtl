@@ -50,12 +50,14 @@ addmarkerstointervalmap <- function(cross,intervalresult){
 	n <- NULL
 	for(chr in 1:length(map)){
 		for(mar in 1:length(map[[chr]])){
-			#cat("Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
+			
+			cat("Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
 			while(intervalresult[intervalmaploc,2] < map[[chr]][mar]  || intervalresult[intervalmaploc,1] < chr ){
 				newres <- rbind(newres,intervalresult[intervalmaploc,])
 				n <- c(n,rownames(intervalresult)[intervalmaploc])
 				intervalmaploc <- intervalmaploc+1
 			}
+			cat("Checkpoint\n")
 			if(intervalresult[intervalmaploc,2] == map[[chr]][mar]){
 				#cat("Markers at same location taking LOD score\n")
 				newres <- rbind(newres,c(chr,map[[chr]][mar],intervalresult[intervalmaploc,3],intervalresult[intervalmaploc,4],intervalresult[intervalmaploc,5]))
@@ -66,6 +68,7 @@ addmarkerstointervalmap <- function(cross,intervalresult){
 				newres <- rbind(newres,c(chr,map[[chr]][mar],NA,NA,NA))
 			}
 			n <- c(n,names(map[[chr]])[mar])
+			colnames(newres) <- colnames(intervalresult)
 		}
 	}
 	if(intervalmaploc <= nrow(intervalresult)){
