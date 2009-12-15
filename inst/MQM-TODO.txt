@@ -30,9 +30,6 @@ o MQM paper
 
 o Augmentation rewrite to use best N augmentations
 
-o Augmentation of all phenotypes at once (requires some smart handling
-  of NA phenotypes)
-
 o Placement of cofactors for automatic backward selection (perhaps use windowsize)
 
 ----------------------------------------------------------------------
