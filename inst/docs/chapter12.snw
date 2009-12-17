@@ -558,7 +558,7 @@ mqmplot_multitrait(resall,"I")
 created using cofactors at each third marker. Compared to figure 18 the
 profile is clearer, because the individual profiles contain less noise.}
 \end{figure}
-Use $mqmplot_nice$ for more graphical output. (This does not show in the
+Use $mqmplot\_nice$ for more graphical output. (This does not show in the
 generated PDF, but in R it shows the trait profiles)
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -568,13 +568,17 @@ mqmplot_nice(resall,legendloc=1)
 \end{figure}
 
 \clearpage
-The next plot is the $mqmplot_cistrans$.  This plot can be created
-for \qtl\ with associated genome locations (like when a, so called
-eQTL, correlates with a know microarray probe).  The
-two axis are both divided by genetic location. where the X-axis is,
-normally, the \qtl\ location and the Y-axis the location of the trait.
-To achieve the plot genomic locations need to be associated with the
-$scanone$ object.  use $data(locations)$. 
+The next plot is the $mqmplot\_cistrans$ function. This plot is only available 
+when genomic locations of the traits are known. By dafault the R/qtl cross
+object does not store this data. So the user has to add this to the $cross$ object 
+using the addloctocross function. After this operation the cis_trans plot can be created
+for \qtl\ with associated genome locations (For example when one is doing an
+expression QTL analysis (eQTL). in these eQTL experiments the probes on the 
+microarray have a genetic location).  The two axis of the cistrans plot both 
+show the genetic location. The X-axis is, normally, the \qtl\ location and 
+the Y-axis the location of the trait (e.g. a microarray probe).
+Make sure not to forget to add the genomic locations need to be associated with the
+$cross$ object.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
