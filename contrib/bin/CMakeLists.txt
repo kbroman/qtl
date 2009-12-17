@@ -33,11 +33,9 @@ add_executable (mqm
 ../../src/mqmmapqtl.h     
 ../../src/mqmregression.cpp
 ../../src/mqmaugment.h      
-../../src/mqmextra.cpp    
 ../../src/mqmmixture.cpp  
 ../../src/mqmregression.h
-../../src/mqmdatatypes.cpp  
-../../src/mqmextra.h      
+../../src/mqmdatatypes.cpp 
 ../../src/mqmmixture.h    
 ../../src/mqmscan.cpp
 ../../src/mqmdatatypes.h    
