@@ -88,7 +88,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		if (length(pheno.col) > 1){
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
       if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
-      result <- mqmall( cross,cofactors=cofactors,method=method,model=model,
+      result <- mqmall( cross,cofactors=cofactors,forceML=forceML,model=model,
                         cofactor.significance=cofactor.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
                         logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose)
 			return(result)
@@ -104,7 +104,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		}
 
 		if(any(rownames(installed.packages())=="nortest")){
-			library(nortest)
+			require(nortest)
 			if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
 				warning("Trait might not be normal (pearsons normallity test)\n")
 			}
