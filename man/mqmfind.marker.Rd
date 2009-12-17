@@ -46,8 +46,8 @@ mqmfind.marker(cross, mqmscan = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
 data(multitrait)				#Use the multitrait dataset
 cof <- mqmcofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
 multitrait <- fill.geno(multitrait)
-\dontrun{result <- bootstrap(multitrait,Funktie=mqm,cofactors=cof,pheno.col=7,n.run=50,b.size=10,doLOG=1)	# Bootstrap 50 runs in batches of 10
-}\dontshow{result <- bootstrap(multitrait,Funktie=mqm,cofactors=cof,pheno.col=7,n.run=2,b.size=2,doLOG=1)}
+\dontrun{result <- bootstrap(multitrait,mapfunction=mqm,cofactors=cof,pheno.col=7,n.run=50,b.size=10,doLOG=1)	# Bootstrap 50 runs in batches of 10
+}\dontshow{result <- bootstrap(multitrait,mapfunction=mqm,cofactors=cof,pheno.col=7,n.run=2,b.size=2,doLOG=1)}
 f2perm <- mqmpermObject(result)		        #Create a permutation object
 summary(f2perm)				        #What LOD score is considered significant ?
 marker <- mqmfind.marker(multitrait,result[[1]],f2perm)		#Find markers with a significant QTL effect (First run is original phenotype data)

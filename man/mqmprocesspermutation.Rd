@@ -43,8 +43,8 @@ f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-\dontrun{f2result <- bootstrap(f2cross,Funktie=mqm)			# Bootstrap MQM mapping on the f2cross
-}\dontshow{f2result <- bootstrap(f2cross,Funktie=mqm, n.run=2, b.size=2)}
+\dontrun{f2result <- bootstrap(f2cross,mapfunction=mqm)			# Bootstrap MQM mapping on the f2cross
+}\dontshow{f2result <- bootstrap(f2cross,mapfunction=mqm, n.run=2, b.size=2)}
 f2perm <- mqmpermObject(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 }

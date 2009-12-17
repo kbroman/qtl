@@ -82,8 +82,8 @@
   \item{verbose}{ verbose output}
 }
 
-\details{
-}
+%\details{
+%}
 
 \value{
 When scanning 1 phenotype the function returns a scanone object. This contains a matrix of three columns LODscores, 
@@ -106,8 +106,8 @@ trait can be obtained from the \code{mqmmulti} object, in scanone format.
 Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
-\note{ 
-}
+%\note{ 
+%}
 
 \seealso{
 \itemize{
