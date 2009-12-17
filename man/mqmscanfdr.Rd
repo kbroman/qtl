@@ -12,20 +12,37 @@
 }
 
 \arguments{
-	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and mqmscan from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-	\item{mapfunction}{ Function to use when mappingQTL's (either scanall, cimall or mqmall)}
-	\item{thresholds}{ False discovery rate is calculated for peaks above these LOD thresholds (DEFAULT=Range from 1 to 20, using 10 thresholds) }
-	\item{n.perm}{ Number of permutation runs (DEFAULT=10, should be 1000 to 5000) }
-	\item{verbose}{If TRUE, print tracing information}
-	\item{\dots}{Parameters passed through to the
-	  \code{\link[qtl]{scanall}}, \code{\link[qtl]{cimall}} or
-	    \code{\link[qtl]{mqmall}} functions} 
+	\item{cross}{ Cross object, An object of class \code{cross} from R/qtl
+    with multiple phenotypes suitable for scanone and mqmscan from R/qtl.
+    See \code{\link[qtl]{read.cross}} for details. 
+  }
+	\item{mapfunction}{ What QTL mapping function should be used. Currently
+   three functions can be used to calculate genome wide FDR. 
+   (either scanall, cimall or mqmall)
+  }
+	\item{thresholds}{ False discovery rate (FDR) is calculated for peaks 
+    above these LOD thresholds (DEFAULT=Range from 1 to 20, using 10 thresholds)
+    User can input a list of LOD scores at which they want FDR to be calculated.
+  }
+	\item{n.perm}{ Number of permutation runs (DEFAULT=10 for quick analysis, however
+    for publications it adviced to use 1000 to 5000 permutations to get a stabile 
+    estimate of FDRs) 
+  }
+	\item{verbose}{ verbose output }
+	\item{\dots}{ Here the user can supply parameters that will be passed on to the 
+    underlying mapping function. Parameters passed through should match the 
+    parameters of the underlying mapping function, otherwise an error will occur.
+    For the parameters see: \code{\link[qtl]{scanall}}, \code{\link[qtl]{cimall}} or
+	  \code{\link[qtl]{mqmall}}.
+  } 
 }
 
 \details{
-  Analysis of \code{\link[qtl]{scan.one}}, \code{\link[qtl]{cim}} or
-	    \code{\link[qtl]{mqmall}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
-  The \code{snow} library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
+  This function wraps the analysis of \code{\link[qtl]{scan.one}}, \code{\link[qtl]{cim}}
+  or \code{\link[qtl]{mqmall}} to scan for QTL in shuffled/randomized data. It is 
+  recommended to also install the \code{snow} library. The \code{snow} library allows
+  calculations to run on multiple cores or even scale it up to an entire cluster, 
+  thus speeding up calculation by the number of computers used.
 }
 
 \value{
