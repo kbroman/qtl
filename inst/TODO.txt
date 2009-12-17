@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o scantwo: ability to scan just specific chromosome pairs
+
 o Bug in summary.scanone in the case of a single chr, multiple
   phenotypes and multiple scanoneperm cols with format="allpeaks":
 
