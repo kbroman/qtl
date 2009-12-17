@@ -568,7 +568,7 @@ mqmplot_nice(resall,legendloc=1)
 \end{figure}
 
 \clearpage
-The next plot is the $mqmcistransplot$.  This plot can be created
+The next plot is the $mqmplot_cistrans$.  This plot can be created
 for \qtl\ with associated genome locations (like when a, so called
 eQTL, correlates with a know microarray probe).  The
 two axis are both divided by genetic location. where the X-axis is,
@@ -580,9 +580,9 @@ $scanone$ object.  use $data(locations)$.
 <<fig=TRUE>>=
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
-mqmcistransplot(resall, multiloc, 5, FALSE, TRUE)
+mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
-\caption{mqmcistransplot, available when \qtl\
+\caption{mqmplot_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 \end{figure}
@@ -607,8 +607,8 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	mqmplot_nice:& plotting of mutiple traits (MQMmulti object) \\
 	mqmplot_boot:& plot methode to show single trait permutations \\
 	mqmplot_one:& plotting of single trait analysis with information content \\
-	addloctocross:& Adding genetic locations for traits \\	
-	mqmcistransplot:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmplot_cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
+  addloctocross:& Adding genetic locations for traits \\	
 	mqmtestnormal:& Tests the normallity of a trait \\ 	
 	\hline
 	\end{tabular}
