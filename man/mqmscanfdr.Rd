@@ -46,7 +46,7 @@
 }
 
 \value{
-	Returns a matrix with FP FN and FDR for the selected thresholds
+	Returns a matrix with FalsePositives FalseNegatives and False Discovery Rates for the selected thresholds
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }
