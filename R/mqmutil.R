@@ -43,14 +43,14 @@ estimatemarkerlod <- function(interresults){
 }
 
 
-addmarkerstointervalmap <- function(cross,intervalresult){
+addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
 	map <- pull.map(cross)
 	newres <- NULL
 	intervalmaploc <- 1
 	n <- NULL
 	for(chr in 1:length(map)){
 		for(mar in 1:length(map[[chr]])){
-			cat(chr,"Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
+			if(verbose) cat(chr,"Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
 			if((class(map[[chr]])=="A")){
 			while(intervalresult[intervalmaploc,2] < map[[chr]][mar]  || intervalresult[intervalmaploc,1] < chr ){
 				newres <- rbind(newres,intervalresult[intervalmaploc,])
@@ -109,7 +109,7 @@ mqmgetmodel <- function(scanresult){
 		model <- attr(scanresult,"mqmmodel")
 		model
 	}else{
-		stop("Please supply a scan result")
+		stop("Please supply a scan result made by using mqm qith cofactors")
 	}
 }
 
