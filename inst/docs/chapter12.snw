@@ -73,7 +73,7 @@ Using ML or Reduced ML the algorithm employs a backward selection strategy to id
 \item Calculating relative marker positions
 \item (Re)Estimating recombinant frequencies
 \item LOGlikelyhood estimations of the full model using all cofactors
-\item IF(Cofactors) THEN Backward elimination of cofactors & mapQTL
+\item IF(Cofactors) THEN Backward elimination of cofactors \& mapQTL
 \item IF(No cofactors) THEN mapQTL function
 }
 Afterwards the Interval mapping of the QTL model is returned to the user
@@ -373,11 +373,12 @@ chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the significance level fr
 0.02 to 0.002 may yield a smaller model. In biology extensive models are sometimes 
 prefered, but in general a simpler model is more easily understood and verified in 
 the wetlab. Increasing the significance level (and simplifying the model) also has 
-the advantage that we can be more sure of the QTLs we do report.
+the advantage that we can be more sure of the QTLs we do report. we can set this 
+bij using the parameter: cofactor.significance
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-result <- mqm(hyperaug, cofactorlist, alfa=0.002)
+result <- mqm(hyperaug, cofactorlist, cofactor.significance=0.002)
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
@@ -395,7 +396,7 @@ significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 To replot the plots created during \mqm\ analysis is also possible. The figures can be 
-reconstructed from resulting $scanone$ object using $mqmplotone(result)$ see figure 
+reconstructed from resulting $scanone$ object using $mqmplot_one(result)$ see figure 
 \ref{AutoCofactor}. This retrieves the model and the QTLprofile from the result 
 objectattribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
 scans, as they have an additinal column $info$ and contain a QTLmodel. The info 
@@ -407,9 +408,9 @@ this value \"to clean\" the QTL profile by giving less weight to less informativ
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplotone(result)
+mqmplot_one(result)
 @
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (alpha = 0.002). Figure plotted using $mqmplotone$.
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (alpha = 0.002). Figure plotted using $mqmplot_one$.
 }
 \label{AutoCofactor}
 \end{figure}
@@ -492,7 +493,7 @@ require(snow)
 results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
 @
 <<fig=TRUE>>=
-mqmplotpermutation(results)
+mqmplot_permutations(results)
 @
 \caption{Calculate significance permuting 25 times over the hyper dataset. 
 \qtl\ with a \lod\ higher than
@@ -540,7 +541,7 @@ resall <- mqmall(multifilled,n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplotall(resall,"I")
+mqmplot_all(resall,"I")
 @
 \caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.}
 \end{figure}
@@ -551,17 +552,17 @@ resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplotall(resall,"I")
+mqmplot_all(resall,"I")
 @
 \caption{Heatmap of 25 metabolite expression traits in \At with profiles
 created using cofactors at each third marker. Compared to figure 18 the
 profile is clearer, because the individual profiles contain less noise.}
 \end{figure}
-Use $mqmplotnice$ for more graphical output. (This does not show in the
+Use $mqmplot_nice$ for more graphical output. (This does not show in the
 generated PDF, but in R it shows the trait profiles)
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplotnice(resall,legendloc=1)
+mqmplot_nice(resall,legendloc=1)
 @
 \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 \end{figure}
@@ -602,10 +603,10 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	bootstrap (AKA permute):& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
-	mqmplotall:& plotting of multiple traits (MQMmulti object) \\
-	mqmplotnice:& plotting of mutiple traits (MQMmulti object) \\
-	mqmplotboot:& plot methode to show single trait permutations \\
-	mqmplotone:& plotting of single trait analysis with information content \\
+	mqmplot_all:& plotting of multiple traits (MQMmulti object) \\
+	mqmplot_nice:& plotting of mutiple traits (MQMmulti object) \\
+	mqmplot_boot:& plot methode to show single trait permutations \\
+	mqmplot_one:& plotting of single trait analysis with information content \\
 	addloctocross:& Adding genetic locations for traits \\	
 	mqmcistransplot:& Genomewide plot of cis- and transQTLs above a threshold \\
 	mqmtestnormal:& Tests the normallity of a trait \\ 	

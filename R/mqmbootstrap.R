@@ -227,11 +227,11 @@ bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10
 }
 
 mqmprocesspermutation <- function(mqmpermutationresult = NULL){
-	if(class(mqmbootresult)[2] == "mqmmulti"){
+	if(class(mqmpermutationresult)[2] == "mqmmulti"){
 		result <- NULL
 		names <- NULL
-		for(i in 2:length(mqmbootresult)) {
-			result <- rbind(result,max(mqmbootresult[[i]][,3]))
+		for(i in 2:length(mqmpermutationresult)) {
+			result <- rbind(result,max(mqmpermutationresult[[i]][,3]))
 			names <- c(names,i-1)
 		}
 		result <- as.matrix(result)
