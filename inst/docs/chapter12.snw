@@ -537,7 +537,7 @@ improvement of the signal to noise ratio.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-resall <- mqmall(multifilled,n.clusters=2)
+resall <- mqm(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -548,7 +548,7 @@ mqmplot_multitrait(resall,"I")
 \clearpage
 <<>>=
 cofactorlist <- mqmsetcofactors(multifilled,3)
-resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
+resall <- mqm(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
