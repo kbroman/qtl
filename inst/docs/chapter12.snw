@@ -541,7 +541,7 @@ resall <- mqmall(multifilled,n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplot_all(resall,"I")
+mqmplot_multitrait(resall,"I")
 @
 \caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.}
 \end{figure}
@@ -552,7 +552,7 @@ resall <- mqmall(multifilled,cofactors=cofactorlist,n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplot_all(resall,"I")
+mqmplot_multitrait(resall,"I")
 @
 \caption{Heatmap of 25 metabolite expression traits in \At with profiles
 created using cofactors at each third marker. Compared to figure 18 the
@@ -603,7 +603,7 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	bootstrap (AKA permute):& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
-	mqmplot_all:& plotting of multiple traits (MQMmulti object) \\
+	mqmplot_multitrait:& plotting of multiple traits (MQMmulti object) \\
 	mqmplot_nice:& plotting of mutiple traits (MQMmulti object) \\
 	mqmplot_boot:& plot methode to show single trait permutations \\
 	mqmplot_one:& plotting of single trait analysis with information content \\
