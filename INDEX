@@ -104,7 +104,7 @@ mqmpackage              Tool for analyzing QTLs in experimental crosses
 mqmpermutationresult    Function to convert mqmmulti objects into a
                         scanoneperm object
 mqmplot_boot            Plot results from a bootstrap scan
-mqmplotall              Plotting routine to display the results from a
+mqmplot_multitrait      Plotting routine to display the results from a
                         scanall / bootstrap scan
 mqmplotcistrans         Plotting routine to show cis and trans QTL
                         information
@@ -116,7 +116,7 @@ mqmscan                 Genome scan with a multiple QTL model (MQM)
 mqmscanfdr              Estimates of FDR when doing multiple trait QTL
                         analysis
 mqmsetcofactors         Create cofactors to be used with mqmscan
-mqmtestnormal           pearsons normality test used in mqm
+mqmtestnormal           Pearsons normality test used in mqm
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes

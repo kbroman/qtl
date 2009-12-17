@@ -38,15 +38,11 @@ mqmaugment(cross, maxaugind=60, minprob=0.1, verbose=FALSE)
   \item{verbose}{ Verbose output }
 }
 
-\details{
-}
-
 \value{
-  Returns the cross object for the single phenotype \code{pheno.col},
-  with augmented individuals (many individuals from the data set will
-  be repeated multiple times). Some individuals may have been dropped
-  completely when the probability falls below \code{minprob}. An added
-  component to the cross object named \code{mqm} contains
+  Returns the cross object with augmented individuals (many individuals 
+  from the data set will be repeated multiple times). Some individuals 
+  may have been dropped completely when the probability falls below 
+  \code{minprob}. An added component to the cross object named \code{mqm} contains
   information on exactly which individuals are retained and repeated.  
 }  
 
