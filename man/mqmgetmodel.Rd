@@ -37,12 +37,4 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 	}
 }
 
-\examples{
-
-}
-
-%\references{
-%	
-%}
-
 \keyword{ utilities }

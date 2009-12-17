@@ -9,19 +9,29 @@
 }
 
 \usage{
-	mqmall(cross, multiC=TRUE, n.clusters = 1,b.size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
+	mqmall(cross, multiC=TRUE, n.clusters = 1,b.size=10, FF=0,\dots, plot=FALSE, verbose=FALSE)
 }
 
 \arguments{
-  \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{multiC}{ Use multicore (if available)}
-  \item{n.clusters}{ Number of child processes to split the job into }
-  \item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
-  \item{\dots}{Parameters passed through to the \code{\link[qtl]{mqm}} function}
+  \item{cross}{ Cross object, an object of class 
+    \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. 
+  }
+  \item{multiC}{ Use multiple cores (only if the package SNOW is available)
+  }
+  \item{n.clusters}{ Number of child processes to split the job into. with multiC 
+  is TRUE this determins how many cores are used at a given time. For optimal performance use
+  2 on a duocore, 3 on a quadcore and 5 on a hexacore.
+  }
+  \item{b.size}{ Batch size. The entire set is split in 
+    jobs. Each job contains b.size number of traits per job 
+  }
+  \item{\dots}{ Parameters passed through to the \code{\link[qtl]{mqm}} function used in 
+    scanning for QTLs
+  }
 }
 
 \details{
-  Uses the function specified by the Funktie parameter to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
+  Uses the mqm function to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
   The snow library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
 }
 
@@ -49,12 +59,12 @@
 \examples{
 	#Doing a multitrait analysis
 	data(multitrait)
-\dontshow{multitrait < subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
-multitrait$pheno < multitrait$pheno[,1:3]}
-    multitrait < calc.genoprob(multitrait)
-	cof < MQMCofactorsEach(multitrait,3)
-    multitrait < fill.geno(multitrait)
-	result < mqmall(multitrait,cofactors=cof,doLOG=1,b.size=5)
+  \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
+  multitrait$pheno <- multitrait$pheno[,1:3]}
+  multitrait <- calc.genoprob(multitrait)
+	cof <- MQMCofactorsEach(multitrait,3)
+  multitrait <- fill.geno(multitrait)
+	result <- mqmall(multitrait,cofactors=cof,b.size=5)
 }
 
 \references{

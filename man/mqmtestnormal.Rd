@@ -1,25 +1,23 @@
 \name{mqmtestnormal}
 \alias{mqmtestnormal}
 
-\title{ pearsons normality test used in mqm }
+\title{ Pearsons normality test used in mqm }
 
 \description{
-  Wraps a pearsons normality test from the nortest package.
+  Wraps a pearsons normality test from the nortest package. 
+  This function is used in MQM to test the normality of the
+  trait under investigation
 }
 
 \usage{
-mqmtestnormal(cross, pheno.col = 1){
+mqmtestnormal(cross, pheno.col = 1)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link[qtl]{read.cross}} for details.}
-  \item{pheno.col}{ the phenotype to test for normality  }
+  \item{pheno.col}{ The phenotype to test for normality  }
 }
-
-%\details{
-%Not available yet
-%}
 
 \value{
 	Boolean indicating normality of the trait in pheno.col
@@ -36,10 +34,6 @@ mqmtestnormal(cross, pheno.col = 1){
 	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
 	}
-}
-
-\examples{
-
 }
 
 \references{
