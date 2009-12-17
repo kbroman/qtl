@@ -88,7 +88,7 @@ permute <- function(...){
 #
 ######################################################################
 
-bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
+bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
 {
 	
 	if(missing(cross))
@@ -120,7 +120,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 
 		#Scan the original
 		#cross <- fill.geno(cross) # <- this should be done outside of this function
-		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,Funktie=Funktie,verbose=verbose,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,mapfunction=mapfunction,verbose=verbose,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.run)
@@ -151,7 +151,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				}			
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,mapfunction=mapfunction,bootmethod=bootmethod,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -186,7 +186,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				}else{
 					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,mapfunction=mapfunction,bootmethod=bootmethod,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
