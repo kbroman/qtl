@@ -24,11 +24,6 @@
 #
 ######################################################################
 
-	\item{mapfunction}{ What QTL mapping function should be used. Currently
-   three functions can be used to calculate genome wide FDR. 
-   (either scanall, cimall or mqmall)
-  }
-
 cimall <- function(...) {
 	scanall(...,mapfunction=cim)
 }
