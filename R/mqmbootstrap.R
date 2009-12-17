@@ -67,15 +67,15 @@ mqmscanfdr <- function(cross, mapfunction=mqmall, thresholds=c(1,2,3,4,5,7,10,15
 }
 
 mqmpermute <- function(...){
-	bootstrap(...,Funktie=mqm)
+	bootstrap(...,mapfunction=mqm)
 }
 
 mqmbootstrap <- function(...){
-	bootstrap(...,Funktie=mqm)
+	bootstrap(...,mapfunction=mqm)
 }
 
 bootstrapcim <- function(...){
-	bootstrap(...,Funktie=cim)
+	bootstrap(...,mapfunction=cim)
 }
 
 permute <- function(...){
