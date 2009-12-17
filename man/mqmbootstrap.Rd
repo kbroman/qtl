@@ -15,7 +15,7 @@
 }
 
 \usage{
-	bootstrap(cross, Funktie=scanone, pheno.col=1,
+	bootstrap(cross, mapfunction=scanone, pheno.col=1,
 	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
    	          n.clusters=1, bootmethod=0, plot=FALSE, verbose=FALSE, \dots)
 	bootstrapcim(\dots)
@@ -23,8 +23,11 @@
 }
 
 \arguments{
-	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and mqmscan from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-	\item{Funktie}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
+	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL
+    with multiple phenotypes suitable for scanone and mqmscan from R/QTL.
+    See \code{\link[qtl]{read.cross}} for details. 
+  }
+	\item{mapfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
 	\item{multiC}{ Use multicore (if available)}  
 	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
