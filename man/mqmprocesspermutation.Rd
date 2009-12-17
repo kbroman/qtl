@@ -4,7 +4,10 @@
 \title{Function to convert mqmmulti objects into a scanoneperm object}
 
 \description{
-	Function to convert \code{mqmmulti} objects into a \code{scanoneperm} object, this allows the use of R/QTL methods for permutation analysis that do not support MQM's internal structure.
+	Function to convert \code{mqmmulti} objects into a \code{scanoneperm} 
+  object, this allows the use of R/qtl methods for permutation analysis
+  that do not support the output of a multiple QTL scan using mqm's 
+  outputstructure.
 }
 
 \usage{
