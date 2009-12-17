@@ -24,15 +24,20 @@
 #
 ######################################################################
 
+	\item{mapfunction}{ What QTL mapping function should be used. Currently
+   three functions can be used to calculate genome wide FDR. 
+   (either scanall, cimall or mqmall)
+  }
+
 cimall <- function(...) {
-	scanall(...,Funktie=cim)
+	scanall(...,mapfunction=cim)
 }
 
 mqmall <- function(cross,multiC=TRUE,n.clusters=1,b.size=10,...) {
-	scanall(cross=cross,multiC=multiC,n.clusters=n.clusters,b.size=b.size,...,Funktie=mqm)
+	scanall(cross=cross,multiC=multiC,n.clusters=n.clusters,b.size=b.size,...,mapfunction=mqm)
 }
 
-scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=0,...,plot=FALSE,verbose=FALSE){
+scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=0,...,plot=FALSE,verbose=FALSE){
 
 	
 	if(missing(cross)){
@@ -87,7 +92,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,Funktie=Funktie,verbose=verbose,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
@@ -122,7 +127,7 @@ scanall <- function(cross,Funktie=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=
 				}else{
 					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}	
-				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,Funktie=Funktie,verbose=verbose,...)
+				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
