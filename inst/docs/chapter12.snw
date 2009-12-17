@@ -58,7 +58,7 @@ and scales on multi-CPU systems.
 \section{A quick overview}
 
 These are the steps in an \mqm\ \qtl\ analysis
-\itemize{
+\begin{itemize}
 \item Load in experiment using formats supported by R/QTL
 \item Set trait under consideration as first trait in R/QTL format
 \item Fill in missing data using either the fill.geno or mqmaugmentdata routine
@@ -67,15 +67,17 @@ These are the steps in an \mqm\ \qtl\ analysis
 \item Set cofactors at "Top scoring" and not so "Top scoring" markers
 \item Rerun analysis with cofactors
 \item Bootstrap analysis with cofactors to get estimates of QTL significance
-}
-Using ML or Reduced ML the algorithm employs a backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
-\itemize{
+\end{itemize}
+Using (restricted) maximum likelihood  the algorithm employs a 
+backward selection strategy to identify QTL hotspot. The algorithm 
+passes through the following stages:
+\begin{itemize}
 \item Calculating relative marker positions
 \item (Re)Estimating recombinant frequencies
 \item LOGlikelyhood estimations of the full model using all cofactors
 \item IF(Cofactors) THEN Backward elimination of cofactors \& mapQTL
 \item IF(No cofactors) THEN mapQTL function
-}
+\end{itemize}
 Afterwards the Interval mapping of the QTL model is returned to the user
 
 \section{Data augmentation}
@@ -163,11 +165,13 @@ most likely genotypes at each marker, no expansion of the dataset takes place}
 \end{figure}
 
 With a lower $minprob$ value less likely genotypes are also
-considered and the resulting \emph{augmented} dataset will be larger. Unfortunately, 
-at this stage, the expanded dataset can not be used with scanone as it treats the extra individuals as new
+considered and the resulting \emph{augmented} dataset will be
+larger. Unfortunately, at this stage, the expanded dataset 
+can not be used with scanone as it treats the extra individuals as new
 individuals, while \mqm\ recognises expanded individuals as 
-single entities. The (weighted) augmented individuals with all possible genotypes leads to a 
-more accurate mapping when dealing with missing values and give a smoother \qtl\ profile, leading to a more accurate mapping.
+single entities. The (weighted) augmented individuals with all possible
+genotypes leads to a more accurate mapping when dealing with missing values
+and give a smoother \qtl\ profile, leading to a more accurate mapping.
 \cite{jansen93}.
 
 \begin{figure}[ht]
@@ -363,18 +367,18 @@ plot(result, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for mqm, followed by backward elimination
-(alpha = 0.02). The resulting profiles are clearly different }
+(cofactor.significance = 0.02). The resulting profiles are clearly different }
 \label{Backward2}
 \end{figure}
 
 This \mqm\ QTL mapping results in a lot of significant markers, with even multiple 
-hits on each chromosome. Figure \ref{Backward2} shows us that at an alpha of 0.02 
+hits on each chromosome. Figure \ref{Backward2} shows us that at an cofactor.significance of 0.02 
 chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the significance level from 
 0.02 to 0.002 may yield a smaller model. In biology extensive models are sometimes 
 prefered, but in general a simpler model is more easily understood and verified in 
 the wetlab. Increasing the significance level (and simplifying the model) also has 
 the advantage that we can be more sure of the QTLs we do report. we can set this 
-bij using the parameter: cofactor.significance
+bij using the parameter: $cofactor.significance$.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -383,7 +387,7 @@ op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
 @
-\caption{\hyperintro, intially with cofactors at every fifth marker; after backwards elimination (alpha = 0.002).
+\caption{\hyperintro, intially with cofactors at every fifth marker; after backwards elimination (cofactor.significance = 0.002).
 }
 \label{FigLowAlpha}
 \end{figure}
@@ -477,15 +481,25 @@ on the effect of the genotype at location x.
 
 \section{Permutation test for significance} 
 
-To estimate significance of the peeks ( and perhaps exclude some markers from our model ) we can use a permutation test. This can be
-computationally expensive - repeating the same test thousands of times. If you have access to multiple CPUs on your
-computer you can install the SNOW package
-\cite{tierney03}\cite{tierney04}, which allows parallel computations on multiple CPU (cores). For small sets, with a limited amount
+To estimate significance of the peeks ( and perhaps exclude some markers 
+from our model ) we can use a permutation test. This can be
+computationally expensive - repeating the same test thousands of times. 
+If you have access to multiple CPUs on your computer you can install the 
+SNOW package \cite{tierney03}\cite{tierney04}, which allows parallel 
+computations on multiple CPU (cores). For small sets, with a limited amount
 of traits, the $mqmpermute()$ works well. For large genome wide association studies
 (GWAS) use $mqmscanfdr()$ to estimate the FDR across the entire
 dataset
 at certain \lod\ cutoffs (for this example we use $25$ permutations, for
-a real experiment use - typically - $1000$ tests with $b.size=25$ or $50$). b.size is the batchsize per core. If we set 100 permutations using 4 cores and a batchsize of 10, each core gets 10 traits to calculate QTL profiles on. When done another 10 traits are send to the core, untill all 100 traits have been analyzed. In mqmpermutate we do single trait permutations not taking correlation between the traits into account. If we want to estimate false discovery rates, we need to do a whole genome permutation using mqmscanfdr. This method does take correlation between traits into account and gives an unbiased estimate of FDR at different thresholds (userspecified)
+a real experiment use - typically - $1000$ tests with $b.size=25$ or $50$). 
+b.size is the batchsize per core. If we set 100 permutations using 4 cores 
+and a batchsize of 10, each core gets 10 traits to calculate QTL profiles on. 
+When done another 10 traits are send to the core, untill all 100 traits have been analyzed. 
+In mqmpermutate we do single trait permutations not taking correlation between 
+the traits into account. If we want to estimate false discovery rates, we need 
+to do a whole genome permutation using mqmscanfdr. This method does take 
+correlation between traits into account and gives an unbiased estimate 
+of FDR at different thresholds (userspecified).
 
 \begin{figure}[ht]
 <<>>=
@@ -554,7 +568,7 @@ resall <- mqm(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cluste
 <<fig=TRUE>>=
 mqmplot_multitrait(resall,"I")
 @
-\caption{Heatmap of 25 metabolite expression traits in \At with profiles
+\caption{Heatmap of 25 metabolite expression traits in \At\ with profiles
 created using cofactors at each third marker. Compared to figure 18 the
 profile is clearer, because the individual profiles contain less noise.}
 \end{figure}
@@ -568,10 +582,10 @@ mqmplot_nice(resall,legendloc=1)
 \end{figure}
 
 \clearpage
-The next plot is the $mqmplot\_cistrans$ function. This plot is only available 
+The next plot is the $mqmplot_cistrans$ function. This plot is only available 
 when genomic locations of the traits are known. By dafault the R/qtl cross
 object does not store this data. So the user has to add this to the $cross$ object 
-using the addloctocross function. After this operation the cis_trans plot can be created
+using the addloctocross function. After this operation the cis\_trans plot can be created
 for \qtl\ with associated genome locations (For example when one is doing an
 expression QTL analysis (eQTL). in these eQTL experiments the probes on the 
 microarray have a genetic location).  The two axis of the cistrans plot both 
@@ -588,7 +602,7 @@ mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
 \caption{mqmplot_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
-genome they were measured (here mQTL for \At), cutoff \lod\ 5}
+genome they were measured (here mQTL for \At\), cutoff \lod\ 5}
 \end{figure}
 
 \clearpage
@@ -607,11 +621,11 @@ genome they were measured (here mQTL for \At), cutoff \lod\ 5}
 	bootstrap (AKA permute):& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
-	mqmplot_multitrait:& plotting of multiple traits (MQMmulti object) \\
-	mqmplot_nice:& plotting of mutiple traits (MQMmulti object) \\
-	mqmplot_boot:& plot methode to show single trait permutations \\
-	mqmplot_one:& plotting of single trait analysis with information content \\
-	mqmplot_cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmplot\_multitrait:& plotting of multiple traits (MQMmulti object) \\
+	mqmplot\_nice:& plotting of mutiple traits (MQMmulti object) \\
+	mqmplot\_boot:& plot methode to show single trait permutations \\
+	mqmplot\_one:& plotting of single trait analysis with information content \\
+	mqmplot\_cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
   addloctocross:& Adding genetic locations for traits \\	
 	mqmtestnormal:& Tests the normallity of a trait \\ 	
 	\hline
