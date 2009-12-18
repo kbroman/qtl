@@ -424,6 +424,27 @@ mqmplot_one(result)
 \end{figure}
 
 \section{MQM effects}
+We can add the current effect to the mqmplots that are created by 
+using the function $mqmplot\_directedqtl$. To use this function 
+firstly we must have the $outputmarkers$ parameter when scanning 
+using mqm set to true (true is the default value).
+We extract the markers from the output of the mqmscan using 
+$mqmextractmarkers(result)$. Then we call the plotting function 
+which internaly adds the sign of the effect to the LOD score of 
+the marker, and calls the standard R/qtl plotting functions. An example
+can be found in figure \ref{QTLeffects}.
+<<>>=
+onlymarkers <- mqmextractmarkers(result)
+@
+\begin{figure}[ht]
+<<fig=TRUE>>=
+mqmplot_directedqtl(hyperaug,onlymarkers)
+@
+\caption{Same as figure \ref{AutoCofactor}, but with effect sign 
+added to the QTL profile.
+}
+\label{QTLeffects}
+\end{figure}
 
 Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5 are
 associated with high bloodpressure. If we want to investigate the
@@ -624,9 +645,11 @@ genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 	mqmall:& mqmall to scan all traits using mqm\\
 	bootstrap (AKA permute):& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
-	mqmpermObject:& Creates an R/qtl permutationobject from the output of the $permute()$ function \\
+	mqmpermObject:& Creates an R/qtl permutationobject 
+                & from the output of the $permute()$ function \\
 	mqmplot\_multitrait:& plotting of multiple traits (MQMmulti object) \\
 	mqmplot\_nice:& plotting of mutiple traits (MQMmulti object) \\
+  mqmplot\_directedqtl:& Plotting of signle trait with added qtl effect\\
 	mqmplot\_boot:& plot methode to show single trait permutations \\
 	mqmplot\_one:& plotting of single trait analysis with information content \\
 	mqmplot\_cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
