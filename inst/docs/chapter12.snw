@@ -605,7 +605,8 @@ mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
 \caption{mqmplot\_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
-genome they were measured (here mQTL for \At\), cutoff is at a lod score of 5}
+genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
+}
 \end{figure}
 
 \clearpage
