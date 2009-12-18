@@ -27,6 +27,7 @@ mqmextractmarkers <- function(mqmresult){
       cleanedresult <- rbind(cleanedresult,mqmresult[x,])
     }
   }
+  class(cleanedresult) <- class(mqmresult)
   cleanedresult
 }
 
@@ -88,7 +89,8 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
 	}
 	rownames(newres) <- n
 	newres <- estimatemarkerlod(newres)
-	newres
+	class(newres) <- c("scanone",class(newres))
+  newres
 }
 
 mqmtestnormal <- function(cross, pheno.col=1){
