@@ -73,6 +73,8 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 
 \seealso{
 	\itemize{
+  \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
+  \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl  
 	\item	\code{\link[qtl]{mqmaugment}} - Data augmentation routine to estimate missing data used by MQM
 	\item	\code{\link[qtl]{mqm}} - Function called to do single/multiple trait QTL analysis using MQM
 	\item \code{\link[qtl]{mqmsetcofactors}} - Helper function to create cofactors to be used with MQM

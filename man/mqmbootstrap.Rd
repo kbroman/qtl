@@ -74,7 +74,7 @@ result <- bootstrapcim(multitrait,pheno.col=7, b.size=5)
 }\dontshow{result <- bootstrap(multitrait,pheno.col=7, n.run=2, b.size=2)
 result <- bootstrapcim(multitrait,pheno.col=7, n.run=2, b.size=2)}
 multitrait <- fill.geno(multitrait)
-cof <- mqmcofactorsEach(multitrait,3)		#Set cofactors at each 3th marker
+cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
 \dontrun{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
 \dontshow{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
 #EXTRA

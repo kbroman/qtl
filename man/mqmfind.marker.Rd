@@ -1,10 +1,11 @@
 \name{mqmfind.marker}
 \alias{mqmfind.marker}
 
-\title{ Find the significant markers after bootstrapping/permutation }
+\title{ Find significant markers after permutation }
 
 \description{
- Find the genetic markers significant after bootstrapping/permutation of the data
+ Find the genetic markers significant after permutation of the data using the MQM algorithm.
+ These markers can be used as cofactors for model selection in a forward stepwise approach.
 }
 
 \usage{
@@ -19,24 +20,16 @@ mqmfind.marker(cross, mqmscan = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
   \item{verbose}{If TRUE, print tracing information.}
 }
 
-%\details{
-%
-%}
-
 \value{
 	return a matrix with at each row a significant marker (determined from the \code{scanoneperm} object) and with columns: markername, chr and pos (Cm)
 }
-
-%\references{ 
-%
-%}
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{MQM}} MQM description
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{mqmintro}} MQM description
+	\item \code{\link[qtl]{mqm}} - Function called to do single trait analysis
 	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
 	\item \code{\link[qtl]{mqmpermObject}} - Function called to convert mqmbootstrap into an scanoneperm object
 }

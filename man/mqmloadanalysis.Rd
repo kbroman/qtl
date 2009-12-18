@@ -30,8 +30,9 @@ Returns a matrix with QTLscores for each location on the chromosome, which can b
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
+  \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
+  \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
+	\item \code{\link[qtl]{mqm}} - Function called to do single / multple trait QTL analysis using MQM
 }
 }
 

@@ -31,8 +31,9 @@ mqmtestnormal(cross, pheno.col = 1)
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
+  \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
+  \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
+	\item \code{\link[qtl]{mqmscan}} - Function called to do single / multiple trait QTL analysis
 	}
 }
 

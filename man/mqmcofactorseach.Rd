@@ -1,10 +1,10 @@
 \name{mqmsetcofactors}
 \alias{mqmsetcofactors}
 
-\title{Create cofactors to be used with mqmscan} 
+\title{Create cofactors to be used with mqm} 
 
 \description{
-  Return a list of cofactors ready to be used with the mqmscan function
+  Return a list of cofactors ready to be used with the mqm function
 }
 
 \usage{
@@ -18,22 +18,17 @@ mqmsetcofactors(cross, each = 3, verbose=FALSE)
   \item{verbose}{If TRUE, print tracing information.}
 }
 
-%\details{
-%	Not available yet
-%}
-
 \value{
-	An formatted list of cofactors to be used with the \code{\link[qtl]{mqmscan}} algorithm
+	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link[qtl]{mqm}} algorithm.
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 
 \seealso{ 
-\itemize{
-	\item \code{\link[qtl]{MQM}} - MQM main information
-	\item \code{\link[qtl]{mqmscan}} - Single trait analysis
-	\item \code{\link[qtl]{mqmall}} - Analyse multiple traits 
-}
+  \itemize{
+  	\item \code{\link[qtl]{MQM}} - MQM main information
+  	\item \code{\link[qtl]{mqm}} - Single / multiple trait QTL analysis using MQM
+  }
 }
 
 \examples{
@@ -42,7 +37,7 @@ data(map10)							# Mouse genome
 \dontshow{map10 <- map10[1:5]}
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
 a <- mqmsetcofactors(cross,3)					# Set Cofactors each third marker
-result <- mqmscan(cross,a)					# Do a backward model selection
+result <- mqm(cross,a)					# Do a backward model selection
 }
 
 \keyword{ models }
