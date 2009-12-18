@@ -90,28 +90,28 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
-MQM                     Multiple QTL Model (MQM) mapping
 mqmall                  Multitrait analysis of a cross object
 mqmaugment              MQM augmentation
 mqmcofactors            Create cofactors to be used with mqmscan
 mqmfind.marker          Find the significant markers after
                         bootstrapping/permutation
-mqmgetmodel             Retrieves selected cofactors from the results
-                        of an mqm scan
+mqmgetmodel             Retrieve the QTL model used in mapping from the
+                        results of an mqm scan
+mqmintro                Multiple QTL Model (MQM) mapping
 mqmloadanalysis         Enables loading of previous MQM analysis from
                         file
 mqmpackage              Tool for analyzing QTLs in experimental crosses
-mqmpermutationresult    Function to convert mqmmulti objects into a
-                        scanoneperm object
+mqmpermutationresult    Convert mqmmulti objects into a scanoneperm
+                        object
 mqmplot_boot            Plot results from a bootstrap scan
 mqmplot_multitrait      Plotting routine to display the results from a
-                        scanall / bootstrap scan
+                        mqm scan on multiple phenotypes
+mqmplot_nice            Plot the results from a mqm scan on multiple
+                        phenotypes
+mqmplot_one             Plotting routine to display the results from a
+                        QTL scan
 mqmplotcistrans         Plotting routine to show cis and trans QTL
                         information
-mqmplotnice             Plot the results from a bootstrap or scanall
-                        scan
-mqmplotone              Plotting routine to display the results from a
-                        QTL scan
 mqmscan                 Genome scan with a multiple QTL model (MQM)
 mqmscanfdr              Estimates of FDR when doing multiple trait QTL
                         analysis
