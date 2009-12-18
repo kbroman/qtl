@@ -25,6 +25,15 @@
 #           mqmcistransplot, addloctocross 
 ######################################################################
 
+mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
+  onlymarkers <- mqmextractmarkers(mqmresults)
+  eff <- effectscan(sim.geno(cross),draw=F)
+  eff <- eff[-which(eff[,1]=="X"),]
+  onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
+  if(draw) plot(ylim=c(-max(mqmresults[,3]),max(mqmresults[,3])),onlymarkers)
+  onlymarkers
+}
+
 mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 	if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
