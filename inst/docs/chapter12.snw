@@ -541,10 +541,9 @@ mqmscanfdr(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
 MQM can analyse multiple traits simultaneously. 
 Start by loading a new dataset ($multitrait$). $multitrait$
 consists of an arabidopsis RIL cross with 24 metabolites measured (phenotypes).
-
-Start by filling in the genome using the $fill.geno$ function, rather
-than $mqmaugment$, which can only handle one trait. To map back the
-possible regulatory locations of these traits use plain scanning of
+Of these 24 phenotypes we will only scan the first 5 phenotypes this 
+can be done using the $pheno.col$ parameter.
+To map back the possible regulatory locations of these traits one can use plain scanning of
 all traits (initially without cofactors). Next plot all the profiles
 in a heatmap. In this heatmap the colors represent the LOD score, on
 the x-axis the marker number and on the y-axis the traits. The traits
@@ -593,8 +592,8 @@ using the addloctocross function. After this operation the cis\_trans plot can b
 for \qtl\ with associated genome locations (For example when one is doing an
 expression QTL analysis (eQTL). in these eQTL experiments the probes on the 
 microarray have a genetic location).  The two axis of the cistrans plot both 
-show the genetic location. The X-axis is, normally, the \qtl\ location and 
-the Y-axis the location of the trait (e.g. a microarray probe).
+show the genetic location. The x-axis is, normally, the \qtl\ location and 
+the y-axis the locations of the traits (e.g. a microarray probe).
 Make sure not to forget to add the genomic locations need to be associated with the
 $cross$ object.
 
@@ -606,7 +605,7 @@ mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
 \caption{mqmplot\_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
-genome they were measured (here mQTL for \At\), cutoff \lod\ 5}
+genome they were measured (here mQTL for \At\), cutoff is at a lod score of 5}
 \end{figure}
 
 \clearpage
