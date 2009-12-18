@@ -339,7 +339,7 @@ mqmplot_boot <- function(result, ...){
 	lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)	
 	chrs <- unique(lapply(result,getChr))
     for(x in unique(chrs[[1]])){
-		abline(v=sum(as.numeric(chrs[[1]])<=x),lty="dashed",col="black",lwd=2)
+		abline(v=sum(as.numeric(chrs[[1]])<=x),lty="dashed",col="gray",lwd=1)
 	}
 }
 
