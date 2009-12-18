@@ -33,6 +33,8 @@ mqmpermutationresult(mqmpermutationresult = NULL)
 
 \seealso{ 
   \itemize{
+    \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
+    \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
   	\item \code{\link[qtl]{mqmpermute}} - Estimate confidence interfalls for QTL location using MQM
   	\item \code{\link[qtl]{summary.scanoneperm}} - LOD thresholds from scanone permutation results
   }
