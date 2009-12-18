@@ -1,10 +1,12 @@
 \name{mqmplot_multitrait}
 \alias{mqmplot_multitrait}
 
-\title{Plotting routine to display the results from a scanall / bootstrap scan}
+\title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a scanall scan or a bootstrap, in either a contourmap or a multiple QTL plot from \code{\link[qtl]{plot.scanone}}
+  Plotting routine to display the results from a mqm scan on multiple phenotypes. 
+  It supports four diffferent visualizations: a contourmap, heatmap, 3D graph or a multiple 
+  QTL plot from \code{\link[qtl]{plot.scanone}}
 }
 
 \usage{
@@ -19,21 +21,13 @@ mqmplot_multitrait(result, type = "C", theta = 30, phi = 15, \dots)
   \item{\dots}{Additional arguments passed to \code{\link[graphics]{plot}}.}
 }
 
-%\details{
-%
-%}
-
-\value{None.}
-
-%\references{ Danny Arends \email{Danny.Arends@gmail.com} }
-
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 
 \seealso{ 
-\itemize{
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
-	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for MQM
-}
+  \itemize{
+  	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
+  	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for MQM
+  }
 }
 
 \examples{

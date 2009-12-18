@@ -1,11 +1,14 @@
 \name{mqmpackage-package}
 \alias{mqmpackage}
+\alias{mqmoverview}
 \docType{package}
 \title{
 	Tool for analyzing QTLs in experimental crosses
 }
 \description{
-	Multi-trait MarkerQTLMarker(MQM) Analysis of experimental crosses to identify QTLs contributing to variation in quantitative traits.
+	QTL mapping for single and multiple quantative traits using Multiple QTL analysis 
+  in experimental crosses. QTL analysis helps to identify genomic locations 
+  contributing to variation in quantitative traits.
 	Currently supported crosses:
 	\itemize{
 		\item F2 Intercross
@@ -28,12 +31,10 @@
 
 	Index:
 	\preformatted{
-	mqmscan                 mqmscan - Multiple QTL mapping for F2 crosses
-	scanall					scanall - Function called to analyse multiple traits in the cross object
-	bootstrap			bootstrap - Bootstrapping approach to obtain estimates of QTL significance
+	mqm                     mqm - Multiple QTL mapping for F2 crosses
+	mqmpermute			        mqmpermute - Bootstrapping approach to obtain estimates of QTL significance
 	mqmaugment              mqmaugment - Missing data augmentation routine for MQM
-	mqmcofactors            mqmcofactors - Helper function to create cofactors to be used with mqmscan
-	mqmcofactorsEach        mqmcofactorsEach - Helper function to create cofactors to be used with mqmscan
+	mqmsetcofactors         mqmcofactors - Helper function to create cofactors to be used with mqm
 	multitrait              Crossobject from R/QTL with multiple traits
 	}
 	Normal layout of MQM-QTL analysis
@@ -72,9 +73,9 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 
 \seealso{
 	\itemize{
-	\item	\code{\link[qtl]{mqmaugment}} - Dataaugmentation routine to estimate missing data
-	\item	\code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object
+	\item	\code{\link[qtl]{mqmaugment}} - Data augmentation routine to estimate missing data used by MQM
+	\item	\code{\link[qtl]{mqm}} - Function called to do single/multiple trait QTL analysis using MQM
+	\item \code{\link[qtl]{mqmsetcofactors}} - Helper function to create cofactors to be used with MQM
 	}
 }
 \examples{

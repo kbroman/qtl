@@ -4,7 +4,7 @@
 \title{ Estimates of FDR when doing multiple trait QTL analysis }
 
 \description{
-   Using a randomization approaches to obtain estimates of FDR when doing multiple trait QTL analysis
+   Using a randomization approaches to obtain estimates of False Discovery Rates (FDR) when doing multiple trait QTL analysis
 }
 
 \usage{
@@ -46,7 +46,8 @@
 }
 
 \value{
-	Returns a matrix with FalsePositives FalseNegatives and False Discovery Rates for the selected thresholds
+	Returns a data.frame with 3 columns: FalsePositives, FalseNegatives and False Discovery Rates. 
+  In the rows the userspecified thresholds are with scores for the 3 columns.
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }

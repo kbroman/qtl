@@ -1,7 +1,7 @@
 \name{mqmpermutationresult}
 \alias{mqmpermutationresult}
 
-\title{Function to convert mqmmulti objects into a scanoneperm object}
+\title{Convert mqmmulti objects into a scanoneperm object}
 
 \description{
 	Function to convert \code{mqmmulti} objects into a \code{scanoneperm} 
@@ -16,8 +16,8 @@ mqmpermutationresult(mqmpermutationresult = NULL)
 
 \arguments{
   \item{mqmpermutationresult}{ \code{mqmmulti} object obtained 
-	after performing permutations on a single trait.using the 
-	function \code{\link[qtl]{mqmpermute}} 
+    after performing permutations on a single trait.using the 
+    function \code{\link[qtl]{mqmpermute}} 
   }
 }
 
@@ -26,16 +26,16 @@ mqmpermutationresult(mqmpermutationresult = NULL)
 %}
 
 \value{
-	Output of the algorithm is a \code{scanoneperm} object See also: \code{\link[qtl]{summary.scanoneperm}}
+	Output of the algorithm is a \code{scanoneperm} object. See also: \code{\link[qtl]{summary.scanoneperm}}
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
 
 \seealso{ 
-\itemize{
-	\item \code{\link[qtl]{mqmpermute}} - Function called to estimate confidence interfalls for scanone,cim or mqm
-	\item \code{\link[qtl]{summary.scanoneperm}} - Summary of a QTL object
-}
+  \itemize{
+  	\item \code{\link[qtl]{mqmpermute}} - Estimate confidence interfalls for QTL location using MQM
+  	\item \code{\link[qtl]{summary.scanoneperm}} - LOD thresholds from scanone permutation results
+  }
 }
 
 \examples{
@@ -45,7 +45,7 @@ data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 \dontrun{f2result <- bootstrap(f2cross,mapfunction=mqm)			# Bootstrap MQM mapping on the f2cross
 }\dontshow{f2result <- bootstrap(f2cross,mapfunction=mqm, n.run=2, b.size=2)}
-f2perm <- mqmpermObject(f2result)			# Create a permutation object
+f2perm <- mqmpermutationresult(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 }
 

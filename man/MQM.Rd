@@ -1,5 +1,5 @@
-\name{MQM}
-\alias{MQM}
+\name{mqmintro}
+\alias{mqmintro}
 
 \title{Multiple QTL Model (MQM) mapping}
 

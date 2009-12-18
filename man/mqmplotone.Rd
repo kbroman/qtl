@@ -1,5 +1,5 @@
-\name{mqmplotone}
-\alias{mqmplotone}
+\name{mqmplot_one}
+\alias{mqmplot_one}
 
 \title{Plotting routine to display the results from a QTL scan  }
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmplotone(result, extended = 0 ,\dots)
+mqmplot_one(result, extended = 0 ,\dots)
 }
 
 \arguments{
@@ -17,18 +17,12 @@ mqmplotone(result, extended = 0 ,\dots)
   \item{\dots}{ Extra argument passed to the \code{\link[qtl]{plot.scanone}} }  
 }
 
-%\details{
-%  ~~ If necessary, more details than the description above ~~
-%}
-
-\value{None.}
-
-
 \author{ Danny Arends \email{Danny.Arends@gmail.com}  }
 
 \seealso{ 
   \itemize{
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
+	\item \code{\link[qtl]{mqm}} - Function called to do single trait QTL analysis using MQM
+  \item \code{\link[qtl]{scanone}} - Function called to do single trait QTL analysis provided by R/qtl
   }
 }
 
@@ -40,7 +34,7 @@ data(map10)                                             # Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- mqmaugment(f2cross)
 f2result <- mqmscan(f2cross)                    	# Do a MQM scan of the genome
-mqmplotone(f2result)					# Use our fancy plotting routine
+mqmplot_one(f2result)					# Use our fancy plotting routine
 }
 
 \keyword{ hplot }
