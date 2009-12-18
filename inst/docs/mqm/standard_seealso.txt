@@ -1,4 +1,5 @@
-    \item \code{\link[qtl]{MQM}} - MQM description and references
+    \item \code{\link[qtl]{mqmintro}} - MQM description and references
+    \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
     \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
     \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
     \item \code{\link[qtl]{mqmaugment}} - Augmentation routine for estimating missing data
