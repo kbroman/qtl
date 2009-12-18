@@ -27,7 +27,7 @@
 #
 # which.marker: Extracts the number of the marker when viewing the markers lineair
 # mqmcofactors: Prepares a cofactor list to use with mqmscan
-# mqmcofactorsEach: Prepares a cofactor list to use with mqmscan
+# mqmsetcofactors: Prepares a cofactor list to use with mqmscan
 #
 ######################################################################
 
