@@ -428,17 +428,14 @@ We can add the current effect to the mqmplots that are created by
 using the function $mqmplot\_directedqtl$. To use this function 
 firstly we must have the $outputmarkers$ parameter when scanning 
 using mqm set to true (true is the default value).
-We extract the markers from the output of the mqmscan using 
+We can also manually extract the markers from the output of the mqmscan using 
 $mqmextractmarkers(result)$. Then we call the plotting function 
 which internaly adds the sign of the effect to the LOD score of 
 the marker, and calls the standard R/qtl plotting functions. An example
 can be found in figure \ref{QTLeffects}.
-<<>>=
-onlymarkers <- mqmextractmarkers(result)
-@
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplot_directedqtl(hyperaug,onlymarkers)
+mqmplot_directedqtl(hyperaug,result)
 @
 \caption{Same as figure \ref{AutoCofactor}, but with effect sign 
 added to the QTL profile.
