@@ -20,6 +20,25 @@ ourline <- function(){
 }
 
 
+mqmextractmarkers <- function(mqmresult){
+  cleanedresult <- NULL
+  for(x in 1:nrow(mqmresult)){
+    if(!grepl(".loc",rownames(mqmresult)[x])){
+      cleanedresult <- rbind(cleanedresult,mqmresult[x,])
+    }
+  }
+  cleanedresult
+}
+
+mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
+  onlymarkers <- mqmextractmarkers(mqmresults)
+  eff <- effectscan(sim.geno(cross),draw=F)
+  eff <- eff[-which(eff[,1]=="X"),]
+  onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
+  if(draw) plot(ylim=c(-max(mqmresults[,3]),max(mqmresults[,3])),onlymarkers)
+  onlymarkers
+}
+
 estimatemarkerlod <- function(interresults){
 	for(x in 1:nrow(interresults)){
 		if(is.na(interresults[x,3])){
