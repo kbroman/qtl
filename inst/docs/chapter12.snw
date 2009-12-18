@@ -72,13 +72,17 @@ Using (restricted) maximum likelihood  the algorithm employs a
 backward selection strategy to identify QTL hotspot. The algorithm 
 passes through the following stages:
 \begin{itemize}
-\item Calculating relative marker positions
-\item (Re)Estimating recombinant frequencies
-\item LOGlikelyhood estimations of the full model using all cofactors
-\item IF(Cofactors) THEN Backward elimination of cofactors \& mapQTL
-\item IF(No cofactors) THEN mapQTL function
+\item (Re)Estimation of the genetic map based on the individual genotypes provided
+\item Calculating relative marker positions and detecting linkage groups
+\item (Re)Estimating recombination frequencies
+\item Likelihood estimations of the full model using all markers
+\item If there are Cofactors available (see sectio about model selection, 
+      then backward elimination of cofactors is performed followed by the
+      genomescan for QTLs using the model created.
+\item If there are no Cofactors available, the algorithm performs a
+      genome scan for QTLs testing each genetic location independantly.
 \end{itemize}
-Afterwards the Interval mapping of the QTL model is returned to the user
+Afterwards the interval map created during the genome scan for QTLs and the QTL model are returned to the user
 
 \section{Data augmentation}
 
@@ -400,7 +404,7 @@ significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 To replot the plots created during \mqm\ analysis is also possible. The figures can be 
-reconstructed from resulting $scanone$ object using $mqmplot_one(result)$ see figure 
+reconstructed from resulting $scanone$ object using $mqmplot\_one(result)$ see figure 
 \ref{AutoCofactor}. This retrieves the model and the QTLprofile from the result 
 objectattribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
 scans, as they have an additinal column $info$ and contain a QTLmodel. The info 
@@ -414,7 +418,7 @@ this value \"to clean\" the QTL profile by giving less weight to less informativ
 <<fig=TRUE>>=
 mqmplot_one(result)
 @
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (alpha = 0.002). Figure plotted using $mqmplot_one$.
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (alpha = 0.002). Figure plotted using $mqmplot\_one$ function.
 }
 \label{AutoCofactor}
 \end{figure}
@@ -582,7 +586,7 @@ mqmplot_nice(resall,legendloc=1)
 \end{figure}
 
 \clearpage
-The next plot is the $mqmplot_cistrans$ function. This plot is only available 
+The next plot is the $mqmplot\_cistrans$ function. This plot is only available 
 when genomic locations of the traits are known. By dafault the R/qtl cross
 object does not store this data. So the user has to add this to the $cross$ object 
 using the addloctocross function. After this operation the cis\_trans plot can be created
@@ -600,7 +604,7 @@ data(locations)
 multiloc <- addloctocross(multifilled,locations)
 mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
-\caption{mqmplot_cistrans, available when \qtl\
+\caption{mqmplot\_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At\), cutoff \lod\ 5}
 \end{figure}
