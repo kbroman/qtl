@@ -26,6 +26,15 @@
 ######################################################################
 
 mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(mqmresults)){
+		stop("No mqmresults object. Please supply a valid scanone object.") 
+	}
+  if(!any(class(mqmresults)=="scanone")){
+  	stop("No mqmresults object. Please supply a valid scanone object.") 
+  }
   onlymarkers <- mqmextractmarkers(mqmresults)
   eff <- effectscan(sim.geno(cross),draw=F)
   eff <- eff[-which(eff[,1]=="X"),]
@@ -35,7 +44,10 @@ mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
 }
 
 mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
-	if(is.null(cross$locations)){
+		if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
 	locations <- NULL
@@ -138,6 +150,9 @@ mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,ci
 }
 
 addloctocross <- function(cross,locations=NULL,locfile="locations.txt"){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
 	if(is.null(locations)){
 		locations <- read.table(locfile,row.names=1,header=TRUE)
 	}
