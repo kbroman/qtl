@@ -104,6 +104,8 @@ mqmpackage              Tool for analyzing QTLs in experimental crosses
 mqmpermutationresult    Convert mqmmulti objects into a scanoneperm
                         object
 mqmplot_boot            Plot results from a bootstrap scan
+mqmplot_directedqtl     Plotting routine to display the effects and
+                        results from a QTL scan
 mqmplot_multitrait      Plotting routine to display the results from a
                         mqm scan on multiple phenotypes
 mqmplot_nice            Plot the results from a mqm scan on multiple
