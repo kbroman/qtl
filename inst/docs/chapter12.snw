@@ -224,7 +224,7 @@ at the output the $mqm$ method produces pseudomarkers by default
 (unlike $scanone()$). This is because MQM uses interval mapping 
 internally. In interval mapping the chromosomes are divided into an 
 equally spaced grid. Thus each chromosome is divided into fictional 
-markers spaced xx Cm apart. The xx can be set by the user using 
+markers spaced xx \cM\ apart. The xx can be set by the user using 
 the $stepsize$ parameter. A LOD score for underlying QTLs is 
 calculated at these 'fictional' markers. Using the interval mapping 
 approach we obtain smoother profiles than compared to 
@@ -253,9 +253,9 @@ This is achieved by the following code and a new mqm scan is performed (figure \
 <<>>=
 #Summary results shows the highest lodscores per chromosome
 summary(result_nocof)
-#find.marker extracts the marker nearest to chr4 at 30Cm
+#find.marker extracts the marker nearest to chr4 at 30cM
 find.marker(hyperaug,chr=4,pos=30)
-#which.marker translates the name into a cofacotr number
+#which.marker translates the name into a cofactor number
 toset <- which.marker(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
@@ -316,8 +316,8 @@ plot(result_2, result_1, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood 
-scores for each chromosome. The LOD scores don't seem to improve much after adding
- another cofactor on chromosome 4. But lets take a closer look }
+scores for each chromosome. The LOD scores don't seem to improve much after adding 
+another cofactor on chromosome 4. But lets take a closer look }
 \label{twowaycomparison}
 \end{figure}
 
@@ -334,11 +334,12 @@ We see the LOD scores on chromosome 1 increasing when including more cofactors.}
 \clearpage
 
 \mqm\ checks that no markers are included that are less significant than the
-alpha level specified by the user. The marker on chromosome 1 is also informative 
-enough to be included into the model. Thus creating a new initial model consisting 
-of cofactors on chromosome 4 and 1). This process of selection of cofactors can 
-continue untill there are no more informative markers that can be included. Practically 
-this means one keeps on adding cofactors untill the newest added cofactor gets dropped from the model.
+cofactor.significance level specified by the user. The marker on chromosome 
+1 is also informative enough to be included into the model. Thus creating a 
+new initial model consisting of cofactors on chromosome 4 and 1. This selection 
+of cofactors can continue untill there are no more informative markers 
+that can be included. Practically this means one keeps on adding cofactors 
+untill the newest added cofactor gets dropped from the model.
 
 This manually looking into the profile and determining at which marker to set a cofactor
 could be very time consuming in the case of many QTLs underlying a trait.
@@ -372,9 +373,11 @@ backward eliminatio to find the most likely model}
 mqmgetmodel(result)
 @
 The $mqmgetmodel()$ function returns the model from the resulting $scanone$ object.
-The model will be returned in R/qtl model format and can be used with the scan.two 
-function from R/qtl. This is only available when doing automatic backward elimination. 
-The resulting model can also be used to obtain the location and name of the significant markers.
+The model will be returned in R/qtl model format and can be used with the $scantwo$ 
+routine from R/qtl. This is only available when doing backward elimination, because 
+when no cofators are supplied the model used in \qtl\ scanning includes no cofactors. 
+The resulting model can also be used to obtain the location and name 
+of the significant cofactors.
 
 \clearpage
 \begin{figure}[ht]
@@ -382,18 +385,19 @@ The resulting model can also be used to obtain the location and name of the sign
 plot(result, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
-marker for mqm, followed by backward elimination
+marker for \mqm\, followed by backward elimination
 (cofactor.significance = 0.02). The resulting profiles are clearly different }
 \label{Backward2}
 \end{figure}
 
 This \mqm\ QTL mapping results in a lot of significant markers, with even multiple 
-hits on each chromosome. Figure \ref{Backward2} shows us that at an cofactor.significance of 0.02 
-chromosomes 1,2,4,5,6 and (15?) are involved. Lowering the significance level from 
-0.02 to 0.002 may yield a smaller model. In biology extensive models are sometimes 
-prefered, but in general a simpler model is more easily understood and verified in 
-the wetlab. Increasing the significance level (and simplifying the model) also has 
-the advantage that we can be more sure of the QTLs we do report. we can set this 
+hits on each chromosome. Figure \ref{Backward2} shows us that at an 
+cofactor.significance of 0.02 chromosomes 1,2,4,5,6 and (15?) are involved. 
+Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
+In biology extensive models are sometimes prefered, but in general a simpler 
+model is more easily understood and verified in the wetlab. Increasing 
+the significance level (and simplifying the model) also has the advantage 
+that we can be more sure of the QTLs we do report. Users can set the significance level 
 bij using the parameter: $cofactor.significance$.
 
 \begin{figure}[ht]
@@ -416,10 +420,10 @@ significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 To replot the plots created during \mqm\ analysis is also possible. The figures can be 
-reconstructed from resulting $scanone$ object using $mqmplot\_one(result)$ see figure 
-\ref{AutoCofactor}. This retrieves the model and the QTLprofile from the result 
-objectattribute $mqmgetmodel(result)$. The functions can only be used with \mqm\
-scans, as they have an additinal column $info$ and contain a QTLmodel. The info 
+reconstructed from resulting $scanone$ object using $mqmplot\_one()$ function(see figure 
+\ref{AutoCofactor}). This retrieves the model and the QTLprofile from the result 
+objectattribute $mqmgetmodel()$. The functions can only be used with \mqm\
+scans, as they have an additinal column $info$ and contain a QTL model. The info 
 column contains the estimated information content per marker. $info$ is calculated 
 from the deviation of the ideal marker distribution. For example, in a recombinant 
 inbred line we have most power when both groups (A and B) have 125 mice, and no power 
@@ -477,19 +481,21 @@ plot.pxg(hyperaug,marker="D1Mit102")
 \label{MainEffectsD1}
 \end{figure}
 The initial scans for high bloodpressure in figure \ref{Backward}
-possibly shows two \qtl\ on chromosome 1. The dual humped shape could be explained by
-an interaction between two QTLs on that chromosome. But there are other explainations 
-for these kind of curves. We can however find out if there is an interaction on chromosome 
-1 by using the effectplot function. To investigate the possible interaction we select markers "D1Mit19" (significant
-in figure \ref{Backward1}) and "D1Mit102" (significant in figure \ref{Backward2} and
+possibly shows two \qtl\ on chromosome 1. The dual humped shape 
+could be explained by an interaction between two QTLs on that chromosome. 
+But there are other explainations for these kind of curves. We 
+can however find out if there is an interaction on chromosome 
+1 by using the effectplot function. To investigate the possible 
+interaction we select markers "D1Mit19" (significant in figure \ref{Backward1}) 
+and "D1Mit102" (significant in figure \ref{Backward2} and
 \ref{AutoCofactor}) and make an effectplot.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 @
-\caption{With $effectplot$ discover a possible epistatic effect of
-markers D1Mit19 and D1Mit102.}
+\caption{With $effectplot$ the user can discover a possible epistatic effects between markers. Here an example using 
+markers D1Mit19 and D1Mit102, (which show a slight interaction).}
 \label{epistatic1}
 \end{figure}
 
@@ -507,39 +513,52 @@ effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 \end{figure}
 
 Figure \ref{epistatic1} shows some evidence for an interaction between the two
-markers D1Mit102 and D5Mit213, as both lines are non parallel. Imagine two loci x and y influencing a trait. Parallel lines denote 
-no significant interaction between x and y. While non-parallel lines mean the genotype on location y has an effect 
-on the effect of the genotype at location x.
+markers D1Mit102 and D5Mit213, as both lines are non parallel. The two loci 
+'x' and 'y' influence the trait in a significant way (because they are selected 
+as cofactors by the mqm routine). If the effect shows two parallel lines the 
+effect of both loci would be independant of eachother. This means no significant 
+interaction between x and y. While non-parallel lines would indicate that the 
+genotype on location y effects the influence of genotype x on the trait.
+Interactions like these (epistatic ones) are prime wetlab candidates, and 
+tell us the biology behind the QTLs.
 
 \clearpage
 
 \section{Permutation test for significance} 
 
+\NOTE For all the examples in this section we use $25$ permutations. A real 
+experiment uses - typically - $n.run=1000 to 10000$ tests with $b.size=25 to 500$
+\\
+\\
 To estimate significance of the peeks ( and perhaps exclude some markers 
-from our model ) we can use a permutation test. This can be
-computationally expensive - repeating the same test thousands of times. 
+from our model ) we can use a permutation testing. This step is
+computationally expensive - repeating the same test thousands of 
+times on shuffled data to see what LOD scores come up in non associated data. 
 If you have access to multiple CPUs on your computer you can install the 
 SNOW package \cite{tierney03}\cite{tierney04}, which allows parallel 
-computations on multiple CPU (cores). For small sets, with a limited amount
-of traits, the $mqmpermute()$ works well. For large genome wide association studies
-(GWAS) use $mqmscanfdr()$ to estimate the FDR across the entire
-dataset
-at certain \lod\ cutoffs (for this example we use $25$ permutations, for
-a real experiment use - typically - $1000$ tests with $b.size=25$ or $50$). 
-b.size is the batchsize per core. If we set 100 permutations using 4 cores 
-and a batchsize of 10, each core gets 10 traits to calculate QTL profiles on. 
-When done another 10 traits are send to the core, untill all 100 traits have been analyzed. 
-In mqmpermutate we do single trait permutations not taking correlation between 
-the traits into account. If we want to estimate false discovery rates, we need 
-to do a whole genome permutation using mqmscanfdr. This method does take 
+computations on multiple CPU (cores). For small sets, with a limited amount 
+of classical traits, the $mqmpermute()$ works well. For large genome wide 
+association studies (GWAS) use $mqmscanfdr()$ to estimate the FDR across the entire
+dataset at \lod\ cutoffs levels.
+Both routines share some parameters: like $b.size$ the batchsize per core. 
+If we set 100 permutations using 4 cores and a batchsize of 10, each core 
+gets 10 traits to calculate QTL profiles on. 
+When QTL modeling and mapping is done for these 10 traits. Another 10 traits are 
+send to the core, untill all 100 traits have been analyzed. 
+In $mqmpermutate()$ we do single trait permutations not taking correlation between 
+the traits into account. This has the advantage that for each peek in the profile 
+above the significance level we can provide a confidence interval. First we need to 
+convert the output to R/qtl format using the $mqmpermutationresult()$ function. The 
+resulting object is of class 
+If we want to estimate false discovery rates, we need 
+to do a whole genome permutation using $mqmscanfdr()$. This method does take 
 correlation between traits into account and gives an unbiased estimate 
 of FDR at different thresholds (userspecified).
-
-\begin{figure}[ht]
 <<>>=
 require(snow)
 results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
 @
+\begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_permutations(results)
 @
@@ -549,9 +568,12 @@ mqmplot_permutations(results)
 This is estimated from permuting a single trait. Chromosomes are signified by the gray gridlines.
 }
 \end{figure}
-
+<<>>=
+resultsrqtl <- mqmpermutationresult(results)
+summary(resultsrqtl)
+@
 For estimating false discovery rates use the function
-$mqmscanfdr$. The function scans the traits and counts
+$mqmscanfdr()$. The function scans the traits and counts
 observed \qtl\ (markers with a LOD above $x$) when setting a certain
 threshold. It permutes all the data leaving the correlation structure
 between traits intact. For this small example very high FDR estimates
