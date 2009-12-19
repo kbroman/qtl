@@ -340,7 +340,14 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 	end.3 <- proc.time()   
 	if(verbose) cat("INFO: Calculation time (R->C,C,C-R): (",round((end.1-start)[3], digits=3), ",",round((end.2-end.1)[3], digits=3),",",round((end.3-end.2)[3], digits=3),") (in seconds)\n")
 	
-	if(outputmarkers) qtl <- addmarkerstointervalmap(cross,qtl)
+	if(outputmarkers){
+    qtl <- addmarkerstointervalmap(cross,qtl)
+  	qtl <- as.data.frame(qtl)
+    if(backward && !is.null(qc) && model.present){
+      attr(qtl,"mqmmodel") <- QTLmodel
+    }
+    class(qtl) <- c("scanone",class(qtl))   
+  }
 	qtl
 	}else{
 		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
