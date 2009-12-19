@@ -549,11 +549,8 @@ In $mqmpermutate()$ we do single trait permutations not taking correlation betwe
 the traits into account. This has the advantage that for each peek in the profile 
 above the significance level we can provide a confidence interval. First we need to 
 convert the output to R/qtl format using the $mqmpermutationresult()$ function. The 
-resulting object is of class 
-If we want to estimate false discovery rates, we need 
-to do a whole genome permutation using $mqmscanfdr()$. This method does take 
-correlation between traits into account and gives an unbiased estimate 
-of FDR at different thresholds (userspecified).
+resulting object is of class $scanoneperm$ and can be used by the standard R/qtl 
+functions for further analysis. 
 <<>>=
 require(snow)
 results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
@@ -572,9 +569,12 @@ This is estimated from permuting a single trait. Chromosomes are signified by th
 resultsrqtl <- mqmpermutationresult(results)
 summary(resultsrqtl)
 @
-For estimating false discovery rates use the function
-$mqmscanfdr()$. The function scans the traits and counts
-observed \qtl\ (markers with a LOD above $x$) when setting a certain
+
+To estimate false discovery rates in large sets, we need to do a whole genome 
+permutation using $mqmscanfdr()$. This method does take 
+correlation between traits into account and gives an unbiased estimate 
+of FDR at different thresholds (userspecified). This function scans the 
+traits and counts observed \qtl\ (markers with a LOD above $x$) when setting a certain
 threshold. It permutes all the data leaving the correlation structure
 between traits intact. For this small example very high FDR estimates
 are calculated because of the small amount of permutations and the
@@ -594,11 +594,11 @@ MQM can analyse multiple traits simultaneously.
 Start by loading a new dataset ($multitrait$). $multitrait$
 consists of an arabidopsis RIL cross with 24 metabolites measured (phenotypes).
 Of these 24 phenotypes we will only scan the first 5 phenotypes this 
-can be done using the $pheno.col$ parameter.
-To map back the possible regulatory locations of these traits one can use plain scanning of
-all traits (initially without cofactors). Next plot all the profiles
+can be done using the $pheno.col$ parameter. To map back the possible 
+regulatory locations of these metabolites one can use plain scanning of
+all metabolites (initially without cofactors). Next plot all the profiles
 in a heatmap. In this heatmap the colors represent the LOD score, on
-the x-axis the marker number and on the y-axis the traits. The traits
+the x-axis the marker number and on the y-axis the metabolite. The traits
 are numbered in the plot. Plot heatmap without cofactors and then the
 heatmap with cofactors and backward elimination. The plots show
 improvement of the signal to noise ratio.
@@ -627,7 +627,7 @@ mqmplot_multitrait(resall,"I")
 created using cofactors at each third marker. Compared to figure 18 the
 profile is clearer, because the individual profiles contain less noise.}
 \end{figure}
-Use $mqmplot\_nice$ for more graphical output. (This does not show in the
+Use $mqmplot\_nice()$ for more graphical output. (This does not show in the
 generated PDF, but in R it shows the trait profiles)
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -674,9 +674,9 @@ genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
 	which.marker:& Change markernumbering into mqmformat \\
 	mqmall:& mqmall to scan all traits using mqm\\
-	bootstrap (AKA permute):& Single trait permutation \\
+	mqmpermutate:& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
-	mqmpermObject:& Creates an R/qtl permutationobject 
+	mqmprocesspermutation:& Creates an R/qtl permutationobject 
                 & from the output of the $permute()$ function \\
 	mqmplot\_multitrait:& plotting of multiple traits (MQMmulti object) \\
 	mqmplot\_nice:& plotting of mutiple traits (MQMmulti object) \\
