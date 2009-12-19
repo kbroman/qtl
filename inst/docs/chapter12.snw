@@ -414,7 +414,7 @@ plot(result)
 \clearpage
 
 When comparing the \mqm\ scan in figure \ref{FigLowAlpha} with the original
-$scanone$ result in figure \ref{scanone} there are some striking differences.
+$scanone$ result in figure \ref{NoCofs} there are some striking differences.
 Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
@@ -451,7 +451,7 @@ the marker, and calls the standard R/qtl plotting functions. An example
 can be found in figure \ref{QTLeffects}.
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplot_directedqtl(hyperaug,result)
+dirresults <- mqmplot_directedqtl(hyperaug,result)
 @
 \caption{Same as figure \ref{AutoCofactor}, but with effect sign 
 added to the QTL profile.
@@ -676,7 +676,7 @@ genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 	mqmall:& mqmall to scan all traits using mqm\\
 	mqmpermutate:& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
-	mqmprocesspermutation:& Creates an R/qtl permutationobject 
+	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
                 & from the output of the $permute()$ function \\
 	mqmplot\_multitrait:& plotting of multiple traits (MQMmulti object) \\
 	mqmplot\_nice:& plotting of mutiple traits (MQMmulti object) \\
