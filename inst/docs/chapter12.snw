@@ -59,17 +59,17 @@ and scales on multi-CPU systems.
 
 These are the steps in an \mqm\ \qtl\ analysis
 \begin{itemize}
-\item Load in experiment using formats supported by R/QTL
-\item Set trait under consideration as first trait in R/QTL format
+\item Load in experiment using formats supported by R/qtl
+\item Set trait under consideration as first trait in R/qtl format
 \item Fill in missing data using either the fill.geno or mqmaugmentdata routine
 \item Call mqmscan to do a genomescan
 \item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
 \item Set cofactors at "Top scoring" and not so "Top scoring" markers
 \item Rerun analysis with cofactors
-\item Bootstrap analysis with cofactors to get estimates of QTL significance
+\item Bootstrap analysis with cofactors to get estimates of \qtl\ significance
 \end{itemize}
 Using (restricted) maximum likelihood  the algorithm employs a 
-backward selection strategy to identify QTL hotspot. The algorithm 
+backward selection strategy to identify \qtl\ hotspot. The algorithm 
 passes through the following stages:
 \begin{itemize}
 \item (Re)Estimation of the genetic map based on the individual genotypes provided
@@ -82,12 +82,14 @@ passes through the following stages:
 \item If there are no Cofactors available, the algorithm performs a
       genome scan for QTLs testing each genetic location independantly.
 \end{itemize}
-Afterwards the interval map created during the genome scan for QTLs and the QTL model are returned to the user
+Afterwards the interval map created during the \qtl\ genome scan and 
+the \qtl\ model are returned to the user as an R/qtl $scanone$ object.
 
 \section{Data augmentation}
 
-\FIXME the augmentation procedure is still not conclusive - and therefor 
-the description below is not completely correct.
+\NOTE The data augmentation procedure is still not 'final' or conclusive.
+The data augmentation routine will change in the future and the current 
+description below is not completely correct.
 
 Most real genetic marker data is incomplete. \mqm\ automatically
 expands the dataset by adding all potential variants and attaches a
@@ -118,19 +120,19 @@ mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 geno.image(mycross)
 @
 \caption{Simulate an F2 cross with 2\% missing data starting from the
-map10 F2 intercross. The figure
-displays genotypes of 100 individuals with around 2\%
-missing data for the map10 F2 intercross}
+map10 F2 intercross. The figure displays genotypes of 100 individuals 
+with around 2\% missing data (white) for the map10 F2 intercross}
 \label{missing data}
 \end{figure}
 
-Before we can go to the next step (scanning for QTL using linear
-regression), the data has to be completed (i.e. no more missing markers).
-There are two possibilities: either use fill.geno or augmentation with
-$mqmaugment$. With $fill.geno()$ the most likely genotype is filled in
+Before we can go to the next step (\qtl\ genome scan), the data has to 
+be completed (i.e. no more missing markers).
+There are two possibilities: either use the imputationfunction in R/qtl 
+($fill.geno()$) or use the mqm data augmentation routine ($mqmaugment()$).
+With $fill.geno()$ the most likely genotype is filled in
 using multiple imputations, estimating the missing marker genotypes.
 In contrast augmentation introduces all variants. At this stage
-$mqmaugment$ is specific to \mqm \footnote{Note that after
+$mqmaugmen()t$ is specific to \mqm \footnote{Note that after
 augmentation the resulting cross object is no longer suitable for the
 use with $scan.one$ or \cim, because of the additional information
 stored}. 
@@ -183,7 +185,7 @@ and give a smoother \qtl\ profile, leading to a more accurate mapping.
 augmentedcross <- mqmaugment(mycross, minprob=0.1)
 plot.geno(augmentedcross)
 @
-\caption{$plot.geno$ showing the augmented genotypes of 100 individuals with no
+\caption{$plot.geno()$ showing the augmented genotypes of 100 individuals with no
 missing values. There are 340 individuals in this plot, because \mqm\ expands
 the dataset when filling in missing markers (an average expansion of 3.4 per
 individual).}
@@ -195,7 +197,7 @@ individual).}
 
 The \emph{hyper} dataset is a backcrossed offspring of mice with two traits in the
 dataset: bloodpressure (bp) and sex. Here we show an example of running both
-single marker QTL (scanone) and \mqm\ QTL mapping routinges to analyse the blood 
+single marker QTL (scanone) and \mqm\ QTL mapping routines to analyse the blood 
 pressure trait.
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
@@ -208,16 +210,26 @@ hyperaug <- mqmaugment(hyper, minprob=1)
 result_nocof <- mqm(hyperaug)
 result_scanone <- scanone(hyperaug)
 @
-We start bij loading the dataset using the command $data(hyper)$. We fill in missing 
-genotypes using the mqmaugment routine discussed before. Then scan for QTLs using 
-mqmscan and scanone with default parameters. A plot comparing the two scanning methods 
-to eachother can be found in figure \ref{NoCofs}. We see that the plot of the results from both scans
-(black=mqm, green=scanone) show an almost 1 to 1 correspondence. When we look at the output 
-from the two methods we see that MQM doesn't have the original markers listed. This is because 
-MQM uses intervall mapping. Each chromosome is divided into fictional markers spaced xx Cm apart.
-The xx can be set by the user using the stepsize parameter. A LOD score for underlying QTLs is 
-calculated at these 'fictional' markers. Using the intervall mapping approach we obtain smoother 
-profiles than compared to markerbased mapping approaches (when using a small stepsize).
+We start bij loading the dataset using the command $data(hyper)$. 
+The data object is called $hyper$ and we fill in missing 
+genotypes using the $mqmaugment()$ routine discussed before. 
+This creates a new dataobject which is called $hyperaug$ which has 
+no missing genotype data. This object is then analysed using 
+$mqmscan()$ and $scanone()$ with default parameters. A plot 
+comparing the two scanning methods to eachother can be found 
+in figure \ref{NoCofs}. The plot shows no difference between 
+the two methods. Results from both scans (Black=mqm, 
+Green=scanone) show an almost 1 to 1 correspondence. When looking 
+at the output the $mqm$ method produces pseudomarkers by default 
+(unlike $scanone()$). This is because MQM uses interval mapping 
+internally. In interval mapping the chromosomes are divided into an 
+equally spaced grid. Thus each chromosome is divided into fictional 
+markers spaced xx Cm apart. The xx can be set by the user using 
+the $stepsize$ parameter. A LOD score for underlying QTLs is 
+calculated at these 'fictional' markers. Using the interval mapping 
+approach we obtain smoother profiles than compared to 
+markerbased mapping approaches (when using a small $stepsize$ 
+parameter).
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
