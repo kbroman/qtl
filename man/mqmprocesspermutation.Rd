@@ -1,5 +1,5 @@
-\name{mqmpermutationresult}
-\alias{mqmpermutationresult}
+\name{mqmprocesspermutation}
+\alias{mqmprocesspermutation}
 
 \title{Convert mqmmulti objects into a scanoneperm object}
 
@@ -11,7 +11,7 @@
 }
 
 \usage{
-mqmpermutationresult(mqmpermutationresult = NULL)
+mqmprocesspermutation(mqmpermutationresult = NULL)
 }
 
 \arguments{
@@ -47,7 +47,7 @@ data(map10)						# Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 \dontrun{f2result <- bootstrap(f2cross,mapfunction=mqm)			# Bootstrap MQM mapping on the f2cross
 }\dontshow{f2result <- bootstrap(f2cross,mapfunction=mqm, n.run=2, b.size=2)}
-f2perm <- mqmpermutationresult(f2result)			# Create a permutation object
+f2perm <- mqmprocesspermutation(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 }
 
