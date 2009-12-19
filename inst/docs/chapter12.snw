@@ -548,7 +548,7 @@ send to the core, untill all 100 traits have been analyzed.
 In $mqmpermutate()$ we do single trait permutations not taking correlation between 
 the traits into account. This has the advantage that for each peek in the profile 
 above the significance level we can provide a confidence interval. First we need to 
-convert the output to R/qtl format using the $mqmpermutationresult()$ function. The 
+convert the output to R/qtl format using the $mqmprocesspermutation()$ function. The 
 resulting object is of class $scanoneperm$ and can be used by the standard R/qtl 
 functions for further analysis. 
 <<>>=
@@ -566,7 +566,7 @@ This is estimated from permuting a single trait. Chromosomes are signified by th
 }
 \end{figure}
 <<>>=
-resultsrqtl <- mqmpermutationresult(results)
+resultsrqtl <- mqmprocesspermutation(results)
 summary(resultsrqtl)
 @
 
