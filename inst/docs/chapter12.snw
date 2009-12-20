@@ -28,7 +28,7 @@
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
-scanone (green)}
+single \qtl\ mapping with $scanone$ (green)}
 
 \title { Chapter 12 - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl Broman and Ritsert Jansen }
@@ -220,16 +220,6 @@ scan for \qtl\ using both $scanone$ and $mqm$ routines (using default
 parameters). Figure \ref{NoCofs} displays there is virtually no difference
 in outcome.
 
-Note that $mqm$ produces pseudomarkers by default (unlike $scanone$). A pseudo-
-marker has a name like c7.loc25 - i.e. the 25th pseudo marker on chromosome 7. This is
-because MQM uses interval mapping internally. The chromosomes are divided into
-an equally spaced sections. Thus each chromosome is divided into fictional
-markers spaced equally $stepsize$ \cM\ apart. A LOD score for underlying QTLs
-is calculated at these 'fictional' markers. A small $stepsize$ allows for
-smoother profiles compared with pure marker based mapping approaches. The real
-markers are listed between the pseudo markers. You can remove the pseudo markers
-by using the function $mqmextractmarkers(res)$.
-
 \begin{figure}[p]
 <<fig=TRUE>>=
 plot(result_no_cofactors, result_scanone, col=colors, lwd=lines)
@@ -239,7 +229,17 @@ are virtually equal when used without \emph{augmentation} and no extra parameter
 \label{NoCofs}
 \end{figure}
 
-To use the automatic model selection in \mqm\ we first need to supply the
+Note that $mqm$ produces pseudomarkers by default (unlike $scanone$). A pseudo-
+marker has a name like c7.loc25 - i.e. the 25 \cM\ pseudo marker on chromosome 7. This is
+because MQM uses interval mapping internally. The chromosomes are divided into
+an equally spaced sections. Thus each chromosome is divided into fictional
+markers spaced equally $stepsize$ \cM\ apart. A LOD score for underlying QTLs
+is calculated at these 'fictional' markers. A small $stepsize$ allows for
+smoother profiles compared with pure marker based mapping approaches. The real
+markers are listed between the pseudo markers. You can remove the pseudo markers
+by using the function $mqmextractmarkers(res)$.
+
+For (automatic) model selection in \mqm\ we first need to supply the
 algorithm with an initial model.  This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
 backward elimination on a large number of markers.  
@@ -250,7 +250,7 @@ would account for sex as an external variable influencing our results.
 Start building the initial model by adding cofactors at markers with high LOD
 scores. figure \ref{NoCofs} displayed a large QTL peek on chromosome 4 at 30 \cM,
 so let us account for that by setting a cofactor at the marker nearest to the
-peek on chromosome 4 and perform a new mqm
+peek on chromosome 4 and perform a new $mqm$
 scan (figure \ref{Cofactor4}).
 
 <<>>=
@@ -270,19 +270,20 @@ op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result_1))
 plot(result_1)
 @
-\caption{\hyperintro.  A cofactor is added at chromosome 4 (D4Mit164) and kept in the
-model. The LOD score (evidence) for a second QTL on chromosome 1 increases.
+\caption{\hyperintro. A cofactor is added at chromosome 4 (D4Mit164) and kept in the
+model. The LOD score (evidence) for a second QTL on chromosome 1 increases (see also
+figure \ref{Cofactor4b})
 } 
 \label{Cofactor4}
 \end{figure}
 
-Figure \ref{Cofactor4} shows the effect of setting a single marker as a
+Figures \ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.
 The marker is not dropped and it passes initial rough thresholding to account
 for the, user defined, alpha level. It is therefore used in the mappingphase 
 of the mqm routine. We expect LODscores to change (slightly) genomewide because 
 we account for variation already explained by the QTL on chromosome 4. We can 
-show this change in LOD scores by plotting these new results against the mqm 
+show this change in LOD scores by plotting these new results against the \mqm\
 \qtl\ mapping without cofactors.
 
 \begin{figure}[ht]
@@ -292,6 +293,7 @@ plot(result_1, result_scanone, col=colors, lwd=lines)
 \caption{\hyperintrocolors, after introducing a
 cofactor at chromosome 4 (D4Mit164) to account for variation explained by that
 marker.}
+\label{Cofactor4b}
 \end{figure}
 
 The second peek on chromosome 1 at 70 \cM\ increases, so try adding that to the
