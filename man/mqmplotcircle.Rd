@@ -1,4 +1,4 @@
-\name{mqmplotcircle}
+\name{mqmplot_circle}
 \alias{mqmplot_circle}
 \alias{mqmplotcircle}
 
