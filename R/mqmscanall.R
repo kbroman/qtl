@@ -42,12 +42,12 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
 		start <- proc.time()
 		n.pheno <- nphe(cross)
 		if(verbose) {
-                  ourline()
-                  cat("Starting R/QTL multitrait analysis\n")
-                  cat("Number of phenotypes:",n.pheno,"\n")
-                  cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
-                  ourline()	
-                }
+      ourline()
+      cat("Starting R/QTL multitrait analysis\n")
+      cat("Number of phenotypes:",n.pheno,"\n")
+      cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
+      ourline()	
+    }
 		
 		result <- NULL	 	#BATCH result variable
 		res <- NULL			#GLOBAL result variable
