@@ -37,15 +37,15 @@ scanone (green)}
 
 \section{Introduction}
 
-\mqm\ allows the mapping of QTL using an automated model selection method, as
+\mqm\ allows the mapping of \qtl\ using an automated model selection method, as
 described by R.C. Jansen\cite{jansen94}. \mqm\ is part of
-\rqtl\cite{broman09}\cite{broman03} and consists of a three step procedure
-consisting of (1) data augmentation, (2) automatic backward model elimination using genetic
+the free \rqtl\ R package\cite{rqtlbook}\cite{broman09}\cite{broman03} and consists of a three step procedure:
+(1) data augmentation, (2) automatic backward model elimination using genetic
 markers as cofactors and (3) QTL (interval) mapping using the most
 'informative' model. The method internally controls false discovery rates (FDR) and
 lets users test different QTL models by elimation of non-significant
 cofactors\footnote{We assume the reader knows how to load his data into R using
-the R/qtl $read.cross()$ function}.
+the R/qtl $read.cross()$ function, see also the R/qtl tutorials\cite{broman09} and book\cite{rqtlbook}}.
 
 \input{mqm/limitations.txt}
 
@@ -57,20 +57,22 @@ and scales on multi-CPU systems.
 
 \section{A quick overview}
 
-These are the steps in an \mqm\ \qtl\ analysis
+These are the typical steps in an \mqm\ \qtl\ analysis
 \begin{itemize}
-\item Load in experiment using formats supported by R/qtl
-\item Set trait under consideration as first trait in R/qtl format
-\item Fill in missing data using either the fill.geno or mqmaugmentdata routine
-\item Call mqmscan to do a genomescan
-\item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
-\item Set cofactors at "Top scoring" and not so "Top scoring" markers
-\item Rerun analysis with cofactors
-\item Bootstrap analysis with cofactors to get estimates of \qtl\ significance
+\item Load an experiment using R/qtl data types
+\item Select trait under consideration
+\item Fill in missing data using either the $fill.geno$ or $mqmaugmentdata$ routine
+\item Call $mqmscan$ to execute a genome scan
+\item Call $mqmscan$ with $n.run$ to get an estimate of "significant" lod scores
+\item Select cofactors at certain marker locations
+\item Analysis with cofactors
+\item Finally, a bootstrap analysis with $cofactors$ to get estimates of significance
 \end{itemize}
-Using (restricted) maximum likelihood  the algorithm employs a 
-backward selection strategy to identify \qtl\ hotspot. The algorithm 
-passes through the following stages:
+
+Using (restricted) maximum likelihood  the algorithm employs a backward
+selection strategy to identify \qtl\ hotspot. The algorithm passes through the
+following stages:
+
 \begin{itemize}
 \item (Re)Estimation of the genetic map based on the individual genotypes provided
 \item Calculating relative marker positions and detecting linkage groups
@@ -82,6 +84,7 @@ passes through the following stages:
 \item If there are no Cofactors available, the algorithm performs a
       genome scan for QTLs testing each genetic location independantly.
 \end{itemize}
+
 Afterwards the interval map created during the \qtl\ genome scan and 
 the \qtl\ model are returned to the user as an R/qtl $scanone$ object.
 
@@ -440,24 +443,27 @@ mqmplot_one(result)
 \end{figure}
 
 \section{MQM effects}
-We can add the current effect to the mqmplots that are created by 
-using the function $mqmplot\_directedqtl$. To use this function 
-firstly we must have the $outputmarkers$ parameter when scanning 
-using mqm set to true (true is the default value).
-We can also manually extract the markers from the output of the mqmscan using 
-$mqmextractmarkers(result)$. Then we call the plotting function 
-which internaly adds the sign of the effect to the LOD score of 
-the marker, and calls the standard R/qtl plotting functions. An example
-can be found in figure \ref{QTLeffects}.
-\begin{figure}[ht]
-<<fig=TRUE>>=
-dirresults <- mqmplot_directedqtl(hyperaug,result)
-@
-\caption{Same as figure \ref{AutoCofactor}, but with effect sign 
-added to the QTL profile.
-}
-\label{QTLeffects}
-\end{figure}
+
+% Commented out because of sweave problem
+%We can add the current effect to the mqmplots that are created by 
+%using the function $mqmplot\_directedqtl$. To use this function 
+%firstly we must have the $outputmarkers$ parameter when scanning 
+%using mqm set to true (true is the default value).
+%We can also manually extract the markers from the output of the mqmscan using 
+%$mqmextractmarkers(result)$. Then we call the plotting function 
+%which internaly adds the sign of the effect to the LOD score of 
+%the marker, and calls the standard R/qtl plotting functions. An example
+%can be found in figure \ref{QTLeffects}.
+
+%\begin{figure}[ht]
+%<<fig=TRUE>>=
+%dirresults <- mqmplot_directedqtl(hyperaug,result)
+%@
+%\caption{Same as figure \ref{AutoCofactor}, but with effect sign 
+%added to the QTL profile.
+%}
+%\label{QTLeffects}
+%\end{figure}
 
 Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5 are
 associated with high bloodpressure. If we want to investigate the
@@ -723,6 +729,10 @@ function from R/qtl can be used.
 		Broman, K.W.; 2009.
 		\emph{A brief tour of R/qtl}
 		http://www.rqtl.org, R/qtl tutorials.
+  \bibitem{rqtlbook}
+    Karl W. Bromand and Saunak Sen.	  	  
+	  \emph{A Guide to QTL Mapping with R/qtl}
+    Springer, 2009
 	\bibitem{broman03}
 		Broman, K.W.; Wu, H.; Sen, S.; Churchill, G.A.; 2003.
 		\emph{R/qtl: QTL mapping in experimental crosses}
