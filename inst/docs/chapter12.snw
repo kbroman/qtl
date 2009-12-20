@@ -211,7 +211,7 @@ colors <- c("Black","Green")
 lines <- c(2,1)
 hyperaug <- mqmaugment(hyper, minprob=1)
 result_scanone <- scanone(hyperaug)
-result_nocof <- mqm(hyperaug)
+result_no_cofactors <- mqm(hyperaug)
 @
 
 After loading $data(hyper)$ we create a dataset without missing genotypes using
@@ -220,40 +220,42 @@ scan for \qtl\ using both $scanone$ and $mqm$ routines (using default
 parameters). Figure \ref{NoCofs} displays there is virtually no difference
 in outcome.
 
-When looking 
-at the output the $mqm$ method produces pseudomarkers by default 
-(unlike $scanone()$). This is because MQM uses interval mapping 
-internally. In interval mapping the chromosomes are divided into an 
-equally spaced grid. Thus each chromosome is divided into fictional 
-markers spaced xx \cM\ apart. The xx can be set by the user using 
-the $stepsize$ parameter. A LOD score for underlying QTLs is 
-calculated at these 'fictional' markers. Using the interval mapping 
-approach we obtain smoother profiles than compared to 
-markerbased mapping approaches (when using a small $stepsize$ 
-parameter).
+Note that $mqm$ produces pseudomarkers by default (unlike $scanone$). A pseudo-
+marker has a name like c7.loc25 - i.e. the 25th pseudo marker on chromosome 7. This is
+because MQM uses interval mapping internally. The chromosomes are divided into
+an equally spaced sections. Thus each chromosome is divided into fictional
+markers spaced equally $stepsize$ \cM\ apart. A LOD score for underlying QTLs
+is calculated at these 'fictional' markers. A small $stepsize$ allows for
+smoother profiles compared with pure marker based mapping approaches. The real
+markers are listed between the pseudo markers. You can remove the pseudo markers
+by using the function $mqmextractmarkers(res)$.
 
 \begin{figure}[p]
 <<fig=TRUE>>=
-plot(result_nocof, result_scanone, col=colors, lwd=lines)
+plot(result_no_cofactors, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors. Both routines
-correspond one to one when using no extra parameters}
+are virtually equal when used without \emph{augmentation} and no extra parameters}
 \label{NoCofs}
 \end{figure}
 
-To use the automatic model selection in \mqm\ we first need to supply the algorithm with an initial model.
-This initial model can be produced in two ways: (1) Building a model by hand (Forward stepwise), or
-(2) use unsupervised backward elimination on a large number of markers.  
+To use the automatic model selection in \mqm\ we first need to supply the
+algorithm with an initial model.  This initial model can be produced in two
+ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
+backward elimination on a large number of markers.  
 
-First it will be explained how to build the initial model by hand, using a forward stepwise approach.
-A model consists of markers we want to account for, like we would account for sex as an 
-external variable influencing our results. We start building the initial model by adding cofactors at 
-markers with high LOD scores. figure \ref{NoCofs} shows a large QTL peek on chromosome 4 at 30 \cM, 
-so let's account for that by setting a cofactor at the marker nearest to the peek on chromosome 4. 
-This is achieved by the following code and a new mqm scan is performed (figure \ref{Cofactor4}).
+First we will build the initial model by hand using a forward stepwise
+approach.  A model consists of a set of markers we want to account for, like we
+would account for sex as an external variable influencing our results. 
+Start building the initial model by adding cofactors at markers with high LOD
+scores. figure \ref{NoCofs} displayed a large QTL peek on chromosome 4 at 30 \cM,
+so let us account for that by setting a cofactor at the marker nearest to the
+peek on chromosome 4 and perform a new mqm
+scan (figure \ref{Cofactor4}).
+
 <<>>=
 #Summary results shows the highest lodscores per chromosome
-summary(result_nocof)
+summary(result_no_cofactors)
 #find.marker extracts the marker nearest to chr4 at 30cM
 find.marker(hyperaug,chr=4,pos=30)
 #which.marker translates the name into a cofactor number
@@ -324,7 +326,7 @@ another cofactor on chromosome 4. But lets take a closer look }
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result_nocof, result_1, result_2,chr=c(1,11,15),col=c("black","red","blue"),lwd=c(3,2,1))
+plot(result_no_cofactors, result_1, result_2,chr=c(1,11,15),col=c("black","red","blue"),lwd=c(3,2,1))
 @
 \caption{Comparison between the last scans. We see here a closeup of chromosome 1
 scanned using mqm with 3 different cofactor settings: MQM using no cofactors, 
