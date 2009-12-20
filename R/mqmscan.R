@@ -147,20 +147,30 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		if(!is.null(cross$mqm)){
 			#cat("INFO: previously augmented dataset.\n")			
 			#cat("INFO: Individuals before augmentation",cross$mqm$Nind,".\n")
-			n.ind <- cross$mqm$Nind - length(unique(droppedIND))
-      augmentedNind <- cross$mqm$Nind - length(droppedIND)
-			#cat("INFO: Individuals after augmentation",cross$mqm$augIND,".\n")
-			augmentedInd <- cross$mqm$augIND[-dropped]
-      ind <- 0
-      for(x in 1:(length(augmentedInd)-1)){
-        if(augmentedInd[x+1] - 1 > augmentedInd[x] ){
-          for(y in (x+1):length(augmentedInd))
-          augmentedInd[y] <- augmentedInd[y] - ((augmentedInd[x+1] - augmentedInd[x])-1)
+      #if(!is.null(dropped)){
+			#
+
+      #}else{
+      #  augmentedInd <- cross$mqm$augIND
+      #}
+      augmentedNind <- cross$mqm$Nind
+      augmentedInd <- cross$mqm$augIND
+      cat("n.ind:",n.ind,"\n")
+      cat("augmentedNind:",augmentedNind,"\n")
+      cat("length(augmentedInd):",length(augmentedInd),"\n")
+      if(!is.null(dropped)){
+        augmentedInd <- cross$mqm$augIND[-dropped]
+        for(x in 1:(length(augmentedInd)-1)){
+          if(augmentedInd[x+1] - 1 > augmentedInd[x] ){
+            for(y in (x+1):length(augmentedInd)){
+              augmentedInd[y] <- augmentedInd[y] - ((augmentedInd[x+1] - augmentedInd[x])-1)
+            }
+          }
         }
+        #augmentedNind <- augmentedNind - length(droppedIND)
       }
-      #cat("Length vector:",length(augmentedInd),"\n")
-      #cat("Vector:",augmentedInd,"\n")
-      #cat("Nind:",augmentedNind,"\n")
+      cat("New augmentedNind:",augmentedNind,"\n")
+      cat("New length(augmentedInd):",length(augmentedInd),"\n")
 		}else{
 			#No augmentation
 			augmentedNind <- n.ind
