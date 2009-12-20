@@ -89,6 +89,7 @@ returned as an (\mqm\ extended) R/qtl $scanone$ object. Several special
 plotting routines are available for \mqm\ results.
 
 \section{Data augmentation}
+\label{augmentation}
 
 Most real world datasets are incomplete. That is, genotype information is
 missing, or can have multiple plausible values. \mqm\ automatically expands the
@@ -196,10 +197,10 @@ individual)}
 
 \label{QTL modelling}
 
-The \emph{hyper} dataset is a backcrossed offspring of mice with two traits in the
-dataset: bloodpressure (bp) and sex. Here we show an example of running both
-single marker QTL (scanone) and \mqm\ QTL mapping routines to analyse the blood 
-pressure trait.
+The hyper tension \emph{hyper} dataset is a backcrossed (BC) offspring of mice with two
+traits in the dataset: bloodpressure (bp) and sex. Here we show an example of
+running both $scanone$ single marker \qtl\ analysis and $mqmscan$ multiple
+\QTL\ model mapping, to map blood pressure \qtl.
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
@@ -208,19 +209,17 @@ data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
 hyperaug <- mqmaugment(hyper, minprob=1)
-result_nocof <- mqm(hyperaug)
 result_scanone <- scanone(hyperaug)
+result_nocof <- mqm(hyperaug)
 @
-We start bij loading the dataset using the command $data(hyper)$. 
-The data object is called $hyper$ and we fill in missing 
-genotypes using the $mqmaugment()$ routine discussed before. 
-This creates a new dataobject which is called $hyperaug$ which has 
-no missing genotype data. This object is then analysed using 
-$mqmscan()$ and $scanone()$ with default parameters. A plot 
-comparing the two scanning methods to eachother can be found 
-in figure \ref{NoCofs}. The plot shows no difference between 
-the two methods. Results from both scans (Black=mqm, 
-Green=scanone) show an almost 1 to 1 correspondence. When looking 
+
+After loading $data(hyper)$ we create a dataset without missing genotypes using
+the $mqmaugment()$ routine discussed in section \ref{augmentation}.  Next we
+scan for \qtl\ using both $scanone$ and $mqm$ routines (using default
+parameters). Figure \ref{NoCofs} displays there is virtually no difference
+using the scans this way.
+
+When looking 
 at the output the $mqm$ method produces pseudomarkers by default 
 (unlike $scanone()$). This is because MQM uses interval mapping 
 internally. In interval mapping the chromosomes are divided into an 
