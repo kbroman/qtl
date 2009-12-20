@@ -10,6 +10,7 @@
 \usepackage{verbatim}   % useful for program listings
 \usepackage{color}      % use if color is used in text
 \usepackage{subfigure}  % use for side-by-side figures
+\usepackage{float}
 \usepackage{Sweave}
 
 \newcommand{\mqm}{\emph{MQM}}
@@ -217,7 +218,7 @@ After loading $data(hyper)$ we create a dataset without missing genotypes using
 the $mqmaugment()$ routine discussed in section \ref{augmentation}.  Next we
 scan for \qtl\ using both $scanone$ and $mqm$ routines (using default
 parameters). Figure \ref{NoCofs} displays there is virtually no difference
-using the scans this way.
+in outcome.
 
 When looking 
 at the output the $mqm$ method produces pseudomarkers by default 
@@ -231,7 +232,7 @@ approach we obtain smoother profiles than compared to
 markerbased mapping approaches (when using a small $stepsize$ 
 parameter).
 
-\begin{figure}[ht]
+\begin{figure}[p]
 <<fig=TRUE>>=
 plot(result_nocof, result_scanone, col=colors, lwd=lines)
 @
