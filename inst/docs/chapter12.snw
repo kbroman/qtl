@@ -366,7 +366,7 @@ until a limited number of significant cofactors is left.
 
 After backward elimination \mqm\ will scan each chromosome using the model that
 includes the retained cofactors. Here we set a cofactor at every fifth
-marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in high bloodpressure (results in figures \figure{Backward1} and \figure{Backward2}):
+marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
 
 <<>>=
 # automatic cofactor selection through backward elimination
@@ -448,7 +448,7 @@ profile by giving less weight to less informative markers.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplot_one(result)
+mqmplot_one(result, extended=TRUE)
 @
 \caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination ($cofactor.significance = 0.002$). Figure plotted using $mqmplot\_one$ function.
 }
@@ -498,7 +498,7 @@ plot.pxg(hyperaug,marker="D1Mit102")
 \caption{Main effect of marker D1Mit102.}
 \label{MainEffectsD1}
 \end{figure}
-The initial scans for high bloodpressure in figure \ref{Backward}
+The initial scans for high bloodpressure in figure \ref{Backward1}
 possibly shows two \qtl\ on chromosome 1. The dual humped shape 
 could be explained by an interaction between two QTLs on that chromosome. 
 But there are other explainations for these kind of curves. We 
