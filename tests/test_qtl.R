@@ -36,9 +36,10 @@ cat(mr[15,]$lod,test)
 if (test != 966) stop("scanone_mr gives an incorrect result")
 
 augmentedcross <- mqmaugment(listeria, minprob=1)
-if (nind(augmentedcross)!=116) stop("Number of individuals incorrect")
-
-result <- mqmscan(augmentedcross)
+#DANNY: Changed from 116 to 120 because agment doesn't drop individuals with missing phenotypes anymore
+if (nind(augmentedcross)!=120) stop("Number of individuals incorrect")
+#DANNY: Comparison went wrong because we have REAL markers, disable that to fix
+result <- mqmscan(augmentedcross,outputmarkers=F)
 if (round(result[5,5]*1000) != 153) stop("MQM gives an unexpected result (1)")
 if (round(max(result[,5])*1000) != 5467) stop("MQM gives an unexpected result (2)")
 
