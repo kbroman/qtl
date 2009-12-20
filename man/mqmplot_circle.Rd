@@ -1,6 +1,5 @@
-\name{mqmplot_cistrans}
-\alias{mqmplotcistrans}
-\alias{cistransplot}
+\name{mqmplot_circle}
+\alias{mqmplot_circle}
 
 \title{Circular genome plotting - routine to show QTL information}
 
