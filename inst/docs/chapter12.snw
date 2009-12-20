@@ -402,28 +402,28 @@ plot(result, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for \mqm\, followed by backward elimination
-(cofactor.significance = 0.02)}
+($cofactor.significance = 0.02$)}
 \label{Backward2}
 \end{figure}
 
-This \mqm\ QTL mapping results in a lot of significant markers, with even multiple 
-hits on each chromosome. Figure \ref{Backward2} shows us that at an 
-cofactor.significance of 0.02 chromosomes 1,2,4,5,6 and (15?) are involved. 
+\mqm\ \qtl\ mapping may result in many significant markers, with even multiple 
+hits on each chromosome. Figure \ref{Backward2} shows that at 
+$cofactor.significance=0.02$ chromosomes 1,2,4,5,6 and 15(?) are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes prefered, but in general a simpler 
-model is more easily understood and verified in the wetlab. Increasing 
-the significance level (and simplifying the model) also has the advantage 
-that we can be more sure of the QTLs we do report. Users can set the significance level 
-bij using the parameter: $cofactor.significance$.
+model is more easily understood and, perhaps, validated. Increasing 
+this significance level (hopefully) has the advantage 
+that we can be more sure of the \qtl. 
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot lowered cofactor.significance
 result <- mqm(hyperaug, cofactorlist, cofactor.significance=0.002)
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
 @
-\caption{\hyperintro, intially with cofactors at every fifth marker; after backwards elimination (cofactor.significance = 0.002).
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination ($cofactor.significance = 0.002$).
 }
 \label{FigLowAlpha}
 \end{figure}
@@ -450,7 +450,7 @@ this value \"to clean\" the QTL profile by giving less weight to less informativ
 <<fig=TRUE>>=
 mqmplot_one(result)
 @
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (cofactor.significance = 0.002). Figure plotted using $mqmplot\_one$ function.
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination ($cofactor.significance = 0.002$). Figure plotted using $mqmplot\_one$ function.
 }
 \label{AutoCofactor}
 \end{figure}
