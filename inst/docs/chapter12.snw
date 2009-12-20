@@ -656,12 +656,14 @@ mqmplot_nice(resall,legendloc=1)
 The next plot is the $mqmplot\_circle$ function. It shows a circular representation 
 of the genome. After using automatic backward selection we can also highlight 
 significant markers.
+\begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multifilled, resall, highlight=2)
 @
 \caption{Circleplot 1 - Multiple traits}
 \end{figure}
 
+\begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multifilled, resall, highlight=2)
 @
@@ -693,7 +695,7 @@ have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 }
 \end{figure}
-
+\begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multiloc,resall, highlight=2)
 @
