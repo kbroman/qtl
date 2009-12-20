@@ -444,12 +444,13 @@ information content per marker. $info$ is calculated from the deviation of the
 \emph{ideal} marker distribution. 
 
 For example, with a dataset of 100 mice, when comparing two distinct phenotypes
-at a marker location we have most power when both groups are equally divided
+at a marker location, we have most power when both groups are equally divided
 into 50 mice, and, virtually, no power when we have a group with 1 mouse versus
-a group of 49 mice. We can multiple the estimated QTL effect by information
-content to 'clean' the QTL profile by giving less weight to less informative
-markers. Please note that in the analysis of deviance the sample size already 
-plays a role. Still, this is can be a way of reducing noise.
+a group of 49 mice. We can multiple the estimated \qtl\ effect by this
+information content to 'clean' the QTL profile by giving less weight to less
+informative markers. Please note that in the analysis of deviance the sample
+size already plays a role in calculating \qtl. However, despite a lack of
+formal proof, it can be a way of further weighting/exploring \emph{information} content.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
