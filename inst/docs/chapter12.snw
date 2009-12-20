@@ -79,7 +79,7 @@ following stages:
 \item (Re)-estimation of recombination frequencies
 \item Likelihood estimations of the full model using all markers
 \item Backward elimination of cofactors, followed by a
-      genome scan for \qtl\ using the model (see model selection)
+      genome scan for \qtl\ using the model (see section \label{QTL modelling})
 \item If there are no $cofactors$, perform a
       genome scan testing each genetic location independantly
 \end{itemize}
@@ -90,27 +90,23 @@ plotting routines are available for \mqm\ results.
 
 \section{Data augmentation}
 
-\NOTE The data augmentation procedure is still not 'final' or conclusive.
-The data augmentation routine will change in the future and the current 
-description below is not completely correct.
-
-Most real genetic marker data is incomplete. \mqm\ automatically
-expands the dataset by adding all potential variants and attaches a
-likelihood to them.  For example, information is missing (unknown) at
-a marker location in one individual. Based on the values of the
-neighbouring markers, a likelihood is attached to a marker being, for
-example, either A or B.  With \mqm\ all likely options are considered.
-When genotypes A and B are possible at the location two 'individuals'
-are created in the augmentation step, one with genotype A, and one
-with genotype B. A probability is attached to either variant. The
-combined probabilities of all markers tells us whether a combination
-of variants is likely, or not.
+Most real world datasets are incomplete. That is, genotype information is
+missing, or can have multiple plausible values. \mqm\ automatically expands the
+dataset by adding all potential variants and attaches a likelihood.  For
+example, information is missing (unknown) at a marker location for one
+individual. Based on the values of the neighbouring markers, and the
+(estimated) recombination rate, a probability is attached.  With \mqm\ all
+likely options are considered.  When genotypes A and B are possible at the
+location two 'individuals' are created in the augmentation step, one with
+genotype A, and one with genotype B. A probability is attached to either
+variant. The combined probabilities of all markers tells us whether a
+combination of variants is likely, or not.
 
 To see an example of missing data with an F2 intercross, we can
 visualize the genotypes of the individuals using $plot.geno$ In figure
 \ref{missing data} there are 2\% missing values in white. The other
-colors stand for genotypes at a certain position for a certain
-individual. We can simulate an F2 dataset with 2\% missing markers as
+colors are genotypes at a certain position, for a certain
+individual. Simulate an F2 dataset with 2\% missing markers as
 follows:
 
 <<>>=
@@ -129,26 +125,22 @@ with around 2\% missing data (white) for the map10 F2 intercross}
 \end{figure}
 
 Before we can go to the next step (\qtl\ genome scan), the data has to 
-be completed (i.e. no more missing markers).
-There are two possibilities: either use the imputationfunction in R/qtl 
-($fill.geno()$) or use the mqm data augmentation routine ($mqmaugment()$).
-With $fill.geno()$ the most likely genotype is filled in
+be completed (i.e. no more missing data).
+There are two possibilities: either use the imputation function
+$fill.geno()$ or use the \mqm\ data augmentation routine $mqmaugment()$.
+With $fill.geno()$ a 'most likely' genotype is filled in
 using multiple imputations, estimating the missing marker genotypes.
-In contrast augmentation introduces all variants. At this stage
-$mqmaugmen()t$ is specific to \mqm \footnote{Note that after
+In contrast, \emph{augmentation} introduces all variants. At this stage
+$mqmaugment()$ is specific to \mqm\footnote{Note that after
 augmentation the resulting cross object is no longer suitable for the
 use with $scan.one$ or \cim, because of the additional information
 stored}. 
 
-Here we use \mqm's augmentation. The function $mqmaugment()$ can fill in
+Here, we use \mqm's augmentation. The function $mqmaugment()$ can fill in
 missing genotypes for us. For each missing marker it fills in all possible
-marker locations with all genotypes and calculates their probability. When they
-are more likely than the $minprob$ parameter the \emph{augmented}
+marker locations with all genotypes and calculates the probability. When the
+probability is more likely than the $minprob$ parameter the \emph{augmented}
 individual is stored in the new $crossobject$, ready for QTL mapping.
-\footnote{Note at this point the $mqmaugment()$
-function can only handle one phenotype at the time even though augmentation is
-independent of the phenotype. This will be changed in an upcoming release of
-R/qtl with \mqm}
 
 The important parameters are: $cross, pheno.col, maxaugind, minprob$
 and $verbose$. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
@@ -197,6 +189,8 @@ individual).}
 \clearpage
 
 \section{QTL modelling and mapping with MQM}
+
+\label{QTL modelling}
 
 The \emph{hyper} dataset is a backcrossed offspring of mice with two traits in the
 dataset: bloodpressure (bp) and sex. Here we show an example of running both
