@@ -49,11 +49,11 @@ the R/qtl $read.cross()$ function, see also the R/qtl tutorials\cite{broman09} a
 
 \input{mqm/limitations.txt}
 
-Still, \mqm\ is a valuable addition to the \qtl\ mapper's toolbox. It
-is able to deal with interference of \qtl, handles missing data and
-allows more precise detection than other methods. This tutorial will
-show how to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is fast
-and scales on multi-CPU systems and computer clusters.
+Still, \mqm\ is a valuable addition to the \qtl\ mapper's toolbox. It is able
+to deal with interference of \qtl, handles missing data and allows more precise
+detection than other methods. This tutorial will show how to use \mqm\ for
+\qtl\ mapping. Also R/qtl's \mqm\ is faster than other implementations and
+scales on multi-CPU systems and computer clusters.
 
 \section{A quick overview}
 
