@@ -435,22 +435,31 @@ Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
-A figures can be reconstructed from a result ($scanone$ object) using the
+Figures can be reconstructed from the result ($scanone$ object) using the
 $mqmplot\_one$ function (see for example figure \ref{AutoCofactor}). Here the
 model and \qtl\ profile are retrieved.  These functions can only be used with
-\mqm\ scans, as they have an additinal column $info$ which contains a QTL
-model. The info column contains the estimated information content per marker.
-$info$ is calculated from the deviation of the ideal marker distribution. For
-example, in a recombinant inbred line we have most power when both groups (A
-and B) have 125 mice, and no power when we have 1 A versus 249 B. Therefore we
-can multiple the estimated QTL effect by this value \"to clean\" the QTL
-profile by giving less weight to less informative markers.
+\mqm\ scans, as they have an additinal column $info$ which contains the QTL
+model. Of interest is that this column also has the \emph{estimated}
+information content per marker. $info$ is calculated from the deviation of the
+\emph{ideal} marker distribution. 
+
+For example, with a dataset of 100 mice, when comparing two distinct phenotypes
+at a marker location, we have most power when both groups are equally divided
+into 50 mice, and, virtually, no power when we have a group with 1 mouse versus
+a group of 49 mice. We can multiple the estimated \qtl\ effect by this
+information content to 'clean' the QTL profile by giving less weight to less
+informative markers. Please note that in the analysis of deviance the sample
+size already plays a role in calculating \qtl. However, despite a lack of
+formal proof, it can be a way of further weighting/exploring \emph{information} content.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot retained info in result with information indicator
 mqmplot_one(result, extended=TRUE)
 @
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination ($cofactor.significance = 0.002$). Figure plotted using $mqmplot\_one$ function.
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination ($cofactor.significance = 0.002$). $mqmplot\_one$ function
+shows retained information in $result$ with added weighting of information at
+marker positions
 }
 \label{AutoCofactor}
 \end{figure}
