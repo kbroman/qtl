@@ -145,19 +145,13 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		
 		#CHECK for previously augmented dataset
 		if(!is.null(cross$mqm)){
-			#cat("INFO: previously augmented dataset.\n")			
-			#cat("INFO: Individuals before augmentation",cross$mqm$Nind,".\n")
-      #if(!is.null(dropped)){
-			#
-
-      #}else{
-      #  augmentedInd <- cross$mqm$augIND
-      #}
       augmentedNind <- cross$mqm$Nind
       augmentedInd <- cross$mqm$augIND
-      cat("n.ind:",n.ind,"\n")
-      cat("augmentedNind:",augmentedNind,"\n")
-      cat("length(augmentedInd):",length(augmentedInd),"\n")
+      if(verbose){
+        cat("n.ind:",n.ind,"\n")
+        cat("augmentedNind:",augmentedNind,"\n")
+        cat("length(augmentedInd):",length(augmentedInd),"\n")
+      }
       if(!is.null(dropped)){
         augmentedInd <- cross$mqm$augIND[-dropped]
         for(x in 1:(length(augmentedInd)-1)){
@@ -167,10 +161,11 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
             }
           }
         }
-        #augmentedNind <- augmentedNind - length(droppedIND)
       }
-      cat("New augmentedNind:",augmentedNind,"\n")
-      cat("New length(augmentedInd):",length(augmentedInd),"\n")
+      if(verbose){
+        cat("New augmentedNind:",augmentedNind,"\n")
+        cat("New length(augmentedInd):",length(augmentedInd),"\n")
+      }
 		}else{
 			#No augmentation
 			augmentedNind <- n.ind
