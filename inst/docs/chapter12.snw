@@ -435,16 +435,16 @@ Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
-To replot the plots created during \mqm\ analysis is also possible. The figures can be 
-reconstructed from resulting $scanone$ object using $mqmplot\_one$ function(see figure 
-\ref{AutoCofactor}). This retrieves the model and the QTLprofile from the result 
-objectattribute $mqmgetmodel$. The functions can only be used with \mqm\
-scans, as they have an additinal column $info$ and contain a QTL model. The info 
-column contains the estimated information content per marker. $info$ is calculated 
-from the deviation of the ideal marker distribution. For example, in a recombinant 
-inbred line we have most power when both groups (A and B) have 125 mice, and no power 
-when we have 1 A versus 249 B. Therefore we can multiple the estimated QTL effect by 
-this value \"to clean\" the QTL profile by giving less weight to less informative markers.
+A figures can be reconstructed from a result ($scanone$ object) using the
+$mqmplot\_one$ function (see for example figure \ref{AutoCofactor}). Here the
+model and \qtl\ profile are retrieved.  These functions can only be used with
+\mqm\ scans, as they have an additinal column $info$ which contains a QTL
+model. The info column contains the estimated information content per marker.
+$info$ is calculated from the deviation of the ideal marker distribution. For
+example, in a recombinant inbred line we have most power when both groups (A
+and B) have 125 mice, and no power when we have 1 A versus 249 B. Therefore we
+can multiple the estimated QTL effect by this value \"to clean\" the QTL
+profile by giving less weight to less informative markers.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
