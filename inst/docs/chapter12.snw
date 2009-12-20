@@ -206,6 +206,7 @@ running both $scanone$ single marker \qtl\ analysis and $mqmscan$ multiple
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
 <<>>=
+# calculate scanone and mqm after filling missing data
 data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
@@ -222,6 +223,7 @@ in outcome.
 
 \begin{figure}[p]
 <<fig=TRUE>>=
+# plot scanone/mqm comparison
 plot(result_no_cofactors, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors. Both routines
@@ -229,12 +231,12 @@ are virtually equal when used without \emph{augmentation} and no extra parameter
 \label{NoCofs}
 \end{figure}
 
-Note that $mqm$ produces pseudomarkers by default (unlike $scanone$). A pseudo-
+Note that $mqm$ produces pseudo markers by default (unlike $scanone$). A pseudo-
 marker has a name like c7.loc25 - i.e. the 25 \cM\ pseudo marker on chromosome 7. This is
 because MQM uses interval mapping internally. The chromosomes are divided into
 an equally spaced sections. Thus each chromosome is divided into fictional
 markers spaced equally $stepsize$ \cM\ apart. A LOD score for underlying QTLs
-is calculated at these 'fictional' markers. A small $stepsize$ allows for
+is calculated at these fictional pseudo markers. A small $stepsize$ allows for
 smoother profiles compared with pure marker based mapping approaches. The real
 markers are listed between the pseudo markers. You can remove the pseudo markers
 by using the function $mqmextractmarkers(res)$.
@@ -251,7 +253,7 @@ Start building the initial model by adding cofactors at markers with high LOD
 scores. figure \ref{NoCofs} displayed a large QTL peek on chromosome 4 at 30 \cM,
 so let us account for that by setting a cofactor at the marker nearest to the
 peek on chromosome 4 and perform a new $mqm$
-scan (figure \ref{Cofactor4}).
+scan (result in figures \ref{Cofactor4} and \ref{Cofactor4b}):
 
 <<>>=
 #Summary results shows the highest lodscores per chromosome
@@ -264,8 +266,10 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
 result_1 <- mqm(hyperaug, cofactorlist)
 @
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot after adding first cofactor
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result_1))
 plot(result_1)
@@ -278,120 +282,127 @@ figure \ref{Cofactor4b})
 \end{figure}
 
 Figures \ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
-cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.
-The marker is not dropped and it passes initial rough thresholding to account
-for the, user defined, alpha level. It is therefore used in the mappingphase 
-of the mqm routine. We expect LODscores to change (slightly) genomewide because 
-we account for variation already explained by the QTL on chromosome 4. We can 
-show this change in LOD scores by plotting these new results against the \mqm\
-\qtl\ mapping without cofactors.
+cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.  The
+marker is not dropped and it passes initial thresholding to account for
+the $cofactor.significance$ level. LOD scores are expected to change (slightly)
+genome wide because of variation already explained by the \qtl\ on
+chromosome 4. This can be shown by plotting these new
+results against the \mqm\ \qtl\ mapping without cofactors (figure \ref{Cofactor4b}).
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 plot(result_1, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
-cofactor at chromosome 4 (D4Mit164) to account for variation explained by that
-marker.}
+cofactor at chromosome 4 (D4Mit164) accounting for variation explained at that
+location}
 \label{Cofactor4b}
 \end{figure}
 
-The second peek on chromosome 1 at 70 \cM\ increases, so try adding that to the
-model and check if the model with both cofactors changes the \qtl. Combining
-$which.marker$ with $find.marker$, the new cofactornumber $c$ with the cofactor
-already in $toset$. When using the function mqmcofactors or mqmsetcofactors, the 
-number of cofactors the user is trying to set is compared against the number of 
-individuals inside the cross object. If there is any danger of overfitting the 
-model the function will error and not return a cofactorlist. Also inside MQM the 
-residual degrees of freedom left are checked to make sure also 'usercreated' 
-cofactorlists do not overfit the modeling routine.
+Figure \ref{Cofactor4b} clearly shows the second peek on chromosome 1 at 70
+\cM\ increases, so we add that to the model and check if the model with both
+cofactors changes the \qtl. Again, combining $which.marker$ with $find.marker$,
+adds the new cofactornumber $c$ with the cofactor already in $toset$ (see figure 
+\ref{twowaycomparison}): 
 
 <<>>=
-summary(result_1)
-#we can combine find marker and which.marker commands and expand our toset variable
+# add another cofactor
+# summary(result_1)
 toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
 result_2 <- mqm(hyperaug, cofactorlist)
 @
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot after adding second cofactor
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result_2))
 plot(result_2, result_1, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors, after introducing a
-cofactors at chromosomes 1 and 4 we see just a tiny difference in the likeyhood 
-scores for each chromosome. The LOD scores don't seem to improve much after adding 
-another cofactor on chromosome 4. But lets take a closer look }
+cofactors at chromosomes 1 and 4 there appears only a small difference in the likelihood 
+scores for each chromosome. The LOD scores do not appear to improve much after adding 
+the second cofactor on chromosome 4. But\ldots (see figure \ref{threewaycomparison}) }
 \label{twowaycomparison}
 \end{figure}
 
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot closeup of threeway comparison
 plot(result_no_cofactors, result_1, result_2,chr=c(1,11,15),col=c("black","red","blue"),lwd=c(3,2,1))
 @
-\caption{Comparison between the last scans. We see here a closeup of chromosome 1
-scanned using mqm with 3 different cofactor settings: MQM using no cofactors, 
-MQM using a single cofactor on chromosome 4 (Red) and MQM using cofactors on chromosome 1 and 4.(Blue) 
-We see the LOD scores on chromosome 1 increasing when including more cofactors.}
+\caption{Three way comparison of the last scans. We see here a closeup of chromosome 1
+scanned using \mqm\ with 3 different cofactor settings: no cofactors (black), 
+a single cofactor on chromosome 4 (Red) and cofactors on chromosome 1 and 4.(Blue) 
+The LOD scores on chromosome 1 increase with more cofactors, while the peaks on
+the chromosome 11 and 15 decrease}
 \label{threewaycomparison}
 \end{figure}
-\clearpage
+
+When using the functions $mqmcofactors$ and $mqmsetcofactors$, the
+number of cofactors the user is trying to set is compared against the number of
+individuals inside the cross object. If there is any danger of overfitting the
+model the function will display an error and will not return a cofactorlist.
+Also the residual degrees of freedom left are checked to make sure also the
+user created cofactor lists do not overfit the modeling routine.
 
 \mqm\ checks that no markers are included that are less significant than the
-cofactor.significance level specified by the user. The marker on chromosome 
-1 is also informative enough to be included into the model. Thus creating a 
-new initial model consisting of cofactors on chromosome 4 and 1. This selection 
-of cofactors can continue untill there are no more informative markers 
-that can be included. Practically this means one keeps on adding cofactors 
-untill the newest added cofactor gets dropped from the model.
+$cofactor.significance$ level specified by the user. The marker on chromosome 1
+is informative enough to be included into the model. Thus creating a new
+initial model consisting of cofactors on chromosome 4 and 1. This (forward)
+selection of cofactors can continue untill there are no more informative
+markers that can be included. Practically this means one keeps on adding
+cofactors 
+until the last added cofactor gets dropped from the model.
 
-This manually looking into the profile and determining at which marker to set a cofactor
-could be very time consuming in the case of many QTLs underlying a trait.
-\mqm\ also provides unsupervised backward elimination (or elimination) on a large
-number of markers by setting cofactors at every other marker. The algorithm
-will analyse all the markers and if one is found to be not informative enough
-it drops it from the model. This step is repeated until a limited number of
-significant cofactors is left.
+Manually determining which marker to set a cofactor can be very time consuming
+in the case of many QTLs underlying a trait. Fortunately \mqm\ provides
+unsupervised backward elimination on a large number of markers by setting
+cofactors at every other marker. Iteratively the algorithm analyses all the
+markers and drops the least informative from the model. This step is repeated
+until a limited number of significant cofactors is left.
 
-After backwards elimination it will scan each chromosome using the model that
-includes the retained cofactors. Set the plot parameter to TRUE ($plot=T$) to
-get a graphical view of the model. Here we set a cofactor at every fifth
-marker, and assess which chromosomes may be implicated in high bloodpressure.
-Specify the cofactor at every 5 markers by using the $mqmsetcofactors$ function
+After backward elimination \mqm\ will scan each chromosome using the model that
+includes the retained cofactors. Here we set a cofactor at every fifth
+marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in high bloodpressure (results in figures \figure{Backward1} and \figure{Backward2}):
 
 <<>>=
+# automatic cofactor selection through backward elimination
 cofactorlist <- mqmsetcofactors(hyperaug,5)
 result <- mqm(hyperaug, cofactorlist, plot=T)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot result of cofactor backward elimination
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
 @
 \caption{\hyperintro, after introducing cofactors at every fifth marker and
-backward eliminatio to find the most likely model}
+backward elimination}
 \label{Backward1}
 \end{figure}
 <<>>=
 mqmgetmodel(result)
 @
-The $mqmgetmodel$ function returns the model from the resulting $scanone$ object.
-The model will be returned in R/qtl model format and can be used with the $scantwo$ 
-routine from R/qtl. This is only available when doing backward elimination, because 
-when no cofators are supplied the model used in \qtl\ scanning includes no cofactors. 
-The resulting model can also be used to obtain the location and name 
-of the significant cofactors.
+
+$mqmgetmodel$ function returns the final model from the resulting $scanone$
+object.  This model can be used with the $scantwo$ routine from R/qtl. $mqmgetmodel$ 
+can only be used after backward elimination as it needs a list of
+cofactors. The resulting model can also be used to obtain the location and
+name of the significant cofactors.
 
 \clearpage
 \begin{figure}[ht]
 <<fig=TRUE>>=
+# plot MQM backward elimination with scanone
 plot(result, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for \mqm\, followed by backward elimination
-(cofactor.significance = 0.02). The resulting profiles are clearly different }
+(cofactor.significance = 0.02)}
 \label{Backward2}
 \end{figure}
 
@@ -439,7 +450,7 @@ this value \"to clean\" the QTL profile by giving less weight to less informativ
 <<fig=TRUE>>=
 mqmplot_one(result)
 @
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (alpha = 0.002). Figure plotted using $mqmplot\_one$ function.
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (cofactor.significance = 0.002). Figure plotted using $mqmplot\_one$ function.
 }
 \label{AutoCofactor}
 \end{figure}
@@ -568,7 +579,7 @@ mqmplot_permutations(results)
 @
 \caption{Calculate significance permuting 25 times over the hyper dataset. 
 \qtl\ with a \lod\ higher than
-2.5 LOD score can be considered significant (at $alpha=0.05 (green)$ or $alpha=0.10 (blue)$).
+2.5 LOD score can be considered significant (at $cofactor.significance=0.05 (green)$ or $cofactor.significance=0.10 (blue)$).
 This is estimated from permuting a single trait. Chromosomes are signified by the gray gridlines.
 }
 \end{figure}
