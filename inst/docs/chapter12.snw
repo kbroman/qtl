@@ -142,15 +142,21 @@ marker locations with all genotypes and calculates the probability. When the
 probability is more likely than the $minprob$ parameter the \emph{augmented}
 individual is stored in the new $crossobject$, ready for QTL mapping.
 
-The important parameters are: $cross, pheno.col, maxaugind, minprob$
-and $verbose$. $maxaugind$ sets the maximum number of \emph{augmented} genotypes
-per individual in a dataset. The default of 60 is usually good enough (20
-missing F2 markers or 30 missing BC markers per individual). However higher numbers could be needed 
-when there are more missing markers. Each individual is
-augmented with a probability of, at least, $minprob$ -
-i.e. only augment genotypes that of individuals that are above a probability of occurring (and drop
-the less likely cases). Note that setting this value too low may result in dropping
-individuals entirely. Use the verbose option to get more feedback on the augmentation routine.
+The important parameters are: $cross, pheno.col, maxaugind, minprob$ and
+$verbose$ (see also the $mqmaugment$ help page in R). $maxaugind$ sets the
+maximum number of \emph{augmented} genotypes per individual in a dataset. The
+default of 60 is usually good enough (20 missing F2 markers or 30 missing BC
+markers per individual). However higher numbers are needed when there are more
+missing markers. Each individual is augmented with a probability of, at least,
+$minprob$ - in other words, only augment genotypes that of individuals that are
+above a probability of occurring (and drop the less likely cases). Note that
+setting this value too low may result in dropping individuals entirely as
+$maxaugind$ is quickly reached\footnote{The current version drops individuals
+that go beyond $maxaugind$. This is undesired behaviour and will be fixed in an
+upcoming release. A value $minprob=1$ may prevent the dropping of individuals,
+making augmentation behave like $fill.geno$'s imputation method}. Use the verbose
+option to get more feedback on the augmentation routine and check how many
+individuals are dropped.
 
 <<>>=
 # displays warning because MQM ignores the X chromosome in an F2
@@ -160,19 +166,19 @@ augmentedcross <- mqmaugment(mycross, minprob=1)
 <<fig=TRUE>>=
 plot.geno(augmentedcross)
 @
-\caption{$plot.geno$ showing the genotypes of 100 individuals with no missing
-values ($mqmaugment$ with $minprob=1$ means we fill in the 
-most likely genotypes at each marker, no expansion of the dataset takes place}
+\caption{$plot.geno$ displays the genotypes of 100 filled individuals
+($mqmaugment$ with $minprob=1$ means only the 'most likely' individual is
+used and
+no real expansion of the dataset takes place, similar to $fill.geno$)}
 \end{figure}
 
 With a lower $minprob$ value less likely genotypes are also
 considered and the resulting \emph{augmented} dataset will be
 larger. Unfortunately, at this stage, the expanded dataset 
-can not be used with scanone as it treats the extra individuals as new
-individuals, while \mqm\ recognises expanded individuals as 
+can not be used with the other R/qtl functions, like $scanone$, as it treats the extra individuals as new
+individuals. \mqm\ recognises expanded individuals as 
 single entities. The (weighted) augmented individuals with all possible
-genotypes leads to a more accurate mapping when dealing with missing values
-and give a smoother \qtl\ profile, leading to a more accurate mapping.
+genotypes theoretically leads to more accurate mapping when dealing with missing values
 \cite{jansen93}.
 
 \begin{figure}[ht]
@@ -180,10 +186,9 @@ and give a smoother \qtl\ profile, leading to a more accurate mapping.
 augmentedcross <- mqmaugment(mycross, minprob=0.1)
 plot.geno(augmentedcross)
 @
-\caption{$plot.geno()$ showing the augmented genotypes of 100 individuals with no
-missing values. There are 340 individuals in this plot, because \mqm\ expands
-the dataset when filling in missing markers (an average expansion of 3.4 per
-individual).}
+\caption{$plot.geno()$ displays the \emph{augmented} genotypes of 100 individuals. There are a total of 340 'expanded' individuals in this plot, because \mqm\ 
+fills in missing markers with all likely genotypes (an average expansion of 3.4 per
+individual)}
 \end{figure}
 
 \clearpage
