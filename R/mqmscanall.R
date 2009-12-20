@@ -4,7 +4,7 @@
 # Alias: scanall, cimall, mqmall
 #
 # copyright (c) 2009, Danny Arends
-# last modified Jun, 2009
+# last modified Dec, 2009
 # first written Feb, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -28,13 +28,11 @@ cimall <- function(...) {
 	scanall(...,mapfunction=cim)
 }
 
-mqmall <- function(cross,multiC=TRUE,n.clusters=1,b.size=10,...) {
-	scanall(cross=cross,multiC=multiC,n.clusters=n.clusters,b.size=b.size,...,mapfunction=mqm)
+mqmall <- function(cross, multiC=TRUE, n.clusters=1, b.size=10, ...) {
+	scanall(cross=cross, multiC=multiC, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqm)
 }
 
-scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10,FF=0,...,plot=FALSE,verbose=FALSE){
-
-	
+scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.size=10, FF=0, ..., plot=FALSE, verbose=FALSE){
 	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
@@ -53,10 +51,7 @@ scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10
 		
 		result <- NULL	 	#BATCH result variable
 		res <- NULL			#GLOBAL result variable
-		
-        # we shouldn't do fill.geno here!
-	#	all.data <- fill.geno(cross)
-        all.data <- cross
+    all.data <- cross
 		
 		bootstraps <- 1:n.pheno
 		batches <- length(bootstraps) %/% b.size
@@ -75,11 +70,7 @@ scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10
                   if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
-                                if(verbose) {
-                                  ourline()
-                                  cat("INFO: Starting with batch",x,"/",batches,"\n")				
-                                  ourline()
-                                }
+        if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")
 				if(x==batches && last.batch.num > 0){
 					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
 				}else{
@@ -99,24 +90,20 @@ scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
 				LEFT <- AVG*(batches-x)
-                                if(verbose) {
-                                  cat("INFO: Done with batch",x,"/",batches,"\n")	
-                                  cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-                                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
-                                  cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
-                                  ourline()
-                                }
+        if(verbose) {
+          cat("INFO: Done with batch",x,"/",batches,"\n")	
+          cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+          cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
+          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+          cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
+          ourline()
+        }
 			}
 		}else{
 			if(verbose) cat("INFO: Library snow not found, so going into singlemode.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
-				if(verbose) {
-                                  ourline()
-                                  cat("INFO: Starting with batch",x,"/",batches,"\n")				
-                                  ourline()
-                                }
+				if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")				
 				if(x==batches && last.batch.num > 0){
 					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
 				}else{
@@ -133,14 +120,14 @@ scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10
 				SUM <- SUM + (end-start)[3]
 				AVG <- SUM/x
 				LEFT <- AVG*(batches-x)
-                                if(verbose) {
-                                  cat("INFO: Done with batch",x,"/",batches,"\n")	
-                                  cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
-                                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
-                                  cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
-                                  ourline()
-                                }
+        if(verbose) {
+          cat("INFO: Done with batch",x,"/",batches,"\n")	
+          cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
+          cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
+          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+          cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
+          ourline()
+        }
 			}
 		}
 		if(FF){
@@ -161,12 +148,12 @@ scanall <- function(cross,mapfunction=scanone,multiC=TRUE,n.clusters=1,b.size=10
 		end <- proc.time()
 		SUM <- SUM + (end-start)[3]
 		AVG <- SUM/n.pheno	
-                if(verbose) {
-                  cat("------------------------------------------------------------------\n")
-                  cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
-                  cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
-                  cat("------------------------------------------------------------------\n")
-                }
+    if(verbose) {
+      cat("------------------------------------------------------------------\n")
+      cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
+      cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
+      cat("------------------------------------------------------------------\n")
+    }
 		res
 }
 
