@@ -112,6 +112,9 @@ plot.circle <- function(x, distance=F, vulcano=F,
   }
 }
 
+mqmplotcircle <- function(...){
+  mqmplot_circle(...)
+}
 
 mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE){
   if(is.null(cross)){
