@@ -53,7 +53,7 @@ Still, \mqm\ is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with interference of \qtl, handles missing data and
 allows more precise detection than other methods. This tutorial will
 show how to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is fast
-and scales on multi-CPU systems.
+and scales on multi-CPU systems and computer clusters.
 
 \section{A quick overview}
 
@@ -74,19 +74,19 @@ selection strategy to identify \qtl\ hotspot. The algorithm passes through the
 following stages:
 
 \begin{itemize}
-\item (Re)Estimation of the genetic map based on the individual genotypes provided
-\item Calculating relative marker positions and detecting linkage groups
-\item (Re)Estimating recombination frequencies
+\item (Re)-estimation of the genetic map based on the genotypes provided
+\item Calculation of relative marker positions and detection of linkage groups
+\item (Re)-estimation of recombination frequencies
 \item Likelihood estimations of the full model using all markers
-\item If there are Cofactors available (see sectio about model selection, 
-      then backward elimination of cofactors is performed followed by the
-      genomescan for QTLs using the model created.
-\item If there are no Cofactors available, the algorithm performs a
-      genome scan for QTLs testing each genetic location independantly.
+\item Backward elimination of cofactors, followed by a
+      genome scan for \qtl\ using the model (see model selection)
+\item If there are no $cofactors$, perform a
+      genome scan testing each genetic location independantly
 \end{itemize}
 
-Afterwards the interval map created during the \qtl\ genome scan and 
-the \qtl\ model are returned to the user as an R/qtl $scanone$ object.
+The interval map created during the genome scan and the \qtl\ model are
+returned as an (\mqm\ extended) R/qtl $scanone$ object. Several special
+plotting routines are available for \mqm\ results.
 
 \section{Data augmentation}
 
@@ -444,16 +444,15 @@ mqmplot_one(result)
 
 \section{MQM effects}
 
-% Commented out because of sweave problem
-%We can add the current effect to the mqmplots that are created by 
-%using the function $mqmplot\_directedqtl$. To use this function 
-%firstly we must have the $outputmarkers$ parameter when scanning 
-%using mqm set to true (true is the default value).
-%We can also manually extract the markers from the output of the mqmscan using 
-%$mqmextractmarkers(result)$. Then we call the plotting function 
-%which internaly adds the sign of the effect to the LOD score of 
-%the marker, and calls the standard R/qtl plotting functions. An example
-%can be found in figure \ref{QTLeffects}.
+We can add the current effect to the mqmplots that are created by 
+using the function $mqmplot\_directedqtl$. To use this function 
+firstly we must have the $outputmarkers$ parameter when scanning 
+using mqm set to true (true is the default value).
+We can also manually extract the markers from the output of the mqmscan using 
+$mqmextractmarkers(result)$. Then we call the plotting function 
+which internaly adds the sign of the effect to the LOD score of 
+the marker, and calls the standard R/qtl plotting functions. An example
+can be found in figure \ref{QTLeffects}.
 
 %\begin{figure}[ht]
 %<<fig=TRUE>>=
