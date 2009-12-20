@@ -143,7 +143,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		if(!is.null(cross$mqm)){
 		#	ourcat("INFO: previously augmented dataset.\n",a=verbose)			
 		#	ourcat("INFO: Individuals before augmentation",cross$mqm$Nind,".\n",a=verbose)
-			augmentedNind <- cross$mqm$Nind
+			augmentedNind <- cross$mqm$Nind - length(dropped)
 		#	ourcat("INFO: Individuals after augmentation",cross$mqm$augIND,".\n",a=verbose)
 			augmentedInd <- cross$mqm$augIND
 		}else{
