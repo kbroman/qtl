@@ -653,6 +653,21 @@ mqmplot_nice(resall,legendloc=1)
 @
 \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 \end{figure}
+The next plot is the $mqmplot\_circle$ function. It shows a circular representation 
+of the genome. After using automatic backward selection we can also highlight 
+significant markers.
+<<fig=TRUE>>=
+mqmplot_circle(multifilled, resall, highlight=2)
+@
+\caption{Circleplot 1 - Multiple traits}
+\end{figure}
+
+<<fig=TRUE>>=
+mqmplot_circle(multifilled, resall, highlight=2)
+@
+\caption{Circleplot 2 - Multiple traits highlight of trait 2}
+\end{figure}
+
 
 \clearpage
 The next plot is the $mqmplot\_cistrans$ function. This plot is only available 
@@ -677,6 +692,12 @@ mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 }
+\end{figure}
+
+<<fig=TRUE>>=
+mqmplot_circle(multiloc,resall, highlight=2)
+@
+\caption{Circleplot 3 - Multiple traits with locations added}
 \end{figure}
 
 \clearpage
