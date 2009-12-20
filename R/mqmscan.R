@@ -126,10 +126,14 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 
 		#check for missing phenotypes
 		dropped <- NULL
+    droppedIND <- NULL
 		for(i in 1:length(pheno)) {
 			if(is.na(pheno[i])){
 			  if(verbose) cat("INFO: Dropped individual ",i," with missing phenotype.\n")
-			  dropped <- c(dropped,i) 
+			  dropped <- c(dropped,i)
+        if(!is.null(cross$mqm)){
+          droppedIND <- c(droppedIND,cross$mqm$augIND[i])
+        }
 			  n.ind = n.ind-1
 			}
 		}
@@ -141,11 +145,27 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		
 		#CHECK for previously augmented dataset
 		if(!is.null(cross$mqm)){
-		#	ourcat("INFO: previously augmented dataset.\n",a=verbose)			
-		#	ourcat("INFO: Individuals before augmentation",cross$mqm$Nind,".\n",a=verbose)
-			augmentedNind <- cross$mqm$Nind - length(dropped)
-		#	ourcat("INFO: Individuals after augmentation",cross$mqm$augIND,".\n",a=verbose)
-			augmentedInd <- cross$mqm$augIND
+      augmentedNind <- cross$mqm$Nind
+      augmentedInd <- cross$mqm$augIND
+      if(verbose){
+        cat("n.ind:",n.ind,"\n")
+        cat("augmentedNind:",augmentedNind,"\n")
+        cat("length(augmentedInd):",length(augmentedInd),"\n")
+      }
+      if(!is.null(dropped)){
+        augmentedInd <- cross$mqm$augIND[-dropped]
+        for(x in 1:(length(augmentedInd)-1)){
+          if(augmentedInd[x+1] - 1 > augmentedInd[x] ){
+            for(y in (x+1):length(augmentedInd)){
+              augmentedInd[y] <- augmentedInd[y] - ((augmentedInd[x+1] - augmentedInd[x])-1)
+            }
+          }
+        }
+      }
+      if(verbose){
+        cat("New augmentedNind:",augmentedNind,"\n")
+        cat("New length(augmentedInd):",length(augmentedInd),"\n")
+      }
 		}else{
 			#No augmentation
 			augmentedNind <- n.ind
