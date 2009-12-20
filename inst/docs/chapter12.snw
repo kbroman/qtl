@@ -172,14 +172,13 @@ used and
 no real expansion of the dataset takes place, similar to $fill.geno$)}
 \end{figure}
 
-With a lower $minprob$ value less likely genotypes are also
-considered and the resulting \emph{augmented} dataset will be
-larger. Unfortunately, at this stage, the expanded dataset 
-can not be used with the other R/qtl functions, like $scanone$, as it treats the extra individuals as new
-individuals. \mqm\ recognises expanded individuals as 
-single entities. The (weighted) augmented individuals with all possible
-genotypes theoretically leads to more accurate mapping when dealing with missing values
-\cite{jansen93}.
+With a lower $minprob$, less likely genotypes are also considered, and the
+resulting \emph{augmented} dataset will be larger. The (weighted) augmented
+individuals with all possible genotypes theoretically leads to more accurate
+mapping when dealing with missing values \cite{jansen93}.  \footnote{Note that
+the augmented dataset can only be used with \mqm\ functions.  \mqm\ functions
+recognise expanded individuals as single entities.  Other R/qtl functions, like
+$scanone$, assume the augmented individuals are \emph{real} individuals}
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
