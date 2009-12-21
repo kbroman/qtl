@@ -6,7 +6,7 @@
 \description{
   Plotting routine to display the results from a mqm scan on multiple phenotypes. 
   It supports four diffferent visualizations: a contourmap, heatmap, 3D graph or a multiple 
-  QTL plot from \code{\link[qtl]{plot.scanone}}
+  QTL plot from \code{\link{plot.scanone}}
 }
 
 \usage{
@@ -25,8 +25,8 @@ mqmplot_multitrait(result, type = "C", theta = 30, phi = 15, \dots)
 
 \seealso{ 
   \itemize{
-  	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
-  	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for MQM
+  	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
+  	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for MQM
   }
 }
 

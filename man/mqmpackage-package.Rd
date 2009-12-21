@@ -39,7 +39,7 @@
 	}
 	Normal layout of MQM-QTL analysis
 	\itemize{
-		\item Load in experiment using formats supported by R/QTL. See \code{\link[qtl]{read.cross}} for details.
+		\item Load in experiment using formats supported by R/QTL. See \code{\link{read.cross}} for details.
 		\item Set trait under consideration as first trait in R/QTL format
 		\item Fill in missing data using either the fill.geno or mqmaugmentdata routine
 		\item Call mqmscan to do a genomescan
@@ -73,11 +73,11 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 
 \seealso{
 	\itemize{
-  \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
-  \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl  
-	\item	\code{\link[qtl]{mqmaugment}} - Data augmentation routine to estimate missing data used by MQM
-	\item	\code{\link[qtl]{mqm}} - Function called to do single/multiple trait QTL analysis using MQM
-	\item \code{\link[qtl]{mqmsetcofactors}} - Helper function to create cofactors to be used with MQM
+  \item \code{\link{mqmintro}} - Introduction into MQM
+  \item \code{\link{mqmoverview}} - Overview of the MQM specific additions to R/qtl  
+	\item	\code{\link{mqmaugment}} - Data augmentation routine to estimate missing data used by MQM
+	\item	\code{\link{mqm}} - Function called to do single/multiple trait QTL analysis using MQM
+	\item \code{\link{mqmsetcofactors}} - Helper function to create cofactors to be used with MQM
 	}
 }
 \examples{

@@ -13,7 +13,7 @@ mqmplot_permutations(result, \dots)
 
 \arguments{
   \item{result}{ Resulting \code{mqmmulti} object created when performing 
-	permutation analysis. Only permutations done by the MQM algorithm \code{\link[qtl]{mqm}} 
+	permutation analysis. Only permutations done by the MQM algorithm \code{\link{mqm}} 
 	can use this plotting routine.
   }
   \item{\dots}{ Extra argument passed to the polyplot method of R. Brouwer }    
@@ -29,7 +29,7 @@ mqmplot_permutations(result, \dots)
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm
 }
 }
 

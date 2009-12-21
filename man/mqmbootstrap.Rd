@@ -25,7 +25,7 @@
 \arguments{
 	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL
     with multiple phenotypes suitable for scanone and mqmscan from R/QTL.
-    See \code{\link[qtl]{read.cross}} for details. 
+    See \code{\link{read.cross}} for details. 
   }
 	\item{mapfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
@@ -38,13 +38,13 @@
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
-	  \code{\link[qtl]{scanone}}, \code{\link[qtl]{cim}} or
-	    \code{\link[qtl]{mqm}} functions} 
+	  \code{\link{scanone}}, \code{\link{cim}} or
+	    \code{\link{mqm}} functions} 
 }
 
 \details{
-  Analysis of \code{\link[qtl]{scanone}}, \code{\link[qtl]{cim}} or
-	    \code{\link[qtl]{mqm}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
+  Analysis of \code{\link{scanone}}, \code{\link{cim}} or
+	    \code{\link{mqm}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
   The \code{snow} library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
 }
 
@@ -56,11 +56,11 @@
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
-	\item \code{\link[qtl]{scanone}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{cim}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{mqm}} - Function called to do single trait analysis
+	\item \code{\link{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
+	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
+	\item \code{\link{scanone}} - Function called to do single trait analysis
+	\item \code{\link{cim}} - Function called to do single trait analysis
+	\item \code{\link{mqm}} - Function called to do single trait analysis
 	}
 }
 

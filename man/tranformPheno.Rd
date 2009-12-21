@@ -14,7 +14,7 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{A vector of numeric indices or
    character strings (indicating phenotypes by name) of phenotypes to be
    transformed.}
@@ -38,7 +38,7 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 
-\seealso{ \code{\link[qtl]{mqmscan}}, \code{\link[qtl]{scanall}} }
+\seealso{ \code{\link{mqmscan}}, \code{\link{scanall}} }
 
 \examples{
 data(multitrait)

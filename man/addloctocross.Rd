@@ -13,7 +13,7 @@
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.} 
+   \code{\link{read.cross}} for details.} 
   \item{locations}{Rvariable holding location information about the traits.}
   \item{locfile}{ if there a no \code{locations} specified data is loaded from a file specified by this parameter, see the details section for the layout of the file.}
 }
@@ -40,7 +40,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{CisTransPlot}} - Function called to analyze multiple traits in the cross object
+		\item \code{\link{CisTransPlot}} - Function called to analyze multiple traits in the cross object
 	}
 }
 

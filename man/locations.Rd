@@ -8,7 +8,7 @@
 }
 
 \description{
-	A table with genetic locations of the traits in the \code{\link[qtl]{multitrait}} dataset
+	A table with genetic locations of the traits in the \code{\link{multitrait}} dataset
 }
 \usage{data(locations)}
 \format{
@@ -51,6 +51,6 @@
 }
 }
 
-\seealso{\code{\link[qtl]{multitrait}} }
+\seealso{\code{\link{multitrait}} }
 
 \keyword{datasets}

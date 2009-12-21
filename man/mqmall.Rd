@@ -13,7 +13,7 @@
 
 \arguments{
   \item{cross}{ Cross object, an object of class 
-    \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. 
+    \code{cross} from R/QTL. See \code{\link{read.cross}} for details. 
   }
   \item{multiC}{ Use multiple cores (only if the package SNOW is available)
   }
@@ -24,7 +24,7 @@
   \item{b.size}{ Batch size. The entire set is split in 
     jobs. Each job contains b.size number of traits per job 
   }
-  \item{\dots}{ Parameters passed through to the \code{\link[qtl]{mqm}} function used in 
+  \item{\dots}{ Parameters passed through to the \code{\link{mqm}} function used in 
     scanning for QTLs
   }
 }
@@ -38,7 +38,7 @@
 }
 
 \value{
-  Returns a MQMmulti object. This object is a list of \code{\link[qtl]{scanone}}
+  Returns a MQMmulti object. This object is a list of \code{\link{scanone}}
   objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot_multitrait(result)}
 }
 
@@ -50,10 +50,10 @@
 
 \seealso{ 
 	\itemize{
-	\item \code{\link[qtl]{multitrait}}  Dataset used in the example analysis
-	\item \code{\link[qtl]{fill.geno}}  Augmentationroutine to estimate missing data	
-	\item \code{\link[qtl]{mqmaugment}}  Augmentationroutine to estimate missing data
-	\item \code{\link[qtl]{mqm}}  Function called to do single trait QTL analysis
+	\item \code{\link{multitrait}}  Dataset used in the example analysis
+	\item \code{\link{fill.geno}}  Augmentationroutine to estimate missing data	
+	\item \code{\link{mqmaugment}}  Augmentationroutine to estimate missing data
+	\item \code{\link{mqm}}  Function called to do single trait QTL analysis
 	}
 }
 

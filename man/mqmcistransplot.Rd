@@ -13,8 +13,8 @@
 }
 
 \arguments{
-  \item{x}{An object of class \code{mqmmulti}. See \code{\link[qtl]{mqmall}} for details.} 
-  \item{cross}{An object of class \code{cross}. See \code{\link[qtl]{read.cross}} for details.} 
+  \item{x}{An object of class \code{mqmmulti}. See \code{\link{mqmall}} for details.} 
+  \item{cross}{An object of class \code{cross}. See \code{\link{read.cross}} for details.} 
   \item{threshold}{ Threshold value in LOD, Markers that have a 
 	LOD score above this threshold are plotted as small squares 
 	(see \code{pch} parameter). The markers with LODscores below
@@ -51,7 +51,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
+		\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
 	}
 }
 

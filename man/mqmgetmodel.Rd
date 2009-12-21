@@ -16,7 +16,7 @@
 
 \arguments{
   \item{scanresult}{An object of class \code{scanone} 
-    created bij a mqm scan See \code{\link[qtl]{mqm}} for details.
+    created bij a mqm scan See \code{\link{mqm}} for details.
   } 
 }
 
@@ -27,7 +27,7 @@
 \value{
 	The function returns the QTL model created (cofactors selected in modeling found to 
   be significant at cofactor.significance) and used during the mqmscan
-  See for the format of the model: \code{\link[qtl]{makeqtl}}
+  See for the format of the model: \code{\link{makeqtl}}
 }  
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl}}
@@ -38,9 +38,9 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{mqm}} - Genome scanning using a multiple QTL model (MQM)
-    \item \code{\link[qtl]{mqmsetcofactors}} - Setting multiple cofactors for backward elimination
-    \item \code{\link[qtl]{makeqtl}} - Make a qtl object
+		\item \code{\link{mqm}} - Genome scanning using a multiple QTL model (MQM)
+    \item \code{\link{mqmsetcofactors}} - Setting multiple cofactors for backward elimination
+    \item \code{\link{makeqtl}} - Make a qtl object
 	}
 }
 

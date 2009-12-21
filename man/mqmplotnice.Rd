@@ -11,7 +11,7 @@ mqmplot_nice(result, \dots)
 }
 
 \arguments{
-  \item{result}{ Result object from mqm scan \code{\link[qtl]{mqm}}. 
+  \item{result}{ Result object from mqm scan \code{\link{mqm}}. 
     Make sure that multiple phenotypes have been scanned. 
   }
   \item{\dots}{ Extra argument passed to the polyplot methode of 
@@ -24,8 +24,8 @@ mqmplot_nice(result, \dots)
 
 \seealso{ 
   \itemize{
-  	\item \code{\link[qtl]{mqm}} - Function called to analyse multiple traits using MQM
-  	\item \code{\link[qtl]{mqmpermute}} - Function called to estimate confidence interfalls for MQM
+  	\item \code{\link{mqm}} - Function called to analyse multiple traits using MQM
+  	\item \code{\link{mqmpermute}} - Function called to estimate confidence interfalls for MQM
   }
 }
 
