@@ -1,4 +1,5 @@
 \name{mqmplot_cistrans}
+\alias{mqmplot_cistrans}
 \alias{mqmplotcistrans}
 \alias{cistransplot}
 

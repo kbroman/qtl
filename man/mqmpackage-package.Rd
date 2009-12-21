@@ -84,6 +84,6 @@ Maintainer: Danny Arends \email{Danny.Arends@gmail.com}
 	data(multitrait)
 \dontshow{multitrait <- subset(multitrait, chr=1:2)}        
 	mt.est <- mqmaugment(multitrait)
-	result <- mqmscan(mt.est, doLOG=1)
+	result <- mqmscan(mt.est, logtransform=TRUE)
 	plot(result)
 }

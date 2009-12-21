@@ -78,7 +78,7 @@ cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
 \dontrun{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
 \dontshow{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
 #EXTRA
-f2perm <- mqmpermObject(f2result)			#Create a permutation object
+f2perm <- mqmprocesspermutation(f2result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
 }
 

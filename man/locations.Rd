@@ -41,13 +41,13 @@
 }
 
 \examples{
-% See the help file for CisTransPlot
+% See the help file for mqmplot_cistrans
 \dontrun{
 	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	CisTransPlot(results,multiloc, 5, FALSE, TRUE)
+	mqmplot_cistrans(results,multiloc, 5, FALSE, TRUE)
 }
 }
 
