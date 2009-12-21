@@ -136,7 +136,7 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
   if(!("scanone" %in% class(templateresult))){
     stop("Wrong type of result file, please supply a valid scanone object.") 
   }
-  colorz <- topo.colors(length(result),alpha=0.8)
+  colorz <- rainbow(length(result),alpha=0.8)
   if(!legend){
     totallength <- getgenomelength(templateresult)
     nchr <- length(unique(templateresult[,1]))
