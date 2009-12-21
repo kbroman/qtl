@@ -288,7 +288,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
 
 loopthroughmulti <- function(cross,result,save=FALSE,spacing=100){
   n <- 1
-  while(n <= length(multires)){
+  while(n <= length(result)){
     if(save) jpeg(file=paste("circleplotT",n,".jpg",sep=""),w=800,h=800)
     mqmplot_circle(cross,result,spacing=spacing,highlight=n)
     if(save) dev.off()
