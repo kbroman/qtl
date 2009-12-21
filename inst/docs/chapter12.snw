@@ -663,20 +663,24 @@ mqmplot_nice(resall,legendloc=1)
 \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 \end{figure}
 The next plot is the $mqmplot\_circle$ function. It shows a circular representation 
-of the genome. After using automatic backward selection we can also highlight 
-significant markers.
+of the genome. After using automatic backward selection we can also highlight markers
+found to be significant using MQM. When highlighting the size of the markers is scaled
+based on the LODscore of the marker for the highlighted trait. When not highlighting 
+markers are not scaled. When plotting multiple traits we can see all QTLs of all the traits
+outside the chromosome (solid colored squares, or when highlighting in gray)
 \begin{figure}[ht]
 <<fig=TRUE>>=
-mqmplot_circle(multifilled, resall, highlight=2)
+mqmplot_circle(multifilled, resall)
 @
-\caption{Circleplot 1 - Multiple traits}
+\caption{Circleplot 1 - Multiple traits without locations, traits are in the centre 
+connected by a colored spline to their QTL locations}
 \end{figure}
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multifilled, resall, highlight=2)
 @
-\caption{Circleplot 2 - Multiple traits highlight of trait 2}
+\caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
 \end{figure}
 
 
@@ -704,11 +708,12 @@ have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 }
 \end{figure}
+When having locations we can also use the $mqmplot_circle$ function.
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multiloc,resall, highlight=2)
 @
-\caption{Circleplot 3 - Multiple traits with locations added}
+\caption{Circleplot 3 - Multiple traits with locations added, here we highlight trait number 2}
 \end{figure}
 
 \clearpage
