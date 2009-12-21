@@ -152,18 +152,18 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
           if(verbose) cat("Model found for trait ",x,"\n")
           if(!is.null(cross$locations)){
             if(verbose) cat("Locations of traits available\n")
-            title(sub = "Multiple traits with locations")
             location <- as.numeric(cross$locations[[x]])
             traitl <- locationtocircle(templateresult,location[1],location[2],spacing=spacing)
           }else{
             if(verbose) cat("Locations of traits not available\n")
-            title(sub = "Multiple traits no locations")
             traitl <- t(c(0,0+0.25*(0.5-(x/length(result)))))
           }
           if(highlight==0){
             col=colorz[x]
+			title(sub = "Multiple traits")
           }else{
             col=rgb(0.1, 0.1, 0.1, 0.1)  
+			if(highlight==x) title(sub = paste("Multiple traits highlight of:",colnames(cross$pheno)[x]))
           }
           points(traitl,col=col,pch=24,cex=1)
           for(y in 1:length(model[[4]])){
@@ -289,7 +289,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
 loopthroughmulti <- function(cross,result,save=FALSE,spacing=100){
   n <- 1
   while(n <= length(result)){
-    if(save) jpeg(file=paste("circleplotT",n,".jpg",sep=""),w=800,h=800)
+    if(save) png(file=paste("circleplotT",n,".png",sep=""),w=1024,h=768)
     mqmplot_circle(cross,result,spacing=spacing,highlight=n)
     if(save) dev.off()
     n <- n+1
