@@ -101,8 +101,6 @@ mqmintro                Multiple QTL Model (MQM) mapping
 mqmloadanalysis         Enables loading of previous MQM analysis from
                         file
 mqmpackage              Tool for analyzing QTLs in experimental crosses
-mqmpermutationresult    Convert mqmmulti objects into a scanoneperm
-                        object
 mqmplot_boot            Plot results from a bootstrap scan
 mqmplot_directedqtl     Plotting routine to display the effects and
                         results from a QTL scan
@@ -112,8 +110,12 @@ mqmplot_nice            Plot the results from a mqm scan on multiple
                         phenotypes
 mqmplot_one             Plotting routine to display the results from a
                         QTL scan
+mqmplotcircle           Circular genome plotting - routine to show QTL
+                        information
 mqmplotcistrans         Plotting routine to show cis and trans QTL
                         information
+mqmprocesspermutation   Convert mqmmulti objects into a scanoneperm
+                        object
 mqmscan                 Genome scan with a multiple QTL model (MQM)
 mqmscanfdr              Estimates of FDR when doing multiple trait QTL
                         analysis
