@@ -128,7 +128,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		dropped <- NULL
     droppedIND <- NULL
 		for(i in 1:length(pheno)) {
-			if(is.na(pheno[i])){
+			if(is.na(pheno[i]) || is.infinite(pheno[i])){
 			  if(verbose) cat("INFO: Dropped individual ",i," with missing phenotype.\n")
 			  dropped <- c(dropped,i)
         if(!is.null(cross$mqm)){
