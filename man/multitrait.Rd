@@ -9,7 +9,7 @@
 }
 
 \description{
-	Cross object from R/QTL, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details.
+	Cross object from R/QTL, an object of class \code{cross} from R/QTL. See \code{\link{read.cross}} for details.
 }
 \usage{data(multitrait)}
 \format{

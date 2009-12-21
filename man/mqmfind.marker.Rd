@@ -13,8 +13,8 @@ mqmfind.marker(cross, mqmscan = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
 }
 
 \arguments{
-  \item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and mqmscan from R/QTL. See \code{\link[qtl]{read.cross}} for details.  }
-  \item{mqmscan}{ Results from either \code{\link[qtl]{scanone}} or \code{\link[qtl]{mqmscan}} }
+  \item{cross}{ Cross object, An object of class \code{cross} from R/QTL with multiple phenotypes suitable for scanone and mqmscan from R/QTL. See \code{\link{read.cross}} for details.  }
+  \item{mqmscan}{ Results from either \code{\link{scanone}} or \code{\link{mqmscan}} }
   \item{perm}{ a \code{scanoneperm} object }
   \item{alpha}{ Threshold value, everything with significance < alpha is reported }
   \item{verbose}{If TRUE, print tracing information.}
@@ -28,10 +28,10 @@ mqmfind.marker(cross, mqmscan = NULL, perm = NULL, alpha = 0.05, verbose=FALSE)
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{mqmintro}} MQM description
-	\item \code{\link[qtl]{mqm}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
-	\item \code{\link[qtl]{mqmpermObject}} - Function called to convert mqmbootstrap into an scanoneperm object
+	\item \code{\link{mqmintro}} MQM description
+	\item \code{\link{mqm}} - Function called to do single trait analysis
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone,cim or mqm
+	\item \code{\link{mqmpermObject}} - Function called to convert mqmbootstrap into an scanoneperm object
 }
 }
 

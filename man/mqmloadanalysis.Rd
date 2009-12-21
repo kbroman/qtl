@@ -21,7 +21,7 @@ mqmloadanalysis(file = "MQM_output.txt")
 %}
 
 \value{
-Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the \code{\link[qtl]{plot.scanone}} function.
+Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the \code{\link{plot.scanone}} function.
 }
 
 \references{ Danny Arends \email{Danny.Arends@gmail.com} }
@@ -30,9 +30,9 @@ Returns a matrix with QTLscores for each location on the chromosome, which can b
 
 \seealso{ 
 \itemize{
-  \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
-  \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
-	\item \code{\link[qtl]{mqm}} - Function called to do single / multple trait QTL analysis using MQM
+  \item \code{\link{mqmintro}} - Introduction into MQM
+  \item \code{\link{mqmoverview}} - Overview of the MQM specific additions to R/qtl
+	\item \code{\link{mqm}} - Function called to do single / multple trait QTL analysis using MQM
 }
 }
 

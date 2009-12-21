@@ -14,11 +14,11 @@
 
 \arguments{
   \item{cross}{An object of class \code{cross} with optionally phenotype locations. See 
-    \code{\link[qtl]{read.cross}} for details on reading in cross objects, and optionally
+    \code{\link{read.cross}} for details on reading in cross objects, and optionally
     \code{\link{addloctocross}} for adding phenotype locations.
   } 
   \item{result}{An object of class \code{mqmmulti} or \code{scanone}. 
-    See \code{\link[qtl]{mqmall}} \code{\link[qtl]{scanone}} for details.
+    See \code{\link{mqmall}} \code{\link{scanone}} for details.
   } 
   \item{highlight}{ With a mqmmulti object, highlight this phenotype (value between 
     one and the number of results in the mqmmultiobject) 
@@ -29,8 +29,8 @@
 }
 
 \details{
-  Depending on the input of the result being either \code{\link[qtl]{scanone}} or \code{mqmmulti} a different plot is drawn.
-  If model information is present from \code{\link[qtl]{mqm}} (by setting cofactors) This will be highlighted in 
+  Depending on the input of the result being either \code{\link{scanone}} or \code{mqmmulti} a different plot is drawn.
+  If model information is present from \code{\link{mqm}} (by setting cofactors) This will be highlighted in 
   red (see example).
   If phenotypes have genetic locations (e.g. eQTL) they will be plotted on the genome otherwise 
   phenotypes will be plotted in the middle of the circle (with a small offset)
@@ -49,9 +49,9 @@
 
 \seealso{
 	\itemize{
-		\item \code{\link[qtl]{mqm}} - Function called to analyse multiple traits in the cross object using mqm
-    \item \code{\link[qtl]{mqmall}} - Function called to analyse all traits in the cross object using mqm
-    \item \code{\link[qtl]{scanone}} - Function called to analyse multiple traits in the cross object
+		\item \code{\link{mqm}} - Function called to analyse multiple traits in the cross object using mqm
+    \item \code{\link{mqmall}} - Function called to analyse all traits in the cross object using mqm
+    \item \code{\link{scanone}} - Function called to analyse multiple traits in the cross object
 	}
 }
 
