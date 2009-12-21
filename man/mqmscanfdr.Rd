@@ -41,7 +41,7 @@ mqmscanfdr(cross, mapfunction=mqmall,
 }
 
 \details{
-  This function wraps the analysis of \code{\link{scan.one}}, \code{\link{cim}}
+  This function wraps the analysis of \code{\link{scanone}}, \code{\link{cim}}
   or \code{\link{mqmall}} to scan for QTL in shuffled/randomized data. It is 
   recommended to also install the \code{snow} library. The \code{snow} library allows
   calculations to run on multiple cores or even scale it up to an entire cluster, 
@@ -62,7 +62,7 @@ mqmscanfdr(cross, mapfunction=mqmall,
 \seealso{
 	\itemize{
 	\item \code{\link{mqmcofactors}} - Learn how to set cofactors for the MQM algorithm
-	\item \code{\link{scanall}} - Function called to analyse multiple traits in the cross object (Using scan.one)
+	\item \code{\link{scanall}} - Function called to analyse multiple traits in the cross object (Using scanone)
 	\item \code{\link{cimall}} - Function called to analyse multiple traits in the cross object (Using CIM)
 	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object (Using MQM)
 	}
@@ -70,6 +70,7 @@ mqmscanfdr(cross, mapfunction=mqmall,
 
 \examples{
 data(multitrait)				#Use the multitrait dataset
+multitrait <- fill.geno(multitrait)                     # impute missing genotype data
 \dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 multitrait <- calc.genoprob(multitrait)
 result <- mqmscanfdr(multitrait, threshold=10.0, n.perm=5)	#Calculate the thresholds

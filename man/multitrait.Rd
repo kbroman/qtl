@@ -40,7 +40,7 @@
 \examples{
 data(multitrait)						#Load dataset
 multitrait <- fill.geno(multitrait)                     # impute missing genotype data
-result <- scanall(multitrait,Funktie=mqm,doLOG=1)	#Analyse all 24 traits
+result <- scanall(multitrait,mapfunction=mqm,logtransform=TRUE)	#Analyse all 24 traits
 }
 
 \keyword{datasets}

@@ -36,7 +36,7 @@ mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
   	stop("No mqmresults object. Please supply a valid scanone object.") 
   }
   onlymarkers <- mqmextractmarkers(mqmresults)
-  eff <- effectscan(sim.geno(cross),draw=F)
+  eff <- effectscan(sim.geno(cross),draw=FALSE)
   if(any(eff[,1]=="X")){
     eff <- eff[-which(eff[,1]=="X"),]
   }
@@ -326,8 +326,8 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 
 }
 
-mqmplot_permutations <- function(...){
-	mqmplot_boot(...)
+mqmplot_permutations <- function(result, ...){
+	mqmplot_boot(result, ...)
 }
 
 mqmplot_boot <- function(result, ...){

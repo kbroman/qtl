@@ -35,7 +35,7 @@ data(multitrait)
 \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
-result <- mqmall(multitrait, doLOG=1)
+result <- mqmall(multitrait, logtransform=TRUE)
 mqmplot_multitrait(result,"P")
 mqmplot_multitrait(result,"C")
 mqmplot_multitrait(result,"I")

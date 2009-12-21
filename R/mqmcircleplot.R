@@ -63,20 +63,20 @@ test_plot_circle <- function(){
   values <- (runif(10)*3)+1
   plot.circle(1:10)
   plot.circle(values)
-  plot.circle(values,dist=T)
+  plot.circle(values,dist=TRUE)
   values <- (runif(1000)*3)+1
-  plot.circle(values,dist=T,cex=0.9)
+  plot.circle(values,dist=TRUE,cex=0.9)
 }
 
 
-plot.circle <- function(x, distance=F, vulcano=F, 
+plot.circle <- function(x, distance=FALSE, vulcano=FALSE, 
                         point.color="blue", text.color="red", line.color=rgb(0.1,0.1,0.1,0.1), 
                         lwd=1, cex=1, spacing=1, verbose=FALSE){
   if(is.null(x)) stop("Please supply a vector in x")
   if(is.vector(x)){
     ploty <- c(-1.1,1.1)
     if(vulcano) ploty <- c(0.0,3.0)
-    plot(c(-1.1, 1.1), ploty, type = "n", axes = F, xlab = "", ylab = "")
+    plot(c(-1.1, 1.1), ploty, type = "n", axes = FALSE, xlab = "", ylab = "")
     title(main = "Circular plot")
     cvalues <- circlelocations(length(x)+spacing*length(x))
     l <- 1
@@ -201,7 +201,7 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
-    plot(c(-1,1), c(-1, 1), type = "n", axes = F, xlab = "", ylab = "")
+    plot(c(-1,1), c(-1, 1), type = "n", axes = FALSE, xlab = "", ylab = "")
     title(main = "Legend to circular genome plot")
     legend("center",paste(colnames(cross$pheno)),col=colorz,pch=19,cex=0.75)
   }
@@ -259,7 +259,7 @@ locationtocircle <- function(result, chr, loc, spacing=50, fixoutofbounds=TRUE, 
 
 drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
   result <- mqmextractmarkers(result)
-  plot(c(-1.1, 1.1), c(-1.1, 1.1), type = "n", axes = F, xlab = "", ylab = "")
+  plot(c(-1.1, 1.1), c(-1.1, 1.1), type = "n", axes = FALSE, xlab = "", ylab = "")
   title(main = "Circular genome plot")
   totallength <- getgenomelength(result)
   nchr <- length(unique(result[,1]))

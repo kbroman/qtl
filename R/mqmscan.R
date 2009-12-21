@@ -312,7 +312,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 	colnames(qtl) = c("chr","pos (Cm)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
-	#Convert to data/frame and scan.one object so we can use the standard plotting routines
+	#Convert to data/frame and scanone object so we can use the standard plotting routines
 	qtl <- as.data.frame(qtl)
 	if(backward && !is.null(qc) && model.present){
 	  attr(qtl,"mqmmodel") <- QTLmodel
@@ -374,8 +374,12 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 	}			
 }
 
-mqm <- function(...){
-	mqmscan(...)
+mqm <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
+                    cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
+                    step.min=-20.0,step.max=220,logtransform = FALSE,
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
+	mqmscan(cross, cofactors, pheno.col, model, forceML, cofactor.significance, em.iter, window.size, step.size,
+                step.min, step.max, logtransform, estimate.map, plot, verbose, outputmarkers, multicore, batchsize, n.clusters)
 }
 
 # end of mqmscan.R

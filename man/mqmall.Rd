@@ -8,7 +8,7 @@
 }
 
 \usage{
-	mqmall(cross, multiC=TRUE, n.clusters = 1,b.size=10, FF=0,\dots, plot=FALSE, verbose=FALSE)
+	mqmall(cross, multiC=TRUE, n.clusters = 1,b.size=10, \dots)
 }
 
 \arguments{
