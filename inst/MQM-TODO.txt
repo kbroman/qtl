@@ -13,7 +13,6 @@ SHORT TERM:
 o Tutorial and man pages
   - sweave bug
   - add example of SNOW with mqm scan
-  - add example of circular plot (Danny)
 
 o Fix naming of functions and parameters:
   - mqmscan man: update return value section, text not clear now  #Danny: okay like this ?
