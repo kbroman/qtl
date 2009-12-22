@@ -31,8 +31,11 @@ mqmextractmarkers <- function(mqmresult){
   cleanedresult
 }
 
-# there's something messed up in this function
+
 estimatemarkerlod <- function(interresults){
+  #For an okay return, with all markers filled every REAL marker has to be surrounded by interval markers
+  #It does skip markers untill we reach the next pseudomarker. When one of the assumptions fails
+  #we return, so there could be markers without a LOD score
   if(all(is.na(interresults[,3]))) return (interresults) 
 	pY <- interresults[1,3]		
 	pX <- interresults[1,2]
@@ -40,7 +43,7 @@ estimatemarkerlod <- function(interresults){
   for(x in 2:nrow(interresults)){
 		if(is.na(interresults[x,3])){
 			y <- x
-			while(y <= nrow(interresults) && is.na(interresults[y,3])){
+			while(y <= nrow(interresults) && is.na(interresults[y,3]) && interresult[y,1] == interresult[x,1]){
 				y <- y + 1
 			}
 			nY <- interresults[y,3]     
