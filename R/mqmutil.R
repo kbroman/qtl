@@ -43,7 +43,7 @@ estimatemarkerlod <- function(interresults){
   for(x in 2:nrow(interresults)){
 		if(is.na(interresults[x,3])){
 			y <- x
-			while(y <= nrow(interresults) && is.na(interresults[y,3]) && interresult[y,1] == interresult[x,1]){
+			while(y <= nrow(interresults) && is.na(interresults[y,3]) && interresults[y,1] == interresults[x,1]){
 				y <- y + 1
 			}
 			nY <- interresults[y,3]     
