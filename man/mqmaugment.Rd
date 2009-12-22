@@ -95,8 +95,8 @@ result <- mqmscan(crossaug)    # Scan
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
 
-cat(result$mqm$Nind,'real individuals retained in dataset', 
-    result$mqm$Naug,'individuals augmented')
+cat(crossaug$mqm$Nind,'real individuals retained in dataset', 
+    crossaug$mqm$Naug,'individuals augmented')
 
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
