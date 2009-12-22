@@ -61,15 +61,15 @@ test_mqmplot_circle <- function(){
 
 test_plot_circle <- function(){
   values <- (runif(10)*3)+1
-  plot.circle(1:10)
-  plot.circle(values)
-  plot.circle(values,dist=TRUE)
+  mqmplot_c(1:10)
+  mqmplot_c(values)
+  mqmplot_c(values,dist=TRUE)
   values <- (runif(1000)*3)+1
-  plot.circle(values,dist=TRUE,cex=0.9)
+  mqmplot_c(values,dist=TRUE,cex=0.9)
 }
 
 
-plot.circle <- function(x, distance=FALSE, vulcano=FALSE, 
+mqmplot_c <- function(x, distance=FALSE, vulcano=FALSE, 
                         point.color="blue", text.color="red", line.color=rgb(0.1,0.1,0.1,0.1), 
                         lwd=1, cex=1, spacing=1, verbose=FALSE){
   if(is.null(x)) stop("Please supply a vector in x")
