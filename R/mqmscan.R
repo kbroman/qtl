@@ -32,7 +32,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 	forceML <- 0           #0 -> Restricted Maximum Likelyhood
   }
   dominance <- 0            #We code :0 -> Additive model (no_dominance)
-  if(model=="Dominance"){
+  if(model=="dominance"){
     dominance <- 1          #and 1 -> Dominance model
   }
   if(estimate.map){
