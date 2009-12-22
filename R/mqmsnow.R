@@ -33,13 +33,12 @@ snowCoreALL <- function(x,all.data,mapfunction,verbose=FALSE,...){
           cat("INFO: Starting analysis of trait (",x,"/",num.traits,")\n")
           cat("------------------------------------------------------------------\n")
         }
-	if("cofactors" %in% names(formals(mapfunction))){
-		if(exists("cofactors")){
-			result <- mapfunction(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=verbose,...)
-		}
-	}else{
-		result <- mapfunction(cross=all.data,pheno.col=x,...)
-	}
+	if("cofactors" %in% names(formals(mapfunction)) && exists("cofactors")) {
+          result <- mapfunction(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=verbose,...)
+        }
+        else{
+          result <- mapfunction(cross=all.data,pheno.col=x,...)
+        }
 	colnames(result)[3] <- paste("lod",names(all.data$pheno)[x])
 	e <- proc.time()
         if(verbose) {

@@ -103,6 +103,7 @@ mqmloadanalysis         Enables loading of previous MQM analysis from
 mqmpackage              Tool for analyzing QTLs in experimental crosses
 mqmplot_boot            Plot results from a bootstrap scan
 mqmplot_circle          Circular genome plotting - routine to show QTL
+mqmplot_cistrans        Plotting routine to show cis and trans QTL
                         information
 mqmplot_directedqtl     Plotting routine to display the effects and
                         results from a QTL scan
@@ -112,7 +113,8 @@ mqmplot_nice            Plot the results from a mqm scan on multiple
                         phenotypes
 mqmplot_one             Plotting routine to display the results from a
                         QTL scan
-mqmplotcistrans         Plotting routine to show cis and trans QTL
+mqmplot_permutations    Plot results from a bootstrap scan
+mqmplotcircle           Circular genome plotting - routine to show QTL
                         information
 mqmprocesspermutation   Convert mqmmulti objects into a scanoneperm
                         object

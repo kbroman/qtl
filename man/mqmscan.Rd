@@ -10,9 +10,9 @@
 
 \usage{
 mqm(cross, cofactors, pheno.col = 1, 
-  model=c("Additive","Dominance"), forceML=false,
+  model=c("additive","dominance"), forceML=FALSE,
   cofactor.significance=0.02, em.iter=1000, 
-  window.size=25.0, step.size=5.0, step.min=-20.0, step.max=max(unlist(pull.map(cross))),
+  window.size=25.0, step.size=5.0, step.min=-20.0, step.max=220,
   logtransform = FALSE, estimate.map = FALSE,
   plot=FALSE, verbose=FALSE, outputmarkers=TRUE,
   multicore=TRUE, batchsize=10, n.clusters=1
@@ -80,6 +80,10 @@ mqm(cross, cofactors, pheno.col = 1,
     }
   \item{plot}{ plot the results (default TRUE)}
   \item{verbose}{ verbose output}
+  \item{outputmarkers}{Needs to be explained}
+  \item{multicore}{Use multicore (if available)}
+  \item{batchsize}{Needs to be explained}
+  \item{n.clusters}{Number of child processes to split the job into.}
 }
 
 %\details{
@@ -112,13 +116,13 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \seealso{
 \itemize{
 % \input{"inst/docs/mqm/standard_seealso.txt"}
-    \item \code{\link[qtl]{MQM}} - MQM description and references
-    \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
-    \item \code{\link[qtl]{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link[qtl]{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link[qtl]{mqmbootstrap}} - Estimate confidence intervals
-    \item \code{\link[qtl]{scanone}} - Single QTL scanning
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
 
 % -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 }
@@ -139,8 +143,7 @@ result <- mqmscan(crossaug)    # Scan
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
 
-cat(result$mqm$Nind,'real individuals retained in dataset', \
-    result$mqm$Naug,'individuals augmented')
+cat(result$mqm$Nind,'real individuals retained in dataset', 
     result$mqm$Naug,'individuals augmented')
 
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----

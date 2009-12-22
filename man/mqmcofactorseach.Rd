@@ -13,21 +13,21 @@ mqmsetcofactors(cross, each = 3, verbose=FALSE)
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.} 
+   \code{\link{read.cross}} for details.} 
   \item{each}{ Every 'each' marker will be used as a cofactor }
   \item{verbose}{If TRUE, print tracing information.}
 }
 
 \value{
-	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link[qtl]{mqm}} algorithm.
+	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{mqm}} algorithm.
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
 
 \seealso{ 
   \itemize{
-  	\item \code{\link[qtl]{MQM}} - MQM main information
-  	\item \code{\link[qtl]{mqm}} - Single / multiple trait QTL analysis using MQM
+  	\item \code{\link{MQM}} - MQM main information
+  	\item \code{\link{mqm}} - Single / multiple trait QTL analysis using MQM
   }
 }
 
