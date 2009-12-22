@@ -162,6 +162,9 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
           }
         }
       }
+      if(augmentedNind > length(augmentedInd)){
+        augmentedNind <- length(augmentedInd)
+      }
       if(verbose){
         cat("New augmentedNind:",augmentedNind,"\n")
         cat("New length(augmentedInd):",length(augmentedInd),"\n")
