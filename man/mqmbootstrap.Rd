@@ -3,6 +3,7 @@
 \alias{bootstrapcim}
 \alias{mqmbootstrap}
 \alias{permutate}
+\alias{mqmpermute}
 
 \title{randomization approaches to obtain estimates of QTL LOD score significance }
 
