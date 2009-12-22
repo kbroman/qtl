@@ -34,18 +34,22 @@ mqmextractmarkers <- function(mqmresult){
 # there's something messed up in this function
 estimatemarkerlod <- function(interresults){
   if(all(is.na(interresults[,3]))) return (interresults) 
-	for(x in 1:nrow(interresults)){
+	pY <- interresults[1,3]		
+	pX <- interresults[1,2]
+  if(is.na(pY) || is.na(pX)) return (interresults) #The first marker needs to be a interval marker
+  for(x in 2:nrow(interresults)){
 		if(is.na(interresults[x,3])){
 			y <- x
 			while(y <= nrow(interresults) && is.na(interresults[y,3])){
 				y <- y + 1
 			}
-			nY <- interresults[y,3]
+			nY <- interresults[y,3]     
 			nX <- interresults[y,2]
-			distp = interresults[x,2] - pX  # <- pX may not exist yet
+      if(is.na(nY) || is.na(nX)) return (interresults) #The next marker also needs to be a interval marker
+			distp = interresults[x,2] - pX
 			distn = nX - interresults[x,2]
 			disttot = distn+distp
-			interresults[x,3] <- (((nY-pY)/disttot) * distp) + pY # <- pY may not exist yet
+			interresults[x,3] <- (((nY-pY)/disttot) * distp) + pY
 			interresults[x,4] <- 1
 			interresults[x,5] <- interresults[x,3]
 		}
