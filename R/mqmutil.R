@@ -31,19 +31,21 @@ mqmextractmarkers <- function(mqmresult){
   cleanedresult
 }
 
+# there's something messed up in this function
 estimatemarkerlod <- function(interresults){
+  if(all(is.na(interresults[,3]))) return (interresults) 
 	for(x in 1:nrow(interresults)){
 		if(is.na(interresults[x,3])){
 			y <- x
-			while(is.na(interresults[y,3])){
+			while(y <= nrow(interresults) && is.na(interresults[y,3])){
 				y <- y + 1
 			}
 			nY <- interresults[y,3]
 			nX <- interresults[y,2]
-			distp = interresults[x,2] - pX
+			distp = interresults[x,2] - pX  # <- pX may not exist yet
 			distn = nX - interresults[x,2]
 			disttot = distn+distp
-			interresults[x,3] <- (((nY-pY)/disttot) * distp) + pY
+			interresults[x,3] <- (((nY-pY)/disttot) * distp) + pY # <- pY may not exist yet
 			interresults[x,4] <- 1
 			interresults[x,5] <- interresults[x,3]
 		}
@@ -61,6 +63,7 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
 	n <- NULL
 	for(chr in 1:length(map)){
 		for(mar in 1:length(map[[chr]])){
+
 			if(verbose) cat(chr,"Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
 			if((class(map[[chr]])=="A")){
 			while(intervalresult[intervalmaploc,2] < map[[chr]][mar]  || intervalresult[intervalmaploc,1] < chr ){

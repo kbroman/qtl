@@ -1,4 +1,5 @@
 \name{mqmplot_permutations}
+\alias{mqmplot_permutations}
 \alias{mqmplot_boot}
 
 \title{Plot results from a bootstrap scan}
@@ -13,7 +14,7 @@ mqmplot_permutations(result, \dots)
 
 \arguments{
   \item{result}{ Resulting \code{mqmmulti} object created when performing 
-	permutation analysis. Only permutations done by the MQM algorithm \code{\link[qtl]{mqm}} 
+	permutation analysis. Only permutations done by the MQM algorithm \code{\link{mqm}} 
 	can use this plotting routine.
   }
   \item{\dots}{ Extra argument passed to the polyplot method of R. Brouwer }    
@@ -29,7 +30,7 @@ mqmplot_permutations(result, \dots)
 
 \seealso{ 
 \itemize{
-	\item \code{\link[qtl]{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm
+	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm
 }
 }
 
@@ -42,6 +43,6 @@ f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- calc.genoprob(f2cross)
 \dontrun{f2result <- bootstrap(f2cross)               	        # Bootstrap to obtain confidence intervals
 }\dontshow{f2result <- bootstrap(f2cross, n.run=2, b.size=2, method="hk")}
-mqmplotboot(f2result)					# Use the nice bootstrap plotting methodes
+mqmplot_boot(f2result)					# Use the nice bootstrap plotting methodes
 }
 \keyword{ hplot }

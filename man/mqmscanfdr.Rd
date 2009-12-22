@@ -17,7 +17,7 @@ mqmscanfdr(cross, mapfunction=mqmall,
 \arguments{
 	\item{cross}{ Cross object, An object of class \code{cross} from R/qtl
     with multiple phenotypes suitable for scanone and mqmscan from R/qtl.
-    See \code{\link[qtl]{read.cross}} for details. 
+    See \code{\link{read.cross}} for details. 
   }
 	\item{mapfunction}{ What QTL mapping function should be used. Currently
    three functions can be used to calculate genome wide FDR. 
@@ -35,14 +35,14 @@ mqmscanfdr(cross, mapfunction=mqmall,
 	\item{\dots}{ Here the user can supply parameters that will be passed on to the 
     underlying mapping function. Parameters passed through should match the 
     parameters of the underlying mapping function, otherwise an error will occur.
-    For the parameters see: \code{\link[qtl]{scanall}}, \code{\link[qtl]{cimall}} or
-	  \code{\link[qtl]{mqmall}}.
+    For the parameters see: \code{\link{scanall}}, \code{\link{cimall}} or
+	  \code{\link{mqmall}}.
   } 
 }
 
 \details{
-  This function wraps the analysis of \code{\link[qtl]{scan.one}}, \code{\link[qtl]{cim}}
-  or \code{\link[qtl]{mqmall}} to scan for QTL in shuffled/randomized data. It is 
+  This function wraps the analysis of \code{\link{scanone}}, \code{\link{cim}}
+  or \code{\link{mqmall}} to scan for QTL in shuffled/randomized data. It is 
   recommended to also install the \code{snow} library. The \code{snow} library allows
   calculations to run on multiple cores or even scale it up to an entire cluster, 
   thus speeding up calculation by the number of computers used.
@@ -61,15 +61,16 @@ mqmscanfdr(cross, mapfunction=mqmall,
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set cofactors for the MQM algorithm
-	\item \code{\link[qtl]{scanall}} - Function called to analyse multiple traits in the cross object (Using scan.one)
-	\item \code{\link[qtl]{cimall}} - Function called to analyse multiple traits in the cross object (Using CIM)
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object (Using MQM)
+	\item \code{\link{mqmcofactors}} - Learn how to set cofactors for the MQM algorithm
+	\item \code{\link{scanall}} - Function called to analyse multiple traits in the cross object (Using scanone)
+	\item \code{\link{cimall}} - Function called to analyse multiple traits in the cross object (Using CIM)
+	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object (Using MQM)
 	}
 }
 
 \examples{
 data(multitrait)				#Use the multitrait dataset
+multitrait <- fill.geno(multitrait)                     # impute missing genotype data
 \dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 multitrait <- calc.genoprob(multitrait)
 result <- mqmscanfdr(multitrait, threshold=10.0, n.perm=5)	#Calculate the thresholds

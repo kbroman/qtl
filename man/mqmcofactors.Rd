@@ -13,7 +13,7 @@ mqmcofactors(cross, cofactors, sexfactors, verbose=FALSE)
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
   \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
   \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
   \item{verbose}{If TRUE, print tracing information.}
@@ -24,7 +24,7 @@ mqmcofactors(cross, cofactors, sexfactors, verbose=FALSE)
 %}
 
 \value{
-An formatted list of cofactors to be used with the \code{\link[qtl]{mqmscan}} algorithm
+An formatted list of cofactors to be used with the \code{\link{mqmscan}} algorithm
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} }
@@ -35,8 +35,8 @@ An formatted list of cofactors to be used with the \code{\link[qtl]{mqmscan}} al
 
 \seealso{
 	\itemize{
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object
+	\item \code{\link{mqmscan}} - Function called to do single trait analysis
+	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
 	}
 }
 

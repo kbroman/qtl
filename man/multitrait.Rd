@@ -9,7 +9,7 @@
 }
 
 \description{
-	Cross object from R/QTL, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details.
+	Cross object from R/QTL, an object of class \code{cross} from R/QTL. See \code{\link{read.cross}} for details.
 }
 \usage{data(multitrait)}
 \format{
@@ -40,7 +40,7 @@
 \examples{
 data(multitrait)						#Load dataset
 multitrait <- fill.geno(multitrait)                     # impute missing genotype data
-result <- scanall(multitrait,Funktie=mqm,doLOG=1)	#Analyse all 24 traits
+result <- scanall(multitrait,mapfunction=mqm,logtransform=TRUE)	#Analyse all 24 traits
 }
 
 \keyword{datasets}

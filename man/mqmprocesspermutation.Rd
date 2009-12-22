@@ -17,7 +17,7 @@ mqmprocesspermutation(mqmpermutationresult = NULL)
 \arguments{
   \item{mqmpermutationresult}{ \code{mqmmulti} object obtained 
     after performing permutations on a single trait.using the 
-    function \code{\link[qtl]{mqmpermute}} 
+    function \code{\link{mqmpermute}} 
   }
 }
 
@@ -26,17 +26,17 @@ mqmprocesspermutation(mqmpermutationresult = NULL)
 %}
 
 \value{
-	Output of the algorithm is a \code{scanoneperm} object. See also: \code{\link[qtl]{summary.scanoneperm}}
+	Output of the algorithm is a \code{scanoneperm} object. See also: \code{\link{summary.scanoneperm}}
 }
 
 \author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
 
 \seealso{ 
   \itemize{
-    \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
-    \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
-  	\item \code{\link[qtl]{mqmpermute}} - Estimate confidence interfalls for QTL location using MQM
-  	\item \code{\link[qtl]{summary.scanoneperm}} - LOD thresholds from scanone permutation results
+    \item \code{\link{mqmintro}} - Introduction into MQM
+    \item \code{\link{mqmoverview}} - Overview of the MQM specific additions to R/qtl
+  	\item \code{\link{mqmpermute}} - Estimate confidence interfalls for QTL location using MQM
+  	\item \code{\link{summary.scanoneperm}} - LOD thresholds from scanone permutation results
   }
 }
 

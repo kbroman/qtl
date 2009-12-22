@@ -15,7 +15,7 @@ mqmtestnormal(cross, pheno.col = 1)
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
   \item{pheno.col}{ The phenotype to test for normality  }
 }
 
@@ -31,9 +31,9 @@ mqmtestnormal(cross, pheno.col = 1)
 
 \seealso{
 	\itemize{
-  \item \code{\link[qtl]{mqmintro}} - Introduction into MQM
-  \item \code{\link[qtl]{mqmoverview}} - Overview of the MQM specific additions to R/qtl
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single / multiple trait QTL analysis
+  \item \code{\link{mqmintro}} - Introduction into MQM
+  \item \code{\link{mqmoverview}} - Overview of the MQM specific additions to R/qtl
+	\item \code{\link{mqmscan}} - Function called to do single / multiple trait QTL analysis
 	}
 }
 

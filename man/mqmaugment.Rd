@@ -19,7 +19,7 @@ mqmaugment(cross, maxaugind=60, minprob=0.1, verbose=FALSE)
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}}.} 
+   \code{\link{read.cross}}.} 
   \item{maxaugind}{ 
     Maximum number of augmentations per individual.  The default of 60 allows
     for 20 missing markers for an individual in a BC cross and 30 missing
@@ -68,13 +68,13 @@ results by using \code{minprob=1}.
 \seealso{
   \itemize{
 % \input{"inst/docs/mqm/standard_seealso.txt"}
-    \item \code{\link[qtl]{MQM}} - MQM description and references
-    \item \code{\link[qtl]{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link[qtl]{mqmall}} - Parallellized traits analysis 
-    \item \code{\link[qtl]{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link[qtl]{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link[qtl]{mqmbootstrap}} - Estimate confidence intervals
-    \item \code{\link[qtl]{scanone}} - Single QTL scanning
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
 
 % -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
   }
@@ -95,7 +95,7 @@ result <- mqmscan(crossaug)    # Scan
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
 
-cat(result$mqm$Nind,'real individuals retained in dataset', \
+cat(result$mqm$Nind,'real individuals retained in dataset', 
     result$mqm$Naug,'individuals augmented')
 
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
