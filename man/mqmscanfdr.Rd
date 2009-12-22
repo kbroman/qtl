@@ -35,14 +35,13 @@ mqmscanfdr(cross, mapfunction=mqmall,
 	\item{\dots}{ Here the user can supply parameters that will be passed on to the 
     underlying mapping function. Parameters passed through should match the 
     parameters of the underlying mapping function, otherwise an error will occur.
-    For the parameters see: \code{\link{scanall}}, \code{\link{cimall}} or
-	  \code{\link{mqmall}}.
+    For the parameters see: \code{\link{mqm}}.
   } 
 }
 
 \details{
   This function wraps the analysis of \code{\link{scanone}}, \code{\link{cim}}
-  or \code{\link{mqmall}} to scan for QTL in shuffled/randomized data. It is 
+  or \code{\link{mqm}} to scan for QTL in shuffled/randomized data. It is 
   recommended to also install the \code{snow} library. The \code{snow} library allows
   calculations to run on multiple cores or even scale it up to an entire cluster, 
   thus speeding up calculation by the number of computers used.
@@ -61,10 +60,8 @@ mqmscanfdr(cross, mapfunction=mqmall,
 
 \seealso{
 	\itemize{
-	\item \code{\link{mqmcofactors}} - Learn how to set cofactors for the MQM algorithm
-	\item \code{\link{scanall}} - Function called to analyse multiple traits in the cross object (Using scanone)
-	\item \code{\link{cimall}} - Function called to analyse multiple traits in the cross object (Using CIM)
-	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object (Using MQM)
+  	\item \code{\link{mqmcofactors}} - Learn how to set cofactors for the MQM algorithm
+  	\item \code{\link{mqm}} - Function called to analyse multiple traits in the cross object
 	}
 }
 

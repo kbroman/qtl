@@ -38,7 +38,7 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
 }
 
-\seealso{ \code{\link{mqmscan}}, \code{\link{scanall}} }
+\seealso{ \code{\link{mqmscan}}, \code{\link{scanone}} }
 
 \examples{
 data(multitrait)
