@@ -39,6 +39,8 @@ Minor changes:
   and calculations are stopped early, the cluster nodes are stopped on
   exit.
 
+  Removed some odd erroneous code from the plot.qtl function.
+
 
 Version 1.14, 9/30/2009:
 

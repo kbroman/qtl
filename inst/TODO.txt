@@ -25,10 +25,6 @@ o RIL by sibmating (or selfing) for X chromosome, if there's a 'sex' phenotype.
 
 o Crash in scantwo if X chromosome in RIL by selfing.
 
-o Bug in plot.qtl 
-
-Error in attr(qtl, "formula") <- NULL : object 'qtl' not found
-
 o Crash in stepwiseqtl:
 
       -Starting backward deletion
