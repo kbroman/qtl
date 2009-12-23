@@ -55,6 +55,11 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
+  # in RIL, treat X chromomse like an autosome
+  chrtype <- sapply(cross$geno, class)
+  if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself")) 
+    for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
+
   if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
     cl <- makeCluster(n.cluster)

@@ -35,6 +35,10 @@ Minor changes:
   length > 1.  Before, they gave weird results and a meaningless
   error. 
 
+  Fixed a bug in scanone/scantwo for RIL on the X chromosome; the X
+  chromosome needs to be treated like to autosomes.  We can't really
+  deal with the sexes properly here.
+
   Revised scanone and scantwo so that, if using multiple CPUs via snow
   and calculations are stopped early, the cluster nodes are stopped on
   exit.
