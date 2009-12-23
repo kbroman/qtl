@@ -78,7 +78,7 @@ passes through the following stages:
 \item (Re)-estimation of the genetic map based on the genotypes provided
 \item Calculation of relative marker positions and detection of linkage groups
 \item (OPTIONAL) (Re)-estimation of genetic map and/or recombination frequencies
-\item Likelihood estimations of the full model using all markers
+\item Likelihood estimations of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
       genome scan for \qtl\ using the model (see section \label{QTL modelling})
 \item If there are no $cofactors$, perform a
