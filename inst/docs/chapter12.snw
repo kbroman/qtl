@@ -150,11 +150,12 @@ maximum number of \emph{augmented} genotypes per individual in a dataset. The
 default of 60 is usually too little enough (3 to 4 missing markers per individual).
 This was set low to prevent too much memory use because space is allocated prior 
 to augmentation. As a result the user has to increase the $maxaugind$ parameter when 
-there are more missing markers. Each individual is augmented with a probability of, at least,
-$minprob$ - in other words, only augment genotypes that of individuals that are
-above a probability of occurring (and drop the less likely cases). Note that
+there are more missing markers. Each individual is augmented with the most likely genotype
+, then other genotypes that are still more likely then $minprob$ are also included.
+in other words, only include augmented genotypes of individuals that are
+above a probability of occurring (and do not include the less likely cases). Note that
 setting this value too low may result in dropping individuals entirely as
-$maxaugind$ is quickly reached\footnote{The current version drops individuals
+$maxaugind$ is quickly reached \footnote{The current version drops individuals
 that go beyond $maxaugind$. This is undesired behaviour and will be fixed in an
 upcoming release. A value $minprob=1$ may prevent the dropping of individuals,
 making augmentation behave like $fill.geno$'s imputation method}. Use the verbose
