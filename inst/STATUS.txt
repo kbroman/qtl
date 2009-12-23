@@ -31,6 +31,10 @@ Minor changes:
   Fixed an apparent bug in read.cross for format="qtlcart"; need to
   treat negative genotype codes as missing.
 
+  lodint and bayesint now stop with an error if chr or qtl.index have
+  length > 1.  Before, they gave weird results and a meaningless
+  error. 
+
   Revised scanone and scantwo so that, if using multiple CPUs via snow
   and calculations are stopped early, the cluster nodes are stopped on
   exit.

@@ -42,8 +42,6 @@ o Crash in stepwiseqtl:
 
 o Bug in scantwo [within dropXcol()] for X chromosome with "risib".
 
-o lodint with multiple chr: crazy error
-
 o scanone with method="hk": Major memory problems in the permutations
   with multiple phenotypes. 
 

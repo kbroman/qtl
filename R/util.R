@@ -5,7 +5,7 @@
 # copyright (c) 2001-9, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Sep, 2009
+# last modified Dec, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1915,6 +1915,7 @@ function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
             stop("You must specify qtl.index.")
         }
         else {
+          if(length(qtl.index)>1) stop("qtl.index should have length 1")
           if(qtl.index < 1 || qtl.index > length(results))
             stop("qtl.index misspecified.")
           results <- results[[qtl.index]]
@@ -1932,6 +1933,7 @@ function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
         stop("Give a chromosome ID.")
     }
     else {
+      if(length(chr) > 1) stop("chr should have length 1")
       if(is.na(match(chr, results[,1])))
         stop("Chromosome misspecified.")
       results <- results[results[,1]==chr,]
@@ -2010,6 +2012,7 @@ function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
             stop("You must specify qtl.index.")
         }
         else {
+          if(length(qtl.index)>1) stop("qtl.index should have length 1")
           if(qtl.index < 1 || qtl.index > length(results))
             stop("qtl.index misspecified.")
           results <- results[[qtl.index]]
@@ -2027,6 +2030,7 @@ function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
         stop("Give a chromosome ID.")
     }
     else {
+      if(length(chr) > 1) stop("chr should have length 1")
       if(is.na(match(chr, results[,1])))
         stop("Chromosome misspecified.")
       results <- results[results[,1]==chr,]
