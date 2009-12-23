@@ -345,10 +345,10 @@ the chromosome 11 and 15 decrease}
 
 When using the functions $mqmcofactors$ and $mqmsetcofactors$, the
 number of cofactors the user is trying to set is compared against the number of
-individuals inside the cross object. If there is any danger of overfitting the
-model the function will display an error and will not return a cofactorlist.
-Also the residual degrees of freedom left are checked to make sure also the
-user created cofactor lists do not overfit the modeling routine.
+individuals inside the cross object. If there is any danger of setting too 
+many cofactors the two $cofactor$ functions will warn the user by
+displaying an error about the user trying to set more cofactors then samplesize 
+will permit, and not return a cofactorlist.
 
 \mqm\ checks that no markers are included that are less significant than the
 $cofactor.significance$ level specified by the user. The marker on chromosome 1
