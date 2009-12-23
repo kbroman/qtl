@@ -356,19 +356,28 @@ is informative enough to be included into the model. Thus creating a new
 initial model consisting of cofactors on chromosome 4 and 1. This (forward)
 selection of cofactors can continue untill there are no more informative
 markers that can be included. Practically this means one keeps on adding
-cofactors 
-until the last added cofactor gets dropped from the model.
+cofactors until the last added cofactor gets dropped from the model.
 
-Manually determining which marker to set a cofactor can be very time consuming
-in the case of many QTLs underlying a trait. Fortunately \mqm\ provides
-unsupervised backward elimination on a large number of markers by setting
-cofactors at every other marker. Iteratively the algorithm analyses all the
+Manually determining which marker to set a cofactor can be very time consuming 
+in the case of many QTLs underlying a trait. It also can be prone to overfitting 
+(because the user looks at the data to decide where to place cofactors). And is 
+generally not feasable for a large number of traits. Fortunately to solve 
+these issues \mqm\ provides unsupervised backward elimination.
+
+\clearpage
+\section{Unsupervised backward elimination}
+MQM also provides unsupervised backward elimination on a large number of markers by 
+setting cofactors a lot of markers beforehand. When samplesize allows us we could 
+place a cofactor at every marker. But in practice ussually only a subset of 
+locations is interesting beforehand. Using the $cofactor$ functions user can create
+a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
 markers and drops the least informative from the model. This step is repeated
 until a limited number of significant cofactors is left.
 
 After backward elimination \mqm\ will scan each chromosome using the model that
 includes the retained cofactors. Here we set a cofactor at every fifth
-marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
+marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in
+high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
 
 <<>>=
 # automatic cofactor selection through backward elimination
