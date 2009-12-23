@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 10/13/2009:
+Version 1.15, 12/23/2009:
 
 Major changes:
 
@@ -30,6 +30,10 @@ Minor changes:
 
   Fixed an apparent bug in read.cross for format="qtlcart"; need to
   treat negative genotype codes as missing.
+
+  Revised scanone and scantwo so that, if using multiple CPUs via snow
+  and calculations are stopped early, the cluster nodes are stopped on
+  exit.
 
 
 Version 1.14, 9/30/2009:
