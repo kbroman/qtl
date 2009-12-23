@@ -450,9 +450,9 @@ at a marker location, we have most power when both groups are equally divided
 into 50 mice, and, virtually, no power when we have a group with 1 mouse versus
 a group of 49 mice. We can multiple the estimated \qtl\ effect by this
 information content to 'clean' the QTL profile by giving less weight to less
-informative markers. Please note that in the analysis of deviance the sample
-size already plays a role in calculating \qtl. However, despite a lack of
-formal proof, it can be a way of further weighting/exploring \emph{information} content.
+informative markers. Please note that in the sample size already plays a role in 
+calculating \qtl. However, despite a lack of formal proof, it can be a way of 
+further weighting/exploring \emph{information} content.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
