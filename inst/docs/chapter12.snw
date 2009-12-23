@@ -63,11 +63,9 @@ These are the typical steps in an \mqm\ \qtl\ analysis
 \item Load an experiment using R/qtl data types
 \item Select trait under consideration
 \item Fill in missing data using either the $fill.geno$ or $mqmaugmentdata$ routine
-\item Call $mqmscan$ to execute a genome scan
-\item Call $mqmscan$ with $n.run$ to get an estimate of "significant" lod scores
-\item Select cofactors at certain marker locations
-\item Analysis with cofactors
-\item Finally, a bootstrap analysis with $cofactors$ to get estimates of significance
+\item Select $cofactors$ at markers that are suspected to have a \qtl\ at or near their location
+\item Use unsupervised backward elimination to analyse the $cofactors$
+\item Then use $mqmpermute$ with a permutation or simulation analysis to get estimates of significance
 \end{itemize}
 
 Using (restricted) maximum likelihood  the algorithm employs a backward
