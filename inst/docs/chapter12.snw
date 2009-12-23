@@ -566,11 +566,11 @@ experiment uses - typically - $n.run=1000 to 10000$ tests with $b.size=25 to 500
 \\
 \\
 To estimate significance of the peeks (and perhaps exclude some markers 
-from our model ) we can use a permutation testing. This step is
-computationally expensive - repeating the same test thousands of 
+from our model ) we can use permutation testing provided by the function $mqmpermute$. 
+This step is computationally expensive - repeating the same test thousands of 
 times on shuffled data to see what LOD scores come up in non associated data. 
-We can use two methods to estimate QTL significance when dealing with a small 
-amounts of traits. We can use either the $bootmethod$ parameter of the $mqmpermute$ 
+We can use two 'favors' to estimate QTL significance when dealing with a small 
+amounts of traits. We can use the $bootmethod$ parameter of the $mqmpermute$ 
 function to choose the 'flavor' of permutation $0 = non-parametric$ permutation or 
 $1 = parametric bootstrap$ a simulation of the data. If you have access to multiple 
 CPUs on your computer you can install the SNOW package \cite{tierney03}\cite{tierney04}, 
