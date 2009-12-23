@@ -147,9 +147,10 @@ individual is stored in the new $crossobject$, ready for QTL mapping.
 The important parameters are: $cross, pheno.col, maxaugind, minprob$ and
 $verbose$ (see also the $mqmaugment$ help page in R). $maxaugind$ sets the
 maximum number of \emph{augmented} genotypes per individual in a dataset. The
-default of 60 is usually good enough (20 missing F2 markers or 30 missing BC
-markers per individual). However higher numbers are needed when there are more
-missing markers. Each individual is augmented with a probability of, at least,
+default of 60 is usually too little enough (3 to 4 missing markers per individual).
+This was set low to prevent too much memory use because space is allocated prior 
+to augmentation. As a result the user has to increase the $maxaugind$ parameter when 
+there are more missing markers. Each individual is augmented with a probability of, at least,
 $minprob$ - in other words, only augment genotypes that of individuals that are
 above a probability of occurring (and drop the less likely cases). Note that
 setting this value too low may result in dropping individuals entirely as
