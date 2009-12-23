@@ -71,13 +71,13 @@ These are the typical steps in an \mqm\ \qtl\ analysis
 \end{itemize}
 
 Using (restricted) maximum likelihood  the algorithm employs a backward
-selection strategy to identify \qtl\ hotspot. The algorithm passes through the
-following stages:
+elimination strategy to identify \qtl\ underlying the trait. The algorithm 
+passes through the following stages:
 
 \begin{itemize}
 \item (Re)-estimation of the genetic map based on the genotypes provided
 \item Calculation of relative marker positions and detection of linkage groups
-\item (Re)-estimation of recombination frequencies
+\item (OPTIONAL) (Re)-estimation of genetic map and/or recombination frequencies
 \item Likelihood estimations of the full model using all markers
 \item Backward elimination of cofactors, followed by a
       genome scan for \qtl\ using the model (see section \label{QTL modelling})
