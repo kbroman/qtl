@@ -1,11 +1,11 @@
 #! /bin/sh
 
-echo "* Starting SWEAVE to generate chapter12 (MQM)"
+echo "* Starting SWEAVE to generate MQM-tour (MQM)"
 which R
 R --version
 
 R CMD BATCH SweaveIt.R
-latex chapter12.tex
+latex MQM-tour.tex
 # run twice for references
-latex chapter12.tex 
-dvipdfm chapter12.dvi
+latex MQM-tour.tex 
+dvipdfm MQM-tour.dvi
