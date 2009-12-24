@@ -30,7 +30,7 @@ pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
 single \qtl\ mapping with $scanone$ (green)}
 
-\title { Chapter 12 - Multiple QTL Model (MQM) Analysis }
+\title { Tutorial - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl Broman and Ritsert Jansen }
 \begin {document}
 \maketitle
