@@ -1,11 +1,10 @@
 \name{mqmloadanalysis}
 \alias{mqmloadanalysis}
 
-\title{Enables loading of previous MQM analysis from file} 
-
+\title{Enables loading of previously saved MQM analysis from file} 
 
 \description{
-  Enables loading of previous MQM analysis from file
+  Enables loading of previously saved MQM analysis from file
 }
 
 \usage{
@@ -24,16 +23,14 @@ mqmloadanalysis(file = "MQM_output.txt")
 Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the \code{\link{plot.scanone}} function.
 }
 
-\references{ Danny Arends \email{Danny.Arends@gmail.com} }
-
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ 
+  % \dannyauthor
+}
 
 \seealso{ 
-\itemize{
-  \item \code{\link{mqmintro}} - Introduction into MQM
-  \item \code{\link{mqmoverview}} - Overview of the MQM specific additions to R/qtl
-	\item \code{\link{mqm}} - Function called to do single / multple trait QTL analysis using MQM
-}
+  \itemize{
+    % \input{"inst/docs/mqm/standard_seealso.txt"}
+  }
 }
 
 \examples{
