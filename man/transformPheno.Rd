@@ -14,11 +14,12 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 
 \arguments{
   \item{cross}{ 
-    % \crossobject 
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
- \item{pheno.col}{A vector of numeric indices or
-   character strings (indicating phenotypes by name) of phenotypes to be
-   transformed.}
+ \item{pheno.col}{
+   A vector of numeric indices or character strings (indicating phenotypes by
+   name) of phenotypes to be transformed.
+ }
  \item{transf}{The function to use in the transformation.}
  \item{\dots}{Additional arguments, to be passed to \code{transf}.}
 }
@@ -28,7 +29,7 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 }
 
 \author{  
-  % /dannyauthor
+  % \dannyauthor
 }
 
 \seealso{ \code{\link{transf}}, \code{\link{mqmscan}}, \code{\link{scanone}} }
@@ -36,10 +37,10 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 \examples{
 data(multitrait)
 
-# Log transform all phenotypes
+# Log transformation of all phenotypes
 multitrait.log <- transformPheno(multitrait, pheno.col=1:nphe(multitrait))
 
-# Square-root transform all phenotypes
+# Square-root transformation of all phenotypes
 multitrait.sqrt <- transformPheno(multitrait, pheno.col=1:nphe(multitrait),
                                   transf=sqrt)
 }
