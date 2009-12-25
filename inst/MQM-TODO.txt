@@ -11,12 +11,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 SHORT TERM:
 
 o Tutorial and man pages
-  - sweave bug
+  - sweave problem - some eps output is not working on Linux
   - add example of SNOW with mqm scan
+  - mqmgetmodel.Rd needs example
 
 o Fix naming of functions and parameters:
-  - mqmscan man: update return value section, text not clear now  #Danny: okay like this ?
-  - lit list is part of MQM.Rd only - so include from there       #Should all pages have the same refs ?
   + change augmentdata to mqmaugment                              #Danny: Where ?
   - make sure all man, R and C-code functions and parameters are  #15 %
     similarly named for MQM

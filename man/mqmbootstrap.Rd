@@ -31,6 +31,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 	\item{mapfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ 
 Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
+  }
 	\item{multiC}{ Use multicore (if available)}  
 	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000, or higher,
   for publications) }
