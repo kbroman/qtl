@@ -37,8 +37,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot_multitrait(result)}
 }
 
-\author
-{ 
+\author{ 
 Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
