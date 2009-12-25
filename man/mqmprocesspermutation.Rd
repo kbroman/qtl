@@ -21,22 +21,25 @@ mqmprocesspermutation(mqmpermutationresult = NULL)
   }
 }
 
-%\details{
-%
-%}
-
 \value{
 	Output of the algorithm is a \code{scanoneperm} object. See also: \code{\link{summary.scanoneperm}}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} }
+\author{ 
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+}
 
 \seealso{ 
   \itemize{
-    \item \code{\link{mqmintro}} - Introduction into MQM
-    \item \code{\link{mqmoverview}} - Overview of the MQM specific additions to R/qtl
-  	\item \code{\link{mqmpermute}} - Estimate confidence interfalls for QTL location using MQM
-  	\item \code{\link{summary.scanoneperm}} - LOD thresholds from scanone permutation results
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
   }
 }
 
