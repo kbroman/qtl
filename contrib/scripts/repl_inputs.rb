@@ -37,6 +37,8 @@ REPL =
     "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}",
   'dannyauthor' =>
     "Danny Arends \\email{danny.arends@gmail.com}",
+  'dannyrutgerauthors' =>
+    "Danny Arends \\email{danny.arends@gmail.com} ; Rutger Brouwer",
   'crossobject' =>
     'An object of class \code{cross}. See \code{\link{read.cross}} for details',
   'phenocol' =>

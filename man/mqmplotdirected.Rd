@@ -12,8 +12,8 @@ mqmplot_directedqtl(cross, mqmresults, draw = TRUE)
 }
 
 \arguments{
-  \item{cross}{ Cross object, an object of class 
-    \code{cross} from R/QTL. See \code{\link{read.cross}} for details. 
+  \item{cross}{ 
+    % \crossobject
   }
   \item{mqmresults}{ Results from mqmscan of type \code{scanone} }
   \item{draw}{ If TRUE, draw the figure. }  
@@ -25,12 +25,13 @@ mqmplot_directedqtl(cross, mqmresults, draw = TRUE)
   scanone object see: \code{\link{scanone}}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com}  }
+\author{ 
+  % \dannyauthor
+}
 
 \seealso{ 
   \itemize{
-	\item \code{\link{mqm}} - Function called to do single trait QTL analysis using MQM
-  \item \code{\link{scanone}} - Function called to do single trait QTL analysis provided by R/qtl
+    % \input{"inst/docs/mqm/standard_seealso.txt"}
   }
 }
 

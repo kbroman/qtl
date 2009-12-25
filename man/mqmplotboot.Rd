@@ -26,12 +26,14 @@ mqmplot_permutations(result, \dots)
 
 \value{ No value returned (plotting routine) }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} }
+\author{ 
+  % \dannyrutgerauthor
+}
 
 \seealso{ 
 \itemize{
-	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for scanone, cim and mqm
-}
+  % \input{"inst/docs/mqm/standard_seealso.txt"}
+  }
 }
 
 \examples{

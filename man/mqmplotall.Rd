@@ -21,12 +21,13 @@ mqmplot_multitrait(result, type = "C", theta = 30, phi = 15, \dots)
   \item{\dots}{Additional arguments passed to \code{\link[graphics]{plot}}.}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ 
+  % \dannyauthor
+}
 
 \seealso{ 
   \itemize{
-  	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
-  	\item \code{\link{bootstrap}} - Function called to estimate confidence interfalls for MQM
+    \input{"inst/docs/mqm/standard_seealso.txt"}
   }
 }
 
@@ -40,12 +41,6 @@ mqmplot_multitrait(result,"P")
 mqmplot_multitrait(result,"C")
 mqmplot_multitrait(result,"I")
 mqmplot_multitrait(result,"D")
-}
-
-\references{
-\itemize{
-	\item Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988), \emph{The New S Language.} Wadsworth & Brooks/Cole.
-}
 }
 
 \keyword{ hplot }
