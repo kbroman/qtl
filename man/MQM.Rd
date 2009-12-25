@@ -29,10 +29,9 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \note{
 % \input{"inst/docs/mqm/limitations.txt"}
 
-At the moment, MQM is limited to experimental crosses F2, RIL and BC.
+At this point, MQM is limited to experimental crosses F2, RIL and BC.
 Also MQM does not treat sex chromosomes differently from autosomal
-chromosomes - though one can introduce sex as a cofactor. Another
-limitation is that MQM handles one phenotype at a time. Finally,
+chromosomes - though one can introduce sex as a cofactor. Finally,
 automatic backward elimination currently does not consider the marker
 density at locations. Future versions of MQM may improve on this.
 
@@ -57,27 +56,25 @@ density at locations. Future versions of MQM may improve on this.
 \examples{
 % \input{"inst/docs/mqm/standard_example.txt"}
 data(map10)                    # Mouse dataset
-qtl <- c(3,15,3,7)             # QTL location
 
 # simulate a cross (autosomes)
+qtl <- c(3,15,3,7)             # QTL location
 cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
 
 # MQM
 crossaug <- mqmaugment(cross)  # Augmentation
+cat(crossaug$mqm$Nind,'real individuals retained in dataset',
+    crossaug$mqm$Naug,'individuals augmented')
+
 result <- mqmscan(crossaug)    # Scan
 
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
-
-cat(crossaug$extra$Nind,'real individuals retained in dataset', 
-    crossaug$extra$Naug,'individuals augmented')
-
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 
 \references{
 % \input{"inst/docs/mqm/standard_references.txt"}
-	\itemize{
 		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
 		\item Swertz MA, Jansen RC. (2007), Beyond standardization: dynamic software infrastructures for systems biology. \emph{Nat Rev Genet.} \bold{3}, 235--243.
 		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
@@ -87,7 +84,6 @@ cat(crossaug$extra$Nind,'real individuals retained in dataset',
 		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
 		\item Jansen RC (1993), Interval mapping of multiple quantitative trait loci. \emph{Genetics}, \bold{135}, 205--211.
 		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
-	}
 % -----^^ inst/docs/mqm/standard_references.txt ^^-----
 }
 
