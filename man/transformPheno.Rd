@@ -4,7 +4,7 @@
 \title{Transform phenotypes in a cross object}
 
 \description{
-  Transform phenotypes in a cross object; by default use a log
+  Transform phenotypes in a cross object; by default use a Log
   transformation, though any function may be used.
 }
 
@@ -28,25 +28,21 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 %}
 
 \value{
-  The input cross object with the selected phenotypes transformed as indicated.
+  The input cross object with the transformed phenotypes
 }
 
 \author{  Danny Arends, \email{Danny.Arends@gmail.com}, Karl W. Broman,
   \email{kbroman@biostat.wisc.edu}}
 
-\note{ 
-If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
-}
-
-\seealso{ \code{\link{mqmscan}}, \code{\link{scanone}} }
+\seealso{ \code{\link{transf}}, \code{\link{mqmscan}}, \code{\link{scanone}} }
 
 \examples{
 data(multitrait)
 
-# log transform all phenotypes
+# Log transform all phenotypes
 multitrait.log <- transformPheno(multitrait, pheno.col=1:nphe(multitrait))
 
-# square-root transform all phenotypes
+# Square-root transform all phenotypes
 multitrait.sqrt <- transformPheno(multitrait, pheno.col=1:nphe(multitrait),
                                   transf=sqrt)
 }
