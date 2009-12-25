@@ -51,7 +51,6 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
-
 % -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }

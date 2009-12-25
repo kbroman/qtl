@@ -22,7 +22,7 @@ mqmplot_multitrait(result, type = "C", theta = 30, phi = 15, \dots)
 }
 
 \author{ 
-  % \dannyauthor
+Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 }
 
 \seealso{ 
