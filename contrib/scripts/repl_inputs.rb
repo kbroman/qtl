@@ -40,7 +40,9 @@ REPL =
   'crossobject' =>
     'An object of class \code{cross}. See \code{\link{read.cross}} for details',
   'phenocol' =>
-    'Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers.'
+    'Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers.',
+  'verbose' =>
+    'Display more output on verbose=TRUE'
 }
 
 ARGV.each do | fn | 
