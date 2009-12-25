@@ -1,6 +1,5 @@
 \name{mqmscan}
 \alias{mqmscan}
-\alias{mqm}
 
 \title{Genome scan with a multiple QTL model (MQM)}
 
@@ -114,7 +113,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 %}
 
 \seealso{
-\itemize{
+  \itemize{
 % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
@@ -125,7 +124,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{scanone}} - Single QTL scanning
 
 % -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
-}
+  }
 }
 
 \examples{
