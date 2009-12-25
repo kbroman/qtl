@@ -41,6 +41,7 @@ density at locations. Future versions of MQM may improve on this.
 
 \seealso{
 	\itemize{
+    \item The MQM tutorial (online)
 % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
