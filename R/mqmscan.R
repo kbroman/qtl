@@ -23,9 +23,15 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: mqmscan mqm 
+# Contains: mqmscan
+#           mqm
+#           
 #
 #####################################################################
+
+
+
+
 
 
 
