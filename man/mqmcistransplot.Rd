@@ -15,7 +15,9 @@
 
 \arguments{
   \item{x}{An object of class \code{mqmmulti}. See \code{\link{mqmall}} for details.} 
-  \item{cross}{An object of class \code{cross}. See \code{\link{read.cross}} for details.} 
+  \item{cross}{
+    % \crossobject
+  }
   \item{threshold}{ Threshold value in LOD, Markers that have a 
 	LOD score above this threshold are plotted as small squares 
 	(see \code{pch} parameter). The markers with LODscores below
@@ -44,15 +46,13 @@
 	Plotting routine, so no return
 }  
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl}}
-
-\note{
-If you find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+\author{ 
+  % \dannyauthor
 }
 
 \seealso{
 	\itemize{
-		\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
+% \input{"inst/docs/mqm/standard_seealso.txt"}
 	}
 }
 
@@ -66,8 +66,4 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 	mqmplot_cistrans(results, multiloc, 5, FALSE, TRUE)
 }
 
-%\references{
-%	
-%}
-
-\keyword{ utilities }
+\keyword{ hplot }

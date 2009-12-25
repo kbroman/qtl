@@ -41,22 +41,17 @@
 	Plotting routine, no return
 }  
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl}}
-
-\note{
-  If you find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+\author{ 
+  % \dannyauthor
 }
 
 \seealso{
 	\itemize{
-		\item \code{\link{mqm}} - Function called to analyse multiple traits in the cross object using mqm
-    \item \code{\link{mqmall}} - Function called to analyse all traits in the cross object using mqm
-    \item \code{\link{scanone}} - Function called to analyse multiple traits in the cross object
+    % \input{"inst/docs/mqm/standard_seealso.txt"}
 	}
 }
 
 \examples{
-  #Exhaustive example so dont run every time
   \dontrun{
     library(qtl)
     data(hyper)

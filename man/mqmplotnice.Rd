@@ -20,12 +20,13 @@ mqmplot_nice(result, \dots)
   }   
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; Rutger Brouwer \email{R.W.W.Brouwer@rug.nl} }
+\author{ 
+  % \dannyrutgerauthors
+}
 
 \seealso{ 
   \itemize{
-  	\item \code{\link{mqm}} - Function called to analyse multiple traits using MQM
-  	\item \code{\link{mqmpermute}} - Function called to estimate confidence interfalls for MQM
+    % \input{"inst/docs/mqm/standard_seealso.txt"}
   }
 }
 

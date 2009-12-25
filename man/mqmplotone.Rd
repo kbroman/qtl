@@ -17,12 +17,13 @@ mqmplot_one(result, extended = 0 ,\dots)
   \item{\dots}{ Extra argument passed to the \code{\link{plot.scanone}} }  
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com}  }
+\author{ 
+  % \dannyauthor
+}
 
 \seealso{ 
   \itemize{
-	\item \code{\link{mqm}} - Function called to do single trait QTL analysis using MQM
-  \item \code{\link{scanone}} - Function called to do single trait QTL analysis provided by R/qtl
+    % \input{"inst/docs/mqm/standard_seealso.txt"}
   }
 }
 
