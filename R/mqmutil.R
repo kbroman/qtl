@@ -20,15 +20,19 @@ ourline <- function(){
 }
 
 
+# Return the real markers in the set (remove fake ones)
 mqmextractmarkers <- function(mqmresult){
-  cleanedresult <- NULL
+  result <- NULL
   for(x in 1:nrow(mqmresult)){
-    if(!grepl(".loc",rownames(mqmresult)[x])){
-      cleanedresult <- rbind(cleanedresult,mqmresult[x,])
+    # for every marker...
+    marker = mqmresult[x,]
+    found = grep('.loc',rownames(marker))
+    if (length(found)==0) {
+      result <- rbind(result,marker)
     }
   }
-  class(cleanedresult) <- class(mqmresult)
-  cleanedresult
+  class(result) <- class(mqmresult)
+  result
 }
 
 
