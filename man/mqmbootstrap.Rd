@@ -5,14 +5,15 @@
 \alias{permutate}
 \alias{mqmpermute}
 
-\title{randomization approaches to obtain estimates of QTL LOD score significance }
+\title{Estimate QTL LOD score significance through bootstrap permutations}
 
 \description{
-   Using different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
+   Different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
    \itemize{
    \item Random redistribution of traits (method=0)
    \item Random redistribution of simulated trait values (method=1)
    }
+   Calculations can be parallelized using the SNOW package.
 }
 
 \usage{
@@ -24,14 +25,15 @@
 }
 
 \arguments{
-	\item{cross}{ Cross object, An object of class \code{cross} from R/QTL
-    with multiple phenotypes suitable for scanone and mqmscan from R/QTL.
-    See \code{\link{read.cross}} for details. 
+	\item{cross}{ 
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
 	\item{mapfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
-	\item{pheno.col}{ Phenotype under investigation (from the cross object) }
+	\item{pheno.col}{ 
+Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
 	\item{multiC}{ Use multicore (if available)}  
-	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000 to 5000) }
+	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000, or higher,
+  for publications) }
 	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
         \item{file}{File name (?)}
 	\item{n.clusters}{ Number of child processes to split the job into }
@@ -53,15 +55,22 @@
 	Returns a mqmmulti object. this object is a list of scanone objects that can be plotted using \code{plot.scanone(result[[trait]])}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }
+\author{ 
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+}
 
 \seealso{
 	\itemize{
-	\item \code{\link{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link{mqmall}} - Function called to analyse multiple traits in the cross object
-	\item \code{\link{scanone}} - Function called to do single trait analysis
-	\item \code{\link{cim}} - Function called to do single trait analysis
-	\item \code{\link{mqm}} - Function called to do single trait analysis
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
 
@@ -81,6 +90,17 @@ cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
 #EXTRA
 f2perm <- mqmprocesspermutation(f2result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
+}
+
+\references{
+% \input{"inst/docs/mqm/significance_references.txt"}
+    \item Bruno M. Tesson, Ritsert C. Jansen (2009) Chapter 3.7. Determining the significance threshold \emph{eQTL Analysis in Mice and Rats} \bold{1}, 20--25
+		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
+% -----^^ inst/docs/mqm/significance_references.txt ^^-----
+% \input{"inst/docs/mqm/parallelisation_references.txt"}
+		\item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
+		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
+% -----^^ inst/docs/mqm/parallelisation_references.txt ^^-----
 }
 
 \keyword{ models }
