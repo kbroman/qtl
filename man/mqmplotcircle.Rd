@@ -42,12 +42,20 @@
 }  
 
 \author{ 
-  % \dannyauthor
+Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 }
 
 \seealso{
 	\itemize{
     % \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
 
