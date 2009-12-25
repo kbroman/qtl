@@ -34,7 +34,9 @@ REPL =
     ' * Published under the terms of the GNU Lesser General Public License 3 (GPL3)',
   # Keywords for R man pages
   'mqmauthors' =>
-    "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}",
+    "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman email{kbroman@biostat.wisc.edu}",
+  'dannyauthor' =>
+    "Danny Arends email{danny.arends@gmail.com}",
   'crossobject' =>
     'An object of class \code{cross}. See \code{\link{read.cross}} for details'
 }
