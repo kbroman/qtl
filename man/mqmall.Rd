@@ -1,10 +1,10 @@
 \name{mqmall}
 \alias{mqmall}
 
-\title{QTL analysis using mqm on multiple phenotypes in a cross object}
+\title{Parallelized MQM on multiple phenotypes in a cross object}
 
 \description{
-	QTL analysis using mqm on multiple phenotypes in a cross object uses the SNOW library for faster computations
+  Parallelized QTL analysis using MQM on multiple phenotypes in a cross object (uses SNOW)
 }
 
 \usage{
@@ -12,14 +12,12 @@
 }
 
 \arguments{
-  \item{cross}{ Cross object, an object of class 
-    \code{cross} from R/QTL. See \code{\link{read.cross}} for details. 
+  \item{cross}{ 
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{multiC}{ Use multiple cores (only if the package SNOW is available)
   }
-  \item{n.clusters}{ Number of child processes to split the job into. with multiC 
-  is TRUE this determins how many cores are used at a given time. For optimal performance use
-  2 on a duocore, 3 on a quadcore and 5 on a hexacore.
+  \item{n.clusters}{ Number of parallel processes
   }
   \item{b.size}{ Batch size. The entire set is split in 
     jobs. Each job contains b.size number of traits per job 
@@ -30,11 +28,8 @@
 }
 
 \details{
-  Uses the mqm function to scan for QTL's for each 
-  phenotype in the cross object. It is recomended 
-  to also install the snow library. The snow library 
-  allows calculations to run on multiple cores or 
-  even scale it up to an entire cluster, thus speeding up calculation.
+  Uses \code{mqmscan} to scan for QTL's for each 
+  phenotype in the cross object. 
 }
 
 \value{
@@ -42,18 +37,23 @@
   objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot_multitrait(result)}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu}  }
-
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
+\author
+{ 
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
 \seealso{ 
 	\itemize{
-	\item \code{\link{multitrait}}  Dataset used in the example analysis
-	\item \code{\link{fill.geno}}  Augmentationroutine to estimate missing data	
-	\item \code{\link{mqmaugment}}  Augmentationroutine to estimate missing data
-	\item \code{\link{mqm}}  Function called to do single trait QTL analysis
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
 
@@ -70,14 +70,10 @@
 
 \references{
 	\itemize{
-		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
-		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.21. 	
+% \input{"inst/docs/mqm/parallelisation_references.txt"}
 		\item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
-		\item Jansen RC, Nap JP (2001), Genetical genomics: the added value from segregation. \emph{Trends in Genetics}, \bold{17}, 388391.
-		\item Jansen RC, Stam P (1994), High resolution of quantitative traits into multiple loci via interval mapping. \emph{Genetics}, \bold{136}, 14471455.
-		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963971.
-		\item Jansen RC (1993), Interval mapping of multiple quantitative trait loci. \emph{Genetics}, \bold{135}, 205211.
-		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 138.
+		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
+% -----^^ inst/docs/mqm/parallelisation_references.txt ^^-----
 	}
 }
 
