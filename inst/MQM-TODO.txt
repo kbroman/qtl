@@ -11,16 +11,22 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 SHORT TERM:
 
 o Tutorial and man pages
-  - sweave problem - some eps output is not working on Linux
-  - add example of SNOW with mqm scan
-  - mqmgetmodel.Rd needs example
+  - sweave problem - some eps output is not working on Linux (pjotr)
+  - add example of SNOW with mqm scan in tutorial (danny)
+  - mqmgetmodel.Rd needs example (danny)
   - mqmcofactorseach.Rd has wrong example - do we need that method?
+    (danny)
 
 o Fix naming of functions and parameters:
-  + change augmentdata to mqmaugment                              #Danny: Where ?
   - make sure all man, R and C-code functions and parameters are  #15 %
-    similarly named for MQM
- 
+    similarly named for MQM (danny)
+
+o Other
+  - fix header rewrite to ignore log entries containing header (pjotr)
+  - Add C header rewrite (pjotr)
+  - Make sure R CMD check works (all)
+  - fix regression tests on Unix (pjotr)
+
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
