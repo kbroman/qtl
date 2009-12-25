@@ -14,6 +14,7 @@ o Tutorial and man pages
   - sweave problem - some eps output is not working on Linux
   - add example of SNOW with mqm scan
   - mqmgetmodel.Rd needs example
+  - mqmcofactorseach.Rd has wrong example - do we need that method?
 
 o Fix naming of functions and parameters:
   + change augmentdata to mqmaugment                              #Danny: Where ?
