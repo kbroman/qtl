@@ -1,10 +1,10 @@
 \name{transformPheno}
 \alias{transformPheno}
 
-\title{Transform phenotypes in a cross object}
+\title{Transformation of the phenotypes in a cross object}
 
 \description{
-  Transform phenotypes in a cross object; by default use a Log
+  Transform phenotypes in a cross object; by default use a logarithmic
   transformation, though any function may be used.
 }
 
@@ -13,8 +13,9 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 }
 
 \arguments{
-  \item{cross}{An object of class \code{cross}. See
-   \code{\link{read.cross}} for details.}
+  \item{cross}{ 
+    % \crossobject 
+  }
  \item{pheno.col}{A vector of numeric indices or
    character strings (indicating phenotypes by name) of phenotypes to be
    transformed.}
@@ -22,17 +23,13 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
  \item{\dots}{Additional arguments, to be passed to \code{transf}.}
 }
 
-%\details{
-%  The selected phenotype columns are transformed via the selected
-%  transformation.  
-%}
-
 \value{
   The input cross object with the transformed phenotypes
 }
 
-\author{  Danny Arends, \email{Danny.Arends@gmail.com}, Karl W. Broman,
-  \email{kbroman@biostat.wisc.edu}}
+\author{  
+  % /dannyauthor
+}
 
 \seealso{ \code{\link{transf}}, \code{\link{mqmscan}}, \code{\link{scanone}} }
 
