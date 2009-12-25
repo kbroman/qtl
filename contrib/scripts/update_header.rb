@@ -30,7 +30,7 @@ def file_R(buf, source)
   methods = ""
   buf.each do | s |
     if s =~ /^(\S+)\s+<-/
-      methods += $1 + ' '
+      methods += $1 + "\n#           "
     end
   end
   inside_header = true
