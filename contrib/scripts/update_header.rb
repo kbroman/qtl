@@ -4,16 +4,51 @@
 #
 # by Pjotr Prins
 
+require 'parsedate'
 
+def git_info(source)
+  git = `git log #{source}`.split(/\n/)
+  git[2] =~ /Date: /
+  lastmodified = ParseDate.parsedate($'.strip)
+  modifiedby = []
+  git.grep(/^Author/).uniq.each do | author |
+    if author !~ /anny/
+      author =~ /Author: (.*) </
+      modifiedby.push $1
+    end
+  end
+  return lastmodified, modifiedby
+end
 
-R_HEADER =<<R_BLOCK
+def file_R(buf, source)
+  outbuf = []
+  # parse for modified by
+  lastmodified, modifiedby = git_info(source)
+  d = lastmodified
+  t = Time.mktime(d[0],d[1],d[2])
+  # parse for methods
+  methods = ""
+  buf.each do | s |
+    if s =~ /^(\S+)\s+<-/
+      methods += $1 + ' '
+    end
+  end
+  inside_header = true
+  buf.each do | s |
+    if inside_header and s !~ /^#/
+      # now inject header
+      outbuf.push <<R_HEADER
 #####################################################################
 #
-# mqmaugment.R
+# #{File.basename(source)}
 #
-# copyright (c) 2009, Danny Arends, Pjotr Prins and Karl W. Broman
-# last modified July, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by #{modifiedby.join(" and ")}
+#
+# 
+# first written Februari 2009
+# last modified #{t.strftime("%B %Y")}
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -27,21 +62,19 @@ R_HEADER =<<R_BLOCK
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
+# Part of the R/qtl package
+# Contains: #{methods}
+#
 #####################################################################
-R_BLOCK
 
 
-def file_R(buf)
-  outbuf = []
-  inside_header = false
-  buf.each do | s |
-    if inside_header and s !~ /^#/
-      # now inject header
-      outbuf.push "# new header!\n"
+R_HEADER
+      inside_header = false
     else
-      outbuf.push s
+      outbuf.push s if !inside_header
     end
   end
+  outbuf
 end
 
 
@@ -56,7 +89,7 @@ ARGV.each do | fn |
   # parse buffer and strip header replacing it with new
 
   if fn =~ /\.R/
-    outbuf = file_R(buf)
+    outbuf = file_R(buf, fn)
   else
     raise 'Unknown file extension for '+fn
   end

@@ -111,7 +111,7 @@ bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10
 			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
 		}
 
-		#Set the Phenotype under intrest as the first
+		#Set the Phenotype under interest as the first
 		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 
 		if(n.clusters > b.size){

@@ -2,7 +2,6 @@
 #
 # mqmplots.R
 #
-# copyright polyplot (c) 2009, Rutger Brouwer
 # copyright other functions (c) 2009, Danny Arends
 # last modified Jun, 2009
 # first written Feb, 2009
@@ -24,6 +23,8 @@
 #           polyplot, mqmplot_all, mqmplotboot, mqmplotnice, mqmplotone
 #           mqmcistransplot, addloctocross 
 ######################################################################
+
+# copyright polyplot (c) 2009, Rutger Brouwer
 
 mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
 	if(is.null(cross)){
