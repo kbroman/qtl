@@ -16,6 +16,7 @@ mqmtestnormal(cross, pheno.col = 1)
 \arguments{
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
   \item{pheno.col}{ 
 Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
   }

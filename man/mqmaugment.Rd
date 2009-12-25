@@ -67,6 +67,7 @@ results by using \code{minprob=1}.
 
 \seealso{
   \itemize{
+	\item \code{\link{fill.geno}} - Alternative routine for estimating missing data	
 % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
