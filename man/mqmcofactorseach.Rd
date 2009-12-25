@@ -22,12 +22,13 @@ mqmsetcofactors(cross, each = 3, verbose=FALSE)
 	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{mqm}} algorithm.
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{
+  % \mqmauthors
+}
 
 \seealso{ 
   \itemize{
-  	\item \code{\link{MQM}} - MQM main information
-  	\item \code{\link{mqm}} - Single / multiple trait QTL analysis using MQM
+    % \input{"inst/docs/mqm/standard_seealso.txt"}
   }
 }
 
@@ -36,7 +37,7 @@ qtl <- c(3,15,3,7)						# QTL at chromosome 3
 data(map10)							# Mouse genome
 \dontshow{map10 <- map10[1:5]}
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
-a <- mqmsetcofactors(cross,3)					# Set Cofactors each third marker
+a <- mqmsetcofactors(cross,3)					# Set Cofactors every third marker
 result <- mqm(cross,a)					# Do a backward model selection
 }
 
