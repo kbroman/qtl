@@ -1,21 +1,23 @@
 \name{addloctocross}
 \alias{addloctocross}
 
-\title{Adds phenotypes location into a cross object}
+\title{Add phenotype location into a cross object}
 
 \description{
-	Adds genomic locations of phenotype (phenotypes that have genomic locations usually come from eQTL or pQTL studies) into a cross object
+	Add phenotype location(s) into a cross object
+  (as with eQTL/pQTL studies) 
 }
 
 \usage{
-	addloctocross(cross,locations=NULL, locfile="locations.txt")
+	addloctocross(cross, locations=NULL, locfile="locations.txt")
 }
 
 \arguments{
-  \item{cross}{An object of class \code{cross}. See
-   \code{\link{read.cross}} for details.} 
-  \item{locations}{Rvariable holding location information about the traits.}
-  \item{locfile}{ if there a no \code{locations} specified data is loaded from a file specified by this parameter, see the details section for the layout of the file.}
+  \item{cross}{
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
+  \item{locations}{R variable holding location information}
+  \item{locfile}{ load from a file, see the details section for the layout of the file.}
 }
 
 \details{
@@ -32,15 +34,23 @@ cM	postion from start of chromosome in cM
   The input cross object, with the locations added as an aditional component \code{locations}
 }  
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl}}
-
-\note{
-If you find anything wrong with the algorithm please notify me at: Danny.Arends@gmail.com
+\author{ 
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
 \seealso{
 	\itemize{
-		\item \code{\link{mqmplot_cistrans}} - Function called to analyze multiple traits in the cross object
+    \item \code{\link{mqmplot_cistrans}} - Cis/trans plot
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
 
@@ -52,11 +62,7 @@ If you find anything wrong with the algorithm please notify me at: Danny.Arends@
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
 	mqmplot_cistrans(results, multiloc, 5, FALSE, TRUE)
+  }
 }
-}
-
-%\references{
-%
-%}
 
 \keyword{ utilities }
