@@ -21,7 +21,7 @@ mqm(cross, cofactors, pheno.col = 1,
 
 \arguments{
   \item{cross}{ 
-    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{cofactors}{ List of cofactors to be analysed as cofactors in the 
     QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
@@ -131,21 +131,20 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \examples{
 % \input{"inst/docs/mqm/standard_example.txt"}
 data(map10)                    # Mouse dataset
-qtl <- c(3,15,3,7)             # QTL location
 
 # simulate a cross (autosomes)
-cross <- sim.cross(map10,qtl,n=100,missing.prob=0.01)
+qtl <- c(3,15,3,7)             # QTL location
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
 
 # MQM
 crossaug <- mqmaugment(cross)  # Augmentation
+cat(crossaug$mqm$Nind,'real individuals retained in dataset',
+    crossaug$mqm$Naug,'individuals augmented')
+
 result <- mqmscan(crossaug)    # Scan
 
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
-
-cat(result$mqm$Nind,'real individuals retained in dataset', 
-    result$mqm$Naug,'individuals augmented')
-
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 

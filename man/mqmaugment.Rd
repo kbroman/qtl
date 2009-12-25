@@ -83,21 +83,20 @@ results by using \code{minprob=1}.
 \examples{
 % \input{"inst/docs/mqm/standard_example.txt"}
 data(map10)                    # Mouse dataset
-qtl <- c(3,15,3,7)             # QTL location
 
 # simulate a cross (autosomes)
+qtl <- c(3,15,3,7)             # QTL location
 cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
 
 # MQM
 crossaug <- mqmaugment(cross)  # Augmentation
+cat(crossaug$mqm$Nind,'real individuals retained in dataset',
+    crossaug$mqm$Naug,'individuals augmented')
+
 result <- mqmscan(crossaug)    # Scan
 
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
-
-cat(crossaug$mqm$Nind,'real individuals retained in dataset', 
-    crossaug$mqm$Naug,'individuals augmented')
-
 % -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 

@@ -34,9 +34,9 @@ REPL =
     ' * Published under the terms of the GNU Lesser General Public License 3 (GPL3)',
   # Keywords for R man pages
   'mqmauthors' =>
-    "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman email{kbroman@biostat.wisc.edu}",
+    "Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \\email{kbroman@biostat.wisc.edu}",
   'dannyauthor' =>
-    "Danny Arends email{danny.arends@gmail.com}",
+    "Danny Arends \\email{danny.arends@gmail.com}",
   'crossobject' =>
     'An object of class \code{cross}. See \code{\link{read.cross}} for details',
   'phenocol' =>
@@ -53,13 +53,13 @@ ARGV.each do | fn |
   
   # parse buffer and strip between inputs
   outbuf = []
-  input = false
+  inside_input = false
   skipone = false
   buf.each do | s |
     if s.strip =~ /^%\s+\\input\{\"(\S+?)\"\}/
       inputfn = $1
       print "\nInjecting #{inputfn}"
-      input = true
+      inside_input = true
       # inject inputfn
       raise "File not found #{inputfn}!" if !File.exist?(inputfn)
       outbuf.push s
@@ -74,8 +74,8 @@ ARGV.each do | fn |
         next
       end
     end
-    input = false if input and s.strip == '}'
-    outbuf.push s if !input and !skipone
+    inside_input = false if s.strip == '}'
+    outbuf.push s if !inside_input and !skipone
     skipone = false
   end
   File.open(fn,"w") do | f |
