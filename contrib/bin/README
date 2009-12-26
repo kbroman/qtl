@@ -20,6 +20,10 @@ To test all
 
   make testall
 
+To run a single test you can use regular expressions (man ctest), e.g.
+
+  ctest -R TestMQMF2_test0 
+
 Both build and install the 'R/qtl' package in its default location before
 running the test scripts. You need both R and lapack, on Debian/Ubuntu:
 
