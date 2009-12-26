@@ -2,12 +2,14 @@
  *
  * mqm.h
  *
- * Master include file for common mqm.headers
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
- * last modified July, 2009
- * first written July, 2009
+ * Modified by Pjotr Prins and Danny Arends
+ * last modified October 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -20,6 +22,8 @@
  *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
+ *
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 

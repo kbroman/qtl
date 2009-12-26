@@ -2,22 +2,28 @@
  *
  * mqmaugment.h
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
- *   This program is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU General Public License, 
- *   version 3, as published by the Free Software Foundation.
+ * Modified by Danny Arends and Pjotr Prins
+ * last modified December 2009
  *
- *   This program is distributed in the hope that it will be useful, 
- *   but without any warranty; without even the implied warranty of
- *   merchantability or fitness for a particular purpose. See the GNU
- *   General Public License, version 3, for more details.
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
  *
- *   A copy of the GNU General Public License, version 3, is available
- *   at http://www.r-project.org/Licenses/GPL-3
+ *     This program is distributed in the hope that it will be useful,
+ *     but without any warranty; without even the implied warranty of
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
+ *
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
+ *
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 
