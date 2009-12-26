@@ -292,7 +292,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     }
   }
   for (int i=0; i<Nind; i++) {
-    //Sum up log likelyhoods for each individual
+    //Sum up log likelihoods for each individual
     logL+= log(indL[i]);
   }
   Free(indL);
