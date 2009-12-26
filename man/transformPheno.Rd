@@ -32,7 +32,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 }
 
-\seealso{ \code{\link{transf}}, \code{\link{mqmscan}}, \code{\link{scanone}} }
+\seealso{ \code{\link{mqmscan}}, \code{\link{scanone}} }
 
 \examples{
 data(multitrait)
