@@ -427,7 +427,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else {
-            //STD case we know what the next marker is nou use probleft to estimate the likelyhood of the current location
+            //STD case we know what the next marker is nou use probleft to estimate the likelihood of the current location
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {

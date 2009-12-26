@@ -276,7 +276,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
       (*cofactor)[j]=MNOCOF;
     }
   }
-  //QTL likelyhood for each location
+  //QTL likelihood for each location
   if(verbose) info("Number of output datapoints: %d",Nsteps);
   for (int ii=0; ii<Nsteps; ii++) {
     //Convert LR to LOD before sending back

@@ -173,7 +173,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
 		//info("INFO: REML");
   }
   if (!useREML) {
-		//info("INFO: Maximum Likelyhood");
+		//info("INFO: Maximum Likelihood");
     varknown=false;
     biasadj=false;
   }

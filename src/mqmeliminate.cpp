@@ -64,24 +64,24 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   while ((Ncof>0)&&(!finished)) {
     for (int j=0; j<Nmark; j++) {
       if ((*newcofactor)[j]==MCOF) {
-        //See what the likelyhood is when we drop the cofactor
+        // See what the likelihood is when we drop the cofactor
         (*newcofactor)[j]=MNOCOF;
         if (REMLorML=='1') variance= -1.0;
         logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
-        //Set back the cofactor to MCOF
+        // Set back the cofactor to MCOF
         (*newcofactor)[j]=MCOF;
       } else if ((*newcofactor)[j]==MSEX) {
-        //See what the likelyhood is when we drop the sexcofactor
+        // See what the likelihood is when we drop the sexcofactor
         (*newcofactor)[j]=MNOCOF;
         if (REMLorML=='1') variance= -1.0;
         logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
-        //Set back the cofactor to MSEX
+        // Set back the cofactor to MSEX
         (*newcofactor)[j]=MSEX;
       } else if ((*newcofactor)[j]!=MNOCOF) {
         Rprintf("ERROR: Something is wrong when trying to parse the newcofactorslist.\n");
       }
     }
-    /* nu bepalen welke cofactor 0 kan worden (=verwijderd) */
+    /* assess which cofactor 0 can be dropped */
     maxlogL= logLfull-10000.0;
     for (int j=0; j<Nmark; j++) {
       if ((*newcofactor)[j]!=MNOCOF) {
@@ -94,7 +94,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
 #ifndef STANDALONE
     //Rprintf("TEST BW\n");
     R_CheckUserInterrupt(); /* check for ^C */
-    //R_ProcessEvents(); /*  Try not to crash windows etc*/
+    //R_ProcessEvents(); /*  Try not to crash windows */
     R_FlushConsole();
 #endif
     //See which cofactor we need to drop, if we dont drop any (or have none left) we're finished
@@ -102,12 +102,14 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
-      if(verbose)info("Marker %d is dropped, resulting in logL of reduced model = %f",(dropj+1),savelogL);
-    } else if  ( ((*newcofactor)[dropj]==MBB) && (F1> 2.0*(savelogL-maxlogL)) ) {
+      if(verbose) 
+        info("Marker %d is dropped, resulting in reduced model logL = %f",(dropj+1),savelogL);
+    } else if ( ((*newcofactor)[dropj]==MBB) && (F1> 2.0*(savelogL-maxlogL)) ) {
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
-      if(verbose)info("Marker %d is dropped, resulting in logL of reduced model = %f",(dropj+1),savelogL);
+      if(verbose)
+        info("Marker %d is dropped, resulting in logL of reduced model = %f",(dropj+1),savelogL);
     } else {
       if (verbose) {
         Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");
