@@ -453,7 +453,8 @@ int main(int argc,char *argv[]) {
     ivector new_ind;
     cvector position = relative_marker_position(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
+    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
+      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
     mqmaugment(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
@@ -463,13 +464,23 @@ int main(int argc,char *argv[]) {
     freevector((void *)position);
     freevector((void *)r);
     
-    //Start scanning for QTLs
+    // Start scanning for QTLs
     analyseF2(nind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
-    //Write final QTL profile (screen and file)
+    // Write final QTL profile (screen and file)
     for (int q=0; q<locationsoutput; q++) {
-      // outstream << q << "\t" << QTL[0][q] << "\n";
-      fprintf(fout,"%5d\t%10.5f\n",q,QTL[0][q]);
+      double qtlvalue = QTL[0][q];
+      fprintf(fout,"%5d\t",q);
+      // The following prints a 'standardized' value on Windows and Unix for regression tests (for nan and inf)
+      if (isnan(qtlvalue)) {
+          fprintf(fout,"       NAN\n");
+      }
+      else
+        if (isinf(qtlvalue)) {
+          fprintf(fout,"  INFINITE\n");
+        }
+        else
+          fprintf(fout,"%10.5f\n",QTL[0][q]);
     }
     
     freevector((void *)f1genotype);
