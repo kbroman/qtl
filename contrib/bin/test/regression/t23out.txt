@@ -28,18 +28,18 @@ INFO: F(4.003906,2,235)=0.020000
 INFO: Log-likelihood of full model= -15627.273277
 INFO: Residual variance= 59.654157
 INFO: Trait mean= 101.611600; Trait variation= 70.959584
-INFO: Marker 91 is dropped, resulting in logL of reduced model = -15627.280044
-INFO: Marker 86 is dropped, resulting in logL of reduced model = -15627.292584
-INFO: Marker 76 is dropped, resulting in logL of reduced model = -15627.307673
-INFO: Marker 112 is dropped, resulting in logL of reduced model = -15627.325783
-INFO: Marker 89 is dropped, resulting in logL of reduced model = -15627.372390
-INFO: Marker 153 is dropped, resulting in logL of reduced model = -15627.742823
-INFO: Marker 143 is dropped, resulting in logL of reduced model = -15628.195929
-INFO: Marker 144 is dropped, resulting in logL of reduced model = -15628.564707
-INFO: Marker 53 is dropped, resulting in logL of reduced model = -15629.423763
-INFO: Marker 67 is dropped, resulting in logL of reduced model = -15630.344713
-INFO: Marker 28 is dropped, resulting in logL of reduced model = -15631.632660
-INFO: Marker 72 is dropped, resulting in logL of reduced model = -15634.535006
+INFO: Marker 91 is dropped, resulting in reduced model logL = -15627.280044
+INFO: Marker 86 is dropped, resulting in reduced model logL = -15627.292584
+INFO: Marker 76 is dropped, resulting in reduced model logL = -15627.307673
+INFO: Marker 112 is dropped, resulting in reduced model logL = -15627.325783
+INFO: Marker 89 is dropped, resulting in reduced model logL = -15627.372390
+INFO: Marker 153 is dropped, resulting in reduced model logL = -15627.742823
+INFO: Marker 143 is dropped, resulting in reduced model logL = -15628.195929
+INFO: Marker 144 is dropped, resulting in reduced model logL = -15628.564707
+INFO: Marker 53 is dropped, resulting in reduced model logL = -15629.423763
+INFO: Marker 67 is dropped, resulting in reduced model logL = -15630.344713
+INFO: Marker 28 is dropped, resulting in reduced model logL = -15631.632660
+INFO: Marker 72 is dropped, resulting in reduced model logL = -15634.535006
 INFO: Number of output datapoints: 2020
     0	   0.14203
     1	   0.14210
