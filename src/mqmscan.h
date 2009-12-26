@@ -2,10 +2,12 @@
  *
  * mqmscan.h
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 2009 Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * Modified by DannyArends and Pjotr Prins
+ *
+ * first written before 2000
+ * last modified September 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -20,7 +22,6 @@
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
- * Contains: R_mqmscan, mqmscan
  *
  **********************************************************************/
 
