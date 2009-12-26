@@ -22,6 +22,8 @@ o Fix naming of functions and parameters:
     similarly named for MQM (danny)
 
 o Other
+  - Add test descriptions and check test T32 differs on 64bits compile
+    (danny)
   - fix header rewrite to ignore log entries containing header (pjotr)
   - Add C header rewrite (pjotr)
   - Make sure R CMD check works (all)
