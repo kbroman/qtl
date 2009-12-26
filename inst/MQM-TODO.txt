@@ -24,8 +24,8 @@ o Fix naming of functions and parameters:
 o Other
   - Add test descriptions and check test T32 differs on 64bits compile
     (danny)
-  - fix header rewrite to ignore log entries containing header (pjotr)
-  - Make sure R CMD check works (all)
+  - Make sure R CMD check works (all), by running script in
+    ./contrib/scripts/run_all_tests.sh before passing on changes
 
 ----------------------------------------------------------------------
 
