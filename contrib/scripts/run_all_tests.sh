@@ -1,4 +1,6 @@
 #! /bin/sh
+#
+# Usage: contrib/scripts/run_all_tests.sh .
 
 path=$1
 
