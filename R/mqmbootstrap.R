@@ -2,29 +2,42 @@
 #
 # mqmbootstrap.R
 #
-# copyright (c) 2009, Danny Arends
-# last modified Jun, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Pjotr Prins
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: bootstrap - Main function for bootstrap analysis
-#           mqmprocesspermutation - Helperfunction to create permObjects (R/QTL format)
-#           mqmbootstrap, bootstrapcim
-#           FDRpermutation
+# Contains: mqmscanfdr
+#           mqmpermute
+#           mqmbootstrap
+#           bootstrapcim
+#           permute
+#           bootstrap
+#           mqmprocesspermutation
+#           #result
+#           
 #
-######################################################################
+#####################################################################
+
+
+
+
 
 mqmscanfdr <- function(cross, mapfunction=mqmall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
@@ -111,7 +124,7 @@ bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10
 			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
 		}
 
-		#Set the Phenotype under intrest as the first
+		#Set the Phenotype under interest as the first
 		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 
 		if(n.clusters > b.size){

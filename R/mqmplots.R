@@ -2,28 +2,47 @@
 #
 # mqmplots.R
 #
-# copyright polyplot (c) 2009, Rutger Brouwer
-# copyright other functions (c) 2009, Danny Arends
-# last modified Jun, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Pjotr Prins and Karl Broman
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
-#           polyplot, mqmplot_all, mqmplotboot, mqmplotnice, mqmplotone
-#           mqmcistransplot, addloctocross 
-######################################################################
+# Contains: mqmplot_directedqtl
+#           mqmplot_cistrans
+#           addloctocross
+#           polyplot
+#           getThird
+#           getChr
+#           mqmplot_multitrait
+#           mqmplot_permutations
+#           mqmplot_boot
+#           mqmplot_nice
+#           mqmplot_one
+#           
+#
+#####################################################################
+
+
+
+
+
+# copyright polyplot (c) 2009, Rutger Brouwer
 
 mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
 	if(is.null(cross)){
