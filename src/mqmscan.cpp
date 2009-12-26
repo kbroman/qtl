@@ -27,6 +27,7 @@
  *
  **********************************************************************/
 
+#include "mqm.h"
 #include <Rmath.h>
 
 inline int mqmmod(int a, int b) {
