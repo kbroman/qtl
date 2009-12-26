@@ -14,13 +14,13 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
-echo "Run the standard MQM regression tests"
+echo "Run the standard MQM regression tests - without R install"
 cd $cwd
 cd contrib/bin
 rm CMakeCache.txt
 cmake .
-make
-make testall
+make 
+make test
 if [ "$?" -ne "0" ]; then
   echo "Test failed"
   exit 1
@@ -29,6 +29,18 @@ fi
 echo "R CMD check"
 cd $cwd
 R CMD check .
+if [ "$?" -ne "0" ]; then
+  echo "Test failed"
+  exit 1
+fi
+
+echo "Run the R regression tests - with R install"
+cd $cwd
+cd contrib/bin
+rm CMakeCache.txt
+cmake -DTEST_R=TRUE .
+make 
+make testR
 if [ "$?" -ne "0" ]; then
   echo "Test failed"
   exit 1
