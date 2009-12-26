@@ -428,7 +428,8 @@ int main(int argc,char *argv[]) {
       mapdistance[i]=pos[i];
     }
 
-    set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
+    if (coffile)
+      set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
     if (set_cofactors > 0) {
       backwards = 1;
     }
