@@ -2,9 +2,13 @@
 #
 # mqmaugment.R
 #
-# copyright (c) 2009, Danny Arends, Pjotr Prins and Karl W. Broman
-# last modified July, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Pjotr Prins
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -20,8 +24,13 @@
 #
 # Part of the R/qtl package
 # Contains: mqmaugment
+#           
 #
-######################################################################
+#####################################################################
+
+
+
+
 
 ######################################################################
 #

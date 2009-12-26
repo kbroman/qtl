@@ -1,37 +1,47 @@
 #####################################################################
 #
 # mqmcircleplot.R
-# mainroutine: mqmplot_circle
 #
-# copyright (c) 2009, Danny Arends
-# last modified December, 2009
-# first written December, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Pjotr Prins and Karl Broman
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
-# This file contains the following routines:
-# 
-#   test_mqmplot_circle     : Test / initialization routine to check the circle functions / needed libraries+datasets
-#   mqmplot_circle          : Circleplotting routine for scanone / mqmmulti
-#   circlelocations         : Helperfunction to subdivide a circle
-#   drawspline              : Draws a spline between 2 locations on the circle
-#   getchromosomelength     : Retrieve chromosome length from scanone object
-#   getgenomelength         : Retrieve genome length form scanone object
-#   locationtocircle        : Translates a position in cM to a Circular position
-#   drawcirculargenome      : Drawing routine for the genome uses a scanon object
-#   loopthroughmulti        : Loop through an mqmmultiobject highlighting traits 1 by 1
+# Part of the R/qtl package
+# Contains: test_mqmplot_circle
+#           test_plot_circle
+#           mqmplot_c
+#           mqmplotcircle
+#           mqmplot_circle
+#           circlelocations
+#           drawspline
+#           getchromosomelength
+#           getgenomelength
+#           locationtocircle
+#           drawcirculargenome
+#           loopthroughmulti
+#           
 #
-######################################################################
+#####################################################################
+
+
+
+
 
 test_mqmplot_circle <- function(){
   library(qtl)
