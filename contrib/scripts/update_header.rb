@@ -6,18 +6,60 @@
 
 require 'parsedate'
 
-def git_info(source, mainauthor)
-  git = `git log #{source}`.split(/\n/)
-  git[2] =~ /Date: /
-  lastmodified = ParseDate.parsedate($'.strip)
-  modifiedby = []
-  git.grep(/^Author/).uniq.each do | author |
-    if author !~ /#{mainauthor}/
-      author =~ /Author: (.*) </
-      modifiedby.push $1
-    end
+class GitLogEntry
+  attr_reader :id, :author, :date, :comment
+  def initialize buf
+    raise "Git log problem "+buf.to_s if buf[0] !~ /^commit/
+    @id = buf[0]
+    pos = 1
+    pos += 1 if buf[pos] =~ /^Merge:/
+    buf[pos] =~ /^Author: (.*) </
+    @author = $1.strip
+    @author = 'Danny Arends' if @author == 'DannyArends'
+    pos += 1
+    buf[pos] =~ /^Date:   /
+    @date = $'.strip
+    @comment = buf[3..-1]
   end
-  return lastmodified, modifiedby
+end
+
+class GitLog
+  def initialize fn
+    @list = []
+    buf = []
+    # print "Fetching git log from #{fn}\n"
+    `git log #{fn}`.split(/\n/).each do | s |
+      if s =~ /^commit/ and buf.size>0
+        @list.push GitLogEntry.new(buf)
+        buf = []
+      end
+      buf.push s
+    end
+    @list.push GitLogEntry.new(buf)
+  end
+
+  def modified
+    @list.each do | commit |
+      next if commit.comment.join =~ /header/i
+      return ParseDate.parsedate(commit.date)
+    end
+    'unknown'
+  end
+
+  def authors
+    modifiedby = []
+    @list.each do | commit |
+      next if commit.comment.join =~ /header/i
+      modifiedby.push commit.author
+    end
+    modifiedby.uniq
+  end
+end
+
+def git_info(source, mainauthor)
+  gitlog = GitLog.new(source)
+  modifiedby = []
+  return gitlog.modified, gitlog.authors
 end
 
 def file_R(buf, source)
@@ -46,7 +88,7 @@ def file_R(buf, source)
 #
 # Modified by #{modifiedby.join(" and ")}
 #
-# 
+#
 # first written Februari 2009
 # last modified #{t.strftime("%B %Y")}
 #
@@ -92,11 +134,13 @@ def file_C(buf, source)
  *
  * #{File.basename(source)}
  *
- * Copyright (c) 2009 Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ *
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by #{modifiedby.join(" and ")}
- *
- * first written before 2000
  * last modified #{t.strftime("%B %Y")}
  *
  *     This program is free software; you can redistribute it and/or
@@ -125,20 +169,22 @@ C_HEADER
 end
 
 
-ARGV.each do | fn | 
+ARGV.each do | fn |
 
   raise "File not found #{fn}!" if !File.exist?(fn)
   print "\nParsing #{fn}..."
 
   buf = nil
   File.open(fn) { | f | buf = f.read }
-  
+
   # parse buffer and strip header replacing it with new
 
   if fn =~ /\.R/
     outbuf = file_R(buf, fn)
   elsif fn =~ /\.[cChH]/
     outbuf = file_C(buf, fn)
+  elsif fn =~ /\.o$/
+    next
   else
     raise 'Unknown file extension for '+fn
   end
