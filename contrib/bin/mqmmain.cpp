@@ -177,7 +177,9 @@ unsigned int readcofactorfile(const char* filename,cvector *cofactors,const unsi
     if (verbose) Rprintf("Cofactors/Markers: %d/%d\n",num,j);
     return num;
   } else {
-    return 0;
+    // No silent failures!!
+    Rprintf("File not found %s",filename);
+    exit(1);
   }
 }
 
