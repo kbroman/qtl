@@ -29,6 +29,7 @@
 
 #include "mqm.h"
 #include <Rmath.h>
+#include <limits>
 
 inline int mqmmod(int a, int b) {
   return a%b;
@@ -64,9 +65,10 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
  * analyseF2 - analyse one F2/RIL/BC family
  * This is the main controller - called by mqmscan
  *
+ * Returns logL
  */
 
-void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker,
+double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker,
                vector y, ivector f1genotype, int Backwards, double **QTL,vector
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
@@ -197,7 +199,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   if (max > stepmax) {
     info("ERROR: Reestimation of the map put markers at: %f Cm",max);
     info("ERROR: Rerun the algorithm with a step.max larger than %f Cm",max);
-    return;
+    return std::numeric_limits<double>::quiet_NaN();
   } else {
    // if (verbose) info("Reestimation of the map finished. MAX Cm: %f Cm",max);
   }
@@ -246,7 +248,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   //END throwing out missing phenotypes
 
   double variance=-1.0;
-  double logLfull;
+  double logL;
   cvector selcofactor;
   selcofactor= newcvector(Nmark); /* selected cofactors */
 
@@ -255,34 +257,37 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
 
   F1= inverseF(1,Nind-dimx,alfa,verbose);
   F2= inverseF(2,Nind-dimx,alfa,verbose);
-  if(verbose)info("dimX:%d nInd:%d",dimx,Nind);
-  if(verbose)info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
-  if(verbose)info("F(%f,1,%d)=%f",F1,(Nind-dimx),alfa);
-  if(verbose)info("F(%f,2,%d)=%f",F2,(Nind-dimx),alfa);
+  if (verbose) {
+    info("dimX:%d nInd:%d",dimx,Nind);
+    info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
+    info("F(%f,1,%d)=%f",F1,(Nind-dimx),alfa);
+    info("F(%f,2,%d)=%f",F2,(Nind-dimx),alfa);
+  }
   F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
-  logLfull= QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
+  logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
   if(verbose)
   {
-    if (isinf(logLfull)) {
+    if (isinf(logL)) {
       info("Log-likelihood of full model= INFINITE");
     } else 
-      if (isnan(logLfull)) {
+      if (isnan(logL)) {
         info("Log-likelihood of full model= NOT A NUMBER (NAN)");
       }
       else {
-        info("Log-likelihood of full model= %f",logLfull);
+        info("Log-likelihood of full model= %f",logL);
       }
     info("Residual variance= %f",variance);
     info("Trait mean= %f; Trait variation= %f",ymean,yvari);
   }
-  if (Backwards==1)    // use only selected cofactors
-    logLfull= backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logLfull,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
-  if (Backwards==0) // use all cofactors
-    logLfull= mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose); // printout=='n'
-
-  //  Write output and/or send it back to R
+  if (!isinf(logL) && !isnan(logL)) {
+    if (Backwards==1)    // use only selected cofactors
+      logL = backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logL,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
+    if (Backwards==0) // use all cofactors
+      logL = mapQTL(Nind, Nmark, (*cofactor), (*cofactor), marker, position,(*mapdistance), y, r, ind, Naug, variance, 'n', &informationcontent,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose); // printout=='n'
+  }
+  // Write output and/or send it back to R
   // Cofactors that made it to the final model
   for (int j=0; j<Nmark; j++) {
     if (selcofactor[j]==MCOF) {
@@ -291,8 +296,8 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
       (*cofactor)[j]=MNOCOF;
     }
   }
-  //QTL likelihood for each location
-  if(verbose) info("Number of output datapoints: %d",Nsteps);
+  // QTL likelihood for each location
+  if (verbose) info("Number of output datapoints: %d",Nsteps);
   for (int ii=0; ii<Nsteps; ii++) {
     //Convert LR to LOD before sending back
     QTL[0][ii] = Frun[ii][0] / 4.60517;
@@ -310,7 +315,7 @@ void analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker
   Free(chr);
   Free(selcofactor);
   //info("Analysis of data finished");
-  return;
+  return logL;
 }
 
 
@@ -438,17 +443,16 @@ void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
   int **Cofactors;
   int **INDlist;
 
-  //Reorganise the pointers into arrays, singletons are just cast into the function
+  // Reorganise the pointers into arrays, singletons are just cast into the function
   reorg_geno(*Nind,*Nmark,geno,&Geno);
   reorg_int(*Nmark,1,chromo,&Chromo);
   reorg_pheno(*Nmark,1,dist,&Dist);
-  //Here we have  the assumption that step.min is negative this needs to be split in 2
+  // Here we have  the assumption that step.min is negative this needs to be split in 2
   reorg_pheno((int)2*(*chromo) * (((*stepma)-(*stepmi))/ (*steps)),1,qtl,&QTL);
   reorg_pheno(*Nind,*Npheno,pheno,&Pheno);
   reorg_int(*Nmark,1,cofactors,&Cofactors);
   reorg_int(*out_Naug,1,indlist,&INDlist);
-  //Done with reorganising lets start executing
 
   mqmscan(*Nind,*Nmark,*Npheno,Geno,Chromo,Dist,Pheno,Cofactors,*backwards,*RMLorML,*alfa,*emiter,*windowsize,*steps,*stepmi,*stepma,*nRun,*out_Naug,INDlist,QTL, *reestimate,(RqtlCrossType)*crosstype,*domi,*verbose);
-} /* end of function R_mqmscan */
+}
 

@@ -38,7 +38,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);
 
 /* analyseF2 - analyse one F2/BC/RIL family */
 
-void analyseF2(int Nind, int *Nmark, cvector *cofactor, MQMMarkerMatrix marker, 
+double analyseF2(int Nind, int *Nmark, cvector *cofactor, MQMMarkerMatrix marker, 
                vector y, ivector f1genotype, int Backwards, double **QTL,vector
                *mapdistance,int **Chromo,int Nrun,int RMLorML, double
                windowsize,double stepsize, double stepmin,double stepmax,double
