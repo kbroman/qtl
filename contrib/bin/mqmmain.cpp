@@ -468,24 +468,26 @@ int main(int argc,char *argv[]) {
     freevector((void *)r);
     
     // Start scanning for QTLs
-    analyseF2(nind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+    double logL = analyseF2(nind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
     // Write final QTL profile (screen and file)
-    for (int q=0; q<locationsoutput; q++) {
-      double qtlvalue = QTL[0][q];
-      fprintf(fout,"%5d\t",q);
-      // The following prints a 'standardized' value on Windows and Unix for regression tests (for nan and inf)
-      if (isnan(qtlvalue)) {
-          fprintf(fout,"       NAN\n");
-      }
-      else
-        if (isinf(qtlvalue)) {
-          fprintf(fout,"  INFINITE\n");
+    if (!isinf(logL) && !isnan(logL)) {
+      for (int q=0; q<locationsoutput; q++) {
+        double qtlvalue = QTL[0][q];
+        fprintf(fout,"%5d\t",q);
+        // The following prints a 'standardized' value on Windows and Unix for regression tests (for nan and inf)
+        if (isnan(qtlvalue)) {
+            fprintf(fout,"       NAN\n");
         }
         else
-          fprintf(fout,"%10.5f\n",QTL[0][q]);
+          if (isinf(qtlvalue)) {
+            fprintf(fout,"  INFINITE\n");
+          }
+          else
+            fprintf(fout,"%10.5f\n",QTL[0][q]);
+      }
     }
-    
+      
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
     freevector((void *)mapdistance);
