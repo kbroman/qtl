@@ -417,6 +417,7 @@ mqm <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forc
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=220,logtransform = FALSE,
 					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
+  warning("The 'mqm' method should be obsoleted")
 	mqmscan(cross, cofactors, pheno.col, model, forceML, cofactor.significance, em.iter, window.size, step.size,
                 step.min, step.max, logtransform, estimate.map, plot, verbose, outputmarkers, multicore, batchsize, n.clusters)
 }
