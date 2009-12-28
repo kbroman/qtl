@@ -24,5 +24,5 @@ R CMD build $cwd
 R CMD INSTALL qtl_${rqtl_version}.tar.gz
 
 cd $cwd
-R --no-save --no-restore --no-readline --slave < ./tests/test_qtl.R 
+time R --no-save --no-restore --no-readline --slave < ./tests/test_qtl.R 
 
