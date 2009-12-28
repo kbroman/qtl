@@ -4,7 +4,7 @@
 
 path=$1
 
-echo "Run all functional/regression/unit/check tests for R/qtl on $path"
+echo "* Run all functional/regression/unit/check tests for R/qtl on $path"
 if [ ! -z $path -a -d $path ]; then
   cd $path
 fi
@@ -16,7 +16,7 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
-echo "Run the standard MQM regression tests - without R install"
+echo "* Run the standard MQM regression tests - without R install"
 cd $cwd
 cd contrib/bin
 rm CMakeCache.txt
@@ -24,19 +24,19 @@ cmake .
 make 
 make test
 if [ "$?" -ne "0" ]; then
-  echo "Test failed"
+  echo "Test 'standalone' failed"
   exit 1
 fi
 
-echo "R CMD check"
+echo "* Run R CMD check"
 cd $cwd
 R CMD check .
 if [ "$?" -ne "0" ]; then
-  echo "Test failed"
+  echo "Test 'R CMD check' failed"
   exit 1
 fi
 
-echo "Run the R regression tests - with R install"
+echo "* Run the R regression tests - with R install"
 cd $cwd
 cd contrib/bin
 rm CMakeCache.txt
@@ -44,7 +44,9 @@ cmake -DTEST_R=TRUE .
 make 
 make testR
 if [ "$?" -ne "0" ]; then
-  echo "Test failed"
+  echo "Test 'R regression tests' failed"
   exit 1
 fi
 
+echo "* Generate PDF's"
+echo "== skipped =="
