@@ -38,23 +38,29 @@ single \qtl\ mapping with $scanone$ (green)}
 
 \section{Introduction}
 
-\mqm\ allows the mapping of \qtl\ using an automated model selection method, as
-described by R.C. Jansen\cite{jansen94}. \mqm\ is part of
-the free \rqtl\ R package\cite{rqtlbook}\cite{broman09}\cite{broman03} and consists of a three step procedure:
-(1) data augmentation, (2) automatic backward model elimination using genetic
-markers as cofactors and (3) QTL (interval) mapping using the most
-'informative' model. The method internally controls false discovery rates (FDR) and
-lets users test different QTL models by elimation of non-significant
-cofactors\footnote{We assume the reader knows how to load his data into R using
-the R/qtl $read.cross$ function, see also the R/qtl tutorials\cite{broman09} and book\cite{rqtlbook}}.
+\input{mqm/description.txt}
+
+Multiple QTL model (\mqm) mapping uses an automated model selection method for
+mapping \qtl, as described by R.C. Jansen\cite{jansen94}\footnote{Note that
+\underline{\mqm\ is not the same the same as composite interval mapping
+(CIM)}\cite{jansen94},\cite{CIM}, though both methods were introduced around
+the same time}.
+
+\input{mqm/advantages.txt}
 
 \input{mqm/limitations.txt}
 
-Still, \mqm\ is a valuable addition to the \qtl\ mapper's toolbox. It is able
-to deal with interference of \qtl, handles missing data and allows more precise
-detection than other methods. This tutorial will show how to use \mqm\ for
-\qtl\ mapping. Also R/qtl's \mqm\ is faster than other implementations and
-scales on multi-CPU systems and computer clusters.
+Despite these limitations, \mqm\ is a valuable addition to the \qtl\ mapper's
+toolbox. It is able to deal with interference of \qtl, handles missing data and
+allows more precise detection than other methods. This tutorial will show how
+to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is faster than other
+implementations and scales on multi-CPU systems and computer clusters.
+
+\mqm\ is an integral part of the free \rqtl\
+package\cite{rqtlbook}\cite{broman09}\cite{broman03} for the R statistical
+language\footnote{We assume the reader knows how to load his data into R using
+the R/qtl $read.cross$ function, see also the R/qtl tutorials\cite{broman09}
+and book\cite{rqtlbook}}. 
 
 \section{A quick overview}
 
@@ -735,7 +741,7 @@ mqmplot_circle(multiloc,resall, highlight=2)
 	\begin{tabular}{| l | c | }
 	\hline
 	mqmaugment:& mqm data augmentation \\
-	mqm(scan):& mqm modeling and scanning \\
+	mqmscan:& mqm modeling and scanning \\
 	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
 	which.marker:& Change markernumbering into mqmformat \\
 	mqmall:& mqmall to scan all traits using mqm\\
@@ -818,14 +824,16 @@ function from R/qtl can be used.
 	\bibitem{Churchill94}
 		Churchill, G. A.; and Doerge, R. W.; 1994
 		\emph{Empirical threshold values for quantitative trait mapping}
-		Genetics 138, 963–971. 
+		Genetics 138, 963-971. 
 	\bibitem{jansen93}
 		Jansen R. C.; 1993
 		\emph{Interval mapping of multiple quantitative trait loci}
-		Genetics, 135, 205–211.
+		Genetics, 135, 205-211.
 	\bibitem{Dempster77}
 		Dempster, A. P.; Laird, N. M. and Rubin, D. B.; 1977 
 		\emph{Maximum likelihood from incomplete data via the EM algorithm}
-		J. Roy. Statist. Soc. B, 39, 1–38.
+		J. Roy. Statist. Soc. B, 39, 1-38.
+  \bibitem{CIM}
+	  Composite Interval Mapping reference \FIXME
 \end{thebibliography}
 \end{document}
