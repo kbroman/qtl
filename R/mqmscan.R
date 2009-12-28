@@ -146,10 +146,11 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 			}
 		}
 		pheno <- cross$pheno[[pheno.col]]
-		if(var(pheno,na.rm = TRUE)> 1000){
+    phenovar = var(pheno,na.rm = TRUE)
+		if(phenovar > 1000){
 			if(!logtransform){
 				if(verbose) cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
-				warning("INFO: Perhaps we should LOG-transform this phenotype, please set parameter: logtransform=1 to correct this error")
+				warning(paste("WARNING: Set needs Log-transformation? (var=",phenovar,"), use mqmscan with logtransform=TRUE"))
 			}
 		}
 		if(logtransform){
