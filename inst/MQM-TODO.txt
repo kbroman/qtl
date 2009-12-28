@@ -20,6 +20,8 @@ o Tutorial and man pages
 o Fix naming of functions and parameters:
   - make sure all man, R and C-code functions and parameters are  #15 %
     similarly named for MQM (danny)
+  - The mqm() in mqmscan.R should be removed (called from circle
+    plot) (danny)
 
 o Other
   - Add test descriptions and check test T32 differs on 64bits compile
