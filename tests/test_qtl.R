@@ -50,9 +50,9 @@ result <- mqmscan(augmentedcross, outputmarkers=F)
 if (round(result[5,5]*1000) != 153) stop("MQM gives an unexpected result (1)")
 if (round(max(result[,5])*1000) != 5467) stop("MQM gives an unexpected result (2)")
 
-cat("Version information:")
-cat("R/qtl",version$RQTL)
-cat("R-MQM",version$RMQM)
-cat("MQM",version$MQM)
+cat("Version information:\n")
+cat("R/qtl = ",version$RQTL,"\n")
+cat("R-MQM = ",version$RMQM,"\n")
+cat("MQM   = ",version$MQM,"\n")
 
 cat("test_qtl.R tests succesfully run!")
