@@ -21,6 +21,7 @@ cd $cwd
 cd contrib/bin
 rm CMakeCache.txt
 cmake .
+make clean
 make 
 make test
 if [ "$?" -ne "0" ]; then
@@ -41,6 +42,7 @@ cd $cwd
 cd contrib/bin
 rm CMakeCache.txt
 cmake -DTEST_R=TRUE .
+make clean
 make 
 make testR
 if [ "$?" -ne "0" ]; then
