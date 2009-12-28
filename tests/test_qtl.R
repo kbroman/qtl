@@ -27,18 +27,32 @@
 
 library(qtl)
 
+version = mqm_version()
+cat("R/qtl=",version$RQTL)
+cat("R-MQM=",version$RMQM)
+cat("MQM=",version$MQM)
+
+
 data(listeria)
 if (nind(listeria)!=120) stop("Number of individuals incorrect")
 
-mr = scanone(listeria,method='mr')
+# ---- a quick test of standard R/qtl scanone
+mr = scanone(listeria, method='mr')
 test = round(mr[15,]$lod*1000)
 cat(mr[15,]$lod,test)
 if (test != 966) stop("scanone_mr gives an incorrect result")
 
-augmentedcross <- mqmaugment(listeria, minprob=1)
-if (nind(augmentedcross)!=120) stop("Number of individuals incorrect")
-result <- mqmscan(augmentedcross,outputmarkers=F)
+# ---- a quick test of MQM for R/qtl
+augmentedcross <- mqmaugment(listeria, minprob=1.0, verbose=TRUE)
+nind = nind(augmentedcross)
+if (nind!=120) stop("Number of individuals incorrect: ",nind)
+result <- mqmscan(augmentedcross, outputmarkers=F)
 if (round(result[5,5]*1000) != 153) stop("MQM gives an unexpected result (1)")
 if (round(max(result[,5])*1000) != 5467) stop("MQM gives an unexpected result (2)")
+
+cat("Version information:")
+cat("R/qtl",version$RQTL)
+cat("R-MQM",version$RMQM)
+cat("MQM",version$MQM)
 
 cat("test_qtl.R tests succesfully run!")

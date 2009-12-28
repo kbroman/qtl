@@ -35,8 +35,18 @@
 #####################################################################
 
 
+# Returns the effective version of R/qtl and MQM. This is used for testing,
+# debugging, and error reporting on MQM itself. We could also R/qtl tagged
+# releases, but they may be faster/slower than the development version. Also
+# the C libraries may be used outside R. Returns a list with values for
+# RQTL, RMQM and MQM.
 
-
+mqm_version <- function() {
+  rqtl_version = packageDescription("qtl")["Version"]$Version
+  rmqm_version  = "0.90-pre1"
+  mqm_version   = rmqm_version # fetch from C code, later
+  list(RQTL=rqtl_version, RMQM=rmqm_version, MQM=mqm_version)
+}
 
 ourstop <- function(...){
 	stop(...)
