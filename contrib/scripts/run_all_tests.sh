@@ -37,7 +37,7 @@ if [ "$?" -ne "0" ]; then
   exit 1
 fi
 
-echo "* Run the R regression tests - with R install"
+echo "* Run the R regression tests - with R install from CMakeLists.txt"
 cd $cwd
 cd contrib/bin
 rm CMakeCache.txt

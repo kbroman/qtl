@@ -5,6 +5,8 @@ IF (NOT CMAKE_MODULE_PATH)
 ENDIF()
 
 SET(CMAKE_BUILD_TYPE Debug)
+SET(RQTL_VERSION 1.15-3)
+MESSAGE("RQTL_VERSION=${RQTL_VERSION}")
 
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-Wall -D_DEBUG)
@@ -57,19 +59,19 @@ SET(RTESTOUTPUT rtest/regression)
 # Test R version (updating only the C libraries)
 ADD_CUSTOM_TARGET(testR_Clibs
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND ${R_EXECUTABLE} CMD INSTALL --libs-only qtl_1.15-1.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD INSTALL --libs-only qtl_${RQTL_VERSION}.tar.gz 
   COMMAND ctest -R TestR)
 
 # Test R version only
 ADD_CUSTOM_TARGET(testR
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_1.15-1.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
   COMMAND ctest -R TestR)
 
 # All tests, including R
 ADD_CUSTOM_TARGET(testall
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_1.15-1.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
   COMMAND ctest)
 
 IF(WIN32)
