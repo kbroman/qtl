@@ -168,7 +168,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 
       temp <- scanone(subset(cross, ind=upat[[i]]), chr=chr, pheno.col=batches[[i]], model=model,
                       method=method, addcovar=tempac, intcovar=tempic,
-                      weights=weights, use=use, upper=upper, ties.random=ties.random,
+                      weights=weights, use="complete.obs", upper=upper, ties.random=ties.random,
                       start=start, maxit=maxit, tol=tol, n.perm=n.perm, perm.Xsp=perm.Xsp,
                       perm.strata=perm.strata, verbose=verbose, batchsize=batchsize,
                       n.cluster=n.cluster)

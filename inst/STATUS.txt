@@ -51,6 +51,9 @@ Minor changes:
   Fixed a bug in summary.scanone that shows up in the case of multiple
   LOD columns with permutations and format="allpeaks".
 
+  Fixed a bug in scanone permutations in the case of multiple
+  phenotypes with missing data.
+
 
 Version 1.14, 9/30/2009:
 

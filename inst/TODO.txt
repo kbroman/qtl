@@ -12,10 +12,6 @@ SHORT TERM:
 
 o scantwo: ability to scan just specific chromosome pairs
 
-o Bug in permutation test with multiple phenotypes?
-
-  Error: evaluation nested too deeply: infinite recursion / options(expressions=)?
-
 o Crash in stepwiseqtl:
 
       -Starting backward deletion
