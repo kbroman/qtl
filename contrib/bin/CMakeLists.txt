@@ -71,18 +71,21 @@ SET(RTESTOUTPUT rtest/regression)
 ADD_CUSTOM_TARGET(testR_Clibs
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
   COMMAND ${R_EXECUTABLE} CMD INSTALL --libs-only qtl_${RQTL_VERSION}.tar.gz 
+  COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest -R TestR)
 
 # Test R version only
 ADD_CUSTOM_TARGET(testR
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
   COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
+  COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest -R TestR)
 
 # All tests, including R
 ADD_CUSTOM_TARGET(testall
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
   COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
+  COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest)
 
 IF(WIN32)
