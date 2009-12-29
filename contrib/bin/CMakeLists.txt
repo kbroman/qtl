@@ -15,6 +15,11 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 ENABLE_TESTING()
 ADD_CUSTOM_TARGET(quicktest COMMAND ctest -E "TestR")
 
+
+if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+  set(BITS64 TRUE)
+endif()
+
 # ---- The following MACRO is just to keep the FindRLibs.cmake happy
 MACRO(ASSERT_FOUNDMAP)
   SET(BUILD_LIBS TRUE)
@@ -139,7 +144,7 @@ ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genoty
 ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31out.txt.rnew test/regression/t31out.txt)
 
 # Run T32
-if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+if(BITS64)
   MESSAGE(STATUS "Skip T32 on 64-bits")
 else()
   ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=0.5 -o test/regression/t32out.txt.rnew)
@@ -165,7 +170,9 @@ IF(TEST_R)
   ADD_TEST(TestR_scanone_mr ${RTEST} rtest test_scanone_mr.R)
   ADD_TEST(TestR_scanone_mr_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/scanone_mr.rnew ${RTESTOUTPUT}/scanone_mr.rtest)
   ADD_TEST(TestR_mqm_listeria1 ${RTEST} rtest test_mqm_listeria1.R)
-  ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
+  if(BITS64)
+    ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
+  endif()
 ENDIF()
 
 
