@@ -30,8 +30,6 @@ o Crash in stepwiseqtl:
 o scanone with method="hk": Major memory problems in the permutations
   with multiple phenotypes. 
 
-o Add a map.function argument to read.cross.
-
 o Add functions convert2riself and convert2risib.  
   (treating all other possible cross types appropriately).
 
