@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 12/23/2009:
+Version 1.15, 12/29/2009:
 
 Major changes:
 
@@ -44,6 +44,9 @@ Minor changes:
   exit.
 
   Removed some odd erroneous code from the plot.qtl function.
+
+  Fixed a bug in summary.scanone that shows up in the case of multiple
+  LOD columns with permutations and format="allpeaks".
 
 
 Version 1.14, 9/30/2009:

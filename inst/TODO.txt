@@ -12,11 +12,6 @@ SHORT TERM:
 
 o scantwo: ability to scan just specific chromosome pairs
 
-o Bug in summary.scanone in the case of a single chr, multiple
-  phenotypes and multiple scanoneperm cols with format="allpeaks":
-
-     Error in 1:ncol(pos) : argument of length 0
-
 o Bug in permutation test with multiple phenotypes?
 
   Error: evaluation nested too deeply: infinite recursion / options(expressions=)?
