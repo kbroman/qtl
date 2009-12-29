@@ -14,20 +14,23 @@ Overview of the MQM mapping functions
 
 \section{Introduction}{
 % \input{"inst/docs/mqm/description.txt"}
+Multiple QTL model (MQM) mapping is a powerful QTL mapping method
+developed by Ritsert C. Jansen\cite{jansen94}.  MQM is an automatic
+two-stage procedure in which, in the first stage, important markers
+are selected in multiple regression on markers. In the second stage a
+QTL is moved along the chromosomes by using the pre-selected markers
+as cofactors, except for the markers flanking the interval under
+study. A refined and automated procedure for cases with large numbers
+of marker cofactors is included.
+
 MQM for R/qtl is based on the original implementation of multiple QTL
 model (MQM) mapping and consists of a three step procedure: (1) data
 augmentation, (2) automatic backward model elimination using genetic
-markers as cofactors and (3) QTL (interval) mapping using the most
-'informative' model. The method internally controls false discovery
-rates (FDR) and lets users test different QTL models by elimation of
-non-significant cofactors.  A genome scan is performed by moving a QTL
-along the chromosomes while using a preselected set of markers as
-cofactors. If the QTL gets close to a cofactor the cofactor gets
-dropped. The backward elimination procedure starts with a
-multiple-regression model on an augmented dataset, using a full set of
-cofactors evenly spread over the genome. A maximum likelihood (ML)
-approach is used for cofactor selection.
-
+markers evenly spread over the genome as cofactors and (3) QTL
+(interval) mapping using the most 'informative' model through maximum
+likelihood. The method internally controls false discovery rates (FDR)
+and lets users test different QTL models by elimation of
+non-significant cofactors. 
 
 % -----^^ inst/docs/mqm/description.txt ^^-----
 % \input{"inst/docs/mqm/advantages.txt"}
