@@ -17,8 +17,8 @@
 #
 # R can be queried with:
 #
-#   R CMD config --cppflags
-#   R CMD config --ldflags
+#   R CMD config --cppflags - returns '-I/usr/share/R/include -I/usr/share/R/include'
+#   R CMD config --ldflags  - returns '-L/usr/lib/R/lib -lR'
 #
 # Also pkg-config can be used with --cflags libR etc.
 
@@ -27,6 +27,7 @@ MESSAGE(STATUS,"FindRLibs.cmake")
 ASSERT_FOUNDMAP()
 
 FIND_PROGRAM(R_EXECUTABLE R)
+
 IF(WIN32 AND NOT R_EXECUTABLE)
   FIND_PROGRAM(R_EXECUTABLE R
     PATHS "c:/Progra~1/R/R-2.9.1/"
@@ -35,40 +36,53 @@ ENDIF()
 
 IF(R_EXECUTABLE)
   GET_FILENAME_COMPONENT(R_BINPATH ${R_EXECUTABLE} PATH)  
-  GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)  
-	SET(R_LIBRARY ${R_PATH}/lib/R/lib/libR.so)
+  GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)
+  # Get information from R itself
+  # Fetch the library paths
+  EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --ldflags OUTPUT_VARIABLE _LIBS)
+  message(STATUS "LIBS=${_LIBS}")
+  STRING(REGEX REPLACE "-L([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
+  separate_arguments(R_EXE_LIB_PATHS)
+  message(STATUS "R_EXE_LIB_PATHS=${R_EXE_LIB_PATHS}")
+
+  # Fetch the include paths
+  EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --cppflags OUTPUT_VARIABLE _INCLUDES)
+  message(STATUS "INCLUDES=${_INCLUDES}")
+  STRING(REGEX REPLACE "-I([^ ]+)" "\\1" R_EXE_INCLUDE_PATHS "${_INCLUDES}")
+  separate_arguments(R_EXE_INCLUDE_PATHS)
+  message(STATUS "R_EXE_INCLUDE_PATHS=${R_EXE_INCLUDE_PATHS}")
+
+  # Locate libraries e.g. Linux /usr/lib/R/lib/libR.so /usr/bin/R
+  FIND_LIBRARY(R_LIBRARY
+    NAMES libR.so R.DLL R.dylib
+    PATHS 
+      ${R_EXE_LIB_PATHS}
+      ${R_PATH}
+      ${R_BINPATH}
+  )
 	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
   IF (WIN32)
-    SET(R_LIBRARY ${R_BINPATH}/R.DLL)
     SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/include)
-  ELSE()
-    SET(R_LIBRARY ${R_PATH}/lib/R/lib/libR.so)
-    # SET(R_BLAS_LIBRARY ${R_PATH}/lib/R/lib/libR_BLAS.so)
-    SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
   ENDIF()
 ENDIF(R_EXECUTABLE)
 
-# ---- Find R.h and the Rlib.so shared library
-SET(R_POSSIBLE_INCLUDE_PATHS
-  /usr/share/R/include
-)
-FIND_PATH(R_INCLUDE_PATH R.h
-  ${R_LIKELY_INCLUDE_PATH}
-  ${R_POSSIBLE_INCLUDE_PATHS}
-)
-
-INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
-
-INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(RLibs DEFAULT_MSG R_LIBRARY R_INCLUDE_PATH)
-
 GET_FILENAME_COMPONENT(R_LIBRARY_PATH ${R_LIBRARY} PATH)  
 
-# Locate R_BLAS
+# ---- Find R.h include file(s)
+FIND_PATH(R_INCLUDE_PATH R.h
+  ${R_EXE_INCLUDE_PATHS}
+  ${R_LIKELY_INCLUDE_PATH}
+)
+INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
+
+# Locate R_BLAS (is it required?)
 FIND_LIBRARY(R_BLAS_LIBRARY
   NAMES Rlbas.dll.a R_BLAS.dll R_BLAS.dylib libR_BLAS.so
   PATHS ${R_LIBRARY_PATH} ${R_BINPATH}
   )
+
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(RLibs DEFAULT_MSG R_LIBRARY R_INCLUDE_PATH)
 
 MESSAGE("R_EXECUTABLE=${R_EXECUTABLE}")
 MESSAGE("R_INCLUDE_PATH=${R_INCLUDE_PATH}")
@@ -114,6 +128,5 @@ MARK_AS_ADVANCED(
   R_INCLUDE_PATH
   R_EXECUTABLE
   R_LIBRARY
-  # R_BLAS_LIBRARY
   BIOLIB_R_LIBRARY
   )
