@@ -1,8 +1,13 @@
 #! /bin/sh
 #
-# Usage: contrib/scripts/run_all_tests.sh .
+# Usage: contrib/scripts/run_all_tests.sh . [options]
+#
+# Example:
+#  
+#    ./contrib/scripts/run_all_tests.sh . --library=/my/libs
 
 path=$1
+Roptions=$2
 
 echo "* Run all functional/regression/unit/check tests for R/qtl on $path"
 if [ ! -z $path -a -d $path ]; then
@@ -29,9 +34,9 @@ if [ "$?" -ne "0" ]; then
   exit 1
 fi
 
-echo "* Run R CMD check"
+echo "* Run R CMD check $Roptions $cwd"
 cd $cwd
-R CMD check .
+R CMD check $Roptions .
 if [ "$?" -ne "0" ]; then
   echo "Test 'R CMD check' failed"
   exit 1
