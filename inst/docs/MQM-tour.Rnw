@@ -38,23 +38,26 @@ single \qtl\ mapping with $scanone$ (green)}
 
 \section{Introduction}
 
+
 \input{mqm/description.txt}
 
-Multiple QTL model (\mqm) mapping uses an automated model selection method for
-mapping \qtl, as described by R.C. Jansen\cite{jansen94}\footnote{Note that
-\underline{\mqm\ is not the same the same as composite interval mapping
-(CIM)}\cite{jansen94},\cite{CIM}, though both methods were introduced around
-the same time}.
+\vspace{0.3in}
 
 \input{mqm/advantages.txt}
 
 \input{mqm/limitations.txt}
 
-Despite these limitations, \mqm\ is a valuable addition to the \qtl\ mapper's
-toolbox. It is able to deal with interference of \qtl, handles missing data and
-allows more precise detection than other methods. This tutorial will show how
-to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is faster than other
-implementations and scales on multi-CPU systems and computer clusters.
+Despite these limitations, \mqm\footnote{Note that \mqm\ is \underline{not the
+same} as composite interval mapping (CIM)\cite{jansen94},\cite{CIM}, though
+both methods were introduced around the same time. The great advantage of MQM compared to interval mapping in reducing the chance of a type I error
+(i.e., a QTL is indicated at a location where actually no QTL is
+present) and in reducing the chance of a type II error (i.e., a QTL is
+not detected)\cite{jansen94b}} is a valuable addition to
+the \qtl\ mapper's toolbox. It is able to deal with interference of \qtl,
+handles missing data and allows more precise detection than other methods. This
+tutorial will show how to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is
+faster than other implementations and scales on multi-CPU systems and computer
+clusters.
 
 \mqm\ is an integral part of the free \rqtl\
 package\cite{rqtlbook}\cite{broman09}\cite{broman03} for the R statistical
@@ -821,6 +824,10 @@ function from R/qtl can be used.
 		Jansen R. C.; Stam P.; 1994
 		\emph{High resolution of quantitative traits into multiple loci via interval mapping}
 		Genetics, 136, 1447-1455. 
+  \bititem{jansen94b}
+	  Jansen R.C.
+		\emps{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}
+    Genetics, Vol 138, 871-881
 	\bibitem{Churchill94}
 		Churchill, G. A.; and Doerge, R. W.; 1994
 		\emph{Empirical threshold values for quantitative trait mapping}
