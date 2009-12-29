@@ -11,7 +11,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 SHORT TERM:
 
 o Tutorial and man pages
-  - sweave problem - some eps output is not working on Linux (pjotr)
   - add example of SNOW with mqm scan in tutorial (danny)
   - mqmgetmodel.Rd needs example (danny)
   - mqmcofactorseach.Rd has wrong example - do we need that method?
@@ -26,8 +25,9 @@ o Fix naming of functions and parameters:
 o Other
   - Add test descriptions and check test T32 differs on 64bits compile
     (danny)
-  - Make sure R CMD check works (all), by running script in
-    ./contrib/scripts/run_all_tests.sh before passing on changes
+
+NOTE: Always make sure R CMD check works  by running script in
+./contrib/scripts/run_all_tests.sh before passing on changes (all)
 
 ----------------------------------------------------------------------
 
