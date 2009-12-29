@@ -15,6 +15,12 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 ENABLE_TESTING()
 ADD_CUSTOM_TARGET(quicktest COMMAND ctest -E "TestR")
 
+# ---- The following MACRO is just to keep the FindRLibs.cmake happy
+MACRO(ASSERT_FOUNDMAP)
+  SET(BUILD_LIBS TRUE)
+  SET(BIOLIB_R_LIBRARY UNUSED)
+ENDMACRO()
+
 FIND_PACKAGE(RLibs)
 
 include_directories (../../src)
