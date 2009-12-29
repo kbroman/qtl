@@ -17,7 +17,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
            dir="", file, genfile, mapfile, phefile, chridfile,
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
-           estimate.map=TRUE, convertXdata=TRUE, \dots)
+           estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
+           map.function=c("haldane", "kosambi", "c-f", "morgan"), \dots)
 }
 
 \arguments{
@@ -65,6 +66,13 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     converted to the internal standard, using columns \code{sex} and
     \code{pgm} in the phenotype data if they available or by inference
     if they are not.  If FALSE, the X chromsome data is read as is.}  
+  \item{error.prob}{In the case that the marker map must be estimated:
+   Assumed genotyping error rate used in the calculation of the
+   penetrance Pr(observed genotype | true genotype).}
+ \item{map.function}{In the case that the marker map must be estimated:
+   Indicates whether to use the Haldane, Kosambi,
+   Carter-Falconer, or Morgan map function when converting genetic
+   distances into recombination fractions. (Ignored if m > 0.)}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the
