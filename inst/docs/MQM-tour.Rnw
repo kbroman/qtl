@@ -76,7 +76,7 @@ These are the typical steps in an \mqm\ \qtl\ analysis
 \item Then use $mqmpermute$ with a permutation or simulation analysis to get estimates of significance
 \end{itemize}
 
-Using (restricted) maximum likelihood  the algorithm employs a backward
+Using (restricted) maximum likelihood the algorithm employs a backward
 elimination strategy to identify \qtl\ underlying the trait. The algorithm 
 passes through the following stages:
 
