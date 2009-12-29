@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Sep, 2009
+# last modified Dec, 2009
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -578,9 +578,6 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
       text(whchr+0.4, thepos, x$name, col="red", adj=c(0,0.5))
     }
   }
-
-  #attr(qtl, "formula") <- NULL
-  #attr(qtl, "pLOD") <- NULL
 
   invisible()
 }
