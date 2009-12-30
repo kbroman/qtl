@@ -15,9 +15,6 @@ o scantwo: ability to scan just specific chromosome pairs
 o scanone with method="hk": Major memory problems in the permutations
   with multiple phenotypes. 
 
-o Add functions convert2riself and convert2risib.  
-  (treating all other possible cross types appropriately).
-
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
 

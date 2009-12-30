@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# last modified Dec, 2009
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -264,7 +264,7 @@ function(object,...)
     chr.nam <- as.character(1:length(chr.class))
   }
     
-  if(any(chr.class=="A" & (chr.nam=="X" | chr.nam=="x"))) {
+  if(type != "riself" && any(chr.class=="A" & (chr.nam=="X" | chr.nam=="x"))) {
     wh <- which(chr.nam=="X" | chr.nam=="x")
     warning("Chromosome \"", chr.nam[wh], "\" has class \"A\" but probably ",
             "should have class \"X\".")

@@ -38,7 +38,7 @@
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
-#           findDupMarkers
+#           findDupMarkers, convert2riself, convert2risib
 #
 ######################################################################
 
@@ -3399,6 +3399,134 @@ function(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
 
   themar
 }
+
+######################################################################
+# convert2riself
+######################################################################
+convert2riself <-
+function(cross)
+{
+  if(class(cross)[2] != "cross")
+    stop("input must be a cross object.")
+  curtype <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+  whX <- NULL
+  if(any(chrtype != "A")) { # there's an X chromosome
+    whX <- names(cross$geno)[chrtype != "A"]
+    if(length(whX) > 1)
+      warning("Converting chromosomes ", paste(whX, collapse=" "), " to autosomal.")
+    else
+      warning("Converting chromosome ", whX, " to autosomal.")
+    for(i in whX) class(cross$geno[[i]]) <- "A"
+  }
+
+  gtab <- table(pull.geno(cross))
+  usethree <- FALSE
+  if(!is.na(gtab["3"])) {
+    if(!is.na(gtab["2"]) && gtab["3"] < gtab["2"])
+      usethree <- FALSE
+    else usethree <- TRUE
+  }
+
+  g2omit <- g3omit <- g4omit <- 0
+  for(i in 1:nchr(cross)) {
+    dat <- cross$geno[[i]]$data
+    g1 <- sum(!is.na(dat) & dat==1)
+    g2 <- sum(!is.na(dat) & dat==2)
+    g3 <- sum(!is.na(dat) & dat==3)
+    g4 <- sum(!is.na(dat) & dat>3)
+    if(usethree && chrtype[i] == "A") {
+      dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
+      dat[!is.na(dat) & dat==3] <- 2
+      g2omit <- g2omit + g2
+      g4omit <- g4omit + g4
+    }
+    else {
+      dat[!is.na(dat) & dat!=1 & dat!=2] <- NA
+      g3omit <- g3omit + g3
+      g4omit <- g4omit + g4
+    }
+    cross$geno[[i]]$data <- dat
+  }
+  if(g2omit > 0)
+    warning("Omitting ", g2omit, " genotypes with code==2.")
+  if(g3omit > 0)
+    warning("Omitting ", g3omit, " genotypes with code==3.")
+  if(g4omit > 0)
+    warning("Omitting ", g4omit, " genotypes with code>3.")
+  
+  class(cross)[1] <- "riself"
+  
+  cross
+}
+
+
+######################################################################
+# convert2risib
+######################################################################
+convert2risib <-
+function(cross)
+{
+  if(class(cross)[2] != "cross")
+    stop("input must be a cross object.")
+  curtype <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+
+  gtab <- table(pull.geno(cross))
+  usethree <- FALSE
+  if(!is.na(gtab["3"])) {
+    if(!is.na(gtab["2"]) && gtab["3"] < gtab["2"])
+      usethree <- FALSE
+    else usethree <- TRUE
+  }
+
+  g2omit <- g3omit <- g4omit <- 0
+  for(i in 1:nchr(cross)) {
+    dat <- cross$geno[[i]]$data
+    g1 <- sum(!is.na(dat) & dat==1)
+    g2 <- sum(!is.na(dat) & dat==2)
+    g3 <- sum(!is.na(dat) & dat==3)
+    g4 <- sum(!is.na(dat) & dat>3)
+    if(usethree) {
+      if(chrtype[i] == "A") {
+        dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
+        dat[!is.na(dat) & dat==3] <- 2
+        g2omit <- g2omit + g2
+        g4omit <- g4omit + g4
+      }
+      else { # X chromosome
+        if(g2 >= g3) {
+          dat[!is.na(dat) & dat!=1 & dat!=2] <- NA
+          g3omit <- g3omit + g3
+          g4omit <- g4omit + g4
+        }
+        else {
+          dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
+          dat[!is.na(dat) & dat==3] <- 2
+          g2omit <- g2omit + g2
+          g4omit <- g4omit + g4
+        }
+      }
+    }
+    else {
+      dat[!is.na(dat) & dat!=1 & dat!=2] <- NA
+      g3omit <- g3omit + g3
+      g4omit <- g4omit + g4
+    }
+    cross$geno[[i]]$data <- dat
+  }
+  if(g2omit > 0)
+    warning("Omitting ", g2omit, " genotypes with code==2.")
+  if(g3omit > 0)
+    warning("Omitting ", g3omit, " genotypes with code==3.")
+  if(g4omit > 0)
+    warning("Omitting ", g4omit, " genotypes with code>3.")
+  
+  class(cross)[1] <- "risib"
+  
+  cross
+}
+
 
 # end of util.R
 
