@@ -25,7 +25,7 @@
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
 \newcommand{\NOTE}{({\tt NOTE: })}
-\newcommand{\intro}[1]{{\tt # #1}}
+\newcommand{\intro}[1]{{\tt #1}}
 
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
@@ -211,8 +211,8 @@ individual)}
 
 \label{QTL modelling}
 
-The famous hyper tension \emph{hyper} dataset, that comes standard with R/qtl,
-is a backcrossed (BC) offspring of mice with two traits in the dataset:
+The famous mouse hyper tension \emph{hyper} dataset, that comes standard with
+R/qtl, is a backcrossed (BC) offspring of mice with two traits in the dataset:
 bloodpressure (bp) and sex. Here we show an example of running both $scanone$
 single marker \qtl\ analysis and $mqmscan$ multiple \QTL\ model mapping, to map
 \qtl\ for blood pressure. First, \emph{complete} missing data:
