@@ -28,6 +28,10 @@ Minor changes:
   Added a function convert.map for converting a genetic map from one
   map function to another.
 
+  Added functions convert2riself and convert2risib, for converting a
+  cross object to be treated as RIL by selfing or sib mating,
+  respectively. 
+
   Revised read.cross to have arguments error.prob and map.function, to
   be used if est.map is called.
 
@@ -45,6 +49,9 @@ Minor changes:
   Revised scanone and scantwo so that, if using multiple CPUs via snow
   and calculations are stopped early, the cluster nodes are stopped on
   exit.
+
+  Revised summary.cross so that, for cross type "riself", there's no
+  warning about a chromosome named "X" having class "A".
 
   Removed some odd erroneous code from the plot.qtl function.
 
