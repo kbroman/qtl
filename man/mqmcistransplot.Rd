@@ -14,7 +14,7 @@
 }
 
 \arguments{
-  \item{x}{An object of class \code{mqmmulti}. See \code{\link{mqmall}} for details.} 
+  \item{x}{An object of class \code{mqmmulti}. See \code{\link{mqmscanall}} for details.} 
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
@@ -55,7 +55,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
