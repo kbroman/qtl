@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 12/21/2009:
+Version 1.15, 12/29/2009:
 
 Major changes:
 
@@ -28,8 +28,38 @@ Minor changes:
   Added a function convert.map for converting a genetic map from one
   map function to another.
 
+  Added functions convert2riself and convert2risib, for converting a
+  cross object to be treated as RIL by selfing or sib mating,
+  respectively. 
+
+  Revised read.cross to have arguments error.prob and map.function, to
+  be used if est.map is called.
+
   Fixed an apparent bug in read.cross for format="qtlcart"; need to
   treat negative genotype codes as missing.
+
+  lodint and bayesint now stop with an error if chr or qtl.index have
+  length > 1.  Before, they gave weird results and a meaningless
+  error. 
+
+  Fixed a bug in scanone/scantwo for RIL on the X chromosome; the X
+  chromosome needs to be treated like to autosomes.  We can't really
+  deal with the sexes properly here.
+
+  Revised scanone and scantwo so that, if using multiple CPUs via snow
+  and calculations are stopped early, the cluster nodes are stopped on
+  exit.
+
+  Revised summary.cross so that, for cross type "riself", there's no
+  warning about a chromosome named "X" having class "A".
+
+  Removed some odd erroneous code from the plot.qtl function.
+
+  Fixed a bug in summary.scanone that shows up in the case of multiple
+  LOD columns with permutations and format="allpeaks".
+
+  Fixed a bug in scanone permutations in the case of multiple
+  phenotypes with missing data.
 
 
 Version 1.14, 9/30/2009:

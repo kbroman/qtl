@@ -12,48 +12,8 @@ SHORT TERM:
 
 o scantwo: ability to scan just specific chromosome pairs
 
-o Bug in summary.scanone in the case of a single chr, multiple
-  phenotypes and multiple scanoneperm cols with format="allpeaks":
-
-     Error in 1:ncol(pos) : argument of length 0
-
-o Bug in permutation test with multiple phenotypes?
-
-  Error: evaluation nested too deeply: infinite recursion / options(expressions=)?
-
-o RIL by sibmating (or selfing) for X chromosome, if there's a 'sex' phenotype.
-
-o Crash in scantwo if X chromosome in RIL by selfing.
-
-o Bug in plot.qtl 
-
-Error in attr(qtl, "formula") <- NULL : object 'qtl' not found
-
-o Crash in stepwiseqtl:
-
-      -Starting backward deletion
-      ---Dropping 
-     Error in parse(text = x) : unexpected end of input in "y~ "
-     In addition: Warning messages:
-     1: In scanone(cross, pheno.col = pheno.col, method = method, model = "normal",  :
-       Dropped 1 additive covariates on X chromosome.
-     2: In min(thelod, na.rm = TRUE) :
-       no non-missing arguments to min; returning Inf
-
-o Bug in scantwo [within dropXcol()] for X chromosome with "risib".
-
-o lodint with multiple chr: crazy error
-
 o scanone with method="hk": Major memory problems in the permutations
   with multiple phenotypes. 
-
-o Add a map.function argument to read.cross.
-
-o In scanone and scantwo, if using multiple nodes, be sure to close
-  the connections on exit.
-
-o Add functions convert2riself and convert2risib.  
-  (treating all other possible cross types appropriately).
 
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
