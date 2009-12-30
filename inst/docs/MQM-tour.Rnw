@@ -383,16 +383,15 @@ unsupervised backward elimination.
 % Is dit de standaard proc? Raar. Moet toch afhangen van het aantal
 % individuen en van de locaties van de merkers????????
 
-
-MQM also provides unsupervised backward elimination on a large number of markers by 
-setting cofactors a lot of markers beforehand. When samplesize allows us we could 
-place a cofactor at every marker. But in practice ussually only a subset of 
-locations is interesting beforehand. Using the $cofactor$ functions user can create
+\mqm\ provides unsupervised backward elimination on a large number of markers by 
+setting cofactors beforehand. When $samplesize$ allows it a 
+a cofactor is set at every marker. However, normally only a subset of 
+locations is of interest. The $cofactor$ function creates
 a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
 markers and drops the least informative from the model. This step is repeated
 until a limited number of significant cofactors is left.
 
-After backward elimination \mqm\ will scan each chromosome using the model that
+After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set a cofactor at every fifth
 marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in
 high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
@@ -417,16 +416,16 @@ backward elimination}
 mqmgetmodel(result)
 @
 
-$mqmgetmodel$ function returns the final model from the resulting $scanone$
+The $mqmgetmodel$ function returns the final model from the resulting $scanone$ type
 object.  This model can be used with the $scantwo$ routine from R/qtl. $mqmgetmodel$ 
-can only be used after backward elimination as it needs a list of
+can only be used after backward elimination as it requires a list of
 cofactors. The resulting model can also be used to obtain the location and
 name of the significant cofactors.
 
 \clearpage
+\intro{Plot result of MQM backward elimination against that of $scanone$}
 \begin{figure}[ht]
 <<fig=TRUE>>=
-# plot MQM backward elimination with scanone
 plot(result, result_scanone, col=colors, lwd=lines)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
@@ -435,18 +434,18 @@ marker for \mqm\, followed by backward elimination
 \label{Backward2}
 \end{figure}
 
-\mqm\ \qtl\ mapping may result in many significant markers, with even multiple 
+\mqm\ \qtl\ mapping may result in many significant markers, with multiple 
 hits on each chromosome. Figure \ref{Backward2} shows that at 
 $cofactor.significance=0.02$ chromosomes 1,2,4,5,6 and 15(?) are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
-In biology extensive models are sometimes prefered, but in general a simpler 
+In biology extensive models are sometimes preferred, but in general a simpler 
 model is more easily understood and, perhaps, validated. Increasing 
 this significance level (hopefully) has the advantage 
 that we can be more sure of the \qtl. 
 
+\intro{Plot with lowered $cofactor.significance$}
 \begin{figure}[ht]
 <<fig=TRUE>>=
-# plot lowered cofactor.significance
 result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
@@ -459,31 +458,30 @@ plot(result)
 \clearpage
 
 When comparing the \mqm\ scan in figure \ref{FigLowAlpha} with the original
-$scanone$ result in figure \ref{NoCofs} there are some striking differences.
+$scanone$ result in figure \ref{NoCofs} there are some notable differences.
 Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 Figures can be reconstructed from the result ($scanone$ object) using the
-$mqmplot\_one$ function (see for example figure \ref{AutoCofactor}). Here the
+$mqmplot\_one$ function (see, for example, figure \ref{AutoCofactor}). Here the
 model and \qtl\ profile are retrieved.  These functions can only be used with
-\mqm\ scans, as they have an additinal column $info$ which contains the QTL
-model. Of interest is that this column also has the \emph{estimated}
-information content per marker. $info$ is calculated from the deviation of the
-\emph{ideal} marker distribution. 
+$mqmcan$, as they have an additional column $mqm$ which contains the \qtl\
+model.  This extra column/list also contains the \emph{estimated} information
+content per marker.  
 
-For example, with a dataset of 100 mice, when comparing two distinct phenotypes
-at a marker location, we have most power when both groups are equally divided
-into 50 mice, and, virtually, no power when we have a group with 1 mouse versus
-a group of 49 mice. We can multiple the estimated \qtl\ effect by this
-information content to 'clean' the QTL profile by giving less weight to less
-informative markers. Please note that in the sample size already plays a role in 
-calculating \qtl. However, despite a lack of formal proof, it can be a way of 
-further weighting/exploring \emph{information} content.
+The column $mqm$ is calculated from the deviation of the \emph{ideal} marker
+distribution. For example, with a dataset of 100 mice, when comparing two
+distinct phenotypes at a marker location, we have most power when both groups
+are equally divided into 50 mice, and, virtually, no power when we have one
+mouse versus a group of 49 mice. We can multiply the estimated \qtl\ effect by
+this information content to 'clean' the QTL profile by giving less weight to
+less informative markers. Please note that in the sample size already plays a
+role in calculating \qtl. Meanwhile it allows (informal) further
+weighting/exploring \emph{information} content (figure \ref{AutoCofactor}).
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-# plot retained info in result with information indicator
 mqmplot_one(result, extended=TRUE)
 @
 \caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination ($cofactor.significance = 0.002$). $mqmplot\_one$ function
@@ -493,94 +491,90 @@ marker positions
 \label{AutoCofactor}
 \end{figure}
 
-\section{MQM effects}
+\section{MQM effect plots}
 
-We can add the current effect to the mqmplots that are created by 
-using the function $mqmplot\_directedqtl$. To use this function 
-firstly we must have the $outputmarkers$ parameter when scanning 
-using mqm set to true (true is the default value).
-We can also manually extract the markers from the output of the mqmscan using 
-$mqmextractmarkers(result)$. Then we call the plotting function 
-which internaly adds the sign of the effect to the LOD score of 
-the marker, and calls the standard R/qtl plotting functions. An example
-can be found in figure \ref{QTLeffects}.
+Effects can be add to plots using $mqmplot\_directedqtl$, which requires
+setting $outputmarkers=TRUE$ with $mqmscan$ (default).  To remove plotting the
+virtual markers introduced by \mqm\ use $mqmextractmarkers(result)$. The
+plotting function adds the sign of the effect to the LOD score of the marker
+and calls the standard R/qtl plotting functions. An example can be found in
+figure \ref{QTLeffects}.
 
-%\begin{figure}[ht]
-%<<fig=TRUE>>=
-%dirresults <- mqmplot_directedqtl(hyperaug,result)
-%@
-%\caption{Same as figure \ref{AutoCofactor}, but with effect sign 
-%added to the QTL profile.
-%}
-%\label{QTLeffects}
-%\end{figure}
+\begin{figure}[ht]
+<<fig=TRUE>>=
+dirresults <- mqmplot_directedqtl(hyperaug,result)
+@
+\caption{Same as figure \ref{AutoCofactor}, but with effect sign 
+added to the QTL profile.
+}
+\label{QTLeffects}
+\end{figure}
 
-Figure \ref{FigLowAlpha} implies that chromosomes 1, 2, 4 and 5 are
-associated with high bloodpressure. If we want to investigate the
-effects of the peek we can use \rqtl\ standard plotting tools to
-visualize $main$ and/or $epistatic$ effects. The following code will plot
-those two plots on markers "D1Mit102" (main effect) and the
-interaction between "D1Mit102" and "D5Mit213" to show the $main$
-effect and the estimated $epistasis$. These markers are initially
-chosen because they are considered significant, based on mathematical
-distributions used by \mqm\ (we will show a better method, based on
-permutations, later). We set cofactors on chromosome 1 because these 
-show the highest lod score when using the scan.one function.
+Earlier figure \ref{FigLowAlpha} implied that chromosomes 1, 2, 4 and 5 are
+associated with high blood pressure. If we want to investigate the effect we
+can use \rqtl's standard plotting tools to visualize $main$ and/or $epistatic$
+effects. The following plots show these for markers "D1Mit102" (main effect,
+figure \ref{MainEffectsD1}) and the interaction between "D1Mit102" and
+"D5Mit213" (figure \ref{epistatic1}). These markers are selected chosen for
+significance, based on mathematical distributions used by \mqm\ (a better
+method, based on permutations, is discussed in section \ref{significance}). 
 
-To get an estimate of the effects of the QTLs we first investigate the effectplots.
 
 \begin{figure}[ht]
 <<fig=TRUE, results=hide>>=
 plot.pxg(hyperaug,marker="D1Mit102")
 @
-\caption{Main effect of marker D1Mit102.}
+\caption{\hyperintro. Show effect of marker D1Mit102 using $plot.pgx$}
 \label{MainEffectsD1}
 \end{figure}
+
 The initial scans for high bloodpressure in figure \ref{Backward1}
-possibly shows two \qtl\ on chromosome 1. The dual humped shape 
-could be explained by an interaction between two QTLs on that chromosome. 
-But there are other explainations for these kind of curves. We 
-can however find out if there is an interaction on chromosome 
-1 by using the effectplot function. To investigate the possible 
+possibly show two \qtl\ on chromosome 1. The dual humped shape 
+might be explained by an interaction between two QTL. 
+We 
+can find out if there is an interaction on chromosome 
+1 by using the $effectplot$ function. To investigate the possible 
 interaction we select markers "D1Mit19" (significant in figure \ref{Backward1}) 
 and "D1Mit102" (significant in figure \ref{Backward2} and
-\ref{AutoCofactor}) and make an effectplot.
+\ref{AutoCofactor}). See figure \ref{epistatic1}.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 @
-\caption{With $effectplot$ the user can discover a possible epistatic effects between markers. Here an example using 
-markers D1Mit19 and D1Mit102, (which show a slight interaction).}
+\caption{\hyperintro. $effectplot$ shows possible small epistatic effects between
+markers D1Mit19 and D1Mit102
+}
 \label{epistatic1}
 \end{figure}
 
-If we, for example, are interested in the interactions between
+Likewise, in case we are interested in the interactions between
 chromosome 1 and 5, we could make interaction plots between the two
 markers with a high LOD score on those chromosomes by using the effect
-plot:
+plot. See figure \ref{epistatic2}.
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 @
-\caption{$effectplot$ for discovering an epistatic effect of markers D1Mit102 and D5Mit213}
+\caption{\hyperintro. $effectplot$ shows an epistatic effect between markers D1Mit102 and D5Mit213}
 \label{epistatic2}
 \end{figure}
 
-Figure \ref{epistatic1} shows some evidence for an interaction between the two
-markers D1Mit102 and D5Mit213, as both lines are non parallel. The two loci 
-'x' and 'y' influence the trait in a significant way (because they are selected 
-as cofactors by the mqm routine). If the effect shows two parallel lines the 
-effect of both loci would be independant of eachother. This means no significant 
-interaction between x and y. While non-parallel lines would indicate that the 
-genotype on location y effects the influence of genotype x on the trait.
-Interactions like these (epistatic ones) are prime wetlab candidates, and 
-tell us the biology behind the QTLs.
+Figure \ref{epistatic1} shows some possible evidence for an interaction between
+the two markers D1Mit102 and D5Mit213, as both lines are non parallel. The two
+loci 'x' and 'y' influence the trait in a significant way (because they were
+selected as cofactors by \mqm). If the effect shows two parallel lines the
+effect of both loci would be independent of one another. I.e. there is no
+significant interaction between x and y.  Interactions like these are prime
+wetlab candidates, and, perhaps, tell us something about the biology behind the
+\qtl.
 
 \clearpage
 
-\section{Permutation test for significance} 
+\section{QTL significance} 
+
+\label{signicance}
 
 \NOTE For all the examples in this section we use $25$ permutations. A real 
 experiment uses - typically - $n.run=1000 to 10000$ tests with $b.size=25 to 500$
