@@ -148,7 +148,7 @@ ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31
 
 # Run T32
 if(BITS64)
-  MESSAGE(STATUS "Skip T32 on 64-bits")
+  MESSAGE("Skip T32 on 64-bits")
 else()
   ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=0.5 -o test/regression/t32out.txt.rnew)
   # Immediately compare outputs against older results

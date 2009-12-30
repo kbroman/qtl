@@ -22,7 +22,7 @@
 #
 # Also pkg-config can be used with --cflags libR etc.
 
-MESSAGE(STATUS,"FindRLibs.cmake")
+MESSAGE("FindRLibs.cmake")
 
 ASSERT_FOUNDMAP()
 
@@ -35,8 +35,7 @@ IF(APPLE)
   )
 ELSE()
   FIND_PROGRAM(R_EXECUTABLE R
-    PATHS 
-      /Library/Frameworks/R.framework/Resources/bin
+    PATHS      # maybe use HINTS
       /usr/bin
       /usr/local/bin
   )
@@ -54,21 +53,21 @@ IF(R_EXECUTABLE)
   # Get information from R itself
   # Fetch the library paths
   EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --ldflags OUTPUT_VARIABLE _LIBS)
-  message(STATUS "LIBS=${_LIBS}")
+  message("LIBS=${_LIBS}")
   if (APPLE)
     STRING(REGEX REPLACE "-F([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
   else()
     STRING(REGEX REPLACE "-L([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
   endif()
   separate_arguments(R_EXE_LIB_PATHS)
-  message(STATUS "R_EXE_LIB_PATHS=${R_EXE_LIB_PATHS}")
+  message("R_EXE_LIB_PATHS=${R_EXE_LIB_PATHS}")
 
   # Fetch the include paths
   EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --cppflags OUTPUT_VARIABLE _INCLUDES)
-  message(STATUS "INCLUDES=${_INCLUDES}")
+  message("INCLUDES=${_INCLUDES}")
   STRING(REGEX REPLACE "-I([^ ]+)" "\\1" R_EXE_INCLUDE_PATHS "${_INCLUDES}")
   separate_arguments(R_EXE_INCLUDE_PATHS)
-  message(STATUS "R_EXE_INCLUDE_PATHS=${R_EXE_INCLUDE_PATHS}")
+  message("R_EXE_INCLUDE_PATHS=${R_EXE_INCLUDE_PATHS}")
 
   # Locate libraries e.g. Linux /usr/lib/R/lib/libR.so /usr/bin/R
   FIND_LIBRARY(R_LIBRARY
@@ -94,10 +93,14 @@ FIND_PATH(R_INCLUDE_PATH R.h
 )
 INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
 
-# Locate R_BLAS (is it required?)
 FIND_LIBRARY(R_BLAS_LIBRARY
-  NAMES Rlbas.dll.a R_BLAS.dll R_BLAS.dylib libR_BLAS.so libblas.so
-  PATHS ${R_LIBRARY_PATH} ${R_BINPATH}
+  NAMES Rlbas.dll.a R_BLAS.dll libRblas.dylib libR_BLAS.so libblas.so
+  PATHS 
+      ${R_LIBRARY_PATH} 
+      ${R_EXE_LIB_PATHS}
+      ${R_PATH}
+      ${R_BINPATH}
+      /Library/Frameworks/R.framework/Resources/lib
   )
 
 INCLUDE(FindPackageHandleStandardArgs)
@@ -130,9 +133,11 @@ if(NOT BIOLIB_R_LIBRARY)
       SET(_LINKLIB lib${_LIBNAME}.dylib)
     ENDIF(APPLE)
     message("Looking for ${_LINKLIB} in ${_RLIBPATH}")
-    FIND_LIBRARY(R_LIBRARY NAMES ${_LINKLIB} HINTS ${_RLIBPATH}/build ${_RLIBPATH}/src)
+    FIND_LIBRARY(R_LIBRARY NAMES ${_LINKLIB} 
+      HINTS ${_RLIBPATH}/build ${_RLIBPATH}/src)
     IF(NOT BIOLIB_R_LIBRARY)
-      FIND_LIBRARY(BIOLIB_R_LIBRARY NAMES ${_LINKLIB} PATHS ${_RLIBPATH}/build ${_RLIBPATH}/src)
+      FIND_LIBRARY(BIOLIB_R_LIBRARY NAMES ${_LINKLIB} 
+        PATHS ${_RLIBPATH}/build ${_RLIBPATH}/src)
     ENDIF()
     message("Found ${BIOLIB_R_LIBRARY}")
   else()
