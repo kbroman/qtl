@@ -80,11 +80,11 @@ mqmscanfdr <- function(cross, mapfunction=mqmall, thresholds=c(1,2,3,4,5,7,10,15
 }
 
 mqmpermute <- function(...){
-	bootstrap(...,mapfunction=mqm)
+	bootstrap(...,mapfunction=mqmscan)
 }
 
 mqmbootstrap <- function(...){
-	bootstrap(...,mapfunction=mqm)
+	bootstrap(...,mapfunction=mqmscan)
 }
 
 bootstrapcim <- function(...){

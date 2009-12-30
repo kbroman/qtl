@@ -25,7 +25,7 @@
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
 \newcommand{\NOTE}{({\tt NOTE: })}
-\newcommand{\intro}[1]{{\tt #1}}
+\newcommand{\intro}[1]{\vspace{0.2in}\emph{#1:}}
 
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
@@ -211,8 +211,8 @@ individual)}
 
 \label{QTL modelling}
 
-The famous mouse hyper tension \emph{hyper} dataset, that comes standard with
-R/qtl, is a backcrossed (BC) offspring of mice with two traits in the dataset:
+The famous mouse hyper tension dataset, which comes standard with
+R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
 bloodpressure (bp) and sex. Here we show an example of running both $scanone$
 single marker \qtl\ analysis and $mqmscan$ multiple \QTL\ model mapping, to map
 \qtl\ for blood pressure. First, \emph{complete} missing data:
@@ -245,31 +245,30 @@ are virtually equal when used without \emph{augmentation} and no extra parameter
 \label{NoCofs}
 \end{figure}
 
-Note that $mqm$ produces pseudo markers by default (unlike $scanone$). A pseudo-
-marker has a name like c7.loc25 - i.e. the 25 \cM\ pseudo marker on chromosome 7. This is
-because MQM uses interval mapping internally. The chromosomes are divided into
-an equally spaced sections. Thus each chromosome is divided into fictional
+$mqm$ introduces pseudo markers by default (unlike $scanone$). A pseudo
+marker has a name like c7.loc25 - i.e. the 25 \cM\ pseudo marker on chromosome 7. This reflects the internally used interval mapping. The chromosomes are divided into
+equally spaced sections. Therefore each chromosome is divided into fictional
 markers spaced equally $stepsize$ \cM\ apart. A LOD score for underlying QTLs
 is calculated at these fictional pseudo markers. A small $stepsize$ allows for
 smoother profiles compared with pure marker based mapping approaches. The real
-markers are listed between the pseudo markers. You can remove the pseudo markers
-by using the function $mqmextractmarkers(res)$.
+markers are listed between the pseudo markers. In the result you can remove the
+pseudo markers by using the function $mqmextractmarkers(res)$.
 
 For (automatic) model selection in \mqm\ we first need to supply the
 algorithm with an initial model.  This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
-backward elimination on a large number of markers.  
+backward elimination on a large number of markers. 
 
-First we will build the initial model by hand using a forward stepwise
-approach.  A model consists of a set of markers we want to account for, like we
-would account for sex as an external variable influencing our results. 
-Start building the initial model by adding cofactors at markers with high LOD
-scores. figure \ref{NoCofs} displayed a large QTL peek on chromosome 4 at 30 \cM,
-so let us account for that by setting a cofactor at the marker nearest to the
-peek on chromosome 4 and perform a new $mqm$
-scan (result in figures \ref{Cofactor4} and \ref{Cofactor4b}):
+First we will demonstrate building the initial model by hand using a forward
+stepwise approach (note that the automated procedure is preferred, both for
+theoretical and practical reasons). A model consists of a set of markers we
+want to account for. We can start building the initial model by adding cofactors
+at markers with high LOD scores. figure \ref{NoCofs} displayed a large QTL peek
+on chromosome 4 at 30 \cM, so let us account for that by setting a cofactor at
+the marker nearest to the peek on chromosome 4 and perform a new $mqm$ scan
+(result in figures \ref{Cofactor4} and \ref{Cofactor4b}):
 
-\intro{}
+\intro{Add marker D4Mit164 as a cofactor}
 <<>>=
 #Summary results shows the highest lodscores per chromosome
 summary(result_no_cofactors)
@@ -282,6 +281,7 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 result_1 <- mqmscan(hyperaug, cofactorlist)
 @
 
+\intro{Plot after adding cofactor}
 \begin{figure}[ht]
 <<fig=TRUE>>=
 # plot after adding first cofactor
@@ -320,7 +320,7 @@ cofactors changes the \qtl. Again, combining $which.marker$ with $find.marker$,
 adds the new cofactornumber $c$ with the cofactor already in $toset$ (see figure 
 \ref{twowaycomparison}): 
 
-\intro{add another cofactor}
+\intro{Add another cofactor on chromosome 1 at 70 \cM}
 <<>>=
 # summary(result_1)
 toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
@@ -328,9 +328,9 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 result_2 <- mqmscan(hyperaug, cofactorlist)
 @
 
+\intro{Plot after adding second cofactor}
 \begin{figure}[ht]
 <<fig=TRUE>>=
-# plot after adding second cofactor
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result_2))
 plot(result_2, result_1, col=colors, lwd=lines)
@@ -357,28 +357,29 @@ the chromosome 11 and 15 decrease}
 \end{figure}
 
 When using the functions $mqmcofactors$ and $mqmsetcofactors$, the
-number of cofactors the user is trying to set is compared against the number of
-individuals inside the cross object. If there is any danger of setting too 
-many cofactors the two $cofactor$ functions will warn the user by
-displaying an error about the user trying to set more cofactors then samplesize 
-will permit, and not return a cofactorlist.
+number of cofactors is compared against the number of individuals inside the
+cross object. If there is a danger of setting too many cofactors the two
+$cofactor$ functions will warn the user by displaying an error about the user
+trying to set more cofactors than $samplesize$ permits, and not return a
+cofactorlist.
 
-\mqm\ checks that no markers are included that are less significant than the
-$cofactor.significance$ level specified by the user. The marker on chromosome 1
-is informative enough to be included into the model. Thus creating a new
-initial model consisting of cofactors on chromosome 4 and 1. This (forward)
-selection of cofactors can continue untill there are no more informative
-markers that can be included. Practically this means one keeps on adding
-cofactors until the last added cofactor gets dropped from the model.
+\mqm\ verifies the $cofactor.significance$ level specified by the user. The
+marker on chromosome 1 is informative enough to be included into the model.
+Thus creating a new initial model consisting of cofactors on chromosome 4 and
+1. This (forward) selection of cofactors can continue until there are no more
+informative markers. Practically this means one keeps on adding cofactors until
+the last added cofactor gets dropped from the model.
 
-Manually determining which marker to set a cofactor can be very time consuming 
-in the case of many QTLs underlying a trait. It also can be prone to overfitting 
-(because the user looks at the data to decide where to place cofactors). And is 
-generally not feasable for a large number of traits. Fortunately to solve 
-these issues \mqm\ provides unsupervised backward elimination.
+Manually determining which marker to set a cofactor can be very time consuming
+in the case of many QTL underlying a trait. It is also prone to overfitting
+(because the user manipulates the data). Furthermore manual fitting is
+generally not feasable for a large number of traits. Fortunately \mqm\ provides
+unsupervised backward elimination.
 
 \clearpage
+
 \section{Unsupervised backward elimination}
+
 MQM also provides unsupervised backward elimination on a large number of markers by 
 setting cofactors a lot of markers beforehand. When samplesize allows us we could 
 place a cofactor at every marker. But in practice ussually only a subset of 
@@ -833,7 +834,7 @@ function from R/qtl can be used.
 		Genetics, 136, 1447-1455. 
   \bibitem{jansen94b}
 	  Jansen R.C.
-		\emps{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}.
+		\emph{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}.
     Genetics, Vol 138, 871-881
 	\bibitem{Churchill94}
 		Churchill, G. A.; and Doerge, R. W.; 1994
