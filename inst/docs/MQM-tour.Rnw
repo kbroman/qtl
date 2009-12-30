@@ -25,6 +25,8 @@
 \newcommand{\FIXME}{({\bf FIXME!})}
 \newcommand{\CHECK}{({\bf CHECK!})}
 \newcommand{\NOTE}{({\tt NOTE: })}
+\newcommand{\intro}[1]{{\tt # #1}}
+
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
@@ -116,6 +118,7 @@ colors are genotypes at a certain position, for a certain
 individual. Simulate an F2 dataset with 2\% missing markers as
 follows:
 
+\intro{Simulate a dataset with missing data}
 <<>>=
 library(qtl)
 data(map10)
@@ -166,6 +169,7 @@ augmentation behave similar to $fill.geno$'s imputation method}.  Use the verbos
 option to get more feedback on the augmentation routine and check how many
 individuals are dropped. So first we try augmentation with $minprob=1.0$ (figure \ref{augment1}):
 
+\intro{Plot augmented data using $plot.geno$ with $minprob=1.0$}
 <<>>=
 # displays warning because MQM ignores the X chromosome in an F2
 augmentedcross <- mqmaugment(mycross, minprob=1.0)
@@ -215,7 +219,7 @@ single marker \qtl\ analysis and $mqmscan$ multiple \QTL\ model mapping, to map
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
-\code{Calculate scanone and mqmscan after filling missing data}
+\intro{Use $scanone$ and $mqmscan$ after filling missing data with $mqmaugment$}
 <<>>=
 data(hyper)
 colors <- c("Black","Green")
@@ -265,6 +269,7 @@ so let us account for that by setting a cofactor at the marker nearest to the
 peek on chromosome 4 and perform a new $mqm$
 scan (result in figures \ref{Cofactor4} and \ref{Cofactor4b}):
 
+\intro{}
 <<>>=
 #Summary results shows the highest lodscores per chromosome
 summary(result_no_cofactors)
@@ -315,8 +320,8 @@ cofactors changes the \qtl. Again, combining $which.marker$ with $find.marker$,
 adds the new cofactornumber $c$ with the cofactor already in $toset$ (see figure 
 \ref{twowaycomparison}): 
 
+\intro{add another cofactor}
 <<>>=
-# add another cofactor
 # summary(result_1)
 toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
@@ -387,8 +392,8 @@ includes the retained cofactors. Here we set a cofactor at every fifth
 marker using $mqmsetcofactors$, and assess which chromosomes may be implicated in
 high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
 
+\intro{Automatic cofactor selection through backward elimination}
 <<>>=
-# automatic cofactor selection through backward elimination
 cofactorlist <- mqmsetcofactors(hyperaug,5)
 result <- mqmscan(hyperaug, cofactorlist, plot=T)
 @
