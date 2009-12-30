@@ -1,9 +1,9 @@
-MQM has the following advantages
+R/qtl-MQM has the following advantages
 
 \begin{itemize}
   \item Higher power, as long as the QTL explain a resonable amount of variation
   \item Protection against overfitting, because it uses the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
-  \item Prevents detection of ghost QTL (between two QTL in coupling phase)
-  \item Detects negating QTL (repulsion phase)
+  \item Prevention of ghost QTL (between two QTL in coupling phase)
+  \item Detection of negating QTL (QTL in repulsion phase)
 \end{itemize}
 

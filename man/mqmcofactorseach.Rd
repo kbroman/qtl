@@ -41,12 +41,12 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 }
 
 \examples{
-qtl <- c(3,15,3,7)						# QTL at chromosome 3
-data(map10)							# Mouse genome
+data(map10)							                  # Mouse genome
+qtl <- c(3,15,3,7)						            # QTL at chromosome 3
 \dontshow{map10 <- map10[1:5]}
 cross <- sim.cross(map10,qtl,n=100)				# Simulate a Cross
-a <- mqmsetcofactors(cross,3)					# Set Cofactors every third marker
-result <- mqm(cross,a)					# Do a backward model selection
+a <- mqmsetcofactors(cross,3)					    # Set Cofactors every third marker
+result <- mqmscan(cross,a)					      # Backward model selection
 }
 
 \keyword{ models }

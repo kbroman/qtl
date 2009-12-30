@@ -38,7 +38,6 @@ single \qtl\ mapping with $scanone$ (green)}
 
 \section{Introduction}
 
-
 \input{mqm/description.txt}
 
 \vspace{0.3in}
@@ -50,8 +49,8 @@ single \qtl\ mapping with $scanone$ (green)}
 Despite these limitations, \mqm\footnote{Note that \mqm\ is \underline{not the
 same} as composite interval mapping (CIM)\cite{jansen94},\cite{CIM}, though
 both methods were introduced around the same time. The great advantage of MQM compared to interval mapping in reducing the chance of a type I error
-(i.e., a QTL is indicated at a location where actually no QTL is
-present) and in reducing the chance of a type II error (i.e., a QTL is
+(a QTL is indicated at a location where there is no QTL
+present) and in reducing the chance of a type II error (a QTL is
 not detected)\cite{jansen94b}} is a valuable addition to
 the \qtl\ mapper's toolbox. It is able to deal with interference of \qtl,
 handles missing data and allows more precise detection than other methods. This
@@ -65,30 +64,30 @@ language\footnote{We assume the reader knows how to load his data into R using
 the R/qtl $read.cross$ function, see also the R/qtl tutorials\cite{broman09}
 and book\cite{rqtlbook}}. 
 
-\section{A quick overview}
+\section{A quick overview of \mqm}
 
 These are the typical steps in an \mqm\ \qtl\ analysis
+
 \begin{itemize}
 \item Load an experiment using R/qtl data types
-\item Fill in missing data using either the $fill.geno$ or $mqmaugmentdata$ routine
-\item Select $cofactors$ at markers that are suspected to have a \qtl\ at or near their location
-\item Use $mqmscan$ with unsupervised backward elimination to analyse the $cofactors$
-\item Then use $mqmpermute$ with a permutation or simulation analysis to get estimates of significance
+\item Fill in missing data, using either $fill.geno$ or $mqmaugmentdata$
+\item Unsupervised backward elimination to analyse $cofactors$, using $mqmscan$
+\item Optionally select $cofactors$ at markers that are thought to influence \qtl\ at, or near, the location
+\item Permutation or simulation analysis to get estimates of significance, using $mqmpermute$
 \end{itemize}
 
-Using (restricted) maximum likelihood the algorithm employs a backward
-elimination strategy to identify \qtl\ underlying the trait. The algorithm 
-passes through the following stages:
+Using maximum likelihood (ML), or restricted maximum likelihood (REML), the
+algorithm employs a backward elimination strategy to identify \qtl\ underlying
+the trait. The algorithm passes through the following stages:
 
 \begin{itemize}
-\item (Re)-estimation of the genetic map based on the genotypes provided
 \item Calculation of relative marker positions and detection of linkage groups
-\item (OPTIONAL) (Re)-estimation of genetic map and/or recombination frequencies
+\item Optional (Re-)estimation of genetic map and/or recombination frequencies
 \item Likelihood estimations of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
-      genome scan for \qtl\ using the model (see section \label{QTL modelling})
-\item If there are no $cofactors$, perform a
-      genome scan testing each genetic location independantly
+      genome scan for \qtl
+\item If there are no $cofactors$ defined, perform a
+      genome scan testing each genetic location independently
 \end{itemize}
 
 The interval map created during the genome scan and the \qtl\ model are
@@ -100,7 +99,7 @@ plotting routines are available for \mqm\ results.
 
 Most real world datasets are incomplete. That is, genotype information is
 missing, or can have multiple plausible values. \mqm\ automatically expands the
-dataset by adding all potential variants and attaches a likelihood.  For
+dataset by adding all potential variants and attaches a probability.  For
 example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
 (estimated) recombination rate, a probability is attached.  With \mqm\ all
@@ -132,45 +131,44 @@ with around 2\% missing data (white) for the map10 F2 intercross}
 \label{missing data}
 \end{figure}
 
-Before we can go to the next step (\qtl\ genome scan), the data has to 
-be completed (i.e. no more missing data).
-There are two possibilities: either use the imputation function
-$fill.geno$ or use the \mqm\ data augmentation routine $mqmaugment$.
-With $fill.geno$ a 'most likely' genotype is filled in
-using multiple imputations, estimating the missing marker genotypes.
-In contrast, \emph{augmentation} introduces all variants. At this stage
-$mqmaugment$ is specific to \mqm\footnote{Note that after
-augmentation the resulting cross object is no longer suitable for the
-use with $scan.one$ or \cim, because of the additional information
-stored}. 
+Before we can go to the next step (\qtl\ genome scan), the data has to be
+completed (i.e. no more missing data).  There are two possibilities: either use
+the imputation function $fill.geno$ or use the \mqm\ data augmentation routine
+$mqmaugment$.  With $fill.geno$ a single 'most likely' genotype is filled in using
+multiple imputations, estimating the missing marker genotypes. In contrast,
+\emph{augmentation} introduces multiple likely genotypes. At this stage
+$mqmaugment$ is specific to \mqm\ and the recommended procedure\footnote{Note
+that after augmentation the resulting cross object is no longer suitable for
+the use with $scan.one$ or \cim, because of the additional information stored}.
 
-Here, we use \mqm's augmentation. The function $mqmaugment$ can fill in
-missing genotypes for us. For each missing marker it fills in all possible
-marker locations with all genotypes and calculates the probability. When the
+In this tutorial we use \mqm's augmentation. The function $mqmaugment$ fills in
+missing genotypes for us. For each missing genotype data, at a marker, it fills
+in all possible genotypes and calculates the probability. When the total
 probability is more likely than the $minprob$ parameter the \emph{augmented}
 individual is stored in the new $crossobject$, ready for QTL mapping.
 
 The important parameters are: $cross, pheno.col, maxaugind, minprob$ and
 $verbose$ (see also the $mqmaugment$ help page in R). $maxaugind$ sets the
 maximum number of \emph{augmented} genotypes per individual in a dataset. The
-default of 60 is usually too little enough (3 to 4 missing markers per individual).
-This was set low to prevent too much memory use because space is allocated prior 
-to augmentation. As a result the user has to increase the $maxaugind$ parameter when 
-there are more missing markers. Each individual is augmented with the most likely genotype
-, then other genotypes that are still more likely then $minprob$ are also included.
-in other words, only include augmented genotypes of individuals that are
-above a probability of occurring (and do not include the less likely cases). Note that
-setting this value too low may result in dropping individuals entirely as
-$maxaugind$ is quickly reached \footnote{The current version drops individuals
-that go beyond $maxaugind$. This is undesired behaviour and will be fixed in an
-upcoming release. A value $minprob=1$ may prevent the dropping of individuals,
-making augmentation behave like $fill.geno$'s imputation method}. Use the verbose
+default of 82 allows six missing markers per individual in a BC, and four in an
+F2. As a result the user has to increase the
+$maxaugind$ parameter when there are more missing markers. 
+
+The $minprob$ parameter sets the minimum probability of a genotype for
+inclusion in the augmented dataset. This genotype probability is calculated for
+every marker \emph{relative} to the most likely individual.
+Note that setting this value too
+low may result in dropping individuals entirely as $maxaugind$ is quickly
+reached footnote{The current version drops individuals that go beyond
+$maxaugind$.  This is undesirable behaviour and will be fixed in an upcoming
+release. A value $minprob=1.0$ may prevent the dropping of individuals, making
+augmentation behave similar to $fill.geno$'s imputation method}.  Use the verbose
 option to get more feedback on the augmentation routine and check how many
-individuals are dropped.
+individuals are dropped. So first we try augmentation with $minprob=1.0$ (figure \ref{augment1}):
 
 <<>>=
 # displays warning because MQM ignores the X chromosome in an F2
-augmentedcross <- mqmaugment(mycross, minprob=1)
+augmentedcross <- mqmaugment(mycross, minprob=1.0)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -180,15 +178,17 @@ plot.geno(augmentedcross)
 ($mqmaugment$ with $minprob=1$ means only the 'most likely' individual is
 used and
 no real expansion of the dataset takes place, similar to $fill.geno$)}
+\label{augment1}
 \end{figure}
 
-With a lower $minprob$, less likely genotypes are also considered, and the
+With a lower $minprob$, more \emph{likely} genotypes considered, and the
 resulting \emph{augmented} dataset will be larger. The (weighted) augmented
 individuals with all possible genotypes theoretically leads to more accurate
-mapping when dealing with missing values \cite{jansen93}.  \footnote{Note that
+mapping when dealing with missing values \cite{jansen93}\footnote{Note that
 the augmented dataset can only be used with \mqm\ functions.  \mqm\ functions
 recognise expanded individuals as single entities.  Other R/qtl functions, like
-$scanone$, assume the augmented individuals are \emph{real} individuals}
+$scanone$, assume the augmented individuals are \emph{real} individuals}.
+Try augmentation with $minprob=0.1$ (figure \ref{augment2}):
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -198,36 +198,38 @@ plot.geno(augmentedcross)
 \caption{$plot.geno$ displays the \emph{augmented} genotypes of 100 individuals. There are a total of 340 'expanded' individuals in this plot, because \mqm\ 
 fills in missing markers with all likely genotypes (an average expansion of 3.4 per
 individual)}
+\label{augment2}
 \end{figure}
 
 \clearpage
 
-\section{QTL modelling and mapping with MQM}
+\section{MQM multiple QTL model mapping}
 
 \label{QTL modelling}
 
-The hyper tension \emph{hyper} dataset is a backcrossed (BC) offspring of mice with two
-traits in the dataset: bloodpressure (bp) and sex. Here we show an example of
-running both $scanone$ single marker \qtl\ analysis and $mqmscan$ multiple
-\QTL\ model mapping, to map blood pressure \qtl.
+The famous hyper tension \emph{hyper} dataset, that comes standard with R/qtl,
+is a backcrossed (BC) offspring of mice with two traits in the dataset:
+bloodpressure (bp) and sex. Here we show an example of running both $scanone$
+single marker \qtl\ analysis and $mqmscan$ multiple \QTL\ model mapping, to map
+\qtl\ for blood pressure. First, \emph{complete} missing data:
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
+\code{Calculate scanone and mqmscan after filling missing data}
 <<>>=
-# calculate scanone and mqm after filling missing data
 data(hyper)
 colors <- c("Black","Green")
 lines <- c(2,1)
-hyperaug <- mqmaugment(hyper, minprob=1)
+hyperaug <- mqmaugment(hyper, minprob=1.0)
 result_scanone <- scanone(hyperaug)
-result_no_cofactors <- mqm(hyperaug)
+result_no_cofactors <- mqmscan(hyperaug)
 @
 
 After loading $data(hyper)$ we create a dataset without missing genotypes using
-the $mqmaugment$ routine discussed in section \ref{augmentation}.  Next we
-scan for \qtl\ using both $scanone$ and $mqm$ routines (using default
-parameters). Figure \ref{NoCofs} displays there is virtually no difference
-in outcome.
+the $mqmaugment$ routine discussed in section \ref{augmentation}.  Next we scan
+for \qtl\ using both $scanone$ and $mqm$ routines (using default parameters).
+Figure \ref{NoCofs} shows that with $minprob=1.0$ there is virtually no
+difference in outcome.
 
 \begin{figure}[p]
 <<fig=TRUE>>=
@@ -272,7 +274,7 @@ find.marker(hyperaug,chr=4,pos=30)
 toset <- which.marker(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
 #scan again
-result_1 <- mqm(hyperaug, cofactorlist)
+result_1 <- mqmscan(hyperaug, cofactorlist)
 @
 
 \begin{figure}[ht]
@@ -318,7 +320,7 @@ adds the new cofactornumber $c$ with the cofactor already in $toset$ (see figure
 # summary(result_1)
 toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
-result_2 <- mqm(hyperaug, cofactorlist)
+result_2 <- mqmscan(hyperaug, cofactorlist)
 @
 
 \begin{figure}[ht]
@@ -388,7 +390,7 @@ high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
 <<>>=
 # automatic cofactor selection through backward elimination
 cofactorlist <- mqmsetcofactors(hyperaug,5)
-result <- mqm(hyperaug, cofactorlist, plot=T)
+result <- mqmscan(hyperaug, cofactorlist, plot=T)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -435,7 +437,7 @@ that we can be more sure of the \qtl.
 \begin{figure}[ht]
 <<fig=TRUE>>=
 # plot lowered cofactor.significance
-result <- mqm(hyperaug, cofactorlist, cofactor.significance=0.002)
+result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
@@ -652,7 +654,7 @@ improvement of the signal to noise ratio.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-resall <- mqm(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
+resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -663,7 +665,7 @@ mqmplot_multitrait(resall,"I")
 \clearpage
 <<>>=
 cofactorlist <- mqmsetcofactors(multifilled,3)
-resall <- mqm(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.clusters=2)
+resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.clusters=2)
 @
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -824,9 +826,9 @@ function from R/qtl can be used.
 		Jansen R. C.; Stam P.; 1994
 		\emph{High resolution of quantitative traits into multiple loci via interval mapping}
 		Genetics, 136, 1447-1455. 
-  \bititem{jansen94b}
+  \bibitem{jansen94b}
 	  Jansen R.C.
-		\emps{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}
+		\emps{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}.
     Genetics, Vol 138, 871-881
 	\bibitem{Churchill94}
 		Churchill, G. A.; and Doerge, R. W.; 1994

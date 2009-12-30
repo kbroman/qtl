@@ -14,17 +14,18 @@ of individuals is returned in a new \code{crossobject}.
 }
 
 \usage{
-mqmaugment(cross, maxaugind=60, minprob=0.1, verbose=FALSE)
+mqmaugment(cross, maxaugind=82, minprob=0.1, verbose=FALSE)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}}.} 
   \item{maxaugind}{ 
-    Maximum number of augmentations per individual.  The default of 60 allows
-    for 20 missing markers for an individual in a BC cross and 30 missing
-    markers in an F2. When a large number of markers are missing this default
-    number is quickly reached.
+    Maximum number of augmentations per individual.  The default of 82
+    allows for six missing markers for an individual in a BC cross
+    ($2^6=64$) and four missing markers in an F2 ($3^4=81$. When a
+    large number of markers are missing this default number is quickly
+    reached.
   }
   \item{minprob}{ 
     Return individuals with augmented genotypes that are above a probability of
@@ -32,7 +33,7 @@ mqmaugment(cross, maxaugind=60, minprob=0.1, verbose=FALSE)
     will drop all genotypes that are half as likely than the most likely
     genotype (candidate of the individual). The default value of 0.1 will drop
     all genotypes that are less likely of ocurring than 1 in 10, compared
-    against the most likely genotype. Use a value of 1 to return a single
+    against the most likely genotype. Use a value of 1.0 to return a single
     filled in genotype for each individual.
  }
   \item{verbose}{ Verbose output }
