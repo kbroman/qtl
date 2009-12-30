@@ -651,11 +651,16 @@ Using larger batches is efficient as for every batch the full R environment is
 started and initialized.
 
 
-\section{Parallelized MQM multiple trait analysis}
+\section{Parallelized xQTL analysis}
 
-MQM can analyse traits simultaneously using multiple CPU/cores.
+MQM can analyse, so called, xQTL traits simultaneously using parallel computing
+on multiple CPU/cores, and even computer clusters. xQTL datasets (expression
+eQTL, metabolite mQTL) usually contain a large amount of phenotypes with known
+locations on the genome. These locations can be used for detecting cis/trans
+regulation, for example. For QTL mapping every phenotype requires one or more
+calls to $mqmscan$. In addition special plots are presented for xQTL studies.
 
-For example, the mQTL dataset $multitrait$,
+As an example, the mQTL dataset $multitrait$,
 an \At\ RIL cross, contains 24 metabolites measured (phenotypes).
 Of these 24 phenotypes we will only scan the first 5 phenotypes by setting 
 the $pheno.col$ parameter. To map back the 
@@ -710,13 +715,14 @@ mqmplot_nice(resall,legendloc=1)
 % \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 % \end{figure}
 
-The following plot is the $mqmplot\_circle$ function. It shows a circular
+The next plot is the $mqmplot_circle$. It shows a circular
 representation of the genome. After using automatic backward selection
-highlighted markers are found to be significant using \mqm. When highlighting the
-size of the markers is scaled based on the LOD score of the marker for the
-highlighted trait. When not highlighting markers are not scaled. When plotting
-multiple traits we can see all QTLs of all the traits outside the chromosome
-(solid colored squares, or when highlighting in gray)
+certain markers are found to be significant using \mqm. When highlighting, the
+size of the markers is scaled, based on the LOD score of the marker for the
+highlighted trait. 
+\FIXME Improve description of this plot
+\FIXME Multiple traits show \qtl\ outside the chromosome
+(solid colored squares)
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -733,7 +739,7 @@ mqmplot_circle(multifilled, resall, highlight=2)
 \caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
 \end{figure}
 
-The next plot is the $mqmplot\_cistrans$ function. This plot is only available
+The next plot is $mqmplot\_cistrans$. This plot is only available
 when genomic locations of the traits are known, typically in xQTL studies. By
 default the R/qtl cross object does not store this data. So the user has to add
 this information to the $cross$ object using the addloctocross function. After
