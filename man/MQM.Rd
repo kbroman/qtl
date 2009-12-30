@@ -23,24 +23,23 @@ as cofactors, except for the markers flanking the interval under
 study. A refined and automated procedure for cases with large numbers
 of marker cofactors is included.
 
-MQM for R/qtl is based on the original implementation of multiple QTL
-model (MQM) mapping and consists of a three step procedure: (1) data
-augmentation, (2) automatic backward model elimination using genetic
-markers evenly spread over the genome as cofactors and (3) QTL
-(interval) mapping using the most 'informative' model through maximum
-likelihood. The method internally controls false discovery rates (FDR)
-and lets users test different QTL models by elimation of
-non-significant cofactors. 
+MQM for R/qtl is based on the original implementation of MQM mapping
+and consists of a three step procedure: (1) data augmentation, (2)
+automatic backward model elimination using genetic markers evenly
+spread over the genome as cofactors and (3) QTL (interval) mapping
+using the most 'informative' model through maximum likelihood. The
+method internally controls false discovery rates (FDR) and lets users
+test different QTL models by elimation of non-significant cofactors. 
 
 % -----^^ inst/docs/mqm/description.txt ^^-----
 % \input{"inst/docs/mqm/advantages.txt"}
-MQM has the following advantages
+R/qtl-MQM has the following advantages
 
 \begin{itemize}
-  \item Higher power, as long as the QTL explain a resonable amount of variation
+  \item Higher power, as long as the QTL explain a reasonable amount of variation
   \item Protection against overfitting, because it uses the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
-  \item Prevents detection of ghost QTL (between two QTL in coupling phase)
-  \item Detects negating QTL (repulsion phase)
+  \item Prevention of ghost QTL (between two QTL in coupling phase)
+  \item Detection of negating QTL (QTL in repulsion phase)
 \end{itemize}
 
 % -----^^ inst/docs/mqm/advantages.txt ^^-----
@@ -53,17 +52,15 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \note{
 % \input{"inst/docs/mqm/limitations.txt"}
 
-The current implementation of MQM has the following recognized limitations:
-(1) MQM is limited to experimental crosses F2, RIL and BC.  (2) MQM
-augmentation drops entire individuals from the equation when a lot of
-marker data is missing.  (3) MQM does not treat sex chromosomes
-differently from autosomal chromosomes - though one can introduce sex
-as a cofactor. Finally, (4) automatic backward elimination sets
-cofactors at fixed locations and ignores underlying known marker
-density.  
-
-Future versions of MQM may improve on these points. Check the
-changelog for updates.
+The current implementation of R/qtl-MQM has the following recognized
+limitations: (1) MQM is limited to experimental crosses F2, RIL and
+BC.  (2) MQM augmentation drops entire individuals from the equation
+when a lot of marker data is missing.  (3) MQM does not treat sex
+chromosomes differently from autosomal chromosomes - though one can
+introduce sex as a cofactor. Finally, (4) automatic backward
+elimination sets cofactors at fixed locations and ignores underlying
+known marker density. Future versions of R/qtl-MQM may improve on
+these points. Check the changelog for updates.
 
 % -----^^ inst/docs/mqm/limitations.txt ^^-----
 }
