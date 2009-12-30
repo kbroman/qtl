@@ -367,8 +367,7 @@ cofactorlist.
 marker on chromosome 1 is informative enough to be included into the model.
 Thus creating a new initial model consisting of cofactors on chromosome 4 and
 1. This (forward) selection of cofactors can continue until there are no more
-informative markers. Practically this means one keeps on adding cofactors until
-the last added cofactor gets dropped from the model.
+informative markers. 
 
 Manually determining which marker to set a cofactor can be very time consuming
 in the case of many QTL underlying a trait. It is also prone to overfitting
@@ -379,6 +378,11 @@ unsupervised backward elimination.
 \clearpage
 
 \section{Unsupervised backward elimination}
+
+% "setting cofactors every other marker" HUH? Waarom zou je dit willen doen?
+% Is dit de standaard proc? Raar. Moet toch afhangen van het aantal
+% individuen en van de locaties van de merkers????????
+
 
 MQM also provides unsupervised backward elimination on a large number of markers by 
 setting cofactors a lot of markers beforehand. When samplesize allows us we could 
@@ -640,7 +644,7 @@ microarray experiments.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-mqmscanfdr(multifilled,mqmall,cofactors=cofactorlist,n.clusters=2)
+mqmscanfdr(multifilled,mqmscanall,cofactors=cofactorlist,n.clusters=2)
 @
 \section{MQM and multiple traits}
 
@@ -755,7 +759,7 @@ mqmplot_circle(multiloc,resall, highlight=2)
 	mqmscan:& mqm modeling and scanning \\
 	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
 	which.marker:& Change markernumbering into mqmformat \\
-	mqmall:& mqmall to scan all traits using mqm\\
+	mqmscanall:& mqmscanall to scan all traits using mqm\\
 	mqmpermutate:& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
