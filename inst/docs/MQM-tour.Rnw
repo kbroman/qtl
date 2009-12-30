@@ -31,6 +31,7 @@
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
 single \qtl\ mapping with $scanone$ (green)}
+\newcommand{\Atintro}{\At\ RIL mQTL dataset with 24 metabolites as phenotypes}
 
 \title { Tutorial - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl Broman and Ritsert Jansen }
@@ -574,35 +575,22 @@ wetlab candidates, and, perhaps, tell us something about the biology behind the
 
 \section{QTL significance} 
 
-\label{signicance}
+\label{significance}
 
-\NOTE For all the examples in this section we use $25$ permutations. A real 
-experiment uses - typically - $n.run=1000 to 10000$ tests with $b.size=25 to 500$
-\\
-\\
-To estimate significance of the peeks (and perhaps exclude some markers 
-from our model ) we can use permutation testing provided by the function $mqmpermute$. 
-This step is computationally expensive - repeating the same test thousands of 
-times on shuffled data to see what LOD scores come up in non associated data. 
-We can use two 'favors' to estimate QTL significance when dealing with a small 
-amounts of traits. We can use the $bootmethod$ parameter of the $mqmpermute$ 
-function to choose the 'flavor' of permutation $0 = non-parametric$ permutation or 
-$1 = parametric bootstrap$ a simulation of the data. If you have access to multiple 
-CPUs on your computer you can install the SNOW package \cite{tierney03}\cite{tierney04}, 
-which allows parallel computations on multiple CPU (cores). For small sets, 
-with a limited amount of classical traits, the $mqmpermute$ works well. For large 
-genome wide association studies (GWAS) use $mqmscanfdr$ to estimate the FDR across the entire
-dataset at \lod\ cutoffs levels. Both routines share some parameters: like $b.size$ the batchsize per core. 
-If we set 100 permutations using 4 cores and a batchsize of 10, each core 
-gets 10 traits to calculate QTL profiles on. 
-When QTL modeling and mapping is done for these 10 traits. Another 10 traits are 
-send to the core, untill all 100 traits have been analyzed. 
-In $mqmpermutate$ we do single trait permutations not taking correlation between 
-the traits into account. This has the advantage that for each peek in the profile 
-above the significance level we can provide a confidence interval. First we need to 
-convert the output to R/qtl format using the $mqmprocesspermutation$ function. The 
-resulting object is of class $scanoneperm$ and can be used by the standard R/qtl 
-functions for further analysis. 
+To estimate significance of \qtl\ (and perhaps further exclude markers from a
+model) permutation testing is provided by the function $mqmpermute$. This step
+is computationally expensive\footnote{In the tutorial, for all examples, 25
+permutations are used. A real experiment should use over 1000 permutation tests}
+as the same test is repeated many times on shuffled data. Each test calculates
+LOD scores for non associated (randomly ordered) data. 
+
+\mqm\ provides parametric and non-parametric bootstrapping to estimate QTL
+significance. The $bootmethod$ parameter of the $mqmpermute$ function selects
+the type.  If you have access to multiple CPUs on your computer you can use the
+SNOW package \cite{tierney03}\cite{tierney04}, which allows parallel
+computations on multiple CPU/cores. 
+
+\intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
 results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
@@ -611,49 +599,73 @@ results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.si
 <<fig=TRUE>>=
 mqmplot_permutations(results)
 @
-\caption{Calculate significance permuting 25 times over the hyper dataset. 
-\qtl\ with a \lod\ higher than
-2.5 LOD score can be considered significant (at $cofactor.significance=0.05 (green)$ or $cofactor.significance=0.10 (blue)$).
-This is estimated from permuting a single trait. Chromosomes are signified by the gray gridlines.
+\caption{\hyperintro. Calculate significance permuting 25 times over \qtl\ with
+a \lod\ higher than 2.5 LOD score can be considered significant (at
+$cofactor.significance=0.05$ (green) or $cofactor.significance=0.10$ (blue)).
+Estimation from permuting a single trait. Chromosomes are signified by
+the gray grid lines.
 }
 \end{figure}
+
 <<>>=
 resultsrqtl <- mqmprocesspermutation(results)
 summary(resultsrqtl)
 @
 
-To estimate false discovery rates in large sets, we need to do a whole genome 
-permutation using $mqmscanfdr$. This method does take 
-correlation between traits into account and gives an unbiased estimate 
-of FDR at different thresholds (userspecified). This function scans the 
-traits and counts observed \qtl\ (markers with a LOD above $x$) when setting a certain
-threshold. It permutes all the data leaving the correlation structure
-between traits intact. For this small example very high FDR estimates
-are calculated because of the small amount of permutations and the
-high correlation between traits. We thus discover many QTLs that map 
-to the same location, this could normally only happen when we have an 
-information sparse marker, or correlated traits as we ussually see in 
-microarray experiments.
+For small datasets, with a limited amount of classical traits, $mqmpermute$
+works fine. For large genome wide association studies (GWAS) use $mqmscanfdr$
+instead, which estimates false discovery rates (FDR) across the entire dataset
+at \lod\ cutoff. The routines have similar parameters.
 
+To estimate FDR, whole genome information is permuted with $mqmscanfdr$. This
+method takes correlation between traits into account and gives an unbiased
+estimate of FDR at different (user specified) thresholds. The function scans
+the traits and counts observed \qtl\ (markers with a LOD above $x$) when
+setting a certain threshold. It permutes all the data leaving the correlation
+structure between traits intact. For this small example very high FDR estimates
+are calculated because of the small amount of permutations and the high
+correlation between traits. We thus discover many QTLs that map to the same
+location, this could normally only happen when we have an information sparse
+marker, or correlated traits, often seen in microarray experiments.
+
+\intro{Calculate FDR}
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
 mqmscanfdr(multifilled,mqmscanall,cofactors=cofactorlist,n.clusters=2)
 @
-\section{MQM and multiple traits}
 
-MQM can analyse multiple traits simultaneously. 
-Start by loading a new dataset ($multitrait$). $multitrait$
-consists of an arabidopsis RIL cross with 24 metabolites measured (phenotypes).
-Of these 24 phenotypes we will only scan the first 5 phenotypes this 
-can be done using the $pheno.col$ parameter. To map back the possible 
+The function $mqmpermutate$ does single trait permutations, and does not take
+correlation between the traits into account. The advantage is that a confidence
+interval is provided for each significant QTL.  The \mqm\ output needs to be
+converted to the standard R/qtl format using the $mqmprocesspermutation$
+function. The resulting object is of class $scanoneperm$ and can be used by the
+standard R/qtl functions for further analysis. 
+
+Finally, with regard to parallelized processing using the multiple cores,
+nowadays even standard in laptop computers, we can assign, for example four
+cores using a batch size of 10. This way each core gets 10 traits to calculate
+QTL profiles on.  When QTL modeling and mapping is done for these 10 traits.
+Another 10 traits are send to the core, until all traits have been analyzed.
+Using larger batches is efficient as for every batch the full R environment is
+started and initialized.
+
+
+\section{Parallelized MQM multiple trait analysis}
+
+MQM can analyse traits simultaneously using multiple CPU/cores.
+
+For example, the mQTL dataset $multitrait$,
+an \At\ RIL cross, contains 24 metabolites measured (phenotypes).
+Of these 24 phenotypes we will only scan the first 5 phenotypes by setting 
+the $pheno.col$ parameter. To map back the 
 regulatory locations of these metabolites one can use plain scanning of
-all metabolites (initially without cofactors). Next plot all the profiles
-in a heatmap. In this heatmap the colors represent the LOD score, on
+all metabolites (initially without cofactors). Next, we plot all the profiles
+in a heatmap (see figure \ref{At.heatmap1}). In this heatmap the colors represent the LOD score, on
 the x-axis the marker number and on the y-axis the metabolite. The traits
 are numbered in the plot. Plot heatmap without cofactors and then the
-heatmap with cofactors and backward elimination. The plots show
-improvement of the signal to noise ratio.
+heatmap with cofactors and backward elimination. Figure \ref{At.heatmap2} shows
+improvement over figure \ref{At.heatmap1} because of an improved signal to noise ratio.
 
 <<>>=
 data(multitrait)
@@ -664,9 +676,12 @@ resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
 <<fig=TRUE>>=
 mqmplot_multitrait(resall,"I")
 @
-\caption{Heatmap of 25 metabolite expression traits in arabidopsis, profiles created using mqm with no cofactors.}
+\caption{\Atintro. Heatmap of metabolite expression traits, with profiles created using \mqm\ without preselected cofactors. The colors represent the LOD score, on
+the x-axis the marker number and on the y-axis the metabolite}
+\label{At.heatmap1}
 \end{figure}
-\clearpage
+
+
 <<>>=
 cofactorlist <- mqmsetcofactors(multifilled,3)
 resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.clusters=2)
@@ -675,24 +690,34 @@ resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cl
 <<fig=TRUE>>=
 mqmplot_multitrait(resall,"I")
 @
-\caption{Heatmap of 25 metabolite expression traits in \At\ with profiles
-created using cofactors at each third marker. Compared to figure 18 the
-profile is clearer, because the individual profiles contain less noise.}
+\caption{\Atintro. Heatmap of metabolite expression traits, with profiles created using \mqm\ with cofactors at each third marker. The colors represent the LOD
+score, on the x-axis the marker number and on the y-axis the metabolite}
+
+\label{At.heatmap2}
 \end{figure}
-Use $mqmplot\_nice$ for more graphical output. (This does not show in the
-generated PDF, but in R it shows the trait profiles)
-\begin{figure}[ht]
-<<fig=TRUE>>=
+
+Use $mqmplot\_nice$ for more graphical output. (Unfortunately this does not
+show in the generated PDF, but in R it shows the trait profiles)
+
+<<>>=
 mqmplot_nice(resall,legendloc=1)
 @
-\caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
-\end{figure}
-The next plot is the $mqmplot\_circle$ function. It shows a circular representation 
-of the genome. After using automatic backward selection we can also highlight markers
-found to be significant using MQM. When highlighting the size of the markers is scaled
-based on the LODscore of the marker for the highlighted trait. When not highlighting 
-markers are not scaled. When plotting multiple traits we can see all QTLs of all the traits
-outside the chromosome (solid colored squares, or when highlighting in gray)
+
+% \begin{figure}[ht]
+% <<fig=TRUE>>=
+% mqmplot_nice(resall,legendloc=1)
+% @
+% \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
+% \end{figure}
+
+The following plot is the $mqmplot\_circle$ function. It shows a circular
+representation of the genome. After using automatic backward selection
+highlighted markers are found to be significant using \mqm. When highlighting the
+size of the markers is scaled based on the LOD score of the marker for the
+highlighted trait. When not highlighting markers are not scaled. When plotting
+multiple traits we can see all QTLs of all the traits outside the chromosome
+(solid colored squares, or when highlighting in gray)
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multifilled, resall)
@@ -708,19 +733,17 @@ mqmplot_circle(multifilled, resall, highlight=2)
 \caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
 \end{figure}
 
+The next plot is the $mqmplot\_cistrans$ function. This plot is only available
+when genomic locations of the traits are known, typically in xQTL studies. By
+default the R/qtl cross object does not store this data. So the user has to add
+this information to the $cross$ object using the addloctocross function. After
+this operation the cis\_trans plot can be created for \qtl\ with associated
+genome locations. For example with expression QTL (eQTL) usually the probes on
+the microarray have a known chromosomal location.  
 
-\clearpage
-The next plot is the $mqmplot\_cistrans$ function. This plot is only available 
-when genomic locations of the traits are known. By dafault the R/qtl cross
-object does not store this data. So the user has to add this to the $cross$ object 
-using the addloctocross function. After this operation the cis\_trans plot can be created
-for \qtl\ with associated genome locations (For example when one is doing an
-expression QTL analysis (eQTL). in these eQTL experiments the probes on the 
-microarray have a genetic location).  The two axis of the cistrans plot both 
-show the genetic location. The x-axis is, normally, the \qtl\ location and 
-the y-axis the locations of the traits (e.g. a microarray probe).
-Make sure not to forget to add the genomic locations need to be associated with the
-$cross$ object.
+The two axis of the cistrans plot both show the genetic location. The x-axis
+is, normally, the \qtl\ location and the y-axis the locations of the trait
+(e.g. a the microarray probe).
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
@@ -728,17 +751,20 @@ data(locations)
 multiloc <- addloctocross(multifilled,locations)
 mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
-\caption{mqmplot\_cistrans, available when \qtl\
+\caption{\Atintro. mqmplot\_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff is at a lod score of 5
 }
 \end{figure}
-When having locations we can also use the $mqmplot_circle$ function.
+
+When having locations we can, again, use the $mqmplot_circle$ function, now with 
+the extra information.
+
 \begin{figure}[ht]
 <<fig=TRUE>>=
 mqmplot_circle(multiloc,resall, highlight=2)
 @
-\caption{Circleplot 3 - Multiple traits with locations added, here we highlight trait number 2}
+\caption{\Atintro. Circleplot 3 - Multiple traits with locations added, here we highlight trait number 2}
 \end{figure}
 
 \clearpage
@@ -773,30 +799,7 @@ mqmplot_circle(multiloc,resall, highlight=2)
 
 \clearpage
 
-\section{Final notes}
-
-\subsection{Sex Chromosomes}
-
-The current version of \mqm\ does not treat the sex chromosome as a
-special case. You can treat sex as a covariate, of course, but special
-recombination rates are not considered. This will change in a future
-version.
-
-\subsection{Out of memory}
-
-When using a slack augmentation setting the matrix may grow out of
-memory. You will see the following error:\\
-\\
-ERROR: Dataset too large after augmentation
-
-When this happens please reload your crossobject from file and rerun the mqmaugmentation routine with:\\
-1) set $minprob$ parameter higher (closer to 1)\\
-2) allow for more augmentations per individual\\
-3) allow for more augmentations in total\\
-When dealing with a lot of missing markers (This message already shows when $minprob$ is equal to 1), the basic fill.geno
-function from R/qtl can be used.
-
-\clearpage
+\NOTE: the bibliography should use standard bibtex
 
 \begin{thebibliography}{9}
 	\bibitem{broman09}

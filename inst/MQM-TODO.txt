@@ -15,12 +15,13 @@ o Tutorial and man pages
   - mqmgetmodel.Rd needs example (danny)
   - mqmcofactorseach.Rd has wrong example - do we need that method?
     (danny)
+  - The first circle plot is empty (danny)
+  - fix the bibliography (pjotr)
 
 o Fix naming of functions and parameters:
   - make sure all man, R and C-code functions and parameters are  #15 %
     similarly named for MQM (danny)
-  - The mqm() in mqmscan.R should be removed (called from circle
-    plot) (danny)
+  - Change bootmethod from 0/1 into something descriptive (danny)
 
 o Other
   - Add test descriptions and check test T32 differs on 64bits compile
