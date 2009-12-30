@@ -24,7 +24,7 @@
 #
 # Part of the R/qtl package
 # Contains: cimall
-#           mqmall
+#           mqmscanall
 #           scanall
 #           
 #
@@ -38,7 +38,7 @@ cimall <- function(...) {
 	scanall(...,mapfunction=cim)
 }
 
-mqmall <- function(cross, multiC=TRUE, n.clusters=1, b.size=10, ...) {
+mqmscanall <- function(cross, multiC=TRUE, n.clusters=1, b.size=10, ...) {
 	scanall(cross=cross, multiC=multiC, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqmscan)
 }
 

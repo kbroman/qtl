@@ -56,7 +56,7 @@ test_mqmplot_circle <- function(){
   multifilled <- fill.geno(multitrait)
   multicof <- mqmsetcofactors(multitrait,10)
   multiloc <- addloctocross(multifilled,locations)
-  multires <- mqmall(multifilled,cofactors=multicof)
+  multires <- mqmscanall(multifilled,cofactors=multicof)
 
   mqmplot_circle(hyperfilled,hyperres)
   Sys.sleep(3)

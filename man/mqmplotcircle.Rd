@@ -18,7 +18,7 @@
     \code{\link{addloctocross}} for adding phenotype locations.
   } 
   \item{result}{An object of class \code{mqmmulti} or \code{scanone}. 
-    See \code{\link{mqmall}} \code{\link{scanone}} for details.
+    See \code{\link{mqmscanall}} \code{\link{scanone}} for details.
   } 
   \item{highlight}{ With a mqmmulti object, highlight this phenotype (value between 
     one and the number of results in the mqmmultiobject) 
@@ -50,7 +50,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
@@ -74,7 +74,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     multifilled <- fill.geno(multitrait)
     multicof <- mqmsetcofactors(multitrait,10)
     multiloc <- addloctocross(multifilled,locations)
-    multires <- mqmall(multifilled,cofactors=multicof)
+    multires <- mqmscanall(multifilled,cofactors=multicof)
     
     #Basic scanone, thickness of markers = LODscore
     mqmplot_circle(hyperfilled,hyperscanone)

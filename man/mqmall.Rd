@@ -1,5 +1,5 @@
-\name{mqmall}
-\alias{mqmall}
+\name{mqmscanall}
+\alias{mqmscanall}
 
 \title{Parallelized MQM on multiple phenotypes in a cross object}
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-	mqmall(cross, multiC=TRUE, n.clusters = 1,b.size=10, \dots)
+	mqmscanall(cross, multiC=TRUE, n.clusters = 1,b.size=10, \dots)
 }
 
 \arguments{
@@ -46,7 +46,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 % \input{"inst/docs/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link{mqmall}} - Parallellized traits analysis 
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
@@ -63,7 +63,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
   multitrait <- calc.genoprob(multitrait)
 	cof <- mqmsetcofactors(multitrait,3)
   multitrait <- fill.geno(multitrait)
-	result <- mqmall(multitrait,cofactors=cof,b.size=5)
+	result <- mqmscanall(multitrait,cofactors=cof,b.size=5)
 }
 
 \references{
