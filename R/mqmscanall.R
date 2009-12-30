@@ -39,7 +39,7 @@ cimall <- function(...) {
 }
 
 mqmall <- function(cross, multiC=TRUE, n.clusters=1, b.size=10, ...) {
-	scanall(cross=cross, multiC=multiC, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqm)
+	scanall(cross=cross, multiC=multiC, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqmscan)
 }
 
 scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.size=10, FF=0, ..., plot=FALSE, verbose=FALSE){
