@@ -51,7 +51,7 @@ test_mqmplot_circle <- function(){
   
   hyperfilled <- fill.geno(hyper)
   hypercof <- mqmsetcofactors(hyper,4)
-  hyperres <- mqm(hyperfilled,hypercof)
+  hyperres <- mqmscan(hyperfilled,hypercof)
 
   multifilled <- fill.geno(multitrait)
   multicof <- mqmsetcofactors(multitrait,10)

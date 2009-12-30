@@ -38,7 +38,7 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross, maxaugind=60, minprob=0.1, verbose=FALSE) {
+mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
