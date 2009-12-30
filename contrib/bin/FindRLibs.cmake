@@ -26,11 +26,25 @@ MESSAGE(STATUS,"FindRLibs.cmake")
 
 ASSERT_FOUNDMAP()
 
-FIND_PROGRAM(R_EXECUTABLE R)
+IF(APPLE)
+  FIND_PROGRAM(R_EXECUTABLE R
+    PATHS 
+      /Library/Frameworks/R.framework/Resources/bin
+      /usr/bin
+      /usr/local/bin
+  )
+ELSE()
+  FIND_PROGRAM(R_EXECUTABLE R
+    PATHS 
+      /Library/Frameworks/R.framework/Resources/bin
+      /usr/bin
+      /usr/local/bin
+  )
+ENDIF()
 
 IF(WIN32 AND NOT R_EXECUTABLE)
   FIND_PROGRAM(R_EXECUTABLE R
-    PATHS "c:/Progra~1/R/R-2.9.1/"
+    PATHS "c:/Progra~1/R/R-2.9.1"
   )
 ENDIF()
 
@@ -41,7 +55,11 @@ IF(R_EXECUTABLE)
   # Fetch the library paths
   EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --ldflags OUTPUT_VARIABLE _LIBS)
   message(STATUS "LIBS=${_LIBS}")
-  STRING(REGEX REPLACE "-L([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
+  if (APPLE)
+    STRING(REGEX REPLACE "-F([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
+  else()
+    STRING(REGEX REPLACE "-L([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
+  endif()
   separate_arguments(R_EXE_LIB_PATHS)
   message(STATUS "R_EXE_LIB_PATHS=${R_EXE_LIB_PATHS}")
 
@@ -54,11 +72,12 @@ IF(R_EXECUTABLE)
 
   # Locate libraries e.g. Linux /usr/lib/R/lib/libR.so /usr/bin/R
   FIND_LIBRARY(R_LIBRARY
-    NAMES libR.so R.DLL R.dylib
+    NAMES libR.so R.DLL libR.dylib
     PATHS 
       ${R_EXE_LIB_PATHS}
       ${R_PATH}
       ${R_BINPATH}
+      /Library/Frameworks/R.framework/Resources/lib
   )
 	SET(R_LIKELY_INCLUDE_PATH ${R_PATH}/lib/R/include)
   IF (WIN32)
@@ -77,7 +96,7 @@ INCLUDE_DIRECTORIES(${R_INCLUDE_PATH})
 
 # Locate R_BLAS (is it required?)
 FIND_LIBRARY(R_BLAS_LIBRARY
-  NAMES Rlbas.dll.a R_BLAS.dll R_BLAS.dylib libR_BLAS.so
+  NAMES Rlbas.dll.a R_BLAS.dll R_BLAS.dylib libR_BLAS.so libblas.so
   PATHS ${R_LIBRARY_PATH} ${R_BINPATH}
   )
 
