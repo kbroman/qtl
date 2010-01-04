@@ -24,7 +24,7 @@ o Fix naming of functions and parameters:
 o Other
   - Add test descriptions (danny)
   - Checked Tests T25, T32 and T33 standalone those gave problems with augmentation
-	and had strange resulkts because of that. So pjotr: Could u check if test 
+	and had strange results because of that. So pjotr: Could u check if test 
 	T32 still differs on 64bits compile
 
 NOTE: Always make sure R CMD check works  by running script in
