@@ -11,9 +11,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 SHORT TERM:
 
 o Tutorial and man pages
-  - add example of SNOW with mqm scan in tutorial 
-	(danny: ??? i don't get it, if people install they use snow otherwise 
-	they don't. It can't be enabled if u dont have it installed)
   - mqmcofactorseach.Rd has wrong example - do we need that method?
     (danny: Yes, i think so, we need an easy way to set a lot of cofactors,
 	this function altough not perfect allows us. Removing it will break 
