@@ -260,8 +260,8 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   if (verbose) {
     info("dimX:%d nInd:%d",dimx,Nind);
     info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
-    info("F(%f,1,%d)=%f",F1,(Nind-dimx),alfa);
-    info("F(%f,2,%d)=%f",F2,(Nind-dimx),alfa);
+    info("F(%.3f,1,%d)=%f",F1,(Nind-dimx),alfa);
+    info("F(%.3f,2,%d)=%f",F2,(Nind-dimx),alfa);
   }
   F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
@@ -276,10 +276,10 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
         info("Log-likelihood of full model= NOT A NUMBER (NAN)");
       }
       else {
-        info("Log-likelihood of full model= %f",logL);
+        info("Log-likelihood of full model= %.3f",logL);
       }
-    info("Residual variance= %f",variance);
-    info("Trait mean= %f; Trait variation= %f",ymean,yvari);
+    info("Residual variance= %.3f",variance);
+    info("Trait mean= %.3f; Trait variation= %.3f",ymean,yvari);
   }
   if (!isinf(logL) && !isnan(logL)) {
     if (Backwards==1)    // use only selected cofactors
