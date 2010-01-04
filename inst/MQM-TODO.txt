@@ -18,7 +18,6 @@ o Tutorial and man pages
     (danny: Yes, i think so, we need an easy way to set a lot of cofactors,
 	this function altough not perfect allows us. Removing it will break 
 	all backward selection currently implemented in man/tutorialpages)
-  - The first circle plot is empty (danny)
   - fix the bibliography (pjotr)
 
 o Fix naming of functions and parameters:
