@@ -6,16 +6,16 @@ INFO: dimX:1 nInd:180
 INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa
 INFO: F(5.468750,1,179)=0.020000
 INFO: F(4.003906,2,179)=0.020000
-INFO: Log-likelihood of full model= -8847.557271
+INFO: Log-likelihood of full model= -8852.741610
 INFO: Residual variance= 28972781.109373
 INFO: Trait mean= 4327.088889; Trait variation= 28972781.109373
 INFO: Number of output datapoints: 505
     0	   0.87562
-    1	   0.91162
-    2	   0.84573
-    3	   0.69833
-    4	   0.50497
-    5	   0.30072
+    1	   0.88609
+    2	   0.79512
+    3	   0.63128
+    4	   0.46658
+    5	   0.29247
     6	   0.20922
     7	   0.34553
     8	   0.55674
@@ -516,11 +516,11 @@ INFO: Number of output datapoints: 505
   503	   0.03302
   504	   0.03164
   505	   1.00000
-  506	   0.95606
-  507	   0.94638
-  508	   0.99064
-  509	   0.96561
-  510	   0.98148
+  506	   0.95457
+  507	   0.94407
+  508	   0.99027
+  509	   0.96336
+  510	   0.98059
   511	   0.97585
   512	   0.97925
   513	   0.98421
