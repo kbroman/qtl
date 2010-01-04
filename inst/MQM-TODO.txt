@@ -12,9 +12,9 @@ SHORT TERM:
 
 o Tutorial and man pages
   - add example of SNOW with mqm scan in tutorial (danny)
-  - mqmgetmodel.Rd needs example (danny)
-  - mqmcofactorseach.Rd has wrong example - do we need that method?
-    (danny)
+    - mqmcofactorseach.Rd has wrong example - do we need that method?
+    (danny: Yes, i think so, we need an easy way to set a lot of cofactors,
+	this function altough not perfect allows us)
   - The first circle plot is empty (danny)
   - fix the bibliography (pjotr)
 
