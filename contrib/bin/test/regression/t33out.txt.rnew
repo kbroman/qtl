@@ -6,33 +6,33 @@ INFO: dimX:13 nInd:120
 INFO: F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa
 INFO: F(5.664062,1,107)=0.020000
 INFO: F(4.101562,2,107)=0.020000
-INFO: Log-likelihood of full model= -9774.859058
+INFO: Log-likelihood of full model= -9786.980087
 INFO: Residual variance= 5394.243045
 INFO: Trait mean= 148.703367; Trait variation= 6631.434991
-INFO: Marker 63 is dropped, resulting in reduced model logL = -9774.872546
-INFO: Marker 56 is dropped, resulting in reduced model logL = -9774.889327
-INFO: Marker 74 is dropped, resulting in reduced model logL = -9774.932263
-INFO: Marker 89 is dropped, resulting in reduced model logL = -9775.098995
-INFO: Marker 90 is dropped, resulting in reduced model logL = -9775.218449
-INFO: Marker 27 is dropped, resulting in reduced model logL = -9775.746325
-INFO: Marker 28 is dropped, resulting in reduced model logL = -9775.884810
-INFO: Marker 31 is dropped, resulting in reduced model logL = -9776.425215
-INFO: Marker 47 is dropped, resulting in reduced model logL = -9777.281374
-INFO: Marker 8 is dropped, resulting in reduced model logL = -9778.645292
+INFO: Marker 63 is dropped, resulting in reduced model logL = -9786.993575
+INFO: Marker 56 is dropped, resulting in reduced model logL = -9787.010355
+INFO: Marker 74 is dropped, resulting in reduced model logL = -9787.053292
+INFO: Marker 89 is dropped, resulting in reduced model logL = -9787.220023
+INFO: Marker 90 is dropped, resulting in reduced model logL = -9787.339478
+INFO: Marker 27 is dropped, resulting in reduced model logL = -9787.867354
+INFO: Marker 28 is dropped, resulting in reduced model logL = -9788.005839
+INFO: Marker 31 is dropped, resulting in reduced model logL = -9788.546243
+INFO: Marker 47 is dropped, resulting in reduced model logL = -9789.402403
+INFO: Marker 8 is dropped, resulting in reduced model logL = -9790.766321
 INFO: Number of output datapoints: 2020
     0	   0.13155
-    1	   0.16214
-    2	   0.13253
-    3	   0.10284
-    4	   0.07441
-    5	   0.04879
-    6	   0.02755
-    7	   0.01195
-    8	   0.00274
-    9	   0.00001
-   10	   0.00324
-   11	   0.01147
-   12	   0.02353
+    1	   0.11792
+    2	   0.09529
+    3	   0.07268
+    4	   0.05123
+    5	   0.03220
+    6	   0.01686
+    7	   0.00620
+    8	   0.00075
+    9	   0.00051
+   10	   0.00494
+   11	   0.01317
+   12	   0.02422
    13	   0.02930
    14	   0.02852
    15	   0.02714
@@ -2041,18 +2041,18 @@ INFO: Number of output datapoints: 2020
  2018	   0.00113
  2019	   0.00104
  2020	   1.00000
- 2021	   0.97833
- 2022	   0.93715
- 2023	   0.89845
- 2024	   0.86199
- 2025	   0.82951
- 2026	   0.80007
- 2027	   0.80079
- 2028	   0.83049
- 2029	   0.86352
- 2030	   0.90052
- 2031	   0.93980
- 2032	   0.98152
+ 2021	   0.97761
+ 2022	   0.93510
+ 2023	   0.89521
+ 2024	   0.85770
+ 2025	   0.82515
+ 2026	   0.79591
+ 2027	   0.79698
+ 2028	   0.82638
+ 2029	   0.85967
+ 2030	   0.89763
+ 2031	   0.93799
+ 2032	   0.98095
  2033	   0.97258
  2034	   0.92730
  2035	   0.88476
