@@ -35,6 +35,19 @@ inline int mqmmod(int a, int b) {
   return a%b;
 }
 
+double truncate(double n, double p = 3){
+    int sign = 0;
+	if(n >= 0){
+        sign = 1;
+    }else{
+        sign = -1;
+    }
+	double val = fabs((pow(10,p)) * n);
+	val = floor(val);
+    val /= pow(10,p);
+	return (double) sign * val;
+}
+
 double Lnormal(double residual, double variance) {
   //Now using R-library for Lnormal
   return dnorm(residual,0,sqrt(variance),0);
