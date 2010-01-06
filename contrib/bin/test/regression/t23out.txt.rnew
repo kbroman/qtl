@@ -28,18 +28,18 @@ INFO: F(4.003,2,235)=0.020000
 INFO: Log-likelihood of full model= -15627.273
 INFO: Residual variance= 59.654
 INFO: Trait mean= 101.611; Trait variation= 70.959
-INFO: Marker 91 is dropped, resulting in reduced model logL = -15627.280044
-INFO: Marker 86 is dropped, resulting in reduced model logL = -15627.292584
-INFO: Marker 76 is dropped, resulting in reduced model logL = -15627.307673
-INFO: Marker 112 is dropped, resulting in reduced model logL = -15627.325783
-INFO: Marker 89 is dropped, resulting in reduced model logL = -15627.372390
-INFO: Marker 153 is dropped, resulting in reduced model logL = -15627.742823
-INFO: Marker 143 is dropped, resulting in reduced model logL = -15628.195929
-INFO: Marker 144 is dropped, resulting in reduced model logL = -15628.564707
-INFO: Marker 53 is dropped, resulting in reduced model logL = -15629.423763
-INFO: Marker 67 is dropped, resulting in reduced model logL = -15630.344713
-INFO: Marker 28 is dropped, resulting in reduced model logL = -15631.632660
-INFO: Marker 72 is dropped, resulting in reduced model logL = -15634.535006
+INFO: Marker 91 is dropped, resulting in reduced model logL = -15627.280
+INFO: Marker 86 is dropped, resulting in reduced model logL = -15627.292
+INFO: Marker 76 is dropped, resulting in reduced model logL = -15627.307
+INFO: Marker 112 is dropped, resulting in reduced model logL = -15627.325
+INFO: Marker 89 is dropped, resulting in reduced model logL = -15627.372
+INFO: Marker 153 is dropped, resulting in reduced model logL = -15627.742
+INFO: Marker 143 is dropped, resulting in reduced model logL = -15628.195
+INFO: Marker 144 is dropped, resulting in reduced model logL = -15628.564
+INFO: Marker 53 is dropped, resulting in reduced model logL = -15629.423
+INFO: Marker 67 is dropped, resulting in reduced model logL = -15630.344
+INFO: Marker 28 is dropped, resulting in reduced model logL = -15631.632
+INFO: Marker 72 is dropped, resulting in reduced model logL = -15634.535
 INFO: Number of output datapoints: 2020
     0	0.142
     1	0.142
