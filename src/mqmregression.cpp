@@ -391,7 +391,7 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
     //prob= betai(df2/2.0, df1/2.0, df2/(df2+df1*halfway));
     //USE R FUNCTIONALITY TO REPLACE OLD C ROUTINES
     prob = pbeta(df2/(df2+df1*halfway), df2/2.0, df1/2.0, 1, 0);
-    debug_trace("->(%f, %f, %f) %f %f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob, prob2);
+    debug_trace("->(%f, %f, %f) %f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
     if (prob<alfa) maxF= halfway;
     else minF= halfway;
     absdiff= fabs(prob-alfa);
