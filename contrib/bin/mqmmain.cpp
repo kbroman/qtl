@@ -486,7 +486,7 @@ int main(int argc,char *argv[]) {
             fprintf(fout,"  INFINITE\n");
           }
           else
-            fprintf(fout,"%.3f\n",QTL[0][q]);
+            fprintf(fout,"%.3f\n",truncate(QTL[0][q]));
       }
     }
       
