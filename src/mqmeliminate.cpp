@@ -99,7 +99,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
       if(verbose) 
-        info("Marker %d is dropped, resulting in reduced model logL = %f",(dropj+1),savelogL);
+        info("Marker %d is dropped, resulting in reduced model logL = %.3f",(dropj+1),truncate(savelogL));
     } else if ( ((*newcofactor)[dropj]==MBB) && (F1> 2.0*(savelogL-maxlogL)) ) {
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MNOCOF;

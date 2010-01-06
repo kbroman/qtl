@@ -54,7 +54,7 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y,
                   vector *weight, ivector ind, int Naug, double *variance,
                   vector Fy, bool biasadj, bool fitQTL, bool dominance) {
-  // Rprintf("regression IN\n");
+  debug_trace("regression IN\n");
   /*
   cofactor[j] at locus j:
   MNOCOF: no cofactor at locus j
@@ -62,9 +62,9 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   MSEX: QTL at locus j, but QTL effect is not included in the model
   MQTL: QTL at locu j and QTL effect is included in the model
   */
-	//for (int j=0; j<Naug; j++){
-	//   info("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
-  //}
+	for (int j=0; j<Naug; j++){
+	   debug_trace("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
+  }
 
   matrix XtWX;
   cmatrix Xt;
@@ -204,7 +204,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   vector fit, resi;
   fit= newvector(newNaug);
   resi= newvector(newNaug);
-  // cout << "Calculate residuals" << endl;
+  debug_trace("Calculate residuals");
   if (*variance<0) {
     *variance= 0.0;
     if (!fitQTL)
@@ -281,7 +281,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       }
   }
   /* calculation of logL */
-  // cout << "calculate logL" << endl;
+  debug_trace("calculate logL");
   long double logL=0.0;
   for (int i=0; i<Nind; i++) {
     indL[i]= 0.0;
@@ -385,13 +385,13 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
   double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
   int count=0;
   while ((absdiff>0.001)&&(count<100)) {
-    //Rprintf("INFO df1:%d df2:%d alpha:%f\n", df1, df2, alfa);
+    debug_trace("INFO df1:%d df2:%d alpha:%f\n", df1, df2, alfa);
     count++;
     halfway= (maxF+minF)/2.0;
     //prob= betai(df2/2.0, df1/2.0, df2/(df2+df1*halfway));
     //USE R FUNCTIONALITY TO REPLACE OLD C ROUTINES
     prob = pbeta(df2/(df2+df1*halfway), df2/2.0, df1/2.0, 1, 0);
-    //Rprintf("->(%f, %f, %f) %f %f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob, prob2);
+    debug_trace("->(%f, %f, %f) %f %f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob, prob2);
     if (prob<alfa) maxF= halfway;
     else minF= halfway;
     absdiff= fabs(prob-alfa);
