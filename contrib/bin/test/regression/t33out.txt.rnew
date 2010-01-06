@@ -9,16 +9,16 @@ INFO: F(4.101,2,107)=0.020000
 INFO: Log-likelihood of full model= -9774.859
 INFO: Residual variance= 5394.243
 INFO: Trait mean= 148.703; Trait variation= 6631.434
-INFO: Marker 63 is dropped, resulting in reduced model logL = -9774.872546
-INFO: Marker 56 is dropped, resulting in reduced model logL = -9774.889327
-INFO: Marker 74 is dropped, resulting in reduced model logL = -9774.932263
-INFO: Marker 89 is dropped, resulting in reduced model logL = -9775.098995
-INFO: Marker 90 is dropped, resulting in reduced model logL = -9775.218449
-INFO: Marker 27 is dropped, resulting in reduced model logL = -9775.746325
-INFO: Marker 28 is dropped, resulting in reduced model logL = -9775.884810
-INFO: Marker 31 is dropped, resulting in reduced model logL = -9776.425215
-INFO: Marker 47 is dropped, resulting in reduced model logL = -9777.281374
-INFO: Marker 8 is dropped, resulting in reduced model logL = -9778.645292
+INFO: Marker 63 is dropped, resulting in reduced model logL = -9774.872
+INFO: Marker 56 is dropped, resulting in reduced model logL = -9774.889
+INFO: Marker 74 is dropped, resulting in reduced model logL = -9774.932
+INFO: Marker 89 is dropped, resulting in reduced model logL = -9775.098
+INFO: Marker 90 is dropped, resulting in reduced model logL = -9775.218
+INFO: Marker 27 is dropped, resulting in reduced model logL = -9775.746
+INFO: Marker 28 is dropped, resulting in reduced model logL = -9775.884
+INFO: Marker 31 is dropped, resulting in reduced model logL = -9776.425
+INFO: Marker 47 is dropped, resulting in reduced model logL = -9777.281
+INFO: Marker 8 is dropped, resulting in reduced model logL = -9778.645
 INFO: Number of output datapoints: 2020
     0	0.131
     1	0.162
