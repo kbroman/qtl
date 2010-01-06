@@ -35,7 +35,7 @@ inline int mqmmod(int a, int b) {
   return a%b;
 }
 
-double truncate(double n, double p = 3){
+double mytruncate(double n, double p = 3){
     int sign = 0;
 	if(n >= 0){
         sign = 1;
@@ -46,6 +46,10 @@ double truncate(double n, double p = 3){
 	val = floor(val);
     val /= pow(10,p);
 	return (double) sign * val;
+}
+
+double truncate(double n){
+  return mytruncate(n,3);
 }
 
 double Lnormal(double residual, double variance) {
