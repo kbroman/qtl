@@ -174,13 +174,13 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       }
     }
   }
-  //if (verbose) info("Num markers: %d -> %d",Nmark,jj);
+  debug_trace("Num markers: %d -> %d",Nmark,jj);
   Nmark= jj;
   (*nummark) = jj;
   position = relative_marker_position(Nmark,chr);
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
-  //info("After dropping of uninformative cofactors");
+  debug_trace("After dropping of uninformative cofactors\n");
   //calculate Traits mean and variance
   ivector newind;
   vector newy;
