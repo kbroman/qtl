@@ -105,7 +105,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
       if(verbose)
-        info("Marker %d is dropped, resulting in logL of reduced model = %.3f",(dropj+1),savelogL);
+        info("Marker %d is dropped, resulting in logL of reduced model = %.3f",(dropj+1),truncate(savelogL));
     } else {
       if (verbose) {
         Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");
