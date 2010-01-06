@@ -92,8 +92,6 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
-mqmall                  Parallelized MQM on multiple phenotypes in a
-                        cross object
 mqmaugment              MQM augmentation
 mqmcofactors            Create cofactors to be used with mqmscan
 mqmfind.marker          Fetch significant markers after permutation
@@ -119,6 +117,8 @@ mqmplot_permutations    Plot results from a bootstrap scan
 mqmprocesspermutation   Convert mqmmulti objects into a scanoneperm
                         object
 mqmscan                 Genome scan with a multiple QTL model (MQM)
+mqmscanall              Parallelized MQM on multiple phenotypes in a
+                        cross object
 mqmscanfdr              Estimate FDR for multiple trait QTL analysis
 mqmsetcofactors         Create cofactors to be used with mqm
 mqmtestnormal           Pearsons normality test used for MQM
