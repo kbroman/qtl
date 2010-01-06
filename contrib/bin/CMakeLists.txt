@@ -30,6 +30,7 @@ FIND_PACKAGE(RLibs)
 
 include_directories (../../src)
 add_definitions(-DSTANDALONE)
+#add_definitions(-DDTRACE)
 
 IF(NOT WIN32)
   add_definitions(-pg)
