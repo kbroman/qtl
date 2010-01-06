@@ -54,7 +54,9 @@ double truncate(double n){
 
 double Lnormal(double residual, double variance) {
   //Now using R-library for Lnormal
-  return dnorm(residual,0,sqrt(variance),0);
+  double result = dnorm(residual,0,sqrt(variance),0);
+  debug_trace("Lnormal result:%f, residual: %f, variance %f\n",result,residual,variance);
+  return result;
 }
 
 
