@@ -66,6 +66,7 @@
   
 #else
   // Running mqm under R
+  #define debug_trace(format, ...) { }
   #ifdef WIN32
    #define message(type, format, ...) { \
     Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
