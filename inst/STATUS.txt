@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-9, Karl W Broman
+copyright (c) 2001-10, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 12/29/2009:
+Version 1.15, 1/6/2010:
 
 Major changes:
 
@@ -34,6 +34,9 @@ Minor changes:
 
   Revised read.cross to have arguments error.prob and map.function, to
   be used if est.map is called.
+
+  Fixed a bug in xaxisloc.scanone for the case of multiple chr/pos in
+  the input.
 
   Fixed an apparent bug in read.cross for format="qtlcart"; need to
   treat negative genotype codes as missing.
