@@ -148,10 +148,10 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
                   int Nloci,
                   double *variance, int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, int verbose) {
                   
-  //if(verbose==1){info("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%c domi=%c cross=%c",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);}
-  //for (int i=0; i<Naug; i++){
-  // info("%d r=%f",i,r[i]);
-  //}
+  debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%c domi=%c cross=%c",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
+  for (int i=0; i<Naug; i++){
+   debug_trace("%d r=%f",i,r[i]);
+  }
   int iem= 0, newNaug, i, j;
   bool warnZeroDist=false;
   bool varknown;
@@ -270,11 +270,11 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  //info("Weights done");
-  //info("Individual->trait,indweight weight Ploci");
-  //for (int j=0; j<Nind; j++){
-  //  info("%d->%f,%f %f %f", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
-  //}
+  debug_trace("Weights done");
+  debug_trace("Individual->trait,indweight weight Ploci");
+  for (int j=0; j<Nind; j++){
+    debug_trace("%d->%f,%f %f %f", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
+  }
   double logL=0;
   vector indL;
   indL= newvector(Nind);
@@ -354,9 +354,9 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  //for (i=0; i<Nind; i++){
-    //Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
-  //}
+  for (i=0; i<Nind; i++){
+    debug_trace("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
+  }
   Free(Fy);
   Free(Ploci);
   Free(indweight);
