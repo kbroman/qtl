@@ -12,12 +12,12 @@
 #
 # They can be hard coded by uncommenting, for example:
 #
- IF(WIN32) 
+IF(WIN32) 
 	SET(R_INCLUDE_PATH "c:/Progra~1/R/R-2.9.1/include")
 	SET(R_EXECUTABLE "c:/Progra~1/R/R-2.9.1/bin/R.exe")
 	SET(R_LIBRARY "c:/Progra~1/R/R-2.9.1/bin/R.dll")
 	SET(R_BLAS_LIBRARY "c:/Progra~1/R/R-2.9.1/bin/Rblas.dll")
- ENDIF()
+ENDIF()
 #
 # R can be queried with:
 #
@@ -56,10 +56,10 @@ IF(R_EXECUTABLE)
   GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)
   # Get information from R itself
   # Fetch the library paths
-  IF(!WIN32)
-  EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --ldflags OUTPUT_VARIABLE _LIBS)
+  IF(NOT WIN32)
+    EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --ldflags OUTPUT_VARIABLE _LIBS)
   ELSE()
-  SET(_LIBS "-LC:/PROGRA~1/R/R-29~1.1/bin -lR")
+    SET(_LIBS "-LC:/PROGRA~1/R/R-29~1.1/bin -lR")
   ENDIF()
   message("LIBS=${_LIBS}")
   if (APPLE)
@@ -71,10 +71,10 @@ IF(R_EXECUTABLE)
   message("R_EXE_LIB_PATHS=${R_EXE_LIB_PATHS}")
 
   # Fetch the include paths
-  IF(!WIN32)  
-  EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --cppflags OUTPUT_VARIABLE _INCLUDES)
+  IF(NOT WIN32)  
+    EXECUTE_PROCESS(COMMAND ${R_EXECUTABLE} CMD config --cppflags OUTPUT_VARIABLE _INCLUDES)
   ELSE()
-  SET(_INCLUDES "-IC:/PROGRA~1/R/R-29~1.1/include")
+    SET(_INCLUDES "-IC:/PROGRA~1/R/R-29~1.1/include")
   ENDIF()
   message("INCLUDES=${_INCLUDES}")
   STRING(REGEX REPLACE "-I([^ ]+)" "\\1" R_EXE_INCLUDE_PATHS "${_INCLUDES}")
