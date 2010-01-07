@@ -59,7 +59,7 @@
   #define fatal(s) { message("FATAL",s); exit(127); }
   
   #ifdef DTRACE 
-    #define debug_trace(format, ...) { fprintf(redirect_info,"TRACE: "); fprintf(redirect_info,format, ## __VA_ARGS__); }
+    #define debug_trace(format, ...) { fprintf(redirect_info,"TRACE "); fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); fprintf(redirect_info,format, ## __VA_ARGS__); }
   #else
     #define debug_trace(format, ...) { }
   #endif 
