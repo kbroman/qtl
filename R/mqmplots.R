@@ -2,31 +2,74 @@
 #
 # mqmplots.R
 #
-# copyright polyplot (c) 2009, Rutger Brouwer
-# copyright other functions (c) 2009, Danny Arends
-# last modified Jun, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Pjotr Prins and Karl Broman
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: Different plotting functions belonging to the MQM subpackage of R/QTL
-#           polyplot, mqmplotall, mqmplotboot, mqmplotnice, mqmplotone
-#           CisTransPlot, addloctocross 
-######################################################################
+# Contains: mqmplot_directedqtl
+#           mqmplot_cistrans
+#           addloctocross
+#           polyplot
+#           getThird
+#           getChr
+#           mqmplot_multitrait
+#           mqmplot_permutations
+#           mqmplot_boot
+#           mqmplot_nice
+#           mqmplot_one
+#           
+#
+#####################################################################
 
-CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
-	if(is.null(cross$locations)){
+
+
+
+
+# copyright polyplot (c) 2009, Rutger Brouwer
+
+mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(mqmresults)){
+		stop("No mqmresults object. Please supply a valid scanone object.") 
+	}
+  if(!any(class(mqmresults)=="scanone")){
+  	stop("No mqmresults object. Please supply a valid scanone object.") 
+  }
+  onlymarkers <- mqmextractmarkers(mqmresults)
+  eff <- effectscan(sim.geno(cross),draw=FALSE)
+  if(any(eff[,1]=="X")){
+    eff <- eff[-which(eff[,1]=="X"),]
+  }
+  onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
+  if(draw) plot(ylim=c((min(onlymarkers[,3])*1.1),(max(onlymarkers[,3])*1.1)),onlymarkers)
+  class(onlymarkers) <- c("scanone",class(onlymarkers))
+  onlymarkers
+}
+
+mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+		if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
 	locations <- NULL
@@ -89,7 +132,14 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 		locz <- NULL
 		for(marker in 1:ncol(QTLs)){
 			pos <- find.markerpos(cross, colnames(QTLs)[marker])
-			locz <- c(locz,round(chr.breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
+			if(!is.na(pos[1,1])){
+				locz <- c(locz,round(chr.breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
+			}else{
+				mark <- colnames(QTLs)[marker]
+				mchr <- substr(mark,sum(regexpr("c",mark)+attr(regexpr("c",mark),"match.length")),regexpr(".loc",mark)-1)
+				mpos <- as.numeric(substr(mark,sum(regexpr("loc",mark)+attr(regexpr("loc",mark),"match.length")),nchar(mark)))
+				locz <- c(locz,round(chr.breaks[as.numeric(mchr)] + as.numeric(mpos)))
+			}
 		}
 		trait.locz <- NULL
 		for(j in 1:nrow(QTLs)){
@@ -122,6 +172,9 @@ CisTransPlot <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisare
 }
 
 addloctocross <- function(cross,locations=NULL,locfile="locations.txt"){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
 	if(is.null(locations)){
 		locations <- read.table(locfile,row.names=1,header=TRUE)
 	}
@@ -182,7 +235,7 @@ polyplot <- function( x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex = p
 	if(is.null(xlim)) xlim = c(min(tps),max(tps))
 	plot.new()															# make a new plot
 	plot.window(xlim=xlim, ylim=ylim, log="")							# add the plot windows size
-	grid()
+	#grid()
 	for( k in 1:nrow( x ) ) {
 		max.p  <- NULL			# the expression of the maximum
 		min.p  <- NULL			#
@@ -228,14 +281,18 @@ getThird <- function(x){
 	x[,3]
 }
 
-mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
+getChr <- function(x){
+	x[,1]
+}
+
+mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
   if(class(result)[2] != "mqmmulti")
 		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
-
   if(type=="C"){
     #Countour plot
     temp <- lapply(result,getThird)
+	chrs <- unique(lapply(result,getChr))
 	c <- do.call("rbind",temp)
     c <- t(c)
     contour(
@@ -246,17 +303,23 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
             col=rainbow((max(c)/5)+25,1,1.0,0.1),
             nlevels=(max(c)/5)
             )
+    for(x in unique(chrs[[1]])){
+		abline(v=sum(as.numeric(chrs[[1]])<=x))
+	}			
   }
   if(type=="I"){
     #Image plot
     temp <- lapply(result,getThird)
+	chrs <- unique(lapply(result,getChr))
 	c <- do.call("rbind",temp)
 	c <- t(c)
     image(x=1:dim(c)[1],y=1:dim(c)[2],c,
           xlab="Markers",ylab="Trait",
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
           )
-    
+    for(x in unique(chrs[[1]])){
+		abline(v=sum(as.numeric(chrs[[1]])<=x))
+	}
   }
   if(type=="D"){
     #3D perspective plot
@@ -282,7 +345,11 @@ mqmplotall <- function(result, type="C", theta=30, phi=15, ...){
 
 }
 
-mqmplotboot <- function(result, ...){
+mqmplot_permutations <- function(result, ...){
+	mqmplot_boot(result, ...)
+}
+
+mqmplot_boot <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
@@ -292,33 +359,37 @@ mqmplotboot <- function(result, ...){
 	if(class(result)[2] != "mqmmulti")		
           ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
 
-        for( j in 1:length( result[[i]][,3] ) ) {
-          row1 <- NULL
-          row2 <- NULL
-          for(i in 1:length( result ) ) {
-            if(i==1){
-              row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
-              names(row1) <- rep(j,(length( result )-1))
-            }else{
-              row2 <- c(row2,result[[i]][,3][j])
-            }
-          }
-          names(row2) <- rep(j,(length( result )-1))
-          matrix <- cbind(matrix,rbind(row1,row2))
-        }
+	for( j in 1:length( result[[i]][,3] ) ) {
+	  row1 <- NULL
+	  row2 <- NULL
+	  for(i in 1:length( result ) ) {
+		if(i==1){
+		  row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
+		  names(row1) <- rep(j,(length( result )-1))
+		}else{
+		  row2 <- c(row2,result[[i]][,3][j])
+		}
+	  }
+	  names(row2) <- rep(j,(length( result )-1))
+	  matrix <- cbind(matrix,rbind(row1,row2))
+	}
 
-        rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
-		
+	rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
+	
 	#Because bootstrap only has 2 rows of data we can use black n blue
-        polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
+	polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	#PLot some lines so we know what is significant
-        perm.temp <- mqmpermObject(result)			#Create a permutation object
-        numresults <- dim(result[[1]])[1]
-        lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
-        lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)			
+	perm.temp <- mqmprocesspermutation(result)			#Create a permutation object
+	numresults <- dim(result[[1]])[1]
+	lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
+	lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)	
+	chrs <- unique(lapply(result,getChr))
+    for(x in unique(chrs[[1]])){
+		abline(v=sum(as.numeric(chrs[[1]])<=x),lty="dashed",col="gray",lwd=1)
+	}
 }
 
-mqmplotnice <- function(result, ...){
+mqmplot_nice <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	matrix <- NULL
 	names <- NULL
@@ -350,35 +421,41 @@ mqmplotnice <- function(result, ...){
 	polyplot(matrix,...)
 }
 
-mqmplotone <- function(result, result2, extended=0,...){
+mqmplot_one <- function(result, extended=0,...){
 	#Helperfunction to show scanone objects made by doing mqmscan runs
-	if(!("scanone" %in% class(result)))
-          ourstop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
-
-        info.c <- result
-        info.c[,3]<- info.c[,5]
-        if(extended){
-          info.l <- result
-          info.l[,3] <- result[,4]
-          plot(result,info.c,info.l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
-          grid(max(result$chr),5)
-          labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
-          legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
-        }else{
-          if (!missing(result2) && !("scanone" %in% class(result2))) {
-	    #MAX 3 scanone objects
-            plot(result,info.c,result2,lwd=1,ylab="QTL (LOD)",...)
-            grid(max(result$chr),5)
-            labels <- c(colnames(result)[3],colnames(result)[5],colnames(result2)[3])
-            legend("topright", labels,col=c("black","blue"),lty=c(1,1))
-          }else{
-	    #MAX 3 scanone objects (here we now have 2)
-            plot(result,info.c,lwd=1,ylab="QTL (LOD)",...)
-            grid(max(result$chr),5)
-            labels <- c(colnames(result)[3],colnames(result)[5])
-            legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
-          }
-        }
+  if(!("scanone" %in% class(result))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
+  if(is.null(result$"info")){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
+  if(is.null(attr(result,"mqmmodel"))){
+    op <- par(mfrow = c(1,1))
+  }else{
+    op <- par(mfrow = c(2,1))
+  }
+  info.c <- result
+  info.c[,3]<- info.c[,5]
+  if(extended){
+    if(!is.null(attr(result,"mqmmodel"))){
+      plot(attr(result,"mqmmodel"))
+    }
+    info.l <- result
+    info.l[,3] <- result[,4]
+    plot(result,info.c,info.l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
+    grid(max(result$chr),5)
+    labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
+    legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
+  }else{
+    if(!is.null(attr(result,"mqmmodel"))){
+      plot(attr(result,"mqmmodel"))
+    }
+    plot(result,lwd=1,ylab="QTL (LOD)",...)
+    grid(max(result$chr),5)
+    labels <- c(colnames(result)[3])
+    legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
+  }
+  op <- par(mfrow = c(1,1))
 }
 
 # end of mqmplots.R

@@ -8,7 +8,7 @@ addcovarint             Add QTL x covariate interaction to a
                         multiple-QTL model
 addint                  Add pairwise interaction to a multiple-QTL
                         model
-addloctocross           Adds phenotypes location into a cross object
+addloctocross           Add phenotype location into a cross object
 addpair                 Scan for an additional pair of QTL in a
                         multiple-QTL model
 addqtl                  Scan for an additional QTL in a multiple-QTL
@@ -17,8 +17,8 @@ addtoqtl                Add to a qtl object
 argmax.geno             Reconstruct underlying genotypes
 badorder                An intercross with misplaced markers
 bayesint                Bayesian credible interval
-bootstrap               randomization approaches to obtain estimates of
-                        QTL LOD score significance
+bootstrap               Estimate QTL LOD score significance through
+                        bootstrap permutations
 bristle3                Data on bristle number in Drosophila
 bristleX                Data on bristle number in Drosophila
 c.cross                 Combine data for QTL experiments
@@ -35,8 +35,6 @@ checkAlleles            Identify markers with switched alleles
 chrlen                  Chromosome lengths in QTL experiment
 chrnames                Pull out the chromosome names from a cross
 cim                     Composite interval mapping
-CisTransPlot            Plotting routine to show cis and trans QTL
-                        information
 clean.cross             Remove derived data
 clean.scantwo           Clean up scantwo output
 comparecrosses          Compare two cross objects.
@@ -49,6 +47,8 @@ convert.scanone         Convert output from scanone for R/qtl version
                         0.98
 convert.scantwo         Convert output from scantwo for R/qtl version
                         1.03 and earlier
+convert2riself          Convert a cross to RIL by selfing.
+convert2risib           Convert a cross to RIL by sib mating.
 convert2sa              Convert a sex-specific map to a sex-averaged
                         one.
 countXO                 Count number of obligate crossovers for each
@@ -65,8 +65,6 @@ est.rf                  Estimate pairwise recombination fractions
 fake.4way               Simulated data for a 4-way cross
 fake.bc                 Simulated data for a backcross
 fake.f2                 Simulated data for an F2 intercross
-FDRpermutation          Estimates of FDR when doing multiple trait QTL
-                        analysis
 fill.geno               Fill holes in genotype data
 find.flanking           Find flanking markers for a specified position
 find.marker             Find marker closest to a specified position
@@ -85,6 +83,8 @@ hyper                   Data on hypertension
 jittermap               Jitter marker positions in a genetic map
 listeria                Data on Listeria monocytogenes susceptibility
 locateXO                Estimate locations of crossovers
+locations               Genetic locations of traits for the multitrait
+                        dataset
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map
@@ -92,25 +92,36 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
-MQM                     Multiple QTL Model (MQM) mapping
-mqmaugment              MQM data augmentation
+mqmaugment              MQM augmentation
 mqmcofactors            Create cofactors to be used with mqmscan
-mqmcofactorsEach        Create cofactors to be used with mqmscan
-mqmfind.marker          Find the significant markers after
-                        bootstrapping/permutation
-mqmloadanalysis         Enables loading of previous MQM analysis from
-                        file
-mqmpackage              Tool for analyzing QTLs in experimental crosses
-mqmpermObject           Function to convert mqmmulti objects into a
-                        scanoneperm object
-mqmplotall              Plotting routine to display the results from a
-                        scanall / bootstrap scan
-mqmplotboot             Plot results from a bootstrap scan
-mqmplotnice             Plot the results from a bootstrap or scanall
-                        scan
-mqmplotone              Plotting routine to display the results from a
+mqmfind.marker          Fetch significant markers after permutation
+                        analysis
+mqmgetmodel             Retrieve the QTL model used in mapping from the
+                        results of an MQM scan
+mqmintro                Multiple QTL Model (MQM) mapping
+mqmloadanalysis         Enables loading of previously saved MQM
+                        analysis from file
+mqmplot_circle          Circular genome plotting - routine to show QTL
+                        information
+mqmplot_cistrans        Plotting routine to show cis and trans QTL
+                        information
+mqmplot_directedqtl     Plotting routine to display the effects and
+                        results from a QTL scan
+mqmplot_multitrait      Plotting routine to display the results from a
+                        mqm scan on multiple phenotypes
+mqmplot_nice            Plot the results from a mqm scan on multiple
+                        phenotypes
+mqmplot_one             Plotting routine to display the results from a
                         QTL scan
-mqmscan                 Multiple qtl mapping for inbred crosses
+mqmplot_permutations    Plot results from a bootstrap scan
+mqmprocesspermutation   Convert mqmmulti objects into a scanoneperm
+                        object
+mqmscan                 Genome scan with a multiple QTL model (MQM)
+mqmscanall              Parallelized MQM on multiple phenotypes in a
+                        cross object
+mqmscanfdr              Estimate FDR for multiple trait QTL analysis
+mqmsetcofactors         Create cofactors to be used with mqm
+mqmtestnormal           Pearsons normality test used for MQM
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes
@@ -198,7 +209,8 @@ summary.scantwoperm     LOD thresholds from scantwo permutation results
 switch.order            Switch the order of markers on a chromosome
 top.errorlod            List genotypes with large error LOD scores
 totmar                  Determine the total number of markers
-transformPheno          Transform phenotypes in a cross object
+transformPheno          Transformation of the phenotypes in a cross
+                        object
 tryallpositions         Test all possible positions for a marker
 write.cross             Write data for a QTL experiment to a file
 xaxisloc.scanone        Get x-axis locations in scanone plot.

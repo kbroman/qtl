@@ -3,7 +3,7 @@
 # read.cross.R
 #
 # copyright (c) 2000-9, Karl W Broman
-# last modified Apr, 2009
+# last modified Dec, 2009
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,7 +37,9 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
                   "qtlcart", "gary", "karl"),
          dir="", file, genfile, mapfile, phefile, chridfile, mnamesfile, pnamesfile,
          na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
-         alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE, ...)
+         alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE,
+         error.prob=0.0001, map.function=c("haldane", "kosambi", "c-f", "morgan"),
+         ...)
 {
   if(format == "csvrs") {
     format <- "csvsr"
@@ -139,7 +141,8 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   # re-estimate map?
   if(estimate.map) {
     cat(" --Estimating genetic map\n")
-    newmap <- est.map(cross)
+    map.function <- match.arg(map.function)
+    newmap <- est.map(cross, error.prob=error.prob, map.function=map.function)
     cross <- replace.map(cross, newmap)
   }
 

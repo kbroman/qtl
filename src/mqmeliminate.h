@@ -2,10 +2,14 @@
  *
  * mqmeliminate.h
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
+ *
+ * Modified by Danny Arends and Pjotr Prins
+ * last modified September 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -19,8 +23,7 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains: analyseF2, backward
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 

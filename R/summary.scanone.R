@@ -3,7 +3,7 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-9, Karl W Broman
-# last modified May, 2009
+# last modified Dec, 2009
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -233,6 +233,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
     }
 
     pos <- sapply(wh, function(a,b) b[a], object[,2])
+    if(!is.matrix(pos)) pos <- as.matrix(pos)
 
     lod <- pos
 
