@@ -36,16 +36,16 @@ inline int mqmmod(int a, int b) {
 }
 
 double mytruncate(double n, double p = 3){
-    int sign = 0;
-	if(n >= 0){
-        sign = 1;
-    }else{
-        sign = -1;
-    }
-	double val = fabs((pow(10,p)) * n);
-	val = floor(val);
-    val /= pow(10,p);
-	return (double) sign * val;
+  int sign = 0;
+  if(n >= 0){
+      sign = 1;
+  }else{
+      sign = -1;
+  }
+  double val = fabs((pow(10,p)) * n);
+  val = floor(val);
+  val /= pow(10,p);
+  return (double) sign * val;
 }
 
 double truncate(double n){
@@ -58,7 +58,6 @@ double Lnormal(double residual, double variance) {
   debug_trace("Lnormal result:%f, residual: %f, variance %f\n",result,residual,variance);
   return result;
 }
-
 
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno) {
 //reorganisation of doubles into a matrix
