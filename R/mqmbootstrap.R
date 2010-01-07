@@ -101,9 +101,12 @@ permute <- function(...){
 #
 ######################################################################
 
-bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
+bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
 {
-	
+	bootmethod <- 0
+	if(method=="simulation"){
+		bootmethod <- 1
+	}
 	if(missing(cross))
 		stop("No cross file. Please supply a valid cross object.") 
 

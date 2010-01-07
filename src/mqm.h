@@ -45,6 +45,8 @@
   #include "mqmeliminate.h"
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
+  
+
 
 #ifdef STANDALONE
   // Running mqm stand alone (without R)
@@ -55,8 +57,16 @@
     fprintf(redirect_info,"\n"); } 
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
+  
+  #ifdef DTRACE 
+    #define debug_trace(format, ...) { fprintf(redirect_info,"TRACE "); fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); fprintf(redirect_info,format, ## __VA_ARGS__); }
+  #else
+    #define debug_trace(format, ...) { }
+  #endif 
+  
 #else
   // Running mqm under R
+  #define debug_trace(format, ...) { }
   #ifdef WIN32
    #define message(type, format, ...) { \
     Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
