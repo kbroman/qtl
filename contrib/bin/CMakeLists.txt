@@ -30,6 +30,7 @@ FIND_PACKAGE(RLibs)
 
 include_directories (../../src)
 add_definitions(-DSTANDALONE)
+#add_definitions(-DDTRACE)
 
 IF(NOT WIN32)
   add_definitions(-pg)
@@ -62,6 +63,10 @@ add_executable (mqm
 mqmmain.cpp
 )
 
+add_executable (mqmdebugout
+mqmdebugout.cpp
+)
+
 SET(RTEST scripts/r.sh)
 SET(RTESTOUTPUT rtest/regression)
 
@@ -88,9 +93,18 @@ ADD_CUSTOM_TARGET(testall
 
 IF(WIN32)
   SET(MQMEXE "mqm.exe")
+  SET(MQMDEBUGOUT "mqmdebugout.exe")
 ELSE()
   SET(MQMEXE "./mqm")
+  SET(MQMDEBUGOUT "./mqmdebugout")
 ENDIF()
+
+# debugout output
+ADD_TEST(debugout_dnorm ${MQMDEBUGOUT} -d -o test/regression/debugout_dnorm.new)
+ADD_TEST(debugout_dnorm_cmp ${CMAKE_COMMAND} -E compare_files test/regression/debugout_dnorm.new test/regression/debugout_dnorm.txt)
+
+ADD_TEST(debugout_pbeta ${MQMDEBUGOUT} -p -o test/regression/debugout_pbeta.new)
+ADD_TEST(debugout_pbeta_cmp ${CMAKE_COMMAND} -E compare_files test/regression/debugout_pbeta.new test/regression/debugout_pbeta.txt)
 
 # Older test for comparison with (older test) MQM_test0.txt
 # to only run this test use 'ctest -R test0'

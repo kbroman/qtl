@@ -11,21 +11,21 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 SHORT TERM:
 
 o Tutorial and man pages
-  - add example of SNOW with mqm scan in tutorial (danny)
-  - mqmgetmodel.Rd needs example (danny)
   - mqmcofactorseach.Rd has wrong example - do we need that method?
-    (danny)
-  - The first circle plot is empty (danny)
+    (danny: Yes, i think so, we need an easy way to set a lot of cofactors,
+	this function altough not perfect allows us. Removing it will break 
+	all backward selection currently implemented in man/tutorialpages)
   - fix the bibliography (pjotr)
 
 o Fix naming of functions and parameters:
   - make sure all man, R and C-code functions and parameters are  #15 %
     similarly named for MQM (danny)
-  - Change bootmethod from 0/1 into something descriptive (danny)
 
 o Other
-  - Add test descriptions and check test T32 differs on 64bits compile
-    (danny)
+  - Add test descriptions (danny)
+  - Checked Tests T25, T32 and T33 standalone those gave problems with augmentation
+	and had strange results because of that. So pjotr: Could u check if test 
+	T32 still differs on 64bits compile
 
 NOTE: Always make sure R CMD check works  by running script in
 ./contrib/scripts/run_all_tests.sh before passing on changes (all)
