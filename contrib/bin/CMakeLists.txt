@@ -63,6 +63,10 @@ add_executable (mqm
 mqmmain.cpp
 )
 
+add_executable (mqmunittest
+unittests.cpp
+)
+
 SET(RTEST scripts/r.sh)
 SET(RTESTOUTPUT rtest/regression)
 
@@ -89,9 +93,18 @@ ADD_CUSTOM_TARGET(testall
 
 IF(WIN32)
   SET(MQMEXE "mqm.exe")
+  SET(MQMUNIT "mqmunittest.exe")
 ELSE()
   SET(MQMEXE "./mqm")
+  SET(MQMUNIT "./mqmunittest")
 ENDIF()
+
+#unittests
+ADD_TEST(unittest_dnorm ${MQMUNIT} -d -o test/regression/unittest_dnorm.new)
+ADD_TEST(unittest_dnorm_cmp ${CMAKE_COMMAND} -E compare_files test/regression/unittest_dnorm.new test/regression/unittest_dnorm.txt)
+
+ADD_TEST(unittest_pbeta ${MQMUNIT} -p -o test/regression/unittest_pbeta.new)
+ADD_TEST(unittest_pbeta_cmp ${CMAKE_COMMAND} -E compare_files test/regression/unittest_pbeta.new test/regression/unittest_pbeta.txt)
 
 # Older test for comparison with (older test) MQM_test0.txt
 # to only run this test use 'ctest -R test0'
