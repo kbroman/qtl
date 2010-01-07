@@ -2,8 +2,8 @@
 #
 # add_threshold.R
 #
-# copyright (c) 2006-9, Karl W Broman, Johns Hopkins University
-# last modified Jun, 2009
+# copyright (c) 2006-10, Karl W Broman, Johns Hopkins University
+# last modified Jan, 2010
 # first written Dec, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -123,7 +123,7 @@ function(out, thechr, thepos, chr, gap=25)
   if(length(thechr) > 1) {
     res <- rep(NA, length(thechr))
     for(i in seq(along=thechr))
-      res[i] <- xaxisloc.scanone(out, chr, thechr[i], thepos[i], gap)
+      res[i] <- xaxisloc.scanone(out, thechr[i], thepos[i], chr, gap)
     return(res)
   }
 
