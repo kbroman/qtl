@@ -33,7 +33,7 @@
      
 double Lnormal(double residual, double variance);
 int mqmmod(int a, int b);
-double truncate(double n);
+double ftruncate3(double n);
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno);
 void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);
 
