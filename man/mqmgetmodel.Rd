@@ -47,4 +47,13 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	}
 }
 
+\examples{
+	data(hyper)
+	hyperfilled <- fill.geno(hyper)
+	cofactors <- mqmsetcofactors(hyperfilled,4)
+	result <- mqmscan(hyperfilled,cofactors)
+	mqmgetmodel(result)
+	plot(mqmgetmodel(result))
+}
+
 \keyword{ utilities }
