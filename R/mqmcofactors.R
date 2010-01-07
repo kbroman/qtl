@@ -2,33 +2,67 @@
 #
 # mqmcofactors.R
 #
-# copyright (c) 2009, Danny Arends
-# last modified Jun, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Karl Broman and unknown and Pjotr Prins
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: mqmcofactors, mqmcofactorsEach
+# Contains: which.marker
+#           mqmcofactors
+#           mqmsetcofactors
+#           #a
+#           
 #
-######################################################################
+#####################################################################
+
+
+
+
 
 ######################################################################
 #
+# which.marker: Extracts the number of the marker when viewing the markers lineair
 # mqmcofactors: Prepares a cofactor list to use with mqmscan
-# mqmcofactorsEach: Prepares a cofactor list to use with mqmscan
+# mqmsetcofactors: Prepares a cofactor list to use with mqmscan
 #
 ######################################################################
+
+
+which.marker <- function(cross,name){
+	if(missing(cross))
+		ourstop("No cross file. Please supply a valid cross object.")
+	n <- 0
+	marker_num <- 0
+	for(chr in 1:nchr(cross)) {
+	  for(marker in 1:length(cross$geno[[chr]]$map)){
+		if(names(cross$geno[[chr]]$map[marker])==name){
+			cat("Marker",name,"is number",n,"\n")
+			marker_num <- n
+		}
+		n <- n+1
+	  }
+	}
+	if(marker_num==0){
+		stop("No marker named",name," found.\n")
+	}
+	marker_num;
+}
 
 mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
 	if(missing(cross))
@@ -86,7 +120,7 @@ mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
     cofactorlist
 }
 
-mqmcofactorsEach <- function(cross,each = 3,verbose=FALSE){
+mqmsetcofactors <- function(cross,each = 3,verbose=FALSE){
 	if(missing(cross))
           ourstop("No cross file. Please supply a valid cross object.")
 
@@ -118,8 +152,7 @@ mqmcofactorsEach <- function(cross,each = 3,verbose=FALSE){
 		}
 	}
     if(sum(cofactorlist) > (individuals-10)){
-		ourstop("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
-		return
+		warning("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
 	}
 	cofactorlist
 }

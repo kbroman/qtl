@@ -2,12 +2,14 @@
  *
  * mqm.h
  *
- * Master include file for common mqm.headers
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl Broman
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
- * last modified July, 2009
- * first written July, 2009
+ * Modified by Pjotr Prins and Danny Arends
+ * last modified October 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -20,6 +22,8 @@
  *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
+ *
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 
@@ -41,6 +45,8 @@
   #include "mqmeliminate.h"
   #include "mqmmapqtl.h"  
   #include "mqmscan.h"
+  
+
 
 #ifdef STANDALONE
   // Running mqm stand alone (without R)
@@ -51,8 +57,16 @@
     fprintf(redirect_info,"\n"); } 
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
+  
+  #ifdef DTRACE 
+    #define debug_trace(format, ...) { fprintf(redirect_info,"TRACE "); fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); fprintf(redirect_info,format, ## __VA_ARGS__); }
+  #else
+    #define debug_trace(format, ...) { }
+  #endif 
+  
 #else
   // Running mqm under R
+  #define debug_trace(format, ...) { }
   #ifdef WIN32
    #define message(type, format, ...) { \
     Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}

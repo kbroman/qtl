@@ -1,81 +1,104 @@
 \name{mqmaugment}
 \alias{mqmaugment}
 
-\title{MQM data augmentation}
+\title{MQM augmentation}
 
 \description{
-Estimates missing data by increasing the number of marker locations and filling in 
-genotypes based on surrounding markers and recombination frequencies. 
-
-Augment/expand the dataset by adding additional (likely) genotypes.
-Genotypic marker information is incomplete when marker scores are missing or dominant, or
-markers are non-segregating but you want to assume a
-segregating QTL on top of this marker (~very closely linked),
-and all likely possible configurations are generated 
-
-A new markerset is created, likewise the Augmentation halts when the number of
-individuals maxNaug is reached. Individuals are expanded up to imaxNaug.
+Fills in missing genotypes for multiple QTL model (MQM) mapping. For each
+missing or incomplete marker it fills in (or 'augments') all possible
+genotypes, thus creating new candidate 'individuals' and calculates their
+probability using information on neighbouring markers and recombination
+frequencies. When a genotype of an augmented genotype is less likely than the
+\code{minprob} parameter it is dropped from the dataset. The \emph{augmented} list
+of individuals is returned in a new \code{crossobject}.  
 }
 
 \usage{
-mqmaugment(cross, pheno.col=1, maxind=1000, maxaugind=1, neglect=10, verbose=FALSE)
+mqmaugment(cross, maxaugind=82, minprob=0.1, verbose=FALSE)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}}.} 
-  \item{pheno.col}{Column number in the phenotype matrix which should be
-    used as the phenotype.  This can be a vector of integers, which index on
-    the phenotype, a string matching one phenotype name, or, when the value is
-    TRUE, all phenotypes are used.
+   \code{\link{read.cross}}.} 
+  \item{maxaugind}{ 
+    Maximum number of augmentations per individual.  The default of 82
+    allows for six missing markers for an individual in a BC cross
+    ($2^6=64$) and four missing markers in an F2 ($3^4=81$. When a
+    large number of markers are missing this default number is quickly
+    reached.
   }
-  \item{maxind}{ Maximum number of individuals augmentation can expand to }
-  \item{maxaugind}{ Maximum number of augmentations per individual }
-  \item{neglect}{ Drop certain unlikely genotypes during augmentation
-  (neglect=1 does not drop individuals, higher values do). The neglect
-  parameter drops genotypes. E.g. for neglect=100  eliminate genotypes 100
-  times less likely than the most likely configuration. The dataset may be
-  reduced when there is a lot of missing data.  }
-  \item{verbose}{ Be verbose }
-}
-
-\details{
+  \item{minprob}{ 
+    Return individuals with augmented genotypes that are above a probability of
+    occurring. minprob is a value between 0 and 1. For example a value of 0.5
+    will drop all genotypes that are half as likely than the most likely
+    genotype (candidate of the individual). The default value of 0.1 will drop
+    all genotypes that are less likely of ocurring than 1 in 10, compared
+    against the most likely genotype. Use a value of 1.0 to return a single
+    filled in genotype for each individual.
+ }
+  \item{verbose}{ Verbose output }
 }
 
 \value{
-  The cross object the single phenotype \code{pheno.col}, without dropped
-  individuals and with augmented individuals (many will be repeated multiple
-  times). An added component \code{extra} contains information on which
-  individuals are retained and repeated.  
+  Returns the cross object with augmented individuals (many individuals 
+  from the data set will be repeated multiple times). Some individuals 
+  may have been dropped completely when the probability falls below 
+  \code{minprob}. An added component to the cross object named \code{mqm} contains
+  information on exactly which individuals are retained and repeated.  
 }  
 
-\author{R.C. Jansen ; Danny Arends}
+\author{
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+}
 
 \note{
-The sex chromosome 'X' is dropped before augmentation.
+The sex chromosome 'X' is treated like autosomes during augmentation.
+With an F2 the sex chromosome is not considered. This will change in
+a future version of MQM.
 
-With unrealistic values for augmentation a warning is shown and the cross
-object may have been corrupted. 
+When augmentation runs out of memory, a warning is given and the returned
+object should not be used.
 
-Warning: with lots of missing data and/or chromosome markers a neglect value
-larger than 1 may cause the routine to drop a lot of indivuals from the
-dataset. Try running with verbose to see how many individuals are retained in
-the dataset.  
+With a large amount of missing data, e.g. larger than 5\%, a low \code{minprob}
+may cause the routine to drop a lot of indivuals from the dataset and distort
+results. Run with \code{verbose=TRUE} to verify how many individuals are
+retained in the dataset or check the return \code{cross$mqm} values. Compare
+results by using \code{minprob=1}.
 }
 
 \seealso{
   \itemize{
-  \item \code{\link[qtl]{MQM}} - MQM description and references
-  \item \code{\link[qtl]{mqmscan}} - Main MQM function for trait analysis
+	\item \code{\link{fill.geno}} - Alternative routine for estimating missing data	
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
   }
 }
 
 \examples{
-qtl <- c(3,15,3,7)                     # QTL at chromosome 3
-data(map10)                            # Mouse genome
-cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)    # Simulate a Cross (just autosomes)
-crossaug <- mqmaugment(cross)          # Augmentation of the data
-result <- mqmscan(crossaug)            # Do a MQM scan of the genome
+% \input{"inst/docs/mqm/standard_example.txt"}
+data(map10)                    # Mouse dataset
+
+# simulate a cross (autosomes)
+qtl <- c(3,15,3,7)             # QTL location
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
+
+# MQM
+crossaug <- mqmaugment(cross)  # Augmentation
+cat(crossaug$mqm$Nind,'real individuals retained in dataset',
+    crossaug$mqm$Naug,'individuals augmented')
+
+result <- mqmscan(crossaug)    # Scan
+
+# show LOD interval of the QTL on chr 3
+lodint(result,chr=3)
+% -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 
-\keyword{ utilities }
+\keyword{utilities}
