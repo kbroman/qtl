@@ -35,11 +35,37 @@ inline int mqmmod(int a, int b) {
   return a%b;
 }
 
-double Lnormal(double residual, double variance) {
-  //Now using R-library for Lnormal
-  return dnorm(residual,0,sqrt(variance),0);
+/*
+ * Helper function for truncate
+ */
+static double ftruncate(double n, double p = 3){
+  int sign = 0;
+  if(n >= 0){
+      sign = 1;
+  }else{
+      sign = -1;
+  }
+  double val = fabs((pow(10,p)) * n);
+  val = floor(val);
+  val /= pow(10,p);
+  return (double) sign * val;
 }
 
+/*
+ * Truncate a floating point to 3 decimal numbers. This is used for output
+ * functions, in particular for regression tests - so floating point problems on 
+ * different platforms are eliminated
+ */
+double ftruncate3(double n){
+  return ftruncate(n,3);
+}
+
+double Lnormal(double residual, double variance) {
+  //Now using R-library for Lnormal
+  double result = dnorm(residual,0,sqrt(variance),0);
+  debug_trace("Lnormal result:%f, residual: %f, variance %f\n",result,residual,variance);
+  return result;
+}
 
 void reorg_pheno(int n_ind, int n_mar, double *pheno, double ***Pheno) {
 //reorganisation of doubles into a matrix
@@ -157,13 +183,13 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       }
     }
   }
-  //if (verbose) info("Num markers: %d -> %d",Nmark,jj);
+  debug_trace("Num markers: %d -> %d",Nmark,jj);
   Nmark= jj;
   (*nummark) = jj;
   position = relative_marker_position(Nmark,chr);
   r = recombination_frequencies(Nmark, position, (*mapdistance));
 
-  //info("After dropping of uninformative cofactors");
+  debug_trace("After dropping of uninformative cofactors\n");
   //calculate Traits mean and variance
   ivector newind;
   vector newy;
@@ -260,8 +286,8 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   if (verbose) {
     info("dimX:%d nInd:%d",dimx,Nind);
     info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
-    info("F(%f,1,%d)=%f",F1,(Nind-dimx),alfa);
-    info("F(%f,2,%d)=%f",F2,(Nind-dimx),alfa);
+    info("F(%.3f,1,%d)=%f",ftruncate3(F1),(Nind-dimx),alfa);
+    info("F(%.3f,2,%d)=%f",ftruncate3(F2),(Nind-dimx),alfa);
   }
   F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
@@ -276,10 +302,10 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
         info("Log-likelihood of full model= NOT A NUMBER (NAN)");
       }
       else {
-        info("Log-likelihood of full model= %f",logL);
+        info("Log-likelihood of full model= %.3f",ftruncate3(logL));
       }
-    info("Residual variance= %f",variance);
-    info("Trait mean= %f; Trait variation= %f",ymean,yvari);
+    info("Residual variance= %.3f",ftruncate3(variance));
+    info("Trait mean= %.3f; Trait variation= %.3f",ftruncate3(ymean),ftruncate3(yvari));
   }
   if (!isinf(logL) && !isnan(logL)) {
     if (Backwards==1)    // use only selected cofactors

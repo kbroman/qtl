@@ -9,7 +9,7 @@
 }
 
 \usage{
-	mqmplot_circle(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE)
+	mqmplot_circle(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE,alpha=FALSE)
 }
 
 \arguments{
@@ -25,6 +25,7 @@
   }
   \item{spacing}{ User defined spacing between chromosomes in cM }
   \item{legend}{ With a mqmmulti object, plots a legend for the non-highlighed version }
+  \item{transparency}{ Use transparency when drawing the plots (defaults to no transparency) }
   \item{verbose}{ Be verbose }
 }
 
@@ -68,7 +69,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     
     hyperfilled <- fill.geno(hyper)
     hypercof <- mqmsetcofactors(hyper,4)
-    hyperres <- mqm(hyperfilled,hypercof)
+    hyperres <- mqmscan(hyperfilled,hypercof)
     hyperscanone <- scanone(hyperfilled)
 
     multifilled <- fill.geno(multitrait)
