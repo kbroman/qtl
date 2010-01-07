@@ -63,8 +63,8 @@ add_executable (mqm
 mqmmain.cpp
 )
 
-add_executable (mqmunittest
-unittests.cpp
+add_executable (mqmdebugout
+mqmdebugout.cpp
 )
 
 SET(RTEST scripts/r.sh)
@@ -93,18 +93,18 @@ ADD_CUSTOM_TARGET(testall
 
 IF(WIN32)
   SET(MQMEXE "mqm.exe")
-  SET(MQMUNIT "mqmunittest.exe")
+  SET(MQMDEBUGOUT "mqmdebugout.exe")
 ELSE()
   SET(MQMEXE "./mqm")
-  SET(MQMUNIT "./mqmunittest")
+  SET(MQMDEBUGOUT "./mqmdebugout")
 ENDIF()
 
-#unittests
-ADD_TEST(unittest_dnorm ${MQMUNIT} -d -o test/regression/unittest_dnorm.new)
-ADD_TEST(unittest_dnorm_cmp ${CMAKE_COMMAND} -E compare_files test/regression/unittest_dnorm.new test/regression/unittest_dnorm.txt)
+# debugout output
+ADD_TEST(debugout_dnorm ${MQMDEBUGOUT} -d -o test/regression/debugout_dnorm.new)
+ADD_TEST(debugout_dnorm_cmp ${CMAKE_COMMAND} -E compare_files test/regression/debugout_dnorm.new test/regression/debugout_dnorm.txt)
 
-ADD_TEST(unittest_pbeta ${MQMUNIT} -p -o test/regression/unittest_pbeta.new)
-ADD_TEST(unittest_pbeta_cmp ${CMAKE_COMMAND} -E compare_files test/regression/unittest_pbeta.new test/regression/unittest_pbeta.txt)
+ADD_TEST(debugout_pbeta ${MQMDEBUGOUT} -p -o test/regression/debugout_pbeta.new)
+ADD_TEST(debugout_pbeta_cmp ${CMAKE_COMMAND} -E compare_files test/regression/debugout_pbeta.new test/regression/debugout_pbeta.txt)
 
 # Older test for comparison with (older test) MQM_test0.txt
 # to only run this test use 'ctest -R test0'
