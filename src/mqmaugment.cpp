@@ -63,13 +63,13 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
     for(int j=0; j<Nmark;j++){
       switch (markers[j][i]) {
         case MMISSING:
-          augind=augind+3;
+          augind=augind*3;
         break;
         case MNOTAA:
-          augind=augind+2;
+          augind=augind*2;
         break;
         case MNOTBB:
-          augind=augind+2;
+          augind=augind*2;
         break;
         default:
           missingmarkers--; //Marker known
@@ -177,7 +177,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
-          //info("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d",i,ii,iidx,maxiaug,previaug,imaxNaug);
+          debug_trace("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d\n",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
           //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker
           if (newmarker[j][ii]==MNOTAA) {
