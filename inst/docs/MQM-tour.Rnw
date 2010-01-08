@@ -593,7 +593,7 @@ it can be installed by selecting from the menu, Packages and choosing Install
 Package(s) from the dropdown menu. Select a cran mirror near your own location 
 for fast download and then select the SNOW package. It will start downloading the package, 
 and install any dependencies needed. Linux users can download a copy of SNOW from 
-\verbatim{http://cran.r-project.org/web/packages/snow/index.html}. Once the package 
+http://cran.r-project.org/web/packages/snow/index.html . Once the package 
 has finished downloading the tar.gz file can be installed using R CMD INSTALL snow.tar.gz
 
 \intro{Calculate significance - using SNOW parallelization parameters}
