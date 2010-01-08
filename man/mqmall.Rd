@@ -1,72 +1,77 @@
-\name{mqmall}
-\alias{mqmall}
-\alias{cimall}
+\name{mqmscanall}
+\alias{mqmscanall}
 
-\title{Multitrait analysis of a cross object}
+\title{Parallelized MQM on multiple phenotypes in a cross object}
 
 \description{
-	Uses mqm to scan for QTL's for each phenotype in the cross object.
+  Parallelized QTL analysis using MQM on multiple phenotypes in a cross object (uses SNOW)
 }
 
 \usage{
-	mqmall(cross, multiC=TRUE, n.clusters = 1,b.size=10, FF=0,\dots,plot=FALSE, verbose=FALSE)
+	mqmscanall(cross, multiC=TRUE, n.clusters = 1,b.size=10, \dots)
 }
 
 \arguments{
-  \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{multiC}{ Use multicore (if available)}
-  \item{n.clusters}{ Number of child processes to split the job into }
-  \item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
-  \item{\dots}{Parameters passed through to the \code{\link[qtl]{mqm}} function}
+  \item{cross}{ 
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
+  \item{multiC}{ Use multiple cores (only if the package SNOW is available)
+  }
+  \item{n.clusters}{ Number of parallel processes
+  }
+  \item{b.size}{ Batch size. The entire set is split in 
+    jobs. Each job contains b.size number of traits per job 
+  }
+  \item{\dots}{ Parameters passed through to the \code{\link{mqm}} function used in 
+    scanning for QTLs
+  }
 }
 
 \details{
-  Uses the function specified by the Funktie parameter to scan for QTL's for each phenotype in the cross object. It is recomended to also install the snow library.
-  The snow library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
+  Uses \code{mqmscan} to scan for QTL's for each 
+  phenotype in the cross object. 
 }
 
 \value{
-  Returns a MQMmulti object. This object is a list of scanone objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{plot.all(result)}
+  Returns a MQMmulti object. This object is a list of \code{\link{scanone}}
+  objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot_multitrait(result)}
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu}  }
-
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
+\author{ 
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
 \seealso{ 
 	\itemize{
-	\item \code{\link[qtl]{multitrait}}  Dataset used in the example analysis
-	\item \code{\link[qtl]{fill.geno}}  Augmentationroutine to estimate missing data	
-	\item \code{\link[qtl]{MQMaugment}}  Augmentationroutine to estimate missing data
-	\item \code{\link[qtl]{scanone}}  Function called to do single trait analysis
-	\item \code{\link[qtl]{cim}}  Function called to do single trait analysis
-	\item \code{\link[qtl]{mqm}}  Function called to do single trait analysis
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
 	}
 }
 
 \examples{
 	#Doing a multitrait analysis
 	data(multitrait)
-\dontshow{multitrait < subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
-multitrait$pheno < multitrait$pheno[,1:3]}
-    multitrait < calc.genoprob(multitrait)
-	cof < MQMCofactorsEach(multitrait,3)
-    multitrait < fill.geno(multitrait)
-	result < mqmall(multitrait,cofactors=cof,doLOG=1,b.size=5)
+  \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
+  multitrait$pheno <- multitrait$pheno[,1:3]}
+  multitrait <- calc.genoprob(multitrait)
+	cof <- mqmsetcofactors(multitrait,3)
+  multitrait <- fill.geno(multitrait)
+	result <- mqmscanall(multitrait,cofactors=cof,b.size=5)
 }
 
 \references{
 	\itemize{
-		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
-		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.21. 	
+% \input{"inst/docs/mqm/parallelisation_references.txt"}
 		\item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
-		\item Jansen RC, Nap JP (2001), Genetical genomics: the added value from segregation. \emph{Trends in Genetics}, \bold{17}, 388391.
-		\item Jansen RC, Stam P (1994), High resolution of quantitative traits into multiple loci via interval mapping. \emph{Genetics}, \bold{136}, 14471455.
-		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963971.
-		\item Jansen RC (1993), Interval mapping of multiple quantitative trait loci. \emph{Genetics}, \bold{135}, 205211.
-		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 138.
+		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
+% -----^^ inst/docs/mqm/parallelisation_references.txt ^^-----
 	}
 }
 

@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-9, Karl W Broman and Hao Wu
-# last modified Sep, 2009
+# last modified Dec, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -55,9 +55,16 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
+  # in RIL, treat X chromomse like an autosome
+  chrtype <- sapply(cross$geno, class)
+  if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself")) 
+    for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
+
   if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
     cl <- makeCluster(n.cluster)
+    clusterStopped <- FALSE
+    on.exit(if(!clusterStopped) stopCluster(cl))
     clusterSetupRNG(cl)
     clusterEvalQ(cl, require(qtl, quietly=TRUE))
     n.perm <- ceiling(n.perm/n.cluster)
@@ -69,6 +76,7 @@ function(cross, chr, pheno.col=1,
                          maxit=maxit, tol=tol, verbose=FALSE, n.perm=n.perm, perm.strata=perm.strata, 
                          assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0)
     stopCluster(cl)
+    clusterStopped <- TRUE
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])

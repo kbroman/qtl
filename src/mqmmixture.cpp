@@ -2,13 +2,14 @@
  *
  * mqmmixture.cpp
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
- * Original version R.C Jansen
- * first written <2000 (unknown)
+ * Modified by Pjotr Prins and Danny Arends
+ * last modified December 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -22,7 +23,7 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * Mixture functions
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 
@@ -147,10 +148,10 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
                   int Nloci,
                   double *variance, int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, int verbose) {
                   
-  //if(verbose==1){info("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%c domi=%c cross=%c",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);}
-  //for (int i=0; i<Naug; i++){
-  // info("%d r=%f",i,r[i]);
-  //}
+  debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%d domi=%d cross=%c\n",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
+  for (int i=0; i<Nloci; i++){
+   debug_trace("loci %d : recombfreq=%f\n",i,r[i]);
+  }
   int iem= 0, newNaug, i, j;
   bool warnZeroDist=false;
   bool varknown;
@@ -162,6 +163,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   newNaug= ((!fitQTL) ? Naug : 3*Naug);
   Fy= newvector(newNaug);
   logP= Nloci*log(Pscale);                          // only for computational accuracy
+  debug_trace("logP:%f\n",logP);
   varknown= (((*variance)==-1.0) ? false : true );
   Ploci= newvector(newNaug);
   #ifndef STANDALONE
@@ -173,7 +175,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
 		//info("INFO: REML");
   }
   if (!useREML) {
-		//info("INFO: Maximum Likelyhood");
+		//info("INFO: Maximum Likelihood");
     varknown=false;
     biasadj=false;
   }
@@ -269,11 +271,11 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  //info("Weights done");
-  //info("Individual->trait,indweight weight Ploci");
-  //for (int j=0; j<Nind; j++){
-  //  info("%d->%f,%f %f %f", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
-  //}
+  debug_trace("Weights done\n");
+  debug_trace("Individual->trait,indweight weight Ploci\n");
+  for (int j=0; j<Nind; j++){
+    debug_trace("%d->%f,%f %f %f\n", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
+  }
   double logL=0;
   vector indL;
   indL= newvector(Nind);
@@ -353,9 +355,9 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  //for (i=0; i<Nind; i++){
-    //Rprintf("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
-  //}
+  for (i=0; i<Nind; i++){
+    debug_trace("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP);
+  }
   Free(Fy);
   Free(Ploci);
   Free(indweight);

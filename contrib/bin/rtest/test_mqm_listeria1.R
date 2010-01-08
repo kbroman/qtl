@@ -31,7 +31,7 @@ library(qtl)
 
 data(listeria)
 
-augmentedcross <- mqmaugment(listeria,neglect=1)
+augmentedcross <- mqmaugment(listeria, minprob=1.0)
 result <- mqmscan(augmentedcross)
 sink(paste('regression/',script,'.rnew',sep=''))
 result

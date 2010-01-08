@@ -2,10 +2,14 @@
  *
  * mqmregression.cpp
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
+ *
+ * Modified by Pjotr Prins and Danny Arends
+ * last modified December 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -19,10 +23,10 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains: regression
+ * C functions for the R/qtl package
  *
  **********************************************************************/
+
 #include "mqm.h"
 #include <Rmath.h>
 
@@ -50,7 +54,7 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y,
                   vector *weight, ivector ind, int Naug, double *variance,
                   vector Fy, bool biasadj, bool fitQTL, bool dominance) {
-  // Rprintf("regression IN\n");
+  debug_trace("regression IN\n");
   /*
   cofactor[j] at locus j:
   MNOCOF: no cofactor at locus j
@@ -58,9 +62,9 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   MSEX: QTL at locus j, but QTL effect is not included in the model
   MQTL: QTL at locu j and QTL effect is included in the model
   */
-	//for (int j=0; j<Naug; j++){
-	//   info("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
-  //}
+	for (int j=0; j<Naug; j++){
+	   debug_trace("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
+  }
 
   matrix XtWX;
   cmatrix Xt;
@@ -200,7 +204,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   vector fit, resi;
   fit= newvector(newNaug);
   resi= newvector(newNaug);
-  // cout << "Calculate residuals" << endl;
+  debug_trace("Calculate residuals\n");
   if (*variance<0) {
     *variance= 0.0;
     if (!fitQTL)
@@ -277,7 +281,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       }
   }
   /* calculation of logL */
-  // cout << "calculate logL" << endl;
+  debug_trace("calculate logL\n");
   long double logL=0.0;
   for (int i=0; i<Nind; i++) {
     indL[i]= 0.0;
@@ -292,7 +296,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     }
   }
   for (int i=0; i<Nind; i++) {
-    //Sum up log likelyhoods for each individual
+    //Sum up log likelihoods for each individual
     logL+= log(indL[i]);
   }
   Free(indL);
@@ -381,18 +385,18 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
   double prob=0.0, minF=0.0, maxF=100.0, halfway=50.0, absdiff=1.0;
   int count=0;
   while ((absdiff>0.001)&&(count<100)) {
-    //Rprintf("INFO df1:%d df2:%d alpha:%f\n", df1, df2, alfa);
+    debug_trace("INFO df1:%d df2:%d alpha:%f\n", df1, df2, alfa);
     count++;
     halfway= (maxF+minF)/2.0;
     //prob= betai(df2/2.0, df1/2.0, df2/(df2+df1*halfway));
     //USE R FUNCTIONALITY TO REPLACE OLD C ROUTINES
     prob = pbeta(df2/(df2+df1*halfway), df2/2.0, df1/2.0, 1, 0);
-    //Rprintf("->(%f, %f, %f) %f %f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob, prob2);
+    debug_trace("(%f, %f, %f) prob=%f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
     if (prob<alfa) maxF= halfway;
     else minF= halfway;
     absdiff= fabs(prob-alfa);
   }
-  if(verbose)info("Prob=%f Alfa=%f", prob, alfa);
+  if(verbose)info("Prob=%.3f Alfa=%f", prob, alfa);
   return halfway;
 }
 

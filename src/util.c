@@ -40,7 +40,7 @@
  **********************************************************************/
 
 #include <R.h>
-#include <R_ext/BLAS.h>
+// #include <R_ext/BLAS.h>
 #include "util.h"
 
 #define THRESH 200.0
@@ -632,6 +632,7 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 }
 	  
 /* multiply two matrices - I'm using dgemm from lapack here */
+/*
 void matmult2(double *result, double *a, int nrowa,
              int ncola, double *b, int ncolb)
 
@@ -640,6 +641,7 @@ void matmult2(double *result, double *a, int nrowa,
   F77_CALL(dgemm)("N", "N", &nrowa, &ncolb, &ncola, &alpha, a, &nrowa,
              b, &ncola, &beta, result, &nrowa);
 }
+*/
 
 void matmult(double *result, double *a, int nrowa,
              int ncola, double *b, int ncolb)
