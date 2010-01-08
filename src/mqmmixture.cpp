@@ -150,7 +150,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
                   
   debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%d domi=%d cross=%c\n",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
   for (int i=0; i<Naug; i++){
-   debug_trace("%d r=%f",i,r[i]);
+   debug_trace("Naug: %d recombfreq=%f\n",i,r[i]);
   }
   int iem= 0, newNaug, i, j;
   bool warnZeroDist=false;
@@ -270,10 +270,10 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  debug_trace("Weights done");
-  debug_trace("Individual->trait,indweight weight Ploci");
+  debug_trace("Weights done\n");
+  debug_trace("Individual->trait,indweight weight Ploci\n");
   for (int j=0; j<Nind; j++){
-    debug_trace("%d->%f,%f %f %f", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
+    debug_trace("%d->%f,%f %f %f\n", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
   }
   double logL=0;
   vector indL;
