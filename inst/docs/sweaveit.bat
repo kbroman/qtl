@@ -1,3 +1,4 @@
 R CMD BATCH SweaveIt.R
-latex chapter12.tex
-dvipdfm chapter12.dvi
+latex MQM-tour.tex
+latex MQM-tour.tex
+dvipdfm MQM-tour.dvi

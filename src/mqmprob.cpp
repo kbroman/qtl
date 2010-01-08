@@ -2,15 +2,14 @@
  *
  * mqmprob.cpp
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
- * Original version R.C Jansen
- * first written before 2000
- *
- * Much modified by Danny Arends and Pjotr Prins (c) 2009
+ * Modified by Danny Arends and Pjotr Prins
+ * last modified December 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -24,7 +23,7 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * Probability functions used by the MQM algorithm
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 
@@ -178,7 +177,7 @@ double left_prob(const double r,const MQMMarker markerL,const MQMMarker markerR,
   const double rr = 1.0-r;      // No recombination
   const double rr2 = rr*rr;     //Double Norecombination
  
-  const int recombinations = fabs((double)markerL-(double)markerR);    //The number of recombinations
+  const int recombinations = (int)fabs((double)markerL-(double)markerR);    //The number of recombinations
 
   switch (crosstype) {
     case CF2: //F2 cross
@@ -318,7 +317,7 @@ double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imar
   const double r2 = r*r;      //Breeding Logic (see prob_new)
   const double rr = 1.0-r;
   const double rr2 = rr*rr;
-  const int recombinations = fabs(markerL-markerR);   //Number of recombinations between markerL and markerR
+  const int recombinations = (int)fabs(markerL-markerR);   //Number of recombinations between markerL and markerR
 
   if (is_knownMarker(markerR, CF2)) {   //If we know the next marker we have an answer
     if ((markerL==MH)&&(markerR==MH)) {
@@ -387,12 +386,12 @@ double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imar
     return 0.0;  //info("Strange: encountered BB genotype in BC");
   }  
 
-  const char markerR = imarker[j+1];                   //Next marker at the right side
-  const double r = rs[j];                              //Recombination freq beween markerL and markerR
-  double prob0 = 0.0;                                  //Internal variable holding the probability AA if the next rightmarker is (Semi) Unknown
-  double prob1 = 0.0;                                  //Internal variable holding the probability H if the next rightmarker is (Semi) Unknown
-  const double rr = 1.0-r;                             //Breeding Logic (see prob_new)
-  const int recombinations = fabs(markerL-markerR);    //Number of recombinations between markerL and markerR
+  const char markerR = imarker[j+1];                   		//Next marker at the right side
+  const double r = rs[j];                              		//Recombination freq beween markerL and markerR
+  double prob0 = 0.0;                                  		//Internal variable holding the probability AA if the next rightmarker is (Semi) Unknown
+  double prob1 = 0.0;                                  		//Internal variable holding the probability H if the next rightmarker is (Semi) Unknown
+  const double rr = 1.0-r;                             		//Breeding Logic (see prob_new)
+  const int recombinations = (int)fabs(markerL-markerR);    //Number of recombinations between markerL and markerR
   if (is_knownMarker(markerR, CBC)) {
     return ((recombinations==0)? rr : r );
   } else {
@@ -420,7 +419,7 @@ double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector ima
   double prob0 = 0.0;
   double prob2 = 0.0;
   const double rr = 1.0-r;
-  const int recombinations = fabs(markerL-markerR);
+  const int recombinations = (int)fabs(markerL-markerR);
   if (is_knownMarker(markerR, CRIL)) {
     return ((recombinations==0) ? rr : r);
   } else { //Next marker is semi unknown

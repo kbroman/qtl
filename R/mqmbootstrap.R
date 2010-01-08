@@ -2,35 +2,48 @@
 #
 # mqmbootstrap.R
 #
-# copyright (c) 2009, Danny Arends
-# last modified Jun, 2009
-# first written Feb, 2009
+# Copyright (c) 2009, Danny Arends
+#
+# Modified by Pjotr Prins
+#
+# 
+# first written Februari 2009
+# last modified December 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: bootstrap - Main function for bootstrap analysis
-#           mqmgetpermobject - Helperfunction to create permObjects (R/QTL format)
-#           mqmbootstrap, bootstrapcim
-#           FDRpermutation
+# Contains: mqmscanfdr
+#           mqmpermute
+#           mqmbootstrap
+#           bootstrapcim
+#           permute
+#           bootstrap
+#           mqmprocesspermutation
+#           #result
+#           
 #
-######################################################################
+#####################################################################
 
-mqmscanfdr <- function(cross, Funktie=mqmall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
+
+
+
+
+mqmscanfdr <- function(cross, mapfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
 	above.in.real.res <- NULL
-	res <- Funktie(cross,...)
+	res <- mapfunction(cross,...)
 	for(threshold in thresholds){
 		above.in.real <- 0
 		for(x in 1:nphe(cross)){
@@ -49,7 +62,7 @@ mqmscanfdr <- function(cross, Funktie=mqmall, thresholds=c(1,2,3,4,5,7,10,15,20)
 		for(chr in 1:nchr(cross)){
 			perm$geno[[1]]$data <- perm$geno[[1]]$data[neworder,]
 		}
-		res <- Funktie(perm,...)
+		res <- mapfunction(perm,...)
 		for(threshold in thresholds){
 			above.in.perm <- 0
 			for(y in 1:nphe(cross)){
@@ -67,15 +80,15 @@ mqmscanfdr <- function(cross, Funktie=mqmall, thresholds=c(1,2,3,4,5,7,10,15,20)
 }
 
 mqmpermute <- function(...){
-	bootstrap(...,Funktie=mqm)
+	bootstrap(...,mapfunction=mqmscan)
 }
 
 mqmbootstrap <- function(...){
-	bootstrap(...,Funktie=mqm)
+	bootstrap(...,mapfunction=mqmscan)
 }
 
 bootstrapcim <- function(...){
-	bootstrap(...,Funktie=cim)
+	bootstrap(...,mapfunction=cim)
 }
 
 permute <- function(...){
@@ -88,9 +101,12 @@ permute <- function(...){
 #
 ######################################################################
 
-bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
+bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
 {
-	
+	bootmethod <- 0
+	if(method=="simulation"){
+		bootmethod <- 1
+	}
 	if(missing(cross))
 		stop("No cross file. Please supply a valid cross object.") 
 
@@ -111,7 +127,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
 		}
 
-		#Set the Phenotype under intrest as the first
+		#Set the Phenotype under interest as the first
 		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 
 		if(n.clusters > b.size){
@@ -120,7 +136,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 
 		#Scan the original
 		#cross <- fill.geno(cross) # <- this should be done outside of this function
-		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,Funktie=Funktie,verbose=verbose,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,mapfunction=mapfunction,verbose=verbose,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.run)
@@ -151,13 +167,13 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				}			
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,mapfunction=mapfunction,bootmethod=bootmethod,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotboot(temp)
+					mqmplot_boot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -186,12 +202,12 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 				}else{
 					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,mapfunction=mapfunction,bootmethod=bootmethod,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotboot(temp)
+					mqmplot_boot(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -226,12 +242,12 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 	}
 }
 
-mqmgetpermobject <- function(mqmbootresult = NULL){
-	if(class(mqmbootresult)[2] == "mqmmulti"){
+mqmprocesspermutation <- function(mqmpermutationresult = NULL){
+	if(class(mqmpermutationresult)[2] == "mqmmulti"){
 		result <- NULL
 		names <- NULL
-		for(i in 2:length(mqmbootresult)) {
-			result <- rbind(result,max(mqmbootresult[[i]][,3]))
+		for(i in 2:length(mqmpermutationresult)) {
+			result <- rbind(result,max(mqmpermutationresult[[i]][,3]))
 			names <- c(names,i-1)
 		}
 		result <- as.matrix(result)

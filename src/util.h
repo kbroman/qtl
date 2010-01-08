@@ -303,8 +303,8 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 void matmult(double *result, double *a, int nrowa,
              int ncola, double *b, int ncolb);
 /* multiply two matrices - I'm using dgemm from lapack here */
-void matmult2(double *result, double *a, int nrowa,
-              int ncola, double *b, int ncolb);
+// void matmult2(double *result, double *a, int nrowa,
+//              int ncola, double *b, int ncolb);
 
 
 /**********************************************************************

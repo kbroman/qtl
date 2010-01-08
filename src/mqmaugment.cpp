@@ -2,11 +2,14 @@
  *
  * mqmaugment.cpp
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
- * last modified Apr, 2009
- * first written Feb, 2009
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * first written <2000 (unknown)
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
+ *
+ * Modified by Pjotr Prins and Danny Arends
+ * last modified December 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -20,7 +23,7 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * Data augmentation routines
+ * C functions for the R/qtl package
  *
  **********************************************************************/
 
@@ -35,10 +38,10 @@
  *             and all likely possible configurations are generated 
  *
  * Inputs are number of markers Nmark, the marker matrix, position vector,
- * recombinations r.  The neglect parameter drops individuals from the dataset
+ * recombinations r.  The minprob parameter drops individuals from the dataset
  * (the value should be between 1..n).
  *
- * The neglect parameter drops genotypes. E.g. for neglect=100  eliminate
+ * The minprob parameter drops genotypes. E.g. for minprob=0.01 eliminate
  * genotypes 100 times less likely than the most likely configuration.
  *
  * A new markerset is created and returned in augmarker, likewise the
@@ -50,8 +53,6 @@
  * changed to reflect the newly augmented dataset. Nind may be smaller because
  * of dropped individuals.
  *
- * FIXME: increasing the buffers for augmentation can automatic
- FIXME Herhalingen naar een aparte functie (eventueel cross specific)
  */
  
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers){
@@ -62,13 +63,13 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
     for(int j=0; j<Nmark;j++){
       switch (markers[j][i]) {
         case MMISSING:
-          augind=augind+3;
+          augind=augind*3;
         break;
         case MNOTAA:
-          augind=augind+2;
+          augind=augind*2;
         break;
         case MNOTBB:
-          augind=augind+2;
+          augind=augind*2;
         break;
         default:
           missingmarkers--; //Marker known
@@ -125,10 +126,13 @@ MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
 }
 */
 
-int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* augmarker, vector *augy, 
-            ivector* augind, int *Nind, int *Naug, const int Nmark, 
-            const cvector position, vector r, const int maxNaug, const int imaxNaug, 
-            const double neglect, const MQMCrossType crosstype, const int verbose) {
+int mqmaugment(const MQMMarkerMatrix marker, const vector y, 
+               MQMMarkerMatrix* augmarker, vector *augy, 
+               ivector* augind, int *Nind, int *Naug, const int Nmark, 
+               const cvector position, vector r, const int maxNaug, 
+               const int imaxNaug, const double minprob, 
+               const MQMCrossType crosstype, const int verbose) 
+{
   int retvalue = 1;     //[Danny] Assume everything will go right, (it never returned a 1 OK, initialization to 0 and return
   int jj;
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
@@ -137,7 +141,8 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   vector newy;
   MQMMarkerVector imarker;
   ivector newind;
-
+  
+  double minprobratio = 1.0f/minprob;
   newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
@@ -146,11 +151,11 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   int iaug     = 0;     // iaug keeps track of current augmented individual
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
-  prob0right, prob1right, prob2right;
+  prob0right, prob1right, prob2right = 0.0f;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
   if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
-  if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Neglect=%f", maxNaug, imaxNaug, neglect);
+  if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Minprob=%f", maxNaug, imaxNaug, minprob);
   // ---- foreach individual create one in the newmarker matrix
   const int nind0 = *Nind;              //Original number of individuals
   int newNind = nind0;                  //Number of unique individuals
@@ -172,7 +177,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
-          //info("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d",i,ii,iidx,maxiaug,previaug,imaxNaug);
+          debug_trace("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d\n",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
           //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker
           if (newmarker[j][ii]==MNOTAA) {
@@ -208,7 +213,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
 
             if (ii==previaug) probmax = (prob2>prob1 ? newprob[ii]*prob2 : newprob[ii]*prob1);
             if (prob1>prob2) {
-              if (probmax/(newprob[ii]*prob2)<neglect) {
+              if (probmax/(newprob[ii]*prob2)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
@@ -223,7 +228,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]= newprob[ii]*prob1left;
             } else {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -272,7 +277,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
 
             if (ii==previaug) probmax= (prob0>prob1 ? newprob[ii]*prob0 : newprob[ii]*prob1);
             if (prob1>prob0) {
-              if (probmax/(newprob[ii]*prob0)<neglect) {
+              if (probmax/(newprob[ii]*prob0)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
@@ -287,7 +292,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -345,7 +350,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               else probmax= newprob[ii]*prob0;
             }
             if ((prob2>prob1)&&(prob2>prob0)) {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -356,7 +361,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              if (probmax/(newprob[ii]*prob0)<neglect) {
+              if (probmax/(newprob[ii]*prob0)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
@@ -372,7 +377,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               newprob[ii]*= prob2left;
 
             } else if ((prob1>prob2)&&(prob1>prob0)) {
-              if (probmax/(newprob[ii]*prob2)<neglect) {
+              if (probmax/(newprob[ii]*prob2)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
@@ -383,7 +388,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              if (probmax/(newprob[ii]*prob0)<neglect) {
+              if (probmax/(newprob[ii]*prob0)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MAA;
                 newprob[iaug]= newprob[ii]*prob0left;
@@ -398,7 +403,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
               newprobmax[ii]= newprob[ii]*prob1;
               newprob[ii]*= prob1left;
             } else {
-              if (probmax/(newprob[ii]*prob1)<neglect) {
+              if (probmax/(newprob[ii]*prob1)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MH;
                 newprob[iaug]= newprob[ii]*prob1left;
@@ -409,7 +414,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
                 newind[iaug]=iidx;
                 newy[iaug]=y[i];
               }
-              if (probmax/(newprob[ii]*prob2)<neglect) {
+              if (probmax/(newprob[ii]*prob2)<minprobratio) {
                 if (++iaug >= maxNaug) goto bailout;
                 newmarker[j][iaug]= MBB;
                 newprob[iaug]= newprob[ii]*prob2left;
@@ -426,7 +431,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
             }
             probmax= (probmax>newprobmax[ii] ? probmax : newprobmax[ii]);
           } else {
-            //STD case we know what the next marker is nou use probleft to estimate the likelyhood of the current location
+            //STD case we know what the next marker is nou use probleft to estimate the likelihood of the current location
             if ((position[j]==MLEFT||position[j]==MUNLINKED)) {
               prob0left= start_prob(crosstype, newmarker[j][ii]);
             } else {
@@ -436,7 +441,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
           }
 
           if (iaug+3>maxNaug) {
-            Rprintf("ERROR: augmentation (should not be reached)\n");  
+            Rprintf("ERROR: augmentation (this code should not be reached)\n");  
             goto bailout;
           }
         }
@@ -465,7 +470,7 @@ int augmentdata(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix* a
   goto cleanup;
 bailout:
   Rprintf("ERROR: Dataset too large after augmentation\n");
-  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or lower the parameter neglect\n");
+  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or increase the parameter minprob\n");
   retvalue = 0;
 cleanup:
   Free(newy);
@@ -481,9 +486,9 @@ cleanup:
  * The R interfact to data augmentation
  */
 
-void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno, 
+void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
-               int *Npheno, int *maxind, int *maxiaug, double *neglect, int
+               int *Npheno, int *maxind, int *maxiaug, double *minprob, int
                *chromo, int *rqtlcrosstypep, int *verbosep) {
   int **Geno;
   double **Pheno;
@@ -532,7 +537,7 @@ void R_augmentdata(int *geno, double *dist, double *pheno, int *auggeno,
   //Calculate positions of markers and Recombinant frequencies
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
-  if (augmentdata(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *neglect, crosstype, verbose)==1) {
+  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {

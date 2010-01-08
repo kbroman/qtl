@@ -1,11 +1,15 @@
 /**********************************************************************
  *
- * mqmmain.cpp - standalone MQM edition
+ * mqmmain.cpp
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr,2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
+ *
+ * Modified by Pjotr Prins and Danny Arends
+ * last modified December 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -20,7 +24,6 @@
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
- * Contains: R_scanMQM, scanMQM
  *
  **********************************************************************/
 
@@ -37,6 +40,7 @@
 using namespace std;
 
 FILE *redirect_info = stdout;
+int debuglevel = 0;
 
 bool checkfileexists(const char *filename) {
   ifstream myfile;
@@ -60,7 +64,7 @@ struct algorithmsettings {
   char estmap;
   unsigned int max_totalaugment; // always >= 0
   unsigned int max_indaugment;   // always >= 0
-  int neglect_unlikely;
+  double neglect_unlikely;
   char suggestedcross;
 };
 
@@ -177,7 +181,9 @@ unsigned int readcofactorfile(const char* filename,cvector *cofactors,const unsi
     if (verbose) Rprintf("Cofactors/Markers: %d/%d\n",num,j);
     return num;
   } else {
-    return 0;
+    // No silent failures!!
+    Rprintf("File not found %s",filename);
+    exit(1);
   }
 }
 
@@ -185,7 +191,7 @@ void printhelp(void) {
   printf ("Commandline switches:\n");
   printf ("-h      		This help.\n");
   printf ("-v      		Verbose (produce a lot of textoutput).\n");
-  printf ("-p(INT) 		DebugLevel -d0,-d1.\n");
+  printf ("-d(INT) 		DebugLevel -d0,-d1.\n");
   printf ("-t(INT) 		Phenotype under analysis.\n");
   printf ("-p(FILE_NAME)	Phenotypes file in plain textformat.\n");
   printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
@@ -202,7 +208,7 @@ void printhelp(void) {
   printf ("--estmap(CHAR)	Reestimate marker positions y/n?.\n");
   printf ("--maugment(INT)	Maximum size of augmented dataset.\n");
   printf ("--miaugment(INT)	Maximum number of individual replications inside a dataset.\n");
-  printf ("--Neglect(INT)	Drop genotypes more unlikely that neglect/1000.\n");
+  printf ("--minprob(FLOAT)	Drop genotypes more unlikely that minprob.\n");
 }
 
 //Functions
@@ -228,16 +234,15 @@ static struct option long_options[] = {
   {"estmap",    required_argument, 0, 'i'},
   {"maugment",    required_argument, 0, 'j'},
   {"miaugment",    required_argument, 0, 'k'},
-  {"neglect",    required_argument, 0, 'l'},
+  {"minprob",    required_argument, 0, 'l'},
   {0, 0, 0, 0}
 };
 
 
 int main(int argc,char *argv[]) {
-  Rprintf("MQM standalone version\n");
+  printf("MQM standalone version\n");
   bool verbose = false;
   bool helpflag = false;
-  int debuglevel = 0;
   unsigned int phenotype = 0; //analyse the first phenotype
   char *phenofile = NULL;
   char *genofile = NULL;
@@ -286,87 +291,89 @@ int main(int argc,char *argv[]) {
       break;      
     case 'a':
       mqmalgorithmsettings.stepmin = atoi(optarg);
-      printf("Option (a) smin: %d\n",mqmalgorithmsettings.stepmin);
+      debug_trace("Option (a) smin: %d\n",mqmalgorithmsettings.stepmin);
     case 'b':
       mqmalgorithmsettings.stepmax = atoi(optarg);
-      printf("Option (b) smax: %d\n",mqmalgorithmsettings.stepmax);
+      debug_trace("Option (b) smax: %d\n",mqmalgorithmsettings.stepmax);
     break;
     case 'n':
       mqmalgorithmsettings.stepsize = atoi(optarg);
-      printf("Option (n) ssize: %d\n",mqmalgorithmsettings.stepsize);
+      debug_trace("Option (n) ssize: %d\n",mqmalgorithmsettings.stepsize);
     break;
     case 'e':
       mqmalgorithmsettings.alpha = atof(optarg);
-      printf("Option (e) alpha: %f\n",mqmalgorithmsettings.alpha);
+      debug_trace("Option (e) alpha: %f\n",mqmalgorithmsettings.alpha);
     break;
     case 'f':
       mqmalgorithmsettings.windowsize = atoi(optarg);
-      printf("Option (f) window: %d\n",mqmalgorithmsettings.windowsize);
+      debug_trace("Option (f) window: %d\n",mqmalgorithmsettings.windowsize);
     break;  
     case 'q':
       mqmalgorithmsettings.maxiter = atoi(optarg);
-      printf("Option (q) maxiter: %d\n",mqmalgorithmsettings.maxiter);
+      debug_trace("Option (q) maxiter: %d\n",mqmalgorithmsettings.maxiter);
     break; 
     case 'i':
       mqmalgorithmsettings.estmap = optarg[0];
-      printf("Option (i) estmap: %d\n",mqmalgorithmsettings.estmap);
+      debug_trace("Option (i) estmap: %d\n",mqmalgorithmsettings.estmap);
     break; 
     case 'j':
       mqmalgorithmsettings.max_totalaugment = atoi(optarg);
-      printf("Option (j) max_totalaugment: %d\n",mqmalgorithmsettings.max_totalaugment);
+      debug_trace("Option (j) max_totalaugment: %d\n",mqmalgorithmsettings.max_totalaugment);
     break; 
     case 'k':
       mqmalgorithmsettings.max_indaugment = atoi(optarg);
-      printf("Option (k) max_indaugment: %d\n",mqmalgorithmsettings.max_indaugment);
+      debug_trace("Option (k) max_indaugment: %d\n",mqmalgorithmsettings.max_indaugment);
     break; 
     case 'l':
-      mqmalgorithmsettings.neglect_unlikely = atoi(optarg);
-      printf("Option (l) neglect: %d\n",mqmalgorithmsettings.neglect_unlikely);
+      mqmalgorithmsettings.neglect_unlikely = atof(optarg);
+      debug_trace("Option (l) minprob: %f\n",mqmalgorithmsettings.neglect_unlikely);
     break; 
     default:
-      fprintf (stderr, "Unknown option character '%c'.\n", optopt);
+      fprintf(stderr, "Unknown option character '%c'.\n", optopt);
   }
   if (helpflag) {
     printhelp();
     return 0;
   } else {
-    printf ("Options for MQM:\n");
-    //Verbose & debug
-    printf ("verbose = %d, debuglevel = %d\n",verbose, debuglevel);
-    //Needed files
-    if (!phenofile) exit_on_error("Please supply a phenotypefile argument.\n");
-    if (!checkfileexists(phenofile)) exit_on_error("Phenotypefile not found on your filesystem.\n");
-    printf ("Phenotypefile = %s\n",phenofile);
-    if (!genofile)  exit_on_error("Please supply a genofile argument.\n");
-    if (!checkfileexists(genofile)) exit_on_error("Genotypefile not found on your filesystem.\n");
-    printf ("Genotypefile = %s\n",genofile);
-    if (!markerfile) exit_on_error("Please supply a markerfile argument.\n");
-    if (!checkfileexists(genofile)) exit_on_error("Markerfile not found on your filesystem.\n");
-    printf ("Markerfile = %s\n",markerfile);
-    if (!settingsfile) exit_on_error("Please supply a settingsfile argument.\n");
-    if (!checkfileexists(settingsfile)) exit_on_error("settingsfile not found on your filesystem.\n");
-    printf ("settingsfile = %s\n",settingsfile);
-    //Optional files
-    if (!coffile) {
-      if (!checkfileexists(coffile)) {
-        printf("Cofactorfile not found on your filesystem.\n");
-      } else {
-        printf ("Cofactorfile = %s\n",coffile);
-      }
-    }
     //Check the output file
-    if (outputfile) printf("Output file specified: %s\n",outputfile);
-    if (checkfileexists(outputfile)) printf("Outputfile exists\n !!! overwriting previous outputfile !!!\n");
-    //Warn people for non-existing options
-    for (index = optind; index < argc; index++) {
-      printf ("Non-option argument %s\n", argv[index]);
-    }
+    if (outputfile) debug_trace("Output file specified: %s\n",outputfile);
+    if (checkfileexists(outputfile)) debug_trace("Outputfile exists\n !!! overwriting previous outputfile !!!\n");
     // Open outputstream if specified - using C type for redirection
     FILE *fout = stdout;
     if (outputfile){
       fout = fopen(outputfile,"w");
       redirect_info = fout;
     }
+    debug_trace ("Options for MQM:\n");
+    //Verbose & debug
+    debug_trace ("verbose = %d, debuglevel = %d\n",verbose, debuglevel);
+    //Needed files
+    if (!phenofile) exit_on_error("Please supply a phenotypefile argument.\n");
+    if (!checkfileexists(phenofile)) exit_on_error("Phenotypefile not found on your filesystem.\n");
+    debug_trace ("Phenotypefile = %s\n",phenofile);
+    if (!genofile)  exit_on_error("Please supply a genofile argument.\n");
+    if (!checkfileexists(genofile)) exit_on_error("Genotypefile not found on your filesystem.\n");
+    debug_trace ("Genotypefile = %s\n",genofile);
+    if (!markerfile) exit_on_error("Please supply a markerfile argument.\n");
+    if (!checkfileexists(genofile)) exit_on_error("Markerfile not found on your filesystem.\n");
+    debug_trace ("Markerfile = %s\n",markerfile);
+    if (!settingsfile) exit_on_error("Please supply a settingsfile argument.\n");
+    if (!checkfileexists(settingsfile)) exit_on_error("settingsfile not found on your filesystem.\n");
+    debug_trace ("settingsfile = %s\n",settingsfile);
+    //Optional files
+    if (!coffile) {
+      if (!checkfileexists(coffile)) {
+        debug_trace("Cofactorfile not found on your filesystem.\n");
+      } else {
+        debug_trace("Cofactorfile = %s\n",coffile);
+      }
+    }
+
+    //Warn people for non-existing options
+    for (index = optind; index < argc; index++) {
+      debug_trace("Non-option argument %s\n", argv[index]);
+    }
+    
     //Read in settingsfile
     mqmalgorithmsettings = loadmqmsetting(settingsfile,mqmalgorithmsettings,verbose);
     //Create large datastructures
@@ -395,18 +402,18 @@ int main(int argc,char *argv[]) {
     //Here we know what we need so we can start reading in files with the new loader functions
     markers = readgenotype(genofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,verbose);
 
-    if (verbose) Rprintf("Genotypefile done\n");
+    debug_trace("Genotypefile done\n");
 
     pheno_value = readphenotype(phenofile,mqmalgorithmsettings.nind,mqmalgorithmsettings.npheno,verbose);
 
-    if (verbose) Rprintf("Phenotypefile done \n");
+    debug_trace("Phenotypefile done \n");
 
     mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verbose);
     chr = mqmmarkersinfo.markerchr;
     pos = mqmmarkersinfo.markerdistance;
     f1genotype = mqmmarkersinfo.markerparent;
 
-    if (verbose) Rprintf("Markerposition file done\n");
+    debug_trace("Markerposition file done\n");
 
     //Determine how many chromosomes we have
     int max_chr=0;
@@ -415,7 +422,7 @@ int main(int argc,char *argv[]) {
         max_chr = chr[m];
       }
     }
-    if (verbose)  Rprintf("# %d Chromosomes\n",max_chr);
+    debug_trace("# %d Chromosomes\n",max_chr);
     //Create a QTL object holding all our output location
     int locationsoutput = 3*max_chr*(((mqmalgorithmsettings.stepmax)-(mqmalgorithmsettings.stepmin))/ (mqmalgorithmsettings.stepsize));
     QTL = newmatrix(1,locationsoutput);
@@ -426,7 +433,8 @@ int main(int argc,char *argv[]) {
       mapdistance[i]=pos[i];
     }
 
-    set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
+    if (coffile)
+      set_cofactors = readcofactorfile(coffile,&cofactor,mqmalgorithmsettings.nmark,verbose);
     if (set_cofactors > 0) {
       backwards = 1;
     }
@@ -450,8 +458,9 @@ int main(int argc,char *argv[]) {
     ivector new_ind;
     cvector position = relative_marker_position(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
-    augmentdata(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
+    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
+      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
+    mqmaugment(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     //Now to set the values we got back into the variables
     pheno_value[phenotype] = new_y;
     INDlist = new_ind;
@@ -460,15 +469,27 @@ int main(int argc,char *argv[]) {
     freevector((void *)position);
     freevector((void *)r);
     
-    //Start scanning for QTLs
-    analyseF2(nind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
-              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,augmentednind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
-    //Write final QTL profile (screen and file)
-    for (int q=0; q<locationsoutput; q++) {
-      // outstream << q << "\t" << QTL[0][q] << "\n";
-      fprintf(fout,"%5d\t%10.5f\n",q,QTL[0][q]);
+    // Start scanning for QTLs
+    double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+              mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
+    // Write final QTL profile (screen and file)
+    if (!isinf(logL) && !isnan(logL)) {
+      for (int q=0; q<locationsoutput; q++) {
+        double qtlvalue = QTL[0][q];
+        fprintf(fout,"%5d\t",q);
+        // The following prints a 'standardized' value on Windows and Unix for regression tests (for nan and inf)
+        if (isnan(qtlvalue)) {
+            fprintf(fout,"       NAN\n");
+        }
+        else
+          if (isinf(qtlvalue)) {
+            fprintf(fout,"  INFINITE\n");
+          }
+          else
+            fprintf(fout,"%.3f\n",ftruncate3(QTL[0][q]));
+      }
     }
-    
+      
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
     freevector((void *)mapdistance);

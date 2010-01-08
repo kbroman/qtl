@@ -1,3 +1,3 @@
-Sweave(file="chapter12.snw")
-Stangle(file="chapter12.snw")
+Sweave(file="MQM-tour.Rnw")
+Stangle(file="MQM-tour.Rnw")
 q("no")

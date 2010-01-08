@@ -1,99 +1,149 @@
 \name{mqmscan}
 \alias{mqmscan}
-\alias{mqm}
 
-\title{Multiple qtl mapping for inbred crosses}
-
+\title{Genome scan with a multiple QTL model (MQM)}
 
 \description{
-	Main multiQTL scanning function (for use with F2 / BC / RIL populations)
+  Genome scan with a multiple QTL model.
 }
 
 \usage{
-	mqmscan(cross, cofactors, pheno.col = 1, REMLorML = 0, 
-                alfa = 0.02, em.iter = 1000, windowsize = 25.0, step.size = 5.0, 
-                step.min = -20.0, step.max = 220.0, file = "MQM_output.txt",
-                doLOG=0, est.map=0, dominance=0, plot=FALSE, forceRIL=0, verbose=FALSE)
+mqmscan(cross, cofactors, pheno.col = 1, 
+  model=c("additive","dominance"), forceML=FALSE,
+  cofactor.significance=0.02, em.iter=1000, 
+  window.size=25.0, step.size=5.0, step.min=-20.0, step.max=220,
+  logtransform = FALSE, estimate.map = FALSE,
+  plot=FALSE, verbose=FALSE, outputmarkers=TRUE,
+  multicore=TRUE, batchsize=10, n.clusters=1
+  )
 }
 
 \arguments{
-  \item{cross}{ Cross object, an object of class \code{cross} from R/QTL. See \code{\link[qtl]{read.cross}} for details. }
-  \item{cofactors}{ List of cofactors with length marker (0:no cofactor, 1:cofactor, 2:sexfactor) }
-  \item{pheno.col}{ Phenotype under analysis is specified by the pheno.col parameter }    
-  \item{REMLorML}{ Lets the algorithm use reduced maximum likelyhood (0) or maximum likelyhood (1) }
-  \item{alfa}{ Global p-value (0<= alfa <= 1) }
-  \item{em.iter}{ Maximum number of iterations EM algorithm }
-  \item{windowsize}{ Windowsize used when mappingQTL locations }
-  \item{step.size}{ Step.size used for the generation of output QTL }
-  \item{step.min}{ Begin this many Cm before the chromosome }
-  \item{step.max}{ Maximum length in Cm }
-  \item{file}{ File to which the raw results are saved.}
-  \item{doLOG}{ Indicate if the algorithm should LOG transform traitdata (DEFAULT 0 = off | 1 = on) }    
-  \item{est.map}{ Reestimation of the marker locations on the genetic map before mapping QTLs (no map is returned the old map remains in the cross object }
-  \item{dominance}{ Should dominance be taken into account ( 0= Additive  (DEFAULT)/ 1= Dominance) }  
-  \item{forceRIL}{ Should we force the cross as a RIL, this option removed AB genotypes and replaces them with BB ? ( 0= NO  (DEFAULT)/ 1= YES) }  
-  \item{plot}{ If TRUE, plot the results.}
-  \item{verbose}{If TRUE, print tracing information.}
+  \item{cross}{ 
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
+  \item{cofactors}{ List of cofactors to be analysed as cofactors in the 
+    QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
+    for backward elimination. (0:no cofactor, 1:cofactor, 2:sexfactor) 
+  }
+  \item{pheno.col}{ Column number in the phenotype matrix which should be
+    used as the phenotype.  This can be a vector of integers; One may also 
+    give a character strings matching the phenotype names.  Finally, one 
+    may give a numeric vector of phenotypeIDs. This should consist of 
+    integers with  0 < value < no. phenotypes. 
+  }
+  \item{model}{ When scanning for QTLs should haplotype dominance be 
+    considered in an F2 intercross. Using the dominance model we scan
+    for additive effects but also allow an additional effect where AA+AB
+    versus BB and AA versus AB+BB. This setting is ignored for BC and RIL 
+    populations 
+  }
+  \item{forceML}{ Specify which statistical method to use to estimate 
+    variance components to use when QTL modeling and mapping. Default 
+	usage is the Restricted maximum likelihood approach (REML). With this
+	option a user can disable REML and use maximum likelihood.
+  }
+  \item{cofactor.significance}{ Significance level at which a cofactor is 
+    considered significant. This is estimated using an analysis of 
+    deviance, and compared to the level specified by the user. The 
+    cofactors that dont reach this level of statistical significance 
+    are NOT used in the mapping stage. Value between 0 and 1 }
+  \item{em.iter}{ Maximum number of iterations for the EM algorithm to converge }
+  \item{window.size}{ Window size for mapping QTL locations, 
+    this parameter is used in the interval mapping stage. When 
+    calculating LOD scores at a genomic position all cofactors 
+    within window.size are dropped to estimate the (unbiased) 
+    effect of the location under interest. 
+  }
+  \item{step.size}{ Step size used in interval mapping. A lower 
+    step.size parameter increases the number of output points, 
+    this creates a smoother QTL profile
+  }
+  \item{step.min}{ Begin this many cM before the chromosome, by default we 
+    start at the genetic beginning (0cM) 
+  }
+  \item{step.max}{ Maximum mapping length in cM, by default set 
+    to the maximum genetic length found in the crossobject. However
+    when using the restimate.map parameter it could be needed
+    to increase this parameter to accomodate for the larger map 
+    internally estimated.
+  }
+  \item{logtransform}{ Indicate if the algorithm should do a log 
+    transformation on the trait data in the pheno.col
+  }    
+  \item{estimate.map}{ Should Re-estimation of the marker locations 
+    on the genetic map occur before mapping QTLs. This method is 
+    deprecated rather use the \code{\link{est.map}} function in R/qtl.
+    This is because no map is returned into the crossobject. 
+    The old map remains in the cross object.
+    }
+  \item{plot}{ plot the results (default TRUE)}
+  \item{verbose}{ verbose output}
+  \item{outputmarkers}{Needs to be explained}
+  \item{multicore}{Use multicore (if available)}
+  \item{batchsize}{Needs to be explained}
+  \item{n.clusters}{Number of child processes to split the job into.}
 }
 
-\details{
-Normal layout of MQM-QTL analysis
-\itemize{
-\item Load in experiment using formats supported by R/QTL
-\item Set trait under consideration as first trait in R/QTL format
-\item Fill in missing data using either the fill.geno or mqmaugmentdata routine
-\item Call mqmscan to do a genomescan
-\item Call mqmscan setting the n.run to get an estimate of "significant" lod scores
-\item Set cofactors at "Top scoring" and not so "Top scoring" markers
-\item Rerun analysis with cofactors
-\item Bootstrap analysis with cofactors to get estimates of QTL significance
-}
-Using ML or Reduced ML the algorithm employs a backward selection strategy to identify QTL hotspot. The algorithm passes through the following stages:
-\itemize{
-\item Calculating relative marker positions
-\item (Re)Estimating recombinant frequencies
-\item LOGlikelyhood estimations of the full model using all cofactors
-\item IF(Cofactors) THEN Backward elimination of cofactors & mapQTL
-\item IF(No cofactors) THEN mapQTL function
-}
-Afterwards the Interval mapping of the QTL model is returned to the user
-}
+%\details{
+%}
 
 \value{
-Returns a matrix with QTLscores,Informationcontent,QTL*Informationcontent for each location on the chromosome, which can be plotted using the plot.scanone function of R/QTL or plot.MQMone to also visualize the QTL*informationcontent
-The phenotype under consideration is specified by the pheno.col argument of the function.
+When scanning 1 phenotype the function returns a scanone object. This contains a matrix of three columns LODscores, 
+Informationcontent and LOD*Informationcontent with at each row pseudomarkers
+sorted in increasing order. For more information on the scanone object see: \code{\link{scanone}} 
+The resulting scanone object itself can be visualized using the standard R/qtl 
+plotting routines (\code{\link{plot.scanone}}) or specialized function to show
+the mqm model (\code{\link{mqmplot_one}}) and QTL profile. If cofactors were 
+specified the QTL model used in scanning is also returned as a named attribute 
+of the scanone object called mqmmodel. It can be extracted from the resulting 
+scanone object by using the \code{\link{mqmgetmodel}} function or the 
+\code{\link{attr}} function. Finally the estimate.map paramter does not 
+return its re estimated genetic map.
+When scanning multiple genotypes a \code{mqmmulti} object is created.
+This object is just a list composed of scanone objects. The results for a single
+trait can be obtained from the \code{mqmmulti} object, in scanone format.
 }
 
-\author{ Danny Arends \email{Danny.Arends@gmail.com} ; R.C. Jansen \email{r.c.jansen@rug.nl} ; Karl W. Broman \email{kbroman@biostat.wisc.edu} }
-
-\note{ 
-	If you find anything wrong with the algorithm please notify me at: \email{Danny.Arends@gmail.com}
+\author{
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
+
+%\note{ 
+%}
 
 \seealso{
-\itemize{
-	\item \code{\link[qtl]{mqmaugment}} - Augmentationroutine to estimate missing data
-	\item \code{\link[qtl]{mqmcofactors}} - Learn how to set Cofactors for the MQM algorithm
-	\item \code{\link[qtl]{mqmall}} - Function called to analyse multiple traits in the cross object using MQM
-	\item \code{\link[qtl]{mqmbootstrap}} - Function called to estimate confidence interfalls for MQM
-	\item \code{\link[qtl]{scanone}} - R/QTL main scanning function
-	\item \code{\link[qtl]{cim}} - Composite interval mapping in R/QTL
-}
+  \itemize{
+% \input{"inst/docs/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
+  }
 }
 
 \examples{
-#Simulated F2 Population
-f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
-data(map10)						# Mouse genome
-f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-f2result <- mqmscan(f2cross)				# Do a MQM scan of the genome
-lodint(f2result,chr=3)					# LOD interval of the QTL on chr 3
+% \input{"inst/docs/mqm/standard_example.txt"}
+data(map10)                    # Mouse dataset
 
-#Simulated BC Population
-bcqtl <- c(3,15,2)					# QTL at chromosome 3
-data(map10)						# Mouse genome
-bccross <- sim.cross(map10,bcqtl,n=100,type="bc")	# Simulate a BC Cross
-bcresult <- mqmscan(bccross)				# Do a MQM scan of the genome
+# simulate a cross (autosomes)
+qtl <- c(3,15,3,7)             # QTL location
+cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
+
+# MQM
+crossaug <- mqmaugment(cross)  # Augmentation
+cat(crossaug$mqm$Nind,'real individuals retained in dataset',
+    crossaug$mqm$Naug,'individuals augmented')
+
+result <- mqmscan(crossaug)    # Scan
+
+# show LOD interval of the QTL on chr 3
+lodint(result,chr=3)
+% -----^^ inst/docs/mqm/standard_example.txt ^^-----
 }
 
 \keyword{ models }
