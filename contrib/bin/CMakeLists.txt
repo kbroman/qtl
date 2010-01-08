@@ -82,7 +82,7 @@ ADD_CUSTOM_TARGET(testR
   COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
   COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest -R TestR)
-
+  
 # All tests, including R
 ADD_CUSTOM_TARGET(testall
   COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
@@ -97,6 +97,13 @@ ELSE()
   SET(MQMEXE "./mqm")
   SET(MQMDEBUGOUT "./mqmdebugout")
 ENDIF()
+
+
+# Tracetest
+ADD_CUSTOM_TARGET(tracetest
+  COMMAND ${MQMEXE} -o T12trace.log -d1 -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1 
+)
+
 
 # debugout output
 ADD_TEST(debugout_dnorm ${MQMDEBUGOUT} -d -o test/regression/debugout_dnorm.new)
@@ -116,7 +123,7 @@ ADD_TEST(TestMQMF2_T11 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genoty
 ADD_TEST(TestMQMF2_T11_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out.txt.rnew test/regression/t11out.txt)
 
 # Run T12 Dataset 1 F2
-ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -d1 -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1 -o test/regression/t12out.txt.rnew)
+ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1 -o test/regression/t12out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T12_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t12out.txt.rnew test/regression/t12out.txt)
 
@@ -158,13 +165,13 @@ ADD_TEST(TestMQMF2_T31 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genoty
 ADD_TEST(TestMQMF2_T31_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t31out.txt.rnew test/regression/t31out.txt)
 
 # Run T32
-if(BITS64)
-  MESSAGE("Skip T32 on 64-bits")
-else()
+#if(BITS64)
+#  MESSAGE("Skip T32 on 64-bits")
+#else()
   ADD_TEST(TestMQMF2_T32 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=0.5 -o test/regression/t32out.txt.rnew)
   # Immediately compare outputs against older results
   ADD_TEST(TestMQMF2_T32_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t32out.txt.rnew test/regression/t32out.txt)
-endif()
+#endif()
 
 # Run T33
 ADD_TEST(TestMQMF2_T33 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3.txt -mtest/std/markers3.txt -stest/std/settings3.txt -ctest/t33/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=0.5 -o test/regression/t33out.txt.rnew)
@@ -175,8 +182,6 @@ ADD_TEST(TestMQMF2_T33_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t33
 ADD_TEST(TestMQMF2_T34 ${MQMEXE} -v -ptest/std/phenotypes3.txt -gtest/std/genotypes3m.txt -mtest/std/markers3.txt -stest/std/settings3.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=120 --miaugment=1 --minprob=1 -o test/regression/t34out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T34_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t34out.txt.rnew test/regression/t34out.txt)
-
-# ADD_TEST(DannyTestMQM ./regressiontests.bat) - move into above...
 
 IF(TEST_R)
   ADD_TEST(TestR_io ${RTEST} ../../tests test_io.R)
