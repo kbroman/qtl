@@ -30,7 +30,6 @@ FIND_PACKAGE(RLibs)
 
 include_directories (../../src)
 add_definitions(-DSTANDALONE)
-#add_definitions(-DDTRACE)
 
 IF(NOT WIN32)
   add_definitions(-pg)
@@ -117,7 +116,7 @@ ADD_TEST(TestMQMF2_T11 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genoty
 ADD_TEST(TestMQMF2_T11_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t11out.txt.rnew test/regression/t11out.txt)
 
 # Run T12 Dataset 1 F2
-ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1 -o test/regression/t12out.txt.rnew)
+ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -d1 -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1 -o test/regression/t12out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T12_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t12out.txt.rnew test/regression/t12out.txt)
 
