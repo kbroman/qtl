@@ -149,8 +149,8 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
                   double *variance, int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, int verbose) {
                   
   debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%d domi=%d cross=%c\n",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
-  for (int i=0; i<Naug; i++){
-   debug_trace("Naug: %d recombfreq=%f\n",i,r[i]);
+  for (int i=0; i<Nloci; i++){
+   debug_trace("loci %d : recombfreq=%f\n",i,r[i]);
   }
   int iem= 0, newNaug, i, j;
   bool warnZeroDist=false;
@@ -163,6 +163,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   newNaug= ((!fitQTL) ? Naug : 3*Naug);
   Fy= newvector(newNaug);
   logP= Nloci*log(Pscale);                          // only for computational accuracy
+  debug_trace("logP:%f\n",logP);
   varknown= (((*variance)==-1.0) ? false : true );
   Ploci= newvector(newNaug);
   #ifndef STANDALONE
