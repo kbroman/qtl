@@ -183,7 +183,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       }
     }
   }
-  debug_trace("Num markers: %d -> %d",Nmark,jj);
+  debug_trace("Num markers: %d -> %d\n",Nmark,jj);
   Nmark= jj;
   (*nummark) = jj;
   position = relative_marker_position(Nmark,chr);
