@@ -148,7 +148,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
                   int Nloci,
                   double *variance, int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, int verbose) {
                   
-  debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%c domi=%c cross=%c",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
+  debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%d domi=%d cross=%c\n",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
   for (int i=0; i<Naug; i++){
    debug_trace("%d r=%f",i,r[i]);
   }
