@@ -51,6 +51,7 @@
 #ifdef STANDALONE
   // Running mqm stand alone (without R)
   extern FILE* redirect_info;  // Redirect output for testing
+  extern int debuglevel;  // Redirect output for testing
   #define message(type, format, ...) { \
     fprintf(redirect_info,"%s: ",type); \
     fprintf(redirect_info, format, ## __VA_ARGS__); \
@@ -58,11 +59,13 @@
   // #define warning(s) { message("WARNING",s); }
   #define fatal(s) { message("FATAL",s); exit(127); }
   
-  #ifdef DTRACE 
-    #define debug_trace(format, ...) { fprintf(redirect_info,"TRACE "); fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); fprintf(redirect_info,format, ## __VA_ARGS__); }
-  #else
-    #define debug_trace(format, ...) { }
-  #endif 
+  #define debug_trace(format, ...) { \
+    if(debuglevel > 0){ \
+      fprintf(redirect_info,"TRACE "); \
+      fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); \
+      fprintf(redirect_info,format, ## __VA_ARGS__); \
+    }\
+    }\
   
 #else
   // Running mqm under R
