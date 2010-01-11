@@ -448,9 +448,8 @@ int main(int argc,char *argv[]) {
     int augmentednind = mqmalgorithmsettings.nind;
     
     //<dataaugmentation>
-    //bool augdata(const int Nind, int const Nmark,const MQMMarkerMatrix markers,int *Nind, MQMMarkerMatrix *newmarkers){
-    // int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
-    calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
+    
+    int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
     
     //Variables for the returned augmented markers,phenotype,individualmapping
     MQMMarkerMatrix newmarkerset;
@@ -468,7 +467,7 @@ int main(int argc,char *argv[]) {
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-    
+/*    
     // Start scanning for QTLs
     double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
@@ -489,7 +488,7 @@ int main(int argc,char *argv[]) {
             fprintf(fout,"%.3f\n",ftruncate3(QTL[0][q]));
       }
     }
-      
+ */     
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
     freevector((void *)mapdistance);
