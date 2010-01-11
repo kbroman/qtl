@@ -98,6 +98,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
                   double neglect_unlikely, int max_totalaugment, int max_indaugment,
                   const matrix* pheno_value,const int nmark,const ivector chr,const vector mapdistance,
                   const MQMCrossType crosstype){
+    info("New augmentation routine");
     const int nind0 = *nind;
     const vector originalpheno = (*pheno_value)[0];
     MQMMarkerMatrix newmarkerset;
@@ -106,19 +107,20 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
     ivector succes_ind;
     cvector position = relative_marker_position(nmark,chr);
     vector r = recombination_frequencies(nmark, position, mapdistance);
+    info("First phase");
     mqmaugment((*markers), (*pheno_value)[0], &newmarkerset, &new_y, &new_ind, &succes_ind, nind, augmentednind,  nmark, position, r, max_totalaugment, max_indaugment, neglect_unlikely, crosstype, 1);
     //First round of augmentation, check if there are still individuals we need to do
     int ind_still_left=0;
     int ind_done=0;
     for(int i=0;i<nind0;i++){
-      //info("Ind:%d %d",i,succes_ind[i]);
+      info("Ind:%d %d",i,succes_ind[i]);
       if(succes_ind[i]==0){
         ind_still_left++;
       }else{
         ind_done++;
       }
     }
-    //info("Second part");
+    info("Second part");
     if(ind_still_left){
       //Second round we augment dropped individuals from the first augmentation
       MQMMarkerMatrix left_markerset;
@@ -140,7 +142,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
         }
       }
       mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, 1);
-      info("Done with: %d",current_leftover_ind);
+      info("Augmentation second phase done with %d individuals",current_leftover_ind);
       //Stick them all back into
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+current_leftover_ind);;
       vector new_y_all = newvector((*augmentednind)+current_leftover_ind);
@@ -151,21 +153,18 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
         if(i < (*augmentednind)){
           currentind = new_ind[i];
           currentpheno = new_y[i];
-          info("%d->%d %f",i,currentind,currentpheno);
           for(int j=0;j<nmark;j++){
             newmarkerset_all[j][i] = newmarkerset[j][currentind];
           }          
         }else{
           currentind = ind_done+(i-(*augmentednind));
           currentpheno = left_y[(i-(*augmentednind))];
-          info("%d->%d %f",(i-(*augmentednind)),currentind,currentpheno);
           for(int j=0;j<nmark;j++){
             newmarkerset_all[j][i] = left_markerset[j][(i-(*augmentednind))];
           }
         }
         new_ind_all[i]= currentind;
-        new_y_all[i]= currentpheno;        
-
+        new_y_all[i]= currentpheno;
       }
       //Everything is added together
       //So set them for mqm
@@ -510,7 +509,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
         newNind-= 1;
         iaug= previaug-1;
         succesind[i]=0;
-        if (verbose) info("INFO: Individual %d has been dropped", i);
+        if (verbose) info("Individual %d moved to second augmentation round", i);
       }
       sumprob= 0.0;
       for (int ii=previaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -604,33 +603,37 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
   ivector succes_ind;
+  /*
   if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, &succes_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
+  
+  */
+  if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&NEWPheno,*Nmark,chr,mapdistance,crosstype)){
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
       for (int j=0; j<(*Naug); j++) {
-        NEWPheno[0][j] = new_y[j];
+        //NEWPheno[0][j] = new_y[j];
         NEWIND[0][j] = new_ind[j];
         NEW[i][j] = 9;
-        if (new_markers[i][j] == MAA) {
+        if (markers[i][j] == MAA) {
           NEW[i][j] = 1;
         }
-        if (new_markers[i][j] == MH) {
+        if (markers[i][j] == MH) {
           NEW[i][j] = 2;
         }
-        if (new_markers[i][j] == MBB) {  // [karl:] this might need to be changed for RIL
+        if (markers[i][j] == MBB) {  // [karl:] this might need to be changed for RIL
           crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
         }
-        if (new_markers[i][j] == MNOTAA) {
+        if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
         }
-        if (new_markers[i][j] == MNOTBB) {
+        if (markers[i][j] == MNOTBB) {
           NEW[i][j] = 4;
         }
       }
     }
-    delMQMMarkerMatrix(new_markers,*Nmark);
-    delMQMMarkerMatrix(markers,*Nmark);
+    //delMQMMarkerMatrix(new_markers,*Nmark);
+    //delMQMMarkerMatrix(markers,*Nmark);
     Free(mapdistance);
     Free(position);
     Free(r);
