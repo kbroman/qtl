@@ -40,7 +40,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
                int *Npheno, int *maxind, int *maxiaug, double *minprob, int
                *chromo, int *crosstype, int *verbose);
 
-int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers);               
+int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers, const MQMCrossType crosstype);         
 
 int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix *augmarker, vector *augy,
             ivector* augind, int *Nind, int *Naug, const int Nmark, 
