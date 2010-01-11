@@ -87,7 +87,11 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
         outoflimit = true;
       }
     }
-    info("Individual: %d has %d missing markers, leading to %d augmentations",i,missingmarkers,augind);
+    if(!outoflimit){
+      info("Individual: %d has %d missing markers, leading to %d augmentations",i,missingmarkers,augind);
+    }else{
+      info("Individual: %d has %d missing markers",i,missingmarkers);
+    }
     if(augind>0){
       augtotal+=augind;
     }else{
