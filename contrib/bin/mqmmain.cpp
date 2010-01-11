@@ -448,7 +448,8 @@ int main(int argc,char *argv[]) {
     int augmentednind = mqmalgorithmsettings.nind;
     
     //<dataaugmentation>
-    
+     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
+      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");   
     //int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
     
     //Variables for the returned augmented markers,phenotype,individualmapping
@@ -542,8 +543,7 @@ int main(int argc,char *argv[]) {
    */
    mqmaugmentfull(&markers,&nind,&augmentednind,&INDlist,mqmalgorithmsettings.neglect_unlikely, mqmalgorithmsettings.max_totalaugment, 
    mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,crosstype);
-  info("nind:%d",nind)
-  info("augmentednind:%d",augmentednind)
+
     // Start scanning for QTLs
     double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
