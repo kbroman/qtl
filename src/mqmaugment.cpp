@@ -56,9 +56,7 @@
  */
  
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers, const MQMCrossType crosstype){
-  unsigned long augtotal=0;
   unsigned int augmentationfactor=2;                  //RIL and/or backcross
-  
   if(crosstype == CF2){
     augmentationfactor=3;                             //F2 population
   }
@@ -92,36 +90,33 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
     }else{
       info("Individual: %d has %d missing markers",i,missingmarkers);
     }
-    if(augind>0){
-      augtotal+=augind;
-    }else{
-      augtotal++;
-    }
   }
-  info("Augmentation: %d\n",augtotal)
-  return (augtotal);
+  return 0;
 }
 
 int mqmaugment(const MQMMarkerMatrix marker, const vector y, 
                MQMMarkerMatrix* augmarker, vector *augy, 
-               ivector* augind, int *Nind, int *Naug, const int Nmark, 
+               ivector* augind, ivector* sucind, int *Nind, int *Naug, const int Nmark, 
                const cvector position, vector r, const int maxNaug, 
                const int imaxNaug, const double minprob, 
                const MQMCrossType crosstype, const int verbose) 
 {
   int retvalue = 1;     //[Danny] Assume everything will go right, (it never returned a 1 OK, initialization to 0 and return
   int jj;
+  const int nind0 = *Nind;              //Original number of individuals
   (*Naug) = maxNaug;     // sets and returns the maximum size of augmented dataset
   // new variables sized to maxNaug:
   MQMMarkerMatrix newmarker;
   vector newy;
   MQMMarkerVector imarker;
   ivector newind;
+  ivector succesind;
   
   double minprobratio = 1.0f/minprob;
   newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
+  succesind = newivector(nind0);              // Tracks if the augmentation is a succes
   imarker   = newMQMMarkerVector(Nmark);             
 
   int iaug     = 0;     // iaug keeps track of current augmented individual
@@ -133,11 +128,12 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
   if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Minprob=%f", maxNaug, imaxNaug, minprob);
   // ---- foreach individual create one in the newmarker matrix
-  const int nind0 = *Nind;              //Original number of individuals
+ 
   int newNind = nind0;                  //Number of unique individuals
   int previaug = 0;                     // previous index in newmarkers
   for (int i=0; i<nind0; i++) {
     //Loop through individuals
+    succesind[i] = 1;                   //Assume we succeed in augmentation
     const int dropped = nind0-newNind;  //How many are dropped
     const int iidx = i - dropped;       //Individuals I's new individual number based on dropped individuals
     newind[iaug]   = iidx;              // iidx corrects for dropped individuals
@@ -424,6 +420,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
       if ((iaug-previaug+1)>imaxNaug) {
         newNind-= 1;
         iaug= previaug-1;
+        succesind[i]=0;
         if (verbose) info("INFO: Individual %d has been dropped", i);
       }
       sumprob= 0.0;
@@ -438,6 +435,10 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   *augmarker = newMQMMarkerMatrix(Nmark, *Naug);
   *augy = newvector(*Naug);
   *augind = newivector(*Naug);
+  *sucind = newivector(nind0);
+  for (int i=0; i<nind0; i++) {
+    (*sucind)[i] = succesind[i];
+  }
   for (int i=0; i<(*Naug); i++) {
     (*augy)[i]= newy[i];
     (*augind)[i]= newind[i];
@@ -513,7 +514,8 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   //Calculate positions of markers and Recombinant frequencies
   position = relative_marker_position(*Nmark,chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
-  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
+  ivector succes_ind;
+  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, &succes_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {

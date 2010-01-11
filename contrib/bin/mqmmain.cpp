@@ -449,18 +449,50 @@ int main(int argc,char *argv[]) {
     
     //<dataaugmentation>
     
-    int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
+    //int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
     
     //Variables for the returned augmented markers,phenotype,individualmapping
     MQMMarkerMatrix newmarkerset;
     vector new_y;
     ivector new_ind;
+    ivector succes_ind;
     cvector position = relative_marker_position(mqmalgorithmsettings.nmark,chr);
     vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
       exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
-    mqmaugment(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
+    mqmaugment(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &succes_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
     //Now to set the values we got back into the variables
+    int ind_still_left=0;
+    int ind_done=0;
+    for(int i=0;i<mqmalgorithmsettings.nind;i++){
+      debug_trace("Ind:%d %d",i,succes_ind[i]);
+      if(succes_ind[i]==0){
+        ind_still_left++;
+      }else{
+        ind_done++;
+      }
+    }
+    if(ind_still_left){
+      MQMMarkerMatrix left_markerset;
+      matrix left_y_input = newmatrix(mqmalgorithmsettings.npheno,ind_still_left);
+      vector left_y;
+      ivector left_ind;
+      info("Done with: %d/%d individuals still need to do %d",ind_done,mqmalgorithmsettings.nind,ind_still_left);
+      MQMMarkerMatrix indleftmarkers= newMQMMarkerMatrix(mqmalgorithmsettings.nmark,ind_still_left);
+      int current_leftover_ind=0;
+      for(int i=0;i<mqmalgorithmsettings.nind;i++){
+        if(succes_ind[i]==0){
+          debug_trace("IND %d -> %d",i,current_leftover_ind);
+          left_y_input[phenotype][current_leftover_ind] = pheno_value[phenotype][i];
+          for(int j=0;j<mqmalgorithmsettings.nmark;j++){
+            indleftmarkers[j][current_leftover_ind] = markers[j][i];
+          }
+          current_leftover_ind++;
+        }
+      }
+      mqmaugment(indleftmarkers, pheno_value[phenotype], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, 1, crosstype, 1);
+      
+    }
     pheno_value[phenotype] = new_y;
     INDlist = new_ind;
     markers = newmarkerset;
