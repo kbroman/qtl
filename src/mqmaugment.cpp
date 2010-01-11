@@ -55,21 +55,25 @@
  *
  */
  
-int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers){
+int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers, const MQMCrossType crosstype){
   int augtotal=0;
   int missingmarkers=Nmark*Nind;                //How many markers are missing for this individual
+  int augmentationfactor=2;                     //RIL and/or backcross
+  if(crosstype == CF2){
+    augmentationfactor=3;                       //F2 population
+  }
   for(int i=0; i<Nind; i++) {
     int augind=0;                               //How many times did we augment this individual
     for(int j=0; j<Nmark;j++){
       switch (markers[j][i]) {
         case MMISSING:
-          augind=augind*3;
+          augind=augind*augmentationfactor;
         break;
         case MNOTAA:
-          augind=augind*2;
+          augind=augind*(augmentationfactor-1);
         break;
         case MNOTBB:
-          augind=augind*2;
+          augind=augind*(augmentationfactor-1);
         break;
         default:
           missingmarkers--; //Marker known
