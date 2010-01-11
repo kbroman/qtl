@@ -473,6 +473,7 @@ int main(int argc,char *argv[]) {
       }
     }
     if(ind_still_left){
+      //Second round we dropped individuals in the first augmentation
       MQMMarkerMatrix left_markerset;
       matrix left_y_input = newmatrix(mqmalgorithmsettings.npheno,ind_still_left);
       vector left_y;
@@ -491,15 +492,47 @@ int main(int argc,char *argv[]) {
         }
       }
       mqmaugment(indleftmarkers, pheno_value[phenotype], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, 1, crosstype, 1);
-      
+      info("Done with: %d",current_leftover_ind);
+      //Stick them all back into
+      MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(mqmalgorithmsettings.nmark,augmentednind+current_leftover_ind);;
+      vector new_y_all = newvector(augmentednind+current_leftover_ind);
+      ivector new_ind_all = newivector(augmentednind+current_leftover_ind);;
+      for(int i=0;i<augmentednind+current_leftover_ind;i++){
+        int currentind;
+        double currentpheno;
+        if(i < augmentednind){
+          currentind = new_ind[i];
+          currentpheno = new_y[i];
+          debug_trace("%d->%d",i,currentind);
+          for(int j=0;j<mqmalgorithmsettings.nmark;j++){
+            newmarkerset_all[j][i] = newmarkerset[j][currentind];
+          }          
+        }else{
+          currentind = ind_done+(i-augmentednind);
+          currentpheno = left_y[(i-augmentednind)];
+          debug_trace("%d->%d",(i-augmentednind),currentind);
+          for(int j=0;j<mqmalgorithmsettings.nmark;j++){
+            newmarkerset_all[j][i] = left_markerset[j][(i-augmentednind)];
+          }
+        }
+        new_ind_all[i]= currentind;
+        new_y_all[i]= currentpheno;        
+
+      }
+      pheno_value[phenotype] = new_y_all;
+      INDlist = new_ind_all;
+      markers = newmarkerset_all;
+      augmentednind=augmentednind+current_leftover_ind;
+      nind= nind+current_leftover_ind;
+    }else{
+      pheno_value[phenotype] = new_y;
+      INDlist = new_ind;
+      markers = newmarkerset;
     }
-    pheno_value[phenotype] = new_y;
-    INDlist = new_ind;
-    markers = newmarkerset;
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-/*    
+   
     // Start scanning for QTLs
     double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
@@ -520,7 +553,7 @@ int main(int argc,char *argv[]) {
             fprintf(fout,"%.3f\n",ftruncate3(QTL[0][q]));
       }
     }
- */     
+   
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
     freevector((void *)mapdistance);
