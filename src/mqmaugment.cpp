@@ -57,9 +57,9 @@
  
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers){
   int augtotal=0;
-  int missingmarkers=Nmark*Nind;               //How many markers are missing for this individual
+  int missingmarkers=Nmark*Nind;                //How many markers are missing for this individual
   for(int i=0; i<Nind; i++) {
-    int augind=0;                   //How many times did we augment this individual
+    int augind=0;                               //How many times did we augment this individual
     for(int j=0; j<Nmark;j++){
       switch (markers[j][i]) {
         case MMISSING:
@@ -76,55 +76,16 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
         break;
       }
     }
+    debug_trace("Individual: %d has %d missing markers, leading to %d augmentations\n",i,missingmarkers,augind);
     if(augind>0){
       augtotal+=augind;
     }else{
       augtotal++;
     }
   }
-  //info("Total of %d missing markers. MaxAugmentation: %d",missingmarkers,augtotal)
+  debug_trace("Total of %d missing markers. augmentation: %d\n",missingmarkers,augtotal)
   return (augtotal);
 }
-/*
-MQMMarkerMatrix augindividual(MQMMarkerVector markers,int Nmark){
-  for(int j=0;j<Nmark;j++){
-    switch (markers[j]) {
-      case MMISSING:
-        augind=augind+3;
-      break;
-      case MNOTAA:
-        augind=augind+2;
-      break;
-      case MNOTBB:
-        augind=augind+2;
-      break;
-      default:
-        missingmarkers--; //Marker known
-      break;
-    } 
-  }
-  info("Number of augmentation for individual:%d",augind);
-  MQMMarkerMatrix returnmatrix = newMQMMarkerMatrix(Nmark,augind);
-  for(int j=0;j<Nmark;j++){
-    for(int i=0;i<augind;i++){
-      switch (markers[j]) {
-        case MMISSING:
-          returnmatrix[j][i];
-        break;
-        case MNOTAA:
-          augind=augind+2;
-        break;
-        case MNOTBB:
-          if(i%2==)
-        break;
-        default:
-          returnmatrix[j][i]=matrix[j]
-        break;
-      }    
-    }
-  }
-}
-*/
 
 int mqmaugment(const MQMMarkerMatrix marker, const vector y, 
                MQMMarkerMatrix* augmarker, vector *augy, 
