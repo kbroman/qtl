@@ -39,6 +39,11 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *minprob, int
                *chromo, int *crosstype, int *verbose);
+               
+int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivector* INDlist,
+                  double neglect_unlikely, int max_totalaugment, int max_indaugment,
+                  const matrix* pheno_value,const int nmark,const ivector chr,const vector mapdistance,
+                  const MQMCrossType crosstype);      
 
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers, const MQMCrossType crosstype);         
 

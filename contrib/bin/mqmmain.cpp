@@ -452,6 +452,7 @@ int main(int argc,char *argv[]) {
     //int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
     
     //Variables for the returned augmented markers,phenotype,individualmapping
+    /*
     MQMMarkerMatrix newmarkerset;
     vector new_y;
     ivector new_ind;
@@ -461,7 +462,7 @@ int main(int argc,char *argv[]) {
     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
       exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
     mqmaugment(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &succes_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
-    //Now to set the values we got back into the variables
+    //First round of augmentation, check if there are still individuals we need to do
     int ind_still_left=0;
     int ind_done=0;
     for(int i=0;i<mqmalgorithmsettings.nind;i++){
@@ -473,12 +474,13 @@ int main(int argc,char *argv[]) {
       }
     }
     if(ind_still_left){
-      //Second round we dropped individuals in the first augmentation
+      //Second round we augment dropped individuals from the first augmentation
       MQMMarkerMatrix left_markerset;
       matrix left_y_input = newmatrix(mqmalgorithmsettings.npheno,ind_still_left);
       vector left_y;
       ivector left_ind;
       info("Done with: %d/%d individuals still need to do %d",ind_done,mqmalgorithmsettings.nind,ind_still_left);
+      //Create a new markermatrix for the individuals
       MQMMarkerMatrix indleftmarkers= newMQMMarkerMatrix(mqmalgorithmsettings.nmark,ind_still_left);
       int current_leftover_ind=0;
       for(int i=0;i<mqmalgorithmsettings.nind;i++){
@@ -491,7 +493,7 @@ int main(int argc,char *argv[]) {
           current_leftover_ind++;
         }
       }
-      mqmaugment(indleftmarkers, pheno_value[phenotype], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, 1, crosstype, 1);
+      mqmaugment(indleftmarkers, left_y_input[phenotype], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, 1, crosstype, 1);
       info("Done with: %d",current_leftover_ind);
       //Stick them all back into
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(mqmalgorithmsettings.nmark,augmentednind+current_leftover_ind);;
@@ -503,14 +505,14 @@ int main(int argc,char *argv[]) {
         if(i < augmentednind){
           currentind = new_ind[i];
           currentpheno = new_y[i];
-          debug_trace("%d->%d",i,currentind);
+          info("%d->%d %f",i,currentind,currentpheno);
           for(int j=0;j<mqmalgorithmsettings.nmark;j++){
             newmarkerset_all[j][i] = newmarkerset[j][currentind];
           }          
         }else{
           currentind = ind_done+(i-augmentednind);
           currentpheno = left_y[(i-augmentednind)];
-          debug_trace("%d->%d",(i-augmentednind),currentind);
+          info("%d->%d %f",(i-augmentednind),currentind,currentpheno);
           for(int j=0;j<mqmalgorithmsettings.nmark;j++){
             newmarkerset_all[j][i] = left_markerset[j][(i-augmentednind)];
           }
@@ -519,20 +521,29 @@ int main(int argc,char *argv[]) {
         new_y_all[i]= currentpheno;        
 
       }
+      //Everything is added together
+      //So set them for mqm
       pheno_value[phenotype] = new_y_all;
       INDlist = new_ind_all;
       markers = newmarkerset_all;
       augmentednind=augmentednind+current_leftover_ind;
       nind= nind+current_leftover_ind;
     }else{
+      //We augmented all individuals in the first go so lets use those
       pheno_value[phenotype] = new_y;
       INDlist = new_ind;
       markers = newmarkerset;
     }
+    
+    
     //Cleanup dataaugmentation:
     freevector((void *)position);
     freevector((void *)r);
-   
+   */
+   mqmaugmentfull(&markers,&nind,&augmentednind,&INDlist,mqmalgorithmsettings.neglect_unlikely, mqmalgorithmsettings.max_totalaugment, 
+   mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,crosstype);
+  info("nind:%d",nind)
+  info("augmentednind:%d",augmentednind)
     // Start scanning for QTLs
     double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);

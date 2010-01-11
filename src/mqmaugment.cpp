@@ -94,6 +94,95 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
   return 0;
 }
 
+int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivector* INDlist,
+                  double neglect_unlikely, int max_totalaugment, int max_indaugment,
+                  const matrix* pheno_value,const int nmark,const ivector chr,const vector mapdistance,
+                  const MQMCrossType crosstype){
+    const int nind0 = *nind;
+    const vector originalpheno = (*pheno_value)[0];
+    MQMMarkerMatrix newmarkerset;
+    vector new_y;
+    ivector new_ind;
+    ivector succes_ind;
+    cvector position = relative_marker_position(nmark,chr);
+    vector r = recombination_frequencies(nmark, position, mapdistance);
+    mqmaugment((*markers), (*pheno_value)[0], &newmarkerset, &new_y, &new_ind, &succes_ind, nind, augmentednind,  nmark, position, r, max_totalaugment, max_indaugment, neglect_unlikely, crosstype, 1);
+    //First round of augmentation, check if there are still individuals we need to do
+    int ind_still_left=0;
+    int ind_done=0;
+    for(int i=0;i<nind0;i++){
+      //info("Ind:%d %d",i,succes_ind[i]);
+      if(succes_ind[i]==0){
+        ind_still_left++;
+      }else{
+        ind_done++;
+      }
+    }
+    //info("Second part");
+    if(ind_still_left){
+      //Second round we augment dropped individuals from the first augmentation
+      MQMMarkerMatrix left_markerset;
+      matrix left_y_input = newmatrix(1,ind_still_left);
+      vector left_y;
+      ivector left_ind;
+      info("Done with: %d/%d individuals still need to do %d",ind_done,nind0,ind_still_left);
+      //Create a new markermatrix for the individuals
+      MQMMarkerMatrix indleftmarkers= newMQMMarkerMatrix(nmark,ind_still_left);
+      int current_leftover_ind=0;
+      for(int i=0;i<nind0;i++){
+        if(succes_ind[i]==0){
+          info("IND %d -> %d",i,current_leftover_ind);
+          left_y_input[0][current_leftover_ind] = originalpheno[i];
+          for(int j=0;j<nmark;j++){
+            indleftmarkers[j][current_leftover_ind] = (*markers)[j][i];
+          }
+          current_leftover_ind++;
+        }
+      }
+      mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, 1);
+      info("Done with: %d",current_leftover_ind);
+      //Stick them all back into
+      MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+current_leftover_ind);;
+      vector new_y_all = newvector((*augmentednind)+current_leftover_ind);
+      ivector new_ind_all = newivector((*augmentednind)+current_leftover_ind);;
+      for(int i=0;i<(*augmentednind)+current_leftover_ind;i++){
+        int currentind;
+        double currentpheno;
+        if(i < (*augmentednind)){
+          currentind = new_ind[i];
+          currentpheno = new_y[i];
+          info("%d->%d %f",i,currentind,currentpheno);
+          for(int j=0;j<nmark;j++){
+            newmarkerset_all[j][i] = newmarkerset[j][currentind];
+          }          
+        }else{
+          currentind = ind_done+(i-(*augmentednind));
+          currentpheno = left_y[(i-(*augmentednind))];
+          info("%d->%d %f",(i-(*augmentednind)),currentind,currentpheno);
+          for(int j=0;j<nmark;j++){
+            newmarkerset_all[j][i] = left_markerset[j][(i-(*augmentednind))];
+          }
+        }
+        new_ind_all[i]= currentind;
+        new_y_all[i]= currentpheno;        
+
+      }
+      //Everything is added together
+      //So set them for mqm
+      (*pheno_value)[0] = new_y_all;
+      (*INDlist) = new_ind_all;
+      (*markers) = newmarkerset_all;
+      (*augmentednind)=(*augmentednind)+current_leftover_ind;
+      (*nind)= (*nind)+current_leftover_ind;
+    }else{
+      //We augmented all individuals in the first go so lets use those
+      (*pheno_value)[0] = new_y;
+      (*INDlist) = new_ind;
+      (*markers) = newmarkerset;
+    }
+    return 1;
+}
+
 int mqmaugment(const MQMMarkerMatrix marker, const vector y, 
                MQMMarkerMatrix* augmarker, vector *augy, 
                ivector* augind, ivector* sucind, int *Nind, int *Naug, const int Nmark, 
