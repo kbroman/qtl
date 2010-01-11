@@ -56,31 +56,35 @@
  */
  
 int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers, const MQMCrossType crosstype){
-  int augtotal=0;
-  int augmentationfactor=2;                     //RIL and/or backcross
+  unsigned long augtotal=0;
+  unsigned int augmentationfactor=2;                  //RIL and/or backcross
   
   if(crosstype == CF2){
-    augmentationfactor=3;                       //F2 population
+    augmentationfactor=3;                             //F2 population
   }
   for(int i=0; i<Nind; i++) {
-    int augind=1;                               //How many times did we augment this individual
-    int missingmarkers=0;                //How many markers are missing for this individual
+    unsigned int augind=1;                            //How many times did we augment this individual
+    int missingmarkers=0;                             //How many markers are missing for this individual
+    bool outoflimit = false;
     for(int j=0; j<Nmark;j++){
       switch (markers[j][i]) {
         case MMISSING:
-          augind=augind*augmentationfactor;
+          if(!outoflimit) augind=augind*augmentationfactor;
           missingmarkers++;
         break;
         case MNOTAA:
-          augind=augind*(augmentationfactor-1);
+          if(!outoflimit) augind=augind*(augmentationfactor-1);
           missingmarkers++;
         break;
         case MNOTBB:
-          augind=augind*(augmentationfactor-1);
+          if(!outoflimit) augind=augind*(augmentationfactor-1);
           missingmarkers++;
         break;
         default:
         break;
+      }
+      if(augind >  UINT_MAX/augmentationfactor){
+        outoflimit = true;
       }
     }
     info("Individual: %d has %d missing markers, leading to %d augmentations",i,missingmarkers,augind);
