@@ -116,11 +116,11 @@ genotype A, and one with genotype B. A probability is attached to either
 variant. The combined probabilities of all markers tells us whether a
 combination of variants is likely, or not.
 
-To see an example of missing data with an F2 intercross, we can
+To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{plot.geno} In figure
 \ref{missing data} there are 2\% missing values in white. The other
 colors are genotypes at a certain position, for a certain
-individual. Simulate an F2 dataset with 2\% missing markers as
+individual. Simulate an F$_2$ dataset with 2\% missing markers as
 follows:
 
 \intro{Simulate a dataset with missing data}
@@ -137,9 +137,9 @@ mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 <<fig=TRUE>>=
 geno.image(mycross)
 @
-\caption{Simulate an F2 cross with 2\% missing data starting from the
-map10 F2 intercross. The figure displays genotypes of 100 individuals 
-with around 2\% missing data (white) for the map10 F2 intercross}
+\caption{Simulate an F$_2$ cross with 2\% missing data starting from the
+map10 F$_2$ intercross. The figure displays genotypes of 100 individuals 
+with around 2\% missing data (white) for the map10 F$_2$ intercross}
 \label{missing data}
 \end{figure}
 
@@ -163,7 +163,7 @@ The important parameters are: \code{cross}, \code{pheno.col}, \code{maxaugind}, 
 \code{verbose} (see also the \code{mqmaugment} help page in R). \code{maxaugind} sets the
 maximum number of \emph{augmented} genotypes per individual in a dataset. The
 default of 82 allows six missing markers per individual in a BC, and four in an
-F2. As a result the user has to increase the
+F$_2$. As a result the user has to increase the
 \code{maxaugind} parameter when there are more missing markers. 
 
 The \code{minprob} parameter sets the minimum probability of a genotype for
