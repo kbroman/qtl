@@ -241,8 +241,7 @@ result_no_cofactors <- mqmscan(hyperaug)
 After loading \code{data(hyper)} we create a dataset without missing genotypes using
 the \code{mqmaugment} routine discussed in section \ref{augmentation}.  Next we scan
 for \qtl\ using both \code{scanone} and \code{mqm} routines (using default parameters).
-Figure \ref{NoCofs} shows that with \code{minprob=1.0} there is virtually no
-difference in outcome.
+Figure \ref{NoCofs} shows that with \code{minprob=1.0} the results are similar.
 
 \begin{figure}[p]
 <<fig=TRUE>>=
