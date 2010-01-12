@@ -11,7 +11,7 @@ MQM for R/qtl is based on the original implementation of MQM mapping
 and consists of a three step procedure: (1) data augmentation, (2)
 automatic backward model elimination using genetic markers evenly
 spread over the genome as cofactors and (3) QTL (interval) mapping
-using the most 'informative' model through maximum likelihood. The
+using the most `informative' model through maximum likelihood. The
 method internally controls false discovery rates (FDR) and lets users
 test different QTL models by elimation of non-significant cofactors. 
 
