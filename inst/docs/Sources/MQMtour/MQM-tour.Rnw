@@ -231,8 +231,6 @@ single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to
 \intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment}}
 <<>>=
 data(hyper)
-colors <- c("Black","Green")
-lines <- c(2,1)
 hyperaug <- mqmaugment(hyper, minprob=1.0)
 result_scanone <- scanone(hyper)
 result_no_cofactors <- mqmscan(hyperaug)
@@ -246,7 +244,7 @@ Figure \ref{NoCofs} shows that with \code{minprob=1.0} the results are similar.
 \begin{figure}[p]
 <<fig=TRUE>>=
 # plot scanone/mqm comparison
-plot(result_no_cofactors, result_scanone, col=colors, lwd=lines)
+plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=2:1)
 @
 \caption{\hyperintrocolors. Both routines
 are virtually equal when used without \emph{augmentation} and no extra parameters}
@@ -314,7 +312,7 @@ results against the \mqm\ \qtl\ mapping without cofactors (figure \ref{Cofactor4
 
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result_1, result_scanone, col=colors, lwd=lines)
+plot(result_1, result_scanone, col=c("black","green"), lty=2:1)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactor at chromosome 4 (D4Mit164) accounting for variation explained at that
@@ -341,7 +339,7 @@ result_2 <- mqmscan(hyperaug, cofactorlist)
 <<fig=TRUE>>=
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result_2))
-plot(result_2, result_1, col=colors, lwd=lines)
+plot(result_2, result_1, col=c("black","green"), lty=lines)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactors at chromosomes 1 and 4 there appears only a small difference in the likelihood 
@@ -354,7 +352,7 @@ the second cofactor on chromosome 4. But\ldots (see figure \ref{threewaycomparis
 \begin{figure}[ht]
 <<fig=TRUE>>=
 # plot closeup of threeway comparison
-plot(result_no_cofactors, result_1, result_2,chr=c(1,11,15),col=c("black","red","blue"),lwd=c(3,2,1))
+plot(result_no_cofactors, result_1, result_2,chr=c(1,11,15),col=c("black","red","blue"),lty=c(3,2,1))
 @
 \caption{Three way comparison of the last scans. We see here a closeup of chromosome 1
 scanned using \mqm\ with 3 different cofactor settings: no cofactors (black), 
@@ -434,7 +432,7 @@ name of the significant cofactors.
 \intro{Plot result of MQM backward elimination against that of \code{scanone}}
 \begin{figure}[ht]
 <<fig=TRUE>>=
-plot(result, result_scanone, col=colors, lwd=lines)
+plot(result, result_scanone, col=c("black","green"), lty=2:1)
 @
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for \mqm\, followed by backward elimination
