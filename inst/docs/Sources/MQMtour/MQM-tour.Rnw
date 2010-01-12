@@ -138,8 +138,8 @@ mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 geno.image(mycross)
 @
 \caption{Simulate an F$_2$ cross with 2\% missing data starting from the
-map10 F$_2$ intercross. The figure displays genotypes of 100 individuals 
-with around 2\% missing data (white) for the map10 F$_2$ intercross}
+\code{map10} F$_2$ intercross. The figure displays genotypes of 100 individuals 
+with around 2\% missing data (white) for the \code{map10} F$_2$ intercross}
 \label{missing data}
 \end{figure}
 
@@ -208,8 +208,8 @@ Try augmentation with \code{minprob=0.1} (figure \ref{augment2}):
 augmentedcross <- mqmaugment(mycross, minprob=0.1)
 plot.geno(augmentedcross)
 @
-\caption{\code{plot.geno} displays the \emph{augmented} genotypes of 100 individuals. There are a total of 340 `expanded' individuals in this plot, because \mqm\ 
-fills in missing markers with all likely genotypes (an average expansion of 3.4 per
+\caption{\code{plot.geno} displays the \emph{augmented} genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} `expanded' individuals in this plot, because \mqm\ 
+fills in missing markers with all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(mycross),1)} per
 individual)}
 \label{augment2}
 \end{figure}
@@ -220,9 +220,9 @@ individual)}
 
 \label{QTL modelling}
 
-The famous mouse hypertension dataset, which comes standard with
+The famous mouse hypertension dataset\cite{sugiyama}, which comes standard with
 R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
-bloodpressure (bp) and sex. Here we show an example of running both \code{scanone}
+blood pressure (bp) and sex. Here we show an example of running both \code{scanone}
 single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to map
 \qtl\ for blood pressure. First, \emph{complete} missing data:
 
@@ -403,7 +403,7 @@ until a limited number of significant cofactors is left.
 After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set a cofactor at every fifth
 marker using \code{mqmsetcofactors}, and assess which chromosomes may be implicated in
-high bloodpressure (results in figures \ref{Backward1} and \ref{Backward2}):
+high blood pressure (results in figures \ref{Backward1} and \ref{Backward2}):
 
 \intro{Automatic cofactor selection through backward elimination}
 <<>>=
@@ -537,7 +537,7 @@ plot.pxg(hyperaug,marker="D1Mit102")
 \label{MainEffectsD1}
 \end{figure}
 
-The initial scans for high bloodpressure in figure \ref{Backward1}
+The initial scans for high blood pressure in figure \ref{Backward1}
 possibly show two \qtl\ on chromosome 1. The dual humped shape 
 might be explained by an interaction between two QTL. 
 We 
@@ -827,13 +827,13 @@ mqmplot_circle(multiloc,resall, highlight=2)
 		\emph{A brief tour of R/qtl}
 		http://www.rqtl.org, R/qtl tutorials.
   \bibitem{rqtlbook}
-    Karl W. Bromand and Saunak Sen.	  	  
+    Karl W. Broman and Saunak Sen.	  	  
 	  \emph{A Guide to QTL Mapping with R/qtl}
     Springer, 2009
 	\bibitem{broman03}
 		Broman, K.W.; Wu, H.; Sen, S.; Churchill, G.A.; 2003.
 		\emph{R/qtl: QTL mapping in experimental crosses}
-		Bioinformatics, 19:889-890.
+		Bioinformatics, 19:889--890.
 	\bibitem{jansen07}
 		Jansen R. C.; 2007.
 		\emph{Chapter 18 - Quantitative trait loci in inbred lines} 
@@ -848,35 +848,41 @@ mqmplot_circle(multiloc,resall, highlight=2)
 	\bibitem{jansen01}	
 		Jansen R. C.; Nap J.P.; 2001
 		\emph{Genetical genomics: the added value from segregation}
-		Trends in Genetics, 17, 388-391.
+		Trends in Genetics, 17, 388--391.
 	\bibitem{jansen94}		
 		Jansen R. C.; Stam P.; 1994
 		\emph{High resolution of quantitative traits into multiple loci via interval mapping}
-		Genetics, 136, 1447-1455. 
+		Genetics, 136, 1447--1455. 
   \bibitem{jansen94b}
 	  Jansen R.C.
 		\emph{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}.
-    Genetics, Vol 138, 871-881
+    Genetics, Vol 138, 871--881
 	\bibitem{Churchill94}
 		Churchill, G. A.; and Doerge, R. W.; 1994
 		\emph{Empirical threshold values for quantitative trait mapping}
-		Genetics 138, 963-971. 
+		Genetics 138, 963--971. 
 	\bibitem{jansen93}
 		Jansen R. C.; 1993
 		\emph{Interval mapping of multiple quantitative trait loci}
-		Genetics, 135, 205-211.
+		Genetics, 135, 205--211.
 	\bibitem{Dempster77}
 		Dempster, A. P.; Laird, N. M. and Rubin, D. B.; 1977 
 		\emph{Maximum likelihood from incomplete data via the EM algorithm}
-		J. Roy. Statist. Soc. B, 39, 1-38.
+		J. Roy. Statist. Soc. B, 39, 1--38.
   \bibitem{CIMa}
          Zeng, Z. B.; 1993 \emph{Theoretical basis for separation of
            multiple linked gene effects in mapping quantitative trait
-           loci} Proc. Natl. Acad. Sci. USA, 90, 10972-10976.
+           loci} Proc. Natl. Acad. Sci. USA, 90, 10972--10976.
   \bibitem{CIMb}
          Zeng, Z. B.; 1994 \emph{Precision mapping of quantitative
            trait loci.}
-         Genetics, 136, 1457-1468
-         
+         Genetics, 136, 1457--1468
+
+  \bibitem{sugiyama}
+    Sugiyama, F.; Churchill, G.A.; Higgins, D.C.; Johns, C.;
+    Makaritsis, K.P.; Gavras, H.; Paigen, B.; 2001. \emph{Concordance
+      of murine quantitative trait loci for salt-induced hypertension
+      with rat and human loci} Genomics, 71, 70--77. 
+
 \end{thebibliography}
 \end{document}
