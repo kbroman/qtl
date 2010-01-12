@@ -339,7 +339,7 @@ result_2 <- mqmscan(hyperaug, cofactorlist)
 <<fig=TRUE>>=
 op <- par(mfrow = c(2,1))
 plot(mqmgetmodel(result_2))
-plot(result_2, result_1, col=c("black","green"), lty=lines)
+plot(result_2, result_1, col=c("black","green"), lty=2:1)
 @
 \caption{\hyperintrocolors, after introducing a
 cofactors at chromosomes 1 and 4 there appears only a small difference in the likelihood 
