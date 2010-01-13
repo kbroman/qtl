@@ -31,8 +31,8 @@
 
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
-\newcommand{\hyperintrocolors}{ \qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
-single \qtl\ mapping with \code{scanone} (green, dashed)}
+\newcommand{\hyperintrocolors}{\qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
+single \qtl\ mapping with \code{scanone} (green, dashed) }
 \newcommand{\Atintro}{\At\ RIL mQTL dataset with 24 metabolites as phenotypes}
 
 \title { Tutorial - Multiple QTL Model (MQM) Analysis }
@@ -453,7 +453,10 @@ unsupervised backward elimination, which is described in the next section.
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
 setting cofactors beforehand. When the sample size allows, it a 
 cofactor is set at every marker. However, normally only a subset of 
-locations is of interest. The \code{cofactor} function creates
+locations is used.  The \code{mqmsetcofactor} function 
+{\color{red} \textbf{[I'm confused.  It had said ``The \code{cofactor}
+    function...'' (I think).]}}
+creates
 a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
 markers and drops the least informative from the model. This step is repeated
 until a limited number of significant cofactors is left.
@@ -466,33 +469,48 @@ high blood pressure (results in Figures~\ref{Backward1} and \ref{Backward2}):
 \intro{Automatic cofactor selection through backward elimination}
 <<>>=
 cofactorlist <- mqmsetcofactors(hyperaug,5)
-result <- mqmscan(hyperaug, cofactorlist, plot=T)
+result <- mqmscan(hyperaug, cofactorlist)
 @
-\begin{figure}[ht]
-<<fig=TRUE>>=
-# plot result of cofactor backward elimination
-op <- par(mfrow = c(2,1))
+
+We plot the results as follows.
+<<Backward1,eval=FALSE>>=
+par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot result of cofactor backward elimination
+<<Backward1>>
 @
 \caption{\hyperintro, after introducing cofactors at every fifth marker and
-backward elimination\label{Backward1}}
+backward elimination.\label{Backward1}}
 \end{figure}
 <<>>=
 mqmgetmodel(result)
 @
 
-The \code{mqmgetmodel} function returns the final model from the resulting \code{scanone} type
-object.  This model can be used with the \code{scantwo} routine from R/qtl. \code{mqmgetmodel}
+The \code{mqmgetmodel} function returns the final model from the
+output of \code{mqmscan}.
+This model can also be used with the \code{scantwo} routine from R/qtl. 
+{\color{red} \textbf{[I don't understand this.  It's not really for
+\code{scantwo} but rather for \code{fitqtl}, right?]}}
+\code{mqmgetmodel}
 can only be used after backward elimination as it requires a list of
 cofactors. The resulting model can also be used to obtain the location and
 name of the significant cofactors.
 
-\clearpage
 \intro{Plot result of MQM backward elimination against that of \code{scanone}}
-\begin{figure}[ht]
-<<fig=TRUE>>=
-plot(result, result_scanone, col=c("black","green"), lty=2:1)
+
+We plot the results along with those from \code{scanone} as follows.
+<<Backward2,eval=FALSE>>=
+plot(result, result_scanone, col=c("black","green"), lty=1:2)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+<<Backward2>>
 @
 \caption{\hyperintrocolors with cofactors at every fifth
 marker for \mqm\, followed by backward elimination
@@ -504,21 +522,25 @@ hits on each chromosome. Figure~\ref{Backward2} shows that at
 \code{cofactor.significance=0.02} chromosomes 1,2,4,5,6 and 15(?) are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes preferred, but in general a simpler 
-model is more easily understood and, perhaps, validated. Increasing 
-this significance level (hopefully) has the advantage 
+model is more easily understood and, perhaps, validated. Decreasing
+the significance level has the advantage 
 that we can be more sure of the \qtl. 
 
-\intro{Plot with lowered \code{cofactor.significance}}
-\begin{figure}[ht]
-<<fig=TRUE>>=
+<<FigLowAlpha,eval=FALSE>>=
 result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
-op <- par(mfrow = c(2,1))
+par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
+@ 
+
+\intro{Plot with lowered \code{cofactor.significance}}
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+<<FigLowAlpha>>
 @
 \caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination (\code{cofactor.significance = 0.002}).\label{FigLowAlpha}}
 \end{figure}
-\clearpage
 
 When comparing the \mqm\ scan in Figure~\ref{FigLowAlpha} with the original
 \code{scanone} result in Figure~\ref{NoCofs} there are some notable differences.
@@ -526,26 +548,32 @@ Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
-Figures can be reconstructed from the result (\code{scanone} object) using the
+Figures can be reconstructed from the result of \code{mqmscan} using the
 \code{mqmplot\_one} function (see, for example, Figure~\ref{AutoCofactor}). Here the
 model and \qtl\ profile are retrieved.  These functions can only be used with
-\code{mqmcan}, as they have an additional column \code{mqm} which contains the \qtl\
-model.  This extra column/list also contains the \emph{estimated} information
+\code{mqmscan}, as they require the additional information about the inferred \qtl\
+model.  The results also contain the \emph{estimated} information
 content per marker.  
 
-The column \code{mqm} is calculated from the deviation of the \emph{ideal} marker
+<<AutoCofactor,eval=FALSE>>=
+mqmplot_one(result, extended=TRUE)
+@ 
+
+The column \code{mqm} 
+{\color{red} \textbf{[What column?]}}
+is calculated from the deviation of the \emph{ideal} marker
 distribution. For example, with a dataset of 100 mice, when comparing two
 distinct phenotypes at a marker location, we have most power when both groups
-are equally divided into 50 mice, and, virtually, no power when we have one
+are equally divided into 50 mice, and virtually no power when we have one
 mouse versus a group of 49 mice. We can multiply the estimated \qtl\ effect by
 this information content to `clean' the QTL profile by giving less weight to
-less informative markers. Please note that in the sample size already plays a
+less informative markers. Please note that the sample size already plays a
 role in calculating \qtl. Meanwhile it allows (informal) further
 weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
-mqmplot_one(result, extended=TRUE)
+<<AutoCofactor>>
 @
 \caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot\_one} function
 shows retained information in \code{result} with added weighting of information at
@@ -561,7 +589,7 @@ plotting function adds the sign of the effect to the LOD score of the marker
 and calls the standard R/qtl plotting functions. An example can be found in
 Figure~\ref{QTLeffects}.
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 dirresults <- mqmplot_directedqtl(hyperaug,result)
 @
@@ -579,7 +607,7 @@ significance, based on mathematical distributions used by \mqm\ (a better
 method, based on permutations, is discussed in section \ref{significance}). 
 
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE, results=hide>>=
 plot.pxg(hyperaug,marker="D1Mit102")
 @
@@ -596,7 +624,7 @@ interaction we select markers "D1Mit19" (significant in Figure~\ref{Backward1})
 and "D1Mit102" (significant in Figure~\ref{Backward2} and
 \ref{AutoCofactor}). See Figure~\ref{epistatic1}.
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 @
@@ -609,7 +637,7 @@ chromosome 1 and 5, we could make interaction plots between the two
 markers with a high LOD score on those chromosomes by using the effect
 plot. See Figure~\ref{epistatic2}.
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 @
@@ -655,7 +683,7 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
 require(snow)
 results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
 @
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 mqmplot_permutations(results)
 @
@@ -736,7 +764,7 @@ data(multitrait)
 multifilled <- fill.geno(multitrait)
 resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
 @
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 mqmplot_multitrait(resall,"I")
 @
@@ -749,7 +777,7 @@ the x-axis the marker number and on the y-axis the metabolite\label{At.heatmap1}
 cofactorlist <- mqmsetcofactors(multifilled,3)
 resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.clusters=2)
 @
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 mqmplot_multitrait(resall,"I")
 @
@@ -764,7 +792,7 @@ show in the generated PDF, but in R it shows the trait profiles)
 mqmplot_nice(resall,legendloc=1)
 @
 
-% \begin{figure}[ht]
+% \begin{figure}
 % <<fig=TRUE>>=
 % mqmplot_nice(resall,legendloc=1)
 % @
@@ -780,7 +808,7 @@ highlighted trait.
 \FIXME Multiple traits show \qtl\ outside the chromosome
 (solid colored squares)
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 mqmplot_circle(multifilled, resall)
 @
@@ -788,7 +816,7 @@ mqmplot_circle(multifilled, resall)
 connected by a colored spline to their QTL locations}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 mqmplot_circle(multifilled, resall, highlight=2)
 @
@@ -807,7 +835,7 @@ The two axis of the cistrans plot both show the genetic location. The x-axis
 is, normally, the \qtl\ location and the y-axis the locations of the trait
 (e.g. a the microarray probe).
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
@@ -821,7 +849,7 @@ genome they were measured (here mQTL for \At), cutoff is at a lod score of 5}
 When having locations we can, again, use the \code{mqmplot\_circle} function, now with 
 the extra information.
 
-\begin{figure}[ht]
+\begin{figure}
 <<fig=TRUE>>=
 mqmplot_circle(multiloc,resall, highlight=2)
 @
