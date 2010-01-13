@@ -27,7 +27,7 @@ MQM for R/qtl is based on the original implementation of MQM mapping
 and consists of a three step procedure: (1) data augmentation, (2)
 automatic backward model elimination using genetic markers evenly
 spread over the genome as cofactors and (3) QTL (interval) mapping
-using the most 'informative' model through maximum likelihood. The
+using the most `informative' model through maximum likelihood. The
 method internally controls false discovery rates (FDR) and lets users
 test different QTL models by elimation of non-significant cofactors. 
 
@@ -35,12 +35,12 @@ test different QTL models by elimation of non-significant cofactors.
 % \input{"inst/docs/Sources/MQM/mqm/advantages.txt"}
 R/qtl-MQM has the following advantages
 
-\itemize{
+\begin{itemize}
   \item Higher power, as long as the QTL explain a reasonable amount of variation
   \item Protection against overfitting, because it uses the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
   \item Prevention of ghost QTL (between two QTL in coupling phase)
   \item Detection of negating QTL (QTL in repulsion phase)
-}
+\end{itemize}
 
 % -----^^ inst/docs/Sources/MQM/mqm/advantages.txt ^^-----
 }
