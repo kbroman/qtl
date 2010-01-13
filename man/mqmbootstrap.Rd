@@ -62,7 +62,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \seealso{
 	\itemize{
-% \input{"inst/docs/mqm/standard_seealso.txt"}
+% \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
@@ -70,7 +70,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
-% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
+% -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
 }
 
@@ -93,14 +93,16 @@ summary(f2perm)						#Get Significant LOD thresholds
 }
 
 \references{
-% \input{"inst/docs/mqm/significance_references.txt"}
+\itemize{
+% \input{"inst/docs/Sources/MQM/mqm/significance_references.txt"}
     \item Bruno M. Tesson, Ritsert C. Jansen (2009) Chapter 3.7. Determining the significance threshold \emph{eQTL Analysis in Mice and Rats} \bold{1}, 20--25
 		\item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
-% -----^^ inst/docs/mqm/significance_references.txt ^^-----
-% \input{"inst/docs/mqm/parallelisation_references.txt"}
+% -----^^ inst/docs/Sources/MQM/mqm/significance_references.txt ^^-----
+% \input{"inst/docs/Sources/MQM/mqm/parallelisation_references.txt"}
 		\item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
 		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
-% -----^^ inst/docs/mqm/parallelisation_references.txt ^^-----
+% -----^^ inst/docs/Sources/MQM/mqm/parallelisation_references.txt ^^-----
+}
 }
 
 \keyword{ models }
