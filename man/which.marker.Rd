@@ -26,7 +26,7 @@
 
 \examples{
 data(hyper)
-mar <- find.markerpos(hyper, 4, 30)
+mar <- find.marker(hyper, 4, 30)
 which.marker(hyper, mar)
 }
 
