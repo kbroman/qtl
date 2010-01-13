@@ -32,13 +32,15 @@ method internally controls false discovery rates (FDR) and lets users
 test different QTL models by elimation of non-significant cofactors. 
 
 % -----^^ inst/docs/Sources/MQM/mqm/description.txt ^^-----
-% \input{"inst/docs/Sources/MQM/mqm/advantages.txt"}
+% \input{"inst/docs/Sources/MQM/mqm/advantages_Rd.txt"}
+R/qtl-MQM has the following advantages:
+
+\itemize{
   \item Higher power, as long as the QTL explain a reasonable amount of variation
   \item Protection against overfitting, because it uses the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
   \item Prevention of ghost QTL (between two QTL in coupling phase)
-  \item Detection of negating QTL (QTL in repulsion phase)
-
-% -----^^ inst/docs/Sources/MQM/mqm/advantages.txt ^^-----
+  \item Detection of negating QTL (QTL in repulsion phase)}
+% -----^^ inst/docs/Sources/MQM/mqm/advantages_Rd.txt ^^-----
 }
 
 \author{
@@ -97,6 +99,7 @@ lodint(result,chr=3)
 }
 
 \references{
+\itemize{
 % \input{"inst/docs/Sources/MQM/mqm/standard_references.txt"}
 		\item Jansen RC, (2007) Quantitative trait loci in inbred lines. Chapter 18 of \emph{Handbook of Stat. Genetics} 3rd edition. John Wiley & Sons, Ltd.
 		\item Jansen RC, Nap JP (2001), Genetical genomics: the added value from segregation. \emph{Trends in Genetics}, \bold{17}, 388--391.
@@ -106,6 +109,7 @@ lodint(result,chr=3)
 		\item Dempster, A. P., Laird, N. M. and Rubin, D. B. (1977) Maximum likelihood from incomplete data via the EM algorithm.  \emph{J. Roy. Statist. Soc.} B, \bold{39}, 1--38.
 
 % -----^^ inst/docs/Sources/MQM/mqm/standard_references.txt ^^-----
+}
 }
 
 \keyword{models}
