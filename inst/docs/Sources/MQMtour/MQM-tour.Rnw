@@ -133,9 +133,15 @@ library(qtl)
 data(map10)
 mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 @
-\begin{figure}[ht]
-<<fig=TRUE>>=
+
+We plot the genotype data using \code{geno.image}, as follows.
+<<missingdata,eval=FALSE>>=
 geno.image(mycross)
+@ 
+
+\begin{figure}[ht]
+<<fig=TRUE,echo=FALSE>>=
+<<missingdata>>
 @
 \caption{Genotype data for a simulated F$_2$ intercross with 100
   individuals and 2\% missing data.  White pixels indicate missing genotypes.\label{missing data}}
@@ -176,16 +182,20 @@ augmentation behave similar to \code{fill.geno}'s imputation method.}.  Use the 
 option to get more feedback on the augmentation routine and check how many
 individuals are dropped. So first we try augmentation with \code{minprob=1.0} (Figure~\ref{augment1}):
 
-\intro{Plot augmented data using \code{plot.geno} with \code{minprob=1.0}}
+\intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
 <<>>=
 # displays warning because MQM ignores the X chromosome in an F2
 augmentedcross <- mqmaugment(mycross, minprob=1.0)
 @
+We may then plot the genotype data as follows.
+<<augment1,eval=FALSE>>=
+geno.image(augmentedcross)
+@ 
 \begin{figure}[ht]
-<<fig=TRUE>>=
-plot.geno(augmentedcross)
+<<fig=TRUE,echo=FALSE>>=
+<<augment1>>
 @
-\caption{\code{plot.geno} displays the genotypes of 100 filled individuals
+\caption{Genotypes, as visualized with \code{geno.image}, of 100 filled individuals
 (\code{mqmaugment} with \code{minprob=1} means only the `most likely' individual is
 used and
 no real expansion of the dataset takes place, similar to \code{fill.geno})\label{augment1}}
@@ -199,13 +209,20 @@ the augmented dataset can only be used with \mqm\ functions.  \mqm\ functions
 recognise expanded individuals as single entities.  Other R/qtl functions, like
 \code{scanone}, assume the augmented individuals are \emph{real} individuals}.
 Try augmentation with \code{minprob=0.1} (Figure~\ref{augment2}):
+<<>>=
+augmentedcross <- mqmaugment(mycross, minprob=0.1)
+@ 
+
+We may again plot the genotype data as follows.
+<<augment2,eval=FALSE>>=
+geno.image(augmentedcross)
+@ 
 
 \begin{figure}[ht]
-<<fig=TRUE>>=
-augmentedcross <- mqmaugment(mycross, minprob=0.1)
-plot.geno(augmentedcross)
+<<fig=TRUE,echo=FALSE>>=
+<<augment2>>
 @
-\caption{\code{plot.geno} displays the \emph{augmented} genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} `expanded' individuals in this plot, because \mqm\ 
+\caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented} genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} `expanded' individuals in this plot, because \mqm\ 
 fills in missing markers with all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(mycross),1)} per
 individual)\label{augment2}}
 \end{figure}
@@ -216,7 +233,7 @@ individual)\label{augment2}}
 
 \label{QTL modelling}
 
-The famous mouse hypertension dataset\cite{sugiyama}, which comes standard with
+The famous mouse hypertension dataset\cite{sugiyama}, which is distributed with
 R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
 blood pressure (bp) and sex. Here we show an example of running both \code{scanone}
 single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to map
@@ -228,19 +245,32 @@ single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to
 <<>>=
 data(hyper)
 hyperaug <- mqmaugment(hyper, minprob=1.0)
-result_scanone <- scanone(hyper)
 result_no_cofactors <- mqmscan(hyperaug)
 @
 
-After loading \code{data(hyper)} we create a dataset without missing genotypes using
-the \code{mqmaugment} routine discussed in section \ref{augmentation}.  Next we scan
-for \qtl\ using both \code{scanone} and \code{mqm} routines (using default parameters).
-Figure~\ref{NoCofs} shows that with \code{minprob=1.0} the results are similar.
+After loading the dataset via \code{data(hyper)},  we create a dataset without missing genotypes using
+the \code{mqmaugment} routine discussed in section \ref{augmentation}.
+Next we scan
+for \qtl\ using the \code{mqm} routines (using default parameters).
+
+We will compare these results to those from \code{scanone}, for which
+one would first calculate conditional QTL genotype probabilities via
+\code{calc.genoprob}.  
+<<>>=
+hyper <- calc.genoprob(hyper, step=5)
+result_scanone <- scanone(hyper)
+@
+
+We plot the results as follows.
+<<NoCofs,eval=FALSE>>=
+plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
+@ 
+As seen in Figure~\ref{NoCofs}, with \code{minprob=1.0}, the results are similar.
 
 \begin{figure}[p]
-<<fig=TRUE>>=
+<<fig=TRUE,echo=FALSE>>=
 # plot scanone/mqm comparison
-plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=2:1)
+<<NoCofs>>
 @
 \caption{\hyperintrocolors. Both routines
 are virtually equal when used without \emph{augmentation} and no extra parameters\label{NoCofs}}
