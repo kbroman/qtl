@@ -49,7 +49,7 @@ single \qtl\ mapping with \code{scanone} (green, dashed) }
 
 \vspace{0.3in}
 
-\input{mqm/advantages.txt}
+\input{mqm/advantages_latex.txt}
 
 \input{mqm/limitations.txt}
 
@@ -582,76 +582,78 @@ marker positions\label{AutoCofactor}}
 
 \section{MQM effect plots}
 
-Effects can be add to plots using \code{mqmplot\_directedqtl}, which requires
-setting \code{outputmarkers=TRUE} with \code{mqmscan} (default).  To remove plotting the
-virtual markers introduced by \mqm\ use \code{mqmextractmarkers(result)}. The
-plotting function adds the sign of the effect to the LOD score of the marker
-and calls the standard R/qtl plotting functions. An example can be found in
-Figure~\ref{QTLeffects}.
+The function \code{mqmplot\_directedqtl} may be used to plot LOD
+curves with an indication of the sign of the estimated QTL effects.
+This requires that \code{mqmscan} was run with
+\code{outputmarkers=TRUE}, but that is the default.  For example:
+<<QTLeffects,eval=FALSE>>=
+dirresults <- mqmplot_directedqtl(hyperaug,result)
+@ 
+The output is in Figure~\ref{QTLeffects}.
 
 \begin{figure}
-<<fig=TRUE>>=
-dirresults <- mqmplot_directedqtl(hyperaug,result)
+<<fig=TRUE,echo=FALSE,height=3.5>>=
+<<QTLeffects>>
 @
-\caption{Same as Figure~\ref{AutoCofactor}, but with effect sign 
-added to the QTL profile.\label{QTLeffects}}
+\caption{Same as Figure~\ref{AutoCofactor}, but with LOD scores
+  multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
 \end{figure}
 
-Earlier Figure~\ref{FigLowAlpha} implied that chromosomes 1, 2, 4 and 5 are
-associated with high blood pressure. If we want to investigate the effect we
-can use \rqtl's standard plotting tools to visualize \emph{main\/} and/or \emph{epistatic\/}
-effects. The following plots show these for markers "D1Mit102" (main effect,
-Figure~\ref{MainEffectsD1}) and the interaction between "D1Mit102" and
-"D5Mit213" (Figure~\ref{epistatic1}). These markers are selected chosen for
-significance, based on mathematical distributions used by \mqm\ (a better
-method, based on permutations, is discussed in section \ref{significance}). 
+The results in Figure~\ref{FigLowAlpha} implied that QTL on chromosomes 1, 2, 4 and 5 are
+associated with blood pressure. If we want to investigate the effects
+of the QTL, we
+can use the functions \code{plot.pxg} and \code{effectplot}.
+The following plots show these for markers D1Mit102 (main effect,
+Figure~\ref{MainEffectsD1}) and the interaction between D1Mit102 and
+D5Mit213 (Figure~\ref{epistatic1}). 
 
+<<MainEffectsD1,eval=FALSE>>=
+plot.pxg(hyperaug,marker="D1Mit102")
+@ 
 
 \begin{figure}
-<<fig=TRUE, results=hide>>=
-plot.pxg(hyperaug,marker="D1Mit102")
+<<fig=TRUE, echo=FALSE,height=3>>=
+<<MainEffectsD1>>
 @
 \caption{\hyperintro. Show effect of marker D1Mit102 using \code{plot.pgx}\label{MainEffectsD1}}
 \end{figure}
 
 The initial scans for high blood pressure in Figure~\ref{Backward1}
-possibly show two \qtl\ on chromosome 1. The dual humped shape 
-might be explained by an interaction between two QTL. 
-We 
-can find out if there is an interaction on chromosome 
-1 by using the \code{effectplot} function. To investigate the possible 
-interaction we select markers "D1Mit19" (significant in Figure~\ref{Backward1}) 
-and "D1Mit102" (significant in Figure~\ref{Backward2} and
+possibly show two \qtl\ on chromosome 1 (as there were two peaks in
+the LOD curve).  We 
+can investigate possible interactions between these putative QTL
+using the \code{effectplot} function. To investigate the possible 
+interaction we select markers D1Mit19 (significant in Figure~\ref{Backward1}) 
+and D1Mit102 (significant in Figure~\ref{Backward2} and
 \ref{AutoCofactor}). See Figure~\ref{epistatic1}.
+<<epistatic1,eval=FALSE>>=
+effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
+@ 
 
 \begin{figure}
-<<fig=TRUE>>=
-effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
+<<fig=TRUE,echo=FALSE,height=3.5>>=
+<<epistatic1>>
 @
 \caption{\hyperintro. \code{effectplot} shows possible small epistatic effects between
 markers D1Mit19 and D1Mit102\label{epistatic1}}
 \end{figure}
 
 Likewise, in case we are interested in the interactions between
-chromosome 1 and 5, we could make interaction plots between the two
-markers with a high LOD score on those chromosomes by using the effect
-plot. See Figure~\ref{epistatic2}.
+chromosomes 1 and 5, we could make interaction plots between the two
+markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}.
+<<epistatic2,eval=FALSE>>=
+effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
+@ 
+Figure~\ref{epistatic2} shows little evidence for an interaction between
+the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
 
 \begin{figure}
-<<fig=TRUE>>=
-effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
+<<fig=TRUE,echo=FALSE,height=3.5>>=
+<<epistatic2>>
 @
-\caption{\hyperintro. \code{effectplot} shows an epistatic effect between markers D1Mit102 and D5Mit213\label{epistatic2}}
+\caption{\hyperintro. \code{effectplot} shows little evidence for an
+  epistatic interaction between markers D1Mit102 and D5Mit213\label{epistatic2}}
 \end{figure}
-
-Figure~\ref{epistatic1} shows some possible evidence for an interaction between
-the two markers D1Mit102 and D5Mit213, as both lines are non parallel. The two
-loci `x' and `y' influence the trait in a significant way (because they were
-selected as cofactors by \mqm). If the effect shows two parallel lines the
-effect of both loci would be independent of one another. I.e. there is no
-significant interaction between x and y.  Interactions like these are prime
-wetlab candidates, and, perhaps, tell us something about the biology behind the
-\qtl.
 
 \clearpage
 
