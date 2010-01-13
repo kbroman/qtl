@@ -28,6 +28,7 @@
  **********************************************************************/
 
 #include "mqm.h"
+#include "simulate.h"
 
 /*
  * Augment/expand the dataset by adding additional (likely) genotypes.
@@ -96,29 +97,29 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
 
 
 MQMMarker randommarker(const MQMCrossType crosstype){
-  int randnum;
+  double randnum;
   switch (crosstype) {
     case CF2:
-      randnum = 3*rand();
-      if(randnum == 1){
+      randnum = 3*((double)rand()/(double)RAND_MAX);
+      if(randnum <= 1){
         return MAA;
       }
-      if(randnum == 2){
+      if(randnum <= 2){
         return MH;
       }
       return MBB;
     break;
     case CBC:
-      randnum = 2*rand();    
-      if(randnum == 1){
+      randnum = 2*((double)rand()/(double)RAND_MAX);   
+      if(randnum <= 1){
         return MAA;
       }else{
         return MH;
       }
     break;
     case CRIL:
-      randnum = 2*rand();    
-      if(randnum == 1){
+      randnum = 2*((double)rand()/(double)RAND_MAX);    
+      if(randnum <= 1){
         return MAA;
       }else{
         return MBB;
@@ -181,7 +182,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, 1);
       info("Augmentation second phase done with %d individuals",current_leftover_ind);
       //Stick them all back into
-      int numimputations=8;
+      int numimputations=64;
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+numimputations*current_leftover_ind);;
       vector new_y_all = newvector((*augmentednind)+numimputations*current_leftover_ind);
       ivector new_ind_all = newivector((*augmentednind)+numimputations*current_leftover_ind);;
@@ -210,11 +211,16 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
                 newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
               }else{
                 // Imputation of less likely genotypes at 1 ... max_indaugment
-                //newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
-                if(indleftmarkers[j][(i-(*augmentednind))]==MMISSING){
+                newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
+                if(indleftmarkers[j][(i-(*augmentednind))]==MMISSING && position[j] == MLEFT){
                   newmarkerset_all[j][newindex] = randommarker(crosstype);
                 }else{
-                  newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
+                  double randnum = ((double)rand()/((double)RAND_MAX+(double)1));
+                  if(randnum <= r[j]){
+                    newmarkerset_all[j][newindex] = randommarker(crosstype);
+                  }else{
+                    newmarkerset_all[j][newindex] = newmarkerset_all[j-1][newindex];
+                  }
                 }
               }
             }
