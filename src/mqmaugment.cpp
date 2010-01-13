@@ -501,7 +501,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   const int verbose = *verbosep;
   const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
-  info("Starting C-part of the data augmentation routine");
+  if(verbose) info("Starting C-part of the data augmentation routine");
   ivector new_ind;
   vector new_y, mapdistance;
   cvector position;
@@ -527,7 +527,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, crosstype);
 
-  info("Filling the chromosome matrix");
+  if(verbose) info("Filling the chromosome matrix");
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
     mapdistance[i]=POSITIONUNKNOWN;
