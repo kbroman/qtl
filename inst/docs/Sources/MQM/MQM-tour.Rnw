@@ -548,11 +548,11 @@ mqmgetmodel(result)
 
 The \code{mqmgetmodel} function returns the final model from the
 output of \code{mqmscan}.
-This model can be further investigated using the \code{fitqtl} and \code{fitqtl} routines from R/qtl.
-\code{mqmgetmodel}
-can only be used after backward elimination as it requires a list of
-cofactors. The resulting model can also be used to obtain the location and
-name of the significant cofactors.
+This model can be further investigated using the \code{fitqtl} and 
+\code{fitqtl} routines from R/qtl.
+\code{mqmgetmodel} can only be used after backward elimination 
+as it requires a list of cofactors. The resulting model can also
+ be used to obtain the location and name of the significant cofactors.
 
 \intro{Plot result of MQM backward elimination against that of \code{scanone}}
 
@@ -585,7 +585,7 @@ par(mfrow = c(2,1))
 plot(mqmgetmodel(result))
 plot(result)
 @ 
-
+\clearpage
 \intro{Plot with lowered \code{cofactor.significance}}
 
 \begin{figure}
