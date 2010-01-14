@@ -173,6 +173,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
       }
       if(!is.null(dropped)){
         augmentedInd <- cross$mqm$augIND[-dropped]
+        augmentedInd[1] <- 0
         for(x in 1:(length(augmentedInd)-1)){
           if(augmentedInd[x+1] - 1 > augmentedInd[x] ){
             for(y in (x+1):length(augmentedInd)){
@@ -181,9 +182,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
           }
         }
       }
-      if(augmentedNind > length(augmentedInd)){
-        augmentedNind <- length(augmentedInd)
-      }
+      augmentedNind <- length(unique(augmentedInd))
       if(verbose){
         cat("New augmentedNind:",augmentedNind,"\n")
         cat("New length(augmentedInd):",length(augmentedInd),"\n")
