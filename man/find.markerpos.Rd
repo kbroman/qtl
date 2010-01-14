@@ -1,7 +1,7 @@
 \name{find.markerpos}
 \alias{find.markerpos}
 
-\title{Find position of a marker.}
+\title{Find position of a marker}
 
 \description{
   Find the chromosome and cM position of a set of genetic markers. 

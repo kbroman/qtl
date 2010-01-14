@@ -44,24 +44,27 @@
 ######################################################################
 
 
-which.marker <- function(cross,name,verbose=FALSE){
-	if(missing(cross))
-		ourstop("No cross file. Please supply a valid cross object.")
-	n <- 0
-	marker_num <- 0
-	for(chr in 1:nchr(cross)) {
-	  for(marker in 1:length(cross$geno[[chr]]$map)){
-		if(names(cross$geno[[chr]]$map[marker])==name){
-			if(verbose) cat("Marker",name,"is number",n,"\n")
-			marker_num <- n
-		}
-		n <- n+1
-	  }
-	}
-	if(marker_num==0){
-		stop("No marker named",name," found.\n")
-	}
-	marker_num;
+#which.marker <- function(cross,name,verbose=FALSE){
+#	if(missing(cross))
+#		ourstop("No cross file. Please supply a valid cross object.")
+#	n <- 0
+#	marker_num <- 0
+#	for(chr in 1:nchr(cross)) {
+#	  for(marker in 1:length(cross$geno[[chr]]$map)){
+#		if(names(cross$geno[[chr]]$map[marker])==name){
+#			if(verbose) cat("Marker",name,"is number",n,"\n")
+#			marker_num <- n
+#		}
+#		n <- n+1
+#	  }
+#	}
+#	if(marker_num==0){
+#		stop("No marker named",name," found.\n")
+#	}
+#	marker_num;
+which.marker <-
+function(cross, name) {
+  match(name, markernames(cross))
 }
 
 mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
