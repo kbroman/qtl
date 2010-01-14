@@ -224,11 +224,66 @@ geno.image(augmentedcross)
 <<fig=TRUE,echo=FALSE>>=
 <<augment2>>
 @
-\caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented} genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} `expanded' individuals in this plot, because \mqm\ 
-fills in missing markers with all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(mycross),1)} per
+\caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented} 
+genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} 
+`expanded' individuals in this plot, because \mqm\ fills in missing markers with 
+all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(mycross),1)} per
 individual).\label{augment2}}
 \end{figure}
 
+Augmentation on a real dataset (multitrait) which contains 24 metabolite traits from a RIL population of Arabidopsis thalia.
+We begin by removing data (5%, 10% and 80%) from the genotypes
+<<augment3>>=
+data(multitrait)
+multimissing5 <- simulateMissingData(multitrait,5)
+multimissing10 <- simulateMissingData(multitrait,10)
+multimissing80 <- simulateMissingData(multitrait,80)
+@
+We then use mqmaugmentation to fill in the missing genotypes, when we have 
+more missing data we increase the minprob parameter.
+If we would set the minprob parameter too low, we indicate that we also 
+want to include more unlikely genotypes. This leads to the situation 
+where an individual cannot be augmented enough. When this happend the 
+individual is removed from the dataset (to prevent memory overflow) 
+and genotype information is lost.
+<<augment4>>=
+multiaug5 <- mqmaugment(multimissing5)
+multiaug10 <- mqmaugment(multimissing10,minprob=0.25)
+multiaug80 <- mqmaugment(multimissing80,minprob=0.80)
+@
+After augmentation we can check howmany individuals still remain in a 
+set and how many times they are augmented. Normally we wouldn't not 
+want to drop individuals, so choosing a good minprob parameter is crucial.
+Then we scan for QTLs inside the crossobjects using scanone and/or mqmscan
+<<augment5>>=
+resultsone5 <- scanone(multimissing5)
+resultsone10 <- scanone(multimissing10)
+resultsone80 <- scanone(multimissing80)
+result5perc <- mqmscan(multiaug5)
+result10perc <- mqmscan(multiaug10)
+result80perc <- mqmscan(multiaug80)
+@
+The results of the increasing amount of missing data can been seen in figure
+
+<<augment6,eval=FALSE,echo=FALSE>>=
+op <- par(mfrow=c(2,2))
+plot(result5perc,result10perc,result80perc,main="Missing data compare")
+legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("black","blue","red"),lwd=1)
+plot(resultsone5,result5perc,main="5% Missing")
+legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
+plot(resultsone10,result10perc,main="10% Missing")
+legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
+plot(resultsone80,result80perc,main="80% Missing")
+legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+<<augment6>>
+@
+\caption{Results after we increase amount of missing data on the mqmscan method in the multitrait dataset.
+\label{augment6}}
+\end{figure}
 \clearpage
 
 \section{MQM multiple QTL model mapping}
