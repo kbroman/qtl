@@ -614,8 +614,7 @@ content per marker.
 mqmplot_one(result, extended=TRUE)
 @ 
 
-The column \code{mqm} 
-{\color{red} \textbf{[What column?]}}
+The second column \code{info} in the result
 is calculated from the deviation of the \emph{ideal} marker
 distribution. For example, with a dataset of 100 mice, when comparing two
 distinct phenotypes at a marker location, we have most power when both groups
