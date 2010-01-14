@@ -548,9 +548,7 @@ mqmgetmodel(result)
 
 The \code{mqmgetmodel} function returns the final model from the
 output of \code{mqmscan}.
-This model can also be used with the \code{scantwo} routine from R/qtl. 
-{\color{red} \textbf{[I don't understand this.  It's not really for
-\code{scantwo} but rather for \code{fitqtl}, right?]}}
+This model can be further investigated using the \code{fitqtl} and \code{fitqtl} routines from R/qtl.
 \code{mqmgetmodel}
 can only be used after backward elimination as it requires a list of
 cofactors. The resulting model can also be used to obtain the location and
