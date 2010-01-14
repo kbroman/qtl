@@ -934,6 +934,7 @@ mqmplot_circle(multiloc,resall, highlight=2)
   mqmplot\_directedqtl:& Plotting of signle trait with added qtl effect\\
 	mqmplot\_boot:& plot methode to show single trait permutations \\
 	mqmplot\_one:& plotting of single trait analysis with information content \\
+	mqmplot\_circle:& Genome plot of QTLs in a circle (optional: Use of location information)\\  
 	mqmplot\_cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
   addloctocross:& Adding genetic locations for traits \\	
 	mqmtestnormal:& Tests the normallity of a trait \\ 	
