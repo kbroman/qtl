@@ -142,7 +142,10 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   MQMMarkerVector imarker;
   ivector newind;
   
-  double minprobratio = 1.0f/minprob;
+  double minprobratio = (1.0f/minprob);
+  if(minprob!=1){
+    minprobratio += 0.00001;
+  }
   newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
