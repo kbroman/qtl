@@ -108,7 +108,7 @@ MQMMarkerMatrix readgenotype(const char* filename,const unsigned int nind,const 
   MQMMarkerMatrix genomarkers = newMQMMarkerMatrix(nmar,nind);
   ifstream myfstream(filename, ios::in);
   char c;
-  while (!myfstream.eof()) {
+  while (!myfstream.eof() && i < nind) {
     if (j < nmar) {
       myfstream >> c;
       genomarkers[j][i] = (MQMMarker)c;
