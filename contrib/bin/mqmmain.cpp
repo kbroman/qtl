@@ -40,6 +40,7 @@
 using namespace std;
 
 FILE *redirect_info = stdout;
+int debuglevel = 0;
 
 bool checkfileexists(const char *filename) {
   ifstream myfile;
@@ -107,7 +108,7 @@ MQMMarkerMatrix readgenotype(const char* filename,const unsigned int nind,const 
   MQMMarkerMatrix genomarkers = newMQMMarkerMatrix(nmar,nind);
   ifstream myfstream(filename, ios::in);
   char c;
-  while (!myfstream.eof()) {
+  while (!myfstream.eof() && i < nind) {
     if (j < nmar) {
       myfstream >> c;
       genomarkers[j][i] = (MQMMarker)c;
@@ -190,7 +191,7 @@ void printhelp(void) {
   printf ("Commandline switches:\n");
   printf ("-h      		This help.\n");
   printf ("-v      		Verbose (produce a lot of textoutput).\n");
-  printf ("-p(INT) 		DebugLevel -d0,-d1.\n");
+  printf ("-d(INT) 		DebugLevel -d0,-d1.\n");
   printf ("-t(INT) 		Phenotype under analysis.\n");
   printf ("-p(FILE_NAME)	Phenotypes file in plain textformat.\n");
   printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
@@ -242,7 +243,6 @@ int main(int argc,char *argv[]) {
   printf("MQM standalone version\n");
   bool verbose = false;
   bool helpflag = false;
-  int debuglevel = 0;
   unsigned int phenotype = 0; //analyse the first phenotype
   char *phenofile = NULL;
   char *genofile = NULL;
