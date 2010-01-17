@@ -45,7 +45,8 @@ qtl*gz
 *.Rout
 contrib/bin/mqmdebugout
 ..Rcheck/
-inst/docs/Sources/MQMtour/MQM-tour.tex
-inst/docs/Sources/MQMtour/MQM-tour.R
+inst/docs/MQM-tour.tex
+inst/docs/MQM-tour.txt
+inst/docs/MQM-tour.R
 *.pdf
 *.tex
