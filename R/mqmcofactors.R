@@ -2,13 +2,13 @@
 #
 # mqmcofactors.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
 # Modified by Karl Broman and unknown and Pjotr Prins
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified January 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -44,24 +44,27 @@
 ######################################################################
 
 
-which.marker <- function(cross,name){
-	if(missing(cross))
-		ourstop("No cross file. Please supply a valid cross object.")
-	n <- 0
-	marker_num <- 0
-	for(chr in 1:nchr(cross)) {
-	  for(marker in 1:length(cross$geno[[chr]]$map)){
-		if(names(cross$geno[[chr]]$map[marker])==name){
-			cat("Marker",name,"is number",n,"\n")
-			marker_num <- n
-		}
-		n <- n+1
-	  }
-	}
-	if(marker_num==0){
-		stop("No marker named",name," found.\n")
-	}
-	marker_num;
+#which.marker <- function(cross,name,verbose=FALSE){
+#	if(missing(cross))
+#		ourstop("No cross file. Please supply a valid cross object.")
+#	n <- 0
+#	marker_num <- 0
+#	for(chr in 1:nchr(cross)) {
+#	  for(marker in 1:length(cross$geno[[chr]]$map)){
+#		if(names(cross$geno[[chr]]$map[marker])==name){
+#			if(verbose) cat("Marker",name,"is number",n,"\n")
+#			marker_num <- n
+#		}
+#		n <- n+1
+#	  }
+#	}
+#	if(marker_num==0){
+#		stop("No marker named",name," found.\n")
+#	}
+#	marker_num;
+which.marker <-
+function(cross, name) {
+  match(name, markernames(cross))
 }
 
 mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){

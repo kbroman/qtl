@@ -56,6 +56,14 @@ ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
 }
 
+simulateMissingData <- function(cross,percentage=5){
+  for(x in 1:length(cross$geno)){
+    numtoDROP <- length(cross$geno[[x]]$data)*(percentage/100)
+    toDROP <- sample(length(cross$geno[[x]]$data))[1:numtoDROP]
+    cross$geno[[x]]$data[toDROP] <- NA
+  }
+  cross
+}
 
 # Return the real markers in the set (remove fake ones)
 mqmextractmarkers <- function(mqmresult){

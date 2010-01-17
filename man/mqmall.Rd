@@ -43,7 +43,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \seealso{ 
 	\itemize{
-% \input{"inst/docs/mqm/standard_seealso.txt"}
+% \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
@@ -51,7 +51,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
-% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
+% -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
 }
 
@@ -68,10 +68,10 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \references{
 	\itemize{
-% \input{"inst/docs/mqm/parallelisation_references.txt"}
+% \input{"inst/docs/Sources/MQM/mqm/parallelisation_references.txt"}
 		\item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
 		\item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1. 	
-% -----^^ inst/docs/mqm/parallelisation_references.txt ^^-----
+% -----^^ inst/docs/Sources/MQM/mqm/parallelisation_references.txt ^^-----
 	}
 }
 

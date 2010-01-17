@@ -204,7 +204,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   vector fit, resi;
   fit= newvector(newNaug);
   resi= newvector(newNaug);
-  debug_trace("Calculate residuals");
+  debug_trace("Calculate residuals\n");
   if (*variance<0) {
     *variance= 0.0;
     if (!fitQTL)
@@ -281,7 +281,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       }
   }
   /* calculation of logL */
-  debug_trace("calculate logL");
+  debug_trace("calculate logL\n");
   long double logL=0.0;
   for (int i=0; i<Nind; i++) {
     indL[i]= 0.0;
@@ -391,7 +391,7 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
     //prob= betai(df2/2.0, df1/2.0, df2/(df2+df1*halfway));
     //USE R FUNCTIONALITY TO REPLACE OLD C ROUTINES
     prob = pbeta(df2/(df2+df1*halfway), df2/2.0, df1/2.0, 1, 0);
-    debug_trace("->(%f, %f, %f) %f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
+    debug_trace("(%f, %f, %f) prob=%f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
     if (prob<alfa) maxF= halfway;
     else minF= halfway;
     absdiff= fabs(prob-alfa);
