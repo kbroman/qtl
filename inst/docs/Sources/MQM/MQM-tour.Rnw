@@ -340,7 +340,7 @@ plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
 are similar when used without \emph{augmentation\/} and with no extra parameters.\label{NoCofs}}
 \end{figure}
 \begin{figure}
-<<NoCofsListeria,eval=FALSE>>=
+<<NoCofsListeria,fig=TRUE,echo=FALSE,height=3>>=
 plot(result_multiaug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
 @ 
 \caption{multitrait dataset: mqm versus scanone}
