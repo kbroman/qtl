@@ -327,9 +327,9 @@ We plot the results as follows.
 <<NoCofs,eval=FALSE>>=
 plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
 @ 
-As seen in Figure~\ref{NoCofs}, with \code{minprob=1.0}, the results are similar.
-{\color{red} \textbf{[I wouldn't say that the results are ``virtually identical''.]}}
-
+As seen in Figure~\ref{NoCofs}, with default parameter the result from the 
+mqm scan are similar to the scanone scan results. There are however mayor 
+differences between the two methods. which will become clear in the next part of this section.
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
 # plot scanone/mqm comparison
@@ -361,7 +361,7 @@ ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
 backward elimination on a large number of markers. 
 
 First we will demonstrate building the initial model by hand using a forward
-stepwise approach. (Note that the automated procedure is preferred, both for
+stepwise approach. (NOTE: The automated procedure is preferred, both for
 theoretical and practical reasons.) A model consists of a set of markers we
 want to account for. We can start building the initial model by adding cofactors
 at markers with high LOD scores. Figure~\ref{NoCofs} displayed a large QTL peak
@@ -387,9 +387,7 @@ closest to 30 \cM.  The function \code{which.marker} translates the
 marker name into a cofactor number.  The function \code{mqmcofactors}
 sets up a cofactor list for use with \code{mqmscan}.  
 
-
-
-\intro{Plot after adding cofactor}
+\intro{Plot the results of the genome scan after adding a single cofactor}
 
 We may plot the \MQM\ results, with the single cofactor, as follows.
 <<Cofactor4,eval=FALSE>>=
@@ -513,11 +511,10 @@ unsupervised backward elimination, which is described in the next section.
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
 setting cofactors beforehand. When the sample size allows, it a 
 cofactor is set at every marker. However, normally only a subset of 
-locations is used.  The \code{mqmsetcofactor} function 
+locations is used.  The function:"\code{mqmsetcofactor}"
 {\color{red} \textbf{[I'm confused.  It had said ``The \code{cofactor}
     function...'' (I think).]}}
-creates
-a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
+creates a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
 markers and drops the least informative from the model. This step is repeated
 until a limited number of significant cofactors is left.
 
@@ -554,10 +551,10 @@ mqmgetmodel(result)
 The \code{mqmgetmodel} function returns the final model from the
 output of \code{mqmscan}.
 This model can be further investigated using the \code{fitqtl} and 
-\code{fitqtl} routines from R/qtl.
-\code{mqmgetmodel} can only be used after backward elimination 
-as it requires a list of cofactors. The resulting model can also
- be used to obtain the location and name of the significant cofactors.
+\code{fitqtl} routines from R/qtl.NOTE: that \code{mqmgetmodel} can only be 
+used after backward elimination that produces a significant model. The 
+resulting model can also be used to obtain the location and name of the 
+significant cofactors.
 
 \intro{Plot result of MQM backward elimination against that of \code{scanone}}
 
@@ -580,9 +577,8 @@ hits on each chromosome. Figure~\ref{Backward2} shows that at
 \code{cofactor.significance=0.02} chromosomes 1,2,4,5,6 and 15(?) are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes preferred, but in general a simpler 
-model is more easily understood and, perhaps, validated. Decreasing
-the significance level has the advantage 
-that we can be more sure of the \qtl. 
+model is more easily understood and, perhaps, validated. Decreasing 
+the significance level also has the advantage that we can be more sure of the \qtl we report. 
 
 <<FigLowAlpha,eval=FALSE>>=
 result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
