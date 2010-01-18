@@ -487,6 +487,16 @@ cofactorlist <- mqmcofactors(hyperaug,toset)
 result_2 <- mqmscan(hyperaug, cofactorlist)
 @
 
+
+% -----------
+<<>>=
+# summary(result_multi_1)
+multitoset <- c(multitoset,which.marker(multiaug,find.marker(multiaug,1,70)))
+multicofactorlist <- mqmcofactors(multiaug,multitoset)
+result_multi_2 <- mqmscan(multiaug, multicofactorlist)
+@
+% -----------
+
 \intro{Plot after adding second cofactor}
 
 We may plot the results with one and two cofactors as follows.
@@ -509,6 +519,26 @@ scores for each chromosome. The LOD scores do not appear to improve much after a
 the second cofactor on chromosome 4. But\ldots (see Figure~\ref{threewaycomparison})\label{twowaycomparison}}
 \end{figure}
 
+% --------------------------
+
+<<twowaycomparison,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(result_multi_2))
+plot(result_multi_2, result_multi_1, col=c("black","green"), lty=1:2)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+<<twowaycomparison>>
+@
+\caption{multi 1 cof versus 2 cof}
+\end{figure}
+
+% ---------------------------
+
+
+
+
 We may plot the results with 0, 1 and 2 cofactors as follows.
 <<threewaycomparison,eval=FALSE>>=
 plot(result_no_cofactors, result_1, result_2, chr=c(1,11,15),
@@ -526,6 +556,23 @@ and 4 (blue, dotted).
 The LOD scores on chromosome 1 increase with more cofactors, while the peaks on
 the chromosome 11 and 15 decrease.\label{threewaycomparison}}
 \end{figure}
+
+% ---------------------
+<<threewaycomparisonmulti,eval=FALSE>>=
+plot(result_multi_no_cofactors, result_multi_1, result_multi_2,
+     col=c("black","red","blue"), lty=1:3)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+# plot closeup of threeway comparison
+<<threewaycomparisonmulti>>
+@
+\caption{multi 0,1,2 cof}
+\end{figure}
+% ---------------------
+
+
 
 When using the functions \code{mqmcofactors} and \code{mqmsetcofactors}, the
 number of cofactors is compared against the number of individuals inside the
@@ -575,6 +622,11 @@ cofactorlist <- mqmsetcofactors(hyperaug,5)
 result <- mqmscan(hyperaug, cofactorlist)
 @
 
+<<>>=
+multicofactorlist <- mqmsetcofactors(multiaug,5)
+backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
+@
+
 We plot the results as follows.
 <<Backward1,eval=FALSE>>=
 par(mfrow = c(2,1))
@@ -590,6 +642,29 @@ plot(result)
 \caption{\hyperintro, after introducing cofactors at every fifth marker and
 backward elimination.\label{Backward1}}
 \end{figure}
+
+%---------------------------
+
+<<Backward1multi,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(backwardresultmulti))
+plot(backwardresultmulti)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot result of cofactor backward elimination
+<<Backward1multi>>
+@
+\caption{backward on multi}
+\end{figure}
+
+
+
+
+%-----------------------------
+
+
 <<>>=
 mqmgetmodel(result)
 @
@@ -618,6 +693,22 @@ marker for \mqm\, followed by backward elimination
 (\code{cofactor.significance = 0.02})\label{Backward2}}
 \end{figure}
 
+
+
+% ------------------------------
+<<Backward2multi,eval=FALSE>>=
+plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+<<Backward2multi>>
+@
+\caption{backward multi versus scanone}
+\end{figure}
+
+% -------------------------------
+
 \mqm\ \qtl\ mapping may result in many significant markers, with multiple 
 hits on each chromosome. Figure~\ref{Backward2} shows that at 
 \code{cofactor.significance=0.02} chromosomes 1,2,4,5,6 and 15(?) are involved. 
@@ -642,6 +733,30 @@ plot(result)
 \caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination (\code{cofactor.significance = 0.002}).\label{FigLowAlpha}}
 \end{figure}
 
+
+
+%-----------------------
+
+<<FigLowAlpha,eval=FALSE>>=
+multiresult <- mqmscan(multiaug, multicofactorlist, cofactor.significance=0.002)
+par(mfrow = c(2,1))
+plot(mqmgetmodel(multiresult))
+plot(multiresult)
+@ 
+\clearpage
+\intro{Plot with lowered \code{cofactor.significance}}
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+<<FigLowAlpha>>
+@
+\caption{Multi lower P (no change in model)}
+\end{figure}
+
+
+
+%-----------------------
+
 When comparing the \mqm\ scan in Figure~\ref{FigLowAlpha} with the original
 \code{scanone} result in Figure~\ref{NoCofs} there are some notable differences.
 Some \qtl\ show higher significance (LOD scores) and some others show lower
@@ -659,6 +774,28 @@ content per marker.
 mqmplot_one(result, extended=TRUE)
 @ 
 
+\begin{figure}
+<<fig=TRUE>>=
+<<AutoCofactor>>
+@
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot\_one} function
+shows retained information in \code{result} with added weighting of information at
+marker positions\label{AutoCofactor}}
+\end{figure}
+
+
+
+<<AutoCofactor,eval=FALSE>>=
+mqmplot_one(multiresult, extended=TRUE)
+@ 
+
+\begin{figure}
+<<fig=TRUE>>=
+<<AutoCofactor>>
+@
+\caption{multiset plotone}
+\end{figure}
+
 The second column \code{info} in the result
 is calculated from the deviation of the \emph{ideal} marker
 distribution. For example, with a dataset of 100 mice, when comparing two
@@ -669,15 +806,6 @@ this information content to `clean' the QTL profile by giving less weight to
 less informative markers. Please note that the sample size already plays a
 role in calculating \qtl. Meanwhile it allows (informal) further
 weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
-
-\begin{figure}
-<<fig=TRUE>>=
-<<AutoCofactor>>
-@
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot\_one} function
-shows retained information in \code{result} with added weighting of information at
-marker positions\label{AutoCofactor}}
-\end{figure}
 
 \section{MQM effect plots}
 
