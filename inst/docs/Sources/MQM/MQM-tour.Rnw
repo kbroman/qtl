@@ -308,11 +308,11 @@ We could also have used the fill.geno function from R/qtl.
 \intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment} minprob=1}
 <<>>=
 data(hyper)
-data(listeria)
+data(multitrait)
 hyperaug <- mqmaugment(hyper, minprob=1.0)
-listeriaaug <- mqmaugment(listeria, minprob=1.0)
+multiaug <- mqmaugment(multitrait)
 result_no_cofactors <- mqmscan(hyperaug)
-result_listeria_no_cofactors <- mqmscan(listeriaaug)
+result_multiaug_no_cofactors <- mqmscan(multiaug)
 @
 
 After filling in missing genotypes in the dataset \code{data(hyper)},  
@@ -323,9 +323,9 @@ one would first calculate conditional QTL genotype probabilities via
 \code{calc.genoprob}.  
 <<>>=
 hyper <- calc.genoprob(hyper, step=5)
-listeria <- calc.genoprob(listeria, step=5)
+multitrait <- calc.genoprob(multitrait, step=5)
 result_scanone <- scanone(hyper)
-result_listeria_scanone <- scanone(listeria)
+result_multi_scanone <- scanone(multitrait)
 @
 
 As seen in Figure~\ref{NoCofs}, with default parameter the result from the 
@@ -341,9 +341,9 @@ are similar when used without \emph{augmentation\/} and with no extra parameters
 \end{figure}
 \begin{figure}
 <<NoCofsListeria,eval=FALSE>>=
-plot(result_listeria_no_cofactors, result_listeria_scanone, col=c("black", "green"), lty=1:2)
+plot(result_multiaug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
 @ 
-\caption{Listeria mqm versus scanone}
+\caption{multitrait dataset: mqm versus scanone}
 \end{figure}
 
 
