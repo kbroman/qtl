@@ -308,8 +308,11 @@ We could also have used the fill.geno function from R/qtl.
 \intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment} minprob=1}
 <<>>=
 data(hyper)
+data(listeria)
 hyperaug <- mqmaugment(hyper, minprob=1.0)
+listeriaaug <- mqmaugment(listeria, minprob=1.0)
 result_no_cofactors <- mqmscan(hyperaug)
+result_listeria_no_cofactors <- mqmscan(listeriaaug)
 @
 
 After filling in missing genotypes in the dataset \code{data(hyper)},  
@@ -320,24 +323,29 @@ one would first calculate conditional QTL genotype probabilities via
 \code{calc.genoprob}.  
 <<>>=
 hyper <- calc.genoprob(hyper, step=5)
+listeria <- calc.genoprob(listeria, step=5)
 result_scanone <- scanone(hyper)
+result_listeria_scanone <- scanone(listeria)
 @
 
-We plot the results as follows.
-<<NoCofs,eval=FALSE>>=
-plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
-@ 
 As seen in Figure~\ref{NoCofs}, with default parameter the result from the 
 mqm scan are similar to the scanone scan results. There are however mayor 
 differences between the two methods. which will become clear in the next part of this section.
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
-# plot scanone/mqm comparison
+plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
 <<NoCofs>>
 @
 \caption{\hyperintrocolors. The results
 are similar when used without \emph{augmentation\/} and with no extra parameters.\label{NoCofs}}
 \end{figure}
+\begin{figure}
+<<NoCofsListeria,eval=FALSE>>=
+plot(result_listeria_no_cofactors, result_listeria_scanone, col=c("black", "green"), lty=1:2)
+@ 
+\caption{Listeria mqm versus scanone}
+\end{figure}
+
 
 MQM introduces pseudo markers by default (unlike \code{scanone}, which
 relied on \code{calc.genoprob} and by default just considers the
