@@ -165,6 +165,11 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   int previaug = 0;                     // previous index in newmarkers
   for (int i=0; i<nind0; i++) {
     //Loop through individuals
+    #ifndef STANDALONE
+      R_CheckUserInterrupt(); /* check for ^C */
+      //R_ProcessEvents(); /*  Try not to crash windows */
+      R_FlushConsole();
+    #endif
     const int dropped = nind0-newNind;  //How many are dropped
     const int iidx = i - dropped;       //Individuals I's new individual number based on dropped individuals
     newind[iaug]   = iidx;              // iidx corrects for dropped individuals
