@@ -388,9 +388,9 @@ result_1 <- mqmscan(hyperaug, cofactorlist)
 \intro{SAME FOR MULTI}
 <<>>=
 max(result_multiaug_no_cofactors)
-find.marker(multiaug,chr=4,pos=30)
-multitoset <- which.marker(multiaug,"D4Mit164")
-multicofactorlist <- mqmcofactors(multiaug,toset)
+find.marker(multiaug,chr=5,pos=35)
+multitoset <- which.marker(multiaug,"GH.117C")
+multicofactorlist <- mqmcofactors(multiaug,multitoset)
 result_multi_1 <- mqmscan(multiaug, multicofactorlist)
 @
 
@@ -491,7 +491,7 @@ result_2 <- mqmscan(hyperaug, cofactorlist)
 % -----------
 <<>>=
 # summary(result_multi_1)
-multitoset <- c(multitoset,which.marker(multiaug,find.marker(multiaug,1,70)))
+multitoset <- c(multitoset,which.marker(multiaug,find.marker(multiaug,4,10)))
 multicofactorlist <- mqmcofactors(multiaug,multitoset)
 result_multi_2 <- mqmscan(multiaug, multicofactorlist)
 @
@@ -559,7 +559,7 @@ the chromosome 11 and 15 decrease.\label{threewaycomparison}}
 
 % ---------------------
 <<threewaycomparisonmulti,eval=FALSE>>=
-plot(result_multi_no_cofactors, result_multi_1, result_multi_2,
+plot(result_multiaug_no_cofactors, result_multi_1, result_multi_2,
      col=c("black","red","blue"), lty=1:3)
 @ 
 
