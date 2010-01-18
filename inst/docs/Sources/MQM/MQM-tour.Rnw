@@ -379,15 +379,19 @@ the marker nearest to the peak on chromosome 4 and perform a new \mqm\ scan
 
 \intro{Add marker D4Mit164 as a cofactor}
 <<>>=
-# location of the highest lod score
 max(result_no_cofactors)
-#find.marker extracts the marker nearest to chr4 at 30cM
 find.marker(hyperaug,chr=4,pos=30)
-#which.marker translates the name into a cofactor number
 toset <- which.marker(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
-#scan again
 result_1 <- mqmscan(hyperaug, cofactorlist)
+@
+\intro{SAME FOR MULTI}
+<<>>=
+max(result_multiaug_no_cofactors)
+find.marker(multiaug,chr=4,pos=30)
+multitoset <- which.marker(multiaug,"D4Mit164")
+multicofactorlist <- mqmcofactors(multiaug,toset)
+result_multi_1 <- mqmscan(multiaug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
@@ -414,6 +418,24 @@ model. The LOD score (evidence) for a second QTL on chromosome 1 increases (see 
 Figure~\ref{Cofactor4b})\label{Cofactor4}} 
 \end{figure}
 
+% --------------
+<<Cofactor4multi,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(result_multi_1))
+plot(result_multi_1)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot after adding first cofactor
+<<Cofactor4multi>>
+@
+\caption{SAME MULTITRAIT} 
+\end{figure}
+
+
+% --------------
+
 We plot them together with the \code{scanone} results, as follows.
 <<Cofactor4b,eval=FALSE>>=
 plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
@@ -427,6 +449,22 @@ plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
 cofactor at chromosome 4 (D4Mit164) accounting for variation explained at that
 location\label{Cofactor4b}}
 \end{figure}
+
+
+% -------------------------
+
+<<Cofactor4bMULTI,eval=FALSE>>=
+plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
+@
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+<<Cofactor4bMULTI>>
+@
+\caption{MULTI4B}
+\end{figure}
+
+% ---------------------------
 
 Figures~\ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.  The
