@@ -116,7 +116,7 @@ likely options are considered.  When genotypes A and B are possible at the
 location two `individuals' are created in the augmentation step, one with
 genotype A, and one with genotype B. A probability is attached to either
 variant. The combined probabilities of all markers tells us whether a
-combination of variants is likely, or not.
+variants is very likely, or unlikely.
 
 To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{geno.image}. In
@@ -203,7 +203,7 @@ used and
 no real expansion of the dataset takes place, similar to \code{fill.geno}).\label{augment1}}
 \end{figure}
 
-With a lower \code{minprob}, more \emph{likely} genotypes considered, and the
+With a lower \code{minprob}, more \emph{UNlikely} genotypes considered, and the
 resulting \emph{augmented} dataset will be larger. The (weighted) augmented
 individuals with all possible genotypes theoretically leads to more accurate
 mapping when dealing with missing values \cite{jansen93}\footnote{Note that
@@ -242,7 +242,7 @@ multimissing80 <- simulateMissingData(multitrait,80)
 We then use mqmaugmentation to fill in the missing genotypes, when we have 
 more missing data we increase the minprob parameter.
 If we would set the minprob parameter too low, we indicate that we also 
-want to include more unlikely genotypes. This leads to the situation 
+want to include more \emph{UNlikely} genotypes. This leads to the situation 
 where an individual cannot be augmented enough. When this happend the 
 individual is removed from the dataset (to prevent memory overflow) 
 and genotype information is lost.
