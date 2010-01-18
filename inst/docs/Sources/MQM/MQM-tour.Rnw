@@ -177,11 +177,14 @@ inclusion in the augmented dataset. This genotype probability is calculated for
 every marker \emph{relative} to the most likely individual.
 Note that setting this value too
 low may result in dropping individuals entirely as \code{maxaugind} is quickly
-reached\footnote{The current version drops individuals that go beyond
-\code{maxaugind}.  This is undesirable behaviour and will be fixed in an upcoming
-release. A value \code{minprob=1.0} may prevent the dropping of individuals, making
-augmentation behave similar to \code{fill.geno}'s imputation method.}.  Use the verbose
-option to get more feedback on the augmentation routine and check how many
+reached\footnote{The current version drops individuals that go beyond \code{maxaugind}. 
+This is undesirable behaviour and will be fixed in an upcoming release. Increasing minprob 
+(towards 1) can keep these individuals inside the dataset also, a good rule of thumb is to 
+set minprob to the percentage of data missing. Furthermore augmentation cannot handle selective genotyped 
+datasets, these will always be handled with minprob=1 (a warning will be issued). A value of \code{minprob=1.0} 
+prevents the dropping of individuals, making augmentation behave similar to \code{fill.geno}'s 
+imputation method.}.  
+Use the verbose option to get more feedback on the augmentation routine and check how many
 individuals are dropped. So first we try augmentation with \code{minprob=1.0} (Figure~\ref{augment1}):
 
 \intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
@@ -232,7 +235,7 @@ individual).\label{augment2}}
 \end{figure}
 
 Augmentation on a real dataset (multitrait) which contains 24 metabolite traits from a RIL population of Arabidopsis thalia.
-We begin by removing data (5%, 10% and 80%) from the genotypes
+We begin by removing some genotypedata (5%, 10% and 80%) from the crossobject.
 <<augment3>>=
 data(multitrait)
 multimissing5 <- simulateMissingData(multitrait,5)
@@ -294,21 +297,23 @@ The famous mouse hypertension dataset\cite{sugiyama}, which is distributed with
 R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
 blood pressure (bp) and sex. Here we show an example of running both \code{scanone}
 single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to map
-\qtl\ for blood pressure. First, \emph{complete} missing data:
+\qtl\ for blood pressure. First, we need to \emph{complete} missing data. To create a dataset without 
+missing genotypes here we use the \code{mqmaugment} routine discussed in section \ref{augmentation}. 
+Because the hyper dataset has been selectively genotyped the minprob parameter of the augmentation is 
+set to 1 (omitting to set it would issue a warning and it would be automatically set to 1). 
+We could also have used the fill.geno function from R/qtl.
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
-\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment}}
+\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment} minprob=1}
 <<>>=
 data(hyper)
 hyperaug <- mqmaugment(hyper, minprob=1.0)
 result_no_cofactors <- mqmscan(hyperaug)
 @
 
-After loading the dataset via \code{data(hyper)},  we create a dataset without missing genotypes using
-the \code{mqmaugment} routine discussed in section \ref{augmentation}.
-Next we scan
-for \qtl\ using the \code{mqm} routines (using default parameters).
+After filling in missing genotypes in the dataset \code{data(hyper)},  
+we scan for \qtl\ using the \code{mqm} routines (using default parameters).
 
 We will compare these results to those from \code{scanone}, for which
 one would first calculate conditional QTL genotype probabilities via
