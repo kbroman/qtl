@@ -264,7 +264,10 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   ivector newind;
   ivector succesind;
   
-  double minprobratio = 1.0f/minprob;
+  double minprobratio = (1.0f/minprob);
+  if(minprob!=1){
+    minprobratio += 0.00001;
+  }
   newmarker = newMQMMarkerMatrix(Nmark+1, maxNaug);  // augmented marker matrix
   newy      = newvector(maxNaug);            // phenotypes
   newind    = newivector(maxNaug);           // individuals index
@@ -286,6 +289,11 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   for (int i=0; i<nind0; i++) {
     //Loop through individuals
     succesind[i] = 1;                   //Assume we succeed in augmentation
+    #ifndef STANDALONE
+      R_CheckUserInterrupt(); /* check for ^C */
+      //R_ProcessEvents(); /*  Try not to crash windows */
+      R_FlushConsole();
+    #endif
     const int dropped = nind0-newNind;  //How many are dropped
     const int iidx = i - dropped;       //Individuals I's new individual number based on dropped individuals
     newind[iaug]   = iidx;              // iidx corrects for dropped individuals
@@ -630,7 +638,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   const int verbose = *verbosep;
   const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
-  info("Starting C-part of the data augmentation routine");
+  if(verbose) info("Starting C-part of the data augmentation routine");
   ivector new_ind;
   vector mapdistance;
   cvector position;
@@ -656,7 +664,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   //Change all the markers from R/qtl format to MQM internal
   change_coding(Nmark, Nind, Geno, markers, crosstype);
 
-  info("Filling the chromosome matrix");
+  if(verbose) info("Filling the chromosome matrix");
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
     mapdistance[i]=POSITIONUNKNOWN;

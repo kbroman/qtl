@@ -68,7 +68,7 @@ fake.f2                 Simulated data for an F2 intercross
 fill.geno               Fill holes in genotype data
 find.flanking           Find flanking markers for a specified position
 find.marker             Find marker closest to a specified position
-find.markerpos          Find position of a marker.
+find.markerpos          Find position of a marker
 find.pheno              Find column number for a particular phenotype.
 find.pseudomarker       Find the pseudomarker closest to a specified
                         position
@@ -212,5 +212,6 @@ totmar                  Determine the total number of markers
 transformPheno          Transformation of the phenotypes in a cross
                         object
 tryallpositions         Test all possible positions for a marker
+which.marker            Determine the numeric index for a marker
 write.cross             Write data for a QTL experiment to a file
 xaxisloc.scanone        Get x-axis locations in scanone plot.

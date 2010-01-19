@@ -114,7 +114,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \seealso{
   \itemize{
-% \input{"inst/docs/mqm/standard_seealso.txt"}
+% \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
@@ -122,12 +122,12 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
-% -----^^ inst/docs/mqm/standard_seealso.txt ^^-----
+% -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
 }
 
 \examples{
-% \input{"inst/docs/mqm/standard_example.txt"}
+% \input{"inst/docs/Sources/MQM/mqm/standard_example.txt"}
 data(map10)                    # Mouse dataset
 
 # simulate a cross (autosomes)
@@ -143,7 +143,7 @@ result <- mqmscan(crossaug)    # Scan
 
 # show LOD interval of the QTL on chr 3
 lodint(result,chr=3)
-% -----^^ inst/docs/mqm/standard_example.txt ^^-----
+% -----^^ inst/docs/Sources/MQM/mqm/standard_example.txt ^^-----
 }
 
 \keyword{ models }

@@ -108,7 +108,7 @@ MQMMarkerMatrix readgenotype(const char* filename,const unsigned int nind,const 
   MQMMarkerMatrix genomarkers = newMQMMarkerMatrix(nmar,nind);
   ifstream myfstream(filename, ios::in);
   char c;
-  while (!myfstream.eof()) {
+  while (!myfstream.eof() && i < nind) {
     if (j < nmar) {
       myfstream >> c;
       genomarkers[j][i] = (MQMMarker)c;
@@ -222,6 +222,36 @@ void exit_on_error_gracefull(const char *msg) {
   info("EXIT ERROR: %s",msg);
   printhelp();
   exit(0);
+}
+
+
+bool selectivelygenotyped(const MQMMarkerMatrix markers,const ivector chr,const unsigned int nind, const unsigned int nmar){
+  int currentchr =0;
+  int count = 0;
+  int countmissing = 0;
+  for(unsigned int i = 0;i < nind; i++){
+    for(unsigned int j = 0;j < nmar; j++){
+      if(chr[j] > currentchr && currentchr != 0){
+        if(count==countmissing){
+          return TRUE;
+        }else{
+          count = 0;
+          countmissing = 0;
+        }
+        currentchr = chr[j];
+      }else{
+        if(markers[j][i]==9){
+          countmissing++;
+        }
+        count++;
+      }
+      
+    }
+    count=0;
+    countmissing=0;
+    currentchr=0;
+  }
+  return FALSE;
 }
 
 static struct option long_options[] = {
@@ -451,6 +481,11 @@ int main(int argc,char *argv[]) {
      if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
       exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");   
     //int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
+    
+    if(selectivelygenotyped(markers,chr,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark)){
+      fprintf(fout,"Warning: Selective genotyped set, only including most likely (neglect_unlikely set to 1)\n");
+      mqmalgorithmsettings.neglect_unlikely = 1;
+    }
     
     //Variables for the returned augmented markers,phenotype,individualmapping
     /*
