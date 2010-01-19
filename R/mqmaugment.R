@@ -209,7 +209,7 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
   # ---- RESULTS
   endtime <- proc.time()
   if(n.ind != n.indold){
-	warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals")
+	warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
   }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
   cross  # return cross type
