@@ -73,7 +73,7 @@
   (from \code{\link{scanone}}).
 
   The \code{\link{scantwo}} function calculates, for each pair of
-  putative QTLs, \eqn{(q_1,q_2)}{(q1,q2)}, the likelihood undering the
+  putative QTLs, \eqn{(q_1,q_2)}{(q1,q2)}, the likelihood under the
   null model \eqn{L_0}{L0}, the likelihood under each of the single-QTL
   models, \eqn{L(q_1)}{L(q1)} and \eqn{L(q_2)}{L(q2)}, the likelihood
   under an additive QTL model, \eqn{L_a(q_1,q_2)}{La(q1,q2)}, and the
