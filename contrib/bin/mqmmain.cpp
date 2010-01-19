@@ -483,6 +483,7 @@ int main(int argc,char *argv[]) {
     calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
     
     if(selectivelygenotyped(markers,chr,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark)){
+      fprintf(fout,"Warning: Selective genotyped set, only including most likely (neglect_unlikely set to 1)\n");
       mqmalgorithmsettings.neglect_unlikely = 1;
     }
     
