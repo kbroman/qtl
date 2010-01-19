@@ -224,6 +224,36 @@ void exit_on_error_gracefull(const char *msg) {
   exit(0);
 }
 
+
+bool selectivelygenotyped(const MQMMarkerMatrix markers,const ivector chr,const unsigned int nind, const unsigned int nmar){
+  int currentchr =0;
+  int count = 0;
+  int countmissing = 0;
+  for(unsigned int i = 0;i < nind; i++){
+    for(unsigned int j = 0;j < nmar; j++){
+      if(chr[j] > currentchr && currentchr != 0){
+        if(count==countmissing){
+          return TRUE;
+        }else{
+          count = 0;
+          countmissing = 0;
+        }
+        currentchr = chr[j];
+      }else{
+        if(markers[j][i]==9){
+          countmissing++;
+        }
+        count++;
+      }
+      
+    }
+    count=0;
+    countmissing=0;
+    currentchr=0;
+  }
+  return FALSE;
+}
+
 static struct option long_options[] = {
   {"smin",  required_argument, 0, 'a'},
   {"smax",  required_argument, 0, 'b'},
@@ -451,6 +481,10 @@ int main(int argc,char *argv[]) {
     //bool augdata(const int Nind, int const Nmark,const MQMMarkerMatrix markers,int *Nind, MQMMarkerMatrix *newmarkers){
     // int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
     calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
+    
+    if(selectivelygenotyped(markers,chr,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark)){
+      mqmalgorithmsettings.neglect_unlikely = 1;
+    }
     
     //Variables for the returned augmented markers,phenotype,individualmapping
     MQMMarkerMatrix newmarkerset;
