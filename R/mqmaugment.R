@@ -38,7 +38,7 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE) {
+mqmaugment <- function(cross,maxaugind=82, minprob=0.1, ,unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
@@ -100,17 +100,18 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
     cat("INFO: Number of chr:",n.chr,".\n")
   }
   #------- Check for selective genotyping
-  selectivegenotyped <- FALSE
-  for(c in 1:n.chr){
-    for(i in 1:nind(cross)){
-      if(!selectivegenotyped && sum(is.na(cross$geno[[c]]$data[i,])) == length(cross$geno[[c]]$data[i,])){
-        selectivegenotyped <- TRUE
-        minprob <- 1
-        maxiaug <- 2  #So we don't allocate a lot of space
-        warning("MQM doesn't augment selective genotyped datasets, selecting most likely (minprob = 1)")
-      }
-    }
-  }
+  # DANNY: SKIPPING THIS, we can augment/impute the missing chromosomes now
+  # selectivegenotyped <- FALSE
+  # for(c in 1:n.chr){
+  #   for(i in 1:nind(cross)){
+  #     if(!selectivegenotyped && sum(is.na(cross$geno[[c]]$data[i,])) == length(cross$geno[[c]]$data[i,])){
+  #       selectivegenotyped <- TRUE
+  #       minprob <- 1
+  #       maxiaug <- 2  #So we don't allocate a lot of space
+  #       warning("MQM doesn't augment selective genotyped datasets, selecting most likely (minprob = 1)")
+  #     }
+  #   }
+  # }
   # ---- Genotype
   geno <- pull.geno(cross)
   chr <- rep(1:nchr(cross), nmar(cross))
