@@ -15,6 +15,8 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
+sh contrib/scripts/cleanup.sh
+
 rqtl_version=`grep Version DESCRIPTION | awk '{ print $2; }'`
 
 echo "* Run R CMD check"

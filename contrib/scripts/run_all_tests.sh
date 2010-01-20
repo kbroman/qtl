@@ -21,6 +21,8 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
+sh contrib/scripts/cleanup.sh
+
 echo "* Run the standard MQM regression tests - without R install"
 cd $cwd
 cd contrib/bin
@@ -36,6 +38,7 @@ fi
 
 echo "* Run R CMD check $Roptions $cwd"
 cd $cwd
+sh contrib/scripts/cleanup.sh
 R CMD check $Roptions .
 if [ "$?" -ne "0" ]; then
   echo "Test 'R CMD check' failed"
@@ -44,6 +47,7 @@ fi
 
 echo "* Run the R regression tests - with R install from CMakeLists.txt"
 cd $cwd
+sh contrib/scripts/cleanup.sh
 cd contrib/bin
 rm CMakeCache.txt
 cmake -DTEST_R=TRUE .

@@ -53,3 +53,8 @@ comparecrosses(csv, csv3)
 
 # Write in mapmaker format
 write.cross(csv, "mm", filestem="junk2")
+
+# Cleanup
+unlink("junk1.csv")
+unlink("junk2.raw")
+unlink("junk2.prep")
