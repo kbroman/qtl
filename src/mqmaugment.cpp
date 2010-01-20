@@ -134,8 +134,8 @@ MQMMarker randommarker(const MQMCrossType crosstype){
 
 int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivector* INDlist,
                   double neglect_unlikely, int max_totalaugment, int max_indaugment,
-                  const matrix* pheno_value,const int nmark,const ivector chr,const vector mapdistance,
-                  const MQMCrossType crosstype){
+                  const matrix* pheno_value, const int nmark, const ivector chr, const vector mapdistance,
+                  const int unaugmentable, const MQMCrossType crosstype){
     info("New augmentation routine");
     const int nind0 = *nind;
     const vector originalpheno = (*pheno_value)[0];
@@ -159,7 +159,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       }
     }
     info("Second part");
-    if(ind_still_left){
+    if(ind_still_left && unaugmentable != 3){
       //Second round we augment dropped individuals from the first augmentation
       MQMMarkerMatrix left_markerset;
       matrix left_y_input = newmatrix(1,ind_still_left);
@@ -182,7 +182,10 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, 1);
       info("Augmentation second phase done with %d individuals",current_leftover_ind);
       //Stick them all back into
-      int numimputations=1;
+       int numimputations=1;
+      if(unaugmentable==2){
+        numimputations=max_indaugment;
+      }
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+numimputations*current_leftover_ind);;
       vector new_y_all = newvector((*augmentednind)+numimputations*current_leftover_ind);
       ivector new_ind_all = newivector((*augmentednind)+numimputations*current_leftover_ind);;
@@ -205,9 +208,20 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
           for(int a=0;a<numimputations;a++){
             int newindex = (*augmentednind)+a+((i-(*augmentednind))*numimputations);
             //info("i=%d,s=%d,i-s=%d index=%d/%d",i,(*augmentednind),(i-(*augmentednind)),newindex,(*augmentednind)+numimputations*current_leftover_ind);
-            for(int j=0;j<nmark;j++){  
-              // Most likely genotype at 0  
-              newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
+            if(unaugmentable == 2 && a > 0){
+              for(int j=0;j<nmark;j++){  
+                // Imputed genotype at 1 ... max_indaugment
+                if(indleftmarkers[j][(i-(*augmentednind))]==MMISSING){
+                  newmarkerset_all[j][newindex] = randommarker(crosstype);
+                }else{
+                  newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
+                }
+              }        
+            }else{
+              for(int j=0;j<nmark;j++){  
+                // Most likely genotype at 0  
+                newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
+              }
             }
             new_ind_all[newindex]= currentind;
             new_y_all[newindex]= currentpheno;
@@ -615,7 +629,7 @@ cleanup:
 void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *minprob, int
-               *chromo, int *rqtlcrosstypep, int *verbosep) {
+               *chromo, int *rqtlcrosstypep, int *unaugmentable, int *verbosep) {
   int **Geno;
   double **Pheno;
   double **Dist;
@@ -668,7 +682,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, &succes_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
   
   */
-  if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&Pheno,*Nmark,chr,mapdistance,crosstype)){
+  if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&Pheno,*Nmark,chr,mapdistance,*unaugmentable,crosstype)){
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
