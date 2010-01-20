@@ -31,19 +31,22 @@ MESSAGE("FindRLibs.cmake")
 ASSERT_FOUNDMAP()
 
 IF(APPLE)
+  message("OSX environment")
   FIND_PROGRAM(R_EXECUTABLE R
+    NO_DEFAULT_PATH
     PATHS 
       /Library/Frameworks/R.framework/Resources/bin
       /usr/bin
       /usr/local/bin
   )
-ELSE()
-  FIND_PROGRAM(R_EXECUTABLE R
-    PATHS      # maybe use HINTS
-      /usr/bin
-      /usr/local/bin
-  )
 ENDIF()
+
+# If the R path is in the cache the following will skip...
+FIND_PROGRAM(R_EXECUTABLE R
+  PATHS      # maybe use HINTS
+    /usr/bin
+    /usr/local/bin
+)
 
 IF(WIN32 AND NOT R_EXECUTABLE)
   FIND_PROGRAM(R_EXECUTABLE R
@@ -52,6 +55,7 @@ IF(WIN32 AND NOT R_EXECUTABLE)
 ENDIF()
 
 IF(R_EXECUTABLE)
+  message("R_EXECUTABLE=${R_EXECUTABLE}")
   GET_FILENAME_COMPONENT(R_BINPATH ${R_EXECUTABLE} PATH)  
   GET_FILENAME_COMPONENT(R_PATH ${R_BINPATH} PATH)
   # Get information from R itself
@@ -63,7 +67,8 @@ IF(R_EXECUTABLE)
   ENDIF()
   message("LIBS=${_LIBS}")
   if (APPLE)
-    STRING(REGEX REPLACE "-F([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
+    # returns -F/Library/Frameworks/R.framework/.. -framework R
+    STRING(REGEX REPLACE "-F([^ ]+) -framework R" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
   else()
     STRING(REGEX REPLACE "-L([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
   endif()
