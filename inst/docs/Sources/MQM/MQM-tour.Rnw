@@ -116,7 +116,7 @@ likely options are considered.  When genotypes A and B are possible at the
 location two `individuals' are created in the augmentation step, one with
 genotype A, and one with genotype B. A probability is attached to either
 variant. The combined probabilities of all markers tells us whether a
-combination of variants is likely, or not.
+variants is very likely, or unlikely.
 
 To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{geno.image}. In
@@ -177,11 +177,14 @@ inclusion in the augmented dataset. This genotype probability is calculated for
 every marker \emph{relative} to the most likely individual.
 Note that setting this value too
 low may result in dropping individuals entirely as \code{maxaugind} is quickly
-reached\footnote{The current version drops individuals that go beyond
-\code{maxaugind}.  This is undesirable behaviour and will be fixed in an upcoming
-release. A value \code{minprob=1.0} may prevent the dropping of individuals, making
-augmentation behave similar to \code{fill.geno}'s imputation method.}.  Use the verbose
-option to get more feedback on the augmentation routine and check how many
+reached\footnote{The current version drops individuals that go beyond \code{maxaugind}. 
+This is undesirable behaviour and will be fixed in an upcoming release. Increasing minprob 
+(towards 1) can keep these individuals inside the dataset also, a good rule of thumb is to 
+set minprob to the percentage of data missing. Furthermore augmentation cannot handle selective genotyped 
+datasets, these will always be handled with minprob=1 (a warning will be issued). A value of \code{minprob=1.0} 
+prevents the dropping of individuals, making augmentation behave similar to \code{fill.geno}'s 
+imputation method.}.  
+Use the verbose option to get more feedback on the augmentation routine and check how many
 individuals are dropped. So first we try augmentation with \code{minprob=1.0} (Figure~\ref{augment1}):
 
 \intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
@@ -203,7 +206,7 @@ used and
 no real expansion of the dataset takes place, similar to \code{fill.geno}).\label{augment1}}
 \end{figure}
 
-With a lower \code{minprob}, more \emph{likely} genotypes considered, and the
+With a lower \code{minprob}, more \emph{UNlikely} genotypes considered, and the
 resulting \emph{augmented} dataset will be larger. The (weighted) augmented
 individuals with all possible genotypes theoretically leads to more accurate
 mapping when dealing with missing values \cite{jansen93}\footnote{Note that
@@ -232,7 +235,7 @@ individual).\label{augment2}}
 \end{figure}
 
 Augmentation on a real dataset (multitrait) which contains 24 metabolite traits from a RIL population of Arabidopsis thalia.
-We begin by removing data (5%, 10% and 80%) from the genotypes
+We begin by removing some genotypedata (5%, 10% and 80%) from the crossobject.
 <<augment3>>=
 data(multitrait)
 multimissing5 <- simulateMissingData(multitrait,5)
@@ -242,7 +245,7 @@ multimissing80 <- simulateMissingData(multitrait,80)
 We then use mqmaugmentation to fill in the missing genotypes, when we have 
 more missing data we increase the minprob parameter.
 If we would set the minprob parameter too low, we indicate that we also 
-want to include more unlikely genotypes. This leads to the situation 
+want to include more \emph{UNlikely} genotypes. This leads to the situation 
 where an individual cannot be augmented enough. When this happend the 
 individual is removed from the dataset (to prevent memory overflow) 
 and genotype information is lost.
@@ -294,45 +297,55 @@ The famous mouse hypertension dataset\cite{sugiyama}, which is distributed with
 R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
 blood pressure (bp) and sex. Here we show an example of running both \code{scanone}
 single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to map
-\qtl\ for blood pressure. First, \emph{complete} missing data:
+\qtl\ for blood pressure. First, we need to \emph{complete} missing data. To create a dataset without 
+missing genotypes here we use the \code{mqmaugment} routine discussed in section \ref{augmentation}. 
+Because the hyper dataset has been selectively genotyped the minprob parameter of the augmentation is 
+set to 1 (omitting to set it would issue a warning and it would be automatically set to 1). 
+We could also have used the fill.geno function from R/qtl.
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
-\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment}}
+\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment} minprob=1}
 <<>>=
 data(hyper)
+data(multitrait)
 hyperaug <- mqmaugment(hyper, minprob=1.0)
+multiaug <- mqmaugment(multitrait)
 result_no_cofactors <- mqmscan(hyperaug)
+result_multiaug_no_cofactors <- mqmscan(multiaug)
 @
 
-After loading the dataset via \code{data(hyper)},  we create a dataset without missing genotypes using
-the \code{mqmaugment} routine discussed in section \ref{augmentation}.
-Next we scan
-for \qtl\ using the \code{mqm} routines (using default parameters).
+After filling in missing genotypes in the dataset \code{data(hyper)},  
+we scan for \qtl\ using the \code{mqm} routines (using default parameters).
 
 We will compare these results to those from \code{scanone}, for which
 one would first calculate conditional QTL genotype probabilities via
 \code{calc.genoprob}.  
 <<>>=
 hyper <- calc.genoprob(hyper, step=5)
+multitrait <- calc.genoprob(multitrait, step=5)
 result_scanone <- scanone(hyper)
+result_multi_scanone <- scanone(multitrait)
 @
 
-We plot the results as follows.
-<<NoCofs,eval=FALSE>>=
-plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
-@ 
-As seen in Figure~\ref{NoCofs}, with \code{minprob=1.0}, the results are similar.
-{\color{red} \textbf{[I wouldn't say that the results are ``virtually identical''.]}}
-
+As seen in Figure~\ref{NoCofs}, with default parameter the result from the 
+mqm scan are similar to the scanone scan results. There are however mayor 
+differences between the two methods. which will become clear in the next part of this section.
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
-# plot scanone/mqm comparison
+plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
 <<NoCofs>>
 @
 \caption{\hyperintrocolors. The results
 are similar when used without \emph{augmentation\/} and with no extra parameters.\label{NoCofs}}
 \end{figure}
+\begin{figure}
+<<NoCofsListeria,fig=TRUE,echo=FALSE,height=3>>=
+plot(result_multiaug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
+@ 
+\caption{multitrait dataset: mqm versus scanone}
+\end{figure}
+
 
 MQM introduces pseudo markers by default (unlike \code{scanone}, which
 relied on \code{calc.genoprob} and by default just considers the
@@ -356,7 +369,7 @@ ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
 backward elimination on a large number of markers. 
 
 First we will demonstrate building the initial model by hand using a forward
-stepwise approach. (Note that the automated procedure is preferred, both for
+stepwise approach. (NOTE: The automated procedure is preferred, both for
 theoretical and practical reasons.) A model consists of a set of markers we
 want to account for. We can start building the initial model by adding cofactors
 at markers with high LOD scores. Figure~\ref{NoCofs} displayed a large QTL peak
@@ -366,15 +379,19 @@ the marker nearest to the peak on chromosome 4 and perform a new \mqm\ scan
 
 \intro{Add marker D4Mit164 as a cofactor}
 <<>>=
-# location of the highest lod score
 max(result_no_cofactors)
-#find.marker extracts the marker nearest to chr4 at 30cM
 find.marker(hyperaug,chr=4,pos=30)
-#which.marker translates the name into a cofactor number
 toset <- which.marker(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
-#scan again
 result_1 <- mqmscan(hyperaug, cofactorlist)
+@
+\intro{SAME FOR MULTI}
+<<>>=
+max(result_multiaug_no_cofactors)
+find.marker(multiaug,chr=5,pos=35)
+multitoset <- which.marker(multiaug,"GH.117C")
+multicofactorlist <- mqmcofactors(multiaug,multitoset)
+result_multi_1 <- mqmscan(multiaug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
@@ -382,9 +399,7 @@ closest to 30 \cM.  The function \code{which.marker} translates the
 marker name into a cofactor number.  The function \code{mqmcofactors}
 sets up a cofactor list for use with \code{mqmscan}.  
 
-
-
-\intro{Plot after adding cofactor}
+\intro{Plot the results of the genome scan after adding a single cofactor}
 
 We may plot the \MQM\ results, with the single cofactor, as follows.
 <<Cofactor4,eval=FALSE>>=
@@ -403,6 +418,24 @@ model. The LOD score (evidence) for a second QTL on chromosome 1 increases (see 
 Figure~\ref{Cofactor4b})\label{Cofactor4}} 
 \end{figure}
 
+% --------------
+<<Cofactor4multi,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(result_multi_1))
+plot(result_multi_1)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot after adding first cofactor
+<<Cofactor4multi>>
+@
+\caption{SAME MULTITRAIT} 
+\end{figure}
+
+
+% --------------
+
 We plot them together with the \code{scanone} results, as follows.
 <<Cofactor4b,eval=FALSE>>=
 plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
@@ -416,6 +449,22 @@ plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
 cofactor at chromosome 4 (D4Mit164) accounting for variation explained at that
 location\label{Cofactor4b}}
 \end{figure}
+
+
+% -------------------------
+
+<<Cofactor4bMULTI,eval=FALSE>>=
+plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
+@
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+<<Cofactor4bMULTI>>
+@
+\caption{MULTI4B}
+\end{figure}
+
+% ---------------------------
 
 Figures~\ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.  The
@@ -437,6 +486,16 @@ toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
 result_2 <- mqmscan(hyperaug, cofactorlist)
 @
+
+
+% -----------
+<<>>=
+# summary(result_multi_1)
+multitoset <- c(multitoset,which.marker(multiaug,find.marker(multiaug,4,10)))
+multicofactorlist <- mqmcofactors(multiaug,multitoset)
+result_multi_2 <- mqmscan(multiaug, multicofactorlist)
+@
+% -----------
 
 \intro{Plot after adding second cofactor}
 
@@ -460,6 +519,26 @@ scores for each chromosome. The LOD scores do not appear to improve much after a
 the second cofactor on chromosome 4. But\ldots (see Figure~\ref{threewaycomparison})\label{twowaycomparison}}
 \end{figure}
 
+% --------------------------
+
+<<twowaycomparison,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(result_multi_2))
+plot(result_multi_2, result_multi_1, col=c("black","green"), lty=1:2)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+<<twowaycomparison>>
+@
+\caption{multi 1 cof versus 2 cof}
+\end{figure}
+
+% ---------------------------
+
+
+
+
 We may plot the results with 0, 1 and 2 cofactors as follows.
 <<threewaycomparison,eval=FALSE>>=
 plot(result_no_cofactors, result_1, result_2, chr=c(1,11,15),
@@ -477,6 +556,23 @@ and 4 (blue, dotted).
 The LOD scores on chromosome 1 increase with more cofactors, while the peaks on
 the chromosome 11 and 15 decrease.\label{threewaycomparison}}
 \end{figure}
+
+% ---------------------
+<<threewaycomparisonmulti,eval=FALSE>>=
+plot(result_multiaug_no_cofactors, result_multi_1, result_multi_2,
+     col=c("black","red","blue"), lty=1:3)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+# plot closeup of threeway comparison
+<<threewaycomparisonmulti>>
+@
+\caption{multi 0,1,2 cof}
+\end{figure}
+% ---------------------
+
+
 
 When using the functions \code{mqmcofactors} and \code{mqmsetcofactors}, the
 number of cofactors is compared against the number of individuals inside the
@@ -508,11 +604,10 @@ unsupervised backward elimination, which is described in the next section.
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
 setting cofactors beforehand. When the sample size allows, it a 
 cofactor is set at every marker. However, normally only a subset of 
-locations is used.  The \code{mqmsetcofactor} function 
+locations is used.  The function:"\code{mqmsetcofactor}"
 {\color{red} \textbf{[I'm confused.  It had said ``The \code{cofactor}
     function...'' (I think).]}}
-creates
-a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
+creates a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
 markers and drops the least informative from the model. This step is repeated
 until a limited number of significant cofactors is left.
 
@@ -525,6 +620,11 @@ high blood pressure (results in Figures~\ref{Backward1} and \ref{Backward2}):
 <<>>=
 cofactorlist <- mqmsetcofactors(hyperaug,5)
 result <- mqmscan(hyperaug, cofactorlist)
+@
+
+<<>>=
+multicofactorlist <- mqmsetcofactors(multiaug,5)
+backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
 @
 
 We plot the results as follows.
@@ -542,6 +642,29 @@ plot(result)
 \caption{\hyperintro, after introducing cofactors at every fifth marker and
 backward elimination.\label{Backward1}}
 \end{figure}
+
+%---------------------------
+
+<<Backward1multi,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(backwardresultmulti))
+plot(backwardresultmulti)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot result of cofactor backward elimination
+<<Backward1multi>>
+@
+\caption{backward on multi}
+\end{figure}
+
+
+
+
+%-----------------------------
+
+
 <<>>=
 mqmgetmodel(result)
 @
@@ -549,10 +672,10 @@ mqmgetmodel(result)
 The \code{mqmgetmodel} function returns the final model from the
 output of \code{mqmscan}.
 This model can be further investigated using the \code{fitqtl} and 
-\code{fitqtl} routines from R/qtl.
-\code{mqmgetmodel} can only be used after backward elimination 
-as it requires a list of cofactors. The resulting model can also
- be used to obtain the location and name of the significant cofactors.
+\code{fitqtl} routines from R/qtl.NOTE: that \code{mqmgetmodel} can only be 
+used after backward elimination that produces a significant model. The 
+resulting model can also be used to obtain the location and name of the 
+significant cofactors.
 
 \intro{Plot result of MQM backward elimination against that of \code{scanone}}
 
@@ -570,14 +693,29 @@ marker for \mqm\, followed by backward elimination
 (\code{cofactor.significance = 0.02})\label{Backward2}}
 \end{figure}
 
+
+
+% ------------------------------
+<<Backward2multi,eval=FALSE>>=
+plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3>>=
+<<Backward2multi>>
+@
+\caption{backward multi versus scanone}
+\end{figure}
+
+% -------------------------------
+
 \mqm\ \qtl\ mapping may result in many significant markers, with multiple 
 hits on each chromosome. Figure~\ref{Backward2} shows that at 
 \code{cofactor.significance=0.02} chromosomes 1,2,4,5,6 and 15(?) are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes preferred, but in general a simpler 
-model is more easily understood and, perhaps, validated. Decreasing
-the significance level has the advantage 
-that we can be more sure of the \qtl. 
+model is more easily understood and, perhaps, validated. Decreasing 
+the significance level also has the advantage that we can be more sure of the \qtl we report. 
 
 <<FigLowAlpha,eval=FALSE>>=
 result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
@@ -594,6 +732,30 @@ plot(result)
 @
 \caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination (\code{cofactor.significance = 0.002}).\label{FigLowAlpha}}
 \end{figure}
+
+
+
+%-----------------------
+
+<<FigLowAlpha,eval=FALSE>>=
+multiresult <- mqmscan(multiaug, multicofactorlist, cofactor.significance=0.002)
+par(mfrow = c(2,1))
+plot(mqmgetmodel(multiresult))
+plot(multiresult)
+@ 
+\clearpage
+\intro{Plot with lowered \code{cofactor.significance}}
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+<<FigLowAlpha>>
+@
+\caption{Multi lower P (no change in model)}
+\end{figure}
+
+
+
+%-----------------------
 
 When comparing the \mqm\ scan in Figure~\ref{FigLowAlpha} with the original
 \code{scanone} result in Figure~\ref{NoCofs} there are some notable differences.
@@ -612,6 +774,28 @@ content per marker.
 mqmplot_one(result, extended=TRUE)
 @ 
 
+\begin{figure}
+<<fig=TRUE>>=
+<<AutoCofactor>>
+@
+\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot\_one} function
+shows retained information in \code{result} with added weighting of information at
+marker positions\label{AutoCofactor}}
+\end{figure}
+
+
+
+<<AutoCofactor,eval=FALSE>>=
+mqmplot_one(multiresult, extended=TRUE)
+@ 
+
+\begin{figure}
+<<fig=TRUE>>=
+<<AutoCofactor>>
+@
+\caption{multiset plotone}
+\end{figure}
+
 The second column \code{info} in the result
 is calculated from the deviation of the \emph{ideal} marker
 distribution. For example, with a dataset of 100 mice, when comparing two
@@ -622,15 +806,6 @@ this information content to `clean' the QTL profile by giving less weight to
 less informative markers. Please note that the sample size already plays a
 role in calculating \qtl. Meanwhile it allows (informal) further
 weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
-
-\begin{figure}
-<<fig=TRUE>>=
-<<AutoCofactor>>
-@
-\caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot\_one} function
-shows retained information in \code{result} with added weighting of information at
-marker positions\label{AutoCofactor}}
-\end{figure}
 
 \section{MQM effect plots}
 
