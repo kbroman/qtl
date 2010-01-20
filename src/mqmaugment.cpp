@@ -182,50 +182,36 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, 1);
       info("Augmentation second phase done with %d individuals",current_leftover_ind);
       //Stick them all back into
-      int numimputations=64;
+      int numimputations=1;
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+numimputations*current_leftover_ind);;
       vector new_y_all = newvector((*augmentednind)+numimputations*current_leftover_ind);
       ivector new_ind_all = newivector((*augmentednind)+numimputations*current_leftover_ind);;
-      for(int i=0;i<(*augmentednind)+current_leftover_ind;i++){
+      for(int i=0;i<(*augmentednind)+current_leftover_ind;i++){    
         int currentind;
         double currentpheno;
         if(i < (*augmentednind)){
           currentind = new_ind[i];
           currentpheno = new_y[i];
           for(int j=0;j<nmark;j++){
-            newmarkerset_all[j][i] = newmarkerset[j][currentind];
+            newmarkerset_all[j][i] = newmarkerset[j][i];
           }
-          //info("%d",i);          
+        
         new_ind_all[i]= currentind;
-        new_y_all[i]= currentpheno;          
+        new_y_all[i]= currentpheno;
         }else{
           currentind = ind_done+(i-(*augmentednind));
           currentpheno = left_y[(i-(*augmentednind))];
           //info("Imputation of individual %d %d",currentind,numimputations);
           for(int a=0;a<numimputations;a++){
             int newindex = (*augmentednind)+a+((i-(*augmentednind))*numimputations);
-            //info("i=%d,s=%d,i-s=%d index=%d",i,(*augmentednind),(i-(*augmentednind)),(*augmentednind)+a+((i-(*augmentednind))*max_indaugment));
+            //info("i=%d,s=%d,i-s=%d index=%d/%d",i,(*augmentednind),(i-(*augmentednind)),newindex,(*augmentednind)+numimputations*current_leftover_ind);
             for(int j=0;j<nmark;j++){  
-              if(a==0){
-                // Most likely genotype at 0  
-                newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
-              }else{
-                // Imputation of less likely genotypes at 1 ... max_indaugment
-                newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
-                if(indleftmarkers[j][(i-(*augmentednind))]==MMISSING && position[j] == MLEFT){
-                  newmarkerset_all[j][newindex] = randommarker(crosstype);
-                }else{
-                  double randnum = ((double)rand()/((double)RAND_MAX+(double)1));
-                  if(randnum <= r[j]){
-                    newmarkerset_all[j][newindex] = randommarker(crosstype);
-                  }else{
-                    newmarkerset_all[j][newindex] = newmarkerset_all[j-1][newindex];
-                  }
-                }
-              }
+              // Most likely genotype at 0  
+              newmarkerset_all[j][newindex] = left_markerset[j][(i-(*augmentednind))];
             }
             new_ind_all[newindex]= currentind;
-            new_y_all[newindex]= currentpheno;  
+            new_y_all[newindex]= currentpheno;
+            //info("Individual: %d OriginalID:%f Variant:%d",currentind,currentpheno,a);
           }
         }
       }
@@ -581,6 +567,9 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
         newNind-= 1;
         iaug= previaug-1;
         succesind[i]=0;
+        //for(int x=previaug;x<previaug+imaxNaug;x++){
+        //  info("Individual: %d, variant: %d, prob: %f",i,x,newprob[x]);
+        //}
         if (verbose) info("Individual %d moved to second augmentation round", i);
       }
       sumprob= 0.0;
@@ -658,7 +647,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
 
   reorg_int(*maxind, *Nmark, auggeno, &NEW);
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
-  reorg_pheno(*maxind, 1, augPheno, &NEWPheno);
+  reorg_pheno((*maxiaug)*nind0, 1, augPheno, &NEWPheno);
 
   MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
   //Change all the markers from R/qtl format to MQM internal
@@ -679,12 +668,13 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, &succes_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
   
   */
-  if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&NEWPheno,*Nmark,chr,mapdistance,crosstype)){
+  if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&Pheno,*Nmark,chr,mapdistance,crosstype)){
     //Data augmentation finished succesfully
     //Push it back into RQTL format
     for (int i=0; i<(*Nmark); i++) {
       for (int j=0; j<(*Naug); j++) {
-        //NEWPheno[0][j] = new_y[j];
+        //info("Phenotype after return: %f",NEWPheno[0][j]);
+        NEWPheno[0][j] = Pheno[0][j];
         NEWIND[0][j] = new_ind[j];
         NEW[i][j] = 9;
         if (markers[i][j] == MAA) {
