@@ -577,7 +577,7 @@ int main(int argc,char *argv[]) {
     freevector((void *)r);
    */
    mqmaugmentfull(&markers,&nind,&augmentednind,&INDlist,mqmalgorithmsettings.neglect_unlikely, mqmalgorithmsettings.max_totalaugment, 
-   mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,crosstype);
+   mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,1,crosstype);
 
     // Start scanning for QTLs
     double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
