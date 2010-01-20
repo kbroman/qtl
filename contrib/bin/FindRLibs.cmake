@@ -41,6 +41,7 @@ IF(APPLE)
   )
 ENDIF()
 
+# If the R path is in the cache the following will skip...
 FIND_PROGRAM(R_EXECUTABLE R
   PATHS      # maybe use HINTS
     /usr/bin
@@ -66,7 +67,8 @@ IF(R_EXECUTABLE)
   ENDIF()
   message("LIBS=${_LIBS}")
   if (APPLE)
-    STRING(REGEX REPLACE "-F([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
+    # returns -F/Library/Frameworks/R.framework/.. -framework R
+    STRING(REGEX REPLACE "-F([^ ]+) -framework R" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
   else()
     STRING(REGEX REPLACE "-L([^ ]+)" "\\1" R_EXE_LIB_PATHS "${_LIBS}")
   endif()
