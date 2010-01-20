@@ -167,23 +167,21 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
   pheno <- NULL
   oldpheno <- pull.pheno(cross)
   result$augIND <- result$augIND+1
-  for(x in result$augIND[1:n.aug]){
-	if(nphe(cross)>1){
-		pheno <- rbind(pheno,oldpheno[x,])
-	}else{
-		pheno <- c(pheno,oldpheno[x])
-	}
+  for(x in result$augPheno[1:n.aug]){
+    if(nphe(cross)>1){
+      pheno <- rbind(pheno,oldpheno[x,])
+    }else{
+      pheno <- c(pheno,oldpheno[x])
+    }
   }
   for(c in 1:n.chr){
     #print(paste("Cromosome",c,"\n",sep=""))
     matri <- NULL
-    matri2 <- NULL
     markONchr <- dim(cross$geno[[c]]$data)[2]
     #print(paste("# markers",markONchr,"\n",sep=""))
     for(j in markdone:(markdone+markONchr-1)){
       #print(paste("Start",markdone,":End",(markdone+markONchr-1),"\n",sep=""))
       ind2 <- NULL
-
       ind2 <- result$augGeno[(1+(j*maxaug)):(n.aug+(j*maxaug))]
       matri <- rbind(matri,ind2)
     }
@@ -212,5 +210,5 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
 	warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
   }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
-  cross  # return cross type
+  list(result,cross)  # return cross type
 }
