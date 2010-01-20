@@ -21,6 +21,8 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
+sh contrib/scripts/cleanup.sh
+
 echo "* Run the standard MQM regression tests - without R install"
 cd $cwd
 cd contrib/bin
