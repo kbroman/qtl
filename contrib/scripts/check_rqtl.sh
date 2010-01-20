@@ -16,8 +16,10 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
+
 echo "* Run R CMD check"
 cd $cwd
+sh contrib/scripts/cleanup.sh
 R CMD check .
 if [ "$?" -ne "0" ]; then
   echo "Test 'R CMD check' failed"
