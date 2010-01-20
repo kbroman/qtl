@@ -16,6 +16,8 @@ if [ ! -d "contrib" ]; then
 fi
 cwd=`pwd`
 
+sh contrib/scripts/cleanup.sh
+
 echo "* Run R CMD check"
 cd $cwd
 R CMD check .
