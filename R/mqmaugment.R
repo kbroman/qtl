@@ -45,9 +45,9 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
   if(minprob <= 0 || minprob > 1){
 	stop("Error minprob should be a value between 0 and 1.")
   }
-  if((sum(nmissing(cross))/ sum(nmar(cross)*nind(cross))*100)>10 && minprob!=1){
-	warning("Warning: More than 10% missing values and minprob parameter < 1\nWe might loose information by dropping individuals")
-  }
+  #if((sum(nmissing(cross))/ sum(nmar(cross)*nind(cross))*100)>10 && minprob!=1){
+	#warning("Warning: More than 10% missing values and minprob parameter < 1\nWe might loose information by dropping individuals")
+  #}
   #Danny: This moved to the C-part of the algorithm
   #neglect = 1/minprob
 
@@ -102,7 +102,18 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
     cat("INFO: Number of individuals:",n.ind,".\n")
     cat("INFO: Number of chr:",n.chr,".\n")
   }
-
+  #------- Check for selective genotyping
+  selectivegenotyped <- FALSE
+  for(c in 1:n.chr){
+    for(i in 1:nind(cross)){
+      if(!selectivegenotyped && sum(is.na(cross$geno[[c]]$data[i,])) == length(cross$geno[[c]]$data[i,])){
+        selectivegenotyped <- TRUE
+        minprob <- 1
+        maxiaug <- 2  #So we don't allocate a lot of space
+        warning("MQM doesn't augment selective genotyped datasets, selecting most likely (minprob = 1)")
+      }
+    }
+  }
   # ---- Genotype
   geno <- pull.geno(cross)
   chr <- rep(1:nchr(cross), nmar(cross))
@@ -197,8 +208,8 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
   cross$mqm$augIND <- result$augIND[1:n.aug]
   # ---- RESULTS
   endtime <- proc.time()
-  if((n.ind/n.indold*100)<90){
-	warning("Warning: More than 10% of the original individuals dropped")
+  if(n.ind != n.indold){
+	warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
   }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
   cross  # return cross type
