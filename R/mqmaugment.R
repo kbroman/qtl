@@ -38,18 +38,15 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
+mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
   if(minprob <= 0 || minprob > 1){
 	stop("Error minprob should be a value between 0 and 1.")
   }
-  #if((sum(nmissing(cross))/ sum(nmar(cross)*nind(cross))*100)>10 && minprob!=1){
-	#warning("Warning: More than 10% missing values and minprob parameter < 1\nWe might loose information by dropping individuals")
-  #}
-  #Danny: This moved to the C-part of the algorithm
-  #neglect = 1/minprob
+  supported <- c("mostlikely","impute","drop")
+  unaugmentable <- pmatch(unaugmentable, supported)
 
   # ---- check for supported crosses and set ctype
 
@@ -156,6 +153,7 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
     as.double(minprob),
     as.integer(chr),
     as.integer(ctype),
+    as.integer(unaugmentable),
     as.integer(verbose),
     PACKAGE="qtl")
 	
@@ -210,5 +208,5 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
 	warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
   }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
-  list(result,cross)  # return cross type
+  cross  # return cross type
 }
