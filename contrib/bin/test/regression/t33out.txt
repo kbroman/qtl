@@ -1,8 +1,8 @@
-INFO: New augmentation routine
-INFO: First phase
+INFO: Augmentation routine
+INFO: Step 1: Augmentation
 INFO: Crosstype determined by the algorithm:F:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=0.500000
-INFO: Second part
+INFO: Done with augmentation
 INFO: Prob=0.019 Alfa=0.020000
 INFO: Prob=0.019 Alfa=0.020000
 INFO: dimX:13 nInd:120

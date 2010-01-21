@@ -1,5 +1,5 @@
-INFO: New augmentation routine
-INFO: First phase
+INFO: Augmentation routine
+INFO: Step 1: Augmentation
 INFO: Crosstype determined by the algorithm:B:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=0.500000
 INFO: Individual 92 moved to second augmentation round
@@ -124,11 +124,12 @@ INFO: Individual 246 moved to second augmentation round
 INFO: Individual 247 moved to second augmentation round
 INFO: Individual 248 moved to second augmentation round
 INFO: Individual 249 moved to second augmentation round
-INFO: Second part
+INFO: Step 2: Unaugmentable individuals
 INFO: Done with: 128/250 individuals still need to do 122
 INFO: Crosstype determined by the algorithm:B:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=1.000000
-INFO: Augmentation second phase done with 122 individuals
+INFO: Augmentation step 2 returned most likely for 122 individuals
+INFO: Done with augmentation
 INFO: Marker 6 at chr 1 is dropped
 INFO: Marker 15 at chr 1 is dropped
 INFO: Marker 16 at chr 1 is dropped
