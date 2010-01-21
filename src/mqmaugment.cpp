@@ -728,6 +728,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
     }
   } else {
     //Unsuccessfull data augmentation exit
+    info("This code should not be reached, data corruption could have occured. Please re-run this analysis.")
     *Naug = nind0;
     for (int i=0; i<(*Nmark); i++) {
       for (int j=0; j<(*Naug); j++) {
