@@ -54,3 +54,6 @@ r <- testaugmentation(listeria)
 if(!round(r[[1]][3,3],3)==0.352) stop("Listeria ML dataaugmentation error")
 if(!round(r[[1]][3,3],3)==round(r[[2]][3,3],3)) stop("Listeria ML compared versus IMP error")
 if(!round(r[[3]][3,3],3)==0.034) stop("Listeria DROP dataaugmentation error")
+
+
+cat("testaugmentation.R, tests succesfully run!")
