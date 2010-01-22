@@ -195,14 +195,23 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   vector newy;
   MQMMarkerMatrix newmarker;
   double ymean=0.0, yvari=0.0;
+  //info("Number of individuals: %d Number Aug: %d",Nind,out_Naug);
+  int cur = -1;
   for (int i=0; i<Nind; i++){
-    ymean += y[i];
+    if(INDlist[0][i] != cur){
+      ymean += y[i];
+      cur = INDlist[0][i];
+    }
   }
-  ymean/= Nind;
+  ymean/= out_Naug;
+  
   for (int i=0; i<Nind; i++){
-    yvari += pow(y[i]-ymean,2);
+    if(INDlist[0][i] != cur){
+      yvari += pow(y[i]-ymean,2);
+      cur = INDlist[0][i];
+    }
   }  
-  yvari/= (Nind-1);
+  yvari/= (out_Naug-1);
   //Fix for not doing dataaugmentation, we just copy the current as the augmented and set Naug to Nind
   Naug=Nind;
   Nind=out_Naug;
