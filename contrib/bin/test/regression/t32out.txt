@@ -1,5 +1,8 @@
+INFO: Augmentation routine
+INFO: Step 1: Augmentation
 INFO: Crosstype determined by the algorithm:F:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=0.500000
+INFO: Done with augmentation
 INFO: Prob=0.020 Alfa=0.020000
 INFO: Prob=0.021 Alfa=0.020000
 INFO: dimX:1 nInd:120
@@ -8,7 +11,7 @@ INFO: F(5.566,1,119)=0.020000
 INFO: F(4.003,2,119)=0.020000
 INFO: Log-likelihood of full model= -9356.840
 INFO: Residual variance= 6631.434
-INFO: Trait mean= 127.568; Trait variation= 4812.943
+INFO: Trait mean= 148.703; Trait variation= 6631.434
 INFO: Number of output datapoints: 2020
     0	0.218
     1	0.364

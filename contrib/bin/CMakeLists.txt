@@ -47,7 +47,9 @@ ENDIF()
 
 link_libraries(${R_LIBRARY} ${R_BLAS_LIBRARY})
 
-add_executable (mqm 
+add_executable (mqm
+../../src/simulate.c
+../../src/simulate.h
 ../../src/mqmaugment.cpp    
 ../../src/mqmeliminate.h  
 ../../src/mqmmapqtl.h     

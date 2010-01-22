@@ -478,32 +478,18 @@ int main(int argc,char *argv[]) {
     int augmentednind = mqmalgorithmsettings.nind;
     
     //<dataaugmentation>
-    //bool augdata(const int Nind, int const Nmark,const MQMMarkerMatrix markers,int *Nind, MQMMarkerMatrix *newmarkers){
-    // int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
-    calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers);
+     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
+      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");   
+    //int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
     
     if(selectivelygenotyped(markers,chr,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark)){
       fprintf(fout,"Warning: Selective genotyped set, only including most likely (neglect_unlikely set to 1)\n");
       mqmalgorithmsettings.neglect_unlikely = 1;
     }
-    
-    //Variables for the returned augmented markers,phenotype,individualmapping
-    MQMMarkerMatrix newmarkerset;
-    vector new_y;
-    ivector new_ind;
-    cvector position = relative_marker_position(mqmalgorithmsettings.nmark,chr);
-    vector r = recombination_frequencies(mqmalgorithmsettings.nmark, position, mapdistance);
-    if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
-      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
-    mqmaugment(markers, pheno_value[phenotype], &newmarkerset, &new_y, &new_ind, &nind, &augmentednind,  mqmalgorithmsettings.nmark, position, r, mqmalgorithmsettings.max_totalaugment, mqmalgorithmsettings.max_indaugment, mqmalgorithmsettings.neglect_unlikely, crosstype, 1);
-    //Now to set the values we got back into the variables
-    pheno_value[phenotype] = new_y;
-    INDlist = new_ind;
-    markers = newmarkerset;
-    //Cleanup dataaugmentation:
-    freevector((void *)position);
-    freevector((void *)r);
-    
+
+   mqmaugmentfull(&markers,&nind,&augmentednind,&INDlist,mqmalgorithmsettings.neglect_unlikely, mqmalgorithmsettings.max_totalaugment, 
+   mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,1,crosstype,verbose);
+
     // Start scanning for QTLs
     double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
@@ -524,7 +510,7 @@ int main(int argc,char *argv[]) {
             fprintf(fout,"%.3f\n",ftruncate3(QTL[0][q]));
       }
     }
-      
+   
     freevector((void *)f1genotype);
     freevector((void *)cofactor);
     freevector((void *)mapdistance);

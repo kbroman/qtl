@@ -38,15 +38,21 @@ Data augmentation routing
 void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno, 
                double *augPheno, int *augIND, int *Nind, int *Naug, int *Nmark,
                int *Npheno, int *maxind, int *maxiaug, double *minprob, int
-               *chromo, int *crosstype, int *verbose);
+               *chromo,int* unaugmentable,int *crosstype, int *verbose);
+               
+int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivector* INDlist,
+                  double neglect_unlikely, int max_totalaugment, int max_indaugment,
+                  const matrix* pheno_value,const int nmark,const ivector chr,const vector mapdistance,
+                  const int unaugmentable, const MQMCrossType crosstype,const int verbose);      
 
-int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers);               
+int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix markers, const MQMCrossType crosstype);         
 
-int mqmaugment(const MQMMarkerMatrix marker, const vector y, MQMMarkerMatrix *augmarker, vector *augy,
-            ivector* augind, int *Nind, int *Naug, const int Nmark, 
-            const cvector position,
-            vector r, const int maxNaug, const int imaxNaug, const double minprob, 
-            MQMCrossType crosstype, const int verbose);
+int mqmaugment(const MQMMarkerMatrix marker, const vector y, 
+               MQMMarkerMatrix* augmarker, vector *augy, 
+               ivector* augind, ivector* sucind, int *Nind, int *Naug, const int Nmark, 
+               const cvector position, vector r, const int maxNaug, 
+               const int imaxNaug, const double minprob, 
+               const MQMCrossType crosstype, const int verbose);
 
 #ifdef __cplusplus
   }
