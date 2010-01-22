@@ -1,5 +1,8 @@
+INFO: Augmentation routine
+INFO: Step 1: Augmentation
 INFO: Crosstype determined by the algorithm:B:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=1.000000
+INFO: Done with augmentation
 INFO: Marker 6 at chr 1 is dropped
 INFO: Cofactor at chr 1 is dropped
 INFO: Marker 15 at chr 1 is dropped
