@@ -53,19 +53,16 @@ single \qtl\ mapping with \code{scanone} (green, dashed) }
 
 \input{mqm/limitations.txt}
 
-Despite these limitations, \mqm\footnote{Note that \mqm\
-  \cite{jansen94} is \emph{not the
-same} as composite interval mapping (CIM)\cite{CIMa,CIMb}, though
-both methods were introduced around the same time. The great advantage of MQM compared to interval mapping in reducing the chance of a type I error
-(a QTL is indicated at a location where there is no QTL
-present) and in reducing the chance of a type II error (a QTL is
-not detected)\cite{jansen94b}} is a valuable addition to
-the \qtl\ mapper's toolbox. It is able to deal with interference of \qtl,
-{\color{red} \textbf{[I'm not sure you mean by ``interference of qtl'']}}
-handles missing data and allows more precise detection than other methods. This
-tutorial will show how to use \mqm\ for \qtl\ mapping. Also R/qtl's \mqm\ is
-faster than other implementations and scales on multi-CPU systems and computer
-clusters.
+Despite these limitations, \mqm\footnote{ MQM should not be confused with
+composite interval mapping (CIM) \cite{CIMa,CIMb}.  The great advantage of MQM
+over CIM is reduction of type I (a QTL is indicated at a location where there
+is no QTL present) and type II (a QTL is not detected)errors for QTL detection
+\citep{Jansen:1994b} } is a valuable addition to the \qtl\ mapper's toolbox. It
+is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
+handles missing data and has higher precision than other methods.  R/qtl's
+\mqm\ is faster than other implementations and scales on multi-CPU systems and
+computer clusters.  In this tutorial we will show you how to use \mqm\ for
+\qtl\ mapping. 
 
 \mqm\ is an integral part of the free \rqtl\
 package\cite{rqtlbook,broman09,broman03} for the R statistical
