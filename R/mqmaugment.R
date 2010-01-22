@@ -28,28 +28,21 @@
 #
 #####################################################################
 
-
-
-
-
 ######################################################################
 #
-# mqmaugment:
+# mqmaugment: dataaugmentation routine for MQM
 #
 ######################################################################
 
-mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
+mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
   if(minprob <= 0 || minprob > 1){
 	stop("Error minprob should be a value between 0 and 1.")
   }
-  #if((sum(nmissing(cross))/ sum(nmar(cross)*nind(cross))*100)>10 && minprob!=1){
-	#warning("Warning: More than 10% missing values and minprob parameter < 1\nWe might loose information by dropping individuals")
-  #}
-  #Danny: This moved to the C-part of the algorithm
-  #neglect = 1/minprob
+  supported <- c("mostlikely","impute","drop")
+  unaugmentable <- pmatch(unaugmentable, supported)
 
   # ---- check for supported crosses and set ctype
 
@@ -102,18 +95,7 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
     cat("INFO: Number of individuals:",n.ind,".\n")
     cat("INFO: Number of chr:",n.chr,".\n")
   }
-  #------- Check for selective genotyping
-  selectivegenotyped <- FALSE
-  for(c in 1:n.chr){
-    for(i in 1:nind(cross)){
-      if(!selectivegenotyped && sum(is.na(cross$geno[[c]]$data[i,])) == length(cross$geno[[c]]$data[i,])){
-        selectivegenotyped <- TRUE
-        minprob <- 1
-        maxiaug <- 2  #So we don't allocate a lot of space
-        warning("MQM doesn't augment selective genotyped datasets, selecting most likely (minprob = 1)")
-      }
-    }
-  }
+
   # ---- Genotype
   geno <- pull.geno(cross)
   chr <- rep(1:nchr(cross), nmar(cross))
@@ -156,6 +138,7 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
     as.double(minprob),
     as.integer(chr),
     as.integer(ctype),
+    as.integer(unaugmentable),
     as.integer(verbose),
     PACKAGE="qtl")
 	
@@ -167,23 +150,21 @@ mqmaugment <- function(cross, maxaugind=82, minprob=0.1, verbose=FALSE) {
   pheno <- NULL
   oldpheno <- pull.pheno(cross)
   result$augIND <- result$augIND+1
-  for(x in result$augIND[1:n.aug]){
-	if(nphe(cross)>1){
-		pheno <- rbind(pheno,oldpheno[x,])
-	}else{
-		pheno <- c(pheno,oldpheno[x])
-	}
+  for(x in result$augPheno[1:n.aug]){
+    if(nphe(cross)>1){
+      pheno <- rbind(pheno,oldpheno[x,])
+    }else{
+      pheno <- c(pheno,oldpheno[x])
+    }
   }
   for(c in 1:n.chr){
     #print(paste("Cromosome",c,"\n",sep=""))
     matri <- NULL
-    matri2 <- NULL
     markONchr <- dim(cross$geno[[c]]$data)[2]
     #print(paste("# markers",markONchr,"\n",sep=""))
     for(j in markdone:(markdone+markONchr-1)){
       #print(paste("Start",markdone,":End",(markdone+markONchr-1),"\n",sep=""))
       ind2 <- NULL
-
       ind2 <- result$augGeno[(1+(j*maxaug)):(n.aug+(j*maxaug))]
       matri <- rbind(matri,ind2)
     }
