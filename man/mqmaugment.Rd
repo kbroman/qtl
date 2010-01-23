@@ -14,7 +14,7 @@ of individuals is returned in a new \code{crossobject}.
 }
 
 \usage{
-mqmaugment(cross, maxaugind=82, minprob=0.1, verbose=FALSE)
+mqmaugment(cross, maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE)
 }
 
 \arguments{
@@ -36,6 +36,16 @@ mqmaugment(cross, maxaugind=82, minprob=0.1, verbose=FALSE)
     against the most likely genotype. Use a value of 1.0 to return a single
     filled in genotype for each individual.
  }
+  \item{unaugmentable}{ 
+    When individuals have too much missing data and augmentation fails three 
+    options are provided: 1. mostlikely: Calculate the most likely genotypes 
+    at missing marker positions and add this individual to the set.
+    2. impute: Calculate the most likely genotypes at missing marker positions 
+    and impute maxaugind individual-variants around the most likely genotype.
+    3. drop: Drop individuals that cannot be augmented from the dataset, this 
+    option is not advised because information from the dropped individuals will
+    be lost.
+ } 
   \item{verbose}{ Verbose output }
 }
 
