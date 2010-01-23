@@ -1,10 +1,8 @@
 The theoretical framework of Multiple QTL Model (MQM) mapping was
-introduced and explored by Ritsert Jansen \citep{Jansen:1993,
-Jansen:1994a, Jansen:1994b}, explained in the Handbook of Statistical
-Genetics \citep{Handbook:Jansen:2007} and used effectively in
-practical research \citep{Schaar:1997, Jansen:1998, Bink:2002}, with
-one known commercial implementation \citep{MapQTL}. Here we present
-the first free and open source implementation of MQM. 
+introduced and explored by Ritsert Jansen, explained in the Handbook
+of Statistical Genetics and used effectively in practical research ,
+with one known commercial implementation. Here we present the first
+free and open source implementation of MQM. 
 
 MQM is an automatic three-stage procedure in which, in the first
 stage, missing data is 'augmented'. I.e. rather than guessing one
