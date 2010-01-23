@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmplot_directedqtl(cross, mqmresults, draw = TRUE)
+mqmplot_directedqtl(cross, mqmresults, pheno.col=1, draw = TRUE)
 }
 
 \arguments{
@@ -16,6 +16,7 @@ mqmplot_directedqtl(cross, mqmresults, draw = TRUE)
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{mqmresults}{ Results from mqmscan of type \code{scanone} }
+  \item{pheno.col}{ From which phenotype in the crossobject are the mqmresults calculated }
   \item{draw}{ If TRUE, draw the figure. }  
 }
 
