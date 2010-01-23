@@ -57,7 +57,7 @@ Despite these limitations, \mqm\footnote{ MQM should not be confused with
 composite interval mapping (CIM) \cite{CIMa,CIMb}.  The great advantage of MQM
 over CIM is reduction of type I (a QTL is indicated at a location where there
 is no QTL present) and type II (a QTL is not detected)errors for QTL detection
-\citep{Jansen:1994b} } is a valuable addition to the \qtl\ mapper's toolbox. It
+\cite{Jansen:1994b} } is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
 handles missing data and has higher precision than other methods.  R/qtl's
 \mqm\ is faster than other implementations and scales on multi-CPU systems and
