@@ -1,17 +1,21 @@
-Multiple QTL model (MQM) mapping is a powerful QTL mapping method
-developed by Ritsert C. Jansen\cite{jansen94}.  MQM is an automatic
-two-stage procedure in which, in the first stage, important markers
-are selected in multiple regression on markers. In the second stage a
-QTL is moved along the chromosomes by using the pre-selected markers
-as cofactors, except for the markers flanking the interval under
-study. A refined and automated procedure for cases with large numbers
-of marker cofactors is included.
+The theoretical framework of Multiple QTL Model (MQM) mapping was
+introduced and explored by Ritsert Jansen \citep{Jansen:1993,
+Jansen:1994a, Jansen:1994b}, explained in the Handbook of Statistical
+Genetics \citep{Handbook:Jansen:2007} and used effectively in
+practical research \citep{Schaar:1997, Jansen:1998, Bink:2002}, with
+one known commercial implementation \citep{MapQTL}. Here we present
+the first free and open source implementation of MQM. 
 
-MQM for R/qtl is based on the original implementation of MQM mapping
-and consists of a three step procedure: (1) data augmentation, (2)
-automatic backward model elimination using genetic markers evenly
-spread over the genome as cofactors and (3) QTL (interval) mapping
-using the most `informative' model through maximum likelihood. The
-method internally controls false discovery rates (FDR) and lets users
-test different QTL models by elimation of non-significant cofactors. 
+MQM is an automatic three-stage procedure in which, in the first
+stage, missing data is 'augmented'. I.e. rather than guessing one
+likely genotype, multiple genotypes are modeled with their matching
+probabilities.  In the second stage important markers are selected in
+multiple regression on markers. In the third stage a QTL is moved
+along the chromosomes by using the pre-selected markers as cofactors,
+except for the markers flanking the interval under study. QTL are
+(interval) mapped using the most `informative' model through maximum
+likelihood.  A refined and automated procedure for cases with large
+numbers of marker cofactors is included.  The method internally
+controls false discovery rates (FDR) and lets users test different QTL
+models by elimation of non-significant cofactors. 
 
