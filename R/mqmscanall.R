@@ -38,11 +38,11 @@ cimall <- function(...) {
 	scanall(...,mapfunction=cim)
 }
 
-mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, b.size=10, ...) {
-	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqmscan)
+mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, batchsize=10, ...) {
+	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, batchsize=batchsize, ..., mapfunction=mqmscan)
 }
 
-scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.size=10, FF=0, ..., plot=FALSE, verbose=FALSE){
+scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0, ..., plot=FALSE, verbose=FALSE){
 	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
@@ -55,7 +55,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.
       ourline()
       cat("Starting R/QTL multitrait analysis\n")
       cat("Number of phenotypes:",n.pheno,"\n")
-      cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
+      cat("Batchsize:",batchsize," & n.clusters:",n.clusters,"\n")
       ourline()	
     }
 		
@@ -64,8 +64,8 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.
     all.data <- cross
 		
 		bootstraps <- 1:n.pheno
-		batches <- length(bootstraps) %/% b.size
-		last.batch.num <- length(bootstraps) %% b.size
+		batches <- length(bootstraps) %/% batchsize
+		last.batch.num <- length(bootstraps) %% batchsize
 		if(last.batch.num > 0){
 			batches = batches+1
 		}
@@ -83,9 +83,9 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.
 				start <- proc.time()
         if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
+					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE))
@@ -105,7 +105,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.
           cat("INFO: Done with batch",x,"/",batches,"\n")	
           cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
           cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% batchsize), digits=3),"seconds\n")
           cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
           ourline()
         }
@@ -116,9 +116,9 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.
 				start <- proc.time()
 				if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")				
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
+					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
 				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
 				if(plot){
@@ -135,7 +135,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.
           cat("INFO: Done with batch",x,"/",batches,"\n")	
           cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
           cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% batchsize), digits=3),"seconds\n")
           cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
           ourline()
         }
