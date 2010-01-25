@@ -38,11 +38,11 @@ cimall <- function(...) {
 	scanall(...,mapfunction=cim)
 }
 
-mqmscanall <- function(cross, multiC=TRUE, n.clusters=1, b.size=10, ...) {
-	scanall(cross=cross, multiC=multiC, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqmscan)
+mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, b.size=10, ...) {
+	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqmscan)
 }
 
-scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.size=10, FF=0, ..., plot=FALSE, verbose=FALSE){
+scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, b.size=10, FF=0, ..., plot=FALSE, verbose=FALSE){
 	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
@@ -76,8 +76,9 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if(multiC && n.clusters>1 && suppressWarnings(require(snow,quietly=TRUE))) {
-                  if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+		if(multicore && n.clusters>1 && ("snow" %in% installed.packages()[,1])) {
+      suppressWarnings(require(snow,quietly=TRUE))
+      if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
         if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")
