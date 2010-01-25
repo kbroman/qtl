@@ -3,6 +3,7 @@
 # mqmplots.R
 #
 # Copyright (c) 2009, Danny Arends
+# Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
@@ -38,13 +39,7 @@
 #
 #####################################################################
 
-
-
-
-
-# copyright polyplot (c) 2009, Rutger Brouwer
-
-mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
+mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -55,7 +50,7 @@ mqmplot_directedqtl <- function(cross, mqmresults, draw = TRUE){
   	stop("No mqmresults object. Please supply a valid scanone object.") 
   }
   onlymarkers <- mqmextractmarkers(mqmresults)
-  eff <- effectscan(sim.geno(cross),draw=FALSE)
+  eff <- effectscan(sim.geno(cross),pheno.col=pheno.col,draw=FALSE)
   if(any(eff[,1]=="X")){
     eff <- eff[-which(eff[,1]=="X"),]
   }
