@@ -6,7 +6,8 @@ version by version.  The bugs marked with ">>" are not yet fixed.  See
 STATUS.txt for further information on changes to the package.  
 
 The list is not comprehensive.  I don't do a terribly good job of
-keeping track of things I find and fix.
+keeping track of things I find and fix. The git log gives an explicit
+of source code changes, and contains descriptions of bug fixes.
 
 If you find a potential bug in R/qtl, please send an email, with as
 many details as possible and possibly example data, to Karl Broman,
