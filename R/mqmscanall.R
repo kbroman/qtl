@@ -64,8 +64,9 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, ba
     all.data <- cross
 		
 		bootstraps <- 1:n.pheno
-		batches <- length(bootstraps) %/% batchsize
+    batches <- length(bootstraps) %/% batchsize
 		last.batch.num <- length(bootstraps) %% batchsize
+    
 		if(last.batch.num > 0){
 			batches = batches+1
 		}
@@ -119,7 +120,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, ba
 					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
-				}	
+				}
 				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
 				if(plot){
 					temp <- result
