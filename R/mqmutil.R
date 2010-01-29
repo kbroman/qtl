@@ -57,6 +57,9 @@ ourline <- function(){
 }
 
 simulateMissingData <- function(cross,percentage=5){
+  if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
   for(x in 1:length(cross$geno)){
     numtoDROP <- length(cross$geno[[x]]$data)*(percentage/100)
     toDROP <- sample(length(cross$geno[[x]]$data))[1:numtoDROP]
@@ -67,6 +70,9 @@ simulateMissingData <- function(cross,percentage=5){
 
 # Return the real markers in the set (remove fake ones)
 mqmextractmarkers <- function(mqmresult){
+  if(!("scanone" %in% class(mqmresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
   result <- NULL
   for(x in 1:nrow(mqmresult)){
     # for every marker...
@@ -113,6 +119,12 @@ estimatemarkerlod <- function(interresults){
 
 
 addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
+  if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(!("scanone" %in% class(intervalresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
 	map <- pull.map(cross)
 	newres <- NULL
 	intervalmaploc <- 1
@@ -153,6 +165,9 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
 }
 
 mqmtestnormal <- function(cross, pheno.col=1){
+  if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
 	returnval <- FALSE
 	if(pheno.col <0 || pheno.col > nphe(cross)){
 		stop("No such phenotype (pheno.col = ",pheno.col,")")

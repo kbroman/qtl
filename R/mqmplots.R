@@ -118,10 +118,10 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...
 		stop("No cross object. Please supply a valid cross object.") 
 	}
   if(is.null(results)){
-		stop("No results object. Please supply a valid scanone object.") 
+		stop("No results object. Please supply a valid mqmmulti object.") 
 	}
   if(!any(class(results)=="mqmmulti")){
-  	stop("Not a mqmmulti object. Please supply a valid scanone object.") 
+  	stop("Not a mqmmulti object. Please supply a valid mqmmulti object.") 
   }  
   cross <- sim.geno(cross)
   names <- NULL
