@@ -116,7 +116,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, ba
 				start <- proc.time()
 				if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")				
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
