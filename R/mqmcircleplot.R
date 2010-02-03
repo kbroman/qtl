@@ -126,10 +126,11 @@ mqmplotcircle <- function(...){
   mqmplot_circle(...)
 }
 
-mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE,transparency=FALSE){
+mqmplot_circle <- function(cross, result, highlight=0, spacing=25, interactstrength=2,legend=FALSE, verbose=FALSE, transparency=FALSE){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+  retresults <- NULL
   lod<-FALSE
   if(any(class(result)=="mqmmulti")){
     if(highlight > 0){
@@ -174,36 +175,39 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
           }
           if(highlight==0){
             col=colorz[x]
-			title(sub = "Multiple traits")
+            title(sub = "Multiple traits")
           }else{
             col=rgb(0.1, 0.1, 0.1, 0.1)  
             if(highlight==x) title(sub = paste("Multiple traits highlight of:",colnames(cross$pheno)[x]))
           }
-          points(traitl,col=col,pch=24,cex=1)
           for(y in 1:length(model[[4]])){
             qtll <- locationtocircle(templateresult,model[[4]][y],model[[5]][y],spacing=spacing)
-            drawspline(traitl,qtll,col=col)
             if(highlight==x){
               for(z in y:length(model[[4]])){
                 if(!z==y){
                   cross <- sim.geno(cross)
                   eff <- effectplot(cross,pheno.col=x,mname1=model$name[y],mname2=model$name[z],draw=F)
                   changeA <- (eff$Means[1,2]-eff$Means[1,1])
-                  changeB <- (eff$Means[2,2]-eff$Means[2,1])
-                  if((abs(changeA-changeB)-4*mean(eff$SEs)) > 0){
-                    #interaction
-                    cat(model$name[y]," ",model$name[z]," ",changeA," ",changeB," ",mean(eff$SEs),"\n")
-                    qtl2 <- locationtocircle(templateresult,model[[4]][z],model[[5]][z],spacing=spacing)
-                    if(changeA/abs(changeA) !=  changeB/abs(changeB)){
-                      drawspline(qtll,qtl2,lwd=2,col="green")
-                    }else{
+                  changeB <- (eff$Means[2,2]-eff$Means[2,1])      
+                  #interaction
+                  qtl2 <- locationtocircle(templateresult,model[[4]][z],model[[5]][z],spacing=spacing)
+                  if(changeA/abs(changeA) !=  changeB/abs(changeB)){
+                    retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
+                    drawspline(qtll,qtl2,lwd=2,col="green")
+                  }else{
+                    if(abs(abs(changeA)-abs(changeB)) > interactstrength*mean(eff$SEs)){       
+                      retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
                       drawspline(qtll,qtl2,lwd=1.5,col="blue")
                     }
                   }
                 }
               }
             }
-            points(qtll*(1+0.1*((x/length(result)))),col=col,pch=19,cex=1)
+            if(highlight==0){
+              points(traitl,col=col,pch=24,cex=1)            
+              drawspline(traitl,qtll,col=col)
+              points(qtll*(1+0.1*((x/length(result)))),col=col,pch=19,cex=1)
+            }
           }
         }else{
           if(verbose) cat("Trait ",x," has no model\n")
@@ -231,7 +235,7 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
           }else{
             traitl <- c(0,0)
           }
-          drawspline(traitl,qtll,col="red")
+          if(!(highlight>0))drawspline(traitl,qtll,col="red")
         }   
       }
       legend("bottomright",c("Significant Cofactor","Interaction Enhance","Interaction Flip"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
@@ -241,6 +245,11 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
     plot(c(-1,1), c(-1, 1), type = "n", axes = FALSE, xlab = "", ylab = "")
     title(main = "Legend to circular genome plot")
     legend("center",paste(colnames(cross$pheno)),col=colorz,pch=19,cex=0.75)
+  }
+  if(!is.null(retresults)){
+    colnames(retresults) <- c("Marker","Marker","Change","Change","SEs")
+    retresults <- as.data.frame(retresults)
+    return(retresults)
   }
 }
 
