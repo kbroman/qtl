@@ -31,10 +31,6 @@
 #
 #####################################################################
 
-
-
-
-
 ######################################################################
 #
 # which.marker: Extracts the number of the marker when viewing the markers lineair
@@ -44,26 +40,7 @@
 ######################################################################
 
 
-#which.marker <- function(cross,name,verbose=FALSE){
-#	if(missing(cross))
-#		ourstop("No cross file. Please supply a valid cross object.")
-#	n <- 0
-#	marker_num <- 0
-#	for(chr in 1:nchr(cross)) {
-#	  for(marker in 1:length(cross$geno[[chr]]$map)){
-#		if(names(cross$geno[[chr]]$map[marker])==name){
-#			if(verbose) cat("Marker",name,"is number",n,"\n")
-#			marker_num <- n
-#		}
-#		n <- n+1
-#	  }
-#	}
-#	if(marker_num==0){
-#		stop("No marker named",name," found.\n")
-#	}
-#	marker_num;
-which.marker <-
-function(cross, name) {
+which.marker <- function(cross, name) {
   match(name, markernames(cross))
 }
 
@@ -116,11 +93,10 @@ mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
 	    cofactorlist[sexfactors[i]]=2
 	  }
 	}
-    if(sum(cofactorlist) > (individuals-10)){
-		ourstop("Trying to set: ",sum(cofactorlist)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
-		return
+  if(sum(cofactorlist) > (individuals-15)){
+		stop("Trying to set: ",sum(cofactorlist)," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
 	}
-    cofactorlist
+  cofactorlist
 }
 
 mqmsetcofactors <- function(cross,each = 3,verbose=FALSE){
@@ -139,8 +115,8 @@ mqmsetcofactors <- function(cross,each = 3,verbose=FALSE){
 	
         if(verbose) {
           cat("INFO: Found",individuals,"individuals in the cross object.\n")
-          cat("INFO: Mamimum amount of cofactors",(individuals-10)," (each =",ceiling(sum(n.mark)/(individuals-10)),") leaves 10 Degrees of Freedom (no Dominance).\n")
-          cat("INFO: Mamimum amount of cofactors",(individuals-10)/2," (each =",ceiling(sum(n.mark)/(individuals-10))*2,") leaves 10 Degrees of Freedom (Dominance).\n")
+          cat("INFO: Mamimum amount of cofactors",(individuals-15)," (each =",ceiling(sum(n.mark)/(individuals-15)),") leaves 15 Degrees of Freedom (no Dominance).\n")
+          cat("INFO: Mamimum amount of cofactors",(individuals-15)/2," (each =",ceiling(sum(n.mark)/(individuals-15))*2,") leaves 15 Degrees of Freedom (Dominance).\n")
         }
 
 	if(each > n.mark){
@@ -154,12 +130,77 @@ mqmsetcofactors <- function(cross,each = 3,verbose=FALSE){
 			cofactorlist[i] = 1
 		}
 	}
-    if(sum(cofactorlist) > (individuals-10)){
-		warning("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 10 Degrees of Freedom.\n")
+    if(sum(cofactorlist) > (individuals-15)){
+		warning("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
 	}
 	cofactorlist
 }
 
-#a <- mqmcofactors(cross,c(10,20,30,40,50,60,70,80),c(186,187))
+scoremissingmarkers <- function(cross){
+  genotype <- pull.geno(cross)
+  nind <- dim(genotype)[1]
+  missing <- NULL
+  for(x in 1:dim(genotype)[2]){
+    missing <- c(missing,sum(is.na(genotype[,x]))/nind)
+  }
+  missing
+}
+
+calculatedensity <- function(cross,distance=30){
+  genotype <- pull.geno(cross)
+  densities <- NULL
+  for(chr in 1:nchr(cross)){
+    map <- pull.map(cross)[[chr]]
+    for(x in 1:length(map)){
+      densities <- c(densities,sum(map[which(map > map[x]-distance)] < map[x]+distance))
+    }
+  }
+  densities
+}
+
+mqmautocofactors <- function(cross,num=50,dominance=FALSE,plot=FALSE){
+  if(num > (nind(cross)-15) && !dominance){
+		stop("Trying to set: ",num," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
+	}
+  if(num > ((nind(cross)-15)/2) && dominance){
+		stop("Trying to set: ",num," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
+	}
+  r <- scanone(cross)
+  cofactors <- rep(0,sum(nmar(cross)))
+  missing <- scoremissingmarkers(cross)
+  densities <- calculatedensity(cross)*missing
+  while(sum(cofactors) < num){
+    lefttoset <- num - sum(cofactors)
+    #cat("Cofactors left",lefttoset,"/",num,"\n")
+    possible <- which(max(densities)==densities)
+    if(length(possible) > lefttoset){
+      possible <- sample(possible,lefttoset)
+    }
+    cofactors[possible] <- 1
+    densities[possible] <- 0  
+  }
+  if(plot) plotcofactors(cross,cofactors)
+  cofactors
+}
+
+plotcofactors <- function(cross,cofactors){
+  map <- pull.map(cross)
+  qc <- NULL
+  qn <- NULL
+  qp <- NULL
+  chr <- 1
+  genotype <- pull.geno(cross)
+   for(x in 1:length(cofactors)){
+    if(cofactors[x]>0){
+      qn <- c(qn, as.character(names(unlist(map))[x]))
+      qc <- c(qc, as.character(names(map)[chr]))
+      qp <- c(qp, as.double(unlist(map)[x]))
+    }
+    if(x > sum(nmar(cross)[1:chr])){
+      chr <- chr+1
+    }
+  }
+  plot(makeqtl(sim.geno(cross),qc,qp,qn),col="blue")
+}
 
 # end of mqmcofactors.R
