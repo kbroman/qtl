@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 1/6/2010:
+Version 1.15, 1/27/2010:
 
 Major changes:
 
@@ -63,6 +63,9 @@ Minor changes:
 
   Fixed a bug in scanone permutations in the case of multiple
   phenotypes with missing data.
+
+  Fixed a problem in effectplot that arose from an apparent bug in
+  weighted.mean in R version 2.10.1
 
 
 Version 1.14, 9/30/2009:
