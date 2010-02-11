@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 1/27/2010:
+Version 1.15, 2/11/2010:
 
 Major changes:
 
@@ -44,6 +44,9 @@ Minor changes:
   lodint and bayesint now stop with an error if chr or qtl.index have
   length > 1.  Before, they gave weird results and a meaningless
   error. 
+
+  In read.cross with format="csv", give a better error message if
+  there are odd values in the marker positions.
 
   Fixed a bug in scanone/scantwo for RIL on the X chromosome; the X
   chromosome needs to be treated like to autosomes.  We can't really
