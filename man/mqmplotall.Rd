@@ -10,14 +10,16 @@
 }
 
 \usage{
-mqmplot_multitrait(result, type = "C", theta = 30, phi = 15, \dots)
+mqmplot_multitrait(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, \dots)
 }
 
 \arguments{
   \item{result}{ Result object from scanall }
-  \item{type}{ "C" for contourplot, "P" for stacked R/QTL plot, "I" for a heatmapplot, "D" for a 3D plot  }
-  \item{theta}{ Horizontal axis rotation in a 3D plot}
-  \item{phi}{ Vertical axis rotation in a 3D plot}
+  \item{type}{ Selection of the plot method to visualize the data options are: "lines" (defaut plotting option), "image", "contour" and "3Dplot" }
+  \item{group}{ A numeric vector indicating which traits to plot. NULL means no grouping }
+  \item{meanprofile}{ Plot a mean/median profile from the group selected }
+  \item{theta}{ Horizontal axis rotation in a 3D plot }
+  \item{phi}{ Vertical axis rotation in a 3D plot }
   \item{\dots}{Additional arguments passed to \code{\link[graphics]{plot}}.}
 }
 
@@ -45,10 +47,10 @@ data(multitrait)
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmscanall(multitrait, logtransform=TRUE)
-mqmplot_multitrait(result,"P")
-mqmplot_multitrait(result,"C")
-mqmplot_multitrait(result,"I")
-mqmplot_multitrait(result,"D")
+mqmplot_multitrait(result,"lines")
+mqmplot_multitrait(result,"contour")
+mqmplot_multitrait(result,"image")
+mqmplot_multitrait(result,"3Dplot")
 }
 
 \keyword{ hplot }
