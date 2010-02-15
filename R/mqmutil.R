@@ -48,6 +48,19 @@ mqm_version <- function() {
   list(RQTL=rqtl_version, RMQM=rmqm_version, MQM=mqm_version)
 }
 
+groupclusteredheatmap <- function(cross, clusteredheatmapresult, height){
+  items <- cut(clusteredheatmapresult$Rowv,h=height)$lower
+  phenotypes <- names(pull.pheno(cross))
+  groups <- vector(length(items), mode="list")
+  cnt <- 1
+  for(x in items){
+    nam <- labels(x)
+    groups[[cnt]] <- which(phenotypes %in% nam)
+    cnt <- cnt+1
+  }
+  groups
+}
+
 ourstop <- function(...){
 	stop(...)
 }
