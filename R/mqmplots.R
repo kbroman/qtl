@@ -362,16 +362,28 @@ getChr <- function(x){
 	x[,1]
 }
 
-mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
+mqmplot_multitrait <- function(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
-  if(class(result)[2] != "mqmmulti")
+  type <- match.arg(type)
+  meanprofile <- match.arg(meanprofile)
+  if(class(result)[2] != "mqmmulti"){
 		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
-  if(type=="C"){
+  }
+  n.pheno <- length(result)  
+  temp <- lapply(result,getThird)
+  chrs <- unique(lapply(result,getChr))
+  c <- do.call("rbind",temp)
+  if(!is.null(group)){
+    c <- c[group,]
+    colors <- rep("blue",n.pheno)
+  }else{
+    group <- 1:n.pheno
+    colors <- rainbow(n.pheno)
+  }
+  c <- t(c)
+  if(type=="contour"){
     #Countour plot
-    temp <- lapply(result,getThird)
-	chrs <- unique(lapply(result,getChr))
-	c <- do.call("rbind",temp)
-    c <- t(c)
+
     contour(
             x=seq(1,dim(c)[1]),
             y=seq(1,dim(c)[2]),
@@ -384,12 +396,8 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}			
   }
-  if(type=="I"){
+  if(type=="image"){
     #Image plot
-    temp <- lapply(result,getThird)
-	chrs <- unique(lapply(result,getChr))
-	c <- do.call("rbind",temp)
-	c <- t(c)
     image(x=1:dim(c)[1],y=1:dim(c)[2],c,
           xlab="Markers",ylab="Trait",
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
@@ -398,28 +406,36 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}
   }
-  if(type=="D"){
+  if(type=="3Dplot"){
     #3D perspective plot
-    temp <- lapply(result,getThird)
-	c <- do.call("rbind",temp)
-    c <- t(c)
     persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
           theta = theta, phi = phi, expand = 1,
           col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
   }
-  if(type=="P"){
-    #Standard plotting option, Lineplot
-    n.pheno <- length(result)
-    colors <- rainbow(n.pheno)
-    for(i in 1:n.pheno) {
-      if(i !=1 ){
-        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
+  if(type=="lines"){
+    #Standard plotting option, Lineplot  
+    first <- TRUE
+    for(i in group) {
+      if(first){
+        plot(result[[i]],ylim=c(0,max(c)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
+        first <- FALSE
       }else{
-        plot(result[[i]],col="black",lwd=1,...)
+        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
       }
     }
+    if(meanprofile != "none"){
+      temp <- result[[1]]
+      if(meanprofile=="median"){
+        temp[,3] <- apply(c,1,median)
+        legend("topright",c("QTL profiles","Median profile"),col=c("blue","black"),lwd=c(1,3))
+      }
+      if(meanprofile=="mean"){
+        temp[,3] <- rowMeans(c)
+        legend("topright",c("QTL profiles","Mean profile"),col=c("blue","black"),lwd=c(1,3))
+      }
+      plot(temp,add=TRUE,col="black",lwd=3,...)
+    }
   }
-
 }
 
 mqmplot_permutations <- function(result, ...){
