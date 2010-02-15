@@ -64,6 +64,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	cof <- mqmsetcofactors(multitrait,3)
   multitrait <- fill.geno(multitrait)
 	result <- mqmscanall(multitrait,cofactors=cof,batchsize=5)
+  mqmplot_multitrait(result,"lines")
 }
 
 \references{
