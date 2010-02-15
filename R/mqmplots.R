@@ -39,17 +39,17 @@
 #
 #####################################################################
 
-mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
+mqmplot_directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
-  if(is.null(mqmresults)){
+  if(is.null(result)){
 		stop("No mqmresults object. Please supply a valid scanone object.") 
 	}
-  if(!any(class(mqmresults)=="scanone")){
+  if(!any(class(result)=="scanone")){
   	stop("No mqmresults object. Please supply a valid scanone object.") 
   }
-  onlymarkers <- mqmextractmarkers(mqmresults)
+  onlymarkers <- mqmextractmarkers(result)
   eff <- effectscan(sim.geno(cross),pheno.col=pheno.col,draw=FALSE)
   if(any(eff[,1]=="X")){
     eff <- eff[-which(eff[,1]=="X"),]
@@ -57,10 +57,11 @@ mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
   onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
   if(draw) plot(ylim=c((min(onlymarkers[,3])*1.1),(max(onlymarkers[,3])*1.1)),onlymarkers)
   class(onlymarkers) <- c("scanone",class(onlymarkers))
+  if(!is.null(attr(result,"mqmmodel"))) attr(onlymarkers,"mqmmodel") <- attr(result,"mqmmodel")
   onlymarkers
 }
 
-mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALSE){
+mqmplot_heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -113,7 +114,7 @@ mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALS
   data
 }
 
-mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...){
+mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, scale="none", ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -128,7 +129,7 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...
   for(x in 1:nphe(cross)){
     results[[x]] <- mqmextractmarkers(results[[x]])
     if(directed){
-      effect <- effectscan(cross, pheno.col=x, draw=F)
+      effect <- effectscan(cross, pheno.col=x, draw=FALSE)
       results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
     }
     names <- c(names,substring(colnames(results[[x]])[3],5))
@@ -139,7 +140,8 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...
     data <- rbind(data,results[[x]][,3])
   }
   rownames(data) <- names
-  heatmap(data,Colv=Colv, xlab="Markers",main="Clustered heatmap",...)
+  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE,...)
+  retresults
 }
 
 mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
