@@ -99,6 +99,7 @@ mqmextractmarkers <- function(mqmresult){
   result
 }
 
+# Return the fake markers in the set (remove real ones)
 mqmextractpseudomarkers <- function(mqmresult){
   if(!("scanone" %in% class(mqmresult))){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
