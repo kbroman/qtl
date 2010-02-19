@@ -74,10 +74,17 @@ mqmplot_heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    results[[x]] <- mqmextractmarkers(results[[x]])
+    results[[x]] <- mqmextractpseudomarkers(results[[x]])
     if(directed){
-      effect <- effectscan(cross, pheno.col=x, draw=F)
-      results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=F)
+      cat(".")
+      for(y in 1:nrow(results[[x]])){
+        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+        cat(effectid,"\n")
+        if(!is.na(effectid&&1)){
+          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+        }
+      }
       if(!hidelow){
         breaks <- c(-100,-10,-3,0,3,10,100)
         col <- c("darkblue","blue","lightblue","yellow","orange","red")
@@ -100,7 +107,7 @@ mqmplot_heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
     data <- rbind(data,results[[x]][,3])
   }
   rownames(data) <- names
-  image(seq(0,sum(nmar(cross))),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  image(seq(0,nrow(results[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
   abline(v=0)
   for(x in unique(chrs[[1]])){
     abline(v=sum(as.numeric(chrs[[1]])<=x))
@@ -127,10 +134,17 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, sca
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    results[[x]] <- mqmextractmarkers(results[[x]])
+    results[[x]] <- mqmextractpseudomarkers(results[[x]])
     if(directed){
-      effect <- effectscan(cross, pheno.col=x, draw=FALSE)
-      results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
+      cat(".")
+      for(y in 1:nrow(results[[x]])){
+        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+        if(!is.na(effectid&&1)){
+          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+        }
+      }
+      
     }
     names <- c(names,substring(colnames(results[[x]])[3],5))
   }
@@ -139,8 +153,9 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, sca
   for(x in 1:length(results)){
     data <- rbind(data,results[[x]][,3])
   }
+  colnames(data) <- rownames(results[[1]])
   rownames(data) <- names
-  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE,...)
+  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
   retresults
 }
 
