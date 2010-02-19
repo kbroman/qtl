@@ -99,6 +99,28 @@ mqmextractmarkers <- function(mqmresult){
   result
 }
 
+mqmextractpseudomarkers <- function(mqmresult){
+  if(!("scanone" %in% class(mqmresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
+  result <- NULL
+  for(x in 1:nrow(mqmresult)){
+    # for every marker...
+    marker = mqmresult[x,]
+    found = grep('.loc',rownames(marker))
+    if(length(found)!=0) {
+      result <- rbind(result,marker)
+    }
+  }
+  class(result) <- class(mqmresult)
+  result
+}
+
+stepsize <- function(mqmpseudomarkers){
+  step <- as.numeric(strsplit(rownames(mqmpseudomarkers)[2],"loc")[[1]][2])-as.numeric(strsplit(rownames(mqmpseudomarkers)[1],"loc")[[1]][2])
+  step
+}
+
 
 estimatemarkerlod <- function(interresults){
   #For an okay return, with all markers filled every REAL marker has to be surrounded by interval markers
