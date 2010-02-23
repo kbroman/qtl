@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-9, Karl W Broman
+# copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Dec, 2009
+# last modified Feb, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2786,7 +2786,7 @@ function()
 ######################################################################
 
 locateXO <-
-function(cross, chr)
+function(cross, chr, full.info=FALSE)
 {
   if(!missing(chr)) {
     cross <- subset(cross, chr=chr)
@@ -2823,12 +2823,52 @@ function(cross, chr)
           as.double(map),
           location=as.double(rep(0,n.ind*2*(n.mar-1))),
           nseen=as.integer(rep(0,n.ind)),
+          ileft=as.integer(rep(0,n.ind*2*(n.mar-1))),
+          iright=as.integer(rep(0,n.ind*2*(n.mar-1))),
+          left=as.double(rep(0,n.ind*2*(n.mar-1))),
+          right=as.double(rep(0,n.ind*2*(n.mar-1))),
+          as.integer(full.info),
           PACKAGE="qtl")
   location <- t(matrix(z$location, nrow=n.ind))
   nseen <- z$nseen
+  if(full.info) {
+    ileft <- t(matrix(z$ileft, nrow=n.ind))
+    iright <- t(matrix(z$iright, nrow=n.ind))
+    left <- t(matrix(z$left, nrow=n.ind))
+    right <- t(matrix(z$right, nrow=n.ind))
+  }
 
-  lapply(as.data.frame(rbind(nseen, location)),
-         function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+  if(!full.info) {
+    return(lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] }))
+  }
+  else {
+    location <- lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    ileft <- lapply(as.data.frame(rbind(nseen, ileft)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    iright <- lapply(as.data.frame(rbind(nseen, iright)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+
+    left <- lapply(as.data.frame(rbind(nseen, left)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    right <- lapply(as.data.frame(rbind(nseen, right)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    res <- location
+    for(i in seq(along=res)) {
+      if(length(res[[i]])>0)
+        res[[i]] <- cbind(location=location[[i]],
+                          left=left[[i]],
+                          right=right[[i]],
+                          ileft=ileft[[i]],
+                          iright=iright[[i]])
+    }
+    return(res)
+  }
 }
 
 # jittermap: make sure no two markers are at precisely the same position
