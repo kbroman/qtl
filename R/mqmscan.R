@@ -108,7 +108,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
       if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
       result <- mqmscanall( cross,cofactors=cofactors,forceML=forceML,model=model,
                         cofactor.significance=cofactor.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
-                        logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose)
+                        logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose,n.clusters=n.clusters,batchsize=batchsize)
 			return(result)
 		}
 		if(pheno.col != 1){
