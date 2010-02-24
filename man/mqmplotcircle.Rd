@@ -9,7 +9,7 @@
 }
 
 \usage{
-	mqmplot_circle(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE,transparency=FALSE)
+	mqmplot_circle(cross,result,highlight=0,spacing=25, interactstrength=2, legend=FALSE,verbose=FALSE,transparency=FALSE)
 }
 
 \arguments{
@@ -23,6 +23,11 @@
   \item{highlight}{ With a mqmmulti object, highlight this phenotype (value between 
     one and the number of results in the mqmmultiobject) 
   }
+  \item{interactstrength}{ When highlighting a trait, consider interactions 
+  significant they have a change of more than interactstrength*SEs. A higher value 
+  will show less interactions.  However the interactions reported at higher 
+  interactstrength values will generaty be more reliable.
+  }  
   \item{spacing}{ User defined spacing between chromosomes in cM }
   \item{legend}{ With a mqmmulti object, plots a legend for the non-highlighed version }
   \item{transparency}{ Use transparency when drawing the plots (defaults to no transparency) }

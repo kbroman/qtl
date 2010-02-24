@@ -60,6 +60,88 @@ mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
   onlymarkers
 }
 
+mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALSE){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(results)){
+		stop("No results object. Please supply a valid scanone object.") 
+	}
+  if(!any(class(results)=="mqmmulti")){
+  	stop("Not a mqmmulti object. Please supply a valid scanone object.") 
+  }  
+  cross <- sim.geno(cross)
+  names <- NULL
+  for(x in 1:nphe(cross)){
+    results[[x]] <- mqmextractmarkers(results[[x]])
+    if(directed){
+      effect <- effectscan(cross, pheno.col=x, draw=F)
+      results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
+      if(!hidelow){
+        breaks <- c(-100,-10,-3,0,3,10,100)
+        col <- c("darkblue","blue","lightblue","yellow","orange","red")
+        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 0","Lod 0 to 3","Lod 3 to 10","Lod > 10")
+      }else{
+        breaks <- c(-100,-10,-3,3,10,100)
+        col <- c("darkblue","blue","white","orange","red")
+        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 3","Lod 3 to 10","Lod > 10")
+      }
+    }else{
+      breaks <- c(0,3,6,9,12,100)
+      col <- c("white","blue","darkblue","yellow","red")
+      leg <- c("Lod 0-3","Lod 3-6","Lod 6-9","Lod 9-12","Lod 12+")
+    }
+    names <- c(names,substring(colnames(results[[x]])[3],5))
+  }
+  chrs <- unique(lapply(results,getChr))
+  data <- NULL
+  for(x in 1:length(results)){
+    data <- rbind(data,results[[x]][,3])
+  }
+  rownames(data) <- names
+  image(seq(0,sum(nmar(cross))),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  abline(v=0)
+  for(x in unique(chrs[[1]])){
+    abline(v=sum(as.numeric(chrs[[1]])<=x))
+  }
+  for(x in 1:nphe(cross)){
+    abline(h=x)
+  }
+  if(legend){
+    legend("bottom",leg,col=col,lty=1,bg="white")
+  }
+  data
+}
+
+mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(results)){
+		stop("No results object. Please supply a valid mqmmulti object.") 
+	}
+  if(!any(class(results)=="mqmmulti")){
+  	stop("Not a mqmmulti object. Please supply a valid mqmmulti object.") 
+  }  
+  cross <- sim.geno(cross)
+  names <- NULL
+  for(x in 1:nphe(cross)){
+    results[[x]] <- mqmextractmarkers(results[[x]])
+    if(directed){
+      effect <- effectscan(cross, pheno.col=x, draw=F)
+      results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
+    }
+    names <- c(names,substring(colnames(results[[x]])[3],5))
+  }
+  chrs <- unique(lapply(results,getChr))
+  data <- NULL
+  for(x in 1:length(results)){
+    data <- rbind(data,results[[x]][,3])
+  }
+  rownames(data) <- names
+  heatmap(data,Colv=Colv, xlab="Markers",main="Clustered heatmap",...)
+}
+
 mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 		if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 

@@ -93,6 +93,8 @@ max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 mqmaugment              MQM augmentation
+mqmautocofactors        Automatic creation of cofactors to be used with
+                        mqm
 mqmcofactors            Create cofactors to be used with mqmscan
 mqmfind.marker          Fetch significant markers after permutation
                         analysis
