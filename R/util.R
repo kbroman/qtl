@@ -2803,7 +2803,7 @@ function(cross, chr, full.info=FALSE)
 
   map <- cross$geno[[1]]$map
   if(is.matrix(map)) map <- map[1,]
-  map <- map - map[1] # shift first marker to 0
+#  map <- map - map[1] # shift first marker to 0
 
   # bc or intercross?  thetype==0 for BC and ==1 for intercross
   if(type=="f2") {

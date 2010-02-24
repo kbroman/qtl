@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 2/19/2010:
+Version 1.15, 2/23/2010:
 
 Major changes:
 
@@ -35,7 +35,8 @@ Minor changes:
   Revised read.cross to have arguments error.prob and map.function, to
   be used if est.map is called.
 
-  Revised locateXO: it has a new argument, full.info; if this is TRUE,
+  Revised locateXO: it no longer shifts the first marker to position
+  0, and it has a new argument, full.info; if this is TRUE,
   the output includes not just the estimated crossover locations but
   also the endpoints of the intervals to which they are known to reside.
 
