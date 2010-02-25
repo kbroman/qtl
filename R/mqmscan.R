@@ -312,10 +312,10 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
         for(j in 1:chrmarkers[[i]]) {
           #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
           if(result$COF[sum] != 48){
-            if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
+            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
             qc <- c(qc, as.character(names(cross$geno)[i]))
             qp <- c(qp, as.double(unlist(new.map)[sum]))
-            qn <- c(qn, substr(names(unlist(new.map))[sum],3,nchar(names(unlist(new.map))[sum])))
+            qn <- c(qn, strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2])
             model.present <- 1
           }
           sum <- sum+1
