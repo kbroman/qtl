@@ -102,6 +102,12 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
     if(any(is.na(geno))){
 			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 		}
+    numcofold <- sum(cofactors)
+    cofactors <- checkdistances(cross,cofactors,1)
+    numcofnew <- sum(cofactors)  
+    if(numcofold!=numcofnew){
+      cat("INFO: Removed ",numcofold-numcofnew," cofactors that were close to eachother\n")
+    }
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
