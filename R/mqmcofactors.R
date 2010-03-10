@@ -158,7 +158,7 @@ calculatedensity <- function(cross,distance=30){
   densities
 }
 
-mqmautocofactors <- function(cross,num=50,dominance=FALSE,plot=FALSE){
+mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALSE){
   if(num > (nind(cross)-15) && !dominance){
 		stop("Trying to set: ",num," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
 	}
@@ -168,19 +168,45 @@ mqmautocofactors <- function(cross,num=50,dominance=FALSE,plot=FALSE){
   r <- scanone(cross)
   cofactors <- rep(0,sum(nmar(cross)))
   missing <- scoremissingmarkers(cross)
-  densities <- calculatedensity(cross)*missing
-  while(sum(cofactors) < num){
+  densities <- calculatedensity(cross,distance*2)*missing
+  cnt <- 0
+  while(sum(cofactors) < num && cnt < num){
     lefttoset <- num - sum(cofactors)
-    #cat("Cofactors left",lefttoset,"/",num,"\n")
+    cat("Cofactors left",lefttoset,"/",num,"\n")
     possible <- which(max(densities)==densities)
     if(length(possible) > lefttoset){
       possible <- sample(possible,lefttoset)
     }
     cofactors[possible] <- 1
-    densities[possible] <- 0  
+    densities[which(cofactors==1)] <- 0
+    cofactors <- checkdistances(cross,cofactors,distance)
+    cnt <- cnt+1
   }
+  if(cnt==num) cat("Solution by itteration, there might be less cofactors then requested\n")
   if(plot) plotcofactors(cross,cofactors)
   cofactors
+}
+
+checkdistances <- function(cross,cofactors,dist=5){
+  map <- unlist(pull.map(cross))
+  newcofactors <- cofactors
+  cnt_dropped <- 0
+  for(x in which(cofactors==1)){
+    for(y in which(cofactors==1)){
+      if(x != y){
+      chr_x <- strsplit(names(map[x]),'.',fixed=T)[[1]][1]
+      loc_x <- as.double(map[x])
+      chr_y <- strsplit(names(map[y]),'.',fixed=T)[[1]][1]
+      loc_y <- as.double(map[y])
+        if(chr_x==chr_y && abs(loc_x-loc_y) < dist){
+          newcofactors[y] <- 0
+          cnt_dropped <- cnt_dropped+1
+        }
+      }
+    }
+  }
+  #cat("Dropped ",cnt_dropped," cofactors due to conflicting locations\n")
+  newcofactors
 }
 
 plotcofactors <- function(cross,cofactors){
@@ -191,13 +217,13 @@ plotcofactors <- function(cross,cofactors){
   chr <- 1
   genotype <- pull.geno(cross)
    for(x in 1:length(cofactors)){
+    if(x > sum(nmar(cross)[1:chr])){
+      chr <- chr+1
+    }
     if(cofactors[x]>0){
       qn <- c(qn, as.character(names(unlist(map))[x]))
       qc <- c(qc, as.character(names(map)[chr]))
       qp <- c(qp, as.double(unlist(map)[x]))
-    }
-    if(x > sum(nmar(cross)[1:chr])){
-      chr <- chr+1
     }
   }
   plot(makeqtl(sim.geno(cross),qc,qp,qn),col="blue")
