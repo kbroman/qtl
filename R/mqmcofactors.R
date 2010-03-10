@@ -165,6 +165,9 @@ mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALS
   if(num > ((nind(cross)-15)/2) && dominance){
 		stop("Trying to set: ",num," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
 	}
+  if(distance < 0.1){
+    distance <- 0.1
+  }
   r <- scanone(cross)
   cofactors <- rep(0,sum(nmar(cross)))
   missing <- scoremissingmarkers(cross)
