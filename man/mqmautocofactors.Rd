@@ -8,13 +8,14 @@
 }
 
 \usage{
-mqmautocofactors(cross, num=50, dominance=FALSE, plot=FALSE)
+mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.} 
   \item{num}{ Number of cofactors to set, (There will be a warning when trying to set too many cofactors) }
+  \item{distance}{ Minimal distance in Cm between two cofactors }
   \item{dominance}{If TRUE, created a cofactorlist that is safe to use with the dominance scanmode of mqm. Please see  \code{\link{mqmscan}} for details.}
   \item{plot}{If TRUE, plots a genetic map displaying the selected markers as cofactors.}
 }
