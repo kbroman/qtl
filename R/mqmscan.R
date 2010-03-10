@@ -102,6 +102,12 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
     if(any(is.na(geno))){
 			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 		}
+    numcofold <- sum(cofactors)
+    cofactors <- checkdistances(cross,cofactors,1)
+    numcofnew <- sum(cofactors)  
+    if(numcofold!=numcofnew){
+      cat("INFO: Removed ",numcofold-numcofnew," cofactors that were close to eachother\n")
+    }
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
@@ -312,10 +318,10 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
         for(j in 1:chrmarkers[[i]]) {
           #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
           if(result$COF[sum] != 48){
-            if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
+            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
             qc <- c(qc, as.character(names(cross$geno)[i]))
             qp <- c(qp, as.double(unlist(new.map)[sum]))
-            qn <- c(qn, substr(names(unlist(new.map))[sum],3,nchar(names(unlist(new.map))[sum])))
+            qn <- c(qn, strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2])
             model.present <- 1
           }
           sum <- sum+1
