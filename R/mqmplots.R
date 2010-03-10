@@ -39,17 +39,17 @@
 #
 #####################################################################
 
-mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
+mqmplot_directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
-  if(is.null(mqmresults)){
+  if(is.null(result)){
 		stop("No mqmresults object. Please supply a valid scanone object.") 
 	}
-  if(!any(class(mqmresults)=="scanone")){
+  if(!any(class(result)=="scanone")){
   	stop("No mqmresults object. Please supply a valid scanone object.") 
   }
-  onlymarkers <- mqmextractmarkers(mqmresults)
+  onlymarkers <- mqmextractmarkers(result)
   eff <- effectscan(sim.geno(cross),pheno.col=pheno.col,draw=FALSE)
   if(any(eff[,1]=="X")){
     eff <- eff[-which(eff[,1]=="X"),]
@@ -57,10 +57,11 @@ mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
   onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
   if(draw) plot(ylim=c((min(onlymarkers[,3])*1.1),(max(onlymarkers[,3])*1.1)),onlymarkers)
   class(onlymarkers) <- c("scanone",class(onlymarkers))
+  if(!is.null(attr(result,"mqmmodel"))) attr(onlymarkers,"mqmmodel") <- attr(result,"mqmmodel")
   onlymarkers
 }
 
-mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALSE){
+mqmplot_heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -73,10 +74,17 @@ mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALS
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    results[[x]] <- mqmextractmarkers(results[[x]])
+    results[[x]] <- mqmextractpseudomarkers(results[[x]])
     if(directed){
-      effect <- effectscan(cross, pheno.col=x, draw=F)
-      results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=F)
+      cat(".")
+      for(y in 1:nrow(results[[x]])){
+        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+        cat(effectid,"\n")
+        if(!is.na(effectid&&1)){
+          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+        }
+      }
       if(!hidelow){
         breaks <- c(-100,-10,-3,0,3,10,100)
         col <- c("darkblue","blue","lightblue","yellow","orange","red")
@@ -99,7 +107,7 @@ mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALS
     data <- rbind(data,results[[x]][,3])
   }
   rownames(data) <- names
-  image(seq(0,sum(nmar(cross))),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  image(seq(0,nrow(results[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
   abline(v=0)
   for(x in unique(chrs[[1]])){
     abline(v=sum(as.numeric(chrs[[1]])<=x))
@@ -113,7 +121,7 @@ mqmplot_heatmap <- function(cross,results,hidelow=TRUE,directed=TRUE,legend=FALS
   data
 }
 
-mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...){
+mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, scale="none", ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -126,10 +134,17 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    results[[x]] <- mqmextractmarkers(results[[x]])
+    results[[x]] <- mqmextractpseudomarkers(results[[x]])
     if(directed){
-      effect <- effectscan(cross, pheno.col=x, draw=F)
-      results[[x]][,3]  <- results[[x]][,3] *(effect[,3]/abs(effect[,3]))
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
+      cat(".")
+      for(y in 1:nrow(results[[x]])){
+        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+        if(!is.na(effectid&&1)){
+          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+        }
+      }
+      
     }
     names <- c(names,substring(colnames(results[[x]])[3],5))
   }
@@ -138,8 +153,10 @@ mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, ...
   for(x in 1:length(results)){
     data <- rbind(data,results[[x]][,3])
   }
+  colnames(data) <- rownames(results[[1]])
   rownames(data) <- names
-  heatmap(data,Colv=Colv, xlab="Markers",main="Clustered heatmap",...)
+  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
+  retresults
 }
 
 mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
@@ -362,16 +379,28 @@ getChr <- function(x){
 	x[,1]
 }
 
-mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
+mqmplot_multitrait <- function(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
-  if(class(result)[2] != "mqmmulti")
+  type <- match.arg(type)
+  meanprofile <- match.arg(meanprofile)
+  if(class(result)[2] != "mqmmulti"){
 		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
-  if(type=="C"){
+  }
+  n.pheno <- length(result)  
+  temp <- lapply(result,getThird)
+  chrs <- unique(lapply(result,getChr))
+  c <- do.call("rbind",temp)
+  if(!is.null(group)){
+    c <- c[group,]
+    colors <- rep("blue",n.pheno)
+  }else{
+    group <- 1:n.pheno
+    colors <- rainbow(n.pheno)
+  }
+  c <- t(c)
+  if(type=="contour"){
     #Countour plot
-    temp <- lapply(result,getThird)
-	chrs <- unique(lapply(result,getChr))
-	c <- do.call("rbind",temp)
-    c <- t(c)
+
     contour(
             x=seq(1,dim(c)[1]),
             y=seq(1,dim(c)[2]),
@@ -384,12 +413,8 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}			
   }
-  if(type=="I"){
+  if(type=="image"){
     #Image plot
-    temp <- lapply(result,getThird)
-	chrs <- unique(lapply(result,getChr))
-	c <- do.call("rbind",temp)
-	c <- t(c)
     image(x=1:dim(c)[1],y=1:dim(c)[2],c,
           xlab="Markers",ylab="Trait",
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
@@ -398,28 +423,36 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}
   }
-  if(type=="D"){
+  if(type=="3Dplot"){
     #3D perspective plot
-    temp <- lapply(result,getThird)
-	c <- do.call("rbind",temp)
-    c <- t(c)
     persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
           theta = theta, phi = phi, expand = 1,
           col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
   }
-  if(type=="P"){
-    #Standard plotting option, Lineplot
-    n.pheno <- length(result)
-    colors <- rainbow(n.pheno)
-    for(i in 1:n.pheno) {
-      if(i !=1 ){
-        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
+  if(type=="lines"){
+    #Standard plotting option, Lineplot  
+    first <- TRUE
+    for(i in group) {
+      if(first){
+        plot(result[[i]],ylim=c(0,max(c)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
+        first <- FALSE
       }else{
-        plot(result[[i]],col="black",lwd=1,...)
+        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
       }
     }
+    if(meanprofile != "none"){
+      temp <- result[[1]]
+      if(meanprofile=="median"){
+        temp[,3] <- apply(c,1,median)
+        legend("topright",c("QTL profiles","Median profile"),col=c("blue","black"),lwd=c(1,3))
+      }
+      if(meanprofile=="mean"){
+        temp[,3] <- rowMeans(c)
+        legend("topright",c("QTL profiles","Mean profile"),col=c("blue","black"),lwd=c(1,3))
+      }
+      plot(temp,add=TRUE,col="black",lwd=3,...)
+    }
   }
-
 }
 
 mqmplot_permutations <- function(result, ...){

@@ -1,26 +1,26 @@
-\name{mqmplot_multitrait}
-\alias{mqmplot_multitrait}
+\name{mqmplot_clusteredheatmap}
+\alias{mqmplot_clusteredheatmap}
 
 \title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a mqm scan on multiple phenotypes. 
-  It supports four diffferent visualizations: a contourmap, heatmap, 3D graph or a multiple 
-  QTL plot from \code{\link{plot.scanone}}
+  Plotting routine to display the results from a mqm scan on multiple phenotypes.
 }
 
 \usage{
-mqmplot_multitrait(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, \dots)
+mqmplot_clusteredheatmap(cross, results, directed=TRUE, Colv=NA, scale="none",\dots)
 }
 
 \arguments{
-  \item{result}{ Result object from scanall }
-  \item{type}{ Selection of the plot method to visualize the data options are: "lines" (defaut plotting option), "image", "contour" and "3Dplot" }
-  \item{group}{ A numeric vector indicating which traits to plot. NULL means no grouping }
-  \item{meanprofile}{ Plot a mean/median profile from the group selected }
-  \item{theta}{ Horizontal axis rotation in a 3D plot }
-  \item{phi}{ Vertical axis rotation in a 3D plot }
-  \item{\dots}{Additional arguments passed to \code{\link[graphics]{plot}}.}
+  \item{cross}{
+    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
+  \item{result}{ Result object from mqmscanall }
+  \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
+  \item{Colv}{ Cluster only the Rows, the columns (Markers) should not be clustered }
+  \item{scale}{ character indicating if the values should be centered and scaled in either
+                the row direction or the column direction, or none. The default "none" }
+  \item{\dots}{Additional arguments passed to \code{\link[graphics]{heatmap}}.}
 }
 
 \author{ 
@@ -47,10 +47,8 @@ data(multitrait)
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmscanall(multitrait, logtransform=TRUE)
-mqmplot_multitrait(result,"lines")
-mqmplot_multitrait(result,"contour")
-mqmplot_multitrait(result,"image")
-mqmplot_multitrait(result,"3Dplot")
+cresults <- mqmplot_clusteredheatmap(multitrait,result)
+groupclusteredheatmap(multitrait,cresults,10)
 }
 
 \keyword{ hplot }

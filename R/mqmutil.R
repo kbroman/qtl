@@ -48,6 +48,19 @@ mqm_version <- function() {
   list(RQTL=rqtl_version, RMQM=rmqm_version, MQM=mqm_version)
 }
 
+groupclusteredheatmap <- function(cross, clusteredheatmapresult, height){
+  items <- cut(clusteredheatmapresult$Rowv,h=height)$lower
+  phenotypes <- names(pull.pheno(cross))
+  groups <- vector(length(items), mode="list")
+  cnt <- 1
+  for(x in items){
+    nam <- labels(x)
+    groups[[cnt]] <- which(phenotypes %in% nam)
+    cnt <- cnt+1
+  }
+  groups
+}
+
 ourstop <- function(...){
 	stop(...)
 }
@@ -84,6 +97,29 @@ mqmextractmarkers <- function(mqmresult){
   }
   class(result) <- class(mqmresult)
   result
+}
+
+# Return the fake markers in the set (remove real ones)
+mqmextractpseudomarkers <- function(mqmresult){
+  if(!("scanone" %in% class(mqmresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
+  result <- NULL
+  for(x in 1:nrow(mqmresult)){
+    # for every marker...
+    marker = mqmresult[x,]
+    found = grep('.loc',rownames(marker))
+    if(length(found)!=0) {
+      result <- rbind(result,marker)
+    }
+  }
+  class(result) <- class(mqmresult)
+  result
+}
+
+stepsize <- function(mqmpseudomarkers){
+  step <- as.numeric(strsplit(rownames(mqmpseudomarkers)[2],"loc")[[1]][2])-as.numeric(strsplit(rownames(mqmpseudomarkers)[1],"loc")[[1]][2])
+  step
 }
 
 
