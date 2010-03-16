@@ -81,10 +81,11 @@ mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
 		if(min(sexfactors) <= 0){
 			ourstop("Trying to set a non-existent marker as a sexfactor.")
 		}
-	}
-        else sexfactors <- NULL
+	}else{
+    sexfactors <- NULL
+  }
 
-    cofactorlist <- rep(0,n.mark)
+  cofactorlist <- rep(0,n.mark)
 	for(i in 1:length(cofactors)) {
 	  cofactorlist[cofactors[i]]=1
 	}
@@ -228,7 +229,7 @@ plotcofactors <- function(cross,cofactors){
       chr <- chr+1
     }
     if(cofactors[x]>0){
-      qn <- c(qn, mapnames[x]))
+      qn <- c(qn, mapnames[x])
       qc <- c(qc, as.character(names(map)[chr]))
       qp <- c(qp, as.double(unlist(map)[x]))
     }
