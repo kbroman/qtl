@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmscan(cross, cofactors, pheno.col = 1, 
+mqmscan(cross, cofactors=NULL, pheno.col = 1, 
   model=c("additive","dominance"), forceML=FALSE,
   cofactor.significance=0.02, em.iter=1000, 
   window.size=25.0, step.size=5.0, step.min=-20.0, step.max=220,
