@@ -35,7 +35,7 @@
 #
 ######################################################################
 	
-mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
+mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=220,logtransform = FALSE,
 					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
@@ -102,11 +102,13 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
     if(any(is.na(geno))){
 			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 		}
-    numcofold <- sum(cofactors)
-    cofactors <- checkdistances(cross,cofactors,1)
-    numcofnew <- sum(cofactors)  
-    if(numcofold!=numcofnew){
-      cat("INFO: Removed ",numcofold-numcofnew," cofactors that were close to eachother\n")
+    if(!is.null(cofactors)){
+      numcofold <- sum(cofactors)
+      cofactors <- checkdistances(cross,cofactors,1)
+      numcofnew <- sum(cofactors)  
+      if(numcofold!=numcofnew){
+        cat("INFO: Removed ",numcofold-numcofnew," cofactors that were close to eachother\n")
+      }
     }
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
