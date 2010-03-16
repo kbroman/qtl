@@ -217,14 +217,18 @@ plotcofactors <- function(cross,cofactors){
   qc <- NULL
   qn <- NULL
   qp <- NULL
+  mapnames <- NULL
+  for(x in 1:nchr(cross)){
+    mapnames <- c(mapnames,names(pull.map(cross)[[x]]))
+  }
   chr <- 1
   genotype <- pull.geno(cross)
-   for(x in 1:length(cofactors)){
+  for(x in 1:length(cofactors)){
     if(x > sum(nmar(cross)[1:chr])){
       chr <- chr+1
     }
     if(cofactors[x]>0){
-      qn <- c(qn, as.character(names(unlist(map))[x]))
+      qn <- c(qn, mapnames[x]))
       qc <- c(qc, as.character(names(map)[chr]))
       qp <- c(qp, as.double(unlist(map)[x]))
     }
