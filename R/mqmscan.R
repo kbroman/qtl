@@ -310,7 +310,11 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       if(!estimate.map){
         new.map <- pull.map(cross)
       }
-      chrmarkers <- nmar(cross)			
+      chrmarkers <- nmar(cross)
+      mapnames <- NULL
+      for(x in 1:nchr(cross)){
+        mapnames <- c(mapnames,names(pull.map(cross)[[x]]))
+      }
       sum <- 1
       model.present <- 0
       qc <- NULL
@@ -323,7 +327,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
             if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
             qc <- c(qc, as.character(names(cross$geno)[i]))
             qp <- c(qp, as.double(unlist(new.map)[sum]))
-            qn <- c(qn, strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2])
+            qn <- c(qn, mapnames[sum])
             model.present <- 1
           }
           sum <- sum+1
