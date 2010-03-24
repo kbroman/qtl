@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o stepwiseqtl: if additive.only=TRUE, allow penalties to have just one
+  value.
+
 o scantwo: ability to scan just specific chromosome pairs
 
 o scanone with method="hk": Major memory problems in the permutations
