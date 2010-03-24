@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -102,6 +102,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
     if(any(is.na(geno))){
 			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 		}
+      if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
     numcofold <- sum(cofactors)
     cofactors <- checkdistances(cross,cofactors,1)
     numcofnew <- sum(cofactors)  
@@ -111,7 +112,6 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
-      if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
       result <- mqmscanall( cross,cofactors=cofactors,forceML=forceML,model=model,
                         cofactor.significance=cofactor.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
                         logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose,n.clusters=n.clusters,batchsize=batchsize)
@@ -318,10 +318,10 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
         for(j in 1:chrmarkers[[i]]) {
           #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
           if(result$COF[sum] != 48){
-            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
+            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=TRUE)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
             qc <- c(qc, as.character(names(cross$geno)[i]))
             qp <- c(qp, as.double(unlist(new.map)[sum]))
-            qn <- c(qn, strsplit(names(unlist(new.map)),".",fixed=T)[[sum]][2])
+            qn <- c(qn, strsplit(names(unlist(new.map)),".",fixed=TRUE)[[sum]][2])
             model.present <- 1
           }
           sum <- sum+1

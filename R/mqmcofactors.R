@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified Februari 2010
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -197,9 +197,9 @@ checkdistances <- function(cross,cofactors,dist=5){
   for(x in which(cofactors==1)){
     for(y in which(cofactors==1)){
       if(x != y){
-      chr_x <- strsplit(names(map[x]),'.',fixed=T)[[1]][1]
+      chr_x <- strsplit(names(map[x]),'.',fixed=TRUE)[[1]][1]
       loc_x <- as.double(map[x])
-      chr_y <- strsplit(names(map[y]),'.',fixed=T)[[1]][1]
+      chr_y <- strsplit(names(map[y]),'.',fixed=TRUE)[[1]][1]
       loc_y <- as.double(map[y])
         if(chr_x==chr_y && abs(loc_x-loc_y) < dist){
           newcofactors[y] <- 0

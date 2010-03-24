@@ -2,14 +2,14 @@
 #
 # mqmplots.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 # Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -76,7 +76,7 @@ mqmplot_heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
   for(x in 1:nphe(cross)){
     results[[x]] <- mqmextractpseudomarkers(results[[x]])
     if(directed){
-      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=F)
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
       cat(".")
       for(y in 1:nrow(results[[x]])){
         effectid <- which(rownames(effect)==rownames(results[[x]])[y])

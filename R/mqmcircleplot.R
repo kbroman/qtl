@@ -2,13 +2,13 @@
 #
 # mqmcircleplot.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -186,7 +186,7 @@ mqmplot_circle <- function(cross, result, highlight=0, spacing=25, interactstren
               for(z in y:length(model[[4]])){
                 if(!z==y){
                   cross <- sim.geno(cross)
-                  eff <- effectplot(cross,pheno.col=x,mname1=model$name[y],mname2=model$name[z],draw=F)
+                  eff <- effectplot(cross,pheno.col=x,mname1=model$name[y],mname2=model$name[z],draw=FALSE)
                   changeA <- (eff$Means[1,2]-eff$Means[1,1])
                   changeB <- (eff$Means[2,2]-eff$Means[2,1])      
                   #interaction
