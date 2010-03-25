@@ -2,13 +2,13 @@
 #
 # mqmbootstrap.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
-# Modified by Pjotr Prins
+# Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -104,7 +104,10 @@ permute <- function(...){
 bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
 {
 	bootmethod <- 0
-	if(method=="simulation"){
+#	if(method=="simulation"){ # <- this often gives a warning message;
+#                                 #    I thought we should do method <- match.arg(method), but
+#                                 #    apparently the are other possible options for the method argument
+        if(method[1]=="simulation") {  
 		bootmethod <- 1
 	}
 	if(missing(cross))
