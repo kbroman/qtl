@@ -2,8 +2,8 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2006-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2005-2010, Karl W Broman
+# last modified Feb, 2010
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -171,8 +171,11 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
 
   if(map.included) {
     map <- asnumericwithdec(unlist(gen[3,]), dec=dec)
-    if(any(is.na(map))) 
-      stop("There are missing marker positions.")
+    if(any(is.na(map))) {
+      temp <- unique(unlist(gen[3,])[is.na(map)])
+      stop(paste("There are missing marker positions.\n",
+                 "   In particular, we see these values: ", paste("\"", temp, "\"", collapse=" ", sep="")))
+    }
   }
   else 
     map <- rep(0,ncol(gen))

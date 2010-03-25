@@ -15,12 +15,12 @@ mqmplot_clusteredheatmap(cross, results, directed=TRUE, Colv=NA, scale="none",\d
   \item{cross}{
     An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{result}{ Result object from mqmscanall }
+  \item{results}{ Result object from mqmscanall }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
   \item{Colv}{ Cluster only the Rows, the columns (Markers) should not be clustered }
   \item{scale}{ character indicating if the values should be centered and scaled in either
                 the row direction or the column direction, or none. The default "none" }
-  \item{\dots}{Additional arguments passed to \code{\link[graphics]{heatmap}}.}
+  \item{\dots}{Additional arguments passed to \code{\link[stats]{heatmap}}.}
 }
 
 \author{ 
