@@ -200,10 +200,13 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
   newres
 }
 
-mqmtestnormal <- function(cross, pheno.col=1){
+mqmtestnormal <- function(cross, pheno.col=1,significance=0.05){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+  if(significance > 1 || significance <= 0){
+    stop("significance should be between 0 and 1")
+  }
 	returnval <- FALSE
 	if(pheno.col <0 || pheno.col > nphe(cross)){
 		stop("No such phenotype (pheno.col = ",pheno.col,")")
@@ -213,7 +216,7 @@ mqmtestnormal <- function(cross, pheno.col=1){
 	}
 	if(any(rownames(installed.packages())=="nortest")){
 		require(nortest)
-		if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
+		if(pearson.test(cross$pheno[[pheno.col]])$p.value < significance){
 			cat("Trait distribution not normal\n")
 			returnval<- FALSE
 		}else{
