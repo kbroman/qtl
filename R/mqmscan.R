@@ -237,7 +237,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		}
 		max.cm.on.map <- max(unlist(pull.map(cross)))
 		if(step.max < max.cm.on.map){
-				stop("Markers outside of the mapping at ",max.cm.on.map," Cm, please set parameter step.max larger than this value.")		
+				stop("Markers outside of the mapping at ",max.cm.on.map," cM, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
@@ -322,7 +322,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         for(j in 1:chrmarkers[[i]]) {
           #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
           if(result$COF[sum] != 48){
-            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=TRUE)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
+            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=TRUE)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," cM\n")
             qc <- c(qc, as.character(names(cross$geno)[i]))
             qp <- c(qp, as.double(unlist(new.map)[sum]))
             qn <- c(qn, mapnames[sum])
@@ -342,7 +342,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 	rownames(qtl) <- names
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
-	colnames(qtl) = c("chr","pos (Cm)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
+	colnames(qtl) = c("chr","pos (cM)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
 	#Convert to data/frame and scanone object so we can use the standard plotting routines
 	qtl <- as.data.frame(qtl)
 	if(backward && !is.null(qc) && model.present){
