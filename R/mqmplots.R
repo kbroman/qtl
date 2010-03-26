@@ -33,7 +33,6 @@
 #           mqmplot_multitrait
 #           mqmplot_permutations
 #           mqmplot_boot
-#           mqmplot_nice
 #           mqmplot_one
 #           
 #
@@ -497,38 +496,6 @@ mqmplot_boot <- function(result, ...){
     for(x in unique(chrs[[1]])){
 		abline(v=sum(as.numeric(chrs[[1]])<=x),lty="dashed",col="gray",lwd=1)
 	}
-}
-
-mqmplot_nice <- function(result, ...){
-	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
-	matrix <- NULL
-	names <- NULL
-	i <- 1
-	if(class(result)[2] != "mqmmulti")		
-          ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
-
-	for( j in 1:length( result[[i]][,3] ) ) {
-		row <- NULL
-		for( i in 1:length( result ) ) {
-			row <- c(row,result[[i]][,3][j])
-		}
-		matrix <- rbind(matrix,row)
-	}
-	for( i in 1:length( result ) ) {
-		if(colnames(result[[i]])[3] == "QTL phenotype"){
-			if(i==1){
-				names <- "QTL Phenotype"
-			}else{
-				names <- c(names,paste("Bootstrap run",(i-1)))
-			}
-		}else{
-			names <- c(names,colnames(result[[i]])[3])
-		}
-	}
-	matrix <- t(matrix)
-	colnames(matrix) <- c(1:dim(matrix)[2])
-	rownames(matrix) <- names
-	polyplot(matrix,...)
 }
 
 mqmplot_one <- function(result, extended=0,...){

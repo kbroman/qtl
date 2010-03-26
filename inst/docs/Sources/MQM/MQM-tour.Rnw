@@ -992,7 +992,7 @@ resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot_multitrait(resall,"I")
+mqmplot_multitrait(resall,type="image")
 @
 \caption{\Atintro. Heatmap of metabolite expression traits, with profiles created using \mqm\ without preselected cofactors. The colors represent the LOD score, on
 the x-axis the marker number and on the y-axis the metabolite\label{At.heatmap1}}
@@ -1005,22 +1005,22 @@ resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cl
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot_multitrait(resall,"I")
+mqmplot_multitrait(resall,type="image")
 @
 \caption{\Atintro. Heatmap of metabolite expression traits, with profiles created using \mqm\ with cofactors at each third marker. The colors represent the LOD
 score, on the x-axis the marker number and on the y-axis the metabolite\label{At.heatmap2}}
 \end{figure}
 
-Use \code{mqmplot\_nice} for more graphical output. (Unfortunately this does not
+Use \code{mqmplot\_multitrait} for more graphical output. (Unfortunately this does not
 show in the generated PDF, but in R it shows the trait profiles)
 
 <<>>=
-mqmplot_nice(resall,legendloc=1)
+mqmplot_multitrait(resall,type="lines")
 @
 
 % \begin{figure}
 % <<fig=TRUE>>=
-% mqmplot_nice(resall,legendloc=1)
+% mqmplot_multitrait(resall,type="lines")
 % @
 % \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 % \end{figure}
