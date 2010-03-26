@@ -110,12 +110,12 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
   if (ctype==isRIL) {
     nH = sum(geno==isH)
     if (nH>0) {
-      warning("RIL dataset contains ", nH," heterozygous genotypes")
+      #warning("RIL dataset contains ", nH," heterozygous genotypes")
       if (any(geno==isBB)) { # have 3/BB's, so replace 2/H's with missing values
         geno[geno==isH] <- isMISSING 
-        warning("Removed heterozygous genotypes from RIL set")
+        #warning("Removed heterozygous genotypes from RIL set")
       } else {
-        warning("Converting heterozygous genotypes to BB from RIL set")
+        #warning("Converting heterozygous genotypes to BB from RIL set")
         geno[geno==isH] <- isBB
       }
     }
