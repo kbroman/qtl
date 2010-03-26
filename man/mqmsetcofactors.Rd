@@ -8,13 +8,15 @@
 }
 
 \usage{
-mqmsetcofactors(cross, each = 3, verbose=FALSE)
+mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FALSE)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.} 
   \item{each}{ Every 'each' marker will be used as a cofactor }
+  \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
+  \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
   \item{verbose}{If TRUE, print tracing information.}
 }
 
@@ -33,7 +35,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
     \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
