@@ -34,7 +34,7 @@
 
 
 
-snowCoreALL <- function(x,all.data,mapfunction,verbose=FALSE,...){
+snowCoreALL <- function(x,all.data,scanfunction,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	num.traits <- nphe(all.data)
@@ -43,11 +43,11 @@ snowCoreALL <- function(x,all.data,mapfunction,verbose=FALSE,...){
           cat("INFO: Starting analysis of trait (",x,"/",num.traits,")\n")
           cat("------------------------------------------------------------------\n")
         }
-	if("cofactors" %in% names(formals(mapfunction)) && exists("cofactors")) {
-          result <- mapfunction(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=verbose,...)
+	if("cofactors" %in% names(formals(scanfunction)) && exists("cofactors")) {
+          result <- scanfunction(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=verbose,...)
         }
         else{
-          result <- mapfunction(cross=all.data,pheno.col=x,...)
+          result <- scanfunction(cross=all.data,pheno.col=x,...)
         }
 	colnames(result)[3] <- paste("lod",names(all.data$pheno)[x])
 	e <- proc.time()
@@ -61,7 +61,7 @@ snowCoreALL <- function(x,all.data,mapfunction,verbose=FALSE,...){
 }
 
 
-snowCoreBOOT <- function(x,all.data,mapfunction,bootmethod,verbose=FALSE,...){
+snowCoreBOOT <- function(x,all.data,scanfunction,bootmethod,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	if(!bootmethod){
@@ -76,17 +76,17 @@ snowCoreBOOT <- function(x,all.data,mapfunction,bootmethod,verbose=FALSE,...){
 			all.data$pheno[[1]][j] <- rnorm(1)*(variance^0.5)
 		}
 	}
-	if("cofactors" %in% names(formals(mapfunction))){
+	if("cofactors" %in% names(formals(scanfunction))){
 		if(exists("cofactors")){
-			result <- mapfunction(cross=all.data,cofactors=cofactors,pheno.col=1,verbose=FALSE,...)
+			result <- scanfunction(cross=all.data,cofactors=cofactors,pheno.col=1,verbose=FALSE,...)
 		}else{
-			result <- mapfunction(cross=all.data,pheno.col=1,verbose=FALSE,...)
+			result <- scanfunction(cross=all.data,pheno.col=1,verbose=FALSE,...)
 		}
 	}else{
-		if("plot" %in% names(formals(mapfunction))){
-			result <- mapfunction(cross=all.data,pheno.col=1,...)
+		if("plot" %in% names(formals(scanfunction))){
+			result <- scanfunction(cross=all.data,pheno.col=1,...)
 		}else{
-			result <- mapfunction(cross=all.data,pheno.col=1,...)
+			result <- scanfunction(cross=all.data,pheno.col=1,...)
 		}
 	}
 	e <- proc.time()

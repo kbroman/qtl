@@ -17,7 +17,7 @@
 }
 
 \usage{
-	bootstrap(cross, mapfunction=scanone, pheno.col=1,
+	bootstrap(cross, scanfunction=scanone, pheno.col=1,
 	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
    	          n.clusters=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
 	bootstrapcim(\dots)
@@ -28,7 +28,7 @@
 	\item{cross}{ 
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-	\item{mapfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
+	\item{scanfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ 
 Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
   }

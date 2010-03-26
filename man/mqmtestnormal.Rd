@@ -10,15 +10,18 @@
 }
 
 \usage{
-mqmtestnormal(cross, pheno.col = 1)
+mqmtestnormal(cross, pheno.col = 1,significance=0.05)
 }
 
 \arguments{
   \item{cross}{
-An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{pheno.col}{ 
-Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
+    Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
+  }
+  \item{significance}{ 
+    Significance level for normality
   }
 }
 

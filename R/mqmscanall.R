@@ -35,14 +35,14 @@
 
 
 cimall <- function(...) {
-	scanall(...,mapfunction=cim)
+	scanall(...,scanfunction=cim)
 }
 
 mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, batchsize=10, ...) {
-	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, batchsize=batchsize, ..., mapfunction=mqmscan)
+	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, batchsize=batchsize, ..., scanfunction=mqmscan)
 }
 
-scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0, ..., plot=FALSE, verbose=FALSE){
+scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0, ..., plot=FALSE, verbose=FALSE){
 	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
@@ -90,7 +90,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, ba
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,scanfunction=scanfunction,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
@@ -121,7 +121,7 @@ scanall <- function(cross, mapfunction=scanone, multicore=TRUE, n.clusters=1, ba
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}
-				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
+				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,scanfunction=scanfunction,verbose=verbose,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
