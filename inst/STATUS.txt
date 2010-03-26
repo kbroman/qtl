@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-10, Karl W Broman
+copyright (c) 2001-2010, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 2/23/2010:
+Version 1.15, 3/26/2010:
 
 Major changes:
 
@@ -31,6 +31,10 @@ Minor changes:
   Added functions convert2riself and convert2risib, for converting a
   cross object to be treated as RIL by selfing or sib mating,
   respectively. 
+
+  Revised write.cross so that it can handle non-numeric phenotypes.
+  Also changed the default for the "digits" argument to NULL, so that
+  phenotypes and map positions are not rounded.  
 
   Revised read.cross to have arguments error.prob and map.function, to
   be used if est.map is called.

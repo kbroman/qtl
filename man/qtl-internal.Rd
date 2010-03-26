@@ -311,10 +311,10 @@ subrousummaryscantwo(object, for.perm=FALSE)
 testchr(selection, thechr)
 vbscan(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
        tol=1e-4)
-write.cross.csv(cross, filestem="data", digits=5, rotate=FALSE,
+write.cross.csv(cross, filestem="data", digits=NULL, rotate=FALSE,
                 split=FALSE)
-write.cross.gary(cross, digits)
-write.cross.mm(cross, filestem="data", digits=5)
+write.cross.gary(cross, digits=NULL)
+write.cross.mm(cross, filestem="data", digits=NULL)
 write.cross.qtlcart(cross, filestem="data")
 }
 

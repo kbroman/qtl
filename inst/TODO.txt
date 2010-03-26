@@ -10,6 +10,13 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o MASS and other packages seem to automatically load their datasets,
+  or at least make them available.  Can (and should) we do that?
+  (Also for qtlbook.)
+
+o In summary.cross, if there are *a lot* of phenotypes, don't give the
+  phenotype-by-phenotype information about amount missing.
+
 o stepwiseqtl: if additive.only=TRUE, allow penalties to have just one
   value.
 
