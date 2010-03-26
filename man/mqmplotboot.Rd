@@ -52,7 +52,7 @@ data(map10)                                             # Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- calc.genoprob(f2cross)
 \dontrun{f2result <- bootstrap(f2cross)               	        # Bootstrap to obtain confidence intervals
-}\dontshow{f2result <- bootstrap(f2cross, n.run=2, b.size=2, method="hk")}
+}\dontshow{f2result <- bootstrap(f2cross, n.run=2, b.size=2, method="permutation")}
 mqmplot_boot(f2result)					# Use the nice bootstrap plotting methodes
 }
 \keyword{ hplot }
