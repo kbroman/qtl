@@ -44,96 +44,42 @@ find.markerindex <- function(cross, name) {
   match(name, markernames(cross))
 }
 
-mqmcofactors <- function(cross,cofactors,sexfactors,verbose=FALSE){
+mqmsetcofactors <- function(cross,each = NULL,cofactors=NULL,sexfactors=NULL,verbose=FALSE){
+  if(is.null(each) && is.null(cofactors))
+    stop("Please set either the each parameter or the cofactors")
 	if(missing(cross))
-		ourstop("No cross file. Please supply a valid cross object.")
-
-	if(missing(cofactors))
-		ourstop("Cofactors to set. Please supply a list of markers to serve as cofactors.")
-		
+    stop("No cross file. Please supply a valid cross object.")
+  individuals <- nind(cross)
 	n.chr <- nchr(cross)
-	geno <- NULL
-	cofactorlist <- NULL
-	individuals <- nind(cross)
-        if(verbose) {
-          cat("INFO: Found",individuals,"individuals in the cross object.\n")
-          cat("INFO: Mamimum amount of cofactors",(individuals-10),"leaves 10 Degrees of Freedom, (No Dominance).\n")
-          cat("INFO: Mamimum amount of cofactors",(individuals-10)/2,"leaves 10 Degrees of Freedom (Dominance).\n")
-        }
-	for(i in 1:n.chr) {
-      geno <- cbind(geno,cross$geno[[i]]$data)
-	}
-	
-	n.mark <- ncol(geno)
+	n.mark <- sum(nmar(cross))  
+	cofactorlist <- rep(0,n.mark)
+	if(!is.null(each)  && each > n.mark)
+    stop("Not enough markers to place cofactors at this wide an interval.")
 
-	if(max(cofactors) > n.mark){
-		ourstop("Trying to set a non-existent marker as a cofactor.")	  
-	}
-
-	if(min(cofactors) <= 0){
-		ourstop("Trying to set a non-existent marker as a cofactor.")	  
-	}
 	
-	if(!missing(sexfactors)){
-		if(max(sexfactors) > n.mark){
-			ourstop("Trying to set a non-existent marker as a sexfactor.")
-		}
-		if(min(sexfactors) <= 0){
-			ourstop("Trying to set a non-existent marker as a sexfactor.")
-		}
-	}else{
-    sexfactors <- NULL
+  if(verbose) {
+    cat("INFO: Found",individuals,"individuals in the cross object.\n")
+    cat("INFO: Mamimum amount of cofactors",(individuals-15)," (each =",ceiling(sum(n.mark)/(individuals-15)),") leaves 15 Degrees of Freedom (no Dominance).\n")
+    cat("INFO: Mamimum amount of cofactors",(individuals-15)/2," (each =",ceiling(sum(n.mark)/(individuals-15))*2,") leaves 15 Degrees of Freedom (Dominance).\n")
   }
 
-  cofactorlist <- rep(0,n.mark)
-	for(i in 1:length(cofactors)) {
-	  cofactorlist[cofactors[i]]=1
-	}
-	if(!is.null(sexfactors)){
-      for(i in 1:length(sexfactors)) {
-	    cofactorlist[sexfactors[i]]=2
-	  }
-	}
+	if(is.null(cofactors)){
+    cofactorlist <- rep(c(rep(0,each-1),1),(2*n.mark)/each)
+    cofactorlist <- cofactorlist[1:n.mark]
+  }else{
+  	if(max(cofactors) > n.mark)
+        stop("Trying to set a non-existent marker as a cofactor.")
+    if(min(cofactors) <= 0)
+        stop("Trying to set a non-existent marker as a cofactor.")
+        
+    cofactorlist[cofactors]=1
+  	if(!is.null(sexfactors)){
+      cofactorlist[sexfactors]=2
+    }
+  }
   if(sum(cofactorlist) > (individuals-15)){
-		stop("Trying to set: ",sum(cofactorlist)," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
-	}
-  cofactorlist
-}
-
-mqmsetcofactors <- function(cross,each = 3,verbose=FALSE){
-	if(missing(cross))
-          ourstop("No cross file. Please supply a valid cross object.")
-
-	individuals <- nind(cross)
-	n.chr <- nchr(cross)
-	geno <- NULL
-	cofactorlist <- NULL
-
-	for(i in 1:n.chr) {
-      geno <- cbind(geno,cross$geno[[i]]$data)
-	}
-	n.mark <- ncol(geno)
-	
-        if(verbose) {
-          cat("INFO: Found",individuals,"individuals in the cross object.\n")
-          cat("INFO: Mamimum amount of cofactors",(individuals-15)," (each =",ceiling(sum(n.mark)/(individuals-15)),") leaves 15 Degrees of Freedom (no Dominance).\n")
-          cat("INFO: Mamimum amount of cofactors",(individuals-15)/2," (each =",ceiling(sum(n.mark)/(individuals-15))*2,") leaves 15 Degrees of Freedom (Dominance).\n")
-        }
-
-	if(each > n.mark){
-      ourstop("Not enough markers to place cofactors at.")
-	  return 
-	}	
-	
-    cofactorlist <- rep(0,n.mark)
-	for(i in 1:n.mark) {
-		if(i%%as.integer(each)==0){
-			cofactorlist[i] = 1
-		}
-	}
-    if(sum(cofactorlist) > (individuals-15)){
-		warning("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
-	}
+    warning("Trying to set: ",ceiling(sum(n.mark)/each)," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
+  }
 	cofactorlist
 }
 
