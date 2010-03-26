@@ -332,11 +332,10 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         }
       }
       if(!is.null(qc) && model.present){
-		why <- sim.geno(cross,n.draws=1)
+        why <- sim.geno(cross,n.draws=1)
         QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
-		if(plot){
-			plot(QTLmodel)
-        }
+        attr(QTLmodel,"mqm") <- 1
+        if(plot) plot(QTLmodel)
       }
     }
 	rownames(qtl) <- names
