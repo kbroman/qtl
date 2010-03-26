@@ -87,6 +87,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       cat("INFO: Number of individuals: ",n.ind,"\n")
       cat("INFO: Number of chromosomes: ",n.chr,"\n")
     }
+    savecross <- cross
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -332,7 +333,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         }
       }
       if(!is.null(qc) && model.present){
-        why <- sim.geno(cross,n.draws=1)
+        why <- sim.geno(savecross,n.draws=1)
         QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
         attr(QTLmodel,"mqm") <- 1
         if(plot) plot(QTLmodel)
