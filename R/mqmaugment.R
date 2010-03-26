@@ -63,7 +63,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
   if (crosstype == "f2") {
     ctype = isF2
   }
-  else if (crosstype == "bc" || crosstype="dh") {
+  else if (crosstype == "bc" || crosstype == "dh") {
     ctype = isBC
   }
   else if (crosstype == "riself" || crosstype == "risib") {
