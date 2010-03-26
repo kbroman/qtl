@@ -379,7 +379,7 @@ the marker nearest to the peak on chromosome 4 and perform a new \mqm\ scan
 max(result_no_cofactors)
 find.marker(hyperaug,chr=4,pos=30)
 toset <- find.markerindex(hyperaug,"D4Mit164")
-cofactorlist <- mqmcofactors(hyperaug,toset)
+cofactorlist <- mqmsetcofactors(hyperaug,cofactors=toset)
 result_1 <- mqmscan(hyperaug, cofactorlist)
 @
 \intro{SAME FOR MULTI}
@@ -387,13 +387,13 @@ result_1 <- mqmscan(hyperaug, cofactorlist)
 max(result_multiaug_no_cofactors)
 find.marker(multiaug,chr=5,pos=35)
 multitoset <- find.markerindex(multiaug,"GH.117C")
-multicofactorlist <- mqmcofactors(multiaug,multitoset)
+multicofactorlist <- mqmsetcofactors(multiaug,cofactors=multitoset)
 result_multi_1 <- mqmscan(multiaug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
 closest to 30 \cM.  The function \code{find.markerindex} translates the
-marker name into a cofactor number.  The function \code{mqmcofactors}
+marker name into a cofactor number.  The function \code{mqmsetcofactors}
 sets up a cofactor list for use with \code{mqmscan}.  
 
 \intro{Plot the results of the genome scan after adding a single cofactor}
@@ -480,7 +480,7 @@ adds the new cofactor to the cofactor already in \code{toset} (see Figure~\ref{t
 <<>>=
 # summary(result_1)
 toset <- c(toset,find.markerindex(hyperaug,find.marker(hyperaug,1,70)))
-cofactorlist <- mqmcofactors(hyperaug,toset)
+cofactorlist <- mqmsetcofactors(hyperaug,cofactors=toset)
 result_2 <- mqmscan(hyperaug, cofactorlist)
 @
 
@@ -489,7 +489,7 @@ result_2 <- mqmscan(hyperaug, cofactorlist)
 <<>>=
 # summary(result_multi_1)
 multitoset <- c(multitoset,find.markerindex(multiaug,find.marker(multiaug,4,10)))
-multicofactorlist <- mqmcofactors(multiaug,multitoset)
+multicofactorlist <- mqmsetcofactors(multiaug,cofactors=multitoset)
 result_multi_2 <- mqmscan(multiaug, multicofactorlist)
 @
 % -----------
@@ -571,7 +571,7 @@ plot(result_multiaug_no_cofactors, result_multi_1, result_multi_2,
 
 
 
-When using the functions \code{mqmcofactors} and \code{mqmsetcofactors}, the
+When using the function \code{mqmsetcofactors}, the
 number of cofactors is compared against the number of individuals inside the
 cross object. If there is a danger of setting too many cofactors the two
 cofactor functions will warn the user by displaying an error about the user
