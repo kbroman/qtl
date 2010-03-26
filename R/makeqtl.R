@@ -480,6 +480,7 @@ function(object, ...)
   rownames(output) <- object$altname
   
   attr(output, "type") <- type
+  if(!is.null(attr(object,"mqm"))) attr(output, "mqm") <- attr(object,"mqm")
   if(type=="draws") attr(output, "n.draws") <- n.draws
   class(output) <- c("summary.qtl", "data.frame")
 
@@ -503,7 +504,7 @@ function(x, ...)
     if(type=="draws")
       thetext <- paste("imputed genotypes, with", attr(x, "n.draws"), "imputations.")
     else thetext <- "genotype probabilities."
-  
+    if(!is.null(attr(x,"mqm"))) thetext <- paste("model created by using mqm")
     cat("  QTL object containing", thetext, "\n\n")
 
     print.data.frame(x, digits=5)
