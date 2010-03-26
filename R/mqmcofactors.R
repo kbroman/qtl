@@ -33,14 +33,14 @@
 
 ######################################################################
 #
-# which.marker: Extracts the number of the marker when viewing the markers lineair
+# find.markerindex: Extracts the number of the marker when viewing the markers lineair
 # mqmcofactors: Prepares a cofactor list to use with mqmscan
 # mqmsetcofactors: Prepares a cofactor list to use with mqmscan
 #
 ######################################################################
 
 
-which.marker <- function(cross, name) {
+find.markerindex <- function(cross, name) {
   match(name, markernames(cross))
 }
 

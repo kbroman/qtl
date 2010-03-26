@@ -378,7 +378,7 @@ the marker nearest to the peak on chromosome 4 and perform a new \mqm\ scan
 <<>>=
 max(result_no_cofactors)
 find.marker(hyperaug,chr=4,pos=30)
-toset <- which.marker(hyperaug,"D4Mit164")
+toset <- find.markerindex(hyperaug,"D4Mit164")
 cofactorlist <- mqmcofactors(hyperaug,toset)
 result_1 <- mqmscan(hyperaug, cofactorlist)
 @
@@ -386,13 +386,13 @@ result_1 <- mqmscan(hyperaug, cofactorlist)
 <<>>=
 max(result_multiaug_no_cofactors)
 find.marker(multiaug,chr=5,pos=35)
-multitoset <- which.marker(multiaug,"GH.117C")
+multitoset <- find.markerindex(multiaug,"GH.117C")
 multicofactorlist <- mqmcofactors(multiaug,multitoset)
 result_multi_1 <- mqmscan(multiaug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
-closest to 30 \cM.  The function \code{which.marker} translates the
+closest to 30 \cM.  The function \code{find.markerindex} translates the
 marker name into a cofactor number.  The function \code{mqmcofactors}
 sets up a cofactor list for use with \code{mqmscan}.  
 
@@ -473,13 +473,13 @@ results against the \mqm\ \qtl\ mapping without cofactors (Figure~\ref{Cofactor4
 
 Figure~\ref{Cofactor4b} clearly shows the second peak on chromosome 1 at 70
 \cM\ increases, so we add that to the model and check if the model with both
-cofactors changes the \qtl. Again, combining \code{which.marker} with \code{find.marker},
+cofactors changes the \qtl. Again, combining \code{find.markerindex} with \code{find.marker},
 adds the new cofactor to the cofactor already in \code{toset} (see Figure~\ref{twowaycomparison}): 
 
 \intro{Add another cofactor on chromosome 1 at 70 \cM}
 <<>>=
 # summary(result_1)
-toset <- c(toset,which.marker(hyperaug,find.marker(hyperaug,1,70)))
+toset <- c(toset,find.markerindex(hyperaug,find.marker(hyperaug,1,70)))
 cofactorlist <- mqmcofactors(hyperaug,toset)
 result_2 <- mqmscan(hyperaug, cofactorlist)
 @
@@ -488,7 +488,7 @@ result_2 <- mqmscan(hyperaug, cofactorlist)
 % -----------
 <<>>=
 # summary(result_multi_1)
-multitoset <- c(multitoset,which.marker(multiaug,find.marker(multiaug,4,10)))
+multitoset <- c(multitoset,find.markerindex(multiaug,find.marker(multiaug,4,10)))
 multicofactorlist <- mqmcofactors(multiaug,multitoset)
 result_multi_2 <- mqmscan(multiaug, multicofactorlist)
 @
@@ -1093,7 +1093,7 @@ mqmplot_circle(multiloc,resall, highlight=2)
 	mqmaugment:& mqm data augmentation \\
 	mqmscan:& mqm modeling and scanning \\
 	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
-	which.marker:& Change markernumbering into mqmformat \\
+	find.markerindex:& Change markernumbering into mqmformat \\
 	mqmscanall:& mqmscanall to scan all traits using mqm\\
 	mqmpermute:& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
