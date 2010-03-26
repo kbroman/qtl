@@ -246,16 +246,11 @@ bootstrap <- function(cross,mapfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10
 }
 
 mqmprocesspermutation <- function(mqmpermutationresult = NULL){
-	if(class(mqmpermutationresult)[2] == "mqmmulti"){
-		result <- NULL
-		names <- NULL
-		for(i in 2:length(mqmpermutationresult)) {
-			result <- rbind(result,max(mqmpermutationresult[[i]][,3]))
-			names <- c(names,i-1)
-		}
+	if(!is.null(mqmpermutationresult) && class(mqmpermutationresult)[2] == "mqmmulti"){
+    result <- NULL
+		result <- sapply(mqmpermutationresult[-1], function(a) max(a[,3], na.rm=TRUE))
 		result <- as.matrix(result)
-		rownames(result) <- names
-		result <- cbind(result,result,result)
+		rownames(result) <- 1:(length(mqmpermutationresult)-1)
 		class(result) <- c("scanoneperm",class(result))
 		result
 	}else{
