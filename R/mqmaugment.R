@@ -39,7 +39,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
   if(minprob <= 0 || minprob > 1){
-	stop("Error minprob should be a value between 0 and 1.")
+    stop("Error minprob should be a value between 0 and 1.")
   }
   supported <- c("mostlikely","impute","drop")
   unaugmentable <- pmatch(unaugmentable, supported)
@@ -190,7 +190,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
   # ---- RESULTS
   endtime <- proc.time()
   if(n.ind != n.indold){
-	warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
+    if(verbose) warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
   }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
   cross  # return cross type
