@@ -23,9 +23,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: test_mqmplot_circle
-#           test_plot_circle
-#           mqmplot_c
+# Contains: mqmplot_c
 #           mqmplotcircle
 #           mqmplot_circle
 #           circlelocations
@@ -38,46 +36,6 @@
 #           
 #
 #####################################################################
-
-
-
-
-
-test_mqmplot_circle <- function(){
-  library(qtl)
-  data(hyper)
-  data(multitrait)
-  data(locations)
-  
-  hyperfilled <- fill.geno(hyper)
-  hypercof <- mqmsetcofactors(hyper,4)
-  hyperres <- mqmscan(hyperfilled,hypercof)
-
-  multifilled <- fill.geno(multitrait)
-  multicof <- mqmsetcofactors(multitrait,10)
-  multiloc <- addloctocross(multifilled,locations)
-  multires <- mqmscanall(multifilled,cofactors=multicof)
-
-  mqmplot_circle(hyperfilled,hyperres)
-  Sys.sleep(3)
-  mqmplot_circle(multifilled,multires)
-  Sys.sleep(3)
-  mqmplot_circle(multiloc,multires)
-  Sys.sleep(3)
-  mqmplot_circle(multitrait,multires,highlight=16)
-  Sys.sleep(3)
-  mqmplot_circle(multiloc,multires,highlight=16)
-}
-
-test_plot_circle <- function(){
-  values <- (runif(10)*3)+1
-  mqmplot_c(1:10)
-  mqmplot_c(values)
-  mqmplot_c(values,dist=TRUE)
-  values <- (runif(1000)*3)+1
-  mqmplot_c(values,dist=TRUE,cex=0.9)
-}
-
 
 mqmplot_c <- function(x, distance=FALSE, vulcano=FALSE, 
                         point.color="blue", text.color="red", line.color=rgb(0.1,0.1,0.1,0.1), 
