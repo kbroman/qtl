@@ -32,7 +32,7 @@
 #           getChr
 #           mqmplot.multitrait
 #           mqmplot.permutations
-#           mqmplot_one
+#           mqmplot.singletrait
 #           
 #
 #####################################################################
@@ -493,7 +493,7 @@ mqmplot.permutations <- function(result, ...){
 	}
 }
 
-mqmplot_one <- function(result, extended=0,...){
+mqmplot.singletrait <- function(result, extended=0,...){
 	#Helperfunction to show scanone objects made by doing mqmscan runs
   if(!("scanone" %in% class(result))){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 

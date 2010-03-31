@@ -376,7 +376,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		}
 		#No error do plot 2
 		if(!e){
-			mqmplot_one(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance))
+			mqmplot.singletrait(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance))
 		}else{
 			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance),lwd=1)
 			grid(max(qtl$chr),5)

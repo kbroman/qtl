@@ -768,7 +768,7 @@ model.  The results also contain the \emph{estimated} information
 content per marker.  
 
 <<AutoCofactor,eval=FALSE>>=
-mqmplot_one(result, extended=TRUE)
+mqmplot.singletrait(result, extended=TRUE)
 @ 
 
 \begin{figure}
@@ -780,10 +780,8 @@ shows retained information in \code{result} with added weighting of information 
 marker positions\label{AutoCofactor}}
 \end{figure}
 
-
-
 <<AutoCofactor,eval=FALSE>>=
-mqmplot_one(multiresult, extended=TRUE)
+mqmplot.singletrait(multiresult, extended=TRUE)
 @ 
 
 \begin{figure}
