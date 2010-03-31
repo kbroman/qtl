@@ -94,7 +94,7 @@ Informationcontent and LOD*Informationcontent with at each row pseudomarkers
 sorted in increasing order. For more information on the scanone object see: \code{\link{scanone}} 
 The resulting scanone object itself can be visualized using the standard R/qtl 
 plotting routines (\code{\link{plot.scanone}}) or specialized function to show
-the mqm model (\code{\link{mqmplot_one}}) and QTL profile. If cofactors were 
+the mqm model (\code{\link{mqmplot.singletrait}}) and QTL profile. If cofactors were 
 specified the QTL model used in scanning is also returned as a named attribute 
 of the scanone object called mqmmodel. It can be extracted from the resulting 
 scanone object by using the \code{\link{mqmgetmodel}} function or the 

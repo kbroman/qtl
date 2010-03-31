@@ -1,14 +1,14 @@
-\name{mqmplot_one}
-\alias{mqmplot_one}
+\name{mqmplot.singletrait}
+\alias{mqmplot.singletrait}
 
 \title{Plotting routine to display the results from a QTL scan  }
 
 \description{
-  Plotting routine to display the results from a mqmscan
+  Plotting routine to display the results from a mqmscan on a single trait.
 }
 
 \usage{
-mqmplot_one(result, extended = 0 ,\dots)
+mqmplot.singletrait(result, extended = 0 ,\dots)
 }
 
 \arguments{
@@ -43,7 +43,7 @@ data(map10)                                             # Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- mqmaugment(f2cross)
 f2result <- mqmscan(f2cross)                    	# Do a MQM scan of the genome
-mqmplot_one(f2result)					# Use our fancy plotting routine
+mqmplot.singletrait(f2result)					# Use our fancy plotting routine
 }
 
 \keyword{ hplot }
