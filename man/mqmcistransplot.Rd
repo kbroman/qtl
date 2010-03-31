@@ -22,7 +22,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 	this threshold are not visible 
   }
   \item{onlyPEAK}{ Plot only the peak markers ? (TRUE/FALSE) 
-	(Peak markers are markers that have a QTL likelyhood above
+	(Peak markers are markers that have a QTL likelihood above
 	\code{threshold} and higher than other markers in the same section) 
   }
   \item{highPEAK}{ Highlight peak markers ? (TRUE/FALSE). 
