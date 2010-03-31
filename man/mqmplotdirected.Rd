@@ -1,5 +1,5 @@
-\name{mqmplot_directedqtl}
-\alias{mqmplot_directedqtl}
+\name{mqmplot.directedqtl}
+\alias{mqmplot.directedqtl}
 
 \title{Plotting routine to display the effects and results from a QTL scan  }
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmplot_directedqtl(cross, result, pheno.col=1, draw = TRUE)
+mqmplot.directedqtl(cross, result, pheno.col=1, draw = TRUE)
 }
 
 \arguments{
@@ -52,7 +52,7 @@ data(map10)                                             # Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- mqmaugment(f2cross)
 f2result <- mqmscan(f2cross)                    	# Do a MQM scan of the genome
-mqmplot_directedqtl(f2cross,f2result)
+mqmplot.directedqtl(f2cross,f2result)
 }
 
 \keyword{ hplot }
