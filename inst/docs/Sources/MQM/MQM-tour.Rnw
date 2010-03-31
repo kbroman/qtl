@@ -79,7 +79,7 @@ These are the typical steps in an \mqm\ \qtl\ analysis
 \item Fill in missing data, using either \code{fill.geno} or \code{mqmaugmentdata}
 \item Unsupervised backward elimination to analyse \emph{cofactors}, using \code{mqmscan}
 \item Optionally select \emph{cofactors\/} at markers that are thought to influence \qtl\ at, or near, the location
-\item Permutation or simulation analysis to get estimates of significance, using \code{mqmpermute}
+\item Permutation or simulation analysis to get estimates of significance, using \code{mqmpermutation}
 \end{itemize}
 
 Using maximum likelihood (ML), or restricted maximum likelihood (REML), the
@@ -884,14 +884,14 @@ the two markers D1Mit102 and D5Mit213, as the lines are close to parallel.
 \label{significance}
 
 To estimate significance of \qtl\ (and perhaps further exclude markers from a
-model) permutation testing is provided by the function \code{mqmpermute}. This step
+model) permutation testing is provided by the function \code{mqmpermutation}. This step
 is computationally expensive\footnote{In the tutorial, for all examples, 25
 permutations are used. A real experiment should use over 1000 permutation tests}
 as the same test is repeated many times on shuffled data. Each test calculates
 LOD scores for non associated (randomly ordered) data. 
 
 \mqm\ provides parametric and non-parametric bootstrapping to estimate QTL
-significance. The \code{bootmethod} parameter of the \code{mqmpermute} function selects
+significance. The \code{bootmethod} parameter of the \code{mqmpermutation} function selects
 the type.  If you have access to multiple CPUs on your computer you can use the
 SNOW package \cite{tierney03,tierney04}, which allows parallel
 computations on multiple CPU/cores. The snowpackage is available on cran, using Rgui 
@@ -905,7 +905,7 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
-results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
+results <- mqmpermutation(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
 @
 \begin{figure}
 <<fig=TRUE>>=
@@ -923,7 +923,7 @@ resultsrqtl <- mqmprocesspermutation(results)
 summary(resultsrqtl)
 @
 
-For small datasets, with a limited amount of classical traits, \code{mqmpermute}
+For small datasets, with a limited amount of classical traits, \code{mqmpermutation}
 works fine. For large genome wide association studies (GWAS) use \code{mqmscanfdr}
 instead, which estimates false discovery rates (FDR) across the entire dataset
 at \lod\ cutoff. The routines have similar parameters.
@@ -946,7 +946,7 @@ multifilled <- fill.geno(multitrait)
 mqmscanfdr(multifilled,mqmscanall,cofactors=cofactorlist,n.clusters=2)
 @
 
-The function \code{mqmpermute} does single trait permutations, and does not take
+The function \code{mqmpermutation} does single trait permutations, and does not take
 correlation between the traits into account. The advantage is that a confidence
 interval is provided for each significant QTL.  The \mqm\ output needs to be
 converted to the standard R/qtl format using the \code{mqmprocesspermutation}
@@ -1093,10 +1093,10 @@ mqmplot_circle(multiloc,resall, highlight=2)
 	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
 	find.markerindex:& Change markernumbering into mqmformat \\
 	mqmscanall:& mqmscanall to scan all traits using mqm\\
-	mqmpermute:& Single trait permutation \\
+	mqmpermutation:& Single trait permutation \\
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
-                & from the output of the \code{mqmpermute} function \\
+                & from the output of the \code{mqmpermutation} function \\
 	mqmplot\_multitrait:& plotting of multiple traits (MQMmulti object) \\
 	mqmplot\_nice:& plotting of mutiple traits (MQMmulti object) \\
   mqmplot\_directedqtl:& Plotting of signle trait with added qtl effect\\

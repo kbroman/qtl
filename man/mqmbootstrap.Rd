@@ -1,9 +1,5 @@
-\name{bootstrap}
-\alias{bootstrap}
-\alias{bootstrapcim}
-\alias{mqmbootstrap}
-\alias{permutate}
-\alias{mqmpermute}
+\name{mqmpermutation}
+\alias{mqmpermutation}
 
 \title{Estimate QTL LOD score significance through bootstrap permutations}
 
@@ -17,11 +13,9 @@
 }
 
 \usage{
-	bootstrap(cross, scanfunction=scanone, pheno.col=1,
+	mqmpermutation(cross, scanfunction=scanone, pheno.col=1,
 	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
    	          n.clusters=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
-	bootstrapcim(\dots)
-	mqmbootstrap(\dots)
 }
 
 \arguments{
@@ -68,7 +62,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
@@ -79,14 +73,11 @@ data(multitrait)				#Use the multitrait dataset
 \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
 multitrait$pheno <- log(multitrait$pheno)}
 multitrait <- calc.genoprob(multitrait)
-\dontrun{result <- bootstrap(multitrait,pheno.col=7, b.size=5)
-result <- bootstrapcim(multitrait,pheno.col=7, b.size=5)
-}\dontshow{result <- bootstrap(multitrait,pheno.col=7, n.run=2, b.size=2)
-result <- bootstrapcim(multitrait,pheno.col=7, n.run=2, b.size=2)}
+result <- mqmpermutation(multitrait,pheno.col=7, n.run=2, b.size=2)}
 multitrait <- fill.geno(multitrait)
 cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
-\dontrun{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
-\dontshow{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
+\dontrun{f2result <- mqmpermutation(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
+\dontshow{f2result <- mqmpermutation(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
 #EXTRA
 f2perm <- mqmprocesspermutation(f2result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
