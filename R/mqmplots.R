@@ -31,8 +31,7 @@
 #           getThird
 #           getChr
 #           mqmplot.multitrait
-#           mqmplot_permutations
-#           mqmplot_boot
+#           mqmplot.permutations
 #           mqmplot_one
 #           
 #
@@ -454,11 +453,7 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
   }
 }
 
-mqmplot_permutations <- function(result, ...){
-	mqmplot_boot(result, ...)
-}
-
-mqmplot_boot <- function(result, ...){
+mqmplot.permutations <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
