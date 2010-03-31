@@ -1,6 +1,6 @@
 #####################################################################
 #
-# mqmbootstrap.R
+# mqmpermutation.R
 #
 # Copyright (c) 2009-2010, Danny Arends
 #
@@ -24,13 +24,8 @@
 #
 # Part of the R/qtl package
 # Contains: mqmscanfdr
-#           mqmpermute
-#           mqmbootstrap
-#           bootstrapcim
-#           permute
-#           bootstrap
+#           mqmpermutation
 #           mqmprocesspermutation
-#           #result
 #           
 #
 #####################################################################
@@ -78,30 +73,13 @@ mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,
 	rownames(results) <- thresholds
 	results
 }
-
-mqmpermute <- function(...){
-	bootstrap(...,scanfunction=mqmscan)
-}
-
-mqmbootstrap <- function(...){
-	bootstrap(...,scanfunction=mqmscan)
-}
-
-bootstrapcim <- function(...){
-	bootstrap(...,scanfunction=cim)
-}
-
-permute <- function(...){
-	bootstrap(...)
-}
-
 ######################################################################
 #
-# bootstrap: Shuffles phenotype or does parametric bootstrapping of mqmscan
+# mqmpermutation: Shuffles phenotype or does parametric bootstrapping of mqmscan
 #
 ######################################################################
 
-bootstrap <- function(cross,scanfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
+mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
 {
 	bootmethod <- 0
 #	if(method=="simulation"){ # <- this often gives a warning message;
@@ -258,7 +236,4 @@ mqmprocesspermutation <- function(mqmpermutationresult = NULL){
 	}
 }
 
-#result <- bootstrap(cross)
-# tiff(object, file="namemeplease.tiff" res=300, unit="in", width=6, height=6)
-
-# end of mqmbootstrap.R
+# end of mqmpermutation.R
