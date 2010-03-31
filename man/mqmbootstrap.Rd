@@ -1,7 +1,7 @@
 \name{mqmpermutation}
 \alias{mqmpermutation}
 
-\title{Estimate QTL LOD score significance through bootstrap permutations}
+\title{Estimate QTL LOD score significance using permutations or simulations }
 
 \description{
    Different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
@@ -14,8 +14,8 @@
 
 \usage{
 	mqmpermutation(cross, scanfunction=scanone, pheno.col=1,
-	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
-   	          n.clusters=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
+	          multicore=TRUE, n.perm=10, b.size=10, file="MQM_output.txt",
+   	          n.cluster=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
 }
 
 \arguments{
@@ -30,8 +30,8 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
 	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000, or higher,
   for publications) }
 	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
-        \item{file}{File name (?)}
-	\item{n.clusters}{ Number of child processes to split the job into }
+        \item{file}{ Name of the intermediate output file used }
+	\item{n.cluster}{ Number of child processes to split the job into }
 	\item{method}{ What kind bootstrapping should occur: permutation or simulation } 
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
