@@ -24,7 +24,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: mqmplot_directedqtl
+# Contains: mqmplot.directedqtl
 #           mqmplot_cistrans
 #           addloctocross
 #           polyplot
@@ -38,7 +38,7 @@
 #
 #####################################################################
 
-mqmplot_directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
+mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}

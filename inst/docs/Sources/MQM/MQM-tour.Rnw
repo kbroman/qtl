@@ -811,7 +811,7 @@ curves with an indication of the sign of the estimated QTL effects.
 This requires that \code{mqmscan} was run with
 \code{outputmarkers=TRUE}, but that is the default.  For example:
 <<QTLeffects,eval=FALSE>>=
-dirresults <- mqmplot_directedqtl(hyperaug,result)
+dirresults <- mqmplot.directedqtl(hyperaug,result)
 @ 
 The output is in Figure~\ref{QTLeffects}.
 
