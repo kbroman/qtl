@@ -1065,7 +1065,7 @@ is, normally, the \qtl\ location and the y-axis the locations of the trait
 <<fig=TRUE>>=
 data(locations)
 multiloc <- addloctocross(multifilled,locations)
-mqmplot_cistrans(resall, multiloc, 5, FALSE, TRUE)
+mqmplot.cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
 \caption{\Atintro. mqmplot\_cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the

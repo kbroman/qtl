@@ -1,7 +1,5 @@
-\name{mqmplot_cistrans}
-\alias{mqmplot_cistrans}
-\alias{mqmplotcistrans}
-\alias{cistransplot}
+\name{mqmplot.cistrans}
+\alias{mqmplot.cistrans}
 
 \title{Plotting routine to show cis and trans QTL information}
 
@@ -10,7 +8,7 @@
 }
 
 \usage{
-	mqmplot_cistrans(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
+	mqmplot.cistrans(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
 }
 
 \arguments{
