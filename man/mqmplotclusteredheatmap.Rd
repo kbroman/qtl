@@ -1,5 +1,5 @@
-\name{mqmplot_clusteredheatmap}
-\alias{mqmplot_clusteredheatmap}
+\name{mqmplot.clusteredheatmap}
+\alias{mqmplot.clusteredheatmap}
 
 \title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmplot_clusteredheatmap(cross, results, directed=TRUE, Colv=NA, scale="none",\dots)
+mqmplot.clusteredheatmap(cross, results, directed=TRUE, Colv=NA, scale="none",\dots)
 }
 
 \arguments{
