@@ -185,7 +185,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       //Data augmentation done, we need to return both matrices to R
       int numimputations=1;
       if(unaugmentable==2){
-        numimputations=max_indaugment;  //If we do imputation, we should generate enough to not increase likelyhood for the 'unlikely genotypes'
+        numimputations=max_indaugment;  //If we do imputation, we should generate enough to not increase likelihood for the 'unlikely genotypes'
       }
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+numimputations*current_leftover_ind);
       vector new_y_all = newvector((*augmentednind)+numimputations*current_leftover_ind);
