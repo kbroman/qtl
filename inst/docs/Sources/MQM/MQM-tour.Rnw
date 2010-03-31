@@ -905,7 +905,7 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
-results <- mqmpermutation(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.size=25)
+results <- mqmpermutation(hyperaug,cofactors=cofactorlist,n.clusters=2,n.perm=25,b.size=25)
 @
 \begin{figure}
 <<fig=TRUE>>=
