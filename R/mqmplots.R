@@ -120,7 +120,7 @@ mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
   data
 }
 
-mqmplot_clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, scale="none", ...){
+mqmplot.clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, scale="none", ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
