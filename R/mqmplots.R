@@ -60,7 +60,7 @@ mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
   onlymarkers
 }
 
-mqmplot_heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE){
+mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
