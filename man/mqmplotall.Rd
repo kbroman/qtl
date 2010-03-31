@@ -1,5 +1,5 @@
-\name{mqmplot_multitrait}
-\alias{mqmplot_multitrait}
+\name{mqmplot.multitrait}
+\alias{mqmplot.multitrait}
 
 \title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
 
@@ -10,7 +10,7 @@
 }
 
 \usage{
-mqmplot_multitrait(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, \dots)
+mqmplot.multitrait(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, \dots)
 }
 
 \arguments{
@@ -47,10 +47,10 @@ data(multitrait)
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmscanall(multitrait, logtransform=TRUE)
-mqmplot_multitrait(result,"lines")
-mqmplot_multitrait(result,"contour")
-mqmplot_multitrait(result,"image")
-mqmplot_multitrait(result,"3Dplot")
+mqmplot.multitrait(result,"lines")
+mqmplot.multitrait(result,"contour")
+mqmplot.multitrait(result,"image")
+mqmplot.multitrait(result,"3Dplot")
 }
 
 \keyword{ hplot }

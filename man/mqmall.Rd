@@ -34,7 +34,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 
 \value{
   Returns a MQMmulti object. This object is a list of \code{\link{scanone}}
-  objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot_multitrait(result)}
+  objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot.multitrait(result)}
 }
 
 \author{ 
@@ -64,7 +64,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	cof <- mqmsetcofactors(multitrait,3)
   multitrait <- fill.geno(multitrait)
 	result <- mqmscanall(multitrait,cofactors=cof,batchsize=5)
-  mqmplot_multitrait(result,"lines")
+  mqmplot.multitrait(result,"lines")
 }
 
 \references{

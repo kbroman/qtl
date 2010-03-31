@@ -95,7 +95,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplot_multitrait(temp)
+					mqmplot.multitrait(temp)
 				}
 				res <- c(res,result)
 				end <- proc.time()
@@ -125,7 +125,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplot_multitrait(temp)
+					mqmplot.multitrait(temp)
 				}
 				res <- c(res,result)				
 				end <- proc.time()
