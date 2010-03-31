@@ -82,12 +82,10 @@ mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,
 mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
 {
 	bootmethod <- 0
-#	if(method=="simulation"){ # <- this often gives a warning message;
-#                                 #    I thought we should do method <- match.arg(method), but
-#                                 #    apparently the are other possible options for the method argument
-        if(method[1]=="simulation") {  
-		bootmethod <- 1
-	}
+  
+  supported <- c("permutation","simulation")
+  bootmethod <- pmatch(method, supported)
+
 	if(missing(cross))
 		stop("No cross file. Please supply a valid cross object.") 
 
