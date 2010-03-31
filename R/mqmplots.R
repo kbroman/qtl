@@ -25,7 +25,7 @@
 #
 # Part of the R/qtl package
 # Contains: mqmplot.directedqtl
-#           mqmplot_cistrans
+#           mqmplot.cistrans
 #           addloctocross
 #           polyplot
 #           getThird
@@ -158,7 +158,7 @@ mqmplot.clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, sca
   retresults
 }
 
-mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+mqmplot.cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 		if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
