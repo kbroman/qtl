@@ -30,7 +30,7 @@
 #           polyplot
 #           getThird
 #           getChr
-#           mqmplot_multitrait
+#           mqmplot.multitrait
 #           mqmplot_permutations
 #           mqmplot_boot
 #           mqmplot_one
@@ -378,7 +378,7 @@ getChr <- function(x){
 	x[,1]
 }
 
-mqmplot_multitrait <- function(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, ...){
+mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
   type <- match.arg(type)
   meanprofile <- match.arg(meanprofile)
