@@ -1,15 +1,14 @@
-\name{mqmplot_permutations}
-\alias{mqmplot_permutations}
-\alias{mqmplot_boot}
+\name{mqmplot.permutations}
+\alias{mqmplot.permutations}
 
-\title{Plot results from a bootstrap scan}
+\title{Plot results from a permutation QTL scan}
 
 \description{
-	Plotting routine to display the results from a bootstrap scan 
+	Plotting routine to display the results from a permutation scan.
 }
 
 \usage{
-mqmplot_permutations(result, \dots)
+mqmplot.permutations(result, \dots)
 }
 
 \arguments{
@@ -53,6 +52,6 @@ f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- calc.genoprob(f2cross)
 \dontrun{f2result <- bootstrap(f2cross)               	        # Bootstrap to obtain confidence intervals
 }\dontshow{f2result <- bootstrap(f2cross, n.run=2, b.size=2, method="permutation")}
-mqmplot_boot(f2result)					# Use the nice bootstrap plotting methodes
+mqmplot.permutations(f2result)					# Use the nice bootstrap plotting methodes
 }
 \keyword{ hplot }

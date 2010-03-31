@@ -911,7 +911,7 @@ results <- mqmpermute(hyperaug,cofactors=cofactorlist,n.clusters=2,n.run=25,b.si
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot_permutations(results)
+mqmplot.permutations(results)
 @
 \caption{\hyperintro. Calculate significance permuting 25 times over \qtl\ with
 a \lod\ higher than 2.5 LOD score can be considered significant (at

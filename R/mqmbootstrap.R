@@ -176,7 +176,7 @@ bootstrap <- function(cross,scanfunction=scanone,pheno.col=1,multiC=TRUE,n.run=1
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplot_boot(temp)
+					mqmplot.permutations(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -210,7 +210,7 @@ bootstrap <- function(cross,scanfunction=scanone,pheno.col=1,multiC=TRUE,n.run=1
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplot_boot(temp)
+					mqmplot.permutations(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
