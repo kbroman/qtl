@@ -10,7 +10,7 @@
 \usage{
 write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
                             "mm", "qtlcart", "gary"),
-            filestem="data", chr, digits=5)
+            filestem="data", chr, digits=NULL)
 }
 
 \arguments{
@@ -29,8 +29,9 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   strings.  Refer to chromosomes with a preceding \code{-} to have all
   chromosomes but those considered.  A logical (TRUE/FALSE) vector may
   also be used.} 
-  \item{digits}{Number of digits to which phenotype values should be
-    rounded.}
+  \item{digits}{Number of digits to which phenotype values and genetic
+     map positions should be rounded. If NULL (the default), they are
+     not rounded.}
 }
 
 %\value{
