@@ -47,7 +47,7 @@ data(multitrait)
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmscanall(multitrait, logtransform=TRUE)
-cresults <- mqmplot_clusteredheatmap(multitrait,result)
+cresults <- mqmplot.clusteredheatmap(multitrait,result)
 groupclusteredheatmap(multitrait,cresults,10)
 }
 

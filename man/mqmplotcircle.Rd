@@ -1,6 +1,4 @@
-\name{mqmplot_circle}
-\alias{mqmplot_circle}
-\alias{mqmplotcircle}
+\name{mqmplot.circle}
 
 \title{Circular genome plotting - routine to show QTL information}
 
@@ -9,7 +7,7 @@
 }
 
 \usage{
-	mqmplot_circle(cross,result,highlight=0,spacing=25, interactstrength=2, legend=FALSE,verbose=FALSE,transparency=FALSE)
+	mqmplot.circle(cross,result,highlight=0,spacing=25, interactstrength=2, legend=FALSE,verbose=FALSE,transparency=FALSE)
 }
 
 \arguments{
@@ -83,22 +81,22 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     multires <- mqmscanall(multifilled,cofactors=multicof)
     
     #Basic scanone, thickness of markers = LODscore
-    mqmplot_circle(hyperfilled,hyperscanone)
+    mqmplot.circle(hyperfilled,hyperscanone)
     Sys.sleep(3)
     #Basic mqm, thickness of markers = LODscore, red = significant
-    mqmplot_circle(hyperfilled,hyperres)
+    mqmplot.circle(hyperfilled,hyperres)
     Sys.sleep(3)
     #Basic mqmmulti, color = trait, round circle = significant
-    mqmplot_circle(multifilled,multires)
+    mqmplot.circle(multifilled,multires)
     Sys.sleep(3)
     #mqmmulti with locations of traits in multiloc
-    mqmplot_circle(multiloc,multires)
+    mqmplot.circle(multiloc,multires)
     Sys.sleep(3)
     #mqmmulti with highlighting
-    mqmplot_circle(multitrait,multires,highlight=16)
+    mqmplot.circle(multitrait,multires,highlight=16)
     Sys.sleep(3)
     #mqmmulti with locations of traits in multiloc and highlighting
-    mqmplot_circle(multiloc,multires,highlight=16)
+    mqmplot.circle(multiloc,multires,highlight=16)
   }
 }
 

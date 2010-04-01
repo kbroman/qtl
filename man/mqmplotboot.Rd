@@ -37,7 +37,7 @@ mqmplot.permutations(result, \dots)
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
@@ -50,8 +50,8 @@ data(map10)                                             # Mouse genome
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- calc.genoprob(f2cross)
-\dontrun{f2result <- bootstrap(f2cross)               	        # Bootstrap to obtain confidence intervals
-}\dontshow{f2result <- bootstrap(f2cross, n.run=2, b.size=2, method="permutation")}
+\dontrun{f2result <- mqmpermutation(f2cross)               	        # Bootstrap to obtain confidence intervals
+}\dontshow{f2result <- mqmpermutation(f2cross, n.perm=2, batchsize=2, method="permutation")}
 mqmplot.permutations(f2result)					# Use the nice bootstrap plotting methodes
 }
 \keyword{ hplot }

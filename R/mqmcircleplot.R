@@ -37,54 +37,7 @@
 #
 #####################################################################
 
-mqmplot_c <- function(x, distance=FALSE, vulcano=FALSE, 
-                        point.color="blue", text.color="red", line.color=rgb(0.1,0.1,0.1,0.1), 
-                        lwd=1, cex=1, spacing=1, verbose=FALSE){
-  if(is.null(x)) stop("Please supply a vector in x")
-  if(is.vector(x)){
-    ploty <- c(-1.1,1.1)
-    if(vulcano) ploty <- c(0.0,3.0)
-    plot(c(-1.1, 1.1), ploty, type = "n", axes = FALSE, xlab = "", ylab = "")
-    title(main = "Circular plot")
-    cvalues <- circlelocations(length(x)+spacing*length(x))
-    l <- 1
-    itemnum <- 1
-    for(item in x){
-      nl <- l + spacing
-      loc <- c(0,0)
-      if(vulcano) loc <- c(0,1.75)
-      if(!distance){
-        loc <- loc+t(cvalues[l+(nl-l),])
-      }else{
-        if(is.numeric(x)){
-          loc <- loc+(item/max(x)) * t(cvalues[l+(nl-l),])
-        }
-        if(is.character(x)){
-          loc <- loc+(nchar(item)/max(nchar(x))) * t(cvalues[l+(nl-l),])
-        }
-        points(loc,cex=0.5*cex,col=point.color)
-      }
-      drawspline(c(0,0),loc,col=line.color,lwd=lwd)
-      if(!is.na(text.color)){
-        if(is.null(names(x))){
-          text(1.1*loc,paste("",format(item,dig=2)),col=text.color,cex=0.7*cex)
-        }else{
-          text(1.1*loc,paste(names(x)[itemnum]),col=text.color,cex=0.7*cex)
-        }
-      }
-      l <- 1 + nl
-      itemnum <- itemnum + 1
-    }
-  }else{
-    stop("Please supply a vector in x")
-  }
-}
-
-mqmplotcircle <- function(...){
-  mqmplot_circle(...)
-}
-
-mqmplot_circle <- function(cross, result, highlight=0, spacing=25, interactstrength=2,legend=FALSE, verbose=FALSE, transparency=FALSE){
+mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstrength=2,legend=FALSE, verbose=FALSE, transparency=FALSE){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}

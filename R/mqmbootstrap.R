@@ -92,8 +92,8 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 		#Echo back the cross type
 		if(verbose) {
                   cat("------------------------------------------------------------------\n")
-                  cat("Starting bootstrap analysis\n")
-                  cat("Number of bootstrapping runs:",n.perm,"\n")
+                  cat("Starting permutation analysis\n")
+                  cat("Number of permutations:",n.perm,"\n")
                   cat("Batchsize:",batchsize," & n.cluster:",n.cluster,"\n")
                   cat("------------------------------------------------------------------\n")		
                   cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
@@ -102,7 +102,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 		if(!bootmethod){
 			if(verbose) cat("INFO: Shuffleling traits between individuals.\n")
 		}else{
-			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
+			if(verbose) cat("INFO: Parametric permutation\nINFO: Calculating new traits for each individual.\n")
 		}
 
 		#Set the Phenotype under interest as the first
@@ -208,7 +208,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 		SUM <- (e-b)[3]
 		AVG <- SUM/(n.perm+1)	
                 if(verbose) {
-                  cat("INFO: Done with MQM bootstrap analysis\n")
+                  cat("INFO: Done with MQM permutation analysis\n")
                   cat("------------------------------------------------------------------\n")
                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
                   cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
