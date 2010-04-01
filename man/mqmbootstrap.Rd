@@ -32,7 +32,7 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
 	\item{batchsize}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
         \item{file}{ Name of the intermediate output file used }
 	\item{n.cluster}{ Number of child processes to split the job into }
-	\item{method}{ What kind bootstrapping should occur: permutation or simulation } 
+	\item{method}{ What kind permutation should occur: permutation or simulation } 
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
@@ -74,7 +74,9 @@ data(multitrait)				#Use the multitrait dataset
 multitrait$pheno <- log(multitrait$pheno)}
 multitrait <- calc.genoprob(multitrait)
 result <- mqmpermutation(multitrait,pheno.col=7, n.perm=2, batchsize=2)
+
 cof <- mqmautocofactors(multitrait,50)		#Set 50 cofactors
+multitrait <- fill.geno(multitrait)
 result <- mqmpermutation(multitrait,scanfunction=mqmscan,cofactors=cof,pheno.col=7, n.perm=2,batchsize=2,verbose=FALSE)
 #EXTRA
 f2perm <- mqmprocesspermutation(result)			#Create a permutation object

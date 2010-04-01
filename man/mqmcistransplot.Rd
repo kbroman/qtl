@@ -67,9 +67,9 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 \dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
-    multiloc <- calc.genoprob(multiloc)
+  multiloc <- calc.genoprob(multiloc)
 	results <- scanall(multiloc, method="hk")
-	mqmplot_cistrans(results, multiloc, 5, FALSE, TRUE)
+	mqmplot.cistrans(results, multiloc, 5, FALSE, TRUE)
 }
 
 \keyword{ hplot }
