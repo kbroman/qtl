@@ -14,7 +14,7 @@
 
 \usage{
 	mqmpermutation(cross, scanfunction=scanone, pheno.col=1,
-	          multicore=TRUE, n.perm=10, b.size=10, file="MQM_output.txt",
+	          multicore=TRUE, n.perm=10, batchsize=10, file="MQM_output.txt",
    	          n.cluster=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
 }
 
@@ -27,9 +27,9 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
   }
 	\item{multiC}{ Use multicore (if available)}  
-	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000, or higher,
+	\item{n.perm}{ Number of permutations to perform (DEFAULT=10, should be 1000, or higher,
   for publications) }
-	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
+	\item{batchsize}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
         \item{file}{ Name of the intermediate output file used }
 	\item{n.cluster}{ Number of child processes to split the job into }
 	\item{method}{ What kind bootstrapping should occur: permutation or simulation } 
@@ -73,11 +73,11 @@ data(multitrait)				#Use the multitrait dataset
 \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
 multitrait$pheno <- log(multitrait$pheno)}
 multitrait <- calc.genoprob(multitrait)
-result <- mqmpermutation(multitrait,pheno.col=7, n.run=2, b.size=2)}
+result <- mqmpermutation(multitrait,pheno.col=7, n.perm=2, batchsize=2)
 multitrait <- fill.geno(multitrait)
 cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
-\dontrun{f2result <- mqmpermutation(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
-\dontshow{f2result <- mqmpermutation(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
+\dontrun{f2result <- mqmpermutation(multitrait,scanfunction=scanmqm,cofactors=cof,pheno.col=7, batchsize=5,verbose=FALSE)}
+\dontshow{f2result <- mqmpermutation(multitrait,scanfunction=scanmqm,cofactors=cof,pheno.col=7, n.perm=2,batchsize=2,verbose=FALSE)}
 #EXTRA
 f2perm <- mqmprocesspermutation(f2result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
