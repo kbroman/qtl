@@ -74,12 +74,10 @@ data(multitrait)				#Use the multitrait dataset
 multitrait$pheno <- log(multitrait$pheno)}
 multitrait <- calc.genoprob(multitrait)
 result <- mqmpermutation(multitrait,pheno.col=7, n.perm=2, batchsize=2)
-multitrait <- fill.geno(multitrait)
-cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
-\dontrun{f2result <- mqmpermutation(multitrait,scanfunction=scanmqm,cofactors=cof,pheno.col=7, batchsize=5,verbose=FALSE)}
-\dontshow{f2result <- mqmpermutation(multitrait,scanfunction=scanmqm,cofactors=cof,pheno.col=7, n.perm=2,batchsize=2,verbose=FALSE)}
+cof <- mqmautocofactors(multitrait,50)		#Set 50 cofactors
+result <- mqmpermutation(multitrait,scanfunction=mqmscan,cofactors=cof,pheno.col=7, n.perm=2,batchsize=2,verbose=FALSE)
 #EXTRA
-f2perm <- mqmprocesspermutation(f2result)			#Create a permutation object
+f2perm <- mqmprocesspermutation(result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
 }
 

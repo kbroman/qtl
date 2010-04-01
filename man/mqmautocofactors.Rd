@@ -46,7 +46,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	data(hyper)							        # Hyper dataset
 	\dontshow{hyper <- hyper[1:5]}
 	hyperfilled <- fill.geno(hyper)
-	cofactors <- mqmautocofactors(hyperfilled,15)	# Set Cofactors every third marker
+	cofactors <- mqmautocofactors(hyperfilled,15)	# Set 15 Cofactors
 	result <- mqmscan(hyperfilled,cofactors)	# Backward model selection
 	mqmgetmodel(result)
 }
