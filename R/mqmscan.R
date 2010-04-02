@@ -139,7 +139,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if(phenovar > 1000){
 			if(!logtransform){
 				if(verbose) cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
-				warning(paste("WARNING: Set needs Log-transformation? (var=",phenovar,"), use mqmscan with logtransform=TRUE"))
+				#warning(paste("WARNING: Set needs Log-transformation? (var=",phenovar,"), use mqmscan with logtransform=TRUE"))
 			}
 		}
 		if(logtransform){

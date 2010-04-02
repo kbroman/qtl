@@ -79,7 +79,7 @@ mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,
 #
 ######################################################################
 
-mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,batchsize=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
+mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,batchsize=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),cofactors=NULL,plot=FALSE,verbose=FALSE,...)
 {
 	bootmethod <- 0
   
@@ -114,7 +114,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 
 		#Scan the original
 		#cross <- fill.geno(cross) # <- this should be done outside of this function
-		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,scanfunction=scanfunction,verbose=verbose,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,scanfunction=scanfunction,verbose=verbose,cofactors=cofactors,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.perm)
