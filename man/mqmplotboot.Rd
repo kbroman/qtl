@@ -26,7 +26,8 @@ mqmplot.permutations(result, \dots)
 \value{ No value returned (plotting routine) }
 
 \author{ 
-  % \dannyrutgerauthor
+  Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
+  , Rutger Brouwer
 }
 
 \seealso{ 
