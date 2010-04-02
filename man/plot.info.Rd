@@ -9,7 +9,7 @@
 }
 
 \usage{
-plot.info(x, chr, method=c("both","entropy","variance"), step=1,
+\method{plot}{info}(x, chr, method=c("both","entropy","variance"), step=1,
           off.end=0, error.prob=0.001,
           map.function=c("haldane","kosambi","c-f","morgan"),
           alternate.chrid=FALSE, \dots)

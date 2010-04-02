@@ -8,7 +8,7 @@
 }
 
 \usage{
-plot.missing(x, chr, reorder=FALSE, main="Missing genotypes",
+\method{plot}{missing}(x, chr, reorder=FALSE, main="Missing genotypes",
              alternate.chrid=FALSE, \dots)
 }			    
 

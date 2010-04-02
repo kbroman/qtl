@@ -10,7 +10,7 @@
 }
 
 \usage{
-plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
+\method{plot}{rf}(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
         zmax=12, mark.diagonal=FALSE, \dots)
 }
 
