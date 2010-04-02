@@ -244,7 +244,7 @@ loopthroughmulti <- function(cross,result,save=FALSE,spacing=100){
   n <- 1
   while(n <= length(result)){
     if(save) png(file=paste("circleplotT",n,".png",sep=""),w=1024,h=768)
-    mqmplot_circle(cross,result,spacing=spacing,highlight=n)
+    mqmplot.circle(cross,result,spacing=spacing,highlight=n)
     if(save) dev.off()
     n <- n+1
   }
