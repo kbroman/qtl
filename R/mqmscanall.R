@@ -23,26 +23,17 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: cimall
-#           mqmscanall
+# Contains: mqmscanall
 #           scanall
 #           
 #
 #####################################################################
 
-
-
-
-
-cimall <- function(...) {
-	scanall(...,scanfunction=cim)
+mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, batchsize=10,cofactors=NULL, ...) {
+	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, batchsize=batchsize,cofactors=cofactors, ..., scanfunction=mqmscan)
 }
 
-mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, batchsize=10, ...) {
-	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, batchsize=batchsize, ..., scanfunction=mqmscan)
-}
-
-scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0, ..., plot=FALSE, verbose=FALSE){
+scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0,cofactors=NULL, ..., plot=FALSE, verbose=FALSE){
 	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
@@ -90,7 +81,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,scanfunction=scanfunction,verbose=verbose,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,scanfunction=scanfunction,cofactors=cofactors,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
@@ -121,7 +112,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}
-				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,scanfunction=scanfunction,verbose=verbose,...)
+				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,scanfunction=scanfunction,cofactors=cofactors,verbose=verbose,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")

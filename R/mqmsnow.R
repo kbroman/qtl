@@ -34,7 +34,7 @@
 
 
 
-snowCoreALL <- function(x,all.data,scanfunction,verbose=FALSE,...){
+snowCoreALL <- function(x,all.data,scanfunction,cofactors,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	num.traits <- nphe(all.data)
@@ -43,7 +43,7 @@ snowCoreALL <- function(x,all.data,scanfunction,verbose=FALSE,...){
           cat("INFO: Starting analysis of trait (",x,"/",num.traits,")\n")
           cat("------------------------------------------------------------------\n")
         }
-	if("cofactors" %in% names(formals(scanfunction)) && exists("cofactors")) {
+        if(!is.null(cofactors)) {
           result <- scanfunction(cross=all.data,cofactors=cofactors,pheno.col=x,verbose=verbose,...)
         }
         else{
@@ -61,7 +61,7 @@ snowCoreALL <- function(x,all.data,scanfunction,verbose=FALSE,...){
 }
 
 
-snowCoreBOOT <- function(x,all.data,scanfunction,bootmethod,verbose=FALSE,...){
+snowCoreBOOT <- function(x,all.data,scanfunction,bootmethod,cofactors,verbose=FALSE,...){
 	b <- proc.time()
 	result <- NULL
 	if(!bootmethod){
@@ -77,7 +77,7 @@ snowCoreBOOT <- function(x,all.data,scanfunction,bootmethod,verbose=FALSE,...){
 		}
 	}
 	if("cofactors" %in% names(formals(scanfunction))){
-		if(exists("cofactors")){
+		if(!is.null(cofactors)){
 			result <- scanfunction(cross=all.data,cofactors=cofactors,pheno.col=1,verbose=FALSE,...)
 		}else{
 			result <- scanfunction(cross=all.data,pheno.col=1,verbose=FALSE,...)
