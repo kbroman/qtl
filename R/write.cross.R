@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-9, Karl W Broman and Hao Wu
-# last modified Feb, 2009
+# copyright (c) 2001-2010, Karl W Broman and Hao Wu
+# last modified Mar, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 
 write.cross <-
 function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary"),
-         filestem="data", chr, digits=5)
+         filestem="data", chr, digits=NULL)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -77,7 +77,7 @@ function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary"
 ######################################################################
 
 write.cross.mm <-
-function(cross, filestem="data", digits=5)
+function(cross, filestem="data", digits=NULL)
 {
   n.ind <- nind(cross)
   tot.mar <- totmar(cross)
@@ -147,8 +147,10 @@ function(cross, filestem="data", digits=5)
     if(nchar(pn) < mlpn)
       pn <- paste(pn, paste(rep(" ", mlpn-nchar(pn)),collapse=""),sep="")
 
-    if(!is.factor(cross$pheno[,i]))
-      x <- as.character(round(cross$pheno[,i],digits))
+    if(!is.factor(cross$pheno[,i])) {
+      if(is.null(digits)) x <- as.character(cross$pheno[,i])
+      else x <- as.character(round(cross$pheno[,i],digits))
+    }
     else
       x <- as.character(cross$pheno[,i])
     x[is.na(x)] <- "-"
@@ -199,7 +201,7 @@ function(cross, filestem="data", digits=5)
 ######################################################################
 
 write.cross.csv <-
-function(cross, filestem="data", digits=5, rotate=FALSE, split=FALSE)
+function(cross, filestem="data", digits=NULL, rotate=FALSE, split=FALSE)
 {
   type <- class(cross)[1]
   if(type != "f2" && type != "bc" && type != "riself" && type != "risib" && type != "dh")
@@ -250,10 +252,15 @@ function(cross, filestem="data", digits=5, rotate=FALSE, split=FALSE)
     firstmar <- firstmar + n.mar[i]
   }
   if(any(is.na(geno))) geno[is.na(geno)] <- "-"
-  pheno <- matrix(as.character(round(unlist(cross$pheno),digits)),nrow=n.ind)
-  # factors: should be character by the levels rather than something like "1", "2", etc.
-  for(i in 1:nphe(cross)) 
-    if(is.factor(cross$pheno[,i])) pheno[,i] <- as.character(cross$pheno[,i])
+  pheno <- cross$pheno
+  for(i in 1:nphe(cross)) {
+    if(is.factor(pheno[,i])) pheno[,i] <- as.character(pheno[,i])
+    else if(is.numeric(pheno[,i])) {
+      if(!is.null(digits)) pheno[,i] <- round(pheno[,i], digits)
+      pheno[,i] <- as.character(pheno[,i])
+    }
+  }
+  pheno <- matrix(unlist(pheno), nrow=n.ind)
   
   if(any(is.na(pheno))) pheno[is.na(pheno)] <- "-"
   thedata <- cbind(pheno,geno)
@@ -262,7 +269,10 @@ function(cross, filestem="data", digits=5, rotate=FALSE, split=FALSE)
   chr <- rep(names(cross$geno),n.mar)
   pos <- unlist(lapply(cross$geno,function(a) a$map))
   chr <- c(rep("",n.phe),chr)
-  pos <- c(rep("",n.phe),as.character(round(pos,digits)))
+  if(!is.null(digits))
+    pos <- c(rep("",n.phe),as.character(round(pos,digits)))
+  else 
+    pos <- c(rep("",n.phe),as.character(pos))
 
   # put it all together
   thenames <- colnames(thedata)
@@ -315,7 +325,7 @@ function(cross, filestem="data", digits=5, rotate=FALSE, split=FALSE)
 ######################################################################
 
 write.cross.gary <-
-function(cross, digits)
+function(cross, digits=NULL)
 {
   # local variables
   n.ind <- nind(cross)
@@ -360,9 +370,15 @@ function(cross, digits)
               col.name=FALSE, sep="\t", na="9")
 
   # phenotype
-  pheno <- matrix(as.character(round(unlist(cross$pheno),digits)),nrow=n.ind)
-  for(i in 1:nphe(cross)) 
-    if(is.factor(cross$pheno[,i])) pheno[,i] <- as.character(cross$pheno[,i])
+  pheno <- cross$pheno
+  for(i in 1:nphe(cross)) {
+    if(is.factor(pheno[,i])) pheno[,i] <- as.character(pheno[,i])
+    else if(is.numeric(pheno[,i])) {
+      if(is.null(digits)) pheno[,i] <- as.character(pheno[,i])
+      else pheno[,i] <- as.character(round(pheno[,i], digits))
+    }
+  }
+  pheno <- matrix(unlist(pheno), nrow=nrow(pheno))
 
   write.table(pheno, file="pheno.dat", quote=FALSE, row.names=FALSE,
               col.names=FALSE, sep="\t", na="-999")

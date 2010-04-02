@@ -13,7 +13,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{threshold}{Only an increase in maximum 2-point LOD of at least
    this amount will lead to a marker being flagged.}
  \item{verbose}{If TRUE and there are no markers above the threshold,
@@ -30,7 +30,7 @@
 \details{
   For each marker, we compare the maximum LOD score for the cases where
   the estimated recombination fraction > 0.5 to those where r.f. < 0.5.
-  The function \code{\link[qtl]{est.rf}} must first be run.
+  The function \code{\link{est.rf}} must first be run.
 
   \bold{Note}: Markers that are tightly linked to a marker whose alleles
   are switched are likely to also be flagged by this method.  The real
@@ -53,6 +53,6 @@ fake.f2 <- est.rf(fake.f2)
 checkAlleles(fake.f2)
 }
 
-\seealso{ \code{\link[qtl]{est.rf}}, \code{\link[qtl]{geno.crosstab}} }
+\seealso{ \code{\link{est.rf}}, \code{\link{geno.crosstab}} }
 
 \keyword{utilities}

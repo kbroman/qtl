@@ -5,7 +5,7 @@
 
 \description{
   Use pairwise linkage information between markers (as calculated by
-  \code{\link[qtl]{est.rf}} to partition markers into linkage groups.
+  \code{\link{est.rf}} to partition markers into linkage groups.
 }
 
 \usage{
@@ -15,7 +15,7 @@ formLinkageGroups(cross, max.rf=0.25, min.lod=3, reorgMarkers=FALSE,
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{max.rf}{Maximum recombination fraction for placing two markers in
    the same linkage group (see Details).}
  \item{min.lod}{Minimum LOD score for placing two markers in the same
@@ -60,7 +60,7 @@ apply(tab, 1, function(a) sum(a!=0))
 apply(tab, 2, function(a) sum(a!=0))
 }
 
-\seealso{ \code{\link[qtl]{est.rf}}, \code{\link[qtl]{orderMarkers}} }
+\seealso{ \code{\link{est.rf}}, \code{\link{orderMarkers}} }
 
 
 \keyword{utilities}

@@ -17,7 +17,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
            dir="", file, genfile, mapfile, phefile, chridfile,
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
-           estimate.map=TRUE, convertXdata=TRUE, \dots)
+           estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
+           map.function=c("haldane", "kosambi", "c-f", "morgan"), \dots)
 }
 
 \arguments{
@@ -60,11 +61,18 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \item{estimate.map}{For all formats but \code{qtlcart} and
     \code{karl}: if TRUE and marker positions are
     not included in the input files, the genetic map is estimated using
-    the function  \code{\link[qtl]{est.map}}.} 
+    the function  \code{\link{est.map}}.} 
   \item{convertXdata}{If TRUE, any X chromosome genotype data is
     converted to the internal standard, using columns \code{sex} and
     \code{pgm} in the phenotype data if they available or by inference
     if they are not.  If FALSE, the X chromsome data is read as is.}  
+  \item{error.prob}{In the case that the marker map must be estimated:
+   Assumed genotyping error rate used in the calculation of the
+   penetrance Pr(observed genotype | true genotype).}
+ \item{map.function}{In the case that the marker map must be estimated:
+   Indicates whether to use the Haldane, Kosambi,
+   Carter-Falconer, or Morgan map function when converting genetic
+   distances into recombination fractions. (Ignored if m > 0.)}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the
@@ -106,8 +114,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
 
   \item{pheno}{data.frame of size (\code{n.ind x n.phe}) containing the
     phenotypes.  If a phenotype with the name \code{id} or \code{ID} is
-  included, these identifiers will be used in \code{\link[qtl]{top.errorlod}},
-  \code{\link[qtl]{plot.errorlod}}, and \code{\link[qtl]{plot.geno}} as
+  included, these identifiers will be used in \code{\link{top.errorlod}},
+  \code{\link{plot.errorlod}}, and \code{\link{plot.geno}} as
   identifiers for the individual.} 
 }
 
@@ -155,7 +163,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   are coded 1=AA and 2=AB; and females with pgm==1 are coded 1=BB and
   2=AB.  If the argument \code{convertXdata} is TRUE, conversion to this
   format is made automatically; if FALSE, no conversion is done, 
-  \code{\link[qtl]{summary.cross}} will likely return a warning, and
+  \code{\link{summary.cross}} will likely return a warning, and
   most analyses will not work properly.
 
   Use of \code{convertXdata=FALSE} (in which case the X chromosome
@@ -213,8 +221,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   precisely the same information (and with the same name).  These IDs
   will be included in the data as a phenotype.  If the name \code{id} or
   \code{ID} is used, these identifiers will be used in
-  \code{\link[qtl]{top.errorlod}}, \code{\link[qtl]{plot.errorlod}}, and
-  \code{\link[qtl]{plot.geno}} as identifiers for the individual.  
+  \code{\link{top.errorlod}}, \code{\link{plot.errorlod}}, and
+  \code{\link{plot.geno}} as identifiers for the individual.  
 
   In the genotype data file, the second row gives the chromosome IDs.
   The cell in the second row, first column, must be blank.  A third
@@ -346,6 +354,10 @@ dat1 <- read.cross("csv", dir="Mydata", file="mydata.csv")
 dat2 <- read.cross("csvs", dir="Mydata", genfile="mydata_gen.csv",
                    phefile="mydata_phe.csv")
 
+# you can read files directly from the internet
+datweb <- read.cross("csv", "http://www.rqtl.org/sampledata",
+                     "listeria.csv")
+
 # Mapmaker format
 dat3 <- read.cross("mm", dir="Mydata", file="mydata.raw",
                    mapfile="mydata.map")
@@ -370,7 +382,7 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian S. Yandell}
 
-\seealso{ \code{\link[qtl]{write.cross}}, \code{\link[qtl]{sim.cross}};
+\seealso{ \code{\link{write.cross}}, \code{\link{sim.cross}};
   the \code{sampledata} directory in the package distribution contains
   sample data files in all formats except Gary's.  Also see
   \url{http://www.rqtl.org/sampledata}.  

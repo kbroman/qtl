@@ -1,11 +1,10 @@
 \name{mqmloadanalysis}
 \alias{mqmloadanalysis}
 
-\title{Enables loading of previous MQM analysis from file} 
-
+\title{Enables loading of previously saved MQM analysis from file} 
 
 \description{
-  Enables loading of previous MQM analysis from file
+  Enables loading of previously saved MQM analysis from file
 }
 
 \usage{
@@ -21,18 +20,25 @@ mqmloadanalysis(file = "MQM_output.txt")
 %}
 
 \value{
-Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the \code{\link[qtl]{plot.scanone}} function.
+Returns a matrix with QTLscores for each location on the chromosome, which can be plotted using the \code{\link{plot.scanone}} function.
 }
 
-\references{ Danny Arends \email{Danny.Arends@gmail.com} }
-
-\author{ Danny Arends \email{Danny.Arends@gmail.com} }
+\author{ 
+Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
+}
 
 \seealso{ 
-\itemize{
-	\item \code{\link[qtl]{mqmscan}} - Function called to do single trait analysis
-	\item \code{\link[qtl]{scanall}} - Function called to analytse multiple traits in the cross object
-}
+  \itemize{
+    % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
+    \item \code{\link{MQM}} - MQM description and references
+    \item \code{\link{mqmscan}} - Main MQM single trait analysis
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
+    \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{scanone}} - Single QTL scanning
+% -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
+  }
 }
 
 \examples{

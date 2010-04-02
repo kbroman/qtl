@@ -12,7 +12,7 @@
 }
 
 \arguments{
- \item{object}{An object of class \code{qtl}, created by \code{\link[qtl]{makeqtl}}.}
+ \item{object}{An object of class \code{qtl}, created by \code{\link{makeqtl}}.}
  \item{\dots}{Ignored at this point.}
 }
 
@@ -38,6 +38,6 @@ qtl <- makeqtl(fake.f2, qc, qp, what="prob")
 summary(qtl)
 }
 
-\seealso{ \code{\link[qtl]{makeqtl}} } 
+\seealso{ \code{\link{makeqtl}} } 
 
 \keyword{print}

@@ -11,7 +11,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
 }
 
 \value{
@@ -25,7 +25,7 @@ data(listeria)
 chrnames(listeria)
 }
 
-\seealso{ \code{\link[qtl]{markernames}} }
+\seealso{ \code{\link{markernames}} }
 
 
 \keyword{utilities}

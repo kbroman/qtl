@@ -12,7 +12,7 @@ reorderqtl(qtl, neworder)
 }
 
 \arguments{
- \item{qtl}{A qtl object, as created by \code{\link[qtl]{makeqtl}}.}
+ \item{qtl}{A qtl object, as created by \code{\link{makeqtl}}.}
  \item{neworder}{A vector containing the positive integers up to the
    number of QTL in \code{qtl}, indicating the new order for the QTL.
    If missing, the QTL are ordered by chromosome and then by their
@@ -50,8 +50,8 @@ qtl <- reorderqtl(qtl)
 qtl
 }
 
-\seealso{ \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{fitqtl}},
-  \code{\link[qtl]{dropfromqtl}}, \code{\link[qtl]{addtoqtl}},
-  \code{\link[qtl]{replaceqtl}} }
+\seealso{ \code{\link{makeqtl}}, \code{\link{fitqtl}},
+  \code{\link{dropfromqtl}}, \code{\link{addtoqtl}},
+  \code{\link{replaceqtl}} }
 
 \keyword{utilities}

@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Jun, 2009
+# last modified Sep, 2009
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -115,13 +115,15 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                method=method, dropone=dropone, get.ests=get.ests,
-               run.checks=run.checks, cross.attr=attributes(cross))
+               run.checks=run.checks, cross.attr=attributes(cross),
+               getsex(cross))
 }
   
 
 fitqtlengine <-
 function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
-         dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr)
+         dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
+         sexpgm)
 {
   # local variables
   n.ind <- qtl$n.ind # number of individuals
@@ -130,21 +132,21 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   if(method=="imp")
     n.draws <- dim(qtl$geno)[3] # number of draws
   
-  if( is.null(covar) )  # number of covarariates
+  if( is.null(covar) )  # number of covariates
     n.covar <- 0
   else 
     n.covar <- ncol(covar)
   
   # if formula is missing, build one
-  # all QTLs and covarariates will be additive by default
+  # all QTLs and covariates will be additive by default
   if(missing(formula)) {
     tmp.Q <- paste("Q", 1:n.qtl, sep="") # QTL term names
     formula <- "y~Q1"
     if(n.qtl > 1) 
       for (i in 2:n.qtl) 
         formula <- paste(formula, tmp.Q[i], sep="+")
-    if (n.covar) { # if covarariate is not empty
-      tmp.C <- colnames(covar) # covarariate term names
+    if (n.covar) { # if covariate is not empty
+      tmp.C <- colnames(covar) # covariate term names
       for(i in 1:n.covar)
         formula <- paste(formula, tmp.C[i], sep="+")
     }
@@ -191,11 +193,11 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   # parse the input formula
   p <- parseformula(formula, qtl$altname, colnames(covar))
   # make an array n.gen.QC to represent the genotype numbers
-  # for all input QTLs and covarariates. For covarariates the
+  # for all input QTLs and covariates. For covariates the
   # number of genotyps is 1. This makes programming easier
   n.gen.QC <- c(n.gen[p$idx.qtl]-1, rep(1, p$n.covar))
 
-  # covarariates to be passed to C function
+  # covariates to be passed to C function
   # This is done in case of that user input covar but has no covar in formula
   covar.C <- NULL
   if(!is.null(p$idx.covar))
@@ -224,16 +226,38 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     }
   }
 
+  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm)
+  adjustX <- FALSE
+  if(sum(qtl$chrtype[p$idx.qtl]=="X")==1 && Xadjustment$adjustX)  { # need to include X chromosome covariates
+    adjustX <- TRUE
+
+    n.newcovar <- ncol(Xadjustment$sexpgmcovar)
+    n.gen.QC <- c(n.gen.QC, rep(1, n.newcovar))
+    p$n.covar <- p$n.covar + n.newcovar
+    covar.C <- cbind(covar.C, Xadjustment$sexpgmcovar)
+    sizefull <- sizefull + n.newcovar
+
+    if(p$n.int==1)
+      p$formula.intmtx <- c(p$formula.intmtx, rep(0,n.newcovar))
+    if(p$n.int>1) {
+      for(i in 1:n.newcovar)
+        p$formula.intmtx <- rbind(p$formula.intmtx, rep(0,p$n.int))
+    }
+  }
+  else 
+    adjustX <- FALSE
+
+
   # call C function to do the genome scan
   if(method == "imp") {
     z <- .C("R_fitqtl_imp",
             as.integer(n.ind), # number of individuals
             as.integer(p$n.qtl), # number of qtls
-            as.integer(n.gen.QC), # number of genotypes QTLs and covarariates
+            as.integer(n.gen.QC), # number of genotypes QTLs and covariates
             as.integer(n.draws), # number of draws
             as.integer(qtl$geno[,p$idx.qtl,]), # genotypes for selected marker
-            as.integer(p$n.covar), # number of covarariate
-            as.double(covar.C), # covarariate
+            as.integer(p$n.covar), # number of covariate
+            as.double(covar.C), # covariate
             as.integer(p$formula.intmtx),  # formula matrix for interactive terms
             as.integer(p$n.int), # number of interactions in the formula
             as.double(pheno), # phenotype
@@ -252,7 +276,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
             as.integer(p$n.qtl), # number of qtls
             as.integer(n.gen.QC), # number of genotypes QTLs and covariates
             as.double(prob),      # QTL genotype probabilities
-            as.integer(p$n.covar), # number of covarariate
+            as.integer(p$n.covar), # number of covariate
             as.double(covar.C), # covariates
             as.integer(p$formula.intmtx),  # formula matrix for interactive terms
             as.integer(p$n.int), # number of interactions in the formula
@@ -275,8 +299,14 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     if(n.covar > 0) thenames <- c(thenames,names(covar)[p$idx.covar])
 
     ests <- z$ests
-
     ests.cov <- matrix(z$ests.cov,ncol=sizefull)
+
+    if(adjustX) {
+      keep <- 1:(length(ests)-n.newcovar)
+      ests <- ests[keep]
+      ests.cov <- ests.cov[keep,keep]
+    }
+
     if(any(qtl$n.gen[p$idx.qtl]>=4)) {
       type <- cross.attr$class[1]
       if(type == "4way")
@@ -503,7 +533,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
           idx.qtlname <- as.integer(substr(label.term.drop, 2, 10))
           drop.term.name[i] <- qtl$name[idx.qtlname]
         }
-        else { # this is a covarariate
+        else { # this is a covariate
           drop.term.name[i] <- label.term.drop
         }
       }
@@ -559,7 +589,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       p.new <- parseformula(formula.new, qtl$altname, colnames(covar))
       n.gen.QC <- c(n.gen[p.new$idx.qtl]-1, rep(1, p.new$n.covar))
 
-      # covarariate to be passed to C function
+      # covariate to be passed to C function
       covar.C <- NULL
       if(!is.null(p.new$idx.covar))
         covar.C <- as.matrix(covar[,p.new$idx.covar,drop=FALSE])
@@ -575,16 +605,31 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         }
       }
 
+      if(adjustX) { # need to adjust for X chromosome
+        n.newcovar <- ncol(Xadjustment$sexpgmcovar)
+        n.gen.QC <- c(n.gen.QC, rep(1, n.newcovar))
+        p.new$n.covar <- p.new$n.covar + n.newcovar
+        covar.C <- cbind(covar.C, Xadjustment$sexpgmcovar)
+        sizefull <- sizefull + n.newcovar
+
+        if(p.new$n.int==1)
+          p.new$formula.intmtx <- c(p.new$formula.intmtx, rep(0,n.newcovar))
+        if(p.new$n.int>1) {
+          for(i in 1:n.newcovar)
+            p.new$formula.intmtx <- rbind(p.new$formula.intmtx, rep(0,p.new$n.int))
+        }
+      }
+
       # call C function fit model 
       if(method == "imp") {
         z <- .C("R_fitqtl_imp",
                 as.integer(n.ind), # number of individuals
                 as.integer(p.new$n.qtl), # number of qtls
-                as.integer(n.gen.QC), # number of genotypes QTLs and covarariates
+                as.integer(n.gen.QC), # number of genotypes QTLs and covariates
                 as.integer(n.draws), # number of draws
                 as.integer(qtl$geno[,p.new$idx.qtl,]), # genotypes for selected marker
-                as.integer(p.new$n.covar), # number of covarariate
-                as.double(covar.C), # covarariate
+                as.integer(p.new$n.covar), # number of covariate
+                as.double(covar.C), # covariate
                 as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
                 as.integer(p.new$n.int), # number of interactions in the formula
                 as.double(pheno), # phenotype
@@ -602,10 +647,10 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         z <- .C("R_fitqtl_hk",
                 as.integer(n.ind), # number of individuals
                 as.integer(p.new$n.qtl), # number of qtls
-                as.integer(n.gen.QC), # number of genotypes QTLs and covarariates
+                as.integer(n.gen.QC), # number of genotypes QTLs and covariates
                 as.double(prob),
-                as.integer(p.new$n.covar), # number of covarariate
-                as.double(covar.C), # covarariate
+                as.integer(p.new$n.covar), # number of covariate
+                as.double(covar.C), # covariate
                 as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
                 as.integer(p.new$n.int), # number of interactions in the formula
                 as.double(pheno), # phenotype
@@ -765,11 +810,11 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
   idx.qtl <- NULL
   idx.covar <- NULL
 
-  # loop thru all terms and find out how many QTLs and covarariates
+  # loop thru all terms and find out how many QTLs and covariates
   # are there in the formula. Construct idx.qtl and idx.covar at the same time
   termisqtl <- rep(0, length(idx.term))
   for (i in 1:length(idx.term)) {
-    # find out if there term is a QTL or a covarariate
+    # find out if there term is a QTL or a covariate
     # ignore the case for QTLs, e.g., Q1 is equivalent to q1
     idx.tmp <- grep(paste(label.term[i],"$", sep=""),
                     qtl.dimname, ignore.case=TRUE)
@@ -777,15 +822,15 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
       idx.qtl <- c(idx.qtl, idx.tmp)
       termisqtl[i] <- 1
     }
-    else if(label.term[i] %in% covar.dimname) # it's a covarariate
+    else if(label.term[i] %in% covar.dimname) # it's a covariate
       idx.covar <- c(idx.covar, which(label.term[i]==covar.dimname))
     else 
       stop("Unrecognized term ", label.term[i], " in formula")
   }
   n.qtl <- length(idx.qtl) # number of QTLs in formula
-  n.covar <- length(idx.covar) # number of covarariates in formula
+  n.covar <- length(idx.covar) # number of covariates in formula
   # now idx.qtl and idx.covar are the indices for genotype
-  # and covarariate matrices according to input formula
+  # and covariate matrices according to input formula
  
   # loop thru all terms again and reorganize formula.mtx
   formula.idx <- NULL
@@ -797,7 +842,7 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
       formula.idx <- c(formula.idx, ii)
       ii <- ii+1
     }
-    else { # it's a covarariate
+    else { # it's a covariate
       formula.idx <- c(formula.idx, jj+n.qtl)
       jj <- jj+1
     }
@@ -810,7 +855,7 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
   if(length(formula.idx) > 1)
     formula.mtx <- formula.mtx[order(formula.idx),]
   # take out only part of the matrix for interactions and pass to C function
-  # all the input QTLs and covarariates for C function will be additive
+  # all the input QTLs and covariates for C function will be additive
   n.int <- length(order.term) - length(idx.term) # number of interactions
   if(n.int != 0)
     formula.intmtx <- formula.mtx[,(length(idx.term)+1):length(order.term)]

@@ -11,7 +11,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -37,6 +37,6 @@ abline(v=cumsum(c(0,nmar(listeria)))+0.5)
 abline(h=nrow(dat)+0.5)
 }
 
-\seealso{ \code{\link[qtl]{pull.pheno}}, \code{\link[qtl]{pull.map}} }
+\seealso{ \code{\link{pull.pheno}}, \code{\link{pull.map}} }
 
 \keyword{utilities}

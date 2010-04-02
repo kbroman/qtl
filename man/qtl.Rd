@@ -239,11 +239,11 @@ summary(out.covar, thr=3)
 plot(out.covar, out.nocovar, chr=c(2,5,10))
 }
 
-\seealso{ \code{\link[qtl]{plot.scanone}}, 
-  \code{\link[qtl]{summary.scanone}}, \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{calc.genoprob}}, \code{\link[qtl]{sim.geno}},
-  \code{\link[qtl]{max.scanone}},
-  \code{\link[qtl]{summary.scanoneperm}},
-  \code{\link[qtl]{-.scanone}}, \code{\link[qtl]{+.scanone}} }
+\seealso{ \code{\link{plot.scanone}}, 
+  \code{\link{summary.scanone}}, \code{\link{scantwo}},
+  \code{\link{calc.genoprob}}, \code{\link{sim.geno}},
+  \code{\link{max.scanone}},
+  \code{\link{summary.scanoneperm}},
+  \code{\link{-.scanone}}, \code{\link{+.scanone}} }
 
 \keyword{models}

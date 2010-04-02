@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-9, Karl W Broman
+# copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jun, 2009
+# last modified Feb, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,11 +34,11 @@
 #           print.summary.map, find.pheno,
 #           convert, convert.scanone, convert.scantwo
 #           find.flanking, strip.partials, comparegeno
-#           qtlversion, locate.xo, jittermap, getid,
+#           qtlversion, locateXO, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
-#           findDupMarkers
+#           findDupMarkers, convert2riself, convert2risib
 #
 ######################################################################
 
@@ -959,8 +959,9 @@ function(cross, chr, order, error.prob=0.0001,
   if("rf" %in% names(cross)) {
     rf <- cross$rf
     # determine column within rec fracs
-    oldcols <- cumsum(c(0,n.mar))[chr]+seq(along=order)
-    newcols <- cumsum(c(0,n.mar))[chr]+order
+    whchr <- which(names(cross$geno)==chr)
+    oldcols <- cumsum(c(0,n.mar))[whchr]+seq(along=order)
+    newcols <- cumsum(c(0,n.mar))[whchr]+order
     rf[oldcols,] <- rf[newcols,]
     rf[,oldcols] <- rf[,newcols]
     colnames(rf)[oldcols] <- colnames(rf)[newcols]
@@ -1914,6 +1915,7 @@ function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
             stop("You must specify qtl.index.")
         }
         else {
+          if(length(qtl.index)>1) stop("qtl.index should have length 1")
           if(qtl.index < 1 || qtl.index > length(results))
             stop("qtl.index misspecified.")
           results <- results[[qtl.index]]
@@ -1931,6 +1933,7 @@ function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
         stop("Give a chromosome ID.")
     }
     else {
+      if(length(chr) > 1) stop("chr should have length 1")
       if(is.na(match(chr, results[,1])))
         stop("Chromosome misspecified.")
       results <- results[results[,1]==chr,]
@@ -2009,6 +2012,7 @@ function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
             stop("You must specify qtl.index.")
         }
         else {
+          if(length(qtl.index)>1) stop("qtl.index should have length 1")
           if(qtl.index < 1 || qtl.index > length(results))
             stop("qtl.index misspecified.")
           results <- results[[qtl.index]]
@@ -2026,6 +2030,7 @@ function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
         stop("Give a chromosome ID.")
     }
     else {
+      if(length(chr) > 1) stop("chr should have length 1")
       if(is.na(match(chr, results[,1])))
         stop("Chromosome misspecified.")
       results <- results[results[,1]==chr,]
@@ -2436,17 +2441,17 @@ function(object, ...)
 
     len.f <- sapply(fmap,function(a) diff(range(a)))
     len.m <- sapply(mmap,function(a) diff(range(a)))
-    avesp.f <- sapply(fmap,function(a) mean(diff(a)))
-    avesp.m <- sapply(mmap,function(a) mean(diff(a)))
-    maxsp.f <- sapply(fmap,function(a) max(diff(a)))
-    maxsp.m <- sapply(mmap,function(a) max(diff(a)))
+    avesp.f <- sapply(fmap,function(a) {if(length(a)<2) return(NA); mean(diff(a))})
+    avesp.m <- sapply(mmap,function(a) {if(length(a)<2) return(NA); mean(diff(a))})
+    maxsp.f <- sapply(fmap,function(a) {if(length(a)<2) return(NA); max(diff(a))})
+    maxsp.m <- sapply(mmap,function(a) {if(length(a)<2) return(NA); max(diff(a))})
     totlen.f <- sum(len.f)
     totlen.m <- sum(len.m)
 
-    tot.avesp.f <- mean(unlist(lapply(fmap,diff)))
-    tot.avesp.m <- mean(unlist(lapply(mmap,diff)))
-    tot.maxsp.f <- max(maxsp.f)
-    tot.maxsp.m <- max(maxsp.m)
+    tot.avesp.f <- mean(unlist(lapply(fmap,diff)), na.rm=TRUE)
+    tot.avesp.m <- mean(unlist(lapply(mmap,diff)), na.rm=TRUE)
+    tot.maxsp.f <- max(maxsp.f,na.rm=TRUE)
+    tot.maxsp.m <- max(maxsp.m,na.rm=TRUE)
                     
     output <- rbind(cbind(n.mar,len.f,len.m,avesp.f,avesp.m, maxsp.f, maxsp.m),
                     c(tot.mar,totlen.f,totlen.m,tot.avesp.f,tot.avesp.m,
@@ -2463,11 +2468,11 @@ function(object, ...)
     tot.mar <- sum(n.mar)
 
     len <- sapply(map,function(a) diff(range(a)))
-    avesp <- sapply(map,function(a) mean(diff(a)))
-    maxsp <- sapply(map,function(a) max(diff(a)))
+    avesp <- sapply(map,function(a) {if(length(a)<2) return(NA); mean(diff(a))})
+    maxsp <- sapply(map,function(a) {if(length(a)<2) return(NA); max(diff(a))})
     totlen <- sum(len)
-    tot.avesp <- mean(unlist(lapply(map,diff)))
-    tot.maxsp <- max(maxsp)
+    tot.avesp <- mean(unlist(lapply(map,diff)), na.rm=TRUE)
+    tot.maxsp <- max(maxsp, na.rm=TRUE)
                     
     output <- rbind(cbind(n.mar,len,avesp, maxsp),
                     c(tot.mar,totlen,tot.avesp, tot.maxsp))
@@ -2503,7 +2508,7 @@ function(x, ...)
 # convert functions
 ######################################################################
 convert <-
-function(object)
+function(object, ...)
   UseMethod("convert")
 
 
@@ -2517,7 +2522,7 @@ function(object)
 #
 ######################################################################
 convert.scanone <-
-function(object)
+function(object, ...)
 {  
   if(!any(class(object) == "scanone"))
     stop("Input should have class \"scanone\".")
@@ -2545,7 +2550,7 @@ function(object)
 #                   additive QTL model
 ######################################################################
 convert.scantwo <-
-function(object)
+function(object, ...)
 {
   if(!any(class(object) == "scantwo"))
     stop("Input should have class \"scantwo\".")
@@ -2561,6 +2566,61 @@ function(object)
       lod[,,i][u] <- t(lod[,,i])[u] - lod[,,i][u]
   }
   object$lod <- lod
+  object
+}
+
+
+######################################################################
+# convert.map
+#
+# convert a genetic map from one map function to another
+######################################################################
+convert.map <-
+function(object, old.map.function=c("haldane", "kosambi", "c-f", "morgan"),
+         new.map.function=c("haldane", "kosambi", "c-f", "morgan"), ...)
+{
+  old.map.function <- match.arg(old.map.function)
+  new.map.function <- match.arg(new.map.function)
+  if(!("map" %in% class(object)))
+    stop("Input should have class \"map\".")
+
+  if(old.map.function==new.map.function) {
+    warning("old and new map functions are the same; no change.")
+    return(object)
+  }
+
+  mf <- switch(old.map.function,
+               "haldane"=mf.h,
+               "kosambi"=mf.k,
+               "c-f"=mf.cf,
+               "morgan"=mf.m)
+  imf <- switch(new.map.function,
+               "haldane"=imf.h,
+               "kosambi"=imf.k,
+               "c-f"=imf.cf,
+               "morgan"=imf.m)
+
+  if(is.matrix(object[[1]])) { # sex-specific map
+    for(i in seq(along=object)) {
+      theclass <- class(object[[i]])
+      thenames <- colnames(object[[i]])
+      for(j in 1:2) 
+        object[[i]][j,] <- cumsum(c(object[[i]][j,1], imf(mf(diff(object[[i]][j,])))))
+
+      class(object[[i]]) <- theclass
+      colnames(object[[i]]) <- thenames
+    }
+  }
+  else {
+    for(i in seq(along=object)) {
+      theclass <- class(object[[i]])
+      thenames <- names(object[[i]])
+      object[[i]] <- cumsum(c(object[[i]][1], imf(mf(diff(object[[i]])))))
+      class(object[[i]]) <- theclass
+      names(object[[i]]) <- thenames
+    }
+  }
+
   object
 }
 
@@ -2718,26 +2778,32 @@ function()
 
 ######################################################################
 #
-# locate.xo
+# locateXO
 #
 # Locate crossovers on a single chromosome in each individual
 # Look at just the first chromosome
 # 
 ######################################################################
 
-locate.xo <-
-function(cross)
+locateXO <-
+function(cross, chr, full.info=FALSE)
 {
+  if(!missing(chr)) {
+    cross <- subset(cross, chr=chr)
+    if(nchr(cross) != 1)
+      warning("locateXO works on just one chr; considering chr ", names(cross$geno)[1])
+  }
+
   geno <- cross$geno[[1]]$data
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
 
   if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh")
-    stop("locate.xo only working for backcross, intercross or RI strains.")
+    stop("locateXO only working for backcross, intercross or RI strains.")
 
   map <- cross$geno[[1]]$map
   if(is.matrix(map)) map <- map[1,]
-  map <- map - map[1] # shift first marker to 0
+#  map <- map - map[1] # shift first marker to 0
 
   # bc or intercross?  thetype==0 for BC and ==1 for intercross
   if(type=="f2") {
@@ -2757,12 +2823,52 @@ function(cross)
           as.double(map),
           location=as.double(rep(0,n.ind*2*(n.mar-1))),
           nseen=as.integer(rep(0,n.ind)),
+          ileft=as.integer(rep(0,n.ind*2*(n.mar-1))),
+          iright=as.integer(rep(0,n.ind*2*(n.mar-1))),
+          left=as.double(rep(0,n.ind*2*(n.mar-1))),
+          right=as.double(rep(0,n.ind*2*(n.mar-1))),
+          as.integer(full.info),
           PACKAGE="qtl")
   location <- t(matrix(z$location, nrow=n.ind))
   nseen <- z$nseen
+  if(full.info) {
+    ileft <- t(matrix(z$ileft, nrow=n.ind))
+    iright <- t(matrix(z$iright, nrow=n.ind))
+    left <- t(matrix(z$left, nrow=n.ind))
+    right <- t(matrix(z$right, nrow=n.ind))
+  }
 
-  lapply(as.data.frame(rbind(nseen, location)),
-         function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+  if(!full.info) {
+    return(lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] }))
+  }
+  else {
+    location <- lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    ileft <- lapply(as.data.frame(rbind(nseen, ileft)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    iright <- lapply(as.data.frame(rbind(nseen, iright)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+
+    left <- lapply(as.data.frame(rbind(nseen, left)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    right <- lapply(as.data.frame(rbind(nseen, right)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    res <- location
+    for(i in seq(along=res)) {
+      if(length(res[[i]])>0)
+        res[[i]] <- cbind(location=location[[i]],
+                          left=left[[i]],
+                          right=right[[i]],
+                          ileft=ileft[[i]],
+                          iright=iright[[i]])
+    }
+    return(res)
+  }
 }
 
 # jittermap: make sure no two markers are at precisely the same position
@@ -3333,6 +3439,134 @@ function(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
 
   themar
 }
+
+######################################################################
+# convert2riself
+######################################################################
+convert2riself <-
+function(cross)
+{
+  if(class(cross)[2] != "cross")
+    stop("input must be a cross object.")
+  curtype <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+  whX <- NULL
+  if(any(chrtype != "A")) { # there's an X chromosome
+    whX <- names(cross$geno)[chrtype != "A"]
+    if(length(whX) > 1)
+      warning("Converting chromosomes ", paste(whX, collapse=" "), " to autosomal.")
+    else
+      warning("Converting chromosome ", whX, " to autosomal.")
+    for(i in whX) class(cross$geno[[i]]) <- "A"
+  }
+
+  gtab <- table(pull.geno(cross))
+  usethree <- FALSE
+  if(!is.na(gtab["3"])) {
+    if(!is.na(gtab["2"]) && gtab["3"] < gtab["2"])
+      usethree <- FALSE
+    else usethree <- TRUE
+  }
+
+  g2omit <- g3omit <- g4omit <- 0
+  for(i in 1:nchr(cross)) {
+    dat <- cross$geno[[i]]$data
+    g1 <- sum(!is.na(dat) & dat==1)
+    g2 <- sum(!is.na(dat) & dat==2)
+    g3 <- sum(!is.na(dat) & dat==3)
+    g4 <- sum(!is.na(dat) & dat>3)
+    if(usethree && chrtype[i] == "A") {
+      dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
+      dat[!is.na(dat) & dat==3] <- 2
+      g2omit <- g2omit + g2
+      g4omit <- g4omit + g4
+    }
+    else {
+      dat[!is.na(dat) & dat!=1 & dat!=2] <- NA
+      g3omit <- g3omit + g3
+      g4omit <- g4omit + g4
+    }
+    cross$geno[[i]]$data <- dat
+  }
+  if(g2omit > 0)
+    warning("Omitting ", g2omit, " genotypes with code==2.")
+  if(g3omit > 0)
+    warning("Omitting ", g3omit, " genotypes with code==3.")
+  if(g4omit > 0)
+    warning("Omitting ", g4omit, " genotypes with code>3.")
+  
+  class(cross)[1] <- "riself"
+  
+  cross
+}
+
+
+######################################################################
+# convert2risib
+######################################################################
+convert2risib <-
+function(cross)
+{
+  if(class(cross)[2] != "cross")
+    stop("input must be a cross object.")
+  curtype <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+
+  gtab <- table(pull.geno(cross))
+  usethree <- FALSE
+  if(!is.na(gtab["3"])) {
+    if(!is.na(gtab["2"]) && gtab["3"] < gtab["2"])
+      usethree <- FALSE
+    else usethree <- TRUE
+  }
+
+  g2omit <- g3omit <- g4omit <- 0
+  for(i in 1:nchr(cross)) {
+    dat <- cross$geno[[i]]$data
+    g1 <- sum(!is.na(dat) & dat==1)
+    g2 <- sum(!is.na(dat) & dat==2)
+    g3 <- sum(!is.na(dat) & dat==3)
+    g4 <- sum(!is.na(dat) & dat>3)
+    if(usethree) {
+      if(chrtype[i] == "A") {
+        dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
+        dat[!is.na(dat) & dat==3] <- 2
+        g2omit <- g2omit + g2
+        g4omit <- g4omit + g4
+      }
+      else { # X chromosome
+        if(g2 >= g3) {
+          dat[!is.na(dat) & dat!=1 & dat!=2] <- NA
+          g3omit <- g3omit + g3
+          g4omit <- g4omit + g4
+        }
+        else {
+          dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
+          dat[!is.na(dat) & dat==3] <- 2
+          g2omit <- g2omit + g2
+          g4omit <- g4omit + g4
+        }
+      }
+    }
+    else {
+      dat[!is.na(dat) & dat!=1 & dat!=2] <- NA
+      g3omit <- g3omit + g3
+      g4omit <- g4omit + g4
+    }
+    cross$geno[[i]]$data <- dat
+  }
+  if(g2omit > 0)
+    warning("Omitting ", g2omit, " genotypes with code==2.")
+  if(g3omit > 0)
+    warning("Omitting ", g3omit, " genotypes with code==3.")
+  if(g4omit > 0)
+    warning("Omitting ", g4omit, " genotypes with code>3.")
+  
+  class(cross)[1] <- "risib"
+  
+  cross
+}
+
 
 # end of util.R
 

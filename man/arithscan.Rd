@@ -4,11 +4,11 @@
 \alias{+.scantwo}
 \alias{-.scantwo}
 
-\title{Arithmetic Operators for scanone and scantwo results}
+\title{Arithmetic operators for scanone and scantwo results}
 
 \description{
   Add or subtract LOD scores in results
-  from \code{\link[qtl]{scanone}} or \code{\link[qtl]{scantwo}}.
+  from \code{\link{scanone}} or \code{\link{scantwo}}.
 }
 
 \usage{
@@ -18,7 +18,7 @@
 
 \arguments{
   \item{scan1, scan2}{Genome scan results on the same set of chromosomes
-    and markers, as output by \code{\link[qtl]{scanone}} or \code{\link[qtl]{scantwo}}.}
+    and markers, as output by \code{\link{scanone}} or \code{\link{scantwo}}.}
 }
 
 \details{

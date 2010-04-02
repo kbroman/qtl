@@ -29,6 +29,11 @@
  *  
  **********************************************************************/
 
+
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
 /**********************************************************************
  * 
  * R_scanone_mr
@@ -77,5 +82,10 @@ void scanone_mr(int n_ind, int n_pos, int n_gen, int **Geno,
 		double **Addcov, int n_addcov, double **Intcov,
 		int n_intcov, double *pheno, double *weights, 
 		double *result);
+
+#ifdef __cplusplus
+  }
+#endif
+
 
 /* end of scanone_mr.h */

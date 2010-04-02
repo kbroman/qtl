@@ -4,7 +4,7 @@
 \title{Maximum peak in genome scan}
 
 \description{
-  Print the row of the output from \code{\link[qtl]{scanone}} that
+  Print the row of the output from \code{\link{scanone}} that
   corresponds to the maximum LOD, genome-wide.
 }
 
@@ -14,7 +14,7 @@
 
 \arguments{
  \item{object}{An object of the form output by the function
-   \code{\link[qtl]{scanone}}: a data.frame whose third column is the
+   \code{\link{scanone}}: a data.frame whose third column is the
    LOD score.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
   This should be a vector of character strings referring to chromosomes
@@ -61,7 +61,7 @@ max(out, lodcolumn=2)
 max(out, lodcolumn=3)
 }
 
-\seealso{ \code{\link[qtl]{scanone}}, \code{\link[qtl]{plot.scanone}},
-          \code{\link[qtl]{summary.scanone}} }
+\seealso{ \code{\link{scanone}}, \code{\link{plot.scanone}},
+          \code{\link{summary.scanone}} }
 
 \keyword{print}

@@ -2,10 +2,14 @@
  *
  * mqmregression.h
  *
- * copyright (c) 2009 Ritsert Jansen, Danny Arends, Pjotr Prins and Karl W Broman
+ * Copyright (c) 1996-2009 by
+ * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
- * last modified Apr, 2009
- * first written Feb, 2009
+ * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
+ * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
+ *
+ * Modified by Danny Arends and Pjotr Prins
+ * last modified September 2009
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -19,23 +23,25 @@
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
- * C external functions used by the MQM algorithm
- * Contains:
+ * C functions for the R/qtl package
  *
  **********************************************************************/
+
+
 #ifdef __cplusplus
    extern "C" {
 #endif
-      
+
+int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const bool dominance);
 
 /*
- * Used regression (perhaps change it to something faster)
+ *  Used regression (perhaps change it to something faster)
  *  regression of trait on multiple cofactors  y=xb+e with weight w
-*							(xtwx)b=(xtw)y
-*							b=inv(xtwx)(xtw)y
+*	(xtwx)b=(xtw)y
+*	b=inv(xtwx)(xtw)y
  */
 
-double regression(int Nind, int Nmark, cvector cofactor, cmatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy, char biasadj,char fitQTL,char dominance);
+double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy,const bool biasadj,const bool fitQTL,const bool dominance);
 
 /*
 -----------------------------------------------------------------------
@@ -50,7 +56,7 @@ double betai(double a, double b, double x);
 double betacf(double a, double b, double x);
 double inverseF(int df1, int df2, double alfa,int verbose);
 #ifdef __cplusplus
-   }
+}
 #endif
      
 /* end of mqmregression.h */

@@ -15,7 +15,7 @@ replace.map(cross, map)
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{object}{Same as \code{cross}.}
  \item{map}{A list containing the new genetic map.  This must be the
    same length and with the same marker names as that contained in
@@ -35,6 +35,6 @@ plot.map(fake.f2, newmap)
 fake.f2 <- replace.map(fake.f2, newmap)
 }
 
-\seealso{ \code{\link[qtl]{pull.map}}, \code{\link[qtl]{est.map}} }
+\seealso{ \code{\link{pull.map}}, \code{\link{est.map}} }
 
 \keyword{manip}

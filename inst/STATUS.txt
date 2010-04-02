@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-9, Karl W Broman
+copyright (c) 2001-2010, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,16 +17,123 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.13, 6/30/2009:
+Version 1.15, 3/26/2010:
 
 Major changes:
 
-  Added code from Ritsert Jansen, Danny Arends, and Pjotr Prins,
-  implementing Ritsert Jansen's MQM mapping method. [explain further]
+  None.
 
 Minor changes:
 
-  Added a function transformPheno() for transforming a phenotype.
+  Added a function convert.map for converting a genetic map from one
+  map function to another.
+
+  Added functions convert2riself and convert2risib, for converting a
+  cross object to be treated as RIL by selfing or sib mating,
+  respectively. 
+
+  Revised write.cross so that it can handle non-numeric phenotypes.
+  Also changed the default for the "digits" argument to NULL, so that
+  phenotypes and map positions are not rounded.  
+
+  Revised read.cross to have arguments error.prob and map.function, to
+  be used if est.map is called.
+
+  Revised locateXO: it no longer shifts the first marker to position
+  0, and it has a new argument, full.info; if this is TRUE,
+  the output includes not just the estimated crossover locations but
+  also the endpoints of the intervals to which they are known to reside.
+
+  Fixed a bug in xaxisloc.scanone for the case of multiple chr/pos in
+  the input.
+
+  Fixed an apparent bug in read.cross for format="qtlcart"; need to
+  treat negative genotype codes as missing.
+
+  lodint and bayesint now stop with an error if chr or qtl.index have
+  length > 1.  Before, they gave weird results and a meaningless
+  error. 
+
+  In read.cross with format="csv", give a better error message if
+  there are odd values in the marker positions.
+
+  Fixed a bug in scanone/scantwo for RIL on the X chromosome; the X
+  chromosome needs to be treated like to autosomes.  We can't really
+  deal with the sexes properly here.
+
+  Revised scanone and scantwo so that, if using multiple CPUs via snow
+  and calculations are stopped early, the cluster nodes are stopped on
+  exit.
+
+  Revised summary.cross so that, for cross type "riself", there's no
+  warning about a chromosome named "X" having class "A".
+
+  Removed some odd erroneous code from the plot.qtl function.
+
+  Fixed a bug in summary.scanone that shows up in the case of multiple
+  LOD columns with permutations and format="allpeaks".
+
+  Fixed a bug in scanone permutations in the case of multiple
+  phenotypes with missing data.
+
+  Fixed a problem in effectplot that arose from an apparent bug in
+  weighted.mean in R version 2.10.1
+
+
+Version 1.14, 9/30/2009:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Slight changes to read.cross for formats "mm" and "qtlcart",
+  regarding use of the function grep().
+
+
+Version 1.13, 9/10/2009:
+
+Major changes:
+
+  Fixed a bug in fitqtl regarding the case of a locus on the
+  chromosome...the cited LOD scores for X chromosome loci were not
+  right.  Had to make slight modifications to scanqtl, addqtl,
+  addpair, addint, addcovarint, refineqtl.
+
+Minor changes:
+
+  Revised makeqtl, addtoqtl, dropfromqtl, replaceqtl, and reorderqtl
+  so that qtl objects now include a "chrtype" component, indicating
+  whether QTL are autosomal or for the X chromosome.
+
+  Revised scanone and scantwo for multiple phenotypes with missing
+  data so that, with method="hk" or method="imp", the phenotypes are
+  grouped into batches with matching patterns of missing data, rather
+  than just doing each one at a time.
+
+  Added a function locateXO (formerly the internal function locate.xo)
+  to estimate the locations of crossovers on a given chromosome.
+
+  Added a function, c.scantwo (aka cbind.scantwo), for concatenating
+  multiple scantwo results.
+
+  Revised summary.map to deal with the case of a single marker on a
+  chromosome.  
+
+  Revised scantwo so that phenotype names are in dimnames of the lod
+  component of the output.
+
+  Fixed bugs in read.cross with format="mm" to deal with changes to
+  grep.  [replaced grep("^*", ...) with grep("^\\*", ...)]
+
+  Fixed a bug in reorderqtl; the n.gen component was not getting
+  fixed.
+
+  Fixed a bug in switch.order; results of est.rf were getting messed
+  up.
+
+  Fixed some minor issues regarding hyperlinks in help files.
 
 
 Version 1.12, 6/30/2009:

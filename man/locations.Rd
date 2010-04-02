@@ -8,7 +8,7 @@
 }
 
 \description{
-	A table with genetic locations of the traits in the \code{\link[qtl]{multitrait}} dataset
+	A table with genetic locations of the traits in the \code{\link{multitrait}} dataset
 }
 \usage{data(locations)}
 \format{
@@ -41,16 +41,16 @@
 }
 
 \examples{
-% See the help file for CisTransPlot
+% See the help file for mqmplot.cistrans
 \dontrun{
 	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	CisTransPlot(results,multiloc, 5, FALSE, TRUE)
+	mqmplot.cistrans(results,multiloc, 5, FALSE, TRUE)
 }
 }
 
-\seealso{\code{\link[qtl]{multitrait}} }
+\seealso{\code{\link{multitrait}} }
 
 \keyword{datasets}

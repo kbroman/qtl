@@ -5,7 +5,7 @@
 
 \description{
   Print the estimated genome-wide LOD thresholds on the basis of
-  permutation results from \code{\link[qtl]{scanone}} (with
+  permutation results from \code{\link{scanone}} (with
   \code{n.perm} > 0). 
 }
 
@@ -14,7 +14,7 @@
 }
 
 \arguments{
- \item{object}{Output from the function \code{\link[qtl]{scanone}}
+ \item{object}{Output from the function \code{\link{scanone}}
    with \code{n.perm} > 0.}
  \item{alpha}{Genome-wide significance levels.}
  \item{df}{If TRUE, the degrees of freedom associated with the LOD
@@ -23,13 +23,13 @@
 }
 
 \details{
-  If there were autosomal data only or \code{\link[qtl]{scanone}} was
+  If there were autosomal data only or \code{\link{scanone}} was
   run with \code{perm.Xsp=FALSE}, genome-wide LOD thresholds are given;
   these are the 1-\eqn{\alpha}{alpha} quantiles of the genome-wide maximum LOD
   scores from the permutations.
 
   If there were autosomal and X chromosome data and
-  \code{\link[qtl]{scanone}} was run with \code{perm.Xsp=TRUE},
+  \code{\link{scanone}} was run with \code{perm.Xsp=TRUE},
   autosome- and X-chromsome-specific LOD thresholds are given, by the
   method described in Broman et al. (in press).  Let \eqn{L_A} and
   \eqn{L_X} be total the genetic lengths of the autosomes and X
@@ -66,9 +66,9 @@ operm2 <- scanone(fake.f2, n.perm=100, method="hk", perm.Xsp=TRUE)
 summary(operm2)
 }
 
-\seealso{ \code{\link[qtl]{scanone}},
-  \code{\link[qtl]{summary.scanone}},
-  \code{\link[qtl]{plot.scanoneperm}} }
+\seealso{ \code{\link{scanone}},
+  \code{\link{summary.scanone}},
+  \code{\link{plot.scanoneperm}} }
 
 \references{
   Broman, K. W., Sen, \'S, Owens, S. E., Manichaikul, A.,

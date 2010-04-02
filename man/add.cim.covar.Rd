@@ -14,23 +14,23 @@ add.cim.covar(cimresult, chr, gap=25, \dots)
 
 \arguments{
  \item{cimresult}{Composite interval mapping results, as output from
-   \code{\link[qtl]{cim}}.} 
+   \code{\link{cim}}.} 
   \item{chr}{Optional vector specifying which chromosomes to plot. (The
     chromosomes must be specified by name.)  This should be identical to
-  that used in the call to \code{\link[qtl]{plot.scanone}}.}
+  that used in the call to \code{\link{plot.scanone}}.}
   \item{gap}{Gap separating chromosomes (in cM). This should be identical to
-    that used in the call to \code{\link[qtl]{plot.scanone}}.}
+    that used in the call to \code{\link{plot.scanone}}.}
   \item{\dots}{Additional plot arguments, passed to the function
     \code{\link[graphics]{points}}.} 
 }
 
 
 \details{
-  One must first have used the function \code{\link[qtl]{plot.scanone}}
+  One must first have used the function \code{\link{plot.scanone}}
   to plot the composite interval mapping results.
 
   The arguments \code{chr} and \code{gap} must be identical to the
-  values used in the call to \code{\link[qtl]{plot.scanone}}.
+  values used in the call to \code{\link{plot.scanone}}.
 
   Dots indicating the locations of the selected marker covariates are
   displayed on the x-axis.  (By default, solid red circles are plotted;
@@ -56,6 +56,6 @@ plot(out, out.cim, chr=c(1,4,6,15), col=c("blue", "red"))
 add.cim.covar(out.cim, chr=c(1,4,6,15))}
 }
 
-\seealso{ \code{\link[qtl]{cim}}, \code{\link[qtl]{plot.scanone}} }
+\seealso{ \code{\link{cim}}, \code{\link{plot.scanone}} }
 
 \keyword{hplot}

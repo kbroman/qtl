@@ -30,7 +30,7 @@ map <- pull.map(fake.f2)
 chrlen(map)
 }
 
-\seealso{ \code{\link[qtl]{summary.map}}, \code{\link[qtl]{pull.map}},
-  \code{\link[qtl]{summary.cross}} } 
+\seealso{ \code{\link{summary.map}}, \code{\link{pull.map}},
+  \code{\link{summary.cross}} } 
 
 \keyword{print}

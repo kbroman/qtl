@@ -132,7 +132,7 @@ effectplot(fake.f2, mname1=mnames[1], mname2=mnames[2])
 
 \author{Hao Wu; Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
-\seealso{ \code{\link[qtl]{plot.pxg}}, \code{\link[qtl]{find.marker}},
-  \code{\link[qtl]{effectscan}}, \code{\link[qtl]{find.pseudomarker}} } 
+\seealso{ \code{\link{plot.pxg}}, \code{\link{find.marker}},
+  \code{\link{effectscan}}, \code{\link{find.pseudomarker}} } 
 
 \keyword{hplot}

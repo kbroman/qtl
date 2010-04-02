@@ -13,7 +13,7 @@ top.errorlod(cross, chr, cutoff=4, msg=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -42,7 +42,7 @@ hyper <- calc.errorlod(hyper,error.prob=0.01)
 top.errorlod(hyper,cutoff=4)
 }
 
-\seealso{ \code{\link[qtl]{calc.errorlod}}, \code{\link[qtl]{plot.geno}} }
+\seealso{ \code{\link{calc.errorlod}}, \code{\link{plot.geno}} }
 
 
 \keyword{print}

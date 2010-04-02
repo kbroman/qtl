@@ -12,7 +12,7 @@ dropfromqtl(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 }
 
 \arguments{
- \item{qtl}{A qtl object, as created by \code{\link[qtl]{makeqtl}}.}
+ \item{qtl}{A qtl object, as created by \code{\link{makeqtl}}.}
  \item{index}{Vector specifying the numeric indices of the QTL to be dropped.}
  \item{chr}{Vector indicating the chromosome for each QTL to drop.}
  \item{pos}{Vector (of same length as \code{chr}) indicating the
@@ -27,7 +27,7 @@ dropfromqtl(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 }
 
 \value{
-  The input \code{qtl} object with the specified QTL omitted.   See \code{\link[qtl]{makeqtl}} for
+  The input \code{qtl} object with the specified QTL omitted.   See \code{\link{makeqtl}} for
   details on the format. 
 }
 
@@ -48,8 +48,8 @@ newqtl <- dropfromqtl(qtl, chr=1, pos=25.8)
 altqtl <- dropfromqtl(qtl, index=1)
 }
 
-\seealso{ \code{\link[qtl]{makeqtl}}, \code{\link[qtl]{fitqtl}},
-  \code{\link[qtl]{addtoqtl}}, \code{\link[qtl]{replaceqtl}} ,
-  \code{\link[qtl]{reorderqtl}}}
+\seealso{ \code{\link{makeqtl}}, \code{\link{fitqtl}},
+  \code{\link{addtoqtl}}, \code{\link{replaceqtl}} ,
+  \code{\link{reorderqtl}}}
 
 \keyword{utilities}

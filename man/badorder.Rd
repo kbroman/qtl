@@ -10,7 +10,7 @@
 \usage{data(badorder)}
 
 \format{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}}
+  An object of class \code{cross}.  See \code{\link{read.cross}}
   for details. 
 }
 
@@ -40,8 +40,8 @@ rip3 <- ripple(badorder, chr=1, window=3)
 summary(rip3)
 }
 
-\seealso{ \code{\link[qtl]{est.rf}}, \code{\link[qtl]{ripple}}, 
-  \code{\link[qtl]{est.map}}, \code{\link[qtl]{sim.cross}} }
+\seealso{ \code{\link{est.rf}}, \code{\link{ripple}}, 
+  \code{\link{est.map}}, \code{\link{sim.cross}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

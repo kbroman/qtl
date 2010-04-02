@@ -17,7 +17,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider in
    search for QTL.  This should be a vector of character strings
    referring to chromosomes by name; numeric values are converted to
@@ -32,7 +32,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{Optional QTL object (of class \code{"qtl"}, as created by
-   \code{\link[qtl]{makeqtl}}) to use as a starting point.}
+   \code{\link{makeqtl}}) to use as a starting point.}
  \item{formula}{Optional formula to define the QTL model to be used as a
    starting point.} 
  \item{max.qtl}{Maximum number of QTL to which forward selection should
@@ -42,7 +42,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    Haley-Knott regression.}
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.}
- \item{refine.locations}{If TRUE, use \code{\link[qtl]{refineqtl}} to
+ \item{refine.locations}{If TRUE, use \code{\link{refineqtl}} to
    refine the QTL locations after each step of forward and backward
    selection.}
  \item{additive.only}{If TRUE, allow only additive QTL models; if FALSE,
@@ -123,8 +123,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   Manichaikul et al. (in prepartion) described a system for deriving the
   three penalties on the basis of permutation results from a
   two-dimensional, two-QTL genome scan (as calculated with
-  \code{\link[qtl]{scantwo}}).  These may be calculated with the
-  function \code{\link[qtl]{calc.penalties}}.
+  \code{\link{scantwo}}).  These may be calculated with the
+  function \code{\link{calc.penalties}}.
 
   A forward/backward search method is used, with the aim to optimize the
   penalized LOD score criterion.  That is, we seek to identify the
@@ -197,20 +197,20 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   The output is a representation of the best model, as measured by the
   penalized LOD score (see Details), among all models visited.
   This is QTL object (of class \code{"qtl"}, as produced by
-  \code{\link[qtl]{makeqtl}}), with attributes \code{"formula"},
+  \code{\link{makeqtl}}), with attributes \code{"formula"},
   indicating the model formula, and \code{"pLOD"} indicating the
   penalized LOD score.
 
   If \code{keeplodprofile=TRUE}, LOD profiles from the last pass through
   the refinement algorithm are retained as an attribute,
   \code{"lodprofile"}, to the object.  These may be plotted with
-  \code{\link[qtl]{plotLodProfile}}.  
+  \code{\link{plotLodProfile}}.  
 
   If \code{keeptrace=TRUE}, the output will contain an attribute
   \code{"trace"} containing information on the best model at each step
   of forward and backward elimination.  This is a list of objects of
   class \code{"compactqtl"}, which is similar to a QTL object (as
-  produced by \code{\link[qtl]{makeqtl}}) but containing just 
+  produced by \code{\link{makeqtl}}) but containing just 
   a vector of chromosome IDs and positions for the QTL.  Each will also
   have attributes \code{"formula"} (containing the model formula) and
   \code{"pLOD"} (containing the penalized LOD score.
@@ -259,9 +259,9 @@ for(i in seq(along=thetrace))
   plotModel(thetrace[[i]], main=paste("pLOD =",round(attr(thetrace[[i]],"pLOD"), 2)))
 }
 
-\seealso{ \code{\link[qtl]{calc.penalties}},
-  \code{\link[qtl]{plotModel}}, \code{\link[qtl]{makeqtl}},
-  \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{addqtl}}, \code{\link[qtl]{addpair}} }
+\seealso{ \code{\link{calc.penalties}},
+  \code{\link{plotModel}}, \code{\link{makeqtl}},
+  \code{\link{fitqtl}}, \code{\link{refineqtl}},
+  \code{\link{addqtl}}, \code{\link{addpair}} }
 
 \keyword{models}

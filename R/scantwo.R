@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-9, Karl W Broman and Hao Wu
-# last modified May, 2009
+# last modified Dec, 2009
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -55,9 +55,16 @@ function(cross, chr, pheno.col=1,
   model <- match.arg(model)
   use <- match.arg(use)
   
+  # in RIL, treat X chromomse like an autosome
+  chrtype <- sapply(cross$geno, class)
+  if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself")) 
+    for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
+
   if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
     cl <- makeCluster(n.cluster)
+    clusterStopped <- FALSE
+    on.exit(if(!clusterStopped) stopCluster(cl))
     clusterSetupRNG(cl)
     clusterEvalQ(cl, require(qtl, quietly=TRUE))
     n.perm <- ceiling(n.perm/n.cluster)
@@ -69,6 +76,7 @@ function(cross, chr, pheno.col=1,
                          maxit=maxit, tol=tol, verbose=FALSE, n.perm=n.perm, perm.strata=perm.strata, 
                          assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0)
     stopCluster(cl)
+    clusterStopped <- TRUE
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])
@@ -150,9 +158,66 @@ function(cross, chr, pheno.col=1,
     }
   }
 
+  # use all observations; not in a permutation test; different phenotypes have different sets of missing values
+  #   -> want to do in batches, but need to define batches by the pattern of missing data
+  if(n.perm <= 0 && use=="all.obs" && length(pheno.col) > 1 && (method=="hk" || method=="imp")) { 
+    # drop individuals with missing covariates
+    cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
+    temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,
+                         perm.strata, TRUE)
+    cross <- temp[[1]]
+    pheno <- cross$pheno[,pheno.col, drop=FALSE]
+    addcovar <- temp[[3]]
+    intcovar <- temp[[4]]
+    n.addcovar <- temp[[5]]
+    n.intcovar <- temp[[6]]
+    perm.strata <- temp[[7]]
+
+    # determine the batches (defined by the pattern of missing data)
+    patterns <- apply(pheno, 2, function(a) paste(!is.na(a), collapse=":"))
+    upat <- unique(patterns)
+    m <- match(patterns, upat)
+    batches <- vector("list", length(upat))
+    upat <- lapply(strsplit(upat, ":"), function(a) as.logical(a))
+    for(i in seq(along=batches)) batches[[i]] <- pheno.col[m==i]
+
+    # run scanone for one batch at a time
+    out <- NULL
+    for(i in seq(along=batches)) {
+      if(!is.null(addcovar)) {
+        if(!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
+      tempac <- addcovar[upat[[i]],,drop=FALSE]
+      }
+      else tempac <- addcovar
+      if(!is.null(intcovar)) {
+        if(!is.matrix(intcovar)) intcovar <- as.matrix(intcovar)
+        tempic <- intcovar[upat[[i]],,drop=FALSE]
+      }
+      else tempic <- intcovar
+
+      temp <- scantwo(subset(cross, ind=upat[[i]]), chr=chr, pheno.col=batches[[i]], model=model,
+                      method=method, addcovar=tempac, intcovar=tempic,
+                      weights=weights, use=use, incl.markers=incl.markers, clean.output=clean.output,
+                      clean.nmar=clean.nmar, clean.distance=clean.distance,
+                      maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm, 
+                      perm.strata=perm.strata, assumeCondIndep=assumeCondIndep,
+                      batchsize=batchsize, n.cluster=n.cluster)
+      if(is.null(out)) out <- temp
+      else out <- cbind(out, temp)
+    }
+
+    # reorder LOD score columns and make sure that the names are correct
+    dimnames(out$lod) <- list(NULL, NULL, colnames(cross$pheno)[unlist(batches)])
+    out$lod <- out[,,colnames(cross$pheno)[pheno.col]]
+    dimnames(out)[[3]] <- colnames(cross$pheno)[pheno.col]
+    attr(out,"phenotypes") <- colnames(cross$pheno)[pheno.col]
+
+    return(out)
+  }
+
   # multiple phenotype for methods other than imp and hk
   if(length(pheno.col)>1 && n.perm <= 0 &&
-     (use=="all.obs" || (method!="imp" && method != "hk" ))) {
+     method!="imp" && method != "hk" ) {
     n.phe <- length(pheno.col)
     if(verbose) cat(" -Phenotype 1\n")
     output <- scantwo(cross, pheno.col=pheno.col[1], model=model,
@@ -186,6 +251,7 @@ function(cross, chr, pheno.col=1,
     attr(output,"fullmap") <- fullmap
     attr(output,"phenotypes") <- colnames(cross$pheno)[pheno.col]
     names(output$map)[2] <- "pos"
+    dimnames(output$lod) <- list(NULL, NULL, colnames(cross$pheno)[pheno.col])
     return(output)
   }
 
@@ -1270,6 +1336,8 @@ function(cross, chr, pheno.col=1,
     out <- clean(out, clean.nmar, clean.distance)
 
   attr(out, "phenotypes") <- colnames(pheno)
+  if(length(colnames(pheno)) > 1)
+    dimnames(out$lod) <- list(NULL, NULL, colnames(pheno))
   names(out$map)[2] <- "pos"
   out
 }

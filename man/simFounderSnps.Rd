@@ -34,7 +34,7 @@ simFounderSnps(map, n.str=c("4","8"), pat.freq)
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
-\seealso{ \code{\link[qtl]{sim.map}}, \code{\link[qtl]{sim.cross}} }
+\seealso{ \code{\link{sim.map}}, \code{\link{sim.cross}} }
 
 \examples{
 data(map10)

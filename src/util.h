@@ -2,12 +2,12 @@
  *
  * util.h
  *
- * copyright (c) 2001-9, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2010, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Apr, 2009
+ * last modified Feb, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -291,20 +291,23 @@ void R_comparegeno(int *geno, int *n_ind, int *n_mar,
                    int *n_match, int *n_missing);
 
 void R_locate_xo(int *n_ind, int *n_mar, int *type,
-                 int *geno, double *map,
-                 double *location, int *nseen);
+		 int *geno, double *map, 
+		 double *location, int *nseen,
+		 int *ileft, int *iright, double *left, double *right,
+		 int *full_info);
 
 /* Note: type ==0 for backcross and ==1 for intercross */
 void locate_xo(int n_ind, int n_mar, int type, int **Geno,
-               double *map, double **Location,
-               int *nseen);
+	       double *map, double **Location, 
+	       int *nseen, int **iLeft, int **iRight,
+	       double **Left, double **Right, int full_info);
 
 /* multiply two matrices - I'm using dgemm from lapack here */
 void matmult(double *result, double *a, int nrowa,
              int ncola, double *b, int ncolb);
 /* multiply two matrices - I'm using dgemm from lapack here */
-void matmult2(double *result, double *a, int nrowa,
-              int ncola, double *b, int ncolb);
+// void matmult2(double *result, double *a, int nrowa,
+//              int ncola, double *b, int ncolb);
 
 
 /**********************************************************************

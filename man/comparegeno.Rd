@@ -12,7 +12,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{what}{Indicates whether to return the proportion or number of matching
 genotypes (or both).}
 }
@@ -47,6 +47,6 @@ hist(output, breaks=150, prob=TRUE,
 rug(output)
 }
 
-\seealso{ \code{\link[qtl]{nmissing}} }
+\seealso{ \code{\link{nmissing}} }
 
 \keyword{utilities}

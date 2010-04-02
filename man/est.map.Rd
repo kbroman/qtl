@@ -16,7 +16,7 @@ est.map(cross, error.prob=0.0001,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,
@@ -104,7 +104,7 @@ fake.f2 <- replace.map(fake.f2, newmap)
   \bold{139}, 1045--1056.
 }  
 
-\seealso{ \code{\link[qtl]{plot.map}}, \code{\link[qtl]{replace.map}},
-  \code{\link[qtl]{est.rf}}, \code{\link[qtl]{fitstahl}} }
+\seealso{ \code{\link{plot.map}}, \code{\link{replace.map}},
+  \code{\link{est.rf}}, \code{\link{fitstahl}} }
 
 \keyword{utilities}
