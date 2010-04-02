@@ -8,7 +8,7 @@
 }
 
 \usage{
-	mqmscanall(cross, multicore=TRUE, n.clusters = 1,batchsize=10, \dots)
+	mqmscanall(cross, multicore=TRUE, n.clusters = 1,batchsize=10,cofactors=NULL, \dots)
 }
 
 \arguments{
@@ -22,6 +22,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   \item{batchsize}{ Batch size. The entire set is split in 
     jobs. Each job contains b.size number of traits per job 
   }
+  \item{cofactors}{cofactors, only used when scanfunction is mqm}
   \item{\dots}{ Parameters passed through to the \code{\link{mqm}} function used in 
     scanning for QTLs
   }
