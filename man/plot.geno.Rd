@@ -9,7 +9,7 @@
 }
 
 \usage{
-\method{plot}{geno}(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
+plot.geno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
           cutoff=4, min.sep=2, cex=1.2, \dots) 
 }			    
 
