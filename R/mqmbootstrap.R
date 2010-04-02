@@ -30,10 +30,6 @@
 #
 #####################################################################
 
-
-
-
-
 mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
@@ -145,7 +141,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 				}			
 				cl <- makeCluster(n.cluster)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -180,7 +176,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
