@@ -8,7 +8,7 @@
 }
 
 \usage{
-plot.pxg(x, marker, pheno.col=1, jitter=1, infer=TRUE,
+\method{plot}{pxg}(x, marker, pheno.col=1, jitter=1, infer=TRUE,
          pch, ylab, main, col, \dots)
 }			    
 
