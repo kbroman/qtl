@@ -203,6 +203,7 @@ IF(TEST_R)
   if(NOT BITS64)
     ADD_TEST(TestR_mqm_listeria1_cmp ${CMAKE_COMMAND} -E compare_files ${RTESTOUTPUT}/mqm_listeria1.rnew ${RTESTOUTPUT}/mqm_listeria1.rtest)
   endif()
+  ADD_TEST(TestR_augmentation ${RTEST} rtest test_augmentation.R)
 ENDIF()
 
 
