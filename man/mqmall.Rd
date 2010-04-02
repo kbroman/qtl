@@ -57,15 +57,15 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 }
 
 \examples{
-	#Doing a multitrait analysis
-	data(multitrait)
-  \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
-  multitrait$pheno <- multitrait$pheno[,1:3]}
-  multitrait <- calc.genoprob(multitrait)
-	cof <- mqmsetcofactors(multitrait,3)
-  multitrait <- fill.geno(multitrait)
-	result <- mqmscanall(multitrait,cofactors=cof,batchsize=5)
-  mqmplot.multitrait(result,"lines")
+#Doing a multitrait analysis
+data(multitrait)
+\dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
+multitrait$pheno <- multitrait$pheno[,1:3]}
+multitrait <- calc.genoprob(multitrait)
+cof <- mqmsetcofactors(multitrait,3)
+multitrait <- fill.geno(multitrait)
+result <- mqmscanall(multitrait,cofactors=cof,batchsize=5)
+mqmplot.multitrait(result,"lines")
 }
 
 \references{
