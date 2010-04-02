@@ -2,14 +2,14 @@
 #
 # mqmplots.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 # Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -24,32 +24,30 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: mqmplot_directedqtl
-#           mqmplot_cistrans
+# Contains: mqmplot.directedqtl
+#           mqmplot.cistrans
 #           addloctocross
 #           polyplot
 #           getThird
 #           getChr
-#           mqmplot_multitrait
-#           mqmplot_permutations
-#           mqmplot_boot
-#           mqmplot_nice
-#           mqmplot_one
+#           mqmplot.multitrait
+#           mqmplot.permutations
+#           mqmplot.singletrait
 #           
 #
 #####################################################################
 
-mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
+mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
-  if(is.null(mqmresults)){
+  if(is.null(result)){
 		stop("No mqmresults object. Please supply a valid scanone object.") 
 	}
-  if(!any(class(mqmresults)=="scanone")){
+  if(!any(class(result)=="scanone")){
   	stop("No mqmresults object. Please supply a valid scanone object.") 
   }
-  onlymarkers <- mqmextractmarkers(mqmresults)
+  onlymarkers <- mqmextractmarkers(result)
   eff <- effectscan(sim.geno(cross),pheno.col=pheno.col,draw=FALSE)
   if(any(eff[,1]=="X")){
     eff <- eff[-which(eff[,1]=="X"),]
@@ -57,10 +55,109 @@ mqmplot_directedqtl <- function(cross, mqmresults, pheno.col=1, draw = TRUE){
   onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
   if(draw) plot(ylim=c((min(onlymarkers[,3])*1.1),(max(onlymarkers[,3])*1.1)),onlymarkers)
   class(onlymarkers) <- c("scanone",class(onlymarkers))
+  if(!is.null(attr(result,"mqmmodel"))) attr(onlymarkers,"mqmmodel") <- attr(result,"mqmmodel")
   onlymarkers
 }
 
-mqmplot_cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(results)){
+		stop("No results object. Please supply a valid scanone object.") 
+	}
+  if(!any(class(results)=="mqmmulti")){
+  	stop("Not a mqmmulti object. Please supply a valid scanone object.") 
+  }  
+  cross <- sim.geno(cross)
+  names <- NULL
+  for(x in 1:nphe(cross)){
+    results[[x]] <- mqmextractpseudomarkers(results[[x]])
+    if(directed){
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
+      cat(".")
+      for(y in 1:nrow(results[[x]])){
+        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+        cat(effectid,"\n")
+        if(!is.na(effectid&&1)){
+          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+        }
+      }
+      if(!hidelow){
+        breaks <- c(-100,-10,-3,0,3,10,100)
+        col <- c("darkblue","blue","lightblue","yellow","orange","red")
+        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 0","Lod 0 to 3","Lod 3 to 10","Lod > 10")
+      }else{
+        breaks <- c(-100,-10,-3,3,10,100)
+        col <- c("darkblue","blue","white","orange","red")
+        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 3","Lod 3 to 10","Lod > 10")
+      }
+    }else{
+      breaks <- c(0,3,6,9,12,100)
+      col <- c("white","blue","darkblue","yellow","red")
+      leg <- c("Lod 0-3","Lod 3-6","Lod 6-9","Lod 9-12","Lod 12+")
+    }
+    names <- c(names,substring(colnames(results[[x]])[3],5))
+  }
+  chrs <- unique(lapply(results,getChr))
+  data <- NULL
+  for(x in 1:length(results)){
+    data <- rbind(data,results[[x]][,3])
+  }
+  rownames(data) <- names
+  image(seq(0,nrow(results[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  abline(v=0)
+  for(x in unique(chrs[[1]])){
+    abline(v=sum(as.numeric(chrs[[1]])<=x))
+  }
+  for(x in 1:nphe(cross)){
+    abline(h=x)
+  }
+  if(legend){
+    legend("bottom",leg,col=col,lty=1,bg="white")
+  }
+  data
+}
+
+mqmplot.clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, scale="none", ...){
+	if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(is.null(results)){
+		stop("No results object. Please supply a valid mqmmulti object.") 
+	}
+  if(!any(class(results)=="mqmmulti")){
+  	stop("Not a mqmmulti object. Please supply a valid mqmmulti object.") 
+  }  
+  cross <- sim.geno(cross)
+  names <- NULL
+  for(x in 1:nphe(cross)){
+    results[[x]] <- mqmextractpseudomarkers(results[[x]])
+    if(directed){
+      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
+      cat(".")
+      for(y in 1:nrow(results[[x]])){
+        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+        if(!is.na(effectid&&1)){
+          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+        }
+      }
+      
+    }
+    names <- c(names,substring(colnames(results[[x]])[3],5))
+  }
+  chrs <- unique(lapply(results,getChr))
+  data <- NULL
+  for(x in 1:length(results)){
+    data <- rbind(data,results[[x]][,3])
+  }
+  colnames(data) <- rownames(results[[1]])
+  rownames(data) <- names
+  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
+  retresults
+}
+
+mqmplot.cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 		if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -280,16 +377,28 @@ getChr <- function(x){
 	x[,1]
 }
 
-mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
+mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, ...){
 	#Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
-  if(class(result)[2] != "mqmmulti")
+  type <- match.arg(type)
+  meanprofile <- match.arg(meanprofile)
+  if(class(result)[2] != "mqmmulti"){
 		stop("Wrong type of result file, please supply a valid mqmmulti object.") 
-  if(type=="C"){
+  }
+  n.pheno <- length(result)  
+  temp <- lapply(result,getThird)
+  chrs <- unique(lapply(result,getChr))
+  c <- do.call("rbind",temp)
+  if(!is.null(group)){
+    c <- c[group,]
+    colors <- rep("blue",n.pheno)
+  }else{
+    group <- 1:n.pheno
+    colors <- rainbow(n.pheno)
+  }
+  c <- t(c)
+  if(type=="contour"){
     #Countour plot
-    temp <- lapply(result,getThird)
-	chrs <- unique(lapply(result,getChr))
-	c <- do.call("rbind",temp)
-    c <- t(c)
+
     contour(
             x=seq(1,dim(c)[1]),
             y=seq(1,dim(c)[2]),
@@ -302,12 +411,8 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}			
   }
-  if(type=="I"){
+  if(type=="image"){
     #Image plot
-    temp <- lapply(result,getThird)
-	chrs <- unique(lapply(result,getChr))
-	c <- do.call("rbind",temp)
-	c <- t(c)
     image(x=1:dim(c)[1],y=1:dim(c)[2],c,
           xlab="Markers",ylab="Trait",
           col=rainbow((max(c)/5)+25,1,1.0,0.1),
@@ -316,35 +421,39 @@ mqmplot_multitrait <- function(result, type="C", theta=30, phi=15, ...){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}
   }
-  if(type=="D"){
+  if(type=="3Dplot"){
     #3D perspective plot
-    temp <- lapply(result,getThird)
-	c <- do.call("rbind",temp)
-    c <- t(c)
     persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
           theta = theta, phi = phi, expand = 1,
           col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
   }
-  if(type=="P"){
-    #Standard plotting option, Lineplot
-    n.pheno <- length(result)
-    colors <- rainbow(n.pheno)
-    for(i in 1:n.pheno) {
-      if(i !=1 ){
-        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
+  if(type=="lines"){
+    #Standard plotting option, Lineplot  
+    first <- TRUE
+    for(i in group) {
+      if(first){
+        plot(result[[i]],ylim=c(0,max(c)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
+        first <- FALSE
       }else{
-        plot(result[[i]],col="black",lwd=1,...)
+        plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
       }
     }
+    if(meanprofile != "none"){
+      temp <- result[[1]]
+      if(meanprofile=="median"){
+        temp[,3] <- apply(c,1,median)
+        legend("topright",c("QTL profiles","Median profile"),col=c("blue","black"),lwd=c(1,3))
+      }
+      if(meanprofile=="mean"){
+        temp[,3] <- rowMeans(c)
+        legend("topright",c("QTL profiles","Mean profile"),col=c("blue","black"),lwd=c(1,3))
+      }
+      plot(temp,add=TRUE,col="black",lwd=3,...)
+    }
   }
-
 }
 
-mqmplot_permutations <- function(result, ...){
-	mqmplot_boot(result, ...)
-}
-
-mqmplot_boot <- function(result, ...){
+mqmplot.permutations <- function(result, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
@@ -384,39 +493,7 @@ mqmplot_boot <- function(result, ...){
 	}
 }
 
-mqmplot_nice <- function(result, ...){
-	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
-	matrix <- NULL
-	names <- NULL
-	i <- 1
-	if(class(result)[2] != "mqmmulti")		
-          ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
-
-	for( j in 1:length( result[[i]][,3] ) ) {
-		row <- NULL
-		for( i in 1:length( result ) ) {
-			row <- c(row,result[[i]][,3][j])
-		}
-		matrix <- rbind(matrix,row)
-	}
-	for( i in 1:length( result ) ) {
-		if(colnames(result[[i]])[3] == "QTL phenotype"){
-			if(i==1){
-				names <- "QTL Phenotype"
-			}else{
-				names <- c(names,paste("Bootstrap run",(i-1)))
-			}
-		}else{
-			names <- c(names,colnames(result[[i]])[3])
-		}
-	}
-	matrix <- t(matrix)
-	colnames(matrix) <- c(1:dim(matrix)[2])
-	rownames(matrix) <- names
-	polyplot(matrix,...)
-}
-
-mqmplot_one <- function(result, extended=0,...){
+mqmplot.singletrait <- function(result, extended=0,...){
 	#Helperfunction to show scanone objects made by doing mqmscan runs
   if(!("scanone" %in% class(result))){
     stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 

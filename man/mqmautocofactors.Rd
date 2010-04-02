@@ -1,23 +1,23 @@
-\name{mqmsetcofactors}
-\alias{mqmsetcofactors}
+\name{mqmautocofactors}
+\alias{mqmautocofactors}
 
-\title{Create cofactors to be used with mqm} 
+\title{Automatic creation of cofactors to be used with mqm} 
 
 \description{
   Return a list of cofactors ready to be used with the mqm function
 }
 
 \usage{
-mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FALSE)
+mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.} 
-  \item{each}{ Every 'each' marker will be used as a cofactor }
-  \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
-  \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
-  \item{verbose}{If TRUE, print tracing information.}
+  \item{num}{ Number of cofactors to set, (There will be a warning when trying to set too many cofactors) }
+  \item{distance}{ Minimal distance in Cm between two cofactors }
+  \item{dominance}{If TRUE, created a cofactorlist that is safe to use with the dominance scanmode of mqm. Please see  \code{\link{mqmscan}} for details.}
+  \item{plot}{If TRUE, plots a genetic map displaying the selected markers as cofactors.}
 }
 
 \value{
@@ -46,7 +46,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	data(hyper)							        # Hyper dataset
 	\dontshow{hyper <- hyper[1:5]}
 	hyperfilled <- fill.geno(hyper)
-	cofactors <- mqmsetcofactors(hyperfilled,3)	# Set Cofactors every third marker
+	cofactors <- mqmautocofactors(hyperfilled,15)	# Set 15 Cofactors
 	result <- mqmscan(hyperfilled,cofactors)	# Backward model selection
 	mqmgetmodel(result)
 }

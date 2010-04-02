@@ -40,27 +40,27 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \seealso{
 	\itemize{
-    \item \code{\link{mqmplot_cistrans}} - Cis/trans plot
+    \item \code{\link{mqmplot.cistrans}} - Cis/trans plot
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
 }
 
 \examples{
-% See the help file for mqmplot_cistrans
+% See the help file for mqmplot.cistrans
 \dontrun{
 	data(multitrait)
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
 	results <- scanall(multiloc)
-	mqmplot_cistrans(results, multiloc, 5, FALSE, TRUE)
+	mqmplot.cistrans(results, multiloc, 5, FALSE, TRUE)
   }
 }
 

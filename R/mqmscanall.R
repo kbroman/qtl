@@ -35,14 +35,14 @@
 
 
 cimall <- function(...) {
-	scanall(...,mapfunction=cim)
+	scanall(...,scanfunction=cim)
 }
 
-mqmscanall <- function(cross, multiC=TRUE, n.clusters=1, b.size=10, ...) {
-	scanall(cross=cross, multiC=multiC, n.clusters=n.clusters, b.size=b.size, ..., mapfunction=mqmscan)
+mqmscanall <- function(cross, multicore=TRUE, n.clusters=1, batchsize=10, ...) {
+	scanall(cross=cross, multicore=multicore, n.clusters=n.clusters, batchsize=batchsize, ..., scanfunction=mqmscan)
 }
 
-scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.size=10, FF=0, ..., plot=FALSE, verbose=FALSE){
+scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0, ..., plot=FALSE, verbose=FALSE){
 	if(missing(cross)){
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
@@ -55,7 +55,7 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
       ourline()
       cat("Starting R/QTL multitrait analysis\n")
       cat("Number of phenotypes:",n.pheno,"\n")
-      cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
+      cat("Batchsize:",batchsize," & n.clusters:",n.clusters,"\n")
       ourline()	
     }
 		
@@ -64,8 +64,9 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
     all.data <- cross
 		
 		bootstraps <- 1:n.pheno
-		batches <- length(bootstraps) %/% b.size
-		last.batch.num <- length(bootstraps) %% b.size
+    batches <- length(bootstraps) %/% batchsize
+		last.batch.num <- length(bootstraps) %% batchsize
+    
 		if(last.batch.num > 0){
 			batches = batches+1
 		}
@@ -76,24 +77,25 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if(multiC && n.clusters>1 && suppressWarnings(require(snow,quietly=TRUE))) {
-                  if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+		if(multicore && n.clusters>1 && ("snow" %in% installed.packages()[,1])) {
+      suppressWarnings(require(snow,quietly=TRUE))
+      if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
         if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
+					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
 				cl <- makeCluster(n.clusters)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
+				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,scanfunction=scanfunction,verbose=verbose,...)
 				stopCluster(cl)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplot_nice(temp)
+					mqmplot.multitrait(temp)
 				}
 				res <- c(res,result)
 				end <- proc.time()
@@ -104,7 +106,7 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
           cat("INFO: Done with batch",x,"/",batches,"\n")	
           cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
           cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% batchsize), digits=3),"seconds\n")
           cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
           ourline()
         }
@@ -115,15 +117,15 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
 				start <- proc.time()
 				if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")				
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
-				}	
-				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,mapfunction=mapfunction,verbose=verbose,...)
+					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
+				}
+				result <- lapply(boots, FUN=snowCoreALL,all.data=all.data,scanfunction=scanfunction,verbose=verbose,...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplot_nice(temp)
+					mqmplot.multitrait(temp)
 				}
 				res <- c(res,result)				
 				end <- proc.time()
@@ -134,7 +136,7 @@ scanall <- function(cross, mapfunction=scanone, multiC=TRUE, n.clusters=1, b.siz
           cat("INFO: Done with batch",x,"/",batches,"\n")	
           cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
           cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+          cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% batchsize), digits=3),"seconds\n")
           cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
           ourline()
         }

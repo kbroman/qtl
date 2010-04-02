@@ -44,13 +44,13 @@ mqmloadanalysis <- function(file="MQM_output.txt"){
 mqmfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
 	
 	chr <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'chr'
-	pos <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (Cm)'
+	pos <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (cM)'
 	if(verbose) cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
 	ret <- NULL
 	for(i in 1:length(chr)){
 		ret <- rbind(ret,cbind(find.marker(cross,chr=chr[i],pos=pos[i]),as.integer(chr[i]),as.double(pos[i])))
 	}
-	colnames(ret) <- c("marker","chr","pos (Cm)")
+	colnames(ret) <- c("marker","chr","pos (cM)")
 	ret
 }
 

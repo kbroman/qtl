@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmscanfdr(cross, mapfunction=mqmscanall, 
+mqmscanfdr(cross, scanfunction=mqmscanall, 
   thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, 
   verbose=TRUE, \dots
   )
@@ -18,7 +18,7 @@ mqmscanfdr(cross, mapfunction=mqmscanall,
 	\item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-	\item{mapfunction}{ QTL mapping function (scanall, cimall or mqmscanall)
+	\item{scanfunction}{ QTL mapping function (scanall, cimall or mqmscanall)
   }
 	\item{thresholds}{ False discovery rate (FDR) is calculated for peaks 
     above these LOD thresholds (DEFAULT=Range from 1 to 20, using 10 thresholds)
@@ -57,8 +57,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}

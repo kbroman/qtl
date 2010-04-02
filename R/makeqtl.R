@@ -3,8 +3,10 @@
 # makeqtl.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Dec, 2009
+# last modified March, 2010
 # first written Apr, 2002
+#
+# Modified by Danny Arends
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -480,6 +482,7 @@ function(object, ...)
   rownames(output) <- object$altname
   
   attr(output, "type") <- type
+  if(!is.null(attr(object,"mqm"))) attr(output, "mqm") <- attr(object,"mqm")
   if(type=="draws") attr(output, "n.draws") <- n.draws
   class(output) <- c("summary.qtl", "data.frame")
 
@@ -503,7 +506,7 @@ function(x, ...)
     if(type=="draws")
       thetext <- paste("imputed genotypes, with", attr(x, "n.draws"), "imputations.")
     else thetext <- "genotype probabilities."
-  
+    if(!is.null(attr(x,"mqm"))) thetext <- paste("model created by mqmscan")
     cat("  QTL object containing", thetext, "\n\n")
 
     print.data.frame(x, digits=5)

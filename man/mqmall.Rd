@@ -8,18 +8,18 @@
 }
 
 \usage{
-	mqmscanall(cross, multiC=TRUE, n.clusters = 1,b.size=10, \dots)
+	mqmscanall(cross, multicore=TRUE, n.clusters = 1,batchsize=10, \dots)
 }
 
 \arguments{
   \item{cross}{ 
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{multiC}{ Use multiple cores (only if the package SNOW is available)
+  \item{multicore}{ Use multiple cores (only if the package SNOW is available)
   }
   \item{n.clusters}{ Number of parallel processes
   }
-  \item{b.size}{ Batch size. The entire set is split in 
+  \item{batchsize}{ Batch size. The entire set is split in 
     jobs. Each job contains b.size number of traits per job 
   }
   \item{\dots}{ Parameters passed through to the \code{\link{mqm}} function used in 
@@ -34,7 +34,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 
 \value{
   Returns a MQMmulti object. This object is a list of \code{\link{scanone}}
-  objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot_multitrait(result)}
+  objects that can be plotted using \code{plot.scanone(result[[trait]])} or using \code{mqmplot.multitrait(result)}
 }
 
 \author{ 
@@ -48,8 +48,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
@@ -63,7 +63,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
   multitrait <- calc.genoprob(multitrait)
 	cof <- mqmsetcofactors(multitrait,3)
   multitrait <- fill.geno(multitrait)
-	result <- mqmscanall(multitrait,cofactors=cof,b.size=5)
+	result <- mqmscanall(multitrait,cofactors=cof,batchsize=5)
+  mqmplot.multitrait(result,"lines")
 }
 
 \references{

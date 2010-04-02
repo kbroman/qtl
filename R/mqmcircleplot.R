@@ -2,13 +2,13 @@
 #
 # mqmcircleplot.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -23,9 +23,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: test_mqmplot_circle
-#           test_plot_circle
-#           mqmplot_c
+# Contains: mqmplot_c
 #           mqmplotcircle
 #           mqmplot_circle
 #           circlelocations
@@ -39,97 +37,11 @@
 #
 #####################################################################
 
-
-
-
-
-test_mqmplot_circle <- function(){
-  library(qtl)
-  data(hyper)
-  data(multitrait)
-  data(locations)
-  
-  hyperfilled <- fill.geno(hyper)
-  hypercof <- mqmsetcofactors(hyper,4)
-  hyperres <- mqmscan(hyperfilled,hypercof)
-
-  multifilled <- fill.geno(multitrait)
-  multicof <- mqmsetcofactors(multitrait,10)
-  multiloc <- addloctocross(multifilled,locations)
-  multires <- mqmscanall(multifilled,cofactors=multicof)
-
-  mqmplot_circle(hyperfilled,hyperres)
-  Sys.sleep(3)
-  mqmplot_circle(multifilled,multires)
-  Sys.sleep(3)
-  mqmplot_circle(multiloc,multires)
-  Sys.sleep(3)
-  mqmplot_circle(multitrait,multires,highlight=16)
-  Sys.sleep(3)
-  mqmplot_circle(multiloc,multires,highlight=16)
-}
-
-test_plot_circle <- function(){
-  values <- (runif(10)*3)+1
-  mqmplot_c(1:10)
-  mqmplot_c(values)
-  mqmplot_c(values,dist=TRUE)
-  values <- (runif(1000)*3)+1
-  mqmplot_c(values,dist=TRUE,cex=0.9)
-}
-
-
-mqmplot_c <- function(x, distance=FALSE, vulcano=FALSE, 
-                        point.color="blue", text.color="red", line.color=rgb(0.1,0.1,0.1,0.1), 
-                        lwd=1, cex=1, spacing=1, verbose=FALSE){
-  if(is.null(x)) stop("Please supply a vector in x")
-  if(is.vector(x)){
-    ploty <- c(-1.1,1.1)
-    if(vulcano) ploty <- c(0.0,3.0)
-    plot(c(-1.1, 1.1), ploty, type = "n", axes = FALSE, xlab = "", ylab = "")
-    title(main = "Circular plot")
-    cvalues <- circlelocations(length(x)+spacing*length(x))
-    l <- 1
-    itemnum <- 1
-    for(item in x){
-      nl <- l + spacing
-      loc <- c(0,0)
-      if(vulcano) loc <- c(0,1.75)
-      if(!distance){
-        loc <- loc+t(cvalues[l+(nl-l),])
-      }else{
-        if(is.numeric(x)){
-          loc <- loc+(item/max(x)) * t(cvalues[l+(nl-l),])
-        }
-        if(is.character(x)){
-          loc <- loc+(nchar(item)/max(nchar(x))) * t(cvalues[l+(nl-l),])
-        }
-        points(loc,cex=0.5*cex,col=point.color)
-      }
-      drawspline(c(0,0),loc,col=line.color,lwd=lwd)
-      if(!is.na(text.color)){
-        if(is.null(names(x))){
-          text(1.1*loc,paste("",format(item,dig=2)),col=text.color,cex=0.7*cex)
-        }else{
-          text(1.1*loc,paste(names(x)[itemnum]),col=text.color,cex=0.7*cex)
-        }
-      }
-      l <- 1 + nl
-      itemnum <- itemnum + 1
-    }
-  }else{
-    stop("Please supply a vector in x")
-  }
-}
-
-mqmplotcircle <- function(...){
-  mqmplot_circle(...)
-}
-
-mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE,transparency=FALSE){
+mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstrength=2,legend=FALSE, verbose=FALSE, transparency=FALSE){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+  retresults <- NULL
   lod<-FALSE
   if(any(class(result)=="mqmmulti")){
     if(highlight > 0){
@@ -174,16 +86,39 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
           }
           if(highlight==0){
             col=colorz[x]
-			title(sub = "Multiple traits")
+            title(sub = "Multiple traits")
           }else{
             col=rgb(0.1, 0.1, 0.1, 0.1)  
-			if(highlight==x) title(sub = paste("Multiple traits highlight of:",colnames(cross$pheno)[x]))
+            if(highlight==x) title(sub = paste("Multiple traits highlight of:",colnames(cross$pheno)[x]))
           }
-          points(traitl,col=col,pch=24,cex=1)
           for(y in 1:length(model[[4]])){
             qtll <- locationtocircle(templateresult,model[[4]][y],model[[5]][y],spacing=spacing)
-            drawspline(traitl,qtll,col=col)
-            points(qtll*(1+0.1*((x/length(result)))),col=col,pch=19,cex=1)
+            if(highlight==x){
+              for(z in y:length(model[[4]])){
+                if(!z==y){
+                  cross <- sim.geno(cross)
+                  eff <- effectplot(cross,pheno.col=x,mname1=model$name[y],mname2=model$name[z],draw=FALSE)
+                  changeA <- (eff$Means[1,2]-eff$Means[1,1])
+                  changeB <- (eff$Means[2,2]-eff$Means[2,1])      
+                  #interaction
+                  qtl2 <- locationtocircle(templateresult,model[[4]][z],model[[5]][z],spacing=spacing)
+                  if(changeA/abs(changeA) !=  changeB/abs(changeB)){
+                    retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
+                    drawspline(qtll,qtl2,lwd=2,col="green")
+                  }else{
+                    if(abs(abs(changeA)-abs(changeB)) > interactstrength*mean(eff$SEs)){       
+                      retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
+                      drawspline(qtll,qtl2,lwd=1.5,col="blue")
+                    }
+                  }
+                }
+              }
+            }
+            if(highlight==0){
+              points(traitl,col=col,pch=24,cex=1)            
+              drawspline(traitl,qtll,col=col)
+              points(qtll*(1+0.1*((x/length(result)))),col=col,pch=19,cex=1)
+            }
           }
         }else{
           if(verbose) cat("Trait ",x," has no model\n")
@@ -211,16 +146,21 @@ mqmplot_circle <- function(cross,result,highlight=0,spacing=25,legend=FALSE,verb
           }else{
             traitl <- c(0,0)
           }
-          drawspline(traitl,qtll,col="red")
+          if(!(highlight>0))drawspline(traitl,qtll,col="red")
         }   
       }
-      legend("bottomright","Significant Cofactor",col="red",pch=19,cex=0.75)
+      legend("bottomright",c("Significant Cofactor","Interaction Enhance","Interaction Flip"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
     plot(c(-1,1), c(-1, 1), type = "n", axes = FALSE, xlab = "", ylab = "")
     title(main = "Legend to circular genome plot")
     legend("center",paste(colnames(cross$pheno)),col=colorz,pch=19,cex=0.75)
+  }
+  if(!is.null(retresults)){
+    colnames(retresults) <- c("Marker","Marker","Change","Change","SEs")
+    retresults <- as.data.frame(retresults)
+    return(retresults)
   }
 }
 

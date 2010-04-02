@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -35,7 +35,7 @@
 #
 ######################################################################
 	
-mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
+mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=220,logtransform = FALSE,
 					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
@@ -66,10 +66,10 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		if(class(cross)[1] == "f2"){
 			ctype = 1
 		}
-		if(class(cross)[1] == "bc"){
+		if(class(cross)[1] == "bc" || class(cross)[1]=="dh"){
 			ctype = 2
 		}
-		if(class(cross)[1] == "riself"){
+		if(class(cross)[1] == "riself" || class(cross)[1] == "risib"){
 			ctype = 3
 
     # check genotypes
@@ -87,6 +87,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
       cat("INFO: Number of individuals: ",n.ind,"\n")
       cat("INFO: Number of chromosomes: ",n.chr,"\n")
     }
+    savecross <- cross
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
@@ -102,13 +103,19 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
     if(any(is.na(geno))){
 			stop("Missing genotype information, please estimate unknown data, before running mqmscan.\n")
 		}
+    if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
+    numcofold <- sum(cofactors)
+    cofactors <- checkdistances(cross,cofactors,1)
+    numcofnew <- sum(cofactors)  
+    if(numcofold!=numcofnew){
+      cat("INFO: Removed ",numcofold-numcofnew," cofactors that were close to eachother\n")
+    }
 		#CHECK if the phenotype exists
 		if (length(pheno.col) > 1){
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
-      if(missing(cofactors)) cofactors <- rep(0,sum(nmar(cross)))
       result <- mqmscanall( cross,cofactors=cofactors,forceML=forceML,model=model,
                         cofactor.significance=cofactor.significance,step.min=step.min,step.max=step.max,step.size=step.size,window.size=window.size,
-                        logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose)
+                        logtransform=logtransform, estimate.map = estimate.map,plot=plot, verbose=verbose,n.clusters=n.clusters,batchsize=batchsize)
 			return(result)
 		}
 		if(pheno.col != 1){
@@ -231,7 +238,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		}
 		max.cm.on.map <- max(unlist(pull.map(cross)))
 		if(step.max < max.cm.on.map){
-				stop("Markers outside of the mapping at ",max.cm.on.map," Cm, please set parameter step.max larger than this value.")		
+				stop("Markers outside of the mapping at ",max.cm.on.map," cM, please set parameter step.max larger than this value.")		
 		}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
@@ -302,7 +309,11 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
       if(!estimate.map){
         new.map <- pull.map(cross)
       }
-      chrmarkers <- nmar(cross)			
+      chrmarkers <- nmar(cross)
+      mapnames <- NULL
+      for(x in 1:nchr(cross)){
+        mapnames <- c(mapnames,names(pull.map(cross)[[x]]))
+      }
       sum <- 1
       model.present <- 0
       qc <- NULL
@@ -312,27 +323,26 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
         for(j in 1:chrmarkers[[i]]) {
           #cat("INFO ",sum," ResultCOF:",result$COF[sum],"\n")
           if(result$COF[sum] != 48){
-            if(verbose) cat("MODEL: Marker",sum,"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," Cm\n")
+            if(verbose) cat("MODEL: Marker",sum,"named:", strsplit(names(unlist(new.map)),".",fixed=TRUE)[[sum]][2],"from model found, CHR=",i,",POSITION=",as.double(unlist(new.map)[sum])," cM\n")
             qc <- c(qc, as.character(names(cross$geno)[i]))
             qp <- c(qp, as.double(unlist(new.map)[sum]))
-            qn <- c(qn, substr(names(unlist(new.map))[sum],3,nchar(names(unlist(new.map))[sum])))
+            qn <- c(qn, mapnames[sum])
             model.present <- 1
           }
           sum <- sum+1
         }
       }
       if(!is.null(qc) && model.present){
-		why <- sim.geno(cross,n.draws=1)
+        why <- sim.geno(savecross,n.draws=1)
         QTLmodel <- makeqtl(why, qc, qp, qn, what="draws")
-		if(plot){
-			plot(QTLmodel)
-        }
+        attr(QTLmodel,"mqm") <- 1
+        if(plot) plot(QTLmodel)
       }
     }
 	rownames(qtl) <- names
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
-	colnames(qtl) = c("chr","pos (Cm)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
+	colnames(qtl) = c("chr","pos (cM)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
 	#Convert to data/frame and scanone object so we can use the standard plotting routines
 	qtl <- as.data.frame(qtl)
 	if(backward && !is.null(qc) && model.present){
@@ -366,7 +376,7 @@ mqmscan <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),
 		}
 		#No error do plot 2
 		if(!e){
-			mqmplot_one(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance))
+			mqmplot.singletrait(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance))
 		}else{
 			plot(qtl,main=paste(colnames(cross$pheno)[pheno.col],"at significance=",cofactor.significance),lwd=1)
 			grid(max(qtl$chr),5)

@@ -313,8 +313,8 @@ sim.cross.f2(map, model, n.ind, error.prob, missing.prob,
              partial.missing.prob, keep.errorind, m, p, map.function)
 sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
         m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
-snowCoreALL(x, all.data, mapfunction, verbose=FALSE, \dots)
-snowCoreBOOT(x, all.data, mapfunction, bootmethod, verbose=FALSE, \dots)
+snowCoreALL(x, all.data, scanfunction, verbose=FALSE, \dots)
+snowCoreBOOT(x, all.data, scanfunction, bootmethod, verbose=FALSE, \dots)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),
@@ -326,10 +326,10 @@ subrousummaryscantwo(object, for.perm=FALSE)
 testchr(selection, thechr)
 vbscan(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
        tol=1e-4)
-write.cross.csv(cross, filestem="data", digits=5, rotate=FALSE,
+write.cross.csv(cross, filestem="data", digits=NULL, rotate=FALSE,
                 split=FALSE)
-write.cross.gary(cross, digits)
-write.cross.mm(cross, filestem="data", digits=5)
+write.cross.gary(cross, digits=NULL)
+write.cross.mm(cross, filestem="data", digits=NULL)
 write.cross.qtlcart(cross, filestem="data")
 }
 

@@ -1,7 +1,5 @@
-\name{mqmplot_cistrans}
-\alias{mqmplot_cistrans}
-\alias{mqmplotcistrans}
-\alias{cistransplot}
+\name{mqmplot.cistrans}
+\alias{mqmplot.cistrans}
 
 \title{Plotting routine to show cis and trans QTL information}
 
@@ -10,7 +8,7 @@
 }
 
 \usage{
-	mqmplot_cistrans(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
+	mqmplot.cistrans(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
 }
 
 \arguments{
@@ -24,7 +22,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 	this threshold are not visible 
   }
   \item{onlyPEAK}{ Plot only the peak markers ? (TRUE/FALSE) 
-	(Peak markers are markers that have a QTL likelyhood above
+	(Peak markers are markers that have a QTL likelihood above
 	\code{threshold} and higher than other markers in the same section) 
   }
   \item{highPEAK}{ Highlight peak markers ? (TRUE/FALSE). 
@@ -57,8 +55,8 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
@@ -69,9 +67,9 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 \dontshow{multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))}
 	data(locations)
 	multiloc <- addloctocross(multitrait,locations)
-    multiloc <- calc.genoprob(multiloc)
+  multiloc <- calc.genoprob(multiloc)
 	results <- scanall(multiloc, method="hk")
-	mqmplot_cistrans(results, multiloc, 5, FALSE, TRUE)
+	mqmplot.cistrans(results, multiloc, 5, FALSE, TRUE)
 }
 
 \keyword{ hplot }
