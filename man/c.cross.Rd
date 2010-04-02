@@ -13,7 +13,7 @@
 
 \arguments{
  \item{\dots}{A set of objects of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.  These must all either be of the
+   \code{\link{read.cross}} for details.  These must all either be of the
    same cross type or be a combination of backcrosses and intercrosses.
    All crosses must have the same number of chromosomes and chromosome
    names, and the same marker orders and positions, though the set of
@@ -41,6 +41,6 @@ junk <- fake.f2
 junk <- c(fake.f2,junk)
 }
 
-\seealso{ \code{\link[qtl]{subset.cross}} }
+\seealso{ \code{\link{subset.cross}} }
 
 \keyword{manip}

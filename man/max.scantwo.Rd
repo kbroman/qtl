@@ -5,7 +5,7 @@
 
 \description{
   Print the pair of loci with the largest LOD score in the results of
-  \code{\link[qtl]{scantwo}}. 
+  \code{\link{scantwo}}. 
 }
 
 \usage{
@@ -16,7 +16,7 @@
 
 \arguments{
  \item{object}{An object of class \code{scantwo}, the output of the
-   function \code{\link[qtl]{scantwo}}.}
+   function \code{\link{scantwo}}.}
  \item{lodcolumn}{If the scantwo results contain LOD scores for
    multiple phenotypes, this argument indicates which to use.}
  \item{what}{Indicates for which LOD score the maximum should be reported.}
@@ -34,7 +34,7 @@
 }
 
 \details{
-  This is very similar to the \code{\link[qtl]{summary.scantwo}}
+  This is very similar to the \code{\link{summary.scantwo}}
   function, though this pulls out one pair of positions.
 
   If \code{what="best"}, we find the pair of positions at which the LOD
@@ -49,7 +49,7 @@
 
 \section{Output of addpair}{
 
-  \bold{Note} that, for output from \code{\link[qtl]{addpair}} in which the
+  \bold{Note} that, for output from \code{\link{addpair}} in which the
   new loci are indicated explicitly in the formula, the summary provided
   by \code{max.scantwo} is somewhat special.
 
@@ -79,7 +79,7 @@ out.2dim <- scantwo(fake.f2, method="hk")
 max(out.2dim)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}}, \code{\link[qtl]{plot.scantwo}},
-          \code{\link[qtl]{summary.scantwo}} }
+\seealso{ \code{\link{scantwo}}, \code{\link{plot.scantwo}},
+          \code{\link{summary.scantwo}} }
 
 \keyword{print}

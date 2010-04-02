@@ -100,7 +100,7 @@ sim.cross(map, model=NULL, n.ind=100,
 
   For the 4- and 8-way RIL, one must include the genotypes of the
   founding individuals; these may be simulated with
-  \code{\link[qtl]{simFounderSnps}}.  Also, the output cross will
+  \code{\link{simFounderSnps}}.  Also, the output cross will
   contain a component \code{cross}, which is a matrix with rows
   corresponding to RIL and columns corresponding to the founders, 
   indicating order of the founder strains in the crosses used to
@@ -116,8 +116,8 @@ sim.cross(map, model=NULL, n.ind=100,
   then the RIL genotype would be encoded \eqn{2^{2-1} + 2^{3-1} = 6}{2^(2-1) + 2^(3-1) = 6}.
   If the cross was derived by the cross (DxA)x(CxB), then the RIL
   genotype would be encoded \eqn{2^{1-1} + 2^{4-1} = 9}{2^(1-1) + 2^(4-1) = 6}.
-  These get reorganized after calls to \code{\link[qtl]{calc.genoprob}},
-  \code{\link[qtl]{sim.geno}}, or \code{\link[qtl]{argmax.geno}}, and
+  These get reorganized after calls to \code{\link{calc.genoprob}},
+  \code{\link{sim.geno}}, or \code{\link{argmax.geno}}, and
   this approach simplifies the hidden Markov model (HMM) code.
 
   For the 4- and 8-way RIL, genotyping errors are simulated only if the
@@ -125,7 +125,7 @@ sim.cross(map, model=NULL, n.ind=100,
 }
 
 \value{
-  An object of class \code{cross}.  See \code{\link[qtl]{read.cross}} for
+  An object of class \code{cross}.  See \code{\link{read.cross}} for
   details. 
 
   If \code{keep.qtlgeno} is TRUE, the cross object will contain a
@@ -140,9 +140,9 @@ sim.cross(map, model=NULL, n.ind=100,
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
-\seealso{ \code{\link[qtl]{sim.map}}, \code{\link[qtl]{read.cross}},
-    \code{\link[qtl]{fake.f2}}, \code{\link[qtl]{fake.bc}}
-    \code{\link[qtl]{fake.4way}}, \code{\link[qtl]{simFounderSnps}} }
+\seealso{ \code{\link{sim.map}}, \code{\link{read.cross}},
+    \code{\link{fake.f2}}, \code{\link{fake.bc}}
+    \code{\link{fake.4way}}, \code{\link{simFounderSnps}} }
 
 \examples{
 # simulate a genetic map

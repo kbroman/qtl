@@ -16,7 +16,7 @@ calc.errorlod(cross, error.prob=0.01,
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype)}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,
@@ -44,10 +44,10 @@ calc.errorlod(cross, error.prob=0.01,
   not be trusted blindly, but should be viewed as a tool for identifying
   genotypes deserving further study.
 
-  Use \code{\link[qtl]{top.errorlod}} to print all genotypes with error
+  Use \code{\link{top.errorlod}} to print all genotypes with error
   LOD scores above a specified threshold,
-  \code{\link[qtl]{plot.errorlod}} to plot the error LOD scores for
-  specified chromosomes, and \code{\link[qtl]{plot.geno}} to view the
+  \code{\link{plot.errorlod}} to plot the error LOD scores for
+  specified chromosomes, and \code{\link{plot.geno}} to view the
   observed genotype data with likely errors flagged.
 }
 
@@ -78,8 +78,8 @@ top.errorlod(hyper, cutoff=4)
 plot.geno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
-\seealso{ \code{\link[qtl]{plot.errorlod}},
-  \code{\link[qtl]{top.errorlod}} } 
+\seealso{ \code{\link{plot.errorlod}},
+  \code{\link{top.errorlod}} } 
 
 
 \keyword{utilities}

@@ -15,7 +15,7 @@
 
 \arguments{
  \item{x}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{auto.layout}{If TRUE, \code{par(mfrow)} is set so that all plots
    fit within one figure.}
  \item{pheno.col}{Vector of numbers or character strings corresponding to
@@ -30,8 +30,8 @@
 \value{None.}
 
 \details{
-  Calls \code{\link[qtl]{plot.missing}}, \code{\link[qtl]{plot.map}} and
-  \code{\link[qtl]{plot.pheno}} to plot the missing genotypes, genetic
+  Calls \code{\link{plot.missing}}, \code{\link{plot.map}} and
+  \code{\link{plot.pheno}} to plot the missing genotypes, genetic
   map, and histograms or barplots of all phenotypes. 
 
   If \code{auto.format=TRUE}, \code{par(mfrow)} is used with
@@ -39,7 +39,7 @@
   so that all plots fit on the plotting device.
 
   Numeric phenotypes are displayed as histograms or barplots by calling
-  \code{\link[qtl]{plot.pheno}}. 
+  \code{\link{plot.pheno}}. 
 }    
 
 \examples{
@@ -47,8 +47,8 @@ data(fake.bc)
 plot(fake.bc)
 }
 
-\seealso{ \code{\link[qtl]{plot.missing}}, \code{\link[qtl]{plot.map}}, 
-  \code{\link[qtl]{plot.pheno}} }
+\seealso{ \code{\link{plot.missing}}, \code{\link{plot.map}}, 
+  \code{\link{plot.pheno}} }
 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian Yandell }

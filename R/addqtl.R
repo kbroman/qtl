@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-9, Karl W. Broman
-# last modified Feb, 2009
+# last modified Sep, 2009
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -197,9 +197,13 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     return(NULL)
   }
 
+  sexpgm <- getsex(cross)
+  cross.attr <- attributes(cross)
+
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE)
+                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE,
+                          cross.attr, sexpgm)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(int2test.alt, c("df", "Type III SS", "LOD", "%var",
@@ -209,7 +213,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
                             method=method, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE)
+                            run.checks=FALSE, cross.attr, sexpgm)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
@@ -476,10 +480,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     }
   }
 
+  sexpgm <- getsex(cross)
+  cross.attr <- attributes(cross)
+
   # fit the base model
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                        method=method, dropone=FALSE, get.ests=FALSE,
-                       run.checks=FALSE)$result.full[1,4]
+                       run.checks=FALSE, cross.attr, sexpgm)$result.full[1,4]
 
   results <- NULL
   for(i in chr) {
@@ -826,10 +833,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     }
   }
 
+  sexpgm <- getsex(cross)
+  cross.attr <- attributes(cross)
+
   # fit the base model
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                        method=method, dropone=FALSE, get.ests=FALSE,
-                       run.checks=FALSE)$result.full[1,4]
+                       run.checks=FALSE, cross.attr, sexpgm)$result.full[1,4]
 
   gmap <- NULL
 
@@ -1271,9 +1281,13 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     return(NULL)
   }
 
+  sexpgm <- getsex(cross)
+  cross.attr <- attributes(cross)
+
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE)
+                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE,
+                          cross.attr, sexpgm)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(theint.alt, c("df", "Type III SS", "LOD", "%var",
@@ -1283,7 +1297,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
                             method=method, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE)
+                            run.checks=FALSE, cross.attr, sexpgm)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]

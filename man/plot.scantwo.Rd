@@ -18,7 +18,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"scantwo"}, as output by
-    \code{\link[qtl]{scantwo}}.} 
+    \code{\link{scantwo}}.} 
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -52,7 +52,7 @@
   \item{allow.neg}{If TRUE, allow the plot of negative LOD scores; in
     this case, the z-limits are symmetric about 0.  This option is
     chiefly to allow a plot of difference between LOD scores from
-    different methods, calculated via \code{\link[qtl]{-.scantwo}}.}
+    different methods, calculated via \code{\link[=-.scantwo]{-.scantwo}}.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
@@ -70,10 +70,10 @@
   scores (\code{"int"}), and the lower-right triangle contains the LOD
   scores for the full model (\code{"full"}).
   The diagonal contains either all zeros or the main effects LOD scores
-  (from \code{\link[qtl]{scanone}}).
+  (from \code{\link{scanone}}).
 
-  The \code{\link[qtl]{scantwo}} function calculates, for each pair of
-  putative QTLs, \eqn{(q_1,q_2)}{(q1,q2)}, the likelihood undering the
+  The \code{\link{scantwo}} function calculates, for each pair of
+  putative QTLs, \eqn{(q_1,q_2)}{(q1,q2)}, the likelihood under the
   null model \eqn{L_0}{L0}, the likelihood under each of the single-QTL
   models, \eqn{L(q_1)}{L(q1)} and \eqn{L(q_2)}{L(q2)}, the likelihood
   under an additive QTL model, \eqn{L_a(q_1,q_2)}{La(q1,q2)}, and the
@@ -113,12 +113,12 @@
 
 \section{Output of addpair}{
 
-  \bold{Note} that, for output from \code{\link[qtl]{addpair}} in which the
+  \bold{Note} that, for output from \code{\link{addpair}} in which the
   new loci are indicated explicitly in the formula, the summary provided
   by \code{plot.scantwo} is somewhat special.  In particular, the
   \code{lower} and \code{upper} arguments are ignored.  
 
-  In the case that the formula used in \code{\link[qtl]{addpair}} was
+  In the case that the formula used in \code{\link{addpair}} was
   not symmetric in the two new QTL, the x-axis in the plot corresponds
   to the first of the new QTL and the y-axis corresponds to the second
   of the new QTL.
@@ -151,9 +151,9 @@ plot(out2.em, upper="cond-add", lower="add", chr=c(1,4))
 plot(out2.hk - out2.em, allow.neg=TRUE)
 }
 
-\seealso{ \code{\link[qtl]{scantwo}},
-  \code{\link[qtl]{summary.scantwo}}, \code{\link[qtl]{plot.scanone}},
-  \code{\link[qtl]{-.scantwo}} }
+\seealso{ \code{\link{scantwo}},
+  \code{\link{summary.scantwo}}, \code{\link{plot.scanone}},
+  \code{\link[=-.scantwo]{-.scantwo}} }
 
 \author{Hao Wu; Karl W Broman,
   \email{kbroman@biostat.wisc.edu}; Brian Yandell } 

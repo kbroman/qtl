@@ -1,36 +1,40 @@
 #####################################################################
 #
-# mqmbootstrap.R
+# mqmpermutation.R
 #
-# copyright (c) 2009, Danny Arends
-# last modified Jun, 2009
-# first written Feb, 2009
+# Copyright (c) 2009-2010, Danny Arends
+#
+# Modified by Pjotr Prins and Karl Broman
+#
+# 
+# first written Februari 2009
+# last modified March 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: bootstrap - Main function for bootstrap analysis
-#           mqmpermObject - Helperfunction to create permObjects (R/QTL format)
-#           mqmbootstrap, bootstrapcim
-#           FDRpermutation
+# Contains: mqmscanfdr
+#           mqmpermutation
+#           mqmprocesspermutation
+#           
 #
-######################################################################
+#####################################################################
 
-FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
+mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
 	above.in.real.res <- NULL
-	res <- Funktie(cross,...)
+	res <- scanfunction(cross,...)
 	for(threshold in thresholds){
 		above.in.real <- 0
 		for(x in 1:nphe(cross)){
@@ -49,7 +53,7 @@ FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,1
 		for(chr in 1:nchr(cross)){
 			perm$geno[[1]]$data <- perm$geno[[1]]$data[neworder,]
 		}
-		res <- Funktie(perm,...)
+		res <- scanfunction(perm,...)
 		for(threshold in thresholds){
 			above.in.perm <- 0
 			for(y in 1:nphe(cross)){
@@ -65,36 +69,28 @@ FDRpermutation <- function(cross, Funktie=scanall, thresholds=c(1,2,3,4,5,7,10,1
 	rownames(results) <- thresholds
 	results
 }
-
-
-
-mqmbootstrap <- function(...){
-	bootstrap(...,Funktie=mqm)
-}
-
-bootstrapcim <- function(...){
-	bootstrap(...,Funktie=cim)
-}
-
 ######################################################################
 #
-# bootstrap: Shuffles phenotype or does parametric bootstrapping of mqmscan
+# mqmpermutation: Shuffles phenotype or does parametric bootstrapping of mqmscan
 #
 ######################################################################
 
-bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.size=10,file="MQM_output.txt",n.clusters=1,bootmethod=0,plot=FALSE,verbose=FALSE,...)
+mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,batchsize=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),cofactors=NULL,plot=FALSE,verbose=FALSE,...)
 {
-	
+	bootmethod <- 0
+  
+  supported <- c("permutation","simulation")
+  bootmethod <- pmatch(method, supported)[1]
 	if(missing(cross))
-		ourstop("No cross file. Please supply a valid cross object.") 
+		stop("No cross file. Please supply a valid cross object.") 
 
 	if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
 		#Echo back the cross type
 		if(verbose) {
                   cat("------------------------------------------------------------------\n")
-                  cat("Starting bootstrap analysis\n")
-                  cat("Number of bootstrapping runs:",n.run,"\n")
-                  cat("Batchsize:",b.size," & n.clusters:",n.clusters,"\n")
+                  cat("Starting permutation analysis\n")
+                  cat("Number of permutations:",n.perm,"\n")
+                  cat("Batchsize:",batchsize," & n.cluster:",n.cluster,"\n")
                   cat("------------------------------------------------------------------\n")		
                   cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
                 }
@@ -102,24 +98,24 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 		if(!bootmethod){
 			if(verbose) cat("INFO: Shuffleling traits between individuals.\n")
 		}else{
-			if(verbose) cat("INFO: Parametric bootstrapping\nINFO: Calculating new traits for each individual.\n")
+			if(verbose) cat("INFO: Parametric permutation\nINFO: Calculating new traits for each individual.\n")
 		}
 
-		#Set the Phenotype under intrest as the first
+		#Set the Phenotype under interest as the first
 		cross$pheno[[1]] <- cross$pheno[[pheno.col]]
 
-		if(n.clusters > b.size){
-				ourstop("Please have more items in a batch then clusters assigned per batch")
+		if(n.cluster > batchsize){
+				stop("Please have more items in a batch then clusters assigned per batch")
 		}
 
 		#Scan the original
 		#cross <- fill.geno(cross) # <- this should be done outside of this function
-		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,Funktie=Funktie,verbose=verbose)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,scanfunction=scanfunction,verbose=verbose,cofactors=cofactors,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
-		bootstraps <- runif(n.run)
-		batches <- length(bootstraps) %/% b.size
-		last.batch.num <- length(bootstraps) %% b.size
+		bootstraps <- runif(n.perm)
+		batches <- length(bootstraps) %/% batchsize
+		last.batch.num <- length(bootstraps) %% batchsize
 		results <- NULL
 		if(last.batch.num > 0){
 			batches = batches+1
@@ -129,8 +125,8 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 		LEFT <- 0
 		#TEST FOR SNOW CAPABILITIES
 #		if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]]) && multiC){
-		if(multiC && n.clusters>1 && suppressWarnings(require(snow,quietly=TRUE))) {
-			if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+		if(multicore && n.cluster >1 && suppressWarnings(require(snow,quietly=TRUE))) {
+			if(verbose) cat("INFO: Library snow found using ",n.cluster," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
 				if(verbose) {
@@ -139,19 +135,19 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
                                   ourline()
                                 }
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
+					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}			
-				cl <- makeCluster(n.clusters)
+				cl <- makeCluster(n.cluster)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotboot(temp)
+					mqmplot.permutations(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -161,7 +157,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
                                   cat("INFO: Done with batch",x,"/",batches,"\n")	
                                   cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
                                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% b.size), digits=3),"seconds\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3)," per trait:",round((AVG %/% batchsize), digits=3),"seconds\n")
                                   cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")
                                   ourline()
                                 }
@@ -176,16 +172,16 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
                                   ourline()
                                 }
 				if(x==batches && last.batch.num > 0){
-					boots <- bootstraps[((b.size*(x-1))+1):((b.size*(x-1))+last.batch.num)]
+					boots <- bootstraps[((batchsize*(x-1))+1):((batchsize*(x-1))+last.batch.num)]
 				}else{
-					boots <- bootstraps[((b.size*(x-1))+1):(b.size*(x-1)+b.size)]
+					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,Funktie=Funktie,bootmethod=bootmethod,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)
 					class(temp) <- c(class(temp),"mqmmulti")
-					mqmplotboot(temp)
+					mqmplot.permutations(temp)
 				}
 				end <- proc.time()
 				SUM <- SUM + (end-start)[3]
@@ -195,7 +191,7 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
                                   cat("INFO: Done with batch",x,"/",batches,"\n")	
                                   cat("INFO: Calculation of batch",x,"took:",round((end-start)[3], digits=3),"seconds\n")
                                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")
-                                  cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% b.size), digits=3),"seconds\n")
+                                  cat("INFO: Average time per batch:",round((AVG), digits=3),",per run:",round((AVG %/% batchsize), digits=3),"seconds\n")
                                   cat("INFO: Estimated time left:",LEFT%/%3600,":",(LEFT%%3600)%/%60,":",round(LEFT%%60,digits=0),"(Hour:Min:Sec)\n")				
                                   ourline()
                                 }
@@ -206,9 +202,9 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
 		class(res) <- c(class(res),"mqmmulti")
 		e <- proc.time()
 		SUM <- (e-b)[3]
-		AVG <- SUM/(n.run+1)	
+		AVG <- SUM/(n.perm+1)	
                 if(verbose) {
-                  cat("INFO: Done with MQM bootstrap analysis\n")
+                  cat("INFO: Done with MQM permutation analysis\n")
                   cat("------------------------------------------------------------------\n")
                   cat("INFO: Elapsed time:",(SUM%/%3600),":",(SUM%%3600)%/%60,":",round(SUM%%60, digits=0),"(Hour:Min:Sec)\n")		
                   cat("INFO: Average time per trait:",round(AVG, digits=3),"seconds\n")
@@ -216,29 +212,21 @@ bootstrap <- function(cross,Funktie=scanone,pheno.col=1,multiC=TRUE,n.run=10,b.s
                 }
 		res
 	}else{
-		ourstop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}
 }
 
-mqmpermObject <- function(mqmbootresult = NULL){
-	if(class(mqmbootresult)[2] == "mqmmulti"){
-		result <- NULL
-		names <- NULL
-		for(i in 2:length(mqmbootresult)) {
-			result <- rbind(result,max(mqmbootresult[[i]][,3]))
-			names <- c(names,i-1)
-		}
+mqmprocesspermutation <- function(mqmpermutationresult = NULL){
+	if(!is.null(mqmpermutationresult) && class(mqmpermutationresult)[2] == "mqmmulti"){
+    result <- NULL
+		result <- sapply(mqmpermutationresult[-1], function(a) max(a[,3], na.rm=TRUE))
 		result <- as.matrix(result)
-		rownames(result) <- names
-		result <- cbind(result,result,result)
+		rownames(result) <- 1:(length(mqmpermutationresult)-1)
 		class(result) <- c("scanoneperm",class(result))
 		result
 	}else{
-		ourstop("PLease supply a valid resultobject (mqmmulti).")
+		stop("Please supply a valid resultobject (mqmmulti).")
 	}
 }
 
-#result <- bootstrap(cross)
-# tiff(object, file="namemeplease.tiff" res=300, unit="in", width=6, height=6)
-
-# end of mqmbootstrap.R
+# end of mqmpermutation.R

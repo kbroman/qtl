@@ -14,7 +14,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix to be
    used as the phenotype.  One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of
@@ -23,7 +23,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link[qtl]{makeqtl}}.} 
+   \code{\link{makeqtl}}.} 
  \item{covar}{A matrix or data.frame of covariates.  These must be
    strictly numeric.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
@@ -55,7 +55,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
 
 \section{Value}{
   An object of class \code{addint}, with results as in the
-  drop-one-term analysis from \code{\link[qtl]{fitqtl}}.  This is a data
+  drop-one-term analysis from \code{\link{fitqtl}}.  This is a data
   frame (given class \code{"addint"}, with the following columns: 
   degrees of freedom (df), Type III sum of squares (Type III
   SS), LOD score(LOD), percentage of variance explained (\%var), F
@@ -99,8 +99,8 @@ qtl <- makeqtl(fake.f2, qc, qp, what="prob")
 addint(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3, method="hk")
 }
 
-\seealso{ \code{\link[qtl]{addcovarint}}, \code{\link[qtl]{fitqtl}}, \code{\link[qtl]{makeqtl}},
-  \code{\link[qtl]{scanqtl}}, \code{\link[qtl]{refineqtl}},
-  \code{\link[qtl]{addqtl}}, \code{\link[qtl]{addpair}} }  
+\seealso{ \code{\link{addcovarint}}, \code{\link{fitqtl}}, \code{\link{makeqtl}},
+  \code{\link{scanqtl}}, \code{\link{refineqtl}},
+  \code{\link{addqtl}}, \code{\link{addpair}} }  
 
 \keyword{models}

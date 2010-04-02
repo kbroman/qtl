@@ -12,7 +12,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{what}{Indicates whether to count missing genotypes for each
    individual or each marker.}
 }
@@ -34,7 +34,7 @@ plot(nmissing(listeria))
 plot(nmissing(listeria, what="mar"))
 }
 
-\seealso{ \code{\link[qtl]{ntyped}}, \code{\link[qtl]{summary.cross}},
-          \code{\link[qtl]{nind}}, \code{\link[qtl]{totmar}} }
+\seealso{ \code{\link{ntyped}}, \code{\link{summary.cross}},
+          \code{\link{nind}}, \code{\link{totmar}} }
 
 \keyword{utilities}

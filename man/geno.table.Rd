@@ -15,7 +15,7 @@ geno.table(cross, chr)
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -48,8 +48,8 @@ gt <- geno.table(listeria)
 gt[gt$P.value < 0.01,]
 }
 
-\seealso{ \code{\link[qtl]{summary.cross}},
-  \code{\link[qtl]{drop.markers}}, \code{\link[qtl]{drop.nullmarkers}} }
+\seealso{ \code{\link{summary.cross}},
+  \code{\link{drop.markers}}, \code{\link{drop.nullmarkers}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

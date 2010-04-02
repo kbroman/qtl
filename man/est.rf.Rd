@@ -14,7 +14,7 @@ est.rf(cross, maxit=10000, tol=1e-6)
 
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{maxit}{Maximum number of iterations for the EM algorithm (not
    used with backcrosses).}
  \item{tol}{Tolerance for determining convergence (not used with
@@ -46,7 +46,7 @@ badorder <- est.rf(badorder)
 plot.rf(badorder)
 }
 
-\seealso{ \code{\link[qtl]{plot.rf}}, \code{\link[qtl]{est.map}},
-  \code{\link[qtl]{badorder}}, \code{\link[qtl]{checkAlleles}} }
+\seealso{ \code{\link{plot.rf}}, \code{\link{est.map}},
+  \code{\link{badorder}}, \code{\link{checkAlleles}} }
 
 \keyword{utilities}

@@ -15,10 +15,10 @@
 
 \arguments{
  \item{object}{An object of class \code{ripple}, the output of the
-   function \code{\link[qtl]{ripple}}.}
+   function \code{\link{ripple}}.}
  \item{lod.cutoff}{Only marker orders with LOD score (relative to the
    initial order) above this cutoff will be displayed.  For output of
-   \code{\link[qtl]{ripple}} in the case of minimization of the number
+   \code{\link{ripple}} in the case of minimization of the number
    of obligate crossovers, we double this argument and treat it as a
    cutoff for the number of obligate crossovers.}
  \item{\dots}{Ignored at this point.}
@@ -45,7 +45,7 @@ summary(rip2)
 badorder <- switch.order(badorder, 1, rip2[2,])
 }}
 
-\seealso{ \code{\link[qtl]{ripple}}, \code{\link[qtl]{est.map}},
-  \code{\link[qtl]{est.rf}} }
+\seealso{ \code{\link{ripple}}, \code{\link{est.map}},
+  \code{\link{est.rf}} }
 
 \keyword{print}

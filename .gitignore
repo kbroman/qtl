@@ -15,6 +15,10 @@ CTestTestfile.cmake
 *.pyc
 *.o
 *.so
+*.eps
+*.dvi
+*.sty
+*.aux
 install_manifest.txt
 Testing
 biolib_example.py
@@ -38,3 +42,11 @@ mqm
 qtl*gz
 *.exe
 *.EXE
+*.Rout
+contrib/bin/mqmdebugout
+..Rcheck/
+inst/docs/MQM-tour.tex
+inst/docs/MQM-tour.txt
+inst/docs/MQM-tour.R
+*.pdf
+*.tex

@@ -14,7 +14,7 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{Optional vector indicating the chromosomes to consider.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -114,6 +114,6 @@ plot(output$m, output$loglik, type="b", lwd=2)}
   \bold{139}, 1045--1056.
 }  
 
-\seealso{ \code{\link[qtl]{est.map}}, \code{\link[qtl]{sim.cross}}}
+\seealso{ \code{\link{est.map}}, \code{\link{sim.cross}}}
 
 \keyword{models}

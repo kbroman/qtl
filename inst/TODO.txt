@@ -10,7 +10,23 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Fix bug regarding X chromosome in fitqtl.
+o MASS and other packages seem to automatically load their datasets,
+  or at least make them available.  Can (and should) we do that?
+  (Also for qtlbook.)
+
+o In summary.cross, if there are *a lot* of phenotypes, don't give the
+  phenotype-by-phenotype information about amount missing.
+
+o stepwiseqtl: if additive.only=TRUE, allow penalties to have just one
+  value.
+
+o scantwo: ability to scan just specific chromosome pairs
+
+o scanone with method="hk": Major memory problems in the permutations
+  with multiple phenotypes. 
+
+o Revise the help file for read.cross to make the coding of genotypes
+  more clear.
 
 o Analysis of binary traits by "hk" in scanone/two.
 
@@ -20,9 +36,6 @@ o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
 o plot of genotype frequencies / P-values
-
-o function to identify the XO locations (based on countXO?)
-  [this is locate.xo, I think, but just for a single chromosome.]
 
 o qtl x covar interactions in stepwiseqtl
 

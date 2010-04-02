@@ -2,9 +2,9 @@
 #
 # qtlcart_io.R
 #
-# copyright (c) 2002-7, Brian S. Yandell
+# copyright (c) 2002-9, Brian S. Yandell
 #          [with some modifications by Karl W. Broman and Hao Wu]
-# last modified Nov, 2007
+# last modified Nov, 2009
 # first written Jun, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -98,7 +98,7 @@ function (file)
   # marker positions
   tmp <- range(seq(f)[substring(f, 1, 3) == "-l "])
   s <- strsplit(f[tmp[1]], "")[[1]]
-  b <- grep("|", s, extended = FALSE)
+  b <- grep("\\|", s)
   s <- grep("0", s)
   s <- ceiling((s[length(s)] - b - 1)/nchrom)
 
@@ -221,6 +221,10 @@ function (file)
 
   # here is the translation
   f = array(as.numeric(f),dim(f))
+
+  # omit negative genotypes (treat as missing)
+  f[f<0] <- NA 
+
   f[!is.na(f)] <- c(NA, 1:3, rep(NA, 7), 4, NA, 5)[2 + f[!is.na(f)]]
   if (fix.ridh && all(is.na(f) || f == 1 || f == 3))
     f[!is.na(f) & f == 3] <- 2

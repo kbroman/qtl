@@ -13,7 +13,7 @@
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
-   \code{\link[qtl]{read.cross}} for details.}
+   \code{\link{read.cross}} for details.}
  \item{chr}{A vector of chromosome identifiers, or a single such.}
  \item{pos}{A vector of cM positions.}
 }
@@ -36,7 +36,7 @@ find.flanking(listeria, 5, 28)
 find.flanking(listeria, c(1, 5, 13), c(81, 28, 26))
 }
 
-\seealso{ \code{\link[qtl]{find.marker}}, \code{\link[qtl]{plot.pxg}},
-\code{\link[qtl]{find.markerpos}}, \code{\link[qtl]{find.pseudomarker}} }
+\seealso{ \code{\link{find.marker}}, \code{\link{plot.pxg}},
+\code{\link{find.markerpos}}, \code{\link{find.pseudomarker}} }
 
 \keyword{utilities}

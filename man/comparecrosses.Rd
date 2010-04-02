@@ -11,9 +11,9 @@
 
 \arguments{
  \item{cross1}{An object of class \code{cross} (must be an
-   intercross). See \code{\link[qtl]{read.cross}} for details.} 
+   intercross). See \code{\link{read.cross}} for details.} 
  \item{cross2}{An object of class \code{cross} (must be an
-   intercross). See \code{\link[qtl]{read.cross}} for details.} 
+   intercross). See \code{\link{read.cross}} for details.} 
  \item{tol}{Tolerance value for comparing genetic map positions and
    numeric phenotypes.}
 }
@@ -27,6 +27,6 @@ data(listeria)
 comparecrosses(listeria, listeria)
 }
 
-\seealso{ \code{\link[qtl]{summary.cross}} }
+\seealso{ \code{\link{summary.cross}} }
 
 \keyword{utilities}
