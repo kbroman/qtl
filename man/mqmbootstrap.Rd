@@ -1,11 +1,7 @@
-\name{bootstrap}
-\alias{bootstrap}
-\alias{bootstrapcim}
-\alias{mqmbootstrap}
-\alias{permutate}
-\alias{mqmpermute}
+\name{mqmpermutation}
+\alias{mqmpermutation}
 
-\title{Estimate QTL LOD score significance through bootstrap permutations}
+\title{Estimate QTL LOD score significance using permutations or simulations }
 
 \description{
    Different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
@@ -17,28 +13,26 @@
 }
 
 \usage{
-	bootstrap(cross, mapfunction=scanone, pheno.col=1,
-	          multiC=TRUE, n.run=10, b.size=10, file="MQM_output.txt",
-   	          n.clusters=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
-	bootstrapcim(\dots)
-	mqmbootstrap(\dots)
+	mqmpermutation(cross, scanfunction=scanone, pheno.col=1,
+	          multicore=TRUE, n.perm=10, batchsize=10, file="MQM_output.txt",
+   	          n.cluster=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
 }
 
 \arguments{
 	\item{cross}{ 
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-	\item{mapfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
+	\item{scanfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ 
 Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
   }
 	\item{multiC}{ Use multicore (if available)}  
-	\item{n.run}{ Number of bootstrapping runs (DEFAULT=10, should be 1000, or higher,
+	\item{n.perm}{ Number of permutations to perform (DEFAULT=10, should be 1000, or higher,
   for publications) }
-	\item{b.size}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
-        \item{file}{File name (?)}
-	\item{n.clusters}{ Number of child processes to split the job into }
-	\item{method}{ What kind bootstrapping should occur: permutation or simulation } 
+	\item{batchsize}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
+        \item{file}{ Name of the intermediate output file used }
+	\item{n.cluster}{ Number of child processes to split the job into }
+	\item{method}{ What kind permutation should occur: permutation or simulation } 
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
@@ -67,8 +61,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
@@ -79,16 +73,13 @@ data(multitrait)				#Use the multitrait dataset
 \dontshow{multitrait <- subset(multitrait, chr=1:2, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
 multitrait$pheno <- log(multitrait$pheno)}
 multitrait <- calc.genoprob(multitrait)
-\dontrun{result <- bootstrap(multitrait,pheno.col=7, b.size=5)
-result <- bootstrapcim(multitrait,pheno.col=7, b.size=5)
-}\dontshow{result <- bootstrap(multitrait,pheno.col=7, n.run=2, b.size=2)
-result <- bootstrapcim(multitrait,pheno.col=7, n.run=2, b.size=2)}
+result <- mqmpermutation(multitrait,pheno.col=7, n.perm=2, batchsize=2)
+
+cof <- mqmautocofactors(multitrait,50)		#Set 50 cofactors
 multitrait <- fill.geno(multitrait)
-cof <- mqmsetcofactors(multitrait,3)		#Set cofactors at each 3th marker
-\dontrun{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, b.size=5,verbose=FALSE)}
-\dontshow{f2result <- mqmbootstrap(multitrait,cofactors=cof,pheno.col=7, n.run=2,b.size=2,verbose=FALSE)}
+result <- mqmpermutation(multitrait,scanfunction=mqmscan,cofactors=cof,pheno.col=7, n.perm=2,batchsize=2,verbose=FALSE)
 #EXTRA
-f2perm <- mqmprocesspermutation(f2result)			#Create a permutation object
+f2perm <- mqmprocesspermutation(result)			#Create a permutation object
 summary(f2perm)						#Get Significant LOD thresholds
 }
 

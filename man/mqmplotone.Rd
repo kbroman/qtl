@@ -1,14 +1,14 @@
-\name{mqmplot_one}
-\alias{mqmplot_one}
+\name{mqmplot.singletrait}
+\alias{mqmplot.singletrait}
 
 \title{Plotting routine to display the results from a QTL scan  }
 
 \description{
-  Plotting routine to display the results from a mqmscan
+  Plotting routine to display the results from a mqmscan on a single trait.
 }
 
 \usage{
-mqmplot_one(result, extended = 0 ,\dots)
+mqmplot.singletrait(result, extended = 0 ,\dots)
 }
 
 \arguments{
@@ -28,8 +28,8 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
@@ -43,7 +43,7 @@ data(map10)                                             # Mouse genome
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- mqmaugment(f2cross)
 f2result <- mqmscan(f2cross)                    	# Do a MQM scan of the genome
-mqmplot_one(f2result)					# Use our fancy plotting routine
+mqmplot.singletrait(f2result)					# Use our fancy plotting routine
 }
 
 \keyword{ hplot }

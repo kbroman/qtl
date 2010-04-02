@@ -1,26 +1,24 @@
-\name{mqmplot.multitrait}
-\alias{mqmplot.multitrait}
+\name{mqmplot.heatmap}
+\alias{mqmplot.heatmap}
 
 \title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a mqm scan on multiple phenotypes. 
-  It supports four diffferent visualizations: a contourmap, heatmap, 3D graph or a multiple 
-  QTL plot from \code{\link{plot.scanone}}
+  Plotting routine to display the results from a mqm scan on multiple phenotypes in a heatmap.
 }
 
 \usage{
-mqmplot.multitrait(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, \dots)
+mqmplot.heatmap(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE)
 }
 
 \arguments{
-  \item{result}{ Result object from scanall }
-  \item{type}{ Selection of the plot method to visualize the data options are: "lines" (defaut plotting option), "image", "contour" and "3Dplot" }
-  \item{group}{ A numeric vector indicating which traits to plot. NULL means no grouping }
-  \item{meanprofile}{ Plot a mean/median profile from the group selected }
-  \item{theta}{ Horizontal axis rotation in a 3D plot }
-  \item{phi}{ Vertical axis rotation in a 3D plot }
-  \item{\dots}{Additional arguments passed to \code{\link[graphics]{plot}}.}
+  \item{cross}{
+    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+  }
+  \item{results}{ Result object from mqmscanall }
+  \item{hidelow}{ Hides the low lodscores (< 3) }
+  \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
+  \item{legend}{ Add a lengend to the plot ? }
 }
 
 \author{ 
@@ -47,10 +45,7 @@ data(multitrait)
 multitrait$pheno <- multitrait$pheno[,1:3]}
 multitrait <- fill.geno(multitrait) # impute missing genotype data
 result <- mqmscanall(multitrait, logtransform=TRUE)
-mqmplot.multitrait(result,"lines")
-mqmplot.multitrait(result,"contour")
-mqmplot.multitrait(result,"image")
-mqmplot.multitrait(result,"3Dplot")
+mqmplot.heatmap(multitrait,result)
 }
 
 \keyword{ hplot }

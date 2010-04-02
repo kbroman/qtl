@@ -1,5 +1,5 @@
-\name{which.marker}
-\alias{which.marker}
+\name{find.markerindex}
+\alias{find.markerindex}
 
 \title{Determine the numeric index for a marker}
 
@@ -8,7 +8,7 @@
   markers on all chromosomes are pasted together.
 }
 
-\usage{which.marker(cross, name)}
+\usage{find.markerindex(cross, name)}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
@@ -27,7 +27,7 @@
 \examples{
 data(hyper)
 mar <- find.marker(hyper, 4, 30)
-which.marker(hyper, mar)
+find.markerindex(hyper, mar)
 }
 
 \seealso{ \code{\link{find.markerpos}} }

@@ -62,9 +62,9 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   MSEX: QTL at locus j, but QTL effect is not included in the model
   MQTL: QTL at locu j and QTL effect is included in the model
   */
-	for (int j=0; j<Naug; j++){
-	   debug_trace("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
-  }
+	//for (int j=0; j<Naug; j++){
+	//   debug_trace("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
+  //}
 
   matrix XtWX;
   cmatrix Xt;
@@ -388,8 +388,6 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
     debug_trace("INFO df1:%d df2:%d alpha:%f\n", df1, df2, alfa);
     count++;
     halfway= (maxF+minF)/2.0;
-    //prob= betai(df2/2.0, df1/2.0, df2/(df2+df1*halfway));
-    //USE R FUNCTIONALITY TO REPLACE OLD C ROUTINES
     prob = pbeta(df2/(df2+df1*halfway), df2/2.0, df1/2.0, 1, 0);
     debug_trace("(%f, %f, %f) prob=%f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
     if (prob<alfa) maxF= halfway;

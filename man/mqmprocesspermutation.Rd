@@ -17,7 +17,7 @@ mqmprocesspermutation(mqmpermutationresult = NULL)
 \arguments{
   \item{mqmpermutationresult}{ \code{mqmmulti} object obtained 
     after performing permutations on a single trait.using the 
-    function \code{\link{mqmpermute}} 
+    function \code{\link{mqmpermutation}} 
   }
 }
 
@@ -36,8 +36,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
@@ -48,8 +48,8 @@ f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
-\dontrun{f2result <- bootstrap(f2cross,mapfunction=mqmscan)			# Bootstrap MQM mapping on the f2cross
-}\dontshow{f2result <- bootstrap(f2cross,mapfunction=mqmscan, n.run=2, b.size=2)}
+\dontrun{f2result <- mqmpermutation(f2cross,scanfunction=mqmscan)			# Bootstrap MQM mapping on the f2cross
+}\dontshow{f2result <- mqmpermutation(f2cross,scanfunction=mqmscan, n.perm=2, batchsize=2)}
 f2perm <- mqmprocesspermutation(f2result)			# Create a permutation object
 summary(f2perm)					# What LOD score is considered significant ?
 }

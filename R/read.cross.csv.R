@@ -2,8 +2,8 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2000-2010, Karl W Broman
+# last modified Feb, 2010
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -87,8 +87,11 @@ function(dir, file, na.strings=c("-","NA"),
   if(all(!is.na(data[3,1:n.phe]) & data[3,1:n.phe]=="")) {
     map.included <- TRUE
     map <- asnumericwithdec(unlist(data[3,-(1:n.phe)]), dec=dec)
-    if(any(is.na(map))) 
-      stop("There are missing marker positions.")
+    if(any(is.na(map))) {
+      temp <- unique(unlist(data[3,-(1:n.phe)])[is.na(map)])
+      stop(paste("There are missing marker positions.\n",
+                 "   In particular, we see these values: ", paste("\"", temp, "\"", collapse=" ", sep="")))
+    }
     nondatrow <- 3
   }
   else {

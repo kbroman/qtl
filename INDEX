@@ -93,6 +93,8 @@ max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 mqmaugment              MQM augmentation
+mqmautocofactors        Automatic creation of cofactors to be used with
+                        mqm
 mqmcofactors            Create cofactors to be used with mqmscan
 mqmfind.marker          Fetch significant markers after permutation
                         analysis
@@ -105,8 +107,13 @@ mqmplot_circle          Circular genome plotting - routine to show QTL
                         information
 mqmplot_cistrans        Plotting routine to show cis and trans QTL
                         information
+mqmplot_clusteredheatmap
+                        Plotting routine to display the results from a
+                        mqm scan on multiple phenotypes
 mqmplot_directedqtl     Plotting routine to display the effects and
                         results from a QTL scan
+mqmplot_directedqtl     Plotting routine to display the results from a
+                        QTL scan
 mqmplot_multitrait      Plotting routine to display the results from a
                         mqm scan on multiple phenotypes
 mqmplot_nice            Plot the results from a mqm scan on multiple

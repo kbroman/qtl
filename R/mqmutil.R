@@ -48,6 +48,19 @@ mqm_version <- function() {
   list(RQTL=rqtl_version, RMQM=rmqm_version, MQM=mqm_version)
 }
 
+groupclusteredheatmap <- function(cross, clusteredheatmapresult, height){
+  items <- cut(clusteredheatmapresult$Rowv,h=height)$lower
+  phenotypes <- names(pull.pheno(cross))
+  groups <- vector(length(items), mode="list")
+  cnt <- 1
+  for(x in items){
+    nam <- labels(x)
+    groups[[cnt]] <- which(phenotypes %in% nam)
+    cnt <- cnt+1
+  }
+  groups
+}
+
 ourstop <- function(...){
 	stop(...)
 }
@@ -57,6 +70,9 @@ ourline <- function(){
 }
 
 simulateMissingData <- function(cross,percentage=5){
+  if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
   for(x in 1:length(cross$geno)){
     numtoDROP <- length(cross$geno[[x]]$data)*(percentage/100)
     toDROP <- sample(length(cross$geno[[x]]$data))[1:numtoDROP]
@@ -67,6 +83,9 @@ simulateMissingData <- function(cross,percentage=5){
 
 # Return the real markers in the set (remove fake ones)
 mqmextractmarkers <- function(mqmresult){
+  if(!("scanone" %in% class(mqmresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
   result <- NULL
   for(x in 1:nrow(mqmresult)){
     # for every marker...
@@ -78,6 +97,29 @@ mqmextractmarkers <- function(mqmresult){
   }
   class(result) <- class(mqmresult)
   result
+}
+
+# Return the fake markers in the set (remove real ones)
+mqmextractpseudomarkers <- function(mqmresult){
+  if(!("scanone" %in% class(mqmresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
+  result <- NULL
+  for(x in 1:nrow(mqmresult)){
+    # for every marker...
+    marker = mqmresult[x,]
+    found = grep('.loc',rownames(marker))
+    if(length(found)!=0) {
+      result <- rbind(result,marker)
+    }
+  }
+  class(result) <- class(mqmresult)
+  result
+}
+
+stepsize <- function(mqmpseudomarkers){
+  step <- as.numeric(strsplit(rownames(mqmpseudomarkers)[2],"loc")[[1]][2])-as.numeric(strsplit(rownames(mqmpseudomarkers)[1],"loc")[[1]][2])
+  step
 }
 
 
@@ -113,6 +155,12 @@ estimatemarkerlod <- function(interresults){
 
 
 addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
+  if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(!("scanone" %in% class(intervalresult))){
+    stop("Wrong type of result file, please supply a valid scanone (from MQM) object.") 
+  }
 	map <- pull.map(cross)
 	newres <- NULL
 	intervalmaploc <- 1
@@ -152,7 +200,13 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
   newres
 }
 
-mqmtestnormal <- function(cross, pheno.col=1){
+mqmtestnormal <- function(cross, pheno.col=1,significance=0.05){
+  if(is.null(cross)){
+		stop("No cross object. Please supply a valid cross object.") 
+	}
+  if(significance > 1 || significance <= 0){
+    stop("significance should be between 0 and 1")
+  }
 	returnval <- FALSE
 	if(pheno.col <0 || pheno.col > nphe(cross)){
 		stop("No such phenotype (pheno.col = ",pheno.col,")")
@@ -162,7 +216,7 @@ mqmtestnormal <- function(cross, pheno.col=1){
 	}
 	if(any(rownames(installed.packages())=="nortest")){
 		require(nortest)
-		if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
+		if(pearson.test(cross$pheno[[pheno.col]])$p.value < significance){
 			cat("Trait distribution not normal\n")
 			returnval<- FALSE
 		}else{

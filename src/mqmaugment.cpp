@@ -180,12 +180,12 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
           current_leftover_ind++;
         }
       }
-      mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, 1);
+      mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, verbose);
       if(verbose) info("Augmentation step 2 returned most likely for %d individuals",current_leftover_ind);
       //Data augmentation done, we need to return both matrices to R
       int numimputations=1;
       if(unaugmentable==2){
-        numimputations=max_indaugment;  //If we do imputation, we should generate enough to not increase likelyhood for the 'unlikely genotypes'
+        numimputations=max_indaugment;  //If we do imputation, we should generate enough to not increase likelihood for the 'unlikely genotypes'
       }
       MQMMarkerMatrix newmarkerset_all = newMQMMarkerMatrix(nmark,(*augmentednind)+numimputations*current_leftover_ind);
       vector new_y_all = newvector((*augmentednind)+numimputations*current_leftover_ind);
@@ -240,7 +240,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
     }else{
       if(ind_still_left && unaugmentable == 3){
-        info("Dropping %d unaugmentable individuals from further analysis",ind_still_left);
+        if (verbose) info("Dropping %d unaugmentable individuals from further analysis",ind_still_left);
       }
       //We augmented all individuals in the first go so lets use those
       (*pheno_value)[0] = new_y;

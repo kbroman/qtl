@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmscan(cross, cofactors, pheno.col = 1, 
+mqmscan(cross, cofactors=NULL, pheno.col = 1, 
   model=c("additive","dominance"), forceML=FALSE,
   cofactor.significance=0.02, em.iter=1000, 
   window.size=25.0, step.size=5.0, step.min=-20.0, step.max=220,
@@ -94,7 +94,7 @@ Informationcontent and LOD*Informationcontent with at each row pseudomarkers
 sorted in increasing order. For more information on the scanone object see: \code{\link{scanone}} 
 The resulting scanone object itself can be visualized using the standard R/qtl 
 plotting routines (\code{\link{plot.scanone}}) or specialized function to show
-the mqm model (\code{\link{mqmplot_one}}) and QTL profile. If cofactors were 
+the mqm model (\code{\link{mqmplot.singletrait}}) and QTL profile. If cofactors were 
 specified the QTL model used in scanning is also returned as a named attribute 
 of the scanone object called mqmmodel. It can be extracted from the resulting 
 scanone object by using the \code{\link{mqmgetmodel}} function or the 
@@ -119,8 +119,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }

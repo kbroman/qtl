@@ -1,6 +1,4 @@
-\name{mqmplot_circle}
-\alias{mqmplot_circle}
-\alias{mqmplotcircle}
+\name{mqmplot.circle}
 
 \title{Circular genome plotting - routine to show QTL information}
 
@@ -9,7 +7,7 @@
 }
 
 \usage{
-	mqmplot_circle(cross,result,highlight=0,spacing=25,legend=FALSE,verbose=FALSE,transparency=FALSE)
+	mqmplot.circle(cross,result,highlight=0,spacing=25, interactstrength=2, legend=FALSE,verbose=FALSE,transparency=FALSE)
 }
 
 \arguments{
@@ -23,6 +21,11 @@
   \item{highlight}{ With a mqmmulti object, highlight this phenotype (value between 
     one and the number of results in the mqmmultiobject) 
   }
+  \item{interactstrength}{ When highlighting a trait, consider interactions 
+  significant they have a change of more than interactstrength*SEs. A higher value 
+  will show less interactions.  However the interactions reported at higher 
+  interactstrength values will generaty be more reliable.
+  }  
   \item{spacing}{ User defined spacing between chromosomes in cM }
   \item{legend}{ With a mqmmulti object, plots a legend for the non-highlighed version }
   \item{transparency}{ Use transparency when drawing the plots (defaults to no transparency) }
@@ -53,8 +56,8 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmbootstrap}} - Estimate confidence intervals
+    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
@@ -78,22 +81,22 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     multires <- mqmscanall(multifilled,cofactors=multicof)
     
     #Basic scanone, thickness of markers = LODscore
-    mqmplot_circle(hyperfilled,hyperscanone)
+    mqmplot.circle(hyperfilled,hyperscanone)
     Sys.sleep(3)
     #Basic mqm, thickness of markers = LODscore, red = significant
-    mqmplot_circle(hyperfilled,hyperres)
+    mqmplot.circle(hyperfilled,hyperres)
     Sys.sleep(3)
     #Basic mqmmulti, color = trait, round circle = significant
-    mqmplot_circle(multifilled,multires)
+    mqmplot.circle(multifilled,multires)
     Sys.sleep(3)
     #mqmmulti with locations of traits in multiloc
-    mqmplot_circle(multiloc,multires)
+    mqmplot.circle(multiloc,multires)
     Sys.sleep(3)
     #mqmmulti with highlighting
-    mqmplot_circle(multitrait,multires,highlight=16)
+    mqmplot.circle(multitrait,multires,highlight=16)
     Sys.sleep(3)
     #mqmmulti with locations of traits in multiloc and highlighting
-    mqmplot_circle(multiloc,multires,highlight=16)
+    mqmplot.circle(multiloc,multires,highlight=16)
   }
 }
 

@@ -3,7 +3,7 @@
 # effectplot.R
 #
 # copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# Last modified Feb, 2009
+# Last modified Jan, 2010
 # first written Jul, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -619,6 +619,8 @@ function(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled","group")
       means <- apply(means.all, 2, function(a) weighted.mean(a,weight,na.rm=TRUE))
       meanvar <- apply(vars.all, 2, function(a) weighted.mean(a,weight,na.rm=TRUE)) # mean of vars
       varmean <- apply(means.all, 2, function(a) weighted.mean((a-mean(a,na.rm=TRUE))^2,weight,na.rm=TRUE)) # var of means
+      measured <- apply(means.all, 2, function(a) sum(!is.na(a)))
+      means[measured==0] <- meanvar[measured==0] <- varmean[measured==0] <- NA
       # standard error
       ses <- sqrt(meanvar+varmean)
     }
@@ -705,6 +707,8 @@ function(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled","group")
       means <- apply(means.all, c(1,2), function(a) weighted.mean(a,weight,na.rm=TRUE))
       meanvar <- apply(vars.all, c(1,2), function(a) weighted.mean(a,weight,na.rm=TRUE))
       varmean <- apply(means.all, c(1,2), function(a) weighted.mean((a-mean(a,na.rm=TRUE))^2,weight,na.rm=TRUE)) # var of means
+      measured <- apply(means.all, c(1,2), function(a) sum(!is.na(a)))
+      means[measured==0] <- meanvar[measured==0] <- varmean[measured==0] <- NA
       # standard error
       ses <- sqrt(meanvar+varmean)
     }
