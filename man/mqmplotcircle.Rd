@@ -1,5 +1,5 @@
 \name{mqmplot.circle}
-
+\alias{mqmplot.circle}
 \title{Circular genome plotting - routine to show QTL information}
 
 \description{

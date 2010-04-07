@@ -15,7 +15,7 @@
 \usage{
 	mqmpermutation(cross, scanfunction=scanone, pheno.col=1,
 	          multicore=TRUE, n.perm=10, batchsize=10, file="MQM_output.txt",
-   	          n.cluster=1, method=c("permutation","simulation"), plot=FALSE, verbose=FALSE, \dots)
+   	          n.cluster=1, method=c("permutation","simulation"),cofactors=NULL, plot=FALSE, verbose=FALSE, \dots)
 }
 
 \arguments{
@@ -26,13 +26,14 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 	\item{pheno.col}{ 
 Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
   }
-	\item{multiC}{ Use multicore (if available)}  
+	\item{multicore}{ Use multicore (if available)}  
 	\item{n.perm}{ Number of permutations to perform (DEFAULT=10, should be 1000, or higher,
   for publications) }
 	\item{batchsize}{ Batch size. The entire set is split in jobs. Each job contains b.size number of traits per job }
         \item{file}{ Name of the intermediate output file used }
 	\item{n.cluster}{ Number of child processes to split the job into }
 	\item{method}{ What kind permutation should occur: permutation or simulation } 
+  \item{cofactors}{cofactors, only used when scanfunction is mqm}
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
