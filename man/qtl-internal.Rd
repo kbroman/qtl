@@ -35,6 +35,29 @@
 \alias{genotab.em}
 \alias{getid}
 \alias{getsex}
+
+\alias{addmarkerstointervalmap}
+\alias{calculatedensity}
+\alias{checkdistances}
+\alias{circlelocations}
+\alias{drawcirculargenome}
+\alias{drawspline}
+\alias{estimatemarkerlod}
+\alias{getChr}
+\alias{getchromosomelength}
+\alias{getgenomelength}
+\alias{groupclusteredheatmap}
+\alias{locationtocircle}
+\alias{loopthroughmulti}
+\alias{mqmextractmarkers}
+\alias{mqmextractpseudomarkers}
+\alias{mqm_version}
+\alias{plotcofactors}
+\alias{scanall}
+\alias{scoremissingmarkers}
+\alias{simulateMissingData}
+\alias{stepsize}
+
 \alias{getgenonames}
 \alias{getThird}
 \alias{grab.arg.names}
@@ -187,6 +210,29 @@ markerforwself2(x, y, maxsize=7)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
 getid(cross)
 getsex(cross)
+
+addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
+calculatedensity(cross,distance=30)
+checkdistances(cross,cofactors,dist=5)
+circlelocations(nt)
+drawcirculargenome(result,lodmarkers=FALSE,spacing=50)
+drawspline(cn1, cn2, lwd = 1,col="blue",\dots)
+estimatemarkerlod(interresults)
+getChr(x)
+getchromosomelength(result, chr)
+getgenomelength(result)
+groupclusteredheatmap(cross, clusteredheatmapresult, height)
+locationtocircle(result, chr, loc, spacing=50, fixoutofbounds=TRUE, verbose=FALSE)
+loopthroughmulti(cross,result,save=FALSE,spacing=100)
+mqmextractmarkers(mqmresult)
+mqmextractpseudomarkers(mqmresult)
+mqm_version()
+plotcofactors(cross,cofactors)
+scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
+scoremissingmarkers(cross)
+simulateMissingData(cross,percentage=5)
+stepsize(mqmpseudomarkers)
+
 getgenonames(type=c("f2","bc","riself","risib","4way","dh","special"),
              chrtype=c("A","X"), expandX=c("simple","standard","full"),
              sexpgm, cross.attr)
@@ -313,8 +359,8 @@ sim.cross.f2(map, model, n.ind, error.prob, missing.prob,
              partial.missing.prob, keep.errorind, m, p, map.function)
 sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
         m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
-snowCoreALL(x, all.data, scanfunction, verbose=FALSE, \dots)
-snowCoreBOOT(x, all.data, scanfunction, bootmethod, verbose=FALSE, \dots)
+snowCoreALL(x, all.data, scanfunction, cofactors, verbose=FALSE, \dots)
+snowCoreBOOT(x, all.data, scanfunction, bootmethod, cofactors, verbose=FALSE, \dots)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),

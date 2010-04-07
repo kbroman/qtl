@@ -139,7 +139,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if(phenovar > 1000){
 			if(!logtransform){
 				if(verbose) cat("INFO: Before LOG transformation Mean:",mean(pheno,na.rm = TRUE),"variation:",var(pheno,na.rm = TRUE),".\n")
-				warning(paste("WARNING: Set needs Log-transformation? (var=",phenovar,"), use mqmscan with logtransform=TRUE"))
+				#warning(paste("WARNING: Set needs Log-transformation? (var=",phenovar,"), use mqmscan with logtransform=TRUE"))
 			}
 		}
 		if(logtransform){
@@ -403,15 +403,6 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 	}else{
 		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
 	}			
-}
-
-mqm_obsolete <- function(cross,cofactors,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
-                    cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
-                    step.min=-20.0,step.max=220,logtransform = FALSE,
-					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
-  warning("The 'mqm' method should be obsoleted")
-	mqmscan(cross, cofactors, pheno.col, model, forceML, cofactor.significance, em.iter, window.size, step.size,
-                step.min, step.max, logtransform, estimate.map, plot, verbose, outputmarkers, multicore, batchsize, n.clusters)
 }
 
 # end of mqmscan.R

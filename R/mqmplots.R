@@ -75,10 +75,8 @@ mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
     results[[x]] <- mqmextractpseudomarkers(results[[x]])
     if(directed){
       effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
-      cat(".")
       for(y in 1:nrow(results[[x]])){
         effectid <- which(rownames(effect)==rownames(results[[x]])[y])
-        cat(effectid,"\n")
         if(!is.na(effectid&&1)){
           results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }

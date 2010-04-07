@@ -30,10 +30,6 @@
 #
 #####################################################################
 
-
-
-
-
 mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
@@ -79,7 +75,7 @@ mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,
 #
 ######################################################################
 
-mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,batchsize=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),plot=FALSE,verbose=FALSE,...)
+mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,batchsize=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),cofactors=NULL,plot=FALSE,verbose=FALSE,...)
 {
 	bootmethod <- 0
   
@@ -114,7 +110,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 
 		#Scan the original
 		#cross <- fill.geno(cross) # <- this should be done outside of this function
-		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,scanfunction=scanfunction,verbose=verbose,...)
+		res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,scanfunction=scanfunction,verbose=verbose,cofactors=cofactors,...)
 		
 		#Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
 		bootstraps <- runif(n.perm)
@@ -145,7 +141,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 				}			
 				cl <- makeCluster(n.cluster)
 				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,verbose=verbose,...)
+				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
 				stopCluster(cl)
 				results <- c(results,res)
 				if(plot){
@@ -180,7 +176,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
-				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,verbose=verbose,...)
+				res <- lapply(boots, FUN=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
 				results <- c(results,res)	
 				if(plot){
 					temp <- c(res0,results)

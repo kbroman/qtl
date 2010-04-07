@@ -18,7 +18,9 @@ mqmscanfdr(cross, scanfunction=mqmscanall,
 	\item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-	\item{scanfunction}{ QTL mapping function (scanall, cimall or mqmscanall)
+	\item{scanfunction}{ QTL mapping function, Note: Must use scanall or mqmscanall. Otherwise this will 
+  not produce usefull results. Reason: We need a function that maps all traits ecause of the correlation
+  structure which is not changed (between traits) during permutation (Valis options: scanall or mqmscanall)
   }
 	\item{thresholds}{ False discovery rate (FDR) is calculated for peaks 
     above these LOD thresholds (DEFAULT=Range from 1 to 20, using 10 thresholds)
