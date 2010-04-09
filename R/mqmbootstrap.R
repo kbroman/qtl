@@ -128,7 +128,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 		AVG <- 0
 		LEFT <- 0
 		#TEST FOR SNOW CAPABILITIES
-#		if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]]) && multiC){
+#		if(("snow" %in% installed.packages()[1:dim(installed.packages())[1]]) && multicore){
 		if(multicore && n.cluster >1 && suppressWarnings(require(snow,quietly=TRUE))) {
 			if(verbose) cat("INFO: Library snow found using ",n.cluster," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
