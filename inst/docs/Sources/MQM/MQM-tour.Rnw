@@ -329,9 +329,8 @@ As seen in Figure~\ref{NoCofs}, with default parameter the result from the
 mqm scan are similar to the scanone scan results. There are however mayor 
 differences between the two methods. which will become clear in the next part of this section.
 \begin{figure}
-<<fig=TRUE,echo=FALSE,height=3>>=
+<<NoCofs,fig=TRUE,echo=FALSE,height=3>>=
 plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
-<<NoCofs>>
 @
 \caption{\hyperintrocolors. The results
 are similar when used without \emph{augmentation\/} and with no extra parameters.\label{NoCofs}}
@@ -788,7 +787,7 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{multiset plotone}
+\caption{trait with multiple phenotypes, visualized using mqmplot.singletrait}
 \end{figure}
 
 The second column \code{info} in the result
@@ -905,7 +904,7 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
-results <- mqmpermutation(hyperaug,cofactors=cofactorlist,n.clusters=2,n.perm=25,b.size=25)
+results <- mqmpermutation(hyperaug,scanfunction=mqmscan,cofactors=cofactorlist,n.cluster=2,n.perm=25,batchsize=25)
 @
 \begin{figure}
 <<fig=TRUE>>=
@@ -943,7 +942,7 @@ marker, or correlated traits, often seen in microarray experiments.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-mqmscanfdr(multifilled,mqmscanall,cofactors=cofactorlist,n.clusters=2)
+mqmscanfdr(multifilled,mqmscanall,cofactors=multicofactorlist,n.cluster=2)
 @
 
 The function \code{mqmpermutation} does single trait permutations, and does not take
@@ -986,7 +985,7 @@ improvement over Figure~\ref{At.heatmap1} because of an improved signal to noise
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.clusters=2)
+resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.cluster=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
@@ -999,7 +998,7 @@ the x-axis the marker number and on the y-axis the metabolite\label{At.heatmap1}
 
 <<>>=
 cofactorlist <- mqmsetcofactors(multifilled,3)
-resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.clusters=2)
+resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cluster=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
@@ -1034,7 +1033,7 @@ highlighted trait.
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot_circle(multifilled, resall)
+mqmplot.circle(multifilled, resall)
 @
 \caption{Circleplot 1 - Multiple traits without locations, traits are in the centre 
 connected by a colored spline to their QTL locations}
@@ -1042,7 +1041,7 @@ connected by a colored spline to their QTL locations}
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot_circle(multifilled, resall, highlight=2)
+mqmplot.circle(multifilled, resall, highlight=2)
 @
 \caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
 \end{figure}
@@ -1062,7 +1061,7 @@ is, normally, the \qtl\ location and the y-axis the locations of the trait
 \begin{figure}
 <<fig=TRUE>>=
 data(locations)
-multiloc <- addloctocross(multifilled,locations)
+multiloc <- addloctocross(multifilled, locations)
 mqmplot.cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
 \caption{\Atintro. mqmplot\_cistrans, available when \qtl\
@@ -1075,7 +1074,7 @@ the extra information.
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot_circle(multiloc,resall, highlight=2)
+mqmplot.circle(multiloc,resall, highlight=2)
 @
 \caption{\Atintro. Circleplot 3 - Multiple traits with locations added, here we highlight trait number 2}
 \end{figure}
