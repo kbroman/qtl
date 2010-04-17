@@ -48,5 +48,6 @@ contrib/bin/mqmdebugout
 inst/docs/MQM-tour.tex
 inst/docs/MQM-tour.txt
 inst/docs/MQM-tour.R
+inst/docs/Sources/MQM/MQM-tour.R
 *.pdf
 *.tex
