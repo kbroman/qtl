@@ -211,7 +211,7 @@ geno.image(augmentedcross)
 <<augment1>>
 @
 \caption{Genotypes, as visualized with \code{geno.image}, of 100 filled individuals
-(\code{mqmaugment} with \code{minprob=1} means only a `most likely' individual is
+(\code{mqmaugment} with \code{minprob=1.0} means only a `most likely' individual is
 used and
 no real expansion of the dataset takes place, similar to \code{fill.geno}).\label{augment1}}
 \end{figure}
@@ -248,7 +248,8 @@ individual).\label{augment2}}
 Now we use a the a real dataset
 (multitrait), which contains 24 metabolite traits from a RIL population of \At. 
 
-\intro{Simulate missing data by removing some genotypedata (5%, 10% and 80%) from the crossobject}
+\intro{Simulate missing data by removing some genotypedata (5\%, 10\% and 80\%) from the crossobject}
+
 <<augment3>>=
 data(multitrait)
 multimissing5 <- simulateMissingData(multitrait,5)
@@ -309,19 +310,19 @@ legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
 
 \label{QTL modelling}
 
-The famous mouse hypertension dataset\cite{sugiyama}, which is distributed with
+The (rather famous) mouse hypertension dataset\cite{sugiyama}, distributed with
 R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
-blood pressure (bp) and sex. Here we show an example of running both \code{scanone}
-single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping, to map
-\qtl\ for blood pressure. First, we need to \emph{complete} missing data. To create a dataset without 
-missing genotypes here we use the \code{mqmaugment} routine discussed in section \ref{augmentation}. 
+blood pressure (bp) and sex. Here we analyse blood pressure in the hyper dataset using both
+\code{scanone}
+single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping.
+First \emph{complete} missing data using the \code{mqmaugment} function (see also section \ref{augmentation}). 
 Because the hyper dataset has been selectively genotyped the minprob parameter of the augmentation is 
-set to 1 (omitting to set it would issue a warning and it would be automatically set to 1). 
-We could also have used the fill.geno function from R/qtl.
+set to 1.0 (omitting to set it would issue a warning and it would be automatically set to 1.0).
+As an alternative we could also have used the fill.geno function from R/qtl.
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
-\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment} minprob=1}
+\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with \code{mqmaugment} minprob=1.0}
 <<>>=
 data(hyper)
 data(multitrait)
