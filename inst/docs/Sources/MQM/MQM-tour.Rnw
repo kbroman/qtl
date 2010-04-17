@@ -310,15 +310,14 @@ legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
 
 \label{QTL modelling}
 
-The (rather famous) mouse hypertension dataset\cite{sugiyama}, distributed with
+The hypertension dataset\cite{sugiyama} (hyper), distributed with
 R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
 blood pressure (bp) and sex. Here we analyse blood pressure in the hyper dataset using both
 \code{scanone}
 single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping.
 First \emph{complete} missing data using the \code{mqmaugment} function (see also section \ref{augmentation}). 
-Because the hyper dataset has been selectively genotyped the minprob parameter of the augmentation is 
-set to 1.0 (omitting to set it would issue a warning and it would be automatically set to 1.0).
-As an alternative we could also have used the fill.geno function from R/qtl.
+Because the hyper dataset has been selectively genotyped the \code{minprob} parameter of the augmentation is 
+set to 1.0 (omitting it here would issue a warning and automatically set to 1.0).
 
 % \texttt{qtl.mqm} help page into a \LaTeX{} document
 
@@ -333,11 +332,12 @@ result_multiaug_no_cofactors <- mqmscan(multiaug)
 @
 
 After filling in missing genotypes in the dataset \code{data(hyper)},  
-we scan for \qtl\ using the \code{mqm} routines (using default parameters).
+we scan for \qtl\ using the \mqm\ routines (using default parameters).
 
 We will compare these results to those from \code{scanone}, for which
-one would first calculate conditional QTL genotype probabilities via
-\code{calc.genoprob}.  
+one first calculates conditional QTL genotype probabilities via
+\code{calc.genoprob} (see also section \ref{augmentation}).
+
 <<>>=
 hyper <- calc.genoprob(hyper, step=5)
 multitrait <- calc.genoprob(multitrait, step=5)
@@ -345,55 +345,65 @@ result_scanone <- scanone(hyper)
 result_multi_scanone <- scanone(multitrait)
 @
 
-As seen in Figure~\ref{NoCofs}, with default parameter the result from the 
-mqm scan are similar to the scanone scan results. There are however mayor 
-differences between the two methods. which will become clear in the next part of this section.
+Figure \ref{NoCofs} shows that, with default parameters, the results from 
+\mqm\ are similar to \code{scanone}. There are, however, major 
+differences between the two methods, which will become clear in the next part.
+
 \begin{figure}
 <<NoCofs,fig=TRUE,echo=FALSE,height=3>>=
 plot(result_no_cofactors, result_scanone, col=c("black", "green"), lty=1:2)
 @
-\caption{\hyperintrocolors. The results
-are similar when used without \emph{augmentation\/} and with no extra parameters.\label{NoCofs}}
+\caption{\hyperintrocolors. 
+\mqm\ shows similar results as single \qtl\ mapping, 
+when used without \emph{augmentation\/} (\code{minprob} is 1.0), and with default parameters
+\label{NoCofs}}
 \end{figure}
+
 \begin{figure}
 <<NoCofsListeria,fig=TRUE,echo=FALSE,height=3>>=
 plot(result_multiaug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
 @ 
-\caption{multitrait dataset: mqm versus scanone}
+\caption{\Atintro. 
+\mqm\ shows similar results as single \qtl\ mapping, 
+when used without \emph{augmentation\/} (\code{minprob} is 1.0), and with default parameters
+\label{AtNoCofs}}
 \end{figure}
 
+\MQM\ introduces pseudo markers at fixed intervals, by default, unlike
+\code{scanone}.  A pseudo marker has a name like c7.loc25 - which is the 25
+\cM\ pseudo marker on chromosome 7. Note that this reflects the standard naming
+used in R/qtl.
 
-MQM introduces pseudo markers by default (unlike \code{scanone}, which
-relied on \code{calc.genoprob} and by default just considers the
-marker locations). A pseudo
-marker has a name like c7.loc25 - i.e. the 25 \cM\ pseudo marker on
-chromosome 7. This reflects the format used in \code{scanone}. The chromosomes are divided into
-equally spaced sections. Therefore each chromosome is divided into fictional
-markers spaced equally \code{stepsize} \cM\ apart. A LOD score for underlying QTLs
-is calculated at these fictional pseudo markers. A small \code{stepsize} allows for
-smoother profiles compared with pure marker based mapping approaches. The real
-markers are listed between the pseudo markers. In the result you can remove the
-pseudo markers by using the function \code{mqmextractmarkers}, as follows:
+The chromosomes are divided into equally spaced sections. Therefore each
+chromosome is divided into fictional markers spaced equally \code{stepsize}
+\cM\ apart. A LOD score for underlying QTLs is calculated at these 
+pseudo markers. A small \code{stepsize} allows for smoother profiles compared
+with pure marker based mapping approaches. The real markers are listed between
+the pseudo markers. In the result you can remove the pseudo markers by using
+the function \code{mqmextractmarkers}, as follows:
+
 <<>>=
 just_markers <- mqmextractmarkers(result_no_cofactors)
 @ 
 
 
-For (automatic) model selection in \mqm\ we first need to supply the
+For model selection in \mqm\ we first need to supply the
 algorithm with an initial model.  This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
 backward elimination on a large number of markers. 
 
-First we will demonstrate building the initial model by hand using a forward
-stepwise approach. (NOTE: The automated procedure is preferred, both for
-theoretical and practical reasons.) A model consists of a set of markers we
-want to account for. We can start building the initial model by adding cofactors
-at markers with high LOD scores. Figure~\ref{NoCofs} displayed a large QTL peak
-on chromosome 4 at 30 \cM, so let us account for that by setting a cofactor at
-the marker nearest to the peak on chromosome 4 and perform a new \mqm\ scan
-(result in Figures~\ref{Cofactor4} and \ref{Cofactor4b}):
+Here we first build this initial model by hand using a forward
+stepwise approach (note that the automated procedure is preferred, both for
+theoretical and practical reasons). A model consists of a set of markers we
+want to account for. We can start building the initial model by adding
+cofactors at markers with high LOD scores scored by using \code{mqmscan} with
+default values. Figure~\ref{NoCofs} displayed a large QTL peak on chromosome 4
+at 30 \cM. So account for that by setting a cofactor at the marker
+nearest to the peak on chromosome 4 and perform a new \code{mqmscan} (see
+figures \ref{Cofactor4} and \ref{Cofactor4b}).
 
-\intro{Add marker D4Mit164 as a cofactor}
+\intro{Add marker D4Mit164 (chromosome 4, at 30 \cM) as a cofactor}
+
 <<>>=
 max(result_no_cofactors)
 find.marker(hyperaug,chr=4,pos=30)
@@ -401,7 +411,8 @@ toset <- find.markerindex(hyperaug,"D4Mit164")
 cofactorlist <- mqmsetcofactors(hyperaug,cofactors=toset)
 result_1 <- mqmscan(hyperaug, cofactorlist)
 @
-\intro{SAME FOR MULTI}
+
+\intro{Similarly for the multitrait dataset}
 <<>>=
 max(result_multiaug_no_cofactors)
 find.marker(multiaug,chr=5,pos=35)
@@ -417,7 +428,6 @@ sets up a cofactor list for use with \code{mqmscan}.
 
 \intro{Plot the results of the genome scan after adding a single cofactor}
 
-We may plot the \MQM\ results, with the single cofactor, as follows:
 <<Cofactor4,eval=FALSE>>=
 par(mfrow = c(2,1))
 plot(mqmgetmodel(result_1))
@@ -446,7 +456,9 @@ plot(result_multi_1)
 # plot after adding first cofactor
 <<Cofactor4multi>>
 @
-\caption{SAME MULTITRAIT} 
+\caption{\Atintro. A cofactor is added and kept in the
+model
+\label{AtCofactor4}} 
 \end{figure}
 
 
