@@ -373,16 +373,16 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 used in R/qtl.
 
 The chromosomes are divided into equally spaced sections. Therefore each
-chromosome is divided into fictional markers spaced equally \code{stepsize}
+chromosome is divided into `fictional markers' spaced equally \code{stepsize}
 \cM\ apart. A LOD score for underlying QTLs is calculated at these 
 pseudo markers. A small \code{stepsize} allows for smoother profiles compared
 with pure marker based mapping approaches. The real markers are listed between
 the pseudo markers. In the result you can remove the pseudo markers by using
 the function \code{mqmextractmarkers}, as follows:
 
-<<>>=
-just_markers <- mqmextractmarkers(result_no_cofactors)
-@ 
+% <<>>=
+% just_markers <- mqmextractmarkers(result_no_cofactors)
+% @ 
 
 
 For model selection in \mqm\ we first need to supply the
