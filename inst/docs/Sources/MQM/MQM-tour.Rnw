@@ -57,7 +57,7 @@ Despite these limitations, \mqm\footnote{MQM should not be confused with
 composite interval mapping (CIM) \cite{CIMa,CIMb}.  The great advantage of MQM
 over CIM is reduction of type I error (a QTL is indicated at a location where there
 is no QTL present) and type II error (a QTL is not detected) for QTL detection
-\cite{Jansen:1994b} } is a valuable addition to the \qtl\ mapper's toolbox. It
+\cite{jansen94b} } is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
 handles missing data and has higher precision than other methods.  R/qtl's
 \mqm\ is faster than other implementations and scales on multi-CPU systems and
@@ -67,12 +67,12 @@ computer clusters.  In this tutorial we will show you how to use \mqm\ for
 \mqm\ is an integral part of the free \rqtl\
 package\cite{rqtlbook,broman09,broman03} for the R statistical
 language\footnote{We assume the reader knows how to load his data into R using
-the R/qtl \code{read.cross} function, see also the R/qtl tutorials\cite{broman09}
+the R/qtl \code{read.cross} function; see also the R/qtl tutorials\cite{broman09}
 and book\cite{rqtlbook}}. 
 
 \section{A quick overview of \mqm}
 
-These are the typical steps in an \mqm\ \qtl\ analysis using the statistical R language:
+These are the typical steps in an \mqm\ \qtl\ analysis:
 
 \begin{itemize}
 \item Load an experiment in R using R/qtl data types
@@ -96,7 +96,7 @@ the trait. The algorithm passes through the following stages:
       genome scan testing each genetic location independently
 \end{itemize}
 
-The interval map created during the genome scan and the \qtl\ model are
+The results created during the genome scan and the \qtl\ model are
 returned as an (\mqm\ extended) R/qtl \code{scanone} object. Several special
 plotting routines are available for \mqm\ results.
 
@@ -156,19 +156,17 @@ all possible genotypes of interest by leaving them in the solution space. In con
 the imputation method \emph{selects} the most likely genotype, and uses that
 single (and probably fictional individual) for further analysis. 
 
-The downside of augmentation is that many adding possible genotypes can
-mushroom the solution space out of available computer memory. Also a large
-number of potential genotypes may distort analysis. At this point augmentation
+The downside of augmentation is that the addition of many possible genotypes can
+exceed available computer memory.  Currently, augmentation
 drops an individual if there are too many possible genotypes. You can opt to
 use \code{fill.geno}'s imputation method, instead, when too many individuals
-are dropped, because of missing data. A future version of \code{mqmaugment} may
-take an automatic approach, using imputation with those individuals that can
-not be reasonably augmented.
+are omitted, because of missing data. A future version of \code{mqmaugment} may
+take an automatic approach, using imputation with those individuals that cannot be reasonably augmented.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
-procedure\footnote{Note that after augmentation the resulting use imputation for dropped individuals object is
-no longer suitable for the use with other R\\qtl mapping functions, like \code{scanone} and \cim, because of the
-additional information stored}.  
+procedure\footnote{Note that after augmentation the resulting object is
+no longer suitable for the use with other R/qtl mapping functions, like \code{scanone} and \cim, because of the
+duplication or potential omission of many individuals}.  
 In this tutorial we use \mqm's augmentation. The function \code{mqmaugment} fills in
 missing genotypes for us. For each missing genotype data, at a marker, it fills
 in all possible genotypes and calculates the probability. When the total
@@ -194,8 +192,9 @@ set \code{minprob} to the percentage of data missing. Furthermore augmentation c
 datasets, these will always be handled with minprob=1.0 (a warning will be issued). A value of \code{minprob=1.0} 
 prevents the dropping of individuals, making augmentation behave similar to \code{fill.geno}'s 
 imputation method, though with different selected genotypes}.  
-Use the verbose option to get more feedback on the augmentation routine and check how many
-individuals are dropped. So first we try augmentation with \code{minprob=1.0} (Figure~\ref{augment1}):
+Use \code{verbose=TRUE} to get more feedback on the augmentation
+routine and to check how many
+individuals are dropped. First we try augmentation with \code{minprob=1.0} (Figure~\ref{augment1}):
 
 \intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
 <<>>=
@@ -245,10 +244,11 @@ all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/
 individual).\label{augment2}}
 \end{figure}
 
-Now we use a the a real dataset
-(multitrait), which contains 24 metabolite traits from a RIL population of \At. 
+Now we use a real dataset
+(\code{multitrait}), which contains 24 metabolite traits from a RIL population of \At. 
 
-\intro{Simulate missing data by removing some genotypedata (5\%, 10\% and 80\%) from the crossobject}
+\intro{Simulate missing data by removing some genotype data (5\%, 10\%
+  and 80\%) from the cross object}
 
 <<augment3>>=
 data(multitrait)
@@ -258,7 +258,7 @@ multimissing80 <- simulateMissingData(multitrait,80)
 @
 
 Next use augmentation to fill in the missing genotypes; with more missing data
-increase the minprob parameter.  When the \code{minprob} parameter is set too
+increase the \code{minprob} parameter.  When the \code{minprob} parameter is set too
 low it is possible that an individual cannot be augmented enough, is removed
 from the dataset (to prevent memory overflow), and genotype information is lost.
 
@@ -289,12 +289,12 @@ resultsone80 <- scanone(multimissing80)
 op <- par(mfrow=c(2,2))
 plot(result5perc,result10perc,result80perc,main="Missing data compare")
 legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("black","blue","red"),lwd=1)
-plot(resultsone5,result5perc,main="5% Missing")
-legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
-plot(resultsone10,result10perc,main="10% Missing")
-legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
-plot(resultsone80,result80perc,main="80% Missing")
-legend("topleft",c("scanone","mqm"),col=c("black","blue"),lwd=1)
+plot(resultsone5,result5perc,main="5% Missing", col=c("blue", "red"))
+legend("topleft",c("scanone","mqm"),col=c("blue","red"),lwd=1)
+plot(resultsone10,result10perc,main="10% Missing", col=c("blue", "red"))
+legend("topleft",c("scanone","mqm"),col=c("blue","red"),lwd=1)
+plot(resultsone80,result80perc,main="80% Missing", col=c("blue", "red"))
+legend("topleft",c("scanone","mqm"),col=c("blue","red"),lwd=1)
 @ 
 
 \begin{figure}
