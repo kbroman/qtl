@@ -244,8 +244,15 @@ all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/
 individual).\label{augment2}}
 \end{figure}
 
-Now we use a real dataset
-(\code{multitrait}), which contains 24 metabolite traits from a RIL population of \At. 
+A real dataset (\code{multitrait}), which contains 24 metabolite
+traits from a RIL population of \At.  The \code{multitrait} dataset comes with
+R/qtl (\code{data(multitrait)}) and is part of the \At\ RIL selfing experiment
+with Landsberg erecta (Ler) and Cape Verde Islands (Cvi) with 162 individuals
+scored (with errors at) 117 markers\cite{Koornneef:1998}. The experiment
+concerned empirical untargeted metabolomics using liquid chromatography-time of
+flight mass spectrometry (LC-QTOF MS). This uncovered many qualitative and
+quantitative differences in metabolite accumulation between \At\ accessions
+\cite{Keurentjes:2006}.
 
 \intro{Simulate missing data by removing some genotype data (5\%, 10\%
   and 80\%) from the cross object}
@@ -311,7 +318,7 @@ legend("topleft",c("scanone","mqm"),col=c("blue","red"),lwd=1)
 \label{QTL modelling}
 
 The hypertension dataset\cite{sugiyama} (hyper), distributed with
-R/qtl, is a backcrossed (BC) offspring of mice with two listed traits:
+R/qtl, which is a backcrossed (BC) offspring of mice with two listed traits:
 blood pressure (bp) and sex. Here we analyse blood pressure in the hyper dataset using both
 \code{scanone}
 single marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping.
@@ -1202,12 +1209,21 @@ mqmplot.circle(multiloc,resall, highlight=2)
          Zeng, Z. B.; 1994 \emph{Precision mapping of quantitative
            trait loci.}
          Genetics, 136, 1457--1468
-
   \bibitem{sugiyama}
     Sugiyama, F.; Churchill, G.A.; Higgins, D.C.; Johns, C.;
     Makaritsis, K.P.; Gavras, H.; Paigen, B.; 2001. \emph{Concordance
       of murine quantitative trait loci for salt-induced hypertension
       with rat and human loci} Genomics, 71, 70--77. 
+  \bibitem{Keurentjes:2006}
+Keurentjes, J. J. and Fu, J. and de Vos, C. H. and Lommen, A. and Hall, R. D. and Bino, R. J. and van der Plas, L. H. and Jansen, R. C. and Vreugdenhil, D. and Koornneef, M.
+     (2006), \emph{The genetics of plant metabolism.} Nature Genetics.
+     38-7, 842--849
+  \bibitem{Koornneef:1998}
+Alonso-Blanco, C. and Peeters, A. J. and Koornneef, M. and Lister, C. and Dean, C. and van den Bosch, N. and Pot, J. and Kuiper, M. T.; 1998
+     \emph{
+Development of an AFLP based linkage map of Ler, Col and Cvi
+     Arabidopsis thaliana ecotypes and construction of a Ler/Cvi recombinant
+     inbred line population}. Plant J. 14(2), 259--271.
 
 \end{thebibliography}
 \end{document}
