@@ -526,11 +526,11 @@ result_multi_2 <- mqmscan(multiaug, multicofactorlist)
 \intro{Plot after adding second cofactor}
 
 We may plot the results with one and two cofactors as follows:
-<<twowaycomparison,eval=FALSE>>=
-par(mfrow = c(2,1))
-plot(mqmgetmodel(result_2))
-plot(result_2, result_1, col=c("black","green"), lty=1:2)
-@ 
+% <<twowaycomparison,eval=FALSE>>=
+% par(mfrow = c(2,1))
+% plot(mqmgetmodel(result_2))
+% plot(result_2, result_1, col=c("black","green"), lty=1:2)
+% @ 
 
 % \begin{figure}
 % <<fig=TRUE,echo=FALSE>>=
@@ -566,22 +566,23 @@ plot(result_multi_2, result_multi_1, col=c("black","green"), lty=1:2)
 
 
 We may plot the results with 0, 1 and 2 cofactors as follows:
-<<threewaycomparison,eval=FALSE>>=
-plot(result_no_cofactors, result_1, result_2, chr=c(1,11,15),
-     col=c("black","red","blue"), lty=1:3)
-@ 
 
-\begin{figure}
-<<fig=TRUE,echo=FALSE,height=3>>=
-# plot closeup of threeway comparison
-<<threewaycomparison>>
-@
-\caption{Three way comparison of the \MQM\ scans with no cofactors (black), 
-a single cofactor on chromosome 4 (red, dashed) and cofactors on chromosome 1
-and 4 (blue, dotted).
-The LOD scores on chromosome 1 increase with more cofactors, while the peaks on
-the chromosome 11 and 15 decrease.\label{threewaycomparison}}
-\end{figure}
+% <<threewaycomparison,eval=FALSE>>=
+% plot(result_no_cofactors, result_1, result_2, chr=c(1,11,15),
+%      col=c("black","red","blue"), lty=1:3)
+% @ 
+% 
+% \begin{figure}
+% <<fig=TRUE,echo=FALSE,height=3>>=
+% # plot closeup of threeway comparison
+% <<threewaycomparison>>
+% @
+% \caption{Three way comparison of the \MQM\ scans with no cofactors (black), 
+% a single cofactor on chromosome 4 (red, dashed) and cofactors on chromosome 1
+% and 4 (blue, dotted).
+% The LOD scores on chromosome 1 increase with more cofactors, while the peaks on
+% the chromosome 11 and 15 decrease.\label{threewaycomparison}}
+% \end{figure}
 
 % ---------------------
 <<threewaycomparisonmulti,eval=FALSE>>=
@@ -1048,12 +1049,12 @@ show in the generated PDF, but in R it shows the trait profiles)
 mqmplot.multitrait(resall,type="lines")
 @
 
-% \begin{figure}
-% <<fig=TRUE>>=
-% mqmplot.multitrait(resall,type="lines")
-% @
-% \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
-% \end{figure}
+\begin{figure}
+<<fig=TRUE>>=
+mqmplot.multitrait(resall,type="lines")
+@
+\caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
+\end{figure}
 
 The next plot is the \code{mqmplot\_circle}. It shows a circular
 representation of the genome. After using automatic backward selection
