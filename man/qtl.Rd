@@ -7,8 +7,8 @@
 R/qtl package description
 }
 
-\section{Introduction}{
-}
+%\section{Introduction}{
+%}
 
 \references{
   Boyartchuk V. L., Broman, K. W., Mosher, R. E., D'Orazio

@@ -17,11 +17,11 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 3/26/2010:
+Version 1.15, 4/17/2010:
 
 Major changes:
 
-  None.
+  [Need to describe the MQM stuff here]
 
 Minor changes:
 
