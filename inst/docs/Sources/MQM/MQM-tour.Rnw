@@ -29,10 +29,10 @@
 \newcommand{\intro}[1]{\vspace{0.15in}#1:}
 \newcommand{\code}{\texttt}
 
-\newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
-pressure) in an experiment with 250 mice using \mqm}
-\newcommand{\hyperintrocolors}{\qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
-single \qtl\ mapping with \code{scanone} (green, dashed) }
+% \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
+% pressure) in an experiment with 250 mice using \mqm}
+% \newcommand{\hyperintrocolors}{\qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
+% single \qtl\ mapping with \code{scanone} (green, dashed) }
 \newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes\cite{Keurentjes:2006}}
 \newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (black) and
 single \qtl\ mapping with \code{scanone} (green, dashed) }
@@ -878,34 +878,36 @@ using the \code{effectplot} function. To investigate the possible
 interaction we select markers D1Mit19 (significant in Figure~\ref{Backward1}) 
 and D1Mit102 (significant in Figure~\ref{Backward2} and
 \ref{AutoCofactor}). See Figure~\ref{epistatic1}.
-<<epistatic1,eval=FALSE>>=
-effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
-@ 
 
-\begin{figure}
-<<fig=TRUE,echo=FALSE,height=3.5>>=
-<<epistatic1>>
-@
-\caption{\hyperintro. \code{effectplot} shows possible small epistatic effects between
-markers D1Mit19 and D1Mit102\label{epistatic1}}
-\end{figure}
+% <<epistatic1,eval=FALSE>>=
+% effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
+% @ 
+
+% \begin{figure}
+% <<fig=TRUE,echo=FALSE,height=3.5>>=
+% <<epistatic1>>
+% @
+% \caption{\hyperintro. \code{effectplot} shows possible small epistatic effects between
+% markers D1Mit19 and D1Mit102\label{epistatic1}}
+% \end{figure}
 
 Likewise, in case we are interested in the interactions between
 chromosomes 1 and 5, we could make interaction plots between the two
 markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}.
-<<epistatic2,eval=FALSE>>=
-effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
-@ 
-Figure~\ref{epistatic2} shows little evidence for an interaction between
-the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
 
-\begin{figure}
-<<fig=TRUE,echo=FALSE,height=3.5>>=
-<<epistatic2>>
-@
-\caption{\hyperintro. \code{effectplot} shows little evidence for an
-  epistatic interaction between markers D1Mit102 and D5Mit213\label{epistatic2}}
-\end{figure}
+% <<epistatic2,eval=FALSE>>=
+% effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
+% @ 
+% Figure~\ref{epistatic2} shows little evidence for an interaction between
+% the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
+
+% \begin{figure}
+% <<fig=TRUE,echo=FALSE,height=3.5>>=
+% <<epistatic2>>
+% @
+% \caption{\hyperintro. \code{effectplot} shows little evidence for an
+%   epistatic interaction between markers D1Mit102 and D5Mit213\label{epistatic2}}
+% \end{figure}
 
 \clearpage
 
@@ -933,25 +935,25 @@ and install any dependencies needed. Linux users can download a copy of SNOW fro
 has finished downloading the tar.gz file can be installed using R CMD INSTALL snow.tar.gz
 
 \intro{Calculate significance - using SNOW parallelization parameters}
-<<>>=
-require(snow)
-results <- mqmpermutation(hyperaug,scanfunction=mqmscan,cofactors=cofactorlist,n.cluster=2,n.perm=25,batchsize=25)
-@
-\begin{figure}
-<<fig=TRUE>>=
-mqmplot.permutations(results)
-@
-\caption{\hyperintro. Calculate significance permuting 25 times over \qtl\ with
-a \lod\ higher than 2.5 LOD score can be considered significant (at
-\code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
-Estimation from permuting a single trait. Chromosomes are signified by
-the gray grid lines.}
-\end{figure}
+% <<>>=
+% require(snow)
+% results <- mqmpermutation(hyperaug,scanfunction=mqmscan,cofactors=cofactorlist,n.cluster=2,n.perm=25,batchsize=25)
+% @
+% \begin{figure}
+% <<fig=TRUE>>=
+% mqmplot.permutations(results)
+% @
+% \caption{\hyperintro. Calculate significance permuting 25 times over \qtl\ with
+% a \lod\ higher than 2.5 LOD score can be considered significant (at
+% \code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
+% Estimation from permuting a single trait. Chromosomes are signified by
+% the gray grid lines.}
+% \end{figure}
 
-<<>>=
-resultsrqtl <- mqmprocesspermutation(results)
-summary(resultsrqtl)
-@
+% <<>>=
+% resultsrqtl <- mqmprocesspermutation(results)
+% summary(resultsrqtl)
+% @
 
 For small datasets, with a limited amount of classical traits, \code{mqmpermutation}
 works fine. For large genome wide association studies (GWAS) use \code{mqmscanfdr}
@@ -1201,11 +1203,11 @@ mqmplot.circle(multiloc,resall, highlight=2)
          Zeng, Z. B.; 1994 \emph{Precision mapping of quantitative
            trait loci.}
          Genetics, 136, 1457--1468
-  \bibitem{sugiyama}
-    Sugiyama, F.; Churchill, G.A.; Higgins, D.C.; Johns, C.;
-    Makaritsis, K.P.; Gavras, H.; Paigen, B.; 2001. \emph{Concordance
-      of murine quantitative trait loci for salt-induced hypertension
-      with rat and human loci} Genomics, 71, 70--77. 
+  % \bibitem{sugiyama}
+  %   Sugiyama, F.; Churchill, G.A.; Higgins, D.C.; Johns, C.;
+  %   Makaritsis, K.P.; Gavras, H.; Paigen, B.; 2001. \emph{Concordance
+  %     of murine quantitative trait loci for salt-induced hypertension
+  %     with rat and human loci} Genomics, 71, 70--77. 
   \bibitem{Keurentjes:2006}
 Keurentjes, J. J. and Fu, J. and de Vos, C. H. and Lommen, A. and Hall, R. D. and Bino, R. J. and van der Plas, L. H. and Jansen, R. C. and Vreugdenhil, D. and Koornneef, M.
      (2006), \emph{The genetics of plant metabolism.} Nature Genetics.
