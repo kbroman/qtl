@@ -634,15 +634,15 @@ The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
 creates a list consisting of multiple cofactors that can be used for backward elimination. 
 \code{mqmautocofactor} is prefered when dealing with low samplesizes, because it takes the underlying marker 
 density into account. See Figure~\ref{ManualAuto} for a comparison on the multitrait dataset, using the 
-\code{mqmsetcofactors} function to set cofactors every 5th marker and \code{mqmautocofactor} to set 50 cofactors
-.After cofactor selection iteratively the MQM algorithm analyses all the markers and drops the least 
+\code{mqmsetcofactors} function to set cofactors every 5th marker and \code{mqmautocofactor} to set 50 cofactors.
+After cofactor selection iteratively the MQM algorithm analyses all the markers and drops the least 
 informative cofactor from the model. This step is repeated until a limited number of significant cofactors remains.
 
 After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set 50 cofactors using the automatic cofactor routine, 
 and we use the naive implementation of setcofactors to set a cofactor at every fifth
 marker using \code{mqmsetcofactors}, and assess which chromosomes may be implicated in
-the various traits in our multtrait metabolomics dataset pressure (results in Figures~\ref{Backward1} and \ref{Backward2}):
+the various traits in our multtrait metabolomics dataset (results in Figures~\ref{Backward1} and \ref{Backward2}):
 
 % \intro{Automatic cofactor selection through backward elimination}
 % <<>>=
@@ -650,7 +650,7 @@ the various traits in our multtrait metabolomics dataset pressure (results in Fi
 % result <- mqmscan(hyperaug, cofactorlist)
 % @
 
-<<>>=
+<<echo=FALSE>>=
 multicofactorlist <- mqmautocofactors(multiaug,50)
 autoresultmulti <- mqmscan(multiaug, multicofactorlist)
 multicofactorlist <- mqmsetcofactors(multiaug,5)
@@ -684,7 +684,10 @@ plot(mqmgetmodel(autoresultmulti))
 # plot result of cofactor backward elimination
 <<ManualAuto>>
 @
-\caption{\Atintro after introducing cofactors at every fifth (left) and Automatic marker selection (Right) AFTER backward elimination\label{ManualAuto}}
+\caption{\Atintro after introducing cofactors at every fifth marker (top) and 
+Automatic marker selection (bottom). We see that using \code{mqmautocofactor} does 
+place a cofactor at chromosome 1, while this one is missed by mqmsetcofactors
+(AFTER backward elimination this extra marker remains significant) \label{ManualAuto}}
 \end{figure}
 
 %---------------------------
