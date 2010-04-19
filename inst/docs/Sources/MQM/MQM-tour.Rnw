@@ -33,7 +33,7 @@
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{\qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
 single \qtl\ mapping with \code{scanone} (green, dashed) }
-\newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes\cite{Keurentjes:2006}}
+\newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes\cite{Keurentjes2006}}
 \newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (black) and
 single \qtl\ mapping with \code{scanone} (green, dashed) }
 
@@ -250,11 +250,11 @@ A real dataset (\code{multitrait}), which contains 24 metabolite
 traits from a RIL population of \At.  The \code{multitrait} dataset comes with
 R/qtl (\code{data(multitrait)}) and is part of the \At\ RIL selfing experiment
 with Landsberg erecta (Ler) and Cape Verde Islands (Cvi) with 162 individuals
-scored (with errors at) 117 markers\cite{Koornneef:1998}. The experiment
+scored (with errors at) 117 markers\cite{Koornneef1998}. The experiment
 concerned empirical untargeted metabolomics using liquid chromatography-time of
 flight mass spectrometry (LC-QTOF MS). This uncovered many qualitative and
 quantitative differences in metabolite accumulation between \At\ accessions
-\cite{Keurentjes:2006}.
+\cite{Keurentjes2006}.
 
 \intro{Simulate missing data by removing some genotype data (5\%, 10\%
   and 80\%) from the cross object}
@@ -320,7 +320,7 @@ legend("topleft",c("scanone","mqm"),col=c("blue","red"),lwd=1)
 \label{QTL modelling}
 
 The \code{multitrait} dataset, distributed with R/qtl, contains 24 metabolite
-traits from a RIL population of \At\cite{Keurentjes:2006} (see also section
+traits from a RIL population of \At\cite{Keurentjes2006} (see also section
 \ref{multitrait} and \code{help(multitrait)} in R).  
 
 Here we analyse the \code{multitrait} dataset using both \code{scanone} single
@@ -593,7 +593,7 @@ plot(result_multiaug_no_cofactors, result_multi_1, result_multi_2,
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{multi 0,1,2 cof}
+\caption{\Atintro Comparison between scanning using 0,1 and 2 cofactor(s)}
 \end{figure}
 % ---------------------
 
@@ -683,7 +683,7 @@ plot(backwardresultmulti)
 # plot result of cofactor backward elimination
 <<Backward1multi>>
 @
-\caption{backward on multi after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
+\caption{backward on \Atintro after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
 \end{figure}
 
 
@@ -731,7 +731,7 @@ plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Backward2multi>>
 @
-\caption{backward multi versus scanone \label{Backward2}}
+\caption{\Atintro Backward elimination using multiple cofactors compared to scanone \label{Backward2}}
 \end{figure}
 
 % -------------------------------
@@ -777,10 +777,11 @@ plot(multiresult)
 <<fig=TRUE,echo=FALSE>>=
 <<FigLowAlpha>>
 @
-\caption{Multi lower P (no change in model) \label{FigLowAlpha}}
+\caption{\Atintro With a lower cofactor.significance we get no change 
+in the model (the QTLs are still significant). However based on the 
+trait under examination and our samplesize, increasing cofactor.significance 
+could reduce the number of significant QTLs in our model  \label{FigLowAlpha}}
 \end{figure}
-
-
 
 %-----------------------
 
@@ -823,10 +824,10 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 
 The second column \code{info} in the result
 is calculated from the deviation of the \emph{ideal} marker
-distribution. For example, with a dataset of 100 Arabidopsis, when comparing two
+distribution. For example, with a dataset of 100 \At, when comparing two
 distinct phenotypes at a marker location, we have most power when both groups
-are equally divided into 50 Arabidopsis, and virtually no power when we have one
-mouse versus a group of 99 Arabidopsis. We can multiply the estimated \qtl\ effect by
+are equally divided into 50 \At, and virtually no power when we have one
+mouse versus a group of 99 \At. We can multiply the estimated \qtl\ effect by
 this information content to `clean' the QTL profile by giving less weight to
 less informative markers. Please note that the sample size already plays a
 role in calculating \qtl. Meanwhile it allows (informal) further
@@ -1260,11 +1261,11 @@ mqmplot.circle(multiloc,resall, highlight=2)
     Makaritsis, K.P.; Gavras, H.; Paigen, B.; 2001. \emph{Concordance
       of murine quantitative trait loci for salt-induced hypertension
       with rat and human loci} Genomics, 71, 70--77. 
-  \bibitem{Keurentjes:2006}
+  \bibitem{Keurentjes2006}
 Keurentjes, J. J. and Fu, J. and de Vos, C. H. and Lommen, A. and Hall, R. D. and Bino, R. J. and van der Plas, L. H. and Jansen, R. C. and Vreugdenhil, D. and Koornneef, M.
      (2006), \emph{The genetics of plant metabolism.} Nature Genetics.
      38-7, 842--849
-  \bibitem{Koornneef:1998}
+  \bibitem{Koornneef1998}
 Alonso-Blanco, C. and Peeters, A. J. and Koornneef, M. and Lister, C. and Dean, C. and van den Bosch, N. and Pot, J. and Kuiper, M. T.; 1998
      \emph{
 Development of an AFLP based linkage map of Ler, Col and Cvi
