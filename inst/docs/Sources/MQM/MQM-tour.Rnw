@@ -190,7 +190,7 @@ Note that setting this value too
 low may result in moving a lot of individuals to the second augmentation round as the parameter \code{maxaugind} is quickly
 reached. Increasing minprob (towards a value of 1.0) can keep individuals with more missing data inside the first 
 augmentation round, a good rule of thumb may be to set \code{minprob} to the percentage of data missing. A value of \code{minprob=1.0} 
-makes augmentation behave similar to \code{fill.geno}'s imputation method, though with slightly different genotypes}.  
+makes augmentation behave similar to \code{fill.geno}'s imputation method, though with slightly different genotypes.  
 Use \code{verbose=TRUE} to get more feedback on the augmentation routine and to check how many
 individuals are moved to the imputation / MostLikely / Removal. First we use the augmentation with \code{minprob=1.0}, 
 so basically doing an fill.geno (Figure~\ref{augment1}):
