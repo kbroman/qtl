@@ -953,7 +953,7 @@ markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}
  <<fig=TRUE,echo=FALSE,height=3.5>>=
  <<epistatic2>>
  @
- \caption{\multitrait, \code{effectplot} shows no epistatic effects between
+ \caption{multitrait, \code{effectplot} shows no epistatic effects between
  markers GH.117C and PVV4 \label{epistatic2}}
  \end{figure}
  
