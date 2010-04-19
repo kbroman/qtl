@@ -190,8 +190,7 @@ low may result in dropping individuals entirely as \code{maxaugind} is quickly
 reached\footnote{The current version drops individuals that go beyond \code{maxaugind}
 (a future release of \mqm\ may use imputation method for dropped individuals). Increasing minprob 
 (towards a value of 1.0) can keep these individuals inside the dataset too, a good rule of thumb may be to 
-set \code{minprob} to the percentage of data missing. Furthermore augmentation cannot handle selective genotyped 
-datasets (like the Mouse hyper dataset that comes with R/qtl), these will always be handled with minprob=1.0 (a warning will be issued). A value of \code{minprob=1.0} 
+set \code{minprob} to the percentage of data missing. A value of \code{minprob=1.0} 
 prevents the dropping of individuals, making augmentation behave similar to \code{fill.geno}'s 
 imputation method, though with different selected genotypes}.  
 Use \code{verbose=TRUE} to get more feedback on the augmentation
@@ -626,6 +625,7 @@ unsupervised backward elimination, which is described in the next section.
 % "setting cofactors every other marker" HUH? Waarom zou je dit willen doen?
 % Is dit de standaard proc? Raar. Moet toch afhangen van het aantal
 % individuen en van de locaties van de merkers????????
+% COMMENT: YES !!! vandaar dat we ook mqmautocofactors hebben
 
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
 setting cofactors beforehand. When the sample size allows, it a 
@@ -649,6 +649,7 @@ high blood pressure (results in Figures~\ref{Backward1} and \ref{Backward2}):
 % @
 
 <<>>=
+multicofactorlist <- mqmautocofactors(multiaug,50)
 multicofactorlist <- mqmsetcofactors(multiaug,5)
 backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
 @
@@ -790,7 +791,7 @@ significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 Figures can be reconstructed from the result of \code{mqmscan} using the
-\code{mqmplot\_one} function (see, for example, Figure~\ref{AutoCofactor}). Here the
+\code{mqmplot\_singletrait} function (see, for example, Figure~\ref{AutoCofactor}). Here the
 model and \qtl\ profile are retrieved.  These functions can only be used with
 \code{mqmscan}, as they require the additional information about the inferred \qtl\
 model.  The results also contain the \emph{estimated} information
@@ -822,10 +823,10 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 
 The second column \code{info} in the result
 is calculated from the deviation of the \emph{ideal} marker
-distribution. For example, with a dataset of 100 mice, when comparing two
+distribution. For example, with a dataset of 100 Arabidopsis, when comparing two
 distinct phenotypes at a marker location, we have most power when both groups
-are equally divided into 50 mice, and virtually no power when we have one
-mouse versus a group of 49 mice. We can multiply the estimated \qtl\ effect by
+are equally divided into 50 Arabidopsis, and virtually no power when we have one
+mouse versus a group of 99 Arabidopsis. We can multiply the estimated \qtl\ effect by
 this information content to `clean' the QTL profile by giving less weight to
 less informative markers. Please note that the sample size already plays a
 role in calculating \qtl. Meanwhile it allows (informal) further
