@@ -638,9 +638,10 @@ markers and drops the least informative from the model. This step is repeated
 until a limited number of significant cofactors is left.
 
 After backward elimination \mqm\ scans each chromosome using the model that
-includes the retained cofactors. Here we set a cofactor at every fifth
+includes the retained cofactors. Here we set 50 cofactors using the automatic cofactor routine, 
+and we use the naive implementation of setcofactors to set a cofactor at every fifth
 marker using \code{mqmsetcofactors}, and assess which chromosomes may be implicated in
-high blood pressure (results in Figures~\ref{Backward1} and \ref{Backward2}):
+the various traits in our multtrait metabolomics dataset pressure (results in Figures~\ref{Backward1} and \ref{Backward2}):
 
 % \intro{Automatic cofactor selection through backward elimination}
 % <<>>=
@@ -683,7 +684,7 @@ plot(backwardresultmulti)
 # plot result of cofactor backward elimination
 <<Backward1multi>>
 @
-\caption{backward on multi}
+\caption{backward on multi after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
 \end{figure}
 
 
@@ -731,7 +732,7 @@ plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Backward2multi>>
 @
-\caption{backward multi versus scanone}
+\caption{backward multi versus scanone \label{Backward2}}
 \end{figure}
 
 % -------------------------------
@@ -757,7 +758,7 @@ the significance level also has the advantage that we can be more sure of the \q
 % <<fig=TRUE,echo=FALSE>>=
 % <<FigLowAlpha>>
 % @
-% \caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination (\code{cofactor.significance = 0.002}).\label{FigLowAlpha}}
+% \caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination (\code{cofactor.significance = 0.002}).}
 % \end{figure}
 
 
@@ -777,7 +778,7 @@ plot(multiresult)
 <<fig=TRUE,echo=FALSE>>=
 <<FigLowAlpha>>
 @
-\caption{Multi lower P (no change in model)}
+\caption{Multi lower P (no change in model) \label{FigLowAlpha}}
 \end{figure}
 
 
@@ -852,13 +853,12 @@ This requires that \code{mqmscan} was run with
 %   multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
 % \end{figure}
 
-The results in Figure~\ref{FigLowAlpha} implied that QTL on chromosomes 1, 2, 4 and 5 are
-associated with blood pressure. If we want to investigate the effects
-of the QTL, we
-can use the functions \code{plot.pxg} and \code{effectplot}.
-The following plots show these for markers D1Mit102 (main effect,
-Figure~\ref{MainEffectsD1}) and the interaction between D1Mit102 and
-D5Mit213 (Figure~\ref{epistatic1}). 
+The results in Figure~\ref{FigLowAlpha} implied that QTL on chromosomes 4 and 5 are
+associated with the metabolite X3.Hydroxypropyl. If we want to investigate the effects
+of the QTL, we can use the functions \code{plot.pxg} and \code{effectplot}.
+The following plots show these for markers GH.117C (main effect,
+Figure~\ref{MainEffectsD1}) and the interaction between GH.117C and
+GA1 (Figure~\ref{epistatic1}). 
 
 % <<MainEffectsD1,eval=FALSE>>=
 % plot.pxg(hyperaug,marker="D1Mit102")
@@ -871,14 +871,29 @@ D5Mit213 (Figure~\ref{epistatic1}).
 % \caption{\hyperintro. Show effect of marker D1Mit102 using \code{plot.pgx}\label{MainEffectsD1}}
 % \end{figure}
 
-The initial scans for high blood pressure in Figure~\ref{Backward1}
-possibly show two \qtl\ on chromosome 1 (as there were two peaks in
-the LOD curve).  We 
-can investigate possible interactions between these putative QTL
+%----------------------------------------------
+
+<<MainEffectsD1,eval=FALSE>>=
+plot.pxg(multitrait,marker="GH.117C")
+@ 
+
+\begin{figure}
+<<fig=TRUE, echo=FALSE,height=3>>=
+<<MainEffectsD1>>
+@
+\caption{multitrait, Show effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}\label{MainEffectsD1}}
+\end{figure}
+
+%----------------------------------------------
+
+The initial scans for X3.Hydroxypropyl in Figure~\ref{Backward1}
+possibly show two main efect \qtl\ on chromosome 4 and 5.  We 
+can investigate possible interactions between these main effect QTLs
 using the \code{effectplot} function. To investigate the possible 
-interaction we select markers D1Mit19 (significant in Figure~\ref{Backward1}) 
-and D1Mit102 (significant in Figure~\ref{Backward2} and
+interaction we select markers GA1 (significant in Figure~\ref{Backward1} and Figure~\ref{Backward2}) 
+and GH.117C (significant in Figure~\ref{Backward2} and
 \ref{AutoCofactor}). See Figure~\ref{epistatic1}.
+
 % <<epistatic1,eval=FALSE>>=
 % effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
 % @ 
@@ -891,8 +906,26 @@ and D1Mit102 (significant in Figure~\ref{Backward2} and
 % markers D1Mit19 and D1Mit102\label{epistatic1}}
 % \end{figure}
 
-Likewise, in case we are interested in the interactions between
-chromosomes 1 and 5, we could make interaction plots between the two
+%-----------------------------------------------
+
+ <<epistatic1,eval=FALSE>>=
+ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
+ @ 
+
+ \begin{figure}
+ <<fig=TRUE,echo=FALSE,height=3.5>>=
+ <<epistatic1>>
+ @
+ \caption{multitrait, \code{effectplot} shows possible epistatic effects between
+ markers GH.117C and GA1 \label{epistatic1}}
+ \end{figure}
+
+%------------------------------------------------
+
+
+Likewise, in case we are interested in the interactions between the first small hump on
+chromosomes 1 (marker: PVV4 not significant) and the main efect on 5 (GH.117C), we could 
+make interaction plots between these two
 markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}.
 % <<epistatic2,eval=FALSE>>=
 % effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
@@ -907,6 +940,24 @@ markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}
 % \caption{\hyperintro. \code{effectplot} shows little evidence for an
 %   epistatic interaction between markers D1Mit102 and D5Mit213\label{epistatic2}}
 % \end{figure}
+
+%------------------------------------------------
+
+ <<epistatic2,eval=FALSE>>=
+ effectplot(multitrait, mname1="PVV4", mname2="GH.117C")
+ @ 
+ Figure~\ref{epistatic2} shows no evidence for an interaction between
+ the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
+ 
+ \begin{figure}
+ <<fig=TRUE,echo=FALSE,height=3.5>>=
+ <<epistatic2>>
+ @
+ \caption{\multitrait, \code{effectplot} shows no epistatic effects between
+ markers GH.117C and PVV4 \label{epistatic2}}
+ \end{figure}
+ 
+%------------------------------------------------ 
 
 \clearpage
 
