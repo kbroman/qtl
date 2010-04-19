@@ -985,25 +985,27 @@ and install any dependencies needed. Linux users can download a copy of SNOW fro
 has finished downloading the tar.gz file can be installed using R CMD INSTALL snow.tar.gz
 
 \intro{Calculate significance - using SNOW parallelization parameters}
-% <<>>=
-% require(snow)
-% results <- mqmpermutation(hyperaug,scanfunction=mqmscan,cofactors=cofactorlist,n.cluster=2,n.perm=25,batchsize=25)
-% @
-% \begin{figure}
-% <<fig=TRUE>>=
-% mqmplot.permutations(results)
-% @
-% \caption{\hyperintro. Calculate significance permuting 25 times over \qtl\ with
-% a \lod\ higher than 2.5 LOD score can be considered significant (at
-% \code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
-% Estimation from permuting a single trait. Chromosomes are signified by
-% the gray grid lines.}
-% \end{figure}
+ <<>>=
+ require(snow)
+ results <- mqmpermutation(multiaug,scanfunction=mqmscan,cofactors=multicofactorlist,n.cluster=2,n.perm=25,batchsize=25)
+ @
+ \begin{figure}
+ <<fig=TRUE>>=
+ mqmplot.permutations(results)
+ @
+ \caption{ Multitrait. Calculate significance permuting 25 times over \qtl\ with
+ a \lod\ higher than 2.5 LOD score can be considered significant (at
+ \code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
+ Estimation from permuting a single trait (X3.Hydroxypropyl). Chromosomes are signified by
+ the gray grid lines.}
+ \end{figure}
 
-% <<>>=
-% resultsrqtl <- mqmprocesspermutation(results)
-% summary(resultsrqtl)
-% @
+ <<>>=
+ #summarize the results, mqmprocespermutation makes the output 
+ #comparable to scanone when using n.perm parameter for permutation
+ resultsrqtl <- mqmprocesspermutation(results)
+ summary(resultsrqtl)
+ @
 
 For small datasets, with a limited amount of classical traits, \code{mqmpermutation}
 works fine. For large genome wide association studies (GWAS) use \code{mqmscanfdr}
