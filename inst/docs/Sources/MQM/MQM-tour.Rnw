@@ -391,7 +391,7 @@ stepwise approach (note that the automated procedure is preferred, both for
 theoretical and practical reasons). A model consists of a set of markers we
 want to account for. We can start building the initial model by adding
 cofactors at markers with high LOD scores scored by using \code{mqmscan} with
-default values. Figure~\ref{NoCofs} displayed a large QTL peak on chromosome 4
+default values. Figure~\ref{AtNoCofs} displayed a large QTL peak on chromosome 4
 at 30 \cM. So account for that by setting a cofactor at the marker
 nearest to the peak on chromosome 4 and perform a new \code{mqmscan} (see
 figures \ref{Cofactor4} and \ref{Cofactor4b}).
@@ -537,7 +537,7 @@ We may plot the results with one and two cofactors as follows:
 %   on chr 1 and 4 (green, dashed).  After introducing a
 % cofactors at chromosomes 1 and 4 there appears only a small difference in the likelihood 
 % scores for each chromosome. The LOD scores do not appear to improve much after adding 
-% the second cofactor on chromosome 4. But\ldots (see Figure~\ref{threewaycomparison})\label{twowaycomparison}}
+% the second cofactor on chromosome 4. )}
 % \end{figure}
 
 % --------------------------
@@ -552,7 +552,11 @@ plot(result_multi_2, result_multi_1, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE>>=
 <<twowaycomparison>>
 @
-\caption{multi 1 cof versus 2 cof}
+\caption{\Atintro using 1 cofactor (on chromosome 5) versus 2 cofactors (on chromosome 4 and 5)  After introducing a
+cofactors at chromosomes 4 there appears to be only a small difference in the likelihood scores for each chromosome. 
+The LOD scores do not appear to improve much after adding the second cofactor on chromosome 4. Indicating we have found 
+all underlying QTLs for this trait we could add more cofactors (see Figure~\ref{threewaycomparison} However this won't 
+improve the current 2 QTL model\label{twowaycomparison}}
 \end{figure}
 
 % ---------------------------
@@ -782,7 +786,7 @@ could reduce the number of significant QTLs in our model  \label{FigLowAlpha}}
 %-----------------------
 
 When comparing the \mqm\ scan in Figure~\ref{FigLowAlpha} with the original
-\code{scanone} result in Figure~\ref{NoCofs} there are some notable differences.
+\code{scanone} result in Figure~\ref{AtNoCofs} there are some notable differences.
 Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
@@ -815,7 +819,7 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{trait with multiple phenotypes, visualized using mqmplot.singletrait}
+\caption{\Atinto showing the results of trait 1 when using with multiple cofactors, visualized using mqmplot.singletrait \label{AutoCofactor}}
 \end{figure}
 
 The second column \code{info} in the result
