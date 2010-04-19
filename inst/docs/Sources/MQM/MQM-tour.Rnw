@@ -482,7 +482,7 @@ plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Cofactor4bMULTI>>
 @
-\caption{\Atinto after introducing a cofactor on chromosome 5 (GH.117C) we see a light increase in LOD scores. \label{Cofactor4b}}
+\caption{\Atintro after introducing a cofactor on chromosome 5 (GH.117C) we see a light increase in LOD scores. \label{Cofactor4b}}
 \end{figure}
 
 % ---------------------------
@@ -819,7 +819,7 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{\Atinto showing the results of trait 1 when using with multiple cofactors, visualized using mqmplot.singletrait \label{AutoCofactor}}
+\caption{\Atintro showing the results of trait 1 when using with multiple cofactors, visualized using mqmplot.singletrait \label{AutoCofactor}}
 \end{figure}
 
 The second column \code{info} in the result
