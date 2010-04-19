@@ -451,8 +451,7 @@ plot(result_multi_1)
 <<Cofactor4multi>>
 @
 \caption{\Atintro. A cofactor is added and kept in the
-model
-\label{AtCofactor4}} 
+model \label{Cofactor4}} 
 \end{figure}
 
 
@@ -483,7 +482,7 @@ plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Cofactor4bMULTI>>
 @
-\caption{MULTI4B}
+\caption{\Atinto after introducing a cofactor on chromosome 5 (GH.117C) we see a light increase in LOD scores. \label{Cofactor4b}}
 \end{figure}
 
 % ---------------------------
