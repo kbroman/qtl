@@ -630,12 +630,11 @@ unsupervised backward elimination, which is described in the next section.
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
 setting cofactors beforehand. When the sample size allows, it a 
 cofactor is set at every marker. However, normally only a subset of 
-locations is used.  The function:"\code{mqmsetcofactor}"
-{\color{red} \textbf{[I'm confused.  It had said ``The \code{cofactor}
-    function...'' (I think).]}}
-creates a list consisting of multiple cofactors. Iteratively the algorithm analyses all the
-markers and drops the least informative from the model. This step is repeated
-until a limited number of significant cofactors is left.
+locations is used, becuse of lack of sample size (we can set as many cofactors as we have individuals-12).  
+The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
+creates a list consisting of multiple cofactors that can be used for backward elimination. Iteratively 
+the MQM algorithm analyses all the markers and drops the least informative cofactor from the model. This step is repeated
+until a limited number of significant cofactors remains.
 
 After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set 50 cofactors using the automatic cofactor routine, 
@@ -739,7 +738,7 @@ plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
 
 \mqm\ \qtl\ mapping may result in many significant markers, with multiple 
 hits on each chromosome. Figure~\ref{Backward2} shows that at 
-\code{cofactor.significance=0.02} chromosomes 1,2,4,5,6 and 15(?) are involved. 
+\code{cofactor.significance=0.02} chromosomes 4 and 5 are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes preferred, but in general a simpler 
 model is more easily understood and, perhaps, validated. Decreasing 
@@ -1001,14 +1000,15 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
  \end{figure}
 
  <<>>=
- #summarize the results, mqmprocespermutation makes the output 
- #comparable to scanone when using n.perm parameter for permutation
+
  resultsrqtl <- mqmprocesspermutation(results)
  summary(resultsrqtl)
  @
 
 For small datasets, with a limited amount of classical traits, \code{mqmpermutation}
-works fine. For large genome wide association studies (GWAS) use \code{mqmscanfdr}
+works fine. To summarize these results, mqmprocespermutation makes the output 
+comparable to scanone when using n.perm parameter for permutation. 
+However for large genome wide association studies (GWAS) use \code{mqmscanfdr}
 instead, which estimates false discovery rates (FDR) across the entire dataset
 at \lod\ cutoff. The routines have similar parameters.
 
