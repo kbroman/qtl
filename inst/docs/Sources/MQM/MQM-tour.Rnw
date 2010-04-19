@@ -160,10 +160,11 @@ single (and probably fictional individual) for further analysis.
 
 The downside of augmentation is that the addition of many possible genotypes can
 exceed available computer memory.  Currently, augmentation
-drops an individual if there are too many possible genotypes. You can opt to
-use \code{fill.geno}'s imputation method, instead, when too many individuals
-are omitted, because of missing data. A future version of \code{mqmaugment} may
-take an automatic approach, using imputation with those individuals that cannot be reasonably augmented.
+moves an individual to a second augmentation round. In the second augmentation round 
+the user can specify what needs to be done with these genotypes: Fill in the most likely, 
+multiple imputation or removal from the analysis. This will only happen to individuals with 
+a lot of missing data (leading to too many possible genotypes). You can opt to
+use \code{fill.geno}'s imputation method, also.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
 procedure\footnote{Note that after augmentation the resulting object is
@@ -186,16 +187,13 @@ The \code{minprob} parameter sets the minimum probability of a genotype for
 inclusion in the augmented dataset. This genotype probability is calculated for
 every marker \emph{relative} to the most likely individual.
 Note that setting this value too
-low may result in dropping individuals entirely as \code{maxaugind} is quickly
-reached\footnote{The current version drops individuals that go beyond \code{maxaugind}
-(a future release of \mqm\ may use imputation method for dropped individuals). Increasing minprob 
-(towards a value of 1.0) can keep these individuals inside the dataset too, a good rule of thumb may be to 
-set \code{minprob} to the percentage of data missing. A value of \code{minprob=1.0} 
-prevents the dropping of individuals, making augmentation behave similar to \code{fill.geno}'s 
-imputation method, though with different selected genotypes}.  
-Use \code{verbose=TRUE} to get more feedback on the augmentation
-routine and to check how many
-individuals are dropped. First we try augmentation with \code{minprob=1.0} (Figure~\ref{augment1}):
+low may result in moving a lot of individuals to the second augmentation round as the parameter \code{maxaugind} is quickly
+reached. Increasing minprob (towards a value of 1.0) can keep individuals with more missing data inside the first 
+augmentation round, a good rule of thumb may be to set \code{minprob} to the percentage of data missing. A value of \code{minprob=1.0} 
+makes augmentation behave similar to \code{fill.geno}'s imputation method, though with slightly different genotypes}.  
+Use \code{verbose=TRUE} to get more feedback on the augmentation routine and to check how many
+individuals are moved to the imputation / MostLikely / Removal. First we use the augmentation with \code{minprob=1.0}, 
+so basically doing an fill.geno (Figure~\ref{augment1}):
 
 \intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
 <<>>=
@@ -277,8 +275,7 @@ multiaug10 <- mqmaugment(multimissing10,minprob=0.25)
 multiaug80 <- mqmaugment(multimissing80,minprob=0.80)
 @
 
-After augmentation check how many individuals still remain in the dataset.
-Normally, choose a value of \code{minprob} so no individuals are dropped.  Next
+After augmentation check how many individuals are expanded.  Next
 scan for QTLs inside the crossobjects with \code{mqmscan} and the single QTL
 mapping function \code{scanone} (for reference).  The effect of increasing the
 amount of missing data on QTL mapping, using default values, can been seen in figure \ref{augment6}.
