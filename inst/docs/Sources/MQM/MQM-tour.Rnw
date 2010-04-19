@@ -890,7 +890,7 @@ GA1 (Figure~\ref{epistatic1}).
 
 %----------------------------------------------
 
-<<MainEffectsD1,eval=FALSE>>=
+<<MainEffectsD1,echo=FALSE,eval=FALSE>>=
 plot.pxg(multitrait,marker="GH.117C")
 @ 
 
@@ -908,8 +908,7 @@ possibly show two main efect \qtl\ on chromosome 4 and 5.  We
 can investigate possible interactions between these main effect QTLs
 using the \code{effectplot} function. To investigate the possible 
 interaction we select markers GA1 (significant in Figure~\ref{Backward1} and Figure~\ref{Backward2}) 
-and GH.117C (significant in Figure~\ref{Backward2} and
-\ref{AutoCofactor}). See Figure~\ref{epistatic1}.
+and GH.117C (significant in Figure~\ref{Backward2} and \ref{AutoCofactor}). See Figure~\ref{epistatic1}.
 
 % <<epistatic1,eval=FALSE>>=
 % effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
@@ -925,17 +924,17 @@ and GH.117C (significant in Figure~\ref{Backward2} and
 
 %-----------------------------------------------
 
- <<epistatic1,eval=FALSE>>=
- effectplot(multitrait, mname1="GH.117C", mname2="GA1")
- @ 
+<<epistatic1,eval=FALSE>>=
+effectplot(multitrait, mname1="GH.117C", mname2="GA1")
+@
 
- \begin{figure}
- <<fig=TRUE,echo=FALSE,height=3.5>>=
- <<epistatic1>>
- @
- \caption{multitrait, \code{effectplot} shows possible epistatic effects between
- markers GH.117C and GA1 \label{epistatic1}}
- \end{figure}
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3.5>>=
+<<epistatic1>>
+@
+\caption{multitrait, \code{effectplot} shows possible epistatic effects between
+markers GH.117C and GA1 \label{epistatic1}}
+\end{figure}
 
 %------------------------------------------------
 
@@ -960,19 +959,19 @@ markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}
 
 %------------------------------------------------
 
- <<epistatic2,eval=FALSE>>=
- effectplot(multitrait, mname1="PVV4", mname2="GH.117C")
- @ 
- Figure~\ref{epistatic2} shows no evidence for an interaction between
- the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
- 
- \begin{figure}
- <<fig=TRUE,echo=FALSE,height=3.5>>=
- <<epistatic2>>
- @
- \caption{multitrait, \code{effectplot} shows no epistatic effects between
- markers GH.117C and PVV4 \label{epistatic2}}
- \end{figure}
+<<epistatic2,eval=FALSE>>=
+effectplot(multitrait, mname1="PVV4", mname2="GH.117C")
+@ 
+Figure~\ref{epistatic2} shows no evidence for an interaction between
+the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3.5>>=
+<<epistatic2>>
+@
+\caption{multitrait, \code{effectplot} shows no epistatic effects between
+markers GH.117C and PVV4 \label{epistatic2}}
+\end{figure}
  
 %------------------------------------------------ 
 
@@ -1002,26 +1001,26 @@ and install any dependencies needed. Linux users can download a copy of SNOW fro
 has finished downloading the tar.gz file can be installed using R CMD INSTALL snow.tar.gz
 
 \intro{Calculate significance - using SNOW parallelization parameters}
- <<>>=
- require(snow)
- results <- mqmpermutation(multiaug,scanfunction=mqmscan,cofactors=multicofactorlist,n.cluster=2,n.perm=25,batchsize=25)
- @
- \begin{figure}
- <<fig=TRUE>>=
- mqmplot.permutations(results)
- @
- \caption{ Multitrait. Calculate significance permuting 25 times over \qtl\ with
- a \lod\ higher than 2.5 LOD score can be considered significant (at
- \code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
- Estimation from permuting a single trait (X3.Hydroxypropyl). Chromosomes are signified by
- the gray grid lines.}
- \end{figure}
+<<>>=
+require(snow)
+results <- mqmpermutation(multiaug,scanfunction=mqmscan,cofactors=multicofactorlist,n.cluster=2,n.perm=25,batchsize=25)
+@
+\begin{figure}
+<<fig=TRUE>>=
+mqmplot.permutations(results)
+@
+\caption{ Multitrait. Calculate significance permuting 25 times over \qtl\ with
+a \lod\ higher than 2.5 LOD score can be considered significant (at
+\code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
+Estimation from permuting a single trait (X3.Hydroxypropyl). Chromosomes are signified by
+the gray grid lines.}
+\end{figure}
 
- <<>>=
+<<>>=
 
- resultsrqtl <- mqmprocesspermutation(results)
- summary(resultsrqtl)
- @
+resultsrqtl <- mqmprocesspermutation(results)
+summary(resultsrqtl)
+@
 
 For small datasets, with a limited amount of classical traits, \code{mqmpermutation}
 works fine. To summarize these results, mqmprocespermutation makes the output 
