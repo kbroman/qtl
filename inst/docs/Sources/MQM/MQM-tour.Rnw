@@ -604,7 +604,7 @@ number of cofactors is compared against the number of individuals inside the
 cross object. If there is a danger of setting too many cofactors the two
 cofactor functions will warn the user by displaying an error about the user
 trying to set more cofactors than the sample size permits, and not return a
-cofactorlist.
+cofactorlist. This also happens inside the \code{mqmautocofactor} function.
 
 \mqm\ verifies the \code{cofactor.significance} level specified by the
 user. Above, the marker on chromosome 1 was informative enough to be included into the model,
@@ -632,9 +632,12 @@ setting cofactors beforehand. When the sample size allows, it a
 cofactor is set at every marker. However, normally only a subset of 
 locations is used, becuse of lack of sample size (we can set as many cofactors as we have individuals-12).  
 The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
-creates a list consisting of multiple cofactors that can be used for backward elimination. Iteratively 
-the MQM algorithm analyses all the markers and drops the least informative cofactor from the model. This step is repeated
-until a limited number of significant cofactors remains.
+creates a list consisting of multiple cofactors that can be used for backward elimination. 
+\code{mqmautocofactor} is prefered when dealing with low samplesizes, because it takes the underlying marker 
+density into account. See Figure~\ref{ManualAuto} for a comparison on the multitrait dataset, using the 
+\code{mqmsetcofactors} function to set cofactors every 5th marker and \code{mqmautocofactor} to set 50 cofactors
+.After cofactor selection iteratively the MQM algorithm analyses all the markers and drops the least 
+informative cofactor from the model. This step is repeated until a limited number of significant cofactors remains.
 
 After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set 50 cofactors using the automatic cofactor routine, 
@@ -650,16 +653,17 @@ the various traits in our multtrait metabolomics dataset pressure (results in Fi
 
 <<>>=
 multicofactorlist <- mqmautocofactors(multiaug,50)
+autoresultmulti <- mqmscan(multiaug, multicofactorlist)
 multicofactorlist <- mqmsetcofactors(multiaug,5)
 backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
 @
 
 We plot the results as follows:
-<<Backward1,eval=FALSE>>=
-par(mfrow = c(2,1))
-plot(mqmgetmodel(result))
-plot(result)
-@ 
+%<<Backward1,eval=FALSE>>=
+%par(mfrow = c(2,1))
+%plot(mqmgetmodel(result))
+%plot(result)
+%@ 
 
 % \begin{figure}
 % <<fig=TRUE,echo=FALSE>>=
@@ -669,6 +673,20 @@ plot(result)
 % \caption{\hyperintro, after introducing cofactors at every fifth marker and
 % backward elimination.\label{Backward1}}
 % \end{figure}
+
+<<ManualAuto,eval=FALSE>>=
+par(mfrow = c(2,1))
+plot(mqmgetmodel(backwardresultmulti))
+plot(mqmgetmodel(autoresultmulti))
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot result of cofactor backward elimination
+<<ManualAuto>>
+@
+\caption{\Atintro after introducing cofactors at every fifth (left) and Automatic marker selection (Right) AFTER backward elimination\label{ManualAuto}}
+\end{figure}
 
 %---------------------------
 
