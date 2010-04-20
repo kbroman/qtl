@@ -71,7 +71,7 @@ these points. Check the website and changelog for updates.
 
 \seealso{
 	\itemize{
-    \item The MQM tutorial (online)
+    \item The MQM tutorial, \url{http://www.rqtl.org/tutorials/MQM-tour.pdf}
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
