@@ -9,8 +9,8 @@
 Overview of the MQM mapping functions
 }
 
-\usage{
-}
+%\usage{
+%}
 
 \section{Introduction}{
 % \input{"inst/docs/Sources/MQM/mqm/description.txt"}

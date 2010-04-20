@@ -1,11 +1,8 @@
 
-The current implementation of R/qtl-MQM has the following recognized
+The current implementation of R/qtl-MQM has the following 
 limitations: (1) MQM is limited to experimental crosses F2, RIL and
-BC.  (2) MQM augmentation drops entire individuals from the equation
-when a lot of marker data is missing.  (3) MQM does not treat sex
+BC, (2) MQM does not treat sex
 chromosomes differently from autosomal chromosomes - though one can
-introduce sex as a cofactor. Finally, (4) automatic backward
-elimination sets cofactors at fixed locations and ignores underlying
-known marker density. Future versions of R/qtl-MQM may improve on
-these points. Check the changelog for updates.
+introduce sex as a cofactor. Future versions of R/qtl-MQM may improve on
+these points. Check the website and changelog for updates.
 
