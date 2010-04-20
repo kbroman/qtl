@@ -598,12 +598,12 @@ plot(result_multiaug_no_cofactors, result_multi_1, result_multi_2,
 
 
 
-When using the function \code{mqmsetcofactors}, the
+When using the functions: \code{mqmsetcofactors} or the automated \code{mqmautocofactor}, the
 number of cofactors is compared against the number of individuals inside the
 cross object. If there is a danger of setting too many cofactors the two
 cofactor functions will warn the user by displaying an error about the user
 trying to set more cofactors than the sample size permits, and not return a
-cofactorlist. This also happens inside the \code{mqmautocofactor} function.
+cofactorlist.
 
 \mqm\ verifies the \code{cofactor.significance} level specified by the
 user. Above, the marker on chromosome 1 was informative enough to be included into the model,
