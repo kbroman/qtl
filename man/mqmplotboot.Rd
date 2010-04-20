@@ -26,7 +26,7 @@ mqmplot.permutations(result, \dots)
 \value{ No value returned (plotting routine) }
 
 \author{ 
-  Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
+Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
   , Rutger Brouwer
 }
 
@@ -38,7 +38,7 @@ mqmplot.permutations(result, \dots)
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }

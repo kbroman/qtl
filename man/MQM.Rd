@@ -12,22 +12,30 @@ Overview of the MQM mapping functions
 
 \section{Introduction}{
 % \input{"inst/docs/Sources/MQM/mqm/description.txt"}
-Multiple QTL model (MQM) mapping is a powerful QTL mapping method
-developed by Ritsert C. Jansen\cite{jansen94}.  MQM is an automatic
-two-stage procedure in which, in the first stage, important markers
-are selected in multiple regression on markers. In the second stage a
-QTL is moved along the chromosomes by using the pre-selected markers
-as cofactors, except for the markers flanking the interval under
-study. A refined and automated procedure for cases with large numbers
-of marker cofactors is included.
+Multiple QTL Model (MQM) mapping provides a sensitive approach for
+mapping quantititive trait loci (QTL) in experimental populations. MQM
+adds higher statistical power compared to many other methods.  The
+theoretical framework of MQM mapping was introduced and explored by
+Ritsert Jansen, explained in the `Handbook of Statistical Genetics'
+(see references), and used effectively in practical research, with the
+commercial `mapqtl' software package. Here we present the first free
+and open source implementation of MQM, with extra features like high
+performance parallelization on multi-CPU computers, new plots and
+significance testing.
 
-MQM for R/qtl is based on the original implementation of MQM mapping
-and consists of a three step procedure: (1) data augmentation, (2)
-automatic backward model elimination using genetic markers evenly
-spread over the genome as cofactors and (3) QTL (interval) mapping
-using the most `informative' model through maximum likelihood. The
-method internally controls false discovery rates (FDR) and lets users
-test different QTL models by elimation of non-significant cofactors. 
+MQM is an automatic three-stage procedure in which, in the first
+stage, missing data is `augmented'. In other words, rather than guessing one
+likely genotype, multiple
+genotypes are modeled with their estimated
+probabilities.  In the second stage important markers are selected by
+multiple regression and backward elimination. In the third stage a QTL is moved
+along the chromosomes using these pre-selected markers as cofactors,
+except for the markers flanking the interval under study. QTL are
+(interval) mapped using the most `informative' model through maximum
+likelihood.  A refined and automated procedure for cases with large
+numbers of marker cofactors is included.  The method internally
+controls false discovery rates (FDR) and lets users test different QTL
+models by elimation of non-significant cofactors. 
 
 % -----^^ inst/docs/Sources/MQM/mqm/description.txt ^^-----
 % \input{"inst/docs/Sources/MQM/mqm/advantages_Rd.txt"}
@@ -48,15 +56,15 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \note{
 % \input{"inst/docs/Sources/MQM/mqm/limitations.txt"}
 
-The current implementation of R/qtl-MQM has the following recognized
+The current implementation of R/qtl-MQM has the following 
 limitations: (1) MQM is limited to experimental crosses F2, RIL and
-BC.  (2) MQM augmentation drops entire individuals from the equation
-when a lot of marker data is missing.  (3) MQM does not treat sex
+BC, (2) MQM augmentation drops entire individuals from the equation
+when a lot of marker data is missing, (3) MQM does not treat sex
 chromosomes differently from autosomal chromosomes - though one can
 introduce sex as a cofactor. Finally, (4) automatic backward
 elimination sets cofactors at fixed locations and ignores underlying
 known marker density. Future versions of R/qtl-MQM may improve on
-these points. Check the changelog for updates.
+these points. Check the website and changelog for updates.
 
 % -----^^ inst/docs/Sources/MQM/mqm/limitations.txt ^^-----
 }
@@ -70,7 +78,7 @@ these points. Check the changelog for updates.
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
