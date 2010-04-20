@@ -1,9 +1,7 @@
-\name{mqmintro}
-\alias{mqmintro}
+\name{MQM}
 \alias{MQM}
-\alias{mqm}
 
-\title{Multiple QTL Model (MQM) mapping}
+\title{Introduction to Multiple QTL Model (MQM) mapping}
 
 \description{
 Overview of the MQM mapping functions

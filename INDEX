@@ -91,6 +91,8 @@ markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
+MQM                     Introduction to Multiple QTL Model (MQM)
+                        mapping
 mqmaugment              MQM augmentation
 mqmautocofactors        Automatic creation of cofactors to be used with
                         mqm
@@ -98,7 +100,6 @@ mqmfind.marker          Fetch significant markers after permutation
                         analysis
 mqmgetmodel             Retrieve the QTL model used in mapping from the
                         results of an MQM scan
-mqmintro                Multiple QTL Model (MQM) mapping
 mqmloadanalysis         Enables loading of previously saved MQM
                         analysis from file
 mqmpermutation          Estimate QTL LOD score significance using
@@ -178,7 +179,6 @@ replacemap.scantwo      Replace the genetic map in QTL mapping results
 replaceqtl              Replace a QTL in a qtl object with a different
                         position.
 ripple                  Compare marker orders
-rqtl                    qtl
 scanone                 Genome scan with a single QTL model
 scanoneboot             Bootstrap to get interval estimate of QTL
                         location

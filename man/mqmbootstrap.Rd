@@ -38,12 +38,12 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
 	  \code{\link{scanone}}, \code{\link{cim}} or
-	    \code{\link{mqm}} functions} 
+	    \code{\link{mqmscan}} functions} 
 }
 
 \details{
   Analysis of \code{\link{scanone}}, \code{\link{cim}} or
-	    \code{\link{mqm}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
+	    \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
   The \code{snow} library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
 }
 
