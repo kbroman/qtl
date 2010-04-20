@@ -105,17 +105,20 @@ plotting routines are available for \mqm\ results.
 \section{Data augmentation}
 \label{augmentation}
 
-Most real world datasets are incomplete. That is, genotype information is
+Most real world datasets are incomplete. That is, genotype or phenotype information is
 missing, or can have multiple plausible values. \mqm\ automatically expands the
 dataset by adding all potential variants and attaches a probability to each.  For
 example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
-(estimated) recombination rate, a probability is attached.  With \mqm\ all
-likely options are considered.  When genotypes A and B are possible at the
-location two `individuals' are created in the augmentation step, one with
-genotype A, and one with genotype B. A probability is attached to either
-genotype. The combined probabilities of all markers tells us whether a
-genotype is likely, or unlikely.
+(estimated) recombination rate, a probability is attached to all possible genotypes.  With \mqm\ all
+possible genotypes with a probability above minprob are considered.  When encountering missing marker 
+in a RIL (possible genotypes A and B) all possible genotypes at the missing location are created.
+Thus at the missing location two `individuals' are created in the augmentation step, one with
+genotype A, and one with genotype B (given that both have a probability of occuring more than minprob).
+And the probability is attached to both genotypes. The combined probabilities of all missing marker 
+locations combined tells us whether a genotype is likely, or unlikely. So if a RIL is not missing 
+any markers it is kept in the set as a single individual with P=1.0, if there is one 
+missing marker and genotype A is as likely as B then two individuals are created each with P=0.5.
 
 To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{geno.image}. In
