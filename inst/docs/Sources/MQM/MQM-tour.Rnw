@@ -192,7 +192,7 @@ reached. Increasing minprob (towards a value of 1.0) can keep individuals with m
 augmentation round, a good rule of thumb may be to set \code{minprob} to the percentage of data missing. A value of \code{minprob=1.0} 
 makes augmentation behave similar to \code{fill.geno}'s imputation method, though with slightly different genotypes.  
 Use \code{verbose=TRUE} to get more feedback on the augmentation routine and to check how many
-individuals are moved to the imputation / MostLikely / Removal. First we use the augmentation with \code{minprob=1.0}, 
+individuals are moved to the imputation / mostLikely / removal. First we use the augmentation with \code{minprob=1.0}, 
 so basically doing an fill.geno (Figure~\ref{augment1}):
 
 \intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
@@ -266,8 +266,9 @@ multimissing80 <- simulateMissingData(multitrait,80)
 
 Next use augmentation to fill in the missing genotypes; with more missing data
 increase the \code{minprob} parameter.  When the \code{minprob} parameter is set too
-low it is possible that an individual cannot be augmented enough, is removed
-from the dataset (to prevent memory overflow), and genotype information is lost.
+low it is possible that an individual cannot be augmented, this individuals is the 
+moved to the second round for augmentation and is augmented using (based on the user settings): imputation / mostLikely / removalremoved
+from the dataset (to prevent memory overflow), So no genotype information is lost.
 
 <<augment4>>=
 multiaug5 <- mqmaugment(multimissing5)
