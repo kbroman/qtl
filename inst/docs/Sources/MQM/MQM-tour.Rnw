@@ -970,7 +970,9 @@ the two markers D1Mit102 and D5Mit213, as the lines are close to parallel.
 <<epistatic2>>
 @
 \caption{multitrait, \code{effectplot} shows no epistatic effects between
-markers GH.117C and PVV4 \label{epistatic2}}
+markers GH.117C and PVV4, ths can be seen because the two lines run parallel, 
+the genotype on one location (PVV4) does not affect the effect of the expression 
+on GH.117C other location \label{epistatic2}}
 \end{figure}
  
 %------------------------------------------------ 
@@ -1128,17 +1130,23 @@ The next plot is the \code{mqmplot\_circle}. It shows a circular
 representation of the genome. After using automatic backward selection
 certain markers are found to be significant using \mqm. When highlighting, the
 size of the markers is scaled, based on the LOD score of the marker for the
-highlighted trait. 
-\FIXME Improve description of this plot
-\FIXME Multiple traits show \qtl\ outside the chromosome
-(solid colored squares)
+highlighted trait. There are a number of options that can be specified. The main parameters are:
+\code{highlight}: Highlighting a specific trait, and calculating interactions between the 
+significant cofactors. All other traits are grayed out, but remain partly visible, in this 
+way it is possible to see if significant QTLs for this trait are also colocating with other traits
+\code{interactstrength}: When highlighting a specific trait interactions between significant markers 
+are calculated, However the are only drawn (and reported in the output) if the effect change is larger 
+then \code{interactstrength} * the summed standard deviation. \code{spacing} Spacing between the chromosomes in Cm.
+
 
 \begin{figure}
 <<fig=TRUE>>=
 mqmplot.circle(multifilled, resall)
 @
 \caption{Circleplot 1 - Multiple traits without locations, traits are in the centre 
-connected by a colored spline to their QTL locations}
+connected by a colored spline to their QTL locations The significant QTL locations 
+are depicted as solid square circles at the side of the plot (lower number are closer 
+to the centre). Here a 'hotspot' is visible on chromosome 5}
 \end{figure}
 
 \begin{figure}
