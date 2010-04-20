@@ -855,7 +855,7 @@ weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
 The function \code{mqmplot.directedqtl} may be used to plot LOD
 curves with an indication of the sign of the estimated QTL effects.
 This requires that \code{mqmscan} was run with
-\code{outputmarkers=TRUE}, but that is the default.  For example:
+\code{outputmarkers=TRUE}, but that is the default.  For an example on creating directed QTL plots see Figure~\ref{QTLeffects}:
 % <<QTLeffects,eval=FALSE>>=
 % dirresults <- mqmplot.directedqtl(hyperaug,result)
 % @ 
@@ -869,6 +869,18 @@ This requires that \code{mqmscan} was run with
 % \caption{Same as Figure~\ref{AutoCofactor}, but with LOD scores
 %   multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
 % \end{figure}
+
+<<QTLeffects,eval=FALSE>>=
+dirresults <- mqmplot.directedqtl(multiaug,multiresult)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE,height=3.5>>=
+<<QTLeffects>>
+@
+\caption{Same as Figure~\ref{AutoCofactor}, but with LOD scores
+multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
+\end{figure}
 
 The results in Figure~\ref{FigLowAlpha} implied that QTL on chromosomes 4 and 5 are
 associated with the metabolite X3.Hydroxypropyl. If we want to investigate the effects
@@ -1209,7 +1221,7 @@ mqmplot.circle(multiloc,resall, highlight=2)
 	mqmplot.multitrait:& plotting of multiple traits (MQMmulti object) \\
 	mqmplot.nice:& plotting of mutiple traits (MQMmulti object) \\
   mqmplot.directedqtl:& Plotting of signle trait with added qtl effect\\
-	mqmplot.boot:& plot methode to show single trait permutations \\
+	mqmplot.permutations:& plot methode to show single trait permutations \\
 	mqmplot.singletrait:& plotting of single trait analysis with information content \\
 	mqmplot.circle:& Genome plot of QTLs in a circle (optional: Use of location information)\\  
 	mqmplot.cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
