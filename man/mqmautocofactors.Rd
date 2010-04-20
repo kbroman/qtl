@@ -21,7 +21,7 @@ mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE)
 }
 
 \value{
-	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{mqm}} algorithm.
+	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{MQM}} algorithm.
 }
 
 \author{

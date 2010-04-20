@@ -36,7 +36,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 
 \details{
   This function wraps the analysis of \code{\link{scanone}}, \code{\link{cim}}
-  and \code{\link{mqm}} to scan for QTL in shuffled/randomized data. It is 
+  and \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data. It is 
   recommended to also install the \code{snow} library for parallelization of
   calculations. The \code{snow} library allows
   calculations to run on multiple cores or even scale it up to an entire cluster, 

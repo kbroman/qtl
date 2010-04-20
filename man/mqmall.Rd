@@ -23,7 +23,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
     jobs. Each job contains b.size number of traits per job 
   }
   \item{cofactors}{cofactors, only used when scanfunction is mqm}
-  \item{\dots}{ Parameters passed through to the \code{\link{mqm}} function used in 
+  \item{\dots}{ Parameters passed through to the \code{\link{mqmscan}} function used in 
     scanning for QTLs
   }
 }

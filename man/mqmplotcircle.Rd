@@ -34,7 +34,7 @@
 
 \details{
   Depending on the input of the result being either \code{\link{scanone}} or \code{mqmmulti} a different plot is drawn.
-  If model information is present from \code{\link{mqm}} (by setting cofactors) This will be highlighted in 
+  If model information is present from \code{\link{mqmscan}} (by setting cofactors) This will be highlighted in 
   red (see example).
   If phenotypes have genetic locations (e.g. eQTL) they will be plotted on the genome otherwise 
   phenotypes will be plotted in the middle of the circle (with a small offset)
