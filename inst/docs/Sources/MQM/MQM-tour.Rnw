@@ -621,22 +621,19 @@ unsupervised backward elimination, which is described in the next section.
 
 \section{Unsupervised backward elimination}
 
-% "setting cofactors every other marker" HUH? Waarom zou je dit willen doen?
-% Is dit de standaard proc? Raar. Moet toch afhangen van het aantal
-% individuen en van de locaties van de merkers????????
-% COMMENT: YES !!! vandaar dat we ook mqmautocofactors hebben
-
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
-setting cofactors beforehand. When the sample size allows, it a 
-cofactor is set at every marker. However, normally only a subset of 
-locations is used, becuse of lack of sample size (we can set as many cofactors as we have individuals-12).  
+setting cofactors beforehand. When the sample size allows, it is normal procedure to set 
+a cofactor at every marker. However current day experiments handle less individuals than genetic locations (markers),therefor only a subset of 
+locations can be examined, ( because of lack of sample size (we can set as many cofactors as we have individuals-12)).
 The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
-creates a list consisting of multiple cofactors that can be used for backward elimination. 
+create lists consisting of multiple cofactors that can be used for backward elimination. 
 \code{mqmautocofactor} is prefered when dealing with low samplesizes, because it takes the underlying marker 
 density into account. See Figure~\ref{ManualAuto} for a comparison on the multitrait dataset, using the 
 \code{mqmsetcofactors} function to set cofactors every 5th marker and \code{mqmautocofactor} to set 50 cofactors.
 After cofactor selection iteratively the MQM algorithm analyses all the markers and drops the least 
 informative cofactor from the model. This step is repeated until a limited number of significant cofactors remains.
+From Figure~\ref{ManualAuto} we see that when taking marker density into account we get an extra marker that seems 
+significant when used as cofactor, compared to the naive approach where we miss this marker because we set cofactors every 5th marker.
 
 After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set 50 cofactors using the automatic cofactor routine, 
@@ -674,7 +671,7 @@ We plot the results as follows:
 % \end{figure}
 
 <<ManualAuto,eval=FALSE>>=
-par(mfrow = c(2,1))
+par(mfrow = c(1,2))
 plot(mqmgetmodel(backwardresultmulti))
 plot(mqmgetmodel(autoresultmulti))
 @ 
