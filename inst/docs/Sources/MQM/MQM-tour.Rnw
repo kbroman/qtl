@@ -809,7 +809,7 @@ significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 Figures can be reconstructed from the result of \code{mqmscan} using the
-\code{mqmplot\_singletrait} function (see, for example, Figure~\ref{AutoCofactor}). Here the
+\code{mqmplot.singletrait} function (see, for example, Figure~\ref{AutoCofactor}). Here the
 model and \qtl\ profile are retrieved.  These functions can only be used with
 \code{mqmscan}, as they require the additional information about the inferred \qtl\
 model.  The results also contain the \emph{estimated} information
@@ -823,7 +823,7 @@ mqmplot.singletrait(result, extended=TRUE)
 % <<fig=TRUE>>=
 % <<AutoCofactor>>
 % @
-% \caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot\_one} function
+% \caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot.singletrait} function
 % shows retained information in \code{result} with added weighting of information at
 % marker positions\label{AutoCofactor}}
 % \end{figure}
@@ -852,7 +852,7 @@ weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
 
 \section{MQM effect plots}
 
-The function \code{mqmplot\_directedqtl} may be used to plot LOD
+The function \code{mqmplot.directedqtl} may be used to plot LOD
 curves with an indication of the sign of the estimated QTL effects.
 This requires that \code{mqmscan} was run with
 \code{outputmarkers=TRUE}, but that is the default.  For example:
@@ -1112,7 +1112,7 @@ mqmplot.multitrait(resall,type="image")
 score, on the x-axis the marker number and on the y-axis the metabolite\label{At.heatmap2}}
 \end{figure}
 
-Use \code{mqmplot\_multitrait} for more graphical output. (Unfortunately this does not
+Use \code{mqmplot.multitrait} for more graphical output. (Unfortunately this does not
 show in the generated PDF, but in R it shows the trait profiles)
 
 <<>>=
@@ -1126,7 +1126,7 @@ mqmplot.multitrait(resall,type="lines")
 % \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
 % \end{figure}
 
-The next plot is the \code{mqmplot\_circle}. It shows a circular
+The next plot is the \code{mqmplot.circle}. It shows a circular
 representation of the genome. After using automatic backward selection
 certain markers are found to be significant using \mqm. When highlighting, the
 size of the markers is scaled, based on the LOD score of the marker for the
@@ -1156,11 +1156,11 @@ mqmplot.circle(multifilled, resall, highlight=2)
 \caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
 \end{figure}
 
-The next plot is \code{mqmplot\_cistrans}. This plot is only available
+The next plot is \code{mqmplot.cistrans}. This plot is only available
 when genomic locations of the traits are known, typically in xQTL studies. By
 default the R/qtl cross object does not store this data. So the user has to add
 this information to the cross object using the addloctocross function. After
-this operation the cis\_trans plot can be created for \qtl\ with associated
+this operation the cis.trans plot can be created for \qtl\ with associated
 genome locations. For example with expression QTL (eQTL) usually the probes on
 the microarray have a known chromosomal location.  
 
@@ -1174,12 +1174,12 @@ data(locations)
 multiloc <- addloctocross(multifilled, locations)
 mqmplot.cistrans(resall, multiloc, 5, FALSE, TRUE)
 @
-\caption{\Atintro. mqmplot\_cistrans, available when \qtl\
+\caption{\Atintro. mqmplot.cistrans, available when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
 genome they were measured (here mQTL for \At), cutoff is at a lod score of 5}
 \end{figure}
 
-When having locations we can, again, use the \code{mqmplot\_circle} function, now with 
+When having locations we can, again, use the \code{mqmplot.circle} function, now with 
 the extra information.
 
 \begin{figure}
@@ -1206,13 +1206,13 @@ mqmplot.circle(multiloc,resall, highlight=2)
 	mqmscanfdr:& Genome wide False Discovery Rates \\	
 	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
                 & from the output of the \code{mqmpermutation} function \\
-	mqmplot\_multitrait:& plotting of multiple traits (MQMmulti object) \\
-	mqmplot\_nice:& plotting of mutiple traits (MQMmulti object) \\
-  mqmplot\_directedqtl:& Plotting of signle trait with added qtl effect\\
-	mqmplot\_boot:& plot methode to show single trait permutations \\
-	mqmplot\_one:& plotting of single trait analysis with information content \\
-	mqmplot\_circle:& Genome plot of QTLs in a circle (optional: Use of location information)\\  
-	mqmplot\_cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmplot.multitrait:& plotting of multiple traits (MQMmulti object) \\
+	mqmplot.nice:& plotting of mutiple traits (MQMmulti object) \\
+  mqmplot.directedqtl:& Plotting of signle trait with added qtl effect\\
+	mqmplot.boot:& plot methode to show single trait permutations \\
+	mqmplot.singletrait:& plotting of single trait analysis with information content \\
+	mqmplot.circle:& Genome plot of QTLs in a circle (optional: Use of location information)\\  
+	mqmplot.cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
   addloctocross:& Adding genetic locations for traits \\	
 	mqmtestnormal:& Tests the normallity of a trait \\ 	
 	\hline
