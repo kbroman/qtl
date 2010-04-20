@@ -15,10 +15,10 @@ mqmtestnormal(cross, pheno.col = 1,significance=0.05)
 
 \arguments{
   \item{cross}{
-    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{pheno.col}{ 
-    Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
+Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers. % \phenocol
   }
   \item{significance}{ 
     Significance level for normality
@@ -41,7 +41,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
