@@ -8,14 +8,14 @@
 }
 
 \usage{
-mqmplot.heatmap(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE)
+mqmplot.heatmap(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE)
 }
 
 \arguments{
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{results}{ Result object from mqmscanall }
+  \item{result}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
   \item{hidelow}{ Hides the low lodscores (< 3) }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
   \item{legend}{ Add a lengend to the plot ? }

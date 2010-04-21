@@ -8,11 +8,11 @@
 }
 
 \usage{
-	mqmplot.cistrans(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
+	mqmplot.cistrans(result, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
 }
 
 \arguments{
-  \item{x}{An object of class \code{mqmmulti}. See \code{\link{mqmscanall}} for details.} 
+  \item{result}{An object of class \code{mqmmulti}. See \code{\link{mqmscanall}} for details.} 
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
@@ -33,7 +33,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   \item{cisarea}{ Adjust the two green lines around the line y=x }
   \item{pch}{ What kind of character is used in plotting of the figure (Default: 22, small square) }
   \item{cex}{ Size of the points plotted (default to 0.5 half of the original size)}
-  \item{\dots}{ Extra paramters will be passed to points }
+  \item{\dots}{ Extra parameters will be passed to points }
 }
 
 %\details{
