@@ -98,8 +98,8 @@ the mqm model (\code{\link{mqmplot.singletrait}}) and QTL profile. If cofactors 
 specified the QTL model used in scanning is also returned as a named attribute 
 of the scanone object called mqmmodel. It can be extracted from the resulting 
 scanone object by using the \code{\link{mqmgetmodel}} function or the 
-\code{\link{attr}} function. Finally the estimate.map paramter does not 
-return its re estimated genetic map.
+\code{\link{attr}} function. Finally the estimate.map parameter does not 
+return its re estimated genetic map, altough it is used internally.
 When scanning multiple genotypes a \code{mqmmulti} object is created.
 This object is just a list composed of scanone objects. The results for a single
 trait can be obtained from the \code{mqmmulti} object, in scanone format.
