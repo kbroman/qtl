@@ -59,26 +59,26 @@ mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
   onlymarkers
 }
 
-mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=FALSE){
+mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
-  if(is.null(results)){
-		stop("No results object. Please supply a valid scanone object.") 
+  if(is.null(result)){
+		stop("No result object. Please supply a valid scanone object.") 
 	}
-  if(!any(class(results)=="mqmmulti")){
+  if(!any(class(result)=="mqmmulti")){
   	stop("Not a mqmmulti object. Please supply a valid scanone object.") 
   }  
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    results[[x]] <- mqmextractpseudomarkers(results[[x]])
+    result[[x]] <- mqmextractpseudomarkers(result[[x]])
     if(directed){
-      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
-      for(y in 1:nrow(results[[x]])){
-        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+      effect <- effectscan(sim.geno(cross,step=stepsize(result[[x]])), pheno.col=x, draw=FALSE)
+      for(y in 1:nrow(result[[x]])){
+        effectid <- which(rownames(effect)==rownames(result[[x]])[y])
         if(!is.na(effectid&&1)){
-          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+          result[[x]][y,3]  <- result[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }
       }
       if(!hidelow){
@@ -95,15 +95,15 @@ mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
       col <- c("white","blue","darkblue","yellow","red")
       leg <- c("Lod 0-3","Lod 3-6","Lod 6-9","Lod 9-12","Lod 12+")
     }
-    names <- c(names,substring(colnames(results[[x]])[3],5))
+    names <- c(names,substring(colnames(result[[x]])[3],5))
   }
-  chrs <- unique(lapply(results,getChr))
+  chrs <- unique(lapply(result,getChr))
   data <- NULL
-  for(x in 1:length(results)){
-    data <- rbind(data,results[[x]][,3])
+  for(x in 1:length(result)){
+    data <- rbind(data,result[[x]][,3])
   }
   rownames(data) <- names
-  image(seq(0,nrow(results[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
   abline(v=0)
   for(x in unique(chrs[[1]])){
     abline(v=sum(as.numeric(chrs[[1]])<=x))
@@ -117,39 +117,39 @@ mqmplot.heatmap <- function(cross, results, hidelow=TRUE, directed=TRUE, legend=
   data
 }
 
-mqmplot.clusteredheatmap <- function(cross, results, directed=TRUE, Colv=NA, scale="none", ...){
+mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scale="none", ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
-  if(is.null(results)){
-		stop("No results object. Please supply a valid mqmmulti object.") 
+  if(is.null(result)){
+		stop("No result object. Please supply a valid mqmmulti object.") 
 	}
-  if(!any(class(results)=="mqmmulti")){
+  if(!any(class(result)=="mqmmulti")){
   	stop("Not a mqmmulti object. Please supply a valid mqmmulti object.") 
   }  
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    results[[x]] <- mqmextractpseudomarkers(results[[x]])
+    result[[x]] <- mqmextractpseudomarkers(result[[x]])
     if(directed){
-      effect <- effectscan(sim.geno(cross,step=stepsize(results[[x]])), pheno.col=x, draw=FALSE)
+      effect <- effectscan(sim.geno(cross,step=stepsize(result[[x]])), pheno.col=x, draw=FALSE)
       cat(".")
-      for(y in 1:nrow(results[[x]])){
-        effectid <- which(rownames(effect)==rownames(results[[x]])[y])
+      for(y in 1:nrow(result[[x]])){
+        effectid <- which(rownames(effect)==rownames(result[[x]])[y])
         if(!is.na(effectid&&1)){
-          results[[x]][y,3]  <- results[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+          result[[x]][y,3]  <- result[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }
       }
       
     }
-    names <- c(names,substring(colnames(results[[x]])[3],5))
+    names <- c(names,substring(colnames(result[[x]])[3],5))
   }
-  chrs <- unique(lapply(results,getChr))
+  chrs <- unique(lapply(result,getChr))
   data <- NULL
-  for(x in 1:length(results)){
-    data <- rbind(data,results[[x]][,3])
+  for(x in 1:length(result)){
+    data <- rbind(data,result[[x]][,3])
   }
-  colnames(data) <- rownames(results[[1]])
+  colnames(data) <- rownames(result[[1]])
   rownames(data) <- names
   retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
   retresults
