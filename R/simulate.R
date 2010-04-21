@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Apr, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -605,7 +605,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
     dimnames(thedata) <- list(NULL,mar.names[[i]])
 
     if(chr.type[i] != "X") 
-      thedata <- thedata + 2*sim.bcg(n.ind, map[[i]], m, p, map.function) - 2
+      thedata <- thedata + 2*sim.bcg(n.ind, map[[i]][2:1,], m, p, map.function) - 2
 
     dimnames(thedata) <- list(NULL,mar.names[[i]])
 

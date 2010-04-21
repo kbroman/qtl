@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Feb, 2010
+# last modified Apr, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1780,7 +1780,7 @@ function(cross, chr, pos, where=c("draws","prob"))
 
       # sex-specific map; look at female positions
       if(is.matrix(thismap)) thismap <- thismap[1,]
-      
+
       # find closest marker
       d <- abs(thismap-pos[i])
       o2 <- (1:length(d))[d==min(d)]
@@ -3081,11 +3081,11 @@ function(cross, marker, where=c("draws","prob"))
       themap[[i]] <- attr(cross$geno[[i]]$prob, "map")
   }
 
-  chr <- rep(names(themap), sapply(themap, length))
   if(!is.matrix(themap[[1]])) {
     pmar <- unlist(lapply(themap, names))
     pos <- unlist(themap)
     onemap <- TRUE
+    chr <- rep(names(themap), sapply(themap, length))
   }
   else {
     pos <- unlist(lapply(themap, function(a) a[1,]))
@@ -3094,6 +3094,7 @@ function(cross, marker, where=c("draws","prob"))
     pmar <- unlist(lapply(themap, colnames))
     output <- cbind(output, pos2=rep(NA, length(marker)))
     colnames(output)[2:3] <- c("pos.female","pos.male")
+    chr <- rep(names(themap), sapply(themap, ncol))
   }
   whnotmarker <- grep("^loc-*[0-9]*", pmar)
   pmar[whnotmarker] <- paste("c", chr[whnotmarker], ".", pmar[whnotmarker], sep="")
