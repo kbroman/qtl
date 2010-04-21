@@ -44,7 +44,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 
 \seealso{
 	\itemize{
-    \item \code{\link[stats]{shapiro.test}} - Testfunction wrapped by mqmtestnormal
+    \item \code{\link[stats]{shapiro.test}} - Function wrapped by our mqmtestnormal
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
