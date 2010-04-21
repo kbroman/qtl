@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE)
+mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE, verbose=FALSE)
 }
 
 \arguments{
@@ -19,6 +19,7 @@ mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE)
   \item{dominance}{If TRUE, create a cofactor list that is safe to use
   with the dominance scan mode of MQM.  See  \code{\link{mqmscan}} for details.}
   \item{plot}{If TRUE, plots a genetic map displaying the selected markers as cofactors.}
+  \item{verbose}{If TRUE, give verbose output.}
 }
 
 \value{
