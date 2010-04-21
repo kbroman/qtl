@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -23,11 +23,13 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: which.marker
-#           mqmcofactors
+# Contains: find.markerindex
 #           mqmsetcofactors
 #           mqmautocofactors
-#           
+#           scoremissingmarkers
+#           calculatedensity
+#           plotcofactors
+#           checkdistances
 #
 #####################################################################
 
