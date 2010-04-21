@@ -127,7 +127,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         stop("No such phenotype in cross object.\n")
       }			
 		}
-    if(!mqmtestnormal(cross, pheno.col, 0.05, FALSE)){
+    if(!mqmtestnormal(cross, pheno.col, 0.01, FALSE)){ 
       warning("Trait might not be normal (Shapiro normality test)\n")
 		}
 		pheno <- cross$pheno[[pheno.col]]
