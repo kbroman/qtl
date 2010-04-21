@@ -43,7 +43,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 
 \examples{
 \dontrun{
-qtl <- c(3,15,3,7)					# QTL at chromosome 3
+qtl <- c(3,15,1,0)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
 result <- mqmscan(cross,file="aaa.txt")			# Do a MQM scan of the genome and save it to aaa.txt

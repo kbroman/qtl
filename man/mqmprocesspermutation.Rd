@@ -44,7 +44,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 }
 
 \examples{
-f2qtl <- c(3,15,3,7)					# QTL at chromosome 3
+f2qtl <- c(3,15,1,0)					# QTL at chromosome 3
 data(map10)						# Mouse genome
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
