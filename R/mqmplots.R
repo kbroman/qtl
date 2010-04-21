@@ -9,7 +9,7 @@
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -185,7 +185,7 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 		}
 		colnames(QTLs) <- rownames(result[[1]])
 		axi <- 1:sum.map
-		plot(result=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
+		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		bmatrix <- QTLs>threshold
 		pmatrix <- NULL
 		for(j in 1:nrow(QTLs)){
