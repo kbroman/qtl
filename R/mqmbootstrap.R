@@ -80,7 +80,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 	bootmethod <- 0
   
   supported <- c("permutation","simulation")
-  bootmethod <- pmatch(method, supported)[1]
+  bootmethod <- pmatch(method, supported)[1]-1
 	if(missing(cross))
 		stop("No cross file. Please supply a valid cross object.") 
 

@@ -200,10 +200,17 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
   newres
 }
 
-mqmtestnormal <- function(cross, pheno.col=1,significance=0.05){
+mqmtestnormal <- function(cross, pheno.col=1,significance=0.05, verbose=FALSE){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+
+  # if augmented data, pull out just the unique individuals
+  if("mqm" %in% names(cross)) {
+    theind <- cross$mqm$augIND
+    cross <- subset(cross, ind=match(unique(theind), theind))
+  }
+
   if(significance > 1 || significance <= 0){
     stop("significance should be between 0 and 1")
   }
@@ -217,15 +224,15 @@ mqmtestnormal <- function(cross, pheno.col=1,significance=0.05){
 	if(any(rownames(installed.packages())=="nortest")){
 		require(nortest)
 		if(pearson.test(cross$pheno[[pheno.col]])$p.value < significance){
-			cat("Trait distribution not normal\n")
+			if(verbose) cat("Trait distribution not normal\n")
 			returnval<- FALSE
 		}else{
-			cat("Trait distribution normal\n")
+			if(verbose) cat("Trait distribution normal\n")
 			returnval<- TRUE
 		}
 		returnval
 	}else{
-		cat("Please install package: nortest to enable testing of normality\n")
+		stop("Please install package nortest to enable testing of normality\n")
 	}
 }
 
@@ -234,7 +241,7 @@ mqmgetmodel <- function(scanresult){
 		model <- attr(scanresult,"mqmmodel")
 		model
 	}else{
-		stop("Please supply a scan result made by using mqm qith cofactors")
+		stop("Please supply a scan result made by using mqm with cofactors")
 	}
 }
 

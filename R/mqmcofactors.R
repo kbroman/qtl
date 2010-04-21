@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -23,11 +23,13 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: which.marker
-#           mqmcofactors
+# Contains: find.markerindex
 #           mqmsetcofactors
 #           mqmautocofactors
-#           
+#           scoremissingmarkers
+#           calculatedensity
+#           plotcofactors
+#           checkdistances
 #
 #####################################################################
 
@@ -115,7 +117,7 @@ mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALS
   if(distance < 0.1){
     distance <- 0.1
   }
-  r <- scanone(cross)
+#  r <- scanone(cross)
   cofactors <- rep(0,sum(nmar(cross)))
   missing <- scoremissingmarkers(cross)
   densities <- calculatedensity(cross,distance*2)*missing
