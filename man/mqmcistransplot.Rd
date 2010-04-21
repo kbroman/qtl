@@ -8,11 +8,11 @@
 }
 
 \usage{
-	mqmplot.cistrans(x, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
+	mqmplot.cistrans(result, cross, threshold=5, onlyPEAK=TRUE, highPEAK=FALSE, cisarea=10, pch=22, cex=0.5, \dots)
 }
 
 \arguments{
-  \item{x}{An object of class \code{mqmmulti}. See \code{\link{mqmscanall}} for details.} 
+  \item{result}{An object of class \code{mqmmulti}. See \code{\link{mqmscanall}} for details.} 
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
