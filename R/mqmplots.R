@@ -155,7 +155,7 @@ mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scal
   retresults
 }
 
-mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, verbose=FALSE, ...){
 		if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -172,7 +172,7 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 			sum.map <- sum.map+l.chr
 		}
 		sum.map <- ceiling(sum.map)
-		cat("Total maplength:",sum.map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr.breaks,"\n")		
+		if(verbose) cat("Total maplength:",sum.map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr.breaks,"\n")		
 		for( k in 1:length(result) ) {
 			loc <- cross$locations[[k]]
 			rownames(loc) <- k
@@ -261,15 +261,17 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 	}
 }
 
-addloctocross <- function(cross,locations=NULL,locfile="locations.txt"){
+addloctocross <- function(cross,locations=NULL,locfile="locations.txt", verbose=FALSE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
 	if(is.null(locations)){
 		locations <- read.table(locfile,row.names=1,header=TRUE)
 	}
-	cat("Phenotypes in cross:",nphe(cross),"\n")
-	cat("Phenotypes in file:",nrow(locations),"\n")
+	if(verbose) {
+          cat("Phenotypes in cross:",nphe(cross),"\n")
+          cat("Phenotypes in file:",nrow(locations),"\n")
+        }
 	if(max(as.numeric(rownames(locations))) != nphe(cross)){
 		stop("ID's of traits in file are larger than # of traits in crossfile.") 	
 	}
