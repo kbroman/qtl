@@ -9,7 +9,7 @@
 }
 
 \usage{
-	addloctocross(cross, locations=NULL, locfile="locations.txt")
+	addloctocross(cross, locations=NULL, locfile="locations.txt", verbose=FALSE)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   }
   \item{locations}{R variable holding location information}
   \item{locfile}{ load from a file, see the details section for the layout of the file.}
+  \item{verbose}{If TRUE, give verbose output}
 }
 
 \details{
