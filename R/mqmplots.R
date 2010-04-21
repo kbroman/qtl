@@ -155,7 +155,7 @@ mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scal
   retresults
 }
 
-mqmplot.cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
+mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, ...){
 		if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -163,29 +163,29 @@ mqmplot.cistrans <- function(x,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,ci
 		stop("Please add trait locations to the cross file\n")
 	}
 	locations <- NULL
-	if(any(class(x) == "mqmmulti")){
+	if(any(class(result) == "mqmmulti")){
 		sum.map <- 0
 		chr.breaks <- NULL
 		for(j in 1:nchr(cross)){
-			l.chr <- max(x[[1]][x[[1]][,1]==j,2])
+			l.chr <- max(result[[1]][result[[1]][,1]==j,2])
 			chr.breaks <- c(chr.breaks,sum.map)
 			sum.map <- sum.map+l.chr
 		}
 		sum.map <- ceiling(sum.map)
 		cat("Total maplength:",sum.map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr.breaks,"\n")		
-		for( k in 1:length(x) ) {
+		for( k in 1:length(result) ) {
 			loc <- cross$locations[[k]]
 			rownames(loc) <- k
 			locations <- rbind(locations,loc)
 		}
 		QTLs <- NULL
 		for(y in 1:nrow(locations)){
-			qtl <- x[[y]][,3]
+			qtl <- result[[y]][,3]
 			QTLs <- rbind(QTLs,qtl)
 		}
-		colnames(QTLs) <- rownames(x[[1]])
+		colnames(QTLs) <- rownames(result[[1]])
 		axi <- 1:sum.map
-		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
+		plot(result=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		bmatrix <- QTLs>threshold
 		pmatrix <- NULL
 		for(j in 1:nrow(QTLs)){
