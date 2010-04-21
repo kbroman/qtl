@@ -130,7 +130,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 
 		if(any(rownames(installed.packages())=="nortest")){
 			require(nortest)
-			if(pearson.test(cross$pheno[[pheno.col]])$p.value < 0.05){
+                        if(!mqmtestnormal(cross, pheno.col, 0.05, FALSE)){
 				warning("Trait might not be normal (Pearson normality test)\n")
 			}
 		}

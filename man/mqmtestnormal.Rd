@@ -4,13 +4,13 @@
 \title{ Pearsons normality test used for MQM }
 
 \description{
-  Wraps a pearsons normality test from the nortest package. 
+  Wraps a Pearson's normality test from the nortest package. 
   This function is used in MQM to test the normality of the
   trait under investigation
 }
 
 \usage{
-mqmtestnormal(cross, pheno.col = 1,significance=0.05)
+mqmtestnormal(cross, pheno.col = 1,significance=0.05, verbose=FALSE)
 }
 
 \arguments{
@@ -23,10 +23,19 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
   \item{significance}{ 
     Significance level for normality
   }
+  \item{verbose}{
+    If TRUE, print result as well as return it.
+  }
 }
 
 \value{
-	Boolean indicating normality of the trait in pheno.col
+	Boolean indicating normality of the trait in pheno.col.  (FALSE
+	indicates that the phenotype appears to not be normally distributed.)
+}
+
+\details{
+        For augmented data (as from \code{\link{mqmaugment}}), the cross
+        is first reduced to distinct individuals.
 }
 
 \author{ 
