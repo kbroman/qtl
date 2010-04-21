@@ -107,7 +107,7 @@ calculatedensity <- function(cross,distance=30){
   densities
 }
 
-mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALSE){
+mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALSE,verbose=FALSE){
   if(num > (nind(cross)-15) && !dominance){
 		stop("Trying to set: ",num," markers as cofactor. This leaves less than 15 Degrees of Freedom.\n")
 	}
@@ -124,7 +124,7 @@ mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALS
   cnt <- 0
   while(sum(cofactors) < num && cnt < num){
     lefttoset <- num - sum(cofactors)
-    cat("Cofactors left",lefttoset,"/",num,"\n")
+    if(verbose) cat("Cofactors left",lefttoset,"/",num,"\n")
     possible <- which(max(densities)==densities)
     if(length(possible) > lefttoset){
       possible <- sample(possible,lefttoset)
@@ -134,7 +134,7 @@ mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALS
     cofactors <- checkdistances(cross,cofactors,distance)
     cnt <- cnt+1
   }
-  if(cnt==num) cat("Solution by itteration, there might be less cofactors then requested\n")
+  if(cnt==num && verbose) cat("Solution by iteration, there might be less cofactors then requested\n")
   if(plot) plotcofactors(cross,cofactors)
   cofactors
 }
