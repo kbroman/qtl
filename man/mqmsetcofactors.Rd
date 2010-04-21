@@ -21,7 +21,7 @@ mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FAL
 }
 
 \value{
-	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{mqm}} algorithm.
+	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{MQM}} algorithm.
 }
 
 \author{
@@ -36,7 +36,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }

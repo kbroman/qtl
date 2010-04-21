@@ -13,7 +13,7 @@ mqmplot.permutations(result, \dots)
 
 \arguments{
   \item{result}{ Resulting \code{mqmmulti} object created when performing 
-	permutation analysis. Only permutations done by the MQM algorithm \code{\link{mqm}} 
+	permutation analysis. Only permutations done by the MQM algorithm (see \code{\link{MQM}})
 	can use this plotting routine.
   }
   \item{\dots}{ Extra argument passed to the polyplot method of R. Brouwer }    
@@ -26,7 +26,7 @@ mqmplot.permutations(result, \dots)
 \value{ No value returned (plotting routine) }
 
 \author{ 
-  Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
+Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
   , Rutger Brouwer
 }
 
@@ -38,7 +38,7 @@ mqmplot.permutations(result, \dots)
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
@@ -46,8 +46,8 @@ mqmplot.permutations(result, \dots)
 
 \examples{
 #Simulated F2 Population
-f2qtl <- c(3,15,3,7)                                    # QTL at chromosome 3
-data(map10)                                             # Mouse genome
+f2qtl <- c(3,15,1,0)                                    # QTL at chromosome 3
+data(map10)                                             # Mouse genetic map
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- calc.genoprob(f2cross)

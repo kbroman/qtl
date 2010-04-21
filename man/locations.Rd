@@ -12,11 +12,10 @@
 }
 \usage{data(locations)}
 \format{
-	Each row is a trait with the following information
-	Num		Number of the trait inside the cross file
-	Name	Name of the trait (will be checked against the name in the cross object
-	Chr		Chromosome of the trait
-	cM		Location in cM from the start of the chromosome
+	Each row is a trait with the following information:
+	\code{Name},	Name of the trait (will be checked against the name in the cross object
+	\code{Chr},		Chromosome of the trait
+	\code{cM},		Location in cM from the start of the chromosome
 }
 %\details{
 %	
