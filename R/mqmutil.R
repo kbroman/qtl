@@ -211,6 +211,12 @@ mqmtestnormal <- function(cross, pheno.col=1,significance=0.05, verbose=FALSE){
     cross <- subset(cross, ind=match(unique(theind), theind))
   }
 
+  # shapiro.test works only for 3 <= n <= 5000
+  if(nind(cross) < 3 || nind(cross) > 5000) {
+    warning("Can perform test of normality only if 3 <= n <= 5000")
+    return(TRUE)   # I guess this should be NA
+  }
+
   if(significance > 1 || significance <= 0){
     stop("significance should be between 0 and 1")
   }
