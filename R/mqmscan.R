@@ -228,13 +228,13 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		}
 
 		if((step.min+step.size) > step.max){
-			stop("Current Step setting would crash the algorithm")
+			stop("step.max needs to be >= step.min + step.size")
 		}
 		if(step.min>0){
-			stop("step.min needs to be smaller than 0")
+			stop("step.min needs to be <= 0")
 		}		
 		if(step.size < 1){
-			stop("Step.size needs to be larger than 1")
+			stop("step.size needs to be >= 1")
 		}
 		max.cm.on.map <- max(unlist(pull.map(cross)))
 		if(step.max < max.cm.on.map){
