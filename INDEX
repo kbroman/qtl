@@ -127,7 +127,7 @@ mqmscanall              Parallelized MQM on multiple phenotypes in a
                         cross object
 mqmscanfdr              Estimate FDR for multiple trait QTL analysis
 mqmsetcofactors         Create cofactors to be used with mqm
-mqmtestnormal           Pearsons normality test used for MQM
+mqmtestnormal           Shapiro normality test used for MQM
 multitrait              Example Cross object from R/QTL with multiple
                         traits.
 nchr                    Determine the number of chromosomes
