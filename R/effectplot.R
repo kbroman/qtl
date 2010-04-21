@@ -2,7 +2,7 @@
 #
 # effectplot.R
 #
-# copyright (c) 2002-9, Hao Wu and Karl W. Broman
+# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
 # Last modified Jan, 2010
 # first written Jul, 2002
 #

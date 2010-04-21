@@ -54,6 +54,12 @@ Minor changes:
   Fixed an apparent bug in read.cross for format="qtlcart"; need to
   treat negative genotype codes as missing.
 
+  Fixed a bug in sim.cross for type="4way"; previously it was just
+  using the female map for both female and male meioses.
+
+  Fixed a bug in find.pseudomarkerpos in the case of sex-specific maps
+  (as in a 4-way cross).
+
   lodint and bayesint now stop with an error if chr or qtl.index have
   length > 1.  Before, they gave weird results and a meaningless
   error. 
