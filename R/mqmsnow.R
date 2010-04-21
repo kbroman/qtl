@@ -70,8 +70,7 @@ snowCoreBOOT <- function(x,all.data,scanfunction,bootmethod,cofactors,verbose=FA
 		all.data$pheno[[1]] <- all.data$pheno[[1]][neworder]
 	}else{
 		#parametric permutation
-		variance <- var(pheno,na.rm = TRUE)
-		all.data$pheno[[1]] <- rnorm(nind(all.data))*(variance^0.5)
+		all.data$pheno[[1]] <- rnorm(nind(all.data))
 	}
 	if("cofactors" %in% names(formals(scanfunction))){
 		if(!is.null(cofactors)){
