@@ -33,7 +33,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   \item{cisarea}{ Adjust the two green lines around the line y=x }
   \item{pch}{ What kind of character is used in plotting of the figure (Default: 22, small square) }
   \item{cex}{ Size of the points plotted (default to 0.5 half of the original size)}
-  \item{\dots}{ Extra paramters will be passed to points }
+  \item{\dots}{ Extra parameters will be passed to points }
 }
 
 %\details{
