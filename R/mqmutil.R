@@ -221,19 +221,15 @@ mqmtestnormal <- function(cross, pheno.col=1,significance=0.05, verbose=FALSE){
 	if(!is.numeric(cross$pheno[[pheno.col]])){
 		stop("Please supply a numeric trait (pheno.col = ",pheno.col," is not numeric)")
 	}
-	if(any(rownames(installed.packages())=="nortest")){
-		require(nortest)
-		if(pearson.test(cross$pheno[[pheno.col]])$p.value < significance){
-			if(verbose) cat("Trait distribution not normal\n")
-			returnval<- FALSE
-		}else{
-			if(verbose) cat("Trait distribution normal\n")
-			returnval<- TRUE
-		}
-		returnval
-	}else{
-		stop("Please install package nortest to enable testing of normality\n")
-	}
+
+  if((shapiro.test(cross$pheno[[pheno.col]])$p.value)  > significance){
+    if(verbose) cat("Trait distribution normal\n")
+    returnval<- TRUE
+  }else{
+    if(verbose) cat("Trait distribution not normal\n")
+    returnval<- FALSE
+  }
+  returnval
 }
 
 mqmgetmodel <- function(scanresult){
