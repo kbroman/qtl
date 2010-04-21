@@ -2,13 +2,13 @@
 #
 # mqmprepare.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
-# Modified by Pjotr Prins
+# Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified July 2009
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -43,8 +43,9 @@ mqmloadanalysis <- function(file="MQM_output.txt"){
 
 mqmfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
 	
-	chr <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'chr'
-	pos <- summary(mqmscan,alpha=alpha,perms=perm,pvalues=FALSE)$'pos (cM)'
+        thesum <- summary(mqmscan[,1:3],alpha=alpha,perms=perm,pvalues=FALSE)
+	chr <- thesum$'chr'
+	pos <- thesum$'pos (cM)'
 	if(verbose) cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
 	ret <- NULL
 	for(i in 1:length(chr)){
