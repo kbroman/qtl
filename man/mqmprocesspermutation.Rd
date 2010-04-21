@@ -45,7 +45,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \examples{
 f2qtl <- c(3,15,1,0)					# QTL at chromosome 3
-data(map10)						# Mouse genome
+data(map10)						# Mouse genetic map
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")	# Simulate a F2 Cross
 \dontrun{f2result <- mqmpermutation(f2cross,scanfunction=mqmscan)			# Bootstrap MQM mapping on the f2cross
