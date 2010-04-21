@@ -56,7 +56,7 @@ mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
   if(draw) plot(ylim=c((min(onlymarkers[,3])*1.1),(max(onlymarkers[,3])*1.1)),onlymarkers)
   class(onlymarkers) <- c("scanone",class(onlymarkers))
   if(!is.null(attr(result,"mqmmodel"))) attr(onlymarkers,"mqmmodel") <- attr(result,"mqmmodel")
-  onlymarkers
+  invisible(onlymarkers)
 }
 
 mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE){
@@ -114,7 +114,7 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
   if(legend){
     legend("bottom",leg,col=col,lty=1,bg="white")
   }
-  data
+  invisible(data)
 }
 
 mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scale="none", ...){
