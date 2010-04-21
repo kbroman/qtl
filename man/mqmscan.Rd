@@ -128,16 +128,16 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \examples{
 % \input{"inst/docs/Sources/MQM/mqm/standard_example.txt"}
-data(map10)                    # Mouse dataset
+data(map10)                    # Genetic map modeled after mouse
 
-# simulate a cross (autosomes)
-qtl <- c(3,15,3,7)             # QTL location
+# simulate a cross (autosomes 1-10)
+qtl <- c(3,15,1,0)             # QTL model: chr, pos'n, add've & dom effects
 cross <- sim.cross(map10[1:10],qtl,n=100,missing.prob=0.01)
 
 # MQM
 crossaug <- mqmaugment(cross)  # Augmentation
 cat(crossaug$mqm$Nind,'real individuals retained in dataset',
-    crossaug$mqm$Naug,'individuals augmented')
+    crossaug$mqm$Naug,'individuals augmented\n')
 
 result <- mqmscan(crossaug)    # Scan
 
