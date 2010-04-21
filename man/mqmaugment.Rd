@@ -10,7 +10,7 @@ genotypes, thus creating new candidate 'individuals' and calculates their
 probability using information on neighbouring markers and recombination
 frequencies. When a genotype of an augmented genotype is less likely than the
 \code{minprob} parameter it is dropped from the dataset. The \emph{augmented} list
-of individuals is returned in a new \code{crossobject}.  
+of individuals is returned in a new cross object.  
 }
 
 \usage{
@@ -23,14 +23,14 @@ mqmaugment(cross, maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","imput
   \item{maxaugind}{ 
     Maximum number of augmentations per individual.  The default of 82
     allows for six missing markers for an individual in a BC cross
-    ($2^6=64$) and four missing markers in an F2 ($3^4=81$. When a
+    (\eqn{2^6=64}) and four missing markers in an F2 (\eqn{3^4=81}). When a
     large number of markers are missing this default number is quickly
     reached.
   }
   \item{minprob}{ 
-    Return individuals with augmented genotypes that are above a probability of
-    occurring. minprob is a value between 0 and 1. For example a value of 0.5
-    will drop all genotypes that are half as likely than the most likely
+    Return individuals with augmented genotypes that have at least this probability of
+    occurring. \code{minprob} is a value between 0 and 1. For example a value of 0.5
+    will drop all genotypes that are half as likely as the most likely
     genotype (candidate of the individual). The default value of 0.1 will drop
     all genotypes that are less likely of ocurring than 1 in 10, compared
     against the most likely genotype. Use a value of 1.0 to return a single
@@ -38,15 +38,15 @@ mqmaugment(cross, maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","imput
  }
   \item{unaugmentable}{ 
     When individuals have too much missing data and augmentation fails three 
-    options are provided: 1. mostlikely: Calculate the most likely genotypes 
+    options are provided: 1. \code{"mostlikely"}: Calculate the most likely genotypes 
     at missing marker positions and add this individual to the set.
-    2. impute: Calculate the most likely genotypes at missing marker positions 
-    and impute maxaugind individual-variants around the most likely genotype.
-    3. drop: Drop individuals that cannot be augmented from the dataset, this 
+    2. \code{"impute"}: Calculate the most likely genotypes at missing marker positions 
+    and impute \code{maxaugind} individual-variants around the most likely genotype.
+    3. \code{"drop"}: Drop individuals that cannot be augmented from the dataset, this 
     option is not advised because information from the dropped individuals will
     be lost.
  } 
-  \item{verbose}{ Verbose output }
+  \item{verbose}{ If TRUE, give verbose output }
 }
 
 \value{
