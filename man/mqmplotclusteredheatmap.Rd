@@ -13,7 +13,7 @@ mqmplot.clusteredheatmap(cross, results, directed=TRUE, Colv=NA, scale="none",\d
 
 \arguments{
   \item{cross}{
-    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{results}{ Result object from mqmscanall }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
@@ -35,7 +35,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }

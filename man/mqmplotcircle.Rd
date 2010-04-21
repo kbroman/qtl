@@ -34,7 +34,7 @@
 
 \details{
   Depending on the input of the result being either \code{\link{scanone}} or \code{mqmmulti} a different plot is drawn.
-  If model information is present from \code{\link{mqm}} (by setting cofactors) This will be highlighted in 
+  If model information is present from \code{\link{mqmscan}} (by setting cofactors) This will be highlighted in 
   red (see example).
   If phenotypes have genetic locations (e.g. eQTL) they will be plotted on the genome otherwise 
   phenotypes will be plotted in the middle of the circle (with a small offset)
@@ -57,7 +57,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}

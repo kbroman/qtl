@@ -36,7 +36,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 
 \details{
   This function wraps the analysis of \code{\link{scanone}}, \code{\link{cim}}
-  and \code{\link{mqm}} to scan for QTL in shuffled/randomized data. It is 
+  and \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data. It is 
   recommended to also install the \code{snow} library for parallelization of
   calculations. The \code{snow} library allows
   calculations to run on multiple cores or even scale it up to an entire cluster, 
@@ -60,7 +60,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}

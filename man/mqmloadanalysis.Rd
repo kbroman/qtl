@@ -35,7 +35,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
@@ -43,8 +43,8 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 
 \examples{
 \dontrun{
-qtl <- c(3,15,3,7)					# QTL at chromosome 3
-data(map10)						# Mouse genome
+qtl <- c(3,15,1,0)					# QTL at chromosome 3
+data(map10)						# Mouse genetic map
 cross <- sim.cross(map10,qtl,n=100)			# Simulate a Cross
 result <- mqmscan(cross,file="aaa.txt")			# Do a MQM scan of the genome and save it to aaa.txt
 res_reloaded <- mqmloadanalysis("aaa.txt")		#Reads in and plots the file aaa.txt
