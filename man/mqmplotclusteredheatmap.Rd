@@ -8,14 +8,14 @@
 }
 
 \usage{
-mqmplot.clusteredheatmap(cross, results, directed=TRUE, Colv=NA, scale="none",\dots)
+mqmplot.clusteredheatmap(cross, result, directed=TRUE, Colv=NA, scale="none",\dots)
 }
 
 \arguments{
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{results}{ Result object from mqmscanall }
+  \item{result}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
   \item{Colv}{ Cluster only the Rows, the columns (Markers) should not be clustered }
   \item{scale}{ character indicating if the values should be centered and scaled in either
