@@ -17,11 +17,15 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 4/17/2010:
+Version 1.15, 4/20/2010:
 
 Major changes:
 
-  [Need to describe the MQM stuff here]
+  In collaboration with Danny Arends, Pjotr Prins, and Ritsert Jansen,
+  we have incorporated Ritsert Jansen's MQM mapping software within
+  R/qtl. (Previously, it was available only through the commercial
+  software package, mapqtl).  See the tutorial at
+  http://www.rqtl.org/tutorials/MQM-tour.pdf
 
 Minor changes:
 

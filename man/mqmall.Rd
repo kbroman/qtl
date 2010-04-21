@@ -23,7 +23,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
     jobs. Each job contains b.size number of traits per job 
   }
   \item{cofactors}{cofactors, only used when scanfunction is mqm}
-  \item{\dots}{ Parameters passed through to the \code{\link{mqm}} function used in 
+  \item{\dots}{ Parameters passed through to the \code{\link{mqmscan}} function used in 
     scanning for QTLs
   }
 }
@@ -50,7 +50,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
-    \item \code{\link{mqmpermutation}} - Estimate confidence intervals
+    \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
 	}
