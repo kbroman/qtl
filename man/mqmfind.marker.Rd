@@ -26,7 +26,7 @@ Display more output on verbose=TRUE % \verbose
 
 \value{
   returns a matrix with at each row a significant marker (determined from the
-  \code{scanoneperm} object) and with columns: markername, chr and pos (Cm) 
+  \code{scanoneperm} object) and with columns: markername, chr and pos (cM) 
 }
 
 \author{ 
