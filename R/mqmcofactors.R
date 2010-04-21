@@ -117,7 +117,7 @@ mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALS
   if(distance < 0.1){
     distance <- 0.1
   }
-  r <- scanone(cross)
+#  r <- scanone(cross)
   cofactors <- rep(0,sum(nmar(cross)))
   missing <- scoremissingmarkers(cross)
   densities <- calculatedensity(cross,distance*2)*missing
