@@ -220,7 +220,17 @@ mqmtestnormal <- function(cross, pheno.col=1,significance=0.05, verbose=FALSE){
   if(significance > 1 || significance <= 0){
     stop("significance should be between 0 and 1")
   }
-	returnval <- FALSE
+
+  # if pheno.col has multiple entries
+  if(length(pheno.col) > 1) {
+    returnval <- rep(NA, length(pheno.col))
+    for(i in seq(along=pheno.col))
+      returnval[i] <- mqmtestnormal(cross, pheno.col=pheno.col[i], significance=significance, verbose=verbose)
+    names(returnval) <- colnames(cross$pheno)[pheno.col]
+    return(returnval)
+  }
+
+     	returnval <- FALSE
 	if(pheno.col <0 || pheno.col > nphe(cross)){
 		stop("No such phenotype (pheno.col = ",pheno.col,")")
 	}
