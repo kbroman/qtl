@@ -437,8 +437,8 @@ sets up a cofactor list for use with \code{mqmscan}.
 
 <<Cofactor4,eval=FALSE>>=
 par(mfrow = c(2,1))
-plot(mqmgetmodel(result_1))
-plot(result_1)
+plot(mqmgetmodel(mqm_co1))
+plot(mqm_co1)
 @ 
 
 % \begin{figure}
@@ -473,7 +473,7 @@ model \label{Cofactor4}}
 \intro{Plot the \code{mqmscan} results with \code{scanone} results as follows (Figure \ref{Cofactor4b}}
 
 <<Cofactor4b,eval=FALSE>>=
-plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
+plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
 @
 
 % \begin{figure}
@@ -517,7 +517,7 @@ adds the new cofactor to the cofactor already in \code{toset} (see Figure \ref{t
 
 % \intro{Add another cofactor on chromosome 1 at 70 \cM}
 % <<>>=
-% # summary(result_1)
+% # summary(mqm_co1)
 % toset <- c(toset,find.markerindex(hyperaug,find.marker(hyperaug,1,70)))
 % cofactorlist <- mqmsetcofactors(hyperaug,cofactors=toset)
 % result_2 <- mqmscan(hyperaug, cofactorlist)
@@ -539,7 +539,7 @@ We may plot the results with one and two cofactors as follows:
 % <<twowaycomparison,eval=FALSE>>=
 % par(mfrow = c(2,1))
 % plot(mqmgetmodel(result_2))
-% plot(result_2, result_1, col=c("black","green"), lty=1:2)
+% plot(result_2, mqm_co1, col=c("black","green"), lty=1:2)
 % @ 
 
 % \begin{figure}
@@ -579,25 +579,8 @@ improve the current 2 QTL model\label{twowaycomparison}}
 
 
 
-We may plot the results with 0, 1 and 2 cofactors as follows:
-% <<threewaycomparison,eval=FALSE>>=
-% plot(result_no_cofactors, result_1, result_2, chr=c(1,11,15),
-%      col=c("black","red","blue"), lty=1:3)
-% @ 
+\intro{We may plot the results with 0, 1 and 2 cofactors as follows}
 
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE,height=3>>=
-% # plot closeup of threeway comparison
-% <<threewaycomparison>>
-% @
-% \caption{Three way comparison of the \MQM\ scans with no cofactors (black), 
-% a single cofactor on chromosome 4 (red, dashed) and cofactors on chromosome 1
-% and 4 (blue, dotted).
-% The LOD scores on chromosome 1 increase with more cofactors, while the peaks on
-% the chromosome 11 and 15 decrease.}
-% \end{figure}
-
-% ---------------------
 <<threewaycomparisonmulti,eval=FALSE>>=
 plot(mqm_co0, mqm_co1, mqm_co2,
      col=c("black","red","blue"), lty=1:3)
@@ -657,48 +640,28 @@ and we use the naive implementation of setcofactors to set a cofactor at every f
 marker using \code{mqmsetcofactors}, and assess which chromosomes may be implicated in
 the various traits in our multtrait metabolomics dataset (results in Figures \ref{Backward1} and \ref{Backward2}):
 
-
-% <<>>=
-% cofactorlist <- mqmsetcofactors(hyperaug,5)
-% result <- mqmscan(hyperaug, cofactorlist)
-% @
-
 \intro{Automatic cofactor selection followed by backward elimination}
 Example on how-to set cofactors using \code{mqmautocofactors} and \code{mqmsetcofactors}:
 <<eval=FALSE>>=
 multicofactorlist <- mqmautocofactors(maug,50)
-autoresultmulti <- mqmscan(maug, multicofactorlist)
+mqm_auto <- mqmscan(maug, multicofactorlist)
 multicofactorlist <- mqmsetcofactors(maug,5)
-backwardresultmulti <- mqmscan(maug, multicofactorlist)
+mqm_backw <- mqmscan(maug, multicofactorlist)
 @
 
 <<echo=FALSE>>=
 multicofactorlist <- mqmautocofactors(maug,50)
-autoresultmulti <- mqmscan(maug, multicofactorlist)
+mqm_auto <- mqmscan(maug, multicofactorlist)
 multicofactorlist <- mqmsetcofactors(maug,5)
-backwardresultmulti <- mqmscan(maug, multicofactorlist)
+mqm_backw <- mqmscan(maug, multicofactorlist)
 @
 
-We plot the results as follows:
-%<<Backward1,eval=FALSE>>=
-%par(mfrow = c(2,1))
-%plot(mqmgetmodel(result))
-%plot(result)
-%@ 
-
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE>>=
-% # plot result of cofactor backward elimination
-% <<Backward1>>
-% @
-% \caption{\hyperintro, after introducing cofactors at every fifth marker and
-% backward elimination.\label{Backward1}}
-% \end{figure}
+\intro{ot the results as follows}
 
 <<ManualAuto,eval=FALSE>>=
 par(mfrow = c(1,2))
-plot(mqmgetmodel(backwardresultmulti))
-plot(mqmgetmodel(autoresultmulti))
+plot(mqmgetmodel(mqm_backw))
+plot(mqmgetmodel(mqm_auto))
 @ 
 
 \begin{figure}
@@ -716,8 +679,8 @@ place a cofactor at chromosome 1, while this one is missed by mqmsetcofactors
 
 <<Backward1multi,eval=FALSE>>=
 par(mfrow = c(2,1))
-plot(mqmgetmodel(backwardresultmulti))
-plot(backwardresultmulti)
+plot(mqmgetmodel(mqm_backw))
+plot(mqm_backw)
 @ 
 
 \begin{figure}
@@ -750,7 +713,7 @@ significant cofactors.
 
 We plot the results along with those from \code{scanone} as follows:
 <<Backward2,eval=FALSE>>=
-plot(result, result_scanone, col=c("black","green"), lty=1:2)
+plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
 @ 
 
 % \begin{figure}
@@ -766,7 +729,7 @@ plot(result, result_scanone, col=c("black","green"), lty=1:2)
 
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
-plot(backwardresultmulti, m_one, col=c("black","green"), lty=1:2)
+plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
 @ 
 
 \begin{figure}
