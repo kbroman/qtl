@@ -38,7 +38,7 @@
 mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=220,logtransform = FALSE,
-					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1){
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,test.normality=FALSE){
   
   start <- proc.time()
   model <- match.arg(model)
@@ -127,7 +127,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         stop("No such phenotype in cross object.\n")
       }			
 		}
-    if(!mqmtestnormal(cross, pheno.col, 0.01, FALSE)){ 
+    if(test.normality && !mqmtestnormal(cross, pheno.col, 0.01, FALSE)){ 
       warning("Trait might not be normal (Shapiro normality test)\n")
 		}
 		pheno <- cross$pheno[[pheno.col]]
