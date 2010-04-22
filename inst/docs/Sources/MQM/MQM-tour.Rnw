@@ -310,24 +310,24 @@ amount of missing data on QTL mapping, using default values, can been seen in fi
 
 
 <<augment5>>=
-result5perc <- mqmscan(maug5)
-result10perc <- mqmscan(maug10)
-result80perc <- mqmscan(maug80)
+mqm5 <- mqmscan(maug5)
+mqm10 <- mqmscan(maug10)
+mqm80 <- mqmscan(maug80)
 
-resultsone5 <- scanone(msim5)
-resultsone10 <- scanone(msim10)
-resultsone80 <- scanone(msim80)
+one5 <- scanone(msim5)
+one10 <- scanone(msim10)
+one80 <- scanone(msim80)
 @
 
 <<augment6,eval=FALSE,echo=FALSE>>=
 op <- par(mfrow=c(2,2))
-plot(result5perc,result10perc,result80perc,col=c("green","blue","black"),main="MQM missing data")
+plot(mqm5,mqm10,mqm80,col=c("green","blue","black"),main="MQM missing data")
 legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("green","blue","black"),lwd=1)
-plot(resultsone5,result5perc,main="5% missing", col=c("red", "green"))
+plot(one5,mqm5,main="5% missing", col=c("red", "green"))
 legend("topleft",c("scanone","MQM"),col=c("red","green"),lwd=1)
-plot(resultsone10,result10perc,main="10% missing", col=c("red", "blue"))
+plot(one10,mqm10,main="10% missing", col=c("red", "blue"))
 legend("topleft",c("scanone","MQM"),col=c("red","blue"),lwd=1)
-plot(resultsone80,result80perc,main="80% missing", col=c("red", "black"))
+plot(one80,mqm80,main="80% missing", col=c("red", "black"))
 legend("topleft",c("scanone","MQM"),col=c("red","black"),lwd=1)
 @ 
 
