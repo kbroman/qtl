@@ -274,9 +274,9 @@ quantitative differences in metabolite accumulation between \At\ accessions
 
 <<augment3>>=
 data(multitrait)
-sim5 <- simulateMissingData(multitrait,5)
-sim10 <- simulateMissingData(multitrait,10)
-sim80 <- simulateMissingData(multitrait,80)
+msim5 <- simulateMissingData(multitrait,5)
+msim10 <- simulateMissingData(multitrait,10)
+msim80 <- simulateMissingData(multitrait,80)
 @
 
 Next use augmentation to fill in the missing genotypes; with more missing data
@@ -285,9 +285,9 @@ set too low it is possible that an individual cannot be augmented,
 and is moved to the second round of augmentation (see description above).
 
 <<augment4>>=
-multiaug5 <- mqmaugment(sim5)
-multiaug10 <- mqmaugment(sim10,minprob=0.25)
-multiaug80 <- mqmaugment(sim80,minprob=0.80)
+maug5 <- mqmaugment(msim5)
+maug10 <- mqmaugment(msim10,minprob=0.25)
+maug80 <- mqmaugment(msim80,minprob=0.80)
 @
 
 If however we use the multitrait dataset with 10 % missing data and set \code{minprob} at a lower value (e.g. 0.001)
@@ -296,11 +296,11 @@ or using imputation. We can also choose to drop the individuals entirely from th
 not advisable because usable information is lost.
 
 <<augmentMinProb>>=
-multiaug10minprob <- mqmaugment(sim10,minprob=0.001,verbose=T)
-multiaug10minprobImpute <- mqmaugment(sim10,minprob=0.001,unaugmentable="impute",verbose=T)
-# nind(multiaug)
-nind(multiaug10minprob)
-nind(multiaug10minprobImpute)
+maug10minprob <- mqmaugment(msim10,minprob=0.001,verbose=T)
+maug10minprobImpute <- mqmaugment(msim10,minprob=0.001,unaugmentable="impute",verbose=T)
+# nind(maug)
+nind(maug10minprob)
+nind(maug10minprobImpute)
 @
 
 After augmentation check how many individuals are expanded.  Next
@@ -310,13 +310,13 @@ amount of missing data on QTL mapping, using default values, can been seen in fi
 
 
 <<augment5>>=
-result5perc <- mqmscan(multiaug5)
-result10perc <- mqmscan(multiaug10)
-result80perc <- mqmscan(multiaug80)
+result5perc <- mqmscan(maug5)
+result10perc <- mqmscan(maug10)
+result80perc <- mqmscan(maug80)
 
-resultsone5 <- scanone(sim5)
-resultsone10 <- scanone(sim10)
-resultsone80 <- scanone(sim80)
+resultsone5 <- scanone(msim5)
+resultsone10 <- scanone(msim10)
+resultsone80 <- scanone(msim80)
 @
 
 <<augment6,eval=FALSE,echo=FALSE>>=
@@ -358,8 +358,8 @@ section \ref{augmentation}).
 
 <<>>=
 data(multitrait)
-multiaug <- mqmaugment(multitrait,minprob=1.0)
-result_multiaug_no_cofactors <- mqmscan(multiaug)
+maug <- mqmaugment(multitrait,minprob=1.0)
+result_maug_no_cofactors <- mqmscan(maug)
 @
 
 Scan for \qtl\ with \code{mqmscan}.
@@ -378,7 +378,7 @@ differences between the two methods, which will become clear in the next part.
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(result_multiaug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
+plot(result_maug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
@@ -399,7 +399,7 @@ the pseudo markers. In the result you can remove the pseudo markers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
-just_markers <- mqmextractmarkers(result_multiaug_no_cofactors)
+just_markers <- mqmextractmarkers(result_maug_no_cofactors)
 @ 
 
 
@@ -421,11 +421,11 @@ figures \ref{Cofactor4} and \ref{Cofactor4b}).
 \intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
 
 <<>>=
-max(result_multiaug_no_cofactors)
-find.marker(multiaug,chr=5,pos=35)
-multitoset <- find.markerindex(multiaug,"GH.117C")
-multicofactorlist <- mqmsetcofactors(multiaug,cofactors=multitoset)
-result_multi_1 <- mqmscan(multiaug, multicofactorlist)
+max(result_maug_no_cofactors)
+find.marker(maug,chr=5,pos=35)
+multitoset <- find.markerindex(maug,"GH.117C")
+multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
+result_multi_1 <- mqmscan(maug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
@@ -527,9 +527,9 @@ adds the new cofactor to the cofactor already in \code{toset} (see Figure \ref{t
 % -----------
 <<>>=
 # summary(result_multi_1)
-multitoset <- c(multitoset,find.markerindex(multiaug,find.marker(multiaug,4,10)))
-multicofactorlist <- mqmsetcofactors(multiaug,cofactors=multitoset)
-result_multi_2 <- mqmscan(multiaug, multicofactorlist)
+multitoset <- c(multitoset,find.markerindex(maug,find.marker(maug,4,10)))
+multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
+result_multi_2 <- mqmscan(maug, multicofactorlist)
 @
 % -----------
 
@@ -599,7 +599,7 @@ We may plot the results with 0, 1 and 2 cofactors as follows:
 
 % ---------------------
 <<threewaycomparisonmulti,eval=FALSE>>=
-plot(result_multiaug_no_cofactors, result_multi_1, result_multi_2,
+plot(result_maug_no_cofactors, result_multi_1, result_multi_2,
      col=c("black","red","blue"), lty=1:3)
 @ 
 
@@ -666,17 +666,17 @@ the various traits in our multtrait metabolomics dataset (results in Figures \re
 \intro{Automatic cofactor selection followed by backward elimination}
 Example on how-to set cofactors using \code{mqmautocofactors} and \code{mqmsetcofactors}:
 <<eval=FALSE>>=
-multicofactorlist <- mqmautocofactors(multiaug,50)
-autoresultmulti <- mqmscan(multiaug, multicofactorlist)
-multicofactorlist <- mqmsetcofactors(multiaug,5)
-backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
+multicofactorlist <- mqmautocofactors(maug,50)
+autoresultmulti <- mqmscan(maug, multicofactorlist)
+multicofactorlist <- mqmsetcofactors(maug,5)
+backwardresultmulti <- mqmscan(maug, multicofactorlist)
 @
 
 <<echo=FALSE>>=
-multicofactorlist <- mqmautocofactors(multiaug,50)
-autoresultmulti <- mqmscan(multiaug, multicofactorlist)
-multicofactorlist <- mqmsetcofactors(multiaug,5)
-backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
+multicofactorlist <- mqmautocofactors(maug,50)
+autoresultmulti <- mqmscan(maug, multicofactorlist)
+multicofactorlist <- mqmsetcofactors(maug,5)
+backwardresultmulti <- mqmscan(maug, multicofactorlist)
 @
 
 We plot the results as follows:
@@ -810,7 +810,7 @@ the \code{cofactor.significance} no additional cofactors are dropped from the mo
 %-----------------------
 
 <<FigLowAlpha,eval=FALSE>>=
-multiresult <- mqmscan(multiaug, multicofactorlist, cofactor.significance=0.002)
+multiresult <- mqmscan(maug, multicofactorlist, cofactor.significance=0.002)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(multiresult))
 plot(multiresult)
@@ -899,7 +899,7 @@ This requires that \code{mqmscan} was run with
 % \end{figure}
 
 <<QTLeffects,eval=FALSE>>=
-dirresults <- mqmplot.directedqtl(multiaug,multiresult)
+dirresults <- mqmplot.directedqtl(maug,multiresult)
 @ 
 
 \begin{figure}
@@ -1044,7 +1044,7 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
-results <- mqmpermutation(multiaug,scanfunction=mqmscan,cofactors=multicofactorlist,n.cluster=2,n.perm=25,batchsize=25)
+results <- mqmpermutation(maug,scanfunction=mqmscan,cofactors=multicofactorlist,n.cluster=2,n.perm=25,batchsize=25)
 @
 \begin{figure}
 <<fig=TRUE>>=
