@@ -32,10 +32,10 @@
 \newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
 pressure) in an experiment with 250 mice using \mqm}
 \newcommand{\hyperintrocolors}{\qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
-single \qtl\ mapping with \code{scanone} (green, dashed) }
+single \qtl\ mapping with \code{scanone} (green, dashed)}
 \newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes\cite{Keurentjes2006}}
 \newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (black) and
-single \qtl\ mapping with \code{scanone} (green, dashed) }
+single \qtl\ mapping with \code{scanone} (green, dashed)}
 
 \title { Tutorial - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl W. Broman and Ritsert Jansen }
@@ -125,7 +125,7 @@ allowing for weighted analysis later.
 
 To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{geno.image}. In
-Figure~\ref{missing data} there are 2\% missing values in white. The
+Figure \ref{missing data} there are 2\% missing values in white. The
 other colors are genotypes at a certain position, for a certain
 individual. Simulate an F$_2$ dataset with 2\% missing genotypes as
 follows:
@@ -236,7 +236,7 @@ mapping when dealing with missing values \cite{jansen93}\footnote{Note that
 the augmented dataset can only be used with pure \mqm\ functions.  \mqm\ functions
 recognise expanded individuals as single entities.  Other R/qtl functions, like
 \code{scanone}, assume the augmented individuals are \emph{real} individuals}.
-Try augmentation with \code{minprob=0.1} (Figure~\ref{augment2}):
+Try augmentation with \code{minprob=0.1} (Figure \ref{augment2}):
 <<>>=
 augmentedcross <- mqmaugment(mycross, minprob=0.1)
 @ 
@@ -335,7 +335,7 @@ legend("topleft",c("scanone","MQM"),col=c("red","black"),lwd=1)
 <<fig=TRUE,echo=FALSE>>=
 <<augment6>>
 @
-\caption{\Atintro. Effect of missing data on \code{mqmscan} and \code{scanone} (red) methods
+\caption{\Atintro. Effect of missing data on \code{mqmscan} (green=5\%, blue=10\%, black=80\%) and \code{scanone} (red) methods
 \label{augment6}}
 \end{figure}
 \clearpage
@@ -362,11 +362,10 @@ multiaug <- mqmaugment(multitrait,minprob=1.0)
 result_multiaug_no_cofactors <- mqmscan(multiaug)
 @
 
-Scan for \qtl\ with \code{mqmscan} (using default parameters).
-
+Scan for \qtl\ with \code{mqmscan}.
 We compare \code{mqmscan} with \code{scanone}, for which
 one first calculates conditional QTL genotype probabilities via
-\code{calc.genoprob} (also described in section \ref{augmentation}).
+\code{calc.genoprob} (see section \ref{augmentation}).
 
 <<>>=
 multitrait <- calc.genoprob(multitrait, step=5)
@@ -374,7 +373,7 @@ result_multi_scanone <- scanone(multitrait)
 @
 
 Figure \ref{AtNoCofs} shows that, with default parameters, the results from 
-\mqm\ are similar to \code{scanone}. There are, however, major 
+\mqm\ are similar to \code{scanone}. There are, however, 
 differences between the two methods, which will become clear in the next part.
 
 \begin{figure}
@@ -391,8 +390,7 @@ By default \MQM\ introduces pseudo markers at fixed intervals, unlike
 \code{scanone}.  A pseudo marker has a name like c7.loc25 - which is the 25
 \cM\ pseudo marker on chromosome 7. Note that this reflects the standard naming
 used in R/qtl.
-
-The chromosomes are divided into equally spaced sections. Therefore each
+Each
 chromosome is divided into `fictional markers' spaced equally \code{stepsize}
 \cM\ apart. A LOD score for underlying QTLs is calculated at these 
 pseudo markers. A small \code{stepsize} allows for smoother profiles compared
@@ -415,9 +413,9 @@ stepwise approach (note that the automated procedure is preferred, both for
 theoretical and practical reasons). A model consists of a set of markers we
 want to account for. We can start building the initial model by adding
 cofactors at markers with high LOD scores scored by using \code{mqmscan} with
-default values. Figure~\ref{AtNoCofs} displayed a large QTL peak on chromosome 5
+default values. Figure \ref{AtNoCofs} displayed a large QTL peak on chromosome 5
 at 35 \cM. So account for that by setting a cofactor at the marker
-nearest to the peak on chromosome 4 and perform a new \code{mqmscan} (see
+nearest to the peak on chromosome 5 and perform a new \code{mqmscan} (see
 figures \ref{Cofactor4} and \ref{Cofactor4b}).
 
 \intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
@@ -435,7 +433,7 @@ closest to 35 \cM.  The function \code{find.markerindex} translates the
 marker name into a cofactor number.  The function \code{mqmsetcofactors}
 sets up a cofactor list for use with \code{mqmscan}.  
 
-\intro{Plot the results of the genome scan after adding a single cofactor}
+\intro{Plot the results of the genome scan after adding a single cofactor (Figure \ref{Cofactor4})}
 
 <<Cofactor4,eval=FALSE>>=
 par(mfrow = c(2,1))
@@ -450,7 +448,7 @@ plot(result_1)
 % @
 % \caption{\hyperintro. A cofactor is added at chromosome 4 (D4Mit164) and kept in the
 % model. The LOD score (evidence) for a second QTL on chromosome 1 increases (see also
-% Figure~\ref{Cofactor4b})\label{Cofactor4}} 
+% Figure \ref{Cofactor4b})\label{Cofactor4}} 
 % \end{figure}
 
 % --------------
@@ -465,14 +463,15 @@ plot(result_multi_1)
 # plot after adding first cofactor
 <<Cofactor4multi>>
 @
-\caption{\Atintro. A cofactor is added at the top scoring marker of chromosome 5. During the analysis it is kept in the
+\caption{\Atintro. mqmscan after a cofactor is added at the top scoring marker of chromosome 5. During the analysis it is kept in the
 model \label{Cofactor4}} 
 \end{figure}
 
 
 % --------------
 
-We plot them together with the \code{scanone} results, as follows:
+\intro{Plot the \code{mqmscan} results with \code{scanone} results as follows (Figure \ref{Cofactor4b}}
+
 <<Cofactor4b,eval=FALSE>>=
 plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
 @
@@ -497,24 +496,24 @@ plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Cofactor4bMULTI>>
 @
-\caption{\Atintro  after introducing a cofactor on chromosome 5 (GH.117C) we see a light increase in LOD scores. 
-Compared this figure with Figure~\ref{AtNoCofs}. The black line (MQM) is now above the green dashed line (scanone) \label{Cofactor4b}}
+\caption{\Atintro  after introducing a cofactor on chromosome 5 (GH.117C). 
+MQM (black) differs from scanone (green, dashed) \label{Cofactor4b}}
 \end{figure}
 
 % ---------------------------
 
-Figures~\ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
+Figures \ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.  The
 marker is not dropped and it passes initial thresholding to account for
 the \code{cofactor.significance} level. LOD scores are expected to change (slightly)
 genome wide because of variation already explained by the \qtl\ on
 chromosome 4. This can be shown by plotting these new
-results against the \mqm\ \qtl\ mapping without cofactors (Figure~\ref{Cofactor4b}).
+results against the \mqm\ \qtl\ mapping without cofactors (Figure \ref{Cofactor4b}).
 
-Figure~\ref{Cofactor4b} clearly shows the second peak on chromosome 1 at 70
+Figure \ref{Cofactor4b} clearly shows the second peak on chromosome 1 at 70
 \cM\ increases, so we add that to the model and check if the model with both
 cofactors changes the \qtl. Again, combining \code{find.markerindex} with \code{find.marker},
-adds the new cofactor to the cofactor already in \code{toset} (see Figure~\ref{twowaycomparison}): 
+adds the new cofactor to the cofactor already in \code{toset} (see Figure \ref{twowaycomparison}): 
 
 % \intro{Add another cofactor on chromosome 1 at 70 \cM}
 % <<>>=
@@ -571,7 +570,7 @@ plot(result_multi_2, result_multi_1, col=c("black","green"), lty=1:2)
 \caption{\Atintro using 1 cofactor (on chromosome 5) versus 2 cofactors (on chromosome 4 and 5)  After introducing a
 cofactors at chromosomes 4 there appears to be only a small difference in the likelihood scores for each chromosome. 
 The LOD scores do not appear to improve much after adding the second cofactor on chromosome 4. Indicating we have found 
-all underlying QTLs for this trait we could add more cofactors (see Figure~\ref{threewaycomparison} However this won't 
+all underlying QTLs for this trait we could add more cofactors (see Figure \ref{threewaycomparison} However this won't 
 improve the current 2 QTL model\label{twowaycomparison}}
 \end{figure}
 
@@ -645,18 +644,18 @@ locations can be examined, ( because of lack of sample size (we can set as many 
 The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
 create lists consisting of multiple cofactors that can be used for backward elimination. 
 \code{mqmautocofactor} is prefered when dealing with low samplesizes, because it takes the underlying marker 
-density into account. See Figure~\ref{ManualAuto} for a comparison on the multitrait dataset, using the 
+density into account. See Figure \ref{ManualAuto} for a comparison on the multitrait dataset, using the 
 \code{mqmsetcofactors} function to set cofactors every 5th marker and \code{mqmautocofactor} to set 50 cofactors.
 After cofactor selection iteratively the MQM algorithm analyses all the markers and drops the least 
 informative cofactor from the model. This step is repeated until a limited number of significant cofactors remains.
-From Figure~\ref{ManualAuto} we see that when taking marker density into account we get an extra marker that seems 
+From Figure \ref{ManualAuto} we see that when taking marker density into account we get an extra marker that seems 
 significant when used as cofactor, compared to the naive approach where we miss this marker because we set cofactors every 5th marker.
 
 After backward elimination \mqm\ scans each chromosome using the model that
 includes the retained cofactors. Here we set 50 cofactors using the automatic cofactor routine, 
 and we use the naive implementation of setcofactors to set a cofactor at every fifth
 marker using \code{mqmsetcofactors}, and assess which chromosomes may be implicated in
-the various traits in our multtrait metabolomics dataset (results in Figures~\ref{Backward1} and \ref{Backward2}):
+the various traits in our multtrait metabolomics dataset (results in Figures \ref{Backward1} and \ref{Backward2}):
 
 
 % <<>>=
@@ -780,7 +779,7 @@ plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
 % -------------------------------
 
 \mqm\ \qtl\ mapping may result in many significant markers, with multiple 
-hits on each chromosome. Figure~\ref{Backward2} shows that at 
+hits on each chromosome. Figure \ref{Backward2} shows that at 
 \code{cofactor.significance=0.02} chromosomes 4 and 5 are involved. 
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes preferred, but in general a simpler 
@@ -788,7 +787,7 @@ model is more easily understood and, perhaps, validated. Decreasing
 the significance level also has the advantage that we can be more sure of 
 the \qtl we report. In our example we already found a small model so we don't 
 expect to loose the two QTLs on chromosome 4 and chromosome 5. And indeed when deceasing 
-the \code{cofactor.significance} no additional cofactors are dropped from the model (See Figure~\ref{lowalpha})
+the \code{cofactor.significance} no additional cofactors are dropped from the model (See Figure \ref{lowalpha})
 
 % <<FigLowAlpha,eval=FALSE>>=
 % result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
@@ -831,14 +830,14 @@ could reduce the number of significant QTLs in our model  \label{FigLowAlpha}}
 
 %-----------------------
 
-When comparing the \mqm\ scan in Figure~\ref{FigLowAlpha} with the original
-\code{scanone} result in Figure~\ref{AtNoCofs} there are some notable differences.
+When comparing the \mqm\ scan in Figure \ref{FigLowAlpha} with the original
+\code{scanone} result in Figure \ref{AtNoCofs} there are some notable differences.
 Some \qtl\ show higher significance (LOD scores) and some others show lower
 significance and are, therefore, estimated to be less likely involved in this
 trait.
 
 Figures can be reconstructed from the result of \code{mqmscan} using the
-\code{mqmplot.singletrait} function (see, for example, Figure~\ref{AutoCofactor}). Here the
+\code{mqmplot.singletrait} function (see, for example, Figure \ref{AutoCofactor}). Here the
 model and \qtl\ profile are retrieved.  These functions can only be used with
 \code{mqmscan}, as they require the additional information about the inferred \qtl\
 model.  The results also contain the \emph{estimated} information
@@ -877,25 +876,25 @@ mouse versus a group of 99 \At. We can multiply the estimated \qtl\ effect by
 this information content to `clean' the QTL profile by giving less weight to
 less informative markers. Please note that the sample size already plays a
 role in calculating \qtl. Meanwhile it allows (informal) further
-weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
+weighting/exploring \emph{information} content (Figure \ref{AutoCofactor}).
 
 \section{MQM effect plots}
 
 The function \code{mqmplot.directedqtl} may be used to plot LOD
 curves with an indication of the sign of the estimated QTL effects.
 This requires that \code{mqmscan} was run with
-\code{outputmarkers=TRUE}, but that is the default.  For an example on creating directed QTL plots see Figure~\ref{QTLeffects}:
+\code{outputmarkers=TRUE}, but that is the default.  For an example on creating directed QTL plots see Figure \ref{QTLeffects}:
 % <<QTLeffects,eval=FALSE>>=
 % dirresults <- mqmplot.directedqtl(hyperaug,result)
 % @ 
 
-% The output is in Figure~\ref{QTLeffects}.
+% The output is in Figure \ref{QTLeffects}.
 
 % \begin{figure}
 % <<fig=TRUE,echo=FALSE,height=3.5>>=
 % <<QTLeffects>>
 % @
-% \caption{Same as Figure~\ref{AutoCofactor}, but with LOD scores
+% \caption{Same as Figure \ref{AutoCofactor}, but with LOD scores
 %   multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
 % \end{figure}
 
@@ -907,16 +906,16 @@ dirresults <- mqmplot.directedqtl(multiaug,multiresult)
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<QTLeffects>>
 @
-\caption{Same as Figure~\ref{AutoCofactor}, but with LOD scores
+\caption{Same as Figure \ref{AutoCofactor}, but with LOD scores
 multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
 \end{figure}
 
-The results in Figure~\ref{FigLowAlpha} implied that QTL on chromosomes 4 and 5 are
+The results in Figure \ref{FigLowAlpha} implied that QTL on chromosomes 4 and 5 are
 associated with the metabolite X3.Hydroxypropyl. If we want to investigate the effects
 of the QTL, we can use the functions \code{plot.pxg} and \code{effectplot}.
 The following plots show these for markers GH.117C (main effect,
-Figure~\ref{MainEffectsD1}) and the interaction between GH.117C and
-GA1 (Figure~\ref{epistatic1}). 
+Figure \ref{MainEffectsD1}) and the interaction between GH.117C and
+GA1 (Figure \ref{epistatic1}). 
 
 % <<MainEffectsD1,eval=FALSE>>=
 % plot.pxg(hyperaug,marker="D1Mit102")
@@ -944,12 +943,12 @@ plot.pxg(multitrait,marker="GH.117C")
 
 %----------------------------------------------
 
-The initial scans for X3.Hydroxypropyl in Figure~\ref{Backward1}
+The initial scans for X3.Hydroxypropyl in Figure \ref{Backward1}
 possibly show two main efect \qtl\ on chromosome 4 and 5.  We 
 can investigate possible interactions between these main effect QTLs
 using the \code{effectplot} function. To investigate the possible 
-interaction we select markers GA1 (significant in Figure~\ref{Backward1} and Figure~\ref{Backward2}) 
-and GH.117C (significant in Figure~\ref{Backward2} and \ref{AutoCofactor}). See Figure~\ref{epistatic1}.
+interaction we select markers GA1 (significant in Figure \ref{Backward1} and Figure \ref{Backward2}) 
+and GH.117C (significant in Figure \ref{Backward2} and \ref{AutoCofactor}). See Figure \ref{epistatic1}.
 
 % <<epistatic1,eval=FALSE>>=
 % effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
@@ -982,11 +981,11 @@ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 Likewise, in case we are interested in the interactions between the first small hump on
 chromosomes 1 (marker: PVV4 not significant) and the main efect on 5 (GH.117C), we could 
 make interaction plots between these two
-markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}.
+markers with a high LOD score on those chromosomes.  See Figure \ref{epistatic2}.
 % <<epistatic2,eval=FALSE>>=
 % effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
 % @ 
-% Figure~\ref{epistatic2} shows little evidence for an interaction between
+% Figure \ref{epistatic2} shows little evidence for an interaction between
 % the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
 % 
 % \begin{figure}
@@ -1002,7 +1001,7 @@ markers with a high LOD score on those chromosomes.  See Figure~\ref{epistatic2}
 <<epistatic2,eval=FALSE>>=
 effectplot(multitrait, mname1="PVV4", mname2="GH.117C")
 @ 
-Figure~\ref{epistatic2} shows no evidence for an interaction between
+Figure \ref{epistatic2} shows no evidence for an interaction between
 the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
 
 \begin{figure}
@@ -1121,11 +1120,11 @@ Of these 24 phenotypes we will only scan the first 5 phenotypes by setting
 the \code{pheno.col} parameter. To map back the 
 regulatory locations of these metabolites one can use plain scanning of
 all metabolites (initially without cofactors). Next, we plot all the profiles
-in a heatmap (see Figure~\ref{At.heatmap1}). In this heatmap the colors represent the LOD score, on
+in a heatmap (see Figure \ref{At.heatmap1}). In this heatmap the colors represent the LOD score, on
 the x-axis the marker number and on the y-axis the metabolite. The traits
 are numbered in the plot. Plot heatmap without cofactors and then the
-heatmap with cofactors and backward elimination. Figure~\ref{At.heatmap2} shows
-improvement over Figure~\ref{At.heatmap1} because of an improved signal to noise ratio.
+heatmap with cofactors and backward elimination. Figure \ref{At.heatmap2} shows
+improvement over Figure \ref{At.heatmap1} because of an improved signal to noise ratio.
 
 <<>>=
 data(multitrait)
