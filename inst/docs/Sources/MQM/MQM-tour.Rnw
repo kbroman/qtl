@@ -29,10 +29,6 @@
 \newcommand{\intro}[1]{\vspace{0.15in}#1:}
 \newcommand{\code}{\texttt}
 
-\newcommand{\hyperintro}{\qtl\ profiles of the hyper dataset with the trait bp (blood
-pressure) in an experiment with 250 mice using \mqm}
-\newcommand{\hyperintrocolors}{\qtl\ profiles of the hyper dataset with the trait bp (blood pressure) in an experiment with 250 mice comparing \mqm\ (black) and
-single \qtl\ mapping with \code{scanone} (green, dashed)}
 \newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes\cite{Keurentjes2006}}
 \newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (black) and
 single \qtl\ mapping with \code{scanone} (green, dashed)}
@@ -539,7 +535,7 @@ plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
 appears to be only a small difference in the likelihood scores for each
 chromosome. 
-For this trait we could add more cofactors (see Figure \ref{threewaycomparison}
+For this trait we could add more cofactors (Figure \ref{threewaycomparison})
 However this does not improve the current two QTL model\label{twowaycomparison}}
 \end{figure}
 
@@ -548,20 +544,19 @@ However this does not improve the current two QTL model\label{twowaycomparison}}
 
 
 
-\intro{We may plot the results with 0, 1 and 2 cofactors as follows}
+\intro{Plot the results with 0, 1 and 2 cofactors as follows}
 
 <<threewaycomparisonmulti,eval=FALSE>>=
 plot(mqm_co0, mqm_co1, mqm_co2,
      col=c("black","red","blue"), lty=1:3)
 @ 
 
-@@
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro\ Comparison of MQM results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination \label{threewaycomparison}}
+\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination \label{threewaycomparison}}
 \end{figure}
 % ---------------------
 
