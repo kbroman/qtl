@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -221,6 +221,7 @@ mqmprocesspermutation <- function(mqmpermutationresult = NULL){
     result <- NULL
 		result <- sapply(mqmpermutationresult[-1], function(a) max(a[,3], na.rm=TRUE))
 		result <- as.matrix(result)
+                colnames(result) <- colnames(mqmpermutationresult[[2]])[3]
 		rownames(result) <- 1:(length(mqmpermutationresult)-1)
 		class(result) <- c("scanoneperm",class(result))
 		result
