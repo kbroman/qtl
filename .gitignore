@@ -14,6 +14,7 @@ cmake_install.cmake
 CTestTestfile.cmake
 *.pyc
 *.o
+*.diff
 *.so
 *.eps
 *.dvi
