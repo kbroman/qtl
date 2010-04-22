@@ -941,7 +941,7 @@ plot.pxg(multitrait,marker="GH.117C")
 <<fig=TRUE, echo=FALSE,height=3>>=
 <<MainEffectsD1>>
 @
-\caption{multitrait, Show effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}\label{MainEffectsD1}}
+\caption{\Atintro, Show main effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}\label{MainEffectsD1}}
 \end{figure}
 
 %----------------------------------------------
@@ -975,8 +975,7 @@ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic1>>
 @
-\caption{multitrait, \code{effectplot} shows possible epistatic effects between
-markers GH.117C and GA1 \label{epistatic1}}
+\caption{\Atintro, \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1 \label{epistatic1}}
 \end{figure}
 
 %------------------------------------------------
@@ -1012,7 +1011,7 @@ the two markers D1Mit102 and D5Mit213, as the lines are close to parallel.
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic2>>
 @
-\caption{multitrait, \code{effectplot} shows no epistatic effects between
+\caption{\Atintro, \code{effectplot} shows no epistatic effects between
 markers GH.117C and PVV4, ths can be seen because the two lines run parallel, 
 the genotype on one location (PVV4) does not affect the effect of the expression 
 on GH.117C other location \label{epistatic2}}
@@ -1054,7 +1053,8 @@ results <- mqmpermutation(multiaug,scanfunction=mqmscan,cofactors=multicofactorl
 <<fig=TRUE>>=
 mqmplot.permutations(results)
 @
-\caption{ Multitrait. Calculate significance permuting 25 times over \qtl\ with
+\caption{\Atintro. To calculate \qtl\ significance permutation is used, randomly distributing trait values 
+amongst individuals (25 times) gives an indication what LOD scores are found by chance. Here \qtl\ with
 a \lod\ higher than 2.5 LOD score can be considered significant (at
 \code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10} (blue)).
 Estimation from permuting a single trait (X3.Hydroxypropyl). Chromosomes are signified by
