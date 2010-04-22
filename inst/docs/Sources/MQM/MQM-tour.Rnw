@@ -728,7 +728,7 @@ plot(backwardresultmulti)
 # plot result of cofactor backward elimination
 <<Backward1multi>>
 @
-\caption{backward on \Atintro after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
+\caption{backward elimination on \At after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
 \end{figure}
 
 
@@ -787,7 +787,10 @@ hits on each chromosome. Figure~\ref{Backward2} shows that at
 Lowering the significance level from 0.02 to 0.002 may yield a smaller model. 
 In biology extensive models are sometimes preferred, but in general a simpler 
 model is more easily understood and, perhaps, validated. Decreasing 
-the significance level also has the advantage that we can be more sure of the \qtl we report. 
+the significance level also has the advantage that we can be more sure of 
+the \qtl we report. In our example we already found a small model so we don't 
+expect to loose the two QTLs on chromosome 4 and chromosome 5. And indeed when deceasing 
+the \code{cofactor.significance} no additional cofactors are dropped from the model (See Figure~\ref{lowalpha})
 
 % <<FigLowAlpha,eval=FALSE>>=
 % result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
@@ -816,7 +819,7 @@ plot(mqmgetmodel(multiresult))
 plot(multiresult)
 @ 
 \clearpage
-\intro{Plot with lowered \code{cofactor.significance}}
+\intro{\Atintro Scan done when using a lower \code{cofactor.significance} but using the same strating markers as figure\ref{Backward1}\label{lowalpha}}
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
