@@ -274,9 +274,9 @@ quantitative differences in metabolite accumulation between \At\ accessions
 
 <<augment3>>=
 data(multitrait)
-multimissing5 <- simulateMissingData(multitrait,5)
-multimissing10 <- simulateMissingData(multitrait,10)
-multimissing80 <- simulateMissingData(multitrait,80)
+sim5 <- simulateMissingData(multitrait,5)
+sim10 <- simulateMissingData(multitrait,10)
+sim80 <- simulateMissingData(multitrait,80)
 @
 
 Next use augmentation to fill in the missing genotypes; with more missing data
@@ -285,9 +285,9 @@ set too low it is possible that an individual cannot be augmented,
 and is moved to the second round of augmentation (see description above).
 
 <<augment4>>=
-multiaug5 <- mqmaugment(multimissing5)
-multiaug10 <- mqmaugment(multimissing10,minprob=0.25)
-multiaug80 <- mqmaugment(multimissing80,minprob=0.80)
+multiaug5 <- mqmaugment(sim5)
+multiaug10 <- mqmaugment(sim10,minprob=0.25)
+multiaug80 <- mqmaugment(sim80,minprob=0.80)
 @
 
 If however we use the multitrait dataset with 10 % missing data and set \code{minprob} at a lower value (e.g. 0.001)
@@ -296,8 +296,8 @@ or using imputation. We can also choose to drop the individuals entirely from th
 not advisable because usable information is lost.
 
 <<augmentMinProb>>=
-multiaug10minprob <- mqmaugment(multimissing10,minprob=0.001,verbose=T)
-multiaug10minprobImpute <- mqmaugment(multimissing10,minprob=0.001,unaugmentable="impute",verbose=T)
+multiaug10minprob <- mqmaugment(sim10,minprob=0.001,verbose=T)
+multiaug10minprobImpute <- mqmaugment(sim10,minprob=0.001,unaugmentable="impute",verbose=T)
 # nind(multiaug)
 nind(multiaug10minprob)
 nind(multiaug10minprobImpute)
@@ -314,9 +314,9 @@ result5perc <- mqmscan(multiaug5)
 result10perc <- mqmscan(multiaug10)
 result80perc <- mqmscan(multiaug80)
 
-resultsone5 <- scanone(multimissing5)
-resultsone10 <- scanone(multimissing10)
-resultsone80 <- scanone(multimissing80)
+resultsone5 <- scanone(sim5)
+resultsone10 <- scanone(sim10)
+resultsone80 <- scanone(sim80)
 @
 
 <<augment6,eval=FALSE,echo=FALSE>>=
@@ -497,17 +497,17 @@ plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
 <<Cofactor4bMULTI>>
 @
 \caption{\Atintro  after introducing a cofactor on chromosome 5 (GH.117C). 
-MQM (black) differs from scanone (green, dashed) \label{Cofactor4b}}
+\code{mqmscan} (black) differs from \code{scanone} (green, dashed) \label{Cofactor4b}}
 \end{figure}
 
 % ---------------------------
 
 Figures \ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
-cofactor related to the \qtl\ on chromosome 4, followed by an \mqm\ scan.  The
+cofactor related to the \qtl\ on chromosome 5, followed by an \mqm\ scan.  The
 marker is not dropped and it passes initial thresholding to account for
 the \code{cofactor.significance} level. LOD scores are expected to change (slightly)
 genome wide because of variation already explained by the \qtl\ on
-chromosome 4. This can be shown by plotting these new
+chromosome 5. This can be shown by plotting these new
 results against the \mqm\ \qtl\ mapping without cofactors (Figure \ref{Cofactor4b}).
 
 Figure \ref{Cofactor4b} clearly shows the second peak on chromosome 1 at 70
