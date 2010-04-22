@@ -359,7 +359,7 @@ section \ref{augmentation}).
 <<>>=
 data(multitrait)
 maug <- mqmaugment(multitrait,minprob=1.0)
-maug_no_cofactors <- mqmscan(maug)
+mqm_co0 <- mqmscan(maug)
 @
 
 Scan for \qtl\ with \code{mqmscan}.
@@ -378,7 +378,7 @@ differences between the two methods, which will become clear in the next part.
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(maug_no_cofactors, m_one, col=c("black", "green"), lty=1:2)
+plot(mqm_co0, m_one, col=c("black", "green"), lty=1:2)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
@@ -399,7 +399,7 @@ the pseudo markers. In the result you can remove the pseudo markers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
-just_markers <- mqmextractmarkers(maug_no_cofactors)
+just_markers <- mqmextractmarkers(mqm_co0)
 @ 
 
 
@@ -421,11 +421,11 @@ figures \ref{Cofactor4} and \ref{Cofactor4b}).
 \intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
 
 <<>>=
-max(maug_no_cofactors)
+max(mqm_co0)
 find.marker(maug,chr=5,pos=35)
 multitoset <- find.markerindex(maug,"GH.117C")
 multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
-result_multi_1 <- mqmscan(maug, multicofactorlist)
+mqm_co1 <- mqmscan(maug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
@@ -454,8 +454,8 @@ plot(result_1)
 % --------------
 <<Cofactor4multi,eval=FALSE>>=
 par(mfrow = c(2,1))
-plot(mqmgetmodel(result_multi_1))
-plot(result_multi_1)
+plot(mqmgetmodel(mqm_co1))
+plot(mqm_co1)
 @ 
 
 \begin{figure}
@@ -489,7 +489,7 @@ plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
 % -------------------------
 
 <<Cofactor4bMULTI,eval=FALSE>>=
-plot(result_multi_1, m_one, col=c("black","green"), lty=1:2)
+plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
 @
 
 \begin{figure}
@@ -526,10 +526,10 @@ adds the new cofactor to the cofactor already in \code{toset} (see Figure \ref{t
 
 % -----------
 <<>>=
-# summary(result_multi_1)
+# summary(mqm_co1)
 multitoset <- c(multitoset,find.markerindex(maug,find.marker(maug,4,10)))
 multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
-result_multi_2 <- mqmscan(maug, multicofactorlist)
+mqm_co2 <- mqmscan(maug, multicofactorlist)
 @
 % -----------
 
@@ -559,8 +559,8 @@ We may plot the results with one and two cofactors as follows:
 
 <<twowaycomparison,eval=FALSE>>=
 par(mfrow = c(2,1))
-plot(mqmgetmodel(result_multi_2))
-plot(result_multi_2, result_multi_1, col=c("black","green"), lty=1:2)
+plot(mqmgetmodel(mqm_co2))
+plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 @ 
 
 \begin{figure}
@@ -599,7 +599,7 @@ We may plot the results with 0, 1 and 2 cofactors as follows:
 
 % ---------------------
 <<threewaycomparisonmulti,eval=FALSE>>=
-plot(maug_no_cofactors, result_multi_1, result_multi_2,
+plot(mqm_co0, mqm_co1, mqm_co2,
      col=c("black","red","blue"), lty=1:3)
 @ 
 
