@@ -329,7 +329,7 @@ legend("topleft",c("scanone","MQM"),col=c("blue","red"),lwd=1)
 \end{figure}
 \clearpage
 
-\section{MQM multiple QTL model mapping}
+\section{Multiple QTL Model (MQM) mapping}
 
 \label{QTL modelling}
 
@@ -343,7 +343,7 @@ augment the data using the \code{mqmaugment} function with \code{minprob=1.0} (s
 section \ref{augmentation}). 
 
 \intro{Use \code{scanone} and \code{mqmscan} after filling missing data with
-\code{mqmaugment} minprob=1.0}
+\code{mqmaugment minprob=1.0}}
 
 <<>>=
 data(multitrait)
@@ -353,7 +353,7 @@ result_multiaug_no_cofactors <- mqmscan(multiaug)
 
 Scan for \qtl\ with \code{mqmscan} (using default parameters).
 
-We compare these results to those from \code{scanone}, for which
+We compare \code{mqmscan} with \code{scanone}, for which
 one first calculates conditional QTL genotype probabilities via
 \code{calc.genoprob} (also described in section \ref{augmentation}).
 
@@ -376,7 +376,7 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 \label{AtNoCofs}}
 \end{figure}
 
-\MQM\ introduces pseudo markers at fixed intervals, by default, unlike
+By default \MQM\ introduces pseudo markers at fixed intervals, unlike
 \code{scanone}.  A pseudo marker has a name like c7.loc25 - which is the 25
 \cM\ pseudo marker on chromosome 7. Note that this reflects the standard naming
 used in R/qtl.
@@ -404,22 +404,13 @@ stepwise approach (note that the automated procedure is preferred, both for
 theoretical and practical reasons). A model consists of a set of markers we
 want to account for. We can start building the initial model by adding
 cofactors at markers with high LOD scores scored by using \code{mqmscan} with
-default values. Figure~\ref{AtNoCofs} displayed a large QTL peak on chromosome 4
-at 30 \cM. So account for that by setting a cofactor at the marker
+default values. Figure~\ref{AtNoCofs} displayed a large QTL peak on chromosome 5
+at 35 \cM. So account for that by setting a cofactor at the marker
 nearest to the peak on chromosome 4 and perform a new \code{mqmscan} (see
 figures \ref{Cofactor4} and \ref{Cofactor4b}).
 
-\intro{Add marker D4Mit164 (chromosome 4, at 30 \cM) as a cofactor}
+\intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
 
-% <<>>=
-% max(result_no_cofactors)
-% find.marker(hyperaug,chr=4,pos=30)
-% toset <- find.markerindex(hyperaug,"D4Mit164")
-% cofactorlist <- mqmsetcofactors(hyperaug,cofactors=toset)
-% result_1 <- mqmscan(hyperaug, cofactorlist)
-% @
-
-\intro{Similarly for the multitrait dataset}
 <<>>=
 max(result_multiaug_no_cofactors)
 find.marker(multiaug,chr=5,pos=35)
@@ -429,7 +420,7 @@ result_multi_1 <- mqmscan(multiaug, multicofactorlist)
 @
 
 The function \code{find.marker} identifies the name of the marker
-closest to 30 \cM.  The function \code{find.markerindex} translates the
+closest to 35 \cM.  The function \code{find.markerindex} translates the
 marker name into a cofactor number.  The function \code{mqmsetcofactors}
 sets up a cofactor list for use with \code{mqmscan}.  
 
