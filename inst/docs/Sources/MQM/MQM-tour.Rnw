@@ -304,7 +304,7 @@ nind(maug10minprobImpute)
 @
 
 After augmentation check how many individuals are expanded.  Next
-scan for QTLs inside the crossobjects with \code{mqmscan} and the single QTL
+scan for QTL inside the crossobjects with \code{mqmscan} and the single QTL
 mapping function \code{scanone} (for reference).  The effect of increasing the
 amount of missing data on QTL mapping, using default values, can been seen in figure \ref{augment6}.
 
@@ -392,7 +392,7 @@ By default \MQM\ introduces pseudo markers at fixed intervals, unlike
 used in R/qtl.
 Each
 chromosome is divided into `fictional markers' spaced equally \code{stepsize}
-\cM\ apart. A LOD score for underlying QTLs is calculated at these 
+\cM\ apart. A LOD score for underlying QTL is calculated at these 
 pseudo markers. A small \code{stepsize} allows for smoother profiles compared
 with pure marker based mapping approaches. The real markers are listed between
 the pseudo markers. In the result you can remove the pseudo markers by using
@@ -696,7 +696,7 @@ In biology extensive models are sometimes preferred, but in general a simpler
 model is more easily understood and, perhaps, validated. Decreasing 
 the significance level also has the advantage that we can be more sure of 
 the \qtl we report. In our example we already found a small model so we don't 
-expect to loose the two QTLs on chromosome 4 and chromosome 5. And indeed when deceasing 
+expect to loose the two QTL on chromosome 4 and chromosome 5. And indeed when deceasing 
 the \code{cofactor.significance} no additional cofactors are dropped from the model (See Figure \ref{lowalpha})
 
 % <<FigLowAlpha,eval=FALSE>>=
@@ -733,9 +733,9 @@ plot(multiresult)
 <<FigLowAlpha>>
 @
 \caption{\Atintro. With a lower cofactor.significance we get no change 
-in the model (the QTLs are still significant). However based on the 
+in the model (the QTL are still significant). However based on the 
 trait under examination and our samplesize, increasing cofactor.significance 
-could reduce the number of significant QTLs in our model  \label{FigLowAlpha}}
+could reduce the number of significant QTL in our model  \label{FigLowAlpha}}
 \end{figure}
 
 %-----------------------
@@ -855,7 +855,7 @@ plot.pxg(multitrait,marker="GH.117C")
 
 The initial scans for X3.Hydroxypropyl in Figure \ref{Backward1}
 possibly show two main efect \qtl\ on chromosome 4 and 5.  We 
-can investigate possible interactions between these main effect QTLs
+can investigate possible interactions between these main effect QTL
 using the \code{effectplot} function. To investigate the possible 
 interaction we select markers GA1 (significant in Figure \ref{Backward1} and Figure \ref{Backward2}) 
 and GH.117C (significant in Figure \ref{Backward2} and \ref{AutoCofactor}). See Figure \ref{epistatic1}.
@@ -988,7 +988,7 @@ the traits and counts observed \qtl\ (markers with a LOD above \code{x}) when
 setting a certain threshold. It permutes all the data leaving the correlation
 structure between traits intact. For this small example very high FDR estimates
 are calculated because of the small amount of permutations and the high
-correlation between traits. We thus discover many QTLs that map to the same
+correlation between traits. We thus discover many QTL that map to the same
 location, this could normally only happen when we have an information sparse
 marker, or correlated traits, often seen in microarray experiments.
 
@@ -1083,7 +1083,7 @@ size of the markers is scaled, based on the LOD score of the marker for the
 highlighted trait. There are a number of options that can be specified. The main parameters are:
 \code{highlight}: Highlighting a specific trait, and calculating interactions between the 
 significant cofactors. All other traits are grayed out, but remain partly visible, in this 
-way it is possible to see if significant QTLs for this trait are also colocating with other traits
+way it is possible to see if significant QTL for this trait are also colocating with other traits
 \code{interactstrength}: When highlighting a specific trait interactions between significant markers 
 are calculated, However the are only drawn (and reported in the output) if the effect change is larger 
 then \code{interactstrength} * the summed standard deviation. \code{spacing} Spacing between the chromosomes in Cm.
@@ -1161,8 +1161,8 @@ mqmplot.circle(multiloc,resall, highlight=2)
   mqmplot.directedqtl:& Plotting of signle trait with added qtl effect\\
 	mqmplot.permutations:& plot methode to show single trait permutations \\
 	mqmplot.singletrait:& plotting of single trait analysis with information content \\
-	mqmplot.circle:& Genome plot of QTLs in a circle (optional: Use of location information)\\  
-	mqmplot.cistrans:& Genomewide plot of cis- and transQTLs above a threshold \\
+	mqmplot.circle:& Genome plot of QTL in a circle (optional: Use of location information)\\  
+	mqmplot.cistrans:& Genomewide plot of cis- and transQTL above a threshold \\
   addloctocross:& Adding genetic locations for traits \\	
 	mqmtestnormal:& Tests the normallity of a trait \\ 	
 	\hline
