@@ -35,7 +35,8 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
 
 \details{
         For augmented data (as from \code{\link{mqmaugment}}), the cross
-        is first reduced to distinct individuals.
+        is first reduced to distinct individuals. Furthermore the shapiro used to 
+        test normality works only for 3 <= nind(cross) <= 5000
 }
 
 \author{ 
