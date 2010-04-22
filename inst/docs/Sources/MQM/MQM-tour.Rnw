@@ -501,14 +501,14 @@ plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
 Figures \ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 5, followed by an \mqm\ scan.  The
 marker is not dropped and it passes initial thresholding to account for
-the \code{cofactor.significance} level. LOD scores are expected to change (slightly)
-genome wide because of variation already explained by the \qtl\ on
-chromosome 5. This can be shown by plotting these new
+the \code{cofactor.significance} level. Genome wide LOD scores are expected to change (slightly)
+because of variation already explained by the \qtl\ on
+chromosome 5. This can be made visisble by plotting these new
 results against the \mqm\ \qtl\ mapping without cofactors (Figure \ref{Cofactor4b}).
 
-Figure \ref{Cofactor4b} clearly shows the second peak on chromosome 1 at 70
-\cM\ increases, so we add that to the model and check if the model with both
-cofactors changes the \qtl. Again, combining \code{find.markerindex} with \code{find.marker},
+Figure \ref{Cofactor4b} shows the second peak on chromosome 1 at 70
+\cM\ increases. Add that to the model and check if the model with both
+cofactors changes the \qtl. Combining \code{find.markerindex} with \code{find.marker},
 adds the new cofactor to the cofactor already in \code{toset} (see Figure \ref{twowaycomparison}): 
 
 <<>>=
@@ -570,14 +570,14 @@ trying to set more cofactors than the sample size permits, and not return a
 cofactorlist.
 
 \mqm\ verifies the \code{cofactor.significance} level specified by the
-user. Above, the marker on chromosome 1 was informative enough to be included into the model,
-thus a new initial model consisting of cofactors on chromosome 4 and
-1 was created. This (forward) selection of cofactors can continue until there are no more
+user. Here the marker on chromosome 1 was informative enough and included into the model.
+This way a new initial model consisting of cofactors on chromosome 4 and
+5 was created. This (forward) selection of cofactors can continue until there are no more
 informative markers. 
 
 Manually determining which marker to set a cofactor can be very time consuming
-in the case of many QTL underlying a trait. It is also prone to overfitting
-(because the user manipulates the data). Furthermore manual fitting is
+in the case of many \qtl\ underlying a trait. It is also prone to overfitting
+(because the user manipulates the data). Furthermore, manual fitting is
 generally not feasible for a large number of traits. Fortunately \mqm\ provides
 unsupervised backward elimination, which is described in the next section.
 
