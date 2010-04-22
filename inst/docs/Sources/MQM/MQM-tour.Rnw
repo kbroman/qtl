@@ -536,7 +536,7 @@ result_multi_2 <- mqmscan(multiaug, multicofactorlist)
 @
 % -----------
 
-\intro{Plot after adding second cofactor}
+\intro{Plot after adding second cofactor on chromosome 4 at 10 \cM}
 
 We may plot the results with one and two cofactors as follows:
 % <<twowaycomparison,eval=FALSE>>=
