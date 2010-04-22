@@ -51,8 +51,8 @@ data(map10)                                             # Mouse genetic map
 \dontshow{map10 <- map10[1:3]}
 f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
 f2cross <- calc.genoprob(f2cross)
-\dontrun{f2result <- mqmpermutation(f2cross)               	        # Bootstrap to obtain confidence intervals
+\dontrun{f2result <- mqmpermutation(f2cross, n.perm=1000, method="permutation")	# Permutations to obtain significance threshold
 }\dontshow{f2result <- mqmpermutation(f2cross, n.perm=2, batchsize=2, method="permutation")}
-mqmplot.permutations(f2result)					# Use the nice bootstrap plotting methodes
+mqmplot.permutations(f2result)					# Plot results
 }
 \keyword{ hplot }

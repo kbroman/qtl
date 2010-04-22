@@ -39,6 +39,8 @@
 \examples{
 data(multitrait)						#Load dataset
 multitrait <- fill.geno(multitrait)                     # impute missing genotype data
+\dontshow{multitrait <- subset(multitrait, chr=1)
+multitrait$pheno <- multitrait$pheno[,1:3]}
 result <- scanall(multitrait,scanfunction=mqmscan,logtransform=TRUE)	#Analyse all 24 traits
 }
 
