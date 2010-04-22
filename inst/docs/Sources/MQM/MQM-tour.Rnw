@@ -1099,16 +1099,20 @@ then \code{interactstrength} * the summed standard deviation. \code{spacing} Spa
 mqmplot.circle(multifilled, resall)
 @
 \caption{Circleplot 1 - Multiple traits without locations, traits are in the centre 
-connected by a colored spline to their QTL locations The significant QTL locations 
+connected by a colored spline to their QTL locations. The significant QTL locations 
 are depicted as solid square circles at the side of the plot (lower number are closer 
-to the centre). Here a 'hotspot' is visible on chromosome 5}
+to the centre). Here a 'hotspot' of QTLs is visible on chromosome 5 \label{circle1}}
 \end{figure}
 
 \begin{figure}
 <<fig=TRUE>>=
 mqmplot.circle(multifilled, resall, highlight=2)
 @
-\caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
+\caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2. The significant QTL locations 
+are depicted as solid red square circles at the side of the plot. The different lines shown here signify epistatic 
+interactions (see Figure \ref{epistatic1}). In this plot the blue lines are locations which are modulating eachothers 
+expression (higher or lower), the green lines show a flip in effect. Imagina a situation with two markers, having AA at 
+marker 1 shows trait mean AA > trait mean BB at marker2 however when the individual has BB at marker 1 the effect at marker 2 is reversed AA < BB. \label{circle2}}
 \end{figure}
 
 The next plot is \code{mqmplot.cistrans}. This plot is only available
@@ -1141,7 +1145,10 @@ the extra information.
 <<fig=TRUE>>=
 mqmplot.circle(multiloc,resall, highlight=2)
 @
-\caption{\Atintro. Circleplot 3 - Multiple traits with locations added, here we highlight trait number 2}
+\caption{\Atintro. Circleplot 3 - Multiple traits with locations added, again we highlight trait number 2, 
+the difference between this plot and the previous circle plot \ref{circle2} is that an extra red triangle 
+showing the genetic location of the trait under consideration. These kind of plots are only possible if 
+location information is added to the \code{cross} object \label{circle3}}
 \end{figure}
 
 \clearpage
