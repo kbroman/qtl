@@ -105,8 +105,11 @@ plotting routines are available for \mqm\ results.
 \section{Data augmentation}
 \label{augmentation}
 
-Most real world datasets are incomplete. That is, genotype or phenotype information is
-missing, or can have multiple plausible values. \mqm\ automatically expands the
+Most real world datasets are incomplete. That is, genotype
+% or phenotype -- removed as augmentation does not handle missing
+% phenotypes
+information is missing, or can have multiple plausible values. \mqm\
+automatically expands the
 dataset by adding all potential variants and attaches a probability to each.  For
 example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
