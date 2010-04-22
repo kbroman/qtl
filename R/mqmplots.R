@@ -152,7 +152,7 @@ mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scal
   colnames(data) <- rownames(result[[1]])
   rownames(data) <- names
   retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
-  retresults
+  invisible(retresults)
 }
 
 mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, verbose=FALSE, ...){
