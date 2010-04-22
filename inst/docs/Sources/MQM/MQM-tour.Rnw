@@ -321,7 +321,7 @@ resultsone80 <- scanone(multimissing80)
 
 <<augment6,eval=FALSE,echo=FALSE>>=
 op <- par(mfrow=c(2,2))
-plot(result5perc,result10perc,result80perc,main="MQM missing data")
+plot(result5perc,result10perc,result80perc,col=c("green","blue","black"),main="MQM missing data")
 legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("green","blue","black"),lwd=1)
 plot(resultsone5,result5perc,main="5% missing", col=c("red", "green"))
 legend("topleft",c("scanone","MQM"),col=c("red","green"),lwd=1)
@@ -335,7 +335,7 @@ legend("topleft",c("scanone","MQM"),col=c("red","black"),lwd=1)
 <<fig=TRUE,echo=FALSE>>=
 <<augment6>>
 @
-\caption{\Atintro. Effect of missing data on \code{mqmscan} and \code{scanone} methods
+\caption{\Atintro. Effect of missing data on \code{mqmscan} and \code{scanone} (red) methods
 \label{augment6}}
 \end{figure}
 \clearpage
