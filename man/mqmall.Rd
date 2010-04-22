@@ -15,22 +15,23 @@
   \item{cross}{ 
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{multicore}{ Use multiple cores (only if the package SNOW is available)
+  \item{multicore}{ Use multiple cores (only if the package SNOW is available, otherwise this setting will be ignored)
   }
-  \item{n.clusters}{ Number of parallel processes
+  \item{n.clusters}{ Number of parallel processes to spawn, recommended is setting this lower than the number of cores in the computer
   }
   \item{batchsize}{ Batch size. The entire set is split in 
-    jobs. Each job contains b.size number of traits per job 
+    jobs to reduce memory load per core. Each job contains batchsize number of traits per job.
   }
-  \item{cofactors}{cofactors, only used when scanfunction is mqm}
+  \item{cofactors}{cofactors, only used when scanfunction is mqmscan}
   \item{\dots}{ Parameters passed through to the \code{\link{mqmscan}} function used in 
     scanning for QTLs
   }
 }
 
 \details{
-  Uses \code{mqmscan} to scan for QTL's for each 
-  phenotype in the cross object. 
+  Uses \code{mqmscan} to scan for QTL's for each phenotype in the cross object. 
+  It is recomended that the package SNOW is installed before using this function 
+  on large numbers of phenotypes.
 }
 
 \value{
