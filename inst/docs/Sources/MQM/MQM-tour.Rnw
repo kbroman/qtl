@@ -496,7 +496,7 @@ plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Cofactor4bMULTI>>
 @
-\caption{\Atintro  after introducing a cofactor on chromosome 5 (GH.117C). 
+\caption{\Atintro\ after introducing a cofactor on chromosome 5 (GH.117C). 
 \code{mqmscan} (black) differs from \code{scanone} (green, dashed) \label{Cofactor4b}}
 \end{figure}
 
@@ -515,16 +515,6 @@ Figure \ref{Cofactor4b} clearly shows the second peak on chromosome 1 at 70
 cofactors changes the \qtl. Again, combining \code{find.markerindex} with \code{find.marker},
 adds the new cofactor to the cofactor already in \code{toset} (see Figure \ref{twowaycomparison}): 
 
-% \intro{Add another cofactor on chromosome 1 at 70 \cM}
-% <<>>=
-% # summary(mqm_co1)
-% toset <- c(toset,find.markerindex(hyperaug,find.marker(hyperaug,1,70)))
-% cofactorlist <- mqmsetcofactors(hyperaug,cofactors=toset)
-% result_2 <- mqmscan(hyperaug, cofactorlist)
-% @
-
-
-% -----------
 <<>>=
 # summary(mqm_co1)
 multitoset <- c(multitoset,find.markerindex(maug,find.marker(maug,4,10)))
@@ -534,28 +524,6 @@ mqm_co2 <- mqmscan(maug, multicofactorlist)
 % -----------
 
 \intro{Plot after adding second cofactor on chromosome 4 at 10 \cM}
-
-We may plot the results with one and two cofactors as follows:
-% <<twowaycomparison,eval=FALSE>>=
-% par(mfrow = c(2,1))
-% plot(mqmgetmodel(result_2))
-% plot(result_2, mqm_co1, col=c("black","green"), lty=1:2)
-% @ 
-
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE>>=
-% <<twowaycomparison>>
-% @
-% \caption{QTL profiles of the hyper dataset with the trait bp (blood
-%   pressure) in an experiment with 250 mice, comparing \MQM\ with a
-%   single cofactor on chr 4 (black) to the results with two cofactors
-%   on chr 1 and 4 (green, dashed).  After introducing a
-% cofactors at chromosomes 1 and 4 there appears only a small difference in the likelihood 
-% scores for each chromosome. The LOD scores do not appear to improve much after adding 
-% the second cofactor on chromosome 4. )}
-% \end{figure}
-
-% --------------------------
 
 <<twowaycomparison,eval=FALSE>>=
 par(mfrow = c(2,1))
@@ -567,11 +535,12 @@ plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE>>=
 <<twowaycomparison>>
 @
-\caption{\Atintro using 1 cofactor (on chromosome 5) versus 2 cofactors (on chromosome 4 and 5)  After introducing a
-cofactors at chromosomes 4 there appears to be only a small difference in the likelihood scores for each chromosome. 
-The LOD scores do not appear to improve much after adding the second cofactor on chromosome 4. Indicating we have found 
-all underlying QTLs for this trait we could add more cofactors (see Figure \ref{threewaycomparison} However this won't 
-improve the current 2 QTL model\label{twowaycomparison}}
+\caption{\Atintro\ using one cofactor (on chromosome 5) versus two cofactors (on
+chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
+appears to be only a small difference in the likelihood scores for each
+chromosome. 
+For this trait we could add more cofactors (see Figure \ref{threewaycomparison}
+However this does not improve the current two QTL model\label{twowaycomparison}}
 \end{figure}
 
 % ---------------------------
@@ -586,12 +555,13 @@ plot(mqm_co0, mqm_co1, mqm_co2,
      col=c("black","red","blue"), lty=1:3)
 @ 
 
+@@
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro Comparison of MQM results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination \label{threewaycomparison}}
+\caption{\Atintro\ Comparison of MQM results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination \label{threewaycomparison}}
 \end{figure}
 % ---------------------
 
@@ -669,13 +639,11 @@ plot(mqmgetmodel(mqm_auto))
 # plot result of cofactor backward elimination
 <<ManualAuto>>
 @
-\caption{\Atintro after introducing cofactors at every fifth marker (top) and 
+\caption{\Atintro\ after introducing cofactors at every fifth marker (top) and 
 Automatic marker selection (bottom). We see that using \code{mqmautocofactor} does 
 place a cofactor at chromosome 1, while this one is missed by mqmsetcofactors
 (AFTER backward elimination this extra marker remains significant) \label{ManualAuto}}
 \end{figure}
-
-%---------------------------
 
 <<Backward1multi,eval=FALSE>>=
 par(mfrow = c(2,1))
@@ -690,16 +658,6 @@ plot(mqm_backw)
 @
 \caption{backward elimination on \At after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
 \end{figure}
-
-
-
-
-%-----------------------------
-
-
-% <<>>=
-% mqmgetmodel(result)
-% @
 
 The \code{mqmgetmodel} function returns the final model from the
 output of \code{mqmscan}.
@@ -716,17 +674,6 @@ We plot the results along with those from \code{scanone} as follows:
 plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
 @ 
 
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE,height=3>>=
-% <<Backward2>>
-% @
-% \caption{\hyperintrocolors with cofactors at every fifth
-% marker for \mqm\, followed by backward elimination
-% (\code{cofactor.significance = 0.02})\label{Backward2}}
-% \end{figure}
-% 
-
-
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
 plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
@@ -736,7 +683,7 @@ plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Backward2multi>>
 @
-\caption{\Atintro Backward elimination using multiple cofactors compared to scanone \label{Backward2}}
+\caption{\Atintro. Backward elimination using multiple cofactors compared to scanone \label{Backward2}}
 \end{figure}
 
 % -------------------------------
@@ -779,13 +726,13 @@ plot(mqmgetmodel(multiresult))
 plot(multiresult)
 @ 
 \clearpage
-\intro{\Atintro Scan done when using a lower \code{cofactor.significance} but using the same strating markers as figure\ref{Backward1}\label{lowalpha}}
+\intro{\Atintro. Scan done when using a lower \code{cofactor.significance} but using the same strating markers as figure\ref{Backward1}\label{lowalpha}}
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
 <<FigLowAlpha>>
 @
-\caption{\Atintro With a lower cofactor.significance we get no change 
+\caption{\Atintro. With a lower cofactor.significance we get no change 
 in the model (the QTLs are still significant). However based on the 
 trait under examination and our samplesize, increasing cofactor.significance 
 could reduce the number of significant QTLs in our model  \label{FigLowAlpha}}
@@ -827,7 +774,7 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{\Atintro showing the results of trait 1 when using with multiple cofactors, visualized using mqmplot.singletrait \label{AutoCofactor}}
+\caption{\Atintro\ showing the results of trait 1 when using with multiple cofactors, visualized using mqmplot.singletrait \label{AutoCofactor}}
 \end{figure}
 
 The second column \code{info} in the result
@@ -935,7 +882,7 @@ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic1>>
 @
-\caption{\Atintro, \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1 \label{epistatic1}}
+\caption{\Atintro. \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1 \label{epistatic1}}
 \end{figure}
 
 %------------------------------------------------
@@ -971,7 +918,7 @@ the two markers D1Mit102 and D5Mit213, as the lines are close to parallel.
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic2>>
 @
-\caption{\Atintro, \code{effectplot} shows no epistatic effects between
+\caption{\Atintro. \code{effectplot} shows no epistatic effects between
 markers GH.117C and PVV4, ths can be seen because the two lines run parallel, 
 the genotype on one location (PVV4) does not affect the effect of the expression 
 on GH.117C other location \label{epistatic2}}
