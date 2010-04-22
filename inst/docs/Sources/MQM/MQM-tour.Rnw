@@ -534,7 +534,7 @@ plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 \caption{\Atintro\ using one cofactor (on chromosome 5) versus two cofactors (on
 chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
 appears to be only a small difference in the likelihood scores for each
-chromosome. 
+chromosome. (\code{mqmscan} 2 cofactor (black) differs from \code{mqmscan} 1 cofactors (green, dashed))
 For this trait we could add more cofactors (Figure \ref{threewaycomparison})
 However this does not improve the current two QTL model\label{twowaycomparison}}
 \end{figure}
@@ -556,7 +556,7 @@ plot(mqm_co0, mqm_co1, mqm_co2,
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination \label{threewaycomparison}}
+\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination.  (\code{mqmscan} 3 cofactor (black) differs from \code{mqmscan} 2 cofactors (red) and \code{mqmscan} with only 1 cofactor (blue) \label{threewaycomparison}}
 \end{figure}
 % ---------------------
 
