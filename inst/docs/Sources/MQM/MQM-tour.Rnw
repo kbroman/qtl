@@ -849,7 +849,9 @@ plot.pxg(multitrait,marker="GH.117C")
 <<fig=TRUE, echo=FALSE,height=3>>=
 <<MainEffectsD1>>
 @
-\caption{\Atintro, Show main effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}\label{MainEffectsD1}}
+\caption{\Atintro, shown in this plot are the main effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}. 
+We see the two possible genotypes at this marker and with the traitvalues for each individual plotted per category. The blue 
+line is the mean of the AA group the red line the mean of the BB genotype group \label{MainEffectsD1}}
 \end{figure}
 
 %----------------------------------------------
@@ -883,7 +885,9 @@ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic1>>
 @
-\caption{\Atintro. \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1 \label{epistatic1}}
+\caption{\Atintro. \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1. We can see this because the 
+genotype of GA1 seems to obscure the effect of GH.117C. An individual that has BB at GA1 has no difference in expression between being 
+AA or BB at GH.117C. However when an individual is AA at GA1 there is clear difference between the two genotype means (~1.500 BB versus 12000 when AA) at GH.117C \label{epistatic1}}
 \end{figure}
 
 %------------------------------------------------
