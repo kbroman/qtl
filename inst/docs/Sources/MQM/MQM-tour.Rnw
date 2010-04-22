@@ -289,6 +289,19 @@ multiaug10 <- mqmaugment(multimissing10,minprob=0.25)
 multiaug80 <- mqmaugment(multimissing80,minprob=0.80)
 @
 
+If however we use the multitrait dataset with 10 % missing data and set \code{minprob} at a lower value (e.g. 0.001)
+Then some individuals are moved to the second round then missing data is either filled using the most likely marker 
+or using imputation. We can also choose to drop the individuals entirely from the rest of the analysis, this is however 
+not advisable because usable information is lost.
+
+<<augmentMinProb>>=
+multiaug10minprob <- mqmaugment(multimissing10,minprob=0.001,verbose=T)
+multiaug10minprobImpute <- mqmaugment(multimissing10,minprob=0.001,unaugmentable="impute",verbose=T)
+nind(multiaug)
+nind(multiaug10minprob)
+nind(multiaug10minprobImpute)
+@
+
 After augmentation check how many individuals are expanded.  Next
 scan for QTLs inside the crossobjects with \code{mqmscan} and the single QTL
 mapping function \code{scanone} (for reference).  The effect of increasing the
