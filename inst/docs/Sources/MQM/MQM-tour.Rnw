@@ -660,11 +660,20 @@ and we use the naive implementation of setcofactors to set a cofactor at every f
 marker using \code{mqmsetcofactors}, and assess which chromosomes may be implicated in
 the various traits in our multtrait metabolomics dataset (results in Figures~\ref{Backward1} and \ref{Backward2}):
 
-% \intro{Automatic cofactor selection through backward elimination}
+
 % <<>>=
 % cofactorlist <- mqmsetcofactors(hyperaug,5)
 % result <- mqmscan(hyperaug, cofactorlist)
 % @
+
+\intro{Automatic cofactor selection followed by backward elimination}
+Example on how-to set cofactors using \code{mqmautocofactors} and \code{mqmsetcofactors}:
+<<eval=FALSE>>=
+multicofactorlist <- mqmautocofactors(multiaug,50)
+autoresultmulti <- mqmscan(multiaug, multicofactorlist)
+multicofactorlist <- mqmsetcofactors(multiaug,5)
+backwardresultmulti <- mqmscan(multiaug, multicofactorlist)
+@
 
 <<echo=FALSE>>=
 multicofactorlist <- mqmautocofactors(multiaug,50)
