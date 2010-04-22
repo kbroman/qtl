@@ -110,15 +110,17 @@ missing, or can have multiple plausible values. \mqm\ automatically expands the
 dataset by adding all potential variants and attaches a probability to each.  For
 example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
-(estimated) recombination rate, a probability is attached to all possible genotypes.  With \mqm\ all
-possible genotypes with a probability above minprob are considered.  When encountering missing marker 
-in a RIL (possible genotypes A and B) all possible genotypes at the missing location are created.
-Thus at the missing location two `individuals' are created in the augmentation step, one with
-genotype A, and one with genotype B (given that both have a probability of occuring more than minprob).
-And the probability is attached to both genotypes. The combined probabilities of all missing marker 
-locations combined tells us whether a genotype is likely, or unlikely. So if a RIL is not missing 
-any markers it is kept in the set as a single individual with P=1.0, if there is one 
-missing marker and genotype A is as likely as B then two individuals are created each with P=0.5.
+(estimated) recombination rate, a probability is attached to all possible
+genotypes.  With \mqm\ all possible genotypes with a probability above
+\code{minprob} are considered.  
+
+When encountering a missing marker (possible genotypes {\bf A} and {\bf B} in a
+RIL or BC) all possible genotypes at the missing location are created.  Thus at
+the missing location two `individuals' are created in the augmentation step,
+one with genotype {\bf A}, and one with genotype {\bf B} A probability is
+attached to both augmented individuals.  The combined probability of all
+missing marker locations tells whether a genotype is likely, or unlikely,
+allowing for weighted analysis later.
 
 To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{geno.image}. In
@@ -161,13 +163,14 @@ all possible genotypes of interest by leaving them in the solution space. In con
 the imputation method \emph{selects} the most likely genotype, and uses that
 single (and probably fictional individual) for further analysis. 
 
-The downside of augmentation is that the addition of many possible genotypes can
-exceed available computer memory.  Currently, augmentation
-moves an individual to a second augmentation round. In the second augmentation round 
-the user can specify what needs to be done with these genotypes: Fill in the most likely, 
-multiple imputation or removal from the analysis. This will only happen to individuals with 
-a lot of missing data (leading to too many possible genotypes). You can opt to
-use \code{fill.geno}'s imputation method, also.
+The downside of augmentation is that the addition of many possible genotypes
+can exceed available computer memory.  Currently, augmentation moves an
+individual to a second augmentation round. In the second augmentation round the
+user can specify what needs to be done with these individuals: (1) Only use the
+most likely ones, (2) use multiple imputation for the original genotype or (3)
+remove the original genotype/individual from the analysis.  Note you can opt to
+use \code{fill.geno}'s imputation method, instead of augmentation, when too
+many individuals are omitted, because of missing data.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
 procedure\footnote{Note that after augmentation the resulting object is
@@ -188,22 +191,30 @@ F$_2$. As a result the user has to increase the
 
 The \code{minprob} parameter sets the minimum probability of a genotype for
 inclusion in the augmented dataset. This genotype probability is calculated for
-every marker \emph{relative} to the most likely individual.
-Note that setting this value too
-low may result in moving a lot of individuals to the second augmentation round as the parameter \code{maxaugind} is quickly
-reached. Increasing minprob (towards a value of 1.0) can keep individuals with more missing data inside the first 
-augmentation round, a good rule of thumb may be to set \code{minprob} to the percentage of data missing. A value of \code{minprob=1.0} 
-makes augmentation behave similar to \code{fill.geno}'s imputation method, though with slightly different genotypes.  
-Use \code{verbose=TRUE} to get more feedback on the augmentation routine and to check how many
-individuals are moved to the imputation / mostLikely / removal. First we use the augmentation with \code{minprob=1.0}, 
-so basically doing an fill.geno (Figure~\ref{augment1}):
+every marker \emph{relative} to the most likely individual.  Note that setting
+this value too low may result in moving a lot of individuals to the second
+augmentation round as the maxumimum of augmented individuals (the parameter \code{maxaugind}) is quickly reached.
+Increasing \code{minprob} (towards a value of 1.0) can keep individuals with more
+missing data inside the first augmentation round, a good rule of thumb may be
+to set \code{minprob} to the percentage of data missing. A value of
+\code{minprob=1.0} makes augmentation behave similar to \code{fill.geno}'s
+imputation method, though with different resulting genotypes.  Use
+\code{verbose=TRUE} to get more feedback on the augmentation routine and to
+check how many individuals are moved to the stages of imputation / mostLikely /
+removal\footnote{Augmentation is not always suitable with a lot of missing
+data, like in the case of selective genotyped datasets (for example the Mouse hyper
+dataset that comes with R/qtl), these will always be handled with \code{minprob=1.0}
+(a warning will be issued)}
 
-\intro{Plot augmented data using \code{geno.image} with \code{minprob=1.0}}
+To start with an example, first run \code{mqmaugment} with \code{minprob=1.0}
+(Figure \ref{augment1}):
+
+\intro{Plot augmented data using \code{geno.image}}
 <<>>=
 # displays warning because MQM ignores the X chromosome in an F2
 augmentedcross <- mqmaugment(mycross, minprob=1.0)
 @
-We may then plot the genotype data as follows:
+Plot the genotype data as follows:
 <<augment1,eval=FALSE>>=
 geno.image(augmentedcross)
 @ 
@@ -212,9 +223,9 @@ geno.image(augmentedcross)
 <<augment1>>
 @
 \caption{Genotypes, as visualized with \code{geno.image}, of 100 filled individuals
-(\code{mqmaugment} with \code{minprob=1.0} means only a `most likely' individual is
-used and
-no real expansion of the dataset takes place, similar to \code{fill.geno}).\label{augment1}}
+(\code{mqmaugment} with \code{minprob=1.0}. With missing data only a `most
+likely' individual is used and no real expansion of the dataset takes place,
+with similar results as \code{fill.geno}'s imputation method).\label{augment1}}
 \end{figure}
 
 With a lower \code{minprob}, more {\bf unlikely} genotypes are kept, and the
@@ -268,10 +279,9 @@ multimissing80 <- simulateMissingData(multitrait,80)
 @
 
 Next use augmentation to fill in the missing genotypes; with more missing data
-increase the \code{minprob} parameter.  When the \code{minprob} parameter is set too
-low it is possible that an individual cannot be augmented, this individuals is the 
-moved to the second round for augmentation and is augmented using (based on the user settings): imputation / mostLikely / removalremoved
-from the dataset (to prevent memory overflow), So no genotype information is lost.
+increase the \code{minprob} parameter.  When the \code{minprob} parameter is
+set too low it is possible that an individual cannot be augmented, 
+and is moved to the second round of augmentation (see description above).
 
 <<augment4>>=
 multiaug5 <- mqmaugment(multimissing5)
@@ -326,9 +336,8 @@ traits from a RIL population of \At\cite{Keurentjes2006} (see also section
 
 Here we analyse the \code{multitrait} dataset using both \code{scanone} single
 marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping.  First
-\emph{complete} missing data using the \code{mqmaugment} function (see also
-section \ref{augmentation}). After completing the genotypes (without augmentation, because we use \code{minprob=1.0}) information inside the cross object 
-(For detailed information on augmentation see section \ref{augmentation}).
+augment the data using the \code{mqmaugment} function with \code{minprob=1.0} (see also
+section \ref{augmentation}). 
 
 \intro{Use \code{scanone} and \code{mqmscan} after filling missing data with
 \code{mqmaugment} minprob=1.0}
@@ -339,8 +348,7 @@ multiaug <- mqmaugment(multitrait,minprob=1.0)
 result_multiaug_no_cofactors <- mqmscan(multiaug)
 @
 
-After filling in missing genotypes in the dataset 
-we scan for \qtl\ using the \mqm\ routines (using default parameters).
+Scan for \qtl\ with \code{mqmscan} (using default parameters).
 
 We compare these results to those from \code{scanone}, for which
 one first calculates conditional QTL genotype probabilities via
