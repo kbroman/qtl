@@ -10,7 +10,7 @@
 \usage{
 mqmscanfdr(cross, scanfunction=mqmscanall, 
   thresholds=c(1,2,3,4,5,7,10,15,20), n.perm=10, 
-  verbose=TRUE, \dots
+  verbose=FALSE, \dots
   )
 }
 
