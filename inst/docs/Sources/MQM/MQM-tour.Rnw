@@ -359,7 +359,7 @@ section \ref{augmentation}).
 <<>>=
 data(multitrait)
 maug <- mqmaugment(multitrait,minprob=1.0)
-result_maug_no_cofactors <- mqmscan(maug)
+maug_no_cofactors <- mqmscan(maug)
 @
 
 Scan for \qtl\ with \code{mqmscan}.
@@ -369,7 +369,7 @@ one first calculates conditional QTL genotype probabilities via
 
 <<>>=
 multitrait <- calc.genoprob(multitrait, step=5)
-result_multi_scanone <- scanone(multitrait)
+m_one <- scanone(multitrait)
 @
 
 Figure \ref{AtNoCofs} shows that, with default parameters, the results from 
@@ -378,7 +378,7 @@ differences between the two methods, which will become clear in the next part.
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(result_maug_no_cofactors, result_multi_scanone, col=c("black", "green"), lty=1:2)
+plot(maug_no_cofactors, m_one, col=c("black", "green"), lty=1:2)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
@@ -399,7 +399,7 @@ the pseudo markers. In the result you can remove the pseudo markers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
-just_markers <- mqmextractmarkers(result_maug_no_cofactors)
+just_markers <- mqmextractmarkers(maug_no_cofactors)
 @ 
 
 
@@ -421,7 +421,7 @@ figures \ref{Cofactor4} and \ref{Cofactor4b}).
 \intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
 
 <<>>=
-max(result_maug_no_cofactors)
+max(maug_no_cofactors)
 find.marker(maug,chr=5,pos=35)
 multitoset <- find.markerindex(maug,"GH.117C")
 multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
@@ -489,7 +489,7 @@ plot(result_1, result_scanone, col=c("black","green"), lty=1:2)
 % -------------------------
 
 <<Cofactor4bMULTI,eval=FALSE>>=
-plot(result_multi_1, result_multi_scanone, col=c("black","green"), lty=1:2)
+plot(result_multi_1, m_one, col=c("black","green"), lty=1:2)
 @
 
 \begin{figure}
@@ -599,7 +599,7 @@ We may plot the results with 0, 1 and 2 cofactors as follows:
 
 % ---------------------
 <<threewaycomparisonmulti,eval=FALSE>>=
-plot(result_maug_no_cofactors, result_multi_1, result_multi_2,
+plot(maug_no_cofactors, result_multi_1, result_multi_2,
      col=c("black","red","blue"), lty=1:3)
 @ 
 
@@ -766,7 +766,7 @@ plot(result, result_scanone, col=c("black","green"), lty=1:2)
 
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
-plot(backwardresultmulti, result_multi_scanone, col=c("black","green"), lty=1:2)
+plot(backwardresultmulti, m_one, col=c("black","green"), lty=1:2)
 @ 
 
 \begin{figure}
