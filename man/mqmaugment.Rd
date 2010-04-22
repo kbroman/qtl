@@ -65,14 +65,9 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 The sex chromosome 'X' is treated like autosomes during augmentation.
 With an F2 the sex chromosome is not considered. This will change in
 a future version of MQM.
-
-When augmentation runs out of memory, a warning is given and the returned
-object should not be used.
-
-With a large amount of missing data, e.g. larger than 5\%, a low \code{minprob}
-may cause the routine to drop a lot of indivuals from the dataset and distort
-results. Run with \code{verbose=TRUE} to verify how many individuals are
-retained in the dataset or check the return \code{cross$mqm} values. Compare
+Run with \code{verbose=TRUE} to verify how many individuals are augmented 
+versus moved to the second augmentation round. This could have an effect 
+on the resulting dataset or check the return \code{cross$mqm} values. Compare
 results by using \code{minprob=1}.
 }
 
