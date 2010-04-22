@@ -106,8 +106,6 @@ plotting routines are available for \mqm\ results.
 \label{augmentation}
 
 Most real world datasets are incomplete. That is, genotype
-% or phenotype -- removed as augmentation does not handle missing
-% phenotypes
 information is missing, or can have multiple plausible values. \mqm\
 automatically expands the
 dataset by adding all potential variants and attaches a probability to each.  For
@@ -300,7 +298,7 @@ not advisable because usable information is lost.
 <<augmentMinProb>>=
 multiaug10minprob <- mqmaugment(multimissing10,minprob=0.001,verbose=T)
 multiaug10minprobImpute <- mqmaugment(multimissing10,minprob=0.001,unaugmentable="impute",verbose=T)
-nind(multiaug)
+# nind(multiaug)
 nind(multiaug10minprob)
 nind(multiaug10minprobImpute)
 @
