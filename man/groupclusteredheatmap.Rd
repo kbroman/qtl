@@ -47,4 +47,4 @@ cresults <- mqmplot.clusteredheatmap(multitrait,result)
 groupclusteredheatmap(multitrait,cresults,10)
 }
 
-\keyword{ hplot }
+\keyword{utilities}
