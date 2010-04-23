@@ -161,7 +161,7 @@ checkdistances <- function(cross,cofactors,dist=5){
   newcofactors
 }
 
-plotcofactors <- function(cross,cofactors){
+plotcofactors <- function(cross,cofactors,...){
   map <- pull.map(cross)
   qc <- NULL
   qn <- NULL
@@ -182,7 +182,7 @@ plotcofactors <- function(cross,cofactors){
       qp <- c(qp, as.double(unlist(map)[x]))
     }
   }
-  plot(makeqtl(sim.geno(cross),qc,qp,qn),col="blue")
+  plot(makeqtl(sim.geno(cross),qc,qp,qn),...)
 }
 
 # end of mqmcofactors.R
