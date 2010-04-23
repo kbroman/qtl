@@ -68,7 +68,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if(class(cross)[1] == "bc" || class(cross)[1]=="dh"){
 			ctype = 2
 		}
-		if(class(cross)[1] == "riself")  
+		if(class(cross)[1] == "riself") {
 			ctype = 3
 
     # check genotypes
