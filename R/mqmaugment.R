@@ -66,11 +66,11 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
   else if (crosstype == "bc" || crosstype == "dh") {
     ctype = isBC
   }
-  else if (crosstype == "riself" || crosstype == "risib") {
+  else if (crosstype == "riself") {
     ctype = isRIL
   }
   else {
-    stop("Currently only F2 / BC / RIL by selfing crosses can be analyzed by MQM.")
+    stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
   }
 
   if (verbose) cat("INFO: Received a valid cross file type:", crosstype,".\n")

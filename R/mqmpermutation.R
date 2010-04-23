@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -30,7 +30,7 @@
 #
 #####################################################################
 
-mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=TRUE, ...){
+mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,10,15,20), n.perm = 10, verbose=FALSE, ...){
 	if(verbose){cat("Calculation of FDR estimate of threshold in multitrait analysis.\n")}
 	results <- NULL
 	above.in.real.res <- NULL
@@ -212,7 +212,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
                 }
 		res
 	}else{
-		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
 	}
 }
 
@@ -221,6 +221,7 @@ mqmprocesspermutation <- function(mqmpermutationresult = NULL){
     result <- NULL
 		result <- sapply(mqmpermutationresult[-1], function(a) max(a[,3], na.rm=TRUE))
 		result <- as.matrix(result)
+                colnames(result) <- colnames(mqmpermutationresult[[2]])[3]
 		rownames(result) <- 1:(length(mqmpermutationresult)-1)
 		class(result) <- c("scanoneperm",class(result))
 		result

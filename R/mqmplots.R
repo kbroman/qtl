@@ -117,7 +117,7 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
   invisible(data)
 }
 
-mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scale="none", ...){
+mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -133,17 +133,17 @@ mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scal
     result[[x]] <- mqmextractpseudomarkers(result[[x]])
     if(directed){
       effect <- effectscan(sim.geno(cross,step=stepsize(result[[x]])), pheno.col=x, draw=FALSE)
-      cat(".")
+      if(verbose) cat(".")
       for(y in 1:nrow(result[[x]])){
         effectid <- which(rownames(effect)==rownames(result[[x]])[y])
         if(!is.na(effectid&&1)){
           result[[x]][y,3]  <- result[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }
       }
-      
     }
     names <- c(names,substring(colnames(result[[x]])[3],5))
   }
+  if(verbose && directed) cat("\n")
   chrs <- unique(lapply(result,getChr))
   data <- NULL
   for(x in 1:length(result)){
@@ -152,7 +152,7 @@ mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scal
   colnames(data) <- rownames(result[[1]])
   rownames(data) <- names
   retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
-  retresults
+  invisible(retresults)
 }
 
 mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FALSE,cisarea=10,pch=22,cex=0.5, verbose=FALSE, ...){

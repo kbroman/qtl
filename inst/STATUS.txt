@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 4/20/2010:
+Version 1.15, 4/22/2010:
 
 Major changes:
 
@@ -28,6 +28,9 @@ Major changes:
   http://www.rqtl.org/tutorials/MQM-tour.pdf
 
 Minor changes:
+
+  Added a function transformPheno for transforming one or more
+  phenotypes in a cross object.
 
   Added a function convert.map for converting a genetic map from one
   map function to another.
@@ -47,6 +50,12 @@ Minor changes:
   0, and it has a new argument, full.info; if this is TRUE,
   the output includes not just the estimated crossover locations but
   also the endpoints of the intervals to which they are known to reside.
+
+  Revised summary.cross so that if there are > 30 phenotypes, we don't
+  show the percent missing phenotypes for all traits but just overall.
+
+  Revised stepwiseqtl so that if additive.only=TRUE, you only need to
+  give one penalty.
 
   Fixed a bug in xaxisloc.scanone for the case of multiple chr/pos in
   the input.
