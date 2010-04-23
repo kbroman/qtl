@@ -611,23 +611,41 @@ the various traits in our multtrait metabolomics dataset (results in Figures~\re
 \intro{Automatic cofactor selection followed by backward elimination}
 Example on how-to set cofactors using \code{mqmautocofactors} and \code{mqmsetcofactors}:
 <<eval=FALSE>>=
-multicofactorlist <- mqmautocofactors(maug,50)
-mqm_auto <- mqmscan(maug, multicofactorlist)
+autocofactorlist <- mqmautocofactors(maug,50)
+mqm_auto <- mqmscan(maug, autocofactorlist)
 multicofactorlist <- mqmsetcofactors(maug,5)
 mqm_backw <- mqmscan(maug, multicofactorlist)
 @
 
 <<echo=FALSE>>=
-multicofactorlist <- mqmautocofactors(maug,50)
-mqm_auto <- mqmscan(maug, multicofactorlist)
+autocofactorlist <- mqmautocofactors(maug,50)
+mqm_auto <- mqmscan(maug, autocofactorlist)
 multicofactorlist <- mqmsetcofactors(maug,5)
 mqm_backw <- mqmscan(maug, multicofactorlist)
 @
 
-\intro{ot the results as follows}
+\intro{Plot the results as follows}
+
+<<ManualAutoStart,eval=FALSE>>=
+par(mfrow = c(2,1))
+plotcofactors(maug,autocofactorlist)
+plotcofactors(maug,multicofactorlist)
+@ 
+
+\begin{figure}
+<<fig=TRUE,echo=FALSE>>=
+# plot result of cofactor selection
+<<ManualAutoStart>>
+@
+\caption{\Atintro\ after introducing cofactors at every fifth marker (top) and 
+Automatic marker selection (bottom). We see the difference in placing the initial 
+cofactors between the two methods (top: mqmautocofactors, bottom: mqmsetcofactors) \label{ManualAutoStart}}
+\end{figure}
+
+\intro{Plot the results as follows}
 
 <<ManualAuto,eval=FALSE>>=
-par(mfrow = c(1,2))
+par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw))
 plot(mqmgetmodel(mqm_auto))
 @ 
@@ -639,7 +657,7 @@ plot(mqmgetmodel(mqm_auto))
 @
 \caption{\Atintro\ after introducing cofactors at every fifth marker (top) and 
 Automatic marker selection (bottom). We see that using \code{mqmautocofactor} does 
-place a cofactor at chromosome 1, while this one is missed by mqmsetcofactors
+place a cofactor at chromosome 1 (see Figure \ref{ManualAutoStart}), while this one is missed by mqmsetcofactors
 (AFTER backward elimination this extra marker remains significant) \label{ManualAuto}}
 \end{figure}
 
