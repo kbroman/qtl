@@ -9,7 +9,8 @@
 
 \usage{
 \method{plot}{qtl}(x, chr, horizontal=FALSE, shift=TRUE,
-     show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
+     show.marker.names=FALSE, alternate.chrid=FALSE, justdots=FALSE,
+     col="red", \dots)
 }
 
 \arguments{
@@ -27,7 +28,10 @@
   \item{show.marker.names}{If TRUE, marker names are included.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
-     axis labels, so that they may be more easily distinguished.}
+    axis labels, so that they may be more easily distinguished.}
+  \item{justdots}{If FALSE, just plot dots at the QTL, rather than
+    arrows and QTL names.}
+  \item{col}{Color used to plot indications of QTL}
   \item{\dots}{Passed to \code{\link{plot.map}}.}
 }
 
@@ -49,6 +53,7 @@ fake.f2 <- subset(fake.f2, chr=qc)
 fake.f2 <- calc.genoprob(fake.f2, step=2, err=0.001)
 qtl <- makeqtl(fake.f2, qc, qp, what="prob")
 plot(qtl)
+plot(qtl, justdots=TRUE, col="seagreen")
 }
 
 \seealso{ \code{\link{plot.map}}, \code{\link{makeqtl}} }
