@@ -58,4 +58,17 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
   }
 }
 
+\examples{
+data(multitrait)
+
+# test normality of 7th phenotype
+mqmtestnormal(multitrait, pheno.col=7)
+
+# take log
+multitrait <- transformPheno(multitrait, pheno.col=7, transf=log)
+  
+# test again
+mqmtestnormal(multitrait, pheno.col=7)
+}
+
 \keyword{ utilities }

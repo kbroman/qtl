@@ -1,6 +1,5 @@
 \name{multitrait}
 \alias{multitrait}
-\alias{ArabidopsisLERCVI}
 
 \docType{data}
 
@@ -16,7 +15,8 @@
 	Cross object from R/QTL
 }
 \details{
-	Arabidopsis Recombinant Inbred Line by selfing
+	Arabidopsis recombinant inbred lines by selfing.  There are 162
+	lines, 24 phenotypes, and 117 markers on 5 chromosomes.
 }
 \source{
   Part of the Arabidopsis RIL selfing experiment with Landsberg erecta (Ler) and Cape Verde Islands (Cvi) with 162 individuals scored (with errors at) 117 markers.
@@ -39,6 +39,8 @@
 \examples{
 data(multitrait)						#Load dataset
 multitrait <- fill.geno(multitrait)                     # impute missing genotype data
+\dontshow{multitrait <- subset(multitrait, chr=1)
+multitrait$pheno <- multitrait$pheno[,1:3]}
 result <- scanall(multitrait,scanfunction=mqmscan,logtransform=TRUE)	#Analyse all 24 traits
 }
 

@@ -8,7 +8,7 @@
 }
 
 \usage{
-mqmplot.clusteredheatmap(cross, result, directed=TRUE, Colv=NA, scale="none",\dots)
+mqmplot.clusteredheatmap(cross, result, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, \dots)
 }
 
 \arguments{
@@ -20,6 +20,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   \item{Colv}{ Cluster only the Rows, the columns (Markers) should not be clustered }
   \item{scale}{ character indicating if the values should be centered and scaled in either
                 the row direction or the column direction, or none. The default "none" }
+  \item{verbose}{If TRUE, give verbose output.}
   \item{\dots}{Additional arguments passed to \code{\link[stats]{heatmap}}.}
 }
 

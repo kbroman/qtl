@@ -64,40 +64,27 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 }
 
 \examples{
-  \dontrun{
-    library(qtl)
-    data(hyper)
-    data(multitrait)
-    data(locations)
-    
-    hyperfilled <- fill.geno(hyper)
-    hypercof <- mqmsetcofactors(hyper,4)
-    hyperres <- mqmscan(hyperfilled,hypercof)
-    hyperscanone <- scanone(hyperfilled)
+data(multitrait)
+\dontshow{multitrait$pheno <- multitrait$pheno[,1:3]}
+data(locations)
+\dontshow{locations <- locations[1:3,]}
 
-    multifilled <- fill.geno(multitrait)
-    multicof <- mqmsetcofactors(multitrait,10)
-    multiloc <- addloctocross(multifilled,locations)
-    multires <- mqmscanall(multifilled,cofactors=multicof)
-    
-    #Basic scanone, thickness of markers = LODscore
-    mqmplot.circle(hyperfilled,hyperscanone)
-    Sys.sleep(3)
-    #Basic mqm, thickness of markers = LODscore, red = significant
-    mqmplot.circle(hyperfilled,hyperres)
-    Sys.sleep(3)
-    #Basic mqmmulti, color = trait, round circle = significant
-    mqmplot.circle(multifilled,multires)
-    Sys.sleep(3)
-    #mqmmulti with locations of traits in multiloc
-    mqmplot.circle(multiloc,multires)
-    Sys.sleep(3)
-    #mqmmulti with highlighting
-    mqmplot.circle(multitrait,multires,highlight=16)
-    Sys.sleep(3)
-    #mqmmulti with locations of traits in multiloc and highlighting
-    mqmplot.circle(multiloc,multires,highlight=16)
-  }
+multifilled <- fill.geno(multitrait)                    # impute missing genotypes
+multicof <- mqmsetcofactors(multitrait,10)              # create cofactors
+multiloc <- addloctocross(multifilled,locations)        # add phenotype information to cross
+multires <- mqmscanall(multifilled,cofactors=multicof)  # run mqmscan for all phenotypes
+
+#Basic mqmmulti, color = trait, round circle = significant
+mqmplot.circle(multifilled,multires)
+
+#mqmmulti with locations of traits in multiloc
+mqmplot.circle(multiloc,multires)
+
+#mqmmulti with highlighting
+mqmplot.circle(multitrait,multires,highlight=3)
+
+#mqmmulti with locations of traits in multiloc and highlighting
+mqmplot.circle(multiloc,multires,highlight=3)
 }
 
 \keyword{ utilities }

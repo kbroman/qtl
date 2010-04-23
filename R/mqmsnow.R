@@ -2,13 +2,13 @@
 #
 # mqmsnow.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2010, Danny Arends
 #
 # Modified by Karl Broman and Pjotr Prins
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -49,7 +49,7 @@ snowCoreALL <- function(x,all.data,scanfunction,cofactors,verbose=FALSE,...){
         else{
           result <- scanfunction(cross=all.data,pheno.col=x,...)
         }
-	colnames(result)[3] <- paste("lod",names(all.data$pheno)[x])
+	colnames(result)[3] <- paste("LOD",names(all.data$pheno)[x])
 	e <- proc.time()
         if(verbose) {
           cat("------------------------------------------------------------------\n")
