@@ -4,7 +4,7 @@
 \title{Determine the numeric index for a marker}
 
 \description{
-  Determine the numeric indx for a marker in a cross object, when all
+  Determine the numeric index for a marker in a cross object, when all
   markers on all chromosomes are pasted together.
 }
 
