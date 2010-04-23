@@ -559,7 +559,9 @@ plot(mqm_co0, mqm_co1, mqm_co2,
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination.  (\code{mqmscan} 3 cofactor (black) differs from \code{mqmscan} 2 cofactors (red) and \code{mqmscan} with only 1 cofactor (blue) \label{threewaycomparison}}
+\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 
+cofactor(s) at the start of backward elimination.  (\code{mqmscan} 2 cofactor (blue) 
+differs from \code{mqmscan} 1 cofactors (red) and \code{mqmscan} with only no cofactors (black) \label{threewaycomparison}}
 \end{figure}
 % ---------------------
 
