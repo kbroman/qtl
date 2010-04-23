@@ -212,7 +212,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
                 }
 		res
 	}else{
-		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
 	}
 }
 

@@ -38,7 +38,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 		ourstop("No cross file. Please supply a valid cross object.") 
 	}
 	if(!(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"))
-		stop("ERROR: Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
         
 		start <- proc.time()
 		n.pheno <- nphe(cross)
