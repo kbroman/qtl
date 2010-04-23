@@ -40,7 +40,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 data(multitrait)
 multitrait <- fill.geno(multitrait)
 multimissing5 <- simulateMissingData(multitrait,perc=5)
-cat("Percentage of missing data: ",(sum(nmissing(multimissing5))/sum(ntyped(multimissing5)))*100, "%\n")
+perc <- (sum(nmissing(multimissing5))/sum(ntyped(multimissing5)))
 }
 
 \keyword{utilities}
