@@ -300,7 +300,7 @@ nind(maug10minprobImpute)
 @
 
 After augmentation check how many individuals are expanded.  Next
-scan for QTL inside the crossobjects with \code{mqmscan} and the single-QTL
+scan for QTL inside the cross objects with \code{mqmscan} and the single-QTL
 mapping function \code{scanone} (for reference).  The effect of increasing the
 amount of missing data on QTL mapping, using default values, can been seen in Figure~\ref{augment6}.
 
@@ -349,8 +349,7 @@ The \code{multitrait} dataset, distributed with R/qtl, contains 24 metabolite
 traits from a RIL population of \At \cite{Keurentjes2006} (see also section
 \ref{multitrait} and \code{help(multitrait)} in R).  
 
-Here we analyse the \code{multitrait} dataset using both \code{scanone} single
-marker \qtl\ analysis and \code{mqmscan} multiple \QTL\ model mapping.  First
+Here we analyse the \code{multitrait} dataset using both \code{scanone} (single-\qtl\ analysis) and \code{mqmscan} (multiple \QTL\ model mapping).  First
 augment the data using the \code{mqmaugment} function with \code{minprob=1.0} (see also
 section \ref{augmentation}). 
 
@@ -363,10 +362,9 @@ maug <- mqmaugment(multitrait,minprob=1.0)
 mqm_co0 <- mqmscan(maug)
 @
 
-Scan for \qtl\ with \code{mqmscan}.
 We compare \code{mqmscan} with \code{scanone}, for which
 one first calculates conditional QTL genotype probabilities via
-\code{calc.genoprob} (see section \ref{augmentation}).
+\code{calc.genoprob}.
 
 <<>>=
 multitrait <- calc.genoprob(multitrait, step=5)
@@ -387,16 +385,16 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 \label{AtNoCofs}}
 \end{figure}
 
-By default \MQM\ introduces pseudo markers at fixed intervals, unlike
-\code{scanone}.  A pseudo marker has a name like c7.loc25 - which is the 25
-\cM\ pseudo marker on chromosome 7. Note that this reflects the standard naming
-used in R/qtl.
+By default \MQM\ introduces ``pseudomarkers'' at fixed intervals.
+A pseudomarker has a name like \code{c7.loc25}, which is the
+pseudomarker at 25 \cM\ on chromosome 7. (Note that this reflects the standard naming
+used in R/qtl.)
 Each
-chromosome is divided into `fictional markers' spaced equally \code{stepsize}
+chromosome is divided into `fictional markers' spaced equally \code{step.size}
 \cM\ apart. A LOD score for underlying QTL is calculated at these 
-pseudo markers. A small \code{stepsize} allows for smoother profiles compared
-with pure marker based mapping approaches. The real markers are listed between
-the pseudo markers. In the result you can remove the pseudo markers by using
+pseudomarkers. A small \code{step.size} allows for smoother profiles compared
+with a pure marker-based mapping approach. The real markers are listed between
+the pseudomarkers. In the result you can remove the pseudomarkers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
@@ -404,20 +402,20 @@ just_markers <- mqmextractmarkers(mqm_co0)
 @ 
 
 
-For model selection in \mqm\ we first need to supply the
+For model selection in \mqm, we first need to supply the
 algorithm with an initial model.  This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
-backward elimination on a large number of markers. 
+backward elimination on a large number of markers (discussed in Section~\ref{backelim}).
 
 Here we first build this initial model by hand using a forward
-stepwise approach (note that the automated procedure is preferred, both for
-theoretical and practical reasons). A model consists of a set of markers we
+stepwise approach. (Note that the automated procedure is preferred, both for
+theoretical and practical reasons.) A model consists of a set of markers we
 want to account for. We can start building the initial model by adding
 cofactors at markers with high LOD scores scored by using \code{mqmscan} with
 default values. Figure~\ref{AtNoCofs} displayed a large QTL peak on chromosome 5
-at 35 \cM. So account for that by setting a cofactor at the marker
-nearest to the peak on chromosome 5 and perform a new \code{mqmscan} (see
-Figures~\ref{Cofactor4} and \ref{Cofactor4b}).
+at 35 \cM. So we account for that by setting a cofactor at the marker
+nearest to the peak on chromosome 5 and running \code{mqmscan} again.  (See
+Figures~\ref{Cofactor4} and \ref{Cofactor4b}.)
 
 \intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
 
@@ -436,11 +434,11 @@ sets up a cofactor list for use with \code{mqmscan}.
 
 \intro{Plot the results of the genome scan after adding a single cofactor (Figure~\ref{Cofactor4})}
 
-<<Cofactor4,eval=FALSE>>=
-par(mfrow = c(2,1))
-plot(mqmgetmodel(mqm_co1))
-plot(mqm_co1)
-@ 
+%<<Cofactor4,eval=FALSE>>=
+%par(mfrow = c(2,1))
+%plot(mqmgetmodel(mqm_co1))
+%plot(mqm_co1)
+%@ 
 
 % \begin{figure}
 % <<fig=TRUE,echo=FALSE>>=
@@ -464,18 +462,18 @@ plot(mqm_co1)
 # plot after adding first cofactor
 <<Cofactor4multi>>
 @
-\caption{\Atintro. mqmscan after a cofactor is added at the top scoring marker of chromosome 5. During the analysis it is kept in the
+\caption{\Atintro. \code{mqmscan} after a cofactor is added at the top scoring marker of chromosome 5. During the analysis it is kept in the
 model \label{Cofactor4}} 
 \end{figure}
 
 
 % --------------
 
-\intro{Plot the \code{mqmscan} results with \code{scanone} results as follows (Figure~\ref{Cofactor4b}}
+\intro{Plot the \code{mqmscan} results with \code{scanone} results as follows (Figure~\ref{Cofactor4b})}
 
-<<Cofactor4b,eval=FALSE>>=
-plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
-@
+%<<Cofactor4b,eval=FALSE>>=
+%plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
+%@
 
 % \begin{figure}
 % <<fig=TRUE,echo=FALSE,height=3>>=
@@ -506,15 +504,15 @@ plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
 Figures~\ref{Cofactor4} and \ref{Cofactor4b} show the effect of setting a single marker as a
 cofactor related to the \qtl\ on chromosome 5, followed by an \mqm\ scan.  The
 marker is not dropped and it passes initial thresholding to account for
-the \code{cofactor.significance} level. Genome wide LOD scores are expected to change (slightly)
+the \code{cofactor.significance} level. LOD scores are expected to change slightly,
 because of variation already explained by the \qtl\ on
 chromosome 5. This can be made visisble by plotting these new
 results against the \mqm\ \qtl\ mapping without cofactors (Figure~\ref{Cofactor4b}).
 
-Figure~\ref{Cofactor4b} shows the second peak on chromosome 1 at 70
+Figure~\ref{Cofactor4b} shows the second peak on chromosome 4 at 10
 \cM\ increases. Add that to the model and check if the model with both
 cofactors changes the \qtl. Combining \code{find.markerindex} with \code{find.marker},
-adds the new cofactor to the cofactor already in \code{toset} (see Figure~\ref{twowaycomparison}): 
+adds the new cofactor to the cofactor already in \code{multitoset} (see Figure~\ref{twowaycomparison}): 
 
 <<>>=
 # summary(mqm_co1)
@@ -567,12 +565,12 @@ plot(mqm_co0, mqm_co1, mqm_co2,
 
 
 
-When using the functions: \code{mqmsetcofactors} or the automated \code{mqmautocofactor}, the
+When using the function \code{mqmsetcofactors}, or the automated function \code{mqmautocofactor} discussed below, the
 number of cofactors is compared against the number of individuals inside the
 cross object. If there is a danger of setting too many cofactors the two
-cofactor functions will warn the user by displaying an error about the user
-trying to set more cofactors than the sample size permits, and not return a
-cofactorlist.
+cofactor functions will display an error about 
+setting more cofactors than the sample size permits and not return a
+cofactor list.
 
 \mqm\ verifies the \code{cofactor.significance} level specified by the
 user. Here the marker on chromosome 1 was informative enough and included into the model.
@@ -581,14 +579,14 @@ This way a new initial model consisting of cofactors on chromosome 4 and
 informative markers. 
 
 Manually determining which marker to set a cofactor can be very time consuming
-in the case of many \qtl\ underlying a trait. It is also prone to overfitting
-(because the user manipulates the data). Furthermore, manual fitting is
+in the case of many \qtl\ underlying a trait. It is also prone to overfitting.
+Furthermore, manual fitting is
 generally not feasible for a large number of traits. Fortunately \mqm\ provides
 unsupervised backward elimination, which is described in the next section.
 
 \clearpage
 
-\section{Unsupervised backward elimination}
+\section{Unsupervised backward elimination\label{backelim}}
 
 \mqm\ provides unsupervised backward elimination on a large number of markers by 
 setting cofactors beforehand. When the sample size allows, it is normal procedure to set 
