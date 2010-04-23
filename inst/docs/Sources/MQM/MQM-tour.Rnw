@@ -540,7 +540,7 @@ plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
 appears to be only a small difference in the likelihood scores for each
 chromosome. (\code{mqmscan} 2 cofactor (black) differs from \code{mqmscan} 1 cofactors (green, dashed))
-For this trait we could add more cofactors (Figure \ref{threewaycomparison})
+For this trait we could add more cofactors (Figure~\ref{threewaycomparison})
 However this does not improve the current two QTL model\label{twowaycomparison}}
 \end{figure}
 
@@ -1115,7 +1115,7 @@ mqmplot.circle(multifilled, resall, highlight=2)
 @
 \caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2. The significant QTL locations 
 are depicted as solid red square circles at the side of the plot. The different lines shown here signify epistatic 
-interactions (see Figure \ref{epistatic1}). In this plot the blue lines are locations which are modulating eachothers 
+interactions (see Figure~\ref{epistatic1}). In this plot the blue lines are locations which are modulating eachothers 
 expression (higher or lower), the green lines show a flip in effect. Imagina a situation with two markers, having AA at 
 marker 1 shows trait mean AA > trait mean BB at marker2 however when the individual has BB at marker 1 the effect at marker 2 is reversed AA < BB. \label{circle2}}
 \end{figure}
