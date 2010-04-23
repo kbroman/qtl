@@ -68,7 +68,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if(class(cross)[1] == "bc" || class(cross)[1]=="dh"){
 			ctype = 2
 		}
-		if(class(cross)[1] == "riself" || class(cross)[1] == "risib"){
+		if(class(cross)[1] == "riself")  
 			ctype = 3
 
     # check genotypes
@@ -396,7 +396,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
   }
 	qtl
 	}else{
-		stop("Currently only F2 / BC / RIL cross files can be analyzed by MQM.")
+		stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
 	}			
 }
 
