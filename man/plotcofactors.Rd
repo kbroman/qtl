@@ -9,7 +9,7 @@
 }
 
 \usage{
-plotcofactors(cross,cofactors)
+plotcofactors(cross,cofactors, \dots)
 }
 
 \arguments{
@@ -21,6 +21,7 @@ plotcofactors(cross,cofactors)
     QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
     for backward elimination. (0:no cofactor, 1:cofactor, 2:sexfactor) 
   }
+  \item{\dots}{Passed to \code{\link{plot.qtl}}}
 }
 
 \author{ 
@@ -46,8 +47,8 @@ data(multitrait)
 autocof <- mqmautocofactors(multitrait,20)
 eachcof <- mqmsetcofactors(multitrait,10)
 op <- par(mfrow=c(2,1))
-plotcofactors(multitrait,autocof)
-plotcofactors(multitrait,eachcof)
+plotcofactors(multitrait,autocof, col="blue")
+plotcofactors(multitrait,eachcof, col="blue")
 op <- par(mfrow=c(1,1))
 }
 
