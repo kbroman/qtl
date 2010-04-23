@@ -539,8 +539,8 @@ plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 \caption{\Atintro\ using one cofactor (on chromosome 5) versus two cofactors (on
 chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
 appears to be only a small difference in the likelihood scores for each
-chromosome. 
-For this trait we could add more cofactors (Figure~\ref{threewaycomparison})
+chromosome. (\code{mqmscan} 2 cofactor (black) differs from \code{mqmscan} 1 cofactors (green, dashed))
+For this trait we could add more cofactors (Figure \ref{threewaycomparison})
 However this does not improve the current two QTL model\label{twowaycomparison}}
 \end{figure}
 
@@ -561,7 +561,7 @@ plot(mqm_co0, mqm_co1, mqm_co2,
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination \label{threewaycomparison}}
+\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 cofactor(s) at the start of backward elimination.  (\code{mqmscan} 3 cofactor (black) differs from \code{mqmscan} 2 cofactors (red) and \code{mqmscan} with only 1 cofactor (blue) \label{threewaycomparison}}
 \end{figure}
 % ---------------------
 
@@ -656,7 +656,10 @@ plot(mqm_backw)
 # plot result of cofactor backward elimination
 <<Backward1multi>>
 @
-\caption{backward elimination on \At after introducing cofactors at every fifth marker and backward elimination\label{Backward1}}
+\caption{backward elimination on \At after introducing cofactors at every fifth 
+marker and backward elimination. We see the above the markers that were found 
+significant for trait X3.Hydroxypropyl after backward elimination. Below in black 
+the profile is shown across the genome. We see that the variation in trait X3.Hydroxypropyl maps to chromosome 4 and 5\label{Backward1}}
 \end{figure}
 
 The \code{mqmgetmodel} function returns the final model from the
@@ -683,7 +686,7 @@ plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Backward2multi>>
 @
-\caption{\Atintro. Backward elimination using multiple cofactors compared to scanone \label{Backward2}}
+\caption{\Atintro. Backward elimination using \code{mqmscan} with multiple cofactors (black) compared to \code{scanone} (in red) \label{Backward2}}
 \end{figure}
 
 % -------------------------------
@@ -774,7 +777,10 @@ mqmplot.singletrait(multiresult, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{\Atintro\ showing the results of trait 1 when using with multiple cofactors, visualized using mqmplot.singletrait \label{AutoCofactor}}
+\caption{\Atintro\ showing the results of trait 1 when using with multiple cofactors, visualized using \code{mqmplot.singletrait}.
+This plotting routine give some more information compared to \code{plot.scanone}. In red the information content per marker is shown, 
+and in black the QTL score, the blue line is created by multiplying the red line with the black line. Thus compensating QTLscores for 
+the amount of information at a certain genetic location.  \label{AutoCofactor}}
 \end{figure}
 
 The second column \code{info} in the result
@@ -848,7 +854,9 @@ plot.pxg(multitrait,marker="GH.117C")
 <<fig=TRUE, echo=FALSE,height=3>>=
 <<MainEffectsD1>>
 @
-\caption{\Atintro, Show main effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}\label{MainEffectsD1}}
+\caption{\Atintro, shown in this plot are the main effect of marker GH.117C on trait X3.Hydroxypropyl using \code{plot.pgx}. 
+We see the two possible genotypes at this marker and with the traitvalues for each individual plotted per category. The blue 
+line is the mean of the AA group the red line the mean of the BB genotype group \label{MainEffectsD1}}
 \end{figure}
 
 %----------------------------------------------
@@ -882,7 +890,9 @@ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic1>>
 @
-\caption{\Atintro. \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1 \label{epistatic1}}
+\caption{\Atintro. \code{effectplot} shows possible epistatic interaction between markers GH.117C and GA1. We can see this because the 
+genotype of GA1 seems to obscure the effect of GH.117C. An individual that has BB at GA1 has no difference in expression between being 
+AA or BB at GH.117C. However when an individual is AA at GA1 there is clear difference between the two genotype means (~1.500 BB versus 12000 when AA) at GH.117C \label{epistatic1}}
 \end{figure}
 
 %------------------------------------------------
@@ -1094,16 +1104,20 @@ then \code{interactstrength} * the summed standard deviation. \code{spacing} Spa
 mqmplot.circle(multifilled, resall)
 @
 \caption{Circleplot 1 - Multiple traits without locations, traits are in the centre 
-connected by a colored spline to their QTL locations The significant QTL locations 
+connected by a colored spline to their QTL locations. The significant QTL locations 
 are depicted as solid square circles at the side of the plot (lower number are closer 
-to the centre). Here a 'hotspot' is visible on chromosome 5}
+to the centre). Here a 'hotspot' of QTLs is visible on chromosome 5 \label{circle1}}
 \end{figure}
 
 \begin{figure}
 <<fig=TRUE>>=
 mqmplot.circle(multifilled, resall, highlight=2)
 @
-\caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2}
+\caption{Circleplot 2 - Multiple traits without locations with a highlight on trait 2. The significant QTL locations 
+are depicted as solid red square circles at the side of the plot. The different lines shown here signify epistatic 
+interactions (see Figure \ref{epistatic1}). In this plot the blue lines are locations which are modulating eachothers 
+expression (higher or lower), the green lines show a flip in effect. Imagina a situation with two markers, having AA at 
+marker 1 shows trait mean AA > trait mean BB at marker2 however when the individual has BB at marker 1 the effect at marker 2 is reversed AA < BB. \label{circle2}}
 \end{figure}
 
 The next plot is \code{mqmplot.cistrans}. This plot is only available
@@ -1136,7 +1150,10 @@ the extra information.
 <<fig=TRUE>>=
 mqmplot.circle(multiloc,resall, highlight=2)
 @
-\caption{\Atintro. Circleplot 3 - Multiple traits with locations added, here we highlight trait number 2}
+\caption{\Atintro. Circleplot 3 - Multiple traits with locations added, again we highlight trait number 2, 
+the difference between this plot and the previous circle plot \ref{circle2} is that an extra red triangle 
+showing the genetic location of the trait under consideration. These kind of plots are only possible if 
+location information is added to the \code{cross} object \label{circle3}}
 \end{figure}
 
 \clearpage
