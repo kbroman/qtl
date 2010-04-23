@@ -17,10 +17,6 @@ o In the various MQM functions, pheno.col might be a phenotype name
   rather than just numeric index.  Also, it might be a vector of
   phenotype values.  (Both, as in scanone etc.)
 
-o MASS and other packages seem to automatically load their datasets,
-  or at least make them available.  Can (and should) we do that?
-  (Also for qtlbook.)
-
 o scantwo: ability to scan just specific chromosome pairs
 
 o scanone with method="hk": Major memory problems in the permutations
