@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-9, Karl W Broman
-# last modified Jun, 2009
+# copyright (c) 2007-2010, Karl W Broman
+# last modified Apr, 2010
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -219,11 +219,19 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       stop("No default penalties available for cross type ", cross.type)
   }
   else if(length(penalties) != 3) {
-    if(length(penalties)==2) 
-      penalties <- penalties[c(1,2,2)]
+    if(length(penalties)==1) {
+      if(additive.only)
+        penalties <- rep(penalties,3)
+      else
+        stop("You must include a penalty for interaction terms.")
+    }
     else {
-      warning("penalties should have length 3")
-      penalties <- penalties[1:3]
+      if(length(penalties)==2) 
+        penalties <- penalties[c(1,2,2)]
+      else {
+        warning("penalties should have length 3")
+        penalties <- penalties[1:3]
+      }
     }
   }
 

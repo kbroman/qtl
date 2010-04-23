@@ -51,6 +51,12 @@ Minor changes:
   the output includes not just the estimated crossover locations but
   also the endpoints of the intervals to which they are known to reside.
 
+  Revised summary.cross so that if there are > 30 phenotypes, we don't
+  show the percent missing phenotypes for all traits but just overall.
+
+  Revised stepwiseqtl so that if additive.only=TRUE, you only need to
+  give one penalty.
+
   Fixed a bug in xaxisloc.scanone for the case of multiple chr/pos in
   the input.
 
