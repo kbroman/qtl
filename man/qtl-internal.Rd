@@ -46,16 +46,12 @@
 \alias{getChr}
 \alias{getchromosomelength}
 \alias{getgenomelength}
-\alias{groupclusteredheatmap}
 \alias{locationtocircle}
 \alias{loopthroughmulti}
-\alias{mqmextractmarkers}
 \alias{mqmextractpseudomarkers}
 \alias{mqm_version}
-\alias{plotcofactors}
 \alias{scanall}
 \alias{scoremissingmarkers}
-\alias{simulateMissingData}
 \alias{stepsize}
 
 \alias{getgenonames}
@@ -221,16 +217,12 @@ estimatemarkerlod(interresults)
 getChr(x)
 getchromosomelength(result, chr)
 getgenomelength(result)
-groupclusteredheatmap(cross, clusteredheatmapresult, height)
 locationtocircle(result, chr, loc, spacing=50, fixoutofbounds=TRUE, verbose=FALSE)
 loopthroughmulti(cross,result,save=FALSE,spacing=100)
-mqmextractmarkers(mqmresult)
 mqmextractpseudomarkers(mqmresult)
 mqm_version()
-plotcofactors(cross,cofactors)
 scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
 scoremissingmarkers(cross)
-simulateMissingData(cross,percentage=5)
 stepsize(mqmpseudomarkers)
 
 getgenonames(type=c("f2","bc","riself","risib","4way","dh","special"),
