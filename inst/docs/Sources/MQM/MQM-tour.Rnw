@@ -624,7 +624,7 @@ multicofactorlist <- mqmsetcofactors(maug,5)
 mqm_backw <- mqmscan(maug, multicofactorlist)
 @
 
-\intro{Plot the results as follows}
+\intro{Visual inspection of the initial models}
 
 <<ManualAutoStart,eval=FALSE>>=
 par(mfrow = c(2,1))
