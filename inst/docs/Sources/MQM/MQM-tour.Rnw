@@ -18,7 +18,7 @@
 \newcommand{\MQM}{\mqm}
 \newcommand{\qtl}{QTL}
 \newcommand{\QTL}{\qtl}
-\newcommand{\\xqtl}{\emph{x}QTL}
+\newcommand{\xqtl}{\emph{x}QTL}
 \newcommand{\lod}{LOD}
 \newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
@@ -1102,7 +1102,7 @@ modulating expression (higher or lower), the green lines show a flip in effect.
 	mqmplot.circle:& Genome plot of QTL in a circle (optional: Use of location information)\\  
 	mqmplot.cistrans:& Genomewide plot of cis- and transQTL above a threshold \\
   addloctocross:& Adding genetic locations for traits \\	
-	mqmtestnormal:& Tests the normallity of a trait \\ 	
+	mqmtestnormal:& Tests the normality of a trait \\ 	
 	\hline
 	\end{tabular}
 	\label{tbl:tabel1}
