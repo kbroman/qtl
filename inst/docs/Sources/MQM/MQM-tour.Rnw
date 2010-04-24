@@ -924,8 +924,8 @@ experiments.
 \intro{Calculate FDR}
 <<>>=
 data(multitrait)
-multifilled <- fill.geno(multitrait)
-mqmscanfdr(multifilled,mqmscanall,cofactors=setcofactors,n.cluster=2)
+m_imp <- fill.geno(multitrait)
+mqmscanfdr(m_imp,mqmscanall,cofactors=setcofactors,n.cluster=2)
 @
 
 In contrast, the function \code{mqmpermutation} does single trait permutations,
@@ -969,12 +969,12 @@ because of an improved signal to noise ratio.
 
 <<>>=
 data(multitrait)
-multifilled <- fill.geno(multitrait)
-resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.cluster=2)
+m_imp <- fill.geno(multitrait)
+mqm_imp5 <- mqmscan(m_imp,pheno.col=c(1,2,3,4,5),n.cluster=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.multitrait(resall,type="image")
+mqmplot.multitrait(mqm_imp5,type="image")
 @
 \caption{\Atintro. Heatmap of five metabolite expression traits, with profiles
 created using \mqm\ without preselected cofactors. The colors represent the LOD
@@ -983,12 +983,12 @@ metabolite\label{At.heatmap1}} \end{figure}
 
 
 <<>>=
-cofactorlist <- mqmsetcofactors(multifilled,3)
-resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cluster=2)
+cofactorlist <- mqmsetcofactors(m_imp,3)
+mqm_imp5 <- mqmscan(m_imp,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cluster=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.multitrait(resall,type="image")
+mqmplot.multitrait(mqm_imp5,type="image")
 @
 \caption{\Atintro. Heatmap of metabolite expression traits, with profiles
 created using \mqm\ with cofactors at each third marker. The colors represent
@@ -999,7 +999,7 @@ Use \code{mqmplot.multitrait} for more graphical output. (Unfortunately this doe
 show in the generated PDF, but in R it shows the trait profiles)
 
 <<>>=
-mqmplot.multitrait(resall,type="lines")
+mqmplot.multitrait(mqm_imp5,type="lines")
 @
 
 Next is \code{mqmplot.circle}. The circle plot shows a circular representation
@@ -1020,9 +1020,9 @@ deviation. Parameter \code{spacing} sets space between the chromosomes in Cm.
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.circle(multifilled, resall)
+mqmplot.circle(m_imp, mqm_imp5)
 @
-\caption{\Atintro. Circleplot 1 - Multiple metabolic traits without known
+\caption{\Atintro. Circle plot 1 - Multiple metabolic traits without known
 locations. Four traits are in the centre connected by a colored spline to their
 QTL. Significant QTL locations are depicted as solid square circles. A lower
 \lod\ score is closer to the center. A 'hotspot' of \qtl\ is visible on
@@ -1030,53 +1030,51 @@ chromosome 5 \label{circle1}} \end{figure}
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.circle(multifilled, resall, highlight=2)
+mqmplot.circle(m_imp, mqm_imp5, highlight=2)
 @
-\caption{\Atintro. Circleplot 2 - Multiple metabolic traits without known
-locations.  A highlight on trait 2. The significant QTL locations are depicted
-as solid red square circles at the side of the plot. The different lines shown
-here signify epistatic interactions (see Figure~\ref{epistatic1}). In this plot
-the blue lines are locations which are modulating eachothers expression (higher
-or lower), the green lines show a flip in effect. Imagina a situation with two
-markers, having AA at marker 1 shows trait mean AA > trait mean BB at marker2
-however when the individual has BB at marker 1 the effect at marker 2 is
-reversed AA < BB.  \label{circle2}} \end{figure}
+\caption{\Atintro. Circle plot 2 - Multiple metabolic traits without known
+locations. Highlight the second trait. The significant \qtl\ locations are
+depicted as solid red square circles. The splines show epistatic interactions
+(see also Figure~\ref{epistatic1}).  The blue lines are locations which are
+modulating expression (higher or lower), the green lines show a flip in effect.
+To explain this: with two markers, having AA at marker one shows trait mean AA
+> trait mean BB at marker two however when the individual has BB at marker one
+the effect at marker two is reversed AA < BB.  \label{circle2}} \end{figure}
 
-The next plot is \code{mqmplot.cistrans}. This plot is only available when
-genomic locations of the traits are known, typically in \xqtl studies. By
-default the R/qtl cross object does not store this data. So the user has to add
-this information to the cross object using the addloctocross function. After
-this operation the cis.trans plot can be created for \qtl\ with associated
-genome locations. For example with expression QTL (eQTL) usually the probes on
-the microarray have a known chromosomal location.  
+Next a cis-trans plot with \code{mqmplot.cistrans}. This plot is only available
+when genomic locations of the traits are known, e.g. the genomic probe
+locations in microarray eQTL studies. By default the R/qtl cross object does
+not store this data. So the user has to add this information to the cross
+object using the \code{addloctocross} function. After this operation the
+cis-trans plot can be created for \qtl\ with associated genome locations. 
 
-The two axis of the cistrans plot both show the genetic location. The x-axis
-is, normally, the \qtl\ location and the y-axis the locations of the trait
-(e.g. a the microarray probe).
+The two axis of the cis-trans plot both show the genetic location. The X-axis
+is, normally, the \qtl\ location and the Y-axis the locations of the trait.
 
 \begin{figure}
 <<fig=TRUE>>=
 data(locations)
-multiloc <- addloctocross(multifilled, locations)
-mqmplot.cistrans(resall, multiloc, 5, FALSE, TRUE)
+multiloc <- addloctocross(m_imp, locations)
+mqmplot.cistrans(mqm_imp5, multiloc, 5, FALSE, TRUE)
 @
-\caption{\Atintro. mqmplot.cistrans, available when \qtl\
+\caption{\Atintro. \code{mqmplot.cistrans} can be drawn when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
-genome they were measured (here mQTL for \At), cutoff is at a lod score of 5}
+genome they were measured (here mQTL for \At), cutoff is at \lod=5}
 \end{figure}
 
-When having locations we can, again, use the \code{mqmplot.circle} function, now with 
-the extra information.
+\intro{When having locations we can, again, use the \code{mqmplot.circle} function, now with 
+the extra information}
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.circle(multiloc,resall, highlight=2)
+mqmplot.circle(multiloc,mqm_imp5, highlight=2)
 @
-\caption{\Atintro. Circleplot 3 - Multiple traits with locations added, again
-we highlight trait number 2, the difference between this plot and the previous
-circle plot \ref{circle2} is that an extra red triangle showing the genetic
-location of the trait under consideration. These kind of plots are only
-possible if location information is added to the \code{cross} object
+\caption{\Atintro. Circle plot 3 - Multiple metabolic traits with known
+locations. Highlight the second trait. The significant \qtl\ locations are
+depicted as solid red square circles. The known location of the trait is a 
+red triangle. The splines show epistatic interactions
+(see also Figure~\ref{epistatic1}).  The blue lines are locations which are
+modulating expression (higher or lower), the green lines show a flip in effect.
 \label{circle3}} \end{figure}
 
 \clearpage
