@@ -697,7 +697,7 @@ no additional cofactors are dropped from the model (See Figure~\ref{lowalpha})
 mqm_backw_low <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw_low))
-plot(mqm_back,mqm_backw_low, col=c("blue","green"), lty=1:2)
+plot(mqm_backw,mqm_backw_low, col=c("blue","green"), lty=1:2)
 legend("topleft",c("Significance=0.02","Significance=0.002"),col=c("blue","green"),lwd=1)
 @ 
 \clearpage
