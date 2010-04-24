@@ -713,15 +713,13 @@ at every fifth marker and unsupervised backward elimination of cofactors
 
 % ---- PJOTR is here
 
-\mqm\ \qtl\ mapping may result in many significant markers, with multiple hits
-on each chromosome. Figure~\ref{Backward2} shows that at
-\code{cofactor.significance=0.02} chromosomes 4 and 5 are involved.  Lowering
-the significance level from 0.02 to 0.002 may yield a smaller model.  In
-biology extensive models are sometimes preferred, but in general a simpler
-model is more easily understood and, perhaps, validated. Decreasing the
-significance level also has the advantage that we can be more sure of the \qtl
-we report. In our example we already found a small model so we don't expect to
-loose the two QTL on chromosome 4 and chromosome 5. And indeed when deceasing
+\mqm\ \qtl\ mapping may result in many significant (informative) cofactors.
+Figure~\ref{Backward2} shows at \code{cofactor.significance=0.02} chromosomes 4
+and 5 are involved. Lowering the significance level from 0.02 to 0.002 may
+yield a smaller model.  In biology extensive models are sometimes preferred,
+but in general a simpler model is easier to understand and, perhaps, validated.
+In our example we have already have a small model, so we don't really expect to
+lose the two QTL on chromosome 4 and chromosome 5. And, indeed, when decreasing
 the \code{cofactor.significance} no additional cofactors are dropped from the
 model (See Figure~\ref{lowalpha})
 
