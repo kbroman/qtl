@@ -402,7 +402,6 @@ the function \code{mqmextractmarkers}, as follows:
 real_markers <- mqmextractmarkers(mqm_co0)
 @ 
 
-
 For model selection in \mqm, we first need to supply the
 algorithm with an initial model.  This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
@@ -435,23 +434,6 @@ sets up a cofactor list for use with \code{mqmscan}.
 
 \intro{Plot the results of the genome scan after adding a single cofactor (Figure~\ref{Cofactor4})}
 
-%<<Cofactor4,eval=FALSE>>=
-%par(mfrow = c(2,1))
-%plot(mqmgetmodel(mqm_co1))
-%plot(mqm_co1)
-%@ 
-
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE>>=
-% # plot after adding first cofactor
-% <<Cofactor4>>
-% @
-% \caption{\hyperintro. A cofactor is added at chromosome 4 (D4Mit164) and kept in the
-% model. The LOD score (evidence) for a second QTL on chromosome 1 increases (see also
-% Figure \ref{Cofactor4b})\label{Cofactor4}} 
-% \end{figure}
-
-% --------------
 <<Cofactor4multi,eval=FALSE>>=
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_co1))
@@ -712,31 +694,15 @@ lose the two QTL on chromosome 4 and chromosome 5. And, indeed, when decreasing
 the \code{cofactor.significance} no additional cofactors are dropped from the
 model (See Figure~\ref{lowalpha})
 
-% <<FigLowAlpha,eval=FALSE>>=
-% result <- mqmscan(hyperaug, cofactorlist, cofactor.significance=0.002)
-% par(mfrow = c(2,1))
-% plot(mqmgetmodel(result))
-% plot(result)
-% @ 
 \clearpage
+
 \intro{Plot with lowered \code{cofactor.significance}}
 
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE>>=
-% <<FigLowAlpha>>
-% @
-% \caption{\hyperintro, initially with cofactors at every fifth marker; after backwards elimination (\code{cofactor.significance = 0.002}).}
-% \end{figure}
-
-
-
-%-----------------------
-
 <<FigLowAlpha,eval=FALSE>>=
-multiresult <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
+mqm_backw_low <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
 par(mfrow = c(2,1))
-plot(mqmgetmodel(multiresult))
-plot(multiresult)
+plot(mqmgetmodel(mqm_backw_low))
+plot(mqm_backw_low)
 @ 
 \clearpage
 \intro{\Atintro. Scan done when using a lower \code{cofactor.significance} but using the same strating markers as Figure~\ref{Backward1}\label{lowalpha}}
@@ -770,17 +736,8 @@ contain the \emph{estimated} information content per marker.
 mqmplot.singletrait(result, extended=TRUE)
 @ 
 
-% \begin{figure}
-% <<fig=TRUE>>=
-% <<AutoCofactor>>
-% @
-% \caption{\hyperintro, initially with cofactors at every fifth marker; after backward elimination (\code{cofactor.significance = 0.002}). \code{mqmplot.singletrait} function
-% shows retained information in \code{result} with added weighting of information at
-% marker positions\label{AutoCofactor}}
-% \end{figure}
-
 <<AutoCofactor,eval=FALSE>>=
-mqmplot.singletrait(multiresult, extended=TRUE)
+mqmplot.singletrait(mqm_backw_low, extended=TRUE)
 @ 
 
 \begin{figure}
@@ -811,22 +768,9 @@ The function \code{mqmplot.directedqtl} may be used to plot LOD curves with an
 indication of the sign of the estimated QTL effects.  This requires that
 \code{mqmscan} was run with \code{outputmarkers=TRUE}, but that is the default.
 For an example on creating directed QTL plots see Figure~\ref{QTLeffects}:
-% <<QTLeffects,eval=FALSE>>=
-% dirresults <- mqmplot.directedqtl(hyperaug,result)
-% @ 
-
-% The output is in Figure \ref{QTLeffects}.
-
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE,height=3.5>>=
-% <<QTLeffects>>
-% @
-% \caption{Same as Figure \ref{AutoCofactor}, but with LOD scores
-%   multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
-% \end{figure}
 
 <<QTLeffects,eval=FALSE>>=
-dirresults <- mqmplot.directedqtl(maug,multiresult)
+dirresults <- mqmplot.directedqtl(maug,mqm_backw_low)
 @ 
 
 \begin{figure}
@@ -843,19 +787,6 @@ of the QTL, we can use the functions \code{plot.pxg} and \code{effectplot}.
 The following plots show these for markers GH.117C (main effect,
 Figure~\ref{MainEffectsD1}) and the interaction between GH.117C and
 GA1 (Figure~\ref{epistatic1}). 
-
-% <<MainEffectsD1,eval=FALSE>>=
-% plot.pxg(hyperaug,marker="D1Mit102")
-% @ 
-
-% \begin{figure}
-% <<fig=TRUE, echo=FALSE,height=3>>=
-% <<MainEffectsD1>>
-% @
-% \caption{\hyperintro. Show effect of marker D1Mit102 using \code{plot.pgx}\label{MainEffectsD1}}
-% \end{figure}
-
-%----------------------------------------------
 
 <<MainEffectsD1,echo=FALSE,eval=FALSE>>=
 plot.pxg(multitrait,marker="GH.117C")
@@ -881,20 +812,6 @@ function. To investigate the possible interaction we select markers GA1
 (significant in Figure~\ref{Backward2} and \ref{AutoCofactor}). See
 Figure~\ref{epistatic1}.
 
-% <<epistatic1,eval=FALSE>>=
-% effectplot(hyperaug, mname1="D1Mit19", mname2="D1Mit102")
-% @ 
-
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE,height=3.5>>=
-% <<epistatic1>>
-% @
-% \caption{\hyperintro. \code{effectplot} shows possible small epistatic effects between
-% markers D1Mit19 and D1Mit102\label{epistatic1}}
-% \end{figure}
-
-%-----------------------------------------------
-
 <<epistatic1,eval=FALSE>>=
 effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 @
@@ -918,21 +835,6 @@ Likewise, in case we are interested in the interactions between the first small
 hump on chromosomes 1 (marker: PVV4 not significant) and the main efect on 5
 (GH.117C), we could make interaction plots between these two markers with a
 high LOD score on those chromosomes.  See Figure~\ref{epistatic2}.
-% <<epistatic2,eval=FALSE>>=
-% effectplot(hyperaug, mname1="D1Mit102", mname2="D5Mit213")
-% @ 
-% Figure \ref{epistatic2} shows little evidence for an interaction between
-% the two markers D1Mit102 and D5Mit213, as the lines are close to parallel. 
-% 
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE,height=3.5>>=
-% <<epistatic2>>
-% @
-% \caption{\hyperintro. \code{effectplot} shows little evidence for an
-%   epistatic interaction between markers D1Mit102 and D5Mit213\label{epistatic2}}
-% \end{figure}
-
-%------------------------------------------------
 
 <<epistatic2,eval=FALSE>>=
 effectplot(multitrait, mname1="PVV4", mname2="GH.117C")
@@ -1094,13 +996,6 @@ show in the generated PDF, but in R it shows the trait profiles)
 <<>>=
 mqmplot.multitrait(resall,type="lines")
 @
-
-% \begin{figure}
-% <<fig=TRUE>>=
-% mqmplot.multitrait(resall,type="lines")
-% @
-% \caption{Results of scanning 25 traits using \mqm\ cofactors at each third marker}
-% \end{figure}
 
 The next plot is the \code{mqmplot.circle}. It shows a circular
 representation of the genome. After using automatic backward selection
