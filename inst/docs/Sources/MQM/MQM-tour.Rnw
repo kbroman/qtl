@@ -590,7 +590,6 @@ unsupervised backward elimination, which is described in the next section.
 
 \section{Unsupervised cofactor selection through backward elimination\label{backelim}}
 
-
 \mqm\ provides unsupervised backward elimination on a large number of markers
 by selecting cofactors automatically. Normally the number of markers in a
 dataset is much larger than the number of individuals. \mqm\ allows using as many
@@ -608,11 +607,9 @@ model. This step is repeated until a limited number of informative cofactors
 remain.  When taking marker density into account, an extra cofactor is
 introduced on chromosome 1 (see Figure~\ref{ManualAuto}).
 
-% ---- PJOTR is here
-
 After unsupervised backward elimination \code{mqmscan} scans each chromosome
-using the model with the retained cofactors. For example, after setting 50
-cofactors using \code{mqmautocofactor} and \code{mqmsetcofactors} map \qtl\ for
+using the model with the remaining set of cofactors. For example, starting with 50
+cofactors using \code{mqmautocofactor} and \code{mqmsetcofactors}, map \qtl\ for
 the various traits in \code{multitrait}, which contains 24 metabolite traits
 from a RIL population of \At\, as described in section \ref{multitrait}. The
 \qtl\ LOD scores differ between \mqm\ and single \qtl\ mapping with
@@ -653,7 +650,7 @@ marker density into consideration.
 \label{ManualAutoStart}}
 \end{figure}
 
-\intro{Plot the results as follows}
+\intro{Plot results}
 
 <<ManualAuto,eval=FALSE>>=
 par(mfrow = c(2,1))
@@ -666,11 +663,11 @@ plot(mqmgetmodel(mqm_auto))
 # plot result of cofactor backward elimination
 <<ManualAuto>>
 @
-\caption{\Atintro\ after introducing cofactors at every fifth marker (top) and
-Automatic marker selection (bottom). We see that using \code{mqmautocofactor}
-does place a cofactor at chromosome 1 (see Figure \ref{ManualAutoStart}), while
-this one is missed by mqmsetcofactors (AFTER backward elimination this extra
-marker remains significant) \label{ManualAuto}} \end{figure}
+\caption{\Atintro. \code{mqmsetcofactor} after introducing cofactors at every
+fifth marker (top) and \code{mqmautocofactor} automatic marker selection
+(bottom). \code{mqmautocofactor} places an additional cofactor at chromosome 1
+(see also Figure~\ref{ManualAutoStart}). After backward elimination this extra
+marker remains informative.\label{ManualAuto}} \end{figure}
 
 <<Backward1multi,eval=FALSE>>=
 par(mfrow = c(2,1))
@@ -683,40 +680,38 @@ plot(mqm_backw)
 # plot result of cofactor backward elimination
 <<Backward1multi>>
 @
-\caption{backward elimination on \At after introducing cofactors at every fifth
-marker and backward elimination. We see the above the markers that were found
-significant for trait X3.Hydroxypropyl after backward elimination. Below in
-black the profile is shown across the genome. We see that the variation in
-trait X3.Hydroxypropyl maps to chromosome 4 and 5\label{Backward1}}
+\caption{\Atintro. Unsupervised cofactor selection through backward elimination using \code{mqmsetcofactor} after introducing cofactors at every
+fifth marker. \qtl\ mapped for trait X3.Hydroxypropyl on chromosome 4 and 5\label{Backward1}}
 \end{figure}
 
 The \code{mqmgetmodel} function returns the final model from the output of
 \code{mqmscan}.  This model can be further investigated using the \code{fitqtl}
-and \code{fitqtl} routines from R/qtl.NOTE: that \code{mqmgetmodel} can only be
-used after backward elimination that produces a significant model. The
-resulting model can also be used to obtain the location and name of the
-significant cofactors.
+and \code{fitqtl} routines from R/qtl. \code{mqmgetmodel} can only be used
+after backward elimination produces a significant model. The resulting model
+can also be used to obtain the location and name of the significant cofactors.
 
-\intro{Plot result of MQM backward elimination against that of \code{scanone}}
+\intro{Plot result of \mqm, using unsupervised backward elimination, against that of \code{scanone}}
 
-We plot the results along with those from \code{scanone} as follows:
 <<Backward2,eval=FALSE>>=
-plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
+plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
 @ 
 
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
-plot(mqm_backw, m_one, col=c("black","green"), lty=1:2)
+plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
 @ 
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Backward2multi>>
 @
-\caption{\Atintro. Backward elimination using \code{mqmscan} with multiple cofactors (black) compared to \code{scanone} (in red) \label{Backward2}}
+\caption{\Atintro. Compare \qtl\ mapping of \mqm\, after introducing cofactors
+at every fifth marker and unsupervised backward elimination of cofactors
+(green, dashed), and \code{scanone} (black).
+\label{Backward2}}
 \end{figure}
 
-% -------------------------------
+% ---- PJOTR is here
 
 \mqm\ \qtl\ mapping may result in many significant markers, with multiple hits
 on each chromosome. Figure~\ref{Backward2} shows that at
