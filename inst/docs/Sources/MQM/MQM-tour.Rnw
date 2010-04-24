@@ -1085,32 +1085,30 @@ modulating expression (higher or lower), the green lines show a flip in effect.
 	\centering
 	\begin{tabular}{| l | c | }
 	\hline
-	mqmaugment:& mqm data augmentation \\
-	mqmscan:& mqm modeling and scanning \\
-	mqmsetcofactors:& Set cofactors at these markers (or every x marker) \\
-	find.markerindex:& Change markernumbering into mqmformat \\
-	mqmscanall:& mqmscanall to scan all traits using mqm\\
+	mqmaugment:& data augmentation \\
+	mqmscan:& \mqm\ modelling and scanning \\
+	mqmsetcofactors:& Set cofactors at markers (or at fixed locations) \\
+	find.markerindex:& Change marker numbering into mqmformat \\
+	mqmscanall:& mqmscanall scans all traits using \mqm\\
 	mqmpermutation:& Single trait permutation \\
-	mqmscanfdr:& Genome wide False Discovery Rates \\	
+	mqmscanfdr:& Genome wide False Discovery Rates (FDR) \\	
 	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
                 & from the output of the \code{mqmpermutation} function \\
-	mqmplot.multitrait:& plotting of multiple traits (MQMmulti object) \\
-	mqmplot.nice:& plotting of mutiple traits (MQMmulti object) \\
-  mqmplot.directedqtl:& Plotting of signle trait with added qtl effect\\
-	mqmplot.permutations:& plot methode to show single trait permutations \\
-	mqmplot.singletrait:& plotting of single trait analysis with information content \\
-	mqmplot.circle:& Genome plot of QTL in a circle (optional: Use of location information)\\  
-	mqmplot.cistrans:& Genomewide plot of cis- and transQTL above a threshold \\
+	mqmplot.multitrait:& plot multiple traits (MQMmulti object) \\
+	mqmplot.nice:& plot multiple traits (MQMmulti object) \\
+  mqmplot.directedqtl:& plot of single trait with added \qtl\ effect\\
+	mqmplot.permutations:& plot to show single trait permutations \\
+	mqmplot.singletrait:& plot of single trait analysis with information content \\
+	mqmplot.circle:& Genome plot of \qtl\ in a circle (optional: Use of location information)\\  
+	mqmplot.cistrans:& Genomewide plot of cis- and trans-\qtl, above a threshold \\
   addloctocross:& Adding genetic locations for traits \\	
-	mqmtestnormal:& Tests the normality of a trait \\ 	
+	mqmtestnormal:& Test normality of a trait \\ 	
 	\hline
 	\end{tabular}
 	\label{tbl:tabel1}
 \end{table}
 
 \clearpage
-
-\NOTE{the bibliography should use standard bibtex}
 
 \begin{thebibliography}{9}
 	\bibitem{broman09}
