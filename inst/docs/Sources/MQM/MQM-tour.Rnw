@@ -503,8 +503,8 @@ legend("topleft",c("one cofactor","two cofactors"),col=c("blue","green"),lwd=1)
 <<fig=TRUE,echo=FALSE>>=
 <<twowaycomparison>>
 @
-\caption{\Atintro\ using one cofactor on chromosome 5 (blue), versus two
-cofactors on chromosome 4 and 5 (green).  
+\caption{\Atintro\ using an added cofactor on chromosome 5 (blue), versus two
+cofactors, using an additional cofactor on chromosome 4 (green).  
 \label{twowaycomparison}} \end{figure}
 
 % ---------------------------
@@ -526,10 +526,9 @@ legend("topleft",c("no cofactors", "one cofactor","two cofactors"),col=c("green"
 <<threewaycomparisonmulti>>
 @
 \caption{\Atintro. Comparison of \mqm\ adding 0 (green), 1 (red) and 2 (blue) 
-cofactor(s). 
-Adding more cofactors
+cofactor(s) (note that adding more cofactors
 does not improve the two QTL
-model
+model)
 \label{threewaycomparison}}
 \end{figure}
 
@@ -758,9 +757,10 @@ content (Figure~\ref{AutoCofactor}).
 \label{effectplots}
 
 The function \code{mqmplot.directedqtl} is used to plot \lod\ curves with an
-indication of the sign of the estimated QTL effects.  This requires that
-\code{mqmscan} was run with \code{outputmarkers=TRUE}, but that is the default.
-For an example on creating directed QTL plots see Figure~\ref{QTLeffects}:
+indication of the sign of the estimated QTL effects.  This requires using
+\code{mqmscan} with parameter \code{outputmarkers=TRUE} (default).
+
+\intro{Create a directed QTL plot (Figure~\ref{QTLeffects})}
 
 <<QTLeffects,eval=FALSE>>=
 dirresults <- mqmplot.directedqtl(maug,mqm_backw_low)
@@ -770,11 +770,11 @@ dirresults <- mqmplot.directedqtl(maug,mqm_backw_low)
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<QTLeffects>>
 @
-\caption{Same as Figure~\ref{AutoCofactor}, but with LOD scores
-multiplied by $\pm$1, according to the sign of the estimated QTL effect.\label{QTLeffects}}
+\caption{\Atintro. Like Figure~\ref{AutoCofactor}, but with LOD scores
+multiplied by $\pm$1 according to the sign of the estimated \qtl\ effect.\label{QTLeffects}}
 \end{figure}
 
-The results in Figure~\ref{FigLowAlpha} implied that QTL on chromosomes 4 and 5 are
+The results in Figure~\ref{FigLowAlpha} imply that \qtl\ on chromosomes 4 and 5 are
 associated with the metabolite X3.Hydroxypropyl. If we want to investigate the effects
 of the QTL, we can use the functions \code{plot.pxg} and \code{effectplot}.
 The following plots show these for markers GH.117C (main effect,
@@ -789,18 +789,17 @@ plot.pxg(multitrait,marker="GH.117C")
 <<fig=TRUE, echo=FALSE,height=3>>=
 <<MainEffectsD1>>
 @
-\caption{\Atintro, shown in this plot are the main effect of marker GH.117C on
-trait X3.Hydroxypropyl using \code{plot.pgx}.  We see the two possible
-genotypes at this marker and with the traitvalues for each individual plotted
-per category. The blue line is the mean of the AA group the red line the mean
-of the BB genotype group \label{MainEffectsD1}} \end{figure}
+\caption{\Atintro. Main effect plot, with \code{plot.pgx}, of marker GH.117C on
+trait X3.Hydroxypropyl. For each marker genotype the individual phenotype is 
+plotted, with the mean of genotype AA (red) and BB (blue).
+\label{MainEffectsD1}} \end{figure}
 
 %----------------------------------------------
 
-The initial scans for X3.Hydroxypropyl in Figure~\ref{Backward1} possibly show
-two main efect \qtl\ on chromosome 4 and 5.  We can investigate possible
+The initial scans for X3.Hydroxypropyl (Figure~\ref{Backward1}) show
+two possible \qtl\ on chromosome 4 and 5.  We can investigate 
 interactions between these main effect QTL using the \code{effectplot}
-function. To investigate the possible interaction we select markers GA1
+function. To investigate the possible epistatic interaction, select markers GA1
 (significant in Figure~\ref{Backward1} and Figure~\ref{Backward2}) and GH.117C
 (significant in Figure~\ref{Backward2} and \ref{AutoCofactor}). See
 Figure~\ref{epistatic1}.
@@ -813,8 +812,10 @@ effectplot(multitrait, mname1="GH.117C", mname2="GA1")
 <<fig=TRUE,echo=FALSE,height=3.5>>=
 <<epistatic1>>
 @
-\caption{\Atintro. \code{effectplot} shows possible epistatic interaction
-between markers GH.117C and GA1. We can see this because the genotype of GA1
+\caption{\Atintro. Explore epistatic interaction, using \code{effectplot},
+between markers GH.117C and GA1. 
+
+We can see this because the genotype of GA1
 seems to obscure the effect of GH.117C. An individual that has BB at GA1 has no
 difference in expression between being AA or BB at GH.117C. However when an
 individual is AA at GA1 there is clear difference between the two genotype
