@@ -588,37 +588,38 @@ unsupervised backward elimination, which is described in the next section.
 
 \clearpage
 
-\section{Unsupervised backward elimination\label{backelim}}
+\section{Unsupervised cofactor selection through backward elimination\label{backelim}}
+
 
 \mqm\ provides unsupervised backward elimination on a large number of markers
-by selecting cofactors automatically. When the sample size allows, it is normal
-procedure to set a cofactor at every marker. However current day experiments
-handle less individuals than genetic locations (markers),therefor only a subset
-of locations can be examined, ( because of lack of sample size (we can set as
-many cofactors as we have individuals-12)).  The functions:
-"\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both create lists
-consisting of multiple cofactors that can be used for backward elimination.
-\code{mqmautocofactor} is prefered when dealing with low samplesizes, because
-it takes the underlying marker density into account. See
+by selecting cofactors automatically. Normally the number of markers in a
+dataset is much larger than the number of individuals. \mqm\ allows using as many
+cofactors simultaneously as the number of individuals minus 12\cite{jansen07}.
+
+The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
+create lists of cofactors that can be used for backward elimination.
+\code{mqmautocofactor} accounts for the underlying marker density and is
+therefore suitable for datasets with few individuals.  See
 Figure~\ref{ManualAuto} for a comparison on the multitrait dataset, using the
 \code{mqmsetcofactors} function to set cofactors every 5th marker and
-\code{mqmautocofactor} to set 50 cofactors.  After cofactor selection
-iteratively the MQM algorithm analyses all the markers and drops the least
-informative cofactor from the model. This step is repeated until a limited
-number of significant cofactors remains.  From Figure~\ref{ManualAuto} we see
-that when taking marker density into account we get an extra marker that seems
-significant when used as cofactor, compared to the naive approach where we miss
-this marker because we set cofactors every 5th marker.
+\code{mqmautocofactor} to set 50 cofactors across the genome. After cofactor
+selection \mqm\ analyses and drops the least informative cofactor from the
+model. This step is repeated until a limited number of informative cofactors
+remain.  When taking marker density into account, an extra cofactor is
+introduced on chromosome 1 (see Figure~\ref{ManualAuto}).
 
-After backward elimination \mqm\ scans each chromosome using the model that
-includes the retained cofactors. Here we set 50 cofactors using the automatic
-cofactor routine, and we use the naive implementation of setcofactors to set a
-cofactor at every fifth marker using \code{mqmsetcofactors}, and assess which
-chromosomes may be implicated in the various traits in our multtrait
-metabolomics dataset (results in Figures~\ref{Backward1} and \ref{Backward2}):
+% ---- PJOTR is here
 
-\intro{Automatic cofactor selection followed by backward elimination}
-Example on how-to set cofactors using \code{mqmautocofactors} and \code{mqmsetcofactors}:
+After unsupervised backward elimination \code{mqmscan} scans each chromosome
+using the model with the retained cofactors. For example, after setting 50
+cofactors using \code{mqmautocofactor} and \code{mqmsetcofactors} map \qtl\ for
+the various traits in \code{multitrait}, which contains 24 metabolite traits
+from a RIL population of \At\, as described in section \ref{multitrait}. The
+\qtl\ LOD scores differ between \mqm\ and single \qtl\ mapping with
+\code{scanone} (see Figures~\ref{Backward1} and \ref{Backward2}).
+
+\intro{Unsupervised cofactor selection through backward elimination} 
+
 <<eval=FALSE>>=
 autocofactorlist <- mqmautocofactors(maug,50)
 mqm_auto <- mqmscan(maug, autocofactorlist)
@@ -646,10 +647,10 @@ plotcofactors(maug,multicofactorlist)
 # plot result of cofactor selection
 <<ManualAutoStart>>
 @
-\caption{\Atintro\ after introducing cofactors at every fifth marker (top) and
-Automatic marker selection (bottom). We see the difference in placing the
-initial cofactors between the two methods (top: mqmautocofactors, bottom:
-mqmsetcofactors) \label{ManualAutoStart}}
+\caption{\Atintro. \code{mqmsetcofactor} after introducing cofactors at every fifth marker (top) and
+\code{mqmautocofactor} automatic marker selection (bottom). Automatic selection takes the underlying
+marker density into consideration.
+\label{ManualAutoStart}}
 \end{figure}
 
 \intro{Plot the results as follows}
