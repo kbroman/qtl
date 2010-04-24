@@ -503,13 +503,9 @@ legend("topleft",c("one cofactor","two cofactors"),col=c("blue","green"),lwd=1)
 <<fig=TRUE,echo=FALSE>>=
 <<twowaycomparison>>
 @
-\caption{\Atintro\ using one cofactor (on chromosome 5) versus two cofactors (on
-chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
-appears to be only a small difference in the likelihood scores for each
-chromosome. (\code{mqmscan} with two cofactors (green, dashed) differs from \code{mqmscan} one cofactor (blue))
-For this trait we could add more cofactors (Figure~\ref{threewaycomparison})
-However this does not improve the current two QTL model\label{twowaycomparison}}
-\end{figure}
+\caption{\Atintro\ using one cofactor on chromosome 5 (blue), versus two
+cofactors on chromosome 4 and 5 (green).  
+\label{twowaycomparison}} \end{figure}
 
 % ---------------------------
 
@@ -520,7 +516,8 @@ However this does not improve the current two QTL model\label{twowaycomparison}}
 
 <<threewaycomparisonmulti,eval=FALSE>>=
 plot(mqm_co0, mqm_co1, mqm_co2,
-     col=c("black","red","blue"), lty=1:3)
+     col=c("green","red","blue"), lty=1:3)
+legend("topleft",c("no cofactors", "one cofactor","two cofactors"),col=c("green","red","blue"),lwd=1)
 @ 
 
 \begin{figure}
@@ -528,32 +525,31 @@ plot(mqm_co0, mqm_co1, mqm_co2,
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro. Comparison of \mqm\ results after QTL mapping using 0, 1 and 2 
-cofactor(s) at the start of backward elimination.  (\code{mqmscan} 2 cofactor (blue) 
-differs from \code{mqmscan} 1 cofactors (red) and \code{mqmscan} with only no cofactors (black) \label{threewaycomparison}}
+\caption{\Atintro. Comparison of \mqm\ adding 0 (green), 1 (red) and 2 (blue) 
+cofactor(s). 
+Adding more cofactors
+does not improve the two QTL
+model
+\label{threewaycomparison}}
 \end{figure}
-% ---------------------
 
 
+When using the functions \code{mqmsetcofactors}, or the automated
+\code{mqmautocofactor}, the number of cofactors is compared against the number
+of individuals inside the cross object. If there is a danger of setting too
+many cofactors, an error is shown.
 
-When using the function \code{mqmsetcofactors}, or the automated function \code{mqmautocofactor} discussed below, the
-number of cofactors is compared against the number of individuals inside the
-cross object. If there is a danger of setting too many cofactors the two
-cofactor functions will display an error about 
-setting more cofactors than the sample size permits and not return a
-cofactor list.
+\mqm\ also verifies the \code{cofactor.significance} level specified by the
+user. In the example the marker on chromosome 1 was informative enough, and
+included into the model.  This way a new initial model consisting of cofactors
+on chromosome 4 and 5 was created. This (forward) selection of cofactors can
+continue until there are no more informative markers. 
 
-\mqm\ verifies the \code{cofactor.significance} level specified by the
-user. Here the marker on chromosome 1 was informative enough and included into the model.
-This way a new initial model consisting of cofactors on chromosome 4 and
-5 was created. This (forward) selection of cofactors can continue until there are no more
-informative markers. 
-
-Manually determining which marker to set a cofactor can be very time consuming
+Manually determining the markers to set a cofactor can be very time consuming
 in the case of many \qtl\ underlying a trait. It is also prone to overfitting.
-Furthermore, manual fitting is
-generally not feasible for a large number of traits. Fortunately \mqm\ provides
-unsupervised backward elimination, which is described in the next section.
+Furthermore, manual fitting is generally not feasible for a large number of
+traits. Fortunately \mqm\ provides unsupervised backward elimination, which is
+described in the next section.
 
 \clearpage
 
@@ -682,17 +678,16 @@ at every fifth marker and unsupervised backward elimination of cofactors
 \label{Backward2}}
 \end{figure}
 
-% ---- PJOTR is here
-
 \mqm\ \qtl\ mapping may result in many significant (informative) cofactors.
 Figure~\ref{Backward2} shows at \code{cofactor.significance=0.02} chromosomes 4
 and 5 are involved. Lowering the significance level from 0.02 to 0.002 may
 yield a smaller model.  In biology extensive models are sometimes preferred,
 but in general a simpler model is easier to understand and, perhaps, validated.
-In our example we have already have a small model, so we don't really expect to
-lose the two QTL on chromosome 4 and chromosome 5. And, indeed, when decreasing
-the \code{cofactor.significance} no additional cofactors are dropped from the
-model (See Figure~\ref{lowalpha})
+Depending on the trait, and the sample size, increasing cofactor.significance
+can reduce the number of significant QTL in the model. In this example we have
+already have a small model, so we don't really expect to lose the two QTL on
+chromosome 4 and chromosome 5. When decreasing the \code{cofactor.significance}
+no additional cofactors are dropped from the model (See Figure~\ref{lowalpha})
 
 \clearpage
 
@@ -702,22 +697,21 @@ model (See Figure~\ref{lowalpha})
 mqm_backw_low <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw_low))
-plot(mqm_backw_low)
+plot(mqm_back,mqm_backw_low, col=c("blue","green"), lty=1:2)
+legend("topleft",c("Significance=0.02","Significance=0.002"),col=c("blue","green"),lwd=1)
 @ 
 \clearpage
-\intro{\Atintro. Scan done when using a lower \code{cofactor.significance} but using the same strating markers as Figure~\ref{Backward1}\label{lowalpha}}
+\intro{\qtl\ mapped with different \code{cofactor.significance=0.002}, using the same strating markers as Figure~\ref{Backward1}\label{lowalpha}}
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
 <<FigLowAlpha>>
 @
-\caption{\Atintro. With a lower cofactor.significance we get no change 
-in the model (the QTL are still significant). However based on the 
-trait under examination and our samplesize, increasing cofactor.significance 
-could reduce the number of significant QTL in our model  \label{FigLowAlpha}}
+\caption{\Atintro. 
+\qtl\ mapped with different \code{cofactor.significance}.
+With the lower \code{cofactor.significance} the model does not change.
+\label{FigLowAlpha}}
 \end{figure}
-
-%-----------------------
 
 When comparing the \mqm\ scan in Figure~\ref{FigLowAlpha} with the original
 \code{scanone} result in Figure~\ref{AtNoCofs} there are some notable
@@ -728,8 +722,8 @@ involved in this trait.
 Figures can be reconstructed from the result of \code{mqmscan} using the
 \code{mqmplot.singletrait} function (see, for example,
 Figure~\ref{AutoCofactor}). Here the model and \qtl\ profile are retrieved.
-These functions can only be used with \code{mqmscan}, as they require the
-additional information about the inferred \qtl\ model.  The results also
+These functions can only be used with \code{mqmscan} functions, as they require
+the additional information about the inferred \qtl\ model.  The results also
 contain the \emph{estimated} information content per marker.  
 
 <<AutoCofactor,eval=FALSE>>=
