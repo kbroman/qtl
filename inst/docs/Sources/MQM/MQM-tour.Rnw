@@ -18,6 +18,7 @@
 \newcommand{\MQM}{\mqm}
 \newcommand{\qtl}{QTL}
 \newcommand{\QTL}{\qtl}
+\newcommand{\\xqtl}{\emph{x}QTL}
 \newcommand{\lod}{LOD}
 \newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
@@ -28,6 +29,7 @@
 \newcommand{\NOTE}[1]{({\tt NOTE: #1 })}
 \newcommand{\intro}[1]{\vspace{0.15in}#1:}
 \newcommand{\code}{\texttt}
+\newcommand{\etal}{\emph{et al.}}
 
 \newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes \cite{Keurentjes2006}}
 \newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (\code{mqmscan} in green) and
@@ -863,15 +865,20 @@ as the same test is repeated many times on shuffled data. Each test calculates
 significance. Select the type with the \code{bootmethod} parameter.  If you
 have are lucky enough to have multiple CPUs on your computer you can use the
 SNOW package \cite{tierney03,tierney04}, which allows parallel computations on
-multiple CPU/cores. SNOW is available through the Internet R archive CRAN. For
-example, with Rgui SNOW can be installed by selecting from the menu: `Packages'
-and choosing `Install Package(s)` from the dropdown menu. Select a cran mirror
-near your own location for fast download and then select the SNOW package. It
-will start downloading the package, and install any dependencies needed. Linux
-users can download a copy of SNOW from
+multiple CPU/cores. 
+
+SNOW is available through the Internet R archive CRAN. For example, with Rgui
+SNOW can be installed by selecting from the menu: `Packages' and `Install
+Package(s)` from the drop down menu. Select a CRAN mirror near you and select
+the SNOW package. Rgui will start downloading the package, and install any
+dependencies needed. Linux users can download a copy of SNOW from
 \url{http://cran.r-project.org/web/packages/snow/index.html}. Once the package
-has finished downloading the tar.gz file can be installed using R CMD INSTALL
-snow.tar.gz
+has finished downloading the tar.gz file can be installed using \code{R CMD
+INSTALL snow.tar.gz}
+
+To summarize results from \code{mqmpermutation}, \code{mqmprocespermutation}
+makes the output comparable to \code{scanone} when using the \code{n.perm}
+parameter for permutation.  
 
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
@@ -882,13 +889,13 @@ results <- mqmpermutation(maug,scanfunction=mqmscan,cofactors=setcofactors,n.clu
 <<fig=TRUE>>=
 mqmplot.permutations(results)
 @
-\caption{\Atintro. To calculate \qtl\ significance permutation is used,
-randomly distributing trait values amongst individuals (25 times) gives an
-indication what LOD scores are found by chance. Here \qtl\ with a \lod\ higher
-than 2.5 LOD score can be considered significant (at
-\code{cofactor.significance=0.05} (green) or \code{cofactor.significance=0.10}
-(blue)).  Estimation from permuting a single trait (X3.Hydroxypropyl).
-Chromosomes are signified by the gray grid lines.}
+\caption{\Atintro. \qtl\ significance calculated through permutation using
+\code{mqmpermutation}.  Estimate by permuting a single trait (X3.Hydroxypropyl)
+with randomly distributing trait values amongst individuals, which gives an
+indication of \lod\ scores found by chance. \qtl\ with a \lod\ higher than 2.5
+can be considered significant (at \code{cofactor.significance=0.05} (green) or
+\code{cofactor.significance=0.10} (blue)).  Chromosome are marked by the gray
+vertical grid lines.}
 \end{figure}
 
 <<>>=
@@ -898,23 +905,21 @@ summary(resultsrqtl)
 @
 
 For small datasets, with a limited amount of classical traits,
-\code{mqmpermutation} works fine. To summarize these results,
-mqmprocespermutation makes the output comparable to scanone when using n.perm
-parameter for permutation.  However for large genome wide association studies
-(GWAS) use \code{mqmscanfdr} instead, which estimates false discovery rates
-(FDR) across the entire dataset at \lod\ cutoff. The routines have similar
-parameters.
+\code{mqmpermutation} is nice.  However, for large genome wide association
+studies (GWAS), use \code{mqmscanfdr} instead, which estimates false discovery
+rates (FDR) across the entire dataset at \lod\ cutoff, as described by
+Breitling \etal\cite{breitling08}. 
 
-To estimate FDR, whole genome information is permuted with \code{mqmscanfdr}.
-This method takes correlation between traits into account and gives an unbiased
-estimate of FDR at different (user specified) thresholds. The function scans
-the traits and counts observed \qtl\ (markers with a LOD above \code{x}) when
-setting a certain threshold. It permutes all the data leaving the correlation
-structure between traits intact. For this small example very high FDR estimates
-are calculated because of the small amount of permutations and the high
-correlation between traits. We thus discover many QTL that map to the same
-location, this could normally only happen when we have an information sparse
-marker, or correlated traits, often seen in microarray experiments.
+To estimate the FDR, \code{mqmscanfdr} permutes whole genome information,
+taking correlation between traits into account and giving an unbiased estimate
+of FDR at different (user specified) thresholds. The function scans the traits
+and counts observed \qtl\ with a LOD above \code{x}, setting a certain
+threshold. It permutes all the data leaving the correlation structure between
+traits intact. Below, very high FDR estimates are calculated because of a small
+amount of permutations and high correlation between traits.  We discover many
+QTL that map to the same location. This can normally only happen with
+information sparse marker(s), or correlated traits, as seen in microarray
+experiments.
 
 \intro{Calculate FDR}
 <<>>=
@@ -923,36 +928,36 @@ multifilled <- fill.geno(multitrait)
 mqmscanfdr(multifilled,mqmscanall,cofactors=setcofactors,n.cluster=2)
 @
 
-The function \code{mqmpermutation} does single trait permutations, and does not
-take correlation between the traits into account. The advantage is that a
-confidence interval is provided for each significant QTL.  The \mqm\ output
-needs to be converted to the standard R/qtl format using the
+In contrast, the function \code{mqmpermutation} does single trait permutations,
+and does not take correlation between the traits into account. The advantage is
+that a confidence interval is provided for each significant \qtl.  The \mqm\
+output needs to be converted to the standard R/qtl format using the
 \code{mqmprocesspermutation} function. The resulting object is of class
 \code{scanoneperm} and can be used by the standard R/qtl functions for further
 analysis. 
 
-Finally, with regard to parallelized processing using the multiple cores,
-nowadays even standard in laptop computers, we can assign, for example four
-cores using a batch size of 10. This way each core gets 10 traits to calculate
-QTL profiles on.  When QTL modeling and mapping is done for these 10 traits.
-Another 10 traits are send to the core, until all traits have been analyzed.
-Using larger batches is efficient as for every batch the full R environment is
-started and initialized.
+To parallelize calculations \code{n.cluster} sets the number of CPU cores to
+use. A batch consists of a number of traits to analyze on one core.  A large(r)
+\code{batchsize} (default 10) can also be set to improve efficiency. Every time
+a batch is sent a new instance of R is started, so it pays to have as few
+batches as possible.
 
+\section{Parallelized \xqtl\ analysis}
 
-\section{Parallelized xQTL analysis}
+\mqm\ can handle high throughput \xqtl\ data - the name coined for the family
+of expression QTL, or eQTL \cite{jansen01}, metabolite QTL (mQTL) and pQTL
+(protein QTL), where measurements like gene expression on microrray probes are
+treated as phenotypes.  \mqm\ analyses traits simultaneously using parallel
+computing on multiple CPU/cores, and even computer clusters. \xqtl datasets
+(expression eQTL, metabolite mQTL) usually contain a large amount of phenotypes
+with known locations on the genome. These locations can be used for detecting
+cis/trans regulation, for example. For QTL mapping every phenotype requires one
+or more calls to \code{mqmscan}. In addition special plots are presented for
+\xqtl studies.
 
-MQM can analyse, so called, xQTL traits simultaneously using parallel computing
-on multiple CPU/cores, and even computer clusters. xQTL datasets (expression
-eQTL, metabolite mQTL) usually contain a large amount of phenotypes with known
-locations on the genome. These locations can be used for detecting cis/trans
-regulation, for example. For QTL mapping every phenotype requires one or more
-calls to \code{mqmscan}. In addition special plots are presented for xQTL
-studies.
-
-As an example, the mQTL dataset \code{multitrait}, an \At\ RIL cross, contains
-24 metabolites measured (phenotypes).  Of these 24 phenotypes we will only scan
-the first 5 phenotypes by setting the \code{pheno.col} parameter. To map back
+Our example, the mQTL dataset \code{multitrait}, an \At\ RIL cross, containing
+24 metabolites measured as phenotypes. Of these 24 phenotypes we will only scan
+the first five phenotypes by setting the \code{pheno.col} parameter. To map back
 the regulatory locations of these metabolites one can use plain scanning of all
 metabolites (initially without cofactors). Next, we plot all the profiles in a
 heatmap (see Figure~\ref{At.heatmap1}). In this heatmap the colors represent
@@ -971,7 +976,7 @@ resall <- mqmscan(multifilled,pheno.col=c(1,2,3,4,5),n.cluster=2)
 <<fig=TRUE>>=
 mqmplot.multitrait(resall,type="image")
 @
-\caption{\Atintro. Heatmap of metabolite expression traits, with profiles
+\caption{\Atintro. Heatmap of five metabolite expression traits, with profiles
 created using \mqm\ without preselected cofactors. The colors represent the LOD
 score, on the x-axis the marker number and on the y-axis the
 metabolite\label{At.heatmap1}} \end{figure}
@@ -997,47 +1002,48 @@ show in the generated PDF, but in R it shows the trait profiles)
 mqmplot.multitrait(resall,type="lines")
 @
 
-The next plot is the \code{mqmplot.circle}. It shows a circular representation
-of the genome. After using automatic backward selection certain markers are
-found to be significant using \mqm. When highlighting, the size of the markers
-is scaled, based on the LOD score of the marker for the highlighted trait.
-There are a number of options that can be specified. The main parameters are:
-\code{highlight}: Highlighting a specific trait, and calculating interactions
-between the significant cofactors. All other traits are grayed out, but remain
-partly visible, in this way it is possible to see if significant QTL for this
-trait are also colocating with other traits \code{interactstrength}: When
-highlighting a specific trait interactions between significant markers are
-calculated, However the are only drawn (and reported in the output) if the
-effect change is larger then \code{interactstrength} * the summed standard
-deviation. \code{spacing} Spacing between the chromosomes in Cm.
+Next is \code{mqmplot.circle}. The circle plot shows a circular representation
+of the genome. After using automatic backward selection certain
+marker/cofactors are found to be significant. These are highlighted and
+colored. The cofactor size can be scaled, based on significance (see
+Figures~\ref{circle1} and \ref{circle2}).
+
+The plot can be tweaked. For example, \code{highlight} a specific trait, and
+calculate interactions between the significant cofactors. All other traits are
+grayed out, but remain partly visible, in this way it is possible to see if
+significant QTL for this trait are also colocated with other traits. Parameter
+\code{interactstrength}: highlights interactions between significant markers.
+However they are only drawn (and reported in the output) if the effect change
+is larger than \code{interactstrength} multiplied by the summed standard
+deviation. Parameter \code{spacing} sets space between the chromosomes in Cm.
 
 
 \begin{figure}
 <<fig=TRUE>>=
 mqmplot.circle(multifilled, resall)
 @
-\caption{Circleplot 1 - Multiple traits without locations, traits are in the centre 
-connected by a colored spline to their QTL locations. The significant QTL locations 
-are depicted as solid square circles at the side of the plot (lower number are closer 
-to the centre). Here a 'hotspot' of QTLs is visible on chromosome 5 \label{circle1}}
-\end{figure}
+\caption{\Atintro. Circleplot 1 - Multiple metabolic traits without known
+locations. Four traits are in the centre connected by a colored spline to their
+QTL. Significant QTL locations are depicted as solid square circles. A lower
+\lod\ score is closer to the center. A 'hotspot' of \qtl\ is visible on
+chromosome 5 \label{circle1}} \end{figure}
 
 \begin{figure}
 <<fig=TRUE>>=
 mqmplot.circle(multifilled, resall, highlight=2)
 @
-\caption{Circleplot 2 - Multiple traits without locations with a highlight on
-trait 2. The significant QTL locations are depicted as solid red square circles
-at the side of the plot. The different lines shown here signify epistatic
-interactions (see Figure~\ref{epistatic1}). In this plot the blue lines are
-locations which are modulating eachothers expression (higher or lower), the
-green lines show a flip in effect. Imagina a situation with two markers, having
-AA at marker 1 shows trait mean AA > trait mean BB at marker2 however when the
-individual has BB at marker 1 the effect at marker 2 is reversed AA < BB.
-\label{circle2}} \end{figure}
+\caption{\Atintro. Circleplot 2 - Multiple metabolic traits without known
+locations.  A highlight on trait 2. The significant QTL locations are depicted
+as solid red square circles at the side of the plot. The different lines shown
+here signify epistatic interactions (see Figure~\ref{epistatic1}). In this plot
+the blue lines are locations which are modulating eachothers expression (higher
+or lower), the green lines show a flip in effect. Imagina a situation with two
+markers, having AA at marker 1 shows trait mean AA > trait mean BB at marker2
+however when the individual has BB at marker 1 the effect at marker 2 is
+reversed AA < BB.  \label{circle2}} \end{figure}
 
 The next plot is \code{mqmplot.cistrans}. This plot is only available when
-genomic locations of the traits are known, typically in xQTL studies. By
+genomic locations of the traits are known, typically in \xqtl studies. By
 default the R/qtl cross object does not store this data. So the user has to add
 this information to the cross object using the addloctocross function. After
 this operation the cis.trans plot can be created for \qtl\ with associated
@@ -1179,6 +1185,8 @@ Alonso-Blanco, C. and Peeters, A. J. and Koornneef, M. and Lister, C. and Dean, 
 Development of an AFLP based linkage map of Ler, Col and Cvi
      Arabidopsis thaliana ecotypes and construction of a Ler/Cvi recombinant
      inbred line population}. Plant J. 14(2), 259--271.
-
+  \bibitem{breitling08}
+Breitling, R. and Li, Y. and Tesson, B. M. and Fu, J. and Wu, C. and Wiltshire, T. and Gerrits, A. and Bystrykh, L. V. and de Haan, G. and Su, A. I. and Jansen, R. C.; 2008 
+\emph{Genetical genomics: spotlight on QTL hotspots}. PLoS Genet. 4/10.
 \end{thebibliography}
 \end{document}
