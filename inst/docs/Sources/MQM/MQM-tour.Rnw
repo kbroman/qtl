@@ -377,9 +377,8 @@ differences between the two methods, which will become clear in the next part.
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm_co0, col=c("black", "green"), lty=1:2
+plot(m_one, mqm_co0, col=c("black", "green"), lty=1:2)
 legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
-)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
@@ -474,9 +473,8 @@ model \label{Cofactor4}}
 \intro{Plot the \code{mqmscan} results with \code{scanone} results as follows (Figure~\ref{Cofactor4b})}
 
 <<Cofactor4bMULTI,eval=FALSE>>=
-plot(m_one, mqm_co1, col=c("black","green"), lty=1:2,
+plot(m_one, mqm_co1, col=c("black","green"), lty=1:2)
 legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
-)
 @
 
 \begin{figure}
@@ -515,9 +513,8 @@ mqm_co2 <- mqmscan(maug, setcofactors)
 <<twowaycomparison,eval=FALSE>>=
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_co2))
-plot(mqm_co1, mqm_co2, col=c("blue","green"), lty=1:2,
+plot(mqm_co1, mqm_co2, col=c("blue","green"), lty=1:2)
 legend("topleft",c("one cofactor","two cofactors"),col=c("blue","green"),lwd=1)
-)
 @) 
 
 \begin{figure}
@@ -683,14 +680,14 @@ can also be used to obtain the location and name of the significant cofactors.
 \intro{Plot result of \mqm, using unsupervised backward elimination, against that of \code{scanone}}
 
 <<Backward2,eval=FALSE>>=
-plot(m_one, mqm_backw, col=c("black","green"), lty=1:2,
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1))
+plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
+legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
 @ 
 
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
-plot(m_one, mqm_backw, col=c("black","green"), lty=1:2,
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1))
+plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
+legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
 @ 
 
 \begin{figure}
