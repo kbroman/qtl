@@ -738,24 +738,26 @@ mqmplot.singletrait(mqm_backw_low, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{\Atintro. Plot using \code{mqmplot.singletrait} of the first trait. The information
-content per maker (red), the mapped \qtl\ (black) and the \qtl\ information scores (blue) which is calculated by multiplying marker information content with \qtl\ LOD score.
+\caption{\Atintro. Plot using \code{mqmplot.singletrait} of the first metabolic trait. The information
+content per maker (red), the mapped \qtl\ (black) and the \qtl\ information score (\code{info} blue) which is calculated by multiplying marker information content with \qtl\ LOD score.
 \label{AutoCofactor}} \end{figure}
 
+The information content \code{info} in the result is calculated from the deviation of
+the `ideal marker distribution'. For example, with a dataset of 100
+individuals, when comparing two distinct phenotypes at a marker location, we
+have most power when both groups are equally divided 50/50. A marker has
+virtually no power when one group containing 1 individual versus a group of 99.
+We can multiply the estimated \qtl\ effect by this information content to
+`clean' the QTL profile by giving less weight to less informative markers.
+Please note that the sample size already plays a role in calculating \qtl.
+Meanwhile it allows (informal) further weighting/exploring \emph{information}
+content (Figure~\ref{AutoCofactor}).
+
 % @@
-The second column \code{info} in the result is calculated from the deviation of
-the \emph{ideal} marker distribution. For example, with a dataset of 100 \At,
-when comparing two distinct phenotypes at a marker location, we have most power
-when both groups are equally divided into 50 \At, and virtually no power when
-we have one mouse versus a group of 99 \At. We can multiply the estimated \qtl\
-effect by this information content to `clean' the QTL profile by giving less
-weight to less informative markers. Please note that the sample size already
-plays a role in calculating \qtl. Meanwhile it allows (informal) further
-weighting/exploring \emph{information} content (Figure~\ref{AutoCofactor}).
-
 \section{MQM effect plots}
+\label{effectplots}
 
-The function \code{mqmplot.directedqtl} may be used to plot LOD curves with an
+The function \code{mqmplot.directedqtl} is used to plot \lod\ curves with an
 indication of the sign of the estimated QTL effects.  This requires that
 \code{mqmscan} was run with \code{outputmarkers=TRUE}, but that is the default.
 For an example on creating directed QTL plots see Figure~\ref{QTLeffects}:
