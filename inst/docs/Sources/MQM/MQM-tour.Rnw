@@ -30,8 +30,8 @@
 \newcommand{\code}{\texttt}
 
 \newcommand{\Atintro}{\At\ RIL mQTL dataset (multitrait) with 24 metabolites as phenotypes \cite{Keurentjes2006}}
-\newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (black) and
-single \qtl\ mapping with \code{scanone} (green, dashed)}
+\newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (\code{mqmscan} in green) and
+single \qtl\ mapping (\code{scanone} in black)}
 
 \title { Tutorial - Multiple QTL Model (MQM) Analysis }
 \author { Danny Arends, Pjotr Prins, Karl W. Broman and Ritsert Jansen }
@@ -322,21 +322,21 @@ one80 <- scanone(msim80)
 
 <<augment6,eval=FALSE,echo=FALSE>>=
 op <- par(mfrow=c(2,2))
-plot(mqm5,mqm10,mqm80,col=c("green","blue","black"),main="MQM missing data")
-legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("green","blue","black"),lwd=1)
-plot(one5,mqm5,main="5% missing", col=c("red", "green"))
-legend("topleft",c("scanone","MQM"),col=c("red","green"),lwd=1)
-plot(one10,mqm10,main="10% missing", col=c("red", "blue"))
-legend("topleft",c("scanone","MQM"),col=c("red","blue"),lwd=1)
-plot(one80,mqm80,main="80% missing", col=c("red", "black"))
-legend("topleft",c("scanone","MQM"),col=c("red","black"),lwd=1)
+plot(mqm5,mqm10,mqm80,col=c("green","blue","red"),main="MQM missing data")
+legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("green","blue","red"),lwd=1)
+plot(one5,mqm5,main="5% missing", col=c("black", "green"))
+legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+plot(one10,mqm10,main="10% missing", col=c("black", "blue"))
+legend("topleft",c("scanone","MQM"),col=c("black","blue"),lwd=1)
+plot(one80,mqm80,main="80% missing", col=c("black", "red"))
+legend("topleft",c("scanone","MQM"),col=c("black","red"),lwd=1)
 @ 
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
 <<augment6>>
 @
-\caption{\Atintro. Effect of missing data on \code{mqmscan} (green=5\%, blue=10\%, black=80\%) and \code{scanone} (red) methods
+\caption{\Atintro. Effect of missing data on \code{mqmscan} (green=5\%, blue=10\%, red=80\%) and \code{scanone} (black) methods
 \label{augment6}}
 \end{figure}
 \clearpage
@@ -377,7 +377,7 @@ differences between the two methods, which will become clear in the next part.
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(mqm_co0, m_one, col=c("black", "green"), lty=1:2)
+plot(mqm_co0, m_one, col=c("green", "black"), lty=1:2)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
@@ -471,24 +471,8 @@ model \label{Cofactor4}}
 
 \intro{Plot the \code{mqmscan} results with \code{scanone} results as follows (Figure~\ref{Cofactor4b})}
 
-%<<Cofactor4b,eval=FALSE>>=
-%plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
-%@
-
-% \begin{figure}
-% <<fig=TRUE,echo=FALSE,height=3>>=
-% <<Cofactor4b>>
-% @
-% \caption{\hyperintrocolors, after introducing a
-% cofactor at chromosome 4 (D4Mit164) accounting for variation explained at that
-% location\label{Cofactor4b}}
-% \end{figure}
-
-
-% -------------------------
-
 <<Cofactor4bMULTI,eval=FALSE>>=
-plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
+plot(mqm_co1, m_one, col=c("green","black"), lty=2:1)
 @
 
 \begin{figure}
@@ -496,7 +480,7 @@ plot(mqm_co1, m_one, col=c("black","green"), lty=1:2)
 <<Cofactor4bMULTI>>
 @
 \caption{\Atintro\ after introducing a cofactor on chromosome 5 (GH.117C). 
-\code{mqmscan} (black) differs from \code{scanone} (green, dashed) \label{Cofactor4b}}
+\code{mqmscan} (green, dashed) differs from \code{scanone} (black) \label{Cofactor4b}}
 \end{figure}
 
 % ---------------------------
@@ -527,7 +511,7 @@ mqm_co2 <- mqmscan(maug, setcofactors)
 <<twowaycomparison,eval=FALSE>>=
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_co2))
-plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
+plot(mqm_co2, mqm_co1, col=c("blue","green"), lty=1:2)
 @ 
 
 \begin{figure}
@@ -537,7 +521,7 @@ plot(mqm_co2, mqm_co1, col=c("black","green"), lty=1:2)
 \caption{\Atintro\ using one cofactor (on chromosome 5) versus two cofactors (on
 chromosome 4 and 5). After introducing a second cofactor on chromosomes 4 there
 appears to be only a small difference in the likelihood scores for each
-chromosome. (\code{mqmscan} 2 cofactor (black) differs from \code{mqmscan} 1 cofactors (green, dashed))
+chromosome. (\code{mqmscan} 2 cofactor (blue) differs from \code{mqmscan} 1 cofactors (green, dashed))
 For this trait we could add more cofactors (Figure~\ref{threewaycomparison})
 However this does not improve the current two QTL model\label{twowaycomparison}}
 \end{figure}
