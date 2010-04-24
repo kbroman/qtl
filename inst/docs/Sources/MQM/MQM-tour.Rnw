@@ -709,7 +709,7 @@ legend("topleft",c("Significance=0.02","Significance=0.002"),col=c("blue","green
 @
 \caption{\Atintro. 
 \qtl\ mapped with different \code{cofactor.significance}.
-With the lower \code{cofactor.significance} the model does not change.
+With the lower \code{cofactor.significance=0.002} the model does not change.
 \label{FigLowAlpha}}
 \end{figure}
 
@@ -726,9 +726,9 @@ These functions can only be used with \code{mqmscan} functions, as they require
 the additional information about the inferred \qtl\ model.  The results also
 contain the \emph{estimated} information content per marker.  
 
-<<AutoCofactor,eval=FALSE>>=
-mqmplot.singletrait(result, extended=TRUE)
-@ 
+% <<AutoCofactor,eval=FALSE>>=
+% mqmplot.singletrait(result, extended=TRUE)
+% @ 
 
 <<AutoCofactor,eval=FALSE>>=
 mqmplot.singletrait(mqm_backw_low, extended=TRUE)
@@ -738,14 +738,11 @@ mqmplot.singletrait(mqm_backw_low, extended=TRUE)
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
-\caption{\Atintro\ showing the results of trait 1 when using with multiple
-cofactors, visualized using \code{mqmplot.singletrait}.  This plotting routine
-give some more information compared to \code{plot.scanone}. In red the
-information content per marker is shown, and in black the QTL score, the blue
-line is created by multiplying the red line with the black line. Thus
-compensating QTLscores for the amount of information at a certain genetic
-location.  \label{AutoCofactor}} \end{figure}
+\caption{\Atintro. Plot using \code{mqmplot.singletrait} of the first trait. The information
+content per maker (red), the mapped \qtl\ (black) and the \qtl\ information scores (blue) which is calculated by multiplying marker information content with \qtl\ LOD score.
+\label{AutoCofactor}} \end{figure}
 
+% @@
 The second column \code{info} in the result is calculated from the deviation of
 the \emph{ideal} marker distribution. For example, with a dataset of 100 \At,
 when comparing two distinct phenotypes at a marker location, we have most power
