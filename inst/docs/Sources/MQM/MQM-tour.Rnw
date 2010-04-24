@@ -398,7 +398,7 @@ the pseudomarkers. In the result you can remove the pseudomarkers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
-just_markers <- mqmextractmarkers(mqm_co0)
+real_markers <- mqmextractmarkers(mqm_co0)
 @ 
 
 
@@ -423,8 +423,8 @@ Figures~\ref{Cofactor4} and \ref{Cofactor4b}.)
 max(mqm_co0)
 find.marker(maug,chr=5,pos=35)
 multitoset <- find.markerindex(maug,"GH.117C")
-multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
-mqm_co1 <- mqmscan(maug, multicofactorlist)
+setcofactors <- mqmsetcofactors(maug,cofactors=multitoset)
+mqm_co1 <- mqmscan(maug, setcofactors)
 @
 
 The function \code{find.marker} identifies the name of the marker
@@ -517,8 +517,8 @@ adds the new cofactor to the cofactor already in \code{multitoset} (see Figure~\
 <<>>=
 # summary(mqm_co1)
 multitoset <- c(multitoset,find.markerindex(maug,find.marker(maug,4,10)))
-multicofactorlist <- mqmsetcofactors(maug,cofactors=multitoset)
-mqm_co2 <- mqmscan(maug, multicofactorlist)
+setcofactors <- mqmsetcofactors(maug,cofactors=multitoset)
+mqm_co2 <- mqmscan(maug, setcofactors)
 @
 % -----------
 
@@ -621,25 +621,25 @@ from a RIL population of \At\, as described in section \ref{multitrait}. The
 \intro{Unsupervised cofactor selection through backward elimination} 
 
 <<eval=FALSE>>=
-autocofactorlist <- mqmautocofactors(maug,50)
-mqm_auto <- mqmscan(maug, autocofactorlist)
-multicofactorlist <- mqmsetcofactors(maug,5)
-mqm_backw <- mqmscan(maug, multicofactorlist)
+autocofactors <- mqmautocofactors(maug,50)
+mqm_auto <- mqmscan(maug, autocofactors)
+setcofactors <- mqmsetcofactors(maug,5)
+mqm_backw <- mqmscan(maug, setcofactors)
 @
 
 <<echo=FALSE>>=
-autocofactorlist <- mqmautocofactors(maug,50)
-mqm_auto <- mqmscan(maug, autocofactorlist)
-multicofactorlist <- mqmsetcofactors(maug,5)
-mqm_backw <- mqmscan(maug, multicofactorlist)
+autocofactors <- mqmautocofactors(maug,50)
+mqm_auto <- mqmscan(maug, autocofactors)
+setcofactors <- mqmsetcofactors(maug,5)
+mqm_backw <- mqmscan(maug, setcofactors)
 @
 
 \intro{Visual inspection of the initial models}
 
 <<ManualAutoStart,eval=FALSE>>=
 par(mfrow = c(2,1))
-plotcofactors(maug,autocofactorlist)
-plotcofactors(maug,multicofactorlist)
+plotcofactors(maug,autocofactors)
+plotcofactors(maug,setcofactors)
 @ 
 
 \begin{figure}
@@ -751,7 +751,7 @@ model (See Figure~\ref{lowalpha})
 %-----------------------
 
 <<FigLowAlpha,eval=FALSE>>=
-multiresult <- mqmscan(maug, multicofactorlist, cofactor.significance=0.002)
+multiresult <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(multiresult))
 plot(multiresult)
@@ -998,7 +998,7 @@ has finished downloading the tar.gz file can be installed using R CMD INSTALL sn
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
-results <- mqmpermutation(maug,scanfunction=mqmscan,cofactors=multicofactorlist,n.cluster=2,n.perm=25,batchsize=25)
+results <- mqmpermutation(maug,scanfunction=mqmscan,cofactors=setcofactors,n.cluster=2,n.perm=25,batchsize=25)
 @
 \begin{figure}
 <<fig=TRUE>>=
@@ -1040,7 +1040,7 @@ marker, or correlated traits, often seen in microarray experiments.
 <<>>=
 data(multitrait)
 multifilled <- fill.geno(multitrait)
-mqmscanfdr(multifilled,mqmscanall,cofactors=multicofactorlist,n.cluster=2)
+mqmscanfdr(multifilled,mqmscanall,cofactors=setcofactors,n.cluster=2)
 @
 
 The function \code{mqmpermutation} does single trait permutations, and does not take
