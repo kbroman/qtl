@@ -199,11 +199,11 @@ to set \code{minprob} to the percentage of data missing. A value of
 \code{minprob=1.0} makes augmentation behave similar to \code{fill.geno}'s
 imputation method, though with different resulting genotypes.  Use
 \code{verbose=TRUE} to get more feedback on the augmentation routine and to
-check how many individuals are moved to the second stage for imputation or
+check how many individuals are moved to the second stage, for imputation or
 removal\footnote{Augmentation is not always suitable with a lot of missing
-data, like in the case of selective genotyped datasets (for example the mouse \code{hyper}
-dataset that comes with R/qtl); these will always be handled with \code{minprob=1.0}
-(a warning will be issued).}
+data, like in the case of selective genotyped datasets (for example the mouse
+\code{hyper} dataset that comes with R/qtl); these will always be handled with
+\code{minprob=1.0} (and a warning will be issued).}
 
 To start with an example, first run \code{mqmaugment} with \code{minprob=1.0}
 (Figure~\ref{augment1}):
@@ -227,14 +227,15 @@ likely' individual is used and no real expansion of the dataset takes place,
 with similar results as \code{fill.geno}'s imputation method).\label{augment1}}
 \end{figure}
 
-With a lower \code{minprob}, more \emph{unlikely\/} genotypes are kept, and the
+With a lower \code{minprob}, more augmented individuals are kept, and the
 resulting \emph{augmented} dataset will be larger. The (weighted) augmented
 individuals with all possible genotypes theoretically leads to more accurate
 mapping when dealing with missing values \cite{jansen93}\footnote{Note again that
 the augmented dataset can only be used with pure \mqm\ functions.  \mqm\ functions
 recognise expanded individuals as single entities.  Other R/qtl functions, like
 \code{scanone}, assume the augmented individuals are \emph{real} individuals.}.
-Try augmentation with \code{minprob=0.1} (Figure~\ref{augment2}):
+
+\intro{Try augmentation with \code{minprob=0.1} (Figure~\ref{augment2})}
 <<>>=
 augmentedcross <- mqmaugment(mycross, minprob=0.1)
 @ 
