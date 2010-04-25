@@ -136,14 +136,14 @@ set.seed(19696527)
 <<>>=
 library(qtl)
 data(map10)
-mycross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
+simcross <- sim.cross(map10, type="f2", n.ind=100, missing.prob=0.02)
 @
 
 and plot the genotype data using \code{geno.image} (Figure~\ref{missing data}):
 
 
 <<missingdata,eval=FALSE>>=
-geno.image(mycross)
+geno.image(simcross)
 @ 
 
 \begin{figure}
@@ -211,7 +211,7 @@ To start with an example, first run \code{mqmaugment} with \code{minprob=1.0}
 \intro{Plot augmented data using \code{geno.image}}
 <<>>=
 # displays warning because MQM ignores the X chromosome in an F2
-augmentedcross <- mqmaugment(mycross, minprob=1.0)
+augmentedcross <- mqmaugment(simcross, minprob=1.0)
 @
 Plot the genotype data as follows:
 <<augment1,eval=FALSE>>=
@@ -228,16 +228,17 @@ with similar results as \code{fill.geno}'s imputation method).\label{augment1}}
 \end{figure}
 
 With a lower \code{minprob}, more augmented individuals are kept, and the
-resulting \emph{augmented} dataset will be larger. The (weighted) augmented
-individuals with all possible genotypes theoretically leads to more accurate
+resulting \emph{augmented} dataset will be larger. Adding (weighted) augmented
+individuals with all possible genotypes theoretically leads to a more accurate
 mapping when dealing with missing values \cite{jansen93}\footnote{Note again that
 the augmented dataset can only be used with pure \mqm\ functions.  \mqm\ functions
 recognise expanded individuals as single entities.  Other R/qtl functions, like
 \code{scanone}, assume the augmented individuals are \emph{real} individuals.}.
 
 \intro{Try augmentation with \code{minprob=0.1} (Figure~\ref{augment2})}
+
 <<>>=
-augmentedcross <- mqmaugment(mycross, minprob=0.1)
+augmentedcross <- mqmaugment(simcross, minprob=0.1)
 @ 
 
 \intro{Plot the genotype data}
@@ -253,13 +254,13 @@ geno.image(augmentedcross)
 \caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented} 
 genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} 
 `expanded' individuals in this plot, because \mqm\ fills in missing markers with 
-all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(mycross),1)} per
+all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(simcross),1)} per
 individual).\label{augment2}}
 \end{figure}
 
 \label{multitrait}
-A dataset (\code{multitrait}), which contains 24 metabolite
-traits from a RIL population of \At is now distributed with
+An \mqtl\ dataset (\code{multitrait}), which contains 24 metabolite
+traits from a RIL population of \At is distributed with
 R/qtl (load the data with \code{data(multitrait)}).  This is part of the \At\ RIL selfing experiment
 with Landsberg erecta (Ler) and Cape Verde Islands (Cvi) with 162 individuals
 scored (with errors at) 117 markers \cite{Koornneef1998}. The experiment
@@ -289,20 +290,23 @@ maug10 <- mqmaugment(msim10,minprob=0.25)
 maug80 <- mqmaugment(msim80,minprob=0.80)
 @
 
-If, however, we use the multitrait dataset with 10 \% missing data and set \code{minprob} at a lower value (e.g. 0.001),
-then some individuals are moved to the second round and missing data is either filled using the most likely genotype 
-or using imputation. We can also choose to drop the individuals entirely from the rest of the analysis; however, this is
-not advisable because usable information is lost.
+Taking the 10\% missing set, we can try a lower \code{minprob=0.001}. The
+output below shows that ten augmented individuals miss too many markers to be
+augmented. By using the imputation strategy these individuals are kept in the
+set with a single `most likely' genotype.
+
+\intro{Augment with an imputation strategy}
 
 <<augmentMinProb>>=
 maug10minprob <- mqmaugment(msim10,minprob=0.001,verbose=TRUE)
 maug10minprobImpute <- mqmaugment(msim10,minprob=0.001,strategy="impute",verbose=TRUE)
-# nind(maug)
+# check how many individuals are expanded:
 nind(maug10minprob)
 nind(maug10minprobImpute)
 @
 
-After augmentation check how many individuals are expanded.  Next
+
+Next,
 scan for QTL inside the cross objects with \code{mqmscan} and the single-QTL
 mapping function \code{scanone} (for reference).  The effect of increasing the
 amount of missing data on QTL mapping, using default values, can been seen in Figure~\ref{augment6}.
@@ -339,7 +343,7 @@ legend("topleft",c("scanone","MQM"),col=c("black","red"),lwd=1)
 <<fig=TRUE,echo=FALSE>>=
 <<augment6>>
 @
-\caption{\Atintro. Effect of missing data on \code{mqmscan} (green=5\%, blue=10\%, red=80\%) and \code{scanone} (black) methods
+\caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation (green=5\%, blue=10\%, red=80\%) and \code{scanone}, after \code{fill.geno} imputation.
 \label{augment6}}
 \end{figure}
 \clearpage
