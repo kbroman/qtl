@@ -369,8 +369,8 @@ section \ref{augmentation}).
 
 <<>>=
 data(multitrait)
-maug_1 <- mqmaugment(multitrait,minprob=1.0)
-mqm_1  <- mqmscan(maug_1)
+maug_min1 <- mqmaugment(multitrait,minprob=1.0)
+mqm_min1  <- mqmscan(maug_min1)
 @
 
 We compare \code{mqmscan} with \code{scanone}. For \code{scanone}
@@ -388,14 +388,14 @@ changes (see Figure~\ref{AtNoCofs}).
 
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
 
-<<mqmscan>>=
+<<>>=
 maug <- mqmaugment(multitrait)
 mqm  <- mqmscan(maug)
 @
 
 \begin{figure}
 <<MinprobMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm_1, col=c("black", "green"), lty=1:2)
+plot(m_one, mqm_min1, col=c("black", "green"), lty=1:2)
 legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
 @ 
 \caption{\Atintrocolors. 
