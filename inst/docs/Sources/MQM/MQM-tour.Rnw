@@ -194,7 +194,7 @@ every marker \emph{relative} to the most likely individual.  Note that setting
 this value too low may result in moving a lot of individuals to the second
 augmentation round as the maximum of augmented individuals (the parameter \code{maxaugind}) is quickly reached.
 Increasing \code{minprob} (towards a value of 1.0) can keep individuals with more
-missing data inside the first augmentation round; a good rule of thumb may be
+missing data inside the first augmentation round; a possible rule of thumb may be
 to set \code{minprob} to the percentage of data missing. A value of
 \code{minprob=1.0} makes augmentation behave similar to \code{fill.geno}'s
 imputation method, though with different resulting genotypes.  Use

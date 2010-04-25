@@ -159,7 +159,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
         ind_done++;
       }
     }
-    if(ind_still_left && verbose) info("Step 2: augment_strategy individuals");
+    if(ind_still_left && verbose) info("Step 2: Unaugmented individuals");
     if(ind_still_left && augment_strategy != 3){
       //Second round we augment dropped individuals from the first augmentation
       MQMMarkerMatrix left_markerset;
