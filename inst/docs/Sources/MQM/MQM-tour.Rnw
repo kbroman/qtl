@@ -19,6 +19,8 @@
 \newcommand{\qtl}{QTL}
 \newcommand{\QTL}{\qtl}
 \newcommand{\xqtl}{\emph{x}QTL}
+\newcommand{\mqtl}{\emph{m}QTL}
+\newcommand{\eqtl}{\emph{e}QTL}
 \newcommand{\lod}{LOD}
 \newcommand{\cM}{cM}
 \newcommand{\rqtl}{\emph{R/qtl}}
@@ -356,21 +358,23 @@ The \code{multitrait} dataset, distributed with R/qtl, contains 24 metabolite
 traits from a RIL population of \At \cite{Keurentjes2006} (see also section
 \ref{multitrait} and \code{help(multitrait)} in R).  
 
-Here we analyse the \code{multitrait} dataset using both \code{scanone} (single-\qtl\ analysis) and \code{mqmscan} (multiple \QTL\ model mapping).  First
-augment the data using the \code{mqmaugment} function with \code{minprob=1.0} (see also
+Here we analyse the \code{multitrait} dataset using both \code{scanone}
+(single-\qtl\ analysis) and \code{mqmscan} (multiple \QTL\ model mapping).
+First augment the data using the \code{mqmaugment} function with
+\code{minprob=1.0}, to compare against \code{scanone} with imputation (see also
 section \ref{augmentation}). 
 
-\intro{Use \code{scanone} and \code{mqmscan} after filling missing data with
+\intro{Scan for \qtl\ with \code{mqmscan}, after filling missing data with
 \code{mqmaugment minprob=1.0}}
 
 <<>>=
 data(multitrait)
-maug <- mqmaugment(multitrait,minprob=1.0)
-mqm_co0 <- mqmscan(maug)
+maug_1 <- mqmaugment(multitrait,minprob=1.0)
+mqm_1  <- mqmscan(maug_1)
 @
 
-We compare \code{mqmscan} with \code{scanone}, for which
-one first calculates conditional QTL genotype probabilities via
+We compare \code{mqmscan} with \code{scanone}. For \code{scanone}
+one first calculates conditional \qtl\ genotype probabilities via
 \code{calc.genoprob}.
 
 <<>>=
@@ -378,18 +382,36 @@ multitrait <- calc.genoprob(multitrait, step=5)
 m_one <- scanone(multitrait)
 @
 
-Figure~\ref{AtNoCofs} shows that, with default parameters, the results from 
-\mqm\ are similar to \code{scanone}. There are, however, 
-differences between the two methods, which will become clear in the next part.
+Figure~\ref{Atminprob} shows that, without augmentation, the results from 
+\mqm\ are similar to \code{scanone}. However, with augmentation the picture 
+changes (see Figure~\ref{AtNoCofs}).
+
+\intro{\code{mqmscan} after augmentation}
+
+<<mqmscan>>=
+data(multitrait)
+maug <- mqmaugment(multitrait)
+mqm  <- mqmscan(maug)
+@
 
 \begin{figure}
-<<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm_co0, col=c("black", "green"), lty=1:2)
+<<MinprobMulti,fig=TRUE,echo=FALSE,height=3>>=
+plot(m_one, mqm_1, col=c("black", "green"), lty=1:2)
 legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
 when used without \emph{augmentation} (\code{minprob} is 1.0), and with default parameters
+\label{Atminprob}}
+\end{figure}
+
+\begin{figure}
+<<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
+plot(m_one, mqm, col=c("black", "green"), lty=1:2)
+legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+@ 
+\caption{\Atintrocolors. 
+\mqm\ differs from \code{scanone}, after augmentation 
 \label{AtNoCofs}}
 \end{figure}
 
