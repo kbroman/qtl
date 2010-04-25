@@ -390,7 +390,7 @@ changes (see Figure~\ref{AtNoCofs}).
 
 <<mqmscan>>=
 maug <- mqmaugment(multitrait)
-mqm_co0  <- mqmscan(maug)
+mqm  <- mqmscan(maug)
 @
 
 \begin{figure}
@@ -406,7 +406,7 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm_co0, col=c("black", "green"), lty=1:2)
+plot(m_one, mqm, col=c("black", "green"), lty=1:2)
 legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
 @ 
 \caption{\Atintrocolors. 
@@ -420,14 +420,14 @@ pseudomarker at 25 \cM\ on chromosome 7. (Note that this reflects the standard n
 used in R/qtl.)
 Each
 chromosome is divided into `fictional markers' spaced equally \code{step.size}
-\cM\ apart. A LOD score for underlying QTL is calculated at these 
+\cM\ apart. A \lod\ score for underlying \qtl\ is calculated at these 
 pseudomarkers. A small \code{step.size} allows for smoother profiles compared
 with a pure marker-based mapping approach. The real markers are listed between
 the pseudomarkers. In the result you can remove the pseudomarkers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
-real_markers <- mqmextractmarkers(mqm_co0)
+real_markers <- mqmextractmarkers(mqm)
 @ 
 
 For model selection in \mqm, we first need to supply the
@@ -435,6 +435,7 @@ algorithm with an initial model.  This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
 backward elimination on a large number of markers (discussed in Section~\ref{backelim}).
 
+% @@
 Here we first build this initial model by hand using a forward
 stepwise approach. (Note that the automated procedure is preferred, both for
 theoretical and practical reasons.) A model consists of a set of markers we
@@ -448,7 +449,7 @@ Figures~\ref{Cofactor4} and \ref{Cofactor4b}.)
 \intro{Add marker GH.117C (chromosome 5, at 35 \cM) as a cofactor}
 
 <<>>=
-max(mqm_co0)
+max(mqm)
 find.marker(maug,chr=5,pos=35)
 multitoset <- find.markerindex(maug,"GH.117C")
 setcofactors <- mqmsetcofactors(maug,cofactors=multitoset)
@@ -543,7 +544,7 @@ cofactors, using an additional cofactor on chromosome 4 (green).
 \intro{Plot the results with 0, 1 and 2 cofactors as follows}
 
 <<threewaycomparisonmulti,eval=FALSE>>=
-plot(mqm_co0, mqm_co1, mqm_co2,
+plot(mqm, mqm_co1, mqm_co2,
      col=c("green","red","blue"), lty=1:3)
 legend("topleft",c("no cofactors", "one cofactor","two cofactors"),col=c("green","red","blue"),lwd=1)
 @ 
