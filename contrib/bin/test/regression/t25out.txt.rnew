@@ -124,7 +124,7 @@ INFO: Individual 246 moved to second augmentation round
 INFO: Individual 247 moved to second augmentation round
 INFO: Individual 248 moved to second augmentation round
 INFO: Individual 249 moved to second augmentation round
-INFO: Step 2: Unaugmentable individuals
+INFO: Step 2: Unaugmented individuals
 INFO: Done with: 128/250 individuals still need to do 122
 INFO: Crosstype determined by the algorithm:B:
 INFO: Augmentation parameters: Maximum augmentation=10000, Maximum augmentation per individual=250, Minprob=1.000000
