@@ -386,12 +386,11 @@ Figure~\ref{Atminprob} shows that, without augmentation, the results from
 \mqm\ are similar to \code{scanone}. However, with augmentation the picture 
 changes (see Figure~\ref{AtNoCofs}).
 
-\intro{\code{mqmscan} after augmentation}
+\intro{\code{mqmscan} after augmentation, without cofactor selection}
 
 <<mqmscan>>=
-data(multitrait)
 maug <- mqmaugment(multitrait)
-mqm  <- mqmscan(maug)
+mqm_co0  <- mqmscan(maug)
 @
 
 \begin{figure}
@@ -407,7 +406,7 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 
 \begin{figure}
 <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm, col=c("black", "green"), lty=1:2)
+plot(m_one, mqm_co0, col=c("black", "green"), lty=1:2)
 legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
 @ 
 \caption{\Atintrocolors. 
