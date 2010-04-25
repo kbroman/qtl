@@ -199,7 +199,7 @@ to set \code{minprob} to the percentage of data missing. A value of
 \code{minprob=1.0} makes augmentation behave similar to \code{fill.geno}'s
 imputation method, though with different resulting genotypes.  Use
 \code{verbose=TRUE} to get more feedback on the augmentation routine and to
-check how many individuals are moved to the stages of imputation / mostLikely /
+check how many individuals are moved to the second stage for imputation or
 removal\footnote{Augmentation is not always suitable with a lot of missing
 data, like in the case of selective genotyped datasets (for example the mouse \code{hyper}
 dataset that comes with R/qtl); these will always be handled with \code{minprob=1.0}
@@ -295,7 +295,7 @@ not advisable because usable information is lost.
 
 <<augmentMinProb>>=
 maug10minprob <- mqmaugment(msim10,minprob=0.001,verbose=TRUE)
-maug10minprobImpute <- mqmaugment(msim10,minprob=0.001,unaugmentable="impute",verbose=TRUE)
+maug10minprobImpute <- mqmaugment(msim10,minprob=0.001,strategy="impute",verbose=TRUE)
 # nind(maug)
 nind(maug10minprob)
 nind(maug10minprobImpute)
