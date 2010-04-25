@@ -9,7 +9,7 @@
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Pjotr Prins and Danny Arends
- * last modified December 2009
+ * last modified April 2010
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
