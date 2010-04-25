@@ -79,7 +79,7 @@ These are the typical steps in an \mqm\ \qtl\ analysis:
 \item Fill in missing data, using either \code{mqmaugmentdata} or \code{fill.geno}
 \item Unsupervised backward elimination to analyse \emph{cofactors}, using \code{mqmscan}
 \item Optionally select \emph{cofactors\/} at markers that are thought to influence \qtl\ at, or near, the location
-\item Permutation or simulation analysis to get estimates of significance, using \code{mqmpermutation}
+\item Permutation or simulation analysis to get estimates of significance, using \code{mqmpermutation} or \code{mqmscanfdr}
 \end{itemize}
 
 Using maximum likelihood (ML), or restricted maximum likelihood (REML), the
@@ -111,15 +111,15 @@ example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
 (estimated) recombination rate, a probability is attached to all possible
 genotypes.  With \mqm\ all possible genotypes with a probability above
-\code{minprob} are considered.  
+parameter \code{minprob} are considered.  
 
 When encountering a missing marker genotype (possible genotypes {\bf A} and {\bf B} in a
 RIL), all possible genotypes at the missing location are created.  Thus at
-the missing location two `individuals' are created in the augmentation step,
+the missing location two `individuals' are created in the \emph{augmentation} step,
 one with genotype {\bf A}, and one with genotype {\bf B}. A probability is
-attached to both augmented individuals.  The combined probability of all
+attached to both \emph{augmented} individuals.  The combined probability of all
 missing marker locations tells whether a genotype is likely, or unlikely,
-allowing for weighted analysis later.
+which allows for weighted analysis later.
 
 To see an example of missing data with an F$_2$ intercross, we can
 visualize the genotypes of the individuals using \code{geno.image}. In
@@ -157,7 +157,7 @@ geno.image(mycross)
 Before going to the next step (the \qtl\ genome scan), the data has to be
 completed (i.e. no more missing data).  There are two possibilities: (1) 
 the \mqm\ data augmentation routine \code{mqmaugment} or (2) the imputation
-function \code{fill.geno}. As described above, augmentation tries to analyse
+routine \code{fill.geno}. As described above, augmentation tries to analyse
 all possible genotypes of interest by leaving them in the solution space. In contrast,
 the imputation method \emph{selects} the most likely genotype, and uses that
 single individual for further analysis. 
@@ -167,14 +167,14 @@ can exceed available computer memory.  Currently, augmentation moves an
 individual to a second augmentation round. In the second augmentation round the
 user can specify what needs to be done with these individuals: (1) Only use the
 most likely ones, (2) use multiple imputation for the original genotype or (3)
-remove the original genotype/individual from the analysis.  Note you can opt to
-use \code{fill.geno}'s imputation method, instead of augmentation, when too
-many individuals are omitted, because of missing data.
+remove the original genotype/individual from the analysis.  Note that you can
+opt to use \code{fill.geno}'s imputation method, instead of augmentation, when
+too many individuals are dropped because of missing data.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
 procedure\footnote{Note that after augmentation the resulting object is
-no longer suitable for the use with other R/qtl mapping functions, like \code{scanone} and \cim, because of the
-duplication or potential omission of many individuals.}.  
+no longer suitable for the use with other R/qtl mapping functions, like \code{scanone} and \cim, because they can not account for
+duplicated or dropped of individuals.}.  
 In this tutorial we focus on \mqm's augmentation. The function \code{mqmaugment} fills in
 missing genotypes for us. For each missing genotype data, at a marker, it fills
 in all possible genotypes and calculates the probability. When the total
