@@ -94,8 +94,10 @@ the trait. The algorithm passes through the following stages:
 \item Likelihood-based estimation of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
       genome scan for \qtl
-\item If there are no \emph{cofactors\/} defined, perform a
-      genome scan testing each genetic location independently
+\item If there are no \emph{cofactors\/} defined, The backward elimination of cofactors 
+      is not skipped. Perform a genome scan for \qtl testing each genetic (interval) 
+      location individually. In this case REML and ML will result in the same \qtl profile 
+      because there is no full model.
 \end{itemize}
 
 The results created during the genome scan and the \qtl\ model are
