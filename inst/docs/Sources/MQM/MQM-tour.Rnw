@@ -378,8 +378,8 @@ one first calculates conditional \qtl\ genotype probabilities via
 \code{calc.genoprob}.
 
 <<>>=
-multitrait <- calc.genoprob(multitrait, step=5)
-m_one <- scanone(multitrait)
+mgenop <- calc.genoprob(multitrait, step=5)
+m_one <- scanone(mgenop)
 @
 
 Figure~\ref{Atminprob} shows that, without augmentation, the results from 
@@ -389,7 +389,6 @@ changes (see Figure~\ref{AtNoCofs}).
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
 
 <<>>=
-data(multitrait)
 maug <- mqmaugment(multitrait)
 mqm  <- mqmscan(maug)
 @
