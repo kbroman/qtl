@@ -14,14 +14,14 @@ Overview of the MQM mapping functions
 % \input{"inst/docs/Sources/MQM/mqm/description.txt"}
 Multiple QTL Model (MQM) mapping provides a sensitive approach for
 mapping quantititive trait loci (QTL) in experimental populations. MQM
-adds higher statistical power compared to many other methods.  The
-theoretical framework of MQM mapping was introduced and explored by
-Ritsert Jansen, explained in the `Handbook of Statistical Genetics'
-(see references), and used effectively in practical research, with the
-commercial `mapqtl' software package. Here we present the first free
-and open source implementation of MQM, with extra features like high
-performance parallelization on multi-CPU computers, new plots and
-significance testing.
+MQM adds higher statistical power to detect linked as well as unlinked 
+QTL compared to many other methods.  The theoretical framework of MQM 
+mapping was introduced and explored by Ritsert C. Jansen, explained in 
+the `Handbook of Statistical Genetics' (see references), and used 
+effectively in practical research, with the commercial `mapqtl' software 
+package. Here we present the first free and open source implementation 
+of MQM, with extra features like high performance parallelization on 
+multi-CPU computers, new plots and significance testing.
 
 MQM is an automatic three-stage procedure in which, in the first
 stage, missing data is `augmented'. In other words, rather than guessing one
