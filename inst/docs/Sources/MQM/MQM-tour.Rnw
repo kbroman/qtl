@@ -738,7 +738,10 @@ plot(mqm_backw,mqm_backw_low, col=c("blue","green"), lty=1:2)
 legend("topleft",c("Significance=0.02","Significance=0.002"),col=c("blue","green"),lwd=1)
 @ 
 \clearpage
-\intro{\qtl\ mapped with different \code{cofactor.significance=0.002}, using the same strating markers as Figure~\ref{Backward1}\label{lowalpha}}
+\intro{\qtl\ mapped with different \code{cofactor.significance=0.002}, using the 
+same starting markers as Figure~\ref{Backward1}. As can be seen from the plot the 
+models selected are similar. This means the QTL found significant at 0.02 are still 
+significant at a more restrictive cutoff.\label{lowalpha}}
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
@@ -776,7 +779,7 @@ mqmplot.singletrait(mqm_backw_low, extended=TRUE)
 <<AutoCofactor>>
 @
 \caption{\Atintro. Plot using \code{mqmplot.singletrait} of the first metabolic trait. The information
-content per maker (red), the mapped \qtl\ (black) and the \qtl\ information score (\code{info} blue) which is calculated by multiplying marker information content with \qtl\ LOD score.
+content per marker (red), the mapped \qtl\ (black) and the \qtl\ information score (\code{info} blue) which is calculated by multiplying marker information content with \qtl\ LOD score.
 \label{AutoCofactor}} \end{figure}
 
 The information content \code{info} in the result is calculated from the deviation of
@@ -943,8 +946,8 @@ summary(resultsrqtl)
 @
 
 For small datasets, with a limited amount of classical traits,
-\code{mqmpermutation} is nice.  However, for large genome wide association
-studies (GWAS), use \code{mqmscanfdr} instead, which estimates false discovery
+\code{mqmpermutation} is nice.  However, for large expression studies (eQTL)
+using microarrays, use \code{mqmscanfdr} instead, which estimates false discovery
 rates (FDR) across the entire dataset at \lod\ cutoff, as described by
 Breitling \etal\cite{breitling08}. 
 
@@ -968,7 +971,9 @@ mqmscanfdr(m_imp,mqmscanall,cofactors=setcofactors,n.cluster=2)
 
 In contrast, the function \code{mqmpermutation} does single trait permutations,
 and does not take correlation between the traits into account. The advantage is
-that a confidence interval is provided for each significant \qtl.  The \mqm\
+that a permutation threshold is determined for each trait. This leads to different 
+significance levels per trait and could lead to certain \qtl being significant at 
+their trait cut-off, which are not significant when a single cut-off.  The \mqm\
 output needs to be converted to the standard R/qtl format using the
 \code{mqmprocesspermutation} function. The resulting object is of class
 \code{scanoneperm} and can be used by the standard R/qtl functions for further
