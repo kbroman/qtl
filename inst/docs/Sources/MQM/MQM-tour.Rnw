@@ -61,10 +61,10 @@ over CIM is reduction of type I error (a QTL is indicated at a location where th
 is no QTL present) and type II error (a QTL is not detected) for QTL detection
 \cite{jansen94b}.} is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
-handles missing data and has higher precision than other methods.  R/qtl's
-\mqm\ is faster than other implementations and scales on multi-CPU systems and
-computer clusters.  In this tutorial we will show you how to use \mqm\ for
-\qtl\ mapping. 
+handles missing data and has higher power to detect QTL (linked and unlinked) 
+than other methods.  R/qtl's \mqm\ is faster than other implementations and 
+scales on multi-CPU systems and computer clusters.  In this tutorial we will 
+show you how to use \mqm\ for \qtl\ mapping. 
 
 \mqm\ is an integral part of the free \rqtl\
 package \cite{rqtlbook,broman09,broman03} for the R statistical
@@ -89,7 +89,7 @@ algorithm employs a backward elimination strategy to identify \qtl\ underlying
 the trait. The algorithm passes through the following stages:
 
 \begin{itemize}
-\item Calculation of relative marker positions and detection of linkage groups
+\item Optional Calculation of relative marker positions and detection of linkage groups
 \item Optional (re-)estimation of genetic map and/or recombination frequencies
 \item Likelihood-based estimation of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
