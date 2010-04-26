@@ -49,9 +49,8 @@ INSTALLATION OF R AND R/QTL (Windows)
 
 INSTALLATION OF R AND R/QTL (MacOS version 10.5 and above)
 
-  1. Download the file R-2.11.0.pkg and double-click it to create a
-     "drive" with a name like "R-2.11.0".  Double-click on the file
-     R.mkpg and follow the instructions.
+  1. Download the file R-2.11.0.pkg, double-click it, and follow the
+     instructions. 
      
   2. To install R/qtl, the simplest approach is to start R and type
 
