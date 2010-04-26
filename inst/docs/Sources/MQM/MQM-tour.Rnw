@@ -389,6 +389,7 @@ changes (see Figure~\ref{AtNoCofs}).
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
 
 <<>>=
+data(multitrait)
 maug <- mqmaugment(multitrait)
 mqm  <- mqmscan(maug)
 @
