@@ -1,6 +1,6 @@
 \name{comparecrosses}
 \alias{comparecrosses}
-\title{Compare two cross objects.}
+\title{Compare two cross objects}
 
 \description{
   Verify that two objects of class \code{cross} have identical classes,

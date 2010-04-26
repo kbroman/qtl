@@ -1,7 +1,7 @@
 \name{convert2riself}
 \alias{convert2riself}
 
-\title{Convert a cross to RIL by selfing.}
+\title{Convert a cross to RIL by selfing}
 
 \description{
   Convert a cross to type \code{"riself"} (RIL by selfing).

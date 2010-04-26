@@ -1,7 +1,7 @@
 \name{find.pheno}
 \alias{find.pheno}
 
-\title{Find column number for a particular phenotype.}
+\title{Find column number for a particular phenotype}
 
 \description{
   Find the column number corresponding to a particular
