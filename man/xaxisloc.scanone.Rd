@@ -1,7 +1,7 @@
 \name{xaxisloc.scanone}
 \alias{xaxisloc.scanone}
 
-\title{Get x-axis locations in scanone plot.}
+\title{Get x-axis locations in scanone plot}
 
 \description{
   Get x-axis locations for given cM positions on given chromosomes in a

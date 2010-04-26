@@ -35,7 +35,7 @@ chrnames                Pull out the chromosome names from a cross
 cim                     Composite interval mapping
 clean.cross             Remove derived data
 clean.scantwo           Clean up scantwo output
-comparecrosses          Compare two cross objects.
+comparecrosses          Compare two cross objects
 comparegeno             Compare individuals' genotype data
 compareorder            Compare two orderings of markers on a
                         chromosome
@@ -45,17 +45,17 @@ convert.scanone         Convert output from scanone for R/qtl version
                         0.98
 convert.scantwo         Convert output from scantwo for R/qtl version
                         1.03 and earlier
-convert2riself          Convert a cross to RIL by selfing.
-convert2risib           Convert a cross to RIL by sib mating.
+convert2riself          Convert a cross to RIL by selfing
+convert2risib           Convert a cross to RIL by sib mating
 convert2sa              Convert a sex-specific map to a sex-averaged
-                        one.
+                        one
 countXO                 Count number of obligate crossovers for each
                         individual
 drop.markers            Drop a set of markers
 drop.nullmarkers        Drop markers without any genotype data
 dropfromqtl             Drop a QTL from a qtl object
 effectplot              Plot phenotype means against genotypes at one
-                        or two markers.
+                        or two markers
 effectscan              Plot estimated QTL effects across the whole
                         genome
 est.map                 Estimate genetic maps
@@ -68,7 +68,7 @@ find.flanking           Find flanking markers for a specified position
 find.marker             Find marker closest to a specified position
 find.markerindex        Determine the numeric index for a marker
 find.markerpos          Find position of a marker
-find.pheno              Find column number for a particular phenotype.
+find.pheno              Find column number for a particular phenotype
 find.pseudomarker       Find the pseudomarker closest to a specified
                         position
 findDupMarkers          Find markers with identical genotype data
@@ -113,6 +113,8 @@ mqmplot.cistrans        Plotting routine to show cis and trans QTL
 mqmplot.clusteredheatmap
                         Plotting routine to display the results from a
                         mqm scan on multiple phenotypes
+mqmplot.cofactors       Plotting routine to display cofactors on the
+                        genetic map
 mqmplot.directedqtl     Plotting routine to display the effects and
                         results from a QTL scan
 mqmplot.heatmap         Plotting routine to display the results from a
@@ -131,7 +133,7 @@ mqmscanfdr              Estimate FDR for multiple trait QTL analysis
 mqmsetcofactors         Create cofactors to be used with mqm
 mqmtestnormal           Shapiro normality test used for MQM
 multitrait              Example Cross object from R/QTL with multiple
-                        traits.
+                        traits
 nchr                    Determine the number of chromosomes
 nind                    Determine the number of individuals QTL
                         experiment
@@ -151,19 +153,17 @@ plot.info               Plot the proportion of missing genotype
 plot.map                Plot genetic map
 plot.missing            Plot grid of missing genotypes
 plot.pheno              Plot a phenotype distribution
-plot.pxg                Plot phenotypes versus marker genotypes.
+plot.pxg                Plot phenotypes versus marker genotypes
 plot.qtl                Plot QTL locations
 plot.rf                 Plot recombination fractions
 plot.scanone            Plot LOD curves
-plot.scanoneboot        Plot results of bootstrap for QTL position.
+plot.scanoneboot        Plot results of bootstrap for QTL position
 plot.scanoneperm        Plot permutation results for a single-QTL
                         genome scan
 plot.scantwo            Plot LOD scores for a two-dimensional genome
                         scan
 plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
                         scan
-plotcofactors           Plotting routine to display cofactors on the
-                        genetic map
 plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plotModel               Plot a QTL model
 pull.geno               Pull out the genotype data from a cross
@@ -174,14 +174,14 @@ qtlversion              Installed version of R/qtl
 read.cross              Read data for a QTL experiment
 readMWril               Read data for 4- or 8-way RIL
 refineqtl               Refine the positions of QTL
-reorderqtl              Reorder the QTL in a qtl object.
+reorderqtl              Reorder the QTL in a qtl object
 replace.map             Replace the genetic map of a cross
 replacemap.scanone      Replace the genetic map in QTL mapping results
                         with an alternate map
 replacemap.scantwo      Replace the genetic map in QTL mapping results
                         with an alternate map
 replaceqtl              Replace a QTL in a qtl object with a different
-                        position.
+                        position
 ripple                  Compare marker orders
 scanone                 Genome scan with a single QTL model
 scanoneboot             Bootstrap to get interval estimate of QTL
@@ -223,4 +223,4 @@ transformPheno          Transformation of the phenotypes in a cross
                         object
 tryallpositions         Test all possible positions for a marker
 write.cross             Write data for a QTL experiment to a file
-xaxisloc.scanone        Get x-axis locations in scanone plot.
+xaxisloc.scanone        Get x-axis locations in scanone plot

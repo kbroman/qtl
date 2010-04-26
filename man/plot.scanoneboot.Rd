@@ -1,7 +1,7 @@
 \name{plot.scanoneboot}
 \alias{plot.scanoneboot}
 
-\title{Plot results of bootstrap for QTL position.}
+\title{Plot results of bootstrap for QTL position}
 
 \description{
   Plot a histogram of the results of a nonparametric bootstrap to assess
