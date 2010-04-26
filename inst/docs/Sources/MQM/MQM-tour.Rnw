@@ -785,13 +785,15 @@ content (Figure~\ref{AutoCofactor}).
 \label{effectplots}
 
 The function \code{mqmplot.directedqtl} is used to plot \lod\ curves with an
-indication of the sign of the estimated QTL effects.  This requires using
-\code{mqmscan} with parameter \code{outputmarkers=TRUE} (default).
+indication of the sign of the estimated QTL effects. This function because 
+it uses internal R/qtl functions cannot handle augmented cross objects. An 
+error will occur when the object supplied is augmented using \code{mqmaugment}.
+This requires using \code{mqmscan} with parameter \code{outputmarkers=TRUE} (default).
 
 \intro{Create a directed QTL plot (Figure~\ref{QTLeffects})}
 
 <<QTLeffects,eval=FALSE>>=
-dirresults <- mqmplot.directedqtl(maug,mqm_backw_low)
+dirresults <- mqmplot.directedqtl(multitrait,mqm_backw_low)
 @ 
 
 \begin{figure}
