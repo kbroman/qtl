@@ -19,8 +19,10 @@
 \arguments{
  \item{object}{An object of class \code{scantwo}.  See
    \code{\link{scantwo}} for details.}
- \item{n.mar}{}
- \item{distance}{}
+ \item{n.mar}{Pairs of positions not separated by at least this many
+ markers have LOD scores set to 0.}
+ \item{distance}{Pairs of positions not separated by at least this
+ distance have LOD scores set to 0.} 
  \item{\dots}{Ignored at this point.}
 }
 
