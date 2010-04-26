@@ -404,15 +404,15 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 \label{Atminprob}}
 \end{figure}
 
-\begin{figure}
-<<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm, col=c("black", "green"), lty=1:2)
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
-@ 
-\caption{\Atintrocolors. 
-\mqm\ differs from \code{scanone}, after augmentation 
-\label{AtNoCofs}}
-\end{figure}
+% \begin{figure}
+% <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
+% plot(m_one, mqm, col=c("black", "green"), lty=1:2)
+% legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+% @ 
+% \caption{\Atintrocolors. 
+% \mqm\ differs from \code{scanone}, after augmentation 
+% \label{AtNoCofs}}
+% \end{figure}
 
 By default \MQM\ introduces ``pseudomarkers'' at fixed intervals.
 A pseudomarker has a name like \code{c7.loc25}, which is the
