@@ -1,7 +1,7 @@
 \name{plot.pxg}
 \alias{plot.pxg}
 
-\title{Plot phenotypes versus marker genotypes.}
+\title{Plot phenotypes versus marker genotypes}
 
 \description{
   Plot the phenotype values versus the genotypes at a marker or markers.

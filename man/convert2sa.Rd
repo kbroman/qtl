@@ -1,7 +1,7 @@
 \name{convert2sa}
 \alias{convert2sa}
 
-\title{Convert a sex-specific map to a sex-averaged one.}
+\title{Convert a sex-specific map to a sex-averaged one}
 
 \description{
   Convert a sex-specific map to a sex-averaged one, assuming that the
