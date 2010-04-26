@@ -66,6 +66,9 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+  if(directed && !is.null(cross$mqm$Nind)){
+  	stop("Augmented crossobject. Please supply the original unaugmented dataset.") 
+  }
   if(is.null(result)){
 		stop("No result object. Please supply a valid scanone object.") 
 	}
@@ -124,6 +127,9 @@ mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scal
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+  if(directed && !is.null(cross$mqm$Nind)){
+  	stop("Augmented crossobject. Please supply the original unaugmented dataset.") 
+  }
   if(is.null(result)){
 		stop("No result object. Please supply a valid mqmmulti object.") 
 	}
