@@ -113,6 +113,8 @@ mqmplot.cistrans        Plotting routine to show cis and trans QTL
 mqmplot.clusteredheatmap
                         Plotting routine to display the results from a
                         mqm scan on multiple phenotypes
+mqmplot.cofactors       Plotting routine to display cofactors on the
+                        genetic map
 mqmplot.directedqtl     Plotting routine to display the effects and
                         results from a QTL scan
 mqmplot.heatmap         Plotting routine to display the results from a
@@ -162,8 +164,6 @@ plot.scantwo            Plot LOD scores for a two-dimensional genome
                         scan
 plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
                         scan
-plotcofactors           Plotting routine to display cofactors on the
-                        genetic map
 plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plotModel               Plot a QTL model
 pull.geno               Pull out the genotype data from a cross

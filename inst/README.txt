@@ -29,7 +29,7 @@ OBTAINING R/QTL
 INSTALLATION OF R AND R/QTL (Windows)
 
   1. The Windows version of R is distributed as a single file, with a
-     name something like R-2.10.1-win32.exe.  Install R by executing
+     name something like R-2.11.0-win32.exe.  Install R by executing
      this file.  We recommend installing R in "c:\R" rather than
      "c:\Program Files\R".  Why didn't Microsoft use "Programs" rather
      than "Program files"?
@@ -49,8 +49,8 @@ INSTALLATION OF R AND R/QTL (Windows)
 
 INSTALLATION OF R AND R/QTL (MacOS version 10.5 and above)
 
-  1. Download the file R-2.10.1.dmg and double-click it to create a
-     "drive" with a name like "R-2.10.1".  Double-click on the file
+  1. Download the file R-2.11.0.pkg and double-click it to create a
+     "drive" with a name like "R-2.11.0".  Double-click on the file
      R.mkpg and follow the instructions.
      
   2. To install R/qtl, the simplest approach is to start R and type
