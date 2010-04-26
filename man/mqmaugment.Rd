@@ -14,7 +14,7 @@ of individuals is returned in a new cross object.
 }
 
 \usage{
-mqmaugment(cross, maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE)
+mqmaugment(cross, maxaugind=82, minprob=0.1, strategy=c("default","impute","drop"), verbose=FALSE)
 }
 
 \arguments{
@@ -36,25 +36,27 @@ mqmaugment(cross, maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","imput
     against the most likely genotype. Use a value of 1.0 to return a single
     filled in genotype for each individual.
  }
-  \item{unaugmentable}{ 
-    When individuals have too much missing data and augmentation fails three 
-    options are provided: 1. \code{"mostlikely"}: Calculate the most likely genotypes 
-    at missing marker positions and add this individual to the set.
-    2. \code{"impute"}: Calculate the most likely genotypes at missing marker positions 
-    and impute \code{maxaugind} individual-variants around the most likely genotype.
-    3. \code{"drop"}: Drop individuals that cannot be augmented from the dataset, this 
-    option is not advised because information from the dropped individuals will
-    be lost.
+  \item{strategy}{ 
+    When individuals have too much missing data and augmentation fails three
+    options are provided: 
+    1. \code{"default"}: Calculate genotypes at missing marker positions,
+    accounting for \code{minprob}, and add this individual to the set.
+    2. \code{"impute"}: Calculate the most likely genotypes at missing marker
+    positions and impute \code{maxaugind} individual-variants around the most
+    likely genotype.  
+    3. \code{"drop"}: Drop individuals that cannot be augmented from the
+    dataset, this option is not advised because information from the dropped
+    individuals will be lost.
  } 
   \item{verbose}{ If TRUE, give verbose output }
 }
 
 \value{
-  Returns the cross object with augmented individuals (many individuals 
-  from the data set will be repeated multiple times). Some individuals 
-  may have been dropped completely when the probability falls below 
-  \code{minprob}. An added component to the cross object named \code{mqm} contains
-  information on exactly which individuals are retained and repeated.  
+  Returns the cross object with augmented individuals (many individuals from
+  the data set will be repeated multiple times). Some individuals may have been
+  dropped completely when the probability falls below \code{minprob}. An added
+  component to the cross object named \code{mqm} contains information on
+  exactly which individuals are retained and repeated.  
 }  
 
 \author{
