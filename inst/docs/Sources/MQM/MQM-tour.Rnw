@@ -196,7 +196,7 @@ F$_2$. As a result the user has to increase the
 
 The \code{minprob} parameter sets the minimum probability of a genotype for
 inclusion in the augmented dataset. This genotype probability is calculated for
-every marker \emph{relative} to the most likely individual.  Note that setting
+every marker \emph{relative} to the most likely genotype of this individual.  Note that setting
 this value too low may result in moving a lot of individuals to the second
 augmentation round as the maximum of augmented individuals (the parameter \code{maxaugind}) is quickly reached.
 Increasing \code{minprob} (towards a value of 1.0) can keep individuals with more
@@ -349,7 +349,11 @@ legend("topleft",c("scanone","MQM"),col=c("black","red"),lwd=1)
 <<fig=TRUE,echo=FALSE>>=
 <<augment6>>
 @
-\caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation (green=5\%, blue=10\%, red=80\%) and \code{scanone}, after \code{fill.geno} imputation.
+\caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation 
+(green=5\%, blue=10\%, red=80\%) and \code{scanone}, after \code{fill.geno} 
+imputation. The QTL from the \code{scanone} function show a higher LOD score, this is because 
+\code{scanone} pretends that the 'filled' genotypes represent the true genotype (which 
+is not the case only the most likely genotype is represented).
 \label{augment6}}
 \end{figure}
 \clearpage
