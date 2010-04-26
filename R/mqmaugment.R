@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified April 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -34,15 +34,15 @@
 #
 ######################################################################
 
-mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlikely","impute","drop"), verbose=FALSE) {
+mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","impute","drop"), verbose=FALSE) {
   starttime <- proc.time()
   maxiaug = maxaugind
   maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
   if(minprob <= 0 || minprob > 1){
     stop("Error minprob should be a value between 0 and 1.")
   }
-  supported <- c("mostlikely","impute","drop")
-  unaugmentable <- pmatch(unaugmentable, supported)
+  supported <- c("default","impute","drop")
+  strategy <- pmatch(strategy, supported)
 
   # ---- check for supported crosses and set ctype
 
@@ -138,7 +138,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, unaugmentable=c("mostlik
     as.double(minprob),
     as.integer(chr),
     as.integer(ctype),
-    as.integer(unaugmentable),
+    as.integer(strategy),
     as.integer(verbose),
     PACKAGE="qtl")
 	

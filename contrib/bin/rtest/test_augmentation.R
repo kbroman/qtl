@@ -9,15 +9,15 @@ cat("MQM=",version$MQM)
 
 testaugmentation <- function(cross, ...){
   crossML <- mqmaugment(cross, ...)
-  crossIMP <- mqmaugment(cross,unaugment="impute", ...)
-  crossDROP <- mqmaugment(cross,unaugment="drop", ...)
+  crossIMP <- mqmaugment(cross,strategy="impute", ...)
+  crossDROP <- mqmaugment(cross,strategy="drop", ...)
 
   res1 <- mqmscan(crossML)
   res2 <- mqmscan(crossIMP)
   res3 <- mqmscan(crossDROP)
 
   plot(res1,res2,res3,lty=c(1,2,3),col=c("black","blue","red"))
-  legend("topleft",c("MaxLikely","Imputation","Drop"),lty=c(1,2,3),col=c("black","blue","red"))
+  legend("topleft",c("MinProb","Imputation","Drop"),lty=c(1,2,3),col=c("black","blue","red"))
   list(res1,res2,res3)
 }
 
