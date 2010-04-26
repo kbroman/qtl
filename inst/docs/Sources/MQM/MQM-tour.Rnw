@@ -169,12 +169,13 @@ single individual for further analysis.
 
 The downside of augmentation is that the addition of many possible genotypes
 can exceed available computer memory.  Currently, augmentation moves an
-individual to a second augmentation round. In the second augmentation round the
+individual to a second augmentation round when its has too many possible 
+genotypes (above \code{maxaugind}). In this second augmentation round the
 user can specify what needs to be done with these individuals: (1) Only use the
-most likely ones, (2) use multiple imputation for the original genotype or (3)
-remove the original genotype/individual from the analysis.  Note that you can
-opt to use \code{fill.geno}'s imputation method, instead of augmentation, when
-too many individuals are dropped because of missing data.
+most likely genotype, (2) use multiple imputation to create multiple possible 
+genotypes (upto \code{maxaugind}) or (3) remove the original genotype/individual 
+from the analysis.  Note that you can opt to use \code{fill.geno}'s imputation method, 
+instead of augmentation, when too many individuals are dropped because of missing data.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
 procedure\footnote{Note that after augmentation the resulting object is
