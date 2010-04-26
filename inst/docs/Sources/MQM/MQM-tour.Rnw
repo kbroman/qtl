@@ -1102,7 +1102,9 @@ mqmplot.cistrans(mqm_imp5, multiloc, 5, FALSE, TRUE)
 @
 \caption{\Atintro. \code{mqmplot.cistrans} can be drawn when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
-genome they were measured (here mQTL for \At), cutoff is at \lod=5}
+genome they were measured (here mQTL for \At), cutoff is at \lod=5. Normally 
+these plots are created using 10.000 + traits. However because this tutorial 
+is automatically generated we only use 5 traits to illustrate}
 \end{figure}
 
 \intro{When having locations we can, again, use the \code{mqmplot.circle} function, now with 
