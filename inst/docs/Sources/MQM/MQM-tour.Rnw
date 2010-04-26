@@ -107,7 +107,8 @@ plotting routines are available for \mqm\ results.
 \section{Data augmentation}
 \label{augmentation}
 
-Most datasets are incomplete. That is, genotype
+In an ideal world all datasets would be complete every marker for every 
+individual can be determined, however in the real world datasets are often incomplete. That is, genotype
 information is missing, or can have multiple plausible values. \mqm\
 automatically expands the
 dataset by adding all potential variants and attaches a probability to each.  For
