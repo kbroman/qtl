@@ -628,8 +628,8 @@ mqm_backw <- mqmscan(maug, setcofactors)
 
 <<ManualAutoStart,eval=FALSE>>=
 par(mfrow = c(2,1))
-plotcofactors(maug,autocofactors)
-plotcofactors(maug,setcofactors)
+mqmplot.cofactors(maug,autocofactors)
+mqmplot.cofactors(maug,setcofactors)
 @ 
 
 \begin{figure}
