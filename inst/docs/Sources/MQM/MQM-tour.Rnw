@@ -1188,7 +1188,7 @@ modulating expression (higher or lower), the green lines show a flip in effect.
 		\emph{High resolution of quantitative traits into multiple loci via interval mapping}
 		Genetics, 136, 1447--1455. 
   \bibitem{jansen94b}
-	  Jansen R.C.
+	  Jansen R.C.; 1994
 		\emph{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci}.
     Genetics, Vol 138, 871--881
 	\bibitem{Churchill94}
