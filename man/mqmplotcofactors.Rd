@@ -1,5 +1,5 @@
-\name{plotcofactors}
-\alias{plotcofactors}
+\name{mqmplot.cofactors}
+\alias{mqmplot.cofactors}
 
 \title{Plotting routine to display cofactors on the genetic map}
 
@@ -9,7 +9,7 @@
 }
 
 \usage{
-plotcofactors(cross,cofactors, \dots)
+mqmplot.cofactors(cross,cofactors, \dots)
 }
 
 \arguments{
@@ -47,8 +47,8 @@ data(multitrait)
 autocof <- mqmautocofactors(multitrait,20)
 eachcof <- mqmsetcofactors(multitrait,10)
 op <- par(mfrow=c(2,1))
-plotcofactors(multitrait,autocof, col="blue")
-plotcofactors(multitrait,eachcof, col="blue")
+mqmplot.cofactors(multitrait,autocof, col="blue")
+mqmplot.cofactors(multitrait,eachcof, col="blue")
 op <- par(mfrow=c(1,1))
 }
 
