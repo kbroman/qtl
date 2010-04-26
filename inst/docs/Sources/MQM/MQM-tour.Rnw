@@ -38,7 +38,7 @@
 single \qtl\ mapping (\code{scanone} in black)}
 
 \title { Tutorial - Multiple-QTL Mapping (MQM) Analysis }
-\author { Danny Arends, Pjotr Prins, Karl W. Broman and Ritsert Jansen }
+\author { Danny Arends, Pjotr Prins, Karl W. Broman and Ritsert C. Jansen }
 \begin {document}
 \maketitle
 \clearpage
