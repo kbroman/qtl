@@ -515,18 +515,21 @@ mqmplot.singletrait <- function(result, extended=0,...){
   }else{
     op <- par(mfrow = c(2,1))
   }
-  info.c <- result
-  info.c[,3]<- info.c[,5]
+  info.l <- result
+  info.l[,3] <- result[,4]
   if(extended){
     if(!is.null(attr(result,"mqmmodel"))){
       plot(attr(result,"mqmmodel"))
     }
-    info.l <- result
-    info.l[,3] <- result[,4]
-    plot(result,info.c,info.l,lwd=1,col=c("black","blue","red"),ylab="QTL (LOD)",...)
+    plot(result,lwd=1,col=c("black"),ylab="QTL (LOD)",...)
+    par(new=TRUE)
+    plot(info.l,lwd=1,col=c("red"),ylab="QTL (LOD)",yaxt="n",lty=3,...)
     grid(max(result$chr),5)
-    labels <- c(colnames(result)[3],colnames(result)[5],colnames(result)[4])
-    legend("topright", labels,col=c("black","blue","red"),lty=c(1,1,1))		
+    labels <- c(colnames(result)[3],"Information Content")
+    mtext("Information Content",side=4,col="red",line=4) 
+    axis(4, ylim=c(0,1), col="red",col.axis="red",las=1)
+
+    legend("right", labels,col=c("black","red"),lty=c(1,1,1))		
   }else{
     if(!is.null(attr(result,"mqmmodel"))){
       plot(attr(result,"mqmmodel"))
@@ -534,7 +537,7 @@ mqmplot.singletrait <- function(result, extended=0,...){
     plot(result,lwd=1,ylab="QTL (LOD)",...)
     grid(max(result$chr),5)
     labels <- c(colnames(result)[3])
-    legend("topright", labels,col=c("black","blue"),lty=c(1,1))			
+    legend("right", labels,col=c("black","blue"),lty=c(1,1))			
   }
   op <- par(mfrow = c(1,1))
 }
