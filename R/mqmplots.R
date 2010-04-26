@@ -41,6 +41,9 @@ mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
+  if(!is.null(cross$mqm$Nind)){
+  	stop("Augmented crossobject. Please supply the original unaugmented dataset.") 
+  }
   if(is.null(result)){
 		stop("No mqmresults object. Please supply a valid scanone object.") 
 	}
