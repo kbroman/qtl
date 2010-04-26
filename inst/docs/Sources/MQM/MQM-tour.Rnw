@@ -386,8 +386,8 @@ one first calculates conditional \qtl\ genotype probabilities via
 \code{calc.genoprob}.
 
 <<>>=
-multitrait <- calc.genoprob(multitrait, step=5)
-m_one <- scanone(multitrait)
+mgenop <- calc.genoprob(multitrait, step=5)
+m_one <- scanone(mgenop)
 @
 
 Figure~\ref{Atminprob} shows that, without augmentation, the results from 
@@ -397,7 +397,6 @@ changes (see Figure~\ref{AtNoCofs}).
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
 
 <<>>=
-data(multitrait)
 maug <- mqmaugment(multitrait)
 mqm  <- mqmscan(maug)
 @
@@ -413,15 +412,15 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 \label{Atminprob}}
 \end{figure}
 
-\begin{figure}
-<<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm, col=c("black", "green"), lty=1:2)
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
-@ 
-\caption{\Atintrocolors. 
-\mqm\ differs from \code{scanone}, after augmentation 
-\label{AtNoCofs}}
-\end{figure}
+% \begin{figure}
+% <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
+% plot(m_one, mqm, col=c("black", "green"), lty=1:2)
+% legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+% @ 
+% \caption{\Atintrocolors. 
+% \mqm\ differs from \code{scanone}, after augmentation 
+% \label{AtNoCofs}}
+% \end{figure}
 
 By default \MQM\ introduces ``pseudomarkers'' at fixed intervals.
 A pseudomarker has a name like \code{c7.loc25}, which is the
