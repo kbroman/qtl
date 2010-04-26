@@ -1,7 +1,7 @@
 \name{replaceqtl}
 \alias{replaceqtl}
 
-\title{Replace a QTL in a qtl object with a different position.}
+\title{Replace a QTL in a qtl object with a different position}
 
 \description{
   This function replaces a QTL or QTLs in a qtl object with a different

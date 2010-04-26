@@ -4,7 +4,7 @@
 \docType{data}
 
 \title{ 
-	Example Cross object from R/QTL with multiple traits.
+	Example Cross object from R/QTL with multiple traits
 }
 
 \description{

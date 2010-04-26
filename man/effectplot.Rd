@@ -1,7 +1,7 @@
 \name{effectplot}
 \alias{effectplot}
 
-\title{Plot phenotype means against genotypes at one or two markers.}
+\title{Plot phenotype means against genotypes at one or two markers}
 
 \description{
   Plot the phenotype means for each group defined by the genotypes at 

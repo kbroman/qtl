@@ -28,7 +28,7 @@
 #           mqmautocofactors
 #           scoremissingmarkers
 #           calculatedensity
-#           plotcofactors
+#           mqmplot.cofactors
 #           checkdistances
 #
 #####################################################################
@@ -135,7 +135,7 @@ mqmautocofactors <- function(cross, num=50, distance=5,dominance=FALSE,plot=FALS
     cnt <- cnt+1
   }
   if(cnt==num && verbose) cat("Solution by iteration, there might be less cofactors then requested\n")
-  if(plot) plotcofactors(cross,cofactors)
+  if(plot) mqmplot.cofactors(cross,cofactors)
   cofactors
 }
 
@@ -161,7 +161,7 @@ checkdistances <- function(cross,cofactors,dist=5){
   newcofactors
 }
 
-plotcofactors <- function(cross,cofactors,...){
+mqmplot.cofactors <- function(cross,cofactors,...){
   map <- pull.map(cross)
   qc <- NULL
   qn <- NULL

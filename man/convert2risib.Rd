@@ -1,7 +1,7 @@
 \name{convert2risib}
 \alias{convert2risib}
 
-\title{Convert a cross to RIL by sib mating.}
+\title{Convert a cross to RIL by sib mating}
 
 \description{
   Convert a cross to type \code{"risib"} (RIL by sib mating).

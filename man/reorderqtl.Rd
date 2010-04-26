@@ -1,7 +1,7 @@
 \name{reorderqtl}
 \alias{reorderqtl}
 
-\title{Reorder the QTL in a qtl object.}
+\title{Reorder the QTL in a qtl object}
 
 \description{
   This function changes the order of the QTL in a QTL object.
