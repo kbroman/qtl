@@ -594,8 +594,9 @@ described in the next section.
 
 \mqm\ provides unsupervised backward elimination on a large number of markers
 by selecting cofactors automatically. Normally the number of markers in a
-dataset is much larger than the number of individuals. \mqm\ allows using as many
-cofactors simultaneously as the number of individuals minus 12\cite{jansen07}.
+dataset is much larger than the number of individuals. \mqm\ allows using any number of
+cofactors simultaneously. This can be as low as 0 cofactors up to a maximum of 
+the number of individuals-12 \cite{jansen07}.
 
 The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
 create lists of cofactors that can be used for backward elimination.
