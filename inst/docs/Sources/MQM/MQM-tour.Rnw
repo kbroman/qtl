@@ -391,9 +391,7 @@ m_one <- scanone(mgenop)
 @
 
 Figure~\ref{Atminprob} shows that, without augmentation, the results from 
-\mqm\ are similar to \code{scanone}. However, with augmentation the picture 
-changes (see Figure~\ref{AtNoCofs}). \textbf{[\FIXME this figure was
-  commented out.]}
+\mqm\ are similar to \code{scanone}.
 
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
 
