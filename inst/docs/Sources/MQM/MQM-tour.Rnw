@@ -392,7 +392,8 @@ m_one <- scanone(mgenop)
 
 Figure~\ref{Atminprob} shows that, without augmentation, the results from 
 \mqm\ are similar to \code{scanone}. However, with augmentation the picture 
-changes (see Figure~\ref{AtNoCofs}).
+changes (see Figure~\ref{AtNoCofs}). \textbf{[\FIXME this figure was
+  commented out.]}
 
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
 
@@ -449,7 +450,8 @@ stepwise approach. (Note that the automated procedure is preferred, both for
 theoretical and practical reasons.) A model consists of a set of markers we
 want to account for. We can start building the initial model by adding
 cofactors at markers with high LOD scores scored by using \code{mqmscan} with
-default values. Figure~\ref{AtNoCofs} displayed a large QTL peak on chromosome 5
+default values. Figure~\ref{AtNoCofs} \textbf{[\FIXME this figure was
+  commented out.]} displayed a large QTL peak on chromosome 5
 at 35 \cM. So we account for that by setting a cofactor at the marker
 nearest to the peak on chromosome 5 and running \code{mqmscan} again.  (See
 Figures~\ref{Cofactor4} and \ref{Cofactor4b}.)
