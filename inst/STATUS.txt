@@ -39,6 +39,9 @@ Minor changes:
   cross object to be treated as RIL by selfing or sib mating,
   respectively. 
 
+  Added function simulateMissingData, for omitting genotypes at random
+  from a cross object.
+
   Revised write.cross so that it can handle non-numeric phenotypes.
   Also changed the default for the "digits" argument to NULL, so that
   phenotypes and map positions are not rounded.  

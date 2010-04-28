@@ -13,7 +13,7 @@
 
 \arguments{
   \item{cross}{
-  An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{percentage}{ How much of the genotype data do we need to randomly drop? }
 }
