@@ -14,14 +14,14 @@ Overview of the MQM mapping functions
 % \input{"inst/docs/Sources/MQM/mqm/description.txt"}
 Multiple QTL Model (MQM) mapping provides a sensitive approach for
 mapping quantititive trait loci (QTL) in experimental populations. MQM
-MQM adds higher statistical power to detect linked as well as unlinked 
-QTL compared to many other methods.  The theoretical framework of MQM 
-mapping was introduced and explored by Ritsert C. Jansen, explained in 
-the `Handbook of Statistical Genetics' (see references), and used 
-effectively in practical research, with the commercial `mapqtl' software 
-package. Here we present the first free and open source implementation 
-of MQM, with extra features like high performance parallelization on 
-multi-CPU computers, new plots and significance testing.
+adds higher statistical power compared to many other methods.  The
+theoretical framework of MQM mapping was introduced and explored by
+Ritsert Jansen, explained in the `Handbook of Statistical Genetics'
+(see references), and used effectively in practical research, with the
+commercial `mapqtl' software package. Here we present the first free
+and open source implementation of MQM, with extra features like high
+performance parallelization on multi-CPU computers, new plots and
+significance testing.
 
 MQM is an automatic three-stage procedure in which, in the first
 stage, missing data is `augmented'. In other words, rather than guessing one
@@ -35,14 +35,14 @@ except for the markers flanking the interval under study. QTL are
 likelihood.  A refined and automated procedure for cases with large
 numbers of marker cofactors is included.  The method internally
 controls false discovery rates (FDR) and lets users test different QTL
-models by elimation of non-significant cofactors. 
+models by elimination of non-significant cofactors. 
 
 % -----^^ inst/docs/Sources/MQM/mqm/description.txt ^^-----
 % \input{"inst/docs/Sources/MQM/mqm/advantages_Rd.txt"}
 R/qtl-MQM has the following advantages:
 
 \itemize{
-  \item Higher power, as long as the QTL explain a reasonable amount of variation
+  \item Higher power to detect linked as well as unlinked QTL, as long as the QTL explain a reasonable amount of variation
   \item Protection against overfitting, because it uses the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
   \item Prevention of ghost QTL (between two QTL in coupling phase)
   \item Detection of negating QTL (QTL in repulsion phase)}
@@ -57,11 +57,12 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 % \input{"inst/docs/Sources/MQM/mqm/limitations.txt"}
 
 The current implementation of R/qtl-MQM has the following 
-limitations: (1) MQM is limited to experimental crosses F2, RIL and
-BC, (2) MQM does not treat sex
+limitations: (1) MQM is limited to experimental crosses F2, 
+BC, and selfed RIL, (2) MQM does not treat sex
 chromosomes differently from autosomal chromosomes - though one can
 introduce sex as a cofactor. Future versions of R/qtl-MQM may improve on
-these points. Check the website and changelog for updates.
+these points. Check the website and change log
+(\url{http://www.rqtl.org/STATUS.txt}) for updates.
 
 % -----^^ inst/docs/Sources/MQM/mqm/limitations.txt ^^-----
 }

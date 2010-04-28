@@ -62,7 +62,7 @@ is no QTL present) and type II error (a QTL is not detected) for QTL detection
 \cite{jansen94b}.} is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
 handles missing data and has higher power to detect QTL (linked and unlinked) 
-than other methods.  R/qtl's \mqm\ is faster than other implementations and 
+than other many methods.  R/qtl's \mqm\ is faster than other implementations and 
 scales on multi-CPU systems and computer clusters.  In this tutorial we will 
 show you how to use \mqm\ for \qtl\ mapping. 
 
@@ -94,9 +94,9 @@ the trait. The algorithm passes through the following stages:
 \item Likelihood-based estimation of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
       genome scan for \qtl
-\item If there are no \emph{cofactors\/} defined, The backward elimination of cofactors 
-      is not skipped. Perform a genome scan for \qtl testing each genetic (interval) 
-      location individually. In this case REML and ML will result in the same \qtl profile 
+\item If there are no \emph{cofactors\/} defined, the backward elimination of cofactors 
+      is skipped and a genome scan for \qtl\ is performed, testing each genetic (interval) 
+      location individually. In this case REML and ML will result in the same \qtl\ profile 
       because there is no full model.
 \end{itemize}
 
@@ -104,11 +104,14 @@ The results created during the genome scan and the \qtl\ model are
 returned as an (\mqm\ extended) R/qtl \code{scanone} object. Several special
 plotting routines are available for \mqm\ results.
 
+\clearpage
+
 \section{Data augmentation}
 \label{augmentation}
 
-In an ideal world all datasets would be complete every marker for every 
-individual can be determined, however in the real world datasets are often incomplete. That is, genotype
+In an ideal world all datasets would be complete (with the genotype
+for every marker for every 
+individual determined), however in the real world datasets are often incomplete. That is, genotype
 information is missing, or can have multiple plausible values. \mqm\
 automatically expands the
 dataset by adding all potential variants and attaches a probability to each.  For
@@ -116,6 +119,7 @@ example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
 (estimated) recombination rate, a probability is attached to all possible
 genotypes.  With \mqm\ all possible genotypes with a probability above
+the 
 parameter \code{minprob} are considered.  
 
 When encountering a missing marker genotype (possible genotypes {\bf A} and {\bf B} in a
@@ -173,14 +177,14 @@ individual to a second augmentation round when its has too many possible
 genotypes (above \code{maxaugind}). In this second augmentation round the
 user can specify what needs to be done with these individuals: (1) Only use the
 most likely genotype, (2) use multiple imputation to create multiple possible 
-genotypes (upto \code{maxaugind}) or (3) remove the original genotype/individual 
+genotypes (up to \code{maxaugind}) or (3) remove the original genotype/individual 
 from the analysis.  Note that you can opt to use \code{fill.geno}'s imputation method, 
 instead of augmentation, when too many individuals are dropped because of missing data.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
 procedure\footnote{Note that after augmentation the resulting object is
-no longer suitable for the use with other R/qtl mapping functions, like \code{scanone} and \cim, because they can not account for
-duplicated or dropped of individuals.}.  
+no longer suitable for the use with other R/qtl mapping functions, like \code{scanone} and \code{cim}, because they can not account for
+duplicated or dropped individuals.}.  
 In this tutorial we focus on \mqm's augmentation. The function \code{mqmaugment} fills in
 missing genotypes for us. For each missing genotype data, at a marker, it fills
 in all possible genotypes and calculates the probability. When the total
@@ -266,10 +270,10 @@ individual).\label{augment2}}
 
 \label{multitrait}
 An \mqtl\ dataset (\code{multitrait}), which contains 24 metabolite
-traits from a RIL population of \At is distributed with
+traits from a RIL population of \At, is now distributed with
 R/qtl (load the data with \code{data(multitrait)}).  This is part of the \At\ RIL selfing experiment
 with Landsberg erecta (Ler) and Cape Verde Islands (Cvi) with 162 individuals
-scored (with errors at) 117 markers \cite{Koornneef1998}. The experiment
+scored 117 markers \cite{Koornneef1998}. The experiment
 concerned empirical untargeted metabolomics using liquid chromatography time of
 flight mass spectrometry (LC-QTOF MS). This uncovered many qualitative and
 quantitative differences in metabolite accumulation between \At\ accessions
@@ -315,7 +319,7 @@ nind(maug10minprobImpute)
 Next,
 scan for QTL inside the cross objects with \code{mqmscan} and the single-QTL
 mapping function \code{scanone} (for reference).  The effect of increasing the
-amount of missing data on QTL mapping, using default values, can been seen in Figure~\ref{augment6}.
+amount of missing data on QTL mapping, using default values, can be seen in Figure~\ref{augment6}.
 
 
 <<augment5>>=
@@ -350,7 +354,7 @@ legend("topleft",c("scanone","MQM"),col=c("black","red"),lwd=1)
 <<augment6>>
 @
 \caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation 
-(green=5\%, blue=10\%, red=80\%) and \code{scanone}, after \code{fill.geno} 
+(green=5\%, blue=10\%, red=80\%) and \code{scanone} (black), after \code{fill.geno} 
 imputation. The QTL from the \code{scanone} function show a higher LOD score, this is because 
 \code{scanone} pretends that the 'filled' genotypes represent the true genotype (which 
 is not the case only the most likely genotype is represented).
@@ -971,7 +975,7 @@ mqmscanfdr(m_imp,mqmscanall,cofactors=setcofactors,n.cluster=2)
 In contrast, the function \code{mqmpermutation} does single trait permutations,
 and does not take correlation between the traits into account. The advantage is
 that a permutation threshold is determined for each trait. This leads to different 
-significance levels per trait and could lead to certain \qtl being significant at 
+significance levels per trait and could lead to certain \qtl\ being significant at 
 their trait cut-off, which are not significant when a single cut-off.  The \mqm\
 output needs to be converted to the standard R/qtl format using the
 \code{mqmprocesspermutation} function. The resulting object is of class

@@ -14,7 +14,7 @@ mqmplot.cofactors(cross,cofactors, \dots)
 
 \arguments{
   \item{cross}{ 
-    An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{cofactors}{
     List of cofactors to be analysed as cofactors in the 
