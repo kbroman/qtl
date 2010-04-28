@@ -355,10 +355,7 @@ legend("topleft",c("scanone","MQM"),col=c("black","red"),lwd=1)
 @
 \caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation 
 (green=5\%, blue=10\%, red=80\%) and \code{scanone} (black), after \code{fill.geno} 
-imputation. The QTL from the \code{scanone} function show a higher LOD score, this is because 
-\code{scanone} pretends that the 'filled' genotypes represent the true genotype (which 
-is not the case only the most likely genotype is represented).
-\label{augment6}}
+imputation. \label{augment6}}
 \end{figure}
 \clearpage
 
