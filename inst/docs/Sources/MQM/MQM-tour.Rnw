@@ -89,8 +89,6 @@ algorithm employs a backward elimination strategy to identify \qtl\ underlying
 the trait. The algorithm passes through the following stages:
 
 \begin{itemize}
-\item Optional Calculation of relative marker positions and detection of linkage groups
-\item Optional (re-)estimation of genetic map and/or recombination frequencies
 \item Likelihood-based estimation of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
       genome scan for \qtl
