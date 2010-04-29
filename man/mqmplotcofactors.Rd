@@ -1,10 +1,10 @@
 \name{mqmplot.cofactors}
 \alias{mqmplot.cofactors}
 
-\title{Plotting routine to display cofactors on the genetic map}
+\title{Plot cofactors on the genetic map}
 
 \description{
-  Plotting routine to display cofactors created by \code{\link{mqmautocofactors}} 
+  Plots cofactors as created by \code{\link{mqmcof1actors}} 
   or \code{\link{mqmsetcofactors}} on the genetic map. 
 }
 
@@ -17,9 +17,8 @@ mqmplot.cofactors(cross,cofactors, \dots)
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
   \item{cofactors}{
-    List of cofactors to be analysed as cofactors in the 
-    QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
-    for backward elimination. (0:no cofactor, 1:cofactor, 2:sexfactor) 
+    List of cofactors to use in the QTL model
+    %  (0:no cofactor, 1:cofactor, 2:sexfactor) 
   }
   \item{\dots}{Passed to \code{\link{plot.qtl}}}
 }
@@ -44,11 +43,11 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 
 \examples{
 data(multitrait)
-autocof <- mqmautocofactors(multitrait,20)
-eachcof <- mqmsetcofactors(multitrait,10)
+cof1 <- mqmcof1actors(multitrait,20)
+cof2 <- mqmsetcofactors(multitrait,10)
 op <- par(mfrow=c(2,1))
-mqmplot.cofactors(multitrait,autocof, col="blue")
-mqmplot.cofactors(multitrait,eachcof, col="blue")
+mqmplot.cofactors(multitrait,cof1,col="blue")
+mqmplot.cofactors(multitrait,cof2,col="blue")
 op <- par(mfrow=c(1,1))
 }
 
