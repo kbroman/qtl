@@ -1,12 +1,12 @@
 \name{mqmplot.multitrait}
 \alias{mqmplot.multitrait}
 
-\title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
+\title{Plot results fom a genomescan using a multiple-QTL model on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a mqm scan on multiple phenotypes. 
-  It supports four diffferent visualizations: a contourmap, heatmap, 3D graph or a multiple 
-  QTL plot from \code{\link{plot.scanone}}
+  Plotting routine to display the results from a  multiple-QTL model on multiple phenotypes. 
+  It supports four different visualizations: a contourmap, heatmap, 3D graph or a multiple 
+  QTL plot created by using \code{\link{plot.scanone}} on the \code{mqmmulti} object
 }
 
 \usage{
