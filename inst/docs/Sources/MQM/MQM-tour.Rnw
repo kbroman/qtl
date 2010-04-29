@@ -282,9 +282,9 @@ quantitative differences in metabolite accumulation between \At\ accessions
 
 <<augment3>>=
 data(multitrait)
-msim5 <- simulateMissingData(multitrait,5)
-msim10 <- simulateMissingData(multitrait,10)
-msim80 <- simulateMissingData(multitrait,80)
+msim5 <- simulatemissingdata(multitrait,5)
+msim10 <- simulatemissingdata(multitrait,10)
+msim80 <- simulatemissingdata(multitrait,80)
 @
 
 Next use augmentation to fill in the missing genotypes; with more missing data
