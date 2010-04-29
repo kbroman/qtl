@@ -4,7 +4,7 @@
 \title{Retrieving groups of traits after clustering}
 
 \description{
-  Retrieving groups of traits after clustering, for showing
+  Retrieving groups of clustered traits from the output of mqmplot.clusteredheatmap.
 }
 
 \usage{
@@ -15,8 +15,15 @@
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{clusteredheatmapresult}{ Result object from \code{\link{mqmplot.clusteredheatmap}} }
-  \item{height}{ Height at which to 'cut' the tree, a higher cut-off gives less but larger groups, depending on the tree stucture }
+  \item{clusteredheatmapresult}{ Resultint dendrogram object from \code{\link{mqmplot.clusteredheatmap}} }
+  \item{height}{ Height at which to 'cut' the dendrogram, a higher cut-off gives less but larger groups. 
+  Height represents the maximum distance between two traits clustered together using hclust. the 'normal' 
+  behaviour of bigger groups when using a higher heigh cut-off depends on the tree stucture and the amount 
+  of traits clustered using \link{\code{mqmplot.clusteredheatmap}} }
+}
+
+\value{
+  A list containing groups of traits which were clustered together with a distance less that \code{height}
 }
 
 \author{ 
