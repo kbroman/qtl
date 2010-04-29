@@ -24,7 +24,6 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   }
   \item{cofactors}{cofactors, only used when scanfunction is mqmscan. 
 List of cofactors to be analysed in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
-  }
   \item{\dots}{ Parameters passed through to the \code{\link{mqmscan}} function used in 
     scanning for QTLs
   }

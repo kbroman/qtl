@@ -37,20 +37,20 @@
 #
 #####################################################################
 
-mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
+mqmplot.directedqtl <- function(cross, mqmresult, pheno.col=1, draw = TRUE){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
   if(!is.null(cross$mqm$Nind)){
   	stop("Augmented crossobject. Please supply the original unaugmented dataset.") 
   }
-  if(is.null(result)){
-		stop("No mqmresults object. Please supply a valid scanone object.") 
+  if(is.null(mqmresult)){
+		stop("No mqmresult object. Please supply a valid scanone object.") 
 	}
-  if(!any(class(result)=="scanone")){
-  	stop("No mqmresults object. Please supply a valid scanone object.") 
+  if(!any(class(mqmresult)=="scanone")){
+  	stop("No mqmresult object. Please supply a valid scanone object.") 
   }
-  onlymarkers <- mqmextractmarkers(result)
+  onlymarkers <- mqmextractmarkers(mqmresult)
   eff <- effectscan(sim.geno(cross),pheno.col=pheno.col,draw=FALSE)
   if(any(eff[,1]=="X")){
     eff <- eff[-which(eff[,1]=="X"),]
@@ -58,7 +58,7 @@ mqmplot.directedqtl <- function(cross, result, pheno.col=1, draw = TRUE){
   onlymarkers[,3] <- onlymarkers[,3]*(eff[,3]/abs(eff[,3]))
   if(draw) plot(ylim=c((min(onlymarkers[,3])*1.1),(max(onlymarkers[,3])*1.1)),onlymarkers)
   class(onlymarkers) <- c("scanone",class(onlymarkers))
-  if(!is.null(attr(result,"mqmmodel"))) attr(onlymarkers,"mqmmodel") <- attr(result,"mqmmodel")
+  if(!is.null(attr(mqmresult,"mqmmodel"))) attr(onlymarkers,"mqmmodel") <- attr(mqmresult,"mqmmodel")
   invisible(onlymarkers)
 }
 
@@ -123,42 +123,42 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
   invisible(data)
 }
 
-mqmplot.clusteredheatmap <- function(cross, result, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, ...){
+mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
   if(directed && !is.null(cross$mqm$Nind)){
   	stop("Augmented crossobject. Please supply the original unaugmented dataset.") 
   }
-  if(is.null(result)){
-		stop("No result object. Please supply a valid mqmmulti object.") 
+  if(is.null(mqmresult)){
+		stop("No mqmresult object. Please supply a valid mqmmulti object.") 
 	}
-  if(!any(class(result)=="mqmmulti")){
+  if(!any(class(mqmresult)=="mqmmulti")){
   	stop("Not a mqmmulti object. Please supply a valid mqmmulti object.") 
   }  
   cross <- sim.geno(cross)
   names <- NULL
   for(x in 1:nphe(cross)){
-    result[[x]] <- mqmextractpseudomarkers(result[[x]])
+    mqmresult[[x]] <- mqmextractpseudomarkers(mqmresult[[x]])
     if(directed){
-      effect <- effectscan(sim.geno(cross,step=stepsize(result[[x]])), pheno.col=x, draw=FALSE)
+      effect <- effectscan(sim.geno(cross,step=stepsize(mqmresult[[x]])), pheno.col=x, draw=FALSE)
       if(verbose) cat(".")
-      for(y in 1:nrow(result[[x]])){
-        effectid <- which(rownames(effect)==rownames(result[[x]])[y])
+      for(y in 1:nrow(mqmresult[[x]])){
+        effectid <- which(rownames(effect)==rownames(mqmresult[[x]])[y])
         if(!is.na(effectid&&1)){
-          result[[x]][y,3]  <- result[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
+          mqmresult[[x]][y,3]  <- mqmresult[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }
       }
     }
-    names <- c(names,substring(colnames(result[[x]])[3],5))
+    names <- c(names,substring(colnames(mqmresult[[x]])[3],5))
   }
   if(verbose && directed) cat("\n")
-  chrs <- unique(lapply(result,getChr))
+  chrs <- unique(lapply(mqmresult,getChr))
   data <- NULL
-  for(x in 1:length(result)){
-    data <- rbind(data,result[[x]][,3])
+  for(x in 1:length(mqmresult)){
+    data <- rbind(data,mqmresult[[x]][,3])
   }
-  colnames(data) <- rownames(result[[1]])
+  colnames(data) <- rownames(mqmresult[[1]])
   rownames(data) <- names
   retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
   invisible(retresults)
@@ -462,41 +462,41 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
   }
 }
 
-mqmplot.permutations <- function(result, ...){
+mqmplot.permutations <- function(permutationresult, ...){
 	#Helperfunction to show mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
 	#This function should only be used for bootstrapped data
 	matrix <- NULL
 	row1 <- NULL
 	row2 <- NULL
 	i <- 1
-	if(class(result)[2] != "mqmmulti")		
+	if(class(permutationresult)[2] != "mqmmulti")		
           ourstop("Wrong type of result file, please supply a valid mqmmulti object.") 
 
-	for( j in 1:length( result[[i]][,3] ) ) {
+	for( j in 1:length( permutationresult[[i]][,3] ) ) {
 	  row1 <- NULL
 	  row2 <- NULL
-	  for(i in 1:length( result ) ) {
+	  for(i in 1:length( permutationresult ) ) {
 		if(i==1){
-		  row1 <- c(row1,rep(result[[i]][,3][j],(length( result )-1)))
-		  names(row1) <- rep(j,(length( result )-1))
+		  row1 <- c(row1,rep(permutationresult[[i]][,3][j],(length( permutationresult )-1)))
+		  names(row1) <- rep(j,(length( permutationresult )-1))
 		}else{
-		  row2 <- c(row2,result[[i]][,3][j])
+		  row2 <- c(row2,permutationresult[[i]][,3][j])
 		}
 	  }
-	  names(row2) <- rep(j,(length( result )-1))
+	  names(row2) <- rep(j,(length( permutationresult )-1))
 	  matrix <- cbind(matrix,rbind(row1,row2))
 	}
 
-	rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(result)-1))
+	rownames(matrix) <- c("QTL trait",paste("# of bootstraps:",length(permutationresult)-1))
 	
 	#Because bootstrap only has 2 rows of data we can use black n blue
 	polyplot(matrix,col=c(rgb(0,0,0,1),rgb(0,0,1,0.35)),...)
 	#PLot some lines so we know what is significant
-	perm.temp <- mqmprocesspermutation(result)			#Create a permutation object
-	numresults <- dim(result[[1]])[1]
+	perm.temp <- mqmprocesspermutation(permutationresult)			#Create a permutation object
+	numresults <- dim(permutationresult[[1]])[1]
 	lines(x=1:numresults,y=rep(summary(perm.temp)[1,1],numresults),col="green",lwd=2,lty=2)
 	lines(x=1:numresults,y=rep(summary(perm.temp)[2,1],numresults),col="blue",lwd=2,lty=2)	
-	chrs <- unique(lapply(result,getChr))
+	chrs <- unique(lapply(permutationresult,getChr))
     for(x in unique(chrs[[1]])){
 		abline(v=sum(as.numeric(chrs[[1]])<=x),lty="dashed",col="gray",lwd=1)
 	}

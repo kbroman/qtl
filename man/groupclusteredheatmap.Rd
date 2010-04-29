@@ -19,7 +19,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   \item{height}{ Height at which to 'cut' the dendrogram, a higher cut-off gives less but larger groups. 
   Height represents the maximum distance between two traits clustered together using hclust. the 'normal' 
   behaviour of bigger groups when using a higher heigh cut-off depends on the tree stucture and the amount 
-  of traits clustered using \link{\code{mqmplot.clusteredheatmap}} }
+  of traits clustered using \code{\link{mqmplot.clusteredheatmap}} }
 }
 
 \value{
