@@ -1,12 +1,13 @@
 \name{mqmplot.multitrait}
 \alias{mqmplot.multitrait}
 
-\title{Plot results fom a genomescan using a multiple-QTL model on multiple phenotypes}
+\title{Plot the results from a genomescan using a multiple-QTL model on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a  multiple-QTL model on multiple phenotypes. 
-  It supports four different visualizations: a contourmap, heatmap, 3D graph or a multiple 
-  QTL plot created by using \code{\link{plot.scanone}} on the \code{mqmmulti} object
+  Plotting routine to display the results from a  multiple-QTL model on
+  multiple phenotypes.  It supports four different visualizations: a
+  contourmap, heatmap, 3D graph or a multiple QTL plot created by using
+  \code{\link{plot.scanone}} on the \code{mqmmulti} object
 }
 
 \usage{
@@ -14,8 +15,8 @@ mqmplot.multitrait(result, type=c("lines","image","contour","3Dplot"), group=NUL
 }
 
 \arguments{
-  \item{result}{ Result object from scanall }
-  \item{type}{ Selection of the plot method to visualize the data options are: "lines" (defaut plotting option), "image", "contour" and "3Dplot" }
+  \item{result}{ Result object from \code{\link{mqmscanall}} }
+  \item{type}{ Selection of the plot method to visualize the data: "lines" (defaut plotting option), "image", "contour" and "3Dplot" }
   \item{group}{ A numeric vector indicating which traits to plot. NULL means no grouping }
   \item{meanprofile}{ Plot a mean/median profile from the group selected }
   \item{theta}{ Horizontal axis rotation in a 3D plot }
