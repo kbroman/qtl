@@ -4,10 +4,10 @@
 \title{Estimate QTL LOD score significance using permutations or simulations }
 
 \description{
-   Different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
+   Two randomization approaches to obtain estimates of QTL significance:
    \itemize{
-   \item Random redistribution of traits (method=0)
-   \item Random redistribution of simulated trait values (method=1)
+   \item Random redistribution of traits (method='permutation')
+   \item Random redistribution of simulated trait values (method='simulation')
    }
    Calculations can be parallelized using the SNOW package.
 }
