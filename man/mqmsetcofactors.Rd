@@ -4,7 +4,7 @@
 \title{Set cofactors at fixed distances, to be used with MQM} 
 
 \description{
-  Sets cofactors, at fixed distance. Together
+  Sets cofactors, at fixed marker intervalls. Together
   with \code{mqmscan} cofactors are selected through backward elimination.
 }
 
