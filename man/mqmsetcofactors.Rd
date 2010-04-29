@@ -1,10 +1,10 @@
 \name{mqmsetcofactors}
 \alias{mqmsetcofactors}
 
-\title{Create cofactors to be used with mqm} 
+\title{Set cofactors to be used with MQM} 
 
 \description{
-  Return a list of cofactors ready to be used with the mqm function
+  Create a list of cofactors ready to be used with \code{mqmscan}
 }
 
 \usage{
@@ -12,9 +12,10 @@ mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FAL
 }
 
 \arguments{
-  \item{cross}{An object of class \code{cross}. See
-   \code{\link{read.cross}} for details.} 
-  \item{each}{ Every 'each' marker will be used as a cofactor }
+  \item{cross}{
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
+   } 
+  \item{each}{ Use every marker in list as a cofactor }
   \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
   \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
   \item{verbose}{If TRUE, print tracing information.}
