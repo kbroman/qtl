@@ -4,7 +4,7 @@
 \title{Simulates missing genotype data}
 
 \description{
-  Simulate missing genotype data by randomly dropping out genotype marker annotations
+  Simulate missing genotype data by removing some genotype data from the cross object
 }
 
 \usage{
@@ -20,6 +20,10 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
 
 \author{ 
 Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
+}
+
+\value{
+  An object of class \code{cross} with \code{percentage} % of (randomly) missing genotype data. See \code{\link{read.cross}} for details 
 }
 
 \seealso{ 
