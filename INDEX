@@ -95,15 +95,14 @@ movemarker              Move a marker to a new chromosome
 MQM                     Introduction to Multiple QTL Model (MQM)
                         mapping
 mqmaugment              MQM augmentation
-mqmautocofactors        Automatic creation of cofactors to be used with
-                        mqm
+mqmautocofactors        Automatic setting of cofactors, taking marker
+                        density into account
 mqmextractmarkers       MQM marker extraction
 mqmfind.marker          Fetch significant markers after permutation
                         analysis
 mqmgetmodel             Retrieve the QTL model used in mapping from the
                         results of an MQM scan
-mqmloadanalysis         Enables loading of previously saved MQM
-                        analysis from file
+mqmloadanalysis         Load previously saved MQM analysis from file
 mqmpermutation          Estimate QTL LOD score significance using
                         permutations or simulations
 mqmplot.circle          Circular genome plotting - routine to show QTL
@@ -113,8 +112,7 @@ mqmplot.cistrans        Plotting routine to show cis and trans QTL
 mqmplot.clusteredheatmap
                         Plotting routine to display the results from a
                         mqm scan on multiple phenotypes
-mqmplot.cofactors       Plotting routine to display cofactors on the
-                        genetic map
+mqmplot.cofactors       Plot cofactors on the genetic map
 mqmplot.directedqtl     Plotting routine to display the effects and
                         results from a QTL scan
 mqmplot.heatmap         Plotting routine to display the results from a
@@ -130,7 +128,8 @@ mqmscan                 Genome scan with a multiple QTL model (MQM)
 mqmscanall              Parallelized MQM on multiple phenotypes in a
                         cross object
 mqmscanfdr              Estimate FDR for multiple trait QTL analysis
-mqmsetcofactors         Create cofactors to be used with mqm
+mqmsetcofactors         Set cofactors at fixed distances, to be used
+                        with MQM
 mqmtestnormal           Shapiro normality test used for MQM
 multitrait              Example Cross object from R/QTL with multiple
                         traits
