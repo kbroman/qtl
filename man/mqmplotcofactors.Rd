@@ -17,8 +17,7 @@ mqmplot.cofactors(cross,cofactors, \dots)
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
   \item{cofactors}{
-    List of cofactors to use in the QTL model
-    %  (0:no cofactor, 1:cofactor, 2:sexfactor) 
+List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
   }
   \item{\dots}{Passed to \code{\link{plot.qtl}}}
 }

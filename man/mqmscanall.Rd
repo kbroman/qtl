@@ -22,7 +22,9 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   \item{batchsize}{ Batch size. The entire set is split in 
     jobs to reduce memory load per core. Each job contains batchsize number of traits per job.
   }
-  \item{cofactors}{cofactors, only used when scanfunction is mqmscan}
+  \item{cofactors}{cofactors, only used when scanfunction is mqmscan. 
+List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
+  }
   \item{\dots}{ Parameters passed through to the \code{\link{mqmscan}} function used in 
     scanning for QTLs
   }
