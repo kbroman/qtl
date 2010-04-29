@@ -24,7 +24,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   }
   \item{cofactors}{ List of cofactors to be analysed as cofactors in the 
     QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
-    for backward elimination. (0:no cofactor, 1:cofactor, 2:sexfactor) 
+    for backward elimination. (0: no cofactor, 1: Additive cofactor, 2: Dominant cofactor) 
   }
   \item{pheno.col}{ Column number in the phenotype matrix which should be
     used as the phenotype.  This can be a vector of integers; One may also 
