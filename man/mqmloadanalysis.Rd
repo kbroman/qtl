@@ -1,10 +1,10 @@
 \name{mqmloadanalysis}
 \alias{mqmloadanalysis}
 
-\title{Enables loading of previously saved MQM analysis from file} 
+\title{Load previously saved MQM analysis from file} 
 
 \description{
-  Enables loading of previously saved MQM analysis from file
+  Load previously saved MQM analysis from file
 }
 
 \usage{
@@ -12,7 +12,7 @@ mqmloadanalysis(file = "MQM_output.txt")
 }
 
 \arguments{
-  \item{file}{ File to load MQM analysis from }
+  \item{file}{ File name }
 }
 
 %\details{
