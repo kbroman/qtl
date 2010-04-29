@@ -1,5 +1,5 @@
-\name{simulateMissingData}
-\alias{simulateMissingData}
+\name{simulatemissingdata}
+\alias{simulatemissingdata}
 
 \title{Simulates missing genotype data}
 
@@ -8,7 +8,7 @@
 }
 
 \usage{
-  simulateMissingData(cross, percentage = 5)
+  simulatemissingdata(cross, percentage = 5)
 }
 
 \arguments{
@@ -39,7 +39,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 \examples{
 data(multitrait)
 multitrait <- fill.geno(multitrait)
-multimissing5 <- simulateMissingData(multitrait,perc=5)
+multimissing5 <- simulatemissingdata(multitrait,perc=5)
 perc <- (sum(nmissing(multimissing5))/sum(ntyped(multimissing5)))
 }
 

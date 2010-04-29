@@ -69,7 +69,7 @@ ourline <- function(){
 	cat("------------------------------------------------------------------\n")		
 }
 
-simulateMissingData <- function(cross,percentage=5){
+simulatemissingdata <- function(cross,percentage=5){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
