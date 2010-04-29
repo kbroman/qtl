@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 4/23/2010:
+Version 1.15, 4/30/2010:
 
 Major changes:
 
@@ -59,6 +59,10 @@ Minor changes:
 
   Revised stepwiseqtl so that if additive.only=TRUE, you only need to
   give one penalty.
+
+  Revised read.cross with format="csv" so that initial fields in 2nd
+  row need not be completely empty, but can have white space.  (This
+  was a common problem for users importing csv files.)
 
   In plot.qtl, added argument "justdots", so that one can plot just
   dots at the QTL rather than arrows and QTL names, and "col", the
