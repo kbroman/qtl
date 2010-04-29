@@ -1,10 +1,10 @@
 \name{mqmsetcofactors}
 \alias{mqmsetcofactors}
 
-\title{Set cofactors at fixed distances, to be used with MQM} 
+\title{Set cofactors (manual) to be used with MQM} 
 
 \description{
-  Sets cofactors, at fixed distance. Together
+  Sets cofactors, at fixed marker intervalls. Together
   with \code{mqmscan} cofactors are selected through backward elimination.
 }
 
@@ -13,13 +13,11 @@ mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FAL
 }
 
 \arguments{
-  \item{cross}{
-An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
-   } 
-  \item{each}{ Use every marker in list as a cofactor }
-  \item{cofactors}{ 
-List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
-  \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
+  \item{cross}{An object of class \code{cross}. See
+   \code{\link{read.cross}} for details.} 
+  \item{each}{ Every 'each' marker will be used as a cofactor, when each is used the \code{cofactors} and \code{sexfactors} parameter is ignored }
+  \item{cofactors}{ List of integer describing which markers should be treated as additive cofactors, when \code{each} is set, this parameter is ignored }
+  \item{sexfactors}{ List of integer describing which markers should be treated as dominant cofactors (sexfactors), when \code{each} is set, this parameter is ignored }
   \item{verbose}{If TRUE, print tracing information.}
 }
 
@@ -51,7 +49,12 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	data(hyper)							        # Hyper dataset
 	\dontshow{hyper <- hyper[1:5]}
 	hyperfilled <- fill.geno(hyper)
-	cofactors <- mqmsetcofactors(hyperfilled,3)	# Set Cofactors every third marker
+  # Automatic cofactors every third marker
+	cofactors <- mqmsetcofactors(hyperfilled,3)
+	result <- mqmscan(hyperfilled,cofactors)	# Backward model selection
+	mqmgetmodel(result)
+  #Manual cofactors at markers 3,6,9,12,40 and 60
+  cofactors <- mqmsetcofactors(hyperfilled,cofactors=c(3,6,9,12,40,60))	
 	result <- mqmscan(hyperfilled,cofactors)	# Backward model selection
 	mqmgetmodel(result)
 }

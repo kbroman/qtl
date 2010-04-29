@@ -1,14 +1,14 @@
-\name{simulateMissingData}
-\alias{simulateMissingData}
+\name{simulatemissingdata}
+\alias{simulatemissingdata}
 
 \title{Simulates missing genotype data}
 
 \description{
-  Simulate missing genotype data by randomly dropping out genotype marker annotations
+  Simulate missing genotype data by removing some genotype data from the cross object
 }
 
 \usage{
-  simulateMissingData(cross, percentage = 5)
+  simulatemissingdata(cross, percentage = 5)
 }
 
 \arguments{
@@ -20,6 +20,10 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
 
 \author{ 
 Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
+}
+
+\value{
+  An object of class \code{cross} with \code{percentage} % of (randomly) missing genotype data. See \code{\link{read.cross}} for details 
 }
 
 \seealso{ 
@@ -41,7 +45,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 \examples{
 data(multitrait)
 multitrait <- fill.geno(multitrait)
-multimissing5 <- simulateMissingData(multitrait,perc=5)
+multimissing5 <- simulatemissingdata(multitrait,perc=5)
 perc <- (sum(nmissing(multimissing5))/sum(ntyped(multimissing5)))
 }
 

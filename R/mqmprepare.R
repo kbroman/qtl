@@ -23,23 +23,10 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: mqmloadanalysis
-#           mqmfind.marker
+# Contains: mqmfind.marker
 #           
 #
 #####################################################################
-
-
-
-
-
-mqmloadanalysis <- function(file="MQM_output.txt"){
-	data <- read.table(file)
-	class(data) <- c("scanone",class(data))
-	plot(data)
-	data
-}
-
 
 mqmfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
 	
