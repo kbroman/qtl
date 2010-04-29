@@ -1,7 +1,7 @@
 \name{mqmsetcofactors}
 \alias{mqmsetcofactors}
 
-\title{Set cofactors at fixed distances, to be used with MQM} 
+\title{Set cofactors (manual) to be used with MQM} 
 
 \description{
   Sets cofactors, at fixed marker intervalls. Together
