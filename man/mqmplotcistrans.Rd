@@ -1,12 +1,12 @@
 \name{mqmplot.cistrans}
 \alias{mqmplot.cistrans}
 
-\title{Plot results for a genomescan using a multiple-QTL model. 
-Added to this plot is cis and trans QTL information}
+\title{cis-trans plot}
 
 \description{
-Plot results for a genomescan using a multiple-QTL model. With genetic location for the 
-traits it is possible to show cis and trans QTL information and detect transbands
+Plot results for a genomescan using a multiple-QTL model. With genetic location
+for the traits it is possible to show cis- and trans- locations, and detect
+trans-bands
 }
 
 \usage{

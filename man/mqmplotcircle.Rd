@@ -1,9 +1,9 @@
 \name{mqmplot.circle}
 \alias{mqmplot.circle}
-\title{Circular genome plotting - routine to show QTL information}
+\title{Circular genome plot for MQM}
 
 \description{
-  Circular genome plotting - routine to show QTL information in a circular fashion.
+  Circular genome plot - shows QTL locations and relations.
 }
 
 \usage{
