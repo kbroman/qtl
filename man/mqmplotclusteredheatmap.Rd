@@ -1,21 +1,22 @@
 \name{mqmplot.clusteredheatmap}
 \alias{mqmplot.clusteredheatmap}
 
-\title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
+\title{Plot clustered heatmap
+of MQM scan on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a mqm scan on multiple phenotypes.
+  Plot the results from a MQM scan on multiple phenotypes.
 }
 
 \usage{
-mqmplot.clusteredheatmap(cross, result, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, \dots)
+mqmplot.clusteredheatmap(cross, mqmresult, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, \dots)
 }
 
 \arguments{
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
-  \item{result}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
+  \item{mqmresult}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
   \item{Colv}{ Cluster only the Rows, the columns (Markers) should not be clustered }
   \item{scale}{ character indicating if the values should be centered and scaled in either

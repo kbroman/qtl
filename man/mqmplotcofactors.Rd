@@ -4,8 +4,8 @@
 \title{Plot cofactors on the genetic map}
 
 \description{
-  Plots cofactors as created by \code{\link{mqmcof1actors}} 
-  or \code{\link{mqmsetcofactors}} on the genetic map. 
+  Plots cofactors as created by \code{\link{mqmsetcofactors}} 
+  or \code{\link{mqmautocofactors}} on the genetic map. 
 }
 
 \usage{
