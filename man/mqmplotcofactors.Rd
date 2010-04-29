@@ -18,7 +18,6 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   }
   \item{cofactors}{
 List of cofactors to be analysed in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
-  }
   \item{\dots}{Passed to \code{\link{plot.qtl}}}
 }
 
@@ -44,7 +43,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 
 \examples{
 data(multitrait)
-cof1 <- mqmcof1actors(multitrait,20)
+cof1 <- mqmsetcofactors(multitrait,20)
 cof2 <- mqmsetcofactors(multitrait,10)
 op <- par(mfrow=c(2,1))
 mqmplot.cofactors(multitrait,cof1,col="blue")

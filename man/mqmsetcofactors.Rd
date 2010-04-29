@@ -17,8 +17,7 @@ mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FAL
    \code{\link{read.cross}} for details.} 
   \item{each}{ Every 'each' marker will be used as a cofactor, when each is used the \code{cofactors} and \code{sexfactors} parameter is ignored }
   \item{cofactors}{ 
-List of cofactors to be analysed in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
-    ; when \code{each} is set, this parameter is ignored }
+List of cofactors to be analysed in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}; when \code{each} is set, this parameter is ignored }
   \item{sexfactors}{ list of markers which should be treated as dominant cofactors (sexfactors), when \code{each} is set, this parameter is ignored }
   \item{verbose}{If TRUE, print tracing information.}
 }

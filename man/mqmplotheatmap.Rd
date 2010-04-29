@@ -5,7 +5,7 @@
 
 \description{
   Plotting routine to display a heatmap of results obtained from a multiple-QTL model on multiple phenotypes (the
-  output of \code{\link{mqmall}})
+  output of \code{\link{mqmscanall}})
 }
 
 \usage{

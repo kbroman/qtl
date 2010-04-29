@@ -17,6 +17,7 @@ mqmplot.permutations(permutationresult, \dots)
   \code{\link{mqmpermutation}} permutation analysis.
   }
   \item{\dots}{ Extra arguments passed to \code{\link{polyplot}}}
+  }
 
 %\details{
 %  ~~ If necessary, more details than the description above ~~
