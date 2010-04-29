@@ -9,14 +9,14 @@
 }
 
 \usage{
-mqmplot.directedqtl(cross, result, pheno.col=1, draw = TRUE)
+mqmplot.directedqtl(cross, mqmresult, pheno.col=1, draw = TRUE)
 }
 
 \arguments{
   \item{cross}{ 
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
-  \item{result}{ Results from mqmscan of type \code{scanone} }
+  \item{mqmresult}{ Results from mqmscan of type \code{scanone} }
   \item{pheno.col}{ From which phenotype in the crossobject are the result calculated }
   \item{draw}{ If TRUE, draw the figure. }
 }
