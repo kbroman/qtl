@@ -20,7 +20,7 @@ mqmaugment(cross, maxaugind=82, minprob=0.1, strategy=c("default","impute","drop
 
 \arguments{
   \item{cross}{ 
-    % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
   \item{maxaugind}{ 
     Maximum number of augmentations per individual.  The default of 82

@@ -41,6 +41,8 @@ REPL =
     "Danny Arends \\email{danny.arends@gmail.com} ; Rutger Brouwer",
   'crossobject' =>
     'An object of class \code{cross}. See \code{\link{read.cross}} for details.',
+  'mqmscanobject' =>
+    'An object returned by \code{mqmscan}, including cofactors and QTL model.',
   'phenocol' =>
     'Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers.',
   'verbose' =>
