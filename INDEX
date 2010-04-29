@@ -102,34 +102,31 @@ mqmfind.marker          Fetch significant markers after permutation
                         analysis
 mqmgetmodel             Retrieve the QTL model used in mapping from the
                         results of an MQM scan
-mqmloadanalysis         Load previously saved MQM analysis from file
 mqmpermutation          Estimate QTL LOD score significance using
                         permutations or simulations
 mqmplot.circle          Circular genome plotting - routine to show QTL
                         information
-mqmplot.cistrans        Plotting routine to show cis and trans QTL
-                        information
+mqmplot.cistrans        Plot results for a genomescan using a
+                        multiple-QTL model.  Added to this plot is cis
+                        and trans QTL information
 mqmplot.clusteredheatmap
                         Plotting routine to display the results from a
                         mqm scan on multiple phenotypes
 mqmplot.cofactors       Plot cofactors on the genetic map
-mqmplot.directedqtl     Plotting routine to display the effects and
-                        results from a QTL scan
-mqmplot.heatmap         Plotting routine to display the results from a
-                        mqm scan on multiple phenotypes
-mqmplot.multitrait      Plotting routine to display the results from a
-                        mqm scan on multiple phenotypes
+mqmplot.directedqtl     Plot LOD*Effect curves of a multiple-QTL model
+mqmplot.heatmap         Plot results for a genome scan a multiple-QTL
+                        model on multiple phenotypes
+mqmplot.multitrait      Plot results fom a genomescan using a
+                        multiple-QTL model on multiple phenotypes
 mqmplot.permutations    Plot results from a permutation QTL scan
-mqmplot.singletrait     Plotting routine to display the results from a
-                        QTL scan
+mqmplot.singletrait     Plot LOD curves of a multiple-QTL model
 mqmprocesspermutation   Convert mqmmulti objects into a scanoneperm
                         object
 mqmscan                 Genome scan with a multiple QTL model (MQM)
 mqmscanall              Parallelized MQM on multiple phenotypes in a
                         cross object
 mqmscanfdr              Estimate FDR for multiple trait QTL analysis
-mqmsetcofactors         Set cofactors at fixed distances, to be used
-                        with MQM
+mqmsetcofactors         Set cofactors (manual) to be used with MQM
 mqmtestnormal           Shapiro normality test used for MQM
 multitrait              Example Cross object from R/QTL with multiple
                         traits
@@ -192,7 +189,7 @@ sim.cross               Simulate a QTL experiment
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map
 simFounderSnps          Simulate founder SNPs for a multiple-strain RIL
-simulateMissingData     Simulates missing genotype data
+simulatemissingdata     Simulates missing genotype data
 stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
 subset.cross            Subsetting data for QTL experiment
