@@ -1,10 +1,10 @@
 \name{mqmsetcofactors}
 \alias{mqmsetcofactors}
 
-\title{Set cofactors (manual) to be used with MQM} 
+\title{Set cofactors at fixed intervals, to be used with MQM} 
 
 \description{
-  Sets cofactors, at fixed marker intervalls. Together
+  Set cofactors, at fixed marker intervals. Together
   with \code{mqmscan} cofactors are selected through backward elimination.
 }
 
@@ -16,13 +16,15 @@ mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FAL
   \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.} 
   \item{each}{ Every 'each' marker will be used as a cofactor, when each is used the \code{cofactors} and \code{sexfactors} parameter is ignored }
-  \item{cofactors}{ List of integer describing which markers should be treated as additive cofactors, when \code{each} is set, this parameter is ignored }
-  \item{sexfactors}{ List of integer describing which markers should be treated as dominant cofactors (sexfactors), when \code{each} is set, this parameter is ignored }
+  \item{cofactors}{ 
+List of cofactors to be analysed in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
+    ; when \code{each} is set, this parameter is ignored }
+  \item{sexfactors}{ list of markers which should be treated as dominant cofactors (sexfactors), when \code{each} is set, this parameter is ignored }
   \item{verbose}{If TRUE, print tracing information.}
 }
 
 \value{
-	An formatted list of cofactors to be used with the $cofactors$ parameter of the \code{\link{MQM}} algorithm.
+	An list of cofactors to be passed into \code{\link{mqmscan}}.
 }
 
 \author{
