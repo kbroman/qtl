@@ -4,7 +4,7 @@
 \title{MQM marker extraction}
 
 \description{
-  Extract only the real markers from an cross object
+  Extract the real markers from a cross object that includes pseudo markers
 }
 
 \usage{
@@ -12,11 +12,11 @@ mqmextractmarkers(mqmresult)
 }
 
 \arguments{
-  \item{mqmresult}{result from \code{mqmscan} to scale down to only the results at the real markers}
+  \item{mqmresult}{result from \code{mqmscan}, including pseudo markers}
 }
 
 \value{
-  Returns a scanone object with the pseudomarkers removed, containing only the real markers.
+  Returns a scanone object with the pseudo markers removed
 }  
 
 \author{
