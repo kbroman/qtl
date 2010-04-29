@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2009-2010, Danny Arends
 #
-# Modified by Karl Broman and unknown and Pjotr Prins
+# Modified by Karl Broman and Pjotr Prins
 #
 # 
 # first written Februari 2009

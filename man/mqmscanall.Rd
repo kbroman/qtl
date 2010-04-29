@@ -13,7 +13,7 @@
 
 \arguments{
   \item{cross}{ 
-An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
   \item{multicore}{ Use multiple cores (only if the package SNOW is available, otherwise this setting will be ignored)
   }
@@ -22,7 +22,9 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details % \cro
   \item{batchsize}{ Batch size. The entire set is split in 
     jobs to reduce memory load per core. Each job contains batchsize number of traits per job.
   }
-  \item{cofactors}{cofactors, only used when scanfunction is mqmscan}
+  \item{cofactors}{cofactors, only used when scanfunction is mqmscan. 
+List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
+  }
   \item{\dots}{ Parameters passed through to the \code{\link{mqmscan}} function used in 
     scanning for QTLs
   }
@@ -47,10 +49,12 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	\itemize{
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
+    \item MQM-tutorial - The online MQM tutorial
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
+    \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----

@@ -4,10 +4,10 @@
 \title{Estimate QTL LOD score significance using permutations or simulations }
 
 \description{
-   Different randomization approaches to obtain estimates of QTL significance, currently two methods are implemented:
+   Two randomization approaches to obtain estimates of QTL significance:
    \itemize{
-   \item Random redistribution of traits (method=0)
-   \item Random redistribution of simulated trait values (method=1)
+   \item Random redistribution of traits (method='permutation')
+   \item Random redistribution of simulated trait values (method='simulation')
    }
    Calculations can be parallelized using the SNOW package.
 }
@@ -20,7 +20,7 @@
 
 \arguments{
 	\item{cross}{ 
-An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
 	\item{scanfunction}{ Function to use when mappingQTL's (either scanone,cim or mqm)}
 	\item{pheno.col}{ 
@@ -33,7 +33,8 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
         \item{file}{ Name of the intermediate output file used }
 	\item{n.cluster}{ Number of child processes to split the job into }
 	\item{method}{ What kind permutation should occur: permutation or simulation } 
-  \item{cofactors}{cofactors, only used when scanfunction is mqm}
+  \item{cofactors}{cofactors, only used when scanfunction is mqm.
+List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
@@ -59,10 +60,12 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	\itemize{
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
+    \item MQM-tutorial - The online MQM tutorial
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
+    \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----

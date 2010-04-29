@@ -13,7 +13,7 @@ mqmplot.clusteredheatmap(cross, result, directed=TRUE, Colv=NA, scale="none", ve
 
 \arguments{
   \item{cross}{
-An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
   \item{result}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
@@ -32,10 +32,12 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
   \itemize{
     % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
+    \item MQM-tutorial - The online MQM tutorial
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
+    \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----

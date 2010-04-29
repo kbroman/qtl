@@ -4,13 +4,14 @@
 \title{MQM augmentation}
 
 \description{
-Fills in missing genotypes for multiple QTL model (MQM) mapping. For each
-missing or incomplete marker it fills in (or 'augments') all possible
-genotypes, thus creating new candidate 'individuals' and calculates their
-probability using information on neighbouring markers and recombination
-frequencies. When a genotype of an augmented genotype is less likely than the
-\code{minprob} parameter it is dropped from the dataset. The \emph{augmented} list
-of individuals is returned in a new cross object.  
+Fill in missing genotypes for MQM mapping. For each missing or incomplete
+marker it fills in (or `augments') all possible genotypes, thus creating new
+candidate `individuals'. The probability of each indidual is calculated using
+information on neighbouring markers and recombination frequencies. When a
+genotype of an augmented genotype is less likely than the \code{minprob}
+parameter it is dropped from the dataset. The \emph{augmented} list of
+individuals is returned in a new cross object. For a full discussion on
+augmentation see the MQM tutorial online.
 }
 
 \usage{
@@ -18,8 +19,9 @@ mqmaugment(cross, maxaugind=82, minprob=0.1, strategy=c("default","impute","drop
 }
 
 \arguments{
-  \item{cross}{An object of class \code{cross}. See
-   \code{\link{read.cross}}.} 
+  \item{cross}{ 
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
+  }
   \item{maxaugind}{ 
     Maximum number of augmentations per individual.  The default of 82
     allows for six missing markers for an individual in a BC cross
@@ -78,10 +80,12 @@ results by using \code{minprob=1}.
 	\item \code{\link{fill.geno}} - Alternative routine for estimating missing data	
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
     \item \code{\link{MQM}} - MQM description and references
+    \item MQM-tutorial - The online MQM tutorial
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmsetcofactors}} - Set cofactors for the MQM algorithm
+    \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
+    \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
