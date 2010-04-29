@@ -29,8 +29,8 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
 }
 
 \value{
-	Boolean indicating normality of the trait in pheno.col.  (FALSE
-	indicates that the phenotype appears to not be normally distributed.)
+	Boolean indicating normality of the trait in pheno.col. (FALSE
+	when not normally distributed.)
 }
 
 \details{
