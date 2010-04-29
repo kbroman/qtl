@@ -14,7 +14,7 @@ transformPheno(cross, pheno.col=1, transf=log, ...)
 
 \arguments{
   \item{cross}{ 
-An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
+An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
  \item{pheno.col}{
    A vector of numeric indices or character strings (indicating phenotypes by
