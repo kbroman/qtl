@@ -104,21 +104,18 @@ mqmgetmodel             Retrieve the QTL model used in mapping from the
                         results of an MQM scan
 mqmpermutation          Estimate QTL LOD score significance using
                         permutations or simulations
-mqmplot.circle          Circular genome plotting - routine to show QTL
-                        information
-mqmplot.cistrans        Plot results for a genomescan using a
-                        multiple-QTL model.  Added to this plot is cis
-                        and trans QTL information
+mqmplot.circle          Circular genome plot for MQM
+mqmplot.cistrans        cis-trans plot
 mqmplot.clusteredheatmap
-                        Plotting routine to display the results from a
-                        mqm scan on multiple phenotypes
+                        Plot clustered heatmap of MQM scan on multiple
+                        phenotypes
 mqmplot.cofactors       Plot cofactors on the genetic map
 mqmplot.directedqtl     Plot LOD*Effect curves of a multiple-QTL model
-mqmplot.heatmap         Plot results for a genome scan a multiple-QTL
-                        model on multiple phenotypes
-mqmplot.multitrait      Plot results fom a genomescan using a
+mqmplot.heatmap         Heatmap of a genome of MQM scan on multiple
+                        phenotypes
+mqmplot.multitrait      Plot the results from a genomescan using a
                         multiple-QTL model on multiple phenotypes
-mqmplot.permutations    Plot results from a permutation QTL scan
+mqmplot.permutations    Plot results from mqmpermutation
 mqmplot.singletrait     Plot LOD curves of a multiple-QTL model
 mqmprocesspermutation   Convert mqmmulti objects into a scanoneperm
                         object
@@ -126,7 +123,8 @@ mqmscan                 Genome scan with a multiple QTL model (MQM)
 mqmscanall              Parallelized MQM on multiple phenotypes in a
                         cross object
 mqmscanfdr              Estimate FDR for multiple trait QTL analysis
-mqmsetcofactors         Set cofactors (manual) to be used with MQM
+mqmsetcofactors         Set cofactors at fixed intervals, to be used
+                        with MQM
 mqmtestnormal           Shapiro normality test used for MQM
 multitrait              Example Cross object from R/QTL with multiple
                         traits
