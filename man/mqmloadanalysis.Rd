@@ -35,8 +35,8 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
-    \item \code{\link{mqmautocofactors}} - Find the most informative cofactors through backward elimination
-    \item \code{\link{mqmsetcofactors}} - Set cofactors
+    \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
+    \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
 % -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
