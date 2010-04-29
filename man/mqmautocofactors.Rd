@@ -1,10 +1,10 @@
 \name{mqmautocofactors}
 \alias{mqmautocofactors}
 
-\title{Automatic creation of cofactors to be used with mqm} 
+\title{Automatic cofactor selection} 
 
 \description{
-  Return a list of cofactors ready to be used with the mqm function
+  Find the most informative cofactors through backward elimination
 }
 
 \usage{
@@ -12,19 +12,19 @@ mqmautocofactors(cross, num=50, distance=5, dominance=FALSE, plot=FALSE, verbose
 }
 
 \arguments{
-  \item{cross}{An object of class \code{cross}. See
-   \code{\link{read.cross}} for details.} 
-  \item{num}{ Number of cofactors to set. (There will be a warning when trying to set too many cofactors.) }
-  \item{distance}{ Minimal distance in cM between two cofactors }
+  \item{cross}{ 
+    % \crossobject
+  }
+  \item{num}{ Number of cofactors to set (warns when setting too many cofactors).}
+  \item{distance}{ Minimal distance between two cofactors, in cM.}
   \item{dominance}{If TRUE, create a cofactor list that is safe to use
-  with the dominance scan mode of MQM.  See  \code{\link{mqmscan}} for details.}
+  with the dominance scan mode of MQM. See \code{\link{mqmscan}} for details.}
   \item{plot}{If TRUE, plots a genetic map displaying the selected markers as cofactors.}
   \item{verbose}{If TRUE, give verbose output.}
 }
 
 \value{
-	A formatted list of cofactors to be used with the
-	\code{cofactors} parameter in \code{\link{mqmscan}}.
+	A list of cofactors to be used with \code{\link{mqmscan}}.
 }
 
 \author{
