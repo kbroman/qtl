@@ -1,10 +1,11 @@
 \name{mqmplot.heatmap}
 \alias{mqmplot.heatmap}
 
-\title{Plotting routine to display the results from a mqm scan on multiple phenotypes}
+\title{Plot results for a genome scan a multiple-QTL model on multiple phenotypes}
 
 \description{
-  Plotting routine to display the results from a mqm scan on multiple phenotypes in a heatmap.
+  Plotting routine to display a heatmap of results obtained from a multiple-QTL model on multiple phenotypes (the
+  output of \code{\link{mqmall}})
 }
 
 \usage{

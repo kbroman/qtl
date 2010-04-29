@@ -1,10 +1,11 @@
 \name{mqmplot.directedqtl}
 \alias{mqmplot.directedqtl}
 
-\title{Plotting routine to display the effects and results from a QTL scan  }
+\title{Plot LOD*Effect curves of a multiple-QTL model }
 
 \description{
-  Plotting routine to display the effects and results from a mqmscan
+  Plot the LOD*Effect curve for a genome scan with a multiple-QTL model (the
+  output of \code{\link{mqmscan}}).
 }
 
 \usage{

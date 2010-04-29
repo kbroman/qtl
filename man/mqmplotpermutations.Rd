@@ -4,7 +4,8 @@
 \title{Plot results from a permutation QTL scan}
 
 \description{
-	Plotting routine to display the results from a permutation scan.
+	Plotting routine to display the results from a permutation scan. (the
+  output of \code{\link{mqmpermutation}})
 }
 
 \usage{
