@@ -1,24 +1,22 @@
 \name{mqmplot.permutations}
 \alias{mqmplot.permutations}
 
-\title{Plot results from a permutation QTL scan}
+\title{Plot results from mqmpermutation}
 
 \description{
-	Plotting routine to display the results from a permutation scan. (the
+	Plotting routine to display the results from a permutation QTL scan. (the
   output of \code{\link{mqmpermutation}})
 }
 
 \usage{
-mqmplot.permutations(result, \dots)
+mqmplot.permutations(permutationresult, \dots)
 }
 
 \arguments{
-  \item{result}{ Resulting \code{mqmmulti} object created when performing 
-	permutation analysis. Only permutations done by the MQM algorithm (see \code{\link{MQM}})
-	can use this plotting routine.
+  \item{permutationresult}{ \code{mqmmulti} object returned by
+  \code{\link{mqmpermutation}} permutation analysis.
   }
-  \item{\dots}{ Extra argument passed to the polyplot method of R. Brouwer }    
-}
+  \item{\dots}{ Extra arguments passed to \code{\link{polyplot}}}
 
 %\details{
 %  ~~ If necessary, more details than the description above ~~
