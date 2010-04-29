@@ -1,10 +1,11 @@
 \name{mqmsetcofactors}
 \alias{mqmsetcofactors}
 
-\title{Set cofactors to be used with MQM} 
+\title{Set cofactors at fixed distances, to be used with MQM} 
 
 \description{
-  Create a list of cofactors ready to be used with \code{mqmscan}
+  Sets cofactors, at fixed distance. Together
+  with \code{mqmscan} cofactors are selected through backward elimination.
 }
 
 \usage{

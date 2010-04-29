@@ -1,10 +1,11 @@
 \name{mqmautocofactors}
 \alias{mqmautocofactors}
 
-\title{Automatic cofactor selection} 
+\title{Automatic setting of cofactors, taking marker density into account} 
 
 \description{
-  Find the most informative cofactors through backward elimination
+  Sets cofactors, taking underlying marker density into account. Together
+  with \code{mqmscan} cofactors are selected through backward elimination.
 }
 
 \usage{
