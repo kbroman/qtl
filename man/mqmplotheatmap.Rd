@@ -1,7 +1,7 @@
 \name{mqmplot.heatmap}
 \alias{mqmplot.heatmap}
 
-\title{Plot results for a genome scan a multiple-QTL model on multiple phenotypes}
+\title{Heatmap of a genome of MQM scan on multiple phenotypes}
 
 \description{
   Plotting routine to display a heatmap of results obtained from a multiple-QTL model on multiple phenotypes (the
@@ -19,7 +19,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   \item{result}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
   \item{hidelow}{ Hides the low lodscores (< 3) }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
-  \item{legend}{ Add a lengend to the plot ? }
+  \item{legend}{ If TRUE, add a legend to the plot }
 }
 
 \author{ 
