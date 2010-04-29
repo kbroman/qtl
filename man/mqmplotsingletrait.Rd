@@ -1,10 +1,11 @@
 \name{mqmplot.singletrait}
 \alias{mqmplot.singletrait}
 
-\title{Plotting routine to display the results from a QTL scan  }
+\title{Plot LOD curves of a multiple-QTL model}
 
 \description{
-  Plotting routine to display the results from a mqmscan on a single trait.
+  Plot the LOD curve for a genome scan with a multiple-QTL model (the
+  output of \code{\link{mqmscan}}).
 }
 
 \usage{
