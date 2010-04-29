@@ -16,7 +16,7 @@
 
 \arguments{
   \item{scanresult}{
-    % \scanoneobject
+An object returned by \code{mqmscan}, including cofactors and QTL model. % \mqmscanobject
   } 
 }
 
