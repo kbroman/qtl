@@ -5,7 +5,7 @@
 
 \description{
 	Add phenotype location(s) into a cross object
-  (as with eQTL/pQTL studies) 
+  (with eQTL/pQTL studies) 
 }
 
 \usage{

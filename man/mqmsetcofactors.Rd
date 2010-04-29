@@ -16,7 +16,8 @@ mqmsetcofactors(cross, each = NULL, cofactors=NULL, sexfactors=NULL, verbose=FAL
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
    } 
   \item{each}{ Use every marker in list as a cofactor }
-  \item{cofactors}{ List of integer describing which marker should be treated as a cofactor }
+  \item{cofactors}{ 
+List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
   \item{sexfactors}{ List of integer describing which marker should be treated as a sexfactor }
   \item{verbose}{If TRUE, print tracing information.}
 }

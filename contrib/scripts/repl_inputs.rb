@@ -43,6 +43,8 @@ REPL =
     'An object of class \code{cross}. See \code{\link{read.cross}} for details.',
   'mqmscanobject' =>
     'An object returned by \code{mqmscan}, including cofactors and QTL model.',
+  'mqmcofactors' =>
+    'List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}.',
   'phenocol' =>
     'Column number in the phenotype matrix which should be used as the phenotype. This can be a vector of integers.',
   'verbose' =>

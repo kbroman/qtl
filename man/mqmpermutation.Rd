@@ -33,7 +33,8 @@ Column number in the phenotype matrix which should be used as the phenotype. Thi
         \item{file}{ Name of the intermediate output file used }
 	\item{n.cluster}{ Number of child processes to split the job into }
 	\item{method}{ What kind permutation should occur: permutation or simulation } 
-  \item{cofactors}{cofactors, only used when scanfunction is mqm}
+  \item{cofactors}{cofactors, only used when scanfunction is mqm.
+List of cofactors to be analysed as cofactors in the QTL model. To set cofactors use \code{\link{mqmautocofactors}} or \code{mqmsetcofactors}}. % \mqmcofactors
 	\item{plot}{If TRUE, make a plot}
 	\item{verbose}{If TRUE, print tracing information}
 	\item{\dots}{Parameters passed through to the
