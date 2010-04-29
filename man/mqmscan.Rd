@@ -22,9 +22,11 @@ mqmscan(cross, cofactors=NULL, pheno.col = 1,
   \item{cross}{ 
 An object of class \code{cross}. See \code{\link{read.cross}} for details % \crossobject
   }
-  \item{cofactors}{ List of cofactors to be analysed as cofactors in the 
-    QTL model. See \code{\link{mqmsetcofactors}} on how-to set cofactors 
-    for backward elimination. (0: no cofactor, 1: Additive cofactor, 2: Dominant cofactor) 
+  \item{cofactors}{ List of cofactors to be analysed as cofactors in backward elimination 
+    procedure when building the QTL model. See \code{\link{mqmsetcofactors}} on how-to manually set cofactors 
+    for backward elimination. Or use \code{\link{mqmautocofactors}} for automatic selection of cofactors. Only 
+    three kind of (integer) values are allowed in the cofactor list. (0: no cofactor at this marker, 1: Use 
+    this marker as an additive cofactor, 2: Use this marker as an sexfactor (Dominant cofactor))
   }
   \item{pheno.col}{ Column number in the phenotype matrix which should be
     used as the phenotype.  This can be a vector of integers; One may also 
