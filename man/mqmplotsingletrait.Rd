@@ -4,7 +4,7 @@
 \title{Plot LOD curves of a multiple-QTL model}
 
 \description{
-  Plot the LOD curve for a genome scan with a multiple-QTL model (the
+  Plot the LOD curve for a genome scan for a single trait, with a multiple-QTL model (the
   output of \code{\link{mqmscan}}).
 }
 
@@ -13,9 +13,9 @@ mqmplot.singletrait(result, extended = 0 ,\dots)
 }
 
 \arguments{
-  \item{result}{ Results from mqmscan of type \code{scanone}} 
+  \item{result}{ \code{\link{mqmscan}} result.} 
   \item{extended}{ Extended plotting of the information content }
-  \item{\dots}{ Extra argument passed to the \code{\link{plot.scanone}} }  
+  \item{\dots}{ Extra arguments passed to \code{\link{plot.scanone}} }  
 }
 
 \author{ 
