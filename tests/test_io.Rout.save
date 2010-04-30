@@ -1,6 +1,6 @@
 
-R version 2.9.0 (2009-04-17)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.11.0 (2010-04-22)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -114,4 +114,9 @@ In fixXgeno.f2(cross, alleles) :
 > 
 > # Write in mapmaker format
 > write.cross(csv, "mm", filestem="junk2")
+> 
+> # Cleanup
+> unlink("junk1.csv")
+> unlink("junk2.raw")
+> unlink("junk2.prep")
 > 
