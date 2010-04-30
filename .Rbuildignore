@@ -1,2 +1,5 @@
-*.eps
-*.rnew
+\.eps$
+\.gz$
+\.rnew$
+\.new$
+\.save$
