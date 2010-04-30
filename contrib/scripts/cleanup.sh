@@ -32,3 +32,5 @@ find . -name Rplots.pdf -exec rm -v \{\} \;
 find . -name *.Rout -exec rm -v \{\} \;
 find src/ -name *.dll -exec rm -v \{\} \;
 
+mv inst/docs/Sources/MQM/MQM-tour.R inst/docs/
+mv inst/docs/Sources/MQM/MQM-tour.pdf inst/docs/
