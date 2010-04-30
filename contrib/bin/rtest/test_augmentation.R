@@ -35,7 +35,7 @@ stabilitytest <- function(cross, ...){
 }
 
 data(multitrait)
-multimissing <- simulateMissingData(multitrait,25)
+multimissing <- simulatemissingdata(multitrait,25)
 #r <- stabilitytest(multimissing,verbose=TRUE)
 r <- testaugmentation(multimissing)
 if(!round(r[[1]][3,3],3)==0.764) stop("Multitrait ML dataaugmentation error")
