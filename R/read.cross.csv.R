@@ -86,7 +86,7 @@ function(dir, file, na.strings=c("-","NA"),
 
   # Is map included?  yes if first n.phe columns in row 3 are all blank
   empty <- rep(FALSE, n.phe)
-  empty[grep("^\\s*$", data[3,n.phe])] <- TRUE
+  empty[grep("^\\s*$", data[3,1:n.phe])] <- TRUE
   if(all(!is.na(data[3,1:n.phe]) & empty)) {
     map.included <- TRUE
     map <- asnumericwithdec(unlist(data[3,-(1:n.phe)]), dec=dec)
