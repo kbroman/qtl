@@ -2,5 +2,4 @@
 \.gz$
 \.rnew$
 \.new$
-\.save$
 \.\.Rcheck
