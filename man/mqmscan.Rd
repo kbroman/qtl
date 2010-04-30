@@ -93,28 +93,33 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
 %}
 
 \value{
-When scanning 1 phenotype the function returns a scanone object. This contains a matrix of three columns LODscores, 
-Informationcontent and LOD*Informationcontent with at each row pseudomarkers
-sorted in increasing order. For more information on the scanone object see: \code{\link{scanone}} 
-The resulting scanone object itself can be visualized using the standard R/qtl 
-plotting routines (\code{\link{plot.scanone}}) or specialized function to show
-the mqm model (\code{\link{mqmplot.singletrait}}) and QTL profile. If cofactors were 
-specified the QTL model used in scanning is also returned as a named attribute 
-of the scanone object called mqmmodel. It can be extracted from the resulting 
-scanone object by using the \code{\link{mqmgetmodel}} function or the 
-\code{\link{attr}} function. Finally the estimate.map parameter does not 
-return its re estimated genetic map, altough it is used internally.
-When scanning multiple genotypes a \code{mqmmulti} object is created.
-This object is just a list composed of scanone objects. The results for a single
-trait can be obtained from the \code{mqmmulti} object, in scanone format.
+When scanning a single phenotype the function returns a \code{\link{scanone}}
+object. 
+
+The object contains a matrix of three columns for LOD scores, information content
+and LOD*information content with pseudo markers sorted in increasing
+order. For more information on the scanone object see: \code{\link{scanone}}
 }
 
 \author{
 Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
 }
 
-%\note{ 
-%}
+\note{ 
+The resulting scanone object itself can be visualized using the standard R/qtl
+plotting routines (\code{\link{plot.scanone}}) or specialized function to show
+the mqm model (\code{\link{mqmplot.singletrait}}) and QTL profile. If cofactors
+were specified the QTL model used in scanning is also returned as a named
+attribute of the scanone object called mqmmodel. It can be extracted from the
+resulting scanone object by using the \code{\link{mqmgetmodel}} function or the
+\code{\link{attr}} function. 
+
+Also note the \code{estimate.map} parameter does not return
+its re-estimated genetic map, altough it is used internally.  When scanning
+multiple genotypes a \code{mqmmulti} object is created.  This object is just a
+list composed of scanone objects. The results for a single trait can be
+obtained from the \code{mqmmulti} object, in scanone format.
+}
 
 \seealso{
   \itemize{
