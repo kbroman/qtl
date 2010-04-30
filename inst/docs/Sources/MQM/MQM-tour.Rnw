@@ -419,29 +419,29 @@ when used without \emph{augmentation} (\code{minprob} is 1.0), and with default 
 % \label{AtNoCofs}}
 % \end{figure}
 
-By default \MQM\ introduces ``pseudomarkers'' at fixed intervals.
-A pseudomarker has a name like \code{c7.loc25}, which is the
-pseudomarker at 25 \cM\ on chromosome 7. (Note that this reflects the standard naming
+By default \MQM\ introduces fictional markers, or `pseudo markers', at fixed intervals.
+A pseudo marker has a name like \code{c7.loc25}, which is the
+pseudo marker at 25 \cM\ on chromosome 7. (Note that this reflects the standard naming
 used in R/qtl.)
 Each
-chromosome is divided into `fictional markers' spaced equally \code{step.size}
+chromosome is divided into evenly spaced pseudo markers, \code{step.size}
 \cM\ apart. A \lod\ score for underlying \qtl\ is calculated at these 
-pseudomarkers. A small \code{step.size} allows for smoother profiles compared
+pseudo markers. A small \code{step.size} allows for smoother profiles compared
 with a pure marker-based mapping approach. The real markers are listed between
-the pseudomarkers. In the result you can remove the pseudomarkers by using
+the pseudo markers. In the result you can remove the pseudo markers by using
 the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
 real_markers <- mqmextractmarkers(mqm)
 @ 
 
-For model selection in \mqm, we first need to supply the
-algorithm with an initial model.  This initial model can be produced in two
+For model selection in \mqm, first supply the
+algorithm with an initial model. This initial model can be produced in two
 ways: by (1) building a model by hand (forward stepwise), or (2) by unsupervised
 backward elimination on a large number of markers (discussed in Section~\ref{backelim}).
 
 % @@
-Here we first build this initial model by hand using a forward
+First build this initial model by hand using a forward
 stepwise approach. (Note that the automated procedure is preferred, both for
 theoretical and practical reasons.) A model consists of a set of markers we
 want to account for. We can start building the initial model by adding
@@ -508,11 +508,10 @@ cofactor related to the \qtl\ on chromosome 5, followed by an \mqm\ scan.  The
 marker is not dropped and it passes initial thresholding to account for
 the \code{cofactor.significance} level. LOD scores are expected to change slightly,
 because of variation already explained by the \qtl\ on
-chromosome 5. This can be made visisble by plotting these new
-results against the \mqm\ \qtl\ mapping without cofactors (Figure~\ref{Cofactor4b}).
+chromosome 5 (Figure~\ref{Cofactor4b}).
 
 Figure~\ref{Cofactor4b} shows the second peak on chromosome 4 at 10
-\cM\ increases. Add that to the model and check if the model with both
+\cM\ increases. Add a cofactor to the model and check if the model with both
 cofactors changes the \qtl. Combining \code{find.markerindex} with \code{find.marker},
 adds the new cofactor to the cofactor already in \code{multitoset} (see Figure~\ref{twowaycomparison}): 
 
@@ -590,7 +589,7 @@ described in the next section.
 by selecting cofactors automatically. Normally the number of markers in a
 dataset is much larger than the number of individuals. \mqm\ allows using any number of
 cofactors simultaneously. This can be as low as 0 cofactors up to a maximum of 
-the number of individuals-12 \cite{jansen07}.
+the number of individuals minus 12 ($Inds - 12$), as described in the Handbook of Statistical Genetics\cite{jansen07}.
 
 The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
 create lists of cofactors that can be used for backward elimination.
