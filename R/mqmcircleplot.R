@@ -160,7 +160,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
   if(!is.null(retresults)){
     colnames(retresults) <- c("Marker","Marker","Change","Change","SEs")
     retresults <- as.data.frame(retresults)
-    return(retresults)
+    return(invisible(retresults))
   }
 }
 
