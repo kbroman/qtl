@@ -26,5 +26,9 @@ find . -name *.aux -exec rm -v \{\} \;
 find . -name *.dvi -exec rm -v \{\} \;
 find . -name *.log -exec rm -v \{\} \;
 find . -name *.orig -exec rm -v \{\} \;
+find . -name *.eps -exec rm -v \{\} \;
+find . -name *~ -exec rm -v \{\} \;
+find . -name Rplots.pdf -exec rm -v \{\} \;
+find . -name *.Rout -exec rm -v \{\} \;
 find src/ -name *.dll -exec rm -v \{\} \;
 
