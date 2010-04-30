@@ -43,8 +43,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 	\itemize{
     \item \code{\link{mqmplot.cistrans}} - Cis/trans plot
 % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
+    \item The MQM tutorial: \url{http://www.rqtl.org/tutorials/MQM-tour.pdf} 
     \item \code{\link{MQM}} - MQM description and references
-    \item MQM-tutorial - The online MQM tutorial
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis 
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
