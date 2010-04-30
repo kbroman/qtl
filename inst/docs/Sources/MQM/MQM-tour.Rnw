@@ -62,7 +62,7 @@ is no QTL present) and type II error (a QTL is not detected) for QTL detection
 \cite{jansen94b}.} is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
 handles missing data and has higher power to detect QTL (linked and unlinked) 
-than other many methods.  R/qtl's \mqm\ is faster than other implementations and 
+than other methods.  R/qtl's \mqm\ is faster than other implementations and 
 scales on multi-CPU systems and computer clusters.  In this tutorial we will 
 show you how to use \mqm\ for \qtl\ mapping. 
 
@@ -99,7 +99,7 @@ the trait. The algorithm passes through the following stages:
 \end{itemize}
 
 The results created during the genome scan and the \qtl\ model are
-returned as an (\mqm\ extended) R/qtl \code{scanone} object. Several special
+returned as an (extended) R/qtl \code{scanone} object. Several special
 plotting routines are available for \mqm\ results.
 
 %\clearpage
@@ -112,7 +112,7 @@ for every
 individual at every marker determined), however in the real world datasets are often incomplete. That is, genotype
 information is missing, or can have multiple plausible values. \mqm\
 automatically expands the
-dataset by adding all potential variants and attaches a probability to each.  For
+dataset by adding all potential variants and attaching a probability to each.  For
 example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
 (estimated) recombination rate, a probability is attached to all possible
@@ -162,21 +162,21 @@ geno.image(simcross)
 \end{figure}
 
 Before going to the next step (the \qtl\ genome scan), the data has to be
-completed (i.e. no more missing data).  There are two possibilities: (1) 
+completed (i.e. no more missing data).  There are two possibilities: use (1) 
 the \mqm\ data augmentation routine \code{mqmaugment} or (2) the imputation
-routine \code{fill.geno}. As described above, augmentation tries to analyse
+routine \code{fill.geno}. Augmentation tries to analyse
 all possible genotypes of interest by leaving them in the solution space. In contrast,
 the imputation method \emph{selects} the most likely genotype, and uses that
 single individual for further analysis. 
 
 The downside of augmentation is that the addition of many possible genotypes
 can exceed available computer memory.  Currently, augmentation moves an
-individual to a second augmentation round when its has too many possible 
-genotypes (above \code{maxaugind}). In this second augmentation round the
+individual to a second augmentation round when it has too many possible 
+genotypes (above the maximum number of augmented individuals \code{maxaugind}). In this second augmentation round the
 user can specify what needs to be done with these individuals: (1) Only use the
 most likely genotype, (2) use multiple imputation to create multiple possible 
 genotypes (up to \code{maxaugind}) or (3) remove the original genotype/individual 
-from the analysis.  Note that you can opt to use \code{fill.geno}'s imputation method, 
+from the analysis.  Note that you can opt to use \code{fill.geno}'s imputation method on your dataset, 
 instead of augmentation, when too many individuals are dropped because of missing data.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
@@ -357,7 +357,7 @@ imputation. \label{augment6}}
 \end{figure}
 \clearpage
 
-\section{Multiple-QTL Mapping (MQM) mapping}
+\section{Multiple-QTL Mapping (MQM)}
 
 \label{QTL modelling}
 
