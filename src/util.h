@@ -306,8 +306,8 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 void matmult(double *result, double *a, int nrowa,
              int ncola, double *b, int ncolb);
 /* multiply two matrices - I'm using dgemm from lapack here */
-// void matmult2(double *result, double *a, int nrowa,
-//              int ncola, double *b, int ncolb);
+/* void matmult2(double *result, double *a, int nrowa,
+               int ncola, double *b, int ncolb); */
 
 
 /**********************************************************************
@@ -359,5 +359,5 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
   }
 #endif
 
-#endif // __UTIL_H
+#endif 
 /* end of util.h */
