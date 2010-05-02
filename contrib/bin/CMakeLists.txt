@@ -17,9 +17,6 @@ ELSE()
 ENDIF()
 MESSAGE("RQTL_VERSION=${RQTL_VERSION}")
 
-# Compiler options
-ADD_DEFINITIONS(-pedantic)
-
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-Wall -D_DEBUG)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
@@ -42,7 +39,12 @@ ENDMACRO()
 FIND_PACKAGE(RLibs)
 
 include_directories (../../src)
+
+# Compiler options
 add_definitions(-DSTANDALONE)
+# ADD_DEFINITIONS(-pedantic)
+ADD_DEFINITIONS(-DENABLE_C99_MACROS)
+
 
 IF(NOT WIN32)
   add_definitions(-pg)
