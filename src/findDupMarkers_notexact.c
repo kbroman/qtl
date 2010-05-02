@@ -2,9 +2,9 @@
  * 
  * findDupMarkers_notexact.c
  *
- * copyright (c) 2009, Karl W Broman
+ * copyright (c) 2009-2010, Karl W Broman
  *
- * last modified Jun, 2009
+ * last modified Apr, 2010
  * first written Jun, 2009
  *
  *     This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ void findDupMarkers_notexact(int nind, int nmar, int **Geno,
 			     int *order, int *markerloc, 
 			     int adjacent_only, int *result)
 {
-  int i, j, oi, oj, k, nna, flag;
+  int i, j, oi, oj, k, flag;
 
   for(i=0; i<nmar-1; i++) {
     oi = order[i]-1;
