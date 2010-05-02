@@ -282,7 +282,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   int iaug     = 0;     // iaug keeps track of current augmented individual
   double prob0, prob1, prob2, sumprob,
   prob0left, prob1left, prob2left,
-  prob0right, prob1right, prob2right = 0.0f;
+  prob0right=0.0, prob1right=0.0, prob2right = 0.0f;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
   if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
