@@ -772,7 +772,8 @@ mqmplot.singletrait(mqm_backw_low, extended=TRUE)
 <<AutoCofactor>>
 @
 \caption{\Atintro. Plot using \code{mqmplot.singletrait} of the first metabolic trait. The information
-content per marker (red), the mapped \qtl\ (black) and the \qtl\ information score (\code{info} blue) which is calculated by multiplying marker information content with \qtl\ LOD score.\label{AutoCofactor}} \end{figure}
+content per marker (red) and the mapped \qtl\ (black).\label{AutoCofactor}} 
+\end{figure}
 
 The information content \code{info} in the result is calculated from the deviation of
 the `ideal marker distribution'. For example, with a dataset of 100
