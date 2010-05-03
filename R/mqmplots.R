@@ -523,7 +523,7 @@ mqmplot.singletrait <- function(result, extended=0,...){
     }
     plot(result,lwd=1,col=c("black"),ylab="QTL (LOD)",...)
     par(new=TRUE)
-    plot(info.l,lwd=1,col=c("red"),ylab="QTL (LOD)",yaxt="n",lty=3,...)
+    plot(info.l,lwd=1,col=c("red"),ylab="QTL (LOD)",yaxt="n",lty=1,...)
     grid(max(result$chr),5)
     labels <- c(colnames(result)[3],"Information Content")
     mtext("Information Content",side=4,col="red",line=4) 
