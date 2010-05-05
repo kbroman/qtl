@@ -17,6 +17,19 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.16, 5/5/2010:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Revised fill.geno to have a third option, method="no_dbl_XO", which
+  fills in missing genotypes between markers with exactly the same
+  genotype.  
+
+
 Version 1.15, 5/2/2010:
 
 Major changes:
