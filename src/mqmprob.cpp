@@ -163,7 +163,7 @@ double start_prob(const MQMCrossType crosstype, MQMMarker marker) {
       fatal("Strange: unknown crosstype in start_prob");
   }
   fatal("Should not get here");
-  return NAN;
+  return R_NAN;
 }
 
 
@@ -212,10 +212,10 @@ double left_prob(const double r,const MQMMarker markerL,const MQMMarker markerR,
       break;
     default:
       fatal("Strange: unknown crosstype in prob");
-      return NAN;
+      return R_NAN;
   }
   fatal("Should not get here");
-  return NAN;
+  return R_NAN;
 }
 
 /*
@@ -292,10 +292,10 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
     break;
     case CUNKNOWN:
       fatal("Strange: unknown crosstype in is_knownMarker()");
-      return NAN;
+      return R_NAN;
     break;
   }
-  return NAN;
+  return R_NAN;
 }
 
 /*
