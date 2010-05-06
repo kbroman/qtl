@@ -32,8 +32,6 @@
   extern "C" {
 #endif
 
-#include <stdbool.h>
-
 
 /* ML estimation of recombination frequencies via EM;
     calculation of multilocus genotype probabilities;
