@@ -317,7 +317,7 @@ double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imar
   const double r2 = r*r;      //Breeding Logic (see prob_new)
   const double rr = 1.0-r;
   const double rr2 = rr*rr;
-  const int recombinations = (int)fabs(markerL-markerR);   //Number of recombinations between markerL and markerR
+  const int recombinations = (int)abs(markerL-markerR);   //Number of recombinations between markerL and markerR
 
   if (is_knownMarker(markerR, CF2)) {   //If we know the next marker we have an answer
     if ((markerL==MH)&&(markerR==MH)) {
