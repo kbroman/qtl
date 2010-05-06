@@ -17,7 +17,12 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.15, 5/2/2010:
+Version 1.15-16, 5/6/2010:
+
+  Fix some slight problems in c++ code.
+
+
+Version 1.15-15, 5/2/2010:
 
 Major changes:
 
