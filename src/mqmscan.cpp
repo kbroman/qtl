@@ -45,7 +45,7 @@ static double ftruncate(double n, double p = 3){
   }else{
       sign = -1;
   }
-  double val = abs((pow(10,p)) * n);
+  double val = fabs((pow(10,p)) * n);
   val = floor(val);
   val /= pow(10,p);
   return (double) sign * val;
