@@ -419,7 +419,7 @@ double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector ima
   double prob0 = 0.0;
   double prob2 = 0.0;
   const double rr = 1.0-r;
-  const int recombinations = (int)abs(markerL-markerR);
+  const int recombinations = abs(markerL-markerR);
   if (is_knownMarker(markerR, CRIL)) {
     return ((recombinations==0) ? rr : r);
   } else { //Next marker is semi unknown
