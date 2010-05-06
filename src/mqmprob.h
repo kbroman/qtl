@@ -32,6 +32,7 @@
   extern "C" {
 #endif
 
+#include <R_ext/Arith.h> // FOR R_NAN
 
 cvector relative_marker_position(const unsigned int nmark,const ivector chr);
 vector recombination_frequencies(const unsigned int nmark, const cvector position, const vector mapdistance);
