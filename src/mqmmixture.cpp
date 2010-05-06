@@ -312,7 +312,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
         (*weight)[i+2*Naug]/=indweight[ind[i]];
       }
     }
-    delta= abs(logL-oldlogL);
+    delta= fabs(logL-oldlogL);
     oldlogL= logL;
   }
   // bias adjustment after finished ML estimation via EM

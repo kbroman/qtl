@@ -392,7 +392,7 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
     debug_trace("(%f, %f, %f) prob=%f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
     if (prob<alfa) maxF= halfway;
     else minF= halfway;
-    absdiff= abs(prob-alfa);
+    absdiff= fabs(prob-alfa);
   }
   if(verbose)info("Prob=%.3f Alfa=%f", prob, alfa);
   return halfway;
