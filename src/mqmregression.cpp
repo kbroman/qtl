@@ -323,7 +323,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d) {
   scale= newvector(dim);
   *d=1;
   for (r=0; r<dim; r++) {
-    for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
+    for (max=0.0, c=0; c<dim; c++) if ((temp=abs(m[r][c])) > max) max=temp;
     if (max==0.0) fatal("Singular matrix"); 
     scale[r]=1.0/max;
   }
@@ -335,7 +335,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d) {
     for (max=0.0, rowmax=c, r=c; r<dim; r++) {
       for (sum=m[r][c], i=0; i<c; i++) sum-= m[r][i]*m[i][c];
       m[r][c]=sum;
-      if ((temp=scale[r]*fabs(sum)) > max) {
+      if ((temp=scale[r]*abs(sum)) > max) {
         max=temp;
         rowmax=r;
       }
@@ -392,7 +392,7 @@ double inverseF(int df1, int df2, double alfa, int verbose) {
     debug_trace("(%f, %f, %f) prob=%f\n", df2/(df2+df1*halfway), df2/2.0, df1/2.0, prob);
     if (prob<alfa) maxF= halfway;
     else minF= halfway;
-    absdiff= fabs(prob-alfa);
+    absdiff= abs(prob-alfa);
   }
   if(verbose)info("Prob=%.3f Alfa=%f", prob, alfa);
   return halfway;
