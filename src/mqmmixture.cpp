@@ -95,7 +95,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
           newr= 0.0;
           for (i=0; i<Naug; i++) {
-            Nrecom= fabs((double)marker[j][i]-marker[j+1][i]);
+            Nrecom= abs((double)marker[j][i]-marker[j+1][i]);
             if ((marker[j][i]==MH)&&(marker[j+1][i]==MH))
               Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
             newr+= Nrecom*weight[i];
@@ -312,7 +312,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
         (*weight)[i+2*Naug]/=indweight[ind[i]];
       }
     }
-    delta= fabs(logL-oldlogL);
+    delta= abs(logL-oldlogL);
     oldlogL= logL;
   }
   // bias adjustment after finished ML estimation via EM
