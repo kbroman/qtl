@@ -29,6 +29,9 @@ Minor changes:
   fills in missing genotypes between markers with exactly the same
   genotype.  
 
+  Revised est.map so that the output with verbose=TRUE is less verbose
+  and more informative.
+
 
 Version 1.15, 5/2/2010:
 

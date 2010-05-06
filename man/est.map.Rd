@@ -32,8 +32,7 @@ est.map(cross, error.prob=0.0001,
  \item{tol}{Tolerance for determining convergence.}
  \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
  used only for the 4-way cross.}
- \item{verbose}{Logical; indicates whether to print initial and final
-   estimates of the recombination fractions for each chromosome.}
+ \item{verbose}{If TRUE, print tracing information.}
  \item{omit.noninformative}{If TRUE, on each chromosome, omit individuals
    with fewer than two typed markers, since they are not informative for
    linkage.}
