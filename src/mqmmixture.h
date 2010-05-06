@@ -55,4 +55,4 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   }
 #endif
 
-/* end of mqmmixture.c */
+/* end of mqmmixture.h */

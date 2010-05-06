@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Apr, 2010
+# last modified May, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1432,10 +1432,13 @@ function(...)
 #            rough genome scans by marker regression without
 #            holes.  WE WOULD NOT PLACE ANY TRUST IN THE RESULTS!
 #
+#   the newer method, "no_dbl_XO", fills in missing genotypes between
+#   markers with matching genotypes
+#
 ######################################################################
 
 fill.geno <-
-function(cross, method=c("imp","argmax"), error.prob=0.0001,
+function(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"))
 {
   if(!any(class(cross) == "cross"))
@@ -1472,7 +1475,7 @@ function(cross, method=c("imp","argmax"), error.prob=0.0001,
       colnames(cross$geno[[i]]$data) <- nam
     }
   }
-  else {
+  else if(method=="argmax") {
     # run the Viterbi algorithm
     temp <- argmax.geno(cross,step=0,off.end=0,error.prob=error.prob,
                         map.function=map.function)
@@ -1487,6 +1490,24 @@ function(cross, method=c("imp","argmax"), error.prob=0.0001,
         cross$geno[[i]]$data <-
           matrix(as.numeric(temp$geno[[i]]$argmax),ncol=n.mar[i])
       colnames(cross$geno[[i]]$data) <- nam
+    }
+  }
+  else {
+    for(i in 1:n.chr) {
+      dat <- cross$geno[[i]]$data
+      dat[is.na(dat)] <- 0
+      nr <- nrow(dat)
+      nc <- ncol(dat)
+      dn <- dimnames(dat)
+      dat <- .C("R_fill_geno_nodblXO",
+                as.integer(nr),
+                as.integer(nc),
+                dat=as.integer(dat),
+                PACKAGE="qtl")$dat
+      dat[dat==0] <- NA
+      dat <- matrix(dat, ncol=nc, nrow=nr)
+      dimnames(dat) <- dn
+      cross$geno[[i]]$data <- dat
     }
   }
   cross
