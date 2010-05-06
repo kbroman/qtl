@@ -2,9 +2,9 @@
  * 
  * hmm_main.c
  *
- * copyright (c) 2001-9, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified May, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -434,9 +434,10 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 	     double *loglik, int maxit, double tol, int sexsp, 
 	     int verbose)
 {
-  int i, j, j2, v, v2, it, flag=0, **Geno;
+  int i, j, j2, v, v2, it, flag=0, **Geno, ndigits;
   double s, **alpha, **beta, **gamma, *cur_rf, *cur_rf2;
-  double curloglik;
+  double curloglik, maxdif, temp;
+  char pattern[100], text[200];
   
   /* allocate space for beta and reorganize geno */
   reorg_geno(n_ind, n_mar, geno, &Geno);
@@ -446,11 +447,11 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
   allocate_double(n_mar-1, &cur_rf);
   allocate_double(n_mar-1, &cur_rf2);
 
+  /* digits in verbose output */
   if(verbose) {
-    /* print initial estimates */
-    Rprintf("      "); 
-    for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", rf[j]);
-    Rprintf("\n"); 
+    ndigits = (int)ceil(-log10(tol));
+    if(ndigits > 16) ndigits=16;
+    sprintf(pattern, "%s%d.%df", "%", ndigits+3, ndigits+1);
   }
 
   /* begin EM algorithm */
@@ -538,9 +539,18 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 
     if(verbose>1) {
       /* print estimates as we go along*/
-      Rprintf(" %4d ", it+1);
-      for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", rf[j]);
-      Rprintf("\n");
+      Rprintf("   %4d ", it+1);
+      maxdif=0.0;
+      for(j=0; j<n_mar-1; j++) {
+	temp = fabs(rf[j] - cur_rf[j])/(cur_rf[j]+tol*100.0);
+	if(maxdif < temp) maxdif = temp;
+	if(sexsp) {
+	  temp = fabs(rf2[j] - cur_rf2[j])/(cur_rf2[j]+tol*100.0);
+	  if(maxdif < temp) maxdif = temp;
+	}
+      }
+      sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
+      Rprintf(text, maxdif);
     }
 
     /* check convergence */
@@ -583,12 +593,23 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
   }
 
   if(verbose) {
-    /* print final estimates */
-    Rprintf(" %4d ", it+1);
-    for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", rf[j]);
-    Rprintf("\n");
+    if(verbose < 2) {
+      /* print final estimates */
+      Rprintf("  no. iterations = %d\n", it+1);
+      maxdif=0.0;
+      for(j=0; j<n_mar-1; j++) {
+	temp = fabs(rf[j] - cur_rf[j])/(cur_rf[j]+tol*100.0);
+	if(maxdif < temp) maxdif = temp;
+	if(sexsp) {
+	  temp = fabs(rf2[j] - cur_rf2[j])/(cur_rf2[j]+tol*100.0);
+	  if(maxdif < temp) maxdif = temp;
+	}
+      }
+      sprintf(text, "%s%s\n", "  max rel've change at last step = ", pattern);
+      Rprintf(text, maxdif);
+    }
     
-    Rprintf("loglik: %10.4lf\n\n", *loglik);
+    Rprintf("  loglik: %10.4lf\n\n", *loglik);
   }
 
 }
