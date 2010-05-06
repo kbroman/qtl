@@ -846,3 +846,4 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
 }
 
 
+/* end of util.c */
