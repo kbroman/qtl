@@ -2,14 +2,14 @@
  *
  * mqmmixture.h
  *
- * Copyright (c) 1996-2009 by
+ * Copyright (c) 1996-2010 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Danny Arends and Pjotr Prins
- * last modified September 2009
+ * last modified May 2010
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -31,8 +31,6 @@
 #ifdef __cplusplus
   extern "C" {
 #endif
-
-#include <stdbool.h>
 
 
 /* ML estimation of recombination frequencies via EM;
