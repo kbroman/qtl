@@ -2,14 +2,14 @@
  *
  * mqmprob.cpp
  *
- * Copyright (c) 1996-2009 by
+ * Copyright (c) 1996-2010 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Danny Arends and Pjotr Prins
- * last modified December 2009
+ * last modified May 2010
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -28,6 +28,7 @@
  **********************************************************************/
 
 #include "mqm.h"
+#include <R_ext/Arith.h>
 
 /* This function walks the marker list and determins for every position whether the marker is in the Middle, Left,Right of the chromosome
  When there is only 1 marker on a chromosome it is defined Unlinked*/
@@ -392,6 +393,7 @@ double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imar
   double prob1 = 0.0;                                  		//Internal variable holding the probability H if the next rightmarker is (Semi) Unknown
   const double rr = 1.0-r;                             		//Breeding Logic (see prob_new)
   const int recombinations = abs(markerL-markerR);    //Number of recombinations between markerL and markerR
+
   if (is_knownMarker(markerR, CBC)) {
     return ((recombinations==0)? rr : r );
   } else {
@@ -420,6 +422,7 @@ double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector ima
   double prob2 = 0.0;
   const double rr = 1.0-r;
   const int recombinations = abs(markerL-markerR);
+
   if (is_knownMarker(markerR, CRIL)) {
     return ((recombinations==0) ? rr : r);
   } else { //Next marker is semi unknown
