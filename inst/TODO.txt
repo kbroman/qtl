@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Bug in estimates from fitqtl for RIL: they need to be divided in
+  half.  
+
 o stepwiseqtl: change indications of QTL locations from "7:47.7" to
   "7@47.7".  
 
