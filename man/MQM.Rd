@@ -12,10 +12,10 @@ Overview of the MQM mapping functions
 
 \section{Introduction}{
 % \input{"inst/docs/Sources/MQM/mqm/description.txt"}
-Multiple QTL Model (MQM) mapping provides a sensitive approach for
+Multiple QTL Mapping (MQM) provides a sensitive approach for
 mapping quantititive trait loci (QTL) in experimental populations. MQM
 adds higher statistical power compared to many other methods.  The
-theoretical framework of MQM mapping was introduced and explored by
+theoretical framework of MQM was introduced and explored by
 Ritsert Jansen, explained in the `Handbook of Statistical Genetics'
 (see references), and used effectively in practical research, with the
 commercial `mapqtl' software package. Here we present the first free
