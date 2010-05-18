@@ -11,17 +11,17 @@ the R/qtl mailing list.
 SHORT TERM:
 
 o Tutorial and man pages
-  - mqmcofactorseach.Rd has wrong example - do we need that method?
-    (danny: Yes, i think so, we need an easy way to set a lot of cofactors,
-	this function although not perfect allows us. Removing it will break 
-	all backward selection currently implemented in man/tutorialpages)
   - fix the bibliography (pjotr)
-
+o CODE
+  - Speed up the creation of circleplots when using 10k+ traits (Danny)
+  - Fix the solaris compiler
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
 
 o MQM paper
+- Plot Cis/Trans on geneexpression set from Arabidopsis
+- Circleplot on the same dataset
 
 o Augmentation rewrite to use best N augmentations
 
