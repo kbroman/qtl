@@ -16,7 +16,7 @@ genotypes are modeled with their estimated
 probabilities.  In the second stage important markers are selected by
 multiple regression and backward elimination. In the third stage a QTL is moved
 along the chromosomes using these pre-selected markers as cofactors,
-except for the markers flanking the interval under study. QTL are
+except for the markers in the window around the interval under study. QTL are
 (interval) mapped using the most `informative' model through maximum
 likelihood.  A refined and automated procedure for cases with large
 numbers of marker cofactors is included.  The method internally
