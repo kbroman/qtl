@@ -72,7 +72,12 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
     
     if(any(class(result)=="mqmmulti")){
       #multiple scan results, so plot em all
-      for(x in 1:length(result)){
+      todo <- 1:length(result)
+      if(highlight!=0){
+        #Unless we highlight only one of them
+        todo <- highlight
+      }
+      for(x in todo){
         model <- mqmgetmodel(result[[x]])
         if(!is.null(model)){
           if(verbose) cat("Model found for trait ",x,"\n")
