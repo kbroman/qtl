@@ -30,7 +30,7 @@ genotypes are modeled with their estimated
 probabilities.  In the second stage important markers are selected by
 multiple regression and backward elimination. In the third stage a QTL is moved
 along the chromosomes using these pre-selected markers as cofactors,
-except for the markers flanking the interval under study. QTL are
+except for the markers in the window around the interval under study. QTL are
 (interval) mapped using the most `informative' model through maximum
 likelihood.  A refined and automated procedure for cases with large
 numbers of marker cofactors is included.  The method internally
@@ -43,7 +43,7 @@ R/qtl-MQM has the following advantages:
 
 \itemize{
   \item Higher power to detect linked as well as unlinked QTL, as long as the QTL explain a reasonable amount of variation
-  \item Protection against overfitting, because it uses the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
+  \item Protection against overfitting, because it fixes the residual variance from the full model. For this reason more parameters (cofactors) can be used compared to, for example, CIM
   \item Prevention of ghost QTL (between two QTL in coupling phase)
   \item Detection of negating QTL (QTL in repulsion phase)}
 % -----^^ inst/docs/Sources/MQM/mqm/advantages_Rd.txt ^^-----
