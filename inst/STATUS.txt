@@ -17,13 +17,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.16, 5/13/2010:
+Version 1.16, 5/21/2010:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Added a warning message to summary.cross for the case that there are
+  chromosomes > 1000 cM in length (which might indicate that they're
+  really in basepairs).
 
   Revised fill.geno to have a third option, method="no_dbl_XO", which
   fills in missing genotypes between markers with exactly the same

@@ -304,10 +304,10 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
   if(verbose)
   {
-    if (isinf(logL)) {
+    if (!R_finite(logL)) {
       info("Log-likelihood of full model= INFINITE");
     } else 
-      if (isnan(logL)) {
+      if (R_IsNaN(logL)) {
         info("Log-likelihood of full model= NOT A NUMBER (NAN)");
       }
       else {
@@ -316,7 +316,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     info("Residual variance= %.3f",ftruncate3(variance));
     info("Trait mean= %.3f; Trait variation= %.3f",ftruncate3(ymean),ftruncate3(yvari));
   }
-  if (!isinf(logL) && !isnan(logL)) {
+  if (R_finite(logL) && !R_IsNaN(logL)) {
     if (Backwards==1)    // use only selected cofactors
       logL = backward(Nind, Nmark, (*cofactor), marker, y, weight, ind, Naug, logL,variance, F1, F2, &selcofactor, r, position, &informationcontent, mapdistance,&Frun,run,useREML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
     if (Backwards==0) // use all cofactors
