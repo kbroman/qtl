@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.16, 5/21/2010:
+Version 1.16, 5/23/2010:
 
 Major changes:
 
@@ -25,9 +25,18 @@ Major changes:
 
 Minor changes:
 
+  Added a function rescalemap for rescaling a genetic map (as for the
+  case that a cross object has marker positions in basepairs and one
+  wishes to convert them to Mbp or some approximation of cM
+  locations).  
+
   Added a warning message to summary.cross for the case that there are
   chromosomes > 1000 cM in length (which might indicate that they're
   really in basepairs).
+
+  Revised pull.map to have argument as.table; if as.table=TRUE the map
+  is returned as a simple table with chromosome assignments and
+  positions.  
 
   Revised fill.geno to have a third option, method="no_dbl_XO", which
   fills in missing genotypes between markers with exactly the same

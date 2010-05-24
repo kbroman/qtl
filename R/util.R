@@ -3604,7 +3604,23 @@ function(cross)
 }
 
 
+rescalemap <-
+function(object, scale=1e-6)
+{
+  if("cross" %in% class(object)) {
+    for(i in 1:nchr(object)) {
+      object$geno[[i]]$map <-
+        object$geno[[i]]$map * scale
+    }
+  } else if("map" %in% class(object)) {
+    for(i in seq(along=object)) {
+      object[[i]] <- object[[i]] * scale
+    }
+  } else 
+    stop("rescalemap works only for objects of class \"cross\" or \"map\".")
+
+  object
+}
 
 
 # end of util.R
-
