@@ -51,17 +51,31 @@
 ######################################################################
 
 pull.map <-
-function(cross, chr)
+function(cross, chr, as.table=FALSE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
   if(!missing(chr)) cross <- subset(cross, chr=chr)
-  a <- lapply(cross$geno,function(a) {
-    b <- a$map
-    class(b) <- as.character(class(a))
-    b })
-  class(a) <- "map"
+  if(!as.table) {
+    a <- lapply(cross$geno,function(a) {
+      b <- a$map
+      class(b) <- as.character(class(a))
+      b })
+    class(a) <- "map"
+  } else {
+    themap <- pull.map(cross, as.table=FALSE)
+    if(is.matrix(themap[[1]])) {
+      themap1 <- unlist(lapply(themap, function(a) a[1,]))
+      themap2 <- unlist(lapply(themap, function(a) a[2,]))
+      a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
+                      pos.female=themap1, pos.male=themap2)
+    } else {
+      a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
+                      pos=unlist(themap))
+    }
+    rownames(a) <- markernames(cross)
+  }
 
   a
 }
@@ -3588,6 +3602,8 @@ function(cross)
   
   cross
 }
+
+
 
 
 # end of util.R
