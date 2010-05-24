@@ -11,7 +11,7 @@
 rescalemap(object, scale=1e-6)
 }
 \arguments{
- \item{Object}{An object of class \code{cross} (see
+ \item{object}{An object of class \code{cross} (see
    \code{\link{read.cross}} for details) or \code{map} (see
    \code{\link{sim.map}} for details).}
  \item{scale}{Scale factor by which all positions will be multiplied.}
