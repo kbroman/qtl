@@ -3612,6 +3612,8 @@ function(object, scale=1e-6)
       object$geno[[i]]$map <-
         object$geno[[i]]$map * scale
     }
+    if(abs(scale - 1) > 1e-6)
+      object <- clean(object) # strip off intermediate calculations
   } else if("map" %in% class(object)) {
     for(i in seq(along=object)) {
       object[[i]] <- object[[i]] * scale
