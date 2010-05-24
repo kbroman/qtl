@@ -7,7 +7,7 @@
   Pull out the map portion of a cross object.
 }
 
-\usage{pull.map(cross, chr)}
+\usage{pull.map(cross, chr, as.table=FALSE)}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
@@ -17,6 +17,9 @@
   by name; numeric values are converted to strings.  Refer to
   chromosomes with a preceding \code{-} to have all chromosomes but
   those considered.  A logical (TRUE/FALSE) vector may also be used.}
+ \item{as.table}{If TRUE, return the genetic map as a table with
+ chromosome assignments and marker names.  If FALSE, return the map as a
+ \code{"map"} object.}
 }
 
 \value{
