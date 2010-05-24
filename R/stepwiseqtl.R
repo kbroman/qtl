@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2010, Karl W Broman
-# last modified Apr, 2010
+# last modified May, 2010
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -351,7 +351,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     cat("    no.qtl = ", n.qtl, "  pLOD =", curplod, "  formula:",
         deparseQTLformula(formula), "\n")
   if(verbose > 1) 
-    cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep=":"), "\n")
+    cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep="@"), "\n")
 
   # start stepwise search
   i <- 0
@@ -517,7 +517,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       cat("    no.qtl = ", n.qtl, "  pLOD =", curplod, "  formula:",
           deparseQTLformula(formula), "\n")
     if(verbose > 1) 
-      cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep=":"), "\n")
+      cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep="@"), "\n")
 
 
     if(curplod > curbestplod) {
