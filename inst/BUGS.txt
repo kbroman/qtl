@@ -16,9 +16,9 @@ many details as possible and possibly example data, to Karl Broman,
 
 Version 1.16 bugs:
 
->> 1. Bug in estimates from fitqtl for RIL: they need to be divided in
+   1. Bug in estimates from fitqtl for RIL: they need to be divided in
       half.  The estimates for a backcross are correct, and we're not
-      making the appropriate correction in RIL.
+      making the appropriate correction in RIL. [Fixed in Verison 1.16.]
 
 
 Version 1.11 bugs:

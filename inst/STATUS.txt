@@ -25,6 +25,10 @@ Major changes:
 
 Minor changes:
 
+  Revised fitqtl() so that estimated QTL effects in RIL or doubled
+  haploid are as they should be (half the difference between the two
+  homoyzogotes).  
+
   Added a function rescalemap for rescaling a genetic map (as for the
   case that a cross object has marker positions in basepairs and one
   wishes to convert them to Mbp or some approximation of cM
@@ -45,8 +49,8 @@ Minor changes:
   Revised est.map so that the output with verbose=TRUE is less verbose
   and more informative.
 
-  Slight changes in C++ code, to fix problems reported by Prof. Brian
-  Ripley. 
+  Changes in C++ code, to fix problems that prevented the package from
+  being compiled on Solaris.
 
 
 Version 1.15, 5/2/2010:
