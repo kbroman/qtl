@@ -184,6 +184,7 @@ scanoneboot             Bootstrap to get interval estimate of QTL
 scanqtl                 General QTL scan
 scantwo                 Two-dimensional genome scan with a two-QTL
                         model
+shiftmap                Shift starting points in genetic maps
 sim.cross               Simulate a QTL experiment
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map

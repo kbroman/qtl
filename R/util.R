@@ -3625,4 +3625,40 @@ function(object, scale=1e-6)
 }
 
 
+shiftmap <-
+function(object, offset=0)
+{
+  if("cross" %in% class(object)) {
+    cat(length(offset), "\n")
+    if(length(offset) == 1) offset <- rep(offset, nchr(object))
+    else if(length(offset) != nchr(object))
+      stop("offset must have length 1 or n.chr (", nchr(object), ")")
+
+    for(i in 1:nchr(object)) {
+      if(is.matrix(object$geno[[i]]$map)) {
+        for(j in 1:2)
+          object$geno[[i]]$map[j,] <- object$geno[[i]]$map[j,] - object$geno[[i]]$map[j,1] + offset[i]
+      } else {
+        object$geno[[i]]$map <- object$geno[[i]]$map - object$geno[[i]]$map[1] + offset[i]
+      }
+    }
+  } else if("map" %in% class(object)) {
+    if(length(offset) != 1) offset <- rep(offset, length(object))
+    else if(length(offset) != length(object))
+      stop("offset must have length 1 or n.chr (", length(object), ")")
+    for(i in seq(along=object)) {
+      if(is.matrix(object[[i]])) {
+        for(j in 1:2)
+          object[[i]][j,] <- object[[i]][j,] - object[[i]][j,1] + offset[i]
+      } else {
+        object[[i]] <- object[[i]] - object[[i]][1] + offset[i]
+      }
+    }
+  } else 
+    stop("shiftmap works only for objects of class \"cross\" or \"map\".")
+
+  object
+}
+
+
 # end of util.R
