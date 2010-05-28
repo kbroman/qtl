@@ -17,6 +17,22 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.17, 5/28/2010:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added 'offset' argument to est.map, which defines the starting position
+  for each chromosome.  If missing, we use the starting positions that
+  are currently present in the input cross object.
+
+  Added function shiftmap, for shifting the starting points of a
+  genetic map (in a map or cross object).
+
+
 Version 1.16, 5/23/2010:
 
 Major changes:
