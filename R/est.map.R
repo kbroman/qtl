@@ -2,8 +2,8 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified May, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -32,12 +32,18 @@
 est.map <- 
 function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
-         omit.noninformative=TRUE)
+         omit.noninformative=TRUE, offset)
 {
   if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
 
   type <- class(cross)[1]
+
+  if(!missing(offset)) {
+    if(length(offset)==1) offset <- rep(offset, nchr(cross))
+    else if(length(offset) != nchr(cross))
+      stop("offset must have length 1 or n.chr (", nchr(cross), ")")
+  }
 
   if(m < 0 || p < 0 || p > 1)
     stop("Must have m >=0 and 0 <= p <= 1")
@@ -234,6 +240,18 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
 
     class(newmap[[i]]) <- chrtype[i]
   } # end loop over chromosomes
+
+
+  if(!missing(offset)) {  # shift map start positions
+    for(i in seq(along=newmap))
+      if(is.matrix(newmap[[i]])) {
+        for(j in 1:2) 
+          newmap[[i]][j,] <- newmap[[i]][j,] - newmap[[i]][j,1] + offset[i]
+      } else {
+          newmap[[i]] <- newmap[[i]] - newmap[[i]][1] + offset[i]
+      }
+  }
+      
 
   class(newmap) <- "map"
   newmap
