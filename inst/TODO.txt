@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Bug in estimates from fitqtl for RIL: they need to be divided in
-  half.  
-
 o In mqmsetcofactors(), we might allow cofactors() to be marker names
   rather than just marker indices.
 
