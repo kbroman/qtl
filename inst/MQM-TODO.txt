@@ -12,9 +12,7 @@ SHORT TERM:
 
 o Tutorial and man pages
   - fix the bibliography (pjotr)
-o CODE
-  - Speed up the creation of circleplots when using 10k+ traits (Danny)
-  - Fix the solaris compiler
+
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
