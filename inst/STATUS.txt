@@ -17,13 +17,46 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.16, 5/13/2010:
+Version 1.17, 5/28/2010:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Added 'offset' argument to est.map, which defines the starting position
+  for each chromosome.  If missing, we use the starting positions that
+  are currently present in the input cross object.
+
+  Added function shiftmap, for shifting the starting points of a
+  genetic map (in a map or cross object).
+
+
+Version 1.16, 5/23/2010:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Revised fitqtl() so that estimated QTL effects in RIL or doubled
+  haploid are as they should be (half the difference between the two
+  homoyzogotes).  
+
+  Added a function rescalemap for rescaling a genetic map (as for the
+  case that a cross object has marker positions in basepairs and one
+  wishes to convert them to Mbp or some approximation of cM
+  locations).  
+
+  Added a warning message to summary.cross for the case that there are
+  chromosomes > 1000 cM in length (which might indicate that they're
+  really in basepairs).
+
+  Revised pull.map to have argument as.table; if as.table=TRUE the map
+  is returned as a simple table with chromosome assignments and
+  positions.  
 
   Revised fill.geno to have a third option, method="no_dbl_XO", which
   fills in missing genotypes between markers with exactly the same
@@ -32,8 +65,8 @@ Minor changes:
   Revised est.map so that the output with verbose=TRUE is less verbose
   and more informative.
 
-  Slight changes in C++ code, to fix problems reported by Prof. Brian
-  Ripley. 
+  Changes in C++ code, to fix problems that prevented the package from
+  being compiled on Solaris.
 
 
 Version 1.15, 5/2/2010:

@@ -51,17 +51,31 @@
 ######################################################################
 
 pull.map <-
-function(cross, chr)
+function(cross, chr, as.table=FALSE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
   if(!missing(chr)) cross <- subset(cross, chr=chr)
-  a <- lapply(cross$geno,function(a) {
-    b <- a$map
-    class(b) <- as.character(class(a))
-    b })
-  class(a) <- "map"
+  if(!as.table) {
+    a <- lapply(cross$geno,function(a) {
+      b <- a$map
+      class(b) <- as.character(class(a))
+      b })
+    class(a) <- "map"
+  } else {
+    themap <- pull.map(cross, as.table=FALSE)
+    if(is.matrix(themap[[1]])) {
+      themap1 <- unlist(lapply(themap, function(a) a[1,]))
+      themap2 <- unlist(lapply(themap, function(a) a[2,]))
+      a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
+                      pos.female=themap1, pos.male=themap2)
+    } else {
+      a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
+                      pos=unlist(themap))
+    }
+    rownames(a) <- markernames(cross)
+  }
 
   a
 }
@@ -3590,5 +3604,61 @@ function(cross)
 }
 
 
-# end of util.R
+rescalemap <-
+function(object, scale=1e-6)
+{
+  if("cross" %in% class(object)) {
+    for(i in 1:nchr(object)) {
+      object$geno[[i]]$map <-
+        object$geno[[i]]$map * scale
+    }
+    if(abs(scale - 1) > 1e-6)
+      object <- clean(object) # strip off intermediate calculations
+  } else if("map" %in% class(object)) {
+    for(i in seq(along=object)) {
+      object[[i]] <- object[[i]] * scale
+    }
+  } else 
+    stop("rescalemap works only for objects of class \"cross\" or \"map\".")
 
+  object
+}
+
+
+shiftmap <-
+function(object, offset=0)
+{
+  if("cross" %in% class(object)) {
+    cat(length(offset), "\n")
+    if(length(offset) == 1) offset <- rep(offset, nchr(object))
+    else if(length(offset) != nchr(object))
+      stop("offset must have length 1 or n.chr (", nchr(object), ")")
+
+    for(i in 1:nchr(object)) {
+      if(is.matrix(object$geno[[i]]$map)) {
+        for(j in 1:2)
+          object$geno[[i]]$map[j,] <- object$geno[[i]]$map[j,] - object$geno[[i]]$map[j,1] + offset[i]
+      } else {
+        object$geno[[i]]$map <- object$geno[[i]]$map - object$geno[[i]]$map[1] + offset[i]
+      }
+    }
+  } else if("map" %in% class(object)) {
+    if(length(offset) != 1) offset <- rep(offset, length(object))
+    else if(length(offset) != length(object))
+      stop("offset must have length 1 or n.chr (", length(object), ")")
+    for(i in seq(along=object)) {
+      if(is.matrix(object[[i]])) {
+        for(j in 1:2)
+          object[[i]][j,] <- object[[i]][j,] - object[[i]][j,1] + offset[i]
+      } else {
+        object[[i]] <- object[[i]] - object[[i]][1] + offset[i]
+      }
+    }
+  } else 
+    stop("shiftmap works only for objects of class \"cross\" or \"map\".")
+
+  object
+}
+
+
+# end of util.R
