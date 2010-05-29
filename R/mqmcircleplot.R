@@ -107,14 +107,16 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
                   changeB <- (eff$Means[2,2]-eff$Means[2,1])      
                   #interaction
                   qtl2 <- locationtocircle(templateresult,model[[4]][z],model[[5]][z],spacing=spacing)
+                  if(!is.na(changeA) && !is.na(changeB) && !any(is.na(eff$SEs))){
                   if(changeA/abs(changeA) !=  changeB/abs(changeB)){
                     retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
                     drawspline(qtll,qtl2,lwd=2,col="green")
                   }else{
                     if(abs(abs(changeA)-abs(changeB)) > interactstrength*mean(eff$SEs)){       
                       retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
-                      drawspline(qtll,qtl2,lwd=1.5,col="blue")
+                      drawspline(qtll,qtl2,lwd=2,col="blue")
                     }
+                  }
                   }
                 }
               }
@@ -145,9 +147,9 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           points(qtll,col="red",pch=19,cex=1)
           text(qtll*1.15,model[[2]][y],col="red",cex=0.7)
           if(!is.null(cross$locations)){
-            location <- as.numeric(cross$locations[[1]])
+            location <- as.numeric(cross$locations[[highlight]])
             traitl <- locationtocircle(templateresult,location[1],location[2],spacing=spacing)
-            points(traitl,col="red",pch=24,cex=1)
+            points(traitl,col="red",lwd=2,pch=24,cex=1.5)
           }else{
             traitl <- c(0,0)
           }
