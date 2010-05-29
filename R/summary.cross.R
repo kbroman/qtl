@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Apr, 2010
+# last modified May, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -299,6 +299,16 @@ function(object,...)
   if(!is.null(id) && length(id) != length(unique(id)))
     warning("The individual IDs are not unique.")
 
+  # check that chromosomes aren't too long
+  mapsum <- summary.map(object)
+  if(ncol(mapsum)==7)  # sex-specific map
+    maxlen <- max(mapsum[1:(nrow(mapsum)-1),2:3])
+  else  
+    maxlen <- max(mapsum[1:(nrow(mapsum)-1),2])
+  if(maxlen > 1000)
+    warning(paste("Some chromosomes > 1000 cM in length; there may", 
+                  "be a problem with the genetic map.\n  (Perhaps it is in basepairs?)"))
+    
   cross.summary <- list(type=type, n.ind = n.ind, n.phe=n.phe, 
 			n.chr=n.chr, n.mar=n.mar,
 			missing.gen=missing.gen,typing.freq=typings,

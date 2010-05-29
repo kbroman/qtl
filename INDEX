@@ -176,6 +176,7 @@ replacemap.scantwo      Replace the genetic map in QTL mapping results
                         with an alternate map
 replaceqtl              Replace a QTL in a qtl object with a different
                         position
+rescalemap              Rescale genetic maps
 ripple                  Compare marker orders
 scanone                 Genome scan with a single QTL model
 scanoneboot             Bootstrap to get interval estimate of QTL
@@ -183,6 +184,7 @@ scanoneboot             Bootstrap to get interval estimate of QTL
 scanqtl                 General QTL scan
 scantwo                 Two-dimensional genome scan with a two-QTL
                         model
+shiftmap                Shift starting points in genetic maps
 sim.cross               Simulate a QTL experiment
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map

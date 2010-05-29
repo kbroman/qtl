@@ -12,7 +12,7 @@
 est.map(cross, error.prob=0.0001,
         map.function=c("haldane","kosambi","c-f","morgan"),
         m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE,
-        verbose=FALSE, omit.noninformative=TRUE)
+        verbose=FALSE, omit.noninformative=TRUE, offset)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -36,6 +36,13 @@ est.map(cross, error.prob=0.0001,
  \item{omit.noninformative}{If TRUE, on each chromosome, omit individuals
    with fewer than two typed markers, since they are not informative for
    linkage.}
+ \item{offset}{Defines the starting position
+  for each chromosome.  If missing, we use the starting positions that
+  are currently present in the input cross object.  This should be a
+  single value (to be used for all chromosomes) or a vector with length
+  equal to the number of chromosomes, defining individual starting
+  positions for each chromosome.  For a sex-specific map (as in a 4-way
+  cross), we use the same offset for both the male and female maps.}
 }
 
 \details{

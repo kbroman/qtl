@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-9, Hao Wu and Karl W. Broman
-# last modified Sep, 2009
+# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
+# last modified May, 2010
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -392,11 +392,20 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       for(i in seq(along=p$idx.qtl)) {
         if(n.gen[i]==2) {
           if(method=="imp") {
-            Z[qtl$geno[,p$idx.qtl[i],1]==1,curcol+1] <- -0.5
-            Z[qtl$geno[,p$idx.qtl[i],1]==2,curcol+1] <- 0.5
+            if(cross.attr$class[1] == "bc") {
+              Z[qtl$geno[,p$idx.qtl[i],1]==1,curcol+1] <- -0.5
+              Z[qtl$geno[,p$idx.qtl[i],1]==2,curcol+1] <- 0.5
+            } else {
+              Z[qtl$geno[,p$idx.qtl[i],1]==1,curcol+1] <- -1
+              Z[qtl$geno[,p$idx.qtl[i],1]==2,curcol+1] <- 1
+            }
           }
           else 
-            Z[,curcol+1] <- (qtl$prob[[p$idx.qtl[i]]][,2] - qtl$prob[[p$idx.qtl[i]]][,1])/2
+            if(cross.attr$class[1] == "bc") {
+              Z[,curcol+1] <- (qtl$prob[[p$idx.qtl[i]]][,2] - qtl$prob[[p$idx.qtl[i]]][,1])/2
+            } else {
+              Z[,curcol+1] <- (qtl$prob[[p$idx.qtl[i]]][,2] - qtl$prob[[p$idx.qtl[i]]][,1])
+            }
           colnames(Z)[curcol+1] <- thenames[i]
         }
         else { # 3 genotypes
