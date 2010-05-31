@@ -171,7 +171,6 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
   if(is.null(cross$locations)){
 		stop("Please add trait locations to the cross file\n")
 	}
-	locations <- NULL
 	if(any(class(result) == "mqmmulti")){
 		sum.map <- 0
 		chr.breaks <- NULL
@@ -182,22 +181,13 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 		}
 		sum.map <- ceiling(sum.map)
 		if(verbose) cat("Total maplength:",sum.map," cM in ",nchr(cross),"Chromosomes\nThe lengths are:",chr.breaks,"\n")		
-		for( k in 1:length(result) ) {
-			loc <- cross$locations[[k]]
-			rownames(loc) <- k
-			locations <- rbind(locations,loc)
-		}
-		QTLs <- NULL
-		for(y in 1:nrow(locations)){
-			qtl <- result[[y]][,3]
-			QTLs <- rbind(QTLs,qtl)
-		}
+		locations <-  do.call(rbind,cross$locations)
+		QTLs <- do.call(rbind,lapply(FUN=getThird,result))
 		colnames(QTLs) <- rownames(result[[1]])
-		axi <- 1:sum.map
-		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		bmatrix <- QTLs>threshold
 		pmatrix <- NULL
 		for(j in 1:nrow(QTLs)){
+      if(verbose && (j%%1000 == 0)) cat("QTL row:",j,"\n")
 			temp <- as.vector(bmatrix[j,])
 			tempv <- QTLs[j,]
 			value = 0
@@ -228,8 +218,10 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 				pmatrix <- rbind(pmatrix,temp)
 			}
 		}
+    
 		locz <- NULL
 		for(marker in 1:ncol(QTLs)){
+      if(verbose && (j%%1000 == 0)) cat("QTL col:",marker,"\n")
 			pos <- find.markerpos(cross, colnames(QTLs)[marker])
 			if(!is.na(pos[1,1])){
 				locz <- c(locz,round(chr.breaks[as.numeric(pos[[1]])] + as.numeric(pos[[2]])))
@@ -240,22 +232,21 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 				locz <- c(locz,round(chr.breaks[as.numeric(mchr)] + as.numeric(mpos)))
 			}
 		}
+
+ 		axi <- 1:sum.map
+		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		trait.locz <- NULL
 		for(j in 1:nrow(QTLs)){
+      if(verbose && (j%%1000 == 0)) cat("QTL row:",j,"\n")
 			values <- rep(NA,sum.map)
 			aa <- locz[bmatrix[j,]]
 			trait.locz <- c(trait.locz,chr.breaks[locations[j,1]] + locations[j,2])
 			values[aa] = chr.breaks[locations[j,1]] + locations[j,2]
-			points(values,pch=pch,cex=cex)
-		}
-		if(highPEAK){
-		for(j in 1:nrow(QTLs)){
-			values <- rep(NA,sum.map)
-			aa <- locz[pmatrix[j,]]
-			trait.locz <- c(trait.locz,chr.breaks[locations[j,1]] + locations[j,2])
-			values[aa] = chr.breaks[locations[j,1]] + locations[j,2]
-			points(values,pch=24,cex=1.25*cex,col="black",bg="red")
-		}
+			if(!highPEAK){
+        points(values,pch=pch,cex=cex)
+      }else{
+        points(values,pch=24,cex=1.25*cex,col="black",bg="red")
+      }
 		}
 		points(axi,type="l")		
 		points(axi+(cisarea/2),type="l",col="green")
