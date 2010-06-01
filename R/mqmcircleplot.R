@@ -130,7 +130,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           if(verbose) cat("Trait ",x," has no model\n")
         }
       }
-      legend("bottomleft",c("Trait","QTL"),col=c("black","black"),pch=c(24,19),cex=1)
+      legend("topleft",c("Trait","QTL"),col=c("black","black"),pch=c(24,19),cex=1)
     }
     if(any(class(result)=="scanone") || highlight > 0){
       #single scan result or highlighting one of the multiple
@@ -138,7 +138,6 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
         #Just highlight the template result
         result <- templateresult
       }
-      if(verbose) cat("Single trait plot\n")
       model <- mqmgetmodel(result)
       if(!is.null(model)){
          for(y in 1:length(model[[4]])){
@@ -248,6 +247,14 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     #chrstartloc <- locationtocircle(result,x,1,spacing=spacing)
     chrnumberloc <- locationtocircle(result,x,getchromosomelength(result,x)/2,spacing=spacing)
     #chrendloc <- locationtocircle(result,x,getchromosomelength(result,x),spacing=spacing)
+    cat((10/(totallength+(nchr*spacing)))*2*pi,"\n")
+    points(t(c(-1.1, -1.15)))
+    points(t(c(-0.9, -1.15)))
+    points(t(c(-0.7, -1.15)))
+    text(t(c(-0.9, -1.0)),paste("Distances in cM"),cex=0.6)
+    text(t(c(-1.1, -1.1)),paste("0 cM"),cex=0.6)
+    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),dig=1),"cM"),cex=0.6)
+    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),dig=1),"cM"),cex=0.6)
     #text(1.1*chrstartloc,paste("0 cM"),cex=0.3)
     text(0.9*chrnumberloc,paste("Chr",x),cex=0.6)
     #text(1.1*chrendloc,paste(getchromosomelength(result,x),"cM"),cex=0.3)
