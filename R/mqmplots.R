@@ -234,7 +234,7 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
 		}
 
  		axi <- 1:sum.map
-		plot(x=axi,y=axi,type="n",main="Cis/Trans QTLplot",sub=paste("QTLs above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
+		plot(x=axi,y=axi,type="n",main="Cis/Trans QTL plot",sub=paste("QTL above threshold:",threshold,"LOD"),xlab="Markers (in cM)",ylab="Location of traits (in cM)",xaxt="n",yaxt="n")
 		trait.locz <- NULL
 		for(j in 1:nrow(QTLs)){
       if(verbose && (j%%1000 == 0)) cat("QTL row:",j,"\n")
