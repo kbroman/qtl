@@ -91,10 +91,9 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           }
           if(highlight==0){
             col=colorz[x]
-            title(sub = "Multiple traits")
           }else{
             col=rgb(0.1, 0.1, 0.1, 0.1)  
-            if(highlight==x) title(sub = paste("Multiple traits highlight of:",colnames(cross$pheno)[x]))
+            if(highlight==x) title(sub = paste("Highlight of:",colnames(cross$pheno)[x]))
           }
           for(y in 1:length(model[[4]])){
             qtll <- locationtocircle(templateresult,model[[4]][y],model[[5]][y],spacing=spacing)
@@ -246,12 +245,12 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     }
   }
   for(x in 1:nchr){
-    chrstartloc <- locationtocircle(result,x,1,spacing=spacing)
+    #chrstartloc <- locationtocircle(result,x,1,spacing=spacing)
     chrnumberloc <- locationtocircle(result,x,getchromosomelength(result,x)/2,spacing=spacing)
-    chrendloc <- locationtocircle(result,x,getchromosomelength(result,x),spacing=spacing)
-    text(1.1*chrstartloc,paste("0 cM"),cex=0.3)
+    #chrendloc <- locationtocircle(result,x,getchromosomelength(result,x),spacing=spacing)
+    #text(1.1*chrstartloc,paste("0 cM"),cex=0.3)
     text(0.9*chrnumberloc,paste("Chr",x),cex=0.6)
-    text(1.1*chrendloc,paste(getchromosomelength(result,x),"cM"),cex=0.3)
+    #text(1.1*chrendloc,paste(getchromosomelength(result,x),"cM"),cex=0.3)
   }
 }
 
