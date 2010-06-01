@@ -244,10 +244,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     }
   }
   for(x in 1:nchr){
-    #chrstartloc <- locationtocircle(result,x,1,spacing=spacing)
     chrnumberloc <- locationtocircle(result,x,getchromosomelength(result,x)/2,spacing=spacing)
-    #chrendloc <- locationtocircle(result,x,getchromosomelength(result,x),spacing=spacing)
-    cat((10/(totallength+(nchr*spacing)))*2*pi,"\n")
     points(t(c(-1.1, -1.15)))
     points(t(c(-0.9, -1.15)))
     points(t(c(-0.7, -1.15)))
@@ -255,9 +252,8 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     text(t(c(-1.1, -1.1)),paste("0 cM"),cex=0.6)
     text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),dig=1),"cM"),cex=0.6)
     text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),dig=1),"cM"),cex=0.6)
-    #text(1.1*chrstartloc,paste("0 cM"),cex=0.3)
     text(0.9*chrnumberloc,paste("Chr",x),cex=0.6)
-    #text(1.1*chrendloc,paste(getchromosomelength(result,x),"cM"),cex=0.3)
+
   }
 }
 
