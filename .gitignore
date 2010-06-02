@@ -43,6 +43,8 @@ mqm
 qtl*gz
 *.exe
 *.EXE
+*.dll
+*.DLL
 *.Rout
 contrib/bin/mqmdebugout
 ..Rcheck/
