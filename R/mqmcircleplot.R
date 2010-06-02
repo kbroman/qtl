@@ -107,15 +107,12 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
                   #interaction
                   qtl2 <- locationtocircle(templateresult,model[[4]][z],model[[5]][z],spacing=spacing)
                   if(!is.na(changeA) && !is.na(changeB) && !any(is.na(eff$SEs))){
-                  if(changeA/abs(changeA) !=  changeB/abs(changeB)){
-                    retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
-                    drawspline(qtll,qtl2,lwd=2,col="green")
-                  }else{
+                    col <- "blue"
+                    if(changeA/abs(changeA) <  changeB/abs(changeB)) col <- "green"
                     if(abs(abs(changeA)-abs(changeB)) > interactstrength*mean(eff$SEs)){       
-                      retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
-                      drawspline(qtll,qtl2,lwd=2,col="blue")
+                        retresults <- rbind(retresults,c(model$name[y],model$name[z],changeA,changeB,mean(eff$SEs)))
+                        drawspline(qtll,qtl2,lwd=2,col=col)
                     }
-                  }
                   }
                 }
               }
@@ -154,7 +151,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           if(!(highlight>0))drawspline(traitl,qtll,col="red")
         }   
       }
-      legend("bottomright",c("Significant Cofactor","Interaction Enhance","Interaction Flip"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
+      legend("bottomright",c("Significant Cofactor","Interaction Increase","Interaction Decrease"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
@@ -182,7 +179,7 @@ circlelocations <- function(nt){
 drawspline <- function (cn1, cn2, lwd = 1,col="blue",...){
   x <- cbind(cn1[1],0,cn2[1])
   y <- cbind(cn1[2],0,cn2[2])
-  xspline(x, y, shape=1, lwd=lwd, border=col,...)
+  r <- xspline(x, y, lty=1, shape=1, lwd=lwd, border=col,...)
 }
 
 getchromosomelength <- function(result, chr){
