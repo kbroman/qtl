@@ -93,7 +93,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
             col=colorz[x]
           }else{
             col=rgb(0.1, 0.1, 0.1, 0.1)  
-            if(highlight==x) title(sub = paste("Highlight of:",colnames(cross$pheno)[x]))
+            if(highlight==x) title(main = paste("Circleplot of:",colnames(cross$pheno)[x]))
           }
           for(y in 1:length(model[[4]])){
             qtll <- locationtocircle(templateresult,model[[4]][y],model[[5]][y],spacing=spacing)
@@ -151,7 +151,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           if(!(highlight>0))drawspline(traitl,qtll,col="red")
         }   
       }
-      legend("bottomright",c("Significant Cofactor","Interaction Increase","Interaction Decrease"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
+      legend("topright",c("Significant Cofactor","Interaction Increase","Interaction Decrease"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
@@ -219,7 +219,6 @@ locationtocircle <- function(result, chr, loc, spacing=50, fixoutofbounds=TRUE, 
 drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
   result <- mqmextractmarkers(result)
   plot(c(-1.1, 1.1), c(-1.1, 1.1), type = "n", axes = FALSE, xlab = "", ylab = "")
-  title(main = "Circular genome plot")
   totallength <- getgenomelength(result)
   nchr <- length(unique(result[,1]))
   cvalues <- circlelocations(totallength+(nchr*spacing))
@@ -245,11 +244,11 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     points(t(c(-1.1, -1.15)))
     points(t(c(-0.9, -1.15)))
     points(t(c(-0.7, -1.15)))
-    text(t(c(-0.9, -1.0)),paste("Distances in cM"),cex=0.6)
-    text(t(c(-1.1, -1.1)),paste("0 cM"),cex=0.6)
-    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),dig=1),"cM"),cex=0.6)
-    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),dig=1),"cM"),cex=0.6)
-    text(0.9*chrnumberloc,paste("Chr",x),cex=0.6)
+    text(t(c(-0.9, -1.0)),paste("Distances in cM"),cex=0.8)
+    text(t(c(-1.1, -1.1)),paste("0 cM"),cex=0.7)
+    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),dig=1),"cM"),cex=0.7)
+    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),dig=1),"cM"),cex=0.7)
+    text(0.9*chrnumberloc,paste("Chr",x),cex=0.8)
 
   }
 }
