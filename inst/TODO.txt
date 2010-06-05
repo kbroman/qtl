@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o bug in scantwo, multiple phenotypes by H-K, with some having missing
+  data. 
+
 o In mqmsetcofactors(), we might allow cofactors() to be marker names
   rather than just marker indices.
 
