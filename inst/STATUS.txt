@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/6/2010:
+Version 1.17, 6/7/2010:
 
 Major changes:
 
@@ -31,6 +31,9 @@ Minor changes:
 
   Added function shiftmap, for shifting the starting points of a
   genetic map (in a map or cross object).
+
+  Revised summary.cross so that if markers are at the same location,
+  the warning message indicates which chromosomes are involved.
 
 
 Version 1.16, 5/23/2010:

@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified May, 2010
+# last modified Jun, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@ function(object,...)
 
   # check that object$geno[[i]]$data has colnames and that they match
   #     the names in object$geno[[i]]$map
-  jitterwarning <- 0
+  jitterwarning <- NULL
   for(i in 1:n.chr) {
     nam1 <- colnames(object$geno[[i]]$data)
     map <- object$geno[[i]]$map
@@ -132,23 +132,28 @@ function(object,...)
       if(n > 1) {
         d1 <- diff(map[1,])
         d2 <- diff(map[2,])
-        if(any(d1 < 1e-14 & d2 < 1e-14))
-          jitterwarning <- 1
+        if(any(d1 < 1e-14 & d2 < 1e-14)) {
+          if (is.null(jitterwarning)) jitterwarning<-list()
+          jitterwarning[[names(object$geno)[i]]]<-which(d1 < 1e-14 & d2 < 1e-14)
+	}
       }
     }
     else {
       n <- length(map)
       if(n > 1) {
         d <- diff(map)
-        if(any(d < 1e-14)) 
-          jitterwarning <- 1
+        if(any(d < 1e-14)) {
+          if (is.null(jitterwarning)) jitterwarning<-list()
+          jitterwarning[[names(object$geno)[i]]]<-which(d < 1e-14)
+	}
       }
     }
 
   }
     
-  if(jitterwarning)
-    warning("Some markers at the same position; use jittermap().")
+  if (!is.null(jitterwarning))
+    warning("Some markers at the same position on chr ",
+            paste(names(jitterwarning),collapse=",",sep=""),"; use jittermap().")
 
   if(!is.data.frame(object$pheno)) 
     warning("Phenotypes should be a data.frame.")
