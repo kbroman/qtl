@@ -475,7 +475,6 @@ summary(permo)
 ###################
 data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=c(2,5,10))}
-plot(fake.bc)
 fake.bc <- calc.genoprob(fake.bc, step=2.5)
 
 # genome scans without covariates
