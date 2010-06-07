@@ -37,11 +37,9 @@ function(object,...)
   n.mar <- nmar(object)
   type <- class(object)[1]
 
-  if(type != "f2" && type != "bc" && type != "4way" &&
-     type != "riself" && type != "risib" && type != "dh"
-     && type != "ri4self" && type != "ri4sib"
-     && type != "ri8self" && type != "ri8sib")
-    stop("Cross type ", type, " is not supported.")
+  if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", 
+                   "ri4self", "ri4sib", "ri8self", "ri8sib")))
+     stop("Cross type ", type, " is not supported.")
 
   # combine genotype data into one big matrix
   Geno <- pull.geno(object)
@@ -55,7 +53,7 @@ function(object,...)
     temp <- getgenonames("f2", "A", cross.attr=attributes(object))
     names(typings) <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type=="bc" || type=="riself" || type=="risib" || type=="dh") {
+  else if(type %in% c("bc", "riself", "risib", "dh")) {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:2))
     names(typings) <- getgenonames(type, "A", cross.attr=attributes(object))
   }
@@ -168,7 +166,7 @@ function(object,...)
             paste(names(x)[x>1], collapse="  "))
 
   # check genotype data
-  if(type=="bc" || type=="riself" || type=="risib" || type=="dh") {
+  if(type %in% c("bc", "riself", "risib", "dh")) {
     # Invalid genotypes?
     if(any(!is.na(Geno) & Geno != 1 & Geno != 2)) { 
       u <- unique(as.numeric(Geno))
@@ -237,7 +235,7 @@ function(object,...)
       warning(warn)
     }
   }
-  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+  else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self")) {
     n.str <- as.numeric(substr(type, 3, 3))
     if(any(!is.na(Geno) & (Geno != round(Geno) | Geno < 1 | Geno > 2^n.str-1))) {
       u <- unique(as.numeric(Geno))
@@ -336,8 +334,7 @@ function(x,...)
   else if(x$type=="riself") cat("    RI strains via selfing\n\n")
   else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
   else if(x$type=="dh") cat("    Doubled haploids\n\n")
-  else if(x$type=="ri4self" || x$type=="ri4sib" || x$type=="ri8self" ||
-          x$type=="ri8sib") {
+  else if(x$type %in% c("ri4self", "ri4sib", "ri8self", "ri8sib")) {
     n.str <- substr(x$type, 3, 3)
     if(substr(x$type, 4, nchar(x$type))=="sib") crosstype <- "sib-mating"
     else crosstype <- "selfing"
