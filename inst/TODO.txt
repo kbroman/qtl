@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o plots of segregation ratios at markers: output of geno.table as
+  scanone format?
+
 o bug in scantwo, multiple phenotypes by H-K, with some having missing
   data. 
 
@@ -62,8 +65,6 @@ o X chromosome for 4- and 8-way RIL by sibling mating (also 2-way RIL).
 
 o Better way to make use of ... in plot functions that allows
   unmentioned defaults.
-
-o plots of segregation ratios at markers
 
 o method for having alternative genetic maps and for storing a
   physical map; linear interpolation for plotting scanone output in
