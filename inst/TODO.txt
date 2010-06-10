@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o plots of segregation ratios at markers: output of geno.table as
-  scanone format?
-
 o In mqmsetcofactors(), we might allow cofactors() to be marker names
   rather than just marker indices.
 

@@ -32,6 +32,10 @@ Minor changes:
   Added function shiftmap, for shifting the starting points of a
   genetic map (in a map or cross object).
 
+  Revised geno.table to have an additional argument, scanone.output.
+  If scanone.output=TRUE, the output is as produced by scanone(), so
+  that one may use plot.scanone() to plot the results.
+
   Fixed a bug in scantwo() for the case that multiple phenotype
   columns are considered but they have different patterns of missing
   data.  An error occurred due to a number of stupid small mistakes.
