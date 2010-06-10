@@ -882,10 +882,7 @@ function(...)
   output$lod <- array(dim=c(nr[1], nc[1], sum(nd3)))
   start <- cumsum(c(0,nd3))[-length(nd3)-1]
   end <- start+nd3
-  print(dim(output$lod))
-  print(sapply(dots, function(a) dim(a$lod)))
-  print(start)
-  print(end)
+
   for(i in seq(along=dots))
     output$lod[,,(start[i]+1):end[i]] <- dots[[i]]$lod
   attr(output, "phenotypes") <- unlist(lapply(dots, attr, "phenotypes"))
