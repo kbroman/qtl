@@ -3,7 +3,7 @@
 # read.cross.csv.R
 #
 # copyright (c) 2000-2010, Karl W Broman
-# last modified Apr, 2010
+# last modified Jun, 2010
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -81,6 +81,8 @@ function(dir, file, na.strings=c("-","NA"),
   # determine number of phenotypes based on initial blanks in row 2
   if(length(grep("^\\s*$", data[2,1]))==0)
     stop("You must include at least one phenotype (e.g., an index).")
+  if(length(grep("^\\s*$", data[2,])) == ncol(data))
+    stop("Second row has all blank cells; you need to include chromosome IDs for the markers.")
   empty <- grep("^\\s*$", data[2,])
   n.phe <- min((1:ncol(data))[-empty])-1
 

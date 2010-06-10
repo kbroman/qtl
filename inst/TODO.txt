@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o If a CSV file has 2nd row completely blank, give an error
-
 o plots of segregation ratios at markers: output of geno.table as
   scanone format?
 
