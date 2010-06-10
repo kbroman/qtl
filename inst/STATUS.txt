@@ -40,6 +40,9 @@ Minor changes:
   Revised summary.cross so that if markers are at the same location,
   the warning message indicates which chromosomes are involved.
 
+  Revised read.cross with format="csv" to give an error if the 2nd row
+  has all blanks.
+
 
 Version 1.16, 5/23/2010:
 
