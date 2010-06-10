@@ -15,9 +15,6 @@ o If a CSV file has 2nd row completely blank, give an error
 o plots of segregation ratios at markers: output of geno.table as
   scanone format?
 
-o bug in scantwo, multiple phenotypes by H-K, with some having missing
-  data. 
-
 o In mqmsetcofactors(), we might allow cofactors() to be marker names
   rather than just marker indices.
 

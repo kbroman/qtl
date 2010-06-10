@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/7/2010:
+Version 1.17, 6/9/2010:
 
 Major changes:
 
@@ -31,6 +31,11 @@ Minor changes:
 
   Added function shiftmap, for shifting the starting points of a
   genetic map (in a map or cross object).
+
+  Fixed a bug in scantwo() for the case that multiple phenotype
+  columns are considered but they have different patterns of missing
+  data.  An error occurred due to a number of stupid small mistakes.
+  [Thanks to Ricardo Verdugo for reporting the problem.]
 
   Revised summary.cross so that if markers are at the same location,
   the warning message indicates which chromosomes are involved.
