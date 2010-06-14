@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Dec, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Jun, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -70,6 +70,12 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])
+  }
+
+  # check perm.strat
+  if(!missing(perm.strata) && !is.null(perm.strata)) {
+    if(length(perm.strata) != nind(cross))
+      stop("perm.strata, if given, must have length = nind(cross) [", nind(cross), "]")
   }
 
   # to store the degrees of freedom
