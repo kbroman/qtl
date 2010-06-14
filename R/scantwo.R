@@ -82,6 +82,12 @@ function(cross, chr, pheno.col=1,
     return(operm[[1]])
   }
 
+  # check perm.strat
+  if(!missing(perm.strata) && !is.null(perm.strata)) {
+    if(length(perm.strata) != nind(cross))
+      stop("perm.strata, if given, must have length = nind(cross) [", nind(cross), "]")
+  }
+
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
     pheno.col <- 1
