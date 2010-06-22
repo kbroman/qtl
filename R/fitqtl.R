@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# last modified May, 2010
+# last modified Jun, 2010
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -35,7 +35,8 @@
 
 fitqtl <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
-         dropone=TRUE, get.ests=FALSE, run.checks=TRUE)
+         model=c("normal", "binary"), dropone=TRUE, get.ests=FALSE,
+         run.checks=TRUE, tol=1e-4, maxit=4000)
 {
   # some input checking stuff in here
   if( !("cross" %in% class(cross)) )
@@ -75,6 +76,16 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
+
+  if(model=="binary") {
+    if(method=="imp") {
+      warning("binary traits currently only implemented for Haley-Knott regression; using method=\"hk\".")
+      method <- "hk"
+    }
+    if(any(!is.na(pheno) & pheno != 0 & pheno != 1))
+      stop("For model=\"binary\", phenotypes must by 0 or 1.")
+  }
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -92,7 +103,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   }
   else {
     if(!("prob" %in% names(qtl))) {
-      if("geno" %in% names(qtl)) {
+      if(model != "binary" && "geno" %in% names(qtl)) {
         warning("The qtl object doesn't contain QTL genotype probabilities; using method=\"imp\".")
         method <- "imp"
       }
@@ -114,16 +125,17 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   }    
 
   fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-               method=method, dropone=dropone, get.ests=get.ests,
+               method=method, model=model, dropone=dropone, get.ests=get.ests,
                run.checks=run.checks, cross.attr=attributes(cross),
-               getsex(cross))
+               getsex(cross), tol=tol, maxit=maxit)
 }
   
 
 fitqtlengine <-
 function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
+         model=c("normal", "binary"),
          dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
-         sexpgm)
+         sexpgm, tol, maxit)
 {
   # local variables
   n.ind <- qtl$n.ind # number of individuals
@@ -249,29 +261,52 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
 
   # call C function to do the genome scan
-  if(method == "imp") {
-    z <- .C("R_fitqtl_imp",
-            as.integer(n.ind), # number of individuals
-            as.integer(p$n.qtl), # number of qtls
-            as.integer(n.gen.QC), # number of genotypes QTLs and covariates
-            as.integer(n.draws), # number of draws
-            as.integer(qtl$geno[,p$idx.qtl,]), # genotypes for selected marker
-            as.integer(p$n.covar), # number of covariate
-            as.double(covar.C), # covariate
-            as.integer(p$formula.intmtx),  # formula matrix for interactive terms
-            as.integer(p$n.int), # number of interactions in the formula
-            as.double(pheno), # phenotype
-            as.integer(get.ests), # get estimates?
-            # return variables
-            lod=as.double(0), # LOD score
-            df=as.integer(0), # degree of freedom
-            ests=as.double(rep(0,sizefull)),
-            ests.cov=as.double(rep(0,sizefull*sizefull)),
-            design.mat=as.double(rep(0,sizefull*n.ind)),
-            PACKAGE="qtl")
+  if(model=="normal") {
+    if(method == "imp") {
+      z <- .C("R_fitqtl_imp",
+              as.integer(n.ind), # number of individuals
+              as.integer(p$n.qtl), # number of qtls
+              as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+              as.integer(n.draws), # number of draws
+              as.integer(qtl$geno[,p$idx.qtl,]), # genotypes for selected marker
+              as.integer(p$n.covar), # number of covariate
+              as.double(covar.C), # covariate
+              as.integer(p$formula.intmtx),  # formula matrix for interactive terms
+              as.integer(p$n.int), # number of interactions in the formula
+              as.double(pheno), # phenotype
+              as.integer(get.ests), # get estimates?
+              # return variables
+              lod=as.double(0), # LOD score
+              df=as.integer(0), # degree of freedom
+              ests=as.double(rep(0,sizefull)),
+              ests.cov=as.double(rep(0,sizefull*sizefull)),
+              design.mat=as.double(rep(0,sizefull*n.ind)),
+              PACKAGE="qtl")
+    }
+    else {
+      z <- .C("R_fitqtl_hk",
+              as.integer(n.ind), # number of individuals
+              as.integer(p$n.qtl), # number of qtls
+              as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+              as.double(prob),      # QTL genotype probabilities
+              as.integer(p$n.covar), # number of covariate
+              as.double(covar.C), # covariates
+              as.integer(p$formula.intmtx),  # formula matrix for interactive terms
+              as.integer(p$n.int), # number of interactions in the formula
+              as.double(pheno), # phenotype
+              as.integer(get.ests), # get estimates?
+              # return variables
+              lod=as.double(0), # LOD score
+              df=as.integer(0), # degree of freedom
+              ests=as.double(rep(0,sizefull)),
+              ests.cov=as.double(rep(0,sizefull*sizefull)),
+              design.mat=as.double(rep(0,sizefull*n.ind)),
+              PACKAGE="qtl")
+    }
   }
   else {
-    z <- .C("R_fitqtl_hk",
+    if(method=="imp") stop("fitqtl for binary traits only implemented for Haley-Knott regression.")
+    z <- .C("R_fitqtl_hk_binary",
             as.integer(n.ind), # number of individuals
             as.integer(p$n.qtl), # number of qtls
             as.integer(n.gen.QC), # number of genotypes QTLs and covariates
@@ -288,6 +323,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
             ests=as.double(rep(0,sizefull)),
             ests.cov=as.double(rep(0,sizefull*sizefull)),
             design.mat=as.double(rep(0,sizefull*n.ind)),
+            # convergence
+            as.double(tol),
+            as.integer(maxit),
             PACKAGE="qtl")
   }
 
@@ -468,42 +506,78 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                              "Pvalue(F)")
   rownames(result.full) <- c("Model", "Error", "Total")
   result.full[1,1] <- z$df # model degree of freedom
-  # compute the SS for total
-  Rss0 <- 0
-  mpheno <- mean(pheno)
-  for(i in 1:length(pheno)) 
-    Rss0 <- Rss0 + (pheno[i]-mpheno)^2
 
-  # third row, for Total
-  result.full[3,1] <- length(pheno) - 1 # total degree of freedom
-  result.full[3,2] <- Rss0 # total sum of squares
+  if(model=="normal") {  
+    # compute the SS for total
+    Rss0 <- 0
+    mpheno <- mean(pheno)
+    for(i in 1:length(pheno)) 
+      Rss0 <- Rss0 + (pheno[i]-mpheno)^2
+
+    # third row, for Total
+    result.full[3,1] <- length(pheno) - 1 # total degree of freedom
+    result.full[3,2] <- Rss0 # total sum of squares
     
-  # first row, for Model
-  result.full[1,1] <- z$df # df for Model
-  # Variance explained by model
-  result.full[1,5] <- 100 * (1 - exp(-2*z$lod*log(10)/n.ind))
-  result.full[1,2] <- Rss0 * result.full[1,5]/100  # SS for model
-  result.full[1,3] <- result.full[1,2]/z$df # MS for model
-  result.full[1,4] <- z$lod # Model LOD score
+    # first row, for Model
+    result.full[1,1] <- z$df # df for Model
+    # Variance explained by model
+    result.full[1,5] <- 100 * (1 - exp(-2*z$lod*log(10)/n.ind))
+    result.full[1,2] <- Rss0 * result.full[1,5]/100  # SS for model
+    result.full[1,3] <- result.full[1,2]/z$df # MS for model
+    result.full[1,4] <- z$lod # Model LOD score
 
-  # Second row, for Error
-  # df
-  result.full[2,1] <- result.full[3,1] - result.full[1,1]
-  # SS
-  result.full[2,2] <- result.full[3,2] - result.full[1,2]
-  # MS
-  result.full[2,3] <- result.full[2,2] / result.full[2,1]
+    # Second row, for Error
+    # df
+    result.full[2,1] <- result.full[3,1] - result.full[1,1]
+    # SS
+    result.full[2,2] <- result.full[3,2] - result.full[1,2]
+    # MS
+    result.full[2,3] <- result.full[2,2] / result.full[2,1]
 
-  # first row, P values
-  # P value (chi2) for model
-  result.full[1,6] <- 1 - pchisq(2*log(10)*z$lod, z$df)
-  # P value (F statistics) for model
-  df0 <- result.full[3,1]; df1 <- result.full[2,1];
-  Rss1 <- result.full[2,2]
-  Fstat <- ((Rss0-Rss1)/(df0-df1)) / (Rss1/df1)
-  result.full[1,7] <- 1 - pf(Fstat, df0-df1, df1)
+    # first row, P values
+    # P value (chi2) for model
+    result.full[1,6] <- 1 - pchisq(2*log(10)*z$lod, z$df)
+    # P value (F statistics) for model
+    df0 <- result.full[3,1]; df1 <- result.full[2,1];
+    Rss1 <- result.full[2,2]
+    Fstat <- ((Rss0-Rss1)/(df0-df1)) / (Rss1/df1)
+    result.full[1,7] <- 1 - pf(Fstat, df0-df1, df1)
+  }
+  else {
+    # compute the SS for total
+    Rss0 <- 0
+    mpheno <- mean(pheno)
+    for(i in 1:length(pheno)) 
+      Rss0 <- Rss0 + (pheno[i]-mpheno)^2
 
+    # third row, for Total
+    result.full[3,1] <- length(pheno) - 1 # total degree of freedom
+    result.full[3,2] <- NA # total sum of squares
+    
+    # first row, for Model
+    result.full[1,1] <- z$df # df for Model
+    # Variance explained by model
+    result.full[1,5] <- 100 * (1 - exp(-2*z$lod*log(10)/n.ind))
+    result.full[1,2] <- NA  # SS for model
+    result.full[1,3] <- NA # MS for model
+    result.full[1,4] <- z$lod # Model LOD score
+
+    # Second row, for Error
+    # df
+    result.full[2,1] <- result.full[3,1] - result.full[1,1]
+    # SS
+    result.full[2,2] <- NA
+    # MS
+    result.full[2,3] <- NA
+
+    # first row, P values
+    # P value (chi2) for model
+    result.full[1,6] <- 1 - pchisq(2*log(10)*z$lod, z$df)
+    # P value (F statistics) for model
+    result.full[1,7] <- NA
+  }
   ############# Finish ANOVA table for full model
+
   
   # initialize output object
   output <- NULL
@@ -630,30 +704,52 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       }
 
       # call C function fit model 
-      if(method == "imp") {
-        z <- .C("R_fitqtl_imp",
-                as.integer(n.ind), # number of individuals
-                as.integer(p.new$n.qtl), # number of qtls
-                as.integer(n.gen.QC), # number of genotypes QTLs and covariates
-                as.integer(n.draws), # number of draws
-                as.integer(qtl$geno[,p.new$idx.qtl,]), # genotypes for selected marker
-                as.integer(p.new$n.covar), # number of covariate
-                as.double(covar.C), # covariate
-                as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
-                as.integer(p.new$n.int), # number of interactions in the formula
-                as.double(pheno), # phenotype
-                as.integer(0),
-                # return variables
-                lod=as.double(0), # LOD score
-                df=as.integer(0), # degree of freedom
-                as.double(rep(0,sizefull)),
-                as.double(rep(0,sizefull*sizefull)),
-                as.double(rep(0,n.ind*sizefull)),
-                PACKAGE="qtl")
-      }
+      if(model=="normal") {
+        if(method == "imp") {
+          z <- .C("R_fitqtl_imp",
+                  as.integer(n.ind), # number of individuals
+                  as.integer(p.new$n.qtl), # number of qtls
+                  as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+                  as.integer(n.draws), # number of draws
+                  as.integer(qtl$geno[,p.new$idx.qtl,]), # genotypes for selected marker
+                  as.integer(p.new$n.covar), # number of covariate
+                  as.double(covar.C), # covariate
+                  as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
+                  as.integer(p.new$n.int), # number of interactions in the formula
+                  as.double(pheno), # phenotype
+                  as.integer(0),
+                  # return variables
+                  lod=as.double(0), # LOD score
+                  df=as.integer(0), # degree of freedom
+                  as.double(rep(0,sizefull)),
+                  as.double(rep(0,sizefull*sizefull)),
+                  as.double(rep(0,n.ind*sizefull)),
+                  PACKAGE="qtl")
+        }
 
-      else {
-        z <- .C("R_fitqtl_hk",
+        else {
+          z <- .C("R_fitqtl_hk",
+                  as.integer(n.ind), # number of individuals
+                  as.integer(p.new$n.qtl), # number of qtls
+                  as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+                  as.double(prob),
+                  as.integer(p.new$n.covar), # number of covariate
+                  as.double(covar.C), # covariate
+                  as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
+                  as.integer(p.new$n.int), # number of interactions in the formula
+                  as.double(pheno), # phenotype
+                  as.integer(0),
+                  # return variables
+                  lod=as.double(0), # LOD score
+                  df=as.integer(0), # degree of freedom
+                  as.double(rep(0,sizefull)),
+                  as.double(rep(0,sizefull*sizefull)),
+                  as.double(rep(0,n.ind*sizefull)),
+                  PACKAGE="qtl")
+        }
+      }
+      else { # binary trait
+        z <- .C("R_fitqtl_hk_binary",
                 as.integer(n.ind), # number of individuals
                 as.integer(p.new$n.qtl), # number of qtls
                 as.integer(n.gen.QC), # number of genotypes QTLs and covariates
@@ -670,8 +766,12 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                 as.double(rep(0,sizefull)),
                 as.double(rep(0,sizefull*sizefull)),
                 as.double(rep(0,n.ind*sizefull)),
+                # convergence
+                as.double(tol),
+                as.integer(maxit),
                 PACKAGE="qtl")
       }
+        
 
       # record the result for dropping this term
       # df
@@ -682,17 +782,24 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       result[i,4] <- result.full[1,5] - 100*(1 - 10^(-2*z$lod/n.ind))
 
       # Type III SS for this term - computed from %var
-      result[i,2] <- result.full[3,2] * result[i,4] / 100
+      if(model=="normal")
+        result[i,2] <- result.full[3,2] * result[i,4] / 100
+      else
+        result[i,2] <- NA
       # F value
-      df0 <- length(pheno) - z$df - 1; df1 <- result.full[2,1];
-      Rss0 <- result.full[2,2] + result[i,2];
-      Rss1 <- result.full[2,2]
-      Fstat <- ((Rss0-Rss1)/(df0-df1)) / (Rss1/df1)
-      result[i,5] <- Fstat
+      if(model=="normal") {
+        df0 <- length(pheno) - z$df - 1; df1 <- result.full[2,1];
+        Rss0 <- result.full[2,2] + result[i,2];
+        Rss1 <- result.full[2,2]
+        Fstat <- ((Rss0-Rss1)/(df0-df1)) / (Rss1/df1)
+        result[i,5] <- Fstat
+        # P value (F)
+        result[i,7] <- 1 - pf(Fstat, df0-df1, df1)
+      }
+      else # ignore F stat for binary trait
+        result[i,c(5,7)] <- NA
       # P value (chi2)
       result[i,6] <- 1 - pchisq(2*log(10)*result[i,3], result[i,1])
-      # P value (F)
-      result[i,7] <- 1 - pf(Fstat, df0-df1, df1)
       # assign row name
       rownames(result)[i] <- drop.term.name[i]
     } # finish dropping terms loop
@@ -709,6 +816,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   class(output) <- "fitqtl"
   attr(output, "method") <- method
+  attr(output, "model") <- model
   attr(output, "formula") <- deparseQTLformula(formula)
   attr(output, "type") <- qtl$type
   attr(output, "nind") <- length(pheno)
