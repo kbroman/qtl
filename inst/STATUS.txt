@@ -17,11 +17,13 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/22/2010:
+Version 1.17, 6/24/2010:
 
 Major changes:
 
-  Implemented the fit of models for binary traits in fitqtl().
+  Implemented the fit of models for binary traits in fitqtl(), by
+  Haley-Knott regression.  This model can also be used in refineqtl,
+  scanqtl, addqtl, addpair, addint, stepwiseqtl, and addcovarint.
 
 Minor changes:
 
