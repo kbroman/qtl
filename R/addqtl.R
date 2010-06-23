@@ -36,7 +36,7 @@
 addint <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
-         qtl.only=FALSE, verbose=TRUE, pvalues=TRUE,
+         qtl.only=FALSE, verbose=TRUE, pvalues=TRUE, simple=FALSE,
          tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
@@ -236,7 +236,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   attr(results, "method") <- method
   attr(results, "model") <- model
   attr(results, "formula") <- deparseQTLformula(formula)
+  if(simple) pvalues <- FALSE
   attr(results, "pvalues") <- pvalues
+  attr(results, "simple") <- simple
   results
 }
 
@@ -262,7 +264,7 @@ function(x, ...)
   pval <- attr(x, "pvalues")
   if(!is.null(pval) && !pval)
     x <- x[,-ncol(x)+(0:1)]
-  if(mod == "binary") x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
 
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
     
@@ -1145,7 +1147,7 @@ function(formula, qtlnum)
 addcovarint <-
 function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
          method=c("imp","hk"), model=c("normal", "binary"),
-         verbose=TRUE, pvalues=TRUE, tol=1e-4, maxit=1000)
+         verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -1348,7 +1350,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   attr(results, "model") <- model
   attr(results, "method") <- method
   attr(results, "formula") <- deparseQTLformula(formula)
+  if(simple) pvalues <- FALSE
   attr(results, "pvalues") <- pvalues
+  attr(results, "simple") <- simple
   results
 }
 
@@ -1375,7 +1379,7 @@ function(x, ...)
   if(!is.null(pval) && !pval) 
     x <- x[,-ncol(x)+(0:1)]
 
-  if(mod == "binary") x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
   
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
 
