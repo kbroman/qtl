@@ -115,7 +115,7 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
 
   /* create local variables */
   int i, j, ii, jj, n_qc, itmp; /* loop variants and temp variables */
-  double tol, lrss, lrss0, *LOD_array;
+  double lrss, lrss0, *LOD_array;
   double *the_ests, *the_covar, **TheEsts, ***TheCovar;
   double *dwork, **Ests_covar, tot_wt=0.0, *wts;
   double **Covar_mean, **Mean_covar, *mean_ests; /* for ests and cov matrix */
@@ -126,7 +126,6 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
 
   /* initialization */
   sizefull = 1;
-  tol = TOL;
 
   /* calculate the dimension of the design matrix for full model */
   n_qc = n_qtl+n_cov; /* total number of QTLs and covariates */
@@ -271,8 +270,7 @@ double nullRss0(double *pheno, int n_ind)
 {
   /* local variables */
   int i;
-  double s, rss, tol, m;
-  tol = TOL;
+  double s, rss, m;
 
   /* calculate the mean of phenotype */
   s = 0.0;
