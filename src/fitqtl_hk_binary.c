@@ -213,8 +213,9 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
   double *work, *qty, *qraux, *coef, *resid, tol2, **X;
   int n_int_q, *idx_int_q=0;
   int nrep, thisidx, gen, totrep, thecol, rep, flag;
+  double *nu, *pi, *z, *wt;
   /* return variable */
-  double llik=0.0, curllik, *nu, *pi, *z, *wt;
+  double llik=0.0, curllik;
 
   /* initialization */
   ny = 1; 
