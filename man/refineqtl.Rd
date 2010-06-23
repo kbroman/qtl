@@ -11,8 +11,8 @@
 
 \usage{
 refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
-          method=c("imp","hk"), verbose=TRUE, maxit=10,
-          incl.markers=TRUE, keeplodprofile=TRUE)
+          method=c("imp","hk"), model=c("normal", "binary"), verbose=TRUE, maxit=10,
+          incl.markers=TRUE, keeplodprofile=TRUE, tol=1e-4, maxit.fitqtl=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -41,6 +41,8 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    \code{Q2}, etc.  Covariates are indicated by their names in \code{covar}.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{verbose}{If TRUE, give feedback about progress.  If
    \code{verbose} is an integer > 1, further messages from
    \code{\link{scanqtl}} are also displayed.}
@@ -49,6 +51,9 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    evenly spaced grid.}
  \item{keeplodprofile}{If TRUE, keep the LOD profiles from the last
    iteration as attributes to the output.}
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit.fitqtl}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \details{
