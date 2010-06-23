@@ -11,7 +11,7 @@
 \usage{
 addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
             method=c("imp","hk"), model=c("normal", "binary"), 
-            verbose=TRUE, pvalues=TRUE, tol=1e-4, maxit=1000)
+            verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -41,6 +41,7 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
  \item{verbose}{If TRUE, will print a message if there are no
    interactions to test.}
  \item{pvalues}{If FALSE, p-values will not be included in the results.}
+ \item{simple}{If TRUE, don't include p-values or sums of squares in the summary.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
    model.} 

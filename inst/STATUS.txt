@@ -39,6 +39,9 @@ Minor changes:
   If scanone.output=TRUE, the output is as produced by scanone(), so
   that one may use plot.scanone() to plot the results.
 
+  Added argument 'simple' to summary.fitqtl, addint, and addcovarint;
+  if TRUE, output includes neither p-values nor sums of squares.
+
   Fixed a bug in scantwo() for the case that multiple phenotype
   columns are considered but they have different patterns of missing
   data.  An error occurred due to a number of stupid small mistakes.
