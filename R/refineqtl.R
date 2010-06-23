@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-9, Karl W. Broman
-# last modified Sep, 2009
+# copyright (c) 2006-2010, Karl W. Broman
+# last modified Jun, 2010
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -237,11 +237,11 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     if(keeplodprofile) # do drop-one analysis
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=TRUE, get.ests=FALSE,
-                              run.checks=FALSE, cross.attr, sexpgm)
+                              run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm)
     else 
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, dropone=FALSE, get.ests=FALSE,
-                              run.checks=FALSE, cross.attr, sexpgm)
+                              run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm)
 
     if(i==1) {
       origlod <- curlod <- thisitlod <- basefit$result.full[1,4]

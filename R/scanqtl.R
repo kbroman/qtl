@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Sep, 2008
+# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
+# last modified Jun, 2010
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -300,10 +300,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     else
       qtl <- makeqtl(cross, chr=chr, pos=unlist(pos), what="prob")
       
-    result <- fitqtlengine(pheno, qtl, covar=covar,
+    result <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                            formula=formula, method=method, dropone=FALSE,
-                           get.ests=FALSE, run.checks=FALSE, cross.attr,
-                           sexpgm)
+                           get.ests=FALSE, run.checks=FALSE, cross.attr=cross.attr,
+                           sexpgm=sexpgm)
     result <- result[[1]][1,4]
     names(result) <- "LOD"
     class(result) <- "scanqtl"
@@ -395,10 +395,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     # end of Karl's 8/23/05 addition
 
     # fit QTL, don't do drop one at a time
-    fit <- fitqtlengine(pheno, qtl=qtl.obj, covar=covar,
+    fit <- fitqtlengine(pheno=pheno, qtl=qtl.obj, covar=covar,
                         formula=formula, method=method, dropone=FALSE,
                         get.ests=FALSE, run.checks=FALSE,
-                        cross.attr, sexpgm)
+                        cross.attr=cross.attr, sexpgm=sexpgm)
   
     if(verbose && ((i-1) %% n.prnt) == 0)
         cat("    ", i,"/", n.loop, "\n")
