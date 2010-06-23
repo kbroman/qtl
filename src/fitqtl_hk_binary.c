@@ -241,10 +241,7 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
   work = qraux + sizefull; 
   /* integer array */
   jpvt = iwork;
-  /* make jpvt = numbers 0, 1, ..., (sizefull-1) */
-  /*      jpvt keeps track of any permutation of X columns */
-  for(i=0; i<sizefull; i++) jpvt[i] = i;
-
+  
   /******************************************************
    The following part will construct the design matrix x 
    ******************************************************/
@@ -340,6 +337,8 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     curllik += pheno[j] * log10(pi[j]) + (1.0-pheno[j]) * log10(1.0 - pi[j]);
   }
 
+  /*  Rprintf("%4d %10.5lf\n", 0, curllik); */
+
   /* multiple design matrix by current wts */
   for(i=0; i<sizefull; i++) 
     for(j=0; j<n_ind; j++)
@@ -349,6 +348,10 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
   for(s=0; s<maxit; s++) { /* IRLS iterations */
   
     R_CheckUserInterrupt(); /* check for ^C */
+
+    /* make jpvt = numbers 0, 1, ..., (sizefull-1) */
+    /*      jpvt keeps track of any permutation of X columns */
+    for(i=0; i<sizefull; i++) jpvt[i] = i;
 
     /* call dqrls to fit regression model */
     F77_CALL(dqrls)(X[0], &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
@@ -379,6 +382,8 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
       for(i=0; i<sizefull; i++) 
 	X[i][j] *= wt[j];
     }
+
+    /*    Rprintf("%4d %10.5lf %10.5lf %d/%d\n", s+1, llik, llik - curllik, kk, sizefull); */
 
     if(fabs(llik - curllik) < tol) { /* converged? */
       flag = 1;
