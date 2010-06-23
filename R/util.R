@@ -548,7 +548,7 @@ function(cross, markers)
 ######################################################################
 
 geno.table <- 
-function(cross, chr)
+function(cross, chr, scanone.output=FALSE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -727,7 +727,19 @@ function(cross, chr)
     results <- cbind(results, P.value=pval)
   }   
 
-  data.frame(chr=rep(names(cross$geno),nmar(cross)),results)
+  if(!scanone.output)
+    return(data.frame(chr=rep(names(cross$geno),nmar(cross)),results))
+
+  temp <- results[,1:(ncol(results)-1)]
+  res <- data.frame(chr=rep(names(cross$geno),nmar(cross)),
+                    pos=unlist(pull.map(cross)),
+                    neglog10P=-log10(results[,ncol(results)]),
+                    missing=temp[,1]/apply(temp, 1, sum),
+                    temp[,-1]/apply(temp[,-1], 1, sum))
+  class(res) <- c("scanone", "data.frame")
+  rownames(res) <- rownames(results)
+  res[,1] <- factor(as.character(res[,1]), levels=unique(as.character(res[,1])))
+  res
 }
 
 

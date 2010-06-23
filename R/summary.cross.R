@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified May, 2010
+# last modified Jun, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,11 +37,9 @@ function(object,...)
   n.mar <- nmar(object)
   type <- class(object)[1]
 
-  if(type != "f2" && type != "bc" && type != "4way" &&
-     type != "riself" && type != "risib" && type != "dh"
-     && type != "ri4self" && type != "ri4sib"
-     && type != "ri8self" && type != "ri8sib")
-    stop("Cross type ", type, " is not supported.")
+  if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", 
+                   "ri4self", "ri4sib", "ri8self", "ri8sib")))
+     stop("Cross type ", type, " is not supported.")
 
   # combine genotype data into one big matrix
   Geno <- pull.geno(object)
@@ -55,7 +53,7 @@ function(object,...)
     temp <- getgenonames("f2", "A", cross.attr=attributes(object))
     names(typings) <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type=="bc" || type=="riself" || type=="risib" || type=="dh") {
+  else if(type %in% c("bc", "riself", "risib", "dh")) {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:2))
     names(typings) <- getgenonames(type, "A", cross.attr=attributes(object))
   }
@@ -100,7 +98,7 @@ function(object,...)
 
   # check that object$geno[[i]]$data has colnames and that they match
   #     the names in object$geno[[i]]$map
-  jitterwarning <- 0
+  jitterwarning <- NULL
   for(i in 1:n.chr) {
     nam1 <- colnames(object$geno[[i]]$data)
     map <- object$geno[[i]]$map
@@ -132,23 +130,28 @@ function(object,...)
       if(n > 1) {
         d1 <- diff(map[1,])
         d2 <- diff(map[2,])
-        if(any(d1 < 1e-14 & d2 < 1e-14))
-          jitterwarning <- 1
+        if(any(d1 < 1e-14 & d2 < 1e-14)) {
+          if (is.null(jitterwarning)) jitterwarning<-list()
+          jitterwarning[[names(object$geno)[i]]]<-which(d1 < 1e-14 & d2 < 1e-14)
+	}
       }
     }
     else {
       n <- length(map)
       if(n > 1) {
         d <- diff(map)
-        if(any(d < 1e-14)) 
-          jitterwarning <- 1
+        if(any(d < 1e-14)) {
+          if (is.null(jitterwarning)) jitterwarning<-list()
+          jitterwarning[[names(object$geno)[i]]]<-which(d < 1e-14)
+	}
       }
     }
 
   }
     
-  if(jitterwarning)
-    warning("Some markers at the same position; use jittermap().")
+  if (!is.null(jitterwarning))
+    warning("Some markers at the same position on chr ",
+            paste(names(jitterwarning),collapse=",",sep=""),"; use jittermap().")
 
   if(!is.data.frame(object$pheno)) 
     warning("Phenotypes should be a data.frame.")
@@ -163,7 +166,7 @@ function(object,...)
             paste(names(x)[x>1], collapse="  "))
 
   # check genotype data
-  if(type=="bc" || type=="riself" || type=="risib" || type=="dh") {
+  if(type %in% c("bc", "riself", "risib", "dh")) {
     # Invalid genotypes?
     if(any(!is.na(Geno) & Geno != 1 & Geno != 2)) { 
       u <- unique(as.numeric(Geno))
@@ -232,7 +235,7 @@ function(object,...)
       warning(warn)
     }
   }
-  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+  else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self")) {
     n.str <- as.numeric(substr(type, 3, 3))
     if(any(!is.na(Geno) & (Geno != round(Geno) | Geno < 1 | Geno > 2^n.str-1))) {
       u <- unique(as.numeric(Geno))
@@ -331,8 +334,7 @@ function(x,...)
   else if(x$type=="riself") cat("    RI strains via selfing\n\n")
   else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
   else if(x$type=="dh") cat("    Doubled haploids\n\n")
-  else if(x$type=="ri4self" || x$type=="ri4sib" || x$type=="ri8self" ||
-          x$type=="ri8sib") {
+  else if(x$type %in% c("ri4self", "ri4sib", "ri8self", "ri8sib")) {
     n.str <- substr(x$type, 3, 3)
     if(substr(x$type, 4, nchar(x$type))=="sib") crosstype <- "sib-mating"
     else crosstype <- "selfing"

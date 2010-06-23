@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-9, Karl W Broman and Hao Wu
-# last modified Dec, 2009
+# copyright (c) 2001-2010, Karl W Broman and Hao Wu
+# last modified Jun, 2010
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -80,6 +80,12 @@ function(cross, chr, pheno.col=1,
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])
+  }
+
+  # check perm.strat
+  if(!missing(perm.strata) && !is.null(perm.strata)) {
+    if(length(perm.strata) != nind(cross))
+      stop("perm.strata, if given, must have length = nind(cross) [", nind(cross), "]")
   }
 
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
@@ -208,8 +214,8 @@ function(cross, chr, pheno.col=1,
 
     # reorder LOD score columns and make sure that the names are correct
     dimnames(out$lod) <- list(NULL, NULL, colnames(cross$pheno)[unlist(batches)])
-    out$lod <- out[,,colnames(cross$pheno)[pheno.col]]
-    dimnames(out)[[3]] <- colnames(cross$pheno)[pheno.col]
+    out$lod <- out$lod[,,colnames(cross$pheno)[pheno.col]]
+    dimnames(out$lod)[[3]] <- colnames(cross$pheno)[pheno.col]
     attr(out,"phenotypes") <- colnames(cross$pheno)[pheno.col]
 
     return(out)
