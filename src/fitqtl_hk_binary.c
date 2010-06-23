@@ -126,13 +126,12 @@ void fitqtl_hk_binary(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
 
   /* create local variables */
   int i, j, n_qc, itmp; /* loop variants and temp variables */
-  double tol2, llik, llik0;
+  double llik, llik0;
   double *dwork, **Ests_covar;
   int *iwork, sizefull;
 
   /* initialization */
   sizefull = 1;
-  tol2 = TOL;
 
   /* calculate the dimension of the design matrix for full model */
   n_qc = n_qtl+n_cov; /* total number of QTLs and covariates */
@@ -340,7 +339,7 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
 
   /*  Rprintf("%4d %10.5lf\n", 0, curllik); */
 
-  /* multiple design matrix by current wts */
+  /* multiply design matrix by current wts */
   for(i=0; i<sizefull; i++) 
     for(j=0; j<n_ind; j++)
       X[i][j] *= wt[j];
