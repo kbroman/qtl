@@ -36,7 +36,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
- \item{model}{The phenotypic model: the usual normal model, a model for
+ \item{model}{The phenotype model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
  \item{method}{Indicates whether to use the EM algorithm, 
    imputation, Haley-Knott regression, the extended Haley-Knott method,
