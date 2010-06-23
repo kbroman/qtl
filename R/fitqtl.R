@@ -127,7 +127,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                method=method, model=model, dropone=dropone, get.ests=get.ests,
                run.checks=run.checks, cross.attr=attributes(cross),
-               getsex(cross), tol=tol, maxit=maxit)
+               sexpgm=getsex(cross), tol=tol, maxit=maxit)
 }
   
 
@@ -137,6 +137,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
          dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
          sexpgm, tol, maxit)
 {
+  model <- match.arg(model)
+  method <- match.arg(method)
+
   # local variables
   n.ind <- qtl$n.ind # number of individuals
   n.qtl <- qtl$n.qtl # number of selected markers
@@ -999,7 +1002,7 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
 #
 #####################################################################
 summary.fitqtl <-
-function(object, pvalues=TRUE, ...)
+function(object, pvalues=TRUE, simple=FALSE, ...)
 {
   if(!any(class(object) == "fitqtl")) 
     stop("Input should have class \"fitqtl\".")
@@ -1011,7 +1014,9 @@ function(object, pvalues=TRUE, ...)
     object$ests <- cbind(est=ests, SE=se, t=ests/se)
   }
   class(object) <- "summary.fitqtl"
+  if(simple) pvalues <- FALSE
   attr(object, "pvalues") <- pvalues
+  attr(object, "simple") <- simple
   object
 }
 
@@ -1026,9 +1031,12 @@ print.summary.fitqtl <- function(x, ...)
   cat("\n")
   cat("\t\tfitqtl summary\n\n")
   meth <- attr(x, "method")
+  mod <- attr(x, "model")
+  if(is.null(mod)) mod <- "normal"
   if(meth=="imp") meth <- "multiple imputation"
   else if(meth=="hk") meth <- "Haley-Knott regression"
   cat("Method:", meth, "\n")
+  cat("Model: ", mod, "phenotype\n")
   cat("Number of observations :", attr(x, "nind"), "\n\n")
 
   # print ANOVA table for full model
@@ -1040,13 +1048,13 @@ print.summary.fitqtl <- function(x, ...)
   cat("\n")
   
   pval <- attr(x, "pvalues")
-  if(is.null(pval) || pval)
-    print(x$result.full, quote=FALSE, na.print="")
-  else {
-    z <- x$result.full
-    z <- z[,-ncol(z)+(0:1)]
-    print(z, quote=FALSE, na.print="")
-  }
+  simple <- attr(x, "simple")
+  if(!is.null(pval) && !pval)
+    x$result.full <- x$result.full[,-ncol(x$result.full)+(0:1)]
+  if(mod=="binary" || (!is.null(simple) && simple))
+    x$result.full <- x$result.full[1,-c(2:3,7),drop=FALSE]
+
+  print(x$result.full, quote=FALSE, na.print="")
   cat("\n")
   
   # print ANOVA table for dropping one at a time analysis (if any)
@@ -1056,14 +1064,12 @@ print.summary.fitqtl <- function(x, ...)
     cat("----------------------------------  \n")
     # use printCoefmat instead of print.data.frame
     # make sure the last column is P value
-    pval <- attr(x, "pvalues")
-    if(is.null(pval) || pval)
-      printCoefmat(x$result.drop, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
-    else {
-      z <- x$result.drop
-      z <- z[,-ncol(z)+(0:1)]
-      printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
-    }
+    if(!is.null(pval) && !pval)
+      x$result.drop <- x$result.drop[,-ncol(x$result.drop)+(0:1)]
+    if(mod=="binary" || (!is.null(simple) && simple))
+      x$result.drop <- x$result.drop[,-c(2,5,7),drop=FALSE]
+
+    printCoefmat(x$result.drop, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
     cat("\n")
   }
 
