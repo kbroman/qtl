@@ -951,7 +951,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
            cat("Scanning add've model for chr", ci, "and", cj, "\n")
         
         temp2 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                         covar=covar, formula=newformula2, method=method, model=model
+                         covar=covar, formula=newformula2, method=method, model=model,
                          incl.markers=incl.markers, verbose=verbose.scanqtl,
                          tol=tol, maxit=maxit) - lod0
       }
