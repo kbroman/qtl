@@ -121,13 +121,12 @@ void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
 
   /* create local variables */
   int i, j, n_qc, itmp; /* loop variants and temp variables */
-  double tol, lrss, lrss0;
+  double lrss, lrss0;
   double *dwork, **Ests_covar;
   int *iwork, sizefull;
 
   /* initialization */
   sizefull = 1;
-  tol = TOL;
 
   /* calculate the dimension of the design matrix for full model */
   n_qc = n_qtl+n_cov; /* total number of QTLs and covariates */
