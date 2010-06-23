@@ -78,14 +78,8 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   method <- match.arg(method)
   model <- match.arg(model)
 
-  if(model=="binary") {
-    if(method=="imp") {
-      warning("binary traits currently only implemented for Haley-Knott regression; using method=\"hk\".")
-      method <- "hk"
-    }
-    if(any(!is.na(pheno) & pheno != 0 & pheno != 1))
+  if(model=="binary" && any(!is.na(pheno) & pheno != 0 & pheno != 1))
       stop("For model=\"binary\", phenotypes must by 0 or 1.")
-  }
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -103,7 +97,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   }
   else {
     if(!("prob" %in% names(qtl))) {
-      if(model != "binary" && "geno" %in% names(qtl)) {
+      if("geno" %in% names(qtl)) {
         warning("The qtl object doesn't contain QTL genotype probabilities; using method=\"imp\".")
         method <- "imp"
       }
@@ -308,28 +302,52 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     }
   }
   else {
-    if(method=="imp") stop("fitqtl for binary traits only implemented for Haley-Knott regression.")
-    z <- .C("R_fitqtl_hk_binary",
-            as.integer(n.ind), # number of individuals
-            as.integer(p$n.qtl), # number of qtls
-            as.integer(n.gen.QC), # number of genotypes QTLs and covariates
-            as.double(prob),      # QTL genotype probabilities
-            as.integer(p$n.covar), # number of covariate
-            as.double(covar.C), # covariates
-            as.integer(p$formula.intmtx),  # formula matrix for interactive terms
-            as.integer(p$n.int), # number of interactions in the formula
-            as.double(pheno), # phenotype
-            as.integer(get.ests), # get estimates?
-            # return variables
-            lod=as.double(0), # LOD score
-            df=as.integer(0), # degree of freedom
-            ests=as.double(rep(0,sizefull)),
-            ests.cov=as.double(rep(0,sizefull*sizefull)),
-            design.mat=as.double(rep(0,sizefull*n.ind)),
-            # convergence
-            as.double(tol),
-            as.integer(maxit),
-            PACKAGE="qtl")
+    if(method=="imp") {
+      z <- .C("R_fitqtl_imp_binary",
+              as.integer(n.ind), # number of individuals
+              as.integer(p$n.qtl), # number of qtls
+              as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+              as.integer(n.draws), # number of draws
+              as.integer(qtl$geno[,p$idx.qtl,]), # genotypes for selected marker
+              as.integer(p$n.covar), # number of covariate
+              as.double(covar.C), # covariate
+              as.integer(p$formula.intmtx),  # formula matrix for interactive terms
+              as.integer(p$n.int), # number of interactions in the formula
+              as.double(pheno), # phenotype
+              as.integer(get.ests), # get estimates?
+              # return variables
+              lod=as.double(0), # LOD score
+              df=as.integer(0), # degree of freedom
+              ests=as.double(rep(0,sizefull)),
+              ests.cov=as.double(rep(0,sizefull*sizefull)),
+              design.mat=as.double(rep(0,sizefull*n.ind)),
+              as.double(tol),
+              as.integer(maxit),
+              PACKAGE="qtl")
+    }
+    else {
+      z <- .C("R_fitqtl_hk_binary",
+              as.integer(n.ind), # number of individuals
+              as.integer(p$n.qtl), # number of qtls
+              as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+              as.double(prob),      # QTL genotype probabilities
+              as.integer(p$n.covar), # number of covariate
+              as.double(covar.C), # covariates
+              as.integer(p$formula.intmtx),  # formula matrix for interactive terms
+              as.integer(p$n.int), # number of interactions in the formula
+              as.double(pheno), # phenotype
+              as.integer(get.ests), # get estimates?
+              # return variables
+              lod=as.double(0), # LOD score
+              df=as.integer(0), # degree of freedom
+              ests=as.double(rep(0,sizefull)),
+              ests.cov=as.double(rep(0,sizefull*sizefull)),
+              design.mat=as.double(rep(0,sizefull*n.ind)),
+              # convergence
+              as.double(tol),
+              as.integer(maxit),
+              PACKAGE="qtl")
+    }
   }
 
   if(get.ests) { 
@@ -752,27 +770,52 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         }
       }
       else { # binary trait
-        z <- .C("R_fitqtl_hk_binary",
-                as.integer(n.ind), # number of individuals
-                as.integer(p.new$n.qtl), # number of qtls
-                as.integer(n.gen.QC), # number of genotypes QTLs and covariates
-                as.double(prob),
-                as.integer(p.new$n.covar), # number of covariate
-                as.double(covar.C), # covariate
-                as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
-                as.integer(p.new$n.int), # number of interactions in the formula
-                as.double(pheno), # phenotype
-                as.integer(0),
-                # return variables
-                lod=as.double(0), # LOD score
-                df=as.integer(0), # degree of freedom
-                as.double(rep(0,sizefull)),
-                as.double(rep(0,sizefull*sizefull)),
-                as.double(rep(0,n.ind*sizefull)),
-                # convergence
-                as.double(tol),
-                as.integer(maxit),
-                PACKAGE="qtl")
+        if(method=="imp") {
+          z <- .C("R_fitqtl_imp_binary",
+                  as.integer(n.ind), # number of individuals
+                  as.integer(p.new$n.qtl), # number of qtls
+                  as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+                  as.integer(n.draws), # number of draws
+                  as.integer(qtl$geno[,p.new$idx.qtl,]), # genotypes for selected marker
+                  as.integer(p.new$n.covar), # number of covariate
+                  as.double(covar.C), # covariate
+                  as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
+                  as.integer(p.new$n.int), # number of interactions in the formula
+                  as.double(pheno), # phenotype
+                  as.integer(0),
+                  # return variables
+                  lod=as.double(0), # LOD score
+                  df=as.integer(0), # degree of freedom
+                  as.double(rep(0,sizefull)),
+                  as.double(rep(0,sizefull*sizefull)),
+                  as.double(rep(0,n.ind*sizefull)),
+                  as.double(tol),
+                  as.integer(maxit),
+                  PACKAGE="qtl")
+        }
+        else {
+          z <- .C("R_fitqtl_hk_binary",
+                  as.integer(n.ind), # number of individuals
+                  as.integer(p.new$n.qtl), # number of qtls
+                  as.integer(n.gen.QC), # number of genotypes QTLs and covariates
+                  as.double(prob),
+                  as.integer(p.new$n.covar), # number of covariate
+                  as.double(covar.C), # covariate
+                  as.integer(p.new$formula.intmtx),  # formula matrix for interactive terms
+                  as.integer(p.new$n.int), # number of interactions in the formula
+                  as.double(pheno), # phenotype
+                  as.integer(0),
+                  # return variables
+                  lod=as.double(0), # LOD score
+                  df=as.integer(0), # degree of freedom
+                  as.double(rep(0,sizefull)),
+                  as.double(rep(0,sizefull*sizefull)),
+                  as.double(rep(0,n.ind*sizefull)),
+                  # convergence
+                  as.double(tol),
+                  as.integer(maxit),
+                  PACKAGE="qtl")
+        }
       }
         
 
