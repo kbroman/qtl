@@ -502,8 +502,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     thepos <- c(as.list(qtlpos), list(c(-Inf,Inf)))
 
     sqout <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                     covar=covar, formula=newformula, method=method,
-                     incl.markers=incl.markers, verbose=verbose.scanqtl)
+                     covar=covar, formula=newformula, method=method, model=model,
+                     incl.markers=incl.markers, verbose=verbose.scanqtl,
+                     tol=tol, maxit=maxit)
 
     # get map of positions
     if(method=="imp") {
@@ -941,24 +942,27 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       thepos <- c(as.list(qtlpos), list(c(-Inf, Inf)), list(c(-Inf, Inf)))
 
       temp1 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                       covar=covar, formula=newformula1, method=method,
-                       incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                       covar=covar, formula=newformula1, method=method, model=model,
+                       incl.markers=incl.markers, verbose=verbose.scanqtl,
+                       tol=tol, maxit=maxit) - lod0
 
       if(!is.null(newformula2)) {
         if(verbose)
            cat("Scanning add've model for chr", ci, "and", cj, "\n")
         
         temp2 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                         covar=covar, formula=newformula2, method=method,
-                         incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                         covar=covar, formula=newformula2, method=method, model=model
+                         incl.markers=incl.markers, verbose=verbose.scanqtl,
+                         tol=tol, maxit=maxit) - lod0
       }
       else {
         if(i != j && scanbothways) {
           if(verbose) cat("Scanning chr", cj, "and", ci, "\n")
           thechr <- c(qtlchr, cj, ci)
           temp1r <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                            covar=covar, formula=newformula1, method=method,
-                            incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                            covar=covar, formula=newformula1, method=method, model=model,
+                            incl.markers=incl.markers, verbose=verbose.scanqtl,
+                            tol=tol, maxit=maxit) - lod0
         }
       }
 
@@ -993,10 +997,12 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
       lod.m1[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1.minus1, method=method,
-                             incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                             model=model, incl.markers=incl.markers, 
+                             verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
       lod.m2[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1.minus2, method=method,
-                             incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                             model=model, incl.markers=incl.markers, 
+                             verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
 
     }
 
