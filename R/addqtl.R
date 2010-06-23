@@ -1334,7 +1334,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
     results[k,3] <- thefit1$result.full[1,4] - thefit0$result.full[1,4]
-    results[k,4] <- results[k,2] / thefit1$result.full[3,2]*100
+
+    results[k,4] <- 100*(1-10^(-2*thefit1$result.full[1,4]/qtl$n.ind)) -
+      100*(1-10^(-2*thefit0$result.full[1,4]/qtl$n.ind))
+
     results[k,5] <- (results[k,2]/results[k,1])/thefit1$result.full[2,3]
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
@@ -1342,6 +1345,8 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
                     
   results <- as.data.frame(results)
   class(results) <- c("addcovarint", "data.frame")
+  attr(results, "model") <- model
+  attr(results, "method") <- method
   attr(results, "formula") <- deparseQTLformula(formula)
   attr(results, "pvalues") <- pvalues
   results
@@ -1350,6 +1355,15 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 print.addcovarint <-
 function(x, ...)
 {
+  meth <- attr(x, "method")
+  mod <- attr(x, "model")
+  if(is.null(mod)) mod <- "normal"
+  if(is.null(meth)) meth <- "unknown"
+  if(meth=="imp") meth <- "multiple imputation"
+  else if(meth=="hk") meth <- "Haley-Knott regression"
+  cat("Method:", meth, "\n")
+  cat("Model: ", mod, "phenotype\n")
+
   cat("Model formula:")
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
@@ -1358,13 +1372,13 @@ function(x, ...)
   cat("Add one QTL x covar interaction at a time table:\n")
   cat("--------------------------------------------\n")
   pval <- attr(x, "pvalues")
-  if(is.null(pval) || pval) 
-    printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
-  else {
-    z <- x
-    z <- z[,-ncol(z)+(0:1)]
-    printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
-  }
+  if(!is.null(pval) && !pval) 
+    x <- x[,-ncol(x)+(0:1)]
+
+  if(mod == "binary") x <- x[,-c(2,5,7), drop=FALSE]
+  
+  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+
     
   cat("\n")
 }
