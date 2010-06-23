@@ -10,11 +10,7 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Simplified output for binary traits in addint()
-
-o Analysis of binary traits by imputation in fitqtl
-
-o Analysis of binary traits by "hk" in scanone/two.
+o Analysis of binary traits by "hk" and "imp" in scanone/two.
 
 o Sometimes the rownames for the LOD profile from stepwiseqtl come out
   messed up (that is, they don't have the proper rownames).
@@ -206,8 +202,6 @@ o Incorporate code from Brian Yandell, Fei Zou and Amy Jin on
 
 o Add appropriate functions to analyze advanced intercrosses (AILs)
   and advanced backcross (BCn). 
-
-o Analysis of binary traits by imputation
 
 o Allow phenotypes on multiple individuals (esp for recombinant inbred
   lines). 
