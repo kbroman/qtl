@@ -337,8 +337,6 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     curllik += pheno[j] * log10(pi[j]) + (1.0-pheno[j]) * log10(1.0 - pi[j]);
   }
 
-  /*  Rprintf("%4d %10.5lf\n", 0, curllik); */
-
   /* multiply design matrix by current wts */
   for(i=0; i<sizefull; i++) 
     for(j=0; j<n_ind; j++)
@@ -382,8 +380,6 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
       for(i=0; i<sizefull; i++) 
 	X[i][j] *= wt[j];
     }
-
-    /*    Rprintf("%4d %10.5lf %10.5lf %d/%d\n", s+1, llik, llik - curllik, kk, sizefull); */
 
     if(fabs(llik - curllik) < tol) { /* converged? */
       flag = 1;
