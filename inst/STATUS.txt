@@ -22,8 +22,9 @@ Version 1.17, 6/24/2010:
 Major changes:
 
   Implemented the fit of models for binary traits in fitqtl(), by
-  Haley-Knott regression.  This model can also be used in refineqtl,
-  scanqtl, addqtl, addpair, addint, stepwiseqtl, and addcovarint.
+  Haley-Knott regression and multiple imputation.  This model can also
+  be used in refineqtl, scanqtl, addqtl, addpair, addint, stepwiseqtl,
+  and addcovarint. 
 
 Minor changes:
 
