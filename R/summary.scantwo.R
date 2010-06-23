@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-9, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Sep, 2009
+# copyright (c) 2001-2010, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Jun, 2010
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -882,8 +882,9 @@ function(...)
   output$lod <- array(dim=c(nr[1], nc[1], sum(nd3)))
   start <- cumsum(c(0,nd3))[-length(nd3)-1]
   end <- start+nd3
+
   for(i in seq(along=dots))
-    output$lod[,,start[i]:end[i]] <- dots[[i]]$lod
+    output$lod[,,(start[i]+1):end[i]] <- dots[[i]]$lod
   attr(output, "phenotypes") <- unlist(lapply(dots, attr, "phenotypes"))
   dimnames(output$lod) <- list(NULL, NULL, attr(output, "phenotypes"))
 

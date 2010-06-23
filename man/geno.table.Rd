@@ -10,7 +10,7 @@
 }
 
 \usage{
-geno.table(cross, chr)
+geno.table(cross, chr, scanone.output=FALSE)
 }
 
 \arguments{
@@ -21,13 +21,24 @@ geno.table(cross, chr)
   by name; numeric values are converted to strings.  Refer to
   chromosomes with a preceding \code{-} to have all chromosomes but
   those considered.  A logical (TRUE/FALSE) vector may also be used.}
+ \item{scanone.output}{If TRUE, give result in the form output by
+ \code{\link{scanone}}, so that one may use \code{\link{plot.scanone}}, etc.}
 }
 
 \value{
-  A matrix containing, for each marker, the number of individuals with
-  each possible genotype, as well as the number that were not typed.
-  The first column gives the chromosome ID, and the last column gives
-  P-values from chi-square tests of Mendelian segregation.  
+  If \code{scanone.output=FALSE}, the output is a matrix containing, for
+  each marker, the number of individuals with each possible genotype, as
+  well as the number that were not typed.  The first column gives the
+  chromosome ID, and the last column gives P-values from chi-square
+  tests of Mendelian segregation.
+
+  If \code{scanone.output=TRUE}, the output is of the form produced by
+  \code{\link{scanone}}, with the first two columns being chromosome IDs
+  and cM positions of the markers.  The third column is
+  \eqn{-\log_{10}(P)}{-log10P} from chi-square tests of Mendelian
+  segregation.  The fourth column is the proportion of missing data.
+  The remaining columns are the proportions of the different genotypes
+  (among typed individuals).
 }
 
 \details{
@@ -46,6 +57,10 @@ geno.table(listeria, chr=13)
 
 gt <- geno.table(listeria)
 gt[gt$P.value < 0.01,]
+
+out <- geno.table(listeria, scanone.output=TRUE)
+plot(out)
+plot(out, lod=2)
 }
 
 \seealso{ \code{\link{summary.cross}},
