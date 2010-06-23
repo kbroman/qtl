@@ -392,7 +392,12 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     warning("Didn't converge.");
 
   if(get_ests) { /* get the estimates and their covariance matrix */
-    /* get covariance matrix: dpodi to get (X'X)^-1; re-sort; multiply by sigma_hat^2 */
+
+    /* need to re-run the last regression */
+    F77_CALL(dqrls)(X[0], &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
+		    qty, &kk, jpvt, qraux, work);
+
+    /* get covariance matrix: dpodi to get (X'X)^-1; re-sort */
     job = 1; /* indicates to dpodi to get inverse and not determinant */
     F77_CALL(dpodi)(X[0], &n_ind, &sizefull, work, &job);
 
