@@ -25,8 +25,8 @@
 
 scanqtl <-
 function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
-         method=c("imp", "hk"),
-         incl.markers=FALSE, verbose=TRUE)
+         method=c("imp", "hk"), model=c("normal", "binary"),
+         incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
 {
   if(!any(class(cross) == "cross")) 
     stop("Input should have class \"cross\".")
@@ -62,6 +62,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -301,9 +302,9 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
       qtl <- makeqtl(cross, chr=chr, pos=unlist(pos), what="prob")
       
     result <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
-                           formula=formula, method=method, dropone=FALSE,
+                           formula=formula, method=method, model=model, dropone=FALSE,
                            get.ests=FALSE, run.checks=FALSE, cross.attr=cross.attr,
-                           sexpgm=sexpgm)
+                           sexpgm=sexpgm, tol=tol, maxit=maxit)
     result <- result[[1]][1,4]
     names(result) <- "LOD"
     class(result) <- "scanqtl"
@@ -396,9 +397,9 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
 
     # fit QTL, don't do drop one at a time
     fit <- fitqtlengine(pheno=pheno, qtl=qtl.obj, covar=covar,
-                        formula=formula, method=method, dropone=FALSE,
+                        formula=formula, method=method, model=model, dropone=FALSE,
                         get.ests=FALSE, run.checks=FALSE,
-                        cross.attr=cross.attr, sexpgm=sexpgm)
+                        cross.attr=cross.attr, sexpgm=sexpgm, tol=tol, maxit=maxit)
   
     if(verbose && ((i-1) %% n.prnt) == 0)
         cat("    ", i,"/", n.loop, "\n")

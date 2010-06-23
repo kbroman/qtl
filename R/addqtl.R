@@ -35,8 +35,9 @@
 ######################################################################
 addint <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"), qtl.only=FALSE, verbose=TRUE,
-         pvalues=TRUE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         qtl.only=FALSE, verbose=TRUE, pvalues=TRUE,
+         tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -75,6 +76,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -202,8 +204,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE,
-                          cross.attr=cross.attr, sexpgm=sexpgm)
+                          method=method, model=model, dropone=FALSE, get.ests=FALSE, 
+                          run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                          tol=tol, maxit=maxit)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(int2test.alt, c("df", "Type III SS", "LOD", "%var",
@@ -212,8 +215,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   for(k in seq(along=int2test)) {
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
-                            method=method, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm)
+                            method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                            tol=tol, maxit=maxit)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
@@ -269,9 +273,11 @@ summary.addint <- function(object, ...) object
 ######################################################################
 addqtl <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"), incl.markers=TRUE, verbose=FALSE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000)
 {
   method <- match.arg(method)
+  model <- match.arg(model)
 
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -485,8 +491,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit the base model
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                       method=method, dropone=FALSE, get.ests=FALSE,
-                       run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm)$result.full[1,4]
+                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                       run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                       tol=tol, maxit=maxit)$result.full[1,4]
 
   results <- NULL
   for(i in chr) {
@@ -577,9 +584,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 ######################################################################
 addpair <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"), incl.markers=FALSE, verbose=TRUE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
 {
   method <- match.arg(method)
+  model <- match.arg(model)
 
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -838,8 +847,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit the base model
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                       method=method, dropone=FALSE, get.ests=FALSE,
-                       run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm)$result.full[1,4]
+                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                       run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                       tol=tol, maxit=maxit)$result.full[1,4]
 
   gmap <- NULL
 
@@ -1116,7 +1126,8 @@ function(formula, qtlnum)
 ######################################################################
 addcovarint <-
 function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
-         method=c("imp","hk"), verbose=TRUE, pvalues=TRUE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         verbose=TRUE, pvalues=TRUE, tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -1163,6 +1174,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     stop("icovar must be a vector of character strings corresonding to columns in covar.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -1286,8 +1298,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE,
-                          cross.attr=cross.attr, sexpgm=sexpgm)
+                          method=method, model=model, dropone=FALSE, get.ests=FALSE, 
+                          run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                          tol=tol, maxit=maxit)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(theint.alt, c("df", "Type III SS", "LOD", "%var",
@@ -1296,8 +1309,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   for(k in seq(along=theint)) {
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
-                            method=method, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm)
+                            method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                            tol=tol, maxit=maxit)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]

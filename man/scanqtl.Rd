@@ -11,7 +11,8 @@
 
 \usage{
 scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
-        method=c("imp","hk"), incl.markers=FALSE, verbose=TRUE)
+        method=c("imp","hk"), model=c("normal", "binary"),
+        incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -36,9 +37,14 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
    \code{Q2}, etc.  Covariates are indicated by their names in \code{covar}.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.}
  \item{verbose}{If TRUE, give feedback about progress.}
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \details{
