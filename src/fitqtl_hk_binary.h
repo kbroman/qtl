@@ -24,7 +24,7 @@
  * These functions are for fitting a fixed multiple-QTL model for a binary 
  * trait, by Haley-Knott regression.
  *
- * Contains: R_fitqtl_hk_binary, fitqtl_hk_binary, galtLODHKbin, nullLODHKbin
+ * Contains: R_fitqtl_hk_binary, fitqtl_hk_binary, galtLODHKbin, nullLODbin
  *
  **********************************************************************/
 
@@ -85,8 +85,8 @@ void fitqtl_hk_binary(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
 		      double *design_mat, double tol, int maxit);
 
 
-/* nullLODHKbin - calculate null log10 likelihood */
-double nullLODHKbin(double *pheno, int n_phe);
+/* nullLODbin - calculate null log10 likelihood */
+double nullLODbin(double *pheno, int n_phe);
 
 
 /* galtLODHKbin - calculate log10 lik for full model for binary trait by Haley-Knott regression */
