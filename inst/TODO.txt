@@ -10,6 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Simplified output for binary traits in addint()
+
+o Analysis of binary traits by imputation in fitqtl
+
+o Analysis of binary traits by "hk" in scanone/two.
+
 o Sometimes the rownames for the LOD profile from stepwiseqtl come out
   messed up (that is, they don't have the proper rownames).
 
@@ -35,10 +41,6 @@ o scanone with method="hk": Major memory problems in the permutations
 
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
-
-o Analysis of binary traits by "hk" in scanone/two.
-
-o Implementation of binary traits in fitqtl, etc., with method="hk"
 
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
