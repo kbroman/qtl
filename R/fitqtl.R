@@ -36,7 +36,7 @@
 fitqtl <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
          model=c("normal", "binary"), dropone=TRUE, get.ests=FALSE,
-         run.checks=TRUE, tol=1e-4, maxit=4000)
+         run.checks=TRUE, tol=1e-4, maxit=1000)
 {
   # some input checking stuff in here
   if( !("cross" %in% class(cross)) )
