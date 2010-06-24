@@ -323,9 +323,7 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* finish design matrix construction */
 
   /* save design matrix */
-  for(i=0, k=0; i<sizefull; i++)
-    for(j=0; j<n_ind; j++, k++)
-      designmat[k] = X[i][j];
+  memcpy(designmat, X[0], sizefull*n_ind*sizeof(double));
 
   /* starting point for IRLS */
   curllik = 0.0;
@@ -360,9 +358,7 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     for(i=kk; i<sizefull; i++) ests[jpvt[i]] = 0.0;
     
     /* re-form design matrix */
-    for(i=0, k=0; i<sizefull; i++)
-      for(j=0; j<n_ind; j++, k++)
-	X[i][j] = designmat[k];
+    memcpy(X[0], designmat, sizefull*n_ind*sizeof(double));
 
     /* calculate fitted values, probs, new wts, new z's */
     llik = 0.0;

@@ -422,8 +422,7 @@ double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* finish design matrix construction */
 
   /* save design matrix */
-  for(i=0; i<n_ind*sizefull; i++) 
-    designmat[i] = x[i];
+  memcpy(designmat, x, n_ind*sizefull*sizeof(double));
 
   /* starting point for IRLS */
   curllik = 0.0;
@@ -458,8 +457,7 @@ double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     for(i=kk; i<sizefull; i++) ests[jpvt[i]] = 0.0;
     
     /* re-form design matrix */
-    for(i=0; i<n_ind*sizefull; i++) 
-      x[i] = designmat[i];
+    memcpy(x, designmat, n_ind*sizefull*sizeof(double));
 
     /* calculate fitted values, probs, new wts, new z's */
     llik = 0.0;
