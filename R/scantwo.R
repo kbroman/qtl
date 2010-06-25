@@ -325,9 +325,9 @@ function(cross, chr, pheno.col=1,
   }
   
   if(model=="binary") {
-    if(method != "em") {
+    if(method != "em" && method != "hk") {
       method <- "em"
-      if(n.perm > -2) warning("Only EM algorithm coded for binary traits")
+      if(n.perm > -2) warning("Only EM algorithm and Haley-Knott regression coded for binary traits; using EM")
     }
     if(!is.null(weights)) {
       weights <- NULL
@@ -941,7 +941,7 @@ function(cross, chr, pheno.col=1,
           }
         } # end different chromosome
       }
-      else if(model=="binary" && method=="em") {
+      else if(model=="binary") {
         if(i==j) { # same chromosome
 
           if(i==1) { # first time! do null model and get neg log10 likelihood
@@ -1022,24 +1022,45 @@ function(cross, chr, pheno.col=1,
 
           if(verbose>1) cat("  --Done.\n")
 
-          z <- .C("R_scantwo_1chr_binary_em", 
-                  as.integer(n.ind),
-                  as.integer(n.pos[i]),
-                  as.integer(n.gen[i]),
-                  as.double(temp),
-                  as.double(ac),
-                  as.integer(n.ac),
-                  as.double(ic),
-                  as.integer(n.ic),
-                  as.integer(pheno),
-                  as.double(start),
-                  result=as.double(rep(0,n.pos[i]^2)),
-                  as.integer(maxit),
-                  as.double(tol),
-                  as.integer(verbose),
-                  as.integer(n.col2drop),
-                  as.integer(col2drop),
-                  PACKAGE="qtl")
+          if(method=="em") 
+            z <- .C("R_scantwo_1chr_binary_em", 
+                    as.integer(n.ind),
+                    as.integer(n.pos[i]),
+                    as.integer(n.gen[i]),
+                    as.double(temp),
+                    as.double(ac),
+                    as.integer(n.ac),
+                    as.double(ic),
+                    as.integer(n.ic),
+                    as.integer(pheno),
+                    as.double(start),
+                    result=as.double(rep(0,n.pos[i]^2)),
+                    as.integer(maxit),
+                    as.double(tol),
+                    as.integer(verbose),
+                    as.integer(n.col2drop),
+                    as.integer(col2drop),
+                    PACKAGE="qtl")
+          else # h-k regression
+            z <- .C("R_scantwo_1chr_binary_hk", 
+                    as.integer(n.ind),
+                    as.integer(n.pos[i]),
+                    as.integer(n.gen[i]),
+                    as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                    as.double(temp),
+                    as.double(ac),
+                    as.integer(n.ac),
+                    as.double(ic),
+                    as.integer(n.ic),
+                    as.double(pheno),
+                    result=as.double(rep(0,n.pos[i]^2)),
+                    as.integer(n.col2drop),
+                    as.integer(col2drop),
+                    as.double(tol),
+                    as.integer(maxit),
+                    as.integer(verbose),
+                    PACKAGE="qtl")
+            
 
           # re-organize results
           results[wh.col[[i]],wh.col[[i]]] <-
@@ -1053,26 +1074,47 @@ function(cross, chr, pheno.col=1,
                      nullcoef[-1],rep(0,n.gen[i]*n.gen[j]+
                                       (n.gen[i]*(n.gen[j]-1)*n.intcovar)));
 
-          z <- .C("R_scantwo_2chr_binary_em",
-                  as.integer(n.ind),
-                  as.integer(n.pos[i]),
-                  as.integer(n.pos[j]),
-                  as.integer(n.gen[i]),
-                  as.integer(n.gen[j]),
-                  as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
-                  as.double(cross$geno[[j]]$prob[,keep.pos[[j]],]),
-                  as.double(ac),
-                  as.integer(n.ac),
-                  as.double(ic),
-                  as.integer(n.ic),
-                  as.integer(pheno),
-                  as.double(start),
-                  full=as.double(rep(0,n.pos[i]*n.pos[j])),
-                  int=as.double(rep(0,n.pos[i]*n.pos[j])),
-                  as.integer(maxit),
-                  as.double(tol),
-                  as.integer(verbose),
-                  PACKAGE="qtl")
+          if(method=="em")
+            z <- .C("R_scantwo_2chr_binary_em",
+                    as.integer(n.ind),
+                    as.integer(n.pos[i]),
+                    as.integer(n.pos[j]),
+                    as.integer(n.gen[i]),
+                    as.integer(n.gen[j]),
+                    as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                    as.double(cross$geno[[j]]$prob[,keep.pos[[j]],]),
+                    as.double(ac),
+                    as.integer(n.ac),
+                    as.double(ic),
+                    as.integer(n.ic),
+                    as.integer(pheno),
+                    as.double(start),
+                    full=as.double(rep(0,n.pos[i]*n.pos[j])),
+                    int=as.double(rep(0,n.pos[i]*n.pos[j])),
+                    as.integer(maxit),
+                    as.double(tol),
+                    as.integer(verbose),
+                    PACKAGE="qtl")
+          else # h-k regression
+            z <- .C("R_scantwo_2chr_binary_hk", 
+                    as.integer(n.ind),
+                    as.integer(n.pos[i]),
+                    as.integer(n.pos[j]),
+                    as.integer(n.gen[i]),
+                    as.integer(n.gen[j]),
+                    as.double(cross$geno[[i]]$prob[,keep.pos[[i]],]),
+                    as.double(cross$geno[[j]]$prob[,keep.pos[[j]],]),
+                    as.double(ac),
+                    as.integer(n.ac),
+                    as.double(ic),
+                    as.integer(n.ic),
+                    as.double(pheno),
+                    full=as.double(rep(0,n.pos[i]*n.pos[j])),
+                    int=as.double(rep(0,n.pos[i]*n.pos[j])),
+                    as.double(tol),
+                    as.integer(maxit),
+                    as.integer(verbose),
+                    PACKAGE="qtl")
 
           results[wh.col[[j]],wh.col[[i]]] <-
             t(matrix(z$full,ncol=n.pos[j]))
