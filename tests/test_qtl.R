@@ -60,7 +60,8 @@ hyper <- fill.geno(hyper)
 #Mess up the dataset by moving 1 marker infront of the chromosome
 hyper$geno[[1]]$map[1] <- -10
 res <- mqmscan(hyper,verbose=T)
-if(any(is.na(res[,3]))) stop("MQM doesn't handle negative locations (yet)")
+if(any(is.na(res[,3]))) stop("MQM failed to handle negative locations correctly")
+if(!(rownames(res)[2]=="c1.loc-5")) stop("MQM something wrong with negative locations")
 
 cat("Version information:\n")
 cat("R/qtl = ",version$RQTL,"\n")
