@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified May, 2010
+# last modified Jun, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3641,7 +3641,6 @@ shiftmap <-
 function(object, offset=0)
 {
   if("cross" %in% class(object)) {
-    cat(length(offset), "\n")
     if(length(offset) == 1) offset <- rep(offset, nchr(object))
     else if(length(offset) != nchr(object))
       stop("offset must have length 1 or n.chr (", nchr(object), ")")
