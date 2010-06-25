@@ -54,6 +54,14 @@ cat("test2 = ",test2,"\n")
 if (test1 != 76) stop("MQM gives an unexpected result (1)")
 if (test2 != 5426) stop("MQM gives an unexpected result (2)")
 
+# ---- Test for negative markerlocations
+data(hyper)
+hyper <- fill.geno(hyper)
+#Mess up the dataset by moving 1 marker infront of the chromosome
+hyper$geno[[1]]$map[1] <- -10
+res <- mqmscan(hyper,verbose=T)
+if(any(is.na(res[,3]))) stop("MQM doesn't handle negative locations (yet)")
+
 cat("Version information:\n")
 cat("R/qtl = ",version$RQTL,"\n")
 cat("R-MQM = ",version$RMQM,"\n")
