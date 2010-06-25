@@ -242,7 +242,6 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 			stop("step.size needs to be >= 1")
 		}
 		max.cm.on.map <- max(dist)
-    cat(dist,"\n")
 		if(step.max < max.cm.on.map){
 				stop("Markers outside of the mapping at ",max.cm.on.map," cM, please set parameter step.max larger than this value.")		
 		}
@@ -407,18 +406,17 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
   }
   for(x in 1:n.chr){
     markers.on.chr <- which(qtl[,1]==x)
-    if(newcmbase[x] !=0){
-      qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]-newcmbase[x]
-      for(n in 1:length(rownames(qtl[markers.on.chr,]))){
-      name <- rownames(qtl[markers.on.chr,])[n]
-      if(!is.na(1&&grep(".loc",name,fixed=T))){
-        id <- which(name==rownames(qtl))
-        rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=T)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=T)[[1]][2])-newcmbase[x],sep="")
-      }
+    if(newcmbase[x] !=0 && nrow(qtl[markers.on.chr,]) > 0){
+      qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]+newcmbase[x]
+      for(n in 1:nrow(qtl[markers.on.chr,])){
+        name <- rownames(qtl[markers.on.chr,])[n]
+        if(!is.na(name) && grepl(".loc",name,fixed=T)){
+          id <- which(name==rownames(qtl))
+          rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=T)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=T)[[1]][2])+newcmbase[x],sep="")
+        }
       }
     }
   }
-  
 	qtl
 	}else{
 		stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
