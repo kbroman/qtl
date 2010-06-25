@@ -1,11 +1,11 @@
 /**********************************************************************
  * 
- * fitqtl_hk.c
+ * fitqtl_hk_binary.c
  *
- * copyright (c) 2007-8, Karl W Broman
+ * copyright (c) 2010, Karl W Broman
  *
- * last modified Jan, 2008
- * first written Nov, 2007
+ * last modified Jun, 2010
+ * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -21,10 +21,10 @@
  *
  * C functions for the R/qtl package
  *
- * These functions are for fitting a fixed multiple-QTL model by 
- * Haley-Knott regression.
+ * These functions are for fitting a fixed multiple-QTL model for a binary 
+ * trait, by Haley-Knott regression.
  *
- * Contains: R_fitqtl_hk, fitqtl_hk, galtRssHK
+ * Contains: R_fitqtl_hk_binary, fitqtl_hk_binary, galtLODHKbin, nullLODbin
  *
  **********************************************************************/
 
@@ -38,16 +38,17 @@
 #include <R_ext/Linpack.h>
 #include <R_ext/Utils.h>
 #include "util.h"
-#include "fitqtl_hk.h"
-#include "fitqtl_imp.h"
+#include "fitqtl_hk_binary.h"
 #define TOL 1e-12
 
-void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen, 
-		 double *genoprob, int *n_cov, double *cov, int *model, 
-		 int *n_int, double *pheno, int *get_ests,
-		  /* return variables */
-		 double *lod, int *df, double *ests, double *ests_covar,
-		 double *design_mat)
+void R_fitqtl_hk_binary(int *n_ind, int *n_qtl, int *n_gen, 
+			double *genoprob, int *n_cov, double *cov, int *model, 
+			int *n_int, double *pheno, int *get_ests,
+			/* return variables */
+			double *lod, int *df, double *ests, double *ests_covar,
+			double *design_mat, 
+			/* convergence */
+			double *tol, int *maxit)
 {
   double ***Genoprob=0, **Cov;
   int tot_gen, i, j, curpos;
@@ -70,15 +71,15 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
   /* currently reorg_errlod function is used to reorganize the data */
   if(*n_cov != 0) reorg_errlod(*n_ind, *n_cov, cov, &Cov);
 
-  fitqtl_hk(*n_ind, *n_qtl, n_gen, Genoprob, 
-	     Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-	     ests, ests_covar, design_mat); 
+  fitqtl_hk_binary(*n_ind, *n_qtl, n_gen, Genoprob, 
+		   Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
+		   ests, ests_covar, design_mat, *tol, *maxit); 
 }
 
 
 /**********************************************************************
  * 
- * fitqtl_hk
+ * fitqtl_hk_binary
  *
  * Fits a fixed multiple-QTL model by Haley-Knott regression.
  * 
@@ -110,18 +111,22 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
  *
  * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
  *
+ * tol          Tolerance for convergence
+ * 
+ * maxit        Maximum number of iterations in IRLS
+ *
  **********************************************************************/
 
-void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
-	       double **Cov, int n_cov, 
-	       int *model, int n_int, double *pheno, int get_ests,
-	       double *lod, int *df, double *ests, double *ests_covar,
-	       double *design_mat) 
+void fitqtl_hk_binary(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
+		      double **Cov, int n_cov, 
+		      int *model, int n_int, double *pheno, int get_ests,
+		      double *lod, int *df, double *ests, double *ests_covar,
+		      double *design_mat, double tol, int maxit) 
 {
 
   /* create local variables */
   int i, j, n_qc, itmp; /* loop variants and temp variables */
-  double lrss, lrss0;
+  double llik, llik0;
   double *dwork, **Ests_covar;
   int *iwork, sizefull;
 
@@ -148,51 +153,72 @@ void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
     reorg_errlod(sizefull, sizefull, ests_covar, &Ests_covar);
 
   /* allocate memory for working arrays, total memory is
-     sizefull*n_ind+2*n_ind+4*sizefull for double array, 
+     sizefull*n_ind+6*n_ind+4*sizefull for double array, 
      and sizefull for integer array.
      All memory will be allocated one time and split later */
-  dwork = (double *)R_alloc(sizefull*n_ind+2*n_ind+4*sizefull,
+  dwork = (double *)R_alloc(sizefull*n_ind+6*n_ind+4*sizefull,
 			    sizeof(double));
   iwork = (int *)R_alloc(sizefull, sizeof(int));
 
 
-  /* calculate null model RSS */
-  lrss0 = log10(nullRss0(pheno, n_ind));
+  /* calculate null model log10 likelihood */
+  llik0 = nullLODbin(pheno, n_ind);
 
   R_CheckUserInterrupt(); /* check for ^C */
 
   /* fit the model */
-  lrss = log10( galtRssHK(pheno, n_ind, n_gen, n_qtl, Genoprob,
-			  Cov, n_cov, model, n_int, dwork, iwork, 
-			  sizefull, get_ests, ests, Ests_covar,
-			  design_mat) );
+  llik = galtLODHKbin(pheno, n_ind, n_gen, n_qtl, Genoprob,
+		      Cov, n_cov, model, n_int, dwork, iwork, 
+		      sizefull, get_ests, ests, Ests_covar,
+		      design_mat, tol, maxit);
 
-  *lod = (double)(n_ind)/2.0 * (lrss0 - lrss);
+  *lod = llik - llik0;
 
   /* degree of freedom equals to the number of columns of x minus 1 (mean) */
   *df = sizefull - 1;
 }
 
 
-/* galtRssHK - calculate RSS for full model by Haley-Knott regression */
-double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl, 
-		 double ***Genoprob, double **Cov, int n_cov, int *model, 
-		 int n_int, double *dwork, int *iwork, int sizefull,
-		 int get_ests, double *ests, double **Ests_covar,
-		 double *designmat) 
+/* nullLODbin - calculate null log10 likelihood */
+double nullLODbin(double *pheno, int n_phe)
+{
+  int i;
+  double llik=0.0, pi0=0.0, q0;
+
+  /* calculate proportion of affecteds */
+  for(i=0; i<n_phe; i++) pi0 += pheno[i];
+  pi0 /= (double)n_phe;
+  q0 = log10(1.0 - pi0);
+  pi0 = log10(pi0);
+
+  for(i=0; i<n_phe; i++) 
+    llik += pheno[i]*pi0 + (1.0-pheno[i])*q0;
+
+  return(llik);
+}
+  
+
+
+
+/* galtLODHKbin - calculate log10 lik for full model for binary trait by Haley-Knott regression */
+double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl, 
+		    double ***Genoprob, double **Cov, int n_cov, int *model, 
+		    int n_int, double *dwork, int *iwork, int sizefull,
+		    int get_ests, double *ests, double **Ests_covar,
+		    double *designmat, double tol, int maxit) 
 {
   /* local variables */
-  int i, j, k, *jpvt, ny, idx_col, n_qc, n_int_col, job, outerrep;
-  double *work, *qty, *qraux, *coef, *resid, tol, sigmasq, **X;
+  int i, j, k, kk, *jpvt, ny, idx_col, n_qc, n_int_col, job, outerrep, s;
+  double *work, *qty, *qraux, *coef, *resid, tol2, **X;
   int n_int_q, *idx_int_q=0;
-  int nrep, thisidx, gen, totrep, thecol, rep;
+  int nrep, thisidx, gen, totrep, thecol, rep, flag;
+  double *nu, *pi, *z, *wt;
   /* return variable */
-  double rss_full;
+  double llik=0.0, curllik;
 
   /* initialization */
   ny = 1; 
-  rss_full = 0.0;
-  tol = TOL;
+  tol2 = TOL;
   n_qc = n_qtl + n_cov;
   if(n_qtl > 0) idx_int_q = (int *)R_alloc(n_qtl, sizeof(int));
   X = (double **)R_alloc(sizefull, sizeof(double *));
@@ -200,20 +226,22 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* split the memory block: 
      design matrix x will be (n_ind x sizefull), coef will be (1 x sizefull),
      resid will be (1 x n_ind), qty will be (1 x n_ind), 
+     pi, nu, z, and wt are each (1 x n_ind),
      qraux will be (1 x sizefull), work will be (2 x sizefull) */
   X[0] = dwork;
   for(i=1; i<sizefull; i++) X[i] = X[i-1] + n_ind;
   coef = dwork + n_ind*sizefull;
   resid = coef + sizefull;
   qty = resid + n_ind;
-  qraux = qty + n_ind;
+  pi = qty + n_ind;
+  z = pi + n_ind;
+  nu = z + n_ind;
+  wt = nu + n_ind;
+  qraux = wt + n_ind;
   work = qraux + sizefull; 
   /* integer array */
   jpvt = iwork;
-  /* make jpvt = numbers 0, 1, ..., (sizefull-1) */
-  /*      jpvt keeps track of any permutation of X columns */
-  for(i=0; i<sizefull; i++) jpvt[i] = i;
-
+  
   /******************************************************
    The following part will construct the design matrix x 
    ******************************************************/
@@ -295,38 +323,91 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* finish design matrix construction */
 
   /* save design matrix */
-  for(i=0, k=0; i<sizefull; i++)
-    for(j=0; j<n_ind; j++, k++)
-      designmat[k] = X[i][j];
+  memcpy(designmat, X[0], sizefull*n_ind*sizeof(double));
 
-  /* call dqrls to fit regression model */
-  F77_CALL(dqrls)(X[0], &n_ind, &sizefull, pheno, &ny, &tol, coef, resid,
-		  qty, &k, jpvt, qraux, work);
+  /* starting point for IRLS */
+  curllik = 0.0;
+  for(j=0; j<n_ind; j++) {
+    pi[j] = (pheno[j] + 0.5)/2.0;
+    wt[j] = sqrt(pi[j] * (1.0-pi[j]));
+    nu[j] = log(pi[j]) - log(1.0-pi[j]);
+    z[j] = nu[j]*wt[j] + (pheno[j] - pi[j])/wt[j];
+    curllik += pheno[j] * log10(pi[j]) + (1.0-pheno[j]) * log10(1.0 - pi[j]);
+  }
 
-  /* calculate RSS */
-  for(i=0; i<n_ind; i++) rss_full += resid[i]*resid[i];
+  /* multiply design matrix by current wts */
+  for(i=0; i<sizefull; i++) 
+    for(j=0; j<n_ind; j++)
+      X[i][j] *= wt[j];
+
+  flag = 0;
+  for(s=0; s<maxit; s++) { /* IRLS iterations */
+  
+    R_CheckUserInterrupt(); /* check for ^C */
+
+    /* make jpvt = numbers 0, 1, ..., (sizefull-1) */
+    /*      jpvt keeps track of any permutation of X columns */
+    for(i=0; i<sizefull; i++) jpvt[i] = i;
+
+    /* call dqrls to fit regression model */
+    F77_CALL(dqrls)(X[0], &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
+		    qty, &kk, jpvt, qraux, work);
+
+    /* get ests; need to permute back */
+    for(i=0; i<kk; i++) ests[jpvt[i]] = coef[i];
+    for(i=kk; i<sizefull; i++) ests[jpvt[i]] = 0.0;
+    
+    /* re-form design matrix */
+    memcpy(X[0], designmat, sizefull*n_ind*sizeof(double));
+
+    /* calculate fitted values, probs, new wts, new z's */
+    llik = 0.0;
+    for(j=0; j<n_ind; j++) {
+      nu[j] = 0.0;
+      for(i=0; i<sizefull; i++) 
+	nu[j] += X[i][j] * ests[i];
+      pi[j] = exp(nu[j]);
+      pi[j] /= (1.0 + pi[j]);
+      wt[j] = sqrt(pi[j] * (1.0-pi[j]));
+      z[j] = nu[j]*wt[j] + (pheno[j] - pi[j])/wt[j];
+      llik += (pheno[j] * log10(pi[j]) + (1.0-pheno[j]) * log10(1.0 - pi[j]));
+
+      /* multiply design matrix by new weights */
+      for(i=0; i<sizefull; i++) 
+	X[i][j] *= wt[j];
+    }
+
+    if(fabs(llik - curllik) < tol) { /* converged? */
+      flag = 1;
+      break;
+    }
+    curllik = llik;
+
+  } /* end of IRLS iterations */
+
+  if(!flag)
+    warning("Didn't converge.");
 
   if(get_ests) { /* get the estimates and their covariance matrix */
-    /* get ests; need to permute back */
-    for(i=0; i<k; i++) ests[jpvt[i]] = coef[i];
-    for(i=k; i<sizefull; i++) ests[jpvt[i]] = 0.0;
-    
-    /* get covariance matrix: dpodi to get (X'X)^-1; re-sort; multiply by sigma_hat^2 */
+
+    /* need to re-run the last regression */
+    F77_CALL(dqrls)(X[0], &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
+		    qty, &kk, jpvt, qraux, work);
+
+    /* get covariance matrix: dpodi to get (X'X)^-1; re-sort */
     job = 1; /* indicates to dpodi to get inverse and not determinant */
     F77_CALL(dpodi)(X[0], &n_ind, &sizefull, work, &job);
 
-    sigmasq = rss_full/(double)(n_ind-sizefull);
-    for(i=0; i<k; i++) 
-      for(j=i; j<k; j++) 
-	Ests_covar[jpvt[i]][jpvt[j]] = Ests_covar[jpvt[j]][jpvt[i]] = 
-	  X[j][i] *sigmasq;
-    for(i=k; i<sizefull; i++)
-      for(j=0; j<k; j++)
+    for(i=0; i<kk; i++) 
+      for(j=i; j<kk; j++) 
+	Ests_covar[jpvt[i]][jpvt[j]] = Ests_covar[jpvt[j]][jpvt[i]] = X[j][i];
+    for(i=kk; i<sizefull; i++)
+      for(j=0; j<kk; j++)
 	Ests_covar[jpvt[i]][j] = Ests_covar[j][jpvt[i]] = 0.0;
   }
 
-  return(rss_full);
+  return(llik);
 }
 
 
-/* end of fitqtl_hk.c */
+/* end of fitqtl_hk_binary.c */

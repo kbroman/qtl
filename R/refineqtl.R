@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-9, Karl W. Broman
-# last modified Sep, 2009
+# copyright (c) 2006-2010, Karl W. Broman
+# last modified Jun, 2010
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,10 +37,11 @@
 ######################################################################
 refineqtl <-
 function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
-         method=c("imp", "hk"), verbose=TRUE, maxit=10, 
-         incl.markers=TRUE, keeplodprofile=TRUE)
+         method=c("imp", "hk"), model=c("normal", "binary"), verbose=TRUE, maxit=10, 
+         incl.markers=TRUE, keeplodprofile=TRUE, tol=1e-4, maxit.fitqtl=1000)
 {
   method <- match.arg(method)
+  model <- match.arg(model)
   
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -236,12 +237,14 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   for(i in 1:maxit) {
     if(keeplodprofile) # do drop-one analysis
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
-                              method=method, dropone=TRUE, get.ests=FALSE,
-                              run.checks=FALSE, cross.attr, sexpgm)
+                              method=method, model=model, dropone=TRUE, get.ests=FALSE,
+                              run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                              tol=tol, maxit=maxit.fitqtl)
     else 
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
-                              method=method, dropone=FALSE, get.ests=FALSE,
-                              run.checks=FALSE, cross.attr, sexpgm)
+                              method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                              run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                              tol=tol, maxit=maxit.fitqtl)
 
     if(i==1) {
       origlod <- curlod <- thisitlod <- basefit$result.full[1,4]
@@ -279,9 +282,9 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
         thispos[[j]] <- c(-Inf, Inf)
 
       out <- scanqtl(cross=cross, pheno.col=pheno.col, chr=chrnam, pos=thispos,
-                     covar=covar, formula=formula, method=method,
+                     covar=covar, formula=formula, method=method, model=model,
                      incl.markers=incl.markers,
-                     verbose=scanqtl.verbose)
+                     verbose=scanqtl.verbose, tol=tol, maxit=maxit.fitqtl)
 
       lastout[[j]] <- out
 

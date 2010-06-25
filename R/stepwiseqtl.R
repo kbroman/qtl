@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2010, Karl W Broman
-# last modified May, 2010
+# last modified Jun, 2010
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -57,9 +57,10 @@
 ######################################################################
 stepwiseqtl <-
 function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
-         method=c("imp", "hk"), incl.markers=TRUE, refine.locations=TRUE,
+         method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
          additive.only=FALSE, scan.pairs=FALSE, penalties,
-         keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE)
+         keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
+         tol=1e-4, maxit=1000)
 {
   if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
@@ -110,6 +111,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
   # check that we have the right stuff for the selected method
   method <- match.arg(method)
+  model <- match.arg(model)
   if(method=="imp") {
     if(!("draws" %in% names(cross$geno[[1]]))) {
       if("prob" %in% names(cross$geno[[1]])) {
@@ -157,7 +159,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   # check phenotypes and covariates; drop ind'ls with missing values
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
-    warning("scanqtl can take just one phenotype; only the first will be used")
+    warning("stepwiseqtl can take just one phenotype; only the first will be used")
   }
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
@@ -320,8 +322,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       qtl <- rqtl
     }
     lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
-                  method=method, dropone=FALSE, get.ests=FALSE,
-                  run.checks=FALSE)$result.full[1,4] - lod0
+                  method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                  run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
     curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                          penalties=penalties)
     attr(qtl, "pLOD") <- curplod
@@ -504,8 +506,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
         if(verbose) cat(" ---  Moved a bit\n")
         qtl <- rqtl
         lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
-                      method=method, dropone=FALSE, get.ests=FALSE,
-                      run.checks=FALSE)$result.full[1,4] - lod0
+                      method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                      run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
         curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                         penalties=penalties)
         attr(qtl, "pLOD") <- curplod
@@ -547,8 +549,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   while(n.qtl > 1) {
     i <- i+1
     out <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
-                  method=method, dropone=TRUE, get.ests=FALSE,
-                  run.checks=FALSE)$result.drop 
+                  method=method, model=model, dropone=TRUE, get.ests=FALSE,
+                  run.checks=FALSE, tol=tol, maxit=maxit)$result.drop 
 
     rn <- rownames(out)
     # ignore things with covariates
@@ -618,8 +620,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
           if(verbose) cat(" ---  Moved a bit\n")
           qtl <- rqtl
           lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
-                        method=method, dropone=FALSE, get.ests=FALSE,
-                        run.checks=FALSE)$result.full[1,4] - lod0
+                        method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                        run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
           curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                           penalties=penalties)
           attr(qtl, "pLOD") <- curplod

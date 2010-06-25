@@ -11,9 +11,11 @@
 
 \usage{
 stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
-            method=c("imp", "hk"), incl.markers=TRUE, refine.locations=TRUE,
+            method=c("imp", "hk"), model=c("normal", "binary"),
+            incl.markers=TRUE, refine.locations=TRUE,
             additive.only=FALSE, scan.pairs=FALSE, penalties,
-            keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE)
+            keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
+            tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -40,6 +42,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
  \item{covar}{Data frame of additive covariates.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.}
  \item{refine.locations}{If TRUE, use \code{\link{refineqtl}} to
@@ -61,6 +65,9 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    attribute to the output.}
  \item{verbose}{If TRUE, give feedback about progress.  If
    \code{verbose} is an integer > 1, even more information is printed.} 
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \section{Methods}{

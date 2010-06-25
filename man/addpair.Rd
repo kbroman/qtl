@@ -10,7 +10,8 @@
 
 \usage{
 addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
-        method=c("imp","hk"), incl.markers=FALSE, verbose=TRUE)
+        method=c("imp","hk"), model=c("normal", "binary"),
+        incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -40,6 +41,8 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    is performed.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.  If \code{\link{calc.genoprob}} or
    \code{\link{sim.geno}} were run with
@@ -47,7 +50,9 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
  \item{verbose}{If TRUE, display information about the progress of
    calculations.  If \code{verbose} is an integer > 1, further messages
    from \code{\link{scanqtl}} are also displayed.}
-
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \details{

@@ -38,7 +38,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
- \item{model}{The phenotypic model: the usual normal model or a model for
+ \item{model}{The phenotype model: the usual normal model or a model for
    binary traits.}
  \item{method}{Indicates whether to use the
    the EM algorithm, imputation, Haley-Knott regression, or marker
@@ -131,6 +131,8 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
 
   In the case that \code{n.perm} is specified, the R function
   \code{scantwo} is called repeatedly.
+
+  For \code{model="binary"}, a logistic regression model is used.
 }
 
 \section{X chromosome}{

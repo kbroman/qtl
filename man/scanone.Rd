@@ -36,7 +36,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
- \item{model}{The phenotypic model: the usual normal model, a model for
+ \item{model}{The phenotype model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
  \item{method}{Indicates whether to use the EM algorithm, 
    imputation, Haley-Knott regression, the extended Haley-Knott method,
@@ -101,7 +101,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 
   \bold{The binary model} is for the case of a binary phenotype, which
   must have values 0 and 1.  The proportions of 1's in the different
-  genotype groups are compared.  Currently only methods \code{em} and
+  genotype groups are compared.  Currently only methods \code{em}, \code{hk}, and
   \code{mr} are available for this model.  See Xu and Atchley (1996) and
   Broman (2003).
 

@@ -8,11 +8,12 @@
 }
 
 \usage{
-\method{summary}{fitqtl}(object, pvalues=TRUE, \dots)
+\method{summary}{fitqtl}(object, pvalues=TRUE, simple=FALSE, \dots)
 }
 \arguments{
  \item{object}{Output from \code{\link{fitqtl}}.}
  \item{pvalues}{If FALSE, don't include p-values in the summary.}
+ \item{simple}{If TRUE, don't include p-values or sums of squares in the summary.}
  \item{\dots}{Ignored at this point.}
 }
 

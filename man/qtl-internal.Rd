@@ -181,7 +181,7 @@ convertMWril(cross, parents, error.prob=0)
 countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
-discan(cross, pheno, method=c("em","mr"),
+discan(cross, pheno, method=c("em","hk","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
        verbose=FALSE, give.warnings=TRUE)
 dropfromqtlformula(formula, qtlnum)
@@ -191,7 +191,8 @@ effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pool
 expandf2covar(thecovar)
 find.pseudomarkerpos(cross, marker, where=c("draws", "prob"))
 fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
-             dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr, sexpgm)
+             model=c("normal", "binary"), dropone=TRUE, get.ests=FALSE, 
+             run.checks=TRUE, cross.attr, sexpgm, tol, maxit)
 fitstahl.estp(cross, error.prob=0.0001, m=0, tol=1e-4, maxit=4000)
 fitstahl.estp.sub(p, cross, error.prob=0.0001, m=0, thetol=1e-4, maxit=4000)
 fitstahl.este(cross, m=0, p=0, tol=1e-4, maxit=4000)

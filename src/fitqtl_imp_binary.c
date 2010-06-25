@@ -1,12 +1,11 @@
 /**********************************************************************
  * 
- * fitqtl_imp.c
+ * fitqtl_imp_binary.c
  *
- * copyright (c) 2002-6, Hao Wu
- *     Modified by Karl W. Broman to get estimates of QTL effects
+ * copyright (c) 2010, Karl W. Broman
  *
- * last modified Dec, 2006
- * first written Apr, 2002
+ * last modified Jun, 2010
+ * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -23,9 +22,9 @@
  * C functions for the R/qtl package
  *
  * These functions are for fitting a fixed multiple-QTL model by 
- * imputation.
+ * imputation, for a binary trait.
  *
- * Contains: R_fitqtl_imp, fitqtl_imp, nullRss0, galtRss
+ * Contains: R_fitqtl_imp_binary, fitqtl_imp_binary, galtLODimpbin
  *
  **********************************************************************/
 
@@ -39,17 +38,20 @@
 #include <R_ext/Linpack.h>
 #include <R_ext/Utils.h>
 #include "util.h"
-#include "fitqtl_imp.h"
+#include "fitqtl_imp_binary.h"
+#include "fitqtl_hk_binary.h"
 #define TOL 1e-12
 #define IDXINTQ 15  /* maximum no. QTLs in an interaction */
 #define IDXINTC 10  /* maximum no. covariates in an interaction */
 
-void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
-		  int *draws, int *n_cov, double *cov, int *model, 
-		  int *n_int, double *pheno, int *get_ests,
-		  /* return variables */
-		  double *lod, int *df, double *ests, double *ests_covar,
-		  double *design_mat)
+void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
+			 int *draws, int *n_cov, double *cov, int *model, 
+			 int *n_int, double *pheno, int *get_ests,
+			 /* return variables */
+			 double *lod, int *df, double *ests, double *ests_covar,
+			 double *design_mat,
+			 /* convergence */
+			 double *tol, int *maxit)
 {
   int ***Draws;
   double **Cov;
@@ -61,15 +63,15 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
   /* currently reorg_errlod function is used to reorganize the data */
   if(*n_cov != 0) reorg_errlod(*n_ind, *n_cov, cov, &Cov);
 
-  fitqtl_imp(*n_ind, *n_qtl, n_gen, *n_draws, Draws,
-	     Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-	     ests, ests_covar, design_mat);
+  fitqtl_imp_binary(*n_ind, *n_qtl, n_gen, *n_draws, Draws,
+		    Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
+		    ests, ests_covar, design_mat, *tol, *maxit);
 }
 
 
 /**********************************************************************
  * 
- * fitqtl_imp
+ * fitqtl_imp_binary
  *
  * Fits a fixed multiple-QTL model by multiple imputation.
  * 
@@ -104,18 +106,22 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
  *
  * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
  *
+ * tol          Tolerance for convergence
+ * 
+ * maxit        Maximum number of iterations in IRLS
+ *
  **********************************************************************/
 
-void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws, 
-		int ***Draws, double **Cov, int n_cov, 
-		int *model, int n_int, double *pheno, int get_ests,
-		double *lod, int *df, double *ests, double *ests_covar,
-		double *design_mat) 
+void fitqtl_imp_binary(int n_ind, int n_qtl, int *n_gen, int n_draws, 
+		       int ***Draws, double **Cov, int n_cov, 
+		       int *model, int n_int, double *pheno, int get_ests,
+		       double *lod, int *df, double *ests, double *ests_covar,
+		       double *design_mat, double tol, int maxit) 
 {
 
   /* create local variables */
   int i, j, ii, jj, n_qc, itmp; /* loop variants and temp variables */
-  double lrss, lrss0, *LOD_array;
+  double llik, llik0, *LOD_array;
   double *the_ests, *the_covar, **TheEsts, ***TheCovar;
   double *dwork, **Ests_covar, tot_wt=0.0, *wts;
   double **Covar_mean, **Mean_covar, *mean_ests; /* for ests and cov matrix */
@@ -160,18 +166,18 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
   }
 
   /* allocate memory for working arrays, total memory is
-     sizefull*n_ind+2*n_ind+4*sizefull for double array, 
+     sizefull*n_ind+6*n_ind+4*sizefull for double array, 
      and sizefull for integer array.
      All memory will be allocated one time and split later */
-  dwork = (double *)R_alloc(sizefull*n_ind+2*n_ind+4*sizefull,
+  dwork = (double *)R_alloc(sizefull*n_ind+6*n_ind+4*sizefull,
 			    sizeof(double));
   iwork = (int *)R_alloc(sizefull, sizeof(int));
   index = (int *)R_alloc(n_draws, sizeof(int));
   LOD_array = (double *)R_alloc(n_draws, sizeof(double));
 
 
-  /* calculate null model RSS */
-  lrss0 = log10(nullRss0(pheno, n_ind));
+  /* calculate null model log10 likelihood */
+  llik0 = nullLODbin(pheno, n_ind);
 
   /* loop over imputations */
   for(i=0; i<n_draws; i++) {
@@ -179,12 +185,13 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
     R_CheckUserInterrupt(); /* check for ^C */
 
     /* calculate alternative model RSS */
-    lrss = log10( galtRss(pheno, n_ind, n_gen, n_qtl, Draws[i], 
-			  Cov, n_cov, model, n_int, dwork, iwork, sizefull,
-			  get_ests, ests, Ests_covar, (i==0), design_mat) );
+    llik = galtLODimpbin(pheno, n_ind, n_gen, n_qtl, Draws[i], 
+			 Cov, n_cov, model, n_int, dwork, iwork, sizefull,
+			 get_ests, ests, Ests_covar, design_mat,
+			 tol, maxit);
 
     /* calculate the LOD score in this imputation */
-    LOD_array[i] = (double)n_ind/2.0*(lrss0-lrss);
+    LOD_array[i] = (llik - llik0);
 
     /* if getting estimates, calculate the weights */
     if(get_ests) { 
@@ -263,53 +270,29 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
 
 
 
-/* function to calculate the null model RSS. This function is different
-   from the function used in scanone_imp and scantwo_imp, which contain 
-   the additive covariate in the null model */
-double nullRss0(double *pheno, int n_ind)
-{
-  /* local variables */
-  int i;
-  double s, rss, m;
-
-  /* calculate the mean of phenotype */
-  s = 0.0;
-  for(i=0; i<n_ind; i++)
-    s += pheno[i];
-  m = s / (double)n_ind;
-
-  /* calculate RSS */
-  rss = 0.0;
-  for(i=0; i<n_ind; i++)
-    rss += (pheno[i]-m)*(pheno[i]-m);
-
-  return(rss);
-}
-
-
 /* galtRss - calculate RSS for full model by multiple imputation */
-double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl, 
-	       int **Draws, double **Cov, int n_cov, int *model, 
-	       int n_int, double *dwork, int *iwork, int sizefull,
-	       int get_ests, double *ests, double **Ests_covar,
-	       int save_design, double *designmat) 
+double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl, 
+		     int **Draws, double **Cov, int n_cov, int *model, 
+		     int n_int, double *dwork, int *iwork, int sizefull,
+		     int get_ests, double *ests, double **Ests_covar,
+		     double *designmat, double tol, int maxit) 
 {
   /* local variables */
-  int i, j, k, kk, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job;
-  double *work, *x, *qty, *qraux, *coef, *resid, tol, sigmasq;
+  int i, j, k, kk, s, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job, flag;
+  double *work, *x, *qty, *qraux, *coef, *resid, tol2;
+  double *nu, *pi, *z, *wt;
   /* The following vars are used for parsing model. 
      the dimension of idx_int_q and idx_int_c are set to be arbitrary number
      for the ease of programming. But I think 15 and 10 are big enough. 
      Is there any body want to try a 16 way interaction? */
   int n_int_q, n_int_c, idx_int_q[IDXINTQ], idx_int_c[IDXINTC]; 
   /* return variable */
-  double rss_full;
+  double curllik, llik=0.0;
 
   /* initialization */
   ny = 1; 
   idx_col = 0;
-  rss_full = 0.0;
-  tol = TOL;
+  tol2 = TOL;
   n_qc = n_qtl + n_cov;
 
   /* split the memory block: 
@@ -320,14 +303,14 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
   coef = x + n_ind*sizefull;
   resid = coef + sizefull;
   qty = resid + n_ind;
-  qraux = qty + n_ind;
+  pi = qty + n_ind;
+  z = pi + n_ind;
+  nu = z + n_ind;
+  wt = nu + n_ind;
+  qraux = wt + n_ind;
   work = qraux + sizefull; 
   /* integer array */
   jpvt = iwork;
-  /* make jpvt = numbers 0, 1, ..., (sizefull-1) */
-  /*      jpvt keeps track of any permutation of X columns */
-  for(i=0; i<sizefull; i++) 
-    jpvt[i] = i;
 
   /******************************************************
    The following part will construct the design matrix x 
@@ -439,42 +422,91 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* finish design matrix construction */
 
   /* save design matrix */
-  if(save_design) {
-    for(i=0; i<n_ind*sizefull; i++) 
-      designmat[i] = x[i];
+  memcpy(designmat, x, n_ind*sizefull*sizeof(double));
+
+  /* starting point for IRLS */
+  curllik = 0.0;
+  for(j=0; j<n_ind; j++) {
+    pi[j] = (pheno[j] + 0.5)/2.0;
+    wt[j] = sqrt(pi[j] * (1.0-pi[j]));
+    nu[j] = log(pi[j]) - log(1.0-pi[j]);
+    z[j] = nu[j]*wt[j] + (pheno[j] - pi[j])/wt[j];
+    curllik += pheno[j] * log10(pi[j]) + (1.0-pheno[j]) * log10(1.0 - pi[j]);
   }
 
-  /* call dqrls to fit regression model */
-  F77_CALL(dqrls)(x, &n_ind, &sizefull, pheno, &ny, &tol, coef, resid,
-		  qty, &k, jpvt, qraux, work);
+  /* multiply design matrix by current wts */
+  for(i=0; i<sizefull; i++) 
+    for(j=0; j<n_ind; j++)
+      x[i*n_ind+j] *= wt[j];
 
-  /* calculate RSS */
-  for(i=0; i<n_ind; i++)
-    rss_full += resid[i]*resid[i];
+  flag = 0;
+  for(s=0; s<maxit; s++) { /* IRLS iterations */
+  
+    R_CheckUserInterrupt(); /* check for ^C */
 
+    /* make jpvt = numbers 0, 1, ..., (sizefull-1) */
+    /*      jpvt keeps track of any permutation of X columns */
+    for(i=0; i<sizefull; i++) jpvt[i] = i;
+
+    /* call dqrls to fit regression model */
+    F77_CALL(dqrls)(x, &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
+  		  qty, &kk, jpvt, qraux, work);
+
+    /* get ests; need to permute back */
+    for(i=0; i<kk; i++) ests[jpvt[i]] = coef[i];
+    for(i=kk; i<sizefull; i++) ests[jpvt[i]] = 0.0;
+    
+    /* re-form design matrix */
+    memcpy(x, designmat, n_ind*sizefull*sizeof(double));
+
+    /* calculate fitted values, probs, new wts, new z's */
+    llik = 0.0;
+    for(j=0; j<n_ind; j++) {
+      nu[j] = 0.0;
+      for(i=0; i<sizefull; i++) 
+	nu[j] += x[i*n_ind+j] * ests[i];
+      pi[j] = exp(nu[j]);
+      pi[j] /= (1.0 + pi[j]);
+      wt[j] = sqrt(pi[j] * (1.0-pi[j]));
+      z[j] = nu[j]*wt[j] + (pheno[j] - pi[j])/wt[j];
+      llik += (pheno[j] * log10(pi[j]) + (1.0-pheno[j]) * log10(1.0 - pi[j]));
+
+      /* multiply design matrix by new weights */
+      for(i=0; i<sizefull; i++) 
+	x[i*n_ind+j] *= wt[j];
+    }
+
+    if(fabs(llik - curllik) < tol) { /* converged? */
+      flag = 1;
+      break;
+    }
+    curllik = llik;
+
+  } /* end of IRLS iterations */
+
+  if(!flag)
+    warning("Didn't converge.");
 
   if(get_ests) { /* get the estimates and their covariance matrix */
-    /* get ests; need to permute back */
-    for(i=0; i<k; i++) 
-      ests[jpvt[i]] = coef[i];
-    for(i=k; i<sizefull; i++)
-      ests[jpvt[i]] = 0.0;
-    
+
+    /* need to re-run the last regression */
+    F77_CALL(dqrls)(x, &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
+		    qty, &kk, jpvt, qraux, work);
+
     /* get covariance matrix: dpodi to get (X'X)^-1; re-sort; multiply by sigma_hat^2 */
     job = 1; /* indicates to dpodi to get inverse and not determinant */
     F77_CALL(dpodi)(x, &n_ind, &sizefull, work, &job);
 
-    sigmasq = rss_full/(double)(n_ind-sizefull);
-    for(i=0; i<k; i++) 
-      for(j=i; j<k; j++) 
+    for(i=0; i<kk; i++) 
+      for(j=i; j<kk; j++) 
 	Ests_covar[jpvt[i]][jpvt[j]] = Ests_covar[jpvt[j]][jpvt[i]] = 
-	  x[j*n_ind+i] *sigmasq;
-    for(i=k; i<sizefull; i++)
-      for(j=0; j<k; j++)
+	  x[j*n_ind+i];
+    for(i=kk; i<sizefull; i++)
+      for(j=0; j<kk; j++)
 	Ests_covar[jpvt[i]][j] = Ests_covar[j][jpvt[i]] = 0.0;
   }
 
-  return(rss_full);
+  return(llik);
 }
 
-/* end of fitqtl_imp.c */
+/* end of fitqtl_imp_binary.c */

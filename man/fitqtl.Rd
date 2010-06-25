@@ -10,7 +10,8 @@
 
 \usage{
 fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
-       dropone=TRUE, get.ests=FALSE, run.checks=TRUE)
+       model=c("normal", "binary"), dropone=TRUE, get.ests=FALSE, 
+       run.checks=TRUE, tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -33,11 +34,16 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
    in the data frame \code{covar}.  } 
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{dropone}{If TRUE, do drop-one-term analysis.}
  \item{get.ests}{If TRUE, return estimated QTL effects and their
    estimated variance-covariance matrix.}
  \item{run.checks}{If TRUE, check the input formula and check for
    individuals with missing phenotypes or covariates.}
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \details{
@@ -55,6 +61,8 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   it is dropped, all higher order terms that contain it will also be
   dropped.  The comparison between the new model and the full (input)
   model will be output.
+
+  For \code{model="binary"}, a logistic regression model is used.
 
   \bold{The part to get estimated QTL effects is fully working only for
     the case of autosomes in a backcross or intercross.
