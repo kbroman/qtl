@@ -10,7 +10,8 @@
 
 \usage{
 addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
-       method=c("imp","hk"), verbose=TRUE, pvalues=TRUE)
+            method=c("imp","hk"), model=c("normal", "binary"), 
+            verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -35,9 +36,15 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
    in the data frame \code{covar}.} 
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{verbose}{If TRUE, will print a message if there are no
    interactions to test.}
  \item{pvalues}{If FALSE, p-values will not be included in the results.}
+ \item{simple}{If TRUE, don't include p-values or sums of squares in the summary.}
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \details{

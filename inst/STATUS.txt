@@ -17,11 +17,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/14/2010:
+Version 1.17, 6/25/2010:
 
 Major changes:
 
-  None.
+  Implemented the fit of models for binary traits in fitqtl(), by
+  Haley-Knott regression and multiple imputation.  This model can also
+  be used in refineqtl, scanqtl, addqtl, addpair, addint, stepwiseqtl,
+  and addcovarint. 
+
+  Implemented Haley-Knott regression for binary traits in scanone and
+  scantwo. 
 
 Minor changes:
 
@@ -35,6 +41,9 @@ Minor changes:
   Revised geno.table to have an additional argument, scanone.output.
   If scanone.output=TRUE, the output is as produced by scanone(), so
   that one may use plot.scanone() to plot the results.
+
+  Added argument 'simple' to summary.fitqtl, addint, and addcovarint;
+  if TRUE, output includes neither p-values nor sums of squares.
 
   Fixed a bug in scantwo() for the case that multiple phenotype
   columns are considered but they have different patterns of missing

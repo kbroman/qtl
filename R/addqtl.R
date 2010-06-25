@@ -2,8 +2,8 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-9, Karl W. Broman
-# last modified Sep, 2009
+# copyright (c) 2007-2010, Karl W. Broman
+# last modified Jun, 2010
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -35,8 +35,9 @@
 ######################################################################
 addint <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"), qtl.only=FALSE, verbose=TRUE,
-         pvalues=TRUE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         qtl.only=FALSE, verbose=TRUE, pvalues=TRUE, simple=FALSE,
+         tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -75,6 +76,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -202,8 +204,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE,
-                          cross.attr, sexpgm)
+                          method=method, model=model, dropone=FALSE, get.ests=FALSE, 
+                          run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                          tol=tol, maxit=maxit)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(int2test.alt, c("df", "Type III SS", "LOD", "%var",
@@ -212,13 +215,17 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   for(k in seq(along=int2test)) {
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
-                            method=method, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr, sexpgm)
+                            method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                            tol=tol, maxit=maxit)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
     results[k,3] <- thefit1$result.full[1,4] - thefit0$result.full[1,4]
-    results[k,4] <- results[k,2] / thefit1$result.full[3,2]*100
+
+    results[k,4] <- 100*(1-10^(-2*thefit1$result.full[1,4]/qtl$n.ind)) -
+      100*(1-10^(-2*thefit0$result.full[1,4]/qtl$n.ind))
+
     results[k,5] <- (results[k,2]/results[k,1])/thefit1$result.full[2,3]
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
@@ -226,14 +233,27 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
                     
   results <- as.data.frame(results)
   class(results) <- c("addint", "data.frame")
+  attr(results, "method") <- method
+  attr(results, "model") <- model
   attr(results, "formula") <- deparseQTLformula(formula)
+  if(simple) pvalues <- FALSE
   attr(results, "pvalues") <- pvalues
+  attr(results, "simple") <- simple
   results
 }
 
 print.addint <-
 function(x, ...)
 {
+  meth <- attr(x, "method")
+  mod <- attr(x, "model")
+  if(is.null(mod)) mod <- "normal"
+  if(is.null(meth)) meth <- "unknown"
+  if(meth=="imp") meth <- "multiple imputation"
+  else if(meth=="hk") meth <- "Haley-Knott regression"
+  cat("Method:", meth, "\n")
+  cat("Model: ", mod, "phenotype\n")
+
   cat("Model formula:")
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
@@ -242,13 +262,11 @@ function(x, ...)
   cat("Add one pairwise interaction at a time table:\n")
   cat("--------------------------------------------\n")
   pval <- attr(x, "pvalues")
-  if(is.null(pval) || pval) 
-    printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
-  else {
-    z <- x
-    z <- z[,-ncol(z)+(0:1)]
-    printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
-  }
+  if(!is.null(pval) && !pval)
+    x <- x[,-ncol(x)+(0:1)]
+  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+
+  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
     
   cat("\n")
 }
@@ -269,9 +287,11 @@ summary.addint <- function(object, ...) object
 ######################################################################
 addqtl <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"), incl.markers=TRUE, verbose=FALSE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000)
 {
   method <- match.arg(method)
+  model <- match.arg(model)
 
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -485,8 +505,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit the base model
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                       method=method, dropone=FALSE, get.ests=FALSE,
-                       run.checks=FALSE, cross.attr, sexpgm)$result.full[1,4]
+                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                       run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                       tol=tol, maxit=maxit)$result.full[1,4]
 
   results <- NULL
   for(i in chr) {
@@ -495,8 +516,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     thepos <- c(as.list(qtlpos), list(c(-Inf,Inf)))
 
     sqout <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                     covar=covar, formula=newformula, method=method,
-                     incl.markers=incl.markers, verbose=verbose.scanqtl)
+                     covar=covar, formula=newformula, method=method, model=model,
+                     incl.markers=incl.markers, verbose=verbose.scanqtl,
+                     tol=tol, maxit=maxit)
 
     # get map of positions
     if(method=="imp") {
@@ -577,9 +599,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 ######################################################################
 addpair <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
-         method=c("imp","hk"), incl.markers=FALSE, verbose=TRUE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
 {
   method <- match.arg(method)
+  model <- match.arg(model)
 
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -838,8 +862,9 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit the base model
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                       method=method, dropone=FALSE, get.ests=FALSE,
-                       run.checks=FALSE, cross.attr, sexpgm)$result.full[1,4]
+                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                       run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                       tol=tol, maxit=maxit)$result.full[1,4]
 
   gmap <- NULL
 
@@ -931,24 +956,27 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       thepos <- c(as.list(qtlpos), list(c(-Inf, Inf)), list(c(-Inf, Inf)))
 
       temp1 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                       covar=covar, formula=newformula1, method=method,
-                       incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                       covar=covar, formula=newformula1, method=method, model=model,
+                       incl.markers=incl.markers, verbose=verbose.scanqtl,
+                       tol=tol, maxit=maxit) - lod0
 
       if(!is.null(newformula2)) {
         if(verbose)
            cat("Scanning add've model for chr", ci, "and", cj, "\n")
         
         temp2 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                         covar=covar, formula=newformula2, method=method,
-                         incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                         covar=covar, formula=newformula2, method=method, model=model,
+                         incl.markers=incl.markers, verbose=verbose.scanqtl,
+                         tol=tol, maxit=maxit) - lod0
       }
       else {
         if(i != j && scanbothways) {
           if(verbose) cat("Scanning chr", cj, "and", ci, "\n")
           thechr <- c(qtlchr, cj, ci)
           temp1r <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
-                            covar=covar, formula=newformula1, method=method,
-                            incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                            covar=covar, formula=newformula1, method=method, model=model,
+                            incl.markers=incl.markers, verbose=verbose.scanqtl,
+                            tol=tol, maxit=maxit) - lod0
         }
       }
 
@@ -983,10 +1011,12 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
       lod.m1[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1.minus1, method=method,
-                             incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                             model=model, incl.markers=incl.markers, 
+                             verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
       lod.m2[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1.minus2, method=method,
-                             incl.markers=incl.markers, verbose=verbose.scanqtl) - lod0
+                             model=model, incl.markers=incl.markers, 
+                             verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
 
     }
 
@@ -1116,7 +1146,8 @@ function(formula, qtlnum)
 ######################################################################
 addcovarint <-
 function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
-         method=c("imp","hk"), verbose=TRUE, pvalues=TRUE)
+         method=c("imp","hk"), model=c("normal", "binary"),
+         verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -1163,6 +1194,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     stop("icovar must be a vector of character strings corresonding to columns in covar.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -1286,8 +1318,9 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, dropone=FALSE, get.ests=FALSE, run.checks=FALSE,
-                          cross.attr, sexpgm)
+                          method=method, model=model, dropone=FALSE, get.ests=FALSE, 
+                          run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                          tol=tol, maxit=maxit)
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(theint.alt, c("df", "Type III SS", "LOD", "%var",
@@ -1296,13 +1329,17 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   for(k in seq(along=theint)) {
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
-                            method=method, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr, sexpgm)
+                            method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                            tol=tol, maxit=maxit)
 
     results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
     results[k,2] <- thefit1$result.full[1,2] - thefit0$result.full[1,2]
     results[k,3] <- thefit1$result.full[1,4] - thefit0$result.full[1,4]
-    results[k,4] <- results[k,2] / thefit1$result.full[3,2]*100
+
+    results[k,4] <- 100*(1-10^(-2*thefit1$result.full[1,4]/qtl$n.ind)) -
+      100*(1-10^(-2*thefit0$result.full[1,4]/qtl$n.ind))
+
     results[k,5] <- (results[k,2]/results[k,1])/thefit1$result.full[2,3]
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
@@ -1310,14 +1347,27 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
                     
   results <- as.data.frame(results)
   class(results) <- c("addcovarint", "data.frame")
+  attr(results, "model") <- model
+  attr(results, "method") <- method
   attr(results, "formula") <- deparseQTLformula(formula)
+  if(simple) pvalues <- FALSE
   attr(results, "pvalues") <- pvalues
+  attr(results, "simple") <- simple
   results
 }
 
 print.addcovarint <-
 function(x, ...)
 {
+  meth <- attr(x, "method")
+  mod <- attr(x, "model")
+  if(is.null(mod)) mod <- "normal"
+  if(is.null(meth)) meth <- "unknown"
+  if(meth=="imp") meth <- "multiple imputation"
+  else if(meth=="hk") meth <- "Haley-Knott regression"
+  cat("Method:", meth, "\n")
+  cat("Model: ", mod, "phenotype\n")
+
   cat("Model formula:")
   w <- options("width")[[1]]
   printQTLformulanicely(attr(x, "formula"), "                   ", w+5, w)
@@ -1326,13 +1376,13 @@ function(x, ...)
   cat("Add one QTL x covar interaction at a time table:\n")
   cat("--------------------------------------------\n")
   pval <- attr(x, "pvalues")
-  if(is.null(pval) || pval) 
-    printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
-  else {
-    z <- x
-    z <- z[,-ncol(z)+(0:1)]
-    printCoefmat(z, digits=4, cs.ind=1, P.values=FALSE, has.Pvalue=FALSE)
-  }
+  if(!is.null(pval) && !pval) 
+    x <- x[,-ncol(x)+(0:1)]
+
+  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  
+  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+
     
   cat("\n")
 }

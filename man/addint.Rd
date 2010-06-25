@@ -10,7 +10,8 @@
 
 \usage{
 addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
-       qtl.only=FALSE, verbose=TRUE, pvalues=TRUE)
+       model=c("normal", "binary"), qtl.only=FALSE, verbose=TRUE,
+       pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -34,11 +35,17 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
    the formula, its main effect is added.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
+ \item{model}{The phenotype model: the usual model or a model for binary
+  traits} 
  \item{qtl.only}{If TRUE, only test QTL:QTL interactions (and not
    interactions with covariates).}
  \item{verbose}{If TRUE, will print a message if there are no
    interactions to test.}
  \item{pvalues}{If FALSE, p-values will not be included in the results.}
+ \item{simple}{If TRUE, don't include p-values or sums of squares in the summary.}
+ \item{tol}{Tolerance for convergence for the binary trait model.}
+ \item{maxit}{Maximum number of iterations for fitting the binary trait
+   model.} 
 }
 
 \details{

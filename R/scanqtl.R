@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-8, Hao Wu and Karl W. Broman
-# last modified Sep, 2008
+# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
+# last modified Jun, 2010
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@
 
 scanqtl <-
 function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
-         method=c("imp", "hk"),
-         incl.markers=FALSE, verbose=TRUE)
+         method=c("imp", "hk"), model=c("normal", "binary"),
+         incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
 {
   if(!any(class(cross) == "cross")) 
     stop("Input should have class \"cross\".")
@@ -62,6 +62,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     stop("nrow(covar) != no. individuals in cross.")
 
   method <- match.arg(method)
+  model <- match.arg(model)
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
@@ -300,10 +301,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     else
       qtl <- makeqtl(cross, chr=chr, pos=unlist(pos), what="prob")
       
-    result <- fitqtlengine(pheno, qtl, covar=covar,
-                           formula=formula, method=method, dropone=FALSE,
-                           get.ests=FALSE, run.checks=FALSE, cross.attr,
-                           sexpgm)
+    result <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
+                           formula=formula, method=method, model=model, dropone=FALSE,
+                           get.ests=FALSE, run.checks=FALSE, cross.attr=cross.attr,
+                           sexpgm=sexpgm, tol=tol, maxit=maxit)
     result <- result[[1]][1,4]
     names(result) <- "LOD"
     class(result) <- "scanqtl"
@@ -395,10 +396,10 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     # end of Karl's 8/23/05 addition
 
     # fit QTL, don't do drop one at a time
-    fit <- fitqtlengine(pheno, qtl=qtl.obj, covar=covar,
-                        formula=formula, method=method, dropone=FALSE,
+    fit <- fitqtlengine(pheno=pheno, qtl=qtl.obj, covar=covar,
+                        formula=formula, method=method, model=model, dropone=FALSE,
                         get.ests=FALSE, run.checks=FALSE,
-                        cross.attr, sexpgm)
+                        cross.attr=cross.attr, sexpgm=sexpgm, tol=tol, maxit=maxit)
   
     if(verbose && ((i-1) %% n.prnt) == 0)
         cat("    ", i,"/", n.loop, "\n")

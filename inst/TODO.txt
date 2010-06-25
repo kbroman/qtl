@@ -36,10 +36,6 @@ o scanone with method="hk": Major memory problems in the permutations
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
 
-o Analysis of binary traits by "hk" in scanone/two.
-
-o Implementation of binary traits in fitqtl, etc., with method="hk"
-
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
@@ -204,8 +200,6 @@ o Incorporate code from Brian Yandell, Fei Zou and Amy Jin on
 
 o Add appropriate functions to analyze advanced intercrosses (AILs)
   and advanced backcross (BCn). 
-
-o Analysis of binary traits by imputation
 
 o Allow phenotypes on multiple individuals (esp for recombinant inbred
   lines). 
