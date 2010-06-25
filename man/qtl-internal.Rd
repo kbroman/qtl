@@ -181,7 +181,7 @@ convertMWril(cross, parents, error.prob=0)
 countqtlterms(formula, ignore.covar=TRUE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
-discan(cross, pheno, method=c("em","mr"),
+discan(cross, pheno, method=c("em","hk","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
        verbose=FALSE, give.warnings=TRUE)
 dropfromqtlformula(formula, qtlnum)
