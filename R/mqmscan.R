@@ -96,11 +96,8 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 			geno <- cbind(geno,cross$geno[[i]]$data)
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
       if(min(cross$geno[[i]]$map) < 0){
-        cat("!!!!")
         newcmbase = c(newcmbase,abs(min(cross$geno[[i]]$map)))
-        cat(cross$geno[[i]]$map,"\n")
         cross$geno[[i]]$map <- cross$geno[[i]]$map+abs(min(cross$geno[[i]]$map))
-        cat(cross$geno[[i]]$map,"\n")
       }else{
         newcmbase = c(newcmbase,0)
       }
@@ -407,8 +404,14 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
   for(x in 1:n.chr){
     markers.on.chr <- which(qtl[,1]==x)
     if(newcmbase[x] !=0){
-    cat(qtl[markers.on.chr,2],"\n")
       qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]-newcmbase[x]
+      for(n in 1:length(rownames(qtl[markers.on.chr,]))){
+      name <- rownames(qtl[markers.on.chr,])[n]
+      if(!is.na(1&&grep(".loc",name,fixed=T))){
+        id <- which(name==rownames(qtl))
+        rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=T)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=T)[[1]][2])-newcmbase[x],sep="")
+      }
+      }
     }
   }
   
