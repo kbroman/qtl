@@ -442,7 +442,10 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
     }
   }
   //Rprintf("Starting Cleanup\n");
-  delMQMMarkerMatrix(markers,Nmark+1);
+  //[Danny]: The markers are already DELETED in analyseF2, So this should have always failed... 
+  //but in some way it doesn't. R and Memory managment, perhaps its best to use the c++ stdlibs features
+  //like vector<int> etc, (would mean again mayor recoding)
+  //delMQMMarkerMatrix(markers,Nmark+1);
   Free(f1genotype);
   Free(cofactor);
   Free(mapdistance);
