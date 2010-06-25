@@ -279,8 +279,8 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   }
 
   if(model=="binary") {
-    if(method=="imp" || method=="hk") {
-      if(n.perm > -2) warning("Methods imp and hk not available for binary model; using em")
+    if(method=="imp") {
+      if(n.perm > -2) warning("Method imp not available for binary model; using em")
       method <- "em"
     }
     return(discan(cross, pheno, method, addcovar, intcovar, maxit, tol, verbose, n.perm > -2))
