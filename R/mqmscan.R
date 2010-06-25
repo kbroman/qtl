@@ -90,11 +90,21 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		geno <- NULL
 		chr <- NULL
 		dist <- NULL
+    newcmbase <- NULL
 		out.qtl <- NULL	
 		for(i in 1:n.chr) {
 			geno <- cbind(geno,cross$geno[[i]]$data)
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
-			dist <- c(dist,cross$geno[[i]]$map)
+      if(min(cross$geno[[i]]$map) < 0){
+        cat("!!!!")
+        newcmbase = c(newcmbase,abs(min(cross$geno[[i]]$map)))
+        cat(cross$geno[[i]]$map,"\n")
+        cross$geno[[i]]$map <- cross$geno[[i]]$map+abs(min(cross$geno[[i]]$map))
+        cat(cross$geno[[i]]$map,"\n")
+      }else{
+        newcmbase = c(newcmbase,0)
+      }
+      dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(cofactor.significance <=0 || cofactor.significance >= 1){
 			stop("cofactor.significance must be between 0 and 1.\n")
@@ -351,8 +361,8 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		markers.on.chr <- which(qtl[,1]==x)
 		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
 		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
-		qtl <- qtl[-to.remove,]
-	}		
+    qtl <- qtl[-to.remove,]
+  }		
 	#Reset plotting and return the results
 	if(plot){
 		info.c <- qtl
@@ -394,6 +404,14 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     }
     class(qtl) <- c("scanone",class(qtl))   
   }
+  for(x in 1:n.chr){
+    markers.on.chr <- which(qtl[,1]==x)
+    if(newcmbase[x] !=0){
+    cat(qtl[markers.on.chr,2],"\n")
+      qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]-newcmbase[x]
+    }
+  }
+  
 	qtl
 	}else{
 		stop("Currently only F2, BC, and selfed RIL crosses can be analyzed by MQM.")
