@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-9, Karl W Broman
-# last modified May, 2009
+# copyright (c) 2005-2010, Karl W Broman
+# last modified Jun, 2010
 # first written Mar, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -291,9 +291,7 @@ function(e1, e2)
 
   e1$lod <- e1$lod - e2$lod
   if(e1x) {
-    if(is.null(e1$scanoneX) && is.null(e2$scanoneX))
-      e1$scanoneX <- NULL
-    else 
+    if(!is.null(e1$scanoneX) && !is.null(e2$scanoneX))
       e1$scanoneX <- e1$scanoneX - e2$scanoneX
   }
   
@@ -338,9 +336,7 @@ function(e1, e2)
 
   e1$lod <- e1$lod + e2$lod
   if(e1x) {
-    if(is.null(e1$scanoneX) && is.null(e2$scanoneX))
-      e1$scanoneX <- NULL
-    else 
+    if(!is.null(e1$scanoneX) && !is.null(e2$scanoneX))
       e1$scanoneX <- e1$scanoneX + e2$scanoneX
   }
   
