@@ -26,6 +26,8 @@ Major changes:
   be used in refineqtl, scanqtl, addqtl, addpair, addint, stepwiseqtl,
   and addcovarint. 
 
+  Implemented scanone for binary traits by Haley-Knott regression.
+
 Minor changes:
 
   Added 'offset' argument to est.map, which defines the starting position
