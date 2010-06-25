@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Analysis of binary traits by "hk" and "imp" in scanone/two.
-
 o Sometimes the rownames for the LOD profile from stepwiseqtl come out
   messed up (that is, they don't have the proper rownames).
 

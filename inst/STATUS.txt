@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/24/2010:
+Version 1.17, 6/25/2010:
 
 Major changes:
 
@@ -26,7 +26,8 @@ Major changes:
   be used in refineqtl, scanqtl, addqtl, addpair, addint, stepwiseqtl,
   and addcovarint. 
 
-  Implemented scanone for binary traits by Haley-Knott regression.
+  Implemented Haley-Knott regression for binary traits in scanone and
+  scantwo. 
 
 Minor changes:
 
