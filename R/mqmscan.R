@@ -96,8 +96,11 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 			geno <- cbind(geno,cross$geno[[i]]$data)
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
       if(min(cross$geno[[i]]$map) < 0){
-        newcmbase = c(newcmbase,abs(min(cross$geno[[i]]$map)))
-        cross$geno[[i]]$map <- cross$geno[[i]]$map+abs(min(cross$geno[[i]]$map))
+        newcmbase = c(newcmbase,min(cross$geno[[i]]$map))
+        cross$geno[[i]]$map <- cross$geno[[i]]$map-(min(cross$geno[[i]]$map))
+      }else if(min(cross$geno[[i]]$map) > 100){
+        newcmbase = c(newcmbase,min(cross$geno[[i]]$map))
+        cross$geno[[i]]$map <- cross$geno[[i]]$map-(min(cross$geno[[i]]$map))      
       }else{
         newcmbase = c(newcmbase,0)
       }
@@ -238,7 +241,8 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if(step.size < 1){
 			stop("step.size needs to be >= 1")
 		}
-		max.cm.on.map <- max(unlist(pull.map(cross)))
+		max.cm.on.map <- max(dist)
+    cat(dist,"\n")
 		if(step.max < max.cm.on.map){
 				stop("Markers outside of the mapping at ",max.cm.on.map," cM, please set parameter step.max larger than this value.")		
 		}
