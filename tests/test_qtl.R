@@ -60,12 +60,12 @@ hyper <- fill.geno(hyper)
 #Mess up the markers by shifting
 temp <- shiftmap(hyper, offset=10^7)
 out.temp <- mqmscan(temp,verb=TRUE)
-if(!(rownames(out.temp)[3]=="c1.loc10000010")) stop("MQM something wrong with positive shifts in location")
+if(!(rownames(out.temp)[3]=="D1Mit296")) stop("MQM something wrong with positive shifts in location")
 #Mess up the dataset by moving 1 marker infront of the chromosome
 hyper$geno[[1]]$map[1] <- -10
 res <- mqmscan(hyper,verbose=T)
 if(any(is.na(res[,3]))) stop("MQM failed to handle negative locations correctly")
-if(!(rownames(res)[2]=="c1.loc-5")) stop("MQM something wrong with negative locations")
+if(!(rownames(res)[2]=="c1.loc-15")) stop("MQM something wrong with negative locations")   #to -15 because off.end defaults to 10
 
 
 cat("Version information:\n")
