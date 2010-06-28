@@ -14,7 +14,7 @@ mqmscan(cross, cofactors=NULL, pheno.col = 1,
   window.size=25.0, step.size=5.0, step.min=-20.0, step.max=220,
   logtransform = FALSE, estimate.map = FALSE,
   plot=FALSE, verbose=FALSE, outputmarkers=TRUE,
-  multicore=TRUE, batchsize=10, n.clusters=1, test.normality=FALSE
+  multicore=TRUE, batchsize=10, n.clusters=1, test.normality=FALSE,off.end=10
   )
 }
 
@@ -87,6 +87,8 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   \item{n.clusters}{Number of child processes to split the job into.}
   \item{test.normality}{If TRUE, test whether the phenotype follows a
   normal distribution via \code{\link{mqmtestnormal}}.}
+  \item{off.end}{Distance (in cM) past the terminal markers on each
+   chromosome to which the genotype simulations will be carried.}  
 }
 
 %\details{
