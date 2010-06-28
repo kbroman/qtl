@@ -231,7 +231,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if((step.min+step.size) > step.max){
 			stop("step.max needs to be >= step.min + step.size")
 		}
-    cat("Step.min:",step.min," Step.max:",step.max,"\n")
+    #cat("Step.min:",step.min," Step.max:",step.max,"\n")
 		#if(step.min>0){
 		#	stop("step.min needs to be <= 0")
 		#}		
@@ -407,9 +407,9 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]+newcmbase[x]
       for(n in 1:nrow(qtl[markers.on.chr,])){
         name <- rownames(qtl[markers.on.chr,])[n]
-        if(!is.na(name) && grepl(".loc",name,fixed=T)){
+        if(!is.na(name) && grepl(".loc",name,fixed=TRUE)){
           id <- which(name==rownames(qtl))
-          rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=T)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=T)[[1]][2])+newcmbase[x],sep="")
+          rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=TRUE)[[1]][2])+newcmbase[x],sep="")
         }
       }
     }
