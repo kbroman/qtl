@@ -37,7 +37,7 @@
 mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,
                     step.min=-20.0,step.max=220,logtransform = FALSE,
-					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,test.normality=FALSE){
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,test.normality=FALSE,off.end=10){
   
   start <- proc.time()
   model <- match.arg(model)
@@ -91,19 +91,13 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		chr <- NULL
 		dist <- NULL
     newcmbase <- NULL
-		out.qtl <- NULL	
+		out.qtl <- NULL
 		for(i in 1:n.chr) {
+      #We always shift the marker positions to 0
 			geno <- cbind(geno,cross$geno[[i]]$data)
 			chr <- c(chr,rep(i,dim(cross$geno[[i]]$data)[2]))
-      if(min(cross$geno[[i]]$map) < 0){
-        newcmbase = c(newcmbase,min(cross$geno[[i]]$map))
-        cross$geno[[i]]$map <- cross$geno[[i]]$map-(min(cross$geno[[i]]$map))
-      }else if(min(cross$geno[[i]]$map) > 100){
-        newcmbase = c(newcmbase,min(cross$geno[[i]]$map))
-        cross$geno[[i]]$map <- cross$geno[[i]]$map-(min(cross$geno[[i]]$map))      
-      }else{
-        newcmbase = c(newcmbase,0)
-      }
+      newcmbase = c(newcmbase,min(cross$geno[[i]]$map))
+      cross$geno[[i]]$map <- cross$geno[[i]]$map-(min(cross$geno[[i]]$map))
       dist <- c(dist,cross$geno[[i]]$map)
 		}
 		if(cofactor.significance <=0 || cofactor.significance >= 1){
@@ -231,20 +225,23 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 				}
 			}
 		}
-
+    step.min = -off.end;
+    step.max = max(dist)+off.end;
+    step.max <- as.integer(ceiling((step.max+step.size)/step.size)*step.size)
 		if((step.min+step.size) > step.max){
 			stop("step.max needs to be >= step.min + step.size")
 		}
-		if(step.min>0){
-			stop("step.min needs to be <= 0")
-		}		
+    cat("Step.min:",step.min," Step.max:",step.max,"\n")
+		#if(step.min>0){
+		#	stop("step.min needs to be <= 0")
+		#}		
 		if(step.size < 1){
 			stop("step.size needs to be >= 1")
 		}
-		max.cm.on.map <- max(dist)
-		if(step.max < max.cm.on.map){
-				stop("Markers outside of the mapping at ",max.cm.on.map," cM, please set parameter step.max larger than this value.")		
-		}
+		#max.cm.on.map <- max(dist)
+		#if(step.max < max.cm.on.map){
+		#		stop("Markers outside of the mapping at ",max.cm.on.map," cM, please set parameter step.max larger than this value.")		
+		#}
 		qtlAchromo <- length(seq(step.min,step.max,step.size))
 		if(verbose) cat("INFO: Number of locations per chromosome: ",qtlAchromo, "\n")
 		end.1 <- proc.time()
@@ -359,8 +356,8 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		to.remove <- NULL
 		chr.length <- max(cross$geno[[x]]$map)
 		markers.on.chr <- which(qtl[,1]==x)
-		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+step.size)]
-		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < 0)])
+		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+step.size)]
+		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
     qtl <- qtl[-to.remove,]
   }		
 	#Reset plotting and return the results
