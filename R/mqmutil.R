@@ -188,12 +188,19 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
 			colnames(newres) <- colnames(intervalresult)
 			}
 		}
+    while(intervalmaploc < nrow(intervalresult) && intervalresult[intervalmaploc,1] <= chr ){
+      if((class(map[[chr]])=="A")){
+      newres <- rbind(newres,intervalresult[intervalmaploc,])
+			n <- c(n,rownames(intervalresult)[intervalmaploc])
+			}
+      intervalmaploc <- intervalmaploc+1
+		}
 	}
-	if(intervalmaploc <= nrow(intervalresult)){
-		newres <- rbind(newres,intervalresult[intervalmaploc,])
-		n <- c(n,rownames(intervalresult)[intervalmaploc])
-		intervalmaploc <- intervalmaploc+1		
-	}
+#	if(intervalmaploc <= nrow(intervalresult)){
+	#	newres <- rbind(newres,intervalresult[intervalmaploc,])
+		#n <- c(n,rownames(intervalresult)[intervalmaploc])
+#		intervalmaploc <- intervalmaploc+1		
+#	}
 	rownames(newres) <- n
 	newres <- estimatemarkerlod(newres)
 	class(newres) <- c("scanone",class(newres))
