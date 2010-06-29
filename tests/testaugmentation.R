@@ -19,7 +19,7 @@ cat("MQM=",version$MQM)
 testaugmentation <- function(cross, ...){
   crossML <- mqmaugment(cross, ...)
 
-  res1 <- mqmscan(crossML,logtransform=TRUE,off.end=0)
+  res1 <- mqmscan(crossML,logtransform=TRUE)
   list(res1)
 }
 
