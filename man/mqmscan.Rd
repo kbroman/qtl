@@ -11,10 +11,10 @@
 mqmscan(cross, cofactors=NULL, pheno.col = 1, 
   model=c("additive","dominance"), forceML=FALSE,
   cofactor.significance=0.02, em.iter=1000, 
-  window.size=25.0, step.size=5.0, step.min=-20.0, step.max=220,
+  window.size=25.0, step.size=5.0,
   logtransform = FALSE, estimate.map = FALSE,
   plot=FALSE, verbose=FALSE, outputmarkers=TRUE,
-  multicore=TRUE, batchsize=10, n.clusters=1, test.normality=FALSE,off.end=10
+  multicore=TRUE, batchsize=10, n.clusters=1, test.normality=FALSE,off.end=0
   )
 }
 
@@ -61,15 +61,9 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
     step.size parameter increases the number of output points, 
     this creates a smoother QTL profile
   }
-  \item{step.min}{ Begin this many cM before the chromosome, by default we 
-    start at the genetic beginning (0cM) 
-  }
-  \item{step.max}{ Maximum mapping length in cM, by default set 
-    to the maximum genetic length found in the crossobject. However
-    when using the restimate.map parameter it could be needed
-    to increase this parameter to accomodate for the larger map 
-    internally estimated.
-  }
+  \item{off.end}{Distance (in cM) past the terminal markers on each
+    chromosome to which the genotype simulations will be carried.
+  }  
   \item{logtransform}{ Indicate if the algorithm should do a log 
     transformation on the trait data in the pheno.col
   }    
@@ -79,16 +73,15 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
     This is because no map is returned into the crossobject. 
     The old map remains in the cross object.
     }
-  \item{plot}{ plot the results (default TRUE)}
+  \item{plot}{ plot the results (default FALSE)}
   \item{verbose}{ verbose output}
   \item{outputmarkers}{Needs to be explained}
   \item{multicore}{Use multicore (if available)}
   \item{batchsize}{Needs to be explained}
   \item{n.clusters}{Number of child processes to split the job into.}
   \item{test.normality}{If TRUE, test whether the phenotype follows a
-  normal distribution via \code{\link{mqmtestnormal}}.}
-  \item{off.end}{Distance (in cM) past the terminal markers on each
-   chromosome to which the genotype simulations will be carried.}  
+    normal distribution via \code{\link{mqmtestnormal}}.
+  }
 }
 
 %\details{
