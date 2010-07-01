@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/29/2010:
+Version 1.17, 7/1/2010:
 
 Major changes:
 
@@ -61,6 +61,10 @@ Minor changes:
 
   Revised scanone and scantwo to trap error if perm.strata is not of
   the correct length. 
+
+  Added argument 'ind.noqtl' to scanone, which indicates individuals
+  were are assigned no QTL effect.  This is for rare (largely
+  internal) use for the case that one is combining multiple crosses.  
 
 
 Version 1.16, 5/23/2010:
