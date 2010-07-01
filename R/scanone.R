@@ -3,7 +3,7 @@
 # scanone.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Jun, 2010
+# last modified Jul, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
          use=c("all.obs", "complete.obs"), upper=FALSE,
          ties.random=FALSE, start=NULL, maxit=4000, tol=1e-4,
          n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose, batchsize=250,
-         n.cluster=1)
+         n.cluster=1, ind.noqtl)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   model <- match.arg(model)
@@ -77,6 +77,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     if(length(perm.strata) != nind(cross))
       stop("perm.strata, if given, must have length = nind(cross) [", nind(cross), "]")
   }
+
+  # individuals with no QTL effect
+  if(missing(ind.noqtl)) ind.noqtl <- NULL
+  else if(!is.logical(ind.noqtl) || length(ind.noqtl) != n.ind(cross)) 
+    stop("ind.noqtl be a logical vector of length n.ind (", n.ind(cross), ")")
 
   # to store the degrees of freedom
   dfA <- -1
@@ -124,7 +129,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     # If use="complete.obs", drop individuals with any missing phenotypes
     if(use=="complete.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, TRUE)
+                         perm.strata, ind.noqtl, TRUE)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -132,6 +137,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.addcovar <- temp[[5]]
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
+      ind.noqtl <- temp[[8]]
     }
   }
 
@@ -141,7 +147,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     # drop individuals with missing covariates
     cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
     temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,
-                         perm.strata, TRUE)
+                         perm.strata, ind.noqtl, TRUE)
     cross <- temp[[1]]
     pheno <- cross$pheno[,pheno.col, drop=FALSE]
     addcovar <- temp[[3]]
@@ -149,6 +155,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     n.addcovar <- temp[[5]]
     n.intcovar <- temp[[6]]
     perm.strata <- temp[[7]]
+    ind.noqtl <- temp[[8]]
 
     # determine the batches (defined by the pattern of missing data)
     patterns <- apply(pheno, 2, function(a) paste(!is.na(a), collapse=":"))
@@ -230,7 +237,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(n.perm < 0) { # in the midst of permutations
     if(use=="all.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, n.perm==-1)
+                         perm.strata, ind.noqtl, n.perm==-1)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -238,6 +245,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.addcovar <- temp[[5]]
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
+      ind.noqtl <- temp[[8]]
     }
     else {
       pheno <- as.matrix(cross$pheno[,pheno.col])
