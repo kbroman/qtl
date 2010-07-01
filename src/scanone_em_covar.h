@@ -2,9 +2,9 @@
  * 
  * scanone_em_covar.h
  *
- * copyright (c) 2001-4, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Nov, 2004
+ * last modified Jul, 2010
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -69,13 +69,17 @@
  *
  * verbose        If 1, print out log likelihood at each iteration
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_em_covar(int n_ind, int n_pos, int n_gen, 
 		      double ***Genoprob, double **Addcov, int n_addcov,
 		      double **Intcov, int n_intcov, double *pheno, 
 		      double *weights,
-		      double *result, int maxit, double tol, int verbose);
+		      double *result, int maxit, double tol, int verbose,
+		      int *ind_noqtl);
 
 /**********************************************************************
  * 
@@ -108,13 +112,17 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
  *
  * error_flag  Will be set to 1 if the X'X matrix is singular 
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov, 
 		    double **Intcov, int n_intcov, double *pheno, 
 		    double *weights,
 		    double **wts, double *param, double *work1, 
-		    double *work2, int *error_flag);
+		    double *work2, int *error_flag,
+		    int *ind_noqtl);
 
 /**********************************************************************
  * 
@@ -149,12 +157,16 @@ void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov,
  *          This is done so that by taking rescale=0, we can easily
  *          calculate the log likelihood 
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void estep_em_covar(int n_ind, int n_gen, int pos, double ***Genoprob,
 		    double **Addcov, int n_addcov, double **Intcov,
 		    int n_intcov, double *pheno, double *weights,
-		    double **wts, double *param, int rescale);
+		    double **wts, double *param, int rescale,
+		    int *ind_noqtl);
 
 /* end of scanone_em_covar.h */
 
