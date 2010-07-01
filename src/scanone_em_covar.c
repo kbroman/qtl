@@ -339,7 +339,7 @@ void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov,
     for(j=0, k=n_gen; j<n_addcov; j++, k++) {
       for(s=j, sk=k; s<n_addcov; s++, sk++)  /* add x add */
 	work1[k+nparm1*sk] += (Addcov[j][i]*Addcov[s][i]);
-      if(ind_noqtl[i]) {
+      if(ind_noqtl[i]) { /* QTL x add */
 	work1[nparm1*k] += (Addcov[j][i]*wts[0][i]*weights[i]);
       }
       else {
@@ -451,6 +451,7 @@ void estep_em_covar(int n_ind, int n_gen, int pos, double ***Genoprob,
     /* QTL effect + addcov effect*/
     if(ind_noqtl[i]) {
       wts[0][i] = param[0]*weights[i]+temp;
+      for(j=1; j<n_gen; j++) wts[j][i] = temp;
     }
     else {
       for(j=0; j<n_gen; j++) wts[j][i] = param[j]*weights[i]+temp;

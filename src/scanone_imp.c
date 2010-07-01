@@ -447,10 +447,8 @@ void altRss1(double *tmppheno, double *pheno, int nphe, int n_ind, int n_gen,
   for(i=0; i<n_ind; i++) {
     /* QTL genotypes */
     if(ind_noqtl[i] && Draws[i] == 1) x[i] = weights[i];
-    else {
-      for(s=0; s<n_gen; s++) 
-	if(Draws[i] == s+1) x[i+s*n_ind] = weights[i];
-    }
+    else 
+      x[i+(Draws[i]-1)*n_ind] = weights[i];
 
     /* Additive covariates */
     for(s=0, s2=n_gen; s<n_addcov; s++, s2++)
