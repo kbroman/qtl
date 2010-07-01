@@ -171,7 +171,7 @@ calc.pairprob(cross, step=0, off.end=0, error.prob=0.0001,
               assumeCondIndep=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
 charround(x, digits=1)
-checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
+checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
 checkformula(formula, qtl.name, covar.name)
 checkStepwiseqtlStart(qtl, formula, covar=NULL)
 clean(object, \dots)
