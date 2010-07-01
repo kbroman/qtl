@@ -2,12 +2,12 @@
  * 
  * scanone_imp.c
  *
- * copyright (c) 2001-6, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2010, Karl W Broman and Hao Wu
  *
  * This file is written by Hao Wu 
  * with slight modifications by Karl Broman.
  *
- * last modified Dec, 2006
+ * last modified Jul, 2010
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ void R_scanone_imp(int *n_ind, int *n_pos, int *n_gen, int *n_draws,
 		   int *draws, double *addcov, int *n_addcov, 
 		   double *intcov, int *n_intcov, double *pheno, 
 		   int *nphe, double *weights,
-		   double *result)
+		   double *result, int *ind_noqtl)
 {
   /* reorganize draws */
   int ***Draws;
@@ -73,7 +73,7 @@ void R_scanone_imp(int *n_ind, int *n_pos, int *n_gen, int *n_draws,
       
   scanone_imp(*n_ind, *n_pos, *n_gen, *n_draws, Draws, 
 	      Addcov, *n_addcov, Intcov, *n_intcov, pheno, *nphe, weights,
-	      Result);
+	      Result, ind_noqtl);
 }
 
 
@@ -112,13 +112,16 @@ void R_scanone_imp(int *n_ind, int *n_pos, int *n_gen, int *n_draws,
  * Result       Matrix of size [n_pos x nphe]; upon return, contains
  *              the "LPD" (log posterior distribution of QTL location).
  * 
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws, 
 		 int ***Draws, double **Addcov, int n_addcov, 
 		 double **Intcov, int n_intcov, double *pheno, 
 		 int nphe, double *weights,
-		 double **Result)
+		 double **Result, int *ind_noqtl)
 {
 
   /* create local variables */
@@ -216,7 +219,8 @@ void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws,
       given marker and imputatin number */
       memcpy(tmppheno, pheno, n_ind*nphe*sizeof(double));
       altRss1(tmppheno, pheno, nphe, n_ind, n_gen, Draws[j][i], Addcov,
-        n_addcov, Intcov, n_intcov, dwork_full, multivar, lrss1[j], weights);
+	      n_addcov, Intcov, n_intcov, dwork_full, multivar, lrss1[j], weights,
+	      ind_noqtl);
 
       /* calculate the LOD score for this marker in this imputation */
       for(k=0; k<nrss; k++) 
@@ -405,7 +409,7 @@ void nullRss(double *tmppheno, double *pheno, int nphe, int n_ind,
 void altRss1(double *tmppheno, double *pheno, int nphe, int n_ind, int n_gen,
 	     int *Draws, double **Addcov, int n_addcov, double **Intcov,
 	     int n_intcov, double *dwork, int multivar, double *rss, 
-	     double *weights)
+	     double *weights, int *ind_noqtl)
 {
   /* create local variables */
   int i, j, s, s2, ncolx, lwork, rank, info, nrss, ind_idx;
@@ -442,9 +446,10 @@ void altRss1(double *tmppheno, double *pheno, int nphe, int n_ind, int n_gen,
   /* fill up design matrix */
   for(i=0; i<n_ind; i++) {
     /* QTL genotypes */
-    for(s=0; s<n_gen; s++) {
-      if(Draws[i] == s+1) x[i+s*n_ind] = weights[i];
-      else x[i+s*n_ind] = 0.0;
+    if(ind_noqtl[i] && Draws[i] == 1) x[i] = weights[i];
+    else {
+      for(s=0; s<n_gen; s++) 
+	if(Draws[i] == s+1) x[i+s*n_ind] = weights[i];
     }
 
     /* Additive covariates */
@@ -452,11 +457,10 @@ void altRss1(double *tmppheno, double *pheno, int nphe, int n_ind, int n_gen,
       x[i+s2*n_ind] = Addcov[s][i];
 
     /* Interactive covariates */
-    for(s=0; s<n_intcov; s++) {
-      for(j=0; j<n_gen-1; j++, s2++) {
-        if(Draws[i] == j+1) x[i+n_ind*s2] = Intcov[s][i];
-        else x[i+n_ind*s2] = 0.0;
-      }
+    if(!ind_noqtl[i]) {
+      for(s=0; s<n_intcov; s++) 
+	for(j=0; j<n_gen-1; j++, s2++) 
+	  if(Draws[i] == j+1) x[i+n_ind*s2] = Intcov[s][i];
     }
 
   } /* end loop over individuals */

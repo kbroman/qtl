@@ -79,9 +79,20 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   }
 
   # individuals with no QTL effect
-  if(missing(ind.noqtl)) ind.noqtl <- NULL
-  else if(!is.logical(ind.noqtl) || length(ind.noqtl) != n.ind(cross)) 
-    stop("ind.noqtl be a logical vector of length n.ind (", n.ind(cross), ")")
+  if(missing(ind.noqtl)) ind.noqtl <- rep(FALSE, nind(cross))
+  else {
+    if(method %in% c("mr", "mr-imp", "mr-argmax","ehk") ||
+       model %in% c("2part", "np")) {
+      ind.noqtl <- rep(FALSE, nind(cross))
+      warning("ind.noqtl ignored for model=", model, ", method=", method) 
+    }
+    else if(is.null(addcovar)) {
+      ind.noqtl <- rep(FALSE, nind(cross))
+      warning("ind.noqtl ignored when no additive covariates")
+    }
+    else if(!is.logical(ind.noqtl) || length(ind.noqtl) != nind(cross)) 
+      stop("ind.noqtl be a logical vector of length n.ind (", nind(cross), ")")
+  }
 
   # to store the degrees of freedom
   dfA <- -1
@@ -513,6 +524,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                       as.integer(length(thiscol)), # number of phenotypes 
                       as.double(weights),
                       result=as.double(rep(0,length(thiscol)*n.pos)),
+                      as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                       PACKAGE="qtl")
           firstcol <- firstcol + batchsize
           if(is.null(z)) {
@@ -537,6 +549,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                 as.integer(n.phe), # number of phenotypes 
                 as.double(weights),
                 result=as.double(rep(0,n.phe*n.pos)),
+                as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                 PACKAGE="qtl")
       }
     }
@@ -561,6 +574,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                       as.integer(length(thiscol)), # number of phenotypes 
                       as.double(weights),
                       result=as.double(rep(0,length(thiscol)*n.pos)),
+                      as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                       PACKAGE="qtl")
           firstcol <- firstcol + batchsize
           if(is.null(z)) {
@@ -584,6 +598,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                 as.integer(n.phe), # number of phenotypes 
                 as.double(weights),
                 result=as.double(rep(0,n.phe*n.pos)),
+                as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                 PACKAGE="qtl")
       }
     }
@@ -623,6 +638,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
               as.integer(maxit),
               as.double(tol),
               as.integer(0), # debugging verbose off 
+              as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
               PACKAGE="qtl")
 
     else if(model=="np")  # non-parametric interval mapping
