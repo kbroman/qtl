@@ -2,7 +2,7 @@
 # phyloqtl_scan.R
 #
 # copyright (c) 2009-2010, Karl W Broman
-# last modified Feb, 2010
+# last modified Jul, 2010
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -26,9 +26,8 @@
 
 scanPhyloQTL <-
 function(crosses, partitions, chr, pheno.col=1,
-         model=c("normal","binary"),
-         method=c("em","imp","hk","ehk","mr", "mr-imp","mr-argmax"),
-         ties.random=FALSE, start=NULL, maxit=4000, tol=0.0001)
+         model=c("normal","binary"), method=c("em","imp","hk"),
+         maxit=4000, tol=0.0001)
 {  
   if(missing(chr)) chr <- names(crosses[[1]]$geno)
   model <- match.arg(model)
@@ -88,8 +87,7 @@ function(crosses, partitions, chr, pheno.col=1,
 
     # do the scan
     out[[i]] <- scanone(xx, chr=chr, pheno.col=pheno.col, addcovar=addcovar,
-                        model=model, method=method, ties.random=ties.random,
-                        start=start, maxit=maxit, tol=tol)
+                        model=model, method=method, maxit=maxit, tol=tol)
   }
 
   # just one partition
@@ -106,8 +104,10 @@ function(crosses, partitions, chr, pheno.col=1,
 
 
 max.scanPhyloQTL <-
-function(object, chr, na.rm=TRUE, ...)
+function(object, format=c("lod", "postprob"), chr, na.rm=TRUE, ...)
 {
+  format <- match.arg(format)
+
   if(!missing(chr))
     object <- subset(object, chr=chr)
 
@@ -131,15 +131,24 @@ function(object, chr, na.rm=TRUE, ...)
   names(thelod) <- names(themax)[wh]
   attr(mx, "LOD") <- thelod
 
-  mx <- cbind(mx, inferred=colnames(object)[wh+2], lod=thelod)
+  if(format=="lod") 
+    mx <- cbind(mx, inferred=colnames(object)[wh+2], loddif=thelod)
+  else {
+    mxmx <- apply(mx[,-(1:2)], 1, max)
+    temp <- mx[,-(1:2)]
+    mx[,-(1:2)] <- t(apply(temp, 1, function(a) 10^a/sum(10^a)))
+    mx <- cbind(mx, inferred=colnames(object)[wh+2], maxlod=mxmx)
+  }
+
   class(mx) <- c("summary.scanPhyloQTL", "summary.scanone", "data.frame")
 
   mx
 }
 
 summary.scanPhyloQTL <-
-function(object, na.rm=TRUE)
+function(object, format=c("lod", "postprob"), threshold, na.rm=TRUE) 
 {
+  format <- match.arg(format)
   themax <- apply(object[,-(1:2)], 2, tapply, object[,1], max, na.rm=na.rm)
   wh <- apply(themax, 1, function(a) { a <- which(a==max(a)); if(length(a) > 1) a <- sample(a, 1); a })
   whpos <- rep(NA, length(wh))
@@ -151,11 +160,25 @@ function(object, na.rm=TRUE)
     whpos[i] <- temp[temp2,2]
     names(whpos)[i] <- rownames(temp)[temp2]
   }
-  out <- data.frame(chr=unique(object[,1]), pos=whpos, themax,
-                    inferred=colnames(object)[wh+2],
-                    lod=apply(themax, 1, function(a) -diff(sort(a, decreasing=TRUE)[1:2])))
-  class(out) <- c("summary.scanPhyloQTL", "summary.scanone", "data.frame")
+  if(format=="lod") {
+    out <- data.frame(chr=unique(object[,1]), pos=whpos, themax,
+                      inferred=colnames(object)[wh+2],
+                      loddif=apply(themax, 1, function(a) -diff(sort(a, decreasing=TRUE)[1:2])))
+  }
+  else {
+    out <- data.frame(chr=unique(object[,1]), pos=whpos, themax,
+                      inferred=colnames(object)[wh+2],
+                      maxlod=apply(themax, 1, max))
+    temp <- out[,-c(1:2, ncol(out)-0:1)]
+    out[,-c(1:2, ncol(out)-0:1)] <- t(apply(temp, 1, function(a) 10^a/sum(10^a)))
+  }
+
   rownames(out) <- names(whpos)
+
+  if(!missing(threshold)) 
+    out <- out[out[ncol(out)] >= threshold,,drop=FALSE]
+
+  class(out) <- c("summary.scanPhyloQTL", "summary.scanone", "data.frame")
   out
 }
 
