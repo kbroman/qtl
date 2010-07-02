@@ -183,7 +183,7 @@ create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
 discan(cross, pheno, method=c("em","hk","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
-       verbose=FALSE, give.warnings=TRUE)
+       verbose=FALSE, give.warnings=TRUE, ind.noqtl)
 dropfromqtlformula(formula, qtlnum)
 dropXcol(type=c("f2","bc"), sexpgm, cross.attr)
 effectplot.getmark(cross, mname)

@@ -2,9 +2,9 @@
  * 
  * discan_covar.h
  *
- * copyright (c) 2004, Karl W Broman
+ * copyright (c) 2004-2010, Karl W Broman
  *
- * last modified Dec, 2004
+ * last modified Jul, 2010
  * first written Dec, 2004
  *
  *     This program is free software; you can redistribute it and/or
@@ -70,19 +70,22 @@
  *
  * verbose      If 1, print out log likelihood at each iteration
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void discan_covar(int n_ind, int n_pos, int n_gen, 
 		  double ***Genoprob, double **Addcov, int n_addcov,
 		  double **Intcov, int n_intcov, int *pheno, 
 		  double *start, double *result, int maxit, double tol, 
-		  int verbose);
+		  int verbose, int *ind_noqtl);
 
 void R_discan_covar(int *n_ind, int *n_pos, int *n_gen, 
 		    double *genoprob, double *addcov, int *n_addcov,
 		    double *intcov, int *n_intcov, int *pheno, 
 		    double *start, double *result, int *maxit, double *tol, 
-		    int *verbose);
+		    int *verbose, int *ind_noqtl);
 
 /**********************************************************************
  * 
@@ -93,7 +96,8 @@ void R_discan_covar(int *n_ind, int *n_pos, int *n_gen,
 double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
 		       double ***Genoprob, double **Addcov, int n_addcov,
 		       double **Intcov, int n_intcov, int *pheno, 
-		       double *start, int maxit, double tol, int verbose);
+		       double *start, int maxit, double tol, int verbose,
+		       int *ind_noqtl);
 
 
 /**********************************************************************
@@ -105,7 +109,8 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
 double discan_covar_loglik(int n_ind, int pos, int n_gen, int n_par,
 			   double *par, 
 			   double ***Genoprob, double **Addcov, int n_addcov,
-			   double **Intcov, int n_intcov, int *pheno);
+			   double **Intcov, int n_intcov, int *pheno,
+			   int *ind_noqtl);
 
 /* end of discan_covar.h */
 

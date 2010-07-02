@@ -302,7 +302,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       if(n.perm > -2) warning("Method imp not available for binary model; using em")
       method <- "em"
     }
-    return(discan(cross, pheno, method, addcovar, intcovar, maxit, tol, verbose, n.perm > -2))
+    return(discan(cross, pheno, method, addcovar, intcovar, maxit, tol, verbose, n.perm > -2, ind.noqtl))
   }
   else if(model=="2part") {
     if((n.addcovar > 0 || n.intcovar > 0) && n.perm > -2)
