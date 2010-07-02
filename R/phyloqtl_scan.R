@@ -150,13 +150,13 @@ function(object, format=c("lod", "postprob"), threshold, ...)
 {
   format <- match.arg(format)
 
-  themax <- apply(object[,-(1:2)], 2, tapply, object[,1], max, na.rm=na.rm)
+  themax <- apply(object[,-(1:2)], 2, tapply, object[,1], max, na.rm=TRUE)
   wh <- apply(themax, 1, function(a) { a <- which(a==max(a)); if(length(a) > 1) a <- sample(a, 1); a })
   whpos <- rep(NA, length(wh))
   names(whpos) <- unique(object[,1])
   for(i in seq(along=whpos)) {
     temp <- object[object[,1]==names(whpos)[i],,drop=FALSE]
-    temp2 <- which(temp[,wh[i]+2]==max(temp[,wh[i]+2],na.rm=na.rm))
+    temp2 <- which(temp[,wh[i]+2]==max(temp[,wh[i]+2],na.rm=TRUE))
     if(length(temp2) > 1) temp2 <- sample(temp2, 1)
     whpos[i] <- temp[temp2,2]
     names(whpos)[i] <- rownames(temp)[temp2]
