@@ -3,7 +3,7 @@
 # discan.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Jun, 2010
+# last modified Jul, 2010
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 discan <-
 function(cross, pheno, method=c("em","hk","mr"),
          addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
-         verbose=FALSE, give.warnings=TRUE)
+         verbose=FALSE, give.warnings=TRUE, ind.noqtl)
 {
   method <- match.arg(method)
 
@@ -48,6 +48,24 @@ function(cross, pheno, method=c("em","hk","mr"),
   # to store the degrees of freedom
   dfA <- -1
   dfX <- parXa <- -1
+
+  # individuals with no QTL effect
+  if(missing(ind.noqtl)) ind.noqtl <- rep(FALSE, nind(cross))
+  else {
+    if(!is.logical(ind.noqtl) || length(ind.noqtl) != nind(cross)) 
+      stop("ind.noqtl be a logical vector of length n.ind (", nind(cross), ")")
+
+    if(sum(ind.noqtl) > 1) {
+      if(method == "mr") {
+        ind.noqtl <- rep(FALSE, nind(cross))
+        warning("ind.noqtl ignored for method=", method, ", model=binary") 
+      }
+      else if(is.null(addcovar)) {
+        ind.noqtl <- rep(FALSE, nind(cross))
+        warning("ind.noqtl ignored when no additive covariates")
+      }
+    }
+  }
 
   if(method=="mr" && n.addcovar+n.intcovar>0)  {
     if(give.warnings) warning("Covariates ignored with method=\"mr\"; use \"em\" instead")
@@ -180,6 +198,7 @@ function(cross, pheno, method=c("em","hk","mr"),
                 as.double(tol),
                 as.integer(maxit),
                 as.integer(verbose),
+                as.integer(ind.noqtl),
                 PACKAGE="qtl")
       }
       else if(n.ac + n.ic > 0) {
@@ -205,6 +224,7 @@ function(cross, pheno, method=c("em","hk","mr"),
                 as.integer(maxit),
                 as.double(tol),
                 as.integer(verbose),
+                as.integer(ind.noqtl),
                 PACKAGE="qtl")
       }
       else {
