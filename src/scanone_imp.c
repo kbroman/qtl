@@ -446,8 +446,7 @@ void altRss1(double *tmppheno, double *pheno, int nphe, int n_ind, int n_gen,
   /* fill up design matrix */
   for(i=0; i<n_ind; i++) {
     /* QTL genotypes */
-    if(ind_noqtl[i] && Draws[i] == 1) x[i] = weights[i];
-    else 
+    if(!ind_noqtl[i])
       x[i+(Draws[i]-1)*n_ind] = weights[i];
 
     /* Additive covariates */
