@@ -104,7 +104,7 @@ function(crosses, partitions, chr, pheno.col=1,
 
 
 max.scanPhyloQTL <-
-function(object, format=c("lod", "postprob"), chr, na.rm=TRUE, ...)
+function(object, chr, format=c("lod", "postprob"), ...)
 {
   format <- match.arg(format)
 
@@ -146,9 +146,10 @@ function(object, format=c("lod", "postprob"), chr, na.rm=TRUE, ...)
 }
 
 summary.scanPhyloQTL <-
-function(object, format=c("lod", "postprob"), threshold, na.rm=TRUE) 
+function(object, format=c("lod", "postprob"), threshold, ...)
 {
   format <- match.arg(format)
+
   themax <- apply(object[,-(1:2)], 2, tapply, object[,1], max, na.rm=na.rm)
   wh <- apply(themax, 1, function(a) { a <- which(a==max(a)); if(length(a) > 1) a <- sample(a, 1); a })
   whpos <- rep(NA, length(wh))
