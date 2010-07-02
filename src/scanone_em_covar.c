@@ -309,10 +309,7 @@ void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov,
   /* calculate {E(X)}' y */
   for(j=0; j<nparm1; j++) work2[j] = 0.0;
   for(i=0; i<n_ind; i++) {
-    if(ind_noqtl[i]) {
-      work2[0] += (wts[0][i]*pheno[i]*weights[i]);
-    }
-    else {
+    if(!ind_noqtl[i]) {
       for(j=0; j<n_gen; j++) /* QTL effects */
 	work2[j] += (wts[j][i]*pheno[i]*weights[i]);
     }
@@ -329,21 +326,15 @@ void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov,
   /* calculate E{X'X}; only the upper right triangle is needed */
   for(j=0; j<nparm1*nparm1; j++) work1[j] = 0.0;
   for(i=0; i<n_ind; i++) {
-    if(ind_noqtl[i]) {
-	work1[0] += wts[0][i]*weights[i]*weights[i];
-    }
-    else {
+    if(!ind_noqtl[i]) {
       for(j=0; j<n_gen; j++) /* QTLxQTL */
 	work1[j+nparm1*j] += wts[j][i]*weights[i]*weights[i];
     }
     for(j=0, k=n_gen; j<n_addcov; j++, k++) {
       for(s=j, sk=k; s<n_addcov; s++, sk++)  /* add x add */
 	work1[k+nparm1*sk] += (Addcov[j][i]*Addcov[s][i]);
-      if(ind_noqtl[i]) { /* QTL x add */
-	work1[nparm1*k] += (Addcov[j][i]*wts[0][i]*weights[i]);
-      }
-      else {
-	for(s=0; s<n_gen; s++) /* QTL x add */
+      if(!ind_noqtl[i]) { /* QTL x add */
+	for(s=0; s<n_gen; s++) 
 	  work1[s+nparm1*k] += (Addcov[j][i]*wts[s][i]*weights[i]);
       }
     }
@@ -450,8 +441,7 @@ void estep_em_covar(int n_ind, int n_gen, int pos, double ***Genoprob,
 
     /* QTL effect + addcov effect*/
     if(ind_noqtl[i]) {
-      wts[0][i] = param[0]*weights[i]+temp;
-      for(j=1; j<n_gen; j++) wts[j][i] = temp;
+      for(j=0; j<n_gen; j++) wts[j][i] = temp;
     }
     else {
       for(j=0; j<n_gen; j++) wts[j][i] = param[j]*weights[i]+temp;
