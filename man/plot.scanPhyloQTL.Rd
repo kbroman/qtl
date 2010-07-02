@@ -11,7 +11,7 @@
 
 \usage{
 \method{plot}{scanPhyloQTL}(x, chr, incl.markers=TRUE,
-     col, xlim, ylim, lwd=2, gap=25, mtick=c("link", "triangle"),
+     col, xlim, ylim, lwd=2, gap=25, mtick=c("line", "triangle"),
      show.marker.names=FALSE, alternate.chrid=FALSE, legend=TRUE, \dots)
 }			    
 
@@ -36,6 +36,7 @@
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
+  \item{legend}{Indicates whether to include a legend in the plot.}
   \item{\dots}{Passed to the function \code{\link{plot.scanone}} when it
     is called.}
 }

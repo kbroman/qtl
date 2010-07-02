@@ -11,7 +11,7 @@
 
 \usage{
 scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
-             model=c("normal", "binary", method=c("em", "imp", "hk"),
+             model=c("normal", "binary"), method=c("em", "imp", "hk"),
              maxit=4000, tol=0.0001)
 }
 \arguments{
