@@ -182,13 +182,11 @@ void scanone_hk(int n_ind, int n_pos, int n_gen, double ***Genoprob,
   for(i=0; i<n_pos; i++) { /* loop over positions */
     R_CheckUserInterrupt(); /* check for ^C */
 
+    for(k=0; k<n_ind * ncolx; k++) x[k] = 0.0;
+
     /* fill up X matrix */
     for(j=0; j<n_ind; j++) {
-      if(ind_noqtl[j]) {
-	for(k=0; k<n_gen; k++) 
-	  x[j+k*n_ind] = 0.0;
-      }
-      else {
+      if(!ind_noqtl[j]) {
 	for(k=0; k<n_gen; k++)
 	  x[j+k*n_ind] = Genoprob[k][i][j]*weights[j];
       }
