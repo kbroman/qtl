@@ -74,7 +74,7 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
 
 \value{
   A list with each component being an object of class \code{cross}.  See \code{\link{read.cross}} for
-  details. 
+  details.  The names (e.g. "AB", "AC", "BC") indicate the crosses.
 
   If \code{keep.qtlgeno} is TRUE, each cross object will contain a
   component \code{qtlgeno} which is a matrix containing the QTL
@@ -88,14 +88,46 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
-\seealso{ \code{\link{sim.cross}}, \code{\link{read.cross}},
-    \code{\link{scanPhyloQTL}} }
+\seealso{ \code{\link{scanPhyloQTL}}, 
+  \code{\link{sim.cross}}, \code{\link{read.cross}} }
 
 \examples{
+\dontrun{
+# example map; drop X chromosome
+data(map10)           
+map10 <- map10[1:19]
 
+# simulate data
+x <- simPhyloQTL(4, partition="AB|CD", crosses=c("AB", "AC", "AD"),
+                 map=map10, n.ind=150,
+                 model=c(1, 50, 0.5, 0))
+
+# run calc.genoprob on each cross
+x <- lapply(x, calc.genoprob, step=2)
+
+# scan genome, at each position trying all possible partitions
+out <- scanPhyloQTL(x, method="hk")
+
+# maximum peak
+max(out)
+
+# approximate posterior probabilities at peak
+max(out, format="postprob")
+
+# all peaks above a threshold for LOD(best) - LOD(2nd best)
+summary(out, threshold=1)
+
+# all peaks above a threshold for LOD(best), showing approx post'r prob
+summary(out, format="postprob", threshold=3)
+
+# plot of results
+plot(out)
+}
 }
                     
-%\references{
-%}
+\references{
+  Broman, K. W., Kim, S., An\'e, C. and Payseur, B. A.  Mapping
+  quantitative trait loci to a phylogenetic tree.  In preparation.
+}
   
 \keyword{datagen}
