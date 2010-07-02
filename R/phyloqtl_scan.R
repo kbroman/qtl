@@ -55,10 +55,6 @@ function(crosses, partitions, chr, pheno.col=1,
     # if all crosses need to be flipped, don't flip any of them
     if(!any(cm > 0)) cm <- -cm
 
-    # pull out the crosses to use here
-    x <- crosses[cm != 0]
-    cm <- cm[cm != 0]
-
     # flip crosses if necessary
     if(any(cm < 0))
       for(j in which(cm < 0)) 
@@ -85,9 +81,13 @@ function(crosses, partitions, chr, pheno.col=1,
         addcovar[thestart[j]:end[j],j-1] <- 1
     }
 
+    # ind with no QTL effect
+    ind.noqtl <- rep(cm == 0, sapply(x, nind))
+
     # do the scan
     out[[i]] <- scanone(xx, chr=chr, pheno.col=pheno.col, addcovar=addcovar,
-                        model=model, method=method, maxit=maxit, tol=tol)
+                        model=model, method=method, maxit=maxit, tol=tol,
+                        ind.noqtl=ind.noqtl)
   }
 
   # just one partition
