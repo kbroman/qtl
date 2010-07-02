@@ -9,7 +9,7 @@
 
 \usage{
 simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
-            error.prob=0, missing.prob=0, partitial.missing.prob=0,
+            error.prob=0, missing.prob=0, partial.missing.prob=0,
             keep.qtlgeno=FALSE, keep.errorind=TRUE, m=0, p=0,
   	    map.function=c("haldane","kosambi","c-f","morgan"))
 }
@@ -31,7 +31,6 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
  different QTL, and gives the chromosome number, cM position and
  effects of the QTL (assumed to be the same in each cross in which the
  QTL is segregating).}
- \item{n.ind}{Number of individuals to simulate.}
  \item{error.prob}{The genotyping error rate.}
  \item{missing.prob}{The rate of missing genotypes.}
  \item{partial.missing.prob}{When simulating an intercross or 4-way
