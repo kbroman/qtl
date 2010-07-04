@@ -12,7 +12,7 @@
 \usage{
 scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
              model=c("normal", "binary"), method=c("em", "imp", "hk"),
-             maxit=4000, tol=0.0001)
+             maxit=4000, tol=0.0001, useAllCrosses=TRUE)
 }
 \arguments{
  \item{crosses}{A list with each component being an intercross, as an object of class
@@ -43,6 +43,9 @@ scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
  \item{maxit}{Maximum number of iterations for method \code{"em"}.}
  \item{tol}{Tolerance value for determining convergence for method
    \code{"em"}.}
+ \item{useAllCrosses}{If TRUE, use all crosses in the analysis of all
+   partitions, with crosses not segregating the QTL included in the
+   estimation of the residual variance.}
 }
 
 
