@@ -27,7 +27,7 @@
 scanPhyloQTL <-
 function(crosses, partitions, chr, pheno.col=1,
          model=c("normal","binary"), method=c("em","imp","hk"),
-         maxit=4000, tol=0.0001)
+         maxit=4000, tol=0.0001, useAllCrosses=TRUE)
 {  
   if(missing(chr)) chr <- names(crosses[[1]]$geno)
   model <- match.arg(model)
@@ -54,6 +54,11 @@ function(crosses, partitions, chr, pheno.col=1,
 
     # if all crosses need to be flipped, don't flip any of them
     if(!any(cm > 0)) cm <- -cm
+
+    if(!useAllCrosses) {
+      x <- crosses[cm != 0]
+      cm <- cm[cm != 0]
+    }
 
     # flip crosses if necessary
     if(any(cm < 0))
