@@ -108,7 +108,6 @@
 \alias{print.summary.scantwo}
 \alias{print.summary.scantwo.old}
 \alias{print.summary.scantwoperm}
-\alias{print.summary.scanPhyloQTL}
 \alias{printQTLformulanicely}
 \alias{qtlByPartition}
 \alias{qtlformulasymmetric}
@@ -293,7 +292,6 @@ polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
 \method{print}{summary.scantwo}(x, \dots)
 \method{print}{summary.scantwo.old}(x, \dots)
 \method{print}{summary.scantwoperm}(x, \dots)
-\method{print}{summary.scanPhyloQTL}(x, \dots)
 printQTLformulanicely(formula, header, width, width2, sep=" ")
 qtlByPartition(crosses, partition)
 qtlformulasymmetric(formula, qtlnum1, qtlnum2)

@@ -188,8 +188,6 @@ function(object, format=c("lod", "postprob"), threshold, ...)
   out
 }
 
-print.summary.scanPhyloQTL <- print.summary.scanone
-
 
 # plot results of scanPhyloQTL
 plot.scanPhyloQTL <-
