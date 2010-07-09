@@ -254,17 +254,22 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
       return(map+minloc)
     }
     else if(step>0 && off.end == 0) {
+
       if(ncol(map)==1) return(map+minloc)
 
       a <- seq(floor(min(map[1,])),max(map[1,]),
                by = step)
       a <- a[is.na(match(a,map[1,]))]
 
+      if(length(a)==0) return(map+minloc)
+
       b <- sapply(a,function(x,y,z) {
           ZZ <- min((seq(along=y))[y > x])
           (x-y[ZZ-1])/(y[ZZ]-y[ZZ-1])*(z[ZZ]-z[ZZ-1])+z[ZZ-1] }, map[1,],map[2,])
+
       m1 <- c(a,map[1,])
       m2 <- c(b,map[2,])
+
       names(m1) <- names(m2) <- c(paste("loc",a,sep=""),markernames)
       return(rbind(sort(m1),sort(m2))+minloc)
     }
