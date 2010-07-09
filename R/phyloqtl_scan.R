@@ -49,7 +49,9 @@ function(crosses, partitions, chr, pheno.col=1,
   dimnames(crossmat) <- list(thecrosses, partitions)
 
   out <- vector("list", length(partitions))
+
   for(i in seq(along=partitions)) {
+    cat(i, "of", length(partitions), "\n")
     cm <- crossmat[,i]
 
     # if all crosses need to be flipped, don't flip any of them
@@ -58,6 +60,11 @@ function(crosses, partitions, chr, pheno.col=1,
     if(!useAllCrosses) {
       x <- crosses[cm != 0]
       cm <- cm[cm != 0]
+    }
+    else {
+      o <- order(abs(cm), decreasing=TRUE)
+      cm <- cm[o]
+      x <- crosses[o]
     }
 
     # flip crosses if necessary
