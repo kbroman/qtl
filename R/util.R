@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jun, 2010
+# last modified Jul, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -254,17 +254,22 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
       return(map+minloc)
     }
     else if(step>0 && off.end == 0) {
+
       if(ncol(map)==1) return(map+minloc)
 
       a <- seq(floor(min(map[1,])),max(map[1,]),
                by = step)
       a <- a[is.na(match(a,map[1,]))]
 
+      if(length(a)==0) return(map+minloc)
+
       b <- sapply(a,function(x,y,z) {
           ZZ <- min((seq(along=y))[y > x])
           (x-y[ZZ-1])/(y[ZZ]-y[ZZ-1])*(z[ZZ]-z[ZZ-1])+z[ZZ-1] }, map[1,],map[2,])
+
       m1 <- c(a,map[1,])
       m2 <- c(b,map[2,])
+
       names(m1) <- names(m2) <- c(paste("loc",a,sep=""),markernames)
       return(rbind(sort(m1),sort(m2))+minloc)
     }
@@ -1550,7 +1555,7 @@ function(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
 ######################################################################
 
 checkcovar <-
-function(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
+function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
 {
   chrtype <- sapply(cross$geno, class)
 
@@ -1648,6 +1653,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
     n.intcovar <- ncol(intcovar)
   }
   if(!is.null(perm.strata)) perm.strata <- perm.strata[keep.ind]
+  if(!is.null(ind.noqtl)) ind.noqtl <- ind.noqtl[keep.ind]
 
   # drop individuals missing any covariates
   if(!is.null(addcovar)) { # note that intcovar is contained in addcovar
@@ -1659,6 +1665,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
       if(!is.null(intcovar)) intcovar <- intcovar[!wh,,drop=FALSE]
       n.ind <- nind(cross)
       if(!is.null(perm.strata)) perm.strata <- perm.strata[!wh]
+      if(!is.null(ind.noqtl)) ind.noqtl <- ind.noqtl[!wh]
       if(verbose) warning("Dropping ", sum(wh), " individuals with missing covariates.\n")
     }
   }
@@ -1697,7 +1704,8 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
   pheno <- as.matrix(pheno)
 
   list(cross=cross, pheno=pheno, addcovar=addcovar, intcovar=intcovar,
-       n.addcovar=n.addcovar, n.intcovar=n.intcovar, perm.strata=perm.strata)
+       n.addcovar=n.addcovar, n.intcovar=n.intcovar, perm.strata=perm.strata, 
+       ind.noqtl=ind.noqtl)
 }
 
 # Find the nearest marker to a particular position
