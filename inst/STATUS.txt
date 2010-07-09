@@ -66,6 +66,9 @@ Minor changes:
   were are assigned no QTL effect.  This is for rare (largely
   internal) use for the case that one is combining multiple crosses.  
 
+  Fix bug in internal function create.map, for case of a sex-specific
+  map with very small length.
+
 
 Version 1.16, 5/23/2010:
 
