@@ -47,7 +47,9 @@ Minor changes:
   that one may use plot.scanone() to plot the results.
 
   Changed the default in plot.info from method="both" to
-  method="entropy". 
+  method="entropy".  Also, added an argument "fourwaycross", so that
+  one can look at the missing information just for the alleles of the
+  first parent (A vs B) or the second parent (C vs D).
 
   Added argument 'simple' to summary.fitqtl, addint, and addcovarint;
   if TRUE, output includes neither p-values nor sums of squares.
