@@ -38,7 +38,8 @@
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
-#           findDupMarkers, convert2riself, convert2risib
+#           findDupMarkers, convert2riself, convert2risib,
+#           switchAlleles
 #
 ######################################################################
 
@@ -3679,5 +3680,83 @@ function(object, offset=0)
   object
 }
 
+######################################################################
+# switch alleles in a cross
+######################################################################
+switchAlleles <-
+function(cross, markers, switch=c("AB","CD","ABCD"))
+{
+  type <- class(cross)[1]
+  switch <- match.arg(switch)
+  
+  if(type %in% c("bc", "risib", "riself", "dh")) { 
+    if(switch != "AB")
+      warning("Using switch = \"AB\".")
+
+    found <- rep(FALSE, length(markers))
+    for(i in 1:nchr(cross)) {
+      cn <- colnames(cross$geno[[i]]$data)
+      m <- match(markers, cn)
+      if(any(!is.na(m))) {
+        found[!is.na(m)] <- TRUE
+        for(j in m[!is.na(m)]) {
+          g <- cross$geno[[i]]$data[,j]
+          cross$geno[[i]]$data[!is.na(g) & g==1,j] <- 2
+          cross$geno[[i]]$data[!is.na(g) & g==2,j] <- 1
+        }
+      }
+    }
+
+  }
+  else if(type=="f2") {
+    if(switch != "AB")
+      warning("Using switch = \"AB\".")
+
+    found <- rep(FALSE, length(markers))
+    for(i in 1:nchr(cross)) {
+      cn <- colnames(cross$geno[[i]]$data)
+      m <- match(markers, cn)
+      if(any(!is.na(m))) {
+        found[!is.na(m)] <- TRUE
+        for(j in m[!is.na(m)]) {
+          g <- cross$geno[[i]]$data[,j]
+          cross$geno[[i]]$data[!is.na(g) & g==1,j] <- 3
+          cross$geno[[i]]$data[!is.na(g) & g==3,j] <- 1
+          cross$geno[[i]]$data[!is.na(g) & g==4,j] <- 5
+          cross$geno[[i]]$data[!is.na(g) & g==5,j] <- 4
+        }
+      }
+    }
+  }
+  else if(type=="4way") {
+
+    if(switch=="AB") 
+      newg <- c(2,1,4,3,6,5,7,8,10,9,12,11,14,13)
+    else if(switch=="CD")
+      newg <- c(3,4,1,2,5,6,8,7,10,9,13,14,11,12)
+    else
+      newg <- c(4,3,2,1,6,5,8,7,9,10,14,13,12,11)
+    
+    found <- rep(FALSE, length(markers))
+    for(i in 1:nchr(cross)) {
+      cn <- colnames(cross$geno[[i]]$data)
+      m <- match(markers, cn)
+      if(any(!is.na(m))) {
+        found[!is.na(m)] <- TRUE
+        for(j in m[!is.na(m)]) {
+          g <- cross$geno[[i]]$data[,j]
+          for(k in 1:14)
+            cross$geno[[i]]$data[!is.na(g) & g==k,j] <- newg[k]
+        }
+      }
+    }
+
+  }
+
+  if(any(!found))
+    warning("Some markers not found: ", paste(markers[!found], collapse=" "))
+
+  clean(cross)
+}
 
 # end of util.R

@@ -43,16 +43,15 @@
 
 \examples{
 data(fake.f2)
+\dontshow{fake.f2 <- subset(fake.f2, chr="5")}
 
 # switch homozygotes at marker D5M391
-g <- fake.f2$geno[[5]]$data[,3]
-g <- 4 - g
-fake.f2$geno[[5]]$data[,3] <- g
+fake.f2 <- switchAlleles(fake.f2, "D5M391")
 
 fake.f2 <- est.rf(fake.f2)
 checkAlleles(fake.f2)
 }
 
-\seealso{ \code{\link{est.rf}}, \code{\link{geno.crosstab}} }
+\seealso{ \code{\link{est.rf}}, \code{\link{geno.crosstab}}, \code{\link{switchAlleles}} }
 
 \keyword{utilities}
