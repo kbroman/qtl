@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/29/2010:
+Version 1.17, 7/13/2010:
 
 Major changes:
 
@@ -37,6 +37,10 @@ Minor changes:
 
   Added function shiftmap, for shifting the starting points of a
   genetic map (in a map or cross object).
+
+  Added function switchAlleles, for switching the alleles at selected
+  markers in a cross object.  (For example, in a backcross, switching
+  AA and AB at a marker; in an intercross, exchanging AA for BB.)
 
   Revised geno.table to have an additional argument, scanone.output.
   If scanone.output=TRUE, the output is as produced by scanone(), so
