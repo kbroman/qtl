@@ -3684,7 +3684,7 @@ function(object, offset=0)
 # switch alleles in a cross
 ######################################################################
 switchAlleles <-
-function(cross, markers, switch=c("AB","CD","ABCD"))
+function(cross, markers, switch=c("AB","CD","ABCD", "parents"))
 {
   type <- class(cross)[1]
   switch <- match.arg(switch)
@@ -3734,9 +3734,11 @@ function(cross, markers, switch=c("AB","CD","ABCD"))
       newg <- c(2,1,4,3,6,5,7,8,10,9,12,11,14,13)
     else if(switch=="CD")
       newg <- c(3,4,1,2,5,6,8,7,10,9,13,14,11,12)
-    else
+    else if(switch=="ABCD")
       newg <- c(4,3,2,1,6,5,8,7,9,10,14,13,12,11)
-    
+    else # switch parents
+      newg <- c(1,3,2,4,7,8,5,6,9,10,11,13,12,14)
+
     found <- rep(FALSE, length(markers))
     for(i in 1:nchr(cross)) {
       cn <- colnames(cross$geno[[i]]$data)
