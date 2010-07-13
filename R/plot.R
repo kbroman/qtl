@@ -1012,7 +1012,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 #
 ######################################################################
 plot.info <-
-function(x,chr,method=c("both","entropy","variance"), step=1,
+function(x,chr,method=c("entropy","variance","both"), step=1,
          off.end=0, error.prob=0.001,
          map.function=c("haldane","kosambi","c-f","morgan"),
          alternate.chrid=FALSE, ...)
