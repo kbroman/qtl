@@ -36,6 +36,9 @@ Major changes:
   summary.scanPhyloQTL are the plot, max, and summary functions for
   the output from scanPhyloQTL.
 
+  In mqmscan(), replaced the arguments step.min and step.max with
+  a single argument, off.end (to be more like scanone).
+
 Minor changes:
 
   Added 'offset' argument to est.map, which defines the starting position
