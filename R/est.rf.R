@@ -155,14 +155,16 @@ function(x, chr, what=c("both","lod","rf"),
   par(xpd=TRUE,las=1)
   on.exit(par(xpd=old.xpd,las=old.las))
 
-  # if any of the rf's are NA (ie no data), put NAs in corresponding LODs
-  if(any(is.na(g))) g[is.na(t(g))] <- NA
+  if(!onlylod) {
+    # if any of the rf's are NA (ie no data), put NAs in corresponding LODs
+    if(any(is.na(g))) g[is.na(t(g))] <- NA
 
-  # convert rf to -2*(log2(rf)+1); place zmax's on the diagonal;
-  #    anything above zmax replaced by zmax;
-  #    NA's replaced by -1
-  g[row(g) > col(g) & g > 0.5] <- 0.5
-  g[row(g) > col(g)] <- -4*(log2(g[row(g) > col(g)])+1)/12*zmax
+    # convert rf to -2*(log2(rf)+1); place zmax's on the diagonal;
+    #    anything above zmax replaced by zmax;
+    #    NA's replaced by -1
+    g[row(g) > col(g) & g > 0.5] <- 0.5
+    g[row(g) > col(g)] <- -4*(log2(g[row(g) > col(g)])+1)/12*zmax
+  }
   diag(g) <- zmax
   g[!is.na(g) & g>zmax] <- zmax
   
