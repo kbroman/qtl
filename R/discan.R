@@ -60,7 +60,7 @@ function(cross, pheno, method=c("em","hk","mr"),
         ind.noqtl <- rep(FALSE, nind(cross))
         warning("ind.noqtl ignored for method=", method, ", model=binary") 
       }
-      else if(is.null(addcovar)) {
+      else if(is.null(addcovar) && (!is.logical(ind.noqtl) || any(ind.noqtl))) {
         ind.noqtl <- rep(FALSE, nind(cross))
         warning("ind.noqtl ignored when no additive covariates")
       }
