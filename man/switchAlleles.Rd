@@ -7,14 +7,14 @@
   Switch alleles at selected markers in a cross object.
 }
 
-\usage{switchAlleles(cross, markers, switch=c("AB", "CD", "ABCD"))}
+\usage{switchAlleles(cross, markers, switch=c("AB", "CD", "ABCD", "parents"))}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
    \code{\link{read.cross}} for details.}
  \item{markers}{Names of markers whose alleles are to be switched.}
  \item{switch}{For a 4-way cross, indicates how to switch the alleles (A
- for B, C for D, or both A for B and C for D).}
+ for B, C for D, both A for B and C for D), or both A for C and B for D (\code{parents}).}
 }
 
 \value{
