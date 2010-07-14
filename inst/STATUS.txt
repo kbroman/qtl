@@ -29,6 +29,13 @@ Major changes:
   Implemented Haley-Knott regression for binary traits in scanone and
   scantwo. 
 
+  Added functions for the joint analysis of multiple crosses, in order
+  to map QTL to a phylogenetic tree.  (A paper describing the methods
+  is in preparation.)  The key function is scanPhyloQTL.  simPhyloQTL
+  is used to simulate data.  plot.scanPhyloQTL, max.scanPhyloQTL, and
+  summary.scanPhyloQTL are the plot, max, and summary functions for
+  the output from scanPhyloQTL.
+
 Minor changes:
 
   Added 'offset' argument to est.map, which defines the starting position

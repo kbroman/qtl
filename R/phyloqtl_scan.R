@@ -27,7 +27,8 @@
 scanPhyloQTL <-
 function(crosses, partitions, chr, pheno.col=1,
          model=c("normal","binary"), method=c("em","imp","hk"),
-         maxit=4000, tol=0.0001, useAllCrosses=TRUE)
+         addcovar, maxit=4000, tol=0.0001, useAllCrosses=TRUE,
+         verbose=FALSE)
 {  
   if(missing(chr)) chr <- names(crosses[[1]]$geno)
   model <- match.arg(model)
@@ -48,23 +49,49 @@ function(crosses, partitions, chr, pheno.col=1,
 
   dimnames(crossmat) <- list(thecrosses, partitions)
 
+  if(!missing(addcovar)) {
+    if(!is.list(addcovar) || length(addcovar) != length(crosses)) 
+      stop("addcovar must be a list with the same length as crosses (", length(crosses), ")")
+    n.ind <- sapply(crosses, nind)
+    if(is.matrix(addcovar[[1]])) {
+      nind.addcovar <- sapply(addcovar, nrow)
+      n.addcovar <- sapply(addcovar, ncol)
+    }
+    else {
+      nind.addcovar <- sapply(addcovar, length)
+      n.addcovar <- 1
+    }
+    if(any(nind.addcovar != n.ind)) {
+      err <- paste("crosses: ", paste(n.ind, collapse=" "), "\n",
+                   "addcovar:", paste(n.addcovar, collapse=" "), "\n")
+        
+      stop("Mismatch between no. individuals in addcovar and crosses.\n", err)
+    }
+    if(length(unique(n.addcovar)) > 1) 
+      stop("Mismatch in no. add've covariates: ", paste(n.addcovar, collapse=" "))
+  }
+
   out <- vector("list", length(partitions))
 
   for(i in seq(along=partitions)) {
-    cat(i, "of", length(partitions), "\n")
+    if(verbose) cat("Partition", i, "of", length(partitions), "\n")
     cm <- crossmat[,i]
 
     # if all crosses need to be flipped, don't flip any of them
     if(!any(cm > 0)) cm <- -cm
 
     if(!useAllCrosses) {
-      x <- crosses[cm != 0]
-      cm <- cm[cm != 0]
+      whcm <- which(cm != 0)
+      x <- crosses[whcm]
+      cm <- cm[whcm]
     }
     else {
       o <- order(abs(cm), decreasing=TRUE)
       cm <- cm[o]
+      whcm <- seq(along=cm)
       x <- crosses[o]
+      if(!missing(addcovar))
+        addcovar <- addcovar[o]
     }
 
     # flip crosses if necessary
@@ -83,21 +110,31 @@ function(crosses, partitions, chr, pheno.col=1,
     }
 
     # create cross indicators (as additive covariates)
-    if(length(x)==1) addcovar<-NULL
+    if(length(x)==1) alladdcovar<-NULL
     else {
       ni <- sapply(x, nind)
-      addcovar <- matrix(0, ncol=length(x)-1, nrow=sum(ni))
+      alladdcovar <- matrix(0, ncol=length(x)-1, nrow=sum(ni))
       thestart <- cumsum(c(1,ni))
       end <- cumsum(ni)
       for(j in 2:length(x))
-        addcovar[thestart[j]:end[j],j-1] <- 1
+        alladdcovar[thestart[j]:end[j],j-1] <- 1
+    }
+    if(!missing(addcovar)) {
+      theaddcovar <- as.matrix(addcovar[[whcm[1]]])
+      if(length(whcm) > 1)
+        for(j in 2:length(whcm))
+          theaddcovar <- rbind(theaddcovar, as.matrix(addcovar[[whcm[j]]]))
+
+      # quick check to be sure that it's not a column with all one value
+      if(ncol(theaddcovar)>1 || length(unique(theaddcovar))>1)
+        alladdcovar <- cbind(alladdcovar, theaddcovar)
     }
 
     # ind with no QTL effect
     ind.noqtl <- rep(cm == 0, sapply(x, nind))
 
     # do the scan
-    out[[i]] <- scanone(xx, chr=chr, pheno.col=pheno.col, addcovar=addcovar,
+    out[[i]] <- scanone(xx, chr=chr, pheno.col=pheno.col, addcovar=alladdcovar,
                         model=model, method=method, maxit=maxit, tol=tol,
                         ind.noqtl=ind.noqtl)
   }
