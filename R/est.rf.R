@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Jul, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -136,6 +136,11 @@ function(x, chr, what=c("both","lod","rf"),
     stop("Input should have class \"cross\".")
 
   what <- match.arg(what)
+  if("onlylod" %in% names(attributes(x$rf)) && attr(x$rf, "onlylod")) {
+    onlylod <- TRUE
+    what <- "lod"
+  }
+  else onlylod <- FALSE
   
   if(!missing(chr)) x <- subset(x,chr=chr)
   
@@ -163,7 +168,7 @@ function(x, chr, what=c("both","lod","rf"),
   
   g[is.na(g)] <- -1
 
-  if(what=="lod") { # plot LOD scores 
+  if(what=="lod" && !onlylod) { # plot LOD scores 
     # copy upper triangle (LODs) to lower triangle (rec fracs)
     g[row(g) > col(g)] <- t(g)[row(g) > col(g)]
   }

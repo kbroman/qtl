@@ -88,6 +88,8 @@ locations               Genetic locations of traits for the multitrait
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map
+markerlrt               General likelihood ratio test for association
+                        between marker pairs
 markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
 max.scanPhyloQTL        Maximum peak in genome scan to map a QTL to a
