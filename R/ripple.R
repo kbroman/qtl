@@ -119,6 +119,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     if(verbose) cat("  ", n.orders,"total orders\n")
     if(n.cluster > 1 && suppressWarnings(require(snow, quietly=TRUE))) {
       # parallelize
+      if(n.orders <= n.cluster) n.cluster <- n.orders
       cl <- makeCluster(n.cluster)
       clusterStopped <- FALSE
       on.exit(if(!clusterStopped) stopCluster(cl))
@@ -127,7 +128,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
       order.split <- vector("list", n.cluster)
       for(i in 1:n.cluster)
-        order.split[[i]] <- orders[whclust==i,]
+        order.split[[i]] <- orders[whclust==i,,drop=FALSE]
       result <- parLapply(cl, order.split, rippleSnowLik, cross=temcross,
                           error.prob=error.prob, map.function=map.function, maxit=maxit, tol=tol,
                           sex.sp=sex.sp)
@@ -176,6 +177,8 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     if(verbose) cat("  ", n.orders,"total orders\n")
     if(n.cluster > 1 && suppressWarnings(require(snow, quietly=TRUE))) {
       # parallelize
+      if(n.orders <= n.cluster) n.cluster <- n.orders
+
       cl <- makeCluster(n.cluster)
       clusterStopped <- FALSE
       on.exit(if(!clusterStopped) stopCluster(cl))
@@ -184,7 +187,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
       order.split <- vector("list", n.cluster)
       for(i in 1:n.cluster)
-        order.split[[i]] <- orders[whclust==i,]
+        order.split[[i]] <- orders[whclust==i,,drop=FALSE]
       oblxo <- unlist(parLapply(cl, order.split, rippleSnowCountxo, genodat=genodat, func=func))
       stopCluster(cl)
       clusterStopped <- TRUE
