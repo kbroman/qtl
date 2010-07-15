@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 7/14/2010:
+Version 1.17, 7/15/2010:
 
 Major changes:
 
@@ -55,6 +55,12 @@ Minor changes:
   Revised geno.table to have an additional argument, scanone.output.
   If scanone.output=TRUE, the output is as produced by scanone(), so
   that one may use plot.scanone() to plot the results.
+
+  Added the ability to have ripple() run in parallel, if the snow
+  package is installed.  The added argument n.cluster indicates the
+  number of parallel nodes to use.  This is reapply only useful with
+  method="likelihood"; with method="countxo", it can be slower than
+  just using one CPU.
 
   Changed the default in plot.info from method="both" to
   method="entropy".  Also, added an argument "fourwaycross", so that
