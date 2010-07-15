@@ -133,6 +133,8 @@
 \alias{ripple.perm1}
 \alias{ripple.perm2}
 \alias{ripple.perm.sub}
+\alias{rippleSnowCountxo}
+\alias{rippleSnowLik}
 \alias{roundqtlpos}
 \alias{scanone.perm}
 \alias{scanone.perm.engine}
@@ -323,6 +325,8 @@ reviseXdata(type=c("f2","bc"), expandX=c("simple","standard","full"),
 ripple.perm1(n)
 ripple.perm2(n)
 ripple.perm.sub(x, mat)
+rippleSnowLik(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
+rippleSnowCountxo(orders, genodat, func)
 roundqtlpos(x, digits = 1)
 scanone.perm(cross, pheno.col=1, model=c("normal","binary","2part","np"),
              method=c("em","imp","hk","ehk","mr","mr-imp","mr-argmax"),

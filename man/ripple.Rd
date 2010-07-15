@@ -11,7 +11,7 @@
 \usage{
 ripple(cross, chr, window=4, method=c("countxo","likelihood"),
        error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
-       maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE)
+       maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE, n.cluster=1)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -36,6 +36,9 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
    used only for the 4-way cross.}
  \item{verbose}{If TRUE, information about the number of orders (and, if
    \code{method="likelihood"}, about progress) are printed.}
+ \item{n.cluster}{If the package \code{snow} is available and
+   \code{n.perm} > 0, permutations are run in parallel using this number
+   of nodes.  This is really only useful with \code{method="likelihood"}.}
 }
 
 \details{
