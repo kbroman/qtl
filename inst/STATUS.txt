@@ -77,6 +77,9 @@ Minor changes:
   phenotype name in the output, if pheno.col is something other than
   1. 
 
+  Revised est.map for 4-way crosses slightly.  We'd previously
+  randomized the map before starting EM, which seemed a bad idea.
+
   Fixed a bug in scantwo() for the case that multiple phenotype
   columns are considered but they have different patterns of missing
   data.  An error occurred due to a number of stupid small mistakes.

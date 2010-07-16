@@ -3,7 +3,7 @@
 # est.map.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified May, 2010
+# last modified Jul, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -141,8 +141,8 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
     else {
       # randomize the maps a bit
       orig <- cross$geno[[i]]$map
-      cross$geno[[i]]$map <- cross$geno[[i]]$map +
-        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
+#      cross$geno[[i]]$map <- cross$geno[[i]]$map +
+#        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
 
       rf <- mf(diff(cross$geno[[i]]$map[1,]))
       rf[rf < 1e-14] <- 1e-14
