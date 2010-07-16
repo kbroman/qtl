@@ -168,6 +168,7 @@ plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plotModel               Plot a QTL model
 pull.geno               Pull out the genotype data from a cross
 pull.map                Pull out the genetic map from a cross
+pull.markers            Drop all but a selected set of markers
 pull.pheno              Pull out phenotype data from a cross
 qtl-package             Introductory comments on R/qtl
 qtlversion              Installed version of R/qtl

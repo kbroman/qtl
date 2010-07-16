@@ -62,6 +62,9 @@ Minor changes:
   method="likelihood"; with method="countxo", it can be slower than
   just using one CPU.
 
+  Added a function pull.markers, which is the opposite of
+  drop.markers. 
+
   Changed the default in plot.info from method="both" to
   method="entropy".  Also, added an argument "fourwaycross", so that
   one can look at the missing information just for the alleles of the
