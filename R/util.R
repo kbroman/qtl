@@ -23,7 +23,8 @@
 # Part of the R/qtl package
 # Contains: pull.map, markernames, replace.map, c.cross, create.map,
 #           clean, clean.cross, drop.nullmarkers,
-#           drop.markers, geno.table, genotab.em
+#           drop.markers, pull.markers,
+#           geno.table, genotab.em
 #           mf.k, mf.h, imf.k, imf.h, mf.cf, imf.cf, mf.m, imf.m,
 #           mf.stahl, imf.stahl
 #           switch.order, makeSSmap,
@@ -542,6 +543,21 @@ function(cross, markers)
   cross$geno <- cross$geno[keep.chr]
 
   cross
+}
+
+######################################################################
+# pull.markers
+#
+# like drop.markers, but retain just those indicated
+######################################################################
+pull.markers <-
+function(cross, markers)
+{
+  mn <- markernames(cross)
+  m <- match(markers, mn)
+  if(any(is.na(m)))
+    warning("Some markers couldn't be found: ", paste(markers[is.na(m)], collapse=" "))
+  drop.markers(cross, mn[is.na(match(mn, markers))])
 }
 
 ######################################################################

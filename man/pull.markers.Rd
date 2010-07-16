@@ -1,14 +1,14 @@
-\name{drop.markers}
-\alias{drop.markers}
+\name{pull.markers}
+\alias{pull.markers}
 
-\title{Drop a set of markers}
+\title{Drop all but a selected set of markers}
 
 \description{
-  Drop a vector of markers from the data matrices and genetic maps.
+  Drop all but a selected set of markers from the data matrices and genetic maps.
 }
 
 \usage{
-drop.markers(cross, markers)
+pull.markers(cross, markers)
 }
 
 \arguments{
@@ -18,7 +18,7 @@ drop.markers(cross, markers)
 }
 
 \value{
-  The input object, with any markers in the vector \code{markers} removed
+  The input object, with any markers not specified in the vector \code{markers} removed
   from the genotype data matrices, genetic maps, and, if applicable, any
   derived data (such as produced by \code{\link{calc.genoprob}}).
   (It might be a good idea to re-derive such things after using this
@@ -27,10 +27,11 @@ drop.markers(cross, markers)
 
 \examples{
 data(listeria)
-listeria2 <- drop.markers(listeria, c("D10M44","D1M3","D1M75"))
+listeria2 <- pull.markers(listeria, c("D10M44","D1M3","D1M75"))
 }
 
-\seealso{ \code{\link{drop.nullmarkers}}, \code{\link{pull.markers}}, \code{\link{geno.table}},
+\seealso{ \code{\link{drop.nullmarkers}}, \code{\link{drop.markers}},
+  \code{\link{geno.table}},
   \code{\link{clean.cross}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
