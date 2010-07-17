@@ -3315,7 +3315,11 @@ function(map, tol=1e-4)
 
   fem <- lapply(map, function(a) a[1,])
 
-  dif <- sapply(map, function(a) { a <- apply(a, 1, diff); max(abs(apply(a, 1, diff))) })
+  dif <- sapply(map, function(a) { if(ncol(a)==1) return(diff(a))
+                                   a <- apply(a, 1, diff);
+                                   if(is.matrix(a)) return(max(abs(apply(a, 1, diff))))
+                                   abs(diff(a)) })
+
   if(max(dif) > tol)
     warning("Female and male inter-marker distances differ by as much as ", max(dif), ".")
 

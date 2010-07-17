@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 7/15/2010:
+Version 1.17, 7/17/2010:
 
 Major changes:
 
@@ -93,6 +93,9 @@ Minor changes:
 
   Revised read.cross with format="csv" to give an error if the 2nd row
   has all blanks.
+
+  Fixed bug in convert2sa for case of chromosome with just 1 or 2
+  markers. 
 
   Revised scanone and scantwo to trap error if perm.strata is not of
   the correct length. 
