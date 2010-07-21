@@ -2,10 +2,10 @@
  * 
  * hmm_f2i.c
  * 
- * copyright (c) 2006-7, Karl W Broman
+ * copyright (c) 2006-2010, Karl W Broman
  *         (Some code adapted from code from Nicola Armstrong)
  *
- * last modified Mar, 2007
+ * last modified Jul, 2010
  * first written Aug, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -202,8 +202,10 @@ void est_map_f2i(int n_ind, int n_mar, int *geno, double *d,
     /* rescale */
     for(j=0; j<n_mar-1; j++) {
       rf[j] /= (double)n_ind;
+      /*      
       if(rf[j] < tol/100.0) rf[j] = tol/100.0;
       else if(rf[j] > 0.5-tol/100.0) rf[j] = 0.5-tol/100.0;
+      */
     }
 
     /* use map function to convert back to distances */
@@ -289,15 +291,15 @@ double emit_f2i(int obs_gen, int true_gen, double error_prob,
   case 1: case 2: case 3:
     
     if(true_gen == obs_gen) return(log(1.0-error_prob));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
 
   case 4:
     if(true_gen != 3) return(log(1.0 - error_prob / 2.0));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
 
   case 5:
     if(true_gen != 1) return(log(1.0 - error_prob / 2.0));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
   }
 
   return(0.0); /* shouldn't get here */
