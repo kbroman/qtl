@@ -2,9 +2,9 @@
  * 
  * scanone_hk.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Jul, 2010
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -53,7 +53,8 @@
 void R_scanone_hk(int *n_ind, int *n_pos, int *n_gen,
 		  double *genoprob, double *addcov, int *n_addcov, 
                   double *intcov, int *n_intcov, double *pheno, int *nphe,
-		  double *weights, double *result)
+		  double *weights, double *result, 
+		  int *ind_noqtl)
 {
   double ***Genoprob, **Result, **Addcov, **Intcov;
 
@@ -65,7 +66,8 @@ void R_scanone_hk(int *n_ind, int *n_pos, int *n_gen,
   if(*n_intcov > 0) reorg_errlod(*n_ind, *n_intcov, intcov, &Intcov);
 
   scanone_hk(*n_ind, *n_pos, *n_gen, Genoprob, Addcov, *n_addcov,
-	     Intcov, *n_intcov, pheno, *nphe, weights, Result);
+	     Intcov, *n_intcov, pheno, *nphe, weights, Result, 
+	     ind_noqtl);
 }
 
 /**********************************************************************
@@ -103,12 +105,15 @@ void R_scanone_hk(int *n_ind, int *n_pos, int *n_gen,
  * Result       Result matrix of size [n_pos x (nphe)] containing the
  *              LOD scores for each phenotype
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_hk(int n_ind, int n_pos, int n_gen, double ***Genoprob,
                 double **Addcov, int n_addcov, double **Intcov, 
 		int n_intcov, double *pheno, int nphe, double *weights, 
-		double **Result)
+		double **Result, int *ind_noqtl)
 {
   int  i, j, k, k2, s, rank, info, nrss, lwork, ncolx, ind_idx,
     multivar=0;
@@ -177,15 +182,21 @@ void scanone_hk(int n_ind, int n_pos, int n_gen, double ***Genoprob,
   for(i=0; i<n_pos; i++) { /* loop over positions */
     R_CheckUserInterrupt(); /* check for ^C */
 
+    for(k=0; k<n_ind * ncolx; k++) x[k] = 0.0;
+
     /* fill up X matrix */
     for(j=0; j<n_ind; j++) {
-      for(k=0; k<n_gen; k++)
-	x[j+k*n_ind] = Genoprob[k][i][j]*weights[j]; 
+      if(!ind_noqtl[j]) {
+	for(k=0; k<n_gen; k++)
+	  x[j+k*n_ind] = Genoprob[k][i][j]*weights[j];
+      }
       for(k=0; k<n_addcov; k++)
 	x[j+(k+n_gen)*n_ind] = Addcov[k][j]*weights[j];
-      for(k=0,s=0; k<n_gen-1; k++)
-	for(k2=0; k2<n_intcov; k2++,s++) 
-	  x[j+(n_gen+n_addcov+s)*n_ind] = Genoprob[k][i][j]*Intcov[k2][j]*weights[j];
+      if(!ind_noqtl[j]) {
+	for(k=0,s=0; k<n_gen-1; k++)
+	  for(k2=0; k2<n_intcov; k2++,s++) 
+	    x[j+(n_gen+n_addcov+s)*n_ind] = Genoprob[k][i][j]*Intcov[k2][j]*weights[j];
+      }
     }
 
     /* linear regression of phenotype on QTL genotype probabilities */

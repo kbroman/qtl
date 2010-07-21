@@ -2,9 +2,9 @@
  * 
  * scanone_em_covar.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Jul, 2010
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -83,13 +83,17 @@
  *
  * verbose        If 1, print out log likelihood at each iteration
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_em_covar(int n_ind, int n_pos, int n_gen, 
 		      double ***Genoprob, double **Addcov, int n_addcov,
 		      double **Intcov, int n_intcov, double *pheno, 
 		      double *weights,
-		      double *result, int maxit, double tol, int verbose)
+		      double *result, int maxit, double tol, int verbose,
+		      int *ind_noqtl)
 {
   int i, j, k, s, flag=0, n_par;
   double **wts, *param, *oldparam, regtol; 
@@ -159,13 +163,15 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
       for(k=0; k<n_gen; k++) 
 	wts[k][j] = Genoprob[k][i][j];
     mstep_em_covar(n_ind, n_gen, Addcov, n_addcov, Intcov, n_intcov,
-		   pheno, weights, wts, oldparam, work1, work2, &error_flag);
+		   pheno, weights, wts, oldparam, work1, work2, &error_flag,
+		   ind_noqtl);
     
     if(!error_flag) { /* only proceed if there's no error */
 
       if(verbose) {
 	estep_em_covar(n_ind, n_gen, i, Genoprob, Addcov, n_addcov,
-		       Intcov, n_intcov, pheno, weights, wts, oldparam, 0);
+		       Intcov, n_intcov, pheno, weights, wts, oldparam, 0,
+		       ind_noqtl);
 	oldllik = 0.0;
 	for(k=0; k<n_ind; k++) {
 	  temp = 0.0;
@@ -181,9 +187,11 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
 	R_CheckUserInterrupt(); /* check for ^C */
 
 	estep_em_covar(n_ind, n_gen, i, Genoprob, Addcov, n_addcov,
-		       Intcov, n_intcov, pheno, weights, wts, oldparam, 1);
+		       Intcov, n_intcov, pheno, weights, wts, oldparam, 1,
+		       ind_noqtl);
 	mstep_em_covar(n_ind, n_gen, Addcov, n_addcov, Intcov, n_intcov,
-		       pheno, weights, wts, param, work1, work2, &error_flag);
+		       pheno, weights, wts, param, work1, work2, &error_flag,
+		       ind_noqtl);
 	
 	if(error_flag) { /* error: X'X singular; break out of EM */
 	  flag=0; 
@@ -192,7 +200,8 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
 
 	if(verbose) {
 	  estep_em_covar(n_ind, n_gen, i, Genoprob, Addcov, n_addcov,
-			 Intcov, n_intcov, pheno, weights, wts, param, 0);
+			 Intcov, n_intcov, pheno, weights, wts, param, 0,
+			 ind_noqtl);
 	  llik = 0.0;
 	  for(k=0; k<n_ind; k++) {
 	    temp = 0.0;
@@ -221,7 +230,8 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
       if(!error_flag) { /* skip if there was an error */
 	/* calculate log likelihood */
 	estep_em_covar(n_ind, n_gen, i, Genoprob, Addcov, n_addcov,
-		       Intcov, n_intcov, pheno, weights, wts, param, 0);
+		       Intcov, n_intcov, pheno, weights, wts, param, 0,
+		       ind_noqtl);
 	llik = 0.0;
 	for(k=0; k<n_ind; k++) {
 	  temp = 0.0;
@@ -277,13 +287,17 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
  *
  * error_flag  Set to 1 if E(X'X) is singular
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov, 
 		    double **Intcov, int n_intcov, double *pheno, 
 		    double *weights,
 		    double **wts, double *param, double *work1, 
-		    double *work2, int *error_flag)
+		    double *work2, int *error_flag,
+		    int *ind_noqtl)
 {
   int i, j, k, s, sk, nparm1, info;
   double rcond;
@@ -295,36 +309,46 @@ void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov,
   /* calculate {E(X)}' y */
   for(j=0; j<nparm1; j++) work2[j] = 0.0;
   for(i=0; i<n_ind; i++) {
-    for(j=0; j<n_gen; j++) /* QTL effects */
-      work2[j] += (wts[j][i]*pheno[i]*weights[i]);
+    if(!ind_noqtl[i]) {
+      for(j=0; j<n_gen; j++) /* QTL effects */
+	work2[j] += (wts[j][i]*pheno[i]*weights[i]);
+    }
     for(j=0,k=n_gen; j<n_addcov; j++,k++) /* add covar */
       work2[k] += (Addcov[j][i]*pheno[i]);
-    for(j=0,s=n_gen+n_addcov; j<n_gen-1; j++) {
-      for(k=0; k<n_intcov; k++, s++)  /* int covar */
-	work2[s] += (wts[j][i]*Intcov[k][i]*pheno[i]);
+    if(!ind_noqtl[i]) {
+      for(j=0,s=n_gen+n_addcov; j<n_gen-1; j++) {
+	for(k=0; k<n_intcov; k++, s++)  /* int covar */
+	  work2[s] += (wts[j][i]*Intcov[k][i]*pheno[i]);
+      }
     }
   }
 
   /* calculate E{X'X}; only the upper right triangle is needed */
   for(j=0; j<nparm1*nparm1; j++) work1[j] = 0.0;
   for(i=0; i<n_ind; i++) {
-    for(j=0; j<n_gen; j++) /* QTLxQTL */
-      work1[j+nparm1*j] += wts[j][i]*weights[i]*weights[i];
+    if(!ind_noqtl[i]) {
+      for(j=0; j<n_gen; j++) /* QTLxQTL */
+	work1[j+nparm1*j] += wts[j][i]*weights[i]*weights[i];
+    }
     for(j=0, k=n_gen; j<n_addcov; j++, k++) {
       for(s=j, sk=k; s<n_addcov; s++, sk++)  /* add x add */
 	work1[k+nparm1*sk] += (Addcov[j][i]*Addcov[s][i]);
-      for(s=0; s<n_gen; s++) /* QTL x add */
-	work1[s+nparm1*k] += (Addcov[j][i]*wts[s][i]*weights[i]);
+      if(!ind_noqtl[i]) { /* QTL x add */
+	for(s=0; s<n_gen; s++) 
+	  work1[s+nparm1*k] += (Addcov[j][i]*wts[s][i]*weights[i]);
+      }
     }
-    for(j=0, k=n_gen+n_addcov; j<n_gen-1; j++, k += n_intcov) {
-      for(s=0; s<n_intcov; s++) {
-	for(sk=s; sk<n_intcov; sk++) /* int x int */
-	  work1[k+s+(sk+k)*nparm1] += 
-	    (Intcov[s][i]*wts[j][i]*Intcov[sk][i]);
-	for(sk=0; sk<n_addcov; sk++) /* add x int */
-	  work1[sk+n_gen+(k+s)*nparm1] += 
-	    (Addcov[sk][i]*wts[j][i]*Intcov[s][i]);
-	work1[j+(k+s)*nparm1] += wts[j][i]*Intcov[s][i]*weights[i]; /* qtl x int */
+    if(!ind_noqtl[i]) {
+      for(j=0, k=n_gen+n_addcov; j<n_gen-1; j++, k += n_intcov) {
+	for(s=0; s<n_intcov; s++) {
+	  for(sk=s; sk<n_intcov; sk++) /* int x int */
+	    work1[k+s+(sk+k)*nparm1] += 
+	      (Intcov[s][i]*wts[j][i]*Intcov[sk][i]);
+	  for(sk=0; sk<n_addcov; sk++) /* add x int */
+	    work1[sk+n_gen+(k+s)*nparm1] += 
+	      (Addcov[sk][i]*wts[j][i]*Intcov[s][i]);
+	  work1[j+(k+s)*nparm1] += wts[j][i]*Intcov[s][i]*weights[i]; /* qtl x int */
+	}
       }
     }
   }
@@ -390,12 +414,16 @@ void mstep_em_covar(int n_ind, int n_gen, double **Addcov, int n_addcov,
  *          This is done so that by taking rescale=0, we can easily
  *          calculate the log likelihood 
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void estep_em_covar(int n_ind, int n_gen, int pos, double ***Genoprob,
 		    double **Addcov, int n_addcov, double **Intcov,
 		    int n_intcov, double *pheno, double *weights,
-		    double **wts, double *param, int rescale)
+		    double **wts, double *param, int rescale,
+		    int *ind_noqtl)
 {
   int i, j, k, s, nparm1;
   double temp;
@@ -412,13 +440,20 @@ void estep_em_covar(int n_ind, int n_gen, int pos, double ***Genoprob,
       temp += (Addcov[j][i]*param[k]);
 
     /* QTL effect + addcov effect*/
-    for(j=0; j<n_gen; j++) wts[j][i] = param[j]*weights[i]+temp;
+    if(ind_noqtl[i]) {
+      for(j=0; j<n_gen; j++) wts[j][i] = temp;
+    }
+    else {
+      for(j=0; j<n_gen; j++) wts[j][i] = param[j]*weights[i]+temp;
+    }
 
-    /* interactive cov effect */
-    for(j=0, s=n_gen+n_addcov; j<n_gen-1; j++) {
-      /* s gives location in param vector */
-      for(k=0; k<n_intcov; k++, s++) 
-	wts[j][i] += (Intcov[k][i]*param[s]);
+    if(!ind_noqtl[i]) {
+      /* interactive cov effect */
+      for(j=0, s=n_gen+n_addcov; j<n_gen-1; j++) {
+	/* s gives location in param vector */
+	for(k=0; k<n_intcov; k++, s++) 
+	  wts[j][i] += (Intcov[k][i]*param[s]);
+      }
     }
     /* done calculating fitted values */
 

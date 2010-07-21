@@ -2,10 +2,10 @@
  * 
  * hmm_bci.c
  * 
- * copyright (c) 2006-7, Karl W Broman
+ * copyright (c) 2006-2010, Karl W Broman
  *         (Some code adapted from code from Nicola Armstrong)
  *
- * last modified Mar, 2007
+ * last modified Jul, 2010
  * first written Aug, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -200,8 +200,10 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     /* rescale */
     for(j=0; j<n_mar-1; j++) {
       rf[j] /= (double)n_ind;
+      /*
       if(rf[j] < tol/100.0) rf[j] = tol/100.0;
       else if(rf[j] > 0.5-tol/100.0) rf[j] = 0.5-tol/100.0;
+      */
     }
 
     /* use map function to convert back to distances */

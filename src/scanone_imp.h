@@ -2,12 +2,12 @@
  * 
  * scanone_imp.h
  *
- * copyright (c) 2001-6, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2010, Karl W Broman and Hao Wu
  *
  * This file is written by Hao Wu
  * with slight modifications by Karl Broman.
  *
- * last modified Feb, 2006
+ * last modified Jul, 2010
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ void R_scanone_imp(int *n_ind, int *n_pos, int *n_gen, int *n_draws,
 		   int *draws, double *addcov, int *n_addcov, 
 		   double *intcov, int *n_intcov, double *pheno, 
 		   int *nphe, double *weights,
-		   double *result);
+		   double *result, int *ind_noqtl);
 
 /**********************************************************************
  * 
@@ -79,13 +79,16 @@ void R_scanone_imp(int *n_ind, int *n_pos, int *n_gen, int *n_draws,
  * Result       Matrix of size [n_pos x nphe]; upon return, contains
  *              the "LPD" (log posterior distribution of QTL location).
  * 
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws, 
 		 int ***Draws, double **Addcov, int n_addcov, 
 		 double **Intcov, int n_intcov, double *pheno, 
 		 int nphe, double *weights,
-		 double **Result);
+		 double **Result, int *ind_noqtl);
 
 /* function to calculate the null model RSS for scanone_imp */
 void nullRss(double *tmppheno, double *pheno, int nphe, int n_ind,
@@ -97,6 +100,6 @@ void nullRss(double *tmppheno, double *pheno, int nphe, int n_ind,
 void altRss1(double *tmppheno, double *pheno, int nphe, int n_ind, int n_gen,
 	     int *Draws, double **Addcov, int n_addcov, double **Intcov,
 	     int n_intcov, double *dwork, int multivar, double *rss, 
-	     double *weights);
+	     double *weights, int *ind_noqtl);
 
 /* end of scanone_imp.h */

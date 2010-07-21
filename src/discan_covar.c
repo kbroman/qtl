@@ -2,9 +2,9 @@
  * 
  * discan_covar.c
  *
- * copyright (c) 2004-6, Karl W Broman
+ * copyright (c) 2004-2010, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Jul, 2010
  * first written Dec, 2004
  *
  *     This program is free software; you can redistribute it and/or
@@ -83,13 +83,16 @@
  *
  * verbose      If 1, print out log likelihood at each iteration
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void discan_covar(int n_ind, int n_pos, int n_gen, 
 		  double ***Genoprob, double **Addcov, int n_addcov,
 		  double **Intcov, int n_intcov, int *pheno, 
 		  double *start, double *result, int maxit, double tol, 
-		  int verbose)
+		  int verbose, int *ind_noqtl)
 {
   int i, n_par;
 
@@ -98,7 +101,8 @@ void discan_covar(int n_ind, int n_pos, int n_gen,
   for(i=0; i<n_pos; i++)  
     result[i] = discan_covar_em(n_ind, i, n_gen, n_par, Genoprob,
 				Addcov, n_addcov, Intcov, n_intcov,
-				pheno, start, maxit, tol, verbose);
+				pheno, start, maxit, tol, verbose,
+				ind_noqtl);
 
 }
 
@@ -107,7 +111,7 @@ void R_discan_covar(int *n_ind, int *n_pos, int *n_gen,
 		    double *genoprob, double *addcov, int *n_addcov,
 		    double *intcov, int *n_intcov, int *pheno, 
 		    double *start, double *result, int *maxit, double *tol, 
-		    int *verbose)
+		    int *verbose, int *ind_noqtl)
 {
   double ***Genoprob, **Addcov, **Intcov;
 
@@ -117,7 +121,7 @@ void R_discan_covar(int *n_ind, int *n_pos, int *n_gen,
   
   discan_covar(*n_ind, *n_pos, *n_gen, Genoprob, 
 	       Addcov, *n_addcov, Intcov, *n_intcov, pheno,
-	       start, result, *maxit, *tol, *verbose);
+	       start, result, *maxit, *tol, *verbose, ind_noqtl);
 }
 
 
@@ -131,7 +135,8 @@ void R_discan_covar(int *n_ind, int *n_pos, int *n_gen,
 double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
 		       double ***Genoprob, double **Addcov, int n_addcov,
 		       double **Intcov, int n_intcov, int *pheno, 
-		       double *start, int maxit, double tol, int verbose)
+		       double *start, int maxit, double tol, int verbose,
+		       int *ind_noqtl)
 {
   int i, j, k, kk, s, offset;
   double *jac, **Jac, *grad;
@@ -167,7 +172,7 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
   for(i=0; i<n_par; i++) curpar[i] = start[i];
 
   curllik = discan_covar_loglik(n_ind, pos, n_gen, n_par, curpar, Genoprob,
-				Addcov, n_addcov, Intcov, n_intcov, pheno);
+				Addcov, n_addcov, Intcov, n_intcov, pheno, ind_noqtl);
   if(verbose) 
     Rprintf("        %10.5f\n", curllik);
 
@@ -188,14 +193,16 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
     for(i=0; i<n_ind; i++) {
       temp1s[i] = temp2s[i] = 0.0;
       for(j=0; j<n_gen; j++) {
-	fit = curpar[j];
+	if(!ind_noqtl[i]) 
+	  fit = curpar[j];
+	else fit = 0.0;
 
 	if(n_addcov > 0) {
 	  for(k=0; k<n_addcov; k++) 
 	    fit += Addcov[k][i] * curpar[n_gen+k];
 	}
       
-	if(n_intcov > 0 && j<n_gen-1) {
+	if(!ind_noqtl[i] && n_intcov > 0 && j<n_gen-1) {
 	  for(k=0; k<n_intcov; k++) 
 	    fit += Intcov[k][i] * curpar[n_gen+n_addcov+n_intcov*j+k];
 	}
@@ -208,8 +215,10 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
 
     for(j=0; j<n_gen; j++) {
       for(i=0; i<n_ind; i++) {
-	grad[j] += temp1[i][j];
-	Jac[j][j] += temp2[i][j];
+	if(!ind_noqtl[i]) {
+	  grad[j] += temp1[i][j];
+	  Jac[j][j] += temp2[i][j];
+	}
       }
     }
 
@@ -220,8 +229,10 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
 	for(kk=k; kk<n_addcov; kk++) 
 	  Jac[kk+n_gen][k+n_gen] += Addcov[k][i]*Addcov[kk][i] * temp2s[i];
 	
-	for(j=0; j<n_gen; j++) 
-	  Jac[k+n_gen][j] += Addcov[k][i] * temp2[i][j];
+	if(!ind_noqtl[i]) {
+	  for(j=0; j<n_gen; j++) 
+	    Jac[k+n_gen][j] += Addcov[k][i] * temp2[i][j];
+	}
       
       }
     }
@@ -231,15 +242,17 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
       for(k=0; k<n_intcov; k++) {
 
 	for(i=0; i<n_ind; i++) {
-	  grad[k + offset] += Intcov[k][i] * temp1[i][j];
+	  if(!ind_noqtl[i]) {
+	    grad[k + offset] += Intcov[k][i] * temp1[i][j];
 
-	  for(kk=k; kk<n_intcov; kk++) 
-	    Jac[kk+offset][k+offset] += Intcov[k][i]*Intcov[kk][i]*temp2[i][j];
+	    for(kk=k; kk<n_intcov; kk++) 
+	      Jac[kk+offset][k+offset] += Intcov[k][i]*Intcov[kk][i]*temp2[i][j];
 
-	  for(kk=0; kk<n_addcov; kk++)
-	    Jac[k+offset][kk+n_gen] += Intcov[k][i]*Addcov[kk][i]*temp2[i][j];
+	    for(kk=0; kk<n_addcov; kk++)
+	      Jac[k+offset][kk+n_gen] += Intcov[k][i]*Addcov[kk][i]*temp2[i][j];
 	
-	  Jac[k+offset][j] += Intcov[k][i]*temp2[i][j];
+	    Jac[k+offset][j] += Intcov[k][i]*temp2[i][j];
+	  }
 	}
       }
     }
@@ -284,7 +297,7 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
     }
 
     newllik = discan_covar_loglik(n_ind, pos, n_gen, n_par, newpar, Genoprob,
-				  Addcov, n_addcov, Intcov, n_intcov, pheno);
+				  Addcov, n_addcov, Intcov, n_intcov, pheno, ind_noqtl);
     if(verbose) {
       Rprintf("    %3d %10.5f %10.5f", s+1, newllik, newllik - curllik);
       if(newllik < curllik) Rprintf(" ***");
@@ -338,7 +351,8 @@ double discan_covar_em(int n_ind, int pos, int n_gen, int n_par,
 double discan_covar_loglik(int n_ind, int pos, int n_gen, int n_par,
 			   double *par, 
 			   double ***Genoprob, double **Addcov, int n_addcov,
-			   double **Intcov, int n_intcov, int *pheno) 
+			   double **Intcov, int n_intcov, int *pheno,
+			   int *ind_noqtl) 
 {
   int i, j, k;
   double loglik=0.0, fit, temp;
@@ -347,14 +361,15 @@ double discan_covar_loglik(int n_ind, int pos, int n_gen, int n_par,
     temp=0.0;
 
     for(j=0; j<n_gen; j++) {
-      fit = par[j];
+      if(!ind_noqtl[i]) fit = par[j];
+      else fit = 0.0;
 
       if(n_addcov > 0) {
 	for(k=0; k<n_addcov; k++) 
 	  fit += Addcov[k][i] * par[n_gen+k];
       }
 
-      if(n_intcov > 0 && j<n_gen-1) {
+      if(!ind_noqtl[i] && n_intcov > 0 && j<n_gen-1) {
 	for(k=0; k<n_intcov; k++) 
 	  fit += Intcov[k][i] * par[n_gen+n_addcov+n_intcov*j+k];
       }

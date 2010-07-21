@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Jul, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -136,6 +136,11 @@ function(x, chr, what=c("both","lod","rf"),
     stop("Input should have class \"cross\".")
 
   what <- match.arg(what)
+  if("onlylod" %in% names(attributes(x$rf)) && attr(x$rf, "onlylod")) {
+    onlylod <- TRUE
+    what <- "lod"
+  }
+  else onlylod <- FALSE
   
   if(!missing(chr)) x <- subset(x,chr=chr)
   
@@ -150,20 +155,22 @@ function(x, chr, what=c("both","lod","rf"),
   par(xpd=TRUE,las=1)
   on.exit(par(xpd=old.xpd,las=old.las))
 
-  # if any of the rf's are NA (ie no data), put NAs in corresponding LODs
-  if(any(is.na(g))) g[is.na(t(g))] <- NA
+  if(!onlylod) {
+    # if any of the rf's are NA (ie no data), put NAs in corresponding LODs
+    if(any(is.na(g))) g[is.na(t(g))] <- NA
 
-  # convert rf to -2*(log2(rf)+1); place zmax's on the diagonal;
-  #    anything above zmax replaced by zmax;
-  #    NA's replaced by -1
-  g[row(g) > col(g) & g > 0.5] <- 0.5
-  g[row(g) > col(g)] <- -4*(log2(g[row(g) > col(g)])+1)/12*zmax
+    # convert rf to -2*(log2(rf)+1); place zmax's on the diagonal;
+    #    anything above zmax replaced by zmax;
+    #    NA's replaced by -1
+    g[row(g) > col(g) & g > 0.5] <- 0.5
+    g[row(g) > col(g)] <- -4*(log2(g[row(g) > col(g)])+1)/12*zmax
+  }
   diag(g) <- zmax
   g[!is.na(g) & g>zmax] <- zmax
   
   g[is.na(g)] <- -1
 
-  if(what=="lod") { # plot LOD scores 
+  if(what=="lod" && !onlylod) { # plot LOD scores 
     # copy upper triangle (LODs) to lower triangle (rec fracs)
     g[row(g) > col(g)] <- t(g)[row(g) > col(g)]
   }
