@@ -50,7 +50,8 @@ allchrsplits(cross, chr, error.prob=0.0001,
   at which a split is made.
   The first two columns are the chromosome ID and midpoint of the interval.  The third
   column is a LOD score comparing the combined linkage group to the
-  split into two linkage groups.
+  split into two linkage groups.  A fourth column (\code{gap}) indicates the length of
+  each interval.
 
   The row names indicate the flanking markers for each interval.
 }

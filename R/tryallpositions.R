@@ -330,6 +330,12 @@ function(cross, chr, error.prob=0.0001,
   result <- NULL
 
   for(i in seq(along=cross$geno)) {
+    if(n.mar[i] == 1) {
+#      temp <- data.frame(chr=chrnam[i], pos=pos, lod=NA, gap=0)
+#      rownames(temp) <- themarkers
+#      result <- cbind(result, temp)
+      next
+    }
     thischr <- subset(cross, chr=chrnam[i])
     if(verbose) cat("Chr ", chrnam[i], " (", n.mar[i], " markers)\n", sep="")
     pos <- cross$geno[[i]]$map
@@ -340,13 +346,8 @@ function(cross, chr, error.prob=0.0001,
     }
     else matrixmap <- FALSE
       
-    if(n.mar[i] == 1) {
-      temp <- data.frame(chr=chrnam[i], pos=pos, lod=NA)
-      rownames(temp) <- themarkers
-      result <- cbind(result, temp)
-      next
-    }
 
+    gap <- (pos[-1] - pos[-length(pos)])
     pos <- (pos[-1] + pos[-length(pos)])/2
     int2 <- match(themarkers, colnames(cross$geno[[i]]$data))
     interval <- paste(themarkers[-length(themarkers)], themarkers[-1],
@@ -362,7 +363,7 @@ function(cross, chr, error.prob=0.0001,
     if(n.mar[i] == 2) { # 2 markers
       mmll <- markerloglik(thischr, markernames(thischr), error.prob=error.prob)
       temp <- data.frame(chr=chrnam[i], pos=pos,
-                         lod=(initialloglik - sum(mmll))/log(10))
+                         lod=(initialloglik - sum(mmll))/log(10), gap=gap)
       rownames(temp) <- interval
     }
     else { # >2 markers
@@ -407,7 +408,7 @@ function(cross, chr, error.prob=0.0001,
         attr(est.map(drop.markers(thischr, mn[length(mn)]), error.prob=error.prob,
                      map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)[[1]], "loglik")
 
-      temp <- data.frame(chr=rep(chrnam[i], length(interval)), pos=pos, lod=lod/log(10))
+      temp <- data.frame(chr=rep(chrnam[i], length(interval)), pos=pos, lod=lod/log(10), gap=gap)
       rownames(temp) <- interval
     }
     result <- rbind(result, temp)
