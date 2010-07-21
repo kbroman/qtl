@@ -2,9 +2,9 @@
  * 
  * hmm_bc.c
  * 
- * copyright (c) 2001-9, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@
 
 double init_bc(int true_gen)
 {
-  return(LN_05);
+  return(-M_LN2); /* ln(0.5) */
 }
 
 double emit_bc(int obs_gen, int true_gen, double error_prob)

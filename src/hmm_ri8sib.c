@@ -2,9 +2,9 @@
  * 
  * hmm_ri8sib.c
  * 
- * copyright (c) 2005-9, Karl W Broman
+ * copyright (c) 2005-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Mar, 2005
  *
  *     This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@
 
 double init_ri8sib(int true_gen)
 {
-  return(LN_0125);
+  return(-3.0*M_LN2); /* log(1/8) */
 }
 
 double emit_ri8sib(int obs_gen, int true_gen, double error_prob)
