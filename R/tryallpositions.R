@@ -385,6 +385,9 @@ function(cross, chr, error.prob=0.0001,
                            map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)[[1]]
 #          lod[j] <- initialloglik - attr(temp1, "loglik") - attr(temp2, "loglik")
 
+          if(any(is.na(temp1)) || any(is.na(temp2)))
+            stop("Missing values in estimated map on chr ", chrnam[i], " with split at interval ", j, "\n")
+
           # the likelihoods aren't adding properly, so I'll use the following kluge:
           temp3 <- thischr
           if(is.matrix(temp1))
