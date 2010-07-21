@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 7/17/2010:
+Version 1.17, 7/21/2010:
 
 Major changes:
 
@@ -72,6 +72,11 @@ Minor changes:
 
   Added argument 'simple' to summary.fitqtl, addint, and addcovarint;
   if TRUE, output includes neither p-values nor sums of squares.
+
+  Added a function allchrsplits(), for testing whether to split a
+  linkage group/chromosome into two, by calculating a LOD score for
+  each interval comparing the full linkage group to the split into two
+  groups at that interval.  
 
   Fixed a problem in MQM code regarding negative or really large
   marker positions.

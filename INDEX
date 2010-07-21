@@ -14,6 +14,8 @@ addpair                 Scan for an additional pair of QTL in a
 addqtl                  Scan for an additional QTL in a multiple-QTL
                         model
 addtoqtl                Add to a qtl object
+allchrsplits            Test all possible splits of a chromosome into
+                        two pieces
 argmax.geno             Reconstruct underlying genotypes
 badorder                An intercross with misplaced markers
 bayesint                Bayesian credible interval
