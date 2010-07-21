@@ -2,9 +2,9 @@
  * 
  * hmm_main.h
  *
- * copyright (c) 2001-9, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -30,10 +30,6 @@
  **********************************************************************/
 
 #define TOL       1.0e-12
-#define LN_05    -0.6931471805599453 /* natural log of 0.5 */
-#define LN_025   -1.3862943611198906 /* natural log of 0.25 */
-#define LN_0125  -2.0794415416798357 /* natural log of 0.125 */
-#define LN_2      0.6931471805599453 /* natural log of 2 */
 
 /**********************************************************************
  * 
