@@ -40,7 +40,7 @@
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
-#           switchAlleles
+#           switchAlleles, nqrank
 #
 ######################################################################
 
@@ -3780,5 +3780,33 @@ function(cross, markers, switch=c("AB","CD","ABCD", "parents"))
 
   clean(cross)
 }
+
+######################################################################
+#
+# nqrank: Convert a set of quantitative values to the corresponding
+#         normal quantiles (preserving mean and SD)
+#
+######################################################################
+
+nqrank <-
+function(x, jitter=FALSE)
+{
+  y <- x[!is.na(x)]
+  themean <- mean(y, na.rm=TRUE)
+  thesd <- sd(y, na.rm=TRUE)
+
+  y[y == Inf] <- max(y[y<Inf])+10
+  y[y == -Inf] <- min(y[y > -Inf]) - 10
+  if(jitter)
+    y <- rank(y+runif(length(y))/(sd(y)*10^8))
+  else y <- rank(y)
+
+  x[!is.na(x)] <- qnorm((y-0.5)/length(y))
+
+  x*thesd/sd(x, na.rm=TRUE)-mean(x,na.rm=TRUE)+themean
+}
+
+# end of nqrank.R
+
 
 # end of util.R

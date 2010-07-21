@@ -78,6 +78,9 @@ Minor changes:
   each interval comparing the full linkage group to the split into two
   groups at that interval.  
 
+  Added a function nqrank() for transforming a numeric vector into the
+  corresponding normal quantiles.
+
   Fixed a problem in MQM code regarding negative or really large
   marker positions.
 
