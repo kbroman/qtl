@@ -4,7 +4,7 @@
  *
  * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified May, 2010
+ * last modified Jul, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -526,13 +526,17 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
     /* rescale */
     for(j=0; j<n_mar-1; j++) {
       rf[j] /= (double)n_ind;
+      /*
       if(rf[j] < tol/100.0) rf[j] = tol/100.0;
       else if(rf[j] > 0.5-tol/100.0) rf[j] = 0.5-tol/100.0;
+      */
       
       if(sexsp) {
 	rf2[j] /= (double)n_ind;
+	/*
 	if(rf2[j] < tol/100.0) rf2[j] = tol/100.0;
 	else if(rf2[j] > 0.5-tol) rf2[j] = 0.5-tol/100.0;
+	*/
       }
       else rf2[j] = rf[j];
     }

@@ -136,7 +136,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
       rf <- mf(diff(cross$geno[[i]]$map))
       if(type=="risib" || type=="riself")
         rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype[i])
-      rf[rf < 1e-14] <- 1e-14
+#      rf[rf < 1e-14] <- 1e-14
     }
     else {
       # randomize the maps a bit
@@ -145,9 +145,9 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
 #        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
 
       rf <- mf(diff(cross$geno[[i]]$map[1,]))
-      rf[rf < 1e-14] <- 1e-14
+#      rf[rf < 1e-14] <- 1e-14
       rf2 <- mf(diff(cross$geno[[i]]$map[2,]))
-      rf2[rf2 < 1e-14] <- 1e-14
+#      rf2[rf2 < 1e-14] <- 1e-14
       if(!sex.sp && chrtype[i]=="X")
         temp.sex.sp <- TRUE
       else temp.sex.sp <- sex.sp
@@ -172,6 +172,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
               as.integer(verbose),
               PACKAGE="qtl")
 
+      z$rf[z$rf < 1e-14] <- 1e-14
       if(type=="riself" || type=="risib") 
         z$rf <- adjust.rf.ri(z$rf, substr(type, 3, nchar(type)),
                              chrtype[i], expand=FALSE)
@@ -209,6 +210,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
                 as.integer(verbose),
                 PACKAGE="qtl")
       }
+      z$d[z$d < 1e-14] <- 1e-14
       newmap[[i]] <- cumsum(c(min(cross$geno[[i]]$map),z$d))
       names(newmap[[i]]) <- names(cross$geno[[i]]$map)
       attr(newmap[[i]], "loglik") <- z$loglik
@@ -230,6 +232,9 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
               as.integer(verbose),
               PACKAGE="qtl")
               
+      z$rf[z$rf<1e-14] <- 1e-14
+      z$rf2[z$rf2<1e-14] <- 1e-14
+      
       if(!temp.sex.sp) z$rf2 <- z$rf
 
       newmap[[i]] <- rbind(cumsum(c(min(orig[1,]),imf(z$rf))),
