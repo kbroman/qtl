@@ -2,9 +2,9 @@
  * 
  * scanone_em.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Jul, 2010
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -54,7 +54,8 @@ void R_scanone_em(int *n_ind, int *n_pos, int *n_gen,
 		  double *intcov, int *n_intcov, double *pheno,
 		  double *weights,
 		  double *result, int *std_start, double *start,
-		  int *maxit, double *tol, int *verbose)
+		  int *maxit, double *tol, int *verbose,
+		  int *ind_noqtl)
 {
   double ***Genoprob, **work, **Addcov, **Intcov;
   double *means;
@@ -80,7 +81,7 @@ void R_scanone_em(int *n_ind, int *n_pos, int *n_gen,
   else { /* interval mapping with covariates */
     scanone_em_covar(*n_ind, *n_pos, *n_gen, Genoprob, Addcov,
 		     *n_addcov, Intcov, *n_intcov, pheno, weights,
-		     result, *maxit, *tol, *verbose);
+		     result, *maxit, *tol, *verbose, ind_noqtl);
   }
 }
 

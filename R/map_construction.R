@@ -80,7 +80,8 @@ function(cross, max.rf=0.25, min.lod=3, reorgMarkers=FALSE,
         if(i==round(i,-1)) cat(i,"of", tot.mar, "\n")
     }
     wh <- (rf[,i]<=max.rf & lod[,i] > min.lod)
-    if(any(wh) && length(unique(ingrp[wh]))>1) {
+
+    if(any(wh) && length(unique(ingrp[c(i, which(wh))]))>1) {
       oldgrp <- ingrp[wh]
       ingrp[wh] <- ingrp[i]
       u <- unique(oldgrp[oldgrp != ingrp[i]])

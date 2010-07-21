@@ -16,7 +16,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         use=c("all.obs", "complete.obs"), upper=FALSE,
         ties.random=FALSE, start=NULL, maxit=4000,
         tol=1e-4, n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose,
-        batchsize=250, n.cluster=1)
+        batchsize=250, n.cluster=1, ind.noqtl)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -91,6 +91,9 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
  \item{n.cluster}{If the package \code{snow} is available and
    \code{n.perm} > 0, permutations are run in parallel using this number
    of nodes.}
+ \item{ind.noqtl}{Indicates individuals who should not be allowed a QTL
+   effect (used rarely, if at all); this is a logical vector of same
+   length as there are individuals in the cross.}
 }
 
 \section{Models}{

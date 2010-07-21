@@ -2,9 +2,9 @@
  * 
  * hmm_f2.c
  * 
- * copyright (c) 2001-9, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -45,8 +45,8 @@
 
 double init_f2(int true_gen)
 {
-  if(true_gen==2) return(LN_05);
-  else return(LN_025);
+  if(true_gen==2) return(-M_LN2); /* ln(0.5) */
+  else return(-2.0*M_LN2); /* ln(0.25) */
 }
 
 double emit_f2(int obs_gen, int true_gen, double error_prob)
@@ -55,13 +55,13 @@ double emit_f2(int obs_gen, int true_gen, double error_prob)
   case 0: return(0.0);
   case 1: case 2: case 3:
     if(obs_gen==true_gen) return(log(1.0-error_prob));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
   case 4: /* AA or AB (not BB) */
     if(true_gen != 3) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
   case 5: /* AB or BB (not AA) */
     if(true_gen != 1) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
   }
   return(0.0); /* shouldn't get here */
 }
@@ -73,7 +73,7 @@ double step_f2(int gen1, int gen2, double rf, double junk)
   case 1:
     switch(gen2) {
     case 1: return(2.0*log(1.0-rf));
-    case 2: return(LN_2+log(1.0-rf)+log(rf));
+    case 2: return(M_LN2+log(1.0-rf)+log(rf));
     case 3: return(2.0*log(rf));
     }
   case 2:
@@ -84,7 +84,7 @@ double step_f2(int gen1, int gen2, double rf, double junk)
   case 3:
     switch(gen2) {
     case 1: return(2.0*log(rf));
-    case 2: return(LN_2+log(1.0-rf)+log(rf));
+    case 2: return(M_LN2+log(1.0-rf)+log(rf));
     case 3: return(2.0*log(1.0-rf));
     }
   }
@@ -102,7 +102,7 @@ double step_f2(int gen1, int gen2, double rf, double junk)
 
 double init_f2b(int true_gen)
 {
-  return(LN_025); 
+  return(-2.0*M_LN2);  /* ln(0.25) */
 }
 
 double emit_f2b(int obs_gen, int true_gen, double error_prob)
@@ -112,24 +112,24 @@ double emit_f2b(int obs_gen, int true_gen, double error_prob)
   case 1: 
     switch(true_gen) {
     case 1: return(log(1.0-error_prob));
-    case 2: case 3: case 4: return(log(error_prob)-LN_2);
+    case 2: case 3: case 4: return(log(error_prob)-M_LN2);
     }
   case 2: 
     switch(true_gen) {
-    case 1: case 4: return(log(error_prob)-LN_2);
+    case 1: case 4: return(log(error_prob)-M_LN2);
     case 2: case 3: return(log(1.0-error_prob));
     }
   case 3:
     switch(true_gen) {
     case 4: return(log(1.0-error_prob));
-    case 1: case 2: case 3: return(log(error_prob)-LN_2);
+    case 1: case 2: case 3: return(log(error_prob)-M_LN2);
     }
   case 4: /* AA or AB (not BB) */
     if(true_gen != 4) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
   case 5: /* AB or BB (not AA) */
     if(true_gen != 1) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-LN_2);
+    else return(log(error_prob)-M_LN2);
   }
   return(0.0); /* shouldn't get here */
 }
@@ -329,7 +329,7 @@ double logprec_f2(int obs1, int obs2, double rf)
   case 1: 
     switch(obs2) {
     case 1: return(2.0*log(1.0-rf));
-    case 2: return(LN_2 + log(rf) + log(1.0-rf));
+    case 2: return(M_LN2 + log(rf) + log(1.0-rf));
     case 3: return(2.0*log(rf));
     case 4: return(log(1.0-rf*rf));
     case 5: return(log(1.0-(1.0-rf)*(1.0-rf)));

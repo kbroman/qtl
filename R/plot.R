@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-9, Karl W Broman
+# copyright (c) 2000-2010, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Apr, 2009
+# last modified Jul, 2010
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -1012,10 +1012,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 #
 ######################################################################
 plot.info <-
-function(x,chr,method=c("both","entropy","variance"), step=1,
+function(x,chr,method=c("entropy","variance","both"), step=1,
          off.end=0, error.prob=0.001,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         alternate.chrid=FALSE, ...)
+         alternate.chrid=FALSE, fourwaycross=c("all", "AB", "CD"),
+         ...)
 {
   cross <- x
   if(!any(class(cross) == "cross"))
@@ -1034,11 +1035,33 @@ function(x,chr,method=c("both","entropy","variance"), step=1,
 
   gap <- 25
 
+  # 4-way cross: can consider just A/B or just C/D
+  fourwaycross <- match.arg(fourwaycross)
+
   n.ind <- nind(cross)
   for(i in 1:n.chr) {
 
     n.gen <- dim(cross$geno[[i]]$prob)[3]
     n.pos <- ncol(cross$geno[[i]]$prob)
+
+    # 4-way cross: can consider just A/B or just C/D
+    if(n.gen==4 && (fourwaycross!="all")) {
+      att <- attributes(cross$geno[[i]]$prob)
+      if(fourwaycross == "AB") {
+        cross$geno[[i]]$prob[,,1] <- cross$geno[[i]]$prob[,,1] + cross$geno[[i]]$prob[,,3]
+        cross$geno[[i]]$prob[,,2] <- cross$geno[[i]]$prob[,,2] + cross$geno[[i]]$prob[,,4]
+      }
+      else {
+        cross$geno[[i]]$prob[,,1] <- cross$geno[[i]]$prob[,,1] + cross$geno[[i]]$prob[,,2]
+        cross$geno[[i]]$prob[,,2] <- cross$geno[[i]]$prob[,,3] + cross$geno[[i]]$prob[,,4]
+      }
+      cross$geno[[i]]$prob <- cross$geno[[i]]$prob[,,1:2]
+      n.gen <- 2
+
+      for(j in seq(along=att)) 
+        if(names(att)[j] != "dim" && names(att)[j] != "dimnames") 
+          attr(cross$geno[[i]]$prob, names(att)[j]) <- att[[j]]
+    }
 
     # calculate information (between 0 and 1)
     info <- .C("R_info",
@@ -1095,7 +1118,6 @@ function(x,chr,method=c("both","entropy","variance"), step=1,
 
   class(results) <- c("scanone","data.frame")
 
-  args <- list(...)
   # check whether main was included as an argument
   if("main" %in% names(args)) hasmain <- TRUE
   else hasmain <- FALSE

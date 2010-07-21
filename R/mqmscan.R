@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified April 2010
+# last modified July 2010
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -230,7 +230,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if((step.min+step.size) > step.max){
 			stop("step.max needs to be >= step.min + step.size")
 		}
-    cat("Step.min:",step.min," Step.max:",step.max,"\n")
+#    cat("Step.min:",step.min," Step.max:",step.max,"\n")
 		if(step.size < 1){
 			stop("step.size needs to be >= 1")
 		}
@@ -350,7 +350,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		markers.on.chr <- which(qtl[,1]==x)
 		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
 		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-    cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
+#    cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
     qtl <- qtl[-to.remove,]
   }		
 	if(outputmarkers){

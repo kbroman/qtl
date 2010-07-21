@@ -4,7 +4,7 @@
  *
  * copyright (c) 2010, Karl W Broman
  *
- * last modified Jun, 2010
+ * last modified Jul, 2010
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ void R_scanone_hk_binary(int *n_ind, int *n_pos, int *n_gen,
 			 double *genoprob, double *addcov, int *n_addcov, 
 			 double *intcov, int *n_intcov, double *pheno,
 			 double *result, double *tol, int *maxit, 
-			 int *verbose)
+			 int *verbose, int *ind_noqtl)
 {
   double ***Genoprob, **Addcov, **Intcov;
 
@@ -65,7 +65,7 @@ void R_scanone_hk_binary(int *n_ind, int *n_pos, int *n_gen,
 
   scanone_hk_binary(*n_ind, *n_pos, *n_gen, Genoprob, Addcov, *n_addcov,
 		    Intcov, *n_intcov, pheno, result, *tol, *maxit, 
-		    *verbose);
+		    *verbose, ind_noqtl);
 }
 
 /**********************************************************************
@@ -102,12 +102,16 @@ void R_scanone_hk_binary(int *n_ind, int *n_pos, int *n_gen,
  *
  * verbose      if TRUE, give some output
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_hk_binary(int n_ind, int n_pos, int n_gen, double ***Genoprob,
 		       double **Addcov, int n_addcov, double **Intcov, 
 		       int n_intcov, double *pheno, 
-		       double *result, double tol, int maxit, int verbose)
+		       double *result, double tol, int maxit, int verbose,
+		       int *ind_noqtl)
 {
   int i, j, k, k2, kk, s, ncolx, thepos, flag, ny, *jpvt;
   double *dwork, *x, *x_bk, *coef, *resid, *qty, *qraux, *ests;
@@ -140,15 +144,21 @@ void scanone_hk_binary(int n_ind, int n_pos, int n_gen, double ***Genoprob,
   jpvt = (int *)R_alloc(ncolx, sizeof(int));
 
   for(thepos=0; thepos<n_pos; thepos++) { /* loop over positions */
+
+    for(i=0; i<n_ind*ncolx; i++) x[i] = 0.0;
+
     /* fill up X matrix */
     for(j=0; j<n_ind; j++) {
-      for(k=0; k<n_gen; k++)
-	x[j+k*n_ind] = Genoprob[k][thepos][j];
+      if(!ind_noqtl[j]) 
+	for(k=0; k<n_gen; k++) 
+	  x[j+k*n_ind] = Genoprob[k][thepos][j];
       for(k=0; k<n_addcov; k++)
 	x[j+(k+n_gen)*n_ind] = Addcov[k][j];
-      for(k=0,s=0; k<n_gen-1; k++)
-	for(k2=0; k2<n_intcov; k2++,s++) 
-	  x[j+(n_gen+n_addcov+s)*n_ind] = Genoprob[k][thepos][j]*Intcov[k2][j];
+      if(!ind_noqtl[j]) {
+	for(k=0,s=0; k<n_gen-1; k++)
+	  for(k2=0; k2<n_intcov; k2++,s++)
+	    x[j+(n_gen+n_addcov+s)*n_ind] = Genoprob[k][thepos][j]*Intcov[k2][j];
+      }
     }
 
     /* make a copy of x matrix */

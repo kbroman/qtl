@@ -3,7 +3,7 @@
 # scanone.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Jun, 2010
+# last modified Jul, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
          use=c("all.obs", "complete.obs"), upper=FALSE,
          ties.random=FALSE, start=NULL, maxit=4000, tol=1e-4,
          n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose, batchsize=250,
-         n.cluster=1)
+         n.cluster=1, ind.noqtl)
 {
   if(batchsize < 1) stop("batchsize must be >= 1.")
   model <- match.arg(model)
@@ -76,6 +76,22 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(!missing(perm.strata) && !is.null(perm.strata)) {
     if(length(perm.strata) != nind(cross))
       stop("perm.strata, if given, must have length = nind(cross) [", nind(cross), "]")
+  }
+
+  # individuals with no QTL effect
+  if(missing(ind.noqtl)) ind.noqtl <- rep(FALSE, nind(cross))
+  else {
+    if(method %in% c("mr", "mr-imp", "mr-argmax","ehk") ||
+       model %in% c("2part", "np")) {
+      ind.noqtl <- rep(FALSE, nind(cross))
+      warning("ind.noqtl ignored for model=", model, ", method=", method) 
+    }
+    else if(is.null(addcovar) && (!is.logical(ind.noqtl) || any(ind.noqtl))) {
+      ind.noqtl <- rep(FALSE, nind(cross))
+      warning("ind.noqtl ignored when no additive covariates")
+    }
+    else if(!is.logical(ind.noqtl) || length(ind.noqtl) != nind(cross)) 
+      stop("ind.noqtl be a logical vector of length n.ind (", nind(cross), ")")
   }
 
   # to store the degrees of freedom
@@ -124,7 +140,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     # If use="complete.obs", drop individuals with any missing phenotypes
     if(use=="complete.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, TRUE)
+                         perm.strata, ind.noqtl, TRUE)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -132,6 +148,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.addcovar <- temp[[5]]
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
+      ind.noqtl <- temp[[8]]
     }
   }
 
@@ -141,7 +158,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     # drop individuals with missing covariates
     cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
     temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,
-                         perm.strata, TRUE)
+                         perm.strata, ind.noqtl, TRUE)
     cross <- temp[[1]]
     pheno <- cross$pheno[,pheno.col, drop=FALSE]
     addcovar <- temp[[3]]
@@ -149,6 +166,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     n.addcovar <- temp[[5]]
     n.intcovar <- temp[[6]]
     perm.strata <- temp[[7]]
+    ind.noqtl <- temp[[8]]
 
     # determine the batches (defined by the pattern of missing data)
     patterns <- apply(pheno, 2, function(a) paste(!is.na(a), collapse=":"))
@@ -230,7 +248,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(n.perm < 0) { # in the midst of permutations
     if(use=="all.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, n.perm==-1)
+                         perm.strata, ind.noqtl, n.perm==-1)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -238,6 +256,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.addcovar <- temp[[5]]
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
+      ind.noqtl <- temp[[8]]
     }
     else {
       pheno <- as.matrix(cross$pheno[,pheno.col])
@@ -283,7 +302,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       if(n.perm > -2) warning("Method imp not available for binary model; using em")
       method <- "em"
     }
-    return(discan(cross, pheno, method, addcovar, intcovar, maxit, tol, verbose, n.perm > -2))
+    return(discan(cross, pheno, method, addcovar, intcovar, maxit, tol, verbose, n.perm > -2, ind.noqtl))
   }
   else if(model=="2part") {
     if((n.addcovar > 0 || n.intcovar > 0) && n.perm > -2)
@@ -505,6 +524,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                       as.integer(length(thiscol)), # number of phenotypes 
                       as.double(weights),
                       result=as.double(rep(0,length(thiscol)*n.pos)),
+                      as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                       PACKAGE="qtl")
           firstcol <- firstcol + batchsize
           if(is.null(z)) {
@@ -529,6 +549,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                 as.integer(n.phe), # number of phenotypes 
                 as.double(weights),
                 result=as.double(rep(0,n.phe*n.pos)),
+                as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                 PACKAGE="qtl")
       }
     }
@@ -553,6 +574,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                       as.integer(length(thiscol)), # number of phenotypes 
                       as.double(weights),
                       result=as.double(rep(0,length(thiscol)*n.pos)),
+                      as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                       PACKAGE="qtl")
           firstcol <- firstcol + batchsize
           if(is.null(z)) {
@@ -576,6 +598,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
                 as.integer(n.phe), # number of phenotypes 
                 as.double(weights),
                 result=as.double(rep(0,n.phe*n.pos)),
+                as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
                 PACKAGE="qtl")
       }
     }
@@ -615,6 +638,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
               as.integer(maxit),
               as.double(tol),
               as.integer(0), # debugging verbose off 
+              as.integer(ind.noqtl),       # indicators of ind'l w/o QTL effects
               PACKAGE="qtl")
 
     else if(model=="np")  # non-parametric interval mapping

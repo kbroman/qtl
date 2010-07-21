@@ -14,6 +14,8 @@ addpair                 Scan for an additional pair of QTL in a
 addqtl                  Scan for an additional QTL in a multiple-QTL
                         model
 addtoqtl                Add to a qtl object
+allchrsplits            Test all possible splits of a chromosome into
+                        two pieces
 argmax.geno             Reconstruct underlying genotypes
 badorder                An intercross with misplaced markers
 bayesint                Bayesian credible interval
@@ -88,8 +90,12 @@ locations               Genetic locations of traits for the multitrait
 lodint                  LOD support interval
 makeqtl                 Make a qtl object
 map10                   An example genetic map
+markerlrt               General likelihood ratio test for association
+                        between marker pairs
 markernames             Pull out the marker names from a cross
 max.scanone             Maximum peak in genome scan
+max.scanPhyloQTL        Maximum peak in genome scan to map a QTL to a
+                        phylogenetic tree
 max.scantwo             Maximum peak in two-dimensional genome scan
 movemarker              Move a marker to a new chromosome
 MQM                     Introduction to Multiple QTL Model (MQM)
@@ -154,6 +160,8 @@ plot.scanone            Plot LOD curves
 plot.scanoneboot        Plot results of bootstrap for QTL position
 plot.scanoneperm        Plot permutation results for a single-QTL
                         genome scan
+plot.scanPhyloQTL       Plot LOD curves from single-QTL scan to map QTL
+                        to a phylogenetic tree
 plot.scantwo            Plot LOD scores for a two-dimensional genome
                         scan
 plot.scantwoperm        Plot permutation results for a 2d, 2-QTL genome
@@ -162,6 +170,7 @@ plotLodProfile          Plot 1-d LOD profiles for a multiple QTL model
 plotModel               Plot a QTL model
 pull.geno               Pull out the genotype data from a cross
 pull.map                Pull out the genetic map from a cross
+pull.markers            Drop all but a selected set of markers
 pull.pheno              Pull out phenotype data from a cross
 qtl-package             Introductory comments on R/qtl
 qtlversion              Installed version of R/qtl
@@ -181,6 +190,8 @@ ripple                  Compare marker orders
 scanone                 Genome scan with a single QTL model
 scanoneboot             Bootstrap to get interval estimate of QTL
                         location
+scanPhyloQTL            Single-QTL genome scan to map QTL to a
+                        phylogenetic tree
 scanqtl                 General QTL scan
 scantwo                 Two-dimensional genome scan with a two-QTL
                         model
@@ -189,6 +200,8 @@ sim.cross               Simulate a QTL experiment
 sim.geno                Simulate genotypes given observed marker data
 sim.map                 Simulate a genetic map
 simFounderSnps          Simulate founder SNPs for a multiple-strain RIL
+simPhyloQTL             Simulate a set of intercrosses for a single
+                        diallelic QTL
 simulatemissingdata     Simulates missing genotype data
 stepwiseqtl             Stepwise selection for multiple QTL
 strip.partials          Strip partially informative genotypes
@@ -207,12 +220,15 @@ summary.ripple          Print summary of ripple results
 summary.scanone         Summarize the results of a genome scans
 summary.scanoneboot     Bootstrap confidence interval for QTL location
 summary.scanoneperm     LOD thresholds from scanone permutation results
+summary.scanPhyloQTL    Summarize the results a genome scan to map a
+                        QTL to a phylogenetic tree
 summary.scantwo         Summarize the results of a two-dimensional
                         genome scan
 summary.scantwo.old     Summarize the results of a two-dimensional
                         genome scan
 summary.scantwoperm     LOD thresholds from scantwo permutation results
 switch.order            Switch the order of markers on a chromosome
+switchAlleles           Switch alleles at selected markers
 top.errorlod            List genotypes with large error LOD scores
 totmar                  Determine the total number of markers
 transformPheno          Transformation of the phenotypes in a cross

@@ -9,10 +9,11 @@
 }
 
 \usage{
-plot.info(x, chr, method=c("both","entropy","variance"), step=1,
+plot.info(x, chr, method=c("entropy","variance","both"), step=1,
           off.end=0, error.prob=0.001,
           map.function=c("haldane","kosambi","c-f","morgan"),
-          alternate.chrid=FALSE, \dots)
+          alternate.chrid=FALSE, fourwaycross=c("all", "AB", "CD"),
+          \dots)
 }
 
 \arguments{
@@ -38,7 +39,10 @@ plot.info(x, chr, method=c("both","entropy","variance"), step=1,
    recombination fractions.} 
  \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
-     axis labels, so that they may be more easily distinguished.}
+    axis labels, so that they may be more easily distinguished.}
+  \item{fourwaycross}{For a phase-known four-way cross, measure missing
+ genotype information overall (\code{"all"}), or just for the alleles
+ from the first parent (\code{"AB"}) or from the second parent (\code{"CD"}).}
  \item{\dots}{Passed to \code{\link{plot.scanone}}.}
 }
 
