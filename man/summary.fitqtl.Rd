@@ -17,19 +17,10 @@
  \item{\dots}{Ignored at this point.}
 }
 
-%\details{
-%  To be added.
-%}
-
 \value{
   An object of class \code{summary.fitqtl}, which is not all that
   different than the input, but when printed gives summary information
   about the results.
-}
-
-\references{
-  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
-  trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 
 \author{Hao Wu; Karl W Broman, \email{kbroman@biostat.wisc.edu}}
