@@ -142,6 +142,8 @@ nmar                    Determine the numbers of markers on each
 nmissing                Number of missing genotypes
 nphe                    Determine the number of phenotypes QTL
                         experiment
+nqrank                  Transform a vector of quantitative values to
+                        the corresponding normal quantiles
 ntyped                  Number of genotypes
 orderMarkers            Find an initial order for markers within
                         chromosomes
