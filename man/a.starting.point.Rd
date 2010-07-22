@@ -277,7 +277,7 @@ maxima of the above five LOD scores for each of the imputations.
 }
 
 \references{
-  Broman, K. W., Wu, H., Sen, \'S. and Churchill, G. A. (2003) R/qtl: QTL
+  Broman, K. W., Wu, H., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2003) R/qtl: QTL
   mapping in experimental crosses.  \emph{Bioinformatics} \bold{19},
   889--890. 
 
@@ -292,7 +292,7 @@ maxima of the above five LOD scores for each of the imputations.
   Lincoln, S. E. and Lander, E. S. (1992) Systematic detection of
   errors in genetic linkage data.  \emph{Genomics} \bold{14}, 604--610.
 
-  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
+  Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2001) A statistical framework for quantitative
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 

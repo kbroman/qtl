@@ -68,7 +68,7 @@ calc.penalties(permo.2dim)
 }
 
 \references{
-  Manichaikul, A., Moon, J. Y., Sen, \'S, Yandell, B. S. and Broman,
+  Manichaikul, A., Moon, J. Y., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Yandell, B. S. and Broman,
   K. W. (2009) A model selection approach for the identification of
   quantitative trait loci in experimental crosses, allowing
   epistasis. \emph{Genetics}, to appear.
