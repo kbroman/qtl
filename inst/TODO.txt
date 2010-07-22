@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Sometimes the rownames for the LOD profile from stepwiseqtl come out
-  messed up (that is, they don't have the proper rownames).
-
 o In stepwiseqtl(), allow penalties to be Inf
 
 o In summary.scanone, if perms has multiple columns but lod scores

@@ -110,6 +110,9 @@ Minor changes:
   Fixed bug in convert2sa for case of chromosome with just 1 or 2
   markers. 
 
+  Fixed bug in refineqtl that resulted in sometimes the rownames in
+  the lod profile attribute being messed up.
+
   Revised scanone and scantwo to trap error if perm.strata is not of
   the correct length. 
 
