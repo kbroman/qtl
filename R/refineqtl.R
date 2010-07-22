@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-2010, Karl W. Broman
-# last modified Jun, 2010
+# last modified Jul, 2010
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -368,11 +368,12 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       else
         detailedmap <- attr(cross$geno[[thechr]]$prob,"map")
     
-      r <- range(lastout[[i]][,2])
+      r <- range(lastout[[i]][,2])+c(-1e-5, 1e-5)
       rn <- names(detailedmap)[detailedmap>=r[1] & detailedmap<=r[2]]
       o <- grep("^loc-*[0-9]+",rn)
       if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
         rn[o] <- paste("c",thechr,".",rn[o],sep="")
+      if(length(rn) != nrow(lastout[[i]])) return(list(lastout[[i]], rn, detailedmap))
       if(length(rn) == nrow(lastout[[i]])) rownames(lastout[[i]]) <- rn
     }
 
