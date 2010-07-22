@@ -36,8 +36,6 @@ o Revise the help file for read.cross to make the coding of genotypes
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
-o plot of genotype frequencies / P-values
-
 o qtl x covar interactions in stepwiseqtl
 
 o special treatment of X chromosome in scantwo permutations and in

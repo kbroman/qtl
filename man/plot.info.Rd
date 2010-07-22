@@ -13,7 +13,7 @@ plot.info(x, chr, method=c("entropy","variance","both"), step=1,
           off.end=0, error.prob=0.001,
           map.function=c("haldane","kosambi","c-f","morgan"),
           alternate.chrid=FALSE, fourwaycross=c("all", "AB", "CD"),
-          \dots)
+          include.genofreq=FALSE, \dots)
 }
 
 \arguments{
@@ -43,6 +43,10 @@ plot.info(x, chr, method=c("entropy","variance","both"), step=1,
   \item{fourwaycross}{For a phase-known four-way cross, measure missing
  genotype information overall (\code{"all"}), or just for the alleles
  from the first parent (\code{"AB"}) or from the second parent (\code{"CD"}).}
+  \item{include.genofreq}{If TRUE, estimated genotype frequencies (from
+ the results of 
+ \code{\link{calc.genoprob}} averaged across the individuals) are
+ included as additional columns in the output.}
  \item{\dots}{Passed to \code{\link{plot.scanone}}.}
 }
 
@@ -92,7 +96,8 @@ plot.info(hyper, bandcol="gray70")
 }
 
 \seealso{ \code{\link{plot.scanone}},
-  \code{\link{plot.missing}} }
+  \code{\link{plot.missing}}, \code{\link{calc.genoprob}},
+  \code{\link{geno.table}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
