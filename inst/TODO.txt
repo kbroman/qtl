@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In stepwiseqtl(), allow penalties to be Inf
-
 o In summary.scanone, if perms has multiple columns but lod scores
   have just 1, just work with the first column in the perms
 

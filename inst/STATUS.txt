@@ -106,6 +106,8 @@ Minor changes:
   Revised summary.cross so that if markers are at the same location,
   the warning message indicates which chromosomes are involved.
 
+  Revised calc.plod() to allow penalties to be infinite.
+
   Revised read.cross with format="csv" to give an error if the 2nd row
   has all blanks.
 
