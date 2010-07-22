@@ -30,8 +30,8 @@ o In the various MQM functions, pheno.col might be a phenotype name
 
 o scantwo: ability to scan just specific chromosome pairs
 
-o scanone with method="hk": Major memory problems in the permutations
-  with multiple phenotypes. 
+o scanone (or is it scantwo?) with method="hk": Major memory problems
+  in the permutations with multiple phenotypes.
 
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
