@@ -382,9 +382,13 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian S. Yandell}
 
-\seealso{ \code{\link{write.cross}}, \code{\link{sim.cross}};
+\seealso{ \code{\link{c.cross}}, \code{\link{clean.cross}},
+  \code{\link{subset.cross}}, \code{\link{summary.cross}},
+  \code{\link{plot.cross}}, \code{\link{geno.table}},
+  \code{\link{geno.crosstab}},
+  \code{\link{write.cross}}, \code{\link{sim.cross}};
   the \code{sampledata} directory in the package distribution contains
-  sample data files in all formats except Gary's.  Also see
+  sample data files in multiple formats.  Also see
   \url{http://www.rqtl.org/sampledata}.  
 }
 
