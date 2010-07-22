@@ -395,6 +395,13 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian S. Yandell}
 
+\references{
+  Broman, K. W. and Sen,
+  \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. (2009) \emph{A
+  guide to QTL mapping with R/qtl.}  Springer.  \url{http://www.rqtl.org/book}
+}
+
+
 \seealso{ \code{\link{subset.cross}}, \code{\link{summary.cross}},
   \code{\link{plot.cross}}, \code{\link{c.cross}}, \code{\link{clean.cross}},
   \code{\link{write.cross}}, \code{\link{sim.cross}};
