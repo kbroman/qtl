@@ -1,5 +1,6 @@
 \name{badorder}
 \alias{badorder}
+\docType{data}
 
 \title{An intercross with misplaced markers}
 

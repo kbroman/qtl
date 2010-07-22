@@ -1,4 +1,5 @@
 \name{A starting point}
+\docType{package}
 \alias{qtl-package}
 
 \title{Introductory comments on R/qtl}
