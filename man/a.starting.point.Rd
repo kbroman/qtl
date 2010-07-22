@@ -277,6 +277,10 @@ maxima of the above five LOD scores for each of the imputations.
 }
 
 \references{
+  Broman, K. W. and Sen,
+  \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. (2009) \emph{A
+  guide to QTL mapping with R/qtl.}  Springer.  \url{http://www.rqtl.org/book}
+
   Broman, K. W., Wu, H., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2003) R/qtl: QTL
   mapping in experimental crosses.  \emph{Bioinformatics} \bold{19},
   889--890. 
