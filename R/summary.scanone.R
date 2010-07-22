@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Dec, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Jul, 2010
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -103,8 +103,22 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
         }
         warning("Just one column of permutation results; reusing for all LOD score columns.")
       }
-      else 
-        stop("scanone input has different number of LOD columns as perms input.")
+      else {
+        if(ncol.object == 1) {
+          warning("Using just the first column in the perms input")
+          if("xchr" %in% names(attributes(perms))) {
+            perms$A <- perms$A[,1,drop=FALSE]
+            perms$X <- perms$X[,1,drop=FALSE]
+          }
+          else {
+            clp <- class(perms)
+            perms <- perms[,1,drop=FALSE]
+            class(perms) <- clp
+          }
+        }
+        else 
+          stop("scanone input has different number of LOD columns as perms input.")
+      }
     }
     if(!all(cn.object == cn.perms))
       warning("Column names in scanone input do not match those in perms input.")

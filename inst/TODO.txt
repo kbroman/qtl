@@ -10,12 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In summary.scanone, if perms has multiple columns but lod scores
-  have just 1, just work with the first column in the perms
-
-o column names in scanone() output should be the same as those in
-  scanone perms
-
 o Revise the help file for read.cross to make the coding of genotypes
   more clear.
 
