@@ -97,7 +97,9 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     of dim (\code{2 x n.mar}) where the rows correspond to marker
     positions in female and male genetic distance, respectively.  
 
-    The genotype data for a backcross is coded as follows: NA = missing,
+    The genotype data gets converted into numeric codes, as follows.  
+
+    The genotype data for a backcross is coded as NA = missing,
     1 = AA, 2 = AB.  
 
     For an F2 intercross, the coding is NA = missing, 1 = AA, 2 = AB, 3
@@ -206,6 +208,11 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   Subsequent lines should give the data, with one line for each
   individual, and with phenotypes followed by genotypes.  If possible,
   phenotypes are made numeric; otherwise they are converted to factors.
+
+  The genotype codes must be the same across all markers.  For example,
+  you can't have one marker coded AA/AB/BB and another coded A/H/B.
+  This includes genotypes for the X chromosome, for which hemizygous
+  individuals should be coded as if they were homoyzogous.
 
   The cross is determined to be a backcross if only the first two elements
   of the \code{genotypes} string are found; otherwise, it is assumed to
