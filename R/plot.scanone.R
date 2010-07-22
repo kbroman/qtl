@@ -33,7 +33,7 @@ plot.scanone <-
 function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
          lty=1,col=c("black","blue","red"),lwd=2,add=FALSE,gap=25,
          mtick=c("line", "triangle"), show.marker.names=FALSE,
-         alternate.chrid=FALSE, ...)
+         alternate.chrid=FALSE, bandcol=NULL, ...)
 {
   if(!any(class(x) == "scanone") ||
      (!missing(x2) && !any(class(x2) == "scanone")) ||
@@ -181,6 +181,15 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
         }
       }
     }
+  }
+
+  if(!add && !onechr && !is.null(bandcol)) {
+    u <- par("usr")
+    for(i in seq(2, by=2, length(chr))) {
+      rect(min(out[out[,1]==chr[i],2]) + start[i]-gap/2, u[3],
+           max(out[out[,1]==chr[i],2]) + start[i]+gap/2, u[4], border=bandcol, col=bandcol)
+    }
+    abline(h=u[3:4])
   }
 
   # initialize xtick and xtickmark
