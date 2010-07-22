@@ -117,6 +117,10 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   included, these identifiers will be used in \code{\link{top.errorlod}},
   \code{\link{plot.errorlod}}, and \code{\link{plot.geno}} as
   identifiers for the individual.} 
+
+  While the data format is complicated, there are a number of functions,
+  such as \code{\link{subset.cross}}, to
+  assist in pulling out portions of the data.
 }
 
 \details{
@@ -131,7 +135,9 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   formats work only for backcross and intercross data.
 
   The \code{sampledata} directory in the package distribution contains
-  sample data files in all formats except Gary's.
+  sample data files in multiple formats.    Also see
+  \url{http://www.rqtl.org/sampledata}.
+
 }
 
 
@@ -382,10 +388,8 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian S. Yandell}
 
-\seealso{ \code{\link{c.cross}}, \code{\link{clean.cross}},
-  \code{\link{subset.cross}}, \code{\link{summary.cross}},
-  \code{\link{plot.cross}}, \code{\link{geno.table}},
-  \code{\link{geno.crosstab}},
+\seealso{ \code{\link{subset.cross}}, \code{\link{summary.cross}},
+  \code{\link{plot.cross}}, \code{\link{c.cross}}, \code{\link{clean.cross}},
   \code{\link{write.cross}}, \code{\link{sim.cross}};
   the \code{sampledata} directory in the package distribution contains
   sample data files in multiple formats.  Also see
