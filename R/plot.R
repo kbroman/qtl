@@ -1016,7 +1016,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
          off.end=0, error.prob=0.001,
          map.function=c("haldane","kosambi","c-f","morgan"),
          alternate.chrid=FALSE, fourwaycross=c("all", "AB", "CD"),
-         ...)
+         include.genofreq=FALSE, ...)
 {
   cross <- x
   if(!any(class(cross) == "cross"))
@@ -1039,6 +1039,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
   fourwaycross <- match.arg(fourwaycross)
 
   n.ind <- nind(cross)
+  if(include.genofreq) theprob <- NULL
   for(i in 1:n.chr) {
 
     n.gen <- dim(cross$geno[[i]]$prob)[3]
@@ -1110,11 +1111,66 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
       w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
     rownames(z) <- w
     results <- rbind(results, z)
+
+    if(include.genofreq) {
+      p <- cross$geno[[i]]$prob
+      if(class(cross$geno[[i]])=="X")
+        p <- reviseXdata(class(cross)[1], expandX="full", sexpgm=getsex(cross), prob=p,
+                         cross.attr=attributes(cross))
+      p <- apply(p, 2:3, mean, na.rm=TRUE)
+      if(is.null(theprob)) 
+        theprob <- p
+      else {
+        m1 <- match(colnames(p), colnames(theprob))
+        m2 <- match(colnames(theprob), colnames(p))
+        if(!any(is.na(m1)) && !any(is.na(m2))) {
+          theprob <- rbind(theprob, p[,colnames(theprob)])
+        }
+        else { # some differences in column names
+          if(all(!is.na(m1))) { # need to add some new columns to p
+            noldcol <- ncol(p)
+            nnewcol <- sum(is.na(m2))
+            for(i in 1:nnewcol)
+              p <- cbind(p, 0)
+            colnames(p)[-(1:noldcol)] <- colnames(theprob)[is.na(m2)]
+            theprob <- rbind(theprob, p[,colnames(theprob)])
+          }
+          else if(all(!is.na(m2))) { # need to add some new columns to theprob
+            noldcol <- ncol(theprob)
+            nnewcol <- sum(is.na(m1))
+            for(i in 1:nnewcol)
+              theprob <- cbind(theprob, 0)
+            colnames(theprob)[-(1:noldcol)] <- colnames(p)[is.na(m1)]
+            theprob <- rbind(theprob, p[,colnames(theprob)])
+          }
+          else { # need to add some new columns to each
+            noldcol <- ncol(theprob)
+            nnewcol <- sum(is.na(m1))
+            oldcolnam <- colnames(theprob)
+            for(i in 1:nnewcol)
+              theprob <- cbind(theprob, 0)
+            colnames(theprob)[-(1:noldcol)] <- colnames(p)[is.na(m1)]
+
+            noldcol <- ncol(p)
+            nnewcol <- sum(is.na(m2))
+            for(i in 1:nnewcol)
+              p <- cbind(p, 0)
+            colnames(p)[-(1:noldcol)] <- oldcolnam[is.na(m2)]
+            
+            theprob <- rbind(theprob, p[,colnames(theprob)])
+          }
+        }
+      }
+    } # end of if(include.genofreq)
+
   }
   colnames(results)[3:4] <- c("misinfo.entropy","misinfo.variance")
 
   if(method==0) results <- results[,-4]
   if(method==1) results <- results[,-3]
+
+  if(include.genofreq)
+    results <- cbind(results, theprob)
 
   class(results) <- c("scanone","data.frame")
 

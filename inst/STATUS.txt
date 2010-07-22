@@ -73,7 +73,9 @@ Minor changes:
   Changed the default in plot.info from method="both" to
   method="entropy".  Also, added an argument "fourwaycross", so that
   one can look at the missing information just for the alleles of the
-  first parent (A vs B) or the second parent (C vs D).
+  first parent (A vs B) or the second parent (C vs D).  Finally, added
+  an argument "include.genofreq"; if TRUE, the results will include
+  estimated genotype frequencies at each position.
 
   Added argument 'simple' to summary.fitqtl, addint, and addcovarint;
   if TRUE, output includes neither p-values nor sums of squares.
