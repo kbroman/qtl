@@ -65,15 +65,34 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   For \code{model="binary"}, a logistic regression model is used.
 
   \bold{The part to get estimated QTL effects is fully working only for
-    the case of autosomes in a backcross or intercross.
+    the case of autosomes in a backcross, intercross, RIL or doubled haploids.
     In other cases the values returned are based on a
     design matrix that is convenient for calculations but not easily
     interpreted.}
 
+  The estimated QTL effects for a backcross are derived by the coding
+  scheme \eqn{\pm}{+/-} 1/2 for AA and AB, so that the additive
+  effect corresponds to the difference between phenotype averages for
+  the two genotypes.  For doubled haploids and RIL, the coding scheme is
+  \eqn{\pm}{+/-} 1 for AA and BB, so that the additive effect
+  corresponds to half the difference between the phenotype averages for
+  the two homozygotes.  
+
+  For an intercross, the additive effect is derived from the coding
+  scheme -1/0/+1 for genotypes AA/AB/BB, and so is half the difference
+  between the phenotype averages for the two homozygotes.  The dominance
+  deviation is derived from the coding scheme 0/+1/0 for genotypes
+  AA/AB/BB, and so is the difference between the phenotype average for
+  the heterozygotes and the midpoint between the phenotype averages for
+  the two homozygotes.  
+
+  Epistatic effects and QTL \eqn{\times}{x} covariate interaction
+  effects are obtained through the products of the corresponding
+  additive/dominant effect columns.
 }
 
-\section{Value}{
-  An object of class \code{fitqtl}. It may contains as many as four fields:
+\value{
+  An object of class \code{fitqtl}. It may contains as many as four components:
   \enumerate{
     \item \code{result.full} is the ANOVA table as a matrix for the full model
     result. It contains the degree of freedom (df), Sum of squares (SS),
@@ -98,7 +117,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     \item \code{ests} contains the estimated QTL effects and standard errors.  
 
   \bold{The part to get estimated QTL effects is fully working only for
-    the case of autosomes in a backcross or intercross.
+    the case of autosomes in a backcross, intercross, RIL or doubled haploids.
     In other cases the values returned are based on a
     design matrix that is convenient for calculations but not easily
     interpreted.}
@@ -110,7 +129,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   quantitative trait loci in line crosses using flanking markers.
   \emph{Heredity} \bold{69}, 315--324.
 
-  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
+  Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2001) A statistical framework for quantitative
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 

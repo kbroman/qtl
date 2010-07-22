@@ -13,10 +13,6 @@ SHORT TERM:
 o In plot.geno, allow use of xlim and ylim; also do this in
   plot.scanoneperm and plot.scantwoperm.
 
-o Add an explanation regarding the coding in the coefficient 
-  estimates in fitqtl().  Add text to the help file for
-  summary.fitqtl(). 
-
 o FAQ: - constructing covariate matrices
 
 o get scanone and scantwo to work with a single marker on a
