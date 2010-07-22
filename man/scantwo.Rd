@@ -198,7 +198,7 @@ linkage to the X chromosome.  (See the help file for
   quantitative traits using RFLP linkage maps.  \emph{Genetics}
   \bold{121}, 185--199.
 
-  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
+  Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2001) A statistical framework for quantitative
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 
   Soller, M., Brody, T. and Genizi, A. (1976) On the power of experimental
