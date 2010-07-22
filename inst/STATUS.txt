@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 7/21/2010:
+Version 1.17, 7/22/2010:
 
 Major changes:
 
@@ -64,6 +64,11 @@ Minor changes:
 
   Added a function pull.markers, which is the opposite of
   drop.markers. 
+
+  Added an argument 'bandcol' in plot.scanone, to specify a color for
+  alternating bands to indicate chromosomes.  The default
+  (bandcol=NULL) is to not plot such bands.  A good choice might be
+  bandcol="gray70".  
 
   Changed the default in plot.info from method="both" to
   method="entropy".  Also, added an argument "fourwaycross", so that

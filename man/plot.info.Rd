@@ -87,6 +87,8 @@ plot.info(hyper,chr=c(1,4))
 # save the results and view maximum missing info on each chr
 info <- plot.info(hyper)
 summary(info)
+
+plot.info(hyper, bandcol="gray70")
 }
 
 \seealso{ \code{\link{plot.scanone}},
