@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Function to get rid of duplicate markers
-
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 
