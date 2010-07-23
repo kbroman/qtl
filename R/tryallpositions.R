@@ -71,7 +71,7 @@ function(cross, marker, chr, error.prob=0.0001,
         themar <- colnames(cross$geno[[i]]$data)
         initialloglik <- sum(sapply(themar, function(a, b, c) markerloglik(b, a, c), cross, error.prob))
         
-        nm <- est.map(subset(cross, chr=i), error.prob=error.prob,
+        nm <- est.map(cross, chr=i, error.prob=error.prob,
                       map.function=map.function, m=m, p=p, maxit=maxit,
                       tol=tol, sex.sp=sex.sp, verbose=FALSE,
                       omit.noninformative=FALSE)[[1]]
@@ -106,7 +106,7 @@ function(cross, marker, chr, error.prob=0.0001,
         int2 <- paste("(", int2[-length(int2)], "-", int2[-1], ")", sep="")
         interval <- paste(interval, int2)
 
-        initialmap <- est.map(subset(temp, chr=i),
+        initialmap <- est.map(temp, chr=i,
                               error.prob=error.prob,
                               map.function=map.function, m=m, p=p, maxit=maxit,
                               tol=tol, sex.sp=sex.sp, verbose=FALSE,
@@ -116,7 +116,7 @@ function(cross, marker, chr, error.prob=0.0001,
         llik <- length <- length.male <- rep(NA, length(pos))
         for(j in seq(along=pos)) {
           temp <- movemarker(cross, marker, i, pos[j])
-          nm <- est.map(subset(temp, chr=i), error.prob=error.prob,
+          nm <- est.map(temp, chr=i, error.prob=error.prob,
                         map.function=map.function, m=m, p=p, maxit=maxit,
                         tol=tol, sex.sp=sex.sp, verbose=FALSE,
                         omit.noninformative=FALSE)[[1]]
@@ -156,7 +156,7 @@ function(cross, marker, chr, error.prob=0.0001,
         int2 <- paste("(", int2[-length(int2)], "-", int2[-1], ")", sep="")
         interval <- paste(interval, int2)
 
-        initialmap <- est.map(subset(cross, chr=i), error.prob=error.prob,
+        initialmap <- est.map(cross, chr=i, error.prob=error.prob,
                               map.function=map.function, m=m, p=p, maxit=maxit,
                               tol=tol, sex.sp=sex.sp, verbose=FALSE,
                               omit.noninformative=FALSE)[[1]]
@@ -166,7 +166,7 @@ function(cross, marker, chr, error.prob=0.0001,
         for(j in seq(along=pos)) {
           temp <- movemarker(cross, marker, i, pos[j])
 
-          nm <- est.map(subset(temp, chr=i), error.prob=error.prob,
+          nm <- est.map(temp, chr=i, error.prob=error.prob,
                         map.function=map.function, m=m, p=p, maxit=maxit,
                         tol=tol, sex.sp=sex.sp, verbose=FALSE,
                         omit.noninformative=FALSE)[[1]]
@@ -188,7 +188,7 @@ function(cross, marker, chr, error.prob=0.0001,
 
         temp <- movemarker(cross, marker, i, pos)
 
-        nm <- est.map(subset(temp, chr=i), error.prob=error.prob,
+        nm <- est.map(temp, chr=i, error.prob=error.prob,
                       map.function=map.function, m=m, p=p, maxit=maxit,
                       tol=tol, sex.sp=sex.sp, verbose=FALSE,
                       omit.noninformative=FALSE)[[1]]
