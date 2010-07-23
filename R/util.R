@@ -21,7 +21,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: pull.map, markernames, replace.map, c.cross, create.map,
+# Contains: pull.map, markernames, c.cross, create.map,
 #           clean, clean.cross, drop.nullmarkers,
 #           drop.markers, pull.markers,
 #           geno.table, genotab.em
