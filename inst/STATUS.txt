@@ -65,6 +65,9 @@ Minor changes:
   Added a function pull.markers, which is the opposite of
   drop.markers. 
 
+  Added a function drop.dupmarkers, for dropping markers with
+  duplicate names.
+
   Added an argument 'bandcol' in plot.scanone, to specify a color for
   alternating bands to indicate chromosomes.  The default
   (bandcol=NULL) is to not plot such bands.  A good choice might be

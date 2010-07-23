@@ -23,7 +23,7 @@
 # Part of the R/qtl package
 # Contains: pull.map, markernames, c.cross, create.map,
 #           clean, clean.cross, drop.nullmarkers,
-#           drop.markers, pull.markers,
+#           drop.markers, pull.markers, drop.dupmarkers
 #           geno.table, genotab.em
 #           mf.k, mf.h, imf.k, imf.h, mf.cf, imf.cf, mf.m, imf.m,
 #           mf.stahl, imf.stahl
@@ -559,6 +559,76 @@ function(cross, markers)
     warning("Some markers couldn't be found: ", paste(markers[is.na(m)], collapse=" "))
   drop.markers(cross, mn[is.na(match(mn, markers))])
 }
+
+######################################################################
+# drop.dupmarkers
+#
+# drop duplicate markers, retaining the consensus genotypes
+######################################################################
+drop.dupmarkers <-
+function(cross, verbose=TRUE)
+{
+  mn <- markernames(cross)
+  tab <- table(mn)
+  if(all(tab==1)) {
+    if(verbose) cat("No duplicate markers.\n")
+    return(cross)
+  }
+
+  dup <- names(tab[tab > 1])
+  if(verbose) cat(" ", length(dup), "duplicate markers\n")
+
+  # get consensus genotypes
+  g <- pull.geno(cross)[,!is.na(match(mn, dup))]
+  ng.omitted <- rep(NA, length(dup))
+  tot.omitted <- 0
+  nmar.omitted <- 0
+  for(i in seq(along=dup)) {
+    gg <- g[,colnames(g)==dup[i],drop=FALSE]
+    res <- apply(gg, 1, function(a)
+                 {
+                   if(all(is.na(a))) return(c(NA, 0))
+                   a <- unique(a[!is.na(a)])
+                   if(length(a)==1) return(c(a, 0))
+                   return(c(NA, 1))
+                 } )
+    if(verbose>1) {
+      cat("  ", dup[i], ":\t", sum(res[2,]), " genotypes omitted\n", sep="")
+      if(sum(res[2,]) > 1) cat("      ", paste(which(res[2,]>0), collapse=" "), "\n")
+    }
+    tot.omitted <- tot.omitted + sum(res[2,])
+
+    flag <- FALSE
+    for(j in seq(along=cross$geno)) {
+      mn <- colnames(cross$geno[[j]]$data)
+      wh <- mn==dup[i]
+      if(!any(wh)) next
+      wh <- which(wh)
+      if(!flag) {
+        flag <- TRUE
+        cross$geno[[j]]$data[,wh[1]] <- res[1,]
+        if(length(wh)==1) next
+        else wh <- wh[-1]
+      }
+      if(length(wh) > 0) {
+        nmar.omitted <- nmar.omitted + length(wh)
+        cross$geno[[j]]$data <- cross$geno[[j]]$data[,-wh,drop=FALSE]
+        if(is.matrix(cross$geno[[j]]$map))
+          cross$geno[[j]]$map <- cross$geno[[j]]$map[,-wh,drop=FALSE]
+        else
+          cross$geno[[j]]$map <- cross$geno[[j]]$map[-wh]
+      }
+    }
+  }
+  if(verbose) {
+    cat("  Total genotypes omitted:", tot.omitted, "\n")
+    cat("  Total markers omitted:  ", nmar.omitted, "\n")
+  }
+
+  clean(cross)
+}                   
+
+
 
 ######################################################################
 #
