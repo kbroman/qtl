@@ -10,7 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o FAQ: - constructing covariate matrices
+o Add chr argument to est.map
+
+o Allow replace.map to replace just a portion of the map
+
+o Function to get rid of duplicate markers
 
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
