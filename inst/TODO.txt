@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In plot.scanoneperm and plot.scantwoperm, allow use of xlim and ylim.
-
 o FAQ: - constructing covariate matrices
 
 o get scanone and scantwo to work with a single marker on a
