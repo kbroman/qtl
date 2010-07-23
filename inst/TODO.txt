@@ -10,8 +10,7 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o In plot.geno, allow use of xlim and ylim; also do this in
-  plot.scanoneperm and plot.scantwoperm.
+o In plot.scanoneperm and plot.scantwoperm, allow use of xlim and ylim.
 
 o FAQ: - constructing covariate matrices
 

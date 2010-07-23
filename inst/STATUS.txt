@@ -116,6 +116,9 @@ Minor changes:
   Revised read.cross with format="csv" to give an error if the 2nd row
   has all blanks.
 
+  Revised plot.geno so that the ... argument can include xlim and
+  ylim. 
+
   Fixed bug in convert2sa for case of chromosome with just 1 or 2
   markers. 
 
