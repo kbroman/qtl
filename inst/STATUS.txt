@@ -116,6 +116,10 @@ Minor changes:
   Revised read.cross with format="csv" to give an error if the 2nd row
   has all blanks.
 
+  Revised plot.scanoneboot, plot.scanoneperm, and plot.scantwoperm so
+  that they can use the ... argument more flexibly.  [I use a scheme
+  suggested by Brian Yandell.]
+
   Revised plot.geno so that the ... argument can include xlim and
   ylim. 
 
