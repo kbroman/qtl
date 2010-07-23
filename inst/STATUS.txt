@@ -73,6 +73,10 @@ Minor changes:
   Added an argument 'chr' in est.map, to estimate maps for just a
   subset of chromosomes.
 
+  Revised replace.map (and replacemap.cross) so that the map can have
+  just a subset of the chromosomes in the cross, in which case only
+  the maps for that subset are replaced.
+
   Changed the default in plot.info from method="both" to
   method="entropy".  Also, added an argument "fourwaycross", so that
   one can look at the missing information just for the alleles of the
