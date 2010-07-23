@@ -1043,7 +1043,7 @@ function(cross, chr, order, error.prob=0.0001,
   }
 
   # re-estimate map
-  newmap <- est.map(subset(cross,chr=chr),
+  newmap <- est.map(cross, chr=chr,
                     error.prob=error.prob, map.function=map.function,
                     maxit=maxit, tol=tol, sex.sp=sex.sp)
 
