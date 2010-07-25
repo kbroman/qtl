@@ -30,12 +30,15 @@
 ######################################################################
 
 est.map <- 
-function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
+function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
          omit.noninformative=TRUE, offset)
 {
   if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
+
+  if(!missing(chr))
+    cross <- subset(cross, chr=chr)
 
   type <- class(cross)[1]
 

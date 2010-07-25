@@ -2,8 +2,8 @@
 #
 # replacemap.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Jul, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,42 +40,75 @@ function(object, map)
   if(!any(class(cross) == "cross")) 
     stop("Input should have class \"cross\".")
 
-  n.chr <- nchr(cross) 
-  n.mar <- nmar(cross)
+  chr.names <- names(cross$geno)
+  chr.names2 <- names(map)
 
-  n.chr2 <- length(map)
-  n.mar2 <- sapply(map,length)
-
-  type <- class(cross)[1]
-  if(type=="4way") {
-    mnames <- unlist(lapply(cross$geno, function(a) colnames(a$map)))
-    mnames2 <- unlist(lapply(map, function(a) colnames(a)))
-    n.mar2 <- n.mar2/2
+  m <- match(chr.names2, chr.names)
+  if(any(is.na(m))) { # some extra chr in map
+    extra <- chr.names2[is.na(m)]
+    map <- map[!is.na(m)]
+    chr.names2 <- names(map)
+    warning("Extra chr in map: ", paste(extra, sep=" "))
   }
-  else if(type == "bc" || type == "f2" || type == "riself" || type=="risib" || type=="dh" ||
-          type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
-    mnames <- unlist(lapply(cross$geno, function(a) names(a$map)))
-    mnames2 <- unlist(lapply(map, function(a) names(a)))
+
+  cross.sexsp <- sapply(cross$geno, function(a) is.matrix(a$map))
+  map.sexsp <- sapply(map, is.matrix)
+  if(all(cross.sexsp)) cross.sexsp <- TRUE
+  else if(all(!cross.sexsp)) cross.sexsp <- FALSE
+  else stop("In cross, some maps sex-specific, some not.")
+  
+  if(all(map.sexsp)) map.sexsp <- TRUE
+  else if(all(!map.sexsp)) map.sexsp <- FALSE
+  else stop("In map, some chrsex-specific, some not.")
+  
+  m <- match(chr.names, chr.names2)
+  if(any(is.na(m))) {
+    for(i in chr.names2) {
+      if(cross.sexsp) mnames <- colnames(cross$geno[[i]]$map)
+      else mnames <- names(cross$geno[[i]]$map)
+
+      if(map.sexsp) mnames2 <- colnames(map[[i]])
+      else mnames2 <- names(map[[i]])
+
+      if(length(mnames) != length(mnames2))
+        stop("Different numbers of markers on chr ", i)
+      if(!all(mnames==mnames2))
+        stop("Different marker names on chr ", i)
+      
+      cross$geno[[i]]$map <- map[[i]]
+    }
   }
-  else 
-    stop("Cross type ", type, " not yet supported.")
+  else { # the same chromosomes
+    n.chr <- nchr(cross) 
+    n.mar <- nmar(cross)
 
-  # check that things line up properly
-  if(n.chr != n.chr2)
-    stop("Numbers of chromosomes don't match.")
-  if(any(names(cross$geno) != names(map)))
-    stop("Chromosome names don't match.")
-  if(any(n.mar != n.mar2))
-    stop("Number of markers don't match.")
-  if(any(mnames != mnames2)) 
-    stop("Marker names don't match.")
+    n.chr2 <- length(map)
 
-  # proceed if no errors
-  for(i in 1:length(cross$geno)) {
-    cross$geno[[i]]$map <- map[[i]]
-    if(is.matrix(map[[i]]))
-      class(cross$geno[[i]]$map) <- "matrix"
-    else class(cross$geno[[i]]$map) <- "numeric"
+    if(cross.sexsp) mnames <- unlist(lapply(cross$geno, function(a) colnames(a$map)))
+    else mnames <- unlist(lapply(cross$geno, function(a) names(a$map)))
+
+    if(map.sexsp) {
+      mnames2 <- unlist(lapply(map, colnames))
+      n.mar2 <- sapply(map, ncol)
+    }
+    else {
+      mnames2 <- unlist(lapply(map, names))
+      n.mar2 <- sapply(map, length)
+    }
+
+    # check that things line up properly
+    if(n.chr != n.chr2) 
+      stop("Numbers of chromosomes don't match.")
+    if(any(names(cross$geno) != names(map)))
+      stop("Chromosome names don't match.")
+    if(any(n.mar != n.mar2))
+      stop("Number of markers don't match.")
+    if(any(mnames != mnames2)) 
+      stop("Marker names don't match.")
+
+    # proceed if no errors
+    for(i in 1:length(cross$geno)) 
+      cross$geno[[i]]$map <- map[[i]]
   }
 
   cross

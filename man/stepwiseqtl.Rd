@@ -224,7 +224,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 }
 
 \references{
-  Manichaikul, A., Moon, J. Y., Sen, \'S, Yandell, B. S. and Broman,
+  Manichaikul, A., Moon, J. Y., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Yandell, B. S. and Broman,
   K. W. (2009) A model selection approach for the identification of
   quantitative trait loci in experimental crosses, allowing
   epistasis. \emph{Genetics}, to appear.
@@ -237,7 +237,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   quantitative trait loci in line crosses using flanking markers.
   \emph{Heredity} \bold{69}, 315--324.
 
-  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
+  Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2001) A statistical framework for quantitative
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 
   Zeng, Z.-B., Kao, C.-H. and Basten, C. J. (1999) Estimating the
