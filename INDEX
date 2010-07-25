@@ -53,6 +53,7 @@ convert2sa              Convert a sex-specific map to a sex-averaged
                         one
 countXO                 Count number of obligate crossovers for each
                         individual
+drop.dupmarkers         Drop duplicate markers
 drop.markers            Drop a set of markers
 drop.nullmarkers        Drop markers without any genotype data
 dropfromqtl             Drop a QTL from a qtl object

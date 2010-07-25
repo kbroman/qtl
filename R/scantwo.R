@@ -468,7 +468,7 @@ function(cross, chr, pheno.col=1,
       if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
         w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
       map <- cbind(chr=rep(names(cross$geno)[i],length(map)),
-                   pos=as.data.frame(map) )
+                   pos=as.data.frame(as.numeric(map)) )
       rownames(map) <- w 
 
       # equally spaced positions

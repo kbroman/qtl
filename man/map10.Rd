@@ -1,5 +1,6 @@
 \name{map10}
 \alias{map10}
+\docType{data}
 
 \title{An example genetic map}
 

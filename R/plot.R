@@ -715,6 +715,12 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   else
     themain <- paste("Chromosome",names(cross$geno)[1])
 
+  # check for 'xlim' and 'ylim'
+  if("xlim" %in% names(args)) thexlim <- args$xlim
+  else thexlim <- NULL
+  if("ylim" %in% names(args)) theylim <- args$ylim
+  else theylim <- NULL
+  
   if(type=="4way") {
     jit <- 0.15
     mdata <- data
@@ -731,9 +737,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     ddata[!is.na(data) & (data==5 | data==6)] <- NA
 
     if(horizontal) {
+      if(is.null(thexlim)) thexlim <- c(0, max(map))
+      if(is.null(theylim)) theylim <- c(n.ind+1, 0)
       plot(0,0,type="n",xlab="Location (cM)",ylab="Individual",
            main=themain,
-           ylim=c(n.ind+1,0),xlim=c(0,max(map)), yaxt="n", yaxs="i")
+           ylim=theylim,xlim=thexlim, yaxt="n", yaxs="i")
       segments(0, 1:n.ind-jit, max(map), 1:n.ind-jit)
       segments(0, 1:n.ind+jit, max(map), 1:n.ind+jit)
 
@@ -811,9 +819,12 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       }
     }
     else {
+      if(is.null(theylim)) theylim <- c(max(map), 0)
+      if(is.null(thexlim)) thexlim <- c(0, n.ind+1)
+      
       plot(0,0,type="n",ylab="Location (cM)",xlab="Individual",
            main=themain,
-           xlim=c(0,n.ind+1),ylim=c(max(map),0), xaxt="n", xaxs="i")
+           xlim=thexlim,ylim=theylim, xaxt="n", xaxs="i")
 
       segments(1:n.ind-jit, 0, 1:n.ind-jit, max(map))
       segments(1:n.ind+jit, 0, 1:n.ind+jit, max(map))
@@ -899,9 +910,12 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   else {
 
     if(horizontal) {
+      if(is.null(thexlim)) thexlim <- c(0, max(map))
+      if(is.null(theylim)) theylim <- c(n.ind+0.5,0.5)
+
       plot(0,0,type="n",xlab="Location (cM)",ylab="Individual",
            main=themain,
-           ylim=c(n.ind+0.5,0.5),xlim=c(0,max(map)), yaxt="n")
+           ylim=theylim,xlim=thexlim, yaxt="n")
       segments(0, 1:n.ind, max(map), 1:n.ind)
       if(use.id) axis(side=2, at=1:n.ind, labels=id)
       else axis(side=2)
@@ -950,9 +964,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       if(include.xo) points(xoloc$loc,xoloc$ind,pch=4,col="blue",lwd=2)
     }
     else {
+      if(is.null(theylim)) theylim <- c(max(map), 0)
+      if(is.null(thexlim)) thexlim <- c(0.5,n.ind+0.5)
       plot(0,0,type="n",ylab="Location (cM)",xlab="Individual",
            main=themain,
-           xlim=c(0.5,n.ind+0.5),ylim=c(max(map),0), xaxt="n")
+           xlim=thexlim,ylim=theylim, xaxt="n")
       segments(1:n.ind,0,1:n.ind,max(map))
       if(use.id) axis(side=1, at=1:n.ind, labels=id)
       else axis(side=1)
@@ -1016,7 +1032,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
          off.end=0, error.prob=0.001,
          map.function=c("haldane","kosambi","c-f","morgan"),
          alternate.chrid=FALSE, fourwaycross=c("all", "AB", "CD"),
-         ...)
+         include.genofreq=FALSE, ...)
 {
   cross <- x
   if(!any(class(cross) == "cross"))
@@ -1039,6 +1055,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
   fourwaycross <- match.arg(fourwaycross)
 
   n.ind <- nind(cross)
+  if(include.genofreq) theprob <- NULL
   for(i in 1:n.chr) {
 
     n.gen <- dim(cross$geno[[i]]$prob)[3]
@@ -1110,11 +1127,66 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
       w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
     rownames(z) <- w
     results <- rbind(results, z)
+
+    if(include.genofreq) {
+      p <- cross$geno[[i]]$prob
+      if(class(cross$geno[[i]])=="X")
+        p <- reviseXdata(class(cross)[1], expandX="full", sexpgm=getsex(cross), prob=p,
+                         cross.attr=attributes(cross))
+      p <- apply(p, 2:3, mean, na.rm=TRUE)
+      if(is.null(theprob)) 
+        theprob <- p
+      else {
+        m1 <- match(colnames(p), colnames(theprob))
+        m2 <- match(colnames(theprob), colnames(p))
+        if(!any(is.na(m1)) && !any(is.na(m2))) {
+          theprob <- rbind(theprob, p[,colnames(theprob)])
+        }
+        else { # some differences in column names
+          if(all(!is.na(m1))) { # need to add some new columns to p
+            noldcol <- ncol(p)
+            nnewcol <- sum(is.na(m2))
+            for(i in 1:nnewcol)
+              p <- cbind(p, 0)
+            colnames(p)[-(1:noldcol)] <- colnames(theprob)[is.na(m2)]
+            theprob <- rbind(theprob, p[,colnames(theprob)])
+          }
+          else if(all(!is.na(m2))) { # need to add some new columns to theprob
+            noldcol <- ncol(theprob)
+            nnewcol <- sum(is.na(m1))
+            for(i in 1:nnewcol)
+              theprob <- cbind(theprob, 0)
+            colnames(theprob)[-(1:noldcol)] <- colnames(p)[is.na(m1)]
+            theprob <- rbind(theprob, p[,colnames(theprob)])
+          }
+          else { # need to add some new columns to each
+            noldcol <- ncol(theprob)
+            nnewcol <- sum(is.na(m1))
+            oldcolnam <- colnames(theprob)
+            for(i in 1:nnewcol)
+              theprob <- cbind(theprob, 0)
+            colnames(theprob)[-(1:noldcol)] <- colnames(p)[is.na(m1)]
+
+            noldcol <- ncol(p)
+            nnewcol <- sum(is.na(m2))
+            for(i in 1:nnewcol)
+              p <- cbind(p, 0)
+            colnames(p)[-(1:noldcol)] <- oldcolnam[is.na(m2)]
+            
+            theprob <- rbind(theprob, p[,colnames(theprob)])
+          }
+        }
+      }
+    } # end of if(include.genofreq)
+
   }
   colnames(results)[3:4] <- c("misinfo.entropy","misinfo.variance")
 
   if(method==0) results <- results[,-4]
   if(method==1) results <- results[,-3]
+
+  if(include.genofreq)
+    results <- cbind(results, theprob)
 
   class(results) <- c("scanone","data.frame")
 
