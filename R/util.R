@@ -809,11 +809,40 @@ function(cross, chr, scanone.output=FALSE)
   }    
   else if(type == "4way") {
     for(i in 1:length(pval)) {
-      if(allchrtype[i] == "A") {
-        x <- results[i,2:5]
-        y <- results[i,-(1:5)]
-        if(sum(x) > 0 && sum(y)==0)
-          pval[i] <- chisq.test(x,p=c(0.25,0.25,0.25,0.25))$p.value
+      x <- results[i,2:5]
+      y <- results[i,-(1:5)]
+      if(sum(x) > 0 && sum(y)==0)
+        pval[i] <- chisq.test(x,p=c(0.25,0.25,0.25,0.25))$p.value
+      else {
+        if(allchrtype[i] == "A") {
+          res <- results[i,-1]
+          if(all(res[-c(1,11)]==0))      # AC/not AC
+            pval[i] <- chisq.test(res[c(1,11)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(2,12)]==0)) # BC/not BC
+            pval[i] <- chisq.test(res[c(2,12)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(3,13)]==0)) # AD/not AD
+            pval[i] <- chisq.test(res[c(3,13)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(4,14)]==0)) # BD/not BD
+            pval[i] <- chisq.test(res[c(4,14)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(5,6)]==0)) # A/B
+            pval[i] <- chisq.test(res[c(5,6)], p=c(0.5, 0.5))$p.value
+          else if(all(res[-c(7,8)]==0)) # C/D
+            pval[i] <- chisq.test(res[c(7,8)], p=c(0.5, 0.5))$p.value
+          else if(all(res[-c(9,10)]==0)) # AC/BD or AD/BC
+            pval[i] <- chisq.test(res[c(9,10)], p=c(0.5, 0.5))$p.value
+          else if(all(res[-c(2,4,5)]==0)) # BC/BD/A
+            pval[i] <- chisq.test(res[c(2,4,5)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(1,3,6)]==0)) # AC/AD/B
+            pval[i] <- chisq.test(res[c(1,3,6)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(3,4,7)]==0)) # AD/BD/C
+            pval[i] <- chisq.test(res[c(3,4,7)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(1,2,8)]==0)) # AC/BC/D
+            pval[i] <- chisq.test(res[c(1,2,8)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(2,3,9)]==0)) # AC/BD or AD or BC
+            pval[i] <- chisq.test(res[c(2,3,9)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(1,4,10)]==0)) # AD/BC or AC or BD
+            pval[i] <- chisq.test(res[c(1,4,10)], p=c(0.25, 0.25, 0.5))$p.value
+        }
       }
     }
     results <- cbind(results, P.value=pval)
@@ -822,9 +851,14 @@ function(cross, chr, scanone.output=FALSE)
   if(!scanone.output)
     return(data.frame(chr=rep(names(cross$geno),nmar(cross)),results))
 
-  temp <- results[,1:(ncol(results)-1)]
+  themap <- pull.map(cross)
+  if(is.matrix(themap[[1]]))
+    thepos <- unlist(lapply(themap, function(a) a[1,]))
+  else thepos <- unlist(themap)
+
+  temp <- results[,1:(ncol(results)-1),drop=FALSE]
   res <- data.frame(chr=rep(names(cross$geno),nmar(cross)),
-                    pos=unlist(pull.map(cross)),
+                    pos=thepos,
                     neglog10P=-log10(results[,ncol(results)]),
                     missing=temp[,1]/apply(temp, 1, sum),
                     temp[,-1]/apply(temp[,-1], 1, sum))

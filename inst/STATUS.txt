@@ -17,6 +17,19 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.18, 8/4/2010:
+
+Major changes:
+
+  None
+
+Minor changes:
+
+  Revised geno.table so that, for 4-way crosses, it gives P-values in
+  most cases.  (Previously, it just did so for fully informative
+  markers.) 
+
+
 Version 1.17, 7/28/2010:
 
 Major changes:
