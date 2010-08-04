@@ -3,3 +3,5 @@
 \.rnew$
 \.new$
 \.\.Rcheck
+\.git$
+\.gitignore$
