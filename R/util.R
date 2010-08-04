@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jul, 2010
+# last modified Aug, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3875,8 +3875,5 @@ function(x, jitter=FALSE)
 
   x*thesd/sd(x, na.rm=TRUE)-mean(x,na.rm=TRUE)+themean
 }
-
-# end of nqrank.R
-
 
 # end of util.R
