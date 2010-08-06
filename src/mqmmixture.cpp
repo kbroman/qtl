@@ -2,14 +2,14 @@
  *
  * mqmmixture.cpp
  *
- * Copyright (c) 1996-2009 by
+ * Copyright (c) 1996-2010 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Pjotr Prins and Danny Arends
- * last modified December 2009
+ * last modified August 2010
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -95,7 +95,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
         if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
           newr= 0.0;
           for (i=0; i<Naug; i++) {
-            Nrecom= abs((double)marker[j][i]-marker[j+1][i]);
+            Nrecom= fabs((double)(marker[j][i]-marker[j+1][i]));
             if ((marker[j][i]==MH)&&(marker[j+1][i]==MH))
               Nrecom= 2.0*r[j]*r[j]/(r[j]*r[j]+(1-r[j])*(1-r[j]));
             newr+= Nrecom*weight[i];
