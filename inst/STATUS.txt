@@ -29,6 +29,17 @@ Minor changes:
   most cases.  (Previously, it just did so for fully informative
   markers.) 
 
+  Changed the default format for max.scanPhyloQTL and
+  summary.scanPhyloQTL from format="lod" to format="postprob".
+
+  Added function inferredpartitions for pulling out the inferred
+  partitions for a specified chromosome from the output of
+  scanPhyloQTL. 
+
+  Fixed a bug in summary.scanPhyloQTL so that it works when the input
+  has just one chromosome and so the colnames remain like "AB|CD"
+  rather than getting converted to "AB.CD".
+
 
 Version 1.17, 7/28/2010:
 

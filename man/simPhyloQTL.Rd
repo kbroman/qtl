@@ -87,7 +87,9 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
-\seealso{ \code{\link{scanPhyloQTL}}, 
+\seealso{ \code{\link{scanPhyloQTL}},   \code{\link{inferredpartitions}}, 
+  \code{\link{summary.scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}},
+  \code{\link{plot.scanPhyloQTL}}, 
   \code{\link{sim.cross}}, \code{\link{read.cross}} }
 
 \examples{
@@ -108,13 +110,13 @@ x <- lapply(x, calc.genoprob, step=2)
 out <- scanPhyloQTL(x, method="hk")
 
 # maximum peak
-max(out)
+max(out, format="lod")
 
 # approximate posterior probabilities at peak
 max(out, format="postprob")
 
 # all peaks above a threshold for LOD(best) - LOD(2nd best)
-summary(out, threshold=1)
+summary(out, threshold=1, format="lod")
 
 # all peaks above a threshold for LOD(best), showing approx post'r prob
 summary(out, format="postprob", threshold=3)

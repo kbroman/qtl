@@ -83,6 +83,8 @@ geno.image              Plot grid of genotype data
 geno.table              Create table of genotype distributions
 groupclusteredheatmap   Retrieving groups of traits after clustering
 hyper                   Data on hypertension
+inferredpartitions      Identify inferred partitions in mapping QTL to
+                        a phylogenetic tree
 jittermap               Jitter marker positions in a genetic map
 listeria                Data on Listeria monocytogenes susceptibility
 locateXO                Estimate locations of crossovers

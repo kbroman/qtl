@@ -2,7 +2,7 @@
 # phyloqtl_scan.R
 #
 # copyright (c) 2009-2010, Karl W Broman
-# last modified Jul, 2010
+# last modified Aug, 2010
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -20,7 +20,8 @@
 # Single-QTL scan to map QTL to a phylogenetic tree
 #
 # Part of the R/qtl package
-# Contains: scanPhyloQTL, max.scanPhyloQTL, plot.scanPhyloQTL
+# Contains: scanPhyloQTL, max.scanPhyloQTL, plot.scanPhyloQTL,
+#           inferredpartitions
 #
 ######################################################################
 
@@ -153,7 +154,7 @@ function(crosses, partitions, chr, pheno.col=1,
 
 
 max.scanPhyloQTL <-
-function(object, chr, format=c("lod", "postprob"), ...)
+function(object, chr, format=c("postprob", "lod"), ...)
 {
   format <- match.arg(format)
 
@@ -195,11 +196,15 @@ function(object, chr, format=c("lod", "postprob"), ...)
 }
 
 summary.scanPhyloQTL <-
-function(object, format=c("lod", "postprob"), threshold, ...)
+function(object, format=c("postprob", "lod"), threshold, ...)
 {
   format <- match.arg(format)
 
   themax <- apply(object[,-(1:2)], 2, tapply, object[,1], max, na.rm=TRUE)
+  if(length(unique(object[,1]))==1) {
+    themax <- as.data.frame(matrix(themax, nrow=1))
+    names(themax) <- colnames(object)[-(1:2)]
+  }
   wh <- apply(themax, 1, function(a) { a <- which(a==max(a)); if(length(a) > 1) a <- sample(a, 1); a })
   whpos <- rep(NA, length(wh))
   names(whpos) <- unique(object[,1])
@@ -222,6 +227,7 @@ function(object, format=c("lod", "postprob"), threshold, ...)
     temp <- out[,-c(1:2, ncol(out)-0:1)]
     out[,-c(1:2, ncol(out)-0:1)] <- t(apply(temp, 1, function(a) 10^a/sum(10^a)))
   }
+  colnames(out)[(1:ncol(themax))+2] <- colnames(themax)
 
   rownames(out) <- names(whpos)
 
@@ -293,6 +299,37 @@ function(x, chr, incl.markers=TRUE, col, xlim, ylim, lwd=2,
   invisible()
 }
     
+inferredpartitions <-
+function(output, chr, lodthreshold, probthreshold=0.9)
+{
+  if(!("scanPhyloQTL" %in% class(output)))
+    stop("Argument 'output' must be of class \"scanPhyloQTL\", as output by scanPhyloQTL.")
+
+  if(missing(chr)) {
+    chr <- output[1,1]
+    warning("Missing chromosome; using ", chr)
+  }
+  else if(!any(output[,1]==chr)) 
+    stop("Chromosome \"", chr, "\" not found.")
+
+  if(missing(lodthreshold)) {
+    warning("No lodthreshold given; using lodthreshold=0.")
+    lodthreshold=0
+  }
+
+  output <- output[output[,1]==chr,]
+  output[,1] <- as.factor(as.character(output[,1]))
+  output <- summary(output, format="postprob")
+
+  if(output$maxlod < lodthreshold) return("null")
+  
+  prob <- sort(output[,3:(ncol(output)-2)], decreasing=TRUE)
+  cs <- cumsum(as.numeric(prob))
+  wh <- min(which(cs >= probthreshold))
+  names(prob)[1:wh]
+}
+  
+
   
 
 
