@@ -1047,23 +1047,25 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
 # map functions
 mf.k <- function(d) 0.5*tanh(d/50)
 mf.h <- function(d) 0.5*(1-exp(-d/50))
-imf.k <- function(r) 50*atanh(2*r)
-imf.h <- function(r) -50*log(1-2*r)
+imf.k <- function(r) { r[r >= 0.5] <- 0.5-1e-14; 50*atanh(2*r) }
+imf.h <- function(r) { r[r >= 0.5] <- 0.5-1e-14; -50*log(1-2*r) }
 mf.m <- function(d) sapply(d,function(a) min(a/100,0.5))
 imf.m <- function(r) sapply(r,function(a) min(a*100,50))
 
 # carter-falconer: mf.cf, imf.cf
-imf.cf <- function(r) 12.5*(log(1+2*r)-log(1-2*r))+25*atan(2*r)
+imf.cf <- function(r) { r[r >= 0.5] <- 0.5-1e-14; 12.5*(log(1+2*r)-log(1-2*r))+25*atan(2*r) }
 
 mf.cf <-
 function(d)
 {
+  d[d >= 300] <- 300
+
   icf <- function(r,d)
     imf.cf(r)-d
 
   sapply(d,function(a) {
     if(a==0) return(0)
-    uniroot(icf, c(0,0.5-1e-10),d=a)$root })
+    uniroot(icf, c(0,0.5-1e-14),d=a)$root })
 }
 
 
