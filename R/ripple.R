@@ -3,7 +3,7 @@
 # ripple.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Jul, 2010
+# last modified Aug, 2010
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -139,7 +139,8 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       for(i in 1:n.orders) {
         if(verbose && (i %/% print.by)*print.by == i) cat("    --Order", i, "\n")
         temcross$geno[[1]]$data <- cross$geno[[1]]$data[,orders[i,]]
-        newmap <- est.map(temcross,error.prob,map.function,m=0,p=0,maxit,tol,sex.sp,FALSE)
+        newmap <- est.map(temcross, error.prob=error.prob, map.function=map.function,
+                          m=0, p=0, maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
         loglik[i] <- attr(newmap[[1]],"loglik")
         chrlen[i] <- diff(range(newmap[[1]]))
       }
@@ -242,7 +243,8 @@ function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
   for(i in 1:n.orders) {
     
     temcross$geno[[1]]$data <- cross$geno[[1]]$data[,orders[i,]]
-    newmap <- est.map(temcross,error.prob,map.function,m=0,p=0,maxit,tol,sex.sp,FALSE)
+    newmap <- est.map(temcross, error.prob=error.prob, map.function=map.function,
+                      m=0, p=0, maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
     loglik[i] <- attr(newmap[[1]],"loglik")
     chrlen[i] <- diff(range(newmap[[1]]))
   }
