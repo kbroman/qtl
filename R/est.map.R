@@ -3,7 +3,7 @@
 # est.map.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Jul, 2010
+# last modified Aug, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -139,18 +139,18 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       rf <- mf(diff(cross$geno[[i]]$map))
       if(type=="risib" || type=="riself")
         rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype[i])
-#      rf[rf < 1e-14] <- 1e-14
+      rf[rf < 1e-14] <- 1e-14
     }
     else {
-      # randomize the maps a bit
       orig <- cross$geno[[i]]$map
+      # randomize the maps a bit [we no longer do this]
 #      cross$geno[[i]]$map <- cross$geno[[i]]$map +
 #        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
 
       rf <- mf(diff(cross$geno[[i]]$map[1,]))
-#      rf[rf < 1e-14] <- 1e-14
+      rf[rf < 1e-14] <- 1e-14
       rf2 <- mf(diff(cross$geno[[i]]$map[2,]))
-#      rf2[rf2 < 1e-14] <- 1e-14
+      rf2[rf2 < 1e-14] <- 1e-14
       if(!sex.sp && chrtype[i]=="X")
         temp.sex.sp <- TRUE
       else temp.sex.sp <- sex.sp

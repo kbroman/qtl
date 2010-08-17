@@ -17,11 +17,12 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.18, 8/6/2010:
+Version 1.18, 8/16/2010:
 
 Major changes:
 
-  None
+  Fixed a problem in est.map that resulted in NAs.  (The problem arose
+  in revisions I'd made in version 1.17.)
 
 Minor changes:
 
@@ -35,6 +36,10 @@ Minor changes:
   Added function inferredpartitions for pulling out the inferred
   partitions for a specified chromosome from the output of
   scanPhyloQTL. 
+
+  Slight changes to "inverse" map functions imf.k, imf.h, imf.cf, so
+  that recombination fractions >= 0.5 return large map distances
+  rather than NAs.
 
   Fixed a bug in summary.scanPhyloQTL so that it works when the input
   has just one chromosome and so the colnames remain like "AB|CD"
