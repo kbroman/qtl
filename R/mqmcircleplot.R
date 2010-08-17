@@ -152,6 +152,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
         }   
       }
       legend("topright",c("Significant Cofactor","Interaction Increase","Interaction Decrease"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
+      legend("bottomright",c("Lod 3","Lod 6","Lod 9","Lod 12"),col="gray",pch=19,lwd=0,pt.cex=c(1,2,3,4))
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
@@ -232,7 +233,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
   for(x in 1:nrow(result)){
     #Draw markers
     if(lodmarkers){
-      size <- min(c((result[x,3]/2+1),4))
+      size <- min(c((result[x,3]/3),4))
       c <- gray(0.5-(0.4*(result[x,3]/max(result[,3]))))
       points(locationtocircle(result,result[x,1],result[x,2],spacing=spacing),pch=20,col=c,cex=size)
     }else{
