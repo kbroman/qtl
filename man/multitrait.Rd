@@ -2,8 +2,6 @@
 \alias{multitrait}
 \docType{data}
 
-\docType{data}
-
 \title{ 
 	Example Cross object from R/QTL with multiple traits
 }
