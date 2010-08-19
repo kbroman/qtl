@@ -1131,7 +1131,6 @@ modulating expression (higher or lower), the green lines show a flip in effect.\
 	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
                 & \hspace{0.25in} from the output of the \code{mqmpermutation} function \\
 	mqmplot.multitrait:& plot multiple traits (MQMmulti object) \\
-	mqmplot.nice:& plot multiple traits (MQMmulti object) \\
   mqmplot.directedqtl:& plot of single trait with added \qtl\ effect\\
 	mqmplot.permutations:& plot to show single trait permutations \\
 	mqmplot.singletrait:& plot of single trait analysis with information content \\
