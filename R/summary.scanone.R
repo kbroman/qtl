@@ -3,7 +3,7 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Jul, 2010
+# last modified Sep, 2010
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -483,6 +483,9 @@ c.scanone <-
 function(..., labels)
 {
   dots <- list(...)
+  cl1 <- class(dots[[1]])
+  if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+
   if(length(dots)==1) return(dots[[1]])
   for(i in seq(along=dots)) {
     if(!any(class(dots[[i]]) == "scanone"))
@@ -673,6 +676,10 @@ rbind.scanoneperm <- c.scanoneperm <-
 function(...)
 {
   dots <- list(...)
+
+  cl1 <- class(dots[[1]])
+  if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+
   if(length(dots)==1) return(dots[[1]])
   for(i in seq(along=dots)) {
     if(!any(class(dots[[i]]) == "scanoneperm"))
