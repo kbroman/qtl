@@ -17,6 +17,19 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.19, 9/14/2010:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
+  that the input "..." can be a list of
+  scanone/scanoneperm/scantwo/scantwoperm objects.
+
+
 Version 1.18, 8/18/2010:
 
 Major changes:
