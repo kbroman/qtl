@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2010
+# last modified Oct, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3151,23 +3151,29 @@ function(cross)
   nam <- names(phe)
   if("id" %in% nam) {
     id <- phe$id
-    attr(id,"phenam") <- "id"
+    phenam <- "id"
   }
   else if("ID" %in% nam) {
     id <- phe$ID
-    attr(id,"phenam") <- "ID"
+    phenam <- "ID"
   }
   else if("Id" %in% nam) {
     id <- phe$Id
-    attr(id,"phenam") <- "Id"
+    phenam <- "Id"
   }
   else if("iD" %in% nam) {
     id <- phe$iD
-    attr(id,"phenam") <- "iD"
+    phenam <- "iD"
   }
-  else id <- NULL
+  else {
+    id <- NULL
+    phenam <- NULL
+  }
 
-  if(is.factor(id)) id <- as.character(id)
+  if(is.factor(id))   
+    id <- as.character(id)
+
+  attr(id, "phenam") <- phenam
 
   id
 }
