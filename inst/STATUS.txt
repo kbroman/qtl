@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 10/5/2010:
+Version 1.19, 10/8/2010:
 
 Major changes:
 
@@ -28,6 +28,8 @@ Minor changes:
   Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
+
+  Fixed slight bug in getid().
 
 
 Version 1.18, 8/18/2010:
