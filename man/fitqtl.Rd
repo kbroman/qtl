@@ -93,7 +93,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
 \value{
   An object of class \code{fitqtl}. It may contains as many as four components:
-  \enumerate{
+  \itemize{
     \item \code{result.full} is the ANOVA table as a matrix for the full model
     result. It contains the degree of freedom (df), Sum of squares (SS),
     mean square (MS), LOD score (LOD), percentage of variance explained
