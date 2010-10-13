@@ -15,7 +15,8 @@
 }
 
 \arguments{
- \item{\dots}{A set of objects of class \code{scanone}. These are
+ \item{\dots}{A set of objects of class \code{scanone}. (This can also
+ be a list of \code{scanone} objects.) These are
    the results from  \code{\link{scanone}} (with \code{n.perm=0}),
    generally run with different phenotypes or methods.  All must 
    conform with each other, meaning that

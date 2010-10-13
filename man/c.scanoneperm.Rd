@@ -15,7 +15,8 @@
 }
 
 \arguments{
- \item{\dots}{A set of objects of class \code{scanoneperm}. These are
+ \item{\dots}{A set of objects of class \code{scanoneperm}. (This can
+ also be a list of \code{scanoneperm} objects.) These are
    the permutation results from \code{\link{scanone}} (that is,
    when \code{n.perm > 0}).  These must all have the same number of
    columns. (That is, they must have been created with the same number
