@@ -106,6 +106,15 @@ void delmatrix(matrix m, size_t rows);
 void delcmatrix(cmatrix m, size_t rows);
 void delMQMMarkerMatrix(MQMMarkerMatrix m,size_t rows);
 void copyvector(vector vsource, vector vdestination, int dim);
+void *calloc_init(size_t num, size_t size);
+
+#ifndef ENABLE_C99_MACROS
+  void info(const char *,...);
+
+  void verbose(const char*,...);
+
+  void debug_trace(const char *, ...);
+#endif
 
 #ifdef __cplusplus
   }

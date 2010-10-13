@@ -53,7 +53,10 @@ void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                double *windowsize,double *steps,
                double *stepmi,double *stepma, int *nRun,int *out_Naug,int *indlist,  double *qtl,int *reestimate,int *rqtlcrosstype,int *domi,int *verbose);
 
-
+void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
+             double **Dist, double **Pheno, int **Cofactors, int Backwards, int RMLorML,double Alfa,int Emiter,
+             double Windowsize,double Steps,
+             double Stepmi,double Stepma,int NRUN,int out_Naug,int **INDlist, double **QTL, int re_estimate,RqtlCrossType rqtlcrosstype,int domi,int verbose);
 
 #ifdef __cplusplus
   }
