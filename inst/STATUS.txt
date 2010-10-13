@@ -29,6 +29,8 @@ Minor changes:
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
 
+  Small changes to mqmplot.circle().
+
   Fixed slight bug in getid().
 
 
