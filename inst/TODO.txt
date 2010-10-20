@@ -10,6 +10,15 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o pull.markerrf + pull.markerlod for pulling out the pairwise rf/lod
+  scores (include map as an attribute).  function plotMarkerRF (or
+  something like that) for plotting a slice of one of these (that is,
+  for a single marker) with indications of chromosomes (and the
+  marker's own position).
+
+o subset.cross() seems to sort individuals by their ID, which isn't
+  what we'd really want
+
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 
