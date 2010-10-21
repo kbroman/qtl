@@ -9,7 +9,7 @@
 }
 
 \usage{
-transformPheno(cross, pheno.col=1, transf=log, ...)
+transformPheno(cross, pheno.col=1, transf=log, \dots)
 }
 
 \arguments{
