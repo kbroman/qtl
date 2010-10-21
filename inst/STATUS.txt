@@ -17,13 +17,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 10/13/2010:
+Version 1.19, 10/21/2010:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Added function pull.rf for pulling out either the estimated
+  recombination fractions or the lod scores, as calculated by
+  est.rf(), from a cross object.  Also added a function plot.rfmatrix,
+  for plotting a slice through these. 
 
   Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
   that the input "..." can be a list of
