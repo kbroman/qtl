@@ -70,7 +70,8 @@ plot.rf(badorder, what="rf")
 plot.rf(badorder, chr=2:3, what="lod")
 }
 
-\seealso{ \code{\link{est.rf}}, \code{\link[graphics]{image}},
+\seealso{ \code{\link{est.rf}}, \code{\link{pull.rf}}, \code{\link{plot.rfmatrix}},
+  \code{\link[graphics]{image}},
   \code{\link{badorder}}, \code{\link{ripple}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
