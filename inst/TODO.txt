@@ -10,11 +10,7 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o pull.markerrf + pull.markerlod for pulling out the pairwise rf/lod
-  scores (include map as an attribute).  function plotMarkerRF (or
-  something like that) for plotting a slice of one of these (that is,
-  for a single marker) with indications of chromosomes (and the
-  marker's own position).
+o orderMarkers: verbose=TRUE should give considerably more information
 
 o subset.cross() seems to sort individuals by their ID, which isn't
   what we'd really want
