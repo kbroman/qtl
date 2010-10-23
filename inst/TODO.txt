@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o plot.geno re X chr: in an intercross, show the three possible
+  genotypes, or revise the documentation, or both.
+
 o orderMarkers: verbose=TRUE should give considerably more information
 
 o subset.cross() seems to sort individuals by their ID, which isn't
