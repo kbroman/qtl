@@ -85,12 +85,15 @@ function(cross, chr, error.prob=0.0001,
                         map.function=map.function, m=m, p=p, maxit=maxit, tol=tol,
                         sex.sp=sex.sp)
 
-      origmaptab[mnames[j],3] <- -(attr(origmap[[i]], "loglik") - markerll - attr(newmap[[1]], "loglik"))/log(10)
       if(sexsp) {
-        origmaptab[mnames[j],4] <- Lf - diff(range(newmap[[1]][1,]))
-        origmaptab[mnames[j],5] <- Lm - diff(range(newmap[[1]][2,]))
+        origmaptab[mnames[j],4] <- -(attr(origmap[[i]], "loglik") - markerll - attr(newmap[[1]], "loglik"))/log(10)
+        origmaptab[mnames[j],5] <- Lf - diff(range(newmap[[1]][1,]))
+        origmaptab[mnames[j],6] <- Lm - diff(range(newmap[[1]][2,]))
       }
-      else origmaptab[mnames[j],4] <- L - diff(range(newmap[[1]]))
+      else {
+        origmaptab[mnames[j],3] <- -(attr(origmap[[i]], "loglik") - markerll - attr(newmap[[1]], "loglik"))/log(10)
+        origmaptab[mnames[j],4] <- L - diff(range(newmap[[1]]))
+      }
     }
   }
   
