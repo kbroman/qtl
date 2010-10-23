@@ -17,13 +17,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 10/21/2010:
+Version 1.19, 10/22/2010:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Added function droponemarker, with the aim of identifying
+  problematic markers by dropping one marker at a time and calculating
+  a LOD score and a change in the estimated genetic length of the
+  respective chromosome.
 
   Added function pull.rf for pulling out either the estimated
   recombination fractions or the lod scores, as calculated by
