@@ -77,6 +77,7 @@
    but in the alpha's and beta's, we use 0, 1, ... */
 
 void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno, 
+		   int *cross_scheme,
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
 		   double initf(int), 

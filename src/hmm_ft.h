@@ -36,11 +36,11 @@
  *
  **********************************************************************/
 
-double init_ft(int true_gen, int *cross_scheme, double *cross_temps);
+double init_ft(int true_gen, int *cross_scheme);
 
 double emit_ft(int obs_gen, int true_gen, double error_prob);
   
-double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme, double *cross_temps);
+double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
 double init_ftb(int true_gen);
 
