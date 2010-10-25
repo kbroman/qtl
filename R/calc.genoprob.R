@@ -111,6 +111,15 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       if(xchr)
         warning("calc.genoprob not working properly for the X chromosome for 4- or 8-way RIL.")
     }
+    else if(type == "bcsft") {
+      one.map <- TRUE
+      if(xchr)
+        warning("calc.genoprob not working properly for the X chromosome for bcsft.")
+      cfunc <- "calc_genoprob_ft"
+      n.gen <- 3
+      gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
+      cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+    }
     else 
       stop("calc.genoprob not available for cross type ", type, ".")
 
@@ -150,16 +159,28 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       n.pos <- ncol(newgen)
       marnames <- colnames(map)
     }
+    ## Cross scheme being added for Ft and BCs.
+    ## cross_scheme = c(BC = s, F = t).
+    ## BC has cross_scheme = c(1,0)
+    ## F2 has cross_scheme = c(0,2)
+    ## BCsFt has cross_scheme = c(s,t)
+    ## Other designs such as Ft with test cross don't quite fit in (yet).
+    ## *** Need to change all the C routines!!
 
     # call the C function
     if(one.map) {
+      ## Hide cross scheme in genoprob to pass to routine. BY
+      temp <- as.double(rep(0,n.gen*n.ind*n.pos))
+      if(type == "bcsft")
+        temp[1:2] <- cross.scheme
+      
       z <- .C(cfunc,
               as.integer(n.ind),         # number of individuals
               as.integer(n.pos),         # number of markers
               as.integer(newgen),        # genotype data
               as.double(rf),             # recombination fractions
               as.double(error.prob),     # 
-              genoprob=as.double(rep(0,n.gen*n.ind*n.pos)),
+              genoprob=temp,
               PACKAGE="qtl")
     }
     else {
