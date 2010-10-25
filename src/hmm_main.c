@@ -81,6 +81,7 @@
    but in the alpha's and beta's, we use 0, 1, ... */
 
 void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno, 
+		   int *cross_scheme,
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
 		   double initf(int), 
@@ -92,20 +93,6 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
   int **Geno;
   double ***Genoprob;
 
-  int is_scheme, cross_scheme[2]; double cross_temps[4];
-  /* Sneaky pass of cross scheme from calc.genoprob. BY */
-  /* However, this requires extra arguments to initf and stepf; see below */
-  cross_scheme[0] = genoprob[0]; /* BC(s) */
-  cross_scheme[1] = genoprob[1]; /* F(t) */
-  is_scheme = cross_scheme[0] + cross_scheme[1]; 
-  if(is_scheme > 0) {
-    /* put this calc in static variables */
-    cross_temps[0] = (1 - cross_scheme[1]) * LN_2;   /* init_ft uses LN_t = (1-t) * log(2) */
-    cross_temps[1] = LN_05 + log(1.0 - exp(cross_temps[0])); /* init_ft uses LN_05 + log(1-exp(LN_t)) */
-    cross_temps[2] = exp(2.0 * log(cross_scheme[1] - 1));    /* step_ft uses 2^(t-1) */
-    cross_temps[3] = - log(cross_temps[2] - 1);      /* step_ft uses -log(2^(t-1) - 1) */
-  }
-  
   /* allocate space for alpha and beta and 
      reorganize geno and genoprob */
   reorg_geno(n_ind, n_pos, geno, &Geno);
@@ -119,10 +106,7 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
 
     /* initialize alpha and beta */
     for(v=0; v<n_gen; v++) {
-      if(is_scheme == 0)
-	alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
-      else
-	alpha[v][0] = initf(v+1, *cross_scheme, *cross_temps) + emitf(Geno[0][i], v+1, error_prob);
+      alpha[v][0] = initf(v+1, *cross_scheme) + emitf(Geno[0][i], v+1, error_prob);
       beta[v][n_pos-1] = 0.0;
     }
 
@@ -130,32 +114,16 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
     for(j=1,j2=n_pos-2; j<n_pos; j++, j2--) {
       
       for(v=0; v<n_gen; v++) {
-	if(is_scheme == 0) {
-	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1]);
-	  beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2]) + 
-	    emitf(Geno[j2+1][i],1,error_prob);
-	}
-	else {
-	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1], *cross_scheme, *cross_temps);
-	  beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], *cross_scheme, *cross_temps) + 
-	    emitf(Geno[j2+1][i],1,error_prob);
-	}
+	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1], *cross_scheme);
+	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], *cross_scheme) + 
+	  emitf(Geno[j2+1][i],1,error_prob);
 
 	for(v2=1; v2<n_gen; v2++) {
-	  if(is_scheme == 0) {
-	    alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-				 stepf(v2+1,v+1,rf[j-1],rf2[j-1]));
-	    beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-				 stepf(v+1,v2+1,rf[j2],rf2[j2]) +
-				 emitf(Geno[j2+1][i],v2+1,error_prob));
-	  }
-	  else {
-	    alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-				 stepf(v2+1,v+1,rf[j-1],rf2[j-1], *cross_scheme, *cross_temps));
-	    beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-				 stepf(v+1,v2+1,rf[j2],rf2[j2], *cross_scheme, *cross_temps) +
-				 emitf(Geno[j2+1][i],v2+1,error_prob));
-	  }
+	  alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
+			       stepf(v2+1,v+1,rf[j-1],rf2[j-1], *cross_scheme));
+	  beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
+			       stepf(v+1,v2+1,rf[j2],rf2[j2], *cross_scheme) +
+			       emitf(Geno[j2+1][i],v2+1,error_prob));
 	}
 
 	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob);
