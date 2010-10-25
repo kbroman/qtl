@@ -46,19 +46,36 @@
 #include "hmm_ft.h"
 #include "hmm_f2.h"
 
-double init_ft(int true_gen, int *cross_scheme, double *cross_temps)
+double init_ft(int true_gen, int *cross_scheme)
 {
-  if(true_gen==2) return(cross_temps[0]);
-  else return(cross_temps[1]);
+  static double LN_2t = 0;
+  static double LN_05t = 0;
+
+  if(LN_2t == 0) {
+    /* static variables used frequently */
+    LN_2t = (1 - cross_scheme[1]) * LN_2;   /* init_ft uses LN_t = (1-t) * log(2) */
+    LN_05t = LN_05 + log(1.0 - exp(LN_2t)); /* init_ft uses LN_05 + log(1-exp(LN_t)) */
+  }
+
+  if(true_gen==2) return(LN_2t);
+  else return(LN_05t);
 }
 
 /* double emit_ft same as emit_f2? */
   
-double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme, double *cross_temps) 
+double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   /* ref: Jiang and Zeng (1997 Genetics) */
 
   double t,t1, term1, term3, term4;
+  static double LN_expt = 0;
+  static double LN_logt = 0;
+
+  if(LN_expt == 0) {
+    /* static variables used frequently */
+    LN_expt = exp(2.0 * log(cross_scheme[1] - 1));    /* step_ft uses 2^(t-1) */
+    LN_logt = - log(LN_expt - 1);      /* step_ft uses -log(2^(t-1) - 1) */
+  }
 
   t = cross_scheme[1];
   t1 = t - 1;
@@ -69,17 +86,18 @@ double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme, do
     return(LN_05 + log(1.0 - term1));
   }
   if(gen2 == 2)
-    return(cross_temps[3] + log(1.0 - term1));
+    return(LN_logt + log(1.0 - term1));
   term3 = 1 + 2.0 * rf;
   term4 = exp(t * log(1 - 2 * rf)) / (2 * term3);
   if(gen1 == gen2)
-    term3 = (cross_temps[2] / term3) - term4;
+    term3 = (LN_expt / term3) - term4;
   else
-    term3 = (2.0 * cross_temps[2] * rf / term3) + term4;
-  return(cross_temps[3] + log(term3 - 1 + 0.5 * term1));
+    term3 = (2.0 * LN_expt * rf / term3) + term4;
+  return(LN_logt + log(term3 - 1 + 0.5 * term1));
 }
 
 void calc_genoprob_ft(int *n_ind, int *n_mar, int *geno, 
+		      int *cross_scheme,
 		      double *rf, double *error_prob,
                       double *genoprob) 
 {
