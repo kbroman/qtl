@@ -1,0 +1,89 @@
+/**********************************************************************
+ * 
+ * hmm_ft.h
+ * 
+ * copyright (c) 2001-7, Karl W Broman
+ * modified from hmm_f2.h by Brian S Yandell and Laura M Shannon (c) 2010
+ *
+ * modified Jun, 2010
+ * last modified Oct, 2007
+ * first written Feb, 2001
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License,
+ *     version 3, as published by the Free Software Foundation.
+ * 
+ *     This program is distributed in the hope that it will be useful,
+ *     but without any warranty; without even the implied warranty of
+ *     merchantability or fitness for a particular purpose.  See the GNU
+ *     General Public License, version 3, for more details.
+ * 
+ *     A copy of the GNU General Public License, version 3, is available
+ *     at http://www.r-project.org/Licenses/GPL-3
+ * 
+ * C functions for the R/qtl package
+ *
+ * Contains: init_ft, emit_ft, step_ft, init_ftb, emit_ftb, step_ftb,
+ *           calc_genoprob_ft, calc_genoprob_special_ft, sim_geno_ft, est_map_ft, 
+ *           argmax_geno_ft, errorlod_ft, calc_errorlod_ft, nrec2_ft,
+ *           logprec_ft, est_rf_ft, calc_pairprob_ft, marker_loglik_ft
+ *
+ * These are the init, emit, and step functions plus
+ * all of the hmm wrappers for the FT intercross.
+ *
+ * Genotype codes:  0=AA; 1=AB; 2=BB
+ * Phenotype codes: 0=missing; 1=AA; 2=AB; 3=BB; 4=not BB; 5=not AA
+ *
+ **********************************************************************/
+
+double init_ft(int true_gen, int *cross_scheme, double *cross_temps);
+
+double emit_ft(int obs_gen, int true_gen, double error_prob);
+  
+double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme, double *cross_temps);
+
+double init_ftb(int true_gen);
+
+double emit_ftb(int obs_gen, int true_gen, double error_prob);
+  
+double step_ftb(int gen1, int gen2, double rf, double junk);
+
+double nrec_ftb(int gen1, int gen2);
+
+void calc_genoprob_ft(int *n_ind, int *n_mar, int *geno, 
+		      double *rf, double *error_prob, double *genoprob);
+  
+void calc_genoprob_special_ft(int *n_ind, int *n_mar, int *geno, 
+			      double *rf, double *error_prob, double *genoprob);
+
+void sim_geno_ft(int *n_ind, int *n_pos, int *n_draws, int *geno,
+		 double *rf, double *error_prob, int *draws);
+
+void est_map_ft(int *n_ind, int *n_mar, int *geno, double *rf, 
+		double *error_prob, double *loglik, int *maxit, 
+		double *tol, int *verbose);
+
+void argmax_geno_ft(int *n_ind, int *n_pos, int *geno, 
+		   double *rf, double *error_prob, int *argmax);
+
+double errorlod_ft(int obs, double *prob, double error_prob);
+
+void calc_errorlod_ft(int *n_ind, int *n_mar, int *geno, 
+		      double *error_prob, double *genoprob, 
+		      double *errlod);
+
+double nrec2_ft(int obs1, int obs2, double rf);
+
+double logprec_ft(int obs1, int obs2, double rf);
+
+void est_rf_ft(int *n_ind, int *n_mar, int *geno, double *rf, 
+	       int *maxit, double *tol);
+
+void calc_pairprob_ft(int *n_ind, int *n_mar, int *geno, 
+		      double *rf, double *error_prob, double *genoprob,
+		      double *pairprob);
+
+void marker_loglik_ft(int *n_ind, int *geno,
+		      double *error_prob, double *loglik);
+
+/* end of hmm_ft.h */
