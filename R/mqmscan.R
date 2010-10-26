@@ -341,6 +341,10 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 	qtl <- as.data.frame(qtl)
 	if(backward && !is.null(qc) && model.present){
 	  attr(qtl,"mqmmodel") <- QTLmodel
+    cimcovar <- as.data.frame(cbind(as.numeric(attr(qtl,"mqmmodel")[[4]]),as.data.frame(attr(qtl,"mqmmodel")[[5]])))
+    rownames(cimcovar) <- attr(qtl,"mqmmodel")[[2]]
+    colnames(cimcovar) <- c("chr","pos")
+    attr(qtl, "marker.covar.pos") <- cimcovar
 	}
 	class(qtl) <- c("scanone",class(qtl))
 	for( x in 1:nchr(cross)){
