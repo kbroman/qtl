@@ -44,6 +44,10 @@ Minor changes:
 
   Small changes to mqmplot.circle().
 
+  Subtle changes to tutorials new_multiqtl.pdf,
+  new_summary_scanone.pdf, new_summary_scantwo.pdf; added .R files
+  with the code for these tutorials.
+
   Fixed slight bug in getid().
 
 
