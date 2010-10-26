@@ -1,16 +1,16 @@
-\name{tryallpositions}
-\alias{tryallpositions}
+\name{droponemarker}
+\alias{droponemarker}
 
-\title{Test all possible positions for a marker}
+\title{Drop one marker at a time and determine effect on genetic map}
 
 \description{
-  Try all possible positions for a marker, keeping all other markers
-  fixed, and evaluate the log likelihood and estimate the chromosome
-  length. 
+  Drop one marker at a time from a genetic map and calculate the change
+  in log likelihood and in the chromosome length, in order to identify
+  problematic markers.
 }
 
 \usage{
-tryallpositions(cross, marker, chr, error.prob=0.0001,
+droponemarker(cross, chr, error.prob=0.0001,
                 map.function=c("haldane","kosambi","c-f","morgan"),
                 m=0, p=0, maxit=4000, tol=1e-6, sex.sp=TRUE,
                 verbose=TRUE)
@@ -18,7 +18,6 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.}
- \item{marker}{Character string with name of the marker to move about.}
  \item{chr}{A vector specifying which chromosomes to test for the
    position of the marker.    This should be a vector of character
    strings referring to chromosomes by name; numeric values are
@@ -40,38 +39,44 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
  \item{tol}{Tolerance for determining convergence.}
  \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
  used only for the 4-way cross.}
- \item{verbose}{If TRUE, print information on progress.}
+ \item{verbose}{If TRUE, print information on progress; if > 1, print
+   even more information.}
 }
 
 \value{
   A data frame (actually, an object of class \code{"scanone"}, so that
   one may use \code{\link{plot.scanone}},
-  \code{\link{summary.scanone}}, etc.) with each row being a
-  possible position for the marker. 
+  \code{\link{summary.scanone}}, etc.) with each row being a marker.
   The first two columns are the chromosome ID and position.  The third
-  column is a LOD score comparing the hypotheses that the marker is in that
-  position versus the hypothesis that it is not linked to that chromosome.
+  column is a LOD score comparing the hypothesis that the marker is not
+  linked to the hypothesis that it belongs at that position.
 
   In the case of a 4-way cross, with \code{sex.sp=TRUE}, there are two
-  additional columns with the estimated female and male genetic lengths
-  of the respective chromosome, when the marker is in that position.
+  additional columns with the change in the estimated female and male genetic lengths
+  of the respective chromosome, upon deleting that marker.  
   With \code{sex.sp=FALSE}, or for other types of crosses, there is one
-  additional column, with the estimated genetic length of the respective
-  chromosome, when the marker is in that position.
+  additional column, with the change in estimated genetic length of the respective
+  chromosome, when the marker is omitted.
 
-  The row names indicate the nearest flanking markers for each interval.
+  A well behaved marker will have a negative LOD score and a small
+  change in estimated genetic length.  A poorly behaved marker will have a large
+  positive LOD score and a large change in estimated genetic length.  But note
+  that dropping the first or last marker on a chromosome could result in
+  a large change in estimated length, even if they are not badly
+  behaved; for these markers one should focus on the LOD scores, with a large
+  positive LOD score being bad.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 
 \examples{
 data(fake.bc)
-tryallpositions(fake.bc, "D7M301", 7, error.prob=0, verbose=FALSE)
+droponemarker(fake.bc, 7, error.prob=0, verbose=FALSE)
 }
 
 
-\seealso{ \code{\link{droponemarker}}, \code{\link{est.map}}, \code{\link{ripple}},
+\seealso{ \code{tryallpositions}, \code{\link{est.map}}, \code{\link{ripple}},
   \code{\link{est.rf}}, \code{\link{switch.order}},
-  \code{\link{movemarker}} }
+  \code{\link{movemarker}}, \code{\link{drop.markers}} }
 
 \keyword{utilities}

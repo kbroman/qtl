@@ -266,14 +266,14 @@ mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
 orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
 ourline()
-ourstop(...)
+ourstop(\dots)
 parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)
 polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
          par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"),
          col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, main = NULL, xlab =
-         NULL, ylab = NULL, add=FALSE, ... ) 
+         NULL, ylab = NULL, add=FALSE, \dots) 
 \method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)
