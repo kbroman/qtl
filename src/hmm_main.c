@@ -81,6 +81,7 @@
    but in the alpha's and beta's, we use 0, 1, ... */
 
 void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno, 
+		   int *cross_scheme,
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
 		   double initf(int), 
@@ -91,7 +92,7 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
   double s, **alpha, **beta;
   int **Geno;
   double ***Genoprob;
-  
+
   /* allocate space for alpha and beta and 
      reorganize geno and genoprob */
   reorg_geno(n_ind, n_pos, geno, &Geno);
@@ -105,7 +106,7 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
 
     /* initialize alpha and beta */
     for(v=0; v<n_gen; v++) {
-      alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+      alpha[v][0] = initf(v+1, *cross_scheme) + emitf(Geno[0][i], v+1, error_prob);
       beta[v][n_pos-1] = 0.0;
     }
 
@@ -113,16 +114,15 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
     for(j=1,j2=n_pos-2; j<n_pos; j++, j2--) {
       
       for(v=0; v<n_gen; v++) {
-	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1]);
-	
-	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2]) + 
+	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1], *cross_scheme);
+	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], *cross_scheme) + 
 	  emitf(Geno[j2+1][i],1,error_prob);
 
 	for(v2=1; v2<n_gen; v2++) {
 	  alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-			       stepf(v2+1,v+1,rf[j-1],rf2[j-1]));
+			       stepf(v2+1,v+1,rf[j-1],rf2[j-1], *cross_scheme));
 	  beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-			       stepf(v+1,v2+1,rf[j2],rf2[j2]) +
+			       stepf(v+1,v2+1,rf[j2],rf2[j2], *cross_scheme) +
 			       emitf(Geno[j2+1][i],v2+1,error_prob));
 	}
 
