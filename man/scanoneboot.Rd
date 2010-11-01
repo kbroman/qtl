@@ -98,7 +98,7 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 }
 
 \references{
-  Manichaikul, A., Dupuis, J., Sen, \'S and Broman, K. W. (2006) Poor
+  Manichaikul, A., Dupuis, J., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S} and Broman, K. W. (2006) Poor
   performance of bootstrap confidence intervals for the location of a
   quantitative trait locus. \emph{Genetics} \bold{174}, 481--489.
   

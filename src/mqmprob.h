@@ -47,6 +47,7 @@ double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector ima
 //double prob(const cmatrix loci, const vector rs, const int i, const int j, const char markertype, const MQMCrossType crosstype, const int ADJ);
 
 double start_prob(const MQMCrossType crosstype,MQMMarker markertype);
+bool is_knownMarker(const char marker,const MQMCrossType crosstype);
 
 #ifdef __cplusplus
   }

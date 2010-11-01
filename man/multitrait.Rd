@@ -1,6 +1,5 @@
 \name{multitrait}
 \alias{multitrait}
-
 \docType{data}
 
 \title{ 

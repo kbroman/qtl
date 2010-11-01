@@ -53,6 +53,8 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                const cvector position, vector r, const int maxNaug, 
                const int imaxNaug, const double minprob, 
                const MQMCrossType crosstype, const int verbose);
+               
+MQMMarker randommarker(const MQMCrossType crosstype);
 
 #ifdef __cplusplus
   }

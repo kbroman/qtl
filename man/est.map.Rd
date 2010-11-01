@@ -9,7 +9,7 @@
 }
 
 \usage{
-est.map(cross, error.prob=0.0001,
+est.map(cross, chr, error.prob=0.0001,
         map.function=c("haldane","kosambi","c-f","morgan"),
         m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE,
         verbose=FALSE, omit.noninformative=TRUE, offset)
@@ -17,6 +17,12 @@ est.map(cross, error.prob=0.0001,
 \arguments{
  \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.}
+ \item{chr}{Optional vector indicating the chromosomes to consider.
+   This should be a vector of character
+   strings referring to chromosomes by name; numeric values are
+   converted to strings.  Refer to chromosomes with a preceding \code{-}
+   to have all chromosomes but those considered.  A logical (TRUE/FALSE)
+   vector may also be used.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,

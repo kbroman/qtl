@@ -2,9 +2,9 @@
  * 
  * hmm_4way.c
  * 
- * copyright (c) 2001-9, Karl W Broman
+ * copyright (c) 2001-2010, Karl W Broman
  * 
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@
 
 double init_4way(int true_gen)
 {
-  return(LN_025);
+  return(-2.0*M_LN2);
 }
 
 double emit_4way(int obs_gen, int true_gen, double error_prob)

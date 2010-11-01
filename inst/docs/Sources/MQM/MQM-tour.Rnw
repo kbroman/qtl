@@ -37,7 +37,7 @@
 \newcommand{\Atintrocolors}{\Atintro\ comparing \mqm\ (\code{mqmscan} in green) and
 single \qtl\ mapping (\code{scanone} in black)}
 
-\title { Tutorial - Multiple-QTL Mapping (MQM) Analysis }
+\title { Tutorial - Multiple-QTL Mapping (MQM) Analysis for R/qtl }
 \author { Danny Arends, Pjotr Prins, Karl W. Broman and Ritsert C. Jansen }
 \begin {document}
 \maketitle
@@ -1131,7 +1131,6 @@ modulating expression (higher or lower), the green lines show a flip in effect.\
 	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
                 & \hspace{0.25in} from the output of the \code{mqmpermutation} function \\
 	mqmplot.multitrait:& plot multiple traits (MQMmulti object) \\
-	mqmplot.nice:& plot multiple traits (MQMmulti object) \\
   mqmplot.directedqtl:& plot of single trait with added \qtl\ effect\\
 	mqmplot.permutations:& plot to show single trait permutations \\
 	mqmplot.singletrait:& plot of single trait analysis with information content \\

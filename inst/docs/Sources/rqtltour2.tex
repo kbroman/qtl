@@ -1,0 +1,867 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage{times}     % times font
+\usepackage{color}     % getting colored text
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+% revise margins
+\setlength{\headheight}{0.0in}
+\setlength{\topmargin}{-0.25in}
+\setlength{\headsep}{0.0in}
+\setlength{\textheight}{9.5in}
+\setlength{\footskip}{0.35in}
+\setlength{\oddsidemargin}{-0.25in}
+\setlength{\evensidemargin}{-0.25in}
+\setlength{\textwidth}{7.0in}
+\setlength{\parindent}{0pt}
+\setlength{\parsep}{12pt}
+
+% font colors
+\newcommand{\usercolor}{\color [named]{BlueViolet}}
+\newcommand{\othercolor}{\color [named]{Mahogany}}
+\newcommand{\lod}{\text{LOD}}
+
+% environment for references
+\newenvironment{hanging}
+{\begin{list}{}
+        {\setlength{\labelwidth}{0in}
+         \setlength{\leftmargin}{1em}
+         \setlength{\itemindent}{-1em}
+        }
+}
+{\end{list}}
+
+
+\begin{document}
+
+\begin{center}
+\rule{7.0in}{1mm} \vspace{0mm}
+
+{\Large \textbf{A shorter tour of R/qtl}} \vspace{4mm}
+
+{\large Karl W Broman} \vspace{2mm}
+
+Department of Biostatistics and Medical Informatics\\
+University of Wisconsin -- Madison
+
+\vspace{2mm}
+\href{http://www.rqtl.org}{http://www.rqtl.org}
+\vspace{2mm}
+
+19 October 2009 % the date
+
+\rule{7.0in}{1mm} 
+\end{center}
+
+
+
+\textbf{Preliminaries} \vspace{6pt}
+
+\begin{enumerate}
+
+\item To install R/qtl, type (within R) {\usercolor \verb-install.packages("qtl")-}
+(This needs to be done just once.)
+
+\item To load the R/qtl package, type
+
+\usercolor \verb|library(qtl)| \normalcolor
+
+This needs to be done every time you start R. (There is a way to
+have the package loaded automatically every time, but we won't discuss
+that here.)
+
+\item To view the objects in your workspace:
+
+\usercolor \verb|ls()| \normalcolor
+
+\item The best way to get help on the functions and data sets in R
+(and in R/qtl) is via the html version of the help files. One way to
+get access to this is to type 
+
+\usercolor \verb-help.start()- \normalcolor
+
+This should open a browser with the main help menu.  
+If you then click on \othercolor Packages \normalcolor $\rightarrow$
+\othercolor qtl\normalcolor , you can see all of the available
+functions and datasets in R/qtl.  For example, look at the help file
+for the function \verb-read.cross-.
+
+An alternative method to view this help file is to type one of the
+following: 
+
+\usercolor \verb|help(read.cross)| \\
+\verb|?read.cross| \normalcolor
+
+The html version of the help files are somewhat easier to read, and
+allow use of hotlinks between different functions.  
+
+\item All of the code in this tutorial is available as a file from
+  which you may copy and paste into R, if you prefer that to typing.
+  Type the following within R to get access to the file:
+
+\usercolor \verb-url.show("http://www.rqtl.org/rqtltour2.R")-
+\normalcolor
+
+\end{enumerate}
+
+
+\vspace{12pt}
+\textbf{Data import} \vspace{6pt}
+
+We will consider data from Sugiyama et al., Physiol Genomics 10:5--12,
+2002. 
+The
+data are from an intercross between BALB/cJ and CBA/CaJ; only male
+offspring were considered.  There are four phenotypes: blood pressure,
+heart rate, body weight, and heart weight.  We will focus on the blood
+pressure phenotype, will consider just the 163 individuals with
+genotype data and, for simplicity, will focus on the autosomes.
+The data are contained in the comma-delimited file
+\href{http://www.rqtl.org/sug.csv}{http://www.rqtl.org/sug.csv}.  
+
+\begin{enumerate}
+\addtocounter{enumi}{5}
+
+\item Load the data into R/qtl as follows.
+
+\usercolor 
+\verb|sug <- read.cross("csv", "http://www.rqtl.org", "sug.csv",| \\
+\verb|                  genotypes=c("CC", "CB", "BB"), alleles=c("C", "B"))|
+\normalcolor
+\end{enumerate}
+
+The function \verb-read.cross- is for importing data into R/qtl.
+\verb-"sug.csv"- is the name of the file, which we import directly
+from the R/qtl website.  \verb-genotypes- indicates the codes used for
+the genotypes; \verb-alleles- indicates single-character codes to be
+used in plots and such.
+\vspace{12pt}
+
+\verb-read.cross- loads the data from the file and formats it into
+a special cross object, which is then assigned to \verb-sug- via the
+assignment operator (\verb:<-:).  
+
+
+\clearpage
+\textbf{Diagnostics} \vspace{6pt}
+
+Generally, at this point, one would spend considerable time studying
+the genotype and phenotype data, looking for potential errors.  In
+many cases, about half of the analysis time is devoted to such
+diagnostics.  
+
+\vspace{12pt}
+
+In previous tutorials, we've often gotten bogged down in this part,
+and so we'll skip it here, assume that the data are okay, and
+jump right into QTL mapping.  See the longer (``brief'') tour of R/qtl
+at
+\href{http://www.rqtl.org/tutorials}{http://www.rqtl.org/tutorials},
+or Chapter 3 of Broman and Sen (2009).
+
+
+\vspace{12pt}
+\textbf{Summaries} \vspace{6pt}
+\nopagebreak
+
+The data object \verb-sug- is complex; it contains the genotype
+data, phenotype data and genetic map.  R has a certain amount of
+``object oriented'' facilities, so that calls to functions like
+\verb-summary- and \verb-plot- are interpreted appropriately for the object
+considered.  
+
+The object \verb-sug- has ``class'' \verb-"cross"-, and so calls to
+\verb-summary- and \verb-plot- are actually sent to the functions
+\verb-summary.cross- and \verb-plot.cross-.
+
+\begin{enumerate}
+\addtocounter{enumi}{6}
+\item Get a quick summary of the data.  (This also performs a variety
+  of checks of the integrity of the data.)
+
+\usercolor
+\verb|summary(sug)|
+\normalcolor
+
+We see that this is an intercross with 163 individuals.  There are 6
+phenotypes, and genotype data at 93 markers across the 19 autosomes.
+The genotype data is quite complete.
+
+\item There are a number of simple functions for pulling out pieces of summary
+  information.  Hopefully these are self-explanatory.
+
+\usercolor
+\verb|nind(sug)| \\
+\verb|nchr(sug)| \\
+\verb|totmar(sug)| \\
+\verb|nmar(sug)| \\
+\verb|nphe(sug)|
+\normalcolor
+
+
+
+\item Get a summary plot of the data.
+
+\usercolor
+\verb|plot(sug)|
+\normalcolor
+
+The plot in the upper-left shows the pattern of missing genotype data, with
+black pixels corresponding to missing genotypes.  The next plot shows
+the genetic map of the typed markers.  The following plots are
+histograms or bar plots for the six phenotypes.  The last two
+``phenotypes'' are sex (with 1 corresponding to males) and mouse ID.
+
+
+\item Individual parts of the above plot may be obtained as follows.
+
+\usercolor
+\verb|plot.missing(sug)| \\
+\verb|plot.map(sug)| \\
+\verb|plot.pheno(sug, pheno.col=1)| \\
+\verb|plot.pheno(sug, pheno.col=2)| \\
+\verb|plot.pheno(sug, pheno.col=3)| \\
+\verb|plot.pheno(sug, pheno.col=4)| \\
+\verb|plot.pheno(sug, pheno.col=5)| \\
+\verb|plot.pheno(sug, pheno.col=6)|
+\normalcolor
+
+
+\end{enumerate}
+
+\vspace{12pt}
+\textbf{Single-QTL analysis} \vspace{6pt}
+
+Let's now proceed to QTL mapping via a single-QTL model.  
+
+\begin{enumerate}
+\addtocounter{enumi}{10}
+\item We first calculate the QTL genotype probabilities, given the
+observed marker data, via the function \verb-calc.genoprob-.  This is
+done at the markers and at a grid along the chromosomes.  The argument
+\verb-step- is the density of the grid (in cM), and defines the
+density of later QTL analyses.
+
+\usercolor
+\verb|sug <- calc.genoprob(sug, step=1)|
+\normalcolor
+
+The output of \verb-calc.genoprob- is the same cross object as input,
+with additional information (the QTL genotype probabilities) inserted.  We
+assign this back to the original object (writing over the previous
+data), though it could have also been assigned to a new object.
+
+\item To perform a single-QTL genome scan, we use the function
+  \verb-scanone-.  By default, it performs standard interval mapping
+  (that is, maximum likelihood via the EM algorithm).  Also, by
+  default, it considers the first phenotype in the input cross object
+  (in this case, blood pressure).
+
+\usercolor
+\verb|out.em <- scanone(sug)|
+\normalcolor
+
+\item The output has ``class'' \verb-"scanone"-.  The \verb-summary-
+  function is passed to the function \verb-summary.scanone-, and gives
+  the maximum LOD score on each chromosome.
+
+\usercolor
+\verb|summary(out.em)|
+\normalcolor
+
+\item Alternatively, we can give a threshold, e.g., to only see those
+  chromosomes with LOD $>$ 3.
+
+\usercolor
+\verb|summary(out.em, threshold=3)|
+\normalcolor
+
+\item We can plot the results as follows.
+
+\usercolor
+\verb|plot(out.em)|
+\normalcolor
+
+\item We can do the genome scan via Haley-Knott regression by calling
+  \verb-scanone- with the argument \verb-method="hk"-.  
+
+\usercolor
+\verb|out.hk <- scanone(sug, method="hk")|
+\normalcolor
+
+\item We may plot the two sets of LOD curves together in a single call
+  to \verb-plot-.
+
+\usercolor
+\verb|plot(out.em, out.hk, col=c("blue", "red"))|
+\normalcolor
+
+\item Alternatively, we could do the following:
+
+\usercolor
+\verb|plot(out.em, col="blue")| \\
+\verb|plot(out.hk, col="red", add=TRUE)| 
+\normalcolor
+
+\item It's perhaps more informative to plot the differences:
+
+\usercolor
+\verb|plot(out.hk - out.em, ylim=c(-0.3, 0.3), ylab="LOD(HK)-LOD(EM)")|
+\normalcolor
+ 
+\item To perform a genome scan by the multiple imputation method, one
+  must first call \verb-sim.geno- to perform the multiple
+  imputations.  This is similar to \verb-calc.genoprob-, but with an
+  additional argument, \verb-n.draws-, indicating the number of
+  imputations.  We then call \verb-scanone- with \verb-method="imp"-.
+
+\usercolor
+\verb|sug <- sim.geno(sug, step=1, n.draws=64)| \\
+\verb|out.imp <- scanone(sug, method="imp")|
+\normalcolor
+
+\item We may plot all three curves together as follows.
+
+\usercolor
+\verb|plot(out.em, out.hk, out.imp, col=c("blue", "red", "green"))|
+\normalcolor
+
+\item We can plot the LOD curves for just chromosomes 7 and 15 as follows.
+
+\usercolor
+\verb|plot(out.em, out.hk, out.imp, col=c("blue", "red", "green"), chr=c(7,15))|
+\normalcolor
+
+\item We can also look at differences.
+
+\usercolor
+\verb|plot(out.imp - out.em, out.hk - out.em, col=c("green", "red"), ylim=c(-1,1))|
+\normalcolor
+
+\end{enumerate}
+
+
+\vspace{12pt}
+\textbf{Permutation tests} \vspace{6pt}
+\nopagebreak
+
+To perform a permutation test, to get a genome-wide significance
+  threshold or genome-scan-adjusted p-values, we use \verb-scanone-
+  just as before, but with an additional argument, \verb-n.perm-,
+  indicating the number of permutation replicates.  It's quickest to
+  use Haley-Knott regression.
+
+\begin{enumerate}
+\addtocounter{enumi}{23}
+
+\item In case the time to perform the permutation test is too long, you can
+skip it (here) and load the results (that I calculated previously) for
+this plus other time-consuming stuff we'll see shortly as follows.\label{various}
+
+\usercolor
+\verb|load(url("http://www.rqtl.org/various.RData"))|
+\normalcolor
+
+
+\item The code to do the actual permutation test is the following:
+
+\usercolor
+\verb|operm <- scanone(sug, method="hk", n.perm=1000)|
+\normalcolor
+
+\item A histogram of the results (the 1000 genome-wide maximum LOD
+  scores) is obtained as follows:
+
+\usercolor
+\verb|plot(operm)|
+\normalcolor
+
+\item Significance thresholds may be obtained via the \verb-summary-
+  function:
+
+\usercolor
+\verb|summary(operm)| \\
+\verb|summary(operm, alpha=c(0.05, 0.2))|
+\normalcolor
+
+\item Most importantly, the permutation results may be used along with
+  the \verb-scanone- results to have significance thresholds and
+  p-values calculated automatically:
+
+\usercolor
+\verb|summary(out.hk, perms=operm, alpha=0.2, pvalues=TRUE)|
+\normalcolor
+
+\end{enumerate}
+
+
+\vspace{12pt}
+\textbf{Interval estimates of QTL location} \vspace{6pt}
+\nopagebreak
+
+For the blood pressure phenotype, we've seen good evidence for QTL on
+chromosomes 7 and 15.  Interval estimates of the location of QTL are
+commonly obtained via 1.5-LOD support intervals, which may be
+calculated via the function \verb-lodint-.  Alternatively, an
+approximate Bayes credible interval may be obtained with
+\verb-bayesint-.  
+
+\begin{enumerate}
+\addtocounter{enumi}{28}
+\item To obtain the 1.5-LOD support interval and 95\% Bayes interval
+  for the QTL on chromosome 7, type:
+
+\usercolor
+\verb|lodint(out.hk, chr=7)| \\
+\verb|bayesint(out.hk, chr=7)| 
+\normalcolor
+
+The first and last rows define the ends of the intervals; the middle
+row is the estimated QTL location.
+
+\item It is sometimes useful to identify the closest flanking markers;
+  use \verb-expandtomarkers=TRUE-:
+
+\usercolor
+\verb|lodint(out.hk, chr=7, expandtomarkers=TRUE)| \\
+\verb|bayesint(out.hk, chr=7, expandtomarkers=TRUE)| 
+\normalcolor
+
+\item We can calculate the 2-LOD support interval and the 99\% Bayes
+  interval as follows.
+
+\usercolor
+\verb|lodint(out.hk, chr=7, drop=2)| \\
+\verb|bayesint(out.hk, chr=7, prob=0.99)| 
+\normalcolor
+
+\item The intervals for the chr 15 locus may be calculated as follows.
+
+\usercolor
+\verb|lodint(out.hk, chr=15)| \\
+\verb|bayesint(out.hk, chr=15)| 
+\normalcolor
+
+\end{enumerate}
+
+\vspace{12pt}
+\textbf{QTL effects} \vspace{6pt}
+\nopagebreak
+
+We may obtain plots indicating the estimated effects of the QTL via
+\verb-plot.pxg-, which creates a dot plot, or \verb-effectplot-, which
+plots the average phenotype for each genotype group.
+
+\begin{enumerate}
+\addtocounter{enumi}{32}
+\item For \verb-plot.pxg-, we must first identify the marker closest
+  to the QTL peak.  Use \verb-find.marker-.
+
+\usercolor
+\verb|max(out.hk)| \\
+\verb|mar <- find.marker(sug, chr=7, pos=47.7)| \\
+\verb|plot.pxg(sug, marker=mar)|
+\normalcolor
+
+Note that red dots correspond to inferred genotypes (based on a single
+imputation). 
+
+
+\item The function \verb-effectplot- uses the multiple imputation
+  results from \verb-sim.geno-.
+
+\usercolor
+\verb|effectplot(sug, mname1=mar)|
+\normalcolor
+
+\item We may use \verb-effectplot- at a position on the ``grid''
+  between markers, using \verb-"7@47.7"- to indicate the position at
+  47.7~cM on chr~7.
+
+\usercolor
+\verb|effectplot(sug, mname1="7@47.7")|
+\normalcolor
+
+\item Similar plots may be obtained for the locus on chr 15.
+
+\usercolor
+\verb|max(out.hk, chr=15)| \\
+\verb|mar2 <- find.marker(sug, chr=15, pos=12)| \\
+\verb|plot.pxg(sug, marker=mar2)| \\
+\verb|effectplot(sug, mname1="15@12")|
+\normalcolor
+
+\item We may plot the joint effects of the two loci via
+  \verb-plot.pxg- as follows:
+
+\usercolor
+\verb|plot.pxg(sug, marker=c(mar, mar2))| \\
+\verb|plot.pxg(sug, marker=c(mar2, mar))|
+\normalcolor
+
+\item The function \verb-effectplot- gives more readable figures in
+  this case; it's often useful to look at it in both ways.
+
+\usercolor
+\verb|effectplot(sug, mname1="7@47.7", mname2="15@12")| \\
+\verb|effectplot(sug, mname2="7@47.7", mname1="15@12")| 
+\normalcolor
+
+The two loci do not appear to interact.
+
+
+\end{enumerate}
+
+\vspace{12pt}
+\textbf{Other phenotypes} \vspace{6pt}
+\nopagebreak
+
+By default in \verb-scanone-, we consider the first phenotype in the
+input cross object.  Other phenotypes, include the parallel
+consideration of multiple phenotypes, can be considered via the
+argument \verb-pheno.col-.
+
+
+\begin{enumerate}
+\addtocounter{enumi}{38}
+\item To analyze the second phenotype, refer to it by its numeric
+  index, as follows.
+
+\usercolor
+\verb|out.hr <- scanone(sug, pheno.col=2, method="hk")|
+\normalcolor
+
+\item Alternatively, refer to a phenotype by its name:
+
+\usercolor
+\verb|out.bw <- scanone(sug, pheno.col="bw", method="hk")|
+\normalcolor
+
+\item You can also give a numeric vector of phenotype values.  This is
+  useful for considering a transformed version of a phenotype, such as
+  log body weight.
+
+\usercolor
+\verb|out.logbw <- scanone(sug, pheno.col=log(sug$pheno$bw), method="hk")|
+\normalcolor
+
+\item Use of vector of phenotype indices results in an object with
+  multiple LOD score columns, one for each phenotype.
+
+\usercolor
+\verb|out.all <- scanone(sug, pheno.col=1:4, method="hk")|
+\normalcolor
+
+\item For this final case, it's important to note that the
+  \verb-summary- function, by default, focuses solely on the first
+  LOD score column.
+
+\usercolor
+\verb|summary(out.all, threshold=3)|
+\normalcolor
+
+Here, it looks at the first LOD score column and picks off the peaks
+that are above 3, and then gives the LOD scores at that location for
+the other three columns.  
+
+To do the same thing but focusing on another column, use the argument
+\verb-lodcolumn-. 
+
+\usercolor
+\verb|summary(out.all, threshold=3, lodcolumn=4)|
+\normalcolor
+
+\item Alternatively, use \verb-format="allpeaks"-, to get the maximum
+  LOD score for each column, with a chromosome being shown if at least
+  one of the LOD score column exceeds the threshold.
+
+\usercolor
+\verb|summary(out.all, threshold=3, format="allpeaks")|
+\normalcolor
+
+\item A third version of the output is obtained with
+  \verb-format="allpheno"-, which gives one row per LOD peak and gives
+  the LOD scores for all columns at each peak.
+
+\usercolor
+\verb|summary(out.all, threshold=3, format="allpheno")|
+\normalcolor
+
+\end{enumerate}
+
+
+\vspace{12pt}
+\textbf{Two-dimensional, two-QTL scans} \vspace{6pt}
+\nopagebreak
+
+Two-dimensional, two-QTL scans offer the opportunity to detect
+interacting loci or to separate pairs of linked QTL.  Analysis is
+performed with \verb-scantwo-, which is much like \verb-scanone-.
+
+
+\begin{enumerate}
+\addtocounter{enumi}{45}
+\item For 2d scans, it's advantageous to run things at a coarser step
+  size, by first re-running \verb-calc.genoprob-.
+
+\usercolor
+\verb|sug <- calc.genoprob(sug, step=2)|
+\normalcolor
+
+\item To perform a 2d scan for the blood pressure phenotype, use the
+  following.  If you loaded the file \verb-"various.RData"- in
+  step~\ref{various} on page~\pageref{various},
+  you can skip this, as you already have the results.
+
+\usercolor
+\verb|out2 <- scantwo(sug, method="hk")|
+\normalcolor
+
+\item We may plot the results as follows.
+
+\usercolor
+\verb|plot(out2)|
+\normalcolor
+
+The upper-triangle contains interaction LOD scores, comparing the full
+two-locus model to the additive two-locus model.  The lower-triangle
+contains the ``full'' LOD scores, comparing the full two-locus model
+to the null model.  Because of the clear evidence for QTL on
+chromosomes 7 and 15, we see ``tails'' along those two chromosomes:
+the two locus model with either chr 7 or chr 15 and anything else is clearly better
+than the null model.  
+
+\item It's best to replace the lower-triangle with the LOD score comparing the full model to
+  the best single-QTL model, using either \verb:lower="cond-int": or
+  \verb:lower="fv1": (the two are equivalent).
+
+\usercolor
+\verb|plot(out2, lower="fv1")|
+\normalcolor
+
+\item We can also look at the LOD scores comparing the additive
+  two-QTL model to the best single-QTL model, using either
+  \verb:upper="cond-add": or \verb:upper="av1":.
+
+\usercolor
+\verb|plot(out2, lower="fv1", upper="av1")|
+\normalcolor
+
+\item To assess significance, we need to do a permutation test.  This
+  can be extremely time consuming.  The results were already loaded in
+  step~\ref{various} on page~\pageref{various}, but here is the code (though here I cite \verb:n.perm=5:
+  rather than \verb:n.perm=1000:, as I'd recommend).
+
+\usercolor
+\verb|operm2 <- scantwo(out2, method="hk", n.perm=5)|
+\normalcolor
+
+\item With the permutation results in hand, we can get a summary with
+  p-values.
+
+\usercolor
+\verb|summary(out2, perms=operm2, alpha=0.2, pvalues=TRUE)|
+\normalcolor
+
+The pair of loci on 7 and 15 are clear.  They show no evidence for an
+interaction.  There is some evidence for an additional locus on chr
+12, with p=0.17.
+
+\end{enumerate}
+
+
+\vspace{12pt}
+\textbf{Multiple-QTL analyses} \vspace{6pt}
+\nopagebreak
+
+After performing the single- and two-QTL genome scans, it's best to
+bring the identified loci together into a joint model, which we then
+refine from which we may explore the possibility of further QTL.  In
+this effort, we work with ``QTL objects'' created by \verb-makeqtl-.
+We fit multiple-QTL models with \verb-fitqtl-.  A number of additional
+functions will be introduced below.
+
+\begin{enumerate}
+\addtocounter{enumi}{52}
+\item Let's re-run \verb-calc.genoprob- so that we are working at a
+  step size of 1~cM again.
+
+\usercolor
+\verb|sug <- calc.genoprob(sug, step=1)|
+\normalcolor
+
+\item First, we create a QTL object containing the loci on chr 7 and
+  15.
+
+\usercolor
+\verb|qtl <- makeqtl(sug, chr=c(7,15), pos=c(47.7, 12), what="prob")|
+\normalcolor
+
+The last argument, \verb-what="prob"-, indicates to pull out the QTL
+genotype probabilities for use in Haley-Knott regression.
+
+\item We fit the two locus additive model as follows.
+
+\usercolor
+\verb|out.fq <- fitqtl(sug, qtl=qtl, method="hk")| \\
+\verb|summary(out.fq)|
+\normalcolor
+
+A key part of the output is the ``drop one term at a time'' table,
+which compares the fit of the two-QTL model to the reduced model in
+which a single QTL is omitted.  
+
+\item We may obtain the estimated effects of the QTL via
+  \verb-get.ests=TRUE-.  We use \verb-dropone=FALSE- to suppress the
+  drop-one-term analysis.
+
+\usercolor
+\verb|summary(fitqtl(sug, qtl=qtl, method="hk", get.ests=TRUE, dropone=FALSE))|
+\normalcolor
+
+Since this is an intercross, we obtain estimates of the additive
+effect and dominance deviation for each locus.
+
+\item To assess the possibility of an interaction between the two
+  QTL, we may fit the model with the interaction, indicated via a
+  model ``formula''.  The QTL are referred to as \verb-Q1- and
+  \verb-Q2- in the formula, and we may indicate the interaction in a
+  couple of different ways.
+
+\usercolor
+\verb|out.fqi <- fitqtl(sug, qtl=qtl, method="hk", formula=y~Q1*Q2)| \\
+\verb|out.fqi <- fitqtl(sug, qtl=qtl, method="hk", formula=y~Q1+Q2+Q1:Q2)| \\
+\verb|summary(out.fq)|
+\normalcolor
+
+We don't have time to cover the use of such formulas in any detail
+here.  Note that there is no evidence for an interaction.
+
+\item Another way to assess interactions is with the function
+  \verb-addint-, which adds one interaction at a time, in the context
+  of a multiple-QTL model.  This is most useful when there are more
+  than two QTL being considered.
+
+\usercolor
+\verb|addint(sug, qtl=qtl, method="hk")|
+\normalcolor
+
+\item The locations of the two QTL are as estimated via the single-QTL
+  scan.  We may refine our estimates of QTL location in the context of
+  the multiple-QTL model via \verb-refineqtl-.  This function
+  uses a greedy algorithm to iteratively refines the locations of the
+  QTL, one at a time, at each step seeking to improve the overall fit.
+
+\usercolor
+\verb|rqtl <- refineqtl(sug, qtl=qtl, method="hk")| \\
+\verb|rqtl|
+\normalcolor
+
+The location of each QTL changed slightly, and the overall LOD score
+increased by 0.03.
+
+\item We can re-run \verb-fitqtl- to get the revised drop-one-term
+  table.
+
+\usercolor
+\verb|summary(out.fqr <- fitqtl(sug, qtl=rqtl, method="hk"))|
+\normalcolor
+
+\item The \verb-plotLodProfile- function plots LOD profiles obtained
+  during the call to \verb-refineqtl-.  These give one-dimensional
+  views of the precision of QTL localization, in the context of the
+  multiple-QTL model.
+
+\usercolor
+\verb|plotLodProfile(rqtl)|
+\normalcolor
+
+For each position on the curve for the chr 7 QTL, we compare the
+two-QTL model with the chr 7 locus in varying position but with the
+chr 15 locus fixed at its estimated position, to the single-QTL model
+with just the chr 15 locus.  The chr 15 curve is similar.
+
+These are actually slightly lower than the curves obtained from
+the single-QTL analysis with \verb-scanone-.
+
+\usercolor
+\verb|plot(out.hk, chr=c(7,15), col="red", add=TRUE)|
+\normalcolor
+
+\item The function \verb-addqtl- is used to scan for an additional QTL
+  to be added to the model.
+
+\usercolor
+\verb|out.aq <- addqtl(sug, qtl=rqtl, method="hk")|
+\normalcolor
+
+The biggest peaks are on chr 8 and 12, but nothing is particularly
+exciting.
+
+\usercolor
+\verb|plot(out.aq)|
+\normalcolor
+
+There is also a function \verb-addpair-, for scanning for a pair of
+QTL to be added.
+
+
+\item Finally, we consider the function \verb-stepwiseqtl-, which is
+  our fully automated stepwise algorithm to optimize the penalized LOD
+  scores of Manichaikul et al. (2009).  We first need to calculate the
+  appropriate penalties from the two-dimensional permutation results.
+
+\usercolor
+\verb|print(pen <- calc.penalties(operm2))|
+\normalcolor
+
+We then run \verb-stepwiseqtl-, using \verb-max.qtl=5-.  It will
+perform forward selection to a model with 5 QTL, followed by backward
+elimination, and will report the model giving the largest penalized
+LOD score.  The output is a QTL object.
+
+\usercolor
+\verb|out.sq <- stepwiseqtl(sug, max.qtl=5, penalties=pen, method="hk", verbose=2)| \\
+\verb|out.sq|
+\normalcolor
+
+With \verb-verbose=2-, we get an indication of the location of the QTL
+at each step.  
+
+The result is exactly the model that we had after \verb-refineqtl-.
+
+\end{enumerate}
+
+
+
+\vspace{12pt}
+\textbf{References} \vspace{6pt}
+\nopagebreak
+
+\begin{hanging}
+
+\item Sugiyama F, Churchill GA, Li R, Libby LJM, Carver T, Yagami K-I,
+  John SWM, Paigen B (2002) QTL associated with blood pressure, heart
+  rate, and heart weight in CBA/CaJ and BALB/cJ mice.  Physiol
+  Genomics 10:5--12
+
+\item Broman KW, Sen \'S (2009) A guide to QTL mapping with
+    R/qtl.  Springer
+
+\item 	Manichaikul A, Moon JY, Sen \'S, Yandell BS, Broman KW (2009)
+  A model selection approach for the identification of quantitative
+  trait loci in experimental crosses, allowing epistasis. Genetics
+  181:1077--1086 
+
+\item Dalgaard P (2008) Introductory statistics with R, 2nd edition.
+  Springer
+
+\item Venables WN, Ripley BD (2002) Modern applied statistics with S,
+  4th edition. Springer
+
+
+\end{hanging}
+
+
+\end{document}

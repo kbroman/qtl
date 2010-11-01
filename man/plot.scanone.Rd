@@ -12,7 +12,8 @@
 \method{plot}{scanone}(x, x2, x3, chr, lodcolumn=1, incl.markers=TRUE,
      xlim, ylim, lty=1, col=c("black","blue","red"), lwd=2,
      add=FALSE, gap=25, mtick = c("line", "triangle"),
-     show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
+     show.marker.names=FALSE, alternate.chrid=FALSE,
+     bandcol=NULL, \dots)
 }			    
 
 \arguments{
@@ -42,6 +43,9 @@
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
+  \item{bandcol}{Optional color for alternating bands to indicate
+  chromosomes.  If NULL (the default), no bands are plotted.  A good
+  choice might be \code{bandcol="gray70"}.}
   \item{\dots}{Passed to the function \code{\link[graphics]{plot}} when it
     is called.}
 }
@@ -78,6 +82,8 @@ out.hk <- scanone(fake.f2, method="hk")
 plot(out.hk, chr=c(1,13), add=TRUE, col="slateblue")
 
 plot(out.hk, chr=13, show.marker.names=TRUE)
+
+plot(out.hk, bandcol="gray70")
 }
 
 \seealso{ \code{\link{scanone}},

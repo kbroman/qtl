@@ -2,9 +2,9 @@
  * 
  * hmm_ri4sib.c
  * 
- * copyright (c) 2009, Karl W Broman
+ * copyright (c) 2009-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Apr, 2009
  *
  *     This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@
 
 double init_ri4sib(int true_gen)
 {
-  return(LN_025);
+  return(-2.0*M_LN2);
 }
 
 double emit_ri4sib(int obs_gen, int true_gen, double error_prob)
@@ -65,7 +65,7 @@ double step_ri4sib(int gen1, int gen2, double rf, double junk)
   if(gen1 == gen2) 
     return(-log(1.0+6.0*rf));
   else 
-    return(LN_2 + log(rf) - log(1.0+6.0*rf));
+    return(M_LN2 + log(rf) - log(1.0+6.0*rf));
 }
 
 

@@ -46,7 +46,8 @@ badorder <- est.rf(badorder)
 plot.rf(badorder)
 }
 
-\seealso{ \code{\link{plot.rf}}, \code{\link{est.map}},
+\seealso{ \code{\link{plot.rf}}, \code{\link{pull.rf}}, \code{\link{plot.rfmatrix}},
+  \code{\link{est.map}},
   \code{\link{badorder}}, \code{\link{checkAlleles}} }
 
 \keyword{utilities}

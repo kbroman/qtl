@@ -2,9 +2,9 @@
  * 
  * hmm_ri4self.c
  * 
- * copyright (c) 2009, Karl W Broman
+ * copyright (c) 2009-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Apr, 2009
  *
  *     This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@
 
 double init_ri4self(int true_gen)
 {
-  return(LN_025);
+  return(-2.0*M_LN2);
 }
 
 double emit_ri4self(int obs_gen, int true_gen, double error_prob)

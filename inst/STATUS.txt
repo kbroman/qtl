@@ -17,7 +17,75 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.17, 6/29/2010:
+Version 1.19, 10/26/2010:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added function droponemarker, with the aim of identifying
+  problematic markers by dropping one marker at a time and calculating
+  a LOD score and a change in the estimated genetic length of the
+  respective chromosome.
+
+  Added function pull.rf for pulling out either the estimated
+  recombination fractions or the lod scores, as calculated by
+  est.rf(), from a cross object.  Also added a function plot.rfmatrix,
+  for plotting a slice through these. 
+
+  Revised MQMscan so that the output contains covariate information,
+  to be plotted with add.cim.covar().
+
+  Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
+  that the input "..." can be a list of
+  scanone/scanoneperm/scantwo/scantwoperm objects.
+
+  Small changes to mqmplot.circle().
+
+  Subtle changes to tutorials new_multiqtl.pdf,
+  new_summary_scanone.pdf, new_summary_scantwo.pdf; added .R files
+  with the code for these tutorials.
+
+  Fixed slight bug in getid().
+
+
+Version 1.18, 8/18/2010:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Revised geno.table so that, for 4-way crosses, it gives P-values in
+  most cases.  (Previously, it just did so for fully informative
+  markers.) 
+
+  Changed the default format for max.scanPhyloQTL and
+  summary.scanPhyloQTL from format="lod" to format="postprob".
+
+  Added function inferredpartitions for pulling out the inferred
+  partitions for a specified chromosome from the output of
+  scanPhyloQTL. 
+
+  Fixed a problem in ripple with method="likelihood".  (The problem
+  arose in revisions in version 1.17.)
+
+  Fixed a problem in est.map that resulted in NAs.  (The problem arose
+  in revisions in version 1.17.)
+
+  Slight changes to "inverse" map functions imf.k, imf.h, imf.cf, so
+  that recombination fractions >= 0.5 return large map distances
+  rather than NAs.
+
+  Fixed a bug in summary.scanPhyloQTL so that it works when the input
+  has just one chromosome and so the colnames remain like "AB|CD"
+  rather than getting converted to "AB.CD".
+
+
+Version 1.17, 7/28/2010:
 
 Major changes:
 
@@ -29,6 +97,16 @@ Major changes:
   Implemented Haley-Knott regression for binary traits in scanone and
   scantwo. 
 
+  In mqmscan(), replaced the arguments step.min and step.max with
+  a single argument, off.end (to be more like scanone).
+
+  Added functions for the joint analysis of multiple crosses, in order
+  to map QTL to a phylogenetic tree.  (A paper describing the methods
+  is in preparation.)  The key function is scanPhyloQTL.  simPhyloQTL
+  is used to simulate data.  plot.scanPhyloQTL, max.scanPhyloQTL, and
+  summary.scanPhyloQTL are the plot, max, and summary functions for
+  the output from scanPhyloQTL.
+
 Minor changes:
 
   Added 'offset' argument to est.map, which defines the starting position
@@ -38,15 +116,65 @@ Minor changes:
   Added function shiftmap, for shifting the starting points of a
   genetic map (in a map or cross object).
 
+  Added function switchAlleles, for switching the alleles at selected
+  markers in a cross object.  (For example, in a backcross, switching
+  AA and AB at a marker; in an intercross, exchanging AA for BB.)
+
   Revised geno.table to have an additional argument, scanone.output.
   If scanone.output=TRUE, the output is as produced by scanone(), so
   that one may use plot.scanone() to plot the results.
 
+  Added the ability to have ripple() run in parallel, if the snow
+  package is installed.  The added argument n.cluster indicates the
+  number of parallel nodes to use.  This is reapply only useful with
+  method="likelihood"; with method="countxo", it can be slower than
+  just using one CPU.
+
+  Added a function pull.markers, which is the opposite of
+  drop.markers. 
+
+  Added a function drop.dupmarkers, for dropping markers with
+  duplicate names.
+
+  Added an argument 'bandcol' in plot.scanone, to specify a color for
+  alternating bands to indicate chromosomes.  The default
+  (bandcol=NULL) is to not plot such bands.  A good choice might be
+  bandcol="gray70".  
+
+  Added an argument 'chr' in est.map, to estimate maps for just a
+  subset of chromosomes.
+
+  Revised replace.map (and replacemap.cross) so that the map can have
+  just a subset of the chromosomes in the cross, in which case only
+  the maps for that subset are replaced.
+
+  Changed the default in plot.info from method="both" to
+  method="entropy".  Also, added an argument "fourwaycross", so that
+  one can look at the missing information just for the alleles of the
+  first parent (A vs B) or the second parent (C vs D).  Finally, added
+  an argument "include.genofreq"; if TRUE, the results will include
+  estimated genotype frequencies at each position.
+
   Added argument 'simple' to summary.fitqtl, addint, and addcovarint;
   if TRUE, output includes neither p-values nor sums of squares.
 
+  Added a function allchrsplits(), for testing whether to split a
+  linkage group/chromosome into two, by calculating a LOD score for
+  each interval comparing the full linkage group to the split into two
+  groups at that interval.  
+
+  Added a function nqrank() for transforming a numeric vector into the
+  corresponding normal quantiles.
+
   Fixed a problem in MQM code regarding negative or really large
   marker positions.
+
+  Fixed a bug in mqmpermutation(), where it was using the wrong
+  phenotype name in the output, if pheno.col is something other than
+  1. 
+
+  Revised est.map for 4-way crosses slightly.  We'd previously
+  randomized the map before starting EM, which seemed a bad idea.
 
   Fixed a bug in scantwo() for the case that multiple phenotype
   columns are considered but they have different patterns of missing
@@ -56,11 +184,38 @@ Minor changes:
   Revised summary.cross so that if markers are at the same location,
   the warning message indicates which chromosomes are involved.
 
+  Revised summary.scanone so that if there is one LOD score column in
+  the output, but the permutation results have more than one, then
+  the first column in the permutation results is used and the others
+  are ignored (and a warning, rather than an error, is issued).
+
+  Revised calc.plod() to allow penalties to be infinite.
+
   Revised read.cross with format="csv" to give an error if the 2nd row
   has all blanks.
 
+  Revised plot.scanoneboot, plot.scanoneperm, and plot.scantwoperm so
+  that they can use the ... argument more flexibly.  [I use a scheme
+  suggested by Brian Yandell.]
+
+  Revised plot.geno so that the ... argument can include xlim and
+  ylim. 
+
+  Fixed bug in convert2sa for case of chromosome with just 1 or 2
+  markers. 
+
+  Fixed bug in refineqtl that resulted in sometimes the rownames in
+  the lod profile attribute being messed up.
+
   Revised scanone and scantwo to trap error if perm.strata is not of
   the correct length. 
+
+  Added argument 'ind.noqtl' to scanone, which indicates individuals
+  that are assigned no QTL effect.  This is for rare (largely
+  internal) use for the case that one is combining multiple crosses.  
+
+  Fix bug in internal function create.map, for case of a sex-specific
+  map with very small length.
 
 
 Version 1.16, 5/23/2010:

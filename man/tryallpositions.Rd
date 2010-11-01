@@ -49,7 +49,7 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
   \code{\link{summary.scanone}}, etc.) with each row being a
   possible position for the marker. 
   The first two columns are the chromosome ID and position.  The third
-  column is a LOD score comparing the hypotheses that the marker in that
+  column is a LOD score comparing the hypotheses that the marker is in that
   position versus the hypothesis that it is not linked to that chromosome.
 
   In the case of a 4-way cross, with \code{sex.sp=TRUE}, there are two
@@ -70,7 +70,7 @@ tryallpositions(fake.bc, "D7M301", 7, error.prob=0, verbose=FALSE)
 }
 
 
-\seealso{ \code{\link{est.map}}, \code{\link{ripple}},
+\seealso{ \code{\link{droponemarker}}, \code{\link{est.map}}, \code{\link{ripple}},
   \code{\link{est.rf}}, \code{\link{switch.order}},
   \code{\link{movemarker}} }
 

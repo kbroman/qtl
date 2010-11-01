@@ -4,7 +4,7 @@
  *
  * copyright (c) 2010, Karl W Broman
  *
- * last modified Jun, 2010
+ * last modified Jul, 2010
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ void R_scanone_hk_binary(int *n_ind, int *n_pos, int *n_gen,
 			 double *genoprob, double *addcov, int *n_addcov, 
 			 double *intcov, int *n_intcov, double *pheno,
 			 double *result, double *tol, int *maxit, 
-			 int *verbose);
+			 int *verbose, int *ind_noqtl);
 
 /**********************************************************************
  * 
@@ -77,11 +77,15 @@ void R_scanone_hk_binary(int *n_ind, int *n_pos, int *n_gen,
  *
  * verbose      if TRUE, give some output
  *
+ * ind_noqtl    Indicators (0/1) of which individuals should be excluded 
+ *              from QTL effects.  
+ *
  **********************************************************************/
 
 void scanone_hk_binary(int n_ind, int n_pos, int n_gen, double ***Genoprob,
 		       double **Addcov, int n_addcov, double **Intcov, 
 		       int n_intcov, double *pheno, 
-		       double *result, double tol, int maxit, int verbose);
+		       double *result, double tol, int maxit, int verbose,
+		       int *ind_noqtl);
 
 /* end of scanone_hk_binary.h */

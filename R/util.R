@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jul, 2010
+# last modified Oct, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -21,9 +21,10 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: pull.map, markernames, replace.map, c.cross, create.map,
+# Contains: pull.map, markernames, c.cross, create.map,
 #           clean, clean.cross, drop.nullmarkers,
-#           drop.markers, geno.table, genotab.em
+#           drop.markers, pull.markers, drop.dupmarkers
+#           geno.table, genotab.em
 #           mf.k, mf.h, imf.k, imf.h, mf.cf, imf.cf, mf.m, imf.m,
 #           mf.stahl, imf.stahl
 #           switch.order, makeSSmap,
@@ -38,7 +39,8 @@
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
-#           findDupMarkers, convert2riself, convert2risib
+#           findDupMarkers, convert2riself, convert2risib,
+#           switchAlleles, nqrank
 #
 ######################################################################
 
@@ -544,6 +546,91 @@ function(cross, markers)
 }
 
 ######################################################################
+# pull.markers
+#
+# like drop.markers, but retain just those indicated
+######################################################################
+pull.markers <-
+function(cross, markers)
+{
+  mn <- markernames(cross)
+  m <- match(markers, mn)
+  if(any(is.na(m)))
+    warning("Some markers couldn't be found: ", paste(markers[is.na(m)], collapse=" "))
+  drop.markers(cross, mn[is.na(match(mn, markers))])
+}
+
+######################################################################
+# drop.dupmarkers
+#
+# drop duplicate markers, retaining the consensus genotypes
+######################################################################
+drop.dupmarkers <-
+function(cross, verbose=TRUE)
+{
+  mn <- markernames(cross)
+  tab <- table(mn)
+  if(all(tab==1)) {
+    if(verbose) cat("No duplicate markers.\n")
+    return(cross)
+  }
+
+  dup <- names(tab[tab > 1])
+  if(verbose) cat(" ", length(dup), "duplicate markers\n")
+
+  # get consensus genotypes
+  g <- pull.geno(cross)[,!is.na(match(mn, dup))]
+  ng.omitted <- rep(NA, length(dup))
+  tot.omitted <- 0
+  nmar.omitted <- 0
+  for(i in seq(along=dup)) {
+    gg <- g[,colnames(g)==dup[i],drop=FALSE]
+    res <- apply(gg, 1, function(a)
+                 {
+                   if(all(is.na(a))) return(c(NA, 0))
+                   a <- unique(a[!is.na(a)])
+                   if(length(a)==1) return(c(a, 0))
+                   return(c(NA, 1))
+                 } )
+    if(verbose>1) {
+      cat("  ", dup[i], ":\t", sum(res[2,]), " genotypes omitted\n", sep="")
+      if(sum(res[2,]) > 1) cat("      ", paste(which(res[2,]>0), collapse=" "), "\n")
+    }
+    tot.omitted <- tot.omitted + sum(res[2,])
+
+    flag <- FALSE
+    for(j in seq(along=cross$geno)) {
+      mn <- colnames(cross$geno[[j]]$data)
+      wh <- mn==dup[i]
+      if(!any(wh)) next
+      wh <- which(wh)
+      if(!flag) {
+        flag <- TRUE
+        cross$geno[[j]]$data[,wh[1]] <- res[1,]
+        if(length(wh)==1) next
+        else wh <- wh[-1]
+      }
+      if(length(wh) > 0) {
+        nmar.omitted <- nmar.omitted + length(wh)
+        cross$geno[[j]]$data <- cross$geno[[j]]$data[,-wh,drop=FALSE]
+        if(is.matrix(cross$geno[[j]]$map))
+          cross$geno[[j]]$map <- cross$geno[[j]]$map[,-wh,drop=FALSE]
+        else
+          cross$geno[[j]]$map <- cross$geno[[j]]$map[-wh]
+      }
+    }
+  }
+  if(verbose) {
+    cat("  Total genotypes omitted:", tot.omitted, "\n")
+    cat("  Total markers omitted:  ", nmar.omitted, "\n")
+  }
+
+  clean(cross)
+}                   
+
+
+
+######################################################################
 #
 # geno.table
 #
@@ -722,11 +809,40 @@ function(cross, chr, scanone.output=FALSE)
   }    
   else if(type == "4way") {
     for(i in 1:length(pval)) {
-      if(allchrtype[i] == "A") {
-        x <- results[i,2:5]
-        y <- results[i,-(1:5)]
-        if(sum(x) > 0 && sum(y)==0)
-          pval[i] <- chisq.test(x,p=c(0.25,0.25,0.25,0.25))$p.value
+      x <- results[i,2:5]
+      y <- results[i,-(1:5)]
+      if(sum(x) > 0 && sum(y)==0)
+        pval[i] <- chisq.test(x,p=c(0.25,0.25,0.25,0.25))$p.value
+      else {
+        if(allchrtype[i] == "A") {
+          res <- results[i,-1]
+          if(all(res[-c(1,11)]==0))      # AC/not AC
+            pval[i] <- chisq.test(res[c(1,11)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(2,12)]==0)) # BC/not BC
+            pval[i] <- chisq.test(res[c(2,12)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(3,13)]==0)) # AD/not AD
+            pval[i] <- chisq.test(res[c(3,13)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(4,14)]==0)) # BD/not BD
+            pval[i] <- chisq.test(res[c(4,14)], p=c(0.25, 0.75))$p.value
+          else if(all(res[-c(5,6)]==0)) # A/B
+            pval[i] <- chisq.test(res[c(5,6)], p=c(0.5, 0.5))$p.value
+          else if(all(res[-c(7,8)]==0)) # C/D
+            pval[i] <- chisq.test(res[c(7,8)], p=c(0.5, 0.5))$p.value
+          else if(all(res[-c(9,10)]==0)) # AC/BD or AD/BC
+            pval[i] <- chisq.test(res[c(9,10)], p=c(0.5, 0.5))$p.value
+          else if(all(res[-c(2,4,5)]==0)) # BC/BD/A
+            pval[i] <- chisq.test(res[c(2,4,5)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(1,3,6)]==0)) # AC/AD/B
+            pval[i] <- chisq.test(res[c(1,3,6)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(3,4,7)]==0)) # AD/BD/C
+            pval[i] <- chisq.test(res[c(3,4,7)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(1,2,8)]==0)) # AC/BC/D
+            pval[i] <- chisq.test(res[c(1,2,8)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(2,3,9)]==0)) # AC/BD or AD or BC
+            pval[i] <- chisq.test(res[c(2,3,9)], p=c(0.25, 0.25, 0.5))$p.value
+          else if(all(res[-c(1,4,10)]==0)) # AD/BC or AC or BD
+            pval[i] <- chisq.test(res[c(1,4,10)], p=c(0.25, 0.25, 0.5))$p.value
+        }
       }
     }
     results <- cbind(results, P.value=pval)
@@ -735,9 +851,14 @@ function(cross, chr, scanone.output=FALSE)
   if(!scanone.output)
     return(data.frame(chr=rep(names(cross$geno),nmar(cross)),results))
 
-  temp <- results[,1:(ncol(results)-1)]
+  themap <- pull.map(cross)
+  if(is.matrix(themap[[1]]))
+    thepos <- unlist(lapply(themap, function(a) a[1,]))
+  else thepos <- unlist(themap)
+
+  temp <- results[,1:(ncol(results)-1),drop=FALSE]
   res <- data.frame(chr=rep(names(cross$geno),nmar(cross)),
-                    pos=unlist(pull.map(cross)),
+                    pos=thepos,
                     neglog10P=-log10(results[,ncol(results)]),
                     missing=temp[,1]/apply(temp, 1, sum),
                     temp[,-1]/apply(temp[,-1], 1, sum))
@@ -926,23 +1047,25 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
 # map functions
 mf.k <- function(d) 0.5*tanh(d/50)
 mf.h <- function(d) 0.5*(1-exp(-d/50))
-imf.k <- function(r) 50*atanh(2*r)
-imf.h <- function(r) -50*log(1-2*r)
+imf.k <- function(r) { r[r >= 0.5] <- 0.5-1e-14; 50*atanh(2*r) }
+imf.h <- function(r) { r[r >= 0.5] <- 0.5-1e-14; -50*log(1-2*r) }
 mf.m <- function(d) sapply(d,function(a) min(a/100,0.5))
 imf.m <- function(r) sapply(r,function(a) min(a*100,50))
 
 # carter-falconer: mf.cf, imf.cf
-imf.cf <- function(r) 12.5*(log(1+2*r)-log(1-2*r))+25*atan(2*r)
+imf.cf <- function(r) { r[r >= 0.5] <- 0.5-1e-14; 12.5*(log(1+2*r)-log(1-2*r))+25*atan(2*r) }
 
 mf.cf <-
 function(d)
 {
+  d[d >= 300] <- 300
+
   icf <- function(r,d)
     imf.cf(r)-d
 
   sapply(d,function(a) {
     if(a==0) return(0)
-    uniroot(icf, c(0,0.5-1e-10),d=a)$root })
+    uniroot(icf, c(0,0.5-1e-14),d=a)$root })
 }
 
 
@@ -1026,7 +1149,7 @@ function(cross, chr, order, error.prob=0.0001,
   }
 
   # re-estimate map
-  newmap <- est.map(subset(cross,chr=chr),
+  newmap <- est.map(cross, chr=chr,
                     error.prob=error.prob, map.function=map.function,
                     maxit=maxit, tol=tol, sex.sp=sex.sp)
 
@@ -3028,23 +3151,29 @@ function(cross)
   nam <- names(phe)
   if("id" %in% nam) {
     id <- phe$id
-    attr(id,"phenam") <- "id"
+    phenam <- "id"
   }
   else if("ID" %in% nam) {
     id <- phe$ID
-    attr(id,"phenam") <- "ID"
+    phenam <- "ID"
   }
   else if("Id" %in% nam) {
     id <- phe$Id
-    attr(id,"phenam") <- "Id"
+    phenam <- "Id"
   }
   else if("iD" %in% nam) {
     id <- phe$iD
-    attr(id,"phenam") <- "iD"
+    phenam <- "iD"
   }
-  else id <- NULL
+  else {
+    id <- NULL
+    phenam <- NULL
+  }
 
-  if(is.factor(id)) id <- as.character(id)
+  if(is.factor(id))   
+    id <- as.character(id)
+
+  attr(id, "phenam") <- phenam
 
   id
 }
@@ -3298,7 +3427,11 @@ function(map, tol=1e-4)
 
   fem <- lapply(map, function(a) a[1,])
 
-  dif <- sapply(map, function(a) { a <- apply(a, 1, diff); max(abs(apply(a, 1, diff))) })
+  dif <- sapply(map, function(a) { if(ncol(a)==1) return(diff(a))
+                                   a <- apply(a, 1, diff);
+                                   if(is.matrix(a)) return(max(abs(apply(a, 1, diff))))
+                                   abs(diff(a)) })
+
   if(max(dif) > tol)
     warning("Female and male inter-marker distances differ by as much as ", max(dif), ".")
 
@@ -3679,5 +3812,110 @@ function(object, offset=0)
   object
 }
 
+######################################################################
+# switch alleles in a cross
+######################################################################
+switchAlleles <-
+function(cross, markers, switch=c("AB","CD","ABCD", "parents"))
+{
+  type <- class(cross)[1]
+  switch <- match.arg(switch)
+  
+  if(type %in% c("bc", "risib", "riself", "dh")) { 
+    if(switch != "AB")
+      warning("Using switch = \"AB\".")
+
+    found <- rep(FALSE, length(markers))
+    for(i in 1:nchr(cross)) {
+      cn <- colnames(cross$geno[[i]]$data)
+      m <- match(markers, cn)
+      if(any(!is.na(m))) {
+        found[!is.na(m)] <- TRUE
+        for(j in m[!is.na(m)]) {
+          g <- cross$geno[[i]]$data[,j]
+          cross$geno[[i]]$data[!is.na(g) & g==1,j] <- 2
+          cross$geno[[i]]$data[!is.na(g) & g==2,j] <- 1
+        }
+      }
+    }
+
+  }
+  else if(type=="f2") {
+    if(switch != "AB")
+      warning("Using switch = \"AB\".")
+
+    found <- rep(FALSE, length(markers))
+    for(i in 1:nchr(cross)) {
+      cn <- colnames(cross$geno[[i]]$data)
+      m <- match(markers, cn)
+      if(any(!is.na(m))) {
+        found[!is.na(m)] <- TRUE
+        for(j in m[!is.na(m)]) {
+          g <- cross$geno[[i]]$data[,j]
+          cross$geno[[i]]$data[!is.na(g) & g==1,j] <- 3
+          cross$geno[[i]]$data[!is.na(g) & g==3,j] <- 1
+          cross$geno[[i]]$data[!is.na(g) & g==4,j] <- 5
+          cross$geno[[i]]$data[!is.na(g) & g==5,j] <- 4
+        }
+      }
+    }
+  }
+  else if(type=="4way") {
+
+    if(switch=="AB") 
+      newg <- c(2,1,4,3,6,5,7,8,10,9,12,11,14,13)
+    else if(switch=="CD")
+      newg <- c(3,4,1,2,5,6,8,7,10,9,13,14,11,12)
+    else if(switch=="ABCD")
+      newg <- c(4,3,2,1,6,5,8,7,9,10,14,13,12,11)
+    else # switch parents
+      newg <- c(1,3,2,4,7,8,5,6,9,10,11,13,12,14)
+
+    found <- rep(FALSE, length(markers))
+    for(i in 1:nchr(cross)) {
+      cn <- colnames(cross$geno[[i]]$data)
+      m <- match(markers, cn)
+      if(any(!is.na(m))) {
+        found[!is.na(m)] <- TRUE
+        for(j in m[!is.na(m)]) {
+          g <- cross$geno[[i]]$data[,j]
+          for(k in 1:14)
+            cross$geno[[i]]$data[!is.na(g) & g==k,j] <- newg[k]
+        }
+      }
+    }
+
+  }
+
+  if(any(!found))
+    warning("Some markers not found: ", paste(markers[!found], collapse=" "))
+
+  clean(cross)
+}
+
+######################################################################
+#
+# nqrank: Convert a set of quantitative values to the corresponding
+#         normal quantiles (preserving mean and SD)
+#
+######################################################################
+
+nqrank <-
+function(x, jitter=FALSE)
+{
+  y <- x[!is.na(x)]
+  themean <- mean(y, na.rm=TRUE)
+  thesd <- sd(y, na.rm=TRUE)
+
+  y[y == Inf] <- max(y[y<Inf])+10
+  y[y == -Inf] <- min(y[y > -Inf]) - 10
+  if(jitter)
+    y <- rank(y+runif(length(y))/(sd(y)*10^8))
+  else y <- rank(y)
+
+  x[!is.na(x)] <- qnorm((y-0.5)/length(y))
+
+  x*thesd/sd(x, na.rm=TRUE)-mean(x,na.rm=TRUE)+themean
+}
 
 # end of util.R

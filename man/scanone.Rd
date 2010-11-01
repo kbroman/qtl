@@ -16,7 +16,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
         use=c("all.obs", "complete.obs"), upper=FALSE,
         ties.random=FALSE, start=NULL, maxit=4000,
         tol=1e-4, n.perm, perm.Xsp=FALSE, perm.strata=NULL, verbose,
-        batchsize=250, n.cluster=1)
+        batchsize=250, n.cluster=1, ind.noqtl)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -91,6 +91,9 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
  \item{n.cluster}{If the package \code{snow} is available and
    \code{n.perm} > 0, permutations are run in parallel using this number
    of nodes.}
+ \item{ind.noqtl}{Indicates individuals who should not be allowed a QTL
+   effect (used rarely, if at all); this is a logical vector of same
+   length as there are individuals in the cross.}
 }
 
 \section{Models}{
@@ -273,7 +276,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   spike in the phenotype distribution. \emph{Genetics} \bold{163},
   1169--1175. 
 
-  Broman, K. W., Sen, \'S, Owens, S. E., Manichaikul, A.,
+  Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
   Southard-Smith, E. M. and Churchill G. A.  The X chromosome in
   quantitative trait locus mapping.  \emph{Genetics}, to appear.
 
@@ -301,7 +304,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   quantitative traits using RFLP linkage maps.  \emph{Genetics}
   \bold{121}, 185--199.
 
-  Sen, \'S. and Churchill, G. A. (2001) A statistical framework for quantitative
+  Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2001) A statistical framework for quantitative
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 
   Soller, M., Brody, T. and Genizi, A. (1976) On the power of experimental

@@ -7,6 +7,8 @@
 \alias{charround}
 \alias{checkcovar}
 \alias{checkformula}
+\alias{checkPhyloCrosses}
+\alias{checkPhyloPartition}
 \alias{checkStepwiseqtlStart}
 \alias{clean}
 \alias{condense}
@@ -32,6 +34,8 @@
 \alias{fixX4write}
 \alias{fixXgeno.bc}
 \alias{fixXgeno.f2}
+\alias{flipcross}
+\alias{genAllPartitions}
 \alias{genotab.em}
 \alias{getid}
 \alias{getsex}
@@ -105,6 +109,7 @@
 \alias{print.summary.scantwo.old}
 \alias{print.summary.scantwoperm}
 \alias{printQTLformulanicely}
+\alias{qtlByPartition}
 \alias{qtlformulasymmetric}
 \alias{read.cro.qtlcart}
 \alias{read.cross.csv}
@@ -128,6 +133,8 @@
 \alias{ripple.perm1}
 \alias{ripple.perm2}
 \alias{ripple.perm.sub}
+\alias{rippleSnowCountxo}
+\alias{rippleSnowLik}
 \alias{roundqtlpos}
 \alias{scanone.perm}
 \alias{scanone.perm.engine}
@@ -142,6 +149,7 @@
 \alias{sim.ril}
 \alias{snowCoreALL}
 \alias{snowCoreBOOT}
+\alias{sortPhyloPartitions}
 \alias{subrousummaryscantwo}
 \alias{summary.scantwocondensed}
 \alias{summary.addcovarint}
@@ -171,7 +179,9 @@ calc.pairprob(cross, step=0, off.end=0, error.prob=0.0001,
               assumeCondIndep=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
 charround(x, digits=1)
-checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, verbose=TRUE)
+checkPhyloCrosses(crosses, taxa, nostop=FALSE)
+checkPhyloPartition(partition, taxa)
+checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
 checkformula(formula, qtl.name, covar.name)
 checkStepwiseqtlStart(qtl, formula, covar=NULL)
 clean(object, \dots)
@@ -183,7 +193,7 @@ create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
 deparseQTLformula(formula, reorderterms=FALSE)
 discan(cross, pheno, method=c("em","hk","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
-       verbose=FALSE, give.warnings=TRUE)
+       verbose=FALSE, give.warnings=TRUE, ind.noqtl)
 dropfromqtlformula(formula, qtlnum)
 dropXcol(type=c("f2","bc"), sexpgm, cross.attr)
 effectplot.getmark(cross, mname)
@@ -202,8 +212,10 @@ fitstahl.estpe.sub(x, cross, m=0, thetol=1e-4, maxit=4000)
 fixX4write(geno,sex,pgm,crosstype)
 fixXgeno.bc(cross)
 fixXgeno.f2(cross, alleles)
+flipcross(cross)
 markerforwsel(x, y, maxsize=7)
 markerforwself2(x, y, maxsize=7)
+genAllPartitions(n.taxa, taxa)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
 getid(cross)
 getsex(cross)
@@ -254,14 +266,14 @@ mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
 orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
 ourline()
-ourstop(...)
+ourstop(\dots)
 parseformula(formula, qtl.dimname, covar.dimname)
 \method{plot}{effectscan}(x, gap=25, ylim, mtick=c("line","triangle"),
      add.legend=TRUE, alternate.chrid=FALSE, \dots)
 polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
          par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"),
          col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, main = NULL, xlab =
-         NULL, ylab = NULL, add=FALSE, ... ) 
+         NULL, ylab = NULL, add=FALSE, \dots) 
 \method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)
@@ -283,6 +295,7 @@ polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
 \method{print}{summary.scantwo.old}(x, \dots)
 \method{print}{summary.scantwoperm}(x, \dots)
 printQTLformulanicely(formula, header, width, width2, sep=" ")
+qtlByPartition(crosses, partition)
 qtlformulasymmetric(formula, qtlnum1, qtlnum2)
 read.cro.qtlcart(file)
 read.cross.csv(dir, file, na.strings=c("-","NA"),
@@ -312,6 +325,8 @@ reviseXdata(type=c("f2","bc"), expandX=c("simple","standard","full"),
 ripple.perm1(n)
 ripple.perm2(n)
 ripple.perm.sub(x, mat)
+rippleSnowLik(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
+rippleSnowCountxo(orders, genodat, func)
 roundqtlpos(x, digits = 1)
 scanone.perm(cross, pheno.col=1, model=c("normal","binary","2part","np"),
              method=c("em","imp","hk","ehk","mr","mr-imp","mr-argmax"),
@@ -354,6 +369,7 @@ sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
         m=0, p=0, error.prob=0, missing.prob=0, random.cross=TRUE)
 snowCoreALL(x, all.data, scanfunction, cofactors, verbose=FALSE, \dots)
 snowCoreBOOT(x, all.data, scanfunction, bootmethod, cofactors, verbose=FALSE, \dots)
+sortPhyloPartitions(partitions, taxa)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),

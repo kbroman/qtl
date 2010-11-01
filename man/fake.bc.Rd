@@ -1,5 +1,6 @@
 \name{fake.bc}
 \alias{fake.bc}
+\docType{data}
 
 \title{Simulated data for a backcross}
 
