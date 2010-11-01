@@ -2,9 +2,9 @@
  * 
  * hmm_ri8self.c
  * 
- * copyright (c) 2009, Karl W Broman
+ * copyright (c) 2009-2010, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified Jul, 2010
  * first written Apr, 2009
  *
  *     This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@
 
 double init_ri8self(int true_gen)
 {
-  return(LN_0125);
+  return(-3.0*M_LN2); /* log(1/8) */
 }
 
 double emit_ri8self(int obs_gen, int true_gen, double error_prob)
@@ -69,7 +69,7 @@ double step_ri8self(int gen1, int gen2, double rf, double junk)
   else if((gen1==1 || gen1==3 || gen1==5 || gen1==7) && gen2==gen1+1)
     return(log(rf)+log(1.0-rf)-log(1.0+2.0*rf));
   else
-    return(log(rf) - LN_2 - log(1.0+2.0*rf));
+    return(log(rf) - M_LN2 - log(1.0+2.0*rf));
 }
 
 /* this is needed for est.map; estimated recombination fractions on the RIL scale */
@@ -87,7 +87,7 @@ double step_special_ri8self(int gen1, int gen2, double rf, double junk)
   }
   else {
     RF = 2.0-rf-sqrt(rf*rf-5.0*rf+4.0);
-    return(log(RF) - LN_2 - log(1.0+2.0*RF));
+    return(log(RF) - M_LN2 - log(1.0+2.0*RF));
   }
 }
 

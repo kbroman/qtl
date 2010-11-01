@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified May, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Aug, 2010
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 ripple <-
 function(cross, chr, window=4, method=c("countxo","likelihood"),
          error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
-         maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE)
+         maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE, n.cluster=1)
 {
   if(!any(class(cross) == "cross")) 
     stop("Input should have class \"cross\".")
@@ -116,15 +116,34 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       temcross$geno[[1]]$map <- rbind(m,m)
     else temcross$geno[[1]]$map <- m
 
-    for(i in 1:n.orders) {
-      if(verbose && i==1) cat("  ", n.orders,"total orders\n")
-      if(verbose && (i %/% print.by)*print.by == i) cat("    --Order", i, "\n")
-      temcross$geno[[1]]$data <- cross$geno[[1]]$data[,orders[i,]]
-      newmap <- est.map(temcross,error.prob,map.function,m=0,p=0,maxit,tol,sex.sp,FALSE)
-      loglik[i] <- attr(newmap[[1]],"loglik")
-      chrlen[i] <- diff(range(newmap[[1]]))
-#      if(is.matrix(newmap[[1]])) chrlen[i] <- newmap[[1]][n.mar,1]
-#      else chrlen[i] <- newmap[[1]][n.mar]
+    if(verbose) cat("  ", n.orders,"total orders\n")
+    if(n.cluster > 1 && suppressWarnings(require(snow, quietly=TRUE))) {
+      # parallelize
+      if(n.orders <= n.cluster) n.cluster <- n.orders
+      cl <- makeCluster(n.cluster)
+      clusterStopped <- FALSE
+      on.exit(if(!clusterStopped) stopCluster(cl))
+      if(verbose) cat("   Running in", n.cluster, "clusters\n")
+
+      whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
+      order.split <- vector("list", n.cluster)
+      for(i in 1:n.cluster)
+        order.split[[i]] <- orders[whclust==i,,drop=FALSE]
+      result <- parLapply(cl, order.split, rippleSnowLik, cross=temcross,
+                          error.prob=error.prob, map.function=map.function, maxit=maxit, tol=tol,
+                          sex.sp=sex.sp)
+      loglik <- unlist(lapply(result, function(a) a$loglik))
+      chrlen <- unlist(lapply(result, function(a) a$chrlen))
+    }
+    else {
+      for(i in 1:n.orders) {
+        if(verbose && (i %/% print.by)*print.by == i) cat("    --Order", i, "\n")
+        temcross$geno[[1]]$data <- cross$geno[[1]]$data[,orders[i,]]
+        newmap <- est.map(temcross, error.prob=error.prob, map.function=map.function,
+                          m=0, p=0, maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
+        loglik[i] <- attr(newmap[[1]],"loglik")
+        chrlen[i] <- diff(range(newmap[[1]]))
+      }
     }
 
     # re-scale log likelihoods and convert to lods
@@ -157,17 +176,35 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     n.ind <- nind(cross)
 
     if(verbose) cat("  ", n.orders,"total orders\n")
-    z <- .C(func,
-            as.integer(n.ind),
-            as.integer(n.mar),
-            as.integer(genodat),
-            as.integer(n.orders),
-            as.integer(orders-1),
-            oblxo=as.integer(rep(0,n.orders)),
-            as.integer(print.by),
-            PACKAGE="qtl")
+    if(n.cluster > 1 && suppressWarnings(require(snow, quietly=TRUE))) {
+      # parallelize
+      if(n.orders <= n.cluster) n.cluster <- n.orders
 
-    oblxo <- z$oblxo
+      cl <- makeCluster(n.cluster)
+      clusterStopped <- FALSE
+      on.exit(if(!clusterStopped) stopCluster(cl))
+      if(verbose) cat("   Running in", n.cluster, "clusters\n")
+
+      whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
+      order.split <- vector("list", n.cluster)
+      for(i in 1:n.cluster)
+        order.split[[i]] <- orders[whclust==i,,drop=FALSE]
+      oblxo <- unlist(parLapply(cl, order.split, rippleSnowCountxo, genodat=genodat, func=func))
+      stopCluster(cl)
+      clusterStopped <- TRUE
+    }
+    else {
+      z <- .C(func,
+              as.integer(n.ind),
+              as.integer(n.mar),
+              as.integer(genodat),
+              as.integer(n.orders),
+              as.integer(orders-1),
+              oblxo=as.integer(rep(0,n.orders)),
+              as.integer(print.by),
+              PACKAGE="qtl")
+      oblxo <- z$oblxo
+    }
     # sort orders by lod
     o <- order(oblxo[-1])+1
 
@@ -193,6 +230,46 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
 
   orders
 }
+
+######################################################################
+# function for method="likelihood", for snow 
+######################################################################
+rippleSnowLik <-
+function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
+{
+  n.orders <- nrow(orders)
+  temcross <- cross
+  loglik <- chrlen <- rep(NA, n.orders)
+  for(i in 1:n.orders) {
+    
+    temcross$geno[[1]]$data <- cross$geno[[1]]$data[,orders[i,]]
+    newmap <- est.map(temcross, error.prob=error.prob, map.function=map.function,
+                      m=0, p=0, maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
+    loglik[i] <- attr(newmap[[1]],"loglik")
+    chrlen[i] <- diff(range(newmap[[1]]))
+  }
+  list(loglik=loglik, chrlen=chrlen)
+}
+
+
+
+######################################################################
+# function for method="countxo", for snow
+######################################################################
+rippleSnowCountxo <-
+function(orders, genodat, func)
+{
+  .C(func,
+     as.integer(nrow(genodat)),
+     as.integer(ncol(genodat)),
+     as.integer(genodat),
+     as.integer(nrow(orders)),
+     as.integer(orders-1),
+     oblxo=as.integer(rep(0, nrow(orders))),
+     as.integer(0),
+     PACKAGE="qtl")$oblxo
+}
+
 
 ######################################################################
 #

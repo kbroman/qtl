@@ -3,7 +3,7 @@
 # est.map.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified May, 2010
+# last modified Aug, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,12 +30,15 @@
 ######################################################################
 
 est.map <- 
-function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
+function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
          omit.noninformative=TRUE, offset)
 {
   if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
+
+  if(!missing(chr))
+    cross <- subset(cross, chr=chr)
 
   type <- class(cross)[1]
 
@@ -139,10 +142,10 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
       rf[rf < 1e-14] <- 1e-14
     }
     else {
-      # randomize the maps a bit
       orig <- cross$geno[[i]]$map
-      cross$geno[[i]]$map <- cross$geno[[i]]$map +
-        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
+      # randomize the maps a bit [we no longer do this]
+#      cross$geno[[i]]$map <- cross$geno[[i]]$map +
+#        runif(length(cross$geno[[i]]$map), -0.2, 0.2)
 
       rf <- mf(diff(cross$geno[[i]]$map[1,]))
       rf[rf < 1e-14] <- 1e-14
@@ -172,6 +175,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
               as.integer(verbose),
               PACKAGE="qtl")
 
+      z$rf[z$rf < 1e-14] <- 1e-14
       if(type=="riself" || type=="risib") 
         z$rf <- adjust.rf.ri(z$rf, substr(type, 3, nchar(type)),
                              chrtype[i], expand=FALSE)
@@ -209,6 +213,7 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
                 as.integer(verbose),
                 PACKAGE="qtl")
       }
+      z$d[z$d < 1e-14] <- 1e-14
       newmap[[i]] <- cumsum(c(min(cross$geno[[i]]$map),z$d))
       names(newmap[[i]]) <- names(cross$geno[[i]]$map)
       attr(newmap[[i]], "loglik") <- z$loglik
@@ -230,6 +235,9 @@ function(cross, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","mor
               as.integer(verbose),
               PACKAGE="qtl")
               
+      z$rf[z$rf<1e-14] <- 1e-14
+      z$rf2[z$rf2<1e-14] <- 1e-14
+      
       if(!temp.sex.sp) z$rf2 <- z$rf
 
       newmap[[i]] <- rbind(cumsum(c(min(orig[1,]),imf(z$rf))),

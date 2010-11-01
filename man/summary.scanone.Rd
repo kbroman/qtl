@@ -166,7 +166,7 @@ summary(out2, format="allpeaks", perms=operm2, alpha=0.05, pvalues=TRUE)
   \code{\link{c.scanoneperm}} }
 
 \references{
-  Broman, K. W., Sen, \'S, Owens, S. E., Manichaikul, A.,
+  Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
   Southard-Smith, E. M. and Churchill G. A.  The X chromosome in
   quantitative trait locus mapping.  \emph{Genetics}, to appear.
 }

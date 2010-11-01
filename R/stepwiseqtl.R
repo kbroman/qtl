@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2010, Karl W Broman
-# last modified Jun, 2010
+# last modified Jul, 2010
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -223,7 +223,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   else if(length(penalties) != 3) {
     if(length(penalties)==1) {
       if(additive.only)
-        penalties <- rep(penalties,3)
+        penalties <- c(penalties,Inf,Inf)
       else
         stop("You must include a penalty for interaction terms.")
     }
@@ -764,8 +764,12 @@ function(qtl, formula, covar=NULL)
 # penalized LOD score
 ######################################################################
 calc.plod <-
-function(lod, nterms, type=c("f2","bc"), penalties)
-  as.numeric(lod - nterms[1]*penalties[1] - nterms[2]*penalties[2] - nterms[3]*penalties[3])
+function(lod, nterms, type=c("f2","bc"), penalties) {
+  nterms <- nterms[1:3]
+  if(any(penalties==Inf & nterms > 0)) return(-Inf)
+
+  as.numeric(lod - sum((nterms*penalties)[nterms > 0]))
+}
 
 ######################################################################
 # count terms in a model, for use by plod

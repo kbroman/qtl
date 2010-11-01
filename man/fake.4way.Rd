@@ -1,5 +1,6 @@
 \name{fake.4way}
 \alias{fake.4way}
+\docType{data}
 
 \title{Simulated data for a 4-way cross}
 

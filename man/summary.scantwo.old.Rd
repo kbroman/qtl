@@ -60,7 +60,7 @@
   available, the maximum locus pair for each chromosome is printed
   whenever its joint LOD exceeds the joint LOD threshold.
 
-  The criterion used in this summary is due to Gary Churchill and \'Saunak
+  The criterion used in this summary is due to Gary Churchill and \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}aunak
   Sen, and deserves careful consideration and possible revision.
 }
 

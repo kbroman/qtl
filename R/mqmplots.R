@@ -35,6 +35,7 @@
 #           mqmplot.singletrait
 #           
 #
+#
 #####################################################################
 
 mqmplot.directedqtl <- function(cross, mqmresult, pheno.col=1, draw = TRUE){

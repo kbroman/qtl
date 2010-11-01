@@ -2,8 +2,8 @@
 #
 # tryallpositions.R
 #
-# copyright (c) 2007-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2007-2010, Karl W Broman
+# last modified Jul, 2010
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: tryallpositions, markerloglik
+# Contains: tryallpositions, markerloglik, allchrsplits
 #
 ######################################################################
 
@@ -71,7 +71,7 @@ function(cross, marker, chr, error.prob=0.0001,
         themar <- colnames(cross$geno[[i]]$data)
         initialloglik <- sum(sapply(themar, function(a, b, c) markerloglik(b, a, c), cross, error.prob))
         
-        nm <- est.map(subset(cross, chr=i), error.prob=error.prob,
+        nm <- est.map(cross, chr=i, error.prob=error.prob,
                       map.function=map.function, m=m, p=p, maxit=maxit,
                       tol=tol, sex.sp=sex.sp, verbose=FALSE,
                       omit.noninformative=FALSE)[[1]]
@@ -106,7 +106,7 @@ function(cross, marker, chr, error.prob=0.0001,
         int2 <- paste("(", int2[-length(int2)], "-", int2[-1], ")", sep="")
         interval <- paste(interval, int2)
 
-        initialmap <- est.map(subset(temp, chr=i),
+        initialmap <- est.map(temp, chr=i,
                               error.prob=error.prob,
                               map.function=map.function, m=m, p=p, maxit=maxit,
                               tol=tol, sex.sp=sex.sp, verbose=FALSE,
@@ -116,7 +116,7 @@ function(cross, marker, chr, error.prob=0.0001,
         llik <- length <- length.male <- rep(NA, length(pos))
         for(j in seq(along=pos)) {
           temp <- movemarker(cross, marker, i, pos[j])
-          nm <- est.map(subset(temp, chr=i), error.prob=error.prob,
+          nm <- est.map(temp, chr=i, error.prob=error.prob,
                         map.function=map.function, m=m, p=p, maxit=maxit,
                         tol=tol, sex.sp=sex.sp, verbose=FALSE,
                         omit.noninformative=FALSE)[[1]]
@@ -156,7 +156,7 @@ function(cross, marker, chr, error.prob=0.0001,
         int2 <- paste("(", int2[-length(int2)], "-", int2[-1], ")", sep="")
         interval <- paste(interval, int2)
 
-        initialmap <- est.map(subset(cross, chr=i), error.prob=error.prob,
+        initialmap <- est.map(cross, chr=i, error.prob=error.prob,
                               map.function=map.function, m=m, p=p, maxit=maxit,
                               tol=tol, sex.sp=sex.sp, verbose=FALSE,
                               omit.noninformative=FALSE)[[1]]
@@ -166,7 +166,7 @@ function(cross, marker, chr, error.prob=0.0001,
         for(j in seq(along=pos)) {
           temp <- movemarker(cross, marker, i, pos[j])
 
-          nm <- est.map(subset(temp, chr=i), error.prob=error.prob,
+          nm <- est.map(temp, chr=i, error.prob=error.prob,
                         map.function=map.function, m=m, p=p, maxit=maxit,
                         tol=tol, sex.sp=sex.sp, verbose=FALSE,
                         omit.noninformative=FALSE)[[1]]
@@ -188,7 +188,7 @@ function(cross, marker, chr, error.prob=0.0001,
 
         temp <- movemarker(cross, marker, i, pos)
 
-        nm <- est.map(subset(temp, chr=i), error.prob=error.prob,
+        nm <- est.map(temp, chr=i, error.prob=error.prob,
                       map.function=map.function, m=m, p=p, maxit=maxit,
                       tol=tol, sex.sp=sex.sp, verbose=FALSE,
                       omit.noninformative=FALSE)[[1]]
@@ -245,6 +245,12 @@ function(cross, marker, error.prob=0.0001)
 
   type <- class(cross)[1]
 
+  if(length(marker) > 1) {
+    ll <- sapply(marker, function(a,b,d) markerloglik(b, a, d), cross, error.prob)
+    names(ll) <- marker
+    return(ll)
+  }
+
   # don't let error.prob be exactly zero (or >1)
   if(error.prob < 1e-50) error.prob <- 1e-50
   if(error.prob > 1) {
@@ -297,6 +303,118 @@ function(cross, marker, error.prob=0.0001)
           PACKAGE="qtl")
 
   z$loglik
+}
+
+
+######################################################################
+# allchrsplits
+#
+# get LOD scores for each possible split of each chromosome into
+# two pieces
+#
+######################################################################
+
+allchrsplits <-
+function(cross, chr, error.prob=0.0001,
+         map.function=c("haldane","kosambi","c-f","morgan"),
+         m=0, p=0, maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE)
+{
+  map.function <- match.arg(map.function)
+  if(!missing(chr)) cross <- subset(cross, chr=chr)
+
+  biggap <- imf.h(0.5 - 1e-14)
+
+  n.mar <- nmar(cross)
+  chrnam <- names(cross$geno)
+
+  result <- NULL
+
+  for(i in seq(along=cross$geno)) {
+    if(n.mar[i] == 1) {
+#      temp <- data.frame(chr=chrnam[i], pos=pos, lod=NA, gap=0)
+#      rownames(temp) <- themarkers
+#      result <- cbind(result, temp)
+      next
+    }
+    thischr <- subset(cross, chr=chrnam[i])
+    if(verbose) cat("Chr ", chrnam[i], " (", n.mar[i], " markers)\n", sep="")
+    pos <- cross$geno[[i]]$map
+    themarkers <- colnames(cross$geno[[i]]$data)
+    if(is.matrix(pos)) {
+      pos <- pos[1,]
+      matrixmap <- TRUE
+    }
+    else matrixmap <- FALSE
+      
+
+    gap <- (pos[-1] - pos[-length(pos)])
+    pos <- (pos[-1] + pos[-length(pos)])/2
+    int2 <- match(themarkers, colnames(cross$geno[[i]]$data))
+    interval <- paste(themarkers[-length(themarkers)], themarkers[-1],
+                      sep="-")
+    int2 <- paste("(", int2[-length(int2)], "-", int2[-1], ")", sep="")
+    interval <- paste(interval, int2)
+
+    initialmap <- est.map(thischr, error.prob=error.prob,
+                          map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)
+    thischr$geno[[1]]$map <- initialmap[[1]]
+    initialloglik <- attr(initialmap[[1]], "loglik")
+                          
+    if(n.mar[i] == 2) { # 2 markers
+      mmll <- markerloglik(thischr, markernames(thischr), error.prob=error.prob)
+      temp <- data.frame(chr=chrnam[i], pos=pos,
+                         lod=(initialloglik - sum(mmll))/log(10), gap=gap)
+      rownames(temp) <- interval
+    }
+    else { # >2 markers
+      mn <- markernames(thischr)
+      mmll <- markerloglik(thischr, mn[c(1,length(mn))], error.prob=error.prob)
+      lod <- rep(NA, length(mn)-1)
+
+      if(verbose) cat("  interval 1\n")
+      # first interval
+      lod[1] <- initialloglik - mmll[1] -
+        attr(est.map(drop.markers(thischr, mn[1]), error.prob=error.prob,
+                     map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)[[1]], "loglik")
+
+      if(n.mar[i] > 3) {
+        for(j in 2:(n.mar[i]-2)) {
+          if(verbose) cat("  interval", j, "\n")
+          temp1 <- est.map(pull.markers(thischr, mn[1:j]), error.prob=error.prob,
+                           map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)[[1]]
+          temp2 <- est.map(drop.markers(thischr, mn[1:j]), error.prob=error.prob,
+                           map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)[[1]]
+#          lod[j] <- initialloglik - attr(temp1, "loglik") - attr(temp2, "loglik")
+
+          if(any(is.na(temp1)) || any(is.na(temp2)))
+            stop("Missing values in estimated map on chr ", chrnam[i], " with split at interval ", j, "\n")
+
+          # the likelihoods aren't adding properly, so I'll use the following kluge:
+          temp3 <- thischr
+          if(is.matrix(temp1))
+            temp3$geno[[1]]$map <- cbind(temp1, biggap+temp2)
+          else
+            temp3$geno[[1]]$map <- c(temp1, biggap+temp2)
+            
+          temp3 <- est.map(temp3, error.prob=error.prob, map.function=map.function, m=m, p=p, maxit=0, tol=tol,
+                           sex.sp=sex.sp)[[1]]
+          lod[j] <- initialloglik - attr(temp3, "loglik")
+        }
+      }
+
+      if(verbose) cat("  interval", n.mar[i]-1, "\n")
+      # last interval
+      lod[length(mn)-1] <- initialloglik - mmll[2] -
+        attr(est.map(drop.markers(thischr, mn[length(mn)]), error.prob=error.prob,
+                     map.function=map.function, m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp)[[1]], "loglik")
+
+      temp <- data.frame(chr=rep(chrnam[i], length(interval)), pos=pos, lod=lod/log(10), gap=gap)
+      rownames(temp) <- interval
+    }
+    result <- rbind(result, temp)
+  }
+  class(result) <- c("scanone", "data.frame")
+  result
 }
 
 # end of tryallpositions.R

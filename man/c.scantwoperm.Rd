@@ -15,7 +15,8 @@
 }
 
 \arguments{
- \item{\dots}{A set of objects of class \code{scantwoperm}. These are
+ \item{\dots}{A set of objects of class \code{scantwoperm}. (This can
+ also be a list of \code{scantwoperm} objects.)  These are
    the permutation results from \code{\link{scantwo}} (that is,
    when \code{n.perm > 0}).  These must all concern the same number of
    LOD columns. (That is, they must have been created with the same number

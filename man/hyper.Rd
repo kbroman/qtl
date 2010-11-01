@@ -1,5 +1,6 @@
 \name{hyper}
 \alias{hyper}
+\docType{data}
 
 \title{Data on hypertension}
 

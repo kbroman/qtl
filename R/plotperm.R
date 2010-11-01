@@ -2,8 +2,8 @@
 #
 # plotperm.R
 #
-# copyright (c) 2007-8, Karl W Broman
-# last modified Jan, 2008
+# copyright (c) 2007-2010, Karl W Broman
+# last modified Jul, 2010
 # first written Dec, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -32,52 +32,20 @@ plot.scanoneboot <-
 function(x, ...)
 {
   results <- attr(x, "results")
-
   markerpos <- results[-grep("^c.+\\.loc-*[0-9]+(\\.[0-9]+)*$", rownames(results)),2]
-  n.brk <- ceiling(2*sqrt(length(x)))
-  xlim <- range(results[,2])
 
-  dots <- list(...)
-  main <- ""
-  xlab <- "QTL position (cM)"
+  hideplot.scanoneboot <-
+  function(x, breaks, xlim, main, xlab, ...)
+  {
+    if(missing(breaks)) breaks <- ceiling(2*sqrt(length(x)))
+    if(missing(xlim)) xlim <- range(results[,2])
+    if(missing(main)) main <- ""
+    if(missing(xlab)) xlab <- "QTL position (cM)"
 
-  if("breaks" %in% names(dots)) {
-    if("main" %in% names(dots)) {
-      if("xlab" %in% names(dots)) {
-        hist(x, xlim=xlim, ...)
-      }
-      else {
-        hist(x, xlim=xlim, xlab=xlab, ...)
-      }
-    }
-    else {
-      if("xlab" %in% names(dots)) {
-        hist(x, xlim=xlim, main=main, ...)
-      }
-      else {
-        hist(x, xlim=xlim, xlab=xlab, main=main, ...)
-      }
-    }
+    hist(x, xlim=xlim, xlab=xlab, main=main, breaks=breaks, ...)
   }
-  else {
-    if("main" %in% names(dots)) {
-      if("xlab" %in% names(dots)) {
-        hist(x, breaks=n.brk, xlim=xlim, ...)
-      }
-      else {
-        hist(x, breaks=n.brk, xlim=xlim, xlab=xlab, ...)
-      }
-    }
-    else {
-      if("xlab" %in% names(dots)) {
-        hist(x, breaks=n.brk, xlim=xlim, main=main, ...)
-      }
-      else {
-        hist(x, breaks=n.brk, xlim=xlim, xlab=xlab, main=main, ...)
-      }
-    }
-  }
-  
+
+  hideplot.scanoneboot(x, ...)
   rug(markerpos)
 }
 
@@ -89,101 +57,66 @@ function(x, ...)
 plot.scanoneperm <-
 function(x, lodcolumn=1, ...)
 {
+  # subroutine for hiding arguments in ...
+  hideplot.scanoneperm <-
+  function(A, X, breaks, xlab, xlim, main, ...)
+  {
+    if(missing(xlab)) xlab <- "maximum LOD score"
+
+    if(missing(X)) {
+      if(missing(breaks)) breaks <- ceiling(2*sqrt(length(A)))
+      if(missing(xlim)) xlim <- c(0, max(A))
+      if(missing(main)) main <- ""
+
+      hist(A, breaks=breaks, xlab=xlab, xlim=xlim, main=main, ...)
+    }
+    else {
+      mfrow <- par("mfrow")
+      on.exit(par(mfrow=mfrow))
+      par(mfrow=c(2,1))
+      
+      if(missing(breaks)) {
+        breaks.missing <- TRUE
+        breaks <- seq(0, max(c(A,X)), length=2*sqrt(length(A)))
+      }
+      else breaks.missing <- FALSE
+
+      if(missing(xlim)) xlim <- c(0, max(c(A,X)))
+      if(missing(main)) {
+        main <- "Autosomes"
+        main.missing <- TRUE
+      }
+      else {
+        main.missing <- FALSE
+        if(length(main)>1) { main2 <- main[2]; main <- main[1] }
+        else main2 <- main
+      }
+      
+      hist(A, xlim=xlim, breaks=breaks, xlab=xlab, main=main, ...)
+      rug(A)
+          
+      if(breaks.missing)
+        breaks <- seq(0, max(c(A,X)), length=2*sqrt(length(X)))
+      if(main.missing) main <- "X chromosome"
+      else main <- main2
+      hist(X, xlim=xlim, breaks=breaks, xlab=xlab, main=main, ...)
+      rug(X)
+    }
+  }
+
+  # now to the actual code
   if(is.list(x)) { # separate X chr results
     if(lodcolumn < 1 || lodcolumn > ncol(x$A))
       stop("lodcolumn should be between 1 and ", ncol(x$A))
-    A <- x$A[,lodcolumn]
-    X <- x$X[,lodcolumn]
-    
-    n.brkA <- ceiling(2*sqrt(length(A)))
-    n.brkX <- ceiling(2*sqrt(length(X)))
-    xlim <- c(0,max(c(A,X)))
-
-    dots <- list(...)
-    xlab <- "maximum LOD score"
-
-    mfrow <- par("mfrow")
-    on.exit(par(mfrow=mfrow))
-    par(mfrow=c(2,1))
-
-    if("breaks" %in% names(dots)) {
-      if("xlab" %in% names(dots)) {
-        hist(A, xlim=xlim, main="Autosomes", ...)
-        rug(A)
-        hist(X, xlim=xlim, main="X chromosome", ...)
-        rug(X)
-      }
-      else {
-        hist(A, xlim=xlim, xlab=xlab, main="Autosomes", ...)
-        rug(A)
-        hist(X, xlim=xlim, xlab=xlab, main="X chromosome", ...)
-        rug(X)
-      }
-    }
-    else {
-      if("xlab" %in% names(dots)) {
-        hist(A, breaks=n.brkA, xlim=xlim, main="Autosomes", ...)
-        rug(A)
-        hist(X, breaks=n.brkX, xlim=xlim, main="X chromosome", ...)
-        rug(X)
-      }
-      else {
-        hist(A, breaks=n.brkA, xlim=xlim, xlab=xlab, main="Autosomes", ...)
-        rug(A)
-        hist(X, breaks=n.brkX, xlim=xlim, xlab=xlab, main="X chromosome", ...)
-        rug(X)
-      }
-    }
-  }
+    A <- as.numeric(x$A[,lodcolumn])
+    X <- as.numeric(x$X[,lodcolumn])
+    hideplot.scanoneperm(A, X, ...)
+  }    
   else {  
     if(lodcolumn < 1 || lodcolumn > ncol(x))
       stop("lodcolumn should be between 1 and ", ncol(x$A))
-    x <- x[,lodcolumn]
-    n.brk <- ceiling(2*sqrt(length(x)))
-    xlim <- c(0,max(as.numeric(x)))
-
-    dots <- list(...)
-    main <- ""
-    xlab <- "maximum LOD score"
-
-    if("breaks" %in% names(dots)) {
-      if("main" %in% names(dots)) {
-        if("xlab" %in% names(dots)) {
-          hist(x, xlim=xlim, ...)
-        }
-        else {
-          hist(x, xlim=xlim, xlab=xlab, ...)
-        }
-      }
-      else {
-        if("xlab" %in% names(dots)) {
-          hist(x, xlim=xlim, main=main, ...)
-        }
-        else {
-          hist(x, xlim=xlim, xlab=xlab, main=main, ...)
-        }
-      }
-    }
-    else {
-      if("main" %in% names(dots)) {
-        if("xlab" %in% names(dots)) {
-          hist(x, breaks=n.brk, xlim=xlim, ...)
-        }
-        else {
-          hist(x, breaks=n.brk, xlim=xlim, xlab=xlab, ...)
-        }
-      }
-      else {
-        if("xlab" %in% names(dots)) {
-          hist(x, breaks=n.brk, xlim=xlim, main=main, ...)
-        }
-        else {
-          hist(x, breaks=n.brk, xlim=xlim, xlab=xlab, main=main, ...)
-        }
-      }
-    }
-  
-    rug(as.numeric(x))
+    A <- as.numeric(x[,lodcolumn])
+    hideplot.scanoneperm(A, ...)
   }
 }
 
@@ -196,48 +129,38 @@ function(x, lodcolumn=1, ...)
 plot.scantwoperm <-
 function(x, lodcolumn=1, ...)
 {
+  hideplot.scantwoperm <-
+  function(x, xlim, breaks, xlab, main, ...)
+  {
+    if(missing(xlim)) xlim <- c(0, max(unlist(x)))
+    if(missing(breaks)) 
+      breaks <- seq(0, max(unlist(x)), len=ceiling(4*sqrt(length(x[[1]]))+1))
+    if(missing(xlab)) xlab <- "maximum LOD score"
+    if(missing(main)) main.missing <- TRUE 
+    else { main.missing <- FALSE; main.input <- main }
+      
+    
+    mfcol <- par("mfcol")
+    on.exit(par(mfcol=mfcol))
+    par(mfcol=c(3,2))
+    
+    for(i in seq(along=x)) {
+      if(main.missing) main <- names(x)[i]
+      else {
+        if(length(main.input) >= i) main <- main.input[i]
+        else if(length(main.input) == 1) main <- main.input
+        else main <- ""
+      }
+        
+      hist(x[[i]], xlim=xlim, breaks=breaks, xlab=xlab, main=main,...)
+      rug(x[[i]])
+    }
+  }
+
   if(lodcolumn < 1 || lodcolumn > ncol(x[[1]]))
     stop("lodcolumn should be between 1 and ", ncol(x[[1]]))
   x <- lapply(x, function(a,b) a[,b], lodcolumn)
-
-  xlim <- c(0,max(unlist(x)))
-  brks <- seq(0, max(unlist(x)), length=ceiling(4*sqrt(length(x[[1]])))+1)
-
-  dots <- list(...)
-  xlab <- "maximum LOD score"
-
-  mfcol <- par("mfcol")
-  on.exit(par(mfcol=mfcol))
-  par(mfcol=c(3,2))
-
-  if("breaks" %in% names(dots)) {
-    if("xlab" %in% names(dots)) {
-      for(i in seq(along=x)) {
-        hist(x[[i]], xlim=xlim, main=names(x)[i], ...)
-        rug(x[[i]])
-      }
-    }
-    else {
-      for(i in seq(along=x)) {
-        hist(x[[i]], xlim=xlim, xlab=xlab, main=names(x)[i], ...)
-        rug(x[[i]])
-      }
-    }
-  }
-  else {
-    if("xlab" %in% names(dots)) {
-      for(i in seq(along=x)) {
-        hist(x[[i]], breaks=brks, xlim=xlim, main=names(x)[i], ...)
-        rug(x[[i]])
-      }
-    }
-    else {
-      for(i in seq(along=x)) {
-        hist(x[[i]], breaks=brks, xlim=xlim, xlab=xlab, main=names(x)[i], ...)
-        rug(x[[i]])
-      }
-    }
-  }
+  hideplot.scantwoperm(x, ...)
 }
 
                                 

@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Oct, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: est.rf, plot.rf, checkAlleles
+# Contains: est.rf, plot.rf, checkAlleles, pull.rf, plot.rfmatrix
 #
 ######################################################################
 
@@ -136,6 +136,11 @@ function(x, chr, what=c("both","lod","rf"),
     stop("Input should have class \"cross\".")
 
   what <- match.arg(what)
+  if("onlylod" %in% names(attributes(x$rf)) && attr(x$rf, "onlylod")) {
+    onlylod <- TRUE
+    what <- "lod"
+  }
+  else onlylod <- FALSE
   
   if(!missing(chr)) x <- subset(x,chr=chr)
   
@@ -150,20 +155,22 @@ function(x, chr, what=c("both","lod","rf"),
   par(xpd=TRUE,las=1)
   on.exit(par(xpd=old.xpd,las=old.las))
 
-  # if any of the rf's are NA (ie no data), put NAs in corresponding LODs
-  if(any(is.na(g))) g[is.na(t(g))] <- NA
+  if(!onlylod) {
+    # if any of the rf's are NA (ie no data), put NAs in corresponding LODs
+    if(any(is.na(g))) g[is.na(t(g))] <- NA
 
-  # convert rf to -2*(log2(rf)+1); place zmax's on the diagonal;
-  #    anything above zmax replaced by zmax;
-  #    NA's replaced by -1
-  g[row(g) > col(g) & g > 0.5] <- 0.5
-  g[row(g) > col(g)] <- -4*(log2(g[row(g) > col(g)])+1)/12*zmax
+    # convert rf to -2*(log2(rf)+1); place zmax's on the diagonal;
+    #    anything above zmax replaced by zmax;
+    #    NA's replaced by -1
+    g[row(g) > col(g) & g > 0.5] <- 0.5
+    g[row(g) > col(g)] <- -4*(log2(g[row(g) > col(g)])+1)/12*zmax
+  }
   diag(g) <- zmax
   g[!is.na(g) & g>zmax] <- zmax
   
   g[is.na(g)] <- -1
 
-  if(what=="lod") { # plot LOD scores 
+  if(what=="lod" && !onlylod) { # plot LOD scores 
     # copy upper triangle (LODs) to lower triangle (rec fracs)
     g[row(g) > col(g)] <- t(g)[row(g) > col(g)]
   }
@@ -333,5 +340,93 @@ function(cross, threshold=3, verbose=TRUE)
   
   results[results[,4] >= threshold,]
 }
+
+######################################################################
+# pull.rf
+#
+# pull out the pairwise marker recombination fraction estimates,
+# with class "rfmatrix"
+######################################################################
+
+pull.rf <- 
+function(cross, what=c("rf", "lod"), chr)
+{
+  if(!("cross" %in% class(cross)))
+    stop("Input must have class \"cross\".")
+  
+  if(!missing(chr)) cross <- subset(cross, chr=chr)
+
+  if(!("rf" %in% names(cross))) {
+    warning(" -Running est.rf")
+    cross <- est.rf(cross)
+  }
+  rf <- cross$rf
+  if(nrow(rf) != totmar(cross) || ncol(rf) != totmar(cross) ||
+     any(rownames(rf) != markernames(cross)) ||
+     any(colnames(rf) != markernames(cross))) {
+    warning(" -Rec. frac. estimates seem corrupted; re-running est.rf")
+    cross <- est.rf(cross)
+  }
+  rf <- cross$rf
+
+  diag(rf) <- NA
+  what <- match.arg(what)
+  if(what=="rf") 
+    rf[upper.tri(rf)] <- t(rf)[upper.tri(rf)]
+  else
+    rf[lower.tri(rf)] <- t(rf)[lower.tri(rf)]
+
+  attr(rf, "map") <- pull.map(cross, as.table=TRUE)
+  attr(rf, "what") <- what
+  class(rf) <- c("rfmatrix", "matrix")
+  rf
+}
+
+######################################################################
+# plot.rfmatrix:
+#
+# plot a slice through the matrix (that is, for one marker)
+######################################################################
+
+plot.rfmatrix <- 
+function(x, marker, ...)
+{
+  if(!("rfmatrix" %in% class(x)))
+    stop("Input must have class \"rfmatrix\".")
+
+  if(missing(marker))
+    stop("You must provide a marker name.")
+
+  if(length(marker) > 1) {
+    warning("Ignoring all but the first marker, ", marker[1])
+    marker <- marker[1]
+  }
+
+  if(!(marker %in% rownames(x)))
+    stop("Marker ", marker, " not found.")
+
+  what <- attr(x, "what")
+  x <- cbind(attr(x, "map"), x[marker,])
+  x$chr <- factor(x$chr, levels=unique(x$chr))
+                  
+  # fill in hole
+  wh <- which(rownames(x)==marker)
+  if(wh > 1 && wh < nrow(x) && x[wh-1,1] == x[wh,1] && x[wh+1,1] == x[wh,1]) {
+    xl <- x[wh-1,2]
+    xm <- x[wh,2]
+    xr <- x[wh+1,2]
+    yl <- x[wh-1,3]
+    yr <- x[wh+1,3]
+    x[wh,3] <- yl + (xm-xl)*(yr-yl)/(xr-xl)
+  }
+
+  colnames(x)[3] <- what
+  class(x) <- c("scanone", "data.frame")
+
+  plot(x, ...)
+  
+  invisible(x)
+}
+
 
 # end of est.rf.R
