@@ -53,8 +53,8 @@ double init_ft(int true_gen, int *cross_scheme)
 
   if(LN_2t == 0) {
     /* static variables used frequently */
-    LN_2t = (1 - cross_scheme[1]) * LN_2;   /* init_ft uses LN_t = (1-t) * log(2) */
-    LN_05t = LN_05 + log(1.0 - exp(LN_2t)); /* init_ft uses LN_05 + log(1-exp(LN_t)) */
+    LN_2t = (1 - cross_scheme[1]) * M_LN2;   /* init_ft uses LN_t = (1-t) * log(2) */
+    LN_05t = -M_LN2 + log(1.0 - exp(LN_2t)); /* init_ft uses LN_05 + log(1-exp(LN_t)) */
   }
 
   if(true_gen==2) return(LN_2t);
@@ -83,7 +83,7 @@ double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme)
   if(gen1 == 2) {
     if(gen2 == 2)
       return(log(term1));
-    return(LN_05 + log(1.0 - term1));
+    return(-M_LN2 + log(1.0 - term1));
   }
   if(gen2 == 2)
     return(LN_logt + log(1.0 - term1));
@@ -96,8 +96,118 @@ double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme)
   return(LN_logt + log(term3 - 1 + 0.5 * term1));
 }
 
+/* The following are the init, emit and step functions 
+   when considering phase-known F2 genotypes 
+   (i.e. the 4-state chain: AA, AB, BA, BB             */
+
+double init_ftb(int true_gen, int *cross_scheme)
+{
+  static double LN_2t = 0;
+  static double LN_t2 = 0;
+
+  if(LN_2t == 0) {
+    /* static variables used frequently */
+    LN_2t = - cross_scheme[1] * M_LN2;   /* LN_2t = - t * log(2) */
+    LN_t2 = log(0.5 - exp(LN_2t));   /* LN_2t = - t * log(2) */
+  }
+
+  if(true_gen==2 | true_gen==3) return(LN_2t);
+  else return(LN_t2);
+}
+
+/* need to figure this one out BY/LS 1 nov 2010 */
+  
+double step_ftb(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
+{
+  switch(gen1) {
+  case 1:
+    switch(gen2) {
+    case 1: return(2.0*log(1.0-rf));
+    case 2: case 3: return(log(1.0-rf)+log(rf));
+    case 4: return(2.0*log(rf));
+    }
+  case 2: 
+    switch(gen2) {
+    case 1: case 4: return(log(rf)+log(1.0-rf));
+    case 2: return(2.0*log(1.0-rf));
+    case 3: return(2.0*log(rf));
+    }
+  case 3: 
+    switch(gen2) {
+    case 1: case 4: return(log(rf)+log(1.0-rf));
+    case 3: return(2.0*log(1.0-rf));
+    case 2: return(2.0*log(rf));
+    }
+  case 4:
+    switch(gen2) {
+    case 1: return(2.0*log(rf));
+    case 2: case 3: return(log(1.0-rf)+log(rf));
+    case 4: return(2.0*log(1.0-rf));
+    }
+  }
+  return(log(-1.0)); /* shouldn't get here */
+
+  double t,t1, term1, term3, term4;
+  static double LN_expt = 0;
+  static double LN_logt = 0;
+
+  if(LN_expt == 0) {
+    /* static variables used frequently */
+    LN_expt = exp(2.0 * log(cross_scheme[1] - 1));    /* step_ft uses 2^(t-1) */
+    LN_logt = - log(LN_expt - 1);      /* step_ft uses -log(2^(t-1) - 1) */
+  }
+
+  t = cross_scheme[1];
+  t1 = t - 1;
+  term1 = exp(t1 * log(1.0 - 2.0 * rf * (1.0 - rf)));
+  if(gen1 == 2) {
+    if(gen2 == 2)
+      return(log(term1));
+    return(-M_LN2 + log(1.0 - term1));
+  }
+  if(gen2 == 2)
+    return(LN_logt + log(1.0 - term1));
+  term3 = 1 + 2.0 * rf;
+  term4 = exp(t * log(1 - 2 * rf)) / (2 * term3);
+  if(gen1 == gen2)
+    term3 = (LN_expt / term3) - term4;
+  else
+    term3 = (2.0 * LN_expt * rf / term3) + term4;
+  return(LN_logt + log(term3 - 1 + 0.5 * term1));
+}
+
+double nrec_ftb(int gen1, int gen2)
+{
+  switch(gen1) {
+  case 1: 
+    switch(gen2) {
+    case 1: return(0.0);
+    case 2: case 3: return(0.5);
+    case 4: return(1.0);
+    }
+  case 2:
+    switch(gen2) {
+    case 1: case 4: return(0.5);
+    case 2: return(0.0);
+    case 3: return(1.0);
+    }
+  case 3:
+    switch(gen2) {
+    case 1: case 4: return(0.5);
+    case 3: return(0.0);
+    case 2: return(1.0);
+    }
+  case 4: 
+    switch(gen2) {
+    case 4: return(0.0);
+    case 2: case 3: return(0.5);
+    case 1: return(1.0);
+    }
+  }
+  return(log(-1.0)); /* shouldn't get here */
+}
+
 void calc_genoprob_ft(int *n_ind, int *n_mar, int *geno, 
-		      int *cross_scheme,
 		      double *rf, double *error_prob,
                       double *genoprob) 
 {
@@ -119,7 +229,7 @@ void est_map_ft(int *n_ind, int *n_mar, int *geno, double *rf,
 		double *tol, int *verbose)
 {
   est_map(*n_ind, *n_mar, 4, geno, rf, rf, *error_prob, 
-	  init_ftb, emit_ftb, step_ftb, nrec_ftb, nrec_ftb,
+	  init_ftb, emit_f2b, step_ftb, nrec_ftb, nrec_ftb,
 	  loglik, *maxit, *tol, 0, *verbose);
 }
 
@@ -264,7 +374,7 @@ void marker_loglik_ft(int *n_ind, int *geno,
 		      double *error_prob, double *loglik)
 {
   marker_loglik(*n_ind, 4, geno, *error_prob, 
-		init_ftb, emit_ftb, loglik);
+		init_ftb, emit_f2b, loglik);
 }
   
 /* end of hmm_ft.c */

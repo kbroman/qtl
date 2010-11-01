@@ -43,7 +43,7 @@
 #include "hmm_main.h"
 #include "hmm_f2.h"
 
-double init_f2(int true_gen)
+double init_f2(int true_gen, int *cross_scheme)
 {
   if(true_gen==2) return(-M_LN2); /* ln(0.5) */
   else return(-2.0*M_LN2); /* ln(0.25) */
@@ -67,7 +67,7 @@ double emit_f2(int obs_gen, int true_gen, double error_prob)
 }
     
   
-double step_f2(int gen1, int gen2, double rf, double junk) 
+double step_f2(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   switch(gen1) {
   case 1:
@@ -100,7 +100,7 @@ double step_f2(int gen1, int gen2, double rf, double junk)
    when considering phase-known F2 genotypes 
    (i.e. the 4-state chain: AA, AB, BA, BB             */
 
-double init_f2b(int true_gen)
+double init_f2b(int true_gen, int *cross_scheme)
 {
   return(-2.0*M_LN2);  /* ln(0.25) */
 }
@@ -135,7 +135,7 @@ double emit_f2b(int obs_gen, int true_gen, double error_prob)
 }
     
   
-double step_f2b(int gen1, int gen2, double rf, double junk) 
+double step_f2b(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   switch(gen1) {
   case 1:

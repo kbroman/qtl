@@ -48,7 +48,7 @@
 #include "hmm_ri8sib.h"
 #include "hmm_bc.h"
 
-double init_ri8sib(int true_gen)
+double init_ri8sib(int true_gen, int *cross_scheme)
 {
   return(-3.0*M_LN2); /* log(1/8) */
 }
@@ -61,7 +61,7 @@ double emit_ri8sib(int obs_gen, int true_gen, double error_prob)
 }
     
   
-double step_ri8sib(int gen1, int gen2, double rf, double junk) 
+double step_ri8sib(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   if(gen1 == gen2) 
     return(log(1.0-rf)-log(1.0+6.0*rf));

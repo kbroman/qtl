@@ -45,7 +45,7 @@
 #include <R_ext/PrtUtil.h>
 #include "hmm_main.h"
 
-double init_4way(int true_gen)
+double init_4way(int true_gen, int *cross_scheme)
 {
   return(-2.0*M_LN2);
 }
@@ -129,7 +129,7 @@ double emit_4way(int obs_gen, int true_gen, double error_prob)
   return(0.0); /* shouldn't get here */
 }
 
-double step_4way(int gen1, int gen2, double rf1, double rf2)
+double step_4way(int gen1, int gen2, double rf1, double rf2, int *cross_scheme)
 {
   switch(gen1) {
   case 1:
