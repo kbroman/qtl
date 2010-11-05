@@ -42,6 +42,8 @@ Minor changes:
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
 
+  Fixed a bug in shiftmap().
+
   Slight change to top.errorlod, so that the output columns are not
   factors but character strings.
 

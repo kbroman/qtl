@@ -3795,7 +3795,7 @@ function(object, offset=0)
       }
     }
   } else if("map" %in% class(object)) {
-    if(length(offset) != 1) offset <- rep(offset, length(object))
+    if(length(offset) == 1) offset <- rep(offset, length(object))
     else if(length(offset) != length(object))
       stop("offset must have length 1 or n.chr (", length(object), ")")
     for(i in seq(along=object)) {
