@@ -17,11 +17,13 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/4/2010:
+Version 1.19, 11/5/2010:
 
 Major changes:
 
-  None.
+  Added a tutorial on genetic map construction; find it within the
+  package at docs/geneticmaps.pdf, or (more simply, probably), find it
+  on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf 
 
 Minor changes:
 
@@ -41,6 +43,14 @@ Minor changes:
   Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
+
+  Fixed a problem in subset.cross where, in the case that a cross
+  contained numeric IDs, subsetting the individuals resulted in them
+  being sorted according to their IDs.
+
+  Added a manual page for the function getid(), which was not previously
+  documented.  (It is used internally a great deal, and it may be
+  useful more generally.)
 
   Fixed a bug in shiftmap().
 

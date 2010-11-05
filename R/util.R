@@ -5,7 +5,7 @@
 # copyright (c) 2001-2010, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2010
+# last modified Nov, 2010
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1204,14 +1204,16 @@ function(x, chr, ind, ...)
   }
 
   if(!missing(ind)) {
+    theid <- getid(x)
+
     if(is.logical(ind)) {
       ind[is.na(ind)] <- FALSE
       if(length(ind) != n.ind) 
         stop("ind argument has wrong length (", length(ind), "; should be ", n.ind, ")")
-      ind <- (1:n.ind)[ind]
+      if(!is.null(theid)) 
+        ind <- theid[ind]
+      else ind <- (1:n.ind)[ind]
     }
-
-    theid <- getid(x)
 
     if(!is.null(theid)) { # cross has individual IDs
       if(is.numeric(ind)) {
