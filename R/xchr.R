@@ -2,8 +2,8 @@
 #
 # xchr.R
 #
-# copyright (c) 2004-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2004-2010, Karl W Broman
+# last modified Nov, 2010
 # first written Apr, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -277,7 +277,7 @@ function(type=c("f2","bc","riself","risib","4way","dh","special"),
 # revise genotype data, probabilities or imputations for the X chromosome
 reviseXdata <-
 function(type=c("f2","bc"), expandX=c("simple","standard","full"),
-         sexpgm, geno, prob, draws, pairprob, cross.attr)
+         sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 {
   type <- match.arg(type)
   expandX <- match.arg(expandX)
@@ -297,7 +297,7 @@ function(type=c("f2","bc"), expandX=c("simple","standard","full"),
 
   if(type == "bc") { # backcross
 
-    if(length(sex)==0 || all(sex==0) || all(sex==1)) { # all one sex
+    if(length(sex)==0 || ((all(sex==0) || all(sex==1)) && !force)) { # all one sex
       # no changes necessary
       if(!missing(geno)) return(geno)
       else if(!missing(prob)) {
@@ -383,7 +383,7 @@ function(type=c("f2","bc"), expandX=c("simple","standard","full"),
 
     if(length(sex)==0 || all(sex==0)) { # all females
 
-      if(length(pgm)==0 || all(pgm==0) || all(pgm==1)) { # one dir, females
+      if(length(pgm)==0 || ((all(pgm==0) || all(pgm==1)) && !force)) { # one dir, females
         if(!missing(geno)) return(geno)
         else if(!missing(draws)) return(draws)
         else if(!missing(pairprob)) return(pairprob)
@@ -458,7 +458,7 @@ function(type=c("f2","bc"), expandX=c("simple","standard","full"),
         }
       }
     }
-    else if(all(sex==1))  { # all males
+    else if(all(sex==1) && !force)  { # all males
       if(!missing(geno)) return(geno)
       else if(!missing(draws)) return(draws)
       else if(!missing(pairprob)) return(pairprob)
@@ -535,7 +535,7 @@ function(type=c("f2","bc"), expandX=c("simple","standard","full"),
         }
       } # both sexes, forw dir
 
-      if(all(pgm==1)) { # both sexes, backw dir
+      if(all(pgm==1) && !force) { # both sexes, backw dir
         if(!missing(geno)) {
           gmale <- geno[sex==1,]
           if(expandX!="full") {

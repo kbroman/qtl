@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o plot.geno re X chr: in an intercross, show the three possible
-  genotypes, or revise the documentation, or both.
-
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 

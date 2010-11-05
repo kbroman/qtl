@@ -319,7 +319,7 @@ revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)
 revisescantwodf(df)
 reviseXdata(type=c("f2","bc"), expandX=c("simple","standard","full"),
-            sexpgm, geno, prob, draws, pairprob, cross.attr)
+            sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 ripple.perm1(n)
 ripple.perm2(n)
 ripple.perm.sub(x, mat)

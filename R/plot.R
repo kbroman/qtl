@@ -684,7 +684,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   data <- cross$geno[[1]]$data
   chrtype <- class(cross$geno[[1]])
   if(chrtype=="X" && (type=="f2" || type=="bc"))
-    data <- reviseXdata(type, sexpgm=getsex(cross), geno=data, cross.attr=attributes(cross))
+    data <- reviseXdata(type, sexpgm=getsex(cross), geno=data, cross.attr=attributes(cross), force=TRUE)
 
   if(include.xo) {
     if(type != "4way") { # find crossover locations

@@ -44,6 +44,11 @@ Minor changes:
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
 
+  Revised plot.geno() so that, for the X chromosome in a backcross or
+  intercross, the genotypes appear appropriately, with females being
+  homozygous or heterozygous and the males hemizygous, though we plot
+  the hemizygous genotypes as if they were homozygotes.
+
   In orderMarkers(), if verbose is numeric and > 1, even more
   information on the progress of the calculations is provided.
 
@@ -56,6 +61,9 @@ Minor changes:
   useful more generally.)
 
   Fixed a bug in shiftmap().
+
+  Added an argument, force, to reviseXdata(), to force a change in the
+  genotypes; this is for use within plot.geno().
 
   Slight change to top.errorlod, so that the output columns are not
   factors but character strings.
