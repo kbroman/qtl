@@ -37,7 +37,6 @@
 \alias{flipcross}
 \alias{genAllPartitions}
 \alias{genotab.em}
-\alias{getid}
 \alias{getsex}
 
 \alias{addmarkerstointervalmap}
@@ -217,7 +216,6 @@ markerforwsel(x, y, maxsize=7)
 markerforwself2(x, y, maxsize=7)
 genAllPartitions(n.taxa, taxa)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
-getid(cross)
 getsex(cross)
 
 addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
