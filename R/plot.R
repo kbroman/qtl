@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-2010, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Jul, 2010
+# last modified Nov, 2010
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -752,55 +752,47 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=1] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=16,col=color[1],cex=cex)
-      points(x,ind-jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[1],cex=cex)
   
       # B alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=2] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=16,col=color[3],cex=cex)
-      points(x,ind-jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[3],cex=cex)
   
       # 9/10 genotypes
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=9] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=16,col=color[4],cex=cex)
-      points(x,ind-jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[4],cex=cex)
   
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=10] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=16,col=color[5],cex=cex)
-      points(x,ind-jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[5],cex=cex)
   
       # C alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=1] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind+jit,pch=16,col=color[1],cex=cex)
-      points(x,ind+jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[1],cex=cex)
   
       # D alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=2] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind+jit,pch=16,col=color[3],cex=cex)
-      points(x,ind+jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[3],cex=cex)
   
       # 9/10 genotypes
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=9] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind+jit,pch=16,col=color[4],cex=cex)
-      points(x,ind+jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[4],cex=cex)
   
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=10] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind+jit,pch=16,col=color[5],cex=cex)
-      points(x,ind+jit,pch=1,cex=cex)
+      points(x,ind-jit,pch=21,col="black", bg=color[5],cex=cex)
   
       # plot map
       u <- par("usr")

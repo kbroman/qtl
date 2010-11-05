@@ -60,6 +60,9 @@ Minor changes:
   Slight change to top.errorlod, so that the output columns are not
   factors but character strings.
 
+  Slight change in plot.geno() so that we use filled circles (pch=23) rather
+  than calling points() twice for each point.
+
   Small changes to mqmplot.circle().
 
   Subtle changes to tutorials new_multiqtl.pdf,
