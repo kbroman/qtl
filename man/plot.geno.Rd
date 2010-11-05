@@ -43,6 +43,10 @@ plot.geno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   (D in mapmaker) and "not AA" (C in mapmaker) are indicated by green
   and orange circles, respectively.
 
+  For the X chromosome in a backcross or intercross, hemizygous males
+  are plotted as if they were homozygous (that is, with white and black
+  circles).  
+
   For a 4-way cross, two lines are plotted for each individual.  The
   left or upper line indicates the allele A (white) or B (black); the
   right or lower line indicates the allele C (white) or D (black).  For
