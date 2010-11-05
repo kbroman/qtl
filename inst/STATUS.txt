@@ -44,6 +44,9 @@ Minor changes:
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
 
+  In orderMarkers(), if verbose is numeric and > 1, even more
+  information on the progress of the calculations is provided.
+
   Fixed a problem in subset.cross where, in the case that a cross
   contained numeric IDs, subsetting the individuals resulted in them
   being sorted according to their IDs.
