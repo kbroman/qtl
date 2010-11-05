@@ -676,10 +676,15 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
   map <- cumsum(c(0,d))
   cross$geno[[1]]$map <- map
 
-  data <- cross$geno[[1]]$data
   n.ind <- nrow(errors)
 
   color <- c("white","gray60","black","green","orange","red")
+
+  # revise X chr data for backcross/intercross
+  data <- cross$geno[[1]]$data
+  chrtype <- class(cross$geno[[1]])
+  if(chrtype=="X" && (type=="f2" || type=="bc"))
+    data <- reviseXdata(type, sexpgm=getsex(cross), geno=data, cross.attr=attributes(cross))
 
   if(include.xo) {
     if(type != "4way") { # find crossover locations
@@ -775,24 +780,24 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=1] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=21,col="black", bg=color[1],cex=cex)
+      points(x,ind+jit,pch=21,col="black", bg=color[1],cex=cex)
   
       # D alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=2] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=21,col="black", bg=color[3],cex=cex)
+      points(x,ind+jit,pch=21,col="black", bg=color[3],cex=cex)
   
       # 9/10 genotypes
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=9] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=21,col="black", bg=color[4],cex=cex)
+      points(x,ind+jit,pch=21,col="black", bg=color[4],cex=cex)
   
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=10] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind-jit,pch=21,col="black", bg=color[5],cex=cex)
+      points(x,ind+jit,pch=21,col="black", bg=color[5],cex=cex)
   
       # plot map
       u <- par("usr")
@@ -829,55 +834,47 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=1] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind-jit,y,pch=16,col=color[1],cex=cex)
-      points(ind-jit,y,pch=1,cex=cex)
+      points(ind-jit,y,pch=21,col="black",bg=color[1],cex=cex)
   
       # B alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=2] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind-jit,y,pch=16,col=color[3],cex=cex)
-      points(ind-jit,y,pch=1,cex=cex)
+      points(ind-jit,y,pch=21,col="black",bg=color[3],cex=cex)
   
       # 9/10 genotypes
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=9] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind-jit,y,pch=16,col=color[4],cex=cex)
-      points(ind-jit,y,pch=1,cex=cex)
+      points(ind-jit,y,pch=21,col="black", bg=color[4],cex=cex)
   
       tind <- rep(1:n.ind,length(map));tind[is.na(mdata)] <- NA
       ind <- tind; ind[!is.na(mdata) & mdata!=10] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind-jit,y,pch=16,col=color[5],cex=cex)
-      points(ind-jit,y,pch=1,cex=cex)
+      points(ind-jit,y,pch=21,col="black", bg=color[5],cex=cex)
   
       # C alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=1] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind+jit,y,pch=16,col=color[1],cex=cex)
-      points(ind+jit,y,pch=1,cex=cex)
+      points(ind+jit,y,pch=21,col="black", bg=color[1],cex=cex)
   
       # D alleles
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=2] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind+jit,y,pch=16,col=color[3],cex=cex)
-      points(ind+jit,y,pch=1,cex=cex)
+      points(ind+jit,y,pch=21,col="black", bg=color[3],cex=cex)
   
       # 9/10 genotypes
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=9] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind+jit,y,pch=16,col=color[4],cex=cex)
-      points(ind+jit,y,pch=1,cex=cex)
+      points(ind+jit,y,pch=21,col="black", bg=color[4],cex=cex)
   
       tind <- rep(1:n.ind,length(map));tind[is.na(ddata)] <- NA
       ind <- tind; ind[!is.na(ddata) & ddata!=10] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind+jit,y,pch=16,col=color[5],cex=cex)
-      points(ind+jit,y,pch=1,cex=cex)
+      points(ind+jit,y,pch=21,col="black", bg=color[5],cex=cex)
   
       # plot map
       u <- par("usr")
@@ -916,31 +913,28 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       tind <- rep(1:n.ind,length(map));tind[is.na(data)] <- NA
       ind <- tind; ind[!is.na(data) & data!=1] <- NA
       x <- rep(map,rep(n.ind,length(map)))
-      points(x,ind,pch=16,col=color[1],cex=cex)
-      points(x,ind,pch=1,cex=cex)
+      points(x,ind,pch=21,col="black", bg=color[1],cex=cex)
   
       # AB genotypes
       ind <- tind; ind[!is.na(data) & data!=2] <- NA
-      if(type=="f2") {
-        points(x,ind,pch=16,col=color[2],cex=cex)
-        points(x,ind,pch=1,cex=cex)
-      }
-      else points(x,ind,pch=16,col=color[3],cex=cex) 
+      if(type=="f2" || (type=="bc" && chrtype=="X"))
+        points(x,ind,pch=21,col="black", bg=color[2],cex=cex)
+      else points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
   
-      if(type=="f2") {
+      if(type=="f2" || (type=="bc" && chrtype=="X")) {
         # BB genotypes
         ind <- tind; ind[!is.na(data) & data!=3] <- NA
-        points(x,ind,pch=16,col=color[3],cex=cex)
+        points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
+      }
   
+      if(type=="f2") {
         # not BB (D in mapmaker/qtl) genotypes
         ind <- tind; ind[!is.na(data) & data!=4] <- NA
-        points(x,ind,pch=16,col=color[4],cex=cex)
-        points(x,ind,pch=1,cex=cex)
+        points(x,ind,pch=21,col="black", bg=color[4],cex=cex)
   
         # not AA (C in mapmaker/qtl) genotypes
         ind <- tind; ind[!is.na(data) & data!=5] <- NA
-        points(x,ind,pch=16,col=color[5],cex=cex)
-        points(x,ind,pch=1,cex=cex)
+        points(x,ind,pch=21,col="black", bg=color[5],cex=cex)
       }
   
       # plot map
@@ -969,31 +963,28 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       tind <- rep(1:n.ind,length(map));tind[is.na(data)] <- NA
       ind <- tind; ind[!is.na(data) & data!=1] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(ind,y,pch=16,col="white",cex=cex)
-      points(ind,y,pch=1,cex=cex)
+      points(x,ind,pch=21,col="black", bg="white",cex=cex)
   
       # AB genotypes
       ind <- tind; ind[!is.na(data) & data!=2] <- NA
-      if(type=="f2") {
-        points(ind,y,pch=16,col=color[2],cex=cex)
-        points(ind,y,pch=1,cex=cex)
-      }
-      else points(ind,y,pch=16,col=color[3],cex=cex)
+      if(type=="f2" || (type=="bc" && chrtype=="X"))
+        points(x,ind,pch=21,col="black", bg=color[2],cex=cex)
+      else points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
   
-      if(type=="f2") {
+      if(type=="f2" || (type=="bc" && chrtype=="X")) {
         # BB genotypes
         ind <- tind; ind[!is.na(data) & data!=3] <- NA
-        points(ind,y,pch=16,col=color[3],cex=cex)
+        points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
+      }
   
+      if(type=="f2") {
         # not BB genotypes
         ind <- tind; ind[!is.na(data) & data!=4] <- NA
-        points(ind,y,pch=16,col=color[4],cex=cex)
-        points(ind,y,pch=1,cex=cex)
+        points(x,ind,pch=21,col="black", bg=color[4],cex=cex)
   
         # not AA genotypes
         ind <- tind; ind[!is.na(data) & data!=5] <- NA
-        points(ind,y,pch=16,col=color[5],cex=cex)
-        points(ind,y,pch=1,cex=cex)
+        points(x,ind,pch=21,col="black", bg=color[5],cex=cex)
       }
   
       # plot map
