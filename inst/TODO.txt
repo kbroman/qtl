@@ -15,9 +15,6 @@ o plot.geno re X chr: in an intercross, show the three possible
 
 o orderMarkers: verbose=TRUE should give considerably more information
 
-o subset.cross() seems to sort individuals by their ID, which isn't
-  what we'd really want
-
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 
