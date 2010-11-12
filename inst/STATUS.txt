@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/11/2010:
+Version 1.19, 11/12/2010:
 
 Major changes:
 
@@ -40,6 +40,9 @@ Minor changes:
   Added a function cleanGeno for removing genotypes that are possibly
   in error (as indicated by apparent tight double-crossovers).  Use
   this function with caution.
+
+  Added a function typingGap, which calculates, for each individual
+  and each chromosome, the maximum distance between typed markers.
 
   Revised MQMscan so that the output contains covariate information,
   to be plotted with add.cim.covar().

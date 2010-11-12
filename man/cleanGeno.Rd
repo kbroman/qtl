@@ -50,7 +50,7 @@ cleanGeno(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 \examples{
 data(hyper)
 sum(ntyped(hyper))
-hyperc <- cleanGeno(hyper, chr=4)
+hyperc <- cleanGeno(hyper, chr=4, maxdist=c(2.5, 10), maxmark=c(2, 1))
 sum(ntyped(hyperc))
 }
 
