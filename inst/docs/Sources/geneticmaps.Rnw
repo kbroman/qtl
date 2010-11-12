@@ -1,0 +1,2145 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Karl W. Broman
+% The new multiple-qtl mapping functions
+%
+% This is an "Sweave" document; see the corresponding PDF.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{color}
+
+% revise margins
+\setlength{\headheight}{0.0in}
+\setlength{\topmargin}{-0.25in}
+\setlength{\headsep}{0.0in}
+\setlength{\textheight}{9.00in}
+\setlength{\footskip}{0.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\newcommand{\code}{\texttt}
+\newcommand{\lod}{\text{LOD}}
+
+% make "Figure" within figure captions a small font
+\renewcommand{\figurename}{\small Figure}
+
+\begin{document}
+
+\SweaveOpts{prefix.string=Figs/fig}
+\setkeys{Gin}{width=\textwidth} %% <- change width of figures
+% Try to get the R code from running into the margin
+<<echo=FALSE>>=
+options(width=87, digits=3, scipen=4)
+set.seed(61777369)
+@ 
+
+
+% function (to be used later) to round numbers in a nicer way.
+<<myround,echo=FALSE,results=hide>>=
+source("myround.R")
+@
+
+% Change S input/output font size
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{fontsize=\footnotesize, baselinestretch=0.75, formatcom = {\color[rgb]{0, 0, 0.56}}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{fontsize=\footnotesize, baselinestretch=0.75, formatcom = {\color[rgb]{0.56, 0, 0}}}
+
+
+
+
+\begin{center}
+
+\vspace*{1in}
+
+\textbf{\Large Genetic map construction with R/qtl}
+ 
+\bigskip \bigskip 
+
+
+
+\bigskip \bigskip 
+ 
+{\large Karl W. Broman} 
+
+\bigskip \bigskip
+
+{\color{blue} \tt \bfseries University of Wisconsin-Madison \\
+Department of Biostatistics \& Medical Informatics \\
+Technical Report \# 214 \\[24pt]
+4 November 2010}
+
+\end{center}
+
+\bigskip \bigskip
+
+\textbf{\sffamily Abstract}: Genetic map construction remains an important
+prerequisite for quantitative trait loci analysis in 
+organisms for which genomic sequence is not available.  Surprisingly
+little has been written about the construction of genetic maps,
+particularly regarding the many practical issues involved.  We provide
+an overview of the process, including a description of the key
+facilities in the R/qtl software.  The process is illustrated through
+simulated data on an F$_2$ intercross derived from two inbred strains.
+
+
+\vfill
+
+\noindent \emph{email}: \verb|kbroman@biostat.wisc.edu|
+
+
+
+\newpage
+
+\textbf{\sffamily Introduction}
+
+Mouse geneticists no longer have to be concerned with genetic map
+construction, as the available genomic sequence provides the physical
+locations and order of genetic markers.  Scientists interested in
+mapping quantitative trait loci (QTL) in other organisms, however,
+often must first spend considerable time identifying polymorphic
+markers and then constructing a genetic map specifying the chromosomal
+locations of the markers.  
+
+Surprisingly little has been written about the construction of genetic
+maps.  Certainly, papers describing seminal genetic maps include some
+description of the methods used, but students desire a general
+overview of the process along with a discussion of key issues that
+arise and how to overcome them.  I attempt to provide such an overview
+here, along with a description of the key facilities in R/qtl
+(Broman et al., \emph{Bioinformatics}
+18:889--890, 2003; see \url{http://www.rqtl.org}) for genetic map construction.  While I
+describe the use of R/qtl for this purpose in considerable detail, I
+hope that my general comments are useful for, and that the R code
+is not an obstacle to, readers interested in the process generally or
+in other software.
+
+R/qtl is principally aimed at the analysis of simple crosses
+(particularly backcrosses and intercrosses) derived from a pair of
+inbred strains.  R/qtl includes the ability to analyze doubled
+haploids or a panel of recombinant inbred lines or even a phase-known
+four-way cross, but here I will focus on the simple case of an
+intercross between two inbred strains.
+
+\bigskip 
+\textbf{\sffamily Experimental design issues}
+\nopagebreak
+
+
+Before proceeding with our discussion of genetic map construction, let
+us first describe some of the design issues that a scientist should
+consider before embarking on such a project.
+
+One must first ask: what sort of cross should be performed?  As I
+have in mind a QTL mapping application, I would suggest using the
+same cross (that is, the same material) for both constructing a
+genetic map and for the subsequent QTL mapping.  It is likely the case
+that one will need a larger cross for the QTL mapping than for
+map construction, and also one probably should use a larger
+set of markers for map construction than for QTL mapping.  Thus the
+ideal strategy may be to produce a large cross, for QTL mapping, but
+genotype only a portion of that cross on the full set of markers.
+Once the genetic map is constructed, one may then identify a smaller
+set of markers, which cover the genome as evenly as possible, to
+genotype on the remainder of the cross.
+
+In spite of the fact that map construction often requires fewer
+individuals than QTL mapping, as a general rule one should use more
+than the minimal number of individuals for map construction.  Issues
+such as genotyping errors and segregation distortion are more easily
+overcome with a larger cross population.  
+
+Similarly, one should aim for a much larger set of genetic markers
+than simple calculations about genome size might indicate to be
+sufficient.  In organisms with a mature complement of genomic
+resources, one may choose an ideal set of markers that evenly cover
+the genome and that are all well behaved and easily genotyped.  In the
+\emph{de novo\/} construction of a genetic map, however, markers will
+be developed at random, and so some regions will be densely covered
+with markers and other regions will be quite thin with markers.
+Variation in recombination rate (as well as in marker density and
+polymorphism) will exacerbate this issue.  Moreover, one often finds
+that some markers are very difficult to genotype, and rather than
+spend considerable time optimizing such markers (such as by
+redesigning primers or changing PCR conditions), it would be most
+expedient if such poorly behaved markers could simply be omitted.  If
+one has at hand more markers than are really necessary, it is less of
+a concern to be dropping 10\% of them.  
+
+In the actual genotyping, one should always include DNA from the
+parental lines and F$_1$ individuals as controls, preferably on each
+plate.  Ideally, include the \emph{actual\/} parents and F$_1$
+individuals; if residual heterozygosity is identified, the genotypes
+of these progenitors will be extremely useful for making sense of the
+data.  Additional blind duplicates are useful to give some sense of
+the overall genotyping error rate.   
+
+\bigskip
+\textbf{\sffamily Load the data}
+\nopagebreak
+
+I will consider, as an illustration, a set of simulated data.  Real
+data might be preferred, but by considering simulated data, I can be
+sure that they feature all of the various issues that I wish to
+illustrate.  Moreover, these features can be made quite striking, so
+that there will be little question here of what to do.  In practice,
+aberrant features in the data will often be less than clear and may
+require additional genotyping, or at least a reconsideration of the
+raw genotyping results, before the appropriate action is clear.  
+
+The data set is called \code{mapthis} and is included in
+R/qtl version 1.19-10 and above.  This is an intercross between two
+inbred lines, with 300 individuals genotyped at 100 markers.  There is
+just one ``phenotype,'' which contains individual identifiers.  The
+100 markers were chosen at random from five chromosomes of length 200,
+150, 100, 75 and 50~cM, respectively.  The chromosomal locations of
+the markers are to be treated as unknown, though the marker names
+do contain this information: marker \code{C2M4} is the fourth marker on
+chromosome~2.   (Note that the chromosomes are all autosomes.  I'm
+not considering the X chromosome in this tutorial.)
+
+To load the data, in R, one first needs to load the R/qtl package,
+using the function \code{library()}.  The data set is then loaded via
+\code{data()}.  
+
+% load the data
+<<loaddata>>=
+library(qtl)
+data(mapthis)
+@ 
+
+In practice, one would use the function \code{read.cross()} to load a
+data set into R.  See the help file (type \code{?read.cross}),
+look at the sample data sets at \url{http://www.rqtl.org/sampledata},
+and consider Chapter~2 of Broman and Sen (2009) \emph{A Guide to
+QTL Mapping with R/qtl} (\url{http://www.rqtl.org/book}).
+
+In assembling the sort of comma-delimited file that R/qtl can read,
+one should assign all markers to the same chromosome (which can be
+named whatever is convenient, ``\code{1}'' or ``\code{un}'' or
+whatever).  There is no need to assign map positions to markers.  
+
+A data file for the \code{mapthis} data is at
+\url{http://www.rqtl.org/tutorials/mapthis.csv}.  It can be read into
+R as follows.  (Note the use of \code{estimate.map=FALSE}.  Markers
+will be assigned dummy locations, with no attempt to estimate
+inter-marker distances.)
+
+% read the data (illustration)
+<<readdata,eval=FALSE>>=
+mapthis <- read.cross("csv", "http://www.rqtl.org/tutorials", "mapthis.csv", 
+                      estimate.map=FALSE)
+@ 
+
+
+\bigskip
+\textbf{\sffamily Omit individuals and markers with lots of missing data}
+\nopagebreak
+
+After importing a new data set, the first thing I look at is a summary
+of the cross.
+
+% summary
+<<summarycross>>=
+summary(mapthis)
+@ 
+I look to make sure that the cross type (in this case, an F$_2$
+intercross) was determined correctly and that the numbers of
+individuals and markers is as expected.  The function
+\code{summary.cross()} also performs a variety of basic checks of the
+integrity of the data, and so I'd pay attention to any warning or
+error messages.
+
+Next, I look at the pattern of missing data, through the function
+\code{plot.missing()}. 
+
+% plot missing data pattern
+<<plotmissing,eval=FALSE>>=
+plot.missing(mapthis)
+@ 
+
+\begin{figure}
+\centering
+<<plotmissingplot,fig=TRUE,echo=FALSE,height=3.5>>=
+par(mar=c(4.1,4.1,0.6,1.1))
+plot.missing(mapthis, main="")
+@ 
+\caption{Pattern of missing genotype data in the \code{mapthis} dataset.  Black
+  pixels indicate missing genotypes.\label{fig:plotmissing}}
+\end{figure}
+
+The result (in Fig.~\ref{fig:plotmissing}) indicates several
+individuals with a great deal of missing data (horizontal lines), as well as several
+markers with a great deal of missing data (vertical lines).
+
+The function \code{ntyped()} provides the numbers of genotyped markers
+for each individual (or the number of genotyped individuals for each
+marker).  Let us plot these.  (And note that there is a related
+function, \code{nmissing()}, which provides the number of missing
+genotypes for each individual or marker.)
+
+% plot of number of genotypes
+<<plotntyped,eval=FALSE>>=
+par(mfrow=c(1,2), las=1)
+plot(ntyped(mapthis), ylab="No. typed markers", main="No. genotypes by individual")
+plot(ntyped(mapthis, "mar"), ylab="No. typed individuals", 
+     main="No. genotypes by marker")
+@ 
+
+\begin{figure}
+\centering
+<<plotntypedplot,fig=TRUE,echo=FALSE,height=3>>=
+par(mfrow=c(1,2), las=1, cex=0.8)
+plot(ntyped(mapthis), ylab="No. typed markers", main="No. genotypes by individual")
+plot(ntyped(mapthis, "mar"), ylab="No. typed individuals", 
+     main="No. genotypes by marker")
+@ 
+\caption{Plot of number of genotyped markers for each individual (left
+  panel) and number of genotyped individuals for each marker (right
+  panel).\label{fig:plotntyped}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:plotntyped}, there are six individuals
+missing almost all genotypes, and there are four markers that are
+missing genotypes at about half of the individuals.  Such appreciable
+missing data often indicates a problem (either bad DNAs or
+difficult-to-call markers) and can lead to difficulties in the genetic
+map construction, and so it is best, at this stage, to omit them,
+though one might consider adding them back in later.  
+
+To omit the individuals with lots of missing genotype data, we may use
+the function \code{subset.cross()}, as follows.
+
+% drop individuals with missing data
+<<dropind>>=
+mapthis <- subset(mapthis, ind=(ntyped(mapthis)>50))
+@ 
+
+To omit the markers with lots of missing data, we first need to
+identify the names of the markers.  We then use \code{drop.markers()}.
+
+% drop markers with missing data
+<<dropmarkers>>=
+nt.bymar <- ntyped(mapthis, "mar")
+todrop <- names(nt.bymar[nt.bymar < 200])
+mapthis <- drop.markers(mapthis, todrop)
+@ 
+
+%We now have 294 individuals and 96 markers:
+%% nind; totmar
+%<<nindtotmar>>=
+%nind(mapthis)
+%totmar(mapthis)
+%@ 
+
+
+\bigskip
+\textbf{\sffamily Identify duplicate individuals}
+\nopagebreak
+
+I find it useful to compare the genotypes between all pairs of
+individuals, in order to reveal pairs with unusually similar
+genotypes, which may indicate sample duplications or monozygotic
+twins.  In either case, we will want to remove one individual from
+each pair.  Such duplicates are not common, but they are also not
+rare.
+
+We use the function \code{comparegeno} to compare the genotypes for
+all pairs of individuals.  The output is a matrix, whose contents are
+the proportions of markers at which the pairs have matching
+genotypes.  
+
+% compare individuals' genotypes
+<<comparegeno, eval=FALSE>>=
+cg <- comparegeno(mapthis)
+hist(cg[lower.tri(cg)], breaks=seq(0, 1, len=101), xlab="No. matching genotypes")
+rug(cg[lower.tri(cg)])
+@ 
+
+\begin{figure}
+\centering
+<<comparegenoplot,fig=TRUE,echo=FALSE,height=3>>=
+cg <- comparegeno(mapthis)
+par(mar=c(4.1,4.1,0.1,0.6),las=1)
+hist(cg[lower.tri(cg)], breaks=seq(0, 1, len=101), xlab="No. matching genotypes",
+     main="")
+rug(cg[lower.tri(cg)])
+@ 
+\caption{Histogram of the proportion of markers for which pairs of
+  individuals have matching genotypes.\label{fig:comparegenoplot}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:comparegenoplot}, a pair of F$_2$ siblings
+typically share genotypes at
+\Sexpr{round(mean(cg[lower.tri(cg)])*100,-1)}\% of the markers.  But
+there are some pairs with well over 90\% matching genotypes.  We may
+identify these pairs as follows.
+
+% identify matching pairs
+<<matchingpairs>>=
+wh <- which(cg > 0.9, arr=TRUE)
+wh <- wh[wh[,1] < wh[,2],]
+wh
+@ 
+
+We may inspect the genotype matches for these pairs with the following.
+
+% matching genotypes
+<<matchinggenotypes>>=
+g <- pull.geno(mapthis)
+table(g[144,], g[292,])
+table(g[214,], g[216,])
+table(g[238,], g[288,])
+@ 
+
+As seen above, in each case, the pairs have matching genotypes at all
+but 2 or 3 markers.  Ideally, one would go back to the records to try
+to assess the source of these problems (e.g., are the pairs from the
+same litters?).  Here, we will simply omit one individual from each
+pair.  But first we will omit the genotypes that mismatch, as these are
+indicated to be errors in one or the other individual (or both).  The
+R code is a bit complicated.
+
+% zero out the mismatches
+<<dropmismatches>>=
+for(i in 1:nrow(wh)) {
+  tozero <- !is.na(g[wh[i,1],]) & !is.na(g[wh[i,2],]) & g[wh[i,1],] != g[wh[i,2],]
+  mapthis$geno[[1]]$data[wh[i,1],tozero] <- NA
+}
+@
+
+Now, we omit one individual from each pair.
+
+% omit individuals
+<<omitdup>>=
+mapthis <- subset(mapthis, ind=-wh[,2])
+@ 
+
+It's also useful to look for duplicate markers (that is, markers with
+identical genotypes).  This is particularly true for the case of very
+large sets of markers; multiple markers with identical genotypes will
+invariably map to the same location, and so one might as well thin out
+the markers so that there are no such duplicates, as the extra markers
+simply slow down all of our analyses.  The function
+\code{findDupMarkers()} may be used to identify markers with matching
+genotypes.  (Note that the function \code{drop.dupmarkers()} is for
+dropping markers with matching \emph{names}, and considers the
+genotypes only in order to establish consensus genotypes across the
+multiple markers with the same name).  Here, though, there are no
+markers with matching genotypes.
+
+% look for duplicate markers
+<<finddupmar>>=
+print(dup <- findDupMarkers(mapthis, exact.only=FALSE))
+@ 
+
+
+\bigskip
+\textbf{\sffamily Look for markers with distorted segregation patterns}
+\nopagebreak
+
+We next study the segregation patterns of the markers.  We expect the
+genotypes to appear with the frequencies 1:2:1.  Moderate departures
+from these frequencies are not unusual and may indicate the presence
+of partially lethal alleles.  Gross departures from these frequencies often
+indicate problematic markers that should be omitted, at least
+initially: monomorphic markers (that is, where the two parental lines
+actually have the same allele), or markers that are especially
+difficult to call (e.g., AA are often called as AB).  We use the
+function \code{geno.table} to inspect the segregation patterns.
+It calculates the genotype frequencies and also a P-value for a test
+of departure from the 1:2:1 expected ratios.  We will focus on those
+markers that show significant distortion at the 5\% level, after a Bonferroni
+correction for the multiple tests.  
+
+% inspect segregation patterns
+<<genotable>>=
+gt <- geno.table(mapthis)
+gt[gt$P.value < 0.05/totmar(mapthis),]
+@ 
+% $
+
+The first of these markers, \code{C4M2}, is not terrible.  The others
+appear to be monomorphic with a few errors (\code{C2M9} and
+\code{C2M15}) or have one genotype that is quite rare, which likely
+indicates difficulties in genotyping.  It would be best to omit the
+worst of these markers. 
+
+% drop bad markers
+<<dropbadmarkers>>=
+todrop <- rownames(gt[gt$P.value < 1e-10,])
+mapthis <- drop.markers(mapthis, todrop)
+@ 
+% $
+
+
+\bigskip
+\textbf{\sffamily Study individuals' genotype frequencies}
+\nopagebreak
+
+Just as we expect the markers to segregate 1:2:1, we expect the
+individuals to have genotype frequencies that are in approximately
+those proportions.  Studying such genotype frequencies may help to
+identify individuals with high genotyping error rates or some other
+labeling or breeding mistake.  
+
+There's no R/qtl function to to pull out the genotype frequencies by
+individual, but we can write a bit of R code to do so.  It is a bit
+nasty, with calls to \code{apply()}, \code{table()}, \code{factor()},
+\code{colSums()} and \code{t()}, but hopefully the reader can figure
+this out after a bit of exploration and introspection.
+
+<<genofreqbyind,eval=FALSE>>=
+g <- pull.geno(mapthis)
+gfreq <- apply(g, 1, function(a) table(factor(a, levels=1:3)))
+gfreq <- t(t(gfreq) / colSums(gfreq))
+par(mfrow=c(1,3), las=1)
+for(i in 1:3)
+  plot(gfreq[i,], ylab="Genotype frequency", main=c("AA", "AB", "BB")[i],
+       ylim=c(0,1))
+@ 
+
+\begin{figure}
+\centering
+<<plotgenofreqbyind,fig=TRUE,echo=FALSE,height=3.5>>=
+g <- pull.geno(mapthis)
+gfreq <- apply(g, 1, function(a) table(factor(a, levels=1:3)))
+gfreq <- t(t(gfreq) / colSums(gfreq))
+par(mfrow=c(1,3), las=1)
+for(i in 1:3)
+  plot(gfreq[i,], ylab="Genotype frequency", main=c("AA", "AB", "BB")[i],
+       ylim=c(0,1))
+@ 
+\caption{Genotype frequencies by individual.\label{fig:plotgenofreqbyind}}
+\end{figure}
+
+The results in Fig.~\ref{fig:plotgenofreqbyind} do not indicate any
+particular problems, though the small number of short chromosomes result
+in considerable variability, including one individual with
+no BB genotypes, and the frequencies of 
+AB genotypes varies from
+\Sexpr{round(min(gfreq[2,])*100)}--\Sexpr{round(max(gfreq[2,])*100)}\%.
+However, if there were an individual with $\sim$ 100\% AA or BB
+genotypes (like one of the parental strains), we would see it here.
+
+A more fancy, and potentially more clear view of these genotype
+frequencies is obtained by representing them as points in an
+equilateral triangle (see Fig.~\ref{fig:triangleplot}).  For any point
+within an equilateral triangle, the sum of the distances to the three
+sides is constant, and so one may represent a trinomial distribution as
+a point within the triangle.  I won't show the code, but note that the
+red X in the center of the figure corresponds to the expected genotype
+frequencies (1/4, 1/2, 1/4).  Each black dot corresponds to an
+individual's genotype frequencies.  There's one point along the right
+edge; this corresponds to the individual with no BB genotypes.  Again,
+the small size of the genome results in enormous variation, and so no
+one individual stands out as unreasonable.
+
+\begin{figure}
+\centering
+<<triangleplot,fig=TRUE,echo=FALSE,height=3,results=hide>>=
+source("holmans_triangle.R")
+par(mar=rep(0.1,4), pty="s")
+triplot(labels=c("AA","AB","BB"))
+tripoints(gfreq, cex=0.8)
+tripoints(c(0.25, 0.5, 0.25), col="red", lwd=2, cex=1, pch=4)
+@ 
+\caption{Genotype frequencies by individual, represented on an
+  equilateral triangle.  The red X indicates the expected frequencies
+  of 1:2:1.\label{fig:triangleplot}}
+\end{figure}
+
+
+
+
+
+\bigskip
+\textbf{\sffamily Study pairwise marker linkages; look for switched alleles}
+\nopagebreak
+
+We are now in a position to begin the genetic map construction.  We
+start by assessing the linkage between all pairs of markers.  The
+function \code{est.rf()} is used to 
+estimate the recombination fraction between each pair and to calculate
+a LOD score for a test of rf = 1/2.  But first note that, in the presence
+of appreciable segregation distortion (which is not the case for these
+data), unlinked markers can appear to be linked.  For example,
+consider the following 2$\times$2 table of two-locus genotypes in a backcross.
+
+\begin{center}
+  \begin{tabular}{cccc} \hline
+     & \multicolumn{2}{c}{\textbf{Marker 2}} \\ \cline{2-3}
+    \textbf{Marker 1} & AA & AB & overall\\ \hline
+    AA    &  243 & 27 & 270 \\
+    AB    &   27 &  3 &  30 \\ \hline
+  overall &  270 & 30 & 300 \\ \hline
+  \end{tabular} \end{center}
+
+In this case, the two markers are segregating independently but show
+severe segregation distortion. (They segregate 9:1 rather than  1:1.)
+The usual estimate of the recombination fraction is (27+27)/300 =
+0.18, and the LOD score for the test of rf = 1/2 is $\sim$28.9.  
+
+If segregation distortion is rampant in a dataset (and such things do
+happen), the usual tests of pairwise linkage will give distorted
+results, and so it is best to instead use a simple chi-square or
+likelihood ratio test, to assess the association between markers.  The
+function \code{markerlrt()} behaves just like \code{est.rf()}, but
+uses a general likelihood ratio test in place of the usual test of
+pairwise linkage.  
+
+Now back to the data, which are not so badly behaved.  
+
+% pairwise linkages
+<<pairwiselinkage>>=
+mapthis <- est.rf(mapthis)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+Warning message:
+In est.rf(mapthis) : Alleles potentially switched at markers 
+  C3M16 C2M16 C1M2 C3M9 C2M14 C1M24 C1M1 C2M12 C1M36 C3M1 C2M25 C1M22 C5M5 C5M7 C1M17 C5M1
+  C3M5 C1M15 C2M24 C2M17 C1M23 C5M6 C1M16 C3M2 C3M10 C3M6 C2M13
+\end{Soutput}
+\end{Schunk}
+
+Note the warning message, which indicates that there are numerous
+markers with likely switched alleles (A $\leftrightarrow$ B).  This is
+indicated through pairs of markers that are strongly indicated to be
+associated but have estimated recombination fractions $\gg$ 1/2.
+The \code{checkAlleles()} function gives more detailed information on
+this issue.
+
+% checkAlleles
+<<checkAlleles>>=
+checkAlleles(mapthis, threshold=5)
+@ 
+
+The final column in the output for a marker, \code{diff.in.max.LOD}, is the
+difference between the maximum LOD score for the cases where the
+estimated recombination fraction is $>$ 1/2 and the maximum LOD score
+for the cases where the estimated recombination fraction is $<$ 1/2.
+There are a large number of markers that are tightly associated with other
+markers, but with recombination fractions well above 1/2, which
+indicates that some markers likely have their alleles switched.
+
+A plot of the LOD scores against the estimated recombination fractions
+for all marker pairs will give another good view of this problem.  We
+use the function \code{pull.rf()} to pull out the recombination
+fractions and LOD scores as matrices.
+
+<<lodvrf,eval=FALSE>>=
+rf <- pull.rf(mapthis)
+lod <- pull.rf(mapthis, what="lod")
+plot(as.numeric(rf), as.numeric(lod), xlab="Recombination fraction", ylab="LOD score")
+@ 
+
+\begin{figure}
+\centering
+<<lodvrfplot,fig=TRUE,echo=FALSE,height=3>>=
+rf <- pull.rf(mapthis)
+lod <- pull.rf(mapthis, what="lod")
+par(mar=c(4.1,4.1,0.6,0.6), las=1, cex=0.8)
+plot(as.numeric(rf), as.numeric(lod), xlab="Recombination fraction", ylab="LOD score")
+@ 
+\caption{Plot of LOD scores versus estimated recombination fractions
+  for all marker pairs.\label{fig:lodvrf}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:lodvrf}, there are many marker pairs with
+large LOD scores but estimated recombination fractions $\gg$ 1/2. 
+
+One solution to this problem is to form initial linkage groups,
+ensuring that markers with rf $>$ 1/2 are placed in different groups.
+If all goes well, each chromosome will come out as a pair of linkage
+groups: one containing markers with correct alleles and another
+containing markers with switched alleles.  
+
+We use the function \code{formLinkageGroups()} to infer linkage
+groups.  It uses the pairwise linkage results from \code{est.rf()}
+(or, pairwise association information from \code{markerlrt()}).
+The function has two main arguments: \code{max.rf} and
+\code{min.lod}.  Two markers will be placed in the same linkage groups
+if they have estimated recombination fraction $\le$ \code{max.rf} and
+LOD score $\ge$ \code{min.lod}.  The linkage groups are closed via the
+transitive property.  That is, if markers a and b are linked and
+markers b and c are linked, then all three are placed in the same
+linkage group.  I generally start with \code{min.lod} relatively large
+(say 6 or 8 or even 10).  The appropriate value depends on the number
+of markers and chromosomes (and individuals).  The aim is to get as
+many truly linked markers together, but avoid completely putting
+unlinked markers in the same linkage group.  It is usually easier to
+combine linkage groups after the fact rather than to have to split
+linkage groups apart.
+
+<<forminitialgroups>>=
+lg <- formLinkageGroups(mapthis, max.rf=0.35, min.lod=6)
+table(lg[,2])
+@ 
+
+The output of \code{formLinkageGroups()} is a matrix with two columns:
+the initial linkage group or chromosome for each marker, and then the
+assigned linkage group, as inferred from the pairwise linkage
+information.  The inferred linkage groups are numbered in decreasing
+order of size (so that linkage group 1 has the largest number of
+markers).  Here we see that \Sexpr{length(table(lg[,2]))} linkage
+groups were inferred, with the last \Sexpr{sum(table(lg[,2])==1)}
+groups having just one marker.  One may play with \code{max.rf} and
+\code{min.lod} until the result is about as expected.  Here, I was
+hoping for about 10 linkage groups (since there are five chromosomes but
+each will likely be split in two due to the allele switching problem),
+and so the results seem okay.
+
+Since we are happy with the results, we can reorganize the markers
+into these inferred linkage groups.  We do so with the same function,
+\code{formLinkageGroups()}, via the argument \code{reorgMarkers}.
+
+<<reorganizemarkers>>=
+mapthis <- formLinkageGroups(mapthis, max.rf=0.35, min.lod=6, reorgMarkers=TRUE)
+@ 
+
+A plot of the pairwise recombination fractions and LOD scores may
+indicate how well this worked.
+
+<<plotrf,eval=FALSE>>=
+plot.rf(mapthis, alternate.chrid=TRUE)
+@ 
+
+\begin{figure}
+\centering
+<<plotrfplot,fig=TRUE,echo=FALSE,height=5.5>>=
+par(mar=c(4.1,4.1,2.1,2.1), las=1)
+plot.rf(mapthis, main="", alternate.chrid=TRUE)
+@ 
+\caption{Plot of estimated recombination fractions (upper-left
+  triangle) and LOD scores (lower-right triangle) for all pairs of
+  markers.  Red indicates linked (large LOD score or small
+  recombination fraction) and blue indicates not linked (small LOD
+  score or large recombination fraction).\label{fig:plotrf}}
+\end{figure}
+
+The result, in Fig.~\ref{fig:plotrf}, looks about as expected.  The
+markers within linkage group 1 are linked to each other.  The pattern
+within the group is a bit random, but that is because we have not yet
+ordered the markers in any way.  
+
+Note that linkage groups 4 and 5 are
+associated with each other, in that they have large LOD scores (the
+lower-right rectangle for groups 4 and 5 is largely red), but
+their recombination fractions are not small (the upper-left rectangle
+for groups 4 and 5 is strongly blue).  I would infer from this that
+these markers belong to the same chromosome, but the alleles in one or
+the other group are switched.  We can't know which is correct, and
+ideally one would have parental genotype data to help fix these
+problems, but it is not unreasonable, for now, to assume that the
+larger group of markers corresponds to the ones with the correct
+alleles.  
+
+Similarly, groups 6 and 7 belong together, group 8 belongs to
+group 2, and groups 9--11 belong to group 1.
+
+We can look at this more clearly by picking out a marker from one
+group and studying the recombination fractions and LOD scores for that
+marker against all others.  Let us pick the third marker in linkage
+group 4.  We create the objects \code{rf} and \code{lod} again, using
+\code{pull.rf()}.  These objects have class \code{"rfmatrix"}, and so \code{plot}
+below actually goes to the function \code{plot.rfmatrix()}, which
+plots the values for a single marker in a display similar to a set of
+LOD curves.
+
+<<plotrfonemarker,eval=FALSE>>=
+rf <- pull.rf(mapthis)
+lod <- pull.rf(mapthis, what="lod")
+mn4 <- markernames(mapthis, chr=4)
+par(mfrow=c(2,1))
+plot(rf, mn4[3], bandcol="gray70", ylim=c(0,1), alternate.chrid=TRUE)
+abline(h=0.5, lty=2)
+plot(lod, mn4[3], bandcol="gray70", alternate.chrid=TRUE)
+@ 
+
+\begin{figure}
+\centering
+<<plotrfonemarkerplot,fig=TRUE,echo=FALSE,height=4>>=
+par(mar=c(4.1,4.1,1.1,0.6), las=1)
+<<plotrfonemarker>>
+@ 
+\caption{Plot of estimated recombination fractions (top panel) and
+  LOD scores (bottom panel) for the marker \code{\Sexpr{mn4[3]}} against all
+  other markers.\label{fig:plotrfonemarker}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:plotrfonemarker}, the marker
+\code{\Sexpr{mn4[3]}} is strongly associated with markers in both
+linkage groups 4 and 5, but the estimated recombination fractions
+between \code{\Sexpr{mn4[3]}} and the markers on linkage group 4 are
+all $<$ 1/2, while the estimated recombination fractions 
+between \code{\Sexpr{mn4[3]}} and the markers on linkage group 5 are
+all $>$ 1/2.  We can see the problem even more clearly by inspecting
+a few tables of two-locus genotypes, produced by
+\code{geno.crosstab()}.  
+
+<<genocrosstab>>=
+geno.crosstab(mapthis, mn4[3], mn4[1])
+mn5 <- markernames(mapthis, chr=5)
+geno.crosstab(mapthis, mn4[3], mn5[1])
+@   
+
+It is clear that, if the genotypes for \code{\Sexpr{mn4[3]}} are
+correct, then the A and B alleles for \code{\Sexpr{mn5[1]}} are
+switched.  
+
+In practice, I will look at enormous numbers of these sorts of
+two-locus genotype tables in order to figure out what is going on.
+But these data are (by design) quite clean, and so we will simply
+trust that the alleles need to be switched for all of the markers on
+linkage groups 5 and 7--11.  The function \code{switchAlleles()} is
+convenient for performing the allele switching.
+
+<<switchalleles>>=
+toswitch <- markernames(mapthis, chr=c(5, 7:11))
+mapthis <- switchAlleles(mapthis, toswitch)
+@ 
+
+Now when we revisit the plot of recombination fractions and LOD
+scores, we will see a quite different picture.  (Note that we need to
+re-run \code{est.rf()} after having run \code{switchAlleles()}.)
+
+<<plotrfagain,eval=FALSE>>=
+mapthis <- est.rf(mapthis)
+plot.rf(mapthis, alternate.chrid=TRUE)
+@ 
+
+\begin{figure}
+\centering
+<<plotrfagainplot,fig=TRUE,echo=FALSE,height=5.5>>=
+mapthis <- est.rf(mapthis)
+par(mar=c(4.1,4.1,2.1,2.1), las=1)
+plot.rf(mapthis, main="", alternate.chrid=TRUE)
+@ 
+\caption{Plot of estimated recombination fractions (upper-left
+  triangle) and LOD scores (lower-right triangle) for all pairs of
+  markers, after having switched alleles for many markers.  Red
+  indicates linked (large LOD score or small recombination fraction)
+  and blue indicates not linked (small LOD score or large
+  recombination fraction).\label{fig:plotrfagain}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:plotrfagain}, the LOD scores between marker pairs
+are unchanged, but now the recombination fractions are small
+(indicated in red) for marker pairs with evidence of association
+(large LOD scores, also in red).  
+
+It is useful to revisit the plot of LOD scores versus recombination
+fractions for all pairs.  
+
+<<lodvrfagain,eval=FALSE>>=
+rf <- pull.rf(mapthis)
+lod <- pull.rf(mapthis, what="lod")
+plot(as.numeric(rf), as.numeric(lod), xlab="Recombination fraction", ylab="LOD score")
+@ 
+
+\begin{figure}
+\centering
+<<lodvrfagainplot,fig=TRUE,echo=FALSE,height=3>>=
+rf <- pull.rf(mapthis)
+lod <- pull.rf(mapthis, what="lod")
+par(mar=c(4.1,4.1,0.6,0.6), las=1, cex=0.8)
+plot(as.numeric(rf), as.numeric(lod), xlab="Recombination fraction", ylab="LOD score")
+@ 
+\caption{Plot of LOD scores versus estimated recombination fractions
+  for all marker pairs, after alleles at many markers have been
+  switched.\label{fig:lodvrfagain}}
+\end{figure}
+
+Now we see (in Fig.~\ref{fig:lodvrfagain}) no estimated recombination
+fractions that are much above 1/2, and certainly no large
+recombination fractions with large LOD scores.  In fact, the largest
+LOD score for marker pairs with estimated recombination fraction $>$
+1/2 is \Sexpr{round(max(lod[!is.na(rf) & rf>0.5]), 2)}.
+
+
+\bigskip
+\textbf{\sffamily Form linkage groups}
+\nopagebreak
+
+We now should have the genotype data in good shape and can finally
+proceed to the actual map construction.  First, we again attempt to
+infer the linkage groups, with the hope that we'll come away with
+exactly five.
+
+<<formgroupsagain>>=
+lg <- formLinkageGroups(mapthis, max.rf=0.35, min.lod=6)
+table(lg[,2])
+@ 
+
+Right; we've got five groups.  Now we reorganize the markers again.
+
+<<reorganizemarkersagain>>=
+mapthis <- formLinkageGroups(mapthis, max.rf=0.35, min.lod=6, reorgMarkers=TRUE)
+@ 
+
+It is useful to plot the pairwise recombination fractions and LOD
+scores again.
+
+<<plotrfyetagain,eval=FALSE>>=
+plot.rf(mapthis)
+@ 
+
+\begin{figure}
+\centering
+<<plotrfyetagainplot,fig=TRUE,echo=FALSE,height=5.5>>=
+mapthis <- est.rf(mapthis)
+par(mar=c(4.1,4.1,1.6,1.6), las=1)
+plot.rf(mapthis, main="")
+@ 
+\caption{Plot of estimated recombination fractions (upper-left
+  triangle) and LOD scores (lower-right triangle) for all pairs of
+  markers, after markers have been placed in their final linkage
+  groups.  Red indicates linked (large LOD score or small
+  recombination fraction) and blue indicates not linked (small LOD
+  score or large recombination fraction).\label{fig:plotrfyetagain}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:plotrfyetagain}, we have five clear linkage
+groups, with markers within a group linked to one another, and markers
+in distinct groups showing no evidence of linkage.  The results
+couldn't possibly be cleaner (and they wouldn't be, if these were real
+data). 
+
+\bigskip
+\textbf{\sffamily Order markers on chromosome~5}
+\nopagebreak
+
+We now turn to the problem of ordering markers within each linkage
+group.  (We could go ahead and call them chromosomes at this point.)  
+I always start with the chromosome with the fewest markers, as there
+are fewer possible orders and so the process is quicker.  I like to
+see some progress before I move to the larger chromosomes.  
+
+The function \code{orderMarkers()} may be used to establish an initial
+order.  It picks an arbitrary pair of markers, and then adds an
+additional marker (chosen at random), one at a time, in the best
+supported position.  With the argument \code{use.ripple=TRUE}, the
+function \code{ripple()} is used after the addition of each marker, to
+consider all possible orders in a sliding window of markers, to
+attempt to improve marker order.  The argument \code{window} defines
+the length of the window.  Larger values will explore more possible
+orders but will require considerably more computation time.  The value
+\code{window=7} is usually about the largest one would ever consider;
+use of \code{window=8} will take so long that one would not want to
+sit and wait.  Note that the other arguments to \code{orderMarkers}
+(e.g., \code{error.prob} and \code{map.function}) are passed to
+the function \code{est.map()} for estimation of the genetic map with
+the final order that is chosen.  Also note that \code{ripple()}, in
+this case, chooses among orders in order to minimize the number of
+obligate crossovers.  More on this below.
+
+<<orderchrfive,eval=FALSE>>=
+mapthis <- orderMarkers(mapthis, chr=5)
+@ 
+<<orderchrfiverun,echo=FALSE>>=
+file <- "Rcache/order5.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<orderchrfive>>
+  save(mapthis, file=file)
+}
+@ 
+
+We may use \code{pull.map()} to inspect the result. 
+
+<<chrfivemap>>=
+pull.map(mapthis, chr=5)
+@ 
+
+Since the marker names were chosen to indicate the true marker order,
+we can see that we got the order exactly right.  (Though note that the
+second marker, \code{C5M2} was omitted at some point during the course
+of our analysis.)  Of course, we wouldn't know this, and so we should
+make an attempt to explore alternate orders, in case another order
+might be seen to be an improvement.
+
+We use \code{ripple()} to explore alternate orders.  As mentioned
+above, it considers all possible orders of markers in a sliding window
+of fixed length, with the argument \code{window} defining the width of
+the window.  If \code{window} is equal to the number of markers on the
+chromosome, than all possible orders are considered.  
+
+The quickest approach is to count the number of obligate crossovers
+for each order.  The good orders generally are those that result in
+the smallest numbers of crossovers.  The more refined, but
+considerably slower approach, is to compare the likelihoods of the
+different orders.  (The likelihood for a given marker order is the
+probability of the data assuming that order is correct and plugging in
+estimates of the inter-marker distances.)  We do this with
+\code{method="likelihood"} in \code{ripple()}.  We may also indicate a
+genotyping error probability (through \code{error.prob}).  
+
+While we could start by comparing orders to minimize the number of
+obligate crossovers (with \code{method="countxo"}, the default, in
+\code{ripple()}), this was already done when we called
+\code{orderMarkers()}, and it is not necessary to run it again.
+Nevertheless, the results will indicate how close, in terms of number
+of crossovers, the next-best marker order is to the inferred one.
+
+<<ripplechr5run,echo=FALSE,results=hide>>=
+file <- "Rcache/rip5.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip5 <- ripple(mapthis, chr=5, window=7)
+save(rip5, file=file)
+}
+@ 
+<<ripplechr5,eval=FALSE>>=
+rip5 <- ripple(mapthis, chr=5, window=7)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   13680 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple5>>=
+summary(rip5)
+@ 
+
+As seen above, 13,680 marker orders were considered.  (There are
+$9!/2$ = 181,440 total marker orders.)  On my computer, the code above
+took about 1.5 seconds.  If we'd looked at all possible orders (that
+is, with \code{window=9}), it would take about 14 seconds, but the
+results---I checked---are the same.)  Switching markers 8 and 9
+results in one additional obligate crossover.  If, instead, one switches
+markers 5 and 6, there are two additional obligate crossovers.  
+
+It is good to also study the likelihood of different orders, though we
+will want to greatly reduce the \code{window} argument, so that it can
+be accomplished in a reasonable amount of time.  
+
+<<ripplechr5likrun,echo=FALSE,results=hide>>=
+file <- "Rcache/rip5lik.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip5lik <- ripple(mapthis, chr=5, window=4, method="likelihood", 
+                  error.prob=0.005)
+save(rip5lik, file=file)
+}
+@ 
+<<ripplechr5lik,eval=FALSE>>=
+rip5lik <- ripple(mapthis, chr=5, window=4, method="likelihood", 
+                  error.prob=0.005)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   114 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple5lik>>=
+summary(rip5lik)
+@ 
+
+The result (on my computer) took about two minutes.  We see that
+switching markers 8 and 9 has a LOD score (that is, log$_{10}$
+likelihood, relative to the initial order) of
+\Sexpr{round(rip5lik[2,"LOD"], 1)}, which indicates that it is slightly
+preferred.  However, the estimated chromosome length is slightly
+longer (\Sexpr{round(rip5lik[2,"chrlen"], 1)} versus
+\Sexpr{round(rip5lik[1,"chrlen"], 1)}~cM).
+
+We know, from the marker names, that the initial order was the true
+order, but in practice we would not have such information, and we
+would probably want to switch markers 8 and 9.  Usually we are looking
+to have the estimated chromosome length be as short as possible, but
+if we trust the likelihood calculation, we should go with the
+alternate order.  Of course, the two orders are not really
+distinguishable; we can't really say, on the basis of these data,
+whether the correct order is the first or the second.  
+
+Note that the results here can be sensitive to the assumed genotyping
+error rate.  (I chose \code{error.prob=0.005} above, because the
+data were simulated with this error rate.)  The function
+\code{compareorder()} can be used to compare an initial order to a
+fixed alternative order.  We can use this to quickly inspect how
+sensitive the results are to the assumed error rate.
+
+<<compareorder>>=
+compareorder(mapthis, chr=5, c(1:7,9,8), error.prob=0.01)
+compareorder(mapthis, chr=5, c(1:7,9,8), error.prob=0.001)
+compareorder(mapthis, chr=5, c(1:7,9,8), error.prob=0)
+@ 
+
+These results indicate that with smaller assumed genotyping error rates, the evidence in
+favor of switching markers 8 and 9 increases somewhat.  Note also that
+the map length increases quite a bit.  
+
+If we were looking at these data blindly, I would likely go with
+switching markers 8 and 9, so let's go ahead and do that here.  We use
+\code{switch.order()} to do so.  It takes the same sort of arguments
+as \code{est.map()}, as after the marker order is switched,
+\code{est.map()} is called to revise the estimated map for the chromosome.
+  
+<<switchorder>>=
+mapthis <- switch.order(mapthis, chr=5, c(1:7,9,8), error.prob=0.005)
+pull.map(mapthis, chr=5)
+@   
+
+Note that the map is slightly smaller than what we had seen above,
+after running \code{orderMarkers()}, as we had used the default
+value for \code{error.prob} in that function, and now we are using
+\code{error.prob=0.005}.  Also note that markers \code{C5M10} and
+\code{C5M9} are quite close together and are separated from the next
+marker by \Sexpr{round(diff(pull.map(mapthis, chr=5)[[1]][7:8]),1)}~cM.
+This explains why it is difficult to assess the appropriate order for
+these two markers.  
+
+
+\bigskip
+\textbf{\sffamily Order markers on chromosome~4}
+\nopagebreak
+
+We now turn to chromosome~4.  First, we run \code{orderMarkers()} and print out the estimated map.
+
+<<orderchrfour,eval=FALSE>>=
+mapthis <- orderMarkers(mapthis, chr=4)
+pull.map(mapthis, chr=4)
+@ 
+<<orderchrfourrun,echo=FALSE>>=
+file <- "Rcache/order4.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<orderchrfour>>
+  save(mapthis, file=file)
+}
+pull.map(mapthis, chr=4)
+@ 
+
+
+The marker names tell us the true order, and so we see that the
+inferred order is correct except that markers \code{C4M10} and
+\code{C4M9} are switched.  Let us run \code{ripple()}, to see which
+orders have similar numbers of obligate crossovers.
+
+<<ripplechr4run,echo=FALSE,results=hide>>=
+file <- "Rcache/rip4.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip4 <- ripple(mapthis, chr=4, window=7)
+save(rip4, file=file)
+}
+@ 
+<<ripplechr4,eval=FALSE>>=
+rip4 <- ripple(mapthis, chr=4, window=7)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   18000 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple4>>=
+summary(rip4)
+@ 
+
+The order with markers 9 and 10 switched gives the same number of
+obligate crossovers, and so we can not distinguish between these two
+marker orders.  We turn to the likelihood comparison.
+
+<<ripplechr4likrun,echo=FALSE,results=hide>>=
+file <- "Rcache/rip4lik.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip4lik <- ripple(mapthis, chr=4, window=4, method="likelihood", 
+                  error.prob=0.005)
+save(rip4lik, file=file)
+}
+@ 
+<<ripplechr4lik,eval=FALSE>>=
+rip4lik <- ripple(mapthis, chr=4, window=4, method="likelihood", 
+                  error.prob=0.005)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   132 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple4lik>>=
+summary(rip4lik)
+@ 
+
+There is reasonably good evidence to switch markers 9 and 10 (which is
+nice, as this results in the true marker order).
+
+<<switchmarkers4>>=
+mapthis <- switch.order(mapthis, chr=4, c(1:8,10,9), error.prob=0.005)
+pull.map(mapthis, chr=4)
+@ 
+
+
+
+\bigskip
+\textbf{\sffamily Order markers on chromosome~3}
+\nopagebreak
+
+Turning to chromosome~3, we again run \code{orderMarkers()}.  These
+calculations are starting to take quite a bit of time.  It would all
+be faster if we reduced the argument \code{window} to a smaller value
+(say 4 rather than 7), but then not as many alternate orders will be
+explored and so we may not identify the best order.
+
+<<orderchrthree,eval=FALSE>>=
+mapthis <- orderMarkers(mapthis, chr=3)
+pull.map(mapthis, chr=3)
+@ 
+<<orderchrthreerun,echo=FALSE>>=
+file <- "Rcache/order3.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<orderchrthree>>
+  save(mapthis, file=file)
+}
+pull.map(mapthis, chr=3)
+@ 
+
+Note, from the marker names, that the marker order is the true order.
+The whole chromosome is flipped, but we have no information, from the
+genotype data, to orient the chromosome.  Let us again use
+\code{ripple()} to study alternate orders.
+
+<<ripplechr3run,echo=FALSE,results=hide>>=
+file <- "Rcache/rip3.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip3 <- ripple(mapthis, chr=3, window=7)
+save(rip3, file=file)
+}
+@ 
+<<ripplechr3,eval=FALSE>>=
+rip3 <- ripple(mapthis, chr=3, window=7)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   39600 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple3>>=
+summary(rip3)
+@ 
+
+The next-best order, with markers 2 and 3 switched, results in an
+additional \Sexpr{diff(rip3[1:2,"obligXO"])} obligate crossovers.
+We turn to the likelihood comparison.
+
+<<ripplechr3likrun,echo=FALSE,results=hide>>=
+file <- "Rcache/rip3lik.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip3lik <- ripple(mapthis, chr=3, window=4, method="likelihood", 
+                  error.prob=0.005)
+save(rip3lik, file=file)
+}
+@ 
+<<ripplechr3lik,eval=FALSE>>=
+rip3lik <- ripple(mapthis, chr=3, window=4, method="likelihood", 
+                  error.prob=0.005)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   222 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple3lik>>=
+summary(rip3lik)
+@ 
+
+The next-best order (with markers 2 and 3 switched) is considerably
+worse than our initial order.  
+
+
+\bigskip
+\textbf{\sffamily Order markers on chromosome~2}
+\nopagebreak
+
+We turn to chromosome~2, beginning with \code{orderMarkers()}.  
+
+<<orderchrtwo,eval=FALSE>>=
+mapthis <- orderMarkers(mapthis, chr=2)
+pull.map(mapthis, chr=2)
+@ 
+<<orderchrtworun,echo=FALSE>>=
+file <- "Rcache/order2.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<orderchrtwo>>
+  save(mapthis, file=file)
+}
+pull.map(mapthis, chr=2)
+@ 
+
+Again, as seen from the marker names, the inferred order is the true
+one.  Let us run \code{ripple()} to inspect alternate orders.  
+
+<<ripplechr2run,echo=FALSE,results=hide>>=
+file <- "Rcache/rip2.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip2 <- ripple(mapthis, chr=2, window=7)
+save(rip2, file=file)
+}
+@ 
+<<ripplechr2,eval=FALSE>>=
+rip2 <- ripple(mapthis, chr=2, window=7)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   78480 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple2>>=
+summary(rip2)
+@ 
+
+The next-best order, with markers 3 and 4 switched, has 
+\Sexpr{diff(rip2[1:2,"obligXO"])} additional obligate crossovers. We
+turn to the likelihood comparison.
+
+<<ripplechr2likrun,echo=FALSE,results=hide>>=
+file <- "Rcache/rip2lik.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip2lik <- ripple(mapthis, chr=2, window=4, method="likelihood", 
+                  error.prob=0.005)
+save(rip2lik, file=file)
+}
+@ 
+<<ripplechr2lik,eval=FALSE>>=
+rip2lik <- ripple(mapthis, chr=2, window=4, method="likelihood", 
+                  error.prob=0.005)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   384 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple2lik>>=
+summary(rip2lik)
+@ 
+
+The next-best order, in terms of likelihood, has markers 21 and 22
+switched, and is considerably worse than our initial order.  
+
+
+It is interesting to compare the numbers of obligate crossovers for
+different orders to the LOD scores.  We have LOD scores for a much
+smaller number of orders (\Sexpr{nrow(rip2lik)} versus
+\Sexpr{nrow(rip2) %/% 1000},\Sexpr{nrow(rip2) %% 1000}), since we had used a smaller value for
+\code{window}, but we can pull out the obligate crossover counts
+for those orders that we evaluated in terms of likelihood.  It is a
+bit tricky to line up the orders.
+
+<<comparexo2lik,eval=FALSE>>=
+pat2 <- apply(rip2[,1:24], 1, paste, collapse=":")
+pat2lik <- apply(rip2lik[,1:24], 1, paste, collapse=":")
+rip2 <- rip2[match(pat2lik, pat2),]
+plot(rip2[,"obligXO"], rip2lik[,"LOD"], xlab="obligate crossover count",
+     ylab="LOD score")
+@ 
+
+\begin{figure}
+\centering
+<<comparexo2likplot,fig=TRUE,echo=FALSE,height=3>>=
+par(las=1, mar=c(4.1,4.1,1.1,0.1), cex=0.8)
+<<comparexo2lik>>
+@ 
+\caption{Comparison of the number of obligate crossovers to the LOD
+  score (relative to our inferred order), for chromosome~2 marker orders explored
+  via \code{ripple()}.\label{fig:comparexo2lik}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:comparexo2lik}, there is a clear negative relationship
+between the crossover counts and the likelihoods, though the relationship is
+not perfect, particularly for the orders that are not well supported.
+
+
+
+\bigskip
+\textbf{\sffamily Order markers on chromosome~1}
+\nopagebreak
+
+Finally, we turn to chromosome~1, first running \code{orderMarkers()}.
+
+<<orderchrone,eval=FALSE>>=
+mapthis <- orderMarkers(mapthis, chr=1)
+pull.map(mapthis, chr=1)
+@ 
+<<orderchronerun,echo=FALSE>>=
+file <- "Rcache/order1.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<orderchrone>>
+  save(mapthis, file=file)
+}
+pull.map(mapthis, chr=1)
+@ 
+
+Again, the inferred order is precisely the true order.  I was quite
+surprised to see how well \code{orderMarkers()} performed with these
+data.  Of course, the data are quite clean (by design) and comprise quite a
+large number of individuals.  In practice, one can't expect
+\code{orderMarkers()} to perform so well, 
+and it is worthwhile to study the estimated map and the
+pairwise linkage information closely.  We will do so in a moment, but
+first let's complete our analysis of chromosome~1 by studying the results of
+\code{ripple}. 
+
+<<ripplechr1run,echo=FALSE,results=hide>>=
+file <- "Rcache/rip1.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip1 <- ripple(mapthis, chr=1, window=7)
+save(rip1, file=file)
+}
+@ 
+<<ripplechr1,eval=FALSE>>=
+rip1 <- ripple(mapthis, chr=1, window=7)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   117360 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple1>>=
+summary(rip1)
+@ 
+
+Two alternate orders (switching markers 28 and 29, or switching
+markers 31 and 32) have 2 additional obligate crossovers, compared
+to our initial order.  We turn to the likelihood comparison.
+
+<<ripplechr1likrun,echo=FALSE,results=hide>>=
+file <- "Rcache/rip1lik.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+rip1lik <- ripple(mapthis, chr=1, window=4, method="likelihood", 
+                  error.prob=0.005)
+save(rip1lik, file=file)
+}
+@ 
+<<ripplechr1lik,eval=FALSE>>=
+rip1lik <- ripple(mapthis, chr=1, window=4, method="likelihood", 
+                  error.prob=0.005)
+@ 
+\begin{Schunk}
+\begin{Soutput}
+   546 total orders
+\end{Soutput}
+\end{Schunk}
+<<summaryripple1lik>>=
+summary(rip1lik)
+@ 
+
+The next best order (switching markers 28 and 29) results in a
+moderately large decrease in likelihood, and so we stick with the
+initial order produced by \code{orderMarkers()}.  
+
+Let us return to the question of how to assess the quality of the
+results of \code{orderMarkers()}, aside from our investigations with
+\code{ripple()}.  The \code{ripple()} analysis is excellent for
+comparing nearby marker orders.  And for chromosomes with a modest
+number of markers (like chromosome~5, here), one can consider all
+possible orders exhaustively.  But with many markers (as with
+chromosome~1), we can investigate only a small proportion of the possible
+orders.  For example, with 33 markers (as on chromosome~1), there are
+$33!/2 \approx 10^{36}$ possible marker orders, and we investigated
+only 117,360 of them using \code{ripple} with \code{window=7}.  
+
+There are several things to look it, in assessing whether gross
+changes in marker order are necessary.  (Ideally, R/qtl would include
+a function providing a more complete investigation of marker order,
+perhaps via simulated annealing or another randomized optimization
+algorithm, and we do hope to implement such a feature in the future.)
+First, we should look at the actual map: are there large gaps between
+markers, indicating adjacent markers that are only weakly linked?
+Studying the map locations with \code{pull.map()}, as above, is hard
+when there are lots of markers.  The function \code{summary.map()}
+provides a summary of the average inter-marker distance and the
+largest gap on each chromosome.
+
+<<summarymap>>=
+summary.map(mapthis)
+@ 
+<<savesummarymap,echo=FALSE,results=hide>>=
+firstsummary <- summary.map(mapthis)
+@ 
+
+We see that chromosome~1 has a
+\Sexpr{round(summary.map(mapthis)[1,"max.spacing"],1)}~cM gap; the
+other chromosomes have gaps no larger than 25~cM.  The large gap on
+chromosome~1 is suspicious, but it is not terrible.
+
+In addition to this summary, it is good to also plot the map.
+We use the argument \code{show.marker.names=TRUE} so that marker names
+are included.  Most of them are unreadable, because the markers are
+densely spaced, but at least we learn the identity of markers that are
+surrounded by large gaps.
+
+<<plotmap,eval=FALSE>>=
+plot.map(mapthis, show.marker.names=TRUE)
+@ 
+
+\begin{figure}
+\centering
+<<plotmapplot,fig=TRUE,echo=FALSE,height=3>>=
+par(las=1, mar=c(4.1,4.1,1.1,0.1), cex=0.8)
+plot.map(mapthis, main="", show.marker.names=TRUE)
+@ 
+\caption{Plot of the estimated genetic map, after the markers on each
+  chromosome have been ordered.\label{fig:plotmap}}
+\end{figure}
+
+As seen in Fig.~\ref{fig:plotmap}, there are some large gaps on
+chromosome~1 and some smaller gaps on the other chromosomes.  They
+deserve further investigation (and we will do so in the next section),
+but they aren't particularly troubling.  With gross mistakes in marker
+order, one will often see much larger gaps, say $>$ 100~cM.
+
+Finally, we inspect the pairwise linkage information again.
+
+<<plotrfonemoretime,eval=FALSE>>=
+plot.rf(mapthis)
+@ 
+
+\begin{figure}
+\centering
+<<plotrfonemoretimeplot,fig=TRUE,echo=FALSE,height=5.5>>=
+par(mar=c(4.1,4.1,1.6,1.6), las=1)
+plot.rf(mapthis, main="")
+@ 
+\caption{Plot of estimated recombination fractions (upper-left
+  triangle) and LOD scores (lower-right triangle) for all pairs of
+  markers, after ordering the markers on each chromosome.
+  Red indicates linked (large LOD score or small
+  recombination fraction) and blue indicates not linked (small LOD
+  score or large recombination fraction).\label{fig:plotrfonemoretime}}
+\end{figure}
+
+
+The pairwise linkage information in Fig.~\ref{fig:plotrfonemoretime}
+is close to what we want to see: nearby markers show clear association
+and no distant markers show any association: red along the diagonal,
+dissipating to blue away from the diagonal.
+
+If there were gross problems with marker order, we might see groups of
+distantly placed markers that are more highly associated than more closely
+placed markers.  Just as an example, suppose we split chromosome~1
+into three pieces and moved the latter piece into the middle.  Let's
+look at the pairwise linkage information following such a
+re-ordering.  
+
+<<plotrfafterreorder,eval=FALSE>>=
+messedup <- switch.order(mapthis, chr=1, c(1:11,23:33,12:22), 
+                         error.prob=0.005)
+plot.rf(messedup, chr=1)
+@ 
+
+\begin{figure}
+\centering
+<<plotrfafterreorderplot,fig=TRUE,echo=FALSE,height=3>>=
+par(mar=c(4.1,4.1,1.6,1.6), las=1, pty="s", cex=0.8)
+messedup <- switch.order(mapthis, chr=1, c(1:11,23:33,12:22), 
+                         error.prob=0.005)
+plot.rf(messedup, chr=1, main="")
+@ 
+\caption{Plot of estimated recombination fractions (upper-left
+  triangle) and LOD scores (lower-right triangle) for all pairs of
+  markers on chromosome~1, after messing up the order of the markers.
+  Red indicates linked (large LOD score or small
+  recombination fraction) and blue indicates not linked (small LOD
+  score or large recombination fraction).\label{fig:plotrfafterreorder}}
+\end{figure}
+
+Fig.~\ref{fig:plotrfafterreorder} (on
+page~\pageref{fig:plotrfafterreorder}) displays the sort of pattern one should
+expect with gross problems in marker order: the markers in the first and last
+segments are more tightly associated to each other than they are to
+the markers in the middle segment.  
+
+A plot of the genetic map (see Fig.~\ref{fig:plotmapmessedup}, page~\pageref{fig:plotmapmessedup}) shows a
+50~cM gap between the first and middle segments and an 80~cM gap
+between the middle and last segments. 
+
+<<plotmapmessedup,eval=FALSE>>=
+plot.map(messedup, show.marker.names=TRUE)
+@ 
+
+\begin{figure}
+\centering
+<<plotmapmessedupplot,fig=TRUE,echo=FALSE,height=3>>=
+par(las=1, mar=c(4.1,4.1,1.1,0.1), cex=0.8)
+plot.map(messedup, main="", show.marker.names=TRUE)
+@ 
+\caption{Plot of the estimated genetic map, after messing up the order
+  of markers on chromosome~1.\label{fig:plotmapmessedup}}
+\end{figure}
+
+The map is not as telling as the pairwise linkage information, but
+these are the sorts of things to look at, in trying to decide whether
+there are gross problems that need to be corrected.
+
+If features such as those in Fig.~\ref{fig:plotrfafterreorder} and
+\ref{fig:plotmapmessedup} were seen, one should identify the segments
+of markers that need to be moved around, and then use
+\code{switch.order()} to reorganize the markers.  One might first use
+\code{compareorder()} to compare the current order to the reorganized
+one, to see that the new order gave a clear improvement in likelihood.
+In addition, one will often need to alternate between \code{ripple()}
+and \code{switch.order()} until the final marker order is established.
+
+
+\bigskip
+\textbf{\sffamily Drop one marker at a time}
+\nopagebreak
+
+The large gaps in the genetic map on chromosome~1 remain a concern.
+While such gaps may indicate problems with the order of markers, they
+might also indicate a high genotyping error rate at certain markers.
+If an individual marker is more prone to genotyping errors than
+others, it would often (in the sort of analyses performed above) be
+placed at one end of the chromosome or the other, but in some cases
+(particularly if the genotyping error rate is not high and there are a
+large number of individuals in the cross) it may be placed at
+approximately the correct position but result in reasonably large gaps
+surrounding the marker.
+
+One approach for identifying such problematic markers is to drop one
+marker at a time and investigate the change in chromosome length and
+the change in log likelihood.  This analysis may be accomplished with
+the function \code{droponemarker()}.  
+
+<<droponemarker,eval=FALSE>>=
+dropone <- droponemarker(mapthis, error.prob=0.005)
+@ 
+<<droponemarkerrun,echo=FALSE,results=hide>>=
+file <- "Rcache/dropone.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+  dropone <- droponemarker(mapthis, error.prob=0.005)
+  save(dropone, file=file)
+}
+@ 
+
+The results are of the same form as a genome scan by QTL mapping.  (In
+particular, they have class \code{"scanone"}, like an object produced
+by the \code{scanone()} function.)  We may plot the results as follows.
+
+<<plotdropone,eval=FALSE>>=
+par(mfrow=c(2,1))
+plot(dropone, lod=1, ylim=c(-100,0))
+plot(dropone, lod=2, ylab="Change in chromosome length")
+@ 
+
+\begin{figure}
+\centering
+<<plotdroponeplot,fig=TRUE,echo=FALSE,height=4>>=
+par(mar=c(4.1,4.1,1.6,0.1), mfrow=c(2,1), cex=0.8)
+plot(dropone, lod=1, ylim=c(-100,0))
+plot(dropone, lod=2, ylab="Change in chr length (cM)")
+@ 
+\caption{Results of dropping one marker at a time.  The top panel
+  contains LOD scores; positive values would indicate that dropping a
+  marker improves the likelihood.  The bottom panel indicates the
+  decrease in estimated chromosome length (in cM) following dropping
+  a marker.\label{fig:plotdropone}}
+\end{figure}
+
+As seen in top panel of Fig.~\ref{fig:plotdropone}, there is no one
+marker for which its omission results in an increase in likelihood,
+but as seen in the bottom panel, there are a number of markers that
+give an appreciable decrease in chromosome length, of 15--25 cM, when
+omitted.  Markers at the ends of chromosomes will often result in a
+smaller estimated chromosome length, but that is just because such
+terminal markers hang off some distance from the rest of the
+markers, and so these changes can often be discounted.  Interior markers
+that result in a big change, and there appears to be one on each of
+chromosomes 1, 2 and 3, might indicate error-prone markers that are
+best omitted.  
+
+One may identify the marker on each chromosome whose omission results
+in the largest decreases in chromosome length as follows.
+
+<<worstmarkers>>=
+summary(dropone, lod.column=2)
+@ 
+
+For chromosomes 4 and 5, these are terminal markers.  The markers on
+chromosomes 1, 2 and 3 are all interior markers.  One should probably
+study the pairwise linkage between these markers and
+surrounding markers before proceeding, but we will go ahead and remove
+these markers without any further investigations.
+
+<<dropbadmarkers>>=
+badmar <- rownames(summary(dropone, lod.column=2))[1:3]
+mapthis <- drop.markers(mapthis, badmar)
+@ 
+
+One should re-estimate the genetic map.  We use \code{replace.map()}
+to insert it into the cross object.
+
+<<reestimatemap>>=
+newmap <- est.map(mapthis, error.prob=0.005)
+mapthis <- replace.map(mapthis, newmap)
+summary.map(mapthis)
+@ 
+<<savenewsummary,echo=FALSE,results=hide>>=
+secondsummary <- summary.map(mapthis)
+@ 
+
+Removing those three markers resulted in a decrease in the overall map
+length from \Sexpr{round(firstsummary["overall","length"])}~cM to 
+\Sexpr{round(secondsummary["overall","length"])}~cM.
+
+
+\bigskip
+\textbf{\sffamily Look for problem individuals}
+\nopagebreak
+
+Now that we have the markers in their appropriate order, it is a good
+idea to return to the question of whether there are particular
+individuals whose data are problematic.  One should ask: if a
+particular individual showed considerable genotyping errors or did not
+actually belong to the cross under investigation (e.g., through some
+sort of labeling or breeding error), what sort of aberrations might be
+seen in the data?  Above, we studied the amount of missing genotype
+data for each individual as well as the individuals' genotype
+frequencies.  Another feature to investigate is the observed number of
+crossovers in each individual.  These may be counted with the function
+\code{countXO()}.  (A related function \code{locateXO()} will return
+the estimated locations of all crossovers.)
+
+<<countxo,eval=FALSE>>=
+plot(countXO(mapthis), ylab="Number of crossovers")
+@ 
+
+\begin{figure}
+\centering
+<<countxoplot,fig=TRUE,echo=FALSE,height=3>>=
+par(mar=c(4.1,4.1,0.6,0.6), cex=0.8)
+<<countxo>>
+thecounts <- countXO(mapthis)
+worst <- rev(sort(thecounts, decreasing=TRUE)[1:2])
+@ 
+\caption{Numbers of observed crossovers in each individual.\label{fig:countxo}}
+\end{figure}
+
+The crossover counts in Fig.~\ref{fig:countxo} clearly indicate two
+problematic individuals, with \Sexpr{worst[1]} and \Sexpr{worst[2]}
+crossovers; the other individuals have
+\Sexpr{min(thecounts)}--\Sexpr{max(thecounts[thecounts < worst[1]])}
+crossovers.  We should remove these individuals.
+
+<<drophighxoind>>=
+mapthis <- subset(mapthis, ind=(countXO(mapthis) < 50))
+@ 
+
+Ideally, we would now revisit the entire process again; in particular,
+after removing these problematic individuals, is there evidence that
+marker order needs to be changed?  Let us at least look at chromosome 5.
+
+<<rip5again>>=
+summary(rip <- ripple(mapthis, chr=5, window=7))
+summary(rip <- ripple(mapthis, chr=5, window=2, method="likelihood", 
+                      error.prob=0.005))
+@ 
+
+There is good evidence for switching markers 8 and 9, which actually
+brings us back to the true order of the markers.
+
+<<switchchr5again>>=
+mapthis <- switch.order(mapthis, chr=5, c(1:7,9,8), error.prob=0.005)
+pull.map(mapthis, chr=5)
+@ 
+
+I investigated the other four chromosomes similarly, and there was no
+evidence for further changes in marker order, so I won't present the
+results here.  We should, finally, re-estimate the genetic map.
+
+<<reestmapagain>>=
+newmap <- est.map(mapthis, error.prob=0.005)
+mapthis <- replace.map(mapthis, newmap)
+summary.map(mapthis)
+@ 
+<<savethirdsummary,echo=FALSE,results=hide>>=
+thirdsummary <- summary.map(mapthis)
+@ 
+
+The overall map length has decreased further, from 
+\Sexpr{round(secondsummary["overall","length"])}~cM to
+\Sexpr{round(thirdsummary["overall","length"])}~cM.
+
+
+
+\bigskip
+\textbf{\sffamily Estimate genotyping error rate}
+\nopagebreak
+
+Above, I had generally assumed a genotyping error rate of 5/1000 (in
+estimating map distances and in likelihood calculations comparing
+different marker orders); but I cheated somewhat in using this value,
+as the genotype data were simulated with this error rate.
+
+One can actually estimate the genotyping error rate from the data, as
+the function \code{est.map()} not only estimates the inter-marker
+distances, but also calculates the log likelihood for each
+chromosome.  Thus, if we run \code{est.map()} with different assumed
+values for the genotyping error rate (specified with the
+\code{error.prob} argument), one can identify the maximum likelihood
+estimate of the error rate.
+
+<<studyerrorrate,eval=FALSE>>=
+loglik <- err <- c(0.001, 0.0025, 0.005, 0.0075, 0.01, 0.0125, 0.015, 0.0175, 0.02)
+for(i in seq(along=err)) {
+  cat(i, "of", length(err), "\n")
+  tempmap <- est.map(mapthis, error.prob=err[i])
+  loglik[i] <- sum(sapply(tempmap, attr, "loglik"))
+}
+lod <- (loglik - max(loglik))/log(10)
+@ 
+<<runstudyerrorrate,echo=FALSE,results=hide>>=
+file <- "Rcache/errorrate.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<studyerrorrate>>
+  save(err, lod, file=file)
+}
+@ 
+
+The code is a bit tricky, mostly because the log likelihoods (and
+note that they are on the natural log scale) are included as
+``attributes'' to each chromosome component in the output from
+\code{est.map()}.  We use \code{sapply()} to pull those out, and then
+we add them up.  We finally convert them to the log$_{10}$ scale and
+re-center them so that the maximum is 0.
+
+We may plot the log$_{10}$ likelihood as follows.
+
+<<ploterrorratelik,eval=FALSE>>=
+plot(err, lod, xlab="Genotyping error rate", xlim=c(0,0.02),
+     ylab=expression(paste(log[10], " likelihood")))
+@ 
+
+\begin{figure}
+\centering
+<<ploterrorratelikplot,fig=TRUE,echo=FALSE,height=3>>=
+par(mar=c(4.1,4.1,0.6,0.6), las=1)
+<<ploterrorratelik>>
+@ 
+\caption{The log$_{10}$ likelihood for the genotyping error
+  rate.\label{fig:errorratelik}} 
+\end{figure}
+
+The log$_{10}$ likelihood in Fig.~\ref{fig:errorratelik} indicates
+that the MLE is approximately 0.005.  Error rates of 0.0025 and 0.0075
+have log$_{10}$ likelihoods that are 3 less than that of the MLE.  We
+might investigate additional assumed error rates, or even use the R
+function \code{optimize()} to refine our estimate, but we won't pursue
+that here.
+
+\bigskip
+\textbf{\sffamily Look for genotyping errors}
+\nopagebreak
+
+While the methods for estimating inter-marker distances allow for the
+presence of genotyping errors at a fixed rate, it is nevertheless
+worthwhile to look for, and ideally correct, potential genotyping
+errors in the data.  Such errors may be identified through apparent
+tight double-crossovers, with a single marker being out of phase with
+its adjacent markers.
+
+The most convenient approach for identifying such double-crossovers is
+to calculate genotyping error LOD scores, first developed by Lincoln
+and Lander (\emph{Genomics\/} 14:604--610, 1992).  The LOD score
+compares the likelihood for a genotype being in error versus it not
+being in error.   R/qtl uses a modified calculation of such
+genotyping error LOD scores, with all genotypes
+except that being considered assumed to be strictly correct.  
+
+The error LOD scores are calculated with \code{calc.errorlod()}.  One
+must assume a genotyping error rate, but the results are almost
+identical for a wide range of values.  
+
+<<errorlod,eval=FALSE>>=
+mapthis <- calc.errorlod(mapthis, error.prob=0.005)
+@ 
+<<runerrorlod,echo=FALSE,results=hide>>=
+file <- "Rcache/errorlod.RData"
+if(file.exists(file)) {
+  load(file)
+} else {
+<<errorlod>>
+  save(mapthis, file=file)
+}
+@ 
+
+The function \code{top.errorlod()} produces a list of the genotypes
+with the largest error LOD scores.  One may generally focus on those
+with quite large values, say at least 4--5.  Here will we look at just
+those genotypes with error LOD $\ge$ 6; this is indicated with the
+argument \code{cutoff}.
+
+<<toperrorlod>>=
+print(toperr <- top.errorlod(mapthis, cutoff=6))
+@ 
+
+There are \Sexpr{nrow(toperr)} genotypes that meet this criterion.
+Let us look at the genotypes that were flagged on chromosome 1, using
+the function \code{plot.geno()}.  The argument \code{cutoff} indicates
+a threshold for flagging genotypes as potential errors, based on their
+error LOD scores.  If we had used the argument \code{include.xo=TRUE}
+(which is the default), inferred locations of crossovers would be
+displayed; we suppress that here to get a more clean figure.
+
+<<plotgeno,eval=FALSE>>=
+plot.geno(mapthis, chr=1, ind=toperr$id[toperr$chr==1],
+          cutoff=6, include.xo=FALSE)
+@ 
+
+\begin{figure}
+\centering
+<<plotgenoplot,fig=TRUE,echo=FALSE,height=3>>=
+par(mar=c(4.1,4.1,0.6,0.6), las=1, cex.axis=0.9)
+plot.geno(mapthis, chr=1, ind=toperr$id[toperr$chr==1], main="", cex=0.8,
+          include.xo=FALSE, cutoff=6)
+@ 
+\caption{Genotypes on chromosome 1 for individuals with some potential
+  errors flagged by red squares.  White, gray and black circles correspond to AA, AB
+  and BB genotypes, respectively.\label{fig:plotgeno}}  
+\end{figure}
+
+The results are in Fig.~\ref{fig:plotgeno}.  All of the flagged
+genotypes are cases with an exchange from one homozygote to the other
+and then back again (thus, two crossovers in each interval flanking a
+single marker).  
+
+One might zero out these suspicious genotypes (that is, make them
+missing).  Even better would be to revisit the raw genotyping
+information, or even re-genotype these instances.  But we are talking
+about just \Sexpr{nrow(toperr)} genotypes out of
+\Sexpr{sum(ntyped(mapthis)) %/% 1000},\Sexpr{sum(ntyped(mapthis)) %% 1000}, 
+and with our allowance for genotyping
+errors in the map estimation, they have little influence on the
+results.  
+
+If we did wish to delete these genotypes, we could do so as follows.
+
+<<dropgenotypes>>=
+mapthis.clean <- mapthis
+for(i in 1:nrow(toperr)) {
+  chr <- toperr$chr[i]
+  id <- toperr$id[i]
+  mar <- toperr$marker[i]
+  mapthis.clean$geno[[chr]]$data[mapthis$pheno$id==id, mar] <- NA
+}
+@ 
+%$
+
+
+
+\bigskip
+\textbf{\sffamily Revisit segregation distortion}
+\nopagebreak
+
+Finally, let us return to an investigation of segregation distortion in these data. 
+
+<<segdis,eval=FALSE>>=
+gt <- geno.table(mapthis, scanone.output=TRUE)
+par(mfrow=c(2,1))
+plot(gt, ylab=expression(paste(-log[10], " P-value")))
+plot(gt, lod=3:5, ylab="Genotype frequency")
+abline(h=c(0.25, 0.5), lty=2, col="gray")
+@
+
+\begin{figure}
+\centering
+<<plotsegdis,fig=TRUE,echo=FALSE,height=5>>=
+gt <- geno.table(mapthis, scanone.output=TRUE)
+par(mar=c(4.1,4.1,0.6,0.6), las=1, mfrow=c(2,1), cex=0.8)
+plot(gt, ylab=expression(paste(-log[10], " P-value")))
+plot(gt, lod=3:5, ylab="Genotype frequency")
+abline(h=c(0.25, 0.5), lty=2, col="gray")
+@ 
+\caption{Evidence for segregation distortion: $-$log$_{10}$ P-values from
+  tests of 1:2:1 segregation at each marker (top panel) and the
+  genotype frequencies at each marker (bottom panel, with black, blue
+  and red denoting AA, AB and BB genotypes, respectively).\label{fig:segdis}}  
+\end{figure}
+
+The top panel of Fig.~\ref{fig:segdis} contains $-$log$_{10}$ P-values
+from tests of 1:2:1 segregation at each marker.  The bottom panel in
+Fig.~\ref{fig:segdis} contains the observed genotype frequencies at
+each marker (with black, blue and red corresponding to AA, AB and BB
+genotypes, respectively).  
+
+The greatest departure from 1:2:1
+segregation is on chromosome 4, with somewhat more AA genotypes and
+somewhat fewer BB genotypes.   If we apply a Bonferroni correction for
+the \Sexpr{totmar(mapthis)} tests (\Sexpr{totmar(mapthis)} is the
+total number of markers we have retained in the data), we would look
+for P $\ge$ 0.05/\Sexpr{totmar(mapthis)} which corresponds to
+$-$log$_{10}$ P $\ge$ \Sexpr{round(-log10(0.05/totmar(mapthis)),2)},
+and there is one marker on chromosome 4 that exceeds this.
+
+There are also some departures from 1:2:1 segregation on chromosomes 2
+and 3, but these appear to be within the range of what would be
+expected by chance; the evidence for a real departure from normal
+segregation is not strong.  
+
+The aberrant segregation pattern on chromosome 4 is not too worrisome.
+Multipoint estimates of genetic map distances are little affected by
+segregation distortion, and the pattern of distortion on the
+chromosome indicates rather smooth changes in genotype frequency.
+More worrisome would be a single distorted marker in the midst of other
+markers with normal segregation, which would indicate genotyping
+errors rather than, for example, the presence of partially lethal
+alleles.
+
+And so, finally, we're done.  Let us plot the final map.  
+
+<<plotfinalmap,eval=FALSE>>=
+plot.map(mapthis, show.marker.names=TRUE)
+@ 
+
+\begin{figure}
+\centering
+<<plotfinalmapplot,fig=TRUE,echo=FALSE,height=3>>=
+par(las=1, mar=c(4.6,4.6,0.6,0.6), cex=0.8)
+plot.map(mapthis, main="", show.marker.names=TRUE)
+@ 
+\caption{Plot of the final estimated genetic map\label{fig:plotfinalmap}}
+\end{figure}
+
+The map in
+Fig.~\ref{fig:plotfinalmap} is not pretty, as most of the marker names
+are obscured.  R/qtl does not produce production-quality figures
+automatically; I always go through quite a few extra contortions within R to
+produce a figure suitable for a paper.
+
+
+
+\bigskip
+\textbf{Discussion}
+\nopagebreak
+
+The process of genetic map construction seems to be at least 90\% data
+diagnostics.  While many might find that frustrating, for me that is a
+large part of what makes it fun: it is interesting detective work.  I
+have been involved in the construction of genetic maps for humans,
+mice, dogs, zebrafish, mosquitoes, and sea squirts.  Each project was
+different, with its own special issues that needed to be overcome, and
+such issues can seldom be anticipated in advance.
+
+The general strategy is to think about what sorts of things might be
+going wrong with data, and then what sorts of features of the data
+(summary statistics or plots) might indicate the presence of such
+problems.  There are a variety of things to check routinely, and note
+that the particular order in which these checks are performed is often
+important.
+
+In the procedures described above, and in forming these simulated
+data, I attempted to cover most of the possible problems that might be
+expected to arise.  With the simple intercross considered here, and
+particularly as the data were simulated so that the problems would
+generally be quite clear, the decisions about how to proceed were easy
+to make.  In practice, potential problems in data will often be more
+murky, and careful judgment calls will need to be made and frequently
+revisited, ideally with careful consideration of raw genotyping data
+and other records, and perhaps even with some additional rounds of
+genotyping or even the redesign of genotyping assays.  Moreover, with
+more complex experiments, such as an outcross or the combined analysis
+of multiple crosses, additional issues will arise that we have not
+touched on here.  But the overall strategy, laid out above, can be
+applied quite generally.
+
+
+
+
+\newpage
+{\small
+\noindent \textbf{\sffamily R/qtl functions useful for genetic map construction} \\
+\noindent \begin{tabular}{ll} 
+\hspace*{25mm} & \hspace*{103mm} \\ \hline
+plot.missing & Plot pattern of missing genotypes \\
+ntyped & Count number of typed markers for each individual \\
+nmissing & Count number of missing genotypes for each individual \\
+subset.cross & Pull out a specified set of chromosomes and/or
+individuals from a cross \\
+drop.markers & Remove a list of markers \\
+pull.markers & Drop all but a selected set of markers \\
+drop.nullmarkers & Remove markers without data \\ 
+comparegeno & Count proportion of matching genotypes between all pairs
+of individuals \\
+findDupMarkers & Find markers with identical genotype data \\
+drop.dupmarkers & Drop duplicate markers \\ 
+geno.table & Create table of genotype distributions \\ 
+est.rf & Estimate pairwise recombination fractions \\ 
+markerlrt & General likelihood ratio test for association between
+marker pairs \\
+checkAlleles & Identify markers with potentially switched alleles \\
+pull.rf & Pull out the pairwise recombination fractions or LOD scores
+as a matrix \\
+formLinkageGroups & Partition markers into linkage groups \\ 
+plot.rf & Plot recombination fractions \\ 
+markernames & Pull out the marker names from a cross \\
+plot.rfmatrix & Plot a slice through the pairwise recombination
+fractions or LOD scores \\
+geno.crosstab & Create cross-tabulation of genotypes at two markers \\
+switchAlleles & Switch alleles at selected markers \\ 
+orderMarkers & Find an initial order for markers within chromosomes \\
+ripple & Assess marker order by permuting groups of adjacent
+markers \\
+summary.ripple & Print summary of ripple output \\ 
+est.map & Estimate genetic map \\
+pull.map & Pull out the genetic map from a cross \\ 
+compareorder & Compare two orderings of markers on a chromosome \\
+switch.order & Switch the order of markers on a chromosome \\ 
+summary.map & Print summary of a genetic map \\
+plot.map & Plot genetic map(s) \\ 
+droponemarker & Drop one marker at a time from a genetic map \\
+replace.map & Replace the genetic map of a cross \\ 
+countXO & Count number of obligate crossovers for each individual \\
+locateXO & Estimate locations of crossovers \\
+calc.errorlod & Calculate Lincoln \& Lander (1992) error LOD scores \\
+top.errorlod & List genotypes with highest error LOD values \\ 
+plot.geno & Plot genotypes on a particular chromosomes for selected
+individuals \\ \hline
+%
+tryallpositions & Test all possible positions for a marker \\
+allchrsplits & Test all possible splits of a chromosome into two
+pieces \\
+movemarker & Move a marker from one chromosome to another \\ 
+convert.map & Change map function for a genetic map \\
+shiftmap & Shift starting points in genetic maps \\ 
+rescalemap & Rescale genetic map \\
+\hline
+\end{tabular}
+}
+
+
+\end{document}

@@ -42,7 +42,7 @@ orderMarkers(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
  \item{sex.sp}{Indicates whether to estimate sex-specific maps in the
    final estimated map; this is used only for the 4-way cross.}
  \item{verbose}{If TRUE, information about the progress of the
-   calculations is displayed.}
+   calculations is displayed; if > 1, even more information is given.}
 }
 
 \value{

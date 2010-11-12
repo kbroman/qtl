@@ -2,8 +2,8 @@
 #
 # map_construction.R
 #
-# copyright (c) 2008, Karl W Broman
-# last modified Oct, 2008
+# copyright (c) 2008-2010, Karl W Broman
+# last modified Nov, 2010
 # first written Oct, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -161,10 +161,13 @@ function(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
 
   n.mar <- nmar(cross)
 
+  if(verbose > 1) verbose.sub <- TRUE else verbose.sub <- FALSE
+
   for(i in chr) {
-    if(verbose && length(chr) > 1) cat("Chr", i,"\n")
+    if(verbose && length(chr) > 1) cat(" - Chr", i,"\n")
     if(n.mar[i] > 2) {
-      neworder <- orderMarkers.sub(cross, i, window=window, use.ripple=use.ripple)
+      neworder <- orderMarkers.sub(cross, i, window=window, use.ripple=use.ripple,
+                                   verbose=verbose.sub)
       cross <- switch.order(cross, i, neworder, error.prob=error.prob,
                             map.function=map.function, maxit=maxit, tol=tol,
                             sex.sp=sex.sp)
@@ -180,7 +183,7 @@ function(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
 # the markers de novo, possibly running ripple() to refine the order.
 ######################################################################
 orderMarkers.sub <-
-function(cross, chr, window=7, use.ripple=TRUE)
+function(cross, chr, window=7, use.ripple=TRUE, verbose=FALSE)
 {
   if(missing(chr)) chr <- names(cross$geno)[1]
   if(length(chr) > 1) {
@@ -239,6 +242,7 @@ function(cross, chr, window=7, use.ripple=TRUE)
       }
     
   # work on marker 3
+  if(verbose) cat(" --- Adding marker 3 of", n.mar, "\n")
   orders <- makeorders(3)
   nxo <- rep(NA, nrow(orders))
   nxo[1] <- sum(countXO(cross, 1))
@@ -255,6 +259,7 @@ function(cross, chr, window=7, use.ripple=TRUE)
   # rest of the markers
   if(n.mar > 3) {
     for(k in 4:n.mar) {
+      if(verbose) cat(" --- Adding marker", k, "of", n.mar, "\n")
       cross <- movemarker(cross, marnam[themar[k]], 1)
       orders <- makeorders(k)
       nxo <- rep(NA, nrow(orders))
