@@ -3940,6 +3940,7 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 
   thechr <- names(cross$geno)
   totdrop <- 0
+  maxmaxdist <- max(maxdist)
   for(i in thechr) {
     xoloc <- locateXO(cleaned, chr=i, full.info=TRUE)
     nxo <- sapply(xoloc, function(a) if(is.matrix(a)) return(nrow(a)) else return(0))
@@ -3948,11 +3949,11 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
     ndrop <- 0
     for(j in which(nxo > 1)) {
       maxd <- xoloc[[j]][-1,"right"] - xoloc[[j]][-nrow(xoloc[[j]]),"left"]
-      wh <- maxd <= maxdist
+      wh <- maxd <= maxmaxdist
       if(any(wh)) {
         for(k in which(wh)) {
           nt <- sum(!is.na(g[j,(xoloc[[j]][k,"ileft"]+1):(xoloc[[j]][k+1,"iright"]-1)]))
-          if(nt > 0 && nt <= maxmark) {
+          if(nt > 0 && any(nt <= maxmark & maxd[k] < maxdist)) {
             cleaned$geno[[i]]$data[j,(xoloc[[j]][k,"ileft"]+1):(xoloc[[j]][k+1,"iright"]-1)] <- NA
             ndrop <- ndrop + nt
             totdrop <- totdrop + nt
@@ -3976,4 +3977,5 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 
   cross
 }
+
 # end of util.R
