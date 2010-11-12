@@ -34,17 +34,17 @@
  *
  **********************************************************************/
 
-double init_f2(int true_gen);
+double init_f2(int true_gen, int *cross_scheme);
 
 double emit_f2(int obs_gen, int true_gen, double error_prob);
   
-double step_f2(int gen1, int gen2, double rf, double junk);
+double step_f2(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
-double init_f2b(int true_gen);
+double init_f2b(int true_gen, int *cross_scheme);
 
 double emit_f2b(int obs_gen, int true_gen, double error_prob);
   
-double step_f2b(int gen1, int gen2, double rf, double junk);
+double step_f2b(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
 double nrec_f2b(int gen1, int gen2);
 

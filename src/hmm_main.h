@@ -73,12 +73,11 @@
    but in the alpha's and beta's, we use 0, 1, ... */
 
 void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno, 
-		   int *cross_scheme,
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
-		   double initf(int), 
+		   double initf(int, int *), 
 		   double emitf(int, int, double),
-		   double stepf(int, int, double, double));
+		   double stepf(int, int, double, double, int *));
 
 
 /**********************************************************************
@@ -97,9 +96,9 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
 void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno, 
 			   double *rf, double *rf2, 
 			   double error_prob, double *genoprob, 
-			   double initf(int), 
+			   double initf(int, int *), 
 			   double emitf(int, int, double),
-			   double stepf(int, int, double, double));
+			   double stepf(int, int, double, double, int *));
 
 /**********************************************************************
  * 
@@ -144,9 +143,9 @@ void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno,
 void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
 	      int *geno, double *rf, double *rf2, 
 	      double error_prob, int *draws,
-	      double initf(int), 
+	      double initf(int, int *), 
 	      double emitf(int, int, double),
-	      double stepf(int, int, double, double));
+	      double stepf(int, int, double, double, int *));
 
 
 /**********************************************************************
@@ -198,9 +197,9 @@ void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
    but in the alpha's and beta's, we use 0, 1, ... */
 
 void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf, 
-	     double *rf2, double error_prob, double initf(int), 
+	     double *rf2, double error_prob, double initf(int, int *), 
 	     double emitf(int, int, double),
-	     double stepf(int, int, double, double), 
+	     double stepf(int, int, double, double, int *), 
 	     double nrecf1(int, int), double nrecf2(int, int), 
 	     double *loglik, int maxit, double tol, int sexsp, 
 	     int verbose);
@@ -249,9 +248,9 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 void argmax_geno(int n_ind, int n_pos, int n_gen, int *geno, 
 		   double *rf, double *rf2, 
 		   double error_prob, int *argmax, 
-		   double initf(int), 
+		   double initf(int, int *), 
 		   double emitf(int, int, double),
-		   double stepf(int, int, double, double));
+		   double stepf(int, int, double, double, int *));
 
 /**********************************************************************
  * 
@@ -367,9 +366,9 @@ void calc_pairprob(int n_ind, int n_pos, int n_gen, int *geno,
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
 		   double *pairprob, 
-		   double initf(int), 
+		   double initf(int, int *), 
 		   double emitf(int, int, double),
-		   double stepf(int, int, double, double));
+		   double stepf(int, int, double, double, int *));
 
 /**********************************************************************
  * 
@@ -428,7 +427,7 @@ void R_calc_pairprob_condindep(int *n_ind, int *n_pos, int *n_gen,
 /* Note: true genotypes coded as 1, 2 */
 
 void marker_loglik(int n_ind, int n_gen, int *geno, 
-		   double error_prob, double initf(int), 
+		   double error_prob, double initf(int, int *), 
 		   double emitf(int, int, double),
 		   double *loglik);
 
