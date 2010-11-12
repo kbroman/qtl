@@ -37,11 +37,11 @@
  *
  **********************************************************************/
 
-double init_ri4self(int true_gen);
+double init_ri4self(int true_gen, int *cross_scheme);
 
 double emit_ri4self(int obs_gen, int true_gen, double error_prob);
   
-double step_ri4self(int gen1, int gen2, double rf, double junk);
+double step_ri4self(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
 double step_special_ri4self(int gen1, int gen2, double rf, double junk);
 

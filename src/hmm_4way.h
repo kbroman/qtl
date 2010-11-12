@@ -37,11 +37,11 @@
  *
  **********************************************************************/
 
-double init_4way(int true_gen);
+double init_4way(int true_gen, int *cross_scheme);
 
 double emit_4way(int obs_gen, int true_gen, double error_prob);
 
-double step_4way(int gen1, int gen2, double rf1, double rf2);
+double step_4way(int gen1, int gen2, double rf1, double rf2, int *cross_scheme);
 
 double nrec_4way(int gen1, int gen2);
 

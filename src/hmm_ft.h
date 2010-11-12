@@ -42,11 +42,9 @@ double emit_ft(int obs_gen, int true_gen, double error_prob);
   
 double step_ft(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
-double init_ftb(int true_gen);
+double init_ftb(int true_gen, int *cross_scheme);
 
-double emit_ftb(int obs_gen, int true_gen, double error_prob);
-  
-double step_ftb(int gen1, int gen2, double rf, double junk);
+double step_ftb(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
 double nrec_ftb(int gen1, int gen2);
 
