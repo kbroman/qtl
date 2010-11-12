@@ -40,7 +40,7 @@
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
-#           switchAlleles, nqrank, cleanGeno
+#           switchAlleles, nqrank, cleanGeno, typingGap
 #
 ######################################################################
 
@@ -3938,7 +3938,7 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
   if(!missing(chr)) cleaned <- subset(cross, chr=chr)
   else cleaned <- cross
 
-  thechr <- names(cross$geno)
+  thechr <- names(cleaned$geno)
   totdrop <- 0
   maxmaxdist <- max(maxdist)
   for(i in thechr) {
@@ -3976,6 +3976,30 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
     cross$geno[[i]] <- cleaned$geno[[i]]
 
   cross
+}
+
+typingGap <-
+function(cross, chr)
+{
+  if(!missing(chr))
+    cross <- subset(cross, chr)
+
+  n.ind <- nind(cross)
+  n.chr <- nchr(cross)
+
+  gaps <- matrix(nrow=n.ind, ncol=n.chr)
+  colnames(gaps) <- names(cross$geno)
+
+  for(i in 1:n.chr) {
+    map <- cross$geno[[i]]$map
+    map <- c(map[1], map, map[length(map)])
+    if(is.matrix(map)) stop("This function can't currently handle sex-specific maps.")
+
+    gaps[,i] <- apply(cbind(1,cross$geno[[i]]$data,1), 1,
+                      function(a,b) max(diff(b[!is.na(a)])), map)
+  }
+  if(n.chr==1) gaps <- as.numeric(gaps)
+  gaps
 }
 
 # end of util.R
