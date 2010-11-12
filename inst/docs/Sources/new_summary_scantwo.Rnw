@@ -8,13 +8,14 @@
 
 %\usepackage{times}
 \usepackage{amsmath}
-
+\usepackage{color}
+\usepackage{times}
 
 % revise margins
 \setlength{\headheight}{0.0in}
-\setlength{\topmargin}{0.0in}
+\setlength{\topmargin}{-0.25in}
 \setlength{\headsep}{0.0in}
-\setlength{\textheight}{8.5in}
+\setlength{\textheight}{9.00in}
 \setlength{\footskip}{0.5in}
 \setlength{\oddsidemargin}{0in}
 \setlength{\evensidemargin}{0in}
@@ -37,11 +38,15 @@
 options(width=77)
 @ 
 
+% Change S input/output font size
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{fontsize=\footnotesize, baselinestretch=0.75, formatcom = {\color[rgb]{0, 0, 0.56}}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{fontsize=\footnotesize, baselinestretch=0.75, formatcom = {\color[rgb]{0.56, 0, 0}}}
 
 
 
 \textbf{The new \code{summary.scantwo} and \code{plot.scantwo}} \\
-Karl W Broman, 27 Oct 2006
+Karl W Broman, 27 Oct 2006 \\
+(Added color 26 Oct 2010)
 
 \bigskip
 

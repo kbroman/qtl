@@ -44,6 +44,6 @@ data(hyper)
 plot(countXO(hyper))
 }
 
-\seealso{ \code{\link{ripple}}, \code{\link{locateXO}} }
+\seealso{ \code{\link{ripple}}, \code{\link{locateXO}}, \code{\link{cleanGeno}} }
 
 \keyword{utilities}

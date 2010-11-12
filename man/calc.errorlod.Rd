@@ -79,7 +79,7 @@ plot.geno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
 \seealso{ \code{\link{plot.errorlod}},
-  \code{\link{top.errorlod}} } 
+  \code{\link{top.errorlod}}, \code{\link{cleanGeno}} } 
 
 
 \keyword{utilities}

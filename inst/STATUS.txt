@@ -17,11 +17,13 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 10/26/2010:
+Version 1.19, 11/11/2010:
 
 Major changes:
 
-  None.
+  Added a tutorial on genetic map construction; find it within the
+  package at docs/geneticmaps.pdf, or (more simply, probably), find it
+  on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf 
 
 Minor changes:
 
@@ -30,10 +32,14 @@ Minor changes:
   a LOD score and a change in the estimated genetic length of the
   respective chromosome.
 
-  Added function pull.rf for pulling out either the estimated
+  Added a function pull.rf for pulling out either the estimated
   recombination fractions or the lod scores, as calculated by
   est.rf(), from a cross object.  Also added a function plot.rfmatrix,
   for plotting a slice through these. 
+
+  Added a function cleanGeno for removing genotypes that are possibly
+  in error (as indicated by apparent tight double-crossovers).  Use
+  this function with caution.
 
   Revised MQMscan so that the output contains covariate information,
   to be plotted with add.cim.covar().
@@ -41,6 +47,33 @@ Minor changes:
   Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
+
+  Revised plot.geno() so that, for the X chromosome in a backcross or
+  intercross, the genotypes appear appropriately, with females being
+  homozygous or heterozygous and the males hemizygous, though we plot
+  the hemizygous genotypes as if they were homozygotes.
+
+  In orderMarkers(), if verbose is numeric and > 1, even more
+  information on the progress of the calculations is provided.
+
+  Fixed a problem in subset.cross where, in the case that a cross
+  contained numeric IDs, subsetting the individuals resulted in them
+  being sorted according to their IDs.
+
+  Added a manual page for the function getid(), which was not previously
+  documented.  (It is used internally a great deal, and it may be
+  useful more generally.)
+
+  Fixed a bug in shiftmap().
+
+  Added an argument, force, to reviseXdata(), to force a change in the
+  genotypes; this is for use within plot.geno().
+
+  Slight change to top.errorlod, so that the output columns are not
+  factors but character strings.
+
+  Slight change in plot.geno() so that we use filled circles (pch=23) rather
+  than calling points() twice for each point.
 
   Small changes to mqmplot.circle().
 

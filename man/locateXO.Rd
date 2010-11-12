@@ -50,6 +50,6 @@ xoloc <- locateXO(hyper, chr=4)
 table(sapply(xoloc, length))
 }
 
-\seealso{ \code{\link{countXO}} }
+\seealso{ \code{\link{countXO}}, \code{\link{cleanGeno}} }
 
 \keyword{utilities}

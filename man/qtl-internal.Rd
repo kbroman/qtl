@@ -37,7 +37,6 @@
 \alias{flipcross}
 \alias{genAllPartitions}
 \alias{genotab.em}
-\alias{getid}
 \alias{getsex}
 
 \alias{addmarkerstointervalmap}
@@ -217,7 +216,6 @@ markerforwsel(x, y, maxsize=7)
 markerforwself2(x, y, maxsize=7)
 genAllPartitions(n.taxa, taxa)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
-getid(cross)
 getsex(cross)
 
 addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
@@ -264,7 +262,7 @@ mf.k(d)
 mf.m(d)
 mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
-orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
+orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE, verbose=FALSE)
 ourline()
 ourstop(\dots)
 parseformula(formula, qtl.dimname, covar.dimname)
@@ -321,7 +319,7 @@ revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)
 revisescantwodf(df)
 reviseXdata(type=c("f2","bc"), expandX=c("simple","standard","full"),
-            sexpgm, geno, prob, draws, pairprob, cross.attr)
+            sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 ripple.perm1(n)
 ripple.perm2(n)
 ripple.perm.sub(x, mat)
