@@ -40,7 +40,7 @@
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
-#           switchAlleles, nqrank
+#           switchAlleles, nqrank, cleanGeno
 #
 ######################################################################
 
@@ -3920,4 +3920,60 @@ function(x, jitter=FALSE)
   x*thesd/sd(x, na.rm=TRUE)-mean(x,na.rm=TRUE)+themean
 }
 
+######################################################################
+#
+# cleanGeno: omit genotypes that are possibly in error, as indicated
+#            by apparent double-crossovers separated by a distance of
+#            no more than maxdist and having no more than maxmark
+#            interior typed markers
+#
+######################################################################
+
+cleanGeno <-
+function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
+{  
+  if(class(cross)[1] != "bc") 
+    stop("This function currently only works for a backcross.")
+
+  if(!missing(chr)) cleaned <- subset(cross, chr=chr)
+  else cleaned <- cross
+
+  thechr <- names(cross$geno)
+  totdrop <- 0
+  for(i in thechr) {
+    xoloc <- locateXO(cleaned, chr=i, full.info=TRUE)
+    nxo <- sapply(xoloc, function(a) if(is.matrix(a)) return(nrow(a)) else return(0))
+    g <- pull.geno(cleaned, chr=i)
+    
+    ndrop <- 0
+    for(j in which(nxo > 1)) {
+      maxd <- xoloc[[j]][-1,"right"] - xoloc[[j]][-nrow(xoloc[[j]]),"left"]
+      wh <- maxd <= maxdist
+      if(any(wh)) {
+        for(k in which(wh)) {
+          nt <- sum(!is.na(g[j,(xoloc[[j]][k,"ileft"]+1):(xoloc[[j]][k+1,"iright"]-1)]))
+          if(nt > 0 && nt <= maxmark) {
+            cleaned$geno[[i]]$data[j,(xoloc[[j]][k,"ileft"]+1):(xoloc[[j]][k+1,"iright"]-1)] <- NA
+            ndrop <- ndrop + nt
+            totdrop <- totdrop + nt
+          }
+        }
+      }
+    }
+    if(verbose && ndrop > 0) {
+      totgen <- sum(ntyped(subset(cross, chr=i)))
+      cat(" ---Dropping ", ndrop, " genotypes (out of ", totgen, ") on chr ", i, "\n", sep="")
+    }
+  }
+
+  if(verbose && nchr(cleaned)>1 && totdrop > 0) {
+    totgen <- sum(ntyped(subset(cross, chr=thechr)))
+    cat(" ---Dropped ", totdrop, " genotypes (out of ", totgen, ") in total\n", sep="")
+  }
+
+  for(i in names(cleaned$geno))
+    cross$geno[[i]] <- cleaned$geno[[i]]
+
+  cross
+}
 # end of util.R
