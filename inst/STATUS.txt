@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/5/2010:
+Version 1.19, 11/11/2010:
 
 Major changes:
 
@@ -32,10 +32,14 @@ Minor changes:
   a LOD score and a change in the estimated genetic length of the
   respective chromosome.
 
-  Added function pull.rf for pulling out either the estimated
+  Added a function pull.rf for pulling out either the estimated
   recombination fractions or the lod scores, as calculated by
   est.rf(), from a cross object.  Also added a function plot.rfmatrix,
   for plotting a slice through these. 
+
+  Added a function cleanGeno for removing genotypes that are possibly
+  in error (as indicated by apparent tight double-crossovers).  Use
+  this function with caution.
 
   Revised MQMscan so that the output contains covariate information,
   to be plotted with add.cim.covar().
