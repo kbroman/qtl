@@ -56,6 +56,9 @@ Minor changes:
   homozygous or heterozygous and the males hemizygous, though we plot
   the hemizygous genotypes as if they were homozygotes.
 
+  Revised locateXO() so that the output contains a column with the
+  number of typed markers between adjacent crossovers.
+
   In orderMarkers(), if verbose is numeric and > 1, even more
   information on the progress of the calculations is provided.
 
