@@ -7,7 +7,7 @@
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Feb, 2010
+ * last modified Nov, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -294,13 +294,14 @@ void R_locate_xo(int *n_ind, int *n_mar, int *type,
 		 int *geno, double *map, 
 		 double *location, int *nseen,
 		 int *ileft, int *iright, double *left, double *right,
-		 int *full_info);
+		 int *ntyped, int *full_info);
 
 /* Note: type ==0 for backcross and ==1 for intercross */
 void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 	       double *map, double **Location, 
 	       int *nseen, int **iLeft, int **iRight,
-	       double **Left, double **Right, int full_info);
+	       double **Left, double **Right, int **nTyped, 
+	       int full_info);
 
 /* multiply two matrices - I'm using dgemm from lapack here */
 void matmult(double *result, double *a, int nrowa,

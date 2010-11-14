@@ -3007,6 +3007,7 @@ function(cross, chr, full.info=FALSE)
           iright=as.integer(rep(0,n.ind*2*(n.mar-1))),
           left=as.double(rep(0,n.ind*2*(n.mar-1))),
           right=as.double(rep(0,n.ind*2*(n.mar-1))),
+          ntype=as.integer(rep(0,n.ind*2*(n.mar-1))),
           as.integer(full.info),
           PACKAGE="qtl")
   location <- t(matrix(z$location, nrow=n.ind))
@@ -3016,12 +3017,12 @@ function(cross, chr, full.info=FALSE)
     iright <- t(matrix(z$iright, nrow=n.ind))
     left <- t(matrix(z$left, nrow=n.ind))
     right <- t(matrix(z$right, nrow=n.ind))
+    ntype <- t(matrix(z$ntype, nrow=n.ind))
   }
 
-  if(!full.info) {
-    return(lapply(as.data.frame(rbind(nseen, location)),
-                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] }))
-  }
+  if(!full.info) 
+    res <- lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
   else {
     location <- lapply(as.data.frame(rbind(nseen, location)),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
@@ -3038,17 +3039,27 @@ function(cross, chr, full.info=FALSE)
     right <- lapply(as.data.frame(rbind(nseen, right)),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
+    ntype <- lapply(as.data.frame(rbind(nseen, ntype)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+
     res <- location
     for(i in seq(along=res)) {
-      if(length(res[[i]])>0)
+      if(length(res[[i]])>0) {
+        ntype[[i]][length(ntype[[i]])] <- NA
         res[[i]] <- cbind(location=location[[i]],
                           left=left[[i]],
                           right=right[[i]],
                           ileft=ileft[[i]],
-                          iright=iright[[i]])
+                          iright=iright[[i]],
+                          nTypedBetween=ntype[[i]])
+      }
     }
-    return(res)
   }
+  id <- getid(cross)
+  if(is.null(id)) id <- 1:n.ind
+  names(res) <- id
+
+  res
 }
 
 # jittermap: make sure no two markers are at precisely the same position
