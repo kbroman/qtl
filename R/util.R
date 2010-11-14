@@ -3020,10 +3020,9 @@ function(cross, chr, full.info=FALSE)
     ntype <- t(matrix(z$ntype, nrow=n.ind))
   }
 
-  if(!full.info) {
-    return(lapply(as.data.frame(rbind(nseen, location)),
-                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] }))
-  }
+  if(!full.info) 
+    res <- lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
   else {
     location <- lapply(as.data.frame(rbind(nseen, location)),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
@@ -3055,8 +3054,12 @@ function(cross, chr, full.info=FALSE)
                           nTypedBetween=ntype[[i]])
       }
     }
-    return(res)
   }
+  id <- getid(cross)
+  if(is.null(id)) id <- 1:n.ind
+  names(res) <- id
+
+  res
 }
 
 # jittermap: make sure no two markers are at precisely the same position
