@@ -28,7 +28,7 @@ Major changes:
 Minor changes:
 
   Revised summary.scanoneperm to include a new argument,
-  controlAcrossPheno.  If TRUE, LOD thresholds will control error rate
+  controlAcrossCol.  If TRUE, LOD thresholds will control error rate
   not just across the genome but also across the LOD score columns.
 
   Added function droponemarker, with the aim of identifying
@@ -59,6 +59,10 @@ Minor changes:
   intercross, the genotypes appear appropriately, with females being
   homozygous or heterozygous and the males hemizygous, though we plot
   the hemizygous genotypes as if they were homozygotes.
+
+  Revised subset.scanoneperm and subset.scantwoperm so that one may
+  pull out a subset of replicates (not just columns).  Added functions
+  [.scanoneperm and [.scantwoperm so that one can use [] to subset.
 
   Revised locateXO() so that the output contains a column with the
   number of typed markers between adjacent crossovers.
