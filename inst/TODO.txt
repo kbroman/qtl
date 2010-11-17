@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o implement the "controlAcrossPheno" argument within summary.scanone,
+  to calculate p-values?
+
 o add functions [.scanone and [.scantwo
 
 o get scanone and scantwo to work with a single marker on a
