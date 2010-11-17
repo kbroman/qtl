@@ -23,7 +23,7 @@
 #           max.scanone, c.scanone, subset.scanone,
 #           summary.scanoneperm, print.summary.scanoneperm
 #           c.scanoneperm, rbind.scanoneperm, cbind.scanoneperm
-#           grab.arg.names, subset.scantwoperm
+#           grab.arg.names, subset.scanoneperm
 #
 ######################################################################
 
