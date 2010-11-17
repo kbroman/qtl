@@ -3,7 +3,7 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Sep, 2010
+# last modified Nov, 2010
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #           max.scanone, c.scanone, subset.scanone,
 #           summary.scanoneperm, print.summary.scanoneperm
 #           c.scanoneperm, rbind.scanoneperm, cbind.scanoneperm
-#           grab.arg.names, subset.scanoneperm
+#           grab.arg.names, subset.scanoneperm, [.scanoneperm
 #
 ######################################################################
 
@@ -577,7 +577,7 @@ function(...)
 # scanone permutation test (from scanone with n.perm > 0)
 ######################################################################
 summary.scanoneperm <-
-function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
+function(object, alpha=c(0.05, 0.10), df=FALSE, controlAcrossCol=FALSE, ...)
 {
   if(!any(class(object) == "scanoneperm"))
     stop("Input should have class \"scanoneperm\".")
@@ -587,28 +587,54 @@ function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
 
   if("xchr" %in% names(attributes(object))) { # X-chromosome-specific results
     L <- attr(object, "L")
-    alphaA <- 1 - (1-alpha)^(L[1]/sum(L))
-    alphaX <- 1 - (1-alpha)^(L[2]/sum(L))
+    thealpha <- cbind(1 - (1-alpha)^(L[1]/sum(L)), 1 - (1-alpha)^(L[2]/sum(L)))
+    v <- c("A","X")
     
-    if(!is.matrix(object$A)) object$A <- as.matrix(object$A)
-    quA <- apply(object$A, 2, quantile, 1-alphaA, na.rm=TRUE)
-    if(!is.matrix(quA)) {
-      nam <- names(quA)
-      quA <- matrix(quA, nrow=length(alpha))
-      dimnames(quA) <- list(paste(100*alpha,"%", sep=""), nam)
-    }
-    else rownames(quA) <- paste(100*alpha, "%", sep="")
-    
-    if(!is.matrix(object$X)) object$X <- as.matrix(object$X)
-    quX <- apply(object$X, 2, quantile, 1-alphaX, na.rm=TRUE)
-    if(!is.matrix(quX)) {
-      nam <- names(quX)
-      quX <- matrix(quX, nrow=length(alpha))
-      dimnames(quX) <- list(paste(100*alpha,"%", sep=""), nam)
-    }
-    else rownames(quX) <- paste(100*alpha, "%", sep="")
+    quant <- vector("list", 2)
+    names(quant) <- c("A","X")
+    for(k in 1:2) {
+      if(!is.matrix(object[[v[k]]])) object[[v[k]]] <- as.matrix(object[[v[k]]])
 
-    quant <- list("A"=quA, "X"=quX)
+      if(controlAcrossCol) {
+        if(any(is.na(object[[v[k]]])))
+          object[[v[k]]] <- object[[v[k]]][apply(object[[v[k]]],1,function(a) !any(is.na(a))),,drop=FALSE]
+
+        r <- apply(object[[v[k]]], 2, rank, ties.method="random", na.last=FALSE)
+        print(is.matrix(r))
+        rmax <- apply(r, 1, max)
+        rqu <- quantile(rmax, 1-thealpha[,k], na.rm=TRUE)
+        qu <- matrix(nrow=length(thealpha[,k]), ncol=ncol(object[[v[k]]]))
+
+        for(i in seq(along=rqu)) {
+          fl <- floor(rqu[i])
+          ce <- ceiling(rqu[i])
+          if(fl==ce) {  # exact
+            for(j in 1:ncol(object[[v[k]]])) {
+              qu[i,j] <- object[[v[k]]][r[,j]==rqu[i],j]
+            }
+          }
+          else { # need to interpolate
+            for(j in 1:ncol(object[[v[k]]])) {
+              lo <- object[[v[k]]][r[,j]==fl,j]
+              up <- object[[v[k]]][r[,j]==ce,j]
+              qu[i,j] <- lo*(1-(ce-fl)) + up*(ce-fl)
+            }
+          }
+        }
+        colnames(qu) <- colnames(object[[v[k]]])
+      }
+      else 
+        qu <- apply(object[[v[k]]], 2, quantile, 1-thealpha[,k], na.rm=TRUE)
+      
+      if(!is.matrix(qu)) {
+        nam <- names(qu)
+        qu <- matrix(qu, nrow=length(alpha))
+        dimnames(qu) <- list(paste(100*alpha,"%", sep=""), nam)
+      }
+      else rownames(qu) <- paste(100*alpha, "%", sep="")
+
+      quant[[k]] <- qu
+    }
 
     if(df && "df" %in% names(attributes(object)))
       attr(quant,"df") <- attr(object, "df")
@@ -618,7 +644,35 @@ function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
   }
   else {
     if(!is.matrix(object)) object <- as.matrix(object)
-    quant <- apply(object, 2, quantile, 1-alpha, na.rm=TRUE)
+
+    if(controlAcrossCol) {
+      if(any(is.na(object)))
+          object <- object[apply(object,1,function(a) !any(is.na(a))),,drop=FALSE]
+
+      r <- apply(object, 2, rank, ties.method="random")
+      rmax <- apply(r, 1, max)
+      rqu <- quantile(rmax, 1-alpha, na.rm=TRUE)
+      quant <- matrix(nrow=length(alpha), ncol=ncol(object))
+      for(i in seq(along=rqu)) {
+        fl <- floor(rqu[i])
+        ce <- ceiling(rqu[i])
+        if(fl==ce) {  # exact
+          for(j in 1:ncol(object)) 
+            quant[i,j] <- object[r[,j]==rqu[i],j]
+        }
+        else { # need to interpolate
+          for(j in 1:ncol(object)) {
+            lo <- object[r[,j]==fl,j]
+            up <- object[r[,j]==ce,j]
+            quant[i,j] <- lo*(1-(ce-fl)) + up*(ce-fl)
+          }
+        }
+      }
+      colnames(quant) <- colnames(object)
+    }
+    else 
+      quant <- apply(object, 2, quantile, 1-alpha, na.rm=TRUE)
+
     if(!is.matrix(quant)) {
       nam <- names(quant)
       quant <- matrix(quant, nrow=length(alpha))
@@ -869,35 +923,53 @@ function(..., labels)
 # subset.scanoneperm: pull out a set of lodcolumns
 ##############################
 subset.scanoneperm <-
-function(x, lodcolumn=1, ...)
+function(x, repl, lodcolumn, ...)
 {
+  att <- attributes(x)
+
   if(is.list(x)) {
-    if(is.matrix(x[[1]]) & ncol(x[[1]]) > 1) {
-      if((is.logical(lodcolumn) && length(lodcolumn) != ncol(x[[1]])) ||
-         (!is.logical(lodcolumn) && ((any(lodcolumn > 0) && any(lodcolumn > ncol(x[[1]]) | lodcolumn < 1)) ||
-         (any(lodcolumn < 0) && any(lodcolumn < -ncol(x[[1]])) | lodcolumn > -1))))
-        stop("lodcolumn misspecified.")
-      cl <- class(x)
-      x <- lapply(x, function(a,b) a[,b,drop=FALSE], lodcolumn)
-      class(x) <- cl
-    }
-    else stop("No need to subset; just one column.")
+    if(any(!sapply(x, is.matrix)))
+      x <- lapply(x, as.matrix)
+                  
+    if(missing(lodcolumn)) lodcolumn <- 1:ncol(x[[1]])
+    else if(!is.null(attr(try(x[[1]][,lodcolumn], silent=TRUE),"try-error")))
+      stop("lodcolumn misspecified.")
+
+    if(missing(repl)) repl <- 1:nrow(x[[1]])
+    else if(!is.null(attr(try(x[[1]][repl,], silent=TRUE),"try-error")))
+      stop("repl misspecified.")
+
+    cl <- class(x)
+    x <- lapply(x, function(a,b,d) unclass(a)[b,d,drop=FALSE], repl, lodcolumn)
+    class(x) <- cl
   }
   else {
-    if(is.matrix(x) & ncol(x > 1)) {
-      if((is.logical(lodcolumn) && length(lodcolumn) != ncol(x)) ||
-         (!is.logical(lodcolumn) && ((any(lodcolumn > 0) && any(lodcolumn > ncol(x) | lodcolumn < 1)) ||
-         (any(lodcolumn < 0) && any(lodcolumn < -ncol(x) | lodcolumn > -1)))))
-        stop("lodcolumn misspecified.")
-      cl <- class(x)
-      x <- x[,lodcolumn,drop=FALSE]
-      class(x) <- cl
-    }
-    else stop("No need to subset; just one column.")
+    if(!is.matrix(x)) x <- as.matrix(x)
+    
+    if(missing(lodcolumn)) lodcolumn <- 1:ncol(x)
+    else if(!is.null(attr(try(x[,lodcolumn], silent=TRUE),"try-error")))
+      stop("lodcolumn misspecified.")
+
+    if(missing(repl)) repl <- 1:nrow(x)
+    else if(!is.null(attr(try(x[repl,], silent=TRUE),"try-error")))
+      stop("repl misspecified.")
+    
+    cl <- class(x)
+    x <- unclass(x)[repl,lodcolumn,drop=FALSE]
+    class(x) <- cl
   }
+
+  for(i in seq(along=att)) {
+    if(names(att)[i] == "dim" || length(grep("names", names(att)[i]))>0) next
+    attr(x, names(att)[i]) <- att[[i]]
+  }
+
   x
 }
 
-
+# subset.scanoneperm using [,]
+`[.scanoneperm` <-
+function(x, repl, lodcolumn)
+  subset.scanoneperm(x, repl, lodcolumn)
 
 # end of summary.scanone.R
