@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/12/2010:
+Version 1.19, 11/17/2010:
 
 Major changes:
 
@@ -26,6 +26,10 @@ Major changes:
   on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf 
 
 Minor changes:
+
+  Revised summary.scanoneperm to include a new argument,
+  controlAcrossPheno.  If TRUE, LOD thresholds will control error rate
+  not just across the genome but also across the LOD score columns.
 
   Added function droponemarker, with the aim of identifying
   problematic markers by dropping one marker at a time and calculating
