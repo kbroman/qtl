@@ -93,7 +93,7 @@
   In the case that X-chromosome specific permutations were performed
   (with \code{perm.Xsp=TRUE} in \code{\link{scanone}}), autosome-
   and X-chromosome specific thresholds and p-values are calculated by
-  the method in Broman et al. (in press).
+  the method in Broman et al. (2006).
 }
 
 \value{
@@ -167,8 +167,8 @@ summary(out2, format="allpeaks", perms=operm2, alpha=0.05, pvalues=TRUE)
 
 \references{
   Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
-  Southard-Smith, E. M. and Churchill G. A.  The X chromosome in
-  quantitative trait locus mapping.  \emph{Genetics}, to appear.
+  Southard-Smith, E. M. and Churchill G. A. (2006)  The X chromosome in
+  quantitative trait locus mapping.  \emph{Genetics}, \bold{174}, 2151--2158.
 }
 
 
