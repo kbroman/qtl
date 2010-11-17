@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o add functions [.scanone and [.scantwo
+
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 
