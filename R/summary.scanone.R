@@ -604,22 +604,13 @@ function(object, alpha=c(0.05, 0.10), df=FALSE, controlAcrossCol=FALSE, ...)
         rmax <- apply(r, 1, max)
         rqu <- quantile(rmax, 1-thealpha[,k], na.rm=TRUE)
         qu <- matrix(nrow=length(thealpha[,k]), ncol=ncol(object[[v[k]]]))
+        object.sort <- apply(object[[v[k]]], 2, sort, na.last=FALSE)
 
         for(i in seq(along=rqu)) {
-          fl <- floor(rqu[i])
-          ce <- ceiling(rqu[i])
-          if(fl==ce) {  # exact
-            for(j in 1:ncol(object[[v[k]]])) {
-              qu[i,j] <- object[[v[k]]][r[,j]==rqu[i],j]
-            }
-          }
-          else { # need to interpolate
-            for(j in 1:ncol(object[[v[k]]])) {
-              lo <- object[[v[k]]][r[,j]==fl,j]
-              up <- object[[v[k]]][r[,j]==ce,j]
-              qu[i,j] <- lo*(1-(ce-fl)) + up*(ce-fl)
-            }
-          }
+          if(fl==ce) # exact
+            qu[i,] <- object.sort[rqu[i],]
+          else # need to interpolate
+            qu[i,] <- object.sort[fl,]*(1-(ce-fl)) + object.sort[ce,]*(ce-fl)
         }
         colnames(qu) <- colnames(object[[v[k]]])
       }
@@ -649,24 +640,18 @@ function(object, alpha=c(0.05, 0.10), df=FALSE, controlAcrossCol=FALSE, ...)
       if(any(is.na(object)))
           object <- object[apply(object,1,function(a) !any(is.na(a))),,drop=FALSE]
 
-      r <- apply(object, 2, rank, ties.method="random")
+      r <- apply(object, 2, rank, ties.method="random", na.last=FALSE)
       rmax <- apply(r, 1, max)
       rqu <- quantile(rmax, 1-alpha, na.rm=TRUE)
       quant <- matrix(nrow=length(alpha), ncol=ncol(object))
+      object.sort <- apply(object, 2, sort, na.last=FALSE)
       for(i in seq(along=rqu)) {
         fl <- floor(rqu[i])
         ce <- ceiling(rqu[i])
-        if(fl==ce) {  # exact
-          for(j in 1:ncol(object)) 
-            quant[i,j] <- object[r[,j]==rqu[i],j]
-        }
-        else { # need to interpolate
-          for(j in 1:ncol(object)) {
-            lo <- object[r[,j]==fl,j]
-            up <- object[r[,j]==ce,j]
-            quant[i,j] <- lo*(1-(ce-fl)) + up*(ce-fl)
-          }
-        }
+        if(fl==ce) # exact
+          quant[i,] <- object.sort[rqu[i],]
+        else # need to interpolate
+          quant[i,] <- object.sort[fl,]*(1-(ce-fl)) + object.sort[ce,]*(ce-fl)
       }
       colnames(quant) <- colnames(object)
     }
