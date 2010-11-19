@@ -3,7 +3,7 @@
 # effectplot.R
 #
 # copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# Last modified Jan, 2010
+# Last modified Nov, 2010
 # first written Jul, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,6 +40,16 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
     cross$pheno <- cbind(pheno.col, cross$pheno)
     pheno.col <- 1
   }
+
+  # if mname2 is given but not mname1, switch it around
+  if((missing(mname1) && missing(mark1) && missing(geno1)) &&
+     any(!missing(mname2) || missing(mark2) || missing(geno2))) {
+    if(!missing(mname2)) { mname1 <- mname2; mname2 <- NULL }
+    if(!missing(mark2)) { mark1 <- mark2; mark2 <- NULL }
+    if(!missing(geno2)) { geno1 <- geno2; geno2 <- NULL }
+  }
+  if(missing(mark2)) mark2 <- NULL
+  if(missing(mname2)) mname2 <- NULL
 
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
@@ -118,8 +128,8 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
   if(is.null(printname1)) printname1 <- mname1
 
   # Deal with marker 2
-  if(!missing(mname2) || !missing(mark2)) {
-    if(missing(mark2)) {
+  if(!is.null(mname2) || !is.null(mark2)) {
+    if(is.null(mark2)) {
       # get marker data according to marker name
       tmp <- effectplot.getmark(cross, mname2)
       tmptmp <- attr(tmp, "mname")
@@ -139,7 +149,7 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
       mark2 <- matrix(mark2, ncol=1)
       if(dim(mark2)[1] != n.ind) 
         stop("Marker 2 data has the wrong dimension")
-      if(missing(mname2)) 
+      if(is.null(mname2)) 
         mname2 <- "Marker 2"
     }
     if(is.null(printname2)) printname2 <- mname2

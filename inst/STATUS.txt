@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/17/2010:
+Version 1.19, 11/19/2010:
 
 Major changes:
 
@@ -77,6 +77,9 @@ Minor changes:
   Added a manual page for the function getid(), which was not previously
   documented.  (It is used internally a great deal, and it may be
   useful more generally.)
+
+  Revised effectplot so that if mname2 or mark2 are given but mname1
+  and mark1 are not, the arguments get switched.  
 
   Fixed a bug in shiftmap().
 
