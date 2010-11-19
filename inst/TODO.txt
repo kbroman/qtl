@@ -10,8 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o effectplot: if mname2 is given but not mname1, assume mname2 is
-  mname1 (also geno2 and mark2)
+o summary.scanone: new formats that include confidence intervals  
+  ("tabByCol", "tabByChr"); ci.function=c("lodint", "bayesint")
 
 o implement the "controlAcrossCol" argument within summary.scanone,
   to calculate p-values?
