@@ -17,13 +17,30 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/19/2010:
+Version 1.19, 11/20/2010:
 
 Major changes:
 
   Added a tutorial on genetic map construction; find it within the
   package at docs/geneticmaps.pdf, or (more simply, probably), find it
   on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf 
+
+  Added two additional formats to summary.scanone(), "tabByCol" and
+  "tabByChr".  These produce tables of LOD peaks organized by LOD
+  score column or by chromosome.  The tables include approximate
+  confidence intervals for QTL location (as calculated by the lodint()
+  or bayesint() function; which one is indicated by the new argument
+  ci.function).  Here's an example:
+
+    bp:
+               chr  pos ci.low ci.high   bp  pval
+    c1.loc44.5   1 47.8   35.5    85.0 3.56 0.007
+    D4Mit164     4 29.5   18.8    30.6 8.09 0.000
+
+    sqrt:
+               chr  pos ci.low ci.high sqrt  pval
+    c1.loc44.5   1 47.8   35.5    84.8 3.63 0.007
+    D4Mit164     4 29.5   17.2    30.6 8.08 0.000
 
 Minor changes:
 

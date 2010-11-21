@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o summary.scanone: new formats that include confidence intervals  
-  ("tabByCol", "tabByChr"); ci.function=c("lodint", "bayesint")
-
 o implement the "controlAcrossCol" argument within summary.scanone,
   to calculate p-values?
 

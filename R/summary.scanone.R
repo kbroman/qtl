@@ -31,8 +31,9 @@
 # summarize scanone results 
 ##################################################################
 summary.scanone <-
-function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
-         perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE, ...)
+function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByCol", "tabByChr"),
+         perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE, 
+         ci.function=c("lodint", "bayesint"), ...)
 {
   if(!any(class(object) == "scanone"))
     stop("Input should have class \"scanone\".")
@@ -41,7 +42,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
   ncol.object <- ncol(object)-2
   cn.object <- colnames(object)[-(1:2)]
 
-  if(ncol.object==1 && format != "onepheno") {
+  if(ncol.object==1 && (format == "allpeaks" || format == "allpheno")) {
     warning("With just one LOD column, format=\"onepheno\" used.")
     format <- "onepheno"
   }
@@ -229,7 +230,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
     result <- object[wh,]
   }  # end of format=="allpheno"
 
-  else { # format=="allpeaks"
+  else if(format=="allpeaks") {
     # pull out max on each chromosome
     wh <- vector("list", ncol.object)
 
@@ -297,69 +298,209 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
       result[,(1:ncol.object)*2] <- pos
       result[,(1:ncol.object)*2+1] <- lod
     }
-  }    
-
-  if(pvalues && nrow(result) > 0) { # get p-values and add to the results
-    rn <- rownames(result)
-
-    if("xchr" %in% names(attributes(perms))) {
-      xchr <- attr(perms, "xchr")
-      xchr <- names(xchr)[xchr]
-      xchr <- as.character(result[,1]) %in% xchr
-      L <- attr(perms, "L")
-      Lt <- sum(L)
-      
-      pval <- vector("list", ncol.object)
-      for(i in 1:ncol.object) {
-        if(format=="allpeaks") thecol <- i*2+1
-        else thecol <- i+2
-        
-        pval[[i]] <- rep(0, length(xchr))
-        if(any(xchr))
-          pval[[i]][xchr] <- sapply(result[xchr,thecol], function(a, b, rat)
-                                    1-mean(b < a)^rat, perms$X[,i], Lt/L[2])
-        if(any(!xchr))
-          pval[[i]][!xchr] <- sapply(result[!xchr,thecol], function(a, b, rat)
-                                     1-mean(b < a)^rat, perms$A[,i], Lt/L[1])
-      }
-    }
-    else {
-      pval <- vector("list", ncol.object)
-      for(i in 1:ncol.object) {
-        if(format=="allpeaks") thecol <- i*2+1
-        else thecol <- i+2
-        
-        pval[[i]] <- sapply(result[,thecol], function(a, b) mean(b >= a), perms[,i])
-      }
-    }
-    
-    if(format == "allpeaks") {
-      temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*3+1))
-    
-      names(temp)[1] <- names(result)[1]
-      temp[,1] <- result[,1]
-
-      for(i in 1:ncol.object) {
-        names(temp)[i*3+(-1:1)] <- c(names(result)[i*2+(0:1)], "pval")
-        temp[,i*3-1:0] <- result[,i*2+(0:1)]
-        temp[,i*3+1] <- pval[[i]]
-      }
-    }
-    else {
-      temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*2+2))
-    
-      names(temp)[1:2] <- names(result)[1:2]
-      temp[,1:2] <- result[,1:2]
-      for(i in 1:ncol.object) {
-        names(temp)[i*2+1:2] <- c(names(result)[i+2], "pval")
-        temp[,i*2+1] <- result[,i+2]
-        temp[,i*2+2] <- pval[[i]]
-      }
-    }
-    result <- temp
-    rownames(result) <- rn
   }
-  
+  else { # format=="tabByChr" or =="tabByCol"
+    result <- vector("list", ncol.object)
+    names(result) <- names(object)[-(1:2)]
+
+    # pull out max on each chromosome
+    wh <- vector("list", ncol.object)
+
+    for(lodcolumn in (1:ncol.object)+2) {
+      for(i in unique(chr)) {
+        if(any(!is.na(object[chr==i,lodcolumn]))) {
+          mx <- max(object[chr==i,lodcolumn],na.rm=TRUE)
+          temp <- which(chr==i & object[,lodcolumn]==mx)
+          if(length(temp)>1) temp <- sample(temp, 1)
+          wh[[lodcolumn-2]] <- c(wh[[lodcolumn-2]], temp)
+        }
+        else 
+          wh[[lodcolumn-2]] <- c(wh, NA)
+      }
+    }
+
+    pos <- sapply(wh, function(a,b) b[a], object[,2])
+    if(!is.matrix(pos)) pos <- as.matrix(pos)
+
+    lod <- pos
+
+    for(i in 1:ncol(pos))
+      lod[,i] <- object[wh[[i]],i+2]
+    thechr <- as.character(unique(object[,1]))
+
+    for(i in 1:ncol.object) 
+      result[[i]] <- object[wh[[i]],c(1,2,i+2)]
+
+    if(!missing(threshold)) { # rows with at least one LOD > threshold
+      for(i in 1:ncol.object)
+        result[[i]] <- result[[i]][lod[,i] > threshold,,drop=FALSE]
+    }
+    else if(!missing(alpha)) {
+      keep <- NULL
+      thr <- summary(perms, alpha)
+
+      if("xchr" %in% names(attributes(perms))) {
+        xchr <- attr(perms, "xchr")
+        xchr <- names(xchr)[xchr]
+        xchr <- thechr %in% xchr
+
+        for(i in 1:ncol.object) 
+          result[[i]] <- result[[i]][(lod[,i] > thr$A[i] & !xchr) |
+                                     (lod[,i] > thr$X[i] & xchr), , drop=FALSE]
+
+      }
+      else {
+        for(i in 1:ncol.object)
+          result[[i]] <- result[[i]][lod[,i] > thr[i],,drop=FALSE]
+      }
+    }
+
+  }
+
+
+  if(pvalues) {
+    if(format != "tabByCol" && format != "tabByChr") {
+      if(nrow(result) > 0) { # get p-values and add to the results
+        rn <- rownames(result)
+
+        if("xchr" %in% names(attributes(perms))) {
+          xchr <- attr(perms, "xchr")
+          xchr <- names(xchr)[xchr]
+          xchr <- as.character(result[,1]) %in% xchr
+          L <- attr(perms, "L")
+          Lt <- sum(L)
+      
+          pval <- vector("list", ncol.object)
+          for(i in 1:ncol.object) {
+            if(format=="allpeaks") thecol <- i*2+1
+            else thecol <- i+2
+            
+            pval[[i]] <- rep(0, length(xchr))
+            if(any(xchr))
+              pval[[i]][xchr] <- sapply(result[xchr,thecol], function(a, b, rat)
+                                        1-mean(b < a)^rat, perms$X[,i], Lt/L[2])
+            if(any(!xchr))
+              pval[[i]][!xchr] <- sapply(result[!xchr,thecol], function(a, b, rat)
+                                         1-mean(b < a)^rat, perms$A[,i], Lt/L[1])
+          }
+        }
+        else {
+          pval <- vector("list", ncol.object)
+          for(i in 1:ncol.object) {
+            if(format=="allpeaks") thecol <- i*2+1
+            else thecol <- i+2
+          
+            pval[[i]] <- sapply(result[,thecol], function(a, b) mean(b >= a), perms[,i])
+          }
+        }
+
+        if(format == "allpeaks") {
+          temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*3+1))
+    
+          names(temp)[1] <- names(result)[1]
+          temp[,1] <- result[,1]
+
+          for(i in 1:ncol.object) {
+            names(temp)[i*3+(-1:1)] <- c(names(result)[i*2+(0:1)], "pval")
+            temp[,i*3-1:0] <- result[,i*2+(0:1)]
+            temp[,i*3+1] <- pval[[i]]
+          }
+        }
+        else if(format != "tabByCol" && format != "tabByChr") {
+          temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*2+2))
+    
+          names(temp)[1:2] <- names(result)[1:2]
+          temp[,1:2] <- result[,1:2]
+          for(i in 1:ncol.object) {
+            names(temp)[i*2+1:2] <- c(names(result)[i+2], "pval")
+            temp[,i*2+1] <- result[,i+2]
+            temp[,i*2+2] <- pval[[i]]
+          }
+        }
+        result <- temp
+        rownames(result) <- rn
+
+      }
+    }
+    else {
+      for(i in seq(along=result)) {
+        if(nrow(result[[i]]) == 0) next
+
+        pval <- 1:nrow(result[[i]])
+          
+        if("xchr" %in% names(attributes(perms))) {
+          xchr <- attr(perms, "xchr")
+          xchr <- names(xchr)[xchr]
+          xchr <- as.character(result[[i]][,1]) %in% xchr
+          L <- attr(perms, "L")
+          Lt <- sum(L)
+      
+          if(any(xchr))
+            pval[xchr] <- sapply(result[[i]][xchr,3], function(a, b, rat)
+                                 1-mean(b < a)^rat, perms$X[,i], Lt/L[2])
+          if(any(!xchr))
+            pval[!xchr] <- sapply(result[[i]][!xchr,3], function(a, b, rat)
+                                  1-mean(b < a)^rat, perms$A[,i], Lt/L[1])
+        }
+        else 
+          pval <- sapply(result[[i]][,3], function(a, b) mean(b >= a), perms[,i])
+        
+        result[[i]] <- cbind(as.data.frame(result[[i]]), pval=pval)
+
+      }
+
+    }
+  }
+
+  if(format=="tabByCol" || format=="tabByChr") { # add intervals
+    ci.function <- match.arg(ci.function)
+    if(ci.function=="lodint") cif <- lodint
+    else cif <- bayesint
+
+    for(i in seq(along=result)) {
+      if(nrow(result[[i]]) == 0) next
+
+      lo <- hi <- rep(NA, nrow(result[[i]]))
+      for(j in 1:nrow(result[[i]])) {
+        temp <- cif(object, chr=as.character(result[[i]][j,1]), lodcolumn=i, ...)
+        lo[j] <- temp[1,2]
+        hi[j] <- temp[nrow(temp),2]
+      }
+      result[[i]] <- cbind(as.data.frame(result[[i]]), ci.low=lo, ci.high=hi)
+      colnames(result[[i]])[3] <- "lod"
+    }
+
+    if(format=="tabByChr" && length(result)==1)
+      format <- "tabByCol"     # no need to do by chr in this case
+
+    if(format=="tabByChr") {
+      temp <- vector("list", length(thechr))
+      names(temp) <- thechr
+
+      for(i in seq(along=result)) {
+        if(nrow(result[[i]])==0) next
+        rownames(result[[i]]) <- paste(names(result)[i], rownames(result[[i]]), sep=":")
+        for(j in 1:nrow(result[[i]])) {
+          thischr <- match(result[[i]][j,1], thechr)
+          if(length(temp[[thischr]])==0)
+            temp[[thischr]] <- result[[i]][j,,drop=FALSE]
+          else 
+            temp[[thischr]] <- rbind(temp[[thischr]], result[[i]][j,,drop=FALSE])
+        }
+      }
+      result <- temp
+    }
+
+    # move CI to before the lod score
+    for(i in seq(along=result)) {
+      if(is.null(result[[i]]) || nrow(result[[i]])==0) next
+      nc <- ncol(result[[i]])
+      result[[i]] <- result[[i]][,c(1,2,nc-1,nc,3:(nc-2)),drop=FALSE]
+    }
+
+    attr(result, "tab") <- format
+  }
+
   if(df && "df" %in% names(attributes(object)))
     attr(result, "df") <- attr(object, "df")
   if(!df) attr(result, "df") <- NULL
@@ -374,7 +515,9 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks"),
 print.summary.scanone <-
 function(x, ...)
 {
-  if(nrow(x) == 0) {
+  tab <- attr(x, "tab")
+
+  if(is.null(tab) && nrow(x) == 0) {
     cat("    There were no LOD peaks above the threshold.\n")
     return(invisible(NULL))
   }
@@ -393,7 +536,35 @@ function(x, ...)
     cat("\n")
   }
   
-  print.data.frame(x,digits=3)
+  flag <- FALSE
+  if(is.null(tab)) {
+    print.data.frame(x,digits=3)
+    flag <- TRUE
+  }
+  else if(tab=="tabByChr") {
+    for(i in seq(along=x)) {
+      if(is.null(x[[i]])) next
+      else {
+        flag <- TRUE
+        cat("Chr ", names(x)[i], ":\n", sep="")
+        print(x[[i]], digits=3)
+        cat("\n")
+      }
+    }
+  }
+  else if(tab=="tabByCol") {
+    for(i in seq(along=x)) {
+      if(nrow(x[[i]])==0) next
+      else {
+        flag <- TRUE
+        if(length(x) > 1) cat(names(x)[i], ":\n", sep="")
+        print(x[[i]], digits=3)
+        if(length(x) > 1) cat("\n")
+      }
+    }
+  }
+  if(!flag) 
+    cat("    There were no LOD peaks above the threshold.\n")
 }
 
 # pull out maximum LOD peak, genome-wide
