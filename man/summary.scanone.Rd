@@ -11,8 +11,9 @@
 
 \usage{
 \method{summary}{scanone}(object, threshold,
-        format=c("onepheno", "allpheno", "allpeaks"),
-        perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE, \dots)
+        format=c("onepheno", "allpheno", "allpeaks", "tabByCol", "tabByChr"),
+        perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE,
+        ci.function=c("lodint", "bayesint"), \dots)
 }
 
 \arguments{
@@ -22,8 +23,7 @@
    this value will be returned. This could be a single number or (for
    formats other than \code{"onepheno"}) a threshold for each LOD score
    column.  If \code{alpha} is specified, \code{threshold} should not be.}
- \item{format}{Format for the output; used only if there is more than
-   one LOD score column in the input.  See Details, below.}
+ \item{format}{Format for the output.  See Details, below.}
  \item{perms}{Optional permutation results used to derive thresholds or
    to calculate genome-scan-adjusted p-values.  This must be consistent
    with the \code{object} input, in that it must have the same number of
@@ -42,8 +42,15 @@
    p-values in the results.  This requires that \code{perms} be
    provided.} 
  \item{df}{If TRUE, the degrees of freedom associated with the LOD
-   scores are shown.} 
- \item{\dots}{Ignored at this point.}
+   scores are shown.}
+ \item{ci.function}{For formats \code{"tabByCol"} and \code{"tabByChr"},
+   indicates the function to use to get approximate confidence intervals
+   for QTL location.}
+ \item{\dots}{For formats \code{"tabByCol"} and \code{"tabByChr"},
+   additional arguments are passed to the function indicated by
+   \code{ci.function} (for example, \code{drop} for \code{\link{lodint}}
+   or \code{prob} for \code{\link{bayesint}}, or \code{expandtomarkers}
+   for either).} 
 }
 
 \details{
@@ -85,6 +92,16 @@
   returned if at least one of the LOD score columns exceeded its
   threshold. 
 
+  For \code{format="tabByCol"}, there will be a separate table for each
+  LOD score column, with a single peak per chromosome.  Included are
+  columns indicating chromosome, peak position, lower and upper limits
+  of the confidence interval calculated via \code{\link{lodint}} or
+  \code{\link{bayesint}}, and lod score.  
+
+  The output for \code{format="tabByChr"}, is similar to that of
+  \code{format="tabByCol"}, but with results organized by chromosome
+  rather than by LOD score column.
+
   If \code{pvalues=TRUE}, and \code{perms} is specified,
   genome-scan-adjusted p-values are calculated for each LOD score
   column, and there are additional columns in the output containing
@@ -93,7 +110,7 @@
   In the case that X-chromosome specific permutations were performed
   (with \code{perm.Xsp=TRUE} in \code{\link{scanone}}), autosome-
   and X-chromosome specific thresholds and p-values are calculated by
-  the method in Broman et al. (in press).
+  the method in Broman et al. (2006).
 }
 
 \value{
@@ -104,6 +121,7 @@
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
 
 \examples{
+\dontshow{set.seed(70377314)}
 data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=c(2,5,6))}
 fake.bc <- calc.genoprob(fake.bc, step=5)
@@ -158,6 +176,17 @@ summary(out2, format="allpheno", perms=operm2, alpha=0.05, pvalues=TRUE)
 
 # The same with format="allpeaks"
 summary(out2, format="allpeaks", perms=operm2, alpha=0.05, pvalues=TRUE)
+
+# format="tabByCol"
+summary(out2, format="tabByCol", perms=operm2, alpha=0.05, pvalues=TRUE)
+
+# format="tabByChr", but using bayes intervals
+summary(out2, format="tabByChr", perms=operm2, alpha=0.05, pvalues=TRUE,
+        ci.function="bayesint")
+
+# format="tabByChr", but using 99% bayes intervals
+summary(out2, format="tabByChr", perms=operm2, alpha=0.05, pvalues=TRUE,
+        ci.function="bayesint", prob=0.99)
 }
 
 \seealso{ \code{\link{scanone}}, \code{\link{plot.scanone}},
@@ -167,8 +196,8 @@ summary(out2, format="allpeaks", perms=operm2, alpha=0.05, pvalues=TRUE)
 
 \references{
   Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
-  Southard-Smith, E. M. and Churchill G. A.  The X chromosome in
-  quantitative trait locus mapping.  \emph{Genetics}, to appear.
+  Southard-Smith, E. M. and Churchill G. A. (2006)  The X chromosome in
+  quantitative trait locus mapping.  \emph{Genetics}, \bold{174}, 2151--2158.
 }
 
 

@@ -227,7 +227,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   Manichaikul, A., Moon, J. Y., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Yandell, B. S. and Broman,
   K. W. (2009) A model selection approach for the identification of
   quantitative trait loci in experimental crosses, allowing
-  epistasis. \emph{Genetics}, to appear.
+  epistasis. \emph{Genetics}, \bold{181}, 1077--1086.
 
   Broman,  K. W. and Speed, T. P. (2002) A model selection approach for the
   identification of quantitative trait loci in experimental crosses (with
