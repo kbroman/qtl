@@ -507,7 +507,10 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
 
   if(format=="allpeaks") rownames(result) <- as.character(result$chr)
 
-  class(result) <- c("summary.scanone", "data.frame")
+  if(format=="tabByCol" || format=="tabByChr")
+    class(result) <- c("summary.scanone", "list")
+  else
+    class(result) <- c("summary.scanone", "data.frame")
   result
 }
 
