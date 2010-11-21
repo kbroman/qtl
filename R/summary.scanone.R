@@ -479,7 +479,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
 
       for(i in seq(along=result)) {
         if(nrow(result[[i]])==0) next
-        rownames(result[[i]]) <- paste(names(result)[i], rownames(result[[i]]), sep=":")
+        rownames(result[[i]]) <- paste(names(result)[i], rownames(result[[i]]), sep=" : ")
         for(j in 1:nrow(result[[i]])) {
           thischr <- match(result[[i]][j,1], thechr)
           if(length(temp[[thischr]])==0)
