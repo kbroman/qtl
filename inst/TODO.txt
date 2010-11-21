@@ -10,6 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o need to speed up summary.scanone when many columns and pval=TRUE
+
+o implement the "controlAcrossCol" argument within summary.scanone,
+  to calculate p-values?
+
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 
