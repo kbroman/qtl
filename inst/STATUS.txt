@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 11/20/2010:
+Version 1.19, 11/29/2010:
 
 Major changes:
 
@@ -33,12 +33,12 @@ Major changes:
   ci.function).  Here's an example:
 
     bp:
-               chr  pos ci.low ci.high   bp  pval
+               chr  pos ci.low ci.high  lod  pval
     c1.loc44.5   1 47.8   35.5    85.0 3.56 0.007
     D4Mit164     4 29.5   18.8    30.6 8.09 0.000
 
     sqrt:
-               chr  pos ci.low ci.high sqrt  pval
+               chr  pos ci.low ci.high  lod  pval
     c1.loc44.5   1 47.8   35.5    84.8 3.63 0.007
     D4Mit164     4 29.5   17.2    30.6 8.08 0.000
 
