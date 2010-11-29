@@ -10,16 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o need to speed up summary.scanone when many columns and pval=TRUE
+o In c.cross, include an argument for "flipping" a backcross, so that
+  a backcross to (AxB)xB can be combined with an intercross
 
 o implement the "controlAcrossCol" argument within summary.scanone,
   to calculate p-values?
-
-o get scanone and scantwo to work with a single marker on a
-  chromosome. 
-
-o In c.cross, include an argument for "flipping" a backcross, so that
-  a backcross to (AxB)xB can be combined with an intercross
 
 o qtl x covar interactions in stepwiseqtl
 
@@ -31,6 +26,9 @@ o special treatment of X chromosome in scantwo permutations and in
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o get scanone and scantwo to work with a single marker on a
+  chromosome. 
 
 o function for getting x axis location in scantwo picture (like the
   new xaxisloc.scanone)
