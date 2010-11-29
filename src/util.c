@@ -35,7 +35,8 @@
  *                  wtaverage, comparegeno, R_comparegeno,
  *                  R_locate_xo, locate_xo, matmult, expand_col2drop
  *                  dropcol_xpx, dropcol_xpy, dropcol_x,
- *                  reviseMWril, R_reviseMWril
+ *                  reviseMWril, R_reviseMWril, R_calcPermPval,
+ *                  calcPermPval
  *
  **********************************************************************/
 
@@ -854,6 +855,36 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
 
   reviseMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses,
 	      *missingval);
+}
+
+
+/* wrapper for calcPermPval */
+void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
+		    double *perms, int *n_perms, double *pval)
+{
+  double **Peaks, **Perms, **Pval;
+  
+  reorg_errlod(*nr_peaks, *nc_peaks, peaks, &Peaks);
+  reorg_errlod(*n_perms, *nc_peaks, perms, &Perms);
+  reorg_errlod(*nr_peaks, *nc_peaks, pval, &Pval);
+
+  calcPermPval(Peaks, *nc_peaks, *nr_peaks, Perms, *n_perms, Pval);
+}
+
+/* calculate permutation p-values for summary.scanone() */
+void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
+		  double **Perms, int n_perms, double **Pval)
+{
+  int i, j, k, count;
+
+  for(i=0; i<nc_peaks; i++) {
+    for(j=0; j<nr_peaks; j++) {
+      count = 0;
+      for(k=0; k<n_perms; k++) 
+	if(Perms[i][k] >= Peaks[i][j]) count++;
+      Pval[i][j] = (double)count/(double)n_perms;
+    }
+  }
 }
 
 

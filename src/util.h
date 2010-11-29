@@ -35,7 +35,8 @@
  *                  wtaverage, comparegeno, R_comparegeno
  *                  R_locate_xo, locate_xo, matmult, expand_col2drop
  *                  dropcol_xpx, dropcol_xpy, dropcol_x,
- *                  reviseMWril, R_reviseMWril
+ *                  reviseMWril, R_reviseMWril, R_calcPermPval,
+ *                  calcPermPval
  *
  **********************************************************************/
 
@@ -356,6 +357,13 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
                    int *parents, int *geno, int *crosses,
                    int *missingval);
 
+/* wrapper for calcPermPval */
+void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
+		    double *perms, int *n_perms, double *pval);
+
+/* calculate permutation p-values for summary.scanone() */
+void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
+		  double **Perms, int n_perms, double **Pval);
 #ifdef __cplusplus
   }
 #endif

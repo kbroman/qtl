@@ -4,6 +4,7 @@
 \alias{calc.genoprob.special}
 \alias{calc.pairprob}
 \alias{calc.plod}
+\alias{calcPermPval}
 \alias{charround}
 \alias{checkcovar}
 \alias{checkformula}
@@ -177,6 +178,7 @@ calc.pairprob(cross, step=0, off.end=0, error.prob=0.0001,
               map.function=c("haldane","kosambi","c-f","morgan"), map,
               assumeCondIndep=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
+calcPermPval(peaks, perms)
 charround(x, digits=1)
 checkPhyloCrosses(crosses, taxa, nostop=FALSE)
 checkPhyloPartition(partition, taxa)
