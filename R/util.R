@@ -40,7 +40,8 @@
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
-#           switchAlleles, nqrank, cleanGeno, typingGap
+#           switchAlleles, nqrank, cleanGeno, typingGap,
+#           calcPermPval
 #
 ######################################################################
 
@@ -3989,6 +3990,10 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
   cross
 }
 
+######################################################################
+# typingGap: calculate gaps between typed markers
+######################################################################
+
 typingGap <-
 function(cross, chr)
 {
@@ -4011,6 +4016,38 @@ function(cross, chr)
   }
   if(n.chr==1) gaps <- as.numeric(gaps)
   gaps
+}
+
+######################################################################
+# calcPermPval
+#
+# calculate permutation pvalues for summary.scanone()
+######################################################################
+calcPermPval <-
+function(peaks, perms)
+{
+  if(!is.matrix(peaks))
+    peaks <- as.matrix(peaks)
+  if(!is.matrix(perms))
+    perms <- as.matrix(perms)
+
+  ncol.peaks <- ncol(peaks)
+  nrow.peaks <- nrow(peaks)
+  n.perms <- nrow(perms)
+
+  if(ncol.peaks != ncol(perms))
+    stop("ncol(peaks) != ncol(perms)")
+
+  pval <- .C("R_calcPermPval",
+             as.double(peaks),
+             as.integer(ncol.peaks),
+             as.integer(nrow.peaks),
+             as.double(perms),
+             as.integer(n.perms),
+             pval=as.double(rep(0,ncol.peaks*nrow.peaks)),
+             PACKAGE="qtl")$pval
+
+  matrix(pval, ncol=ncol.peaks, nrow=nrow.peaks)
 }
 
 # end of util.R

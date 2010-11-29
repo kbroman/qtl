@@ -330,31 +330,6 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
 
     for(i in 1:ncol.object) 
       result[[i]] <- object[wh[[i]],c(1,2,i+2)]
-
-    if(!missing(threshold)) { # rows with at least one LOD > threshold
-      for(i in 1:ncol.object)
-        result[[i]] <- result[[i]][lod[,i] > threshold,,drop=FALSE]
-    }
-    else if(!missing(alpha)) {
-      keep <- NULL
-      thr <- summary(perms, alpha)
-
-      if("xchr" %in% names(attributes(perms))) {
-        xchr <- attr(perms, "xchr")
-        xchr <- names(xchr)[xchr]
-        xchr <- thechr %in% xchr
-
-        for(i in 1:ncol.object) 
-          result[[i]] <- result[[i]][(lod[,i] > thr$A[i] & !xchr) |
-                                     (lod[,i] > thr$X[i] & xchr), , drop=FALSE]
-
-      }
-      else {
-        for(i in 1:ncol.object)
-          result[[i]] <- result[[i]][lod[,i] > thr[i],,drop=FALSE]
-      }
-    }
-
   }
 
 
@@ -370,28 +345,29 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
           L <- attr(perms, "L")
           Lt <- sum(L)
       
-          pval <- vector("list", ncol.object)
-          for(i in 1:ncol.object) {
-            if(format=="allpeaks") thecol <- i*2+1
-            else thecol <- i+2
-            
-            pval[[i]] <- rep(0, length(xchr))
-            if(any(xchr))
-              pval[[i]][xchr] <- sapply(result[xchr,thecol], function(a, b, rat)
-                                        1-mean(b < a)^rat, perms$X[,i], Lt/L[2])
-            if(any(!xchr))
-              pval[[i]][!xchr] <- sapply(result[!xchr,thecol], function(a, b, rat)
-                                         1-mean(b < a)^rat, perms$A[,i], Lt/L[1])
+          if(format=="allpeaks")
+            thecol <- (1:ncol.object)*2+1
+          else thecol <- (1:ncol.object)+2
+
+          if(any(xchr)) {
+            tempX <- calcPermPval(result[xchr,thecol,drop=FALSE], perms$X)
+            tempX <- as.data.frame(1-(1-tempX)^(Lt/L[2]))
           }
+          else tempX <- NULL
+          if(any(!xchr)) {
+            tempA <- calcPermPval(result[!xchr,thecol,drop=FALSE], perms$A)
+            tempA <- as.data.frame(1-(1-tempA)^(Lt/L[1]))
+          }
+          else tempA <- NULL
+          pval <- rbind(tempA, tempX)
+          if(any(xchr)) pval[xchr,] <- tempX
+          if(any(!xchr)) pval[!xchr,] <- tempA
         }
         else {
-          pval <- vector("list", ncol.object)
-          for(i in 1:ncol.object) {
-            if(format=="allpeaks") thecol <- i*2+1
-            else thecol <- i+2
-          
-            pval[[i]] <- sapply(result[,thecol], function(a, b) mean(b >= a), perms[,i])
-          }
+          if(format=="allpeaks") thecol <- (1:ncol.object)*2+1
+          else thecol <- (1:ncol.object)+2
+
+          pval <- as.data.frame(calcPermPval(result[,thecol,drop=FALSE], perms))
         }
 
         if(format == "allpeaks") {
@@ -422,37 +398,66 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
 
       }
     }
-    else {
-      for(i in seq(along=result)) {
-        if(nrow(result[[i]]) == 0) next
+    else { # format=="tabByCol" || format=="tabByChr"
+      peaks <- as.data.frame(lapply(result, function(a) a[,3]))
 
-        pval <- 1:nrow(result[[i]])
-          
-        if("xchr" %in% names(attributes(perms))) {
-          xchr <- attr(perms, "xchr")
-          xchr <- names(xchr)[xchr]
-          xchr <- as.character(result[[i]][,1]) %in% xchr
-          L <- attr(perms, "L")
-          Lt <- sum(L)
+      if("xchr" %in% names(attributes(perms))) {
+        xchr <- attr(perms, "xchr")
+        xchr <- names(xchr)[xchr]
+        xchr <- as.character(result[[1]][,1]) %in% xchr
+        L <- attr(perms, "L")
+        Lt <- sum(L)
       
-          if(any(xchr))
-            pval[xchr] <- sapply(result[[i]][xchr,3], function(a, b, rat)
-                                 1-mean(b < a)^rat, perms$X[,i], Lt/L[2])
-          if(any(!xchr))
-            pval[!xchr] <- sapply(result[[i]][!xchr,3], function(a, b, rat)
-                                  1-mean(b < a)^rat, perms$A[,i], Lt/L[1])
+        if(any(xchr)) {
+          tempX <- as.data.frame(calcPermPval(peaks[xchr,,drop=FALSE], perms$X))
+          tempX <- 1-(1-tempX)^(Lt/L[2])
         }
-        else 
-          pval <- sapply(result[[i]][,3], function(a, b) mean(b >= a), perms[,i])
-        
-        result[[i]] <- cbind(as.data.frame(result[[i]]), pval=pval)
+        else tempX <- NULL
+        if(any(!xchr)) {
+          tempA <- as.data.frame(calcPermPval(peaks[!xchr,,drop=FALSE], perms$A))
+          tempA <- 1-(1-tempA)^(Lt/L[1])
+        }
+        else tempA <- NULL
 
+        pval <- rbind(tempA, tempX)
+        if(any(xchr)) pval[xchr,] <- tempX
+        if(any(!xchr)) pval[!xchr,] <- tempA
       }
-
+      else 
+        pval <- as.data.frame(calcPermPval(peaks, perms))
+      
+      for(i in seq(along=result))
+        result[[i]] <- cbind(as.data.frame(result[[i]]), pval=pval[,i])
     }
   }
 
-  if(format=="tabByCol" || format=="tabByChr") { # add intervals
+  if(format=="tabByCol" || format=="tabByChr") { 
+
+    # drop insignificant peaks
+    if(!missing(threshold)) { # rows with at least one LOD > threshold
+      for(i in seq(along=result))
+        result[[i]] <- result[[i]][lod[,i] > threshold,,drop=FALSE]
+    }
+    else if(!missing(alpha)) {
+      keep <- NULL
+      thr <- summary(perms, alpha)
+
+      if("xchr" %in% names(attributes(perms))) {
+        xchr <- attr(perms, "xchr")
+        xchr <- names(xchr)[xchr]
+        xchr <- thechr %in% xchr
+
+        for(i in seq(along=result))
+          result[[i]] <- result[[i]][(lod[,i] > thr$A[i] & !xchr) |
+                                     (lod[,i] > thr$X[i] & xchr), , drop=FALSE]
+      }
+      else {
+        for(i in seq(along=result))
+          result[[i]] <- result[[i]][lod[,i] > thr[i],,drop=FALSE]
+      }
+    }
+
+    # add intervals
     ci.function <- match.arg(ci.function)
     if(ci.function=="lodint") cif <- lodint
     else cif <- bayesint
