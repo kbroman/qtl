@@ -3,7 +3,7 @@
 # ripple.R
 #
 # copyright (c) 2001-2010, Karl W Broman
-# last modified Aug, 2010
+# last modified Nov, 2010
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -124,6 +124,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       clusterStopped <- FALSE
       on.exit(if(!clusterStopped) stopCluster(cl))
       if(verbose) cat("   Running in", n.cluster, "clusters\n")
+      clusterEvalQ(cl, require(qtl, quietly=TRUE))
 
       whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
       order.split <- vector("list", n.cluster)
@@ -184,6 +185,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       clusterStopped <- FALSE
       on.exit(if(!clusterStopped) stopCluster(cl))
       if(verbose) cat("   Running in", n.cluster, "clusters\n")
+      clusterEvalQ(cl, require(qtl, quietly=TRUE))
 
       whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
       order.split <- vector("list", n.cluster)
