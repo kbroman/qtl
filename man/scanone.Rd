@@ -267,7 +267,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
 }
 
 \references{
-  Boyartchuk V. L., Broman, K. W., Mosher, R. E., D'Orazio
+  Boyartchuk,  V. L., Broman, K. W., Mosher, R. E., D'Orazio
   S. E. F., Starnbach, M. N. and Dietrich, W. F. (2001) Multigenic
   control of \emph{Listeria monocytogenes} susceptibility in
   mice. \emph{Nature Genetics} \bold{27}, 259--260.
