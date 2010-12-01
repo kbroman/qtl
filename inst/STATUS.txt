@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.20, 11/30/2010:
+Version 1.20, 12/1/2010:
 
 Major changes:
 
@@ -25,7 +25,8 @@ Major changes:
 
 Minor changes:
 
-  None.
+  Fixed a bug in plot.geno, introduced in version 1.19, that made it
+  not work with horizontal=FALSE.
 
 
 Version 1.19, 11/29/2010:
