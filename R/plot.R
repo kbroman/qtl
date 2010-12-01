@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-2010, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Nov, 2010
+# last modified Dec, 2010
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -963,28 +963,28 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
       tind <- rep(1:n.ind,length(map));tind[is.na(data)] <- NA
       ind <- tind; ind[!is.na(data) & data!=1] <- NA
       y <- rep(map,rep(n.ind,length(map)))
-      points(x,ind,pch=21,col="black", bg="white",cex=cex)
+      points(ind,y,pch=21,col="black", bg="white",cex=cex)
   
       # AB genotypes
       ind <- tind; ind[!is.na(data) & data!=2] <- NA
       if(type=="f2" || (type=="bc" && chrtype=="X"))
-        points(x,ind,pch=21,col="black", bg=color[2],cex=cex)
-      else points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
+        points(ind,y,pch=21,col="black", bg=color[2],cex=cex)
+      else points(ind,y,pch=21,col="black", bg=color[3],cex=cex)
   
       if(type=="f2" || (type=="bc" && chrtype=="X")) {
         # BB genotypes
         ind <- tind; ind[!is.na(data) & data!=3] <- NA
-        points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
+        points(ind,y,pch=21,col="black", bg=color[3],cex=cex)
       }
   
       if(type=="f2") {
         # not BB genotypes
         ind <- tind; ind[!is.na(data) & data!=4] <- NA
-        points(x,ind,pch=21,col="black", bg=color[4],cex=cex)
+        points(ind,y,pch=21,col="black", bg=color[4],cex=cex)
   
         # not AA genotypes
         ind <- tind; ind[!is.na(data) & data!=5] <- NA
-        points(x,ind,pch=21,col="black", bg=color[5],cex=cex)
+        points(ind,y,pch=21,col="black", bg=color[5],cex=cex)
       }
   
       # plot map
