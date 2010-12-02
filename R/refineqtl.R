@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-2010, Karl W. Broman
-# last modified Jul, 2010
+# last modified Dec, 2010
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -183,6 +183,15 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       formula <- paste(formula, "+", paste(colnames(covar), collapse="+"))
     formula <- as.formula(formula)
   }
+
+  # drop covariates that are not in the formula
+  if(!is.null(covar)) {
+    theterms <- rownames(attr(terms(formula), "factors"))
+    m <- match(colnames(covar), theterms)
+    if(all(is.na(m))) covar <- NULL
+    else covar <- covar[,!is.na(m),drop=FALSE]
+  }
+
   formula <- checkformula(formula, qtl$altname, colnames(covar))
 
   # identify which QTL are in the model formula
