@@ -27,6 +27,13 @@ o special treatment of X chromosome in scantwo permutations and in
 
 MEDIUM-SHORT TERM:
 
+o cim(): Haley-Knott-based approach to deal with missing genotypes at
+  marker covariates.
+
+o cim(): rather than forward selection to a fixed number of markers,
+  do forward selection until either a marker is not significant or the
+  fixed maximum.
+
 o get scanone and scantwo to work with a single marker on a
   chromosome. 
 
