@@ -2,8 +2,8 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Aug, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Jan, 2011
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 est.map <- 
 function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
-         omit.noninformative=TRUE, offset)
+         omit.noninformative=TRUE, offset, n.cluster=1)
 {
   if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
@@ -89,6 +89,45 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
   newmap <- vector("list",n.chr)
   names(newmap) <- names(cross$geno)
   chrtype <- sapply(cross$geno, class)
+
+  if(n.cluster > 1 && nchr(cross) > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
+    cat(" -Running est.map via a cluster of", n.cluster, "nodes.\n")
+    cl <- makeCluster(n.cluster)
+    clusterStopped <- FALSE
+    on.exit(if(!clusterStopped) stopCluster(cl))
+    clusterEvalQ(cl, require(qtl, quietly=TRUE))
+    
+    chr <- names(cross$geno)
+
+    # temporary definition of est.map
+    temp.est.map <- function(chr, cross, error.prob, map.function, m, p, maxit, tol,
+                             sex.sp, omit.noninformative)
+      est.map(cross=cross, chr=chr, error.prob=error.prob, map.function=map.function,
+              m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp, omit.noninformative=omit.noninformative,
+              verbose=FALSE)#, n.cluster=1)
+
+    newmap <- clusterApplyLB(cl, chr, temp.est.map, cross, error.prob, map.function, m, p,
+                             maxit, tol, sex.sp, omit.noninformative)
+    for(i in seq(along=newmap)) {
+      newmap[[i]] <- newmap[[i]][[1]]
+      class(newmap[[i]]) <- class(cross$geno[[i]])
+    }
+
+    names(newmap) <- chr
+
+    if(!missing(offset)) {  # shift map start positions
+      for(i in seq(along=newmap)) 
+        if(is.matrix(newmap[[i]])) {
+          for(j in 1:2) 
+            newmap[[i]][j,] <- newmap[[i]][j,] - newmap[[i]][j,1] + offset[i]
+        } else {
+          newmap[[i]] <- newmap[[i]] - newmap[[i]][1] + offset[i]
+        }
+    }
+
+    class(newmap) <- "map"
+    return(newmap)
+  }
 
   # calculate genotype probabilities one chromosome at a time
   for(i in 1:n.chr) {
