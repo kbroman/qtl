@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2010, Karl W Broman
+copyright (c) 2001-2011, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,11 +17,12 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.20, 12/2/2010:
+Version 1.20, 1/10/2011:
 
 Major changes:
 
-  None.
+  Enabled est.map to use multiple processors via snow; added argument
+  n.cluster to indicate the number of cluster nodes to use.
 
 Minor changes:
 
