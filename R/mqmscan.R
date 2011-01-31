@@ -349,13 +349,14 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 	}
 	class(qtl) <- c("scanone",class(qtl))
 	for( x in 1:nchr(cross)){
-		#Remove pseudomarkers from the dataset and scale to the chromosome
+		#Remove pseudomarkers from the dataset and scale to the chromosome 
+    #Somewhat longer then off-end to be able to put back the original markers
 		to.remove <- NULL
 		chr.length <- max(cross$geno[[x]]$map)
 		markers.on.chr <- which(qtl[,1]==x)
 		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
 		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-#    cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
+    cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
     qtl <- qtl[-to.remove,]
   }		
 	if(outputmarkers){
@@ -370,7 +371,6 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     }
     class(qtl) <- c("scanone",class(qtl))   
   }
-  
   #Now we handle the off-end and any shifts comming from that (newcmbase)
   #We didn't thow away the old names, and could thus get duplicates
   qtlnew <- qtl
@@ -399,6 +399,20 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     }
   }
   qtl <- qtlnew
+  
+  for( x in 1:nchr(cross)){
+		#Remove the off ends that we left hanging a step before
+    if(class(hyper$geno[[x]])!="X"){
+      to.remove <- NULL
+      chr.length <- max(cross$geno[[x]]$map)
+      markers.on.chr <- which(qtl[,1]==x)
+      to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end)]
+      to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
+      cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
+      qtl <- qtl[-to.remove,]
+    }
+  }		
+  
   #Plot the results if the user asked for it
 	if(plot){
 		info.c <- qtl
