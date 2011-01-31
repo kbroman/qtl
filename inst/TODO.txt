@@ -14,24 +14,6 @@ o replacemap.cross: also fix up the maps in the genotype probabilities
 
 o subset.cross doesn't subset qtl genotypes (from sim.cross)
 
-o mqmscan(): Can give values off the end of the chromosome even when
-  off.end=0.  See the following code:
-
-    data(hyper)
-    hyper <- fill.geno(hyper, method="argmax")
-    hyperi <- mqmaugment(hyper)
-    outmqm <- mqmscan(hyperi, step.size=2.5)
-    hyper <- calc.genoprob(hyper, step=2.5)
-    out <- scanone(hyper, method="hk")
-    
-    tapply(out[,2], out[,1], max)
-    tapply(outmqm[,2], outmqm[,2], max)
-    
-    out[out[,1]==19,]
-    outmqm[outmqm[,1]==19,]
-
-    plot(outmqm, out, col=c("blue","red"), chr=4)
-
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 
