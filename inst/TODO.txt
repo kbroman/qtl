@@ -32,18 +32,6 @@ o mqmscan(): Can give values off the end of the chromosome even when
 
     plot(outmqm, out, col=c("blue","red"), chr=4)
 
-o mqmscan(): Can give an error message regarding duplicate row names.
-  See the following code (and error message):
-
-    data(hyper)
-    hyper <- fill.geno(hyper, method="argmax")
-    hyperi <- mqmaugment(hyper)
-    outmqm <- mqmscan(hyperi, step.size=1)
-    #Error in `row.names<-.data.frame`(`*tmp*`, value = c("D1Mit296", "c1.loc4.3",  : 
-    #  duplicate 'row.names' are not allowed
-    #In addition: Warning message:
-    #non-unique value when setting 'row.names': 'c9.loc13' 
-
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 

@@ -334,6 +334,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       }
     }
 	rownames(qtl) <- names
+
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 	colnames(qtl) = c("chr","pos (cM)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
@@ -368,21 +369,36 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       attr(qtl, "marker.covar.pos") <- cimcovar
     }
     class(qtl) <- c("scanone",class(qtl))   
-  }  
+  }
+  
+  #Now we handle the off-end and any shifts comming from that (newcmbase)
+  #We didn't thow away the old names, and could thus get duplicates
+  qtlnew <- qtl
+  rownames(qtlnew) <- NULL
+  oldnames <- rownames(qtl)
   for(x in 1:n.chr){
+    #Do per chromosome
     markers.on.chr <- which(qtl[,1]==x)
     if(newcmbase[x] !=0 && nrow(qtl[markers.on.chr,]) > 0){
       qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]+newcmbase[x]
+      #We end up with 3 posibilities
       for(n in 1:nrow(qtl[markers.on.chr,])){
         name <- rownames(qtl[markers.on.chr,])[n]
+        id <- which(name==oldnames)
         if(!is.na(name) && grepl(".loc",name,fixed=TRUE)){
-          id <- which(name==rownames(qtl))
-          rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=TRUE)[[1]][2])+newcmbase[x],sep="")
+          #a marker we need to shift
+          rownames(qtlnew)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=TRUE)[[1]][2])-round(newcmbase[x]),sep="")
+        }else{
+          #a marker with a user defined name, no need to shift
+          rownames(qtlnew)[id] <- name
         }
       }
+    }else{
+      #No shift for the chromosome so we don't have to worry about shifting
+      rownames(qtlnew)[markers.on.chr] <- rownames(qtl)[markers.on.chr]
     }
   }
-
+  qtl <- qtlnew
   #Plot the results if the user asked for it
 	if(plot){
 		info.c <- qtl
