@@ -65,7 +65,7 @@ if(!(rownames(out.temp)[3]=="D1Mit296")) stop("MQM something wrong with positive
 hyper$geno[[1]]$map[1] <- -10
 res <- mqmscan(hyper,verbose=T,off.end=100)
 if(any(is.na(res[,3]))) stop("MQM failed to handle negative locations correctly")
-if(!(rownames(res)[2]=="c1.loc-105")) stop("MQM something wrong with negative locations")   #to -15 because off.end defaults to 10
+if(!(rownames(res)[2]=="c1.loc-95")) stop("MQM something wrong with negative locations")   #to -15 because off.end defaults to 10
 
 
 cat("Version information:\n")

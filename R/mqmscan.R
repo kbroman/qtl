@@ -36,7 +36,8 @@
 	
 mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,logtransform = FALSE,
-					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,test.normality=FALSE,off.end=0){
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,
+          test.normality=FALSE,off.end=0){
   
   start <- proc.time()
   model <- match.arg(model)
@@ -356,7 +357,6 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		markers.on.chr <- which(qtl[,1]==x)
 		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
 		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-    cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
     qtl <- qtl[-to.remove,]
   }		
 	if(outputmarkers){
@@ -387,7 +387,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         id <- which(name==oldnames)
         if(!is.na(name) && grepl(".loc",name,fixed=TRUE)){
           #a marker we need to shift
-          rownames(qtlnew)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=TRUE)[[1]][2])-round(newcmbase[x]),sep="")
+          rownames(qtlnew)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",qtlnew[id,2],sep="")
         }else{
           #a marker with a user defined name, no need to shift
           rownames(qtlnew)[id] <- name
@@ -408,7 +408,6 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       markers.on.chr <- which(qtl[,1]==x)
       to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end)]
       to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-      cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
       qtl <- qtl[-to.remove,]
     }
   }		
