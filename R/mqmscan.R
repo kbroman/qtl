@@ -402,7 +402,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
   
   for( x in 1:nchr(cross)){
 		#Remove the off ends that we left hanging a step before
-    if(class(hyper$geno[[x]])!="X"){
+    if(class(cross$geno[[x]])!="X"){
       to.remove <- NULL
       chr.length <- max(cross$geno[[x]]$map)
       markers.on.chr <- which(qtl[,1]==x)
