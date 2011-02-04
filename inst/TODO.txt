@@ -10,6 +10,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o replacemap.cross: also fix up the maps in the genotype probabilities
+
+o subset.cross doesn't subset qtl genotypes (from sim.cross)
+
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
 

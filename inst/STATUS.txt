@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.20, 1/10/2011:
+Version 1.20, 2/3/2011:
 
 Major changes:
 
@@ -25,6 +25,13 @@ Major changes:
   n.cluster to indicate the number of cluster nodes to use.
 
 Minor changes:
+
+  Fixed a couple of minor bugs in mqmscan: one giving duplicate row
+  names, another resulting in pseudomarkers outside the terminal
+  markers even when off.end=0.
+
+  Fixed bugs in scanone and scantwo regarding batch mode for 
+  model != "normal".
 
   Fixed a bug in refineqtl; it was including all possible covariates
   refered to in the data frame 'covar', even if they weren't referred
