@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2010, Karl W Broman and Hao Wu
-# last modified Jul, 2010
+# copyright (c) 2001-2011, Karl W Broman and Hao Wu
+# last modified Jan, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1448,6 +1448,7 @@ function(n.perm, cross, pheno.col, model,
   ##     stratification is within those groups
   batch.mode <- FALSE
   if( (n.phe==1) && ((method=="imp") || (method=="hk")) &&
+     model=="normal" && 
      is.null(addcovar) && is.null(intcovar) ) {
     chrtype <- sapply(cross$geno, class)
     sexpgm <- getsex(cross)

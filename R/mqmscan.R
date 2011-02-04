@@ -36,7 +36,8 @@
 	
 mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominance"),forceML=FALSE,
                     cofactor.significance=0.02,em.iter=1000,window.size=25.0,step.size=5.0,logtransform = FALSE,
-					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,test.normality=FALSE,off.end=0){
+					estimate.map = FALSE,plot=FALSE,verbose=FALSE, outputmarkers=TRUE, multicore=TRUE, batchsize=10, n.clusters=1,
+          test.normality=FALSE,off.end=0){
   
   start <- proc.time()
   model <- match.arg(model)
@@ -334,6 +335,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       }
     }
 	rownames(qtl) <- names
+
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info)))
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 	colnames(qtl) = c("chr","pos (cM)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
@@ -348,13 +350,13 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 	}
 	class(qtl) <- c("scanone",class(qtl))
 	for( x in 1:nchr(cross)){
-		#Remove pseudomarkers from the dataset and scale to the chromosome
+		#Remove pseudomarkers from the dataset and scale to the chromosome 
+    #Somewhat longer then off-end to be able to put back the original markers
 		to.remove <- NULL
 		chr.length <- max(cross$geno[[x]]$map)
 		markers.on.chr <- which(qtl[,1]==x)
 		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
 		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-#    cat(nrow(qtl)," ",x," Markers: ",length(markers.on.chr)," To rem:",length(to.remove),"\n")
     qtl <- qtl[-to.remove,]
   }		
 	if(outputmarkers){
@@ -368,21 +370,48 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       attr(qtl, "marker.covar.pos") <- cimcovar
     }
     class(qtl) <- c("scanone",class(qtl))   
-  }  
+  }
+  #Now we handle the off-end and any shifts comming from that (newcmbase)
+  #We didn't thow away the old names, and could thus get duplicates
+  qtlnew <- qtl
+  rownames(qtlnew) <- NULL
+  oldnames <- rownames(qtl)
   for(x in 1:n.chr){
+    #Do per chromosome
     markers.on.chr <- which(qtl[,1]==x)
     if(newcmbase[x] !=0 && nrow(qtl[markers.on.chr,]) > 0){
       qtl[markers.on.chr,2] <- qtl[markers.on.chr,2]+newcmbase[x]
+      #We end up with 3 posibilities
       for(n in 1:nrow(qtl[markers.on.chr,])){
         name <- rownames(qtl[markers.on.chr,])[n]
+        id <- which(name==oldnames)
         if(!is.na(name) && grepl(".loc",name,fixed=TRUE)){
-          id <- which(name==rownames(qtl))
-          rownames(qtl)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",as.numeric(strsplit(name,".loc",fixed=TRUE)[[1]][2])+newcmbase[x],sep="")
+          #a marker we need to shift
+          rownames(qtlnew)[id] <- paste(strsplit(name,".loc",fixed=TRUE)[[1]][1],".loc",qtlnew[id,2],sep="")
+        }else{
+          #a marker with a user defined name, no need to shift
+          rownames(qtlnew)[id] <- name
         }
       }
+    }else{
+      #No shift for the chromosome so we don't have to worry about shifting
+      rownames(qtlnew)[markers.on.chr] <- rownames(qtl)[markers.on.chr]
     }
   }
-
+  qtl <- qtlnew
+  
+  for( x in 1:nchr(cross)){
+		#Remove the off ends that we left hanging a step before
+    if(class(cross$geno[[x]])!="X"){
+      to.remove <- NULL
+      chr.length <- max(cross$geno[[x]]$map)
+      markers.on.chr <- which(qtl[,1]==x)
+      to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end)]
+      to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
+      qtl <- qtl[-to.remove,]
+    }
+  }		
+  
   #Plot the results if the user asked for it
 	if(plot){
 		info.c <- qtl
