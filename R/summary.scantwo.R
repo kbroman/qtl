@@ -322,7 +322,7 @@ subrousummaryscantwo <-
 function(object, for.perm=FALSE)
 {
   lod <- object$lod
-  lod[is.na(lod)] <- 0
+  lod[is.na(lod) | lod == Inf | lod == -Inf] <- 0
   map <- object$map
 
   pos <- map[,2]
