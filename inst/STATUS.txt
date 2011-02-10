@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.20, 2/5/2011:
+Version 1.20, 2/10/2011:
 
 Major changes:
 
@@ -25,6 +25,9 @@ Major changes:
   n.cluster to indicate the number of cluster nodes to use.
 
 Minor changes:
+
+  Revised subset.cross so that if the cross contains QTL genotypes
+  (from sim.cross), these are also subsetted.
 
   Fixed a couple of minor bugs in mqmscan: one giving duplicate row
   names, another resulting in pseudomarkers outside the terminal
