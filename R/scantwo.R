@@ -222,8 +222,8 @@ function(cross, chr, pheno.col=1,
   }
 
   # multiple phenotype for methods other than imp and hk
-  if(length(pheno.col)>1 && n.perm <= 0 &&
-     method!="imp" && method != "hk" ) {
+  if(length(pheno.col)>1 && n.perm <= 0 && (model != "normal" ||
+     (method!="imp" && method != "hk"))) {
     n.phe <- length(pheno.col)
     if(verbose) cat(" -Phenotype 1\n")
     output <- scantwo(cross, pheno.col=pheno.col[1], model=model,
