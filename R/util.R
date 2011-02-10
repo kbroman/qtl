@@ -125,11 +125,13 @@ function(cross)
 #
 # Note: map is a vector or a matrix with 2 rows
 # 
-# stepwidth = "fixed" is what R/qtl uses; stepwidth="variable" is for
-#     Brian Yandell and the bmqtl package
+# stepwidth = "fixed" is the original R/qtl version;
+# stepwidth="variable" is for Brian Yandell and the qtlbim package
+# stepwidth="max" creates the minimal number of inserted pseudomarkers
+#                 to have the maximum stepwidth = step
 ######################################################################
 create.map <-
-function(map, step, off.end, stepwidth = c("fixed", "variable"))
+function(map, step, off.end, stepwidth = c("fixed", "variable", "max"))
 {
   stepwidth <- match.arg(stepwidth)
   if(step<0 || off.end<0) stop("step and off.end must be > 0.")
@@ -159,6 +161,38 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 
       return(unclass(a))
     }
+    if(stepwidth == "max") {
+      if(off.end > 0) {
+        toadd <- c(map[1] - off.end, map[length(map)]+off.end)
+
+        if(step==0) {
+          names(toadd) <- paste("loc", 1:2, sep="")
+          map <- sort(c(map, toadd))
+          return(unclass(map))
+        }
+
+        nmap <- c(map[1] - off.end, map, map[length(map)]+off.end)
+      }
+      else {
+        nmap <- map
+        toadd <- NULL
+      }
+
+      if(step==0 || (length(map)==1 && off.end==0)) return(unclass(map))
+      
+      d <- diff(nmap)
+      nadd <- ceiling(d/step)-1
+      if(sum(nadd) > 0) {
+        for(j in 1:(length(nmap)-1)) {
+          if(nadd[j]>0)
+            toadd <- c(toadd, seq(nmap[j], nmap[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
+        }
+      }
+      names(toadd) <- paste("loc", 1:length(toadd), sep="")
+      map <- sort(c(map, toadd))
+      return(unclass(map))
+    }
+
     if(length(map) == 1) { # just one marker!
       if(off.end==0) {
         if(step == 0) step <- 1
@@ -211,8 +245,8 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
   else { # sex-specific map
     if(stepwidth == "variable") {
       if(off.end > 0) {
-        tmp <- dimnames(map)[[2]]
-        map <- cbind(map[, 1] - off.end, map, map[, length(map)] + off.end)
+        tmp <- colnames(map)
+        map <- cbind(map[, 1] - off.end, map, map[, ncol(map)] + off.end)
         dimnames(map) <- list(NULL, c("loc000", tmp, "loc999"))
       }
       if(step == 0)
@@ -233,12 +267,77 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 
       return(unclass(map))
     }
+    if(stepwidth == "max") {
+      if(step==0 && off.end==0) return(unclass(map))
+      if(step==0 && off.end>0) {
+        if(ncol(map)==1) { # only one marker; assume equal recomb in sexes
+          L1 <- L2 <- 1
+        }
+        else {
+          L1 <- diff(range(map[1,]))
+          L2 <- diff(range(map[2,]))
+        }
+
+        nam <- colnames(map)
+        nmap1 <- c(map[1,1]-off.end, map[1,], map[1,ncol(map)]+off.end)
+        nmap2 <- c(map[2,1]-off.end*L2/L1, map[2,], map[2,ncol(map)]+off.end*L2/L1)
+        map <- rbind(nmap1, nmap2)
+        colnames(map) <- c("loc1", nam, "loc2")
+        return(unclass(map))
+      }
+
+      if(ncol(map)==1) L1 <- L2 <- 1
+      else {
+        L1 <- diff(range(map[1,]))
+        L2 <- diff(range(map[2,]))
+      }
+
+      nam <- colnames(map)
+
+      if(off.end > 0) {
+        toadd1 <- c(map[1,1] - off.end, map[1,ncol(map)]+off.end)
+        toadd2 <- c(map[2,1] + off.end*L2/L1, map[2,ncol(map)]+off.end*L2/L1)
+
+        neword <- order(c(map[1,], toadd1))
+        nmap1 <- c(map[1,], toadd1)[neword]
+        nmap2 <- c(map[2,], toadd2)[neword]
+      }
+      else {
+        nmap1 <- map[1,]
+        nmap2 <- map[2,]
+        toadd1 <- toadd2 <- NULL
+      }
+
+      d <- diff(nmap1)
+      nadd <- ceiling(d/step)-1
+      if(sum(nadd) > 0) {
+        for(j in 1:(length(nmap1)-1)) {
+          if(nadd[j]>0) {
+            toadd1 <- c(toadd1, seq(nmap1[j], nmap1[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
+            toadd2 <- c(toadd2, seq(nmap2[j], nmap2[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
+          }
+        }
+      }
+      newnam <- paste("loc", 1:length(toadd1), sep="")
+      
+      toadd1 <- sort(toadd1)
+      toadd2 <- sort(toadd2)
+      neword <- order(c(map[1,], toadd1))
+      nmap1 <- c(map[1,], toadd1)[neword]
+      nmap2 <- c(map[2,], toadd2)[neword]
+      map <- rbind(nmap1, nmap2)
+      colnames(map) <- c(nam, newnam)[neword]
+
+      return(unclass(map))
+    }
+
     minloc <- c(min(map[1,]),min(map[2,]))
-    map <- map-minloc
+    map <- unclass(map-minloc)
     markernames <- colnames(map)
 
     if(step==0 && off.end==0) return(map+minloc)
     else if(step==0 && off.end > 0) {
+      map <- map+minloc
       if(ncol(map)==1) { # only one marker; assume equal recomb in sexes
         L1 <- L2 <- 1
       }
@@ -247,14 +346,12 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
         L2 <- diff(range(map[2,]))
       }
 
-      a <- c(floor(min(map[1,])-off.end),ceiling(max(map[1,])+off.end))
-      names(a) <- paste("loc", a, sep="")
-      b <- c(floor(min(map[2,])-off.end)*L2/L1,
-             ceiling(max(map[2,])+off.end)*L2/L1)
-      n <- c(names(a)[1],markernames,names(a)[2])
-      map <- cbind(c(a[1],b[1]),map,c(a[2],b[2]))
-      dimnames(map) <- list(NULL,n)
-      return(map+minloc)
+      nam <- colnames(map)
+      nmap1 <- c(map[1,1]-off.end, map[1,], map[1,ncol(map)]+off.end)
+      nmap2 <- c(map[2,1]-off.end*L2/L1, map[2,], map[2,ncol(map)]+off.end*L2/L1)
+      map <- rbind(nmap1, nmap2)
+      colnames(map) <- c("loc1", nam, "loc2")
+      return(map)
     }
     else if(step>0 && off.end == 0) {
 

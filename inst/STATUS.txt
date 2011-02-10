@@ -24,6 +24,11 @@ Major changes:
   Enabled est.map to use multiple processors via snow; added argument
   n.cluster to indicate the number of cluster nodes to use.
 
+  Added the option stepwidth="max" in calc.genoprob, sim.geno, and
+  argmax.geno.  This inserts the minimal number of pseudomarkers so
+  that the maximum step between points is as indicated by the "step"
+  argument. 
+
 Minor changes:
 
   Revised subset.cross so that if the cross contains QTL genotypes

@@ -58,7 +58,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.  If \code{\link{calc.genoprob}} or
    \code{\link{sim.geno}} were run with
-   \code{stepwidth="variable"}, we force \code{incl.markers=TRUE}.}
+   \code{stepwidth="variable"} or \code{stepwidth="max"}, we force \code{incl.markers=TRUE}.}
  \item{clean.output}{If TRUE, clean the output with
    \code{\link{clean.scantwo}}, replacing LOD scores for pairs of
    positions that are not well separated with 0.  In permutations, this

@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-2011, Karl W Broman and Hao Wu
-# last modified Jan, 2011
+# last modified Feb, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -121,19 +121,19 @@ function(cross, chr, pheno.col=1,
   if(any(pheno.col < 1 | pheno.col > nphe(cross)))
     stop("pheno.col values should be between 1 and the no. phenotypes")
 
-  # if stepwidth="variable" when calling calc.genoprob or sim.geno,
+  # if stepwidth="variable" or stepwidth=="max" when calling calc.genoprob or sim.geno,
   # we force incl.markers=TRUE; I assume it is the same for all chromosomes
   stepwidth.var <- FALSE
   if(method=="em" || method=="hk") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$prob)) &&
-       attr(cross$geno[[1]]$prob, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$prob, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
   }
   else if(method=="imp") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$draws)) &&
-       attr(cross$geno[[1]]$draws, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$draws, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }

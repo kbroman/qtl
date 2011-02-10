@@ -12,7 +12,7 @@
 \usage{
 argmax.geno(cross, step=0, off.end=0, error.prob=0.0001, 
             map.function=c("haldane","kosambi","c-f","morgan"),
-            stepwidth=c("fixed", "variable"))
+            stepwidth=c("fixed", "variable", "max"))
 }
 
 \arguments{
@@ -28,10 +28,12 @@ argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer or Morgan map function when converting genetic
    distances into recombination fractions.}
- \item{stepwidth}{Indicates whether the intermediate points should have
-   fixed or variable step sizes.  We strongly recommend using
-   \code{"fixed"}; \code{"variable"} is included only for the qtlbim
-   package (\url{http://www.ssg.uab.edu/qtlbim}).}
+ \item{stepwidth}{Indicates whether the intermediate points should with
+   fixed or variable step sizes.  We recommend using
+   \code{"fixed"}; \code{"variable"} is included for the qtlbim
+   package (\url{http://www.ssg.uab.edu/qtlbim}).  The \code{"max"}
+   option inserts the minimal number of intermediate points so that the
+   maximum distance between points is \code{step}.}
 }
 
 \details{

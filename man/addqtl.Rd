@@ -45,7 +45,7 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.  If \code{\link{calc.genoprob}} or
    \code{\link{sim.geno}} were run with
-   \code{stepwidth="variable"}, we force \code{incl.markers=TRUE}.}
+   \code{stepwidth="variable"} or \code{stepwidth="max"}, we force \code{incl.markers=TRUE}.}
  \item{verbose}{If TRUE, display information about the progress of
    calculations.  If \code{verbose} is an integer > 1, further messages
    from \code{\link{scanqtl}} are also displayed.}
