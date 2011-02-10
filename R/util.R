@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2010, Karl W Broman
+# copyright (c) 2001-2011, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Nov, 2010
+# last modified Feb, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1317,6 +1317,9 @@ function(x, chr, ind, ...)
         }
       }
     }
+
+    if("qtlgeno" %in% names(x))
+      x$qtlgeno <- x$qtlgeno[ind,,drop=FALSE]
   }
   x
 }
