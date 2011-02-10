@@ -2,8 +2,8 @@
 #
 # replacemap.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Jul, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Feb, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -109,6 +109,42 @@ function(object, map)
     # proceed if no errors
     for(i in 1:length(cross$geno)) 
       cross$geno[[i]]$map <- map[[i]]
+  }
+
+  # maps in geno prob 
+  if("prob" %in% names(cross$geno[[1]])) {
+    for(i in names(cross$geno)) {
+      if("map" %in% names(attributes(cross$geno[[i]]$prob))) {
+        temp <- attr(cross$geno[[i]]$prob, "map")
+        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp), map)[,2]
+        names(tempr) <- names(temp)
+        attr(cross$geno[[i]]$prob, "map") <- tempr
+      }
+    }
+  }
+
+  # maps in draws
+  if("draws" %in% names(cross$geno[[1]])) {
+    for(i in names(cross$geno)) {
+      if("map" %in% names(attributes(cross$geno[[i]]$draws))) {
+        temp <- attr(cross$geno[[i]]$draws, "map")
+        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp), map)[,2]
+        names(tempr) <- names(temp)
+        attr(cross$geno[[i]]$draws, "map") <- tempr
+      }
+    }
+  }
+
+  # maps in argmax
+  if("argmax" %in% names(cross$geno[[1]])) {
+    for(i in names(cross$geno)) {
+      if("map" %in% names(attributes(cross$geno[[i]]$argmax))) {
+        temp <- attr(cross$geno[[i]]$argmax, "map")
+        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp), map)[,2]
+        names(tempr) <- names(temp)
+        attr(cross$geno[[i]]$argmax, "map") <- tempr
+      }
+    }
   }
 
   cross
