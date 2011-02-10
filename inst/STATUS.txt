@@ -29,6 +29,10 @@ Minor changes:
   Revised subset.cross so that if the cross contains QTL genotypes
   (from sim.cross), these are also subsetted.
 
+  Revised replacemap.cross (aka replace.map) so that it will also
+  replace the maps in results from calc.genoprob, sim.geno and
+  argmax.geno, using interpolation if necessary.
+
   Fixed a couple of minor bugs in mqmscan: one giving duplicate row
   names, another resulting in pseudomarkers outside the terminal
   markers even when off.end=0.
