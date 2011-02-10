@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# last modified Jun, 2010
+# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
+# last modified Feb, 2011
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -91,7 +91,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
 
   if(method=="imp") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$draws)) &&
-       attr(cross$geno[[1]]$draws, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$draws, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
@@ -99,7 +99,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
   }
   else {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$prob)) &&
-       attr(cross$geno[[1]]$prob, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$prob, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
