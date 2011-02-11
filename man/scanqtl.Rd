@@ -40,7 +40,9 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
  \item{model}{The phenotype model: the usual model or a model for binary
   traits} 
  \item{incl.markers}{If FALSE, do calculations only at points on an
-   evenly spaced grid.}
+   evenly spaced grid.  If \code{\link{calc.genoprob}} or
+   \code{\link{sim.geno}} were run with
+   \code{stepwidth="variable"} or \code{stepwidth="max"}, we force \code{incl.markers=TRUE}.}
  \item{verbose}{If TRUE, give feedback about progress.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait

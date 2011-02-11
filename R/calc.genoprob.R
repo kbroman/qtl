@@ -2,8 +2,8 @@
 #
 # calc.genoprob.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Feb, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 calc.genoprob <-
 function(cross, step=0, off.end=0, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         stepwidth=c("fixed", "variable"))
+         stepwidth=c("fixed", "variable", "max"))
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
