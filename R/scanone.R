@@ -3,7 +3,7 @@
 # scanone.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Jan, 2011
+# last modified Feb, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -154,7 +154,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 
   # use all observations; not in a permutation test; different phenotypes have different sets of missing values
   #   -> want to do in batches, but need to define batches by the pattern of missing data
-  if(n.perm <= 0 && use=="all.obs" && length(pheno.col) > 1 && (method=="hk" || method=="imp")) { 
+  if(n.perm <= 0 && use=="all.obs" && length(pheno.col) > 1 && (method=="hk" || method=="imp") && model == "normal") { 
     # drop individuals with missing covariates
     cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
     temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,
@@ -208,10 +208,9 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     return(out)
   }
 
-  # multiple phenotype for methods except imp and hk
-  if(length(pheno.col)>1 && n.perm <= 0 && 
-     method!="imp" && method != "hk") {
-    # do this by brute force
+  # multiple phenotype for methods except imp or hk with normal model
+  if(length(pheno.col)>1 && n.perm <= 0 && (model != "normal" ||
+     (method!="imp" && method != "hk"))) {
     out <- scanone(cross, chr, pheno.col[1], model, method,
                    addcovar, intcovar, weights, use, upper, ties.random,
                    start, maxit, tol, n.perm, perm.Xsp, perm.strata,
