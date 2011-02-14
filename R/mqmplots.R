@@ -63,7 +63,7 @@ mqmplot.directedqtl <- function(cross, mqmresult, pheno.col=1, draw = TRUE){
   invisible(onlymarkers)
 }
 
-mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE){
+mqmplot.heatmap <- function(cross, result, directed=TRUE, legend=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"), ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -88,19 +88,6 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
           result[[x]][y,3]  <- result[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }
       }
-      if(!hidelow){
-        breaks <- c(-100,-10,-3,0,3,10,100)
-        col <- c("darkblue","blue","lightblue","yellow","orange","red")
-        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 0","Lod 0 to 3","Lod 3 to 10","Lod > 10")
-      }else{
-        breaks <- c(-100,-10,-3,3,10,100)
-        col <- c("darkblue","blue","white","orange","red")
-        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 3","Lod 3 to 10","Lod > 10")
-      }
-    }else{
-      breaks <- c(0,3,6,9,12,100)
-      col <- c("white","blue","darkblue","yellow","red")
-      leg <- c("Lod 0-3","Lod 3-6","Lod 6-9","Lod 9-12","Lod 12+")
     }
     names <- c(names,substring(colnames(result[[x]])[3],5))
   }
@@ -110,7 +97,7 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
     data <- rbind(data,result[[x]][,3])
   }
   rownames(data) <- names
-  image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col,...)
   abline(v=0)
   for(x in unique(chrs[[1]])){
     abline(v=sum(as.numeric(chrs[[1]])<=x))
@@ -119,12 +106,16 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
     abline(h=x)
   }
   if(legend){
+    leg <- NULL
+    for(x in 2:length(breaks)){
+      leg <- c(leg,paste("LOD",breaks[x-1],"to",breaks[x]))
+    }
     legend("bottom",leg,col=col,lty=1,bg="white")
   }
   invisible(data)
 }
 
-mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, ...){
+mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, legend=FALSE, Colv=NA, scale="none", verbose=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"), ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -161,7 +152,14 @@ mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, Colv=NA, s
   }
   colnames(data) <- rownames(mqmresult[[1]])
   rownames(data) <- names
-  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
+  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",breaks=breaks,col=col,keep.dendro =TRUE, ...)
+  if(legend){
+    leg <- NULL
+    for(x in 2:length(breaks)){
+      leg <- c(leg,paste("LOD",breaks[x-1],"to",breaks[x]))
+    }
+    legend("bottom",leg,col=col,lty=1,bg="white")
+  }
   invisible(retresults)
 }
 

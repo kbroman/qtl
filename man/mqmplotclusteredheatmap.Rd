@@ -22,6 +22,8 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   \item{scale}{ character indicating if the values should be centered and scaled in either
                 the row direction or the column direction, or none. The default "none" }
   \item{verbose}{If TRUE, give verbose output.}
+  \item{breaks}{ Color break points for the LOD scores }
+  \item{col}{ Colors used between breaks }
   \item{\dots}{Additional arguments passed to \code{\link[stats]{heatmap}}.}
 }
 
