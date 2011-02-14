@@ -9,7 +9,7 @@
 }
 
 \usage{
-mqmplot.heatmap(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE)
+mqmplot.heatmap(cross, result, directed=TRUE, legend=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"))
 }
 
 \arguments{
@@ -17,9 +17,11 @@ mqmplot.heatmap(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE)
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
   \item{result}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
-  \item{hidelow}{ Hides the low lodscores (< 3) }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
   \item{legend}{ If TRUE, add a legend to the plot }
+  \item{breaks}{ Color break points for the LOD scores }
+  \item{col}{ Colors used between breaks }
+  \item{\dots}{Additional arguments passed to the \code{\link{image}} function }
 }
 
 \author{ 
