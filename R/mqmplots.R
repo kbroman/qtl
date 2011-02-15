@@ -388,7 +388,7 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
   chrs <- unique(lapply(result,getChr))
   qtldata <- do.call("rbind",temp)
   if(!is.null(group)){
-    qtldata <- c[group,]
+    qtldata <- qtldata[group,]
     colors <- rep("blue",n.pheno)
   }else{
     group <- 1:n.pheno
