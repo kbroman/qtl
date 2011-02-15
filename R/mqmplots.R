@@ -386,43 +386,35 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
   n.pheno <- length(result)  
   temp <- lapply(result,getThird)
   chrs <- unique(lapply(result,getChr))
-  c <- do.call("rbind",temp)
+  qtldata <- do.call("rbind",temp)
   if(!is.null(group)){
-    c <- c[group,]
+    qtldata <- c[group,]
     colors <- rep("blue",n.pheno)
   }else{
     group <- 1:n.pheno
     colors <- rainbow(n.pheno)
   }
-  c <- t(c)
+  qtldata <- t(qtldata)
   if(type=="contour"){
     #Countour plot
-
-    contour(
-            x=seq(1,dim(c)[1]),
-            y=seq(1,dim(c)[2]),
-            c,
-            xlab="Markers",ylab="Trait",
-            col=rainbow((max(c)/5)+25,1,1.0,0.1),
-            nlevels=(max(c)/5)
-            )
+    contour(x=seq(1,dim(qtldata)[1]),
+            y=seq(1,dim(qtldata)[2]),
+            qtldata,
+            xlab="Markers",ylab="Trait", ...)
     for(x in unique(chrs[[1]])){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}			
   }
   if(type=="image"){
     #Image plot
-    image(x=1:dim(c)[1],y=1:dim(c)[2],c,
-          xlab="Markers",ylab="Trait",
-          col=rainbow((max(c)/5)+25,1,1.0,0.1),
-          )
+    image(x=1:dim(qtldata)[1],y=1:dim(qtldata)[2],qtldata,xlab="Markers",ylab="Trait",...)
     for(x in unique(chrs[[1]])){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}
   }
   if(type=="3Dplot"){
     #3D perspective plot
-    persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
+    persp(x=1:dim(qtldata)[1],y=1:dim(qtldata)[2],qtldata,
           theta = theta, phi = phi, expand = 1,
           col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
   }
@@ -431,7 +423,7 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
     first <- TRUE
     for(i in group) {
       if(first){
-        plot(result[[i]],ylim=c(0,max(c)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
+        plot(result[[i]],ylim=c(0,max(qtldata)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
         first <- FALSE
       }else{
         plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
@@ -440,11 +432,11 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
     if(meanprofile != "none"){
       temp <- result[[1]]
       if(meanprofile=="median"){
-        temp[,3] <- apply(c,1,median)
+        temp[,3] <- apply(qtldata,1,median)
         legend("topright",c("QTL profiles","Median profile"),col=c("blue","black"),lwd=c(1,3))
       }
       if(meanprofile=="mean"){
-        temp[,3] <- rowMeans(c)
+        temp[,3] <- rowMeans(qtldata)
         legend("topright",c("QTL profiles","Mean profile"),col=c("blue","black"),lwd=c(1,3))
       }
       plot(temp,add=TRUE,col="black",lwd=3,...)
