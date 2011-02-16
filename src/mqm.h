@@ -2,14 +2,14 @@
  *
  * mqm.h
  *
- * Copyright (c) 1996-2009 by
+ * Copyright (c) 1996-2011 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Pjotr Prins and Danny Arends
- * last modified October 2009
+ * last modified Feb 2011
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -34,7 +34,7 @@
   #include <R.h>
   // #include <R_ext/PrtUtil.h>
   // #include <R_ext/RS.h>
-  // #include <R_ext/Utils.h>
+  #include <R_ext/Utils.h>
   #include "standalone.h"
   #include "util.h"
   #include "mqmdatatypes.h"

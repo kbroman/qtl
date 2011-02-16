@@ -2,14 +2,14 @@
  *
  * mqmprob.cpp
  *
- * Copyright (c) 1996-2010 by
+ * Copyright (c) 1996-2011 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Danny Arends and Pjotr Prins
- * last modified May 2010
+ * last modified Feb 2011
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -305,6 +305,8 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
  * frequencies. This function is used by augmentation.
  */ 
 double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
+  R_CheckUserInterrupt(); /* check for ^C */
+
   if(position[j]==MRIGHT||position[j]==MUNLINKED){
     return 1.0;
   }
@@ -380,6 +382,8 @@ double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imar
 
 
 double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
+  R_CheckUserInterrupt(); /* check for ^C */
+
   if(position[j] == MRIGHT||position[j] == MUNLINKED){
     return 1.0;
   }
@@ -409,6 +413,8 @@ double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imar
 }
 
 double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
+  R_CheckUserInterrupt(); /* check for ^C */
+
   if(position[j] == MRIGHT||position[j] == MUNLINKED){
     return 1.0;                         //END of chromosome or only 1 marker on a chromosome
   }
