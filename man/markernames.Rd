@@ -30,7 +30,7 @@ data(listeria)
 markernames(listeria, chr=5)
 }
 
-\seealso{ \code{\link{pull.map}} }
+\seealso{ \code{\link{pull.map}}, \code{\link{phenames}}, \code{\link{chrnames}} }
 
 
 \keyword{utilities}
