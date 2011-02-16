@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.20, 2/15/2011:
+Version 1.20, 2/16/2011:
 
 Major changes:
 
@@ -30,6 +30,9 @@ Major changes:
   argument. 
 
 Minor changes:
+
+  Added a function phenames() for pulling out the names of the
+  phenotypes. 
 
   Small revisions and enhancements to some of the MQM plots.
 
