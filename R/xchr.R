@@ -886,7 +886,7 @@ function(sexpgm, covar)
 #           and for the additive model.
 ######################################################################
 dropXcol <-
-function(type=c("f2","bc"), sexpgm, cross.attr)
+function(type=c("f2","bc", "riself", "risib", "4way", "dh", "special"), sexpgm, cross.attr)
 {
   type <- match.arg(type)
   gn <- getgenonames(type, "X", "full", sexpgm, cross.attr)

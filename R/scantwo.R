@@ -531,6 +531,7 @@ function(cross, chr, pheno.col=1,
   # do the 2-dimensional genome scan
   for(i in 1:n.chr) { # loop over the 1st chromosome
     for(j in i:n.chr) { # loop over the 2nd chromosome
+      cat(i, j, "hi\n")
 
       if(chrtype[i]=="X" || chrtype[j]=="X") {
         ac <- addcovarX

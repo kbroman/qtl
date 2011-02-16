@@ -31,6 +31,9 @@ Major changes:
 
 Minor changes:
 
+  Fixed a problem in the internal function dropXcol() that led to a
+  crash in scantwo() for 4-way crosses with an X chromosome.
+
   Added a function phenames() for pulling out the names of the
   phenotypes. 
 
