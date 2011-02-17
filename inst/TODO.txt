@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Get stepwiseqtl working for 4-way cross (and other cases)
-
 o Use format.pval in printing pvalues, so they're never strictly 0.
 
 o In c.cross, include an argument for "flipping" a backcross, so that

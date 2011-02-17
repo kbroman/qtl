@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2010, Karl W Broman
-# last modified Jul, 2010
+# copyright (c) 2007-2011, Karl W Broman
+# last modified Feb, 2011
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -66,6 +66,13 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     stop("Input should have class \"cross\".")
 
   if(!missing(chr)) cross <- subset(cross, chr)
+
+  type <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+  if(type!="f2" && type != "bc" && any(chrtype=="X")) {
+    warning("stepwiseqtl can handle X chromosome only for a backcross or intercross; X chr omitted.")
+    cross <- subset(cross, chr=names(cross$geno)[chrtype!="X"])
+  }
 
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
