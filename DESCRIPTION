@@ -1,6 +1,6 @@
 Package: qtl
-Version: 1.20-12
-Date: 17 Feb 2011
+Version: 1.20-13
+Date: 18 Feb 2011
 Title: Tools for analyzing QTL experiments
 Author: Karl W Broman <kbroman@biostat.wisc.edu> and Hao Wu, with ideas from Gary Churchill and Saunak Sen and contributions from Danny Arends, Ritsert Jansen, Pjotr Prins, and Brian Yandell
 Maintainer: Karl W Broman <kbroman@biostat.wisc.edu>
