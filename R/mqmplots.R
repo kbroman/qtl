@@ -97,7 +97,12 @@ mqmplot.heatmap <- function(cross, result, directed=TRUE, legend=FALSE, breaks =
     data <- rbind(data,result[[x]][,3])
   }
   rownames(data) <- names
-  image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col,...)
+  if(nphe(cross) < 100){
+    image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col,yaxt="n",...)
+    axis(2,at=seq(1,nphe(cross)),labels=colnames(pull.pheno(cross)),las=1)
+  }else{
+    image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col,...)
+  }
   abline(v=0)
   for(x in unique(chrs[[1]])){
     abline(v=sum(as.numeric(chrs[[1]])<=x))
@@ -152,7 +157,11 @@ mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, legend=FAL
   }
   colnames(data) <- rownames(mqmresult[[1]])
   rownames(data) <- names
-  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",breaks=breaks,col=col,keep.dendro =TRUE, ...)
+  if(length(names) < 100){
+    retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",breaks=breaks,col=col,keep.dendro = TRUE, ...)
+  }else{
+    retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",breaks=breaks,col=col,keep.dendro = TRUE,labRow=1:length(names), ...)
+  }
   if(legend){
     leg <- NULL
     for(x in 2:length(breaks)){
