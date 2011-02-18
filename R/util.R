@@ -41,7 +41,7 @@
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
 #           switchAlleles, nqrank, cleanGeno, typingGap,
-#           calcPermPval
+#           calcPermPval, phenames
 #
 ######################################################################
 
@@ -4149,5 +4149,13 @@ function(peaks, perms)
 
   matrix(pval, ncol=ncol.peaks, nrow=nrow.peaks)
 }
+
+######################################################################
+# phenames: pull out phenotype names
+######################################################################
+phenames <-
+function(cross)
+colnames(cross$pheno)
+  
 
 # end of util.R

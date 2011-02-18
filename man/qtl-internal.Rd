@@ -196,7 +196,7 @@ discan(cross, pheno, method=c("em","hk","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
        verbose=FALSE, give.warnings=TRUE, ind.noqtl)
 dropfromqtlformula(formula, qtlnum)
-dropXcol(type=c("f2","bc"), sexpgm, cross.attr)
+dropXcol(type=c("f2","bc", "riself", "risib", "4way", "dh", "special"), sexpgm, cross.attr)
 effectplot.getmark(cross, mname)
 effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled", "group"))
 expandf2covar(thecovar)
