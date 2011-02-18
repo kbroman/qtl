@@ -2,14 +2,14 @@
 #
 # mqmplots.R
 #
-# Copyright (c) 2009-2010, Danny Arends
+# Copyright (c) 2009-2011, Danny Arends
 # Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified April 2010
+# last modified Feb 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -515,7 +515,7 @@ mqmplot.singletrait <- function(result, extended=0,...){
     plot(result,lwd=1,col=c("black"),ylab="QTL (LOD)",...)
     par(new=TRUE)
     plot(info.l,lwd=1,col=c("red"),ylab="QTL (LOD)",yaxt="n",lty=1,...)
-    grid(max(result$chr),5)
+    grid(length(result$chr),5)
     labels <- c(colnames(result)[3],"Information Content")
     mtext("Information Content",side=4,col="red",line=4) 
     axis(4, ylim=c(0,1), col="red",col.axis="red",las=1)
@@ -526,7 +526,7 @@ mqmplot.singletrait <- function(result, extended=0,...){
       plot(attr(result,"mqmmodel"))
     }
     plot(result,lwd=1,ylab="QTL (LOD)",...)
-    grid(max(result$chr),5)
+    grid(length(result$chr),5)
     labels <- c(colnames(result)[3])
     legend("right", labels,col=c("black","blue"),lty=c(1,1))			
   }

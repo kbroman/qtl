@@ -299,6 +299,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
 
+  type <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+  if(type!="f2" && type != "bc" && any(chrtype=="X")) {
+    warning("addqtl can handle X chromosome only for a backcross or intercross; X chr omitted.")
+    cross <- subset(cross, chr=names(cross$geno)[chrtype!="X"])
+  }
+
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
     formula <- as.formula(formula)
@@ -610,6 +617,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
+
+  type <- class(cross)[1]
+  chrtype <- sapply(cross$geno, class)
+  if(type!="f2" && type != "bc" && any(chrtype=="X")) {
+    warning("addpair can handle X chromosome only for a backcross or intercross; X chr omitted.")
+    cross <- subset(cross, chr=names(cross$geno)[chrtype!="X"])
+  }
 
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))

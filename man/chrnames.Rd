@@ -25,7 +25,7 @@ data(listeria)
 chrnames(listeria)
 }
 
-\seealso{ \code{\link{markernames}} }
+\seealso{ \code{\link{markernames}}, \code{\link{phenames}} }
 
 
 \keyword{utilities}

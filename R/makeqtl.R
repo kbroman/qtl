@@ -2,8 +2,8 @@
 #
 # makeqtl.R
 #
-# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# last modified Apr, 2010
+# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
+# last modified Feb, 2011
 # first written Apr, 2002
 #
 # Modified by Danny Arends
@@ -62,6 +62,13 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
   else if( !missing(qtl.name) )
     if( length(chr) != length(qtl.name) )
       stop("Input chr and qtl.name must have the same length.")
+
+  # check X chromosome (only works for bc/F2)
+  if(type != "f2" && type != "bc") {
+    m <- match(chr, names(cross$geno))
+    if(any(!is.na(m)) && any(chrtype[m[!is.na(m)]] == "X"))
+      stop("makeqtl and related functions can handle the X chromosome only for a backcross or intercross.")
+  }
 
   # local variables
   n.ind <- nrow(cross$pheno) # number of individuals

@@ -9,7 +9,7 @@ of MQM scan on multiple phenotypes}
 }
 
 \usage{
-mqmplot.clusteredheatmap(cross, mqmresult, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, \dots)
+mqmplot.clusteredheatmap(cross, mqmresult, directed=TRUE, legend=FALSE, Colv=NA, scale="none", verbose=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"), \dots)
 }
 
 \arguments{
@@ -18,6 +18,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   }
   \item{mqmresult}{ Result object from mqmscanall, the object needs to be of class \code{mqmmulti} }
   \item{directed}{ Take direction of QTLs into account (takes more time because of QTL direction calculations }
+  \item{legend}{ If TRUE, add a legend to the plot }
   \item{Colv}{ Cluster only the Rows, the columns (Markers) should not be clustered }
   \item{scale}{ character indicating if the values should be centered and scaled in either
                 the row direction or the column direction, or none. The default "none" }
