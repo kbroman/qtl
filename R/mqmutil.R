@@ -27,6 +27,7 @@
 #           ourline
 #           mqmextractmarkers
 #           estimatemarkerlod
+#           stringPhenoToInt
 #           addmarkerstointervalmap
 #           mqmtestnormal
 #           mqmgetmodel
