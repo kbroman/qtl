@@ -375,7 +375,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
             qtl.obj$prob[[kk]] <- cross$geno[[ichr[kk]]]$prob[,w,]
           thew[kk] <- w ####
 
-          if(chrtype[ichr[kk]]=="X") {
+          if(chrtype[ichr[kk]]=="X" && (type=="bc" || type=="f2")) {
             if(method=="imp")
               qtl.obj$geno[,kk,] <-
                 reviseXdata(type,"full",sexpgm,draws=qtl.obj$geno[,kk,,drop=FALSE],

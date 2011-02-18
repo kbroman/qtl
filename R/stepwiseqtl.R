@@ -67,13 +67,6 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
   if(!missing(chr)) cross <- subset(cross, chr)
 
-  type <- class(cross)[1]
-  chrtype <- sapply(cross$geno, class)
-  if(type!="f2" && type != "bc" && any(chrtype=="X")) {
-    warning("stepwiseqtl can handle X chromosome only for a backcross or intercross; X chr omitted.")
-    cross <- subset(cross, chr=names(cross$geno)[chrtype!="X"])
-  }
-
   if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
     cross$pheno <- cbind(pheno.col, cross$pheno)
     pheno.col <- 1
