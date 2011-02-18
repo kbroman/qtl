@@ -349,17 +349,17 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     attr(qtl, "marker.covar.pos") <- cimcovar
 	}
 	class(qtl) <- c("scanone",class(qtl))
-	for( x in 1:nchr(cross)){
-		#Remove pseudomarkers from the dataset and scale to the chromosome 
+  if(outputmarkers){
+    #Remove pseudomarkers from the dataset and scale to the chromosome 
     #Somewhat longer then off-end to be able to put back the original markers
-		to.remove <- NULL
-		chr.length <- max(cross$geno[[x]]$map)
-		markers.on.chr <- which(qtl[,1]==x)
-		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
-		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-    qtl <- qtl[-to.remove,]
-  }		
-	if(outputmarkers){
+    for( x in 1:nchr(cross)){
+      to.remove <- NULL  
+      chr.length <- max(cross$geno[[x]]$map)
+      markers.on.chr <- which(qtl[,1]==x)
+      to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
+      to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
+      if(length(to.remove) > 0) qtl <- qtl[-to.remove,]
+    }		
     qtl <- addmarkerstointervalmap(cross,qtl)
   	qtl <- as.data.frame(qtl)
     if(backward && !is.null(qc) && model.present){
