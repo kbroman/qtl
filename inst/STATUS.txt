@@ -17,6 +17,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.21, 3/10/2011:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Slight change to format of verbose output in est.map with m>0 (that
+  is, under interference).
+
+
 Version 1.20, 2/18/2011:
 
 Major changes:
