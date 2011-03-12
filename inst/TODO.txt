@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Revise calc.errorlod to do things in parallel (by chromosome or
+  individual?  ... I'd guess in batches of individuals) 
+
 o Use format.pval in printing pvalues, so they're never strictly 0.
 
 o In c.cross, include an argument for "flipping" a backcross, so that
