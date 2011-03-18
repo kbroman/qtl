@@ -10,9 +10,19 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o replacemap.cross: also fix up the maps in the genotype probabilities
+o Deal with use of gamma in calls to rainbow() in est.rf and
+  plot.scantwo, as they will soon be deprecated in R.
 
-o subset.cross doesn't subset qtl genotypes (from sim.cross)
+o Effect plot on X chromosome: be sure that males and females get
+  split properly.
+
+o replacemap when you have calc.genoprob results but from step=0;
+  seems to give an error
+
+o Revise calc.errorlod to do things in parallel (by chromosome or
+  individual?  ... I'd guess in batches of individuals) 
+
+o Use format.pval in printing pvalues, so they're never strictly 0.
 
 o In c.cross, include an argument for "flipping" a backcross, so that
   a backcross to (AxB)xB can be combined with an intercross
