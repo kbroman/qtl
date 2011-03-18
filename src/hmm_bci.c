@@ -269,9 +269,6 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     *loglik += curloglik;
   }
 
-  /* convert distances back to cM */
-  for(j=0; j<n_mar-1; j++) d[j] *= 100.0;
-
   if(verbose) {
     if(verbose < 2) {
       /* print final estimates */
@@ -287,6 +284,9 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     
     Rprintf("  loglik: %10.4lf\n\n", *loglik);
   }
+
+  /* convert distances back to cM */
+  for(j=0; j<n_mar-1; j++) d[j] *= 100.0;
 }
 
 
