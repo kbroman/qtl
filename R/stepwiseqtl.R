@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2010, Karl W Broman
-# last modified Jul, 2010
+# copyright (c) 2007-2011, Karl W Broman
+# last modified Feb, 2011
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or

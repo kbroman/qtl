@@ -23,7 +23,10 @@ replace.map(cross, map)
 }
 
 \value{The input \code{cross} object with the genetic map replaced by
-  the input \code{map}.}
+  the input \code{map}.  Maps for results from
+  \code{\link{calc.genoprob}}, \code{\link{sim.geno}} and
+  \code{\link{argmax.geno}} are also replaced, using interpolation if
+  necessary.}
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

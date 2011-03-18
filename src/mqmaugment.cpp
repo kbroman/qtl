@@ -2,14 +2,14 @@
  *
  * mqmaugment.cpp
  *
- * Copyright (c) 1996-2009 by
+ * Copyright (c) 1996-2011 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
  * improved for the R-language by Danny Arends, Pjotr Prins and Karl W. Broman
  *
  * Modified by Pjotr Prins and Danny Arends
- * last modified April 2010
+ * last modified Feb 2011
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
@@ -295,7 +295,6 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
     //Loop through individuals
     succesind[i] = 1;                   //Assume we succeed in augmentation
     #ifndef STANDALONE
-      R_CheckUserInterrupt(); /* check for ^C */
       //R_ProcessEvents(); /*  Try not to crash windows */
       R_FlushConsole();
     #endif
@@ -314,6 +313,9 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
+
+	  R_CheckUserInterrupt(); /* check for ^C */
+
           debug_trace("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d\n",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
           //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker

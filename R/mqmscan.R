@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009-2010, Danny Arends
+# Copyright (c) 2009-2011, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified July 2010
+# last modified Feb 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -349,17 +349,17 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     attr(qtl, "marker.covar.pos") <- cimcovar
 	}
 	class(qtl) <- c("scanone",class(qtl))
-	for( x in 1:nchr(cross)){
-		#Remove pseudomarkers from the dataset and scale to the chromosome 
+  if(outputmarkers){
+    #Remove pseudomarkers from the dataset and scale to the chromosome 
     #Somewhat longer then off-end to be able to put back the original markers
-		to.remove <- NULL
-		chr.length <- max(cross$geno[[x]]$map)
-		markers.on.chr <- which(qtl[,1]==x)
-		to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
-		to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
-    qtl <- qtl[-to.remove,]
-  }		
-	if(outputmarkers){
+    for( x in 1:nchr(cross)){
+      to.remove <- NULL  
+      chr.length <- max(cross$geno[[x]]$map)
+      markers.on.chr <- which(qtl[,1]==x)
+      to.remove <- markers.on.chr[which(qtl[markers.on.chr,2] > chr.length+off.end+(2*step.size))]
+      to.remove <- c(to.remove,markers.on.chr[which(qtl[markers.on.chr,2] < -off.end)])
+      if(length(to.remove) > 0) qtl <- qtl[-to.remove,]
+    }		
     qtl <- addmarkerstointervalmap(cross,qtl)
   	qtl <- as.data.frame(qtl)
     if(backward && !is.null(qc) && model.present){
@@ -412,6 +412,8 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     }
   }		
   
+  qtl[,1] <- factor(names(cross$geno)[qtl[,1]], levels=names(cross$geno))
+
   #Plot the results if the user asked for it
 	if(plot){
 		info.c <- qtl
