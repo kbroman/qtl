@@ -2,8 +2,8 @@
 #
 # plot.scantwo.R
 #
-# copyright (c) 2001-9, Karl W Broman, Hao Wu and Brian Yandell
-# last modified May, 2009
+# copyright (c) 2001-2011, Karl W Broman, Hao Wu and Brian Yandell
+# last modified Ma4, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
          nodiag = TRUE,
          contours = FALSE, main, zscale = TRUE, point.at.max=FALSE,
          col.scheme = c("redblue","cm","gray","heat","terrain","topo"),
-         gamma = 0.6, allow.neg=FALSE, alternate.chrid=FALSE, ...)
+         gamma=0.6, allow.neg=FALSE, alternate.chrid=FALSE, ...)
 {
   if(!any(class(x) == "scantwo"))
     stop("Input should have class \"scantwo\".")
@@ -267,7 +267,12 @@ function(x, chr, incl.markers = FALSE, zlim, lodcolumn=1,
                  terrain = terrain.colors(256),
                  topo = topo.colors(256),
                  cm = cm.colors(256),
-                 redblue = rev(rainbow(256, start = 0, end = 2/3,gamma=gamma)))
+                 redblue = rev(rainbow(256, start = 0, end = 2/3)))
+  if(col.scheme=="redblue") {
+    # convert colors using gamma=0.6 (which will no longer be available in R)
+    rgbval <- (col2rgb(cols)/255)^0.6
+    cols <- rgb(rgbval[1,], rgbval[2,], rgbval[3,])
+  }
 
   if(allow.neg) {
     lo <- -zlim.jnt

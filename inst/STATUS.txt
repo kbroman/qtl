@@ -25,6 +25,16 @@ Major changes:
 
 Minor changes:
 
+  Add "addchr" argument to find.pseudomarker.  The default is TRUE,
+  and returned non-marker locations have names like "c5.loc25" (as in
+  the output of scanone).  If FALSE, that initial "c5." part is left
+  off, to return just strings like "loc25" (as in the genotype
+  probabilities from calc.genoprob).
+
+  Revise calls to rainbow() in plot.rf and plot.scantwo so that they
+  no longer use the 'gamma' argument, which is being removed from
+  future versions of R.
+
   Slight change to format of verbose output in est.map with m>0 (that
   is, under interference).
 
