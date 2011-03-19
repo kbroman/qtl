@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Deal with use of gamma in calls to rainbow() in est.rf and
-  plot.scantwo, as they will soon be deprecated in R.
-
 o Effect plot on X chromosome: be sure that males and females get
   split properly.
 
