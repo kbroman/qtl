@@ -10,6 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Effect plot on X chromosome: be sure that males and females get
+  split properly.
+
+o replacemap when you have calc.genoprob results but from step=0;
+  seems to give an error
+
 o Revise calc.errorlod to do things in parallel (by chromosome or
   individual?  ... I'd guess in batches of individuals) 
 
