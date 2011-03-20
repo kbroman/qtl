@@ -5,7 +5,7 @@
 # copyright (c) 2001-2011, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Feb, 2011
+# last modified Mar, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2005,7 +2005,7 @@ function(cross, chr, pos, index)
 
 ### Find the nearest pseudomarker to a particular position
 find.pseudomarker <-
-function(cross, chr, pos, where=c("draws","prob"))  
+function(cross, chr, pos, where=c("draws","prob"), addchr=TRUE)  
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -2068,7 +2068,7 @@ function(cross, chr, pos, where=c("draws","prob"))
       if(length(o2)==1) themarker <- names(thismap)[o2]
       else themarker <- names(thismap)[sample(o2, 1)]
 
-      if(length(grep("^loc[0-9]+\\.*[0-9]*(\\.[0-9]+)*$", themarker)) > 0)
+      if(addchr && length(grep("^loc[0-9]+\\.*[0-9]*(\\.[0-9]+)*$", themarker)) > 0)
         themarker <- paste("c", chr[i], ".", themarker, sep="")
       markers[i] <- themarker
     }
