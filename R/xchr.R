@@ -2,8 +2,8 @@
 #
 # xchr.R
 #
-# copyright (c) 2004-2010, Karl W Broman
-# last modified Nov, 2010
+# copyright (c) 2004-2011, Karl W Broman
+# last modified Feb, 2011
 # first written Apr, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,6 +30,9 @@
 getsex <-
 function(cross)
 {
+  type <- class(cross)[1]
+  if(type != "bc" && type != "f2" && type != "4way") return(list(sex=NULL, pgm=NULL))
+
   phe.names <- names(cross$pheno)
 
   sex.column <- grep("^[Ss][Ee][Xx]$", phe.names)
@@ -79,7 +82,7 @@ function(cross)
     }
   }
 
-  if(length(pgm.column)==0) { # no pgm included
+  if(length(pgm.column)==0 || type=="4way") { # no pgm included
     pgm <- NULL
   }
   else {
