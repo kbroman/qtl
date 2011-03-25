@@ -2,9 +2,9 @@
 #
 # effectscan.R
 #
-# copyright (c) 2003-8, Karl W. Broman
+# copyright (c) 2003-2011, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Jun, 2008
+# last modified Mar, 2011
 # first written Jan, 2003
 #
 #     This program is free software; you can redistribute it and/or
@@ -287,7 +287,7 @@ function(x, gap=25, ylim, mtick=c("line","triangle"),
 
   if(!missing(ylim)) yl <- ylim 
 
-  plot.scanone(results, lod=1, ylim=yl, gap=gap, mtick=mtick, alternate.chrid=alternate.chrid,
+  plot.scanone(results, lodcolumn=1, ylim=yl, gap=gap, mtick=mtick, alternate.chrid=alternate.chrid,
                col=col[1], ...)
 
   if(get.se) {
@@ -330,12 +330,12 @@ function(x, gap=25, ylim, mtick=c("line","triangle"),
       }
     }
 
-    plot.scanone(results, lod=1, add=TRUE, col=col[1])
+    plot.scanone(results, lodcolumn=1, add=TRUE, col=col[1])
   }
 
   if(length(eff) > 1) {
     for(i in seq(along=eff)[-1])
-      plot.scanone(results, lod=eff[i]-2, gap=gap, add=TRUE, col=col[i])
+      plot.scanone(results, lodcolumn=eff[i]-2, gap=gap, add=TRUE, col=col[i])
   }
     
   if(add.legend) 

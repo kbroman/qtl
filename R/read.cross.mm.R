@@ -2,8 +2,8 @@
 #
 # read.cross.mm.R
 #
-# copyright (c) 2000-9, Karl W Broman
-# last modified Sep, 2009
+# copyright (c) 2000-2011, Karl W Broman
+# last modified Mar, 2011
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ function(dir,rawfile,mapfile,estimate.map=TRUE)
                          blank.lines.skip=FALSE,quiet=TRUE,sep="\n"))
 
   # read map file
-  map <- read.table(mapfile,header=FALSE,colClasses="character",blank=FALSE)
+  map <- read.table(mapfile,header=FALSE,colClasses="character",blank.lines.skip=FALSE)
   fixmap <- TRUE
   if(ncol(map) == 1)
     stop("Map file should contain the markers' chromosome IDs.")

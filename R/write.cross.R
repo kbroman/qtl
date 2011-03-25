@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-2010, Karl W Broman and Hao Wu
-# last modified Mar, 2010
+# copyright (c) 2001-2011, Karl W Broman and Hao Wu
+# last modified Mar, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -356,7 +356,7 @@ function(cross, digits=NULL)
 
   # marker names
   mnames <- names(markpos)
-  write.table(mnames, file="mnames.txt", quote=FALSE, row.name=FALSE,
+  write.table(mnames, file="mnames.txt", quote=FALSE, row.names=FALSE,
               col.names=FALSE)
 
   # genotype
@@ -366,8 +366,8 @@ function(cross, digits=NULL)
   # note that gary's format codes genotype from 0
   # and 9 is for NA
   geno <- geno - 1 # note NA will still be NA
-  write.table(geno, file="geno.dat", quote=FALSE, row.name=FALSE,
-              col.name=FALSE, sep="\t", na="9")
+  write.table(geno, file="geno.dat", quote=FALSE, row.names=FALSE,
+              col.names=FALSE, sep="\t", na="9")
 
   # phenotype
   pheno <- cross$pheno
