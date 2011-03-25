@@ -2,13 +2,13 @@
 #
 # mqmcircleplot.R
 #
-# Copyright (c) 2009-2010, Danny Arends
+# Copyright (c) 2009-2011, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified March 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -68,7 +68,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
     nchr <- length(unique(templateresult[,1]))
     cvalues <- circlelocations(totallength+(nchr*spacing))
 
-    drawcirculargenome(templateresult,spacing=spacing,lod=lod)
+    drawcirculargenome(templateresult,spacing=spacing,lodmarkers=lod)
     
     if(any(class(result)=="mqmmulti")){
       #multiple scan results, so plot em all
@@ -245,8 +245,8 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     points(t(c(-0.7, -1.15)))
     text(t(c(-0.9, -1.0)),paste("Distances in cM"),cex=0.8)
     text(t(c(-1.1, -1.1)),paste("0 cM"),cex=0.7)
-    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),dig=1),"cM"),cex=0.7)
-    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),dig=1),"cM"),cex=0.7)
+    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),digits=1),"cM"),cex=0.7)
+    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),digits=1),"cM"),cex=0.7)
     text(0.9*chrnumberloc,paste("Chr",x),cex=0.8)
 
   }
@@ -257,7 +257,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
 loopthroughmulti <- function(cross,result,save=FALSE,spacing=100){
   n <- 1
   while(n <= length(result)){
-    if(save) png(file=paste("circleplotT",n,".png",sep=""),w=1024,h=768)
+    if(save) png(filename=paste("circleplotT",n,".png",sep=""),width=1024,height=768)
     mqmplot.circle(cross,result,spacing=spacing,highlight=n)
     if(save) dev.off()
     n <- n+1
