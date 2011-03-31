@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-2010, Karl W Broman
-# last modified Jun, 2010
+# copyright (c) 2005-2011, Karl W Broman
+# last modified Mar, 2011
 # first written Mar, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -108,11 +108,11 @@ function(e1,e2)
     u1 <- levels(e1[,1])
     u2 <- levels(e2[,2])
     u <- unique(c(u1,u2))
-    if(length(u) == 0) stop("Can't subtract; no chromosomes in common.")
+    if(length(u) == 0) stop("Can't add; no chromosomes in common.")
     e1 <- e1[!is.na(match(e1[,1],u)),]
     e2 <- e2[!is.na(match(e2[,1],u)),]
     if(nrow(e1) != nrow(e2) || any(e1[,1] != e2[,1]) || max(abs(e1[,2]-e2[,2])) < 0.01)
-      stop("Can't subtract; arguments not compatible")
+      stop("Can't add; arguments not compatible")
   }
   nc1 <- ncol(e1)
   nc2 <- ncol(e2)
