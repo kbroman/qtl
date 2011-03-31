@@ -10,6 +10,22 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Bug in plot.scantwo: contours=TRUE gives warning:
+    In any(contours) : coercing argument of type 'double' to logical
+  Also: maybe change the color of the contour.
+
+o Add cross type "haploid" with genotype names like "A" and "B" rather
+  than "AA" and "AB", but otherwise treat like a backcross (along the
+  lines of "dh").
+
+o max.scantwo could take a chr argument
+
+o Add cross type as argument to read.cross; attempt to convert data to
+  that type.
+
+o In sim.cross, do the qtl get sorted by genomic position?  And then
+  do the qtlgeno need to be reordered back?
+
 o Effect plot on X chromosome: be sure that males and females get
   split properly.
 

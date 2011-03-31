@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 3/21/2011:
+Version 1.22, 3/30/2011:
 
 Major changes:
 
@@ -26,6 +26,8 @@ Major changes:
 Minor changes:
 
   Slight changes to avoid some R warning messages.
+
+  Fix warning message in +.scanone.
 
 
 Version 1.21, 3/21/2011:
