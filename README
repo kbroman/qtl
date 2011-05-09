@@ -1,0 +1,5 @@
+This version is by Laura Shannon and Brian Yandell, with guidance from Karl Broman.
+
+25 oct 2010: We have created src/hmm_ft.{c,h} for t-generation intercross. This requires adding
+extra argument cross_scheme to calc_genoprob in hmm_main.{c,h}. This will have to be propagated
+to other types of crosses.
