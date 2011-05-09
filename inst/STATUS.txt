@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 4/11/2011:
+Version 1.22, 5/9/2011:
 
 Major changes:
 
@@ -28,6 +28,8 @@ Minor changes:
   Slight changes to avoid some R warning messages.
 
   Fix warning message in +.scanone.
+
+  Fix bug in mqmfind.marker.
 
   Fix slight bugs in print.addint and print.addcovarint.
 
