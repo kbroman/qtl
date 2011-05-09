@@ -291,15 +291,28 @@ function(cross, marker, error.prob=0.0001)
     if(chrtype=="X")
       warning("markerloglik not working properly for the X chromosome for 4- or 8-way RIL.")
   }
+  else if(type == "bcsft") {
+    cfunc <- "marker_loglik_bcsft"
+    cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+    if(chrtype != "A") { ## X chromosome
+      cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+      cross.scheme[2] <- 0
+    }
+  }
   else 
     stop("markerloglik not available for cross type ", type, ".")
-
+  
+  ## Hide cross scheme in genoprob to pass to routine. BY
+  temp <- 0
+  if(type == "bcsft")
+    temp[1] <- cross.scheme[1] * 1000 + cross.scheme[2]
+  
   # call the C function
   z <- .C(cfunc,
           as.integer(n.ind),       # number of individuals
           as.integer(g),           # genotype data
           as.double(error.prob),     
-          loglik=as.double(0),     # log likelihood
+          loglik=as.double(temp),     # log likelihood
           PACKAGE="qtl")
 
   z$loglik

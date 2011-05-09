@@ -113,12 +113,24 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     }
     else if(type == "bcsft") {
       one.map <- TRUE
-      if(xchr)
-        warning("calc.genoprob not working properly for the X chromosome for bcsft.")
-      cfunc <- "calc_genoprob_ft"
-      n.gen <- 3
-      gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
+      cfunc <- "calc_genoprob_bcsft"
       cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+      if(!xchr) { # autosomal
+        if(cross.scheme[2] == 0) {
+          gen.names <- getgenonames("bc", "A", cross.attr=attributes(cross))
+          n.gen <- 2
+        }
+        else {
+          gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
+          n.gen <- 3
+        }
+      }
+      else { ## X chr
+        cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+        cross.scheme[2] <- 0
+        gen.names <- c("g1","g2")
+        n.gen <- 2
+      }
     }
     else 
       stop("calc.genoprob not available for cross type ", type, ".")
@@ -180,7 +192,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
               as.integer(newgen),        # genotype data
               as.double(rf),             # recombination fractions
               as.double(error.prob),     # 
-              genoprob=temp,
+              genoprob=as.double(temp),
               PACKAGE="qtl")
     }
     else {
@@ -308,6 +320,27 @@ function(cross, error.prob=0.0001,
       if(xchr)
         warning("calc.genoprob.special not working properly for the X chromosome for 4- or 8-way RIL.")
     }
+    else if(type == "bcsft") {
+      one.map <- TRUE
+      cfunc <- "calc_genoprob_bcsft"
+      cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+      if(!xchr) { # autosomal
+        if(cross.scheme[2] == 0) {
+          gen.names <- getgenonames("bc", "A", cross.attr=attributes(cross))
+          n.gen <- 2
+        }
+        else {
+          gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
+          n.gen <- 3
+        }
+      }
+      else { ## X chr
+        cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+        cross.scheme[2] <- 0
+        gen.names <- c("g1","g2")
+        n.gen <- 2
+      }
+    }
     else 
       stop("calc.genoprob.special not available for cross type ", type, ".")
 
@@ -350,13 +383,18 @@ function(cross, error.prob=0.0001,
 
     # call the C function
     if(one.map) {
-      z <- .C(cfunc,
+      ## Hide cross scheme in genoprob to pass to routine. BY
+      temp <- as.double(rep(0,n.gen*n.ind*n.pos))
+      if(type == "bcsft")
+        temp[1:2] <- cross.scheme
+      
+     z <- .C(cfunc,
               as.integer(n.ind),         # number of individuals
               as.integer(n.pos),         # number of markers
               as.integer(newgen),        # genotype data
               as.double(rf),             # recombination fractions
               as.double(error.prob),     # 
-              genoprob=as.double(rep(0,n.gen*n.ind*n.pos)),
+              genoprob=as.double(temp),
               PACKAGE="qtl")
     }
     else {

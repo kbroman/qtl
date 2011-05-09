@@ -450,7 +450,8 @@ function(cross, alleles)
   }
   else cross <- subset(cross,chr= -xchr) # <- omit the X chr completely
 
-  cross
+  ## Pass through read.cross.bcsft (convert if appropriate).
+  read.cross.bcsft(cross = cross, ...)
 }
 
 
