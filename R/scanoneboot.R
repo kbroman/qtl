@@ -2,8 +2,8 @@
 #
 # scanoneboot.R
 #
-# copyright (c) 2007-8, Karl W Broman
-# last modified Aug, 2008
+# copyright (c) 2007-2011, Karl W Broman
+# last modified Mar, 2011
 # first written Apr, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -71,7 +71,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   n.prnt <- floor(n.boot/20)
 
   for(i in 1:n.boot) {
-    temp <- subset(cross, ind=sample(n.ind, repl=TRUE))
+    temp <- subset(cross, ind=sample(n.ind, replace=TRUE))
     out <- scanone(temp, pheno.col=pheno.col, model=model, method=method,
                    addcovar=addcovar, intcovar=intcovar, weights=weights,
                    use=use, upper=upper, ties.random=ties.random, start=start,

@@ -113,7 +113,9 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
     if(numcofold!=numcofnew){
       cat("INFO: Removed ",numcofold-numcofnew," cofactors that were close to eachother\n")
     }
-		#CHECK if the phenotype exists
+		#Convert phenotypes from character to numeric
+    pheno.col = stringPhenoToInt(cross,pheno.col)
+    
 		if (length(pheno.col) > 1){
       cross$pheno <- cross$pheno[,pheno.col]   #Scale down the triats
       result <- mqmscanall( cross,cofactors=cofactors,forceML=forceML,model=model,
