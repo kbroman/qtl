@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-2011, Karl W. Broman
-# last modified Feb, 2011
+# last modified Apr, 2011
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -264,7 +264,7 @@ function(x, ...)
   pval <- attr(x, "pvalues")
   if(!is.null(pval) && !pval)
     x <- x[,-ncol(x)+(0:1)]
-  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
 
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
     
@@ -1379,7 +1379,7 @@ function(x, ...)
   if(!is.null(pval) && !pval) 
     x <- x[,-ncol(x)+(0:1)]
 
-  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
   
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
 
