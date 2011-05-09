@@ -57,6 +57,7 @@
 \alias{scanall}
 \alias{scoremissingmarkers}
 \alias{stepsize}
+\alias{mqmaugment_on_cofactors}
 
 \alias{getgenonames}
 \alias{getThird}

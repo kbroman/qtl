@@ -29,10 +29,9 @@
 #####################################################################
 
 mqmfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
-	
-        thesum <- summary(mqmscan[,1:3],alpha=alpha,perms=perm,pvalues=FALSE)
+	thesum <- summary(mqmscan[,1:3],alpha=alpha,perms=perm,pvalues=FALSE)
 	chr <- thesum$'chr'
-	pos <- thesum$'pos (cM)'
+	pos <- thesum$'pos'
 	if(verbose) cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
 	ret <- NULL
 	for(i in 1:length(chr)){
