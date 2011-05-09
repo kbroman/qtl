@@ -574,11 +574,11 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
 
     if(!justdots) {
       if(horizontal) {
-        arrows(thepos, whchr - 0.35, thepos, whchr, lwd=2, col=col, len=0.05)
+        arrows(thepos, whchr - 0.35, thepos, whchr, lwd=2, col=col, length=0.05)
         text(thepos, whchr-0.4, x$name, col=col, adj=c(0.5,0))
       }
       else {
-        arrows(whchr + 0.35, thepos, whchr, thepos, lwd=2, col=col, len=0.05)
+        arrows(whchr + 0.35, thepos, whchr, thepos, lwd=2, col=col, length=0.05)
         text(whchr+0.4, thepos, x$name, col=col, adj=c(0,0.5))
       }
     }

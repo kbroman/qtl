@@ -27,6 +27,7 @@
 #           ourline
 #           mqmextractmarkers
 #           estimatemarkerlod
+#           stringPhenoToInt
 #           addmarkerstointervalmap
 #           mqmtestnormal
 #           mqmgetmodel
@@ -153,6 +154,23 @@ estimatemarkerlod <- function(interresults){
 	interresults
 }
 
+#Function to go from character phenotypes to numeric column numbers
+#Based on the code in the scanone function
+stringPhenoToInt <- function(cross,pheno.col){
+  if(is.character(pheno.col)) {
+    num <- find.pheno(cross, pheno.col)
+    if(any(is.na(num))) {
+      if(sum(is.na(num)) > 1){
+        stop("Couldn't identify phenotypes ", paste(paste("\"", pheno.col[is.na(num)], "\"", sep=""),collapse=" "))
+      }else{ 
+        stop("Couldn't identify phenotype \"", pheno.col[is.na(num)], "\"")
+      }
+    }
+    pheno.col <- num
+  }
+  if(any(pheno.col < 1 | pheno.col > nphe(cross))) stop("pheno.col values should be between 1 and the no. phenotypes")
+  pheno.col
+}
 
 addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
   if(is.null(cross)){

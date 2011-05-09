@@ -8,7 +8,7 @@
   chromosome. 
 }
 
-\usage{find.pseudomarker(cross, chr, pos, where=c("draws", "prob")), addchr=TRUE}
+\usage{find.pseudomarker(cross, chr, pos, where=c("draws", "prob"), addchr=TRUE)}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
