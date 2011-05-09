@@ -90,6 +90,15 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       if(xchr)
         warning("argmax.geno not working properly for the X chromosome for 4- or 8-way RIL.")
     }
+    else if(type == "bcsft") {
+      one.map <- TRUE
+      cfunc <- "argmax_geno_bcsft"
+      cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+      if(xchr) { ## X chr
+        cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+        cross.scheme[2] <- 0
+      }
+   }
     else 
       stop("argmax.geno not available for cross type ", type, ".")
 
@@ -137,13 +146,18 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
 
     # call the C function
     if(one.map) {
+      ## Hide cross scheme in genoprob to pass to routine. BY
+      temp <- newgen
+      if(type == "bcsft")
+        temp[1:2] <- cross.scheme
+      
       z <- .C(cfunc,
               as.integer(n.ind),         # number of individuals
               as.integer(n.pos),         # number of markers
               as.integer(newgen),        # genotype data
               as.double(rf),             # recombination fractions
               as.double(error.prob),     
-              argmax=as.integer(newgen), # the output
+              argmax=as.integer(temp), # the output
               PACKAGE="qtl")
 
       cross$geno[[i]]$argmax <- matrix(z$argmax,ncol=n.pos)
