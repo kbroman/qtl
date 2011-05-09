@@ -151,6 +151,7 @@
 \alias{snowCoreALL}
 \alias{snowCoreBOOT}
 \alias{sortPhyloPartitions}
+\alias{stringPhenoToInt}
 \alias{subrousummaryscantwo}
 \alias{summary.scantwocondensed}
 \alias{summary.addcovarint}
@@ -371,6 +372,7 @@ sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
 snowCoreALL(x, all.data, scanfunction, cofactors, verbose=FALSE, \dots)
 snowCoreBOOT(x, all.data, scanfunction, bootmethod, cofactors, verbose=FALSE, \dots)
 sortPhyloPartitions(partitions, taxa)
+stringPhenoToInt(cross, pheno.col)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),
