@@ -367,6 +367,9 @@ function(object, ...)
   if(!is.null(attr(object, "alleles")))
     attr(cross2, "alleles") <- attr(object, "alleles")
 
+  if(!is.null(attr(object, "scheme")))
+    attr(cross2, "scheme") <- attr(object, "scheme")
+  
   for(i in 1:length(object$geno)) {
     cross2$geno[[i]] <- list(data=object$geno[[i]]$data,
                              map=object$geno[[i]]$map)
