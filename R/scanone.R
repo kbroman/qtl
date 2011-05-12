@@ -271,7 +271,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   n.ind <- nind(cross)
   n.phe <- ncol(pheno)
   type <- class(cross)[1]
-
+  is.bcs <- FALSE
+  if(type == "bcsft") {
+    cross.scheme <- attr(cross, "scheme")
+    is.bcs <- (cross.scheme[2] == 0)
+  }
 
   # fill in missing genotypes with imputed values
   if(n.perm==0) { # not in the midst of permutations
@@ -404,11 +408,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       newgeno[is.na(newgeno)] <- 0 
 
       # discard partially informative genotypes
-      if(type=="f2") newgeno[newgeno>3] <- 0
+      if(type=="f2" | (type == "bcsft" & !is.bcs)) newgeno[newgeno>3] <- 0
       if(type=="4way") newgeno[newgeno>4] <- 0
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          newgeno <- reviseXdata(type, "full", sexpgm, geno=newgeno,
                                 cross.attr=attributes(cross))
 
@@ -432,7 +436,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.draws <- dim(draws)[3]
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          draws <- reviseXdata(type, "full", sexpgm, draws=draws,
                               cross.attr=attributes(cross))
 
@@ -464,7 +468,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.pos <- ncol(genoprob)
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          genoprob <- reviseXdata(type, "full", sexpgm, prob=genoprob,
                                  cross.attr=attributes(cross))
 

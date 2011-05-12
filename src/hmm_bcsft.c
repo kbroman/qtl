@@ -470,7 +470,7 @@ double golden(double *countmat, int n_gen, int maxit, double tol, int *cross_sch
     resphi = 1.5 - sqrt(5.0) / 2.0;
 
   x[0] = 0.0;
-  x[2] = 0.5;
+  x[2] = 1.0;
   y[0] = comploglik(0.0, n_gen, countmat, cross_scheme);
   y[2] = comploglik(0.5, n_gen, countmat, cross_scheme);
 
@@ -514,7 +514,7 @@ double golden(double *countmat, int n_gen, int maxit, double tol, int *cross_sch
   }
   /* handle boundary situations cleanly */
   if((x[0] == 0.0 && y[0] >= y[1]) || (x[2] == 0.0 && y[2] >= y[1])) return(0.0);
-  if((x[0] == 0.5 && y[0] >= y[1]) || (x[2] == 0.5 && y[2] >= y[1])) return(0.5);
+  if((x[0] == 1.0 && y[0] >= y[1]) || (x[2] == 1.0 && y[2] >= y[1])) return(1.0);
 
   x[1] = (x[2] + x[0]) / 2.0;
   /* make negative if does not converge */
@@ -990,8 +990,10 @@ void est_rf_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 	  tmp1 = ((obs2 * (obs2 - 1)) / 2) - 1;
 	  /* increment count by one */
 	  countmat[obs1 + tmp1] += 1.0;
+	  flag++;
 	}
       }
+
       /* check if marker pair is informative */
       for(obs2=1; obs2<=n_gen; obs2++) {
 	tmp1 = ((obs2 * (obs2 - 1)) / 2) - 1;
@@ -1040,7 +1042,6 @@ void est_rf_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 	Rf[j1][j2] = NA_REAL;
 	Rf[j2][j1] = 0.0;
       }
-	  
     } /* end loops over markers */
   }
 }
