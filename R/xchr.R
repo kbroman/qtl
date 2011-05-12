@@ -284,7 +284,7 @@ function(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
 
 # revise genotype data, probabilities or imputations for the X chromosome
 reviseXdata <-
-function(type=c("f2","bc"), expandX=c("simple","standard","full"),
+function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
          sexpgm, geno, prob, draws, pairprob, cross.attr)
 {
   type <- match.arg(type)
@@ -907,9 +907,18 @@ function(sexpgm, covar)
 #           and for the additive model.
 ######################################################################
 dropXcol <-
-function(type=c("f2","bc"), sexpgm, cross.attr)
+function(type=c("f2","bc","bcsft"), sexpgm, cross.attr)
 {
   type <- match.arg(type)
+
+  ## Treat bcsft as bc if no intercross generations; otherwise as f2.
+  if(type == "bcsft") {
+    if(cross.attr$scheme[2] == 0)
+      type <- "bc"
+    else
+      type <- "f2"
+  }
+
   gn <- getgenonames(type, "X", "full", sexpgm, cross.attr)
 
   if(length(gn)==2) return(rep(0,4))

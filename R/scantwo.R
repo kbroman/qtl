@@ -301,6 +301,11 @@ function(cross, chr, pheno.col=1,
   n.phe <- length(pheno.col)
   type <- class(cross)[1]
   chrtype <- sapply(cross$geno,class)
+  is.bcs <- FALSE
+  if(type == "bcsft") {
+    cross.scheme <- attr(cross, "scheme")
+    is.bcs <- (cross.scheme[2] == 0)
+  }
 
   if(any(chrtype=="X")) {
     sexpgm <- getsex(cross)
@@ -496,7 +501,7 @@ function(cross, chr, pheno.col=1,
       n.pos[i] <- length(keep.pos[[i]])
 
       # Revise X chromosome genotype probabilities or imputations 
-      if(chrtype[i]=="X" && (type=="bc" || type=="f2")) {
+      if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
         if(method=="imp") 
           cross$geno[[i]]$draws <-
             reviseXdata(type, "full", sexpgm, draws=cross$geno[[i]]$draws,
@@ -690,7 +695,7 @@ function(cross, chr, pheno.col=1,
 
           if(verbose>1) cat("  --Calculating joint probs.\n")
 
-          if(chrtype[i]=="X" && (type=="bc" || type=="f2")) {
+          if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
             # calculate joint genotype probabilities for all pairs of positions
             stp <- attr(oldXchr$geno[[1]]$prob, "step")
             oe <- attr(oldXchr$geno[[1]]$prob, "off.end")
@@ -742,7 +747,7 @@ function(cross, chr, pheno.col=1,
           }
 
           # revise pair probilities for X chromosome
-          if(chrtype[i]=="X" && (type=="bc" || type=="f2")) 
+          if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) 
             temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                                 cross.attr=attributes(cross))
 
@@ -964,7 +969,7 @@ function(cross, chr, pheno.col=1,
 
           if(verbose>1) cat("  --Calculating joint probs.\n")
 
-          if(chrtype[i]=="X" && (type=="bc" || type=="f2")) {
+          if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
             # calculate joint genotype probabilities for all pairs of positions
             stp <- attr(oldXchr$geno[[1]]$prob, "step")
             oe <- attr(oldXchr$geno[[1]]$prob, "off.end")
@@ -1016,7 +1021,7 @@ function(cross, chr, pheno.col=1,
           }
 
           # revise pair probilities for X chromosome
-          if(chrtype[i]=="X" && (type=="bc" || type=="f2")) 
+          if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) 
             temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                                 cross.attr=attributes(cross))
 
@@ -1128,10 +1133,10 @@ function(cross, chr, pheno.col=1,
         datai <- cross$geno[[i]]$data
         datai[is.na(datai)] <- 0
 
-        if(type=="f2") datai[datai>3] <- 0
+        if(type=="f2" || (type=="bcsft" & !is.bcs)) datai[datai>3] <- 0
         else if(type=="4way") datai[datai>4] <- 0
 
-        if(chrtype[i]=="X" && (type=="bc" || type=="f2"))
+        if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft")))
             datai <- reviseXdata(type, "full", sexpgm, geno=datai,
                                  cross.attr=attributes(cross))
 
@@ -1163,10 +1168,10 @@ function(cross, chr, pheno.col=1,
           # replace missing and partially informative genotypes with 0's
           dataj <- cross$geno[[j]]$data
           dataj[is.na(dataj)] <- 0
-          if(type=="f2") dataj[dataj>3] <- 0
+          if(type=="f2" || (type=="bcsft" && !is.bcs)) dataj[dataj>3] <- 0
           else if(type=="4way") dataj[dataj>4] <- 0
 
-          if(chrtype[j]=="X" && (type=="bc" || type=="f2"))
+          if(chrtype[j]=="X" && (type %in% c("bc","f2","bcsft")))
             dataj <- reviseXdata(type, "full", sexpgm, geno=dataj,
                                  cross.attr=attributes(cross))
 
