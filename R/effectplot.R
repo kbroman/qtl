@@ -529,7 +529,7 @@ function (cross, mname)
   else if(mar.type=="marker") { # this is a real marker
     mark <- cross$geno[[chr]]$data[, idx.pos]
     # if X chr and backcross or intercross, get sex/dir data + revise data
-    if(chrtype == "X" && (type == "bc" || type == "f2")) {
+    if(chrtype == "X" && (type %in% c("bc","f2","bcsft"))) {
       sexpgm <- getsex(cross)
       mark <- as.numeric(reviseXdata(type, "standard", sexpgm, 
                                      geno = as.matrix(mark),
@@ -543,7 +543,7 @@ function (cross, mname)
     mark <- cross$geno[[chr]]$draws[,idx.pos,,drop=FALSE]
 
     # if X chr and backcross or intercross, get sex/dir data + revise data
-    if(chrtype == "X" && (type == "bc" || type == "f2")) {
+    if(chrtype == "X" && (type %in% c("bc","f2","bcsft"))) {
       sexpgm <- getsex(cross)
       mark <- reviseXdata(type, "standard", sexpgm, draws=mark,
                           cross.attr=attributes(cross))[,1,]

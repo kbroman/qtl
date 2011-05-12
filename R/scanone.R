@@ -408,7 +408,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       newgeno[is.na(newgeno)] <- 0 
 
       # discard partially informative genotypes
-      if(type=="f2" | (type == "bcsft" & !is.bcs)) newgeno[newgeno>3] <- 0
+      if(type=="f2" || (type=="bcsft" && !is.bcs)) newgeno[newgeno>3] <- 0
       if(type=="4way") newgeno[newgeno>4] <- 0
 
       # revise X chromosome genotypes

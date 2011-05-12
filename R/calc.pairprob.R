@@ -137,14 +137,8 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     cfunc <- "calc_pairprob_bcsft"
     cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
     if(!xchr) { # autosome
-      if(cross.scheme[2] == 0) {
-        gen.names <- getgenonames("bc", "A", cross.attr=attributes(cross))
-        n.gen <- 2
-      }
-      else {
-        gen.names <- getgenonames("f2", "A", cross.attr=attributes(cross))
-        n.gen <- 3
-      }
+      gen.names <- getgenonames("bcsft", "A", cross.attr=attributes(cross))
+      n.gen <- 2 + (cross.scheme[2] > 0)
     }
     else { ## X chromsome 
       cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
