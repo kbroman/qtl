@@ -177,7 +177,7 @@ covariates are discarded.
 
 \section{X chromosome}{
 The X chromosome must be treated specially in QTL mapping.  See Broman
-et al. (in press).
+et al. (2006).
 
 If both males and females are included, male hemizygotes are allowed
 to be different from female homozygotes.  Thus, in a backcross, we will
@@ -267,7 +267,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
 }
 
 \references{
-  Boyartchuk V. L., Broman, K. W., Mosher, R. E., D'Orazio
+  Boyartchuk,  V. L., Broman, K. W., Mosher, R. E., D'Orazio
   S. E. F., Starnbach, M. N. and Dietrich, W. F. (2001) Multigenic
   control of \emph{Listeria monocytogenes} susceptibility in
   mice. \emph{Nature Genetics} \bold{27}, 259--260.
@@ -277,8 +277,8 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   1169--1175. 
 
   Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
-  Southard-Smith, E. M. and Churchill G. A.  The X chromosome in
-  quantitative trait locus mapping.  \emph{Genetics}, to appear.
+  Southard-Smith, E. M. and Churchill G. A. (2006)  The X chromosome in
+  quantitative trait locus mapping.  \emph{Genetics}, \bold{174}, 2151--2158.
 
   Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for
   quantitative trait mapping.  \emph{Genetics} \bold{138}, 963--971.

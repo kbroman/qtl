@@ -2,10 +2,10 @@
  * 
  * hmm_bci.c
  * 
- * copyright (c) 2006-2010, Karl W Broman
+ * copyright (c) 2006-2011, Karl W Broman
  *         (Some code adapted from code from Nicola Armstrong)
  *
- * last modified Jul, 2010
+ * last modified Mar, 2011
  * first written Aug, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -93,6 +93,9 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
   double ***tm, *temp;
   double curloglik;
   double initprob;
+  int ndigits;
+  double maxdif, tempdif;
+  char pattern[100], text[200];
   
   n_states = 2*(m+1);  
   initprob = -log((double)n_states);
@@ -121,11 +124,11 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     }
   }
 
+  /* digits in verbose output */
   if(verbose) {
-    /* print initial estimates */
-    Rprintf("      "); 
-    for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", d[j]);
-    Rprintf("\n"); 
+    ndigits = (int)ceil(-log10(tol));
+    if(ndigits > 16) ndigits=16;
+    sprintf(pattern, "%s%d.%df", "%", ndigits+3, ndigits+1);
   }
 
   for(j=0; j<n_mar-1; j++) d[j] /= 100.0; /* convert to Morgans */
@@ -210,12 +213,16 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     for(j=0; j<n_mar-1; j++)
       d[j] = imf_stahl(rf[j], m, p, 1e-10, 1000);
 
-    if(verbose > 1) { /* print some debugging stuff */
-      if(verbose == 2) Rprintf("Iteration");
-      Rprintf(" %4d ", it+1);
-      if(verbose > 2) 
-	for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", d[j]*100.0);
-      Rprintf("\n"); 
+    if(verbose>1) {
+      /* print estimates as we go along*/
+      Rprintf("   %4d ", it+1);
+      maxdif=0.0;
+      for(j=0; j<n_mar-1; j++) {
+	tempdif = fabs(d[j] - cur_d[j])/(cur_d[j]+tol*100.0);
+	if(maxdif < tempdif) maxdif = tempdif;
+      }
+      sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
+      Rprintf(text, maxdif);
     }
 
     /* check convergence */
@@ -262,18 +269,24 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     *loglik += curloglik;
   }
 
-  /* convert distances back to cM */
-  for(j=0; j<n_mar-1; j++) d[j] *= 100.0;
-
   if(verbose) {
-    /* print final estimates */
-    Rprintf(" %4d ", it+1);
-    for(j=0; j<n_mar-1; j++) Rprintf("%.3lf ", d[j]);
-    Rprintf("\n");
+    if(verbose < 2) {
+      /* print final estimates */
+      Rprintf("  no. iterations = %d\n", it+1);
+      maxdif=0.0;
+      for(j=0; j<n_mar-1; j++) {
+	tempdif = fabs(d[j] - cur_d[j])/(cur_d[j]+tol*100.0);
+	if(maxdif < tempdif) maxdif = tempdif;
+      }
+      sprintf(text, "%s%s\n", "  max rel've change at last step = ", pattern);
+      Rprintf(text, maxdif);
+    }
     
-    Rprintf("loglik: %10.4lf\n\n", *loglik);
+    Rprintf("  loglik: %10.4lf\n\n", *loglik);
   }
 
+  /* convert distances back to cM */
+  for(j=0; j<n_mar-1; j++) d[j] *= 100.0;
 }
 
 

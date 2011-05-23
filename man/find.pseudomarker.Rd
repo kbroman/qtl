@@ -8,7 +8,7 @@
   chromosome. 
 }
 
-\usage{find.pseudomarker(cross, chr, pos, where=c("draws", "prob"))}
+\usage{find.pseudomarker(cross, chr, pos, where=c("draws", "prob"), addchr=TRUE)}
 
 \arguments{
  \item{cross}{An object of class \code{cross}.  See
@@ -17,6 +17,10 @@
  \item{pos}{A vector of cM positions.}
  \item{where}{Indicates whether to look in the \code{draws} or
  \code{prob} components of the input cross.}
+ \item{addchr}{If TRUE, include something like \code{"c5."} at the
+ beginning of the names of non-pseudomarker locations, as in the output
+ of \code{\link{scanone}}; if FALSE, don't include this sort of string,
+ as in the genotype probabilities from \code{\link{calc.genoprob}}.}
 }
 
 \value{

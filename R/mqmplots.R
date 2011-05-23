@@ -2,14 +2,14 @@
 #
 # mqmplots.R
 #
-# Copyright (c) 2009-2010, Danny Arends
+# Copyright (c) 2009-2011, Danny Arends
 # Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified April 2010
+# last modified Feb 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -63,7 +63,7 @@ mqmplot.directedqtl <- function(cross, mqmresult, pheno.col=1, draw = TRUE){
   invisible(onlymarkers)
 }
 
-mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=FALSE){
+mqmplot.heatmap <- function(cross, result, directed=TRUE, legend=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"), ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -88,19 +88,6 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
           result[[x]][y,3]  <- result[[x]][y,3] *(effect[effectid,3]/abs(effect[effectid,3]))  
         }
       }
-      if(!hidelow){
-        breaks <- c(-100,-10,-3,0,3,10,100)
-        col <- c("darkblue","blue","lightblue","yellow","orange","red")
-        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 0","Lod 0 to 3","Lod 3 to 10","Lod > 10")
-      }else{
-        breaks <- c(-100,-10,-3,3,10,100)
-        col <- c("darkblue","blue","white","orange","red")
-        leg <- c("Lod < -10","Lod -10 to -3","Lod -3 to 3","Lod 3 to 10","Lod > 10")
-      }
-    }else{
-      breaks <- c(0,3,6,9,12,100)
-      col <- c("white","blue","darkblue","yellow","red")
-      leg <- c("Lod 0-3","Lod 3-6","Lod 6-9","Lod 9-12","Lod 12+")
     }
     names <- c(names,substring(colnames(result[[x]])[3],5))
   }
@@ -110,7 +97,12 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
     data <- rbind(data,result[[x]][,3])
   }
   rownames(data) <- names
-  image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col)
+  if(nphe(cross) < 100){
+    image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col,yaxt="n",...)
+    axis(2,at=seq(1,nphe(cross)),labels=colnames(pull.pheno(cross)),las=1)
+  }else{
+    image(seq(0,nrow(result[[1]])),seq(0,nphe(cross)),t(data),xlab="Markers",ylab="Traits",breaks=breaks,col=col,...)
+  }
   abline(v=0)
   for(x in unique(chrs[[1]])){
     abline(v=sum(as.numeric(chrs[[1]])<=x))
@@ -119,12 +111,16 @@ mqmplot.heatmap <- function(cross, result, hidelow=TRUE, directed=TRUE, legend=F
     abline(h=x)
   }
   if(legend){
+    leg <- NULL
+    for(x in 2:length(breaks)){
+      leg <- c(leg,paste("LOD",breaks[x-1],"to",breaks[x]))
+    }
     legend("bottom",leg,col=col,lty=1,bg="white")
   }
   invisible(data)
 }
 
-mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, Colv=NA, scale="none", verbose=FALSE, ...){
+mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, legend=FALSE, Colv=NA, scale="none", verbose=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"), ...){
 	if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -161,7 +157,18 @@ mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, Colv=NA, s
   }
   colnames(data) <- rownames(mqmresult[[1]])
   rownames(data) <- names
-  retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",keep.dendro =TRUE, ...)
+  if(length(names) < 100){
+    retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",breaks=breaks,col=col,keep.dendro = TRUE, ...)
+  }else{
+    retresults <- heatmap(data,Colv=Colv,scale=scale, xlab="Markers",main="Clustered heatmap",breaks=breaks,col=col,keep.dendro = TRUE,labRow=1:length(names), ...)
+  }
+  if(legend){
+    leg <- NULL
+    for(x in 2:length(breaks)){
+      leg <- c(leg,paste("LOD",breaks[x-1],"to",breaks[x]))
+    }
+    legend("bottom",leg,col=col,lty=1,bg="white")
+  }
   invisible(retresults)
 }
 
@@ -388,43 +395,35 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
   n.pheno <- length(result)  
   temp <- lapply(result,getThird)
   chrs <- unique(lapply(result,getChr))
-  c <- do.call("rbind",temp)
+  qtldata <- do.call("rbind",temp)
   if(!is.null(group)){
-    c <- c[group,]
+    qtldata <- qtldata[group,]
     colors <- rep("blue",n.pheno)
   }else{
     group <- 1:n.pheno
     colors <- rainbow(n.pheno)
   }
-  c <- t(c)
+  qtldata <- t(qtldata)
   if(type=="contour"){
     #Countour plot
-
-    contour(
-            x=seq(1,dim(c)[1]),
-            y=seq(1,dim(c)[2]),
-            c,
-            xlab="Markers",ylab="Trait",
-            col=rainbow((max(c)/5)+25,1,1.0,0.1),
-            nlevels=(max(c)/5)
-            )
+    contour(x=seq(1,dim(qtldata)[1]),
+            y=seq(1,dim(qtldata)[2]),
+            qtldata,
+            xlab="Markers",ylab="Trait", ...)
     for(x in unique(chrs[[1]])){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}			
   }
   if(type=="image"){
     #Image plot
-    image(x=1:dim(c)[1],y=1:dim(c)[2],c,
-          xlab="Markers",ylab="Trait",
-          col=rainbow((max(c)/5)+25,1,1.0,0.1),
-          )
+    image(x=1:dim(qtldata)[1],y=1:dim(qtldata)[2],qtldata,xlab="Markers",ylab="Trait",...)
     for(x in unique(chrs[[1]])){
 		abline(v=sum(as.numeric(chrs[[1]])<=x))
 	}
   }
   if(type=="3Dplot"){
     #3D perspective plot
-    persp(x=1:dim(c)[1],y=1:dim(c)[2],c,
+    persp(x=1:dim(qtldata)[1],y=1:dim(qtldata)[2],qtldata,
           theta = theta, phi = phi, expand = 1,
           col="gray", xlab = "Markers", ylab = "Traits", zlab = "LOD score")
   }
@@ -433,7 +432,7 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
     first <- TRUE
     for(i in group) {
       if(first){
-        plot(result[[i]],ylim=c(0,max(c)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
+        plot(result[[i]],ylim=c(0,max(qtldata)),col=colors[i],lwd=1,ylab="LOD score",xlab="Markers",main="Multiple profiles", ...)
         first <- FALSE
       }else{
         plot(result[[i]],add=TRUE,col=colors[i],lwd=1,...)
@@ -442,11 +441,11 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
     if(meanprofile != "none"){
       temp <- result[[1]]
       if(meanprofile=="median"){
-        temp[,3] <- apply(c,1,median)
+        temp[,3] <- apply(qtldata,1,median)
         legend("topright",c("QTL profiles","Median profile"),col=c("blue","black"),lwd=c(1,3))
       }
       if(meanprofile=="mean"){
-        temp[,3] <- rowMeans(c)
+        temp[,3] <- rowMeans(qtldata)
         legend("topright",c("QTL profiles","Mean profile"),col=c("blue","black"),lwd=c(1,3))
       }
       plot(temp,add=TRUE,col="black",lwd=3,...)
@@ -516,7 +515,7 @@ mqmplot.singletrait <- function(result, extended=0,...){
     plot(result,lwd=1,col=c("black"),ylab="QTL (LOD)",...)
     par(new=TRUE)
     plot(info.l,lwd=1,col=c("red"),ylab="QTL (LOD)",yaxt="n",lty=1,...)
-    grid(max(result$chr),5)
+    grid(length(result$chr),5)
     labels <- c(colnames(result)[3],"Information Content")
     mtext("Information Content",side=4,col="red",line=4) 
     axis(4, ylim=c(0,1), col="red",col.axis="red",las=1)
@@ -527,7 +526,7 @@ mqmplot.singletrait <- function(result, extended=0,...){
       plot(attr(result,"mqmmodel"))
     }
     plot(result,lwd=1,ylab="QTL (LOD)",...)
-    grid(max(result$chr),5)
+    grid(length(result$chr),5)
     labels <- c(colnames(result)[3])
     legend("right", labels,col=c("black","blue"),lty=c(1,1))			
   }

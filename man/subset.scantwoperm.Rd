@@ -1,5 +1,6 @@
 \name{subset.scantwoperm}
 \alias{subset.scantwoperm}
+\alias{[.scantwoperm}
 
 \title{Subsetting two-dimensional permutation test results}
 
@@ -9,14 +10,17 @@
 }
 
 \usage{
-\method{subset}{scantwoperm}(x, lodcolumn, \dots)
+\method{subset}{scantwoperm}(x, repl, lodcolumn, \dots)
+\method{[}{scantwoperm}(x, repl, lodcolumn)
 }
 
 \arguments{
  \item{x}{Permutation results from 
    \code{\link{scantwo}}, run with \code{n.perm}>0.}
- \item{lodcolumn}{A vector specifying which LOD columns to keep (or, if
-   negative), omit.  These should be between 1 and the number of LOD
+ \item{repl}{A vector specifying which permutation replicates to keep or (if
+ negative) omit.}
+ \item{lodcolumn}{A vector specifying which LOD columns to keep or (if
+   negative) omit.  These should be between 1 and the number of LOD
    columns in the input \code{x}.}
  \item{\dots}{Ignored at this point.}
 }
@@ -32,6 +36,9 @@ data(fake.bc)
 fake.bc <- calc.genoprob(fake.bc, step=0)
 operm <- scantwo(fake.bc, method="hk", pheno.col=1:2, n.perm=5)
 operm2 <- subset(operm, lodcolumn=2)
+
+# alternatively
+operm2alt <- operm[,2]
 }
 
 \seealso{ \code{\link{summary.scantwoperm}},

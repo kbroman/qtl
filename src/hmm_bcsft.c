@@ -46,7 +46,6 @@
 #include "hmm_bcsft.h"
 #include "hmm_f2.h"
 #include "hmm_bc.h"
-#include "hmm_util.h"
 #include "util.h"
 
 /* ref: Jiang and Zeng (1997 Genetics) */
@@ -54,9 +53,6 @@
 void prob_bcsft(double rf, int s, int t, double *transpr);
 void count_bcsft(double rf, int s, int t, double *transct);
 void expect_bcsft(double rf, int s, int t, double *transexp);
-
-/* assign probabilities or counts based on vector of precomputed values */
-/* in transpr and transct, which are re-computed only when rf,s or t changes */
 
 double assign_bcsft(int gen1, int gen2, double *transpr) 
 {
@@ -154,11 +150,11 @@ double assign_bcsftc(int obs1, int obs2, double *transval)
   }
   return(transval[1] + transval[2] + transval[3] + transval[6]);            /* 4,5: 1 or 2 x 2 or 3 */
 }
-
-/* end of assign functions */
-
-/* init, emit and step when genotype known, phase unknown
-   geno = 1,2,3 for AA,Aa,aa */
+double assign_bcsftd(int n_gen, int obs1, int obs2, double *transval)
+{
+  if(n_gen == 5) return(assign_bcsftc(obs1, obs2, transval));
+  return(assign_bcsftb(obs1, obs2, transval));
+}
 
 double init_bcsft(int true_gen, int *cross_scheme)
 {
@@ -248,8 +244,9 @@ double step_bcsft(int gen1, int gen2, double rf, double junk, int *cross_scheme)
 
 /****************************************************************************/
 
-/* init, emit and step functions with phase-known genotypes 
-   (i.e. the 4-state chain: AA, Aa, aA, aa             */
+/* The following are the init, emit and step functions 
+   when considering phase-known F2 genotypes 
+   (i.e. the 4-state chain: AA, AB, BA, BB             */
 
 double init_bcsftb(int true_gen, int *cross_scheme)
 {
@@ -306,7 +303,8 @@ double emit_bcsftb(int obs_gen, int true_gen, double error_prob, int *cross_sche
   return(emit_bc(obs_gen, true_gen, error_prob,cross_scheme));
 }
 
-double step_bcsftb(int gen1, int gen2, double rf, double junk, int *cross_scheme)
+
+double step_bcsftb(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   static double oldrf = -1.0;
   static double transpr[10];
@@ -378,14 +376,46 @@ double nrec_bcsftb(int gen1, int gen2, double rf, int *cross_scheme)
   return(assign_bcsftb(gen1, gen2, transexp));
 }
 
-/* compute log likelihood for golden section search */
+/****************************************************************************/
 
-double assign_bcsftd(int n_gen, int obs1, int obs2, double *transval)
+void calc_genoprob_bcsft(int *n_ind, int *n_mar, int *geno, 
+		      double *rf, double *error_prob,
+                      double *genoprob) 
 {
-  if(n_gen == 5) return(assign_bcsftc(obs1, obs2, transval));
-  return(assign_bcsftb(obs1, obs2, transval));
+  /* cross_scheme is hidden in genoprob */
+  int n_gen;
+  n_gen = 2;
+  if(genoprob[1] > 0) n_gen = 3;
+
+  calc_genoprob(*n_ind, *n_mar, n_gen, geno, rf, rf, *error_prob,
+                genoprob, init_bcsft, emit_bcsft, step_bcsft);
 }
-double comploglik_bcsft(double rf, int n_gen, double *countmat, int *cross_scheme)
+   
+void calc_genoprob_special_bcsft(int *n_ind, int *n_mar, int *geno, 
+			      double *rf, double *error_prob, double *genoprob) 
+{
+  /* cross_scheme is hidden in genoprob */
+  int n_gen;
+  n_gen = 2;
+  if(genoprob[1] > 0) n_gen = 3;
+
+  calc_genoprob_special(*n_ind, *n_mar, n_gen, geno, rf, rf, *error_prob, genoprob,
+			init_bcsft, emit_bcsft, step_bcsft);
+}
+ 
+void sim_geno_bcsft(int *n_ind, int *n_pos, int *n_draws, int *geno,
+		 double *rf, double *error_prob, int *draws)
+{
+  /* cross_scheme is hidden in draws */
+  int n_gen;
+  n_gen = 2;
+  if(draws[1] > 0) n_gen = 3;
+
+  sim_geno(*n_ind, *n_pos, n_gen, *n_draws, geno, rf, rf, *error_prob,
+	   draws, init_bcsft, emit_bcsft, step_bcsft);
+}
+
+double comploglik(double rf, int n_gen, double *countmat, int *cross_scheme)
 {
   static double transpr[10];
   static double probmat[15];
@@ -427,171 +457,77 @@ double comploglik_bcsft(double rf, int n_gen, double *countmat, int *cross_schem
   return(lod);
 }
 
-/****************************************************************************/
-
-void calc_genoprobo_bcsft(int *n_ind, int *n_mar, int *geno, 
-		      double *rf, double *error_prob,
-                      double *genoprob) 
+double golden(double *countmat, int n_gen, int maxit, double tol, int *cross_scheme)
 {
-  /* cross_scheme is hidden in genoprob */
-  int n_gen;
-  n_gen = 2;
-  if(genoprob[1] > 0) n_gen = 3;
+  /* Golden section search. */
+  /* en.wikipedia.org/wiki/Golden_section_search */
 
-  calc_genoprob(*n_ind, *n_mar, n_gen, geno, rf, rf, *error_prob,
-                genoprob, init_bcsft, emit_bcsft, step_bcsft);
-}
+  static double resphi = 0.0;
+  double x[4],y[4];
+  int iter;
 
-void calc_genoprob_bcsft(int *n_ind, int *n_mar, int *geno, 
-			 double *rf, double *error_prob, double *genoprob)
-{
-  double **alpha, **beta, **probmat;
-  int **Geno;
-  double ***Genoprob;
-  int i, cross_scheme[2];
+  if(resphi == 0.0)
+    resphi = 1.5 - sqrt(5.0) / 2.0;
 
-  /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
-  cross_scheme[0] = genoprob[0];
-  cross_scheme[1] = genoprob[1];
-  genoprob[0] = 0.0;
-  genoprob[1] = 0.0;
+  x[0] = 0.0;
+  x[2] = 1.0;
+  y[0] = comploglik(0.0, n_gen, countmat, cross_scheme);
+  y[2] = comploglik(0.5, n_gen, countmat, cross_scheme);
 
-  int n_gen,j,v,sgeno;
-  double temp;
-  n_gen = 2;
-  if(cross_scheme[1] > 0) n_gen = 3;
+  if(y[2] < y[0]) {
+    x[1] = x[0];
+    x[0] = x[2];
+    x[2] = x[1];
+    y[1] = y[0];
+    y[0] = y[2];
+    y[2] = y[1];
+  }
+  
+  x[1] = x[0] + resphi * (x[2] - x[0]);
+  y[1] = comploglik(x[1], n_gen, countmat, cross_scheme);
 
-  /* allocate space for alpha and beta and 
-     reorganize geno and genoprob */
-  reorg_geno(*n_ind, *n_mar, geno, &Geno);
-  reorg_genoprob(*n_ind, *n_mar, n_gen, genoprob, &Genoprob);
-  allocate_alpha(*n_mar, n_gen, &alpha);
-  allocate_alpha(*n_mar, n_gen, &beta);
-  allocate_dmatrix(*n_mar, 6, &probmat);
+  /* x0 and x2 are the current bounds; the minimum is between them.
+   * x1 is the center point, which is closer to x0 than to x2. */
 
-  /* initialize stepf calculations */
-  init_stepf(rf, rf, n_gen, *n_mar, cross_scheme, step_bcsft, probmat);
+  for(iter=0; iter<maxit; iter++) {
+    /* Create a new possible center in the area between x1 and x2, closer to x1. */
+    x[3] = x[1] + resphi * (x[2] - x[1]);
 
-  for(i=0; i<*n_ind; i++) { /* i = individual */
+    /* Evaluate termination criterion */
+    if(fabs(x[2] - x[0]) < tol)
+      break;
+ 
+    y[3] = comploglik(x[3], n_gen, countmat, cross_scheme);
 
-    R_CheckUserInterrupt(); /* check for ^C */
-
-    sgeno = 0;
-    for(j=0; j<*n_mar; j++)
-      sgeno += Geno[j][i];
-    if(sgeno > 0) {
-      /* forward-backward equations */
-      forward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, alpha,
-		   init_bcsft, emit_bcsft);
-      backward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, beta,
-		    init_bcsft, emit_bcsft);
-      
-      /* calculate genotype probabilities */
-      calc_probfb(i, *n_mar, n_gen, -1, alpha, beta, Genoprob);
+    if(y[3] >= y[1]) {
+      x[0] = x[1];
+      x[1] = x[3];
+      y[0] = y[1];
+      y[1] = y[3];
     }
     else {
-      /* chromosome with no genotypes for this individual get init probabilities */
-      for(v=0; v<n_gen; v++) {
-	temp = exp(init_bcsft(v+1, cross_scheme));
-	for(j=0; j<*n_mar; j++) 
-	  Genoprob[v][j][i] = temp;
-      }
+      x[2] = x[0];
+      x[0] = x[3];
+      y[2] = y[0];
+      y[0] = y[3];
     }
-  } /* loop over individuals */
-}
+  }
+  /* handle boundary situations cleanly */
+  if((x[0] == 0.0 && y[0] >= y[1]) || (x[2] == 0.0 && y[2] >= y[1])) return(0.0);
+  if((x[0] == 1.0 && y[0] >= y[1]) || (x[2] == 1.0 && y[2] >= y[1])) return(1.0);
 
-void calc_genoprob_specialo_bcsft(int *n_ind, int *n_mar, int *geno, 
-			      double *rf, double *error_prob, double *genoprob) 
-{
-  /* cross_scheme is hidden in genoprob */
-  int n_gen;
-  n_gen = 2;
-  if(genoprob[1] > 0) n_gen = 3;
-
-  calc_genoprob_special(*n_ind, *n_mar, n_gen, geno, rf, rf, *error_prob, genoprob,
-			init_bcsft, emit_bcsft, step_bcsft);
-}
- 
-void calc_genoprob_special_bcsft(int *n_ind, int *n_mar, int *geno, 
-				 double *rf, double *error_prob, double *genoprob)
-{
-  int i, curpos;
-  double **alpha, **beta, **probmat;
-  int **Geno;
-  double ***Genoprob;
-  int cross_scheme[2];
-
-  /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
-  cross_scheme[0] = genoprob[0];
-  cross_scheme[1] = genoprob[1];
-  genoprob[0] = 0.0;
-  genoprob[1] = 0.0;
-
-  int n_gen,j,v,sgeno;
-  double temp;
-  n_gen = 2;
-  if(cross_scheme[1] > 0) n_gen = 3;
-  
-  /* allocate space for alpha and beta and 
-     reorganize geno and genoprob */
-  reorg_geno(*n_ind, *n_mar, geno, &Geno);
-  reorg_genoprob(*n_ind, *n_mar, n_gen, genoprob, &Genoprob);
-  allocate_alpha(*n_mar, n_gen, &alpha);
-  allocate_alpha(*n_mar, n_gen, &beta);
-  allocate_dmatrix(*n_mar, 6, &probmat);
-
-  /* initialize stepf calculations */
-  init_stepf(rf, rf, n_gen, *n_mar, cross_scheme, step_bcsft, probmat);
-
-  for(i=0; i<*n_ind; i++) { /* i = individual */
-
-    for(curpos=0; curpos < *n_mar; curpos++) {
-
-      if(!Geno[curpos][i]) continue;
-
-      R_CheckUserInterrupt(); /* check for ^C */
-
-      sgeno = 0;
-      for(j=0; j<*n_mar; j++)
-	sgeno += Geno[j][i];
-      if(sgeno > 0) {
-	/* forward-backward equations */
-	forward_prob(i, *n_mar, n_gen, curpos, cross_scheme, *error_prob, Geno, probmat, alpha,
-		     init_bcsft, emit_bcsft);
-	backward_prob(i, *n_mar, n_gen, curpos, cross_scheme, *error_prob, Geno, probmat, beta,
-		      init_bcsft, emit_bcsft);
-	
-	/* calculate genotype probabilities */
-	calc_probfb(i, *n_mar, n_gen, curpos, alpha, beta, Genoprob);
-      }
-      else {
-	/* chromosome with no genotypes for this individual get init probabilities */
-	for(v=0; v<n_gen; v++) {
-	  temp = exp(init_bcsft(v+1, cross_scheme));
-	  Genoprob[v][curpos][i] = temp;
-	}
-      }
-    } /* end loop over current position */
-  } /* loop over individuals */
-}
-
-void sim_geno_bcsft(int *n_ind, int *n_pos, int *n_draws, int *geno,
-		 double *rf, double *error_prob, int *draws)
-{
-  /* cross_scheme is hidden in draws */
-  int n_gen;
-  n_gen = 2;
-  if(draws[1] > 0) n_gen = 3;
-
-  sim_geno(*n_ind, *n_pos, n_gen, *n_draws, geno, rf, rf, *error_prob,
-	   draws, init_bcsft, emit_bcsft, step_bcsft);
+  x[1] = (x[2] + x[0]) / 2.0;
+  /* make negative if does not converge */
+  if(iter >= maxit)
+    x[1] = - x[1];
+  return(x[1]);
 }
 
 /* est_map_bcsft maps correctly for BC and F2 */
 /* but not for higher order crosses BCsFt */
 /* need instead to use golden section search for rf */
 
-void est_mapo_bcsft(int *n_ind, int *n_mar, int *geno, double *rf, 
+void est_map0_bcsft(int *n_ind, int *n_mar, int *geno, double *rf, 
 		double *error_prob, double *loglik, int *maxit, 
 		double *tol, int *verbose)
 {
@@ -610,34 +546,66 @@ void est_mapo_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 /* Note: true genotypes coded as 1, 2, ...
    but in the alpha's and beta's, we use 0, 1, ... */
 
+void init_step_map(double *cur_rf, double *cur_rf2, int n_gen, int n_mar, int *cross_scheme, double **probmat)
+{
+  int j,obs1,obs2,tmp1;
+  
+  for(j=0; j<n_mar; j++) {
+    for(obs2=1; obs2<=n_gen; obs2++) {
+      tmp1 = ((obs2 * (obs2 - 1)) / 2) - 1;
+      for(obs1=1; obs1<=obs2; obs1++)
+	probmat[j][obs1 + tmp1] = step_bcsftb(obs1, obs2, cur_rf[j], cur_rf2[j], cross_scheme);
+    }
+  }
+}
+double step_bcsftc(int obs1, int obs2, int mar, double **probmat)
+{
+  int tmp1;
+  
+  /* make obs1 <= obs2 */
+  if(obs1 > obs2) {
+    tmp1 = obs2;
+    obs2 = obs1;
+    obs1 = tmp1;
+  }
+  tmp1 = ((obs2 * (obs2 - 1)) / 2) - 1;
+  return(probmat[mar][obs1 + tmp1]);
+}
 void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf, 
 		   double *error_prob, double *loglik, int *maxit, 
 		   double *tol, int *verbose)
 {
-  int i, j, v, v2, it, flag=0, **Geno, ndigits,tmp1,tmp2;
-  double **alpha, **beta, **gamma, *cur_rf;
-  double s, curloglik, maxdif, temp;
+  int i, j, j2, v, v2, it, flag=0, **Geno, ndigits,tmp1,tmp2,sexsp;
+  double s, **alpha, **beta, **gamma, *cur_rf, *cur_rf2, *rf2;
+  double curloglik, maxdif, temp;
   char pattern[100], text[200];
   int cross_scheme[2];
-  double **countmat, **probmat;
-  
+  double **countmat,**countmat2,**probmat;
+
+  /* Force sex specific to be 0 for now. */
+  sexsp = 0;
+  rf2 = rf;
+
   /* cross scheme hidden in loglik argument; used by hmm_bcsft */
   cross_scheme[0] = (int) ftrunc(*loglik / 1000.0);
   cross_scheme[1] = ((int) *loglik) - 1000 * cross_scheme[0];
   *loglik = 0.0;
-  
+
   /* n_gen inferred from cross scheme */
   int n_gen;
   n_gen = 2;
   if(cross_scheme[1] > 0) n_gen = 4;
-  
+
   /* allocate space for beta and reorganize geno */
   reorg_geno(*n_ind, *n_mar, geno, &Geno);
   allocate_alpha(*n_mar, n_gen, &alpha);
   allocate_alpha(*n_mar, n_gen, &beta);
   allocate_dmatrix(n_gen, n_gen, &gamma);
   allocate_double(*n_mar-1, &cur_rf);
+  allocate_double(*n_mar-1, &cur_rf2);
   allocate_dmatrix(*n_mar, 10, &countmat);
+  if(sexsp)
+    allocate_dmatrix(*n_mar, 10, &countmat2);
   allocate_dmatrix(*n_mar, 10, &probmat);
 
   /* digits in verbose output */
@@ -649,19 +617,27 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 
   /* begin EM algorithm */
   for(it=0; it<*maxit; it++) {
+
+    for(j=0; j<*n_mar-1; j++) {
+      cur_rf[j] = cur_rf2[j] = rf[j];
+      rf[j] = 0.0;
+      if(sexsp) {
+	cur_rf2[j] = rf2[j];
+	rf2[j] = 0.0;
+      }
+    }
+
+    /* initialize stepf calculations */
+    init_step_map(cur_rf, cur_rf2, n_gen, *n_mar, cross_scheme, probmat);
     
-    for(j=0; j<*n_mar-1; j++)
-      cur_rf[j] = rf[j];
-       
-    /* initialize step_bcsftb calculations */
-    init_stepf(cur_rf, cur_rf, n_gen, *n_mar, cross_scheme, step_bcsftb, probmat);
-      
     /*** reset counts for countmat ***/
     for(j=0; j<*n_mar-1; j++) {
       for(v2=0; v2<n_gen; v2++) {
 	tmp1 = (v2 * (v2 + 1)) / 2;
 	for(v=0; v<=v2; v++) {
 	  countmat[j][v + tmp1] = 0.0;
+	  if(sexsp)
+	    countmat2[j][v + tmp1] = 0.0;
 	}
       }
     }
@@ -670,18 +646,44 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
       
       R_CheckUserInterrupt(); /* check for ^C */
       
-      /* forward-backward equations */
-      forward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, alpha,
-		   init_bcsftb, emit_bcsftb);
-
-      backward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, beta,
-		    init_bcsftb, emit_bcsftb);
+      /* initialize alpha and beta */
+      for(v=0; v<n_gen; v++) {
+	alpha[v][0] = init_bcsftb(v+1, cross_scheme) +
+	  emit_bcsftb(Geno[0][i], v+1, *error_prob, cross_scheme);
+	beta[v][*n_mar-1] = 0.0;
+      }
       
-      /* calculate gamma = log Pr(v, v2, O) */
+      /* forward-backward equations */
+      
+      /* reorder evaluation to reduce switching of rf in calculations */
+      
+      /* alpha calcs with cur_rf[j-1] */
+      for(j=1; j<*n_mar; j++) {
+	for(v=0; v<n_gen; v++) {
+	  alpha[v][j] = alpha[0][j-1] + step_bcsftc(1, v+1, j-1, probmat);
+	  for(v2=1; v2<n_gen; v2++)
+	    alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + step_bcsftc(v2+1, v+1, j-1, probmat));
+	  alpha[v][j] += emit_bcsftb(Geno[j][i],v+1,*error_prob, cross_scheme);
+	}
+      }
+      
+      /* beta calcs with cur_rf[j2] */
+      for(j2=*n_mar-2; j2>=0; j2--) {
+	for(v=0; v<n_gen; v++) {
+	  beta[v][j2] = beta[0][j2+1] + step_bcsftc(v+1, 1, j2, probmat) + 
+	    emit_bcsftb(Geno[j2+1][i],1,*error_prob, cross_scheme);
+	  for(v2=1; v2<n_gen; v2++)
+	    beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + step_bcsftc(v+1, v2+1, j2, probmat) +
+				 emit_bcsftb(Geno[j2+1][i],v2+1,*error_prob, cross_scheme));
+	}
+      }
+      
       for(j=0; j<*n_mar-1; j++) {
+	
+	/* calculate gamma = log Pr(v, v2, O) */
 	for(v=0, s=0.0; v<n_gen; v++) {
 	  for(v2=0; v2<n_gen; v2++) {
-	    gamma[v][v2] = alpha[v][j] + beta[v2][j+1] + stepfc(v+1, v2+1, j, probmat) +
+	    gamma[v][v2] = alpha[v][j] + beta[v2][j+1] + step_bcsftc(v+1, v2+1, j, probmat) +
 	      emit_bcsftb(Geno[j+1][i], v2+1, *error_prob, cross_scheme);
 	    
 	    if(v==0 && v2==0) s = gamma[v][v2];
@@ -692,25 +694,38 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 	for(v=0; v<n_gen; v++) {
 	  tmp2 = (v * (v + 1)) / 2;
 	  for(v2=0; v2<n_gen; v2++) {
+	    /* rf[j] += nrec_bcsftb(v+1,v2+1, cur_rf[j], cross_scheme) * exp(gamma[v][v2] - s); */
 	    temp = exp(gamma[v][v2] - s);
 	    if(v2 <= v)
 	      tmp1 = v2 + tmp2;
 	    else
 	      tmp1 = v + (v2 * (v2 + 1)) / 2;
 	    countmat[j][tmp1] += temp;
+	    if(sexsp) { /* this cannot be right */
+	      /* rf2[j] += nrec_bcsftb(v+1,v2+1, cur_rf[j], cross_scheme) * exp(gamma[v][v2] - s); */
+	      countmat2[j][tmp1] += temp;
+	    }
 	  }
 	}
-      }
+     }
+
     } /* loop over individuals */
 
     /* rescale */
     for(j=0; j<*n_mar-1; j++) {
-      /* golden section search for MLE of recombination rate */
-      rf[j] = golden_search(countmat[j], n_gen, *maxit, *tol, cross_scheme,
-			     comploglik_bcsft);
+      /* rf[j] /= (double)*n_ind; */
+      /*** this has to change ***/
+      rf[j] = golden(countmat[j], n_gen, *maxit, *tol, cross_scheme);
 
       if(rf[j] < *tol/1000.0) rf[j] = *tol/1000.0;
       else if(rf[j] > 0.5-*tol/1000.0) rf[j] = 0.5-*tol/1000.0;
+      
+      if(sexsp) {
+	rf2[j] /= (double)*n_ind;
+	if(rf2[j] < *tol/1000.0) rf2[j] = *tol/1000.0;
+	else if(rf2[j] > 0.5-*tol/1000.0) rf2[j] = 0.5-*tol/1000.0;
+      }
+      else rf2[j] = rf[j];
     }
 
     if(*verbose>1) {
@@ -720,9 +735,10 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
       for(j=0; j<*n_mar-1; j++) {
 	temp = fabs(rf[j] - cur_rf[j])/(cur_rf[j]+*tol*100.0);
 	if(maxdif < temp) maxdif = temp;
-
-	if(rf[j] < *tol/1000.0) rf[j] = *tol/1000.0;
-	else if(rf[j] > 0.5-*tol/1000.0) rf[j] = 0.5-*tol/1000.0;
+	if(sexsp) {
+	  temp = fabs(rf2[j] - cur_rf2[j])/(cur_rf2[j]+*tol*100.0);
+	  if(maxdif < temp) maxdif = temp;
+	}
       }
       sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
       Rprintf(text, maxdif);
@@ -730,7 +746,8 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 
     /* check convergence */
     for(j=0, flag=0; j<*n_mar-1; j++) {
-      if(fabs(rf[j] - cur_rf[j]) > *tol*(cur_rf[j]+*tol*100.0)) {
+      if(fabs(rf[j] - cur_rf[j]) > *tol*(cur_rf[j]+*tol*100.0) || 
+	 (sexsp && fabs(rf2[j] - cur_rf2[j]) > *tol*(cur_rf2[j]+*tol*100.0))) {
 	flag = 1; 
 	break;
       }
@@ -742,16 +759,26 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
   
   if(flag) warning("Didn't converge!\n");
 
-  /* initialize step_bcsftb calculations */
-  init_stepf(rf, rf, n_gen, *n_mar, cross_scheme, step_bcsftb, probmat);
-
   /* calculate log likelihood */
   *loglik = 0.0;
   for(i=0; i<*n_ind; i++) { /* i = individual */
-
+    /* initialize alpha */
+    for(v=0; v<n_gen; v++) {
+      alpha[v][0] = init_bcsftb(v+1, cross_scheme) + emit_bcsftb(Geno[0][i], v+1, *error_prob, cross_scheme);
+    }
     /* forward equations */
-    forward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, alpha,
-		 init_bcsftb, emit_bcsftb);
+    for(j=1; j<*n_mar; j++) {
+      for(v=0; v<n_gen; v++) {
+	alpha[v][j] = alpha[0][j-1] + 
+	  step_bcsftb(1, v+1, rf[j-1], rf2[j-1], cross_scheme);
+	
+	for(v2=1; v2<n_gen; v2++) 
+	  alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
+			       step_bcsftb(v2+1,v+1,rf[j-1],rf2[j-1], cross_scheme));
+
+	alpha[v][j] += emit_bcsftb(Geno[j][i],v+1,*error_prob, cross_scheme);
+      }
+    }
 
     curloglik = alpha[0][*n_mar-1];
     for(v=1; v<n_gen; v++)
@@ -768,6 +795,10 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
       for(j=0; j<*n_mar-1; j++) {
 	temp = fabs(rf[j] - cur_rf[j])/(cur_rf[j]+*tol*100.0);
 	if(maxdif < temp) maxdif = temp;
+	if(sexsp) {
+	  temp = fabs(rf2[j] - cur_rf2[j])/(cur_rf2[j]+*tol*100.0);
+	  if(maxdif < temp) maxdif = temp;
+	}
       }
       sprintf(text, "%s%s\n", "  max rel've change at last step = ", pattern);
       Rprintf(text, maxdif);
@@ -778,7 +809,7 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 
 }
 
-void argmax_genoo_bcsft(int *n_ind, int *n_pos, int *geno, 
+void argmax_geno_bcsft(int *n_ind, int *n_pos, int *geno, 
 		   double *rf, double *error_prob, int *argmax)
 {		    
   /* cross_scheme is hidden in argmax */
@@ -790,108 +821,10 @@ void argmax_genoo_bcsft(int *n_ind, int *n_pos, int *geno,
 	      argmax, init_bcsft, emit_bcsft, step_bcsft);
 }
 
-void argmax_geno_bcsft(int *n_ind, int *n_pos, int *geno, 
-		       double *rf, double *error_prob, int *argmax) 
+double myratio(double ct, double prob)
 {
-  int i, j, v, v2;
-  double s, t, **alpha, **probmat;
-  int **Geno, **Argmax, **traceback;
-  int cross_scheme[2];
-
-  /* cross scheme hidden in argmax argument; used by hmm_bcsft */
-  cross_scheme[0] = argmax[0];
-  cross_scheme[1] = argmax[1];
-  argmax[0] = geno[0];
-  argmax[1] = geno[1];
-
-  int n_gen,tb,sgeno;
-  n_gen = 2;
-  if(cross_scheme[1] > 0) n_gen = 3;
-
-  /* Read R's random seed */
-  /* in the case of multiple "most likely" genotype sequences, 
-     we pick from them at random */
-  GetRNGstate();
-
-  /* allocate space and 
-     reorganize geno and argmax */
-  reorg_geno(*n_ind, *n_pos, geno, &Geno);
-  reorg_geno(*n_ind, *n_pos, argmax, &Argmax);
-  allocate_imatrix(*n_pos, n_gen, &traceback);
-  allocate_alpha(*n_pos, n_gen, &alpha);
-  allocate_dmatrix(*n_pos, 6, &probmat);
-
-  /* initialize stepf calculations */
-  init_stepf(rf, rf, n_gen, *n_pos, cross_scheme, step_bcsft, probmat);
-
-  for(i=0; i<*n_ind; i++) { /* i = individual */
-
-    R_CheckUserInterrupt(); /* check for ^C */
-
-    sgeno = 0;
-    for(j=0; j<*n_pos; j++)
-      sgeno += Geno[j][i];
-
-    /* begin viterbi algorithm */
-    /* similar to forward_prob but using max instead of addlog, and recording traceback */
-    for(v=0; v<n_gen; v++) 
-      alpha[v][0] = init_bcsft(v+1, cross_scheme) +
-	emit_bcsft(Geno[0][i], v+1, *error_prob, cross_scheme);
-
-    if(sgeno > 0) {
-      if(*n_pos > 1) { /* multiple markers */
-	for(j=1; j<*n_pos; j++) {
-	  for(v=0; v<n_gen; v++) {
-	    s = alpha[0][j-1] + stepfc(1, v+1, j-1, probmat);
-	    tb = 0;
-	    
-	    for(v2=1; v2<n_gen; v2++) {
-	      t =  alpha[v2][j-1] + stepfc(v2+1, v+1, j-1, probmat);
-	      if(t > s || (fabs(t-s) < TOL && unif_rand() < 0.5)) {
-		s = t;
-		tb = v2;
-	      }
-	    }
-	    alpha[v][j] = s + emit_bcsft(Geno[j][i], v+1, *error_prob, cross_scheme);
-	    traceback[j-1][v] = tb;
-	  }
-	}
-      }    
-    }
-
-    /* finish off viterbi for one or more markers */
-    tb = 0;
-    s = alpha[0][*n_pos-1];
-    for(v=1; v<n_gen; v++) {
-      t = alpha[v][*n_pos-1];
-      if(t > s || (fabs(t-s) < TOL && unif_rand() < 0.5)) {
-	s = t;
-	tb = v;
-      }
-    }
-    Argmax[*n_pos-1][i] = tb;
-
-    /* multiple markers */
-    if(*n_pos > 1) {
-      if(sgeno > 0) {
-	/* traceback to get most likely sequence of genotypes */
-	for(j=*n_pos-2; j >= 0; j--) 
-	  Argmax[j][i] = traceback[j][Argmax[j+1][i]];
-      }
-      else { /* all markers are missing data */
-	for(j=*n_pos-2; j >= 0; j--) 
-	  Argmax[j][i] = Argmax[j+1][i];
-      }
-    }
-    
-    /* code genotypes as 1, 2, ... */
-    for(j=0; j<*n_pos; j++) Argmax[j][i]++;
-    
-  } /* loop over individuals */
-  
-  
-  /* write R's random seed */
-  PutRNGstate();
+  if(prob > 0.0) prob = ct / prob;
+  return(prob);
 }
 
 double nrec2_bcsft(int obs1, int obs2, double rf, int *cross_scheme)
@@ -902,7 +835,6 @@ double nrec2_bcsft(int obs1, int obs2, double rf, int *cross_scheme)
   static double transpr[10],transct[10];
   static int s = -1;
   static int t = -1;
-  double result;
   
   if(s != cross_scheme[0] || t != cross_scheme[1] || fabs(rf - oldrf) > TOL) {
     s = cross_scheme[0];
@@ -917,13 +849,8 @@ double nrec2_bcsft(int obs1, int obs2, double rf, int *cross_scheme)
     transct[3] += transct[4];
   }
 
-  result = assign_bcsftc(obs1, obs2, transpr);
-  if(result > 0.0)
-    result = assign_bcsftc(obs1, obs2, transct) / result;
-
-  return(result);
+  return(myratio(assign_bcsftc(obs1, obs2, transct), assign_bcsftc(obs1, obs2, transpr)));
 }
-
 double logprec_bcsft(int obs1, int obs2, double rf, int *cross_scheme)
 {
   /* this routine is not correct yet */
@@ -1088,8 +1015,7 @@ void est_rf_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 	flag = 1;
 
 	/* use golden section search of log likelihood instead of EM */
-	next_rf = golden_search(countmat, n_gen, *maxit, *tol, cross_scheme,
-				 comploglik_bcsft);
+	next_rf = golden(countmat, n_gen, *maxit, *tol, cross_scheme);
 
 	if(next_rf < 0.0) {
 	  flag = 0;
@@ -1120,7 +1046,7 @@ void est_rf_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
   }
 }
 
-void calc_pairprobo_bcsft(int *n_ind, int *n_mar, int *geno, 
+void calc_pairprob_bcsft(int *n_ind, int *n_mar, int *geno, 
 		      double *rf, double *error_prob, double *genoprob,
 		      double *pairprob) 
 {
@@ -1131,111 +1057,6 @@ void calc_pairprobo_bcsft(int *n_ind, int *n_mar, int *geno,
 
   calc_pairprob(*n_ind, *n_mar, n_gen, geno, rf, rf, *error_prob, genoprob,
 		pairprob, init_bcsft, emit_bcsft, step_bcsft);
-}
-
-void calc_pairprob_bcsft(int *n_ind, int *n_mar, int *geno, 
-		   double *rf, double *error_prob, double *genoprob, 
-			 double *pairprob) 
-{
-  int i, j, j2, v, v2, v3;
-  double s=0.0, **alpha, **beta, **probmat;
-  int **Geno;
-  double ***Genoprob, *****Pairprob;
-  int cross_scheme[2];
-
-  /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
-  cross_scheme[0] = genoprob[0];
-  cross_scheme[1] = genoprob[1];
-  genoprob[0] = 0.0;
-  genoprob[1] = 0.0;
-  
-  int n_gen,sgeno;
-  double temp;
-  n_gen = 2;
-  if(genoprob[1] > 0) n_gen = 3;
-
-  /* *n_mar must be at least 2, or there are no pairs! */
-  if(*n_mar < 2) error("n_pos must be > 1 in calc_pairprob");
-
-  /* allocate space for alpha and beta and 
-     reorganize geno, genoprob, and pairprob */
-  reorg_geno(*n_ind, *n_mar, geno, &Geno);
-  reorg_genoprob(*n_ind, *n_mar, n_gen, genoprob, &Genoprob);
-  reorg_pairprob(*n_ind, *n_mar, n_gen, pairprob, &Pairprob);
-  allocate_alpha(*n_mar, n_gen, &alpha);
-  allocate_alpha(*n_mar, n_gen, &beta);
-  allocate_dmatrix(*n_mar, 6, &probmat);
-
-  /* initialize stepf calculations */
-  init_stepf(rf, rf, n_gen, *n_mar, cross_scheme, step_bcsft, probmat);
-
-  for(i=0; i<*n_ind; i++) { /* i = individual */
-
-    R_CheckUserInterrupt(); /* check for ^C */
-
-    sgeno = 0;
-    for(j=0; j<*n_mar; j++)
-      sgeno += Geno[j][i];
-    if(sgeno > 0) {
-      /* forward-backward equations */
-      forward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, alpha,
-		   init_bcsft, emit_bcsft);
-      backward_prob(i, *n_mar, n_gen, -1, cross_scheme, *error_prob, Geno, probmat, beta,
-		    init_bcsft, emit_bcsft);
-      
-      /* calculate genotype probabilities */
-      calc_probfb(i, *n_mar, n_gen, -1, alpha, beta, Genoprob);
-    }
-    else {
-      /* chromosome with no genotypes for this individual get init probabilities */
-      for(v=0; v<n_gen; v++) {
-	temp = exp(init_bcsft(v+1, cross_scheme));
-	for(j=0; j<*n_mar; j++) 
-	  Genoprob[v][j][i] = temp;
-      }
-    }
-
-    /* calculate Pr(G[j], G[j+1] | marker data) for i = 1...*n_mar-1 */
-    for(j=0; j<*n_mar-1; j++) {
-      for(v=0; v<n_gen; v++) {
-	for(v2=0; v2<n_gen; v2++) {
-	  Pairprob[v][v2][j][j+1][i] = alpha[v][j] + beta[v2][j+1] +
-	    stepfc(v+1, v2+1, j, probmat) + 
-	    emit_bcsft(Geno[j+1][i],v2+1,*error_prob, cross_scheme);
-	  if(v==0 && v2==0) s=Pairprob[v][v2][j][j+1][i];
-	  else s = addlog(s,Pairprob[v][v2][j][j+1][i]);
-	}
-      }
-      /* scale to sum to 1 */
-      for(v=0; v<n_gen; v++) 
-	for(v2=0; v2<n_gen; v2++) 
-	  Pairprob[v][v2][j][j+1][i] = 
-	    exp(Pairprob[v][v2][j][j+1][i] - s);
-    } 
-
-    /* now calculate Pr(G[i], G[j] | marker data) for j > i+1 */
-    for(j=0; j<*n_mar-2; j++) {
-      for(j2=j+2; j2<*n_mar; j2++) {
-
-	for(v=0; v<n_gen; v++) { /* genotype at pos'n j */
-	  for(v2=0; v2<n_gen; v2++) { /* genotype at pos'n j2 */
-
-	    Pairprob[v][v2][j][j2][i] = 0.0;
-
-	    for(v3=0; v3<n_gen; v3++) { /* genotype at pos'n j2-1 */
-	      s = Genoprob[v3][j2-1][i];
-	      if(fabs(s) > TOL) /* avoid 0/0 */
-		Pairprob[v][v2][j][j2][i] += Pairprob[v][v3][j][j2-1][i]*
-		  Pairprob[v3][v2][j2-1][j2][i]/s;
-	    }
-		      
-	  }
-	} /* end loops over genotypes */
-
-      }
-    } /* end loops over pairs of positions */
-	    
-  } /* end loop over individuals */
 }
 
 void marker_loglik_bcsft(int *n_ind, int *geno,

@@ -2,8 +2,8 @@
 #
 # makeqtl.R
 #
-# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# last modified Apr, 2010
+# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
+# last modified Feb, 2011
 # first written Apr, 2002
 #
 # Modified by Danny Arends
@@ -120,7 +120,7 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
       n.gen[i] <- length(getgenonames(type,chrtype[i.chr],"full",sexpgm, attributes(cross)))
       
       # Fix up X chromsome here
-      if(chrtype[i.chr]=="X")
+      if(chrtype[i.chr]=="X" && (type=="bc" || type=="f2"))
         geno[,i,] <- reviseXdata(type,"full",sexpgm,draws=geno[,i,,drop=FALSE],
                                  cross.attr=attributes(cross))
     }
@@ -169,8 +169,7 @@ function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
         stop("Multiple markers at the same position; run jittermap.")
 
       # take genoprob
-      if(chrtype[i.chr] == "X") { # fix X chromosome probs
-        
+      if(chrtype[i.chr]=="X" && (type=="bc" || type=="f2")) { # fix X chromosome probs
         prob[[i]] <- reviseXdata(type, "full", sexpgm,
                                  prob=cross$geno[[i.chr]]$prob[,marker.idx,,drop=FALSE],
                                  cross.attr=attributes(cross))[,1,]
@@ -575,11 +574,11 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
 
     if(!justdots) {
       if(horizontal) {
-        arrows(thepos, whchr - 0.35, thepos, whchr, lwd=2, col=col, len=0.05)
+        arrows(thepos, whchr - 0.35, thepos, whchr, lwd=2, col=col, length=0.05)
         text(thepos, whchr-0.4, x$name, col=col, adj=c(0.5,0))
       }
       else {
-        arrows(whchr + 0.35, thepos, whchr, thepos, lwd=2, col=col, len=0.05)
+        arrows(whchr + 0.35, thepos, whchr, thepos, lwd=2, col=col, length=0.05)
         text(whchr+0.4, thepos, x$name, col=col, adj=c(0,0.5))
       }
     }

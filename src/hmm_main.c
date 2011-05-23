@@ -507,7 +507,6 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 	
 	for(v=0; v<n_gen; v++) {
 	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, cur_rf[j-1], cur_rf2[j-1], cross_scheme);
-	  
 	  beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,cur_rf[j2], cur_rf2[j2], cross_scheme) + 
 	    emitf(Geno[j2+1][i],1,error_prob, cross_scheme);
 	  
@@ -520,7 +519,6 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 	  }
 	  
 	  alpha[v][j] += emitf(Geno[j][i],v+1,error_prob, cross_scheme);
-		 
 	}
 
       }
@@ -574,6 +572,10 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 	  temp = fabs(rf2[j] - cur_rf2[j])/(cur_rf2[j]+tol*100.0);
 	  if(maxdif < temp) maxdif = temp;
 	}
+	/* bsy add */
+	if(verbose > 2)
+	  Rprintf("%d %f %f\n", j+1, cur_rf[j], rf[j]); 
+	/* bsy add */
       }
       sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
       Rprintf(text, maxdif);

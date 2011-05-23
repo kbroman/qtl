@@ -12,7 +12,7 @@
 est.map(cross, chr, error.prob=0.0001,
         map.function=c("haldane","kosambi","c-f","morgan"),
         m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE,
-        verbose=FALSE, omit.noninformative=TRUE, offset)
+        verbose=FALSE, omit.noninformative=TRUE, offset, n.cluster=1)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -49,6 +49,9 @@ est.map(cross, chr, error.prob=0.0001,
   equal to the number of chromosomes, defining individual starting
   positions for each chromosome.  For a sex-specific map (as in a 4-way
   cross), we use the same offset for both the male and female maps.}
+ \item{n.cluster}{If the package \code{snow} is available 
+   calculations for multiple chromosomes are run in parallel using this
+   number of nodes.}
 }
 
 \details{

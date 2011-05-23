@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2010, Karl W Broman
+# copyright (c) 2001-2011, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2010
+# last modified Mar, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,7 +40,8 @@
 #           matchchr, convert2sa, charround, testchr,
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
-#           switchAlleles, nqrank
+#           switchAlleles, nqrank, cleanGeno, typingGap,
+#           calcPermPval, phenames
 #
 ######################################################################
 
@@ -124,11 +125,13 @@ function(cross)
 #
 # Note: map is a vector or a matrix with 2 rows
 # 
-# stepwidth = "fixed" is what R/qtl uses; stepwidth="variable" is for
-#     Brian Yandell and the bmqtl package
+# stepwidth = "fixed" is the original R/qtl version;
+# stepwidth="variable" is for Brian Yandell and the qtlbim package
+# stepwidth="max" creates the minimal number of inserted pseudomarkers
+#                 to have the maximum stepwidth = step
 ######################################################################
 create.map <-
-function(map, step, off.end, stepwidth = c("fixed", "variable"))
+function(map, step, off.end, stepwidth = c("fixed", "variable", "max"))
 {
   stepwidth <- match.arg(stepwidth)
   if(step<0 || off.end<0) stop("step and off.end must be > 0.")
@@ -158,6 +161,38 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 
       return(unclass(a))
     }
+    if(stepwidth == "max") {
+      if(off.end > 0) {
+        toadd <- c(map[1] - off.end, map[length(map)]+off.end)
+
+        if(step==0) {
+          names(toadd) <- paste("loc", 1:2, sep="")
+          map <- sort(c(map, toadd))
+          return(unclass(map))
+        }
+
+        nmap <- c(map[1] - off.end, map, map[length(map)]+off.end)
+      }
+      else {
+        nmap <- map
+        toadd <- NULL
+      }
+
+      if(step==0 || (length(map)==1 && off.end==0)) return(unclass(map))
+      
+      d <- diff(nmap)
+      nadd <- ceiling(d/step)-1
+      if(sum(nadd) > 0) {
+        for(j in 1:(length(nmap)-1)) {
+          if(nadd[j]>0)
+            toadd <- c(toadd, seq(nmap[j], nmap[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
+        }
+      }
+      names(toadd) <- paste("loc", 1:length(toadd), sep="")
+      map <- sort(c(map, toadd))
+      return(unclass(map))
+    }
+
     if(length(map) == 1) { # just one marker!
       if(off.end==0) {
         if(step == 0) step <- 1
@@ -210,8 +245,8 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
   else { # sex-specific map
     if(stepwidth == "variable") {
       if(off.end > 0) {
-        tmp <- dimnames(map)[[2]]
-        map <- cbind(map[, 1] - off.end, map, map[, length(map)] + off.end)
+        tmp <- colnames(map)
+        map <- cbind(map[, 1] - off.end, map, map[, ncol(map)] + off.end)
         dimnames(map) <- list(NULL, c("loc000", tmp, "loc999"))
       }
       if(step == 0)
@@ -232,12 +267,77 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
 
       return(unclass(map))
     }
+    if(stepwidth == "max") {
+      if(step==0 && off.end==0) return(unclass(map))
+      if(step==0 && off.end>0) {
+        if(ncol(map)==1) { # only one marker; assume equal recomb in sexes
+          L1 <- L2 <- 1
+        }
+        else {
+          L1 <- diff(range(map[1,]))
+          L2 <- diff(range(map[2,]))
+        }
+
+        nam <- colnames(map)
+        nmap1 <- c(map[1,1]-off.end, map[1,], map[1,ncol(map)]+off.end)
+        nmap2 <- c(map[2,1]-off.end*L2/L1, map[2,], map[2,ncol(map)]+off.end*L2/L1)
+        map <- rbind(nmap1, nmap2)
+        colnames(map) <- c("loc1", nam, "loc2")
+        return(unclass(map))
+      }
+
+      if(ncol(map)==1) L1 <- L2 <- 1
+      else {
+        L1 <- diff(range(map[1,]))
+        L2 <- diff(range(map[2,]))
+      }
+
+      nam <- colnames(map)
+
+      if(off.end > 0) {
+        toadd1 <- c(map[1,1] - off.end, map[1,ncol(map)]+off.end)
+        toadd2 <- c(map[2,1] + off.end*L2/L1, map[2,ncol(map)]+off.end*L2/L1)
+
+        neword <- order(c(map[1,], toadd1))
+        nmap1 <- c(map[1,], toadd1)[neword]
+        nmap2 <- c(map[2,], toadd2)[neword]
+      }
+      else {
+        nmap1 <- map[1,]
+        nmap2 <- map[2,]
+        toadd1 <- toadd2 <- NULL
+      }
+
+      d <- diff(nmap1)
+      nadd <- ceiling(d/step)-1
+      if(sum(nadd) > 0) {
+        for(j in 1:(length(nmap1)-1)) {
+          if(nadd[j]>0) {
+            toadd1 <- c(toadd1, seq(nmap1[j], nmap1[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
+            toadd2 <- c(toadd2, seq(nmap2[j], nmap2[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
+          }
+        }
+      }
+      newnam <- paste("loc", 1:length(toadd1), sep="")
+      
+      toadd1 <- sort(toadd1)
+      toadd2 <- sort(toadd2)
+      neword <- order(c(map[1,], toadd1))
+      nmap1 <- c(map[1,], toadd1)[neword]
+      nmap2 <- c(map[2,], toadd2)[neword]
+      map <- rbind(nmap1, nmap2)
+      colnames(map) <- c(nam, newnam)[neword]
+
+      return(unclass(map))
+    }
+
     minloc <- c(min(map[1,]),min(map[2,]))
-    map <- map-minloc
+    map <- unclass(map-minloc)
     markernames <- colnames(map)
 
     if(step==0 && off.end==0) return(map+minloc)
     else if(step==0 && off.end > 0) {
+      map <- map+minloc
       if(ncol(map)==1) { # only one marker; assume equal recomb in sexes
         L1 <- L2 <- 1
       }
@@ -246,14 +346,12 @@ function(map, step, off.end, stepwidth = c("fixed", "variable"))
         L2 <- diff(range(map[2,]))
       }
 
-      a <- c(floor(min(map[1,])-off.end),ceiling(max(map[1,])+off.end))
-      names(a) <- paste("loc", a, sep="")
-      b <- c(floor(min(map[2,])-off.end)*L2/L1,
-             ceiling(max(map[2,])+off.end)*L2/L1)
-      n <- c(names(a)[1],markernames,names(a)[2])
-      map <- cbind(c(a[1],b[1]),map,c(a[2],b[2]))
-      dimnames(map) <- list(NULL,n)
-      return(map+minloc)
+      nam <- colnames(map)
+      nmap1 <- c(map[1,1]-off.end, map[1,], map[1,ncol(map)]+off.end)
+      nmap2 <- c(map[2,1]-off.end*L2/L1, map[2,], map[2,ncol(map)]+off.end*L2/L1)
+      map <- rbind(nmap1, nmap2)
+      colnames(map) <- c("loc1", nam, "loc2")
+      return(map)
     }
     else if(step>0 && off.end == 0) {
 
@@ -1207,14 +1305,16 @@ function(x, chr, ind, ...)
   }
 
   if(!missing(ind)) {
+    theid <- getid(x)
+
     if(is.logical(ind)) {
       ind[is.na(ind)] <- FALSE
       if(length(ind) != n.ind) 
         stop("ind argument has wrong length (", length(ind), "; should be ", n.ind, ")")
-      ind <- (1:n.ind)[ind]
+      if(!is.null(theid)) 
+        ind <- theid[ind]
+      else ind <- (1:n.ind)[ind]
     }
-
-    theid <- getid(x)
 
     if(!is.null(theid)) { # cross has individual IDs
       if(is.numeric(ind)) {
@@ -1317,6 +1417,9 @@ function(x, chr, ind, ...)
         }
       }
     }
+
+    if("qtlgeno" %in% names(x))
+      x$qtlgeno <- x$qtlgeno[ind,,drop=FALSE]
   }
   x
 }
@@ -1905,7 +2008,7 @@ function(cross, chr, pos, index)
 
 ### Find the nearest pseudomarker to a particular position
 find.pseudomarker <-
-function(cross, chr, pos, where=c("draws","prob"))  
+function(cross, chr, pos, where=c("draws","prob"), addchr=TRUE)  
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -1968,7 +2071,7 @@ function(cross, chr, pos, where=c("draws","prob"))
       if(length(o2)==1) themarker <- names(thismap)[o2]
       else themarker <- names(thismap)[sample(o2, 1)]
 
-      if(length(grep("^loc[0-9]+\\.*[0-9]*(\\.[0-9]+)*$", themarker)) > 0)
+      if(addchr && length(grep("^loc[0-9]+\\.*[0-9]*(\\.[0-9]+)*$", themarker)) > 0)
         themarker <- paste("c", chr[i], ".", themarker, sep="")
       markers[i] <- themarker
     }
@@ -3008,6 +3111,7 @@ function(cross, chr, full.info=FALSE)
           iright=as.integer(rep(0,n.ind*2*(n.mar-1))),
           left=as.double(rep(0,n.ind*2*(n.mar-1))),
           right=as.double(rep(0,n.ind*2*(n.mar-1))),
+          ntype=as.integer(rep(0,n.ind*2*(n.mar-1))),
           as.integer(full.info),
           PACKAGE="qtl")
   location <- t(matrix(z$location, nrow=n.ind))
@@ -3017,12 +3121,12 @@ function(cross, chr, full.info=FALSE)
     iright <- t(matrix(z$iright, nrow=n.ind))
     left <- t(matrix(z$left, nrow=n.ind))
     right <- t(matrix(z$right, nrow=n.ind))
+    ntype <- t(matrix(z$ntype, nrow=n.ind))
   }
 
-  if(!full.info) {
-    return(lapply(as.data.frame(rbind(nseen, location)),
-                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] }))
-  }
+  if(!full.info) 
+    res <- lapply(as.data.frame(rbind(nseen, location)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
   else {
     location <- lapply(as.data.frame(rbind(nseen, location)),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
@@ -3039,17 +3143,27 @@ function(cross, chr, full.info=FALSE)
     right <- lapply(as.data.frame(rbind(nseen, right)),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
+    ntype <- lapply(as.data.frame(rbind(nseen, ntype)),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+
     res <- location
     for(i in seq(along=res)) {
-      if(length(res[[i]])>0)
+      if(length(res[[i]])>0) {
+        ntype[[i]][length(ntype[[i]])] <- NA
         res[[i]] <- cbind(location=location[[i]],
                           left=left[[i]],
                           right=right[[i]],
                           ileft=ileft[[i]],
-                          iright=iright[[i]])
+                          iright=iright[[i]],
+                          nTypedBetween=ntype[[i]])
+      }
     }
-    return(res)
   }
+  id <- getid(cross)
+  if(is.null(id)) id <- 1:n.ind
+  names(res) <- id
+
+  res
 }
 
 # jittermap: make sure no two markers are at precisely the same position
@@ -3798,7 +3912,7 @@ function(object, offset=0)
       }
     }
   } else if("map" %in% class(object)) {
-    if(length(offset) != 1) offset <- rep(offset, length(object))
+    if(length(offset) == 1) offset <- rep(offset, length(object))
     else if(length(offset) != length(object))
       stop("offset must have length 1 or n.chr (", length(object), ")")
     for(i in seq(along=object)) {
@@ -3920,5 +4034,131 @@ function(x, jitter=FALSE)
 
   x*thesd/sd(x, na.rm=TRUE)-mean(x,na.rm=TRUE)+themean
 }
+
+######################################################################
+#
+# cleanGeno: omit genotypes that are possibly in error, as indicated
+#            by apparent double-crossovers separated by a distance of
+#            no more than maxdist and having no more than maxmark
+#            interior typed markers
+#
+######################################################################
+
+cleanGeno <-
+function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
+{  
+  if(class(cross)[1] != "bc") 
+    stop("This function currently only works for a backcross.")
+
+  if(!missing(chr)) cleaned <- subset(cross, chr=chr)
+  else cleaned <- cross
+
+  thechr <- names(cleaned$geno)
+  totdrop <- 0
+  maxmaxdist <- max(maxdist)
+  for(i in thechr) {
+    xoloc <- locateXO(cleaned, chr=i, full.info=TRUE)
+    nxo <- sapply(xoloc, function(a) if(is.matrix(a)) return(nrow(a)) else return(0))
+    g <- pull.geno(cleaned, chr=i)
+    
+    ndrop <- 0
+    for(j in which(nxo > 1)) {
+      maxd <- xoloc[[j]][-1,"right"] - xoloc[[j]][-nrow(xoloc[[j]]),"left"]
+      wh <- maxd <= maxmaxdist
+      if(any(wh)) {
+        for(k in which(wh)) {
+          nt <- sum(!is.na(g[j,(xoloc[[j]][k,"ileft"]+1):(xoloc[[j]][k+1,"iright"]-1)]))
+          if(nt > 0 && any(nt <= maxmark & maxd[k] < maxdist)) {
+            cleaned$geno[[i]]$data[j,(xoloc[[j]][k,"ileft"]+1):(xoloc[[j]][k+1,"iright"]-1)] <- NA
+            ndrop <- ndrop + nt
+            totdrop <- totdrop + nt
+          }
+        }
+      }
+    }
+    if(verbose && ndrop > 0) {
+      totgen <- sum(ntyped(subset(cross, chr=i)))
+      cat(" ---Dropping ", ndrop, " genotypes (out of ", totgen, ") on chr ", i, "\n", sep="")
+    }
+  }
+
+  if(verbose && nchr(cleaned)>1 && totdrop > 0) {
+    totgen <- sum(ntyped(subset(cross, chr=thechr)))
+    cat(" ---Dropped ", totdrop, " genotypes (out of ", totgen, ") in total\n", sep="")
+  }
+
+  for(i in names(cleaned$geno))
+    cross$geno[[i]] <- cleaned$geno[[i]]
+
+  cross
+}
+
+######################################################################
+# typingGap: calculate gaps between typed markers
+######################################################################
+
+typingGap <-
+function(cross, chr)
+{
+  if(!missing(chr))
+    cross <- subset(cross, chr)
+
+  n.ind <- nind(cross)
+  n.chr <- nchr(cross)
+
+  gaps <- matrix(nrow=n.ind, ncol=n.chr)
+  colnames(gaps) <- names(cross$geno)
+
+  for(i in 1:n.chr) {
+    map <- cross$geno[[i]]$map
+    map <- c(map[1], map, map[length(map)])
+    if(is.matrix(map)) stop("This function can't currently handle sex-specific maps.")
+
+    gaps[,i] <- apply(cbind(1,cross$geno[[i]]$data,1), 1,
+                      function(a,b) max(diff(b[!is.na(a)])), map)
+  }
+  if(n.chr==1) gaps <- as.numeric(gaps)
+  gaps
+}
+
+######################################################################
+# calcPermPval
+#
+# calculate permutation pvalues for summary.scanone()
+######################################################################
+calcPermPval <-
+function(peaks, perms)
+{
+  if(!is.matrix(peaks))
+    peaks <- as.matrix(peaks)
+  if(!is.matrix(perms))
+    perms <- as.matrix(perms)
+
+  ncol.peaks <- ncol(peaks)
+  nrow.peaks <- nrow(peaks)
+  n.perms <- nrow(perms)
+
+  if(ncol.peaks != ncol(perms))
+    stop("ncol(peaks) != ncol(perms)")
+
+  pval <- .C("R_calcPermPval",
+             as.double(peaks),
+             as.integer(ncol.peaks),
+             as.integer(nrow.peaks),
+             as.double(perms),
+             as.integer(n.perms),
+             pval=as.double(rep(0,ncol.peaks*nrow.peaks)),
+             PACKAGE="qtl")$pval
+
+  matrix(pval, ncol=ncol.peaks, nrow=nrow.peaks)
+}
+
+######################################################################
+# phenames: pull out phenotype names
+######################################################################
+phenames <-
+function(cross)
+colnames(cross$pheno)
+  
 
 # end of util.R

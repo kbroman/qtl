@@ -36,6 +36,13 @@ summary(mapthis)
 plot(mapthis)
 }
 
+\references{
+Broman, K. W. (2010) Genetic map construction with R/qtl.  Technical
+report #214, Department of Biostatistics and Medical Informatics,
+University of Wisconsin--Madison
+}
+
+
 \seealso{ \code{\link{fake.f2}}, \code{\link{est.rf}},
   \code{\link{est.map}}, \code{\link{formLinkageGroups}},
   \code{\link{orderMarkers}} }

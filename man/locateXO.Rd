@@ -39,7 +39,10 @@ locateXO(cross, chr, full.info=FALSE)
   If \code{full.info=TRUE}, in place of a numeric vector with estimated
   locations, there is a matrix that includes those locations, the left
   and right endpoints of the intervals to which crossovers can be
-  placed, and the marker indices corresponding to those endpoint. 
+  placed, and the marker indices corresponding to those endpoint.  The
+  final column indicates the number of typed markers between the current
+  crossover and the next one (useful for identifying potential
+  genotyping errors).
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
@@ -50,6 +53,6 @@ xoloc <- locateXO(hyper, chr=4)
 table(sapply(xoloc, length))
 }
 
-\seealso{ \code{\link{countXO}} }
+\seealso{ \code{\link{countXO}}, \code{\link{cleanGeno}} }
 
 \keyword{utilities}
