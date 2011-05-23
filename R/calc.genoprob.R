@@ -59,7 +59,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
   n.mar <- nmar(cross)
 
   type <- class(cross)[1]
-
+  
   # calculate genotype probabilities one chromosome at a time
   for(i in 1:n.chr) {
     if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
