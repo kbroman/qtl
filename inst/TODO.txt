@@ -10,6 +10,30 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o replacemap: "Extra chr in map: 15X" (need to add spaces)
+
+o Calls to data.frame should ensure that stringsAsFactors=FALSE
+  [As that's what I generally assume and I want to avoid effects of
+  global option settings]
+
+o Look at other global options to see if any might interfere with
+  things. 
+
+o addint gives problems except when pvalues=FALSE
+
+  addint(data, qtl = rqtl, formula = y ~ Q1+Q2+Q3*Q4, method = "hk")
+  ->  Error en mod == "binary" | attr(x, "simple") :
+
+o Saunak reported a problem in summary.scanone:
+
+    Some time in the last month, the summary.scanone
+    function does not work (for one data set) when I ask it for p-values
+    with pvalues=TRUE.  It works fine when I don't ask for the p-values.
+    ------------------------------------------
+    Error in calcPermPval(peaks, perms) : 
+     NA/NaN/Inf in foreign function call (arg 4)
+    -------------------------------------------
+
 o checkcovar gives messed up column numbers re 
   "Following phenotypes are not numeric"
 
