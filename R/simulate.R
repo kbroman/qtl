@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Apr, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Mar, 2011
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -306,7 +306,7 @@ function(map,model,n.ind,error.prob,missing.prob,
   # add errors
   if(error.prob > 0) {
     for(i in 1:n.chr) {
-      a <- sample(0:1,n.mar[i]*n.ind,repl=TRUE,
+      a <- sample(0:1,n.mar[i]*n.ind,replace=TRUE,
                   prob=c(1-error.prob,error.prob))
       geno[[i]]$data[a == 1] <- 3 - geno[[i]]$data[a == 1]
       if(keep.errorind) {
@@ -324,7 +324,7 @@ function(map,model,n.ind,error.prob,missing.prob,
       o <- grep("^QTL[0-9]+",mar.names[[i]])
       if(length(o)>0)
         x <- geno[[i]]$data[,o]
-      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,repl=TRUE,
+      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,replace=TRUE,
                             prob=c(missing.prob,1-missing.prob))] <- NA
       if(length(o)>0)
         geno[[i]]$data[,o] <- x
@@ -447,12 +447,12 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
   if(error.prob > 0) {
     for(i in 1:n.chr) {
       if(chr.type[i]=="X") {
-        a <- sample(0:1,n.mar[i]*n.ind,repl=TRUE,
+        a <- sample(0:1,n.mar[i]*n.ind,replace=TRUE,
                     prob=c(1-error.prob,error.prob))
         geno[[i]]$data[a == 1] <- 3 - geno[[i]]$data[a == 1]
       }
       else {
-        a <- sample(0:2,n.mar[i]*n.ind,repl=TRUE,
+        a <- sample(0:2,n.mar[i]*n.ind,replace=TRUE,
                     prob=c(1-error.prob,error.prob/2,error.prob/2))
         if(any(a>0 & geno[[i]]$data==1))
           geno[[i]]$data[a>0 & geno[[i]]$data==1] <-
@@ -481,7 +481,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
   if(partial.missing.prob > 0) {
     for(i in 1:n.chr) {
       if(chr.type[i] != "X") {
-        o <- sample(c(TRUE,FALSE),n.mar[i],repl=TRUE,
+        o <- sample(c(TRUE,FALSE),n.mar[i],replace=TRUE,
                     prob=c(partial.missing.prob,1-partial.missing.prob))
         if(any(o)) {
           o2 <- grep("^QTL[0-9]+",mar.names[[i]])
@@ -508,7 +508,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
       o <- grep("^QTL[0-9]+",mar.names[[i]])
       if(length(o)>0)
         x <- geno[[i]]$data[,o]
-      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,repl=TRUE,
+      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,replace=TRUE,
                             prob=c(missing.prob,1-missing.prob))] <- NA
       if(length(o)>0)
         geno[[i]]$data[,o] <- x
@@ -649,7 +649,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
   if(error.prob > 0) {
     for(i in 1:n.chr) {
       if(chr.type[i] != "X") { # 4-way cross; autosomal
-        a <- sample(0:3,n.mar[i]*n.ind,repl=TRUE,
+        a <- sample(0:3,n.mar[i]*n.ind,replace=TRUE,
                     prob=c(1-error.prob,rep(error.prob/3,3)))
         if(any(a>0 & geno[[i]]$data==1))
           geno[[i]]$data[a>0 & geno[[i]]$data==1] <-
@@ -665,7 +665,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
             geno[[i]]$data[a>0 & geno[[i]]$data==4] - a[a>0 & geno[[i]]$data==4]
       }
       else {
-        a <- sample(0:1,n.mar[i]*n.ind,repl=TRUE,
+        a <- sample(0:1,n.mar[i]*n.ind,replace=TRUE,
                     prob=c(1-error.prob,error.prob))
         if(any(a>0 & geno[[i]]$data==1))
           geno[[i]]$data[a>0 & geno[[i]]$data==1] <-
@@ -695,7 +695,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
   if(partial.missing.prob > 0) {
     for(i in 1:n.chr) {
       if(chr.type[i] != "X") {
-        o <- sample(c(TRUE,FALSE),n.mar[i],repl=TRUE,
+        o <- sample(c(TRUE,FALSE),n.mar[i],replace=TRUE,
                     prob=c(partial.missing.prob,1-partial.missing.prob))
 
         if(any(o)) {
@@ -732,7 +732,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
       o <- grep("^QTL[0-9]+",mar.names[[i]])
       if(length(o)>0)
         x <- geno[[i]]$data[,o]
-      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,repl=TRUE,
+      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,replace=TRUE,
                             prob=c(missing.prob,1-missing.prob))] <- NA
       if(length(o)>0)
         geno[[i]]$data[,o] <- x

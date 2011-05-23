@@ -7,7 +7,7 @@
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Feb, 2010
+ * last modified Nov, 2010
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -35,7 +35,8 @@
  *                  wtaverage, comparegeno, R_comparegeno,
  *                  R_locate_xo, locate_xo, matmult, expand_col2drop
  *                  dropcol_xpx, dropcol_xpy, dropcol_x,
- *                  reviseMWril, R_reviseMWril
+ *                  reviseMWril, R_reviseMWril, R_calcPermPval,
+ *                  calcPermPval
  *
  **********************************************************************/
 
@@ -530,9 +531,9 @@ void R_locate_xo(int *n_ind, int *n_mar, int *type,
 		 int *geno, double *map, 
 		 double *location, int *nseen,
 		 int *ileft, int *iright, double *left, double *right,
-		 int *full_info)
+		 int *ntyped, int *full_info)
 {
-  int **Geno, **iLeft, **iRight;
+  int **Geno, **iLeft, **iRight, **nTyped;
   double **Location, **Left, **Right;
 
   reorg_geno(*n_ind, *n_mar, geno, &Geno);
@@ -542,19 +543,20 @@ void R_locate_xo(int *n_ind, int *n_mar, int *type,
     reorg_errlod(*n_ind, (*type+1)*(*n_mar-1), right, &Right);
     reorg_geno(*n_ind, (*type+1)*(*n_mar-1), ileft, &iLeft);
     reorg_geno(*n_ind, (*type+1)*(*n_mar-1), iright, &iRight);
+    reorg_geno(*n_ind, (*type+1)*(*n_mar-1), ntyped, &nTyped);
   }
 
   locate_xo(*n_ind, *n_mar, *type, Geno, map, Location,
-	    nseen, iLeft, iRight, Left, Right, *full_info);
+	    nseen, iLeft, iRight, Left, Right, nTyped, *full_info);
 }
 
 /* Note: type ==0 for backcross and ==1 for intercross */
 void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 	       double *map, double **Location, int *nseen,
 	       int **iLeft, int **iRight, double **Left, double **Right,
-	       int full_info)
+	       int **nTyped, int full_info)
 {
-  int i, j, curgen, number, icurpos;
+  int i, j, k, curgen, number, icurpos;
   double curpos;
 
   for(i=0; i<n_ind; i++) {
@@ -661,8 +663,18 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 	  }
 	}
       }
+    } /* end loop over markers */
+
+    /* count number of typed markers between adjacent crossovers */
+    if(full_info) {
+      for(j=0; j<nseen[i]-1; j++) {
+	nTyped[j][i] = 0;
+	for(k=iRight[j][i]-1; k<=iLeft[j+1][i]-1; k++) 
+	  if(Geno[k][i] != 0) nTyped[j][i]++;
+      }
     }
-  }
+
+  } /* end loop over individuals */
 }
 	  
 /* multiply two matrices - I'm using dgemm from lapack here */
@@ -843,6 +855,36 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
 
   reviseMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses,
 	      *missingval);
+}
+
+
+/* wrapper for calcPermPval */
+void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
+		    double *perms, int *n_perms, double *pval)
+{
+  double **Peaks, **Perms, **Pval;
+  
+  reorg_errlod(*nr_peaks, *nc_peaks, peaks, &Peaks);
+  reorg_errlod(*n_perms, *nc_peaks, perms, &Perms);
+  reorg_errlod(*nr_peaks, *nc_peaks, pval, &Pval);
+
+  calcPermPval(Peaks, *nc_peaks, *nr_peaks, Perms, *n_perms, Pval);
+}
+
+/* calculate permutation p-values for summary.scanone() */
+void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
+		  double **Perms, int n_perms, double **Pval)
+{
+  int i, j, k, count;
+
+  for(i=0; i<nc_peaks; i++) {
+    for(j=0; j<nr_peaks; j++) {
+      count = 0;
+      for(k=0; k<n_perms; k++) 
+	if(Perms[i][k] >= Peaks[i][j]) count++;
+      Pval[i][j] = (double)count/(double)n_perms;
+    }
+  }
 }
 
 

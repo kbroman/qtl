@@ -2,8 +2,8 @@
 #
 # xchr.R
 #
-# copyright (c) 2004-8, Karl W Broman
-# last modified Jun, 2008
+# copyright (c) 2004-2011, Karl W Broman
+# last modified Feb, 2011
 # first written Apr, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,6 +30,9 @@
 getsex <-
 function(cross)
 {
+  type <- class(cross)[1]
+  if(type != "bc" && type != "f2" && type != "4way") return(list(sex=NULL, pgm=NULL))
+
   phe.names <- names(cross$pheno)
 
   sex.column <- grep("^[Ss][Ee][Xx]$", phe.names)
@@ -79,7 +82,7 @@ function(cross)
     }
   }
 
-  if(length(pgm.column)==0) { # no pgm included
+  if(length(pgm.column)==0 || type=="4way") { # no pgm included
     pgm <- NULL
   }
   else {
@@ -285,7 +288,7 @@ function(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
 # revise genotype data, probabilities or imputations for the X chromosome
 reviseXdata <-
 function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
-         sexpgm, geno, prob, draws, pairprob, cross.attr)
+         sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 {
   type <- match.arg(type)
   expandX <- match.arg(expandX)
@@ -313,7 +316,7 @@ function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
 
   if(type == "bc") { # backcross
 
-    if(length(sex)==0 || all(sex==0) || all(sex==1)) { # all one sex
+    if(length(sex)==0 || ((all(sex==0) || all(sex==1)) && !force)) { # all one sex
       # no changes necessary
       if(!missing(geno)) return(geno)
       else if(!missing(prob)) {
@@ -399,7 +402,7 @@ function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
 
     if(length(sex)==0 || all(sex==0)) { # all females
 
-      if(length(pgm)==0 || all(pgm==0) || all(pgm==1)) { # one dir, females
+      if(length(pgm)==0 || ((all(pgm==0) || all(pgm==1)) && !force)) { # one dir, females
         if(!missing(geno)) return(geno)
         else if(!missing(draws)) return(draws)
         else if(!missing(pairprob)) return(pairprob)
@@ -474,7 +477,7 @@ function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
         }
       }
     }
-    else if(all(sex==1))  { # all males
+    else if(all(sex==1) && !force)  { # all males
       if(!missing(geno)) return(geno)
       else if(!missing(draws)) return(draws)
       else if(!missing(pairprob)) return(pairprob)
@@ -551,7 +554,7 @@ function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
         }
       } # both sexes, forw dir
 
-      if(all(pgm==1)) { # both sexes, backw dir
+      if(all(pgm==1) && !force) { # both sexes, backw dir
         if(!missing(geno)) {
           gmale <- geno[sex==1,]
           if(expandX!="full") {
@@ -907,7 +910,8 @@ function(sexpgm, covar)
 #           and for the additive model.
 ######################################################################
 dropXcol <-
-function(type=c("f2","bc","bcsft"), sexpgm, cross.attr)
+function(type=c("f2","bc", "riself", "risib", "4way", "dh", "special","bcsft"),
+         sexpgm, cross.attr)
 {
   type <- match.arg(type)
 

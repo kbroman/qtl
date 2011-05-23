@@ -3,7 +3,7 @@
 # summary.scantwo.R
 #
 # copyright (c) 2001-2010, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Sep, 2010
+# last modified Nov, 2010
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@
 #           condense.scantwo, summary.scantwocondensed
 #           max.scantwocondensed, print.summary.addpair
 #           rbind.scantwoperm, c.scantwoperm, subset.scantwoperm
+#           [.scantwoperm
+#
 ######################################################################
 #
 # summarize the result from scantwo
@@ -320,7 +322,7 @@ subrousummaryscantwo <-
 function(object, for.perm=FALSE)
 {
   lod <- object$lod
-  lod[is.na(lod)] <- 0
+  lod[is.na(lod) | lod == Inf | lod == -Inf] <- 0
   map <- object$map
 
   pos <- map[,2]
@@ -1005,20 +1007,36 @@ max.scantwocondensed <- max.scantwo
 # subset.scantwoperm: pull out a set of lodcolumns
 ##############################
 subset.scantwoperm <-
-function(x, lodcolumn=1, ...)
+function(x, repl, lodcolumn, ...)
 {
-  if(is.matrix(x[[1]]) & ncol(x[[1]]) > 1) {
-    if((is.logical(lodcolumn) && length(lodcolumn) != ncol(x[[1]])) ||
-       (!is.logical(lodcolumn) && ((any(lodcolumn > 0) && any(lodcolumn > ncol(x[[1]]) | lodcolumn < 1)) ||
-       (any(lodcolumn < 0) && any(lodcolumn < -ncol(x[[1]]) | lodcolumn > -1)))))
-      stop("lodcolumn misspecified.")
-    cl <- class(x)
-    x <- lapply(x, function(a,b) a[,b,drop=FALSE], lodcolumn)
-    class(x) <- cl
+  att <- attributes(x)
+
+  if(any(!sapply(x, is.matrix)))
+    x <- lapply(x, as.matrix)
+
+  if(missing(lodcolumn)) lodcolumn <- 1:ncol(x[[1]])
+  else if(!is.null(attr(try(x[[1]][,lodcolumn], silent=TRUE),"try-error")))
+    stop("lodcolumn misspecified.")
+
+  if(missing(repl)) repl <- 1:nrow(x[[1]])
+  else if(!is.null(attr(try(x[[1]][repl,], silent=TRUE),"try-error")))
+    stop("repl misspecified.")
+
+  cl <- class(x)
+  x <- lapply(x, function(a,b,d) unclass(a)[b,d,drop=FALSE], repl, lodcolumn)
+  class(x) <- cl
+
+  for(i in seq(along=att)) {
+    if(names(att)[i] == "dim" || length(grep("names", names(att)[i]))>0) next
+    attr(x, names(att)[i]) <- att[[i]]
   }
-  else stop("No need to subset; just one column.")
+
   x
 }
 
+# subset.scantwoperm using [,]
+`[.scantwoperm` <-
+function(x, repl, lodcolumn)
+  subset.scantwoperm(x, repl, lodcolumn)
 
 # end of summary.scantwo.R

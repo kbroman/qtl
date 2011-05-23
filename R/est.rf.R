@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Oct, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Mar, 2011
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -213,8 +213,13 @@ function(x, chr, what=c("both","lod","rf"),
   }
   br <- c(-1, seq(-1e-6, zmax, length=257))
 
+  # convert colors using gamma=0.6 (which will no longer be available in R)
+  thecol <- rev(rainbow(256, start=0, end=2/3))
+  rgbval <- (col2rgb(thecol)/255)^0.6
+  thecol <- rgb(rgbval[1,], rgbval[2,], rgbval[3,])
+
   image(1:ncol(g),1:nrow(g),t(g),ylab="Markers",xlab="Markers",breaks=br,
-        col=c("lightgray",rev(rainbow(256,start=0,end=2/3, gamma=0.6))))
+        col=c("lightgray",thecol))
   
   if(mark.diagonal) {
     for(i in 1:ncol(g))

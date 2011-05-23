@@ -2,8 +2,8 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-2010, Karl W. Broman
-# last modified Jun, 2010
+# copyright (c) 2007-2011, Karl W. Broman
+# last modified Apr, 2011
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -264,7 +264,7 @@ function(x, ...)
   pval <- attr(x, "pvalues")
   if(!is.null(pval) && !pval)
     x <- x[,-ncol(x)+(0:1)]
-  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
 
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
     
@@ -359,7 +359,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   if(method=="imp") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$draws)) &&
-       attr(cross$geno[[1]]$draws, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$draws, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
@@ -367,7 +367,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
   else {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$prob)) &&
-       attr(cross$geno[[1]]$prob, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$prob, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
@@ -670,7 +670,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   if(method=="imp") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$draws)) &&
-       attr(cross$geno[[1]]$draws, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$draws, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
@@ -678,7 +678,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
   else {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$prob)) &&
-       attr(cross$geno[[1]]$prob, "stepwidth") == "variable") {
+       attr(cross$geno[[1]]$prob, "stepwidth") != "fixed") {
       stepwidth.var <- TRUE
       incl.markers <- TRUE
     }
@@ -1379,7 +1379,7 @@ function(x, ...)
   if(!is.null(pval) && !pval) 
     x <- x[,-ncol(x)+(0:1)]
 
-  if(mod == "binary" | attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
   
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
 

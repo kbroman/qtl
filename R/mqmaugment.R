@@ -30,6 +30,38 @@
 
 ######################################################################
 #
+# mqmaugment_on_cofactors: Data Augmentation routine for MQM only using the cofactors, the other markers are filled by fill.geno()
+#
+######################################################################
+
+mqmaugment_on_cofactors <- function(cross, cofactors, maxaugind=82, minprob=0.1, strategy=c("default","impute","drop"), verbose=FALSE, ...){
+  markernames <- as.character(unlist(lapply(pull.map(cross),names)))
+  todrop <- markernames[which(cofactors==0)]
+  toaugment <- drop.markers(cross,todrop)
+  cross <- fill.geno(cross, ...)
+  augmented <- mqmaugment(toaugment,maxaugind,minprob,strategy,verbose)
+  newgenomatrix <- NULL
+  for(marker in markernames){
+    if(marker %in% todrop){
+      newgenomatrix <- cbind(newgenomatrix,pull.geno(cross)[augmented$mqm[[3]],marker])
+    }else{
+      newgenomatrix <- cbind(newgenomatrix,pull.geno(augmented)[,marker])
+    }
+  }
+  colnames(newgenomatrix) <- markernames
+  augmented$geno <- vector("list",nchr(cross))
+  for(chr in 1:length(cross$geno)){
+    cat(chr,"\n")
+    augmented$geno[[chr]]$map <- cross$geno[[chr]]$map
+    augmented$geno[[chr]]$data <- newgenomatrix[,names(cross$geno[[chr]]$map)]
+    names(augmented$geno) <- names(cross$geno)
+    class(augmented$geno[[chr]]) <- as.character(class(cross$geno[[chr]]))
+  }
+  augmented
+}
+
+######################################################################
+#
 # mqmaugment: dataaugmentation routine for MQM
 #
 ######################################################################

@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2001-2010, Karl W Broman
+# last modified Nov, 2010
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -279,7 +279,7 @@ function(cross, chr, cutoff=4, msg=TRUE)
   suppressWarnings(asnum <- as.numeric(ind))
   if(!any(is.na(asnum)) && all(ind==asnum)) ind <- asnum
 
-  o <- data.frame(chr=chr,id=ind,marker=mar,errorlod=lod)[order(-lod,ind),]
+  o <- data.frame(chr=chr,id=ind,marker=mar,errorlod=lod,stringsAsFactors=FALSE)[order(-lod,ind),]
   rownames(o) <- 1:nrow(o)
   o
 }

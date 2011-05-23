@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2010, Karl W Broman
+copyright (c) 2001-2011, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.19, 10/26/2010:
+Version 1.22, 5/9/2011:
 
 Major changes:
 
@@ -25,15 +25,137 @@ Major changes:
 
 Minor changes:
 
+  Slight changes to avoid some R warning messages.
+
+  Fix warning message in +.scanone.
+
+  Fix bug in mqmfind.marker.
+
+  Fix slight bugs in print.addint and print.addcovarint.
+
+
+Version 1.21, 3/21/2011:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Add "addchr" argument to find.pseudomarker.  The default is TRUE,
+  and returned non-marker locations have names like "c5.loc25" (as in
+  the output of scanone).  If FALSE, that initial "c5." part is left
+  off, to return just strings like "loc25" (as in the genotype
+  probabilities from calc.genoprob).
+
+  Revise calls to rainbow() in plot.rf and plot.scantwo so that they
+  no longer use the 'gamma' argument, which is being removed from
+  future versions of R.
+
+  Slight change to format of verbose output in est.map with m>0 (that
+  is, under interference).
+
+
+Version 1.20, 2/18/2011:
+
+Major changes:
+
+  Enabled est.map to use multiple processors via snow; added argument
+  n.cluster to indicate the number of cluster nodes to use.
+
+  Added the option stepwidth="max" in calc.genoprob, sim.geno, and
+  argmax.geno.  This inserts the minimal number of pseudomarkers so
+  that the maximum step between points is as indicated by the "step"
+  argument. 
+
+Minor changes:
+
+  Fixed a bug in refineqtl() that kept it from working for a 4-way
+  cross.  (The bug also broke stepwiseqtl().)
+
+  Fixed a problem in the internal function dropXcol() that led to a
+  crash in scantwo() for 4-way crosses with an X chromosome.
+
+  Fixed a bug in mqmscan() regarding the chromosome names in the
+  output. 
+
+  Trap cases of X chromosome for crosses other than bc/f2 in
+  stepwiseqtl, makeqtl, addqtl, and addpair.  
+
+  Added a function phenames() for pulling out the names of the
+  phenotypes. 
+
+  Small revisions and enhancements to some of the MQM plots.
+
+  Revised subset.cross so that if the cross contains QTL genotypes
+  (from sim.cross), these are also subsetted.
+
+  Revised replacemap.cross (aka replace.map) so that it will also
+  replace the maps in results from calc.genoprob, sim.geno and
+  argmax.geno, using interpolation if necessary.
+
+  Fixed a couple of minor bugs in mqmscan: one giving duplicate row
+  names, another resulting in pseudomarkers outside the terminal
+  markers even when off.end=0.
+
+  Fixed bugs in scanone and scantwo regarding batch mode for 
+  model != "normal".
+
+  Fixed a bug in refineqtl; it was including all possible covariates
+  refered to in the data frame 'covar', even if they weren't referred
+  to in the formula.
+
+  Fixed a bug in plot.geno, introduced in version 1.19, that made it
+  not work with horizontal=FALSE.
+
+
+Version 1.19, 11/29/2010:
+
+Major changes:
+
+  Added a tutorial on genetic map construction; find it within the
+  package at docs/geneticmaps.pdf, or (more simply, probably), find it
+  on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf 
+
+  Added two additional formats to summary.scanone(), "tabByCol" and
+  "tabByChr".  These produce tables of LOD peaks organized by LOD
+  score column or by chromosome.  The tables include approximate
+  confidence intervals for QTL location (as calculated by the lodint()
+  or bayesint() function; which one is indicated by the new argument
+  ci.function).  Here's an example:
+
+    bp:
+               chr  pos ci.low ci.high  lod  pval
+    c1.loc44.5   1 47.8   35.5    85.0 3.56 0.007
+    D4Mit164     4 29.5   18.8    30.6 8.09 0.000
+
+    sqrt:
+               chr  pos ci.low ci.high  lod  pval
+    c1.loc44.5   1 47.8   35.5    84.8 3.63 0.007
+    D4Mit164     4 29.5   17.2    30.6 8.08 0.000
+
+Minor changes:
+
+  Revised summary.scanoneperm to include a new argument,
+  controlAcrossCol.  If TRUE, LOD thresholds will control error rate
+  not just across the genome but also across the LOD score columns.
+
   Added function droponemarker, with the aim of identifying
   problematic markers by dropping one marker at a time and calculating
   a LOD score and a change in the estimated genetic length of the
   respective chromosome.
 
-  Added function pull.rf for pulling out either the estimated
+  Added a function pull.rf for pulling out either the estimated
   recombination fractions or the lod scores, as calculated by
   est.rf(), from a cross object.  Also added a function plot.rfmatrix,
   for plotting a slice through these. 
+
+  Added a function cleanGeno for removing genotypes that are possibly
+  in error (as indicated by apparent tight double-crossovers).  Use
+  this function with caution.
+
+  Added a function typingGap, which calculates, for each individual
+  and each chromosome, the maximum distance between typed markers.
 
   Revised MQMscan so that the output contains covariate information,
   to be plotted with add.cim.covar().
@@ -41,6 +163,43 @@ Minor changes:
   Revised c.scanone(), c.scanoneperm, c.scantwo, and c.scantwoperm so
   that the input "..." can be a list of
   scanone/scanoneperm/scantwo/scantwoperm objects.
+
+  Revised plot.geno() so that, for the X chromosome in a backcross or
+  intercross, the genotypes appear appropriately, with females being
+  homozygous or heterozygous and the males hemizygous, though we plot
+  the hemizygous genotypes as if they were homozygotes.
+
+  Revised subset.scanoneperm and subset.scantwoperm so that one may
+  pull out a subset of replicates (not just columns).  Added functions
+  [.scanoneperm and [.scantwoperm so that one can use [] to subset.
+
+  Revised locateXO() so that the output contains a column with the
+  number of typed markers between adjacent crossovers.
+
+  In orderMarkers(), if verbose is numeric and > 1, even more
+  information on the progress of the calculations is provided.
+
+  Fixed a problem in subset.cross where, in the case that a cross
+  contained numeric IDs, subsetting the individuals resulted in them
+  being sorted according to their IDs.
+
+  Added a manual page for the function getid(), which was not previously
+  documented.  (It is used internally a great deal, and it may be
+  useful more generally.)
+
+  Revised effectplot so that if mname2 or mark2 are given but mname1
+  and mark1 are not, the arguments get switched.  
+
+  Fixed a bug in shiftmap().
+
+  Added an argument, force, to reviseXdata(), to force a change in the
+  genotypes; this is for use within plot.geno().
+
+  Slight change to top.errorlod, so that the output columns are not
+  factors but character strings.
+
+  Slight change in plot.geno() so that we use filled circles (pch=23) rather
+  than calling points() twice for each point.
 
   Small changes to mqmplot.circle().
 

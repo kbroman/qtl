@@ -2,13 +2,13 @@
 #
 # mqmcircleplot.R
 #
-# Copyright (c) 2009-2010, Danny Arends
+# Copyright (c) 2009-2011, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified March 2010
+# last modified March 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -68,7 +68,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
     nchr <- length(unique(templateresult[,1]))
     cvalues <- circlelocations(totallength+(nchr*spacing))
 
-    drawcirculargenome(templateresult,spacing=spacing,lod=lod)
+    drawcirculargenome(templateresult,spacing=spacing,lodmarkers=lod)
     
     if(any(class(result)=="mqmmulti")){
       #multiple scan results, so plot em all
@@ -152,7 +152,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
         }   
       }
       legend("topright",c("Selected Cofactor Cofactor","Epistasis (+)","Epistasis (-)"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
-      legend("bottomright",c("Lod 3","Lod 6","Lod 9","Lod 12"),col=gray(0.5-(0.4*(c(3,6,9,12)/min(12,max(result[,3]))))),pch=19,lwd=0,pt.cex=c(1,2,3,4))
+      legend("bottomright",c("Lod 3","Lod 6","Lod 9","Lod 12"),pch=19,lwd=0,pt.cex=c(1,2,3,4))
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
@@ -233,9 +233,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
   for(x in 1:nrow(result)){
     #Draw markers
     if(lodmarkers){
-      size <- min(c((result[x,3]/3),4))
-      c <- gray(0.5-(0.4*(result[x,3]/max(result[,3]))))
-      points(locationtocircle(result,result[x,1],result[x,2],spacing=spacing),pch=20,col=c,cex=size)
+      points(locationtocircle(result,result[x,1],result[x,2],spacing=spacing),pch=20,cex=min(c((result[x,3]),4)))
     }else{
       points(locationtocircle(result,result[x,1],result[x,2],spacing=spacing),pch=20)
     }
@@ -247,8 +245,8 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
     points(t(c(-0.7, -1.15)))
     text(t(c(-0.9, -1.0)),paste("Distances in cM"),cex=0.8)
     text(t(c(-1.1, -1.1)),paste("0 cM"),cex=0.7)
-    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),dig=1),"cM"),cex=0.7)
-    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),dig=1),"cM"),cex=0.7)
+    text(t(c(-0.9, -1.1)),paste(round((totallength+(nchr*spacing))*(0.2/(2*pi)),digits=1),"cM"),cex=0.7)
+    text(t(c(-0.7, -1.1)),paste(round((totallength+(nchr*spacing))*(0.4/(2*pi)),digits=1),"cM"),cex=0.7)
     text(0.9*chrnumberloc,paste("Chr",x),cex=0.8)
 
   }
@@ -259,7 +257,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
 loopthroughmulti <- function(cross,result,save=FALSE,spacing=100){
   n <- 1
   while(n <= length(result)){
-    if(save) png(file=paste("circleplotT",n,".png",sep=""),w=1024,h=768)
+    if(save) png(filename=paste("circleplotT",n,".png",sep=""),width=1024,height=768)
     mqmplot.circle(cross,result,spacing=spacing,highlight=n)
     if(save) dev.off()
     n <- n+1

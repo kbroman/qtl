@@ -4,6 +4,7 @@
 \alias{calc.genoprob.special}
 \alias{calc.pairprob}
 \alias{calc.plod}
+\alias{calcPermPval}
 \alias{charround}
 \alias{checkcovar}
 \alias{checkformula}
@@ -37,7 +38,6 @@
 \alias{flipcross}
 \alias{genAllPartitions}
 \alias{genotab.em}
-\alias{getid}
 \alias{getsex}
 
 \alias{addmarkerstointervalmap}
@@ -57,6 +57,7 @@
 \alias{scanall}
 \alias{scoremissingmarkers}
 \alias{stepsize}
+\alias{mqmaugment_on_cofactors}
 
 \alias{getgenonames}
 \alias{getThird}
@@ -150,6 +151,7 @@
 \alias{snowCoreALL}
 \alias{snowCoreBOOT}
 \alias{sortPhyloPartitions}
+\alias{stringPhenoToInt}
 \alias{subrousummaryscantwo}
 \alias{summary.scantwocondensed}
 \alias{summary.addcovarint}
@@ -178,6 +180,7 @@ calc.pairprob(cross, step=0, off.end=0, error.prob=0.0001,
               map.function=c("haldane","kosambi","c-f","morgan"), map,
               assumeCondIndep=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
+calcPermPval(peaks, perms)
 charround(x, digits=1)
 checkPhyloCrosses(crosses, taxa, nostop=FALSE)
 checkPhyloPartition(partition, taxa)
@@ -189,13 +192,13 @@ condense(object)
 convert(object, \dots)
 convertMWril(cross, parents, error.prob=0)
 countqtlterms(formula, ignore.covar=TRUE)
-create.map(map, step, off.end, stepwidth=c("fixed", "variable"))
+create.map(map, step, off.end, stepwidth=c("fixed", "variable", "max"))
 deparseQTLformula(formula, reorderterms=FALSE)
 discan(cross, pheno, method=c("em","hk","mr"),
        addcovar=NULL, intcovar=NULL, maxit=4000, tol=1e-4,
        verbose=FALSE, give.warnings=TRUE, ind.noqtl)
 dropfromqtlformula(formula, qtlnum)
-dropXcol(type=c("f2","bc"), sexpgm, cross.attr)
+dropXcol(type=c("f2","bc", "riself", "risib", "4way", "dh", "special"), sexpgm, cross.attr)
 effectplot.getmark(cross, mname)
 effectplot.calmeanse(pheno, mark1, mark2, geno1, geno2, ndraws, var.flag=c("pooled", "group"))
 expandf2covar(thecovar)
@@ -217,7 +220,6 @@ markerforwsel(x, y, maxsize=7)
 markerforwself2(x, y, maxsize=7)
 genAllPartitions(n.taxa, taxa)
 genotab.em(dat, tol=1e-6, maxit=10000, verbose=FALSE)
-getid(cross)
 getsex(cross)
 
 addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
@@ -264,7 +266,7 @@ mf.k(d)
 mf.m(d)
 mf.stahl(d, m=0, p=0)
 mybinaryrep(n)
-orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE)
+orderMarkers.sub(cross, chr, window=7, use.ripple=TRUE, verbose=FALSE)
 ourline()
 ourstop(\dots)
 parseformula(formula, qtl.dimname, covar.dimname)
@@ -321,7 +323,7 @@ revisecovar(sexpgm, covar)
 reviseqtlnuminformula(formula, oldnum, newnum)
 revisescantwodf(df)
 reviseXdata(type=c("f2","bc"), expandX=c("simple","standard","full"),
-            sexpgm, geno, prob, draws, pairprob, cross.attr)
+            sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 ripple.perm1(n)
 ripple.perm2(n)
 ripple.perm.sub(x, mat)
@@ -370,6 +372,7 @@ sim.ril(map, n.ril=1, type=c("sibmating", "selfing"), n.str=c("2","4","8"),
 snowCoreALL(x, all.data, scanfunction, cofactors, verbose=FALSE, \dots)
 snowCoreBOOT(x, all.data, scanfunction, bootmethod, cofactors, verbose=FALSE, \dots)
 sortPhyloPartitions(partitions, taxa)
+stringPhenoToInt(cross, pheno.col)
 subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{scantwocondensed}(object, thresholds, 
          what=c("best", "full", "add", "int"),
