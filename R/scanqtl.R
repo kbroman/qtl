@@ -3,7 +3,7 @@
 # scanqtl.R
 #
 # copyright (c) 2002-2011, Hao Wu and Karl W. Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 

@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified March 2011
+# last modified May 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -162,7 +162,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
   }
   if(!is.null(retresults)){
     colnames(retresults) <- c("Marker","Marker","Change","Change","SEs")
-    retresults <- as.data.frame(retresults)
+    retresults <- as.data.frame(retresults, stringsAsFactors=TRUE)
     return(invisible(retresults))
   }
 }

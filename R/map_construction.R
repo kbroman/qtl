@@ -2,8 +2,8 @@
 #
 # map_construction.R
 #
-# copyright (c) 2008-2010, Karl W Broman
-# last modified Nov, 2010
+# copyright (c) 2008-2011, Karl W Broman
+# last modified May, 2011
 # first written Oct, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -136,7 +136,7 @@ function(cross, max.rf=0.25, min.lod=3, reorgMarkers=FALSE,
   }
   else {
     result <- data.frame(origchr=factor(chrstart, levels=names(cross$geno)),
-                         LG=factor(revgrp, levels=1:max(revgrp)))
+                         LG=factor(revgrp, levels=1:max(revgrp)), stringsAsFactors=TRUE)
     rownames(result) <- marnam
     return(result)
   }

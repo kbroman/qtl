@@ -3,7 +3,7 @@
 # simulate.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Mar, 2011
+# last modified May, 2011
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -327,7 +327,7 @@ function(map,model,n.ind,error.prob,missing.prob,
     }
   }
 
-  pheno <- data.frame(phenotype=pheno)
+  pheno <- data.frame(phenotype=pheno, stringsAsFactors=TRUE)
 
   cross <- list(geno=geno,pheno=pheno)
   class(cross) <- c("bc","cross")
@@ -511,7 +511,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
     }
   }
 
-  pheno <- data.frame(phenotype=pheno)
+  pheno <- data.frame(phenotype=pheno, stringsAsFactors=TRUE)
 
   cross <- list(geno=geno,pheno=pheno)
   class(cross) <- c("f2","cross")
@@ -744,7 +744,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
     dimnames(pheno) <- list(NULL, "phenotype")
   }
 
-  pheno <- as.data.frame(pheno)
+  pheno <- as.data.frame(pheno, stringsAsFactors=TRUE)
   cross <- list(geno=geno,pheno=pheno)
   class(cross) <- c("4way","cross")
 

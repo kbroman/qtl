@@ -2,8 +2,8 @@
 #
 # compareorder.R
 #
-# copyright (c) 2007-9, Karl W Broman
-# last modified May, 2009
+# copyright (c) 2007-2011, Karl W Broman
+# last modified May, 2011
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -75,7 +75,7 @@ function(cross, chr, order, error.prob=0.0001,
   result[,2] <- c(diff(range(orig[[1]])),
                   diff(range(new[[1]])))
 
-  as.data.frame(result)
+  as.data.frame(result, stringsAsFactors=TRUE)
 }
 
 # end of compareorder.R

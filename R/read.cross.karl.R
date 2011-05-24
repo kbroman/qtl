@@ -2,8 +2,8 @@
 #
 # read.cross.karl.R
 #
-# copyright (c) 2000-7, Karl W Broman
-# last modified Oct, 2007
+# copyright (c) 2000-2011, Karl W Broman
+# last modified May, 2011
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -159,7 +159,7 @@ function(dir,genfile,mapfile,phefile)
     stop("There are stange values in the genotype data : ",
                  paste(u,collapse=":"), ".")
 
-  cross$pheno <- as.data.frame(cross$pheno)
+  cross$pheno <- as.data.frame(cross$pheno, stringsAsFactors=TRUE)
 
   # return cross + indicator of whether to run est.map
   list(cross,FALSE)

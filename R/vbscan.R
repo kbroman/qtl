@@ -2,8 +2,8 @@
 #
 # vbscan.R
 #
-# copyright (c) 2001-7, Karl W Broman
-# last modified Jul, 2007
+# copyright (c) 2001-2011, Karl W Broman
+# last modified May, 2011
 # first written May, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -115,7 +115,7 @@ function(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
 
     res <- data.frame(chr=rep(names(cross$geno)[i],length(map)),
                       pos = as.numeric(map),
-                      matrix(z$lod,nrow=n.pos,byrow=TRUE))
+                      matrix(z$lod,nrow=n.pos,byrow=TRUE), stringsAsFactors=TRUE)
 
     colnames(res)[-(1:2)] <- c("lod.p.mu","lod.p","lod.mu")
 

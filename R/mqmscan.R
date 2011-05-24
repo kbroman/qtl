@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified Feb 2011
+# last modified May 2011
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -342,10 +342,10 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 	qtl <- cbind(qtl,1/(min(info))*(info-min(info))*qtl[,3])
 	colnames(qtl) = c("chr","pos (cM)",paste("LOD",colnames(cross$pheno)[pheno.col]),"info","LOD*info")
 	#Convert to data/frame and scanone object so we can use the standard plotting routines
-	qtl <- as.data.frame(qtl)
+	qtl <- as.data.frame(qtl, stringsAsFactors=TRUE)
 	if(backward && !is.null(qc) && model.present){
 	  attr(qtl,"mqmmodel") <- QTLmodel
-    cimcovar <- as.data.frame(cbind(as.numeric(attr(qtl,"mqmmodel")[[4]]),as.data.frame(attr(qtl,"mqmmodel")[[5]])))
+    cimcovar <- as.data.frame(cbind(as.numeric(attr(qtl,"mqmmodel")[[4]]),as.data.frame(attr(qtl,"mqmmodel")[[5]])), stringsAsFactors=TRUE)
     rownames(cimcovar) <- attr(qtl,"mqmmodel")[[2]]
     colnames(cimcovar) <- c("chr","pos")
     attr(qtl, "marker.covar.pos") <- cimcovar
@@ -363,10 +363,10 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
       if(length(to.remove) > 0) qtl <- qtl[-to.remove,]
     }		
     qtl <- addmarkerstointervalmap(cross,qtl)
-  	qtl <- as.data.frame(qtl)
+  	qtl <- as.data.frame(qtl, stringsAsFactors=TRUE)
     if(backward && !is.null(qc) && model.present){
       attr(qtl,"mqmmodel") <- QTLmodel
-      cimcovar <- as.data.frame(cbind(as.numeric(attr(qtl,"mqmmodel")[[4]]),as.data.frame(attr(qtl,"mqmmodel")[[5]])))
+      cimcovar <- as.data.frame(cbind(as.numeric(attr(qtl,"mqmmodel")[[4]]),as.data.frame(attr(qtl,"mqmmodel")[[5]])), stringsAsFactors=TRUE)
       rownames(cimcovar) <- attr(qtl,"mqmmodel")[[2]]
       colnames(cimcovar) <- c("chr","pos")
       attr(qtl, "marker.covar.pos") <- cimcovar

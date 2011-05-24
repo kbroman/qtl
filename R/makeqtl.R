@@ -3,7 +3,7 @@
 # makeqtl.R
 #
 # copyright (c) 2002-2011, Hao Wu and Karl W. Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Apr, 2002
 #
 # Modified by Danny Arends
@@ -477,7 +477,7 @@ function(object, ...)
   }
   else type <- "prob"
 
-  output <- data.frame(name=object$name, chr=object$chr, pos=object$pos, n.gen=object$n.gen)
+  output <- data.frame(name=object$name, chr=object$chr, pos=object$pos, n.gen=object$n.gen, stringsAsFactors=TRUE)
   rownames(output) <- object$altname
   
   attr(output, "type") <- type
@@ -667,7 +667,7 @@ function(x, ...)
   if(is.null(x) || length(x) == 0) 
     cat("Null QTL model\n")
   else {
-    temp <- as.data.frame(x)
+    temp <- as.data.frame(x, stringsAsFactors=TRUE)
     rownames(temp) <- paste("Q", 1:nrow(temp), sep="")
     print.data.frame(temp)
   }

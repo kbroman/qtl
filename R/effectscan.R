@@ -4,7 +4,7 @@
 #
 # copyright (c) 2003-2011, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Mar, 2011
+# last modified May, 2011
 # first written Jan, 2003
 #
 #     This program is free software; you can redistribute it and/or
@@ -216,7 +216,7 @@ function(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
       w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
     rownames(z) <- w
     
-    z <- as.data.frame(z)
+    z <- as.data.frame(z, stringsAsFactors=TRUE)
     z <- cbind(chr=rep(names(cross$geno)[i],length(map)),
                pos=as.numeric(map), z)
     rownames(z) <- w
