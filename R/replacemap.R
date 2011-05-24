@@ -3,7 +3,7 @@
 # replacemap.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ function(object, map)
     extra <- chr.names2[is.na(m)]
     map <- map[!is.na(m)]
     chr.names2 <- names(map)
-    warning("Extra chr in map: ", paste(extra, sep=" "))
+    warning("Extra chr in map: ", paste(extra, collapse=" "))
   }
 
   cross.sexsp <- sapply(cross$geno, function(a) is.matrix(a$map))
