@@ -26,41 +26,6 @@ o Saunak reported a problem in summary.scanone:
 o checkcovar gives messed up column numbers re 
   "Following phenotypes are not numeric"
 
-o Various "Notes" like the following:
-
-  drawcirculargenome: warning in round((totallength + (nchr * spacing)) *
-  (0.2/(2 * pi)), dig = 1): partial argument match of 'dig' to 'digits'
-  drawcirculargenome: warning in round((totallength + (nchr * spacing)) *
-  (0.4/(2 * pi)), dig = 1): partial argument match of 'dig' to 'digits'
-  loopthroughmulti: warning in png(file = paste("circleplotT", n, ".png",
-  sep = ""), w = 1024, h = 768): partial argument match of 'file' to
-  'filename'
-  loopthroughmulti: warning in png(file = paste("circleplotT", n, ".png",
-  sep = ""), w = 1024, h = 768): partial argument match of 'w' to
-  'width'
-
-o New warnings in some C code:
-
-  checking whether package "qtl" can be installed ... WARNING
-  Found the following significant warnings:
-  fitqtl_imp.c:298:16: warning: variable "kk" set but not used
-  forwsel.c:199:35: warning: variable "syy" set but not used
-  scanone_em_covar.c:101:14: warning: variable "ny" set but not used
-  scanone_em_covar.c:101:8: warning: variable "jpvt" set but not used
-  scanone_em_covar.c:100:44: warning: variable "work" set but not used
-  scanone_em_covar.c:100:36: warning: variable "qraux" set but not used
-  scanone_em_covar.c:100:30: warning: variable "qty" set but not used
-  scanone_em_covar.c:100:22: warning: variable "resid" set but not used
-  scanone_em_covar.c:100:15: warning: variable "coef" set but not used
-  scanone_em_covar.c:100:11: warning: variable "x" set but not used
-  scanone_em_covar.c:99:36: warning: variable "regtol" set but not used
-  scanone_imp.c:131:42: warning: variable "tol" set but not used
-  scanone_imp.c:130:35: warning: variable "lod_tmp" set but not used
-  scanone_imp.c:129:5: warning: variable "idx" set but not used
-  scanone_imp.c:128:16: warning: variable "itmp" set but not used
-  scantwo_imp.c:145:53: warning: variable "idx" set but not used
-  simulate_ril.c:104:16: warning: variable "ngen" set but not used
-  
 o Column names in output of addpair summary (particularly regarding
   the 6x15 and 7x15 scans in the hyper demo I did).
 

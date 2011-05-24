@@ -2,9 +2,9 @@
  *
  * scantwo_imp.c
  *
- * copyright (c) 2001-6, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2011, Karl W Broman and Hao Wu
  *
- * last modified Dec, 2006 
+ * last modified May, 2011
  * first written Nov, 2001 
  *
  *     This program is free software; you can redistribute it and/or
@@ -142,7 +142,7 @@ void scantwo_imp(int n_ind, int same_chr, int n_pos1, int n_pos2,
   int i, i1, i2, j, k; /* loop variants */
   double **lrss0, **lrss1, **LODfull, **LODadd,*lod_tmp;
   double *dwork_null, *dwork_add, *dwork_full, *tmppheno, dtmp;
-  int nrss, n_col_null, n_col_a, n_col_f, n_gen_sq, idx;
+  int nrss, n_col_null, n_col_a, n_col_f, n_gen_sq;
   int lwork, nlod_per_draw, multivar=0;
   int *allcol2drop;
 
@@ -293,7 +293,6 @@ void scantwo_imp(int n_ind, int same_chr, int n_pos1, int n_pos2,
 
   else { /* the pair is for different chromesome */
     nlod_per_draw = n_pos1*n_pos2;
-    idx = n_pos1*n_pos2;
     for(i1=0; i1<n_pos1; i1++) { /* loop over markers on chr 1 */
       for(i2=0; i2<n_pos2; i2++) { /* loop over markers on chr 2 */
 	for(j=0; j<n_draws; j++) { /* loop over imputations */

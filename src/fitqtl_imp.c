@@ -2,10 +2,10 @@
  * 
  * fitqtl_imp.c
  *
- * copyright (c) 2002-6, Hao Wu
+ * copyright (c) 2002-2011, Hao Wu
  *     Modified by Karl W. Broman to get estimates of QTL effects
  *
- * last modified Dec, 2006
+ * last modified May, 2011
  * first written Apr, 2002
  *
  *     This program is free software; you can redistribute it and/or
@@ -295,7 +295,7 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
 	       int save_design, double *designmat) 
 {
   /* local variables */
-  int i, j, k, kk, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job;
+  int i, j, k, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job;
   double *work, *x, *qty, *qraux, *coef, *resid, tol, sigmasq;
   /* The following vars are used for parsing model. 
      the dimension of idx_int_q and idx_int_c are set to be arbitrary number
@@ -417,8 +417,6 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
 	    tmp_idx += (Draws[itmp1][j]-2)*itmp2;
 	    itmp2 *= n_gen[idx_int_q[k]];
 	  }
-	  if(tmp_idx != 0) 
-	    kk = 0;
 	  x[(idx_col+tmp_idx)*n_ind+j] = 1;
 	  /* interaction with covariates */
 	  for(k=0; k<n_int_c; k++)
