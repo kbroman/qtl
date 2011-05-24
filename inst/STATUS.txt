@@ -25,19 +25,21 @@ Major changes:
 
 Minor changes:
 
-  Slight changes to avoid some R warning messages.
+  Fixed bug in addint() and addcovarint()
 
   Revise all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
 
-  Fix warning message in replacemap.
+  Slight changes to avoid some R warning messages.
 
-  Fix warning message in +.scanone.
+  Fixed warning message in replacemap.
 
-  Fix bug in mqmfind.marker.
+  Fixed warning message in +.scanone.
 
-  Fix slight bugs in print.addint and print.addcovarint.
+  Fixed bug in mqmfind.marker.
+
+  Fixed slight bugs in print.addint and print.addcovarint.
 
 
 Version 1.21, 3/21/2011:
