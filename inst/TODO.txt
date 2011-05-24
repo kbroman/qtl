@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o replacemap: "Extra chr in map: 15X" (need to add spaces)
-
 o Calls to data.frame should ensure that stringsAsFactors=FALSE
   [As that's what I generally assume and I want to avoid effects of
   global option settings]
