@@ -2,9 +2,9 @@
  * 
  * simulate_ril.c
  *
- * copyright (c) 2005-9, Karl W Broman
+ * copyright (c) 2005-2011, Karl W Broman
  *
- * last modified Apr, 2009
+ * last modified May, 2011
  * first written Mar, 2005
  *
  *     This program is free software; you can redistribute it and/or
@@ -101,7 +101,7 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
 	     int *origgeno, 
 	     double error_prob, double missing_prob, int *errors)
 {
-  int i, j, k, ngen, tot_mar, curseg;
+  int i, j, k, tot_mar, curseg;
   struct individual par1, par2, kid1, kid2;
   int **Ril, **Cross, **Errors, **OrigGeno; 
   int maxwork, isX, flag, max_xo, *firstmarker;
@@ -190,7 +190,6 @@ void sim_ril(int n_chr, int *n_mar, int n_ril, double *map,
       }
 
       /* start inbreeding */
-      ngen=1;
       while(1) {
 	R_CheckUserInterrupt(); /* check for ^C */
 

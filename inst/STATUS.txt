@@ -41,6 +41,8 @@ Minor changes:
 
   Fixed slight bugs in print.addint and print.addcovarint.
 
+  Removed a bunch of unused variables from C code.
+
 
 Version 1.21, 3/21/2011:
 
