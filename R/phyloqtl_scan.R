@@ -1,8 +1,8 @@
 ######################################################################
 # phyloqtl_scan.R
 #
-# copyright (c) 2009-2010, Karl W Broman
-# last modified Aug, 2010
+# copyright (c) 2009-2011, Karl W Broman
+# last modified May, 2011
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -202,7 +202,7 @@ function(object, format=c("postprob", "lod"), threshold, ...)
 
   themax <- apply(object[,-(1:2)], 2, tapply, object[,1], max, na.rm=TRUE)
   if(length(unique(object[,1]))==1) {
-    themax <- as.data.frame(matrix(themax, nrow=1))
+    themax <- as.data.frame(matrix(themax, nrow=1), stringsAsFactors=TRUE)
     names(themax) <- colnames(object)[-(1:2)]
   }
   wh <- apply(themax, 1, function(a) { a <- which(a==max(a)); if(length(a) > 1) a <- sample(a, 1); a })
@@ -218,12 +218,12 @@ function(object, format=c("postprob", "lod"), threshold, ...)
   if(format=="lod") {
     out <- data.frame(chr=unique(object[,1]), pos=whpos, themax,
                       inferred=colnames(object)[wh+2],
-                      loddif=apply(themax, 1, function(a) -diff(sort(a, decreasing=TRUE)[1:2])))
+                      loddif=apply(themax, 1, function(a) -diff(sort(a, decreasing=TRUE)[1:2])), stringsAsFactors=TRUE)
   }
   else {
     out <- data.frame(chr=unique(object[,1]), pos=whpos, themax,
                       inferred=colnames(object)[wh+2],
-                      maxlod=apply(themax, 1, max))
+                      maxlod=apply(themax, 1, max), stringsAsFactors=TRUE)
     temp <- out[,-c(1:2, ncol(out)-0:1)]
     out[,-c(1:2, ncol(out)-0:1)] <- t(apply(temp, 1, function(a) 10^a/sum(10^a)))
   }

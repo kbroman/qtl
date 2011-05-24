@@ -2,8 +2,8 @@
 #
 # fitstahl.R
 #
-# copyright (c) 2006-7, Karl W Broman
-# last modified Oct, 2007
+# copyright (c) 2006-2011, Karl W Broman
+# last modified May, 2011
 # first written Aug, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -286,7 +286,7 @@ function(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
       }
     }
   }
-  as.data.frame(result)
+  as.data.frame(result, stringsAsFactors=TRUE)
 }
     
 

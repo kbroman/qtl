@@ -3,7 +3,7 @@
 # sim_ril.R
 #
 # copyright (c) 2004-2011, Karl W Broman
-# last modified Mar, 2011
+# last modified May, 2011
 # first written May, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -106,7 +106,7 @@ function(map, n.ril=1, type=c("sibmating", "selfing"),
     class(geno[[i]]) <- class(omap[[i]])
 
   }
-  pheno <- data.frame(line=1:n.ril)
+  pheno <- data.frame(line=1:n.ril, stringsAsFactors=TRUE)
   x <- list(geno=geno,pheno=pheno,cross=cross)
 
   # ri[n][sib/self]un: un = genotypes not yet transformed

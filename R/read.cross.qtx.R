@@ -2,8 +2,8 @@
 #
 # read.cross.qtx.R
 #
-# copyright (c) 2000-8, Karl W Broman
-# last modified Jul, 2008
+# copyright (c) 2000-2011, Karl W Broman
+# last modified May, 2011
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -93,11 +93,11 @@ function(dir, file, estimate.map=TRUE)
       temp[temp=="X" | temp=="x"] <- NA
       pheno[[i]] <- as.numeric(temp)
     }
-    pheno <- cbind(as.data.frame(pheno),ind=ind)
+    pheno <- cbind(as.data.frame(pheno, stringsAsFactors=TRUE),ind=ind)
     cat("\t", length(pheno), " phenotypes\n",sep="")
   }
   else {
-    pheno <- data.frame(ind=ind)
+    pheno <- data.frame(ind=ind, stringsAsFactors=TRUE)
     cat("\t", 0, "  phenotypes\n",sep="")
   }
 

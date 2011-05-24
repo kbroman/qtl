@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# last modified Jun, 2010
+# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
+# last modified May, 2011
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 
@@ -179,7 +179,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
     # check phenotypes and covariates; drop ind'ls with missing values
     if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-    else phcovar <- as.data.frame(pheno)
+    else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
     if(any(is.na(phcovar))) {
       if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
       else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))

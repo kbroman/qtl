@@ -2,8 +2,8 @@
 #
 # discan.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Jul, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified May, 2011
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -293,7 +293,7 @@ function(cross, pheno, method=c("em","hk","mr"),
       w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
     
     z <- data.frame(chr=rep(names(cross$geno)[i],length(map)),
-                    pos=as.numeric(map), z)
+                    pos=as.numeric(map), z, stringsAsFactors=TRUE)
     rownames(z) <- w
 
     results <- rbind(results, z)
