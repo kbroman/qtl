@@ -2,8 +2,8 @@
 #
 # summary.scantwo.old.R
 #
-# copyright (c) 2001-8, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Jun, 2008
+# copyright (c) 2001-2011, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified May, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -229,7 +229,7 @@ function (object, thresholds = c(0, 0, 0), lodcolumn=1,
                                                               df.int + 2 * df.add), 
                                         lod.int, 1 - pchisq(2 * log(10) * lod.int, df.int),
                                         lod.q1, 1 - pchisq(2 * log(10) * lod.q1, df.add),
-                                        lod.q2, 1 - pchisq(2 * log(10) * lod.q2, df.add))
+                                        lod.q2, 1 - pchisq(2 * log(10) * lod.q2, df.add), stringsAsFactors=TRUE)
                              )
           }
         } 
@@ -241,7 +241,7 @@ function (object, thresholds = c(0, 0, 0), lodcolumn=1,
                            data.frame(chr[i], chr[j], i.pos, j.pos,
                                       lod.joint, 1 - pchisq(2 * log(10) * lod.joint,
                                                             df.int + 2 * df.add), 
-                                      lod.int, 1 - pchisq(2 * log(10) * lod.int, df.int))
+                                      lod.int, 1 - pchisq(2 * log(10) * lod.int, df.int), stringsAsFactors=TRUE)
                            )
         }
         # give the new row (if any) a name
@@ -265,7 +265,7 @@ function (object, thresholds = c(0, 0, 0), lodcolumn=1,
                              "p.q1", "lod.q2", "p.q2")
     else colnames(results) <- c("chr1", "chr2", "pos1", "pos2", 
                                 "lod.joint", "p.joint", "lod.int", "p.int")
-    results <- as.data.frame(results)
+    results <- as.data.frame(results, stringsAsFactors=TRUE)
   }
   class(results) <- c("summary.scantwo.old", "data.frame")
   results
@@ -314,7 +314,7 @@ function(x,...)
       x[,j] <- -round(log10(x[,j]),1)
   }
 
-  res <- as.data.frame(x[,-(1:2)])
+  res <- as.data.frame(x[,-(1:2)], stringsAsFactors=TRUE)
   names(res) <- cnames[1:ncol(res)]
   rownames(res) <- chr
 

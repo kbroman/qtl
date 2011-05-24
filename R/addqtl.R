@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-2011, Karl W. Broman
-# last modified Apr, 2011
+# last modified May, 2011
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 
@@ -117,7 +117,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- as.data.frame(pheno)
+  else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
   if(any(is.na(phcovar))) {
     if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
     else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
@@ -231,7 +231,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
   }
                     
-  results <- as.data.frame(results)
+  results <- as.data.frame(results, stringsAsFactors=TRUE)
   class(results) <- c("addint", "data.frame")
   attr(results, "method") <- method
   attr(results, "model") <- model
@@ -305,7 +305,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 
@@ -480,7 +480,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- as.data.frame(pheno)
+  else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
   if(any(is.na(phcovar))) {
     if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
     else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
@@ -566,7 +566,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
       w[o] <- paste("c",i,".",w[o],sep="")
     
-    z <- data.frame(lod=as.numeric(sqout)-lod0)
+    z <- data.frame(lod=as.numeric(sqout)-lod0, stringsAsFactors=TRUE)
     z <- cbind(chr=rep(i,length(map)),
                pos=as.numeric(map), z)
     rownames(z) <- w
@@ -617,7 +617,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 
@@ -837,7 +837,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- as.data.frame(pheno)
+  else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
   if(any(is.na(phcovar))) {
     if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
     else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
@@ -906,7 +906,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
       w[o] <- paste("c",ci,".",w[o],sep="")
     map <- cbind(chr=rep(ci,length(map)),
-                 pos=as.data.frame(map) )
+                 pos=as.data.frame(map, stringsAsFactors=TRUE) )
     rownames(map) <- w 
     
     if(method=="imp")
@@ -1159,7 +1159,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     stop("Must include covariate data frame.")
   if(!is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 
@@ -1345,7 +1345,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
   }
                     
-  results <- as.data.frame(results)
+  results <- as.data.frame(results, stringsAsFactors=TRUE)
   class(results) <- c("addcovarint", "data.frame")
   attr(results, "model") <- model
   attr(results, "method") <- method

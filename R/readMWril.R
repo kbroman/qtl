@@ -2,8 +2,8 @@
 #
 # readMWril.R
 #
-# copyright (c) 2009, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2009-2011, Karl W Broman
+# last modified May, 2011
 # first written Apr, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -173,7 +173,7 @@ function(dir, rilfile, founderfile,
       }
       else return(x)
     }
-  pheno <- data.frame(lapply(pheno, sw2numeric, dec=dec))
+  pheno <- data.frame(lapply(pheno, sw2numeric, dec=dec), stringsAsFactors=TRUE)
 
   n.str <- nrow(founder)
 

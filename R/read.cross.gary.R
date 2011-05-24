@@ -2,8 +2,8 @@
 #
 # read.cross.gary.R
 #
-# copyright (c) 2000-6, Karl W Broman
-# last modified Oct, 2006
+# copyright (c) 2000-2011, Karl W Broman
+# last modified May, 2011
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -126,7 +126,7 @@ function(dir,genfile,mnamesfile,chridfile,phefile,pnamesfile,mapfile,
         return(as.numeric(as.character(x)))
       else return(x)
     }
-  pheno <- data.frame(lapply(as.data.frame(pheno), sw2numeric))
+  pheno <- data.frame(lapply(as.data.frame(pheno), sw2numeric), stringsAsFactors=TRUE)
 
   # check that data dimensions match
   n.mar1 <- sapply(geno,function(a) ncol(a$data))
@@ -165,7 +165,7 @@ function(dir,genfile,mnamesfile,chridfile,phefile,pnamesfile,mapfile,
     stop("There are stange values in the genotype data : ",
                  paste(sort(u),collapse=":"), ".")
 
-  cross$pheno <- as.data.frame(cross$pheno)
+  cross$pheno <- as.data.frame(cross$pheno, stringsAsFactors=TRUE)
 
   # if map wasn't included, go through each chromosome and
   # make first marker at 0 cM.

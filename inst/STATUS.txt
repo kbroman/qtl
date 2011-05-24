@@ -27,6 +27,10 @@ Minor changes:
 
   Slight changes to avoid some R warning messages.
 
+  Revise all calls to data.frame() and as.data.frame() to override
+  global option of stringsAsFactors, so that we know what's going to
+  happen.
+
   Fix warning message in replacemap.
 
   Fix warning message in +.scanone.

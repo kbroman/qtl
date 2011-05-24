@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-2011, Karl W Broman and Hao Wu
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -376,7 +376,7 @@ function(cross, chr, pheno.col=1,
     gmap <- data.frame(chr=rep(names(cross$geno),n.pos),
                        pos=map,
                        eq.spacing=rep(1,sum(n.pos)),
-                       xchr=rep(sapply(cross$geno,class)=="X",nmar(cross)))
+                       xchr=rep(sapply(cross$geno,class)=="X",nmar(cross)), stringsAsFactors=TRUE)
 
     # number of possible genotypes for each chromosome
     n.gen <- 1:n.chr
@@ -468,7 +468,7 @@ function(cross, chr, pheno.col=1,
       if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
         w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
       map <- cbind(chr=rep(names(cross$geno)[i],length(map)),
-                   pos=as.data.frame(as.numeric(map)) )
+                   pos=as.data.frame(as.numeric(map), stringsAsFactors=TRUE) )
       rownames(map) <- w 
 
       # equally spaced positions

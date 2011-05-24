@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2011, Karl W Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -171,7 +171,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     stop("pheno.col values should be between 1 and the no. phenotypes")
   pheno <- cross$pheno[,pheno.col]
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- as.data.frame(pheno)
+  else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
   hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
   if(all(hasmissing))
     stop("All individuals are missing phenotypes or covariates.")
