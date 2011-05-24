@@ -27,7 +27,7 @@ Minor changes:
 
   Fixed bug in addint() and addcovarint()
 
-  Revise all calls to data.frame() and as.data.frame() to override
+  Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
 
