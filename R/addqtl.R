@@ -247,6 +247,7 @@ function(x, ...)
 {
   meth <- attr(x, "method")
   mod <- attr(x, "model")
+  simp <- attr(x, "simple")
   if(is.null(mod)) mod <- "normal"
   if(is.null(meth)) meth <- "unknown"
   if(meth=="imp") meth <- "multiple imputation"
@@ -264,7 +265,7 @@ function(x, ...)
   pval <- attr(x, "pvalues")
   if(!is.null(pval) && !pval)
     x <- x[,-ncol(x)+(0:1)]
-  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || simp) x <- x[,-c(2,5,7), drop=FALSE]
 
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
     
@@ -1361,6 +1362,7 @@ function(x, ...)
 {
   meth <- attr(x, "method")
   mod <- attr(x, "model")
+  simp <- attr(x, "simple")
   if(is.null(mod)) mod <- "normal"
   if(is.null(meth)) meth <- "unknown"
   if(meth=="imp") meth <- "multiple imputation"
@@ -1379,10 +1381,9 @@ function(x, ...)
   if(!is.null(pval) && !pval) 
     x <- x[,-ncol(x)+(0:1)]
 
-  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || simp) x <- x[,-c(2,5,7), drop=FALSE]
   
   printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
-
     
   cat("\n")
 }
