@@ -2,9 +2,9 @@
 #
 # qtlcart_io.R
 #
-# copyright (c) 2002-9, Brian S. Yandell
+# copyright (c) 2002-2011, Brian S. Yandell
 #          [with some modifications by Karl W. Broman and Hao Wu]
-# last modified Nov, 2009
+# last modified May, 2011
 # first written Jun, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ function (dir, crofile, mapfile)
   cat("       Number of phenotypes:  ", ncol( cro$traits ), "\n")
   
   maplen <- unlist(lapply(map,length))
-  markers <- split( as.data.frame( t( cro$markers )),
+  markers <- split( as.data.frame( t( cro$markers ), stringsAsFactors=TRUE),
                    ordered( rep(names( maplen ), maplen )))
   
   Geno <- list()
@@ -68,7 +68,7 @@ function (dir, crofile, mapfile)
     Geno[[i]] <- tmp
   }
   cross <- list(geno = Geno, pheno = cro$traits )
-  cross$pheno <- as.data.frame(cross$pheno)
+  cross$pheno <- as.data.frame(cross$pheno, stringsAsFactors=TRUE)
   class(cross) <- c( cro$cross.class, "cross")
   if(cro$cross.class == "bcsft")
     attr(cross, "scheme") <- cro$cross.scheme
@@ -214,9 +214,9 @@ function (file)
   f <- matrix(scan(file, "", skip = skip, nlines = nlines, na.strings = ".",
                    blank.lines.skip = FALSE, quiet = TRUE), ncol = size)
   traits <- t(f[-(1:(2 + nmarkers)), ])
-  traits = as.data.frame(traits)
+  traits = as.data.frame(traits, stringsAsFactors=TRUE)
   if (nrow(traits) == 1)
-    traits <- as.data.frame(t(traits))
+    traits <- as.data.frame(t(traits), stringsAsFactors=TRUE)
   colnames(traits) <- trait.names
 
   tmp = options(warn=-1)

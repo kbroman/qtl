@@ -72,10 +72,10 @@ function(cross, chr, as.table=FALSE)
       themap1 <- unlist(lapply(themap, function(a) a[1,]))
       themap2 <- unlist(lapply(themap, function(a) a[2,]))
       a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
-                      pos.female=themap1, pos.male=themap2)
+                      pos.female=themap1, pos.male=themap2, stringsAsFactors=TRUE)
     } else {
       a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
-                      pos=unlist(themap))
+                      pos=unlist(themap), stringsAsFactors=TRUE)
     }
     rownames(a) <- markernames(cross)
   }
@@ -950,7 +950,7 @@ function(cross, chr, scanone.output=FALSE)
   }   
 
   if(!scanone.output)
-    return(data.frame(chr=rep(names(cross$geno),nmar(cross)),results))
+    return(data.frame(chr=rep(names(cross$geno),nmar(cross)),results, stringsAsFactors=TRUE))
 
   themap <- pull.map(cross)
   if(is.matrix(themap[[1]]))
@@ -962,7 +962,7 @@ function(cross, chr, scanone.output=FALSE)
                     pos=thepos,
                     neglog10P=-log10(results[,ncol(results)]),
                     missing=temp[,1]/apply(temp, 1, sum),
-                    temp[,-1]/apply(temp[,-1], 1, sum))
+                    temp[,-1]/apply(temp[,-1], 1, sum), stringsAsFactors=TRUE)
   class(res) <- c("scanone", "data.frame")
   rownames(res) <- rownames(results)
   res[,1] <- factor(as.character(res[,1]), levels=unique(as.character(res[,1])))
@@ -1551,7 +1551,7 @@ function(...)
   n.ind <- sapply(args,nind)
   pheno <- matrix(nrow=sum(n.ind),ncol=length(phenam))
   colnames(pheno) <- phenam
-  pheno <- as.data.frame(pheno)
+  pheno <- as.data.frame(pheno, stringsAsFactors=TRUE)
 
   if(!allsame) {
     crosstype <- factor(rep(c("bc","f2")[match(classes,c("bc","f2"))],n.ind),
@@ -2968,7 +2968,7 @@ function( cross, chr, pos)
   }
   dimnames(marker) <- list(paste(chr,":",pos,sep=""),
                            c("left","right","close"))
-  as.data.frame(marker)
+  as.data.frame(marker, stringsAsFactors=TRUE)
 }
 
 ######################################################################
@@ -3125,25 +3125,25 @@ function(cross, chr, full.info=FALSE)
   }
 
   if(!full.info) 
-    res <- lapply(as.data.frame(rbind(nseen, location)),
+    res <- lapply(as.data.frame(rbind(nseen, location), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
   else {
-    location <- lapply(as.data.frame(rbind(nseen, location)),
+    location <- lapply(as.data.frame(rbind(nseen, location), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
-    ileft <- lapply(as.data.frame(rbind(nseen, ileft)),
+    ileft <- lapply(as.data.frame(rbind(nseen, ileft), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
-    iright <- lapply(as.data.frame(rbind(nseen, iright)),
+    iright <- lapply(as.data.frame(rbind(nseen, iright), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
 
-    left <- lapply(as.data.frame(rbind(nseen, left)),
+    left <- lapply(as.data.frame(rbind(nseen, left), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
-    right <- lapply(as.data.frame(rbind(nseen, right)),
+    right <- lapply(as.data.frame(rbind(nseen, right), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
-    ntype <- lapply(as.data.frame(rbind(nseen, ntype)),
+    ntype <- lapply(as.data.frame(rbind(nseen, ntype), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
 
     res <- location
@@ -3307,7 +3307,7 @@ function(cross, marker)
   }
 
   output <- data.frame(chr=rep("", length(marker)),
-                       pos=rep(NA, length(marker)))
+                       pos=rep(NA, length(marker)), stringsAsFactors=TRUE)
   output$chr <- as.character(output$chr)
   rownames(output) <- marker
   
@@ -3363,7 +3363,7 @@ function(cross, marker, where=c("draws","prob"))
   }
 
   output <- data.frame(chr=rep("", length(marker)),
-                       pos=rep(NA, length(marker)))
+                       pos=rep(NA, length(marker)), stringsAsFactors=TRUE)
   output$chr <- as.character(output$chr)
   rownames(output) <- marker
   

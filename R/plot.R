@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2010, Karl W Broman
+# copyright (c) 2000-2011, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Dec, 2010
+# last modified May, 2011
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -690,7 +690,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     if(type != "4way") { # find crossover locations
       xoloc <- locateXO(cross)
       xoloc <- data.frame(ind=rep(1:length(xoloc),sapply(xoloc,length)),
-                          loc=unlist(xoloc))
+                          loc=unlist(xoloc), stringsAsFactors=TRUE)
     }
     else { # 4-way cross
       mcross <- dcross <- cross
@@ -705,11 +705,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
       mxoloc <- locateXO(mcross)
       mxoloc <- data.frame(ind=rep(1:length(mxoloc),sapply(mxoloc,length)),
-                          loc=unlist(mxoloc))
+                          loc=unlist(mxoloc), stringsAsFactors=TRUE)
 
       dxoloc <- locateXO(dcross)
       dxoloc <- data.frame(ind=rep(1:length(dxoloc),sapply(dxoloc,length)),
-                          loc=unlist(dxoloc))
+                          loc=unlist(dxoloc), stringsAsFactors=TRUE)
     }
   }
 
@@ -1102,7 +1102,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
     z <- data.frame(chr=rep(names(cross$geno)[i],length(map)),
                     pos=as.numeric(map),
                     "Missing information"=info$info1,
-                    "Missing information"=info$info2)
+                    "Missing information"=info$info2, stringsAsFactors=TRUE)
 
     w <- names(map)
     o <- grep("^loc-*[0-9]+",w)
@@ -1358,7 +1358,7 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
   }
 
   # save all of the data, returned invisibly
-  data <- as.data.frame(x)
+  data <- as.data.frame(x, stringsAsFactors=TRUE)
   names(data) <- marker
   for(i in marker) data[[i]] <- ordered(data[[i]])
   data$pheno <- y

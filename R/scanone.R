@@ -3,7 +3,7 @@
 # scanone.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -823,7 +823,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
       w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
     
-    z <- as.data.frame(z)
+    z <- as.data.frame(z, stringsAsFactors=TRUE)
     z <- cbind(chr=rep(names(cross$geno)[i],length(map)),
                pos=as.numeric(map), z)
     rownames(z) <- w

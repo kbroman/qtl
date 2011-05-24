@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-2011, Karl W. Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 
   if(!is.null(covar) && !is.data.frame(covar)) {
     if(is.matrix(covar) && is.numeric(covar)) 
-      covar <- as.data.frame(covar)
+      covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
 
@@ -155,7 +155,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   if(!is.null(covar) && nrow(covar) != length(pheno))
     stop("nrow(covar) != no. individuals in cross.")
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- as.data.frame(pheno)
+  else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
   hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
   if(all(hasmissing))
     stop("All individuals are missing phenotypes or covariates.")
@@ -362,7 +362,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       lastout[[i]] <- lastout[[i]] - (max(lastout[[i]]) - dropresult[rn==qn[i],3])
       pos <- as.numeric(matrix(unlist(strsplit(names(lastout[[i]]), "@")),byrow=TRUE,ncol=2)[,2])
       chr <- rep(qtl$chr[tovary][i], length(pos))
-      lastout[[i]] <- data.frame(chr=chr, pos=pos, lod=as.numeric(lastout[[i]]))
+      lastout[[i]] <- data.frame(chr=chr, pos=pos, lod=as.numeric(lastout[[i]]), stringsAsFactors=TRUE)
     }
     names(lastout) <- qtl$name[tovary]
 
@@ -471,7 +471,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   for(i in chr2keep) {
     temp <- data.frame(chr=orderedchr[i],
                        pos=as.numeric(map[[i]]),
-                       lod=NA)
+                       lod=NA, stringsAsFactors=TRUE)
     rownames(temp) <- names(map[[i]])
     tempscan <- rbind(tempscan, temp)
   }
