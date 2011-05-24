@@ -247,8 +247,10 @@ function(x, ...)
 {
   meth <- attr(x, "method")
   mod <- attr(x, "model")
+  simp <- attr(x, "simple")
   if(is.null(mod)) mod <- "normal"
   if(is.null(meth)) meth <- "unknown"
+  if(mod=="binary" || simp) attr(x, "pvalues") <- FALSE
   if(meth=="imp") meth <- "multiple imputation"
   else if(meth=="hk") meth <- "Haley-Knott regression"
   cat("Method:", meth, "\n")
@@ -264,9 +266,10 @@ function(x, ...)
   pval <- attr(x, "pvalues")
   if(!is.null(pval) && !pval)
     x <- x[,-ncol(x)+(0:1)]
-  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
 
-  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
+  if(mod == "binary" || simp) x <- x[,c(1,3,4), drop=FALSE]
+
+  printCoefmat(x, digits=4, cs.ind=1, P.values=pval, has.Pvalue=pval)
     
   cat("\n")
 }
@@ -1361,8 +1364,10 @@ function(x, ...)
 {
   meth <- attr(x, "method")
   mod <- attr(x, "model")
+  simp <- attr(x, "simple")
   if(is.null(mod)) mod <- "normal"
   if(is.null(meth)) meth <- "unknown"
+  if(mod=="binary" || simp) attr(x, "pvalues") <- FALSE
   if(meth=="imp") meth <- "multiple imputation"
   else if(meth=="hk") meth <- "Haley-Knott regression"
   cat("Method:", meth, "\n")
@@ -1379,10 +1384,9 @@ function(x, ...)
   if(!is.null(pval) && !pval) 
     x <- x[,-ncol(x)+(0:1)]
 
-  if(mod == "binary" || attr(x, "simple")) x <- x[,-c(2,5,7), drop=FALSE]
+  if(mod == "binary" || simp) x <- x[,c(1,3,4), drop=FALSE]
   
-  printCoefmat(x, digits=4, cs.ind=1, P.values=TRUE, has.Pvalue=TRUE)
-
+  printCoefmat(x, digits=4, cs.ind=1, P.values=pval, has.Pvalue=pval)
     
   cat("\n")
 }

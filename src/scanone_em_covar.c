@@ -2,9 +2,9 @@
  * 
  * scanone_em_covar.c
  *
- * copyright (c) 2001-2010, Karl W Broman
+ * copyright (c) 2001-2011, Karl W Broman
  *
- * last modified Jul, 2010
+ * last modified May, 2011
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -96,9 +96,8 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
 		      int *ind_noqtl)
 {
   int i, j, k, s, flag=0, n_par;
-  double **wts, *param, *oldparam, regtol; 
-  double *x, *coef, *resid, *qty, *qraux, *work;
-  int *jpvt, ny, ncol0, error_flag;
+  double **wts, *param, *oldparam;
+  int ncol0, error_flag;
   double llik, oldllik=0.0, *work1, *work2, temp, sw;
 
   /* recenter phenotype to have mean 0, for
@@ -117,15 +116,6 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
   work2 = (double *)R_alloc(n_par-1, sizeof(double));
 
   ncol0 = 1+n_addcov;
-  x = (double *)R_alloc(n_ind*ncol0, sizeof(double));
-  coef = (double *)R_alloc(ncol0, sizeof(double));
-  resid = (double *)R_alloc(n_ind, sizeof(double));
-  qty = (double *)R_alloc(n_ind, sizeof(double));
-  jpvt = (int *)R_alloc(ncol0, sizeof(int));
-  qraux = (double *)R_alloc(ncol0, sizeof(double));
-  work = (double *)R_alloc(2*ncol0, sizeof(double));
-  regtol = TOL;
-  ny = 1;
 
   /* adjust phenotypes and covariates with weights */
   /* Note: weights are actually sqrt(weights) */
