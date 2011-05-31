@@ -436,18 +436,39 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
       
   }
   else {
+    map1 <- map
+
     # check that maps conform
     if(is.matrix(map2[[1]]))
       stop("Second map appears to be a sex-specific map.")
-    if(length(map) != length(map2))
+    if(length(map1) != length(map2))
       stop("Maps have different numbers of chromosomes.")
-    if(any(sapply(map,length) != sapply(map2,length)))
-      stop("Maps have different numbers of markers.")
+    if(any(names(map1) != names(map2))) {
+      cat("Map1: ", names(map1), "\n")
+      cat("Map2: ", names(map2), "\n")
+      stop("Maps have different chromosome names.")
+    }
 
-    map1 <- map
     if(shift) {
       map1 <- lapply(map1,function(a) a-a[1])
       map2 <- lapply(map2,function(a) a-a[1])
+    }
+
+    n.mar1 <- sapply(map1, length)
+    n.mar2 <- sapply(map2, length)
+    markernames1 <- lapply(map1, names)
+    markernames2 <- lapply(map2, names)
+    if(any(n.mar1 != n.mar2)) {
+      if(show.marker.names) {
+        warning("Can't show marker names because of different numbers of markers.")
+        show.marker.names <- FALSE
+      }
+    }
+    else if(any(unlist(markernames1) != unlist(markernames2))) {
+      if(show.marker.names) {
+        warning("Can't show marker names because markers in different orders.")
+        show.marker.names <- FALSE
+      }
     }
 
     n.chr <- length(map1)
@@ -485,7 +506,15 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
         segments(chrpos[i]-0.3, min(map1[[i]]), chrpos[i]-0.3, max(map1[[i]]))
         segments(chrpos[i]+0.3, min(map2[[i]]), chrpos[i]+0.3, max(map2[[i]]))
         
-        segments(chrpos[i]-0.3, map1[[i]], chrpos[i]+0.3, map2[[i]])
+        # lines between markers
+        wh <- match(markernames1[[i]], markernames2[[i]])
+        for(j in which(!is.na(wh)))
+          segments(chrpos[i]-0.3, map1[[i]][j], chrpos[i]+0.3, map2[[i]][wh[j]])
+        if(any(is.na(wh)))
+          segments(chrpos[i]-0.4, map1[[i]][is.na(wh)], chrpos[i]-0.2, map1[[i]][is.na(wh)])
+        wh <- match(markernames2[[i]], markernames1[[i]])
+        if(any(is.na(wh)))
+          segments(chrpos[i]+0.4, map2[[i]][is.na(wh)], chrpos[i]+0.2, map2[[i]][is.na(wh)])
 
         if(show.marker.names)
           text(chrpos[i]+0.35, map2[[i]], names(map2[[i]]), adj=c(0,0.5))
@@ -531,8 +560,16 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
         
         segments(min(map1[[i]]), chrpos[i]-0.3, max(map1[[i]]), chrpos[[i]]-0.3)
         segments(min(map2[[i]]), chrpos[i]+0.3, max(map2[[i]]), chrpos[[i]]+0.3)
-        
-        segments(map1[[i]], chrpos[i]-0.3, map2[[i]], chrpos[i]+0.3)
+
+        # lines between markers
+        wh <- match(markernames1[[i]], markernames2[[i]])
+        for(j in which(!is.na(wh)))
+          segments(map1[[i]][j], chrpos[i]-0.3, map2[[i]][wh[j]], chrpos[i]+0.3)
+        if(any(is.na(wh)))
+          segments(map1[[i]][is.na(wh)], chrpos[i]-0.4, map1[[i]][is.na(wh)], chrpos[i]-0.2)
+        wh <- match(markernames2[[i]], markernames1[[i]])
+        if(any(is.na(wh)))
+          segments(map2[[i]][is.na(wh)], chrpos[i]+0.4, map2[[i]][is.na(wh)], chrpos[i]+0.2)
 
         if(show.marker.names)
           text(map2[[i]], chrpos[i]+0.35, names(map2[[i]]), srt=90, adj=c(1,0.5))
