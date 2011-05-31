@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Function to get no. qtl in a QTL object; also no. interactions (via
+  the formula)
+
 o Look at possible global options to see if any might interfere with
   things. 
 
