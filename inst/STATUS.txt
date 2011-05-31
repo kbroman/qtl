@@ -17,17 +17,21 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 5/24/2011:
+Version 1.22, 5/31/2011:
 
 Major changes:
 
-  None.
+  Revise plot.map to deal with a pair of maps with markers in
+  different orders (or with some markers appearing in one map and not
+  the other).  We still require that the two maps have the same
+  chromosomes and chromosome names (with chromosomes in the same
+  order).  
 
 Minor changes:
 
   Fixed bug in addint() and addcovarint()
 
-  Revise all calls to data.frame() and as.data.frame() to override
+  Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
 
