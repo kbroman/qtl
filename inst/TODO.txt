@@ -10,6 +10,22 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Don't allow "" in na.strings in read.cross (for csv files); maybe
+  also give a warning if chr names match the na.strings;  can we read
+  the first few lines and then read the rest?
+
+o Code submitted from Kevin Emerson regarding dropping genotypes
+  causing double-XO.
+
+o Brian reports a bug in calc.genoprob with stepwidth="max" (for his
+  data, with the X chromosome having data that is constant...all males
+  and cross direction with no rec'n on X)
+
+o Function to calculate recombination fraction and LOD score for just
+  adjacent markers.
+
+o geno.crosstab seems unnecessarily slow
+
 o Function to get no. qtl in a QTL object; also no. interactions (via
   the formula)
 
