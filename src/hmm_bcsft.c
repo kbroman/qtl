@@ -705,8 +705,10 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
 
     /* rescale */
     for(j=0; j<*n_mar-1; j++) {
+      /* *** USING tol IN TWO DISTINCT WAYS CAUSES PROBLEMS *** */
+      /* add tol[1] in est.map to fix this */
       /* golden section search for MLE of recombination rate */
-      rf[j] = golden_search(countmat[j], n_gen, *maxit, *tol, cross_scheme,
+      rf[j] = golden_search(countmat[j], n_gen, *maxit, tol[1], cross_scheme,
 			     comploglik_bcsft);
 
       if(rf[j] < *tol/1000.0) rf[j] = *tol/1000.0;
