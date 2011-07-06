@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Nov, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified May, 2011
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -290,7 +290,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
       pos <- pos[keep,,drop=FALSE]
       lod <- lod[keep,,drop=FALSE]
       thechr <- thechr[keep]
-      result <- as.data.frame(matrix(ncol=ncol.object*2+1,nrow=length(keep)))
+      result <- as.data.frame(matrix(ncol=ncol.object*2+1,nrow=length(keep)), stringsAsFactors=TRUE)
       names(result)[1] <- "chr"
       names(result)[(1:ncol.object)*2] <- "pos"
       names(result)[(1:ncol.object)*2+1] <- names(object)[-(1:2)]
@@ -351,12 +351,12 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
 
           if(any(xchr)) {
             tempX <- calcPermPval(result[xchr,thecol,drop=FALSE], perms$X)
-            tempX <- as.data.frame(1-(1-tempX)^(Lt/L[2]))
+            tempX <- as.data.frame(1-(1-tempX)^(Lt/L[2]), stringsAsFactors=TRUE)
           }
           else tempX <- NULL
           if(any(!xchr)) {
             tempA <- calcPermPval(result[!xchr,thecol,drop=FALSE], perms$A)
-            tempA <- as.data.frame(1-(1-tempA)^(Lt/L[1]))
+            tempA <- as.data.frame(1-(1-tempA)^(Lt/L[1]), stringsAsFactors=TRUE)
           }
           else tempA <- NULL
           pval <- rbind(tempA, tempX)
@@ -367,11 +367,11 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
           if(format=="allpeaks") thecol <- (1:ncol.object)*2+1
           else thecol <- (1:ncol.object)+2
 
-          pval <- as.data.frame(calcPermPval(result[,thecol,drop=FALSE], perms))
+          pval <- as.data.frame(calcPermPval(result[,thecol,drop=FALSE], perms), stringsAsFactors=TRUE)
         }
 
         if(format == "allpeaks") {
-          temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*3+1))
+          temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*3+1), stringsAsFactors=TRUE)
     
           names(temp)[1] <- names(result)[1]
           temp[,1] <- result[,1]
@@ -383,7 +383,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
           }
         }
         else if(format != "tabByCol" && format != "tabByChr") {
-          temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*2+2))
+          temp <- as.data.frame(matrix(nrow=nrow(result), ncol=ncol.object*2+2), stringsAsFactors=TRUE)
     
           names(temp)[1:2] <- names(result)[1:2]
           temp[,1:2] <- result[,1:2]
@@ -399,7 +399,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
       }
     }
     else { # format=="tabByCol" || format=="tabByChr"
-      peaks <- as.data.frame(lapply(result, function(a) a[,3]))
+      peaks <- as.data.frame(lapply(result, function(a) a[,3]), stringsAsFactors=TRUE)
 
       if("xchr" %in% names(attributes(perms))) {
         xchr <- attr(perms, "xchr")
@@ -409,12 +409,12 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
         Lt <- sum(L)
       
         if(any(xchr)) {
-          tempX <- as.data.frame(calcPermPval(peaks[xchr,,drop=FALSE], perms$X))
+          tempX <- as.data.frame(calcPermPval(peaks[xchr,,drop=FALSE], perms$X), stringsAsFactors=TRUE)
           tempX <- 1-(1-tempX)^(Lt/L[2])
         }
         else tempX <- NULL
         if(any(!xchr)) {
-          tempA <- as.data.frame(calcPermPval(peaks[!xchr,,drop=FALSE], perms$A))
+          tempA <- as.data.frame(calcPermPval(peaks[!xchr,,drop=FALSE], perms$A), stringsAsFactors=TRUE)
           tempA <- 1-(1-tempA)^(Lt/L[1])
         }
         else tempA <- NULL
@@ -424,10 +424,10 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
         if(any(!xchr)) pval[!xchr,] <- tempA
       }
       else 
-        pval <- as.data.frame(calcPermPval(peaks, perms))
+        pval <- as.data.frame(calcPermPval(peaks, perms), stringsAsFactors=TRUE)
       
       for(i in seq(along=result))
-        result[[i]] <- cbind(as.data.frame(result[[i]]), pval=pval[,i])
+        result[[i]] <- cbind(as.data.frame(result[[i]]), pval=pval[,i], stringsAsFactors=TRUE)
     }
   }
 
@@ -471,7 +471,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
         lo[j] <- temp[1,2]
         hi[j] <- temp[nrow(temp),2]
       }
-      result[[i]] <- cbind(as.data.frame(result[[i]]), ci.low=lo, ci.high=hi)
+      result[[i]] <- cbind(as.data.frame(result[[i]]), ci.low=lo, ci.high=hi, stringsAsFactors=TRUE)
       colnames(result[[i]])[3] <- "lod"
     }
 
@@ -718,14 +718,15 @@ function(..., labels)
   if(repeats || gavelabels) {
     for(i in 1:length(dots)) {
       colnames(dots[[i]])[-(1:2)] <- paste(colnames(dots[[i]])[-(1:2)], labels[i], sep=".")
-      dots[[i]] <- as.data.frame(dots[[i]])
+      dots[[i]] <- as.data.frame(dots[[i]], stringsAsFactors=TRUE)
     }
   }
 
   result <- dots[[1]]
 
   for(i in 2:length(dots)) 
-    result <- cbind(as.data.frame(result), as.data.frame(dots[[i]][,-(1:2),drop=FALSE]))
+    result <- cbind(as.data.frame(result, stringsAsFactors=TRUE),
+                    as.data.frame(dots[[i]][,-(1:2),drop=FALSE], stringsAsFactors=TRUE))
 
   class(result) <- cl
   attr(result, "df") <- df

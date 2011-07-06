@@ -3,7 +3,7 @@
 # replacemap.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Feb, 2011
+# last modified May, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ function(object, map)
     extra <- chr.names2[is.na(m)]
     map <- map[!is.na(m)]
     chr.names2 <- names(map)
-    warning("Extra chr in map: ", paste(extra, sep=" "))
+    warning("Extra chr in map: ", paste(extra, collapse=" "))
   }
 
   cross.sexsp <- sapply(cross$geno, function(a) is.matrix(a$map))
@@ -116,7 +116,7 @@ function(object, map)
     for(i in names(cross$geno)) {
       if("map" %in% names(attributes(cross$geno[[i]]$prob))) {
         temp <- attr(cross$geno[[i]]$prob, "map")
-        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp), map)[,2]
+        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp, stringsAsFactors=TRUE), map)[,2]
         names(tempr) <- names(temp)
         attr(cross$geno[[i]]$prob, "map") <- tempr
       }
@@ -128,7 +128,7 @@ function(object, map)
     for(i in names(cross$geno)) {
       if("map" %in% names(attributes(cross$geno[[i]]$draws))) {
         temp <- attr(cross$geno[[i]]$draws, "map")
-        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp), map)[,2]
+        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp, stringsAsFactors=TRUE), map)[,2]
         names(tempr) <- names(temp)
         attr(cross$geno[[i]]$draws, "map") <- tempr
       }
@@ -140,7 +140,7 @@ function(object, map)
     for(i in names(cross$geno)) {
       if("map" %in% names(attributes(cross$geno[[i]]$argmax))) {
         temp <- attr(cross$geno[[i]]$argmax, "map")
-        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp), map)[,2]
+        tempr <- interpmap(data.frame(chr=rep(i, length(temp)), pos=temp, stringsAsFactors=TRUE), map)[,2]
         names(tempr) <- names(temp)
         attr(cross$geno[[i]]$argmax, "map") <- tempr
       }
@@ -280,7 +280,7 @@ function(output, newmap)
   if(flag) {
     revmap <- data.frame(chr=factor(rep(names(themapalt), sapply(themapalt, length)),
                            levels=names(themapalt)),
-                         pos=unlist(themapalt))
+                         pos=unlist(themapalt), stringsAsFactors=TRUE)
     rownames(revmap) <- unlist(lapply(themapalt, names))
     revmap[,2] <- interpmap(revmap, newmap)[,2]
     themap <- revmap[rownames(themap),]
