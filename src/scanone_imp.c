@@ -2,12 +2,12 @@
  * 
  * scanone_imp.c
  *
- * copyright (c) 2001-2010, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2011, Karl W Broman and Hao Wu
  *
  * This file is written by Hao Wu 
  * with slight modifications by Karl Broman.
  *
- * last modified Jul, 2010
+ * last modified May, 2011
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -125,10 +125,8 @@ void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws,
 {
 
   /* create local variables */
-  int i, j, k, itmp, nrss, sizefull, sizenull, lwork, 
-    idx, multivar=0, trim=1;
-  double **lrss0, **lrss1, *LOD, *lod_tmp, dtmp,
-    *tmppheno, *dwork_null, *dwork_full, tol;
+  int i, j, k, nrss, sizefull, sizenull, lwork, multivar=0;
+  double **lrss0, **lrss1, *LOD, dtmp, *tmppheno, *dwork_null, *dwork_full;
 
 
   /* if number of pheno is 1 or do multivariate model, 
@@ -144,7 +142,6 @@ void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws,
   sizefull = n_gen + n_addcov + n_intcov*(n_gen-1);
 
   /* allocate memory */
-  lod_tmp = (double *)R_alloc(n_draws, sizeof(double));
   tmppheno = (double *) R_alloc(n_ind*nphe, sizeof(double));
   /* for null model */
   lwork = 3*sizenull + MAX(n_ind, nphe);
@@ -177,10 +174,6 @@ void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws,
   lots of phenotypes */
   LOD = (double *)R_alloc(n_draws*nrss, sizeof(double));
 
-
-  /* tolerance for linear regression */
-  tol = TOL;
-
   /* adjust phenotypes and covariates using weights */
   /* Note: these are actually square-root of weights */
   for(i=0; i<n_ind; i++) {
@@ -191,10 +184,6 @@ void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws,
     for(j=0; j<n_intcov; j++)
       Intcov[j][i] *= weights[i];
   }
-
-  /* calculate the number of LOD needs to be thrown */
-  if(trim) idx = (int) floor( 0.5*log(n_draws)/log(2) );
-  else idx=0;
 
   /* Call nullRss to calculate the RSS for the null model */
   for (i=0; i<n_draws; i++) {
@@ -238,11 +227,9 @@ void scanone_imp(int n_ind, int n_pos, int n_gen, int n_draws,
 
     }
     else { 
-      itmp = i*nrss;
-      for(k=0;k<nrss; k++)
+      for(k=0; k<nrss; k++)
         Result[k][i] = LOD[k];
     } 
-   
 
   } /* end loop over positions */
 }

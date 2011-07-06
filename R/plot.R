@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2010, Karl W Broman
+# copyright (c) 2000-2011, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Dec, 2010
+# last modified May, 2011
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -436,18 +436,39 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
       
   }
   else {
+    map1 <- map
+
     # check that maps conform
     if(is.matrix(map2[[1]]))
       stop("Second map appears to be a sex-specific map.")
-    if(length(map) != length(map2))
+    if(length(map1) != length(map2))
       stop("Maps have different numbers of chromosomes.")
-    if(any(sapply(map,length) != sapply(map2,length)))
-      stop("Maps have different numbers of markers.")
+    if(any(names(map1) != names(map2))) {
+      cat("Map1: ", names(map1), "\n")
+      cat("Map2: ", names(map2), "\n")
+      stop("Maps have different chromosome names.")
+    }
 
-    map1 <- map
     if(shift) {
       map1 <- lapply(map1,function(a) a-a[1])
       map2 <- lapply(map2,function(a) a-a[1])
+    }
+
+    n.mar1 <- sapply(map1, length)
+    n.mar2 <- sapply(map2, length)
+    markernames1 <- lapply(map1, names)
+    markernames2 <- lapply(map2, names)
+    if(any(n.mar1 != n.mar2)) {
+      if(show.marker.names) {
+        warning("Can't show marker names because of different numbers of markers.")
+        show.marker.names <- FALSE
+      }
+    }
+    else if(any(unlist(markernames1) != unlist(markernames2))) {
+      if(show.marker.names) {
+        warning("Can't show marker names because markers in different orders.")
+        show.marker.names <- FALSE
+      }
     }
 
     n.chr <- length(map1)
@@ -485,7 +506,15 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
         segments(chrpos[i]-0.3, min(map1[[i]]), chrpos[i]-0.3, max(map1[[i]]))
         segments(chrpos[i]+0.3, min(map2[[i]]), chrpos[i]+0.3, max(map2[[i]]))
         
-        segments(chrpos[i]-0.3, map1[[i]], chrpos[i]+0.3, map2[[i]])
+        # lines between markers
+        wh <- match(markernames1[[i]], markernames2[[i]])
+        for(j in which(!is.na(wh)))
+          segments(chrpos[i]-0.3, map1[[i]][j], chrpos[i]+0.3, map2[[i]][wh[j]])
+        if(any(is.na(wh)))
+          segments(chrpos[i]-0.4, map1[[i]][is.na(wh)], chrpos[i]-0.2, map1[[i]][is.na(wh)])
+        wh <- match(markernames2[[i]], markernames1[[i]])
+        if(any(is.na(wh)))
+          segments(chrpos[i]+0.4, map2[[i]][is.na(wh)], chrpos[i]+0.2, map2[[i]][is.na(wh)])
 
         if(show.marker.names)
           text(chrpos[i]+0.35, map2[[i]], names(map2[[i]]), adj=c(0,0.5))
@@ -531,8 +560,16 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
         
         segments(min(map1[[i]]), chrpos[i]-0.3, max(map1[[i]]), chrpos[[i]]-0.3)
         segments(min(map2[[i]]), chrpos[i]+0.3, max(map2[[i]]), chrpos[[i]]+0.3)
-        
-        segments(map1[[i]], chrpos[i]-0.3, map2[[i]], chrpos[i]+0.3)
+
+        # lines between markers
+        wh <- match(markernames1[[i]], markernames2[[i]])
+        for(j in which(!is.na(wh)))
+          segments(map1[[i]][j], chrpos[i]-0.3, map2[[i]][wh[j]], chrpos[i]+0.3)
+        if(any(is.na(wh)))
+          segments(map1[[i]][is.na(wh)], chrpos[i]-0.4, map1[[i]][is.na(wh)], chrpos[i]-0.2)
+        wh <- match(markernames2[[i]], markernames1[[i]])
+        if(any(is.na(wh)))
+          segments(map2[[i]][is.na(wh)], chrpos[i]+0.4, map2[[i]][is.na(wh)], chrpos[i]+0.2)
 
         if(show.marker.names)
           text(map2[[i]], chrpos[i]+0.35, names(map2[[i]]), srt=90, adj=c(1,0.5))
@@ -690,7 +727,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
     if(type != "4way") { # find crossover locations
       xoloc <- locateXO(cross)
       xoloc <- data.frame(ind=rep(1:length(xoloc),sapply(xoloc,length)),
-                          loc=unlist(xoloc))
+                          loc=unlist(xoloc), stringsAsFactors=TRUE)
     }
     else { # 4-way cross
       mcross <- dcross <- cross
@@ -705,11 +742,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
       mxoloc <- locateXO(mcross)
       mxoloc <- data.frame(ind=rep(1:length(mxoloc),sapply(mxoloc,length)),
-                          loc=unlist(mxoloc))
+                          loc=unlist(mxoloc), stringsAsFactors=TRUE)
 
       dxoloc <- locateXO(dcross)
       dxoloc <- data.frame(ind=rep(1:length(dxoloc),sapply(dxoloc,length)),
-                          loc=unlist(dxoloc))
+                          loc=unlist(dxoloc), stringsAsFactors=TRUE)
     }
   }
 
@@ -1102,7 +1139,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
     z <- data.frame(chr=rep(names(cross$geno)[i],length(map)),
                     pos=as.numeric(map),
                     "Missing information"=info$info1,
-                    "Missing information"=info$info2)
+                    "Missing information"=info$info2, stringsAsFactors=TRUE)
 
     w <- names(map)
     o <- grep("^loc-*[0-9]+",w)
@@ -1358,7 +1395,7 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
   }
 
   # save all of the data, returned invisibly
-  data <- as.data.frame(x)
+  data <- as.data.frame(x, stringsAsFactors=TRUE)
   names(data) <- marker
   for(i in marker) data[[i]] <- ordered(data[[i]])
   data$pheno <- y

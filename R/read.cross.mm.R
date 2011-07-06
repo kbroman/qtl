@@ -3,7 +3,7 @@
 # read.cross.mm.R
 #
 # copyright (c) 2000-2011, Karl W Broman
-# last modified Mar, 2011
+# last modified May, 2011
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -307,7 +307,7 @@ function(dir,rawfile,mapfile,estimate.map=TRUE)
   if(estimate.map && !includes.pos) estmap <- TRUE
   else estmap <- FALSE
 
-  cross$pheno <- as.data.frame(cross$pheno)
+  cross$pheno <- as.data.frame(cross$pheno, stringsAsFactors=TRUE)
 
   # return cross + indicator of whether to run est.map
   list(cross,estmap)

@@ -3,7 +3,7 @@
 # est.rf.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Mar, 2011
+# last modified May, 2011
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -368,7 +368,7 @@ function(cross, threshold=3, verbose=TRUE)
   results <- data.frame(marker=mar.names,
                         chr=rep(names(cross$geno), n.mar),
                         index=unlist(lapply(n.mar, function(a) 1:a)),
-                        "diff in max LOD" = dif)
+                        "diff in max LOD" = dif, stringsAsFactors=TRUE)
   rownames(results) <- 1:nrow(results)
 
   if(all(results[,4] < threshold)) {

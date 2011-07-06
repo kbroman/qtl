@@ -2,9 +2,9 @@
  * 
  * forwsel.c
  * 
- * copyright (c) 2007-8, Karl W Broman
+ * copyright (c) 2007-2011, Karl W Broman
  *
- * last modified Jan, 2008
+ * last modified May, 2011
  * first written Jan, 2007
  *
  *     This program is free software; you can redistribute it and/or
@@ -196,7 +196,7 @@ void markerforwsel(int n, int m, double **X, double *y,
 void markerforwself2(int n, int m, double **X, double *y,
 		     int maxsize, int *chosen, double *rss)
 {
-  double minrss, *work, sxx, sxy, syy, tsyy; 
+  double minrss, *work, sxx, sxy, tsyy; 
   double currss, *tempy, ym;
   int *ignore;
   int i, j, k, s;
@@ -241,8 +241,6 @@ void markerforwself2(int n, int m, double **X, double *y,
 
   for(k=0; k<maxsize; k++) { 
     chosen[k] = -1;
-
-    syy = minrss;
 
     /* loop over markers */
     for(j=0; j<m; j++) {
