@@ -201,6 +201,17 @@ double init_bcsft(int true_gen, int *cross_scheme)
   return(0.0); /* should not get here */
 }
 
+void genotab_em_bcsft(int *cross_scheme, double *ret)
+{
+  /* used by genotab.em */
+  ret[0] = exp(init_bcsft(1, cross_scheme));
+  ret[1] = exp(init_bcsft(2, cross_scheme));
+  ret[2] = exp(init_bcsft(3, cross_scheme));
+  ret[3] = ret[0] + ret[1];
+  ret[4] = ret[1] + ret[2];
+  return;
+}
+
 double emit_bcsft(int obs_gen, int true_gen, double error_prob, int *cross_scheme)
 {
   if(cross_scheme[1] > 0) return(emit_f2(obs_gen, true_gen, error_prob,cross_scheme));
