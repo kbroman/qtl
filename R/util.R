@@ -752,17 +752,22 @@ function(cross, chr, scanone.output=FALSE)
   n.chr <- nchr(cross)
 
   type <- class(cross)[1]
+  is.bcs <- type == "bcsft"
+  if(is.bcs)
+    is.bcs <- (attr(cross, "scheme")[2] == 0)
+  
   chrtype <- sapply(cross$geno, class)
   allchrtype <- rep(chrtype, nmar(cross))
   chrname <- names(cross$geno)
   allchrname <- rep(chrname, nmar(cross))
-  
-  if(type == "f2") {
+
+  ## Actually plan to have our own geno.table.bcsft routine.
+  if(type == "f2" || (type == "bcsft" && !is.bcs)) {
     n.gen <- 5
     temp <- getgenonames("f2", "A", cross.attr=attributes(cross))
     gen.names <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type == "bc" || type == "risib" || type=="riself" || type=="dh") {
+  else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) {
     n.gen <- 2
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
   }
