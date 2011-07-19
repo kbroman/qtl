@@ -17,17 +17,21 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 5/31/2011:
+Version 1.22, 7/19/2011:
 
 Major changes:
 
-  Revise plot.map to deal with a pair of maps with markers in
+  Revised plot.map to deal with a pair of maps with markers in
   different orders (or with some markers appearing in one map and not
   the other).  We still require that the two maps have the same
   chromosomes and chromosome names (with chromosomes in the same
   order).  
 
 Minor changes:
+
+  Fixed a bug in scantwo, method="hk", for multiple phenotypes or
+  permutation tests in batch.  This showed up only when there were
+  missing genotypes at one or both putative QTL.
 
   Fixed bug in addint() and addcovarint()
 
