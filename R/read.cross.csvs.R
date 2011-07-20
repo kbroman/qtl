@@ -3,7 +3,7 @@
 # read.cross.csvs.R
 #
 # copyright (c) 2005-2011, Karl W Broman
-# last modified Apr, 2011
+# last modified Jul, 2011
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -48,6 +48,11 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
   }
 
   args <- list(...)
+
+  if("" %in% na.strings) {
+    na.strings <- na.strings[na.strings != ""]
+    warning("Including \"\" in na.strings will cause problems; omitted.")
+  }
 
   # if user wants to use comma for decimal point, we need
   if(length(args) > 0 && "dec" %in% names(args)) {

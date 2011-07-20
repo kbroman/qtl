@@ -38,6 +38,8 @@ Minor changes:
   Fixed bug in calc.genoprob with stepwidth="max" in the case that no
   pseudomarkers are to be added.
 
+  Don't allow "" in na.strings in read.cross for csv files.
+
   Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
