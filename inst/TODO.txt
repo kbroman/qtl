@@ -10,10 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Don't allow "" in na.strings in read.cross (for csv files); maybe
-  also give a warning if chr names match the na.strings;  can we read
-  the first few lines and then read the rest?
-
 o Code submitted from Kevin Emerson regarding dropping genotypes
   causing double-XO.
 
