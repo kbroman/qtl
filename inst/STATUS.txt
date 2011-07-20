@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 7/19/2011:
+Version 1.22, 7/20/2011:
 
 Major changes:
 
@@ -34,6 +34,9 @@ Minor changes:
   missing genotypes at one or both putative QTL.
 
   Fixed bug in addint() and addcovarint()
+
+  Fixed bug in calc.genoprob with stepwidth="max" in the case that no
+  pseudomarkers are to be added.
 
   Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to

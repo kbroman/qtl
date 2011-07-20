@@ -5,7 +5,7 @@
 # copyright (c) 2001-2011, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Mar, 2011
+# last modified Jul, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -188,8 +188,10 @@ function(map, step, off.end, stepwidth = c("fixed", "variable", "max"))
             toadd <- c(toadd, seq(nmap[j], nmap[j+1], len=nadd[j]+2)[-c(1,nadd[j]+2)])
         }
       }
-      names(toadd) <- paste("loc", 1:length(toadd), sep="")
-      map <- sort(c(map, toadd))
+      if(length(toadd) > 0)  {
+        names(toadd) <- paste("loc", 1:length(toadd), sep="")
+        map <- sort(c(map, toadd))
+      }
       return(unclass(map))
     }
 
