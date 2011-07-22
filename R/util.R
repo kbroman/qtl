@@ -1165,7 +1165,7 @@ function(d)
 
   sapply(d,function(a) {
     if(a==0) return(0)
-    uniroot(icf, c(0,0.5-1e-14),d=a)$root })
+    uniroot(icf, c(0,0.5-1e-14),d=a,tol=1e-12)$root })
 }
 
 
@@ -4097,7 +4097,7 @@ function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 ######################################################################
 
 typingGap <-
-function(cross, chr)
+function(cross, chr, terminal=FALSE)
 {
   if(!missing(chr))
     cross <- subset(cross, chr)
@@ -4113,8 +4113,12 @@ function(cross, chr)
     map <- c(map[1], map, map[length(map)])
     if(is.matrix(map)) stop("This function can't currently handle sex-specific maps.")
 
-    gaps[,i] <- apply(cbind(1,cross$geno[[i]]$data,1), 1,
-                      function(a,b) max(diff(b[!is.na(a)])), map)
+    if(terminal) # just look at terminal gaps
+      gaps[,i] <- apply(cbind(1,cross$geno[[i]]$data,1), 1,
+                        function(a,b) {d <- diff(b[!is.na(a)]); max(d[c(1,length(d))]) }, map)
+    else
+      gaps[,i] <- apply(cbind(1,cross$geno[[i]]$data,1), 1,
+                        function(a,b) max(diff(b[!is.na(a)])), map)
   }
   if(n.chr==1) gaps <- as.numeric(gaps)
   gaps
