@@ -10,8 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Code submitted from Kevin Emerson regarding dropping genotypes
-  causing double-XO.
+o scanPhyloQTL should give warning if there are different sets of
+  markers. 
 
 o Function to calculate recombination fraction and LOD score for just
   adjacent markers.
