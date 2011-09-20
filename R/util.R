@@ -2459,6 +2459,10 @@ function(cross1, cross2, tol=1e-5)
     phe1 <- cross1$pheno[,i]
     phe2 <- cross2$pheno[,i]
     if(is.numeric(phe1) & is.numeric(phe2)) {
+      phe1[phe1 == Inf] <- max(phe1[phe1 < Inf], na.rm=TRUE)+5
+      phe2[phe2 == Inf] <- max(phe2[phe2 < Inf], na.rm=TRUE)+5
+      phe1[phe1 == -Inf] <- min(phe1[phe1 > -Inf], na.rm=TRUE)-5
+      phe2[phe2 == -Inf] <- min(phe2[phe2 > -Inf], na.rm=TRUE)-5
       if(any((is.na(phe1) & !is.na(phe2)) | (!is.na(phe1) & is.na(phe2)) |
              (!is.na(phe1) & !is.na(phe2) & abs(phe1-phe2) > tol))) {
         stop("Data for phenotype ", names(cross1$pheno)[i],
