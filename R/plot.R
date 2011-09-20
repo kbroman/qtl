@@ -1211,6 +1211,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
   class(results) <- c("scanone","data.frame")
 
   # check whether main was included as an argument
+  args <- list(...)
   if("main" %in% names(args)) hasmain <- TRUE
   else hasmain <- FALSE
 
