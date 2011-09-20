@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 7/22/2011:
+Version 1.22, 9/20/2011:
 
 Major changes:
 
@@ -28,6 +28,8 @@ Major changes:
   order).  
 
 Minor changes:
+
+  Fix problem in comparecrosses() regarding Inf/-Inf phenotypes.
 
   Fixed a bug in scantwo, method="hk", for multiple phenotypes or
   permutation tests in batch.  This showed up only when there were
@@ -47,6 +49,9 @@ Minor changes:
   Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
+
+  Slight change in plot.info to deal with inclusion of 'main'
+  argument. 
 
   Slight changes to avoid some R warning messages.
 
