@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 9/20/2011:
+Version 1.22, 10/17/2011:
 
 Major changes:
 
@@ -43,6 +43,9 @@ Minor changes:
 
   Fixed bug in calc.genoprob with stepwidth="max" in the case that no
   pseudomarkers are to be added.
+
+  Fixed bug in geno.table for the case that X chromosome has just one
+  observed genotype.
 
   Don't allow "" in na.strings in read.cross for csv files.
 

@@ -824,7 +824,7 @@ function(cross, chr, scanone.output=FALSE)
 
         for(j in 1:ncol(dat)) {
            stat <- apply(table(sexpgm$sex, cross$geno[[i]]$data[,j]),1,
-                         function(a) if(sum(a)>0) return(chisq.test(a,p=c(0.5,0.5))$stat)
+                         function(a) if(length(a) > 1 && sum(a)>0) return(chisq.test(a,p=c(0.5,0.5))$stat)
                          else return(0))
            pval[allchrname==chrname[i]][j] <- 1-pchisq(sum(stat),length(stat))
          }
