@@ -10,8 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o bug in geno.table when X chr has just one genotype
-
 o beeswarm package for plot.pxg
 
 o In sim.cross, to get a QTL on the X chromosome, you need to use
