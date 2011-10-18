@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Bug in replacemap.cross in case of sex-specific map and
+  genoprob/draws maps that need interpolation
+
 o beeswarm package for plot.pxg
 
 o In sim.cross, to get a QTL on the X chromosome, you need to use
