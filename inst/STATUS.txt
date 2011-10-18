@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 10/17/2011:
+Version 1.22, 10/18/2011:
 
 Major changes:
 
@@ -28,6 +28,10 @@ Major changes:
   order).  
 
 Minor changes:
+
+  Add warning to help file for fitqtl() regarding the estimated
+  percent variance explained in the case of linked loci: the values
+  are misleading.
 
   Fix problem in comparecrosses() regarding Inf/-Inf phenotypes.
 
