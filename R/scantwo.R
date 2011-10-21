@@ -286,7 +286,7 @@ function(cross, chr, pheno.col=1,
                         maxit=maxit,
                         tol=tol, verbose=verbose, n.perm=n.perm,
                         perm.strata=perm.strata,
-                        batchsize=batchsize))
+                        batchsize=batchsize, chr=chr))
   }
 
 
@@ -1425,14 +1425,12 @@ function(cross, pheno.col=1, model=c("normal","binary"),
          clean.nmar=1, clean.distance=0,
          maxit=4000, tol=1e-4, verbose=FALSE,
          n.perm=1000, perm.strata,
-         assumeCondIndep=FALSE, batchsize=250, chr, chr2)
+         assumeCondIndep=FALSE, batchsize=250, chr)
 {
   method <- match.arg(method)
   model <- match.arg(model)
   use <- match.arg(use)
-
-  if(missing(chr)) chr <- names(cross$geno)
-  if(missing(chr2)) chr2 <- chr
+  if(missing(chr)) chr <- names(chr$geno)
 
   scantwo.perm.engine(n.perm, cross=cross, pheno.col=pheno.col,
                       model=model, method=method, addcovar=addcovar,
@@ -1458,15 +1456,14 @@ function(n.perm, cross, pheno.col, model,
          method, addcovar, intcovar, weights, use,
          incl.markers, clean.output, clean.nmar=1, clean.distance=0,
          maxit, tol, verbose, perm.strata,
-         assumeCondIndep=FALSE, batchsize=250, chr, chr2)
+         assumeCondIndep=FALSE, batchsize=250, chr)
 {
+  if(missing(chr)) chr <- names(chr$geno)
+
   ## local variables
   n.phe <- length(pheno.col)
   n.ind <- dim(cross$pheno)[1]
   pn <- colnames(cross$pheno)[pheno.col]
-
-  if(missing(chr)) chr <- names(cross$geno)
-  if(missing(chr2)) chr2 <- chr
 
   ## if there's only one phenotype, no covariate, and method is imp or hk,
   ## generate permuted phenotype as a matrix and do permutation
@@ -1524,22 +1521,49 @@ function(n.perm, cross, pheno.col, model,
     cross$pheno <- cbind(matrix(cross$pheno[,pheno.col][ord], nrow=n.ind), cross$pheno)
 
     pheno.col <- 1:n.perm
-    tem <- scantwo(cross, pheno.col=pheno.col, model=model, method=method,
-                   addcovar=addcovar, intcovar=intcovar, weights=weights,
-                   use=use, incl.markers=incl.markers,
-                   clean.output=clean.output, clean.nmar=clean.nmar,
-                   clean.distance=clean.distance,
-                   maxit=maxit, tol=tol,verbose=FALSE, n.perm=-1,
-                   perm.strata=perm.strata,
-                   assumeCondIndep=assumeCondIndep,
-                   batchsize=batchsize, n.cluster=0, chr=chr)
-    if(clean.output) tem <- clean(tem, clean.nmar, clean.distance)
 
-    ## find the maximum LOD on each permutation
-    perm.result <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
+    if(is.list(chr)) {
+      chr1 <- chr[[1]]
+      chr2 <- chr[[2]]
+    }
+    else chr1 <- chr2 <- chr
 
-    if("df" %in% names(attributes(tem))) 
-      attr(perm.result, "df") <- revisescantwodf(attr(tem, "df"))
+    thechr <- names(cross$geno)
+    nchr1 <- match(chr1, thechr)
+    nchr2 <- match(chr2, thechr)
+
+    perm.result <- NULL
+    for(i in nchr1) {
+      for(j in nchr2) {
+        if(j < i) next 
+
+        tem <- scantwo(cross, pheno.col=pheno.col, model=model, method=method,
+                       addcovar=addcovar, intcovar=intcovar, weights=weights,
+                       use=use, incl.markers=incl.markers,
+                       clean.output=clean.output, clean.nmar=clean.nmar,
+                       clean.distance=clean.distance,
+                       maxit=maxit, tol=tol,verbose=FALSE, n.perm=-1,
+                       perm.strata=perm.strata,
+                       assumeCondIndep=assumeCondIndep,
+                       batchsize=batchsize, n.cluster=0, chr=list(thechr[i],thechr[j]))
+
+        if(clean.output) tem <- clean(tem, clean.nmar, clean.distance)
+
+        ## find the maximum LOD on each permutation
+        if(is.null(perm.result)) {
+          perm.result <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
+
+          if("df" %in% names(attributes(tem))) 
+            attr(perm.result, "df") <- revisescantwodf(attr(tem, "df"))
+        }
+        else {
+          tem <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
+          for(k in seq(along=perm.result))
+            perm.result[[k]] <- as.matrix(apply(cbind(perm.result[[k]], tem[[k]]), 1, max, na.rm=TRUE))
+        }
+
+      }
+    }
   }
   else { ## all other cases, do one permutation at a time
     if(method=="mr-imp") # save version with missing genotypes
