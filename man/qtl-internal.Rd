@@ -350,14 +350,14 @@ scantwo.perm(cross, pheno.col=1, model=c("normal","binary"),
              clean.nmar=1, clean.distance=0,
              maxit=4000, tol=1e-4, verbose=FALSE,
              n.perm=1000, perm.strata, assumeCondIndep=FALSE,
-             batchsize=250)
+             batchsize=250, chr)
 scantwo.perm.engine(n.perm, cross, pheno.col, model,
                     method, addcovar, intcovar, weights, use,
                     incl.markers, clean.output,  
                     clean.nmar=1, clean.distance=0,
                     maxit, tol, verbose,
                     perm.strata, assumeCondIndep=FALSE,
-                    batchsize=250)
+                    batchsize=250, chr)
 scantwoperm2scanoneperm(scantwoperms)
 sim.bcg(n.ind, map, m, p,
         map.function=c("haldane","kosambi","c-f","morgan"))
