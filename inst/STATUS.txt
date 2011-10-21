@@ -29,11 +29,11 @@ Major changes:
 
 Minor changes:
 
-  Add warning to help file for fitqtl() regarding the estimated
+  Added warning to help file for fitqtl() regarding the estimated
   percent variance explained in the case of linked loci: the values
   are misleading.
 
-  Fix problem in comparecrosses() regarding Inf/-Inf phenotypes.
+  Fixed problem in comparecrosses() regarding Inf/-Inf phenotypes.
 
   Fixed a bug in scantwo, method="hk", for multiple phenotypes or
   permutation tests in batch.  This showed up only when there were
@@ -41,7 +41,7 @@ Minor changes:
 
   Fixed bug in addint() and addcovarint()
 
-  Revise typingGap to have an argument 'terminal'; if TRUE, just look
+  Revised typingGap to have an argument 'terminal'; if TRUE, just look
   at the gap from the terminal markers to the first typed interior
   marker, giving 0 if the terminal markers are both typed.
 
@@ -51,7 +51,7 @@ Minor changes:
   Fixed bug in geno.table for the case that X chromosome has just one
   observed genotype.
 
-  Don't allow "" in na.strings in read.cross for csv files.
+  No longer allow "" in na.strings in read.cross for csv files.
 
   Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
