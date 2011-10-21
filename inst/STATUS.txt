@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 10/18/2011:
+Version 1.22, 10/21/2011:
 
 Major changes:
 
@@ -56,6 +56,10 @@ Minor changes:
   Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
+
+  Revised scantwo so that if the 'chr' argument is a list, we do just
+  the scans of the chr in the first component against those in the
+  second component.
 
   Slight change in plot.info to deal with inclusion of 'main'
   argument. 
