@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 10/21/2011:
+Version 1.22, 10/24/2011:
 
 Major changes:
 
