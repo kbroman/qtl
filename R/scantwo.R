@@ -71,7 +71,7 @@ function(cross, chr, pheno.col=1,
   nchr1 <- match(chr1, thechr)
   nchr2 <- match(chr2, thechr)
   if(!any(sapply(nchr1, function(a,b) any(a <= b), nchr2))) 
-    stop("Need some of first chr to be <= some of second chr; switching")
+    stop("Need some of first chr to be <= some of second chr")
 
   if(missing(n.perm)) n.perm <- 0
 
@@ -1585,6 +1585,16 @@ function(n.perm, cross, pheno.col, model,
                         "av1"=temp,
                         "one"=temp)
       
+    if(is.list(chr)) {
+      chr1 <- chr[[1]]
+      chr2 <- chr[[2]]
+    }
+    else chr1 <- chr2 <- chr
+
+    thechr <- names(cross$geno)
+    nchr1 <- match(chr1, thechr)
+    nchr2 <- match(chr2, thechr)
+
     ## permutation loop
     for(i in 1:n.perm) {
       if(verbose) cat("Permutation", i, "\n")
@@ -1613,20 +1623,40 @@ function(n.perm, cross, pheno.col, model,
       cross$pheno <- cross$pheno[o,,drop=FALSE]
       if(!is.null(addcovar)) addcovarp <- addcovarp[o,,drop=FALSE]
       if(!is.null(intcovar)) intcovarp <- intcovarp[o,,drop=FALSE]
-      tem <- scantwo(cross,  pheno.col=pheno.col, model=model, 
-                     method=method, addcovar=addcovarp, intcovar=intcovarp,
-                     weights=weights, use=use, 
-                     incl.markers=incl.markers, clean.output=clean.output, 
-                     clean.nmar=clean.nmar, clean.distance=clean.distance,
-                     maxit=maxit, tol=tol,
-                     verbose=FALSE, n.perm= -i, perm.strata=perm.strata,
-                     assumeCondIndep=assumeCondIndep,
-                     batchsize=batchsize, n.cluster=0, chr=chr)
 
-      if(clean.output) tem <- clean(tem, clean.nmar, clean.distance)
+
+      temp <- NULL
+      for(ii in nchr1) {
+        for(jj in nchr2) {
+          if(jj < ii) next 
+
+          tem <- scantwo(cross, pheno.col=pheno.col, model=model, method=method,
+                         addcovar=addcovar, intcovar=intcovar, weights=weights,
+                         use=use, incl.markers=incl.markers,
+                         clean.output=clean.output, clean.nmar=clean.nmar,
+                         clean.distance=clean.distance,
+                         maxit=maxit, tol=tol,verbose=FALSE, n.perm=-i,
+                         perm.strata=perm.strata,
+                         assumeCondIndep=assumeCondIndep,
+                         batchsize=batchsize, n.cluster=0, chr=list(thechr[ii],thechr[jj]))
+
+          if(clean.output) tem <- clean(tem, clean.nmar, clean.distance)
+
+          ## find the maximum LOD on each permutation
+          if(is.null(temp)) {
+            temp <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
+          }
+          else {
+            tem <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
+            for(k in seq(along=temp))
+              temp[[k]] <- as.matrix(apply(cbind(temp[[k]], tem[[k]]), 1, max, na.rm=TRUE))
+          }
+
+        }
+      }
+
 
       # maxima
-      temp <- subrousummaryscantwo(tem, for.perm=TRUE)
       for(j in 1:6) perm.result[[j]][i,] <- temp[[j]]
 
       if("df" %in% names(attributes(tem))) 
