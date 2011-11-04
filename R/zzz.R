@@ -23,6 +23,7 @@
 #
 ######################################################################
 
-.First.lib <- function(lib, pkg) library.dynam("qtl", pkg, lib)
+.onUnload <- function(libpath)
+    library.dynam.unload("qtl", libpath)
 
 # end of zzz.R
