@@ -10,6 +10,15 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Bugs in summary.scanone in the case of multiple phenotypes and
+  multiple thresholds for formats other than allpheno and allpeaks.
+  I get warnings like 
+
+      In lod[, i] > threshold :
+      longer object length is not a multiple of shorter object length
+
+  Also, I need to use as.numeric() on the thresholds
+
 o Bug in replacemap.cross in case of sex-specific map and
   genoprob/draws maps that need interpolation
 

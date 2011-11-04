@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 10/24/2011:
+Version 1.22, 11/2/2011:
 
 Major changes:
 
@@ -26,6 +26,11 @@ Major changes:
   the other).  We still require that the two maps have the same
   chromosomes and chromosome names (with chromosomes in the same
   order).  
+
+  Revised scantwo to allow analysis of individual chromosome pairs,
+  and reorganized the way that scantwo permutations are done (first
+  summarizing each chromosome pair and then overall); this should
+  eliminate the memory problems we've had with scantwo permutations.
 
 Minor changes:
 
@@ -63,6 +68,8 @@ Minor changes:
 
   Slight change in plot.info to deal with inclusion of 'main'
   argument. 
+
+  Added NAMESPACE file.
 
   Slight changes to avoid some R warning messages.
 
