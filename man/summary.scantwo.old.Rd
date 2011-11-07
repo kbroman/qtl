@@ -11,7 +11,7 @@
 }
 
 \usage{
-\method{summary}{scantwo.old}(object, thresholds = c(0, 0, 0), lodcolumn=1,
+summary.scantwo.old(object, thresholds = c(0, 0, 0), lodcolumn=1,
                 type = c("joint","interaction"), \dots)
 }
 
