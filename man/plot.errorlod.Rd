@@ -9,7 +9,7 @@
 }
 
 \usage{
-\method{plot}{errorlod}(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
+plot.errorlod(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
               col=c("white","gray85","hotpink","purple3"),
               alternate.chrid=FALSE, \dots)
 }
