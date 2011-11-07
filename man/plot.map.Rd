@@ -10,6 +10,8 @@
 \usage{
 \method{plot}{map}(x, map2, chr, horizontal=FALSE, shift=TRUE,
      show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
+plot.map(x, map2, chr, horizontal=FALSE, shift=TRUE,
+     show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
 }
 
 \arguments{
