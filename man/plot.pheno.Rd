@@ -9,7 +9,7 @@
 }
 
 \usage{
-\method{plot}{pheno}(x, pheno.col=1, \dots)
+plot.pheno(x, pheno.col=1, \dots)
 }
 
 \arguments{
@@ -35,8 +35,9 @@
 
 \examples{
 data(fake.bc)
-plot(fake.bc, pheno.col=1)
-plot(fake.bc, pheno.col=3)
+plot.pheno(fake.bc, pheno.col=1)
+plot.pheno(fake.bc, pheno.col=3)
+plot.pheno(fake.bc, pheno.col="age")
 }
 
 \seealso{ \code{\link{plot.cross}}, \code{\link{plot.map}}, 
