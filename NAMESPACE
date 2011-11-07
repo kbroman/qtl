@@ -1,99 +1,249 @@
 useDynLib(qtl)
 
-# Export all names
-exportPattern(.)
-
 # Import package dependencies
 import(graphics, stats, utils)
 
+# Export all names
+export(add.cim.covar, add.threshold, addcovarint, addint)
+export(addloctocross, addmarkerstointervalmap, addpair, addqtl)
+export(addtoqtl, allchrsplits, argmax.geno, bayesint)
+export(calc.errorlod, calc.genoprob, calc.penalties, calc.plod)
+export(checkAlleles, checkcovar, chrlen, chrnames)
+export(cim, cleanGeno, comparecrosses, comparegeno)
+export(compareorder, convert2riself, convert2risib, convert2sa)
+export(countXO, create.map, drop.dupmarkers, drop.markers)
+export(drop.nullmarkers, dropfromqtl, droponemarker)
+export(effectplot, effectscan, est.map, est.rf)
+export(fill.geno, find.flanking, find.marker, find.markerindex)
+export(find.markerpos, find.pheno, find.pseudomarker, find.pseudomarkerpos)
+export(findDupMarkers, fitqtl, fitstahl, flipcross, formLinkageGroups)
+export(genAllPartitions, geno.crosstab, geno.image, geno.table)
+export(getgenonames, getid, getsex, groupclusteredheatmap)
+export(imf.cf, imf.h, imf.k, imf.m, imf.stahl)
+export(inferredpartitions, jittermap, locatemarker, locateXO)
+export(lodint, makeqtl, markerlrt, markernames)
+export(mf.cf, mf.h, mf.k, mf.m, mf.stahl)
+export(movemarker, mqm_version, mqmaugment)
+export(mqmautocofactors, mqmextractmarkers)
+export(mqmfind.marker, mqmgetmodel, mqmpermutation)
+export(mqmplot.circle, mqmplot.cistrans, mqmplot.clusteredheatmap, mqmplot.cofactors)
+export(mqmplot.directedqtl, mqmplot.heatmap, mqmplot.multitrait, mqmplot.permutations)
+export(mqmplot.singletrait, mqmprocesspermutation, mqmscan, mqmscanall)
+export(mqmscanfdr, mqmsetcofactors, mqmtestnormal)
+export(nchr, nind, nmar, nmissing, nphe, nqrank, ntyped, orderMarkers)
+export(phenames, pickMarkerSubset, plot.errorlod, plot.geno, plot.info, plot.map)
+export(plot.missing, plot.pheno, plot.pxg, plot.rf, plot.rfmatrix, plotLodProfile)
+export(plotModel, pull.geno, pull.map, pull.markers, pull.pheno, pull.rf)
+export(qtlversion, read.cross, refineqtl, reorderqtl, replace.map)
+export(replacemap, replaceqtl, rescalemap, ripple)
+export(scanall, scanone, scanoneboot, scanPhyloQTL, scanqtl, scantwo)
+export(shiftmap, sim.cross, sim.geno, sim.map, simFounderSnps, simPhyloQTL)
+export(simulatemissingdata, stepwiseqtl, strip.partials, subrousummaryscantwo)
+export(subset.cross, subset.map, switch.order, switchAlleles, top.errorlod)
+export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc.scanone)
+export(clean, condense, convert)
+export(summary.scantwo.old)
 
-#export(-.scanone, -.scanoneperm, -.scantwo, -.scantwoperm, 
-#       [.cross, [.map, [.scanoneperm, [.scantwoperm, 
-#                                       +.scanone, +.scanoneperm, +.scantwo, +.scantwoperm, 
-#                                       add.cim.covar, add.threshold, addcovarint, addint, 
-#                                       addloctocross, addmarkerstointervalmap, addpair, addqtl, 
-#addtoqtl, adjust.rf.ri, allchrsplits, argmax.geno, 
-#asnumericwithdec, bayesint, c.cross, c.scanone, 
-#c.scanoneperm, c.scantwo, c.scantwoperm, calc.errorlod, 
-#calc.genoprob, calc.genoprob.special, calc.pairprob, calc.penalties, 
-#calc.plod, calcPermPval, calculatedensity, cbind.scanone, 
-#cbind.scanoneperm, cbind.scantwo, charround, checkAlleles, 
-#checkcovar, checkdistances, checkformula, checkPhyloCrosses, 
-#checkPhyloPartition, checkStepwiseqtlStart, chrlen, chrnames, 
-#cim, circlelocations, clean, clean.cross, 
-#clean.scantwo, cleanGeno, comparecrosses, comparegeno, 
-#compareorder, condense, condense.scantwo, convert, 
-#convert.map, convert.scanone, convert.scantwo, convert2riself, 
-#convert2risib, convert2sa, convertMWril, countqtlterms, 
-#countXO, create.map, deparseQTLformula, discan, 
-#drawcirculargenome, drawspline, drop.dupmarkers, drop.markers, 
-#drop.nullmarkers, dropfromqtl, dropfromqtlformula, droponemarker, 
-#dropXcol, effectplot, effectplot.calmeanse, effectplot.getmark, 
-#effectscan, est.map, est.rf, estimatemarkerlod, 
-#expandf2covar, fill.geno, find.flanking, find.marker, 
-#find.markerindex, find.markerpos, find.pheno, find.pseudomarker, 
-#find.pseudomarkerpos, findDupMarkers, fitqtl, fitqtlengine, 
-#fitstahl, fitstahl.este, fitstahl.este.sub, fitstahl.estp, 
-#fitstahl.estp.sub, fitstahl.estpe, fitstahl.estpe.sub, fixX4write, 
-#fixXgeno.bc, fixXgeno.f2, flipcross, formLinkageGroups, 
-#genAllPartitions, geno.crosstab, geno.image, geno.table, 
-#genotab.em, getChr, getchromosomelength, getgenomelength, 
-#getgenonames, getid, getsex, getThird, 
-#grab.arg.names, groupclusteredheatmap, imf.cf, imf.h, 
-#imf.k, imf.m, imf.stahl, inferredpartitions, 
-#interpmap, interpmap4scantwo, jittermap, LikePheVector, 
-#locatemarker, locateXO, locationtocircle, lodint, 
-#loopthroughmulti, makeqtl, makeSSmap, markerforwsel, 
-#markerforwself2, markerloglik, markerlrt, markernames, 
-#matchchr, max.scanone, max.scanPhyloQTL, max.scantwo, 
-#max.scantwocondensed, mf.cf, mf.h, mf.k, 
-#mf.m, mf.stahl, movemarker, mqm_version, 
-#mqmaugment, mqmaugment_on_cofactors, mqmautocofactors, mqmextractmarkers, 
-#mqmextractpseudomarkers, mqmfind.marker, mqmgetmodel, mqmpermutation, 
-#mqmplot.circle, mqmplot.cistrans, mqmplot.clusteredheatmap, mqmplot.cofactors, 
-#mqmplot.directedqtl, mqmplot.heatmap, mqmplot.multitrait, mqmplot.permutations, 
-#mqmplot.singletrait, mqmprocesspermutation, mqmscan, mqmscanall, 
-#mqmscanfdr, mqmsetcofactors, mqmtestnormal, mybinaryrep, 
-#nchr, nind, nmar, nmissing, 
-#nphe, nqrank, ntyped, orderMarkers, 
-#orderMarkers.sub, ourline, ourstop, parseformula, 
-#phenames, plot.cross, plot.effectscan, plot.errorlod, 
-#plot.geno, plot.info, plot.map, plot.missing, 
-#plot.pheno, plot.pxg, plot.qtl, plot.rf, 
-#plot.rfmatrix, plot.scanone, plot.scanoneboot, plot.scanoneperm, 
-#plot.scanPhyloQTL, plot.scantwo, plot.scantwoperm, plotLodProfile, 
-#plotModel, polyplot, print.addcovarint, print.addint, 
-#print.compactqtl, print.cross, print.map, print.qtl, 
-#print.scanoneboot, print.scantwo, print.summary.addpair, print.summary.compactqtl, 
-#print.summary.cross, print.summary.fitqtl, print.summary.map, print.summary.qtl, 
-#print.summary.ripple, print.summary.scanone, print.summary.scanoneperm, print.summary.scantwo, 
-#print.summary.scantwo.old, print.summary.scantwoperm, printQTLformulanicely, pull.geno, 
-#pull.map, pull.markers, pull.pheno, pull.rf, 
-#qtlByPartition, qtlformulasymmetric, qtlversion, rbind.scanoneperm, 
-#rbind.scantwoperm, read.cro.qtlcart, read.cross, read.cross.csv, 
-#read.cross.csvs, read.cross.gary, read.cross.karl, read.cross.mm, 
-#read.cross.qtlcart, read.cross.qtx, read.map.qtlcart, read.maps.mm, 
-#readMWril, refineqtl, reorderqtl, reorgRIargmax, 
-#reorgRIdraws, reorgRIgenoprob, reorgRIpairprob, replace.map, 
-#replacemap, replacemap.cross, replacemap.scanone, replacemap.scantwo, 
-#replaceqtl, rescalemap, revisecovar, reviseqtlnuminformula, 
-#revisescantwodf, reviseXdata, ripple, ripple.perm.sub, 
-#ripple.perm1, ripple.perm2, rippleSnowCountxo, rippleSnowLik, 
-#roundqtlpos, scanall, scanone, scanone.perm, 
-#scanone.perm.engine, scanoneboot, scanoneXnull, scanPhyloQTL, 
-#scanqtl, scantwo, scantwo.perm, scantwo.perm.engine, 
-#scantwoperm2scanoneperm, scoremissingmarkers, shiftmap, sim.bcg, 
-#sim.cross, sim.cross.4way, sim.cross.bc, sim.cross.f2, 
-#sim.geno, sim.map, sim.ril, simFounderSnps, 
-#simPhyloQTL, simulatemissingdata, snowCoreALL, snowCoreBOOT, 
-#sortPhyloPartitions, stepsize, stepwiseqtl, stringPhenoToInt, 
-#strip.partials, subrousummaryscantwo, subset.cross, subset.map, 
-#subset.scanone, subset.scanoneperm, subset.scantwo, subset.scantwoperm, 
-#summary.addcovarint, summary.addint, summary.compactqtl, summary.cross, 
-#summary.fitqtl, summary.map, summary.qtl, summary.ripple, 
-#summary.scanone, summary.scanoneboot, summary.scanoneperm, summary.scanPhyloQTL, 
-#summary.scantwo, summary.scantwo.old, summary.scantwocondensed, summary.scantwoperm, 
-#switch.order, switchAlleles, testchr, top.errorlod, 
-#totmar, transformPheno, tryallpositions, typingGap, 
-#vbscan, write.cross, write.cross.csv, write.cross.gary, 
-#write.cross.mm, write.cross.qtlcart, xaxisloc.scanone)
+
+# S3 methods
+S3method("-", scanone)
+S3method("-", scanoneperm)
+S3method("-", scantwo)
+S3method("-", scantwoperm)
+S3method("+", scanone)
+S3method("+", scanoneperm)
+S3method("+", scantwo)
+S3method("+", scantwoperm)
+S3method("[", cross)
+S3method("[", map)
+S3method("[", scanoneperm)
+S3method("[", scantwoperm) 
+S3method(c, cross)
+S3method(c, scanone) 
+S3method(c, scanoneperm)
+S3method(c, scantwo)
+S3method(c, scantwoperm) 
+S3method(cbind, scanone) 
+S3method(cbind, scanoneperm)
+S3method(cbind, scantwo)
+S3method(clean, cross) 
+S3method(clean, scantwo)
+S3method(condense, scantwo)
+S3method(convert, scanone)
+S3method(convert, scantwo)
+S3method(convert, map)
+S3method(max, scanone)
+S3method(max, scanPhyloQTL)
+S3method(max, scantwo)
+S3method(max, scantwocondensed)
+S3method(plot, cross)
+S3method(plot, map)
+S3method(plot, qtl)
+S3method(plot, scanone)
+S3method(plot, scanoneboot)
+S3method(plot, scanoneperm)
+S3method(plot, scanPhyloQTL)
+S3method(plot, scantwo)
+S3method(plot, scantwoperm)
+S3method(print, addcovarint)
+S3method(print, addint)
+S3method(print, compactqtl)
+S3method(print, cross)
+S3method(print, map)
+S3method(print, qtl)
+S3method(print, scanoneboot)
+S3method(print, scantwo)
+S3method(print, summary.addpair)
+S3method(print, summary.compactqtl)
+S3method(print, summary.cross)
+S3method(print, summary.fitqtl)
+S3method(print, summary.map)
+S3method(print, summary.qtl)
+S3method(print, summary.ripple)
+S3method(print, summary.scanone)
+S3method(print, summary.scanoneperm)
+S3method(print, summary.scantwo)
+S3method(print, summary.scantwo.old)
+S3method(print, summary.scantwoperm)
+S3method(rbind, scanoneperm)
+S3method(rbind, scantwoperm)
+S3method(replacemap, cross)
+S3method(replacemap, scanone)
+S3method(replacemap, scantwo)
+S3method(subset, scanone)
+S3method(subset, scanoneperm)
+S3method(subset, scantwo)
+S3method(subset, scantwoperm)
+S3method(summary, addcovarint)
+S3method(summary, addint)
+S3method(summary, compactqtl)
+S3method(summary, cross)
+S3method(summary, fitqtl)
+S3method(summary, map)
+S3method(summary, qtl)
+S3method(summary, ripple)
+S3method(summary, scanone)
+S3method(summary, scanoneboot)
+S3method(summary, scanoneperm)
+S3method(summary, scanPhyloQTL)
+S3method(summary, scantwo)
+S3method(summary, scantwocondensed)
+S3method(summary, scantwoperm)
+
+
+
+
+
+# Hidden functions
+#   asnumericwithdec
+#   adjust.rf.ri
+#   calc.genoprob.special
+#   calc.pairprob
+#   calcPermPval
+#   calculatedensity
+#   charround
+#   checkdistances
+#   checkformula
+#   checkPhyloCrosses
+#   checkPhyloPartition
+#   checkStepwiseqtlStart
+#   circlelocations
+#   convertMWril
+#   countqtlterms
+#   deparseQTLformula
+#   discan
+#   drawcirculargenome
+#   drawspline
+#   dropfromqtlformula
+#   dropXcol
+#   effectplot.calmeanse
+#   effectplot.getmark 
+#   estimatemarkerlod
+#   expandf2covar
+#   fitqtlengine
+#   fitstahl.este
+#   fitstahl.este.sub
+#   fitstahl.estp
+#   fitstahl.estp.sub
+#   fitstahl.estpe
+#   fitstahl.estpe.sub
+#   fixX4write
+#   fixXgeno.bc
+#   fixXgeno.f2
+#   getChr
+#   getchromosomelength
+#   getgenomelength
+#   getThird
+#   grab.arg.names
+#   interpmap
+#   interpmap4scantwo
+#   genotab.em
+#   LikePheVector
+#   locationtocircle
+#   loopthroughmulti
+#   makeSSmap
+#   markerforwsel
+#   markerforwself2
+#   markerloglik
+#   matchchr
+#   mqmaugment_on_cofactors
+#   mqmextractpseudomarkers
+#   orderMarkers.sub
+#   ourline
+#   ourstop
+#   parseformula
+#   mybinaryrep
+#   plot.effectscan
+#   polyplot
+#   printQTLformulanicely
+#   qtlByPartition
+#   qtlformulasymmetric
+#   read.cro.qtlcart
+#   read.cross.csv
+#   read.cross.csvs
+#   read.cross.gary
+#   read.cross.karl
+#   read.cross.mm
+#   read.cross.qtlcart
+#   read.cross.qtx
+#   read.map.qtlcart
+#   read.maps.mm
+#   readMWril
+#   reorgRIargmax
+#   reorgRIdraws
+#   reorgRIgenoprob
+#   reorgRIpairprob
+#   revisecovar
+#   reviseqtlnuminformula
+#   revisescantwodf
+#   reviseXdata
+#   ripple.perm.sub
+#   ripple.perm1
+#   ripple.perm2
+#   rippleSnowCountxo
+#   rippleSnowLik
+#   roundqtlpos
+#   scanone.perm
+#   scanone.perm.engine
+#   scanoneXnull
+#   scantwo.perm
+#   scantwo.perm.engine
+#   scantwoperm2scanoneperm
+#   scoremissingmarkers
+#   sim.cross.4way
+#   sim.cross.bc
+#   sim.cross.f2
+#   sim.ril
+#   snowCoreALL
+#   snowCoreBOOT
+#   sortPhyloPartitions
+#   sim.bcg
+#   stepsize
+#   stringPhenoToInt
+#   testchr
+#   vbscan
+#   write.cross.csv
+#   write.cross.gary
+#   write.cross.mm
+#   write.cross.qtlcart
+
