@@ -9,6 +9,7 @@
 
 \usage{
 \method{summary}{map}(object, \dots)
+summary.map(object, \dots)
 }
 
 \arguments{
