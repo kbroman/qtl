@@ -50,11 +50,14 @@ data(hyper)
 # subset of markers on chr 4 spaced >= 5 cM
 pickMarkerSubset(pull.map(hyper)[[4]], 5)
 
-# no. genotypes at each chr 4 marker
-n.typed <- ntyped(subset(hyper, chr=4), what="mar")
+# no. missing genotypes at each chr 4 marker
+n.missing <- nmissing(subset(hyper, chr=4), what="mar")
 
-# subset of markers on chr 4 spaced >= 5 cM, with weights = log(n.typed)
-pickMarkerSubset(pull.map(hyper)[[4]], 5, log(n.typed))
+# weight by -log(prop'n missing), but don't let 0 missing go to +Inf
+wts <- -log( (n.missing+1) / (nind(hyper)+1) )
+
+# subset of markers on chr 4 spaced >= 5 cM, with weights = -log(prop'n missing)
+pickMarkerSubset(pull.map(hyper)[[4]], 5, wts)
 }
 
 \seealso{ \code{\link{drop.markers}}, \code{\link{pull.markers}} }
