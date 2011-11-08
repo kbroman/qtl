@@ -20,7 +20,7 @@ export(findDupMarkers, fitqtl, fitstahl, flipcross, formLinkageGroups)
 export(genAllPartitions, geno.crosstab, geno.image, geno.table)
 export(getgenonames, getid, getsex, groupclusteredheatmap)
 export(imf.cf, imf.h, imf.k, imf.m, imf.stahl)
-export(inferredpartitions, jittermap, locatemarker, locateXO)
+export(inferredpartitions, interpPositions, jittermap, locatemarker, locateXO)
 export(lodint, makeqtl, markerlrt, markernames)
 export(mf.cf, mf.h, mf.k, mf.m, mf.stahl)
 export(movemarker, mqm_version, mqmaugment)
@@ -33,7 +33,7 @@ export(mqmscanfdr, mqmsetcofactors, mqmtestnormal)
 export(nchr, nind, nmar, nmissing, nphe, nqrank, ntyped, orderMarkers)
 export(phenames, pickMarkerSubset, plot.errorlod, plot.geno, plot.info, plot.map)
 export(plot.missing, plot.pheno, plot.pxg, plot.rf, plotLodProfile)
-export(plotModel, pull.geno, pull.map, pull.markers, pull.pheno, pull.rf)
+export(plotModel, polyplot, pull.geno, pull.map, pull.markers, pull.pheno, pull.rf)
 export(qtlversion, read.cross, refineqtl, reorderqtl, replace.map)
 export(replacemap, replaceqtl, rescalemap, ripple)
 export(scanall, scanone, scanoneboot, scanPhyloQTL, scanqtl, scantwo)
@@ -197,7 +197,6 @@ S3method(summary, scantwoperm)
 #   parseformula
 #   mybinaryrep
 #   plot.effectscan
-#   polyplot
 #   printQTLformulanicely
 #   qtlByPartition
 #   qtlformulasymmetric
