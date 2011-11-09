@@ -2,6 +2,5 @@
 \.gz$
 \.rnew$
 \.new$
-\.\.Rcheck
-\.git$
-\.gitignore$
+\.git
+
