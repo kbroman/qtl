@@ -44,9 +44,9 @@ if(!round(r[[3]][3,3],3)==0.844) stop("Multitrait DROP dataaugmentation error")
 
 data(hyper)
 r <- testaugmentation(hyper,maxaugind=32,minprob=0.75)
-if(!round(r[[1]][3,3],3)==0.569) stop("Hyper ML dataaugmentation error")
+if(!round(r[[1]][3,3],3)==0.568) stop("Hyper ML dataaugmentation error")
 if(!round(r[[1]][3,3],3)==round(r[[2]][3,3],3)) stop("Hyper ML compared versus IMP error")
-if(!round(r[[3]][3,3],3)==0.259) stop("Hyper DROP dataaugmentation error")
+if(!round(r[[3]][3,3],3)==0.252) stop("Hyper DROP dataaugmentation error")
 
 
 data(listeria)
