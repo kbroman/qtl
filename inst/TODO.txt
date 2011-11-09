@@ -22,6 +22,10 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
 
   Also, I need to use as.numeric() on the thresholds
 
+o Helper function for create.map to identify locations on the grid
+
+o function to pull out genoprobs or imputations
+
 o Use snow() with orderMarkers
 
 o Bug in replacemap.cross in case of sex-specific map and
