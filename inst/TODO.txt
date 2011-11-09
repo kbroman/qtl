@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o In plot.rfmatrix, include marker name in title (unless main is
+  provided as an argument). 
+
 o Bugs in summary.scanone in the case of multiple phenotypes and
   multiple thresholds for formats other than allpheno and allpeaks.
   I get warnings like 
@@ -18,6 +21,8 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
       longer object length is not a multiple of shorter object length
 
   Also, I need to use as.numeric() on the thresholds
+
+o Use snow() with orderMarkers
 
 o Bug in replacemap.cross in case of sex-specific map and
   genoprob/draws maps that need interpolation

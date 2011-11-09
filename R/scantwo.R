@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-2011, Karl W Broman and Hao Wu
-# last modified Oct, 2011
+# last modified Nov, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -56,15 +56,17 @@ function(cross, chr, pheno.col=1,
   use <- match.arg(use)
   
   # pull out chromosomes to be scanned
-  if(missing(chr)) chr <- names(cross$geno)
-  else if(is.logical(chr)) chr <- names(cross$geno)[chr]
-
-  # special case: do just specific pairs (each of chr1 vs each of chr2, except when chr2 < chr1)
-  if(is.list(chr)) {
-    chr1 <- chr[[1]]
-    chr2 <- chr[[2]]
+  if(missing(chr)) chr1 <- chr2 <- chr <- names(cross$geno)
+  else {
+    thechr <- names(cross$geno)
+    if(is.list(chr)) {
+      # special case: do just specific pairs (each of chr1 vs each of chr2, except when chr2 < chr1)
+      chr1 <- matchchr(chr[[1]], thechr)
+      chr2 <- matchchr(chr[[2]], thechr)
+    }
+    else 
+      chr1 <- chr2 <- matchchr(chr, thechr)
   }
-  else chr1 <- chr2 <- chr
 
   cross <- subset(cross, unique(c(chr1, chr2)))
   thechr <- names(cross$geno)
