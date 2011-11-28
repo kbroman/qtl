@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 11/9/2011:
+Version 1.22, 11/28/2011:
 
 Major changes:
 
@@ -43,6 +43,9 @@ Minor changes:
   Fixed a bug in scantwo, method="hk", for multiple phenotypes or
   permutation tests in batch.  This showed up only when there were
   missing genotypes at one or both putative QTL.
+
+  write.cross with format="csv" now exports genotypes as AA/BB for
+  RIL (previously, genotypes were written as AA/AB).
 
   Fixed bug in addint() and addcovarint()
 

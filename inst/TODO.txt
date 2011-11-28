@@ -10,8 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o write.cross exports riself with AA/AB codes rather than AA/BB
-  codes. 
+o markerlrt() adds attribute "onlylod = TRUE"; this gets stripped off
+  by various functions and should be re-established
 
 o In plot.rfmatrix, include marker name in title (unless main is
   provided as an argument). 
