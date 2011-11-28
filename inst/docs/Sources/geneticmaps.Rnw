@@ -32,7 +32,7 @@
 
 \begin{document}
 
-\SweaveOpts{prefix.string=Figs/fig}
+\SweaveOpts{prefix.string=Figs/fig, eps=TRUE}
 \setkeys{Gin}{width=\textwidth} %% <- change width of figures
 % Try to get the R code from running into the margin
 <<echo=FALSE>>=
