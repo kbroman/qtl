@@ -31,7 +31,7 @@
 
 \begin{document}
 
-\SweaveOpts{prefix.string=Figs/scantwo}
+\SweaveOpts{prefix.string=Figs/scantwo,eps=TRUE}
 \setkeys{Gin}{width=\textwidth} %% <- change width of figures
 % Try to get the R code from running into the margin
 <<echo=FALSE>>=
