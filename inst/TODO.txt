@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o stepwiseqtl: Need a trap for the case that LODs are all NA
+
 o markerlrt() adds attribute "onlylod = TRUE"; this gets stripped off
   by various functions and should be re-established
 
