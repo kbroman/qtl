@@ -34,7 +34,7 @@ export(nchr, nind, nmar, nmissing, nphe, nqrank, ntyped, orderMarkers)
 export(phenames, pickMarkerSubset, plot.errorlod, plot.geno, plot.info, plot.map)
 export(plot.missing, plot.pheno, plot.pxg, plot.rf, plotLodProfile)
 export(plotModel, polyplot, pull.geno, pull.map, pull.markers, pull.pheno, pull.rf)
-export(qtlversion, read.cross, refineqtl, reorderqtl, replace.map)
+export(qtlversion, read.cross, readMWril, refineqtl, reorderqtl, replace.map)
 export(replacemap, replaceqtl, rescalemap, ripple)
 export(scanall, scanone, scanoneboot, scanPhyloQTL, scanqtl, scantwo)
 export(shiftmap, sim.cross, sim.geno, sim.map, simFounderSnps, simPhyloQTL)
@@ -210,7 +210,6 @@ S3method(summary, scantwoperm)
 #   read.cross.qtx
 #   read.map.qtlcart
 #   read.maps.mm
-#   readMWril
 #   reorgRIargmax
 #   reorgRIdraws
 #   reorgRIgenoprob
