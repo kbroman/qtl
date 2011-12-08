@@ -103,8 +103,6 @@ void est_map_magic16(int *n_ind, int *n_mar, int *geno, double *rf,
 		     double *error_prob, double *loglik, int *maxit, 
 		     double *tol, int *verbose)
 {
-  int i;
-
   est_map(*n_ind, *n_mar, 16, geno, rf, rf, *error_prob, 
 	  init_magic16, emit_magic16, step_magic16, nrec_bc, nrec_bc,
 	  loglik, *maxit, *tol, 0, *verbose);
@@ -152,7 +150,7 @@ void calc_errorlod_magic16(int *n_ind, int *n_mar, int *geno,
 			   double *error_prob, double *genoprob, 
 			   double *errlod)
 {
-  calc_errorlod(*n_ind, *n_mar, 16 geno, *error_prob, genoprob,
+  calc_errorlod(*n_ind, *n_mar, 16, geno, *error_prob, genoprob,
 		errlod, errorlod_magic16);
 }
 
