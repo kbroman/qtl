@@ -2,8 +2,8 @@
 #
 # countXO.R
 #
-# copyright (c) 2008-9, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2008-2011, Karl W Broman
+# last modified Dec, 2011
 # first written Feb, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ function(cross, chr, bychr=FALSE)
     }
     else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_countXO_bc"
     else if(type == "4way") func <- "R_countXO_4way"
-    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") {
+    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="magic16") {
       func <- "R_countXO_ril48"
       if(xchr)
         warning("countXO not working properly for the X chromosome for 4- or 8-way RIL.")

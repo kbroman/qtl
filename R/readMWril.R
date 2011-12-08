@@ -3,7 +3,7 @@
 # readMWril.R
 #
 # copyright (c) 2009-2011, Karl W Broman
-# last modified May, 2011
+# last modified Dec, 2011
 # first written Apr, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@
 
 readMWril <-
 function(dir, rilfile, founderfile, 
-         type=c("ri4self", "ri4sib", "ri8self", "ri8sib"),
+         type=c("ri4self", "ri4sib", "ri8self", "ri8sib", "magic16"),
          na.strings=c("-","NA"), rotate=FALSE, ...)
 {
   # create file names

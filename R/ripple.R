@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Nov, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Dec, 2011
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -166,7 +166,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     }
     else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_ripple_bc"
     else if(type == "4way") func <- "R_ripple_4way"
-    else if(type=="ri4self" || type=="ri8self" || type=="ri4sib" || type=="ri8sib")
+    else if(type=="ri4self" || type=="ri8self" || type=="ri4sib" || type=="ri8sib" || type=="magic16")
       func <- "R_ripple_ril48"
     else 
       stop("ripple not available for cross ", type)
