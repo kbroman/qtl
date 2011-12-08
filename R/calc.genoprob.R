@@ -3,7 +3,7 @@
 # calc.genoprob.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Feb, 2011
+# last modified Dec, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -103,9 +103,10 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
     }
-    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="magic16") {
       cfunc <- paste("calc_genoprob_", type, sep="")
-      n.gen <- as.numeric(substr(type, 3, 3))
+      if(type=="magic16") n.gen <- 16
+      else n.gen <- as.numeric(substr(type, 3, 3))
       one.map <- TRUE
       gen.names <- LETTERS[1:n.gen]
       if(xchr)
@@ -279,9 +280,10 @@ function(cross, error.prob=0.0001,
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
     }
-    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="magic16") {
       cfunc <- paste("calc_genoprob_special_", type, sep="")
-      n.gen <- as.numeric(substr(type, 3, 3))
+      if(type=="magic16") n.gen <- 16
+      else n.gen <- as.numeric(substr(type, 3, 3))
       one.map <- TRUE
       gen.names <- LETTERS[1:n.gen]
       if(xchr)

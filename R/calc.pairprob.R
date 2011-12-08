@@ -124,9 +124,10 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     one.map <- FALSE
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
   }
-  else if(type == "ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") {
+  else if(type == "ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="magic16") {
     cfunc <- paste("calc_pairprob_", type, sep="")
-    n.gen <- as.numeric(substr(type, 3, 3))
+    if(type=="magic16") n.gen <- 16
+    else n.gen <- as.numeric(substr(type, 3, 3))
     one.map <- TRUE
     gen.names <- LETTERS[1:n.gen]
     if(xchr)

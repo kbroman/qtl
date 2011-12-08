@@ -14,7 +14,7 @@
 
 \usage{
 readMWril(dir="", rilfile, founderfile,
-          type=c("ri4self", "ri4sib", "ri8self", "ri8sib"),
+          type=c("ri4self", "ri4sib", "ri8self", "ri8sib", "magic16"),
           na.strings=c("-","NA"), rotate=FALSE, \dots)
 }
 

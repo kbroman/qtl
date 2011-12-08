@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Jun, 2010
+# copyright (c) 2001-2011, Karl W Broman
+# last modified Dec, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ function(object,...)
   type <- class(object)[1]
 
   if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", 
-                   "ri4self", "ri4sib", "ri8self", "ri8sib")))
+                   "ri4self", "ri4sib", "ri8self", "ri8sib", "magic16")))
      stop("Cross type ", type, " is not supported.")
 
   # combine genotype data into one big matrix
@@ -235,8 +235,9 @@ function(object,...)
       warning(warn)
     }
   }
-  else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self")) {
-    n.str <- as.numeric(substr(type, 3, 3))
+  else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self", "magic16")) {
+    if(type=="magic16") n.str <- 16
+    else n.str <- as.numeric(substr(type, 3, 3))
     if(any(!is.na(Geno) & (Geno != round(Geno) | Geno < 1 | Geno > 2^n.str-1))) {
       u <- unique(as.numeric(Geno))
       u <- sort(u[!is.na(u)])
@@ -340,6 +341,11 @@ function(x,...)
     else crosstype <- "selfing"
     print.genotypes <- FALSE
     cat("    ", n.str, "-way RIL by ", crosstype, "\n\n", sep="")
+  }
+  else if(x$type %in% c("magic16")) {
+    n.str <- 16
+    print.genotypes <- FALSE
+    cat("    ", n.str, "-way MAGIC liens\n\n", sep="")
   }
   else cat("    cross", x$type, "\n\n",sep=" ")
 
