@@ -61,13 +61,10 @@ double emit_magic16(int obs_gen, int true_gen, double error_prob)
     
 double step_magic16(int gen1, int gen2, double rf, double junk) 
 {
-  int temp;
-  if(gen1 > gen2) { temp = gen1; gen1 = gen2; gen2=temp; }
-  
   if(gen1 == gen2) 
     return(log(1.0-rf));
   else 
-    return(log(rf));
+    return(log(rf) - log(15.0));
 }
 
 
