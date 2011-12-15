@@ -46,6 +46,7 @@
 #include "hmm_main.h"
 #include "hmm_bgmagic16.h"
 #include "hmm_bc.h"
+#include "util.h"
 
 double init_bgmagic16(int true_gen)
 {
@@ -61,10 +62,37 @@ double emit_bgmagic16(int obs_gen, int true_gen, double error_prob)
     
 double step_bgmagic16(int gen1, int gen2, double rf, double junk) 
 {
-  if(gen1 == gen2) 
-    return(log(1.0-rf));
-  else 
-    return(log(rf) - log(15.0));
+  int tempi;
+  double p0, log256, tempd;
+
+  if(gen1 == gen2) {
+    tempd = 1.0-rf;
+    p0 = tempd*tempd*tempd/16.0;
+  }
+  else {
+    if(gen1 > gen2) { /* order gen1 and gen2 */
+      tempi = gen1; 
+      gen1 = gen2; 
+      gen2 = tempi;
+    }
+    if((gen1 == gen2 - 1) && (gen2 % 2 == 0)) { /* 1:2 case */
+      p0 = rf*(1.0-rf)*(1.0-rf)/16.0;
+    }
+    else if((gen2 - gen1 <= 4) && ((gen2 % 4 == 3) || (gen2 % 4 == 0))) { /* 1:3 case */
+      p0 = rf*(1.0-rf)/32.0;
+    }
+    else if(gen2 <= 8 || gen1 > 8) { /* 1:5 case */
+      p0 = rf/64.0;
+    }
+    else { /* 1:9 case */
+      tempd = (1.0-rf)*(1.0-rf);
+      return( log((1.0 - p0*p0)/256) );
+    }
+  
+  }
+
+  tempd = (1.0-rf)*(1.0-rf);
+  return( log(tempd*tempd*(p0-1.0/256.0) + 1.0/256.0) );
 }
 
 
