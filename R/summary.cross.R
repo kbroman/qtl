@@ -38,7 +38,7 @@ function(object,...)
   type <- class(object)[1]
 
   if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", 
-                   "ri4self", "ri4sib", "ri8self", "ri8sib", "magic16")))
+                   "ri4self", "ri4sib", "ri8self", "ri8sib", "bgmagic16")))
      stop("Cross type ", type, " is not supported.")
 
   # combine genotype data into one big matrix
@@ -235,8 +235,8 @@ function(object,...)
       warning(warn)
     }
   }
-  else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self", "magic16")) {
-    if(type=="magic16") n.str <- 16
+  else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self", "bgmagic16")) {
+    if(type=="bgmagic16") n.str <- 16
     else n.str <- as.numeric(substr(type, 3, 3))
     if(any(!is.na(Geno) & (Geno != round(Geno) | Geno < 1 | Geno > 2^n.str-1))) {
       u <- unique(as.numeric(Geno))
@@ -342,10 +342,10 @@ function(x,...)
     print.genotypes <- FALSE
     cat("    ", n.str, "-way RIL by ", crosstype, "\n\n", sep="")
   }
-  else if(x$type %in% c("magic16")) {
+  else if(x$type %in% c("bgmagic16")) {
     n.str <- 16
     print.genotypes <- FALSE
-    cat("    ", n.str, "-way MAGIC liens\n\n", sep="")
+    cat("    ", n.str, "-way Biogemma MAGIC lines\n\n", sep="")
   }
   else cat("    cross", x$type, "\n\n",sep=" ")
 
