@@ -68,7 +68,7 @@ function(cross, error.prob=0.01,
       else cfunc <- "calc_errorlod_bc"
     }
     else if(type=="4way") cfunc <- "calc_errorlod_4way"
-    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="magic16")
+    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16")
       cfunc <- paste("calc_errorlod_", type, sep="")
     else 
       stop("calc.errorlod not available for cross type ", type, ".")

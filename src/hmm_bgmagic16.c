@@ -1,6 +1,6 @@
 /**********************************************************************
  * 
- * hmm_magic16.c
+ * hmm_bgmagic16.c
  * 
  * copyright (c) 2011, Karl W Broman
  *
@@ -21,12 +21,12 @@
  * 
  * C functions for the R/qtl package
  *
- * Contains: init_magic16, emit_magic16, step_magic16, 
- *           calc_genoprob_magic16, calc_genoprob_special_magic16,
- *           argmax_geno_magic16, sim_geno_magic16,
- *           est_map_magic16, 
- *           marker_loglik_magic16, calc_pairprob_magic16, 
- *           errorlod_magic16, calc_errorlod_magic16
+ * Contains: init_bgmagic16, emit_bgmagic16, step_bgmagic16, 
+ *           calc_genoprob_bgmagic16, calc_genoprob_special_bgmagic16,
+ *           argmax_geno_bgmagic16, sim_geno_bgmagic16,
+ *           est_map_bgmagic16, 
+ *           marker_loglik_bgmagic16, calc_pairprob_bgmagic16, 
+ *           errorlod_bgmagic16, calc_errorlod_bgmagic16
  *
  * These are the init, emit, and step functions plus
  * all of the hmm wrappers for 8-way RIL by selfing.
@@ -44,22 +44,22 @@
 #include <Rmath.h>
 #include <R_ext/PrtUtil.h>
 #include "hmm_main.h"
-#include "hmm_magic16.h"
+#include "hmm_bgmagic16.h"
 #include "hmm_bc.h"
 
-double init_magic16(int true_gen)
+double init_bgmagic16(int true_gen)
 {
   return(-4.0*M_LN2); /* log(1/16) */
 }
 
-double emit_magic16(int obs_gen, int true_gen, double error_prob)
+double emit_bgmagic16(int obs_gen, int true_gen, double error_prob)
 {
   if(obs_gen==0) return(0.0);
   if(obs_gen & (1 << (true_gen-1))) return(log(1.0-error_prob));
   else return(log(error_prob)); 
 }
     
-double step_magic16(int gen1, int gen2, double rf, double junk) 
+double step_bgmagic16(int gen1, int gen2, double rf, double junk) 
 {
   if(gen1 == gen2) 
     return(log(1.0-rf));
@@ -68,61 +68,61 @@ double step_magic16(int gen1, int gen2, double rf, double junk)
 }
 
 
-void calc_genoprob_magic16(int *n_ind, int *n_mar, int *geno, 
+void calc_genoprob_bgmagic16(int *n_ind, int *n_mar, int *geno, 
 			   double *rf, double *error_prob, double *genoprob) 
 {
   calc_genoprob(*n_ind, *n_mar, 16, geno, rf, rf, *error_prob, genoprob,
-		init_magic16, emit_magic16, step_magic16);
+		init_bgmagic16, emit_bgmagic16, step_bgmagic16);
 }
 
-void calc_genoprob_special_magic16(int *n_ind, int *n_mar, int *geno, 
+void calc_genoprob_special_bgmagic16(int *n_ind, int *n_mar, int *geno, 
 				   double *rf, double *error_prob, double *genoprob) 
 {
   calc_genoprob_special(*n_ind, *n_mar, 16, geno, rf, rf, *error_prob, genoprob,
-			init_magic16, emit_magic16, step_magic16);
+			init_bgmagic16, emit_bgmagic16, step_bgmagic16);
 }
 
-void argmax_geno_magic16(int *n_ind, int *n_pos, int *geno,
+void argmax_geno_bgmagic16(int *n_ind, int *n_pos, int *geno,
 			 double *rf, double *error_prob, int *argmax)
 {
   argmax_geno(*n_ind, *n_pos, 16, geno, rf, rf, *error_prob,
-	      argmax, init_magic16, emit_magic16, step_magic16);
+	      argmax, init_bgmagic16, emit_bgmagic16, step_bgmagic16);
 }
 
-void sim_geno_magic16(int *n_ind, int *n_pos, int *n_draws, int *geno, 
+void sim_geno_bgmagic16(int *n_ind, int *n_pos, int *n_draws, int *geno, 
 		      double *rf, double *error_prob, int *draws) 
 {
   sim_geno(*n_ind, *n_pos, 16, *n_draws, geno, rf, rf, *error_prob, 
-	   draws, init_magic16, emit_magic16, step_magic16);
+	   draws, init_bgmagic16, emit_bgmagic16, step_bgmagic16);
 }
 
-void est_map_magic16(int *n_ind, int *n_mar, int *geno, double *rf, 
+void est_map_bgmagic16(int *n_ind, int *n_mar, int *geno, double *rf, 
 		     double *error_prob, double *loglik, int *maxit, 
 		     double *tol, int *verbose)
 {
   est_map(*n_ind, *n_mar, 16, geno, rf, rf, *error_prob, 
-	  init_magic16, emit_magic16, step_magic16, nrec_bc, nrec_bc,
+	  init_bgmagic16, emit_bgmagic16, step_bgmagic16, nrec_bc, nrec_bc,
 	  loglik, *maxit, *tol, 0, *verbose);
 }
 
 
 
-void marker_loglik_magic16(int *n_ind, int *geno,
+void marker_loglik_bgmagic16(int *n_ind, int *geno,
 			   double *error_prob, double *loglik)
 {
-  marker_loglik(*n_ind, 16, geno, *error_prob, init_magic16, emit_magic16,
+  marker_loglik(*n_ind, 16, geno, *error_prob, init_bgmagic16, emit_bgmagic16,
 		loglik);
 }
 
-void calc_pairprob_magic16(int *n_ind, int *n_mar, int *geno, 
+void calc_pairprob_bgmagic16(int *n_ind, int *n_mar, int *geno, 
 			   double *rf, double *error_prob, 
 			   double *genoprob, double *pairprob) 
 {
   calc_pairprob(*n_ind, *n_mar, 16, geno, rf, rf, *error_prob, genoprob,
-		pairprob, init_magic16, emit_magic16, step_magic16);
+		pairprob, init_bgmagic16, emit_bgmagic16, step_bgmagic16);
 }
 
-double errorlod_magic16(int obs, double *prob, double error_prob)
+double errorlod_bgmagic16(int obs, double *prob, double error_prob)
 {
   double p=0.0, temp;
   int n=0, i;
@@ -143,12 +143,12 @@ double errorlod_magic16(int obs, double *prob, double error_prob)
   else return(log10(p));
 }
 
-void calc_errorlod_magic16(int *n_ind, int *n_mar, int *geno, 
+void calc_errorlod_bgmagic16(int *n_ind, int *n_mar, int *geno, 
 			   double *error_prob, double *genoprob, 
 			   double *errlod)
 {
   calc_errorlod(*n_ind, *n_mar, 16, geno, *error_prob, genoprob,
-		errlod, errorlod_magic16);
+		errlod, errorlod_bgmagic16);
 }
 
-/* end of hmm_magic16.c */
+/* end of hmm_bgmagic16.c */

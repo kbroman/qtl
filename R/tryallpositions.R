@@ -286,7 +286,7 @@ function(cross, marker, error.prob=0.0001)
   else if(type == "4way") {
     cfunc <- "marker_loglik_4way"
   }
-  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self" || type=="magic16") {
+  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self" || type=="bgmagic16") {
     cfunc <- paste("marker_loglik_", type, sep="")
     if(chrtype=="X")
       warning("markerloglik not working properly for the X chromosome for 4- or 8-way RIL.")

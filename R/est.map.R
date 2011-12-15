@@ -153,7 +153,7 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       one.map <- FALSE
       cfunc <- "est_map_4way"
     }
-    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="magic16") {
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="bgmagic16") {
       cfunc <- paste("est_map_", type, sep="")
       one.map <- TRUE
       if(chrtype[i] == "X")

@@ -103,9 +103,9 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
     }
-    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="magic16") {
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="bgmagic16") {
       cfunc <- paste("calc_genoprob_", type, sep="")
-      if(type=="magic16") n.gen <- 16
+      if(type=="bgmagic16") n.gen <- 16
       else n.gen <- as.numeric(substr(type, 3, 3))
       one.map <- TRUE
       gen.names <- LETTERS[1:n.gen]
@@ -280,9 +280,9 @@ function(cross, error.prob=0.0001,
       one.map <- FALSE
       gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
     }
-    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="magic16") {
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="bgmagic16") {
       cfunc <- paste("calc_genoprob_special_", type, sep="")
-      if(type=="magic16") n.gen <- 16
+      if(type=="bgmagic16") n.gen <- 16
       else n.gen <- as.numeric(substr(type, 3, 3))
       one.map <- TRUE
       gen.names <- LETTERS[1:n.gen]
