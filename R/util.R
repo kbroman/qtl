@@ -5,7 +5,7 @@
 # copyright (c) 2001-2011, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jul, 2011
+# last modified Dec, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -463,6 +463,9 @@ function(object, ...)
     stop("Input should have class \"cross\".")
 
   cross2 <- list(geno=object$geno,pheno=object$pheno)
+
+  if("cross" %in% names(object))
+    cross2$cross <- object$cross
 
   if(!is.null(attr(object, "alleles")))
     attr(cross2, "alleles") <- attr(object, "alleles")
@@ -1372,6 +1375,9 @@ function(x, chr, ind, ...)
       warning("Retained only one individual!")
 
     x$pheno <- x$pheno[ind,,drop=FALSE]
+
+    if("cross" %in% names(x))
+      x$cross <- x$cross[ind,,drop=FALSE]
 
     for(i in 1:nchr(x)) {
       x$geno[[i]]$data <- x$geno[[i]]$data[ind,,drop=FALSE]
