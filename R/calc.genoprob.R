@@ -190,7 +190,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
   } # end loop over chromosomes
 
   # 4- and 8-way RIL: reorganize the results
-  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16") 
     cross <- reorgRIgenoprob(cross)
 
   cross

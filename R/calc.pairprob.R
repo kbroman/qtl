@@ -203,7 +203,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
   pairprob <- array(z$pairprob, dim=c(n.ind,n.pos*(n.pos-1)/2,n.gen,n.gen))
 
   # 4- and 8-way RIL: reorganize the results
-  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16") 
     pairprob <- reorgRIpairprob(cross, pairprob)
 
   pairprob
