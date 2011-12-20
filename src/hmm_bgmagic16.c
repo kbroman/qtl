@@ -63,7 +63,7 @@ double emit_bgmagic16(int obs_gen, int true_gen, double error_prob)
 double step_bgmagic16(int gen1, int gen2, double rf, double junk) 
 {
   int tempi;
-  double p0, log256, tempd;
+  double p0, tempd;
 
   if(gen1 == gen2) {
     tempd = 1.0-rf;
