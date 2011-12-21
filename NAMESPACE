@@ -4,6 +4,8 @@ useDynLib(qtl)
 import(graphics, stats, utils)
 
 # Export all names
+export(inferFounderHap)
+
 export(add.cim.covar, add.threshold, addcovarint, addint)
 export(addloctocross, addmarkerstointervalmap, addpair, addqtl)
 export(addtoqtl, allchrsplits, argmax.geno, bayesint)
@@ -43,6 +45,7 @@ export(summary.map, switch.order, switchAlleles, top.errorlod)
 export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc.scanone)
 export(clean, condense, convert)
 export(summary.scantwo.old)
+
 
 
 # S3 methods
