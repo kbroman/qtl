@@ -187,7 +187,8 @@ function(cross, chr, omit.first.prob=FALSE, include.pos.info=FALSE, rotate=FALSE
   }
 
   id <- getid(cross)
-  if(!is.null(id)) rownames(fullpr) <- id
+  if(is.null(id)) id <- paste("ind", 1:nrow(fullpr), sep="")
+  rownames(fullpr) <- id
 
   if(rotate) {
     fullpr <- as.data.frame(t(fullpr))
@@ -247,7 +248,8 @@ function(cross, chr, include.pos.info=FALSE, rotate=FALSE)
   }
 
   id <- getid(cross)
-  if(!is.null(id)) rownames(fullam) <- id
+  if(is.null(id)) id <- paste("ind", 1:nrow(fullam), sep="")
+  rownames(fullam) <- id
 
   if(rotate) {
     fullam <- as.data.frame(t(fullam))
