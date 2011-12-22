@@ -21,6 +21,15 @@ inferFounderHap(cross, chr, max.n.marker=15)
 }
 
 \details{
+  We omit SNPs for which any of the founders are missing.
+
+  We then consider groups of adjacent SNPs, looking for founder
+  haplotypes that are unique; RIL sharing such a unique haplotype are
+  then inferred to have that founder's DNA.
+
+  We consider each marker as the center of a haplotype, and consider
+  haplotypes of size 1, 3, 5, \dots, \code{max.n.marker}.  We end the
+  extension of the haplotypes when all founders have a unique haplotype.
 }
 
 \value{
