@@ -27,7 +27,7 @@
  * These are utility functions, mostly for the HMM engine.
  *
  * Other functions: addlog, subtrlog, reorg_geno, reorg_genoprob,
- *                  reorg_pairprob, allocate_int,
+ *                  reorg_pairprob, allocate_int, allocate_uint
  *                  allocate_alpha, reorg_draws, allocate_double,
  *                  sample_int, allocate_imatrix, allocate_dmatrix
  *                  reorg_errlod, double_permute, int_permute,
@@ -174,6 +174,17 @@ void allocate_double(int n, double **vector);
  *
  **********************************************************************/
 void allocate_int(int n, int **vector);
+
+/**********************************************************************
+ * 
+ * allocate_uint
+ *
+ * Allocate space for a vector of unsigned ints
+ *
+ * Allocation done by R_alloc, so that R does the cleanup.
+ *
+ **********************************************************************/
+void allocate_uint(int n, unsigned int **vector);
 
 /**********************************************************************
  *
