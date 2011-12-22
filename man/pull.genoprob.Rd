@@ -4,7 +4,7 @@
 \title{Pull out the genotype probabilities from a cross}
 
 \description{
-  Pull out the results of \code{\link{calc.genoprob}} from a cross as a matrix.}
+  Pull out the results of \code{\link{calc.genoprob}} from a cross as a matrix.
 }
 
 \usage{pull.genoprob(cross, chr, omit.first.prob=FALSE,
