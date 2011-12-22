@@ -2,12 +2,12 @@
  *
  * util.h
  *
- * copyright (c) 2001-2010, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2011, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Nov, 2010
+ * last modified Dec, 2011
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -364,9 +364,11 @@ void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
 /* calculate permutation p-values for summary.scanone() */
 void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
 		  double **Perms, int n_perms, double **Pval);
+
 #ifdef __cplusplus
   }
 #endif
 
 #endif 
+
 /* end of util.h */
