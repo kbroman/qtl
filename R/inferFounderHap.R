@@ -27,7 +27,7 @@
 ######################################################################
 
 inferFounderHap <-
-function(cross, chr, max.n.marker=31)
+function(cross, chr, max.n.marker=15)
 {
   if(!missing(chr))
     cross <- subset(cross, chr=chr)
