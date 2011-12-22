@@ -22,6 +22,7 @@
 # 
 # Part of the R/qtl package
 # Contains: pull.map, pull.geno, pull.pheno
+#           pull.genoprob, pull.argmaxgeno
 #
 ######################################################################
 
@@ -128,5 +129,135 @@ function(cross, pheno.col)
 
   pheno
 }
+
+######################################################################
+# pull.genoprob
+######################################################################
+pull.genoprob <-
+function(cross, chr, omit.first.prob=FALSE, include.pos.info=FALSE, rotate=FALSE)
+{
+  if(!missing(chr))
+    cross <- subset(cross, chr=chr)
+
+  if(!("prob" %in% names(cross$geno[[1]])))
+    stop("You must first run calc.genoprob.")
+  
+  if(include.pos.info && !rotate) {
+    warning("If include.pos.info=TRUE, we assume rotate=TRUE as well.")
+    rotate <- TRUE
+  }
+
+  pr <- lapply(cross$geno, function(a) a$prob)
+  chrnames <- names(cross$geno)
+  for(i in seq(along=pr)) {
+    w <- colnames(pr[[i]])
+    o <- grep("^loc-*[0-9]+",w)
+    if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
+      w[o] <- paste("c",chrnames[i],".",w[o],sep="")
+    colnames(pr[[i]]) <- w
+  }
+
+  if(omit.first.prob)
+    fullncol <- sum(sapply(pr, ncol))*(dim(pr[[1]])[3]-1)
+  else
+    fullncol <- sum(sapply(pr, ncol))*dim(pr[[1]])[3]
+
+  fullpr <- matrix(nrow=nrow(pr[[1]]), ncol=fullncol)
+  colnames(fullpr) <- 1:fullncol
+  curcol <- 0
+  thegen <- themarker <- rep(NA, fullncol)
+  if(include.pos.info)
+    thechr <- thepos <- rep(NA, fullncol)
+  for(i in seq(along=pr)) {
+    dim3 <- 1:dim(pr[[i]])[3]
+    if(omit.first.prob) dim3 <- dim3[-1]
+    for(j in seq(along=dim3)) {
+      thecol <- curcol + ((1:ncol(pr[[i]]))-1)*length(dim3) + j
+      fullpr[,thecol] <- pr[[i]][,,dim3[j]]
+      thisgen <- dimnames(pr[[i]])[[3]][dim3[j]]
+      thegen[thecol] <- rep(thisgen, length(thecol))
+      themarker[thecol] <- colnames(pr[[i]])
+      colnames(fullpr)[thecol] <- paste(colnames(pr[[i]]), thisgen, sep=":")
+      if(include.pos.info) {
+        thechr[thecol] <- rep(names(cross$geno)[i], length(thecol))
+        thepos[thecol] <- attr(pr[[i]], "map")
+      }
+    }
+    curcol <- curcol + ncol(pr[[i]])*length(dim3)
+  }
+
+  id <- getid(cross)
+  if(!is.null(id)) rownames(fullpr) <- id
+
+  if(rotate) {
+    fullpr <- as.data.frame(t(fullpr))
+    if(include.pos.info) {
+      thechr <- factor(thechr, names(cross$geno))
+      fullpr <- cbind(marker=themarker, gen=thegen, chr=thechr, pos=thepos, fullpr, stringsAsFactors=FALSE)
+    }
+  }
+
+  fullpr
+}  
+
+
+######################################################################
+# pull.argmaxgeno
+######################################################################
+pull.argmaxgeno <-
+function(cross, chr, include.pos.info=FALSE, rotate=FALSE)
+{
+  if(!missing(chr))
+    cross <- subset(cross, chr=chr)
+
+  if(!("argmax" %in% names(cross$geno[[1]])))
+    stop("You must first run argmax.geno.")
+  
+  if(include.pos.info && !rotate) {
+    warning("If include.pos.info=TRUE, we assume rotate=TRUE as well.")
+    rotate <- TRUE
+  }
+
+  am <- lapply(cross$geno, function(a) a$argmax)
+  chrnames <- names(cross$geno)
+  for(i in seq(along=am)) {
+    w <- colnames(am[[i]])
+    o <- grep("^loc-*[0-9]+",w)
+    if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
+      w[o] <- paste("c",chrnames[i],".",w[o],sep="")
+    colnames(am[[i]]) <- w
+  }
+
+  fullncol <- sum(sapply(am, ncol))
+
+  fullam <- matrix(nrow=nrow(am[[1]]), ncol=fullncol)
+  colnames(fullam) <- 1:fullncol
+  curcol <- 0
+  if(include.pos.info)
+    thechr <- thepos <- rep(NA, fullncol)
+  for(i in seq(along=am)) {
+    thecol <- curcol + 1:ncol(am[[i]])
+    fullam[,thecol] <- am[[i]]
+    colnames(fullam)[thecol] <- colnames(am[[i]])
+    if(include.pos.info) {
+      thechr[thecol] <- rep(names(cross$geno)[i], length(thecol))
+      thepos[thecol] <- attr(am[[i]], "map")
+    }
+    curcol <- curcol + length(thecol)
+  }
+
+  id <- getid(cross)
+  if(!is.null(id)) rownames(fullam) <- id
+
+  if(rotate) {
+    fullam <- as.data.frame(t(fullam))
+    if(include.pos.info) {
+      thechr <- factor(thechr, names(cross$geno))
+      fullam <- cbind(marker=rownames(fullam), chr=thechr, pos=thepos, fullam, stringsAsFactors=FALSE)
+    }
+  }
+
+  fullam
+}  
 
 # end of pull_stuff.R
