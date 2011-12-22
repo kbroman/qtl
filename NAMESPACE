@@ -5,6 +5,7 @@ import(graphics, stats, utils)
 
 # Export all names
 export(inferFounderHap)
+export(pull.genoprob, pull.argmaxgeno)
 
 export(add.cim.covar, add.threshold, addcovarint, addint)
 export(addloctocross, addmarkerstointervalmap, addpair, addqtl)
