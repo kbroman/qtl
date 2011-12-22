@@ -4,7 +4,7 @@
 \title{Pull out the results of the Viterbi algorithm from a cross}
 
 \description{
-  Pull out the results of \code{\link{argmax.geno}} from a cross as a matrix.}
+  Pull out the results of \code{\link{argmax.geno}} from a cross as a matrix.
 }
 
 \usage{pull.argmaxgeno(cross, chr, include.pos.info=FALSE, rotate=FALSE)}
