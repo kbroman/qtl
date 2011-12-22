@@ -27,7 +27,7 @@
 ######################################################################
 
 inferFounderHap <-
-function(cross, chr, max.n.marker=15)
+function(cross, chr, max.n.markers=15)
 {
   if(!missing(chr))
     cross <- subset(cross, chr=chr)
@@ -50,14 +50,14 @@ function(cross, chr, max.n.marker=15)
   founderGen <- founderGen[,nomissing,drop=FALSE]
 
   longbits <- .Machine$sizeof.long*8
-  if(max.n.marker > longbits-1) {
-    max.n.marker <- longbits-1
-    warning("We can't use max.n.marker > ", longbits-1,
-            ", so we're taking max.n.marker = ", longbits-1)
+  if(max.n.markers > longbits-1) {
+    max.n.markers <- longbits-1
+    warning("We can't use max.n.markers > ", longbits-1,
+            ", so we're taking max.n.markers = ", longbits-1)
   }
   n.mar <- ncol(offspringGen)
-  if(max.n.marker > n.mar) max.n.marker <- n.mar
-  max.offset <- ceiling((max.n.marker-1)/2)
+  if(max.n.markers > n.mar) max.n.markers <- n.mar
+  max.offset <- ceiling((max.n.markers-1)/2)
 
   n.ind <- nrow(offspringGen)
   n.founders <- nrow(founderGen)
