@@ -9,7 +9,7 @@
 }
 
 \usage{
-inferFounderHap(cross, chr, max.n.marker=15)
+inferFounderHap(cross, chr, max.n.markers=15)
 }
 
 \arguments{
@@ -17,7 +17,7 @@ inferFounderHap(cross, chr, max.n.marker=15)
    \code{\link{read.cross}} for details.}
  \item{chr}{Indicator of chromosome to consider.  If multiple
  chromosomes are selected, only the first is used.}
- \item{max.n.marker}{Maximum number of adjacent markers to consider.}
+ \item{max.n.markers}{Maximum number of adjacent markers to consider.}
 }
 
 \details{
@@ -28,7 +28,7 @@ inferFounderHap(cross, chr, max.n.marker=15)
   then inferred to have that founder's DNA.
 
   We consider each marker as the center of a haplotype, and consider
-  haplotypes of size 1, 3, 5, \dots, \code{max.n.marker}.  We end the
+  haplotypes of size 1, 3, 5, \dots, \code{max.n.markers}.  We end the
   extension of the haplotypes when all founders have a unique haplotype.
 }
 
@@ -44,7 +44,7 @@ map <- sim.map(100, n.mar=101, include.x=FALSE, eq.spacing=TRUE)
 founderGeno <- simFounderSnps(map, "8")
 ril <- sim.cross(map, n.ind=10, type="ri8sib", founderGeno=founderGeno)
 
-h <- inferFounderHap(ril, max.n.marker=11)
+h <- inferFounderHap(ril, max.n.markers=11)
 mean(!is.na(h)) # proportion inferred
 plot(map[[1]], h[1,], ylim=c(0.5, 8.5), xlab="Position", ylab="Genotype")
 }
