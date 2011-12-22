@@ -268,6 +268,20 @@ void allocate_int(int n, int **vector)
 
 /**********************************************************************
  * 
+ * allocate_uint
+ *
+ * Allocate space for a vector of unsigned ints
+ *
+ * Allocation done by R_alloc, so that R does the cleanup.
+ *
+ **********************************************************************/
+void allocate_uint(int n, unsigned int **vector)
+{
+  *vector = (unsigned int *)R_alloc(n, sizeof(unsigned int));
+}
+
+/**********************************************************************
+ * 
  * allocate_dmatrix
  *
  * Allocate space for a matrix of doubles
