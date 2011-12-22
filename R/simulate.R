@@ -158,6 +158,13 @@ function(map, model=NULL, n.ind=100,
     
     # remove "un" from cross type
     class(rcross)[1] <- substr(class(cross)[1], 1, nchar(class(cross)[1])-2)
+
+    fg <- t(founderGeno[[1]])
+    if(length(founderGeno)>1)
+      for(i in 2:length(founderGeno))
+        fg <- cbind(fg, t(founderGeno[[i]]))
+    colnames(fg) <- markernames(rcross)
+    rcross$founderGeno <- fg
     return(rcross)
   }
 
