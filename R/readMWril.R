@@ -297,6 +297,7 @@ function(dir, rilfile, founderfile,
     warning("There is no genotype data!\n")
 
   cross$cross <- crosses
+  cross$founderGeno <- founder
   class(cross) <- c(type, "cross")
 
   # check data

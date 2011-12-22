@@ -467,6 +467,9 @@ function(object, ...)
   if("cross" %in% names(object))
     cross2$cross <- object$cross
 
+  if("founderGeno" %in% names(object))
+    cross2$founderGeno <- object$founderGeno
+
   if(!is.null(attr(object, "alleles")))
     attr(cross2, "alleles") <- attr(object, "alleles")
 
@@ -1304,6 +1307,9 @@ function(x, chr, ind, ...)
     }
 
     x$geno <- x$geno[chr]
+
+    if("founderGeno" %in% names(x)) 
+      x$founderGeno <- x$founderGeno[,unlist(lapply(x$geno, function(a) colnames(a$data)))]
   }
 
   if(!missing(ind)) {
