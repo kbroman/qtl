@@ -35,7 +35,7 @@ data(listeria)
 listeria <- drop.nullmarkers(listeria)
 }
 
-\seealso{ \code{\link{drop.markers}}, \code{\link{clean.cross}},
+\seealso{ \code{\link{nullmarkers}}, \code{\link{drop.markers}}, \code{\link{clean.cross}},
   \code{\link{geno.table}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

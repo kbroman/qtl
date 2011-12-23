@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o plot.scanone might take LOD score column *names* (as pheno.col does)
+
 o stepwiseqtl: Need a trap for the case that LODs are all NA
 
 o markerlrt() adds attribute "onlylod = TRUE"; this gets stripped off
@@ -28,8 +30,6 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
   Also, I need to use as.numeric() on the thresholds
 
 o Helper function for create.map to identify locations on the grid
-
-o function to pull out genoprobs or imputations
 
 o Use snow() with orderMarkers
 

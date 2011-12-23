@@ -22,7 +22,7 @@
 # 
 # Part of the R/qtl package
 # Contains: markernames, c.cross, create.map,
-#           clean, clean.cross, drop.nullmarkers,
+#           clean, clean.cross, drop.nullmarkers, nullmarkers
 #           drop.markers, pull.markers, drop.dupmarkers
 #           geno.table, genotab.em
 #           mf.k, mf.h, imf.k, imf.h, mf.cf, imf.cf, mf.m, imf.m,
@@ -536,10 +536,43 @@ function(cross)
   }
   cross$geno <- cross$geno[keep.chr]
 
+  if("founderGeno" %in% names(cross)) 
+    cross$founderGeno <- cross$founderGeno[,markernames(cross)]
+
   cross
 }
 
     
+######################################################################
+#
+# nullmarkers
+#
+# identify markers that have no genotype data from the data matrix and
+# genetic maps
+#
+######################################################################
+
+nullmarkers <-
+function(cross)
+{
+  if(!any(class(cross) == "cross"))
+    stop("Input should have class \"cross\".")
+
+  n.chr <- nchr(cross)
+
+  keep.chr <- rep(TRUE,n.chr)
+  all2drop <- NULL
+  for(i in 1:n.chr) {
+    o <- !apply(cross$geno[[i]]$data,2,function(a) sum(!is.na(a)))
+    if(any(o)) { # remove from genotype data and map
+      mn.drop <- colnames(cross$geno[[i]]$data)[o]
+      all2drop <- c(all2drop, mn.drop)
+    }
+  }
+
+  all2drop
+}
+
 ######################################################################
 #
 # drop.markers
@@ -609,6 +642,9 @@ function(cross, markers)
     warning("Markers not found: ", paste(markers[!found],collapse=" "))
 
   cross$geno <- cross$geno[keep.chr]
+
+  if("founderGeno" %in% names(cross)) 
+    cross$founderGeno <- cross$founderGeno[,markernames(cross)]
 
   cross
 }
@@ -692,6 +728,9 @@ function(cross, verbose=TRUE)
     cat("  Total genotypes omitted:", tot.omitted, "\n")
     cat("  Total markers omitted:  ", nmar.omitted, "\n")
   }
+
+  if("founderGeno" %in% names(cross)) 
+    cross$founderGeno <- cross$founderGeno[,markernames(cross)]
 
   clean(cross)
 }                   
