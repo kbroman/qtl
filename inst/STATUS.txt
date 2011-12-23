@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.23, 12/22/2011:
+Version 1.23, 12/23/2011:
 
 Major changes:
 
@@ -30,6 +30,9 @@ Minor changes:
 
   Added a function inferFounderHap() for crudely inferring founder
   haplotypes in multi-parent RIL, using groups of adjacent markers.
+
+  Added function nullmarkers() for identifying markers with no
+  genotype data.
 
   Revised sim.cross so that founder genotypes are included in output,
   for 4- and 8-way RIL.
