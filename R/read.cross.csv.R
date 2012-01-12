@@ -80,27 +80,45 @@ function(dir, file, na.strings=c("-","NA"),
                          blank.lines.skip=TRUE, ...)
   }
 
-  if(rotate) 
+  if(rotate)
     data <- as.data.frame(t(data), stringsAsFactors=FALSE)
 
-  # determine number of phenotypes based on initial blanks in row 2
-  if(length(grep("^\\s*$", data[2,1]))==0)
-    stop("You must include at least one phenotype (e.g., an index).")
-  if(length(grep("^\\s*$", data[2,])) == ncol(data))
-    stop("Second row has all blank cells; you need to include chromosome IDs for the markers.")
-  empty <- grep("^\\s*$", data[2,])
-  n.phe <- min((1:ncol(data))[-empty])-1
+  # empty holds the index of colums with no value in second row
+  cat("data[2,]:", paste(data[2,],collapse=",",sep=""),"\n",sep="")
+  empty <- grep("^\\s*$", data[2, ])
+  if("" %in% na.strings) {
+    # sometimes there is a deviation from the (unfortunate) X as an na.string
+    empty<-sort(union(empty,which(is.na(data[2,]))))
+  }
+  cat("empty:", paste(empty,collapse=",",sep=""),"\n",sep="")
 
-  # Is map included?  yes if first n.phe columns in row 3 are all blank
+  if( ! 1 %in% empty)
+    stop("You must include at least one phenotype (e.g., an index). ",
+         "There was this value in the first column of the second row '",
+         data[2,1],"' where was supposed to be nothing.",sep="")
+
+  # determine number of phenotypes based on initial blanks in row 2
+  if(length(empty)==ncol(data))
+    stop("Second row has all blank cells; you need to include chromosome IDs for the markers.")
+  n.phe <- min((1:ncol(data))[-empty])-1
+  cat("n.phe: ",n.phe,"\n",sep="")
   empty <- rep(FALSE, n.phe)
   empty[grep("^\\s*$", data[3,1:n.phe])] <- TRUE
-  if(all(!is.na(data[3,1:n.phe]) & empty)) {
+  if("" %in% na.strings) {
+    empty[is.na(data[3,1:n.phe])] <- TRUE
+  }
+
+  # Is map included?  yes if first n.phe columns in row 3 are all blank
+  if(all(empty)) {
     map.included <- TRUE
     map <- asnumericwithdec(unlist(data[3,-(1:n.phe)]), dec=dec)
     if(any(is.na(map))) {
       temp <- unique(unlist(data[3,-(1:n.phe)])[is.na(map)])
-      stop(paste("There are missing marker positions.\n",
-                 "   In particular, we see these values: ", paste("\"", temp, "\"", collapse=" ", sep="")))
+      stop("There are missing marker positions.\n",
+           "   In particular, we see these value(s): ",
+           paste("\"",paste(temp,collapse="\",\"",sep=""),"\"",collapse=" ",sep=""),
+           " at position(s): ",
+           paste(which(is.na(map)),colapse=",",sep=""),sep="")
     }
     nondatrow <- 3
   }
@@ -117,9 +135,11 @@ function(dir, file, na.strings=c("-","NA"),
 
   # pull apart phenotypes, genotypes and map
   mnames <- data[1,-(1:n.phe)]
-  if(any(is.na(mnames)))  stop("There are missing marker names.")
+  if(any(is.na(mnames)))
+        stop("There are missing marker names. Check column(s) ",paste(which(is.na(mnames))+1+n.phe,collapse=","),sep="")
   chr <- data[2,-(1:n.phe)]
-  if(any(is.na(chr))) stop("There are missing chromosome IDs.")
+  if(any(is.na(chr)))
+        stop("There are missing chromosome IDs. Check column(s) ",paste(which(is.na(chr))+1+n.phe,collapse=","),sep="")
 
   if(length(genotypes) > 0) {
     # look for strange entries in the genotype data
@@ -231,25 +251,23 @@ function(dir, file, na.strings=c("-","NA"),
   n.ind2 <- sapply(geno,function(a) nrow(a$data))
   if(any(n.ind1 != n.ind2)) {
     cat(n.ind1,n.ind2,"\n")
-    stop("Number of individuals in genotypes and phenotypes do not match.");
+    stop("Number of individuals in genotypes and phenotypes do not match.")
   }
   if(any(n.mar1 != n.mar2)) {
     cat(n.mar1,n.mar2,"\n")
-    stop("Numbers of markers in genotypes and marker names files do not match.");
+    stop("Numbers of markers in genotypes and marker names files do not match.")
   }
 
   # print some information about the amount of data read
-  cat(" --Read the following data:\n");
-  cat("\t", n.ind1, " individuals\n");
-  cat("\t", sum(n.mar1), " markers\n");
-  cat("\t", n.phe, " phenotypes\n");
-
-  if(all(is.na(allgeno)))
-    warning("There is no genotype data!\n")
+  cat(" --Read the following data:\n")
+  cat("\t",n.ind1," individuals\n")
+  cat("\t",sum(n.mar1)," markers\n")
+  cat("\t",n.phe," phenotypes\n")
 
   # determine map type: f2 or bc or 4way?
-  if(all(is.na(allautogeno)) || max(allautogeno,na.rm=TRUE)<=2) type <- "bc"  
-  else if(max(allautogeno,na.rm=TRUE)<=5) type <- "f2" 
+  if(all(is.na(allgeno))) warning("There is no genotype data!\n")
+  if(all(is.na(allautogeno)) || max(allautogeno,na.rm=TRUE)<=2) type <- "bc"
+  else if(max(allautogeno,na.rm=TRUE)<=5) type <- "f2"
   else type <- "4way"
   cross <- list(geno=geno,pheno=pheno)
   class(cross) <- c(type,"cross")
