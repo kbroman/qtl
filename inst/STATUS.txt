@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2011, Karl W Broman
+copyright (c) 2001-2012, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.23, 12/23/2011:
+Version 1.23, 1/11/2012:
 
 Major changes:
 
@@ -33,6 +33,10 @@ Minor changes:
 
   Added function nullmarkers() for identifying markers with no
   genotype data.
+
+  Revisions to read.cross, format="csv", from Steffen Moeller, to
+  handle the case of "" as a missing value string and to give some
+  more informative warnings/errors.
 
   Revised sim.cross so that founder genotypes are included in output,
   for 4- and 8-way RIL.
