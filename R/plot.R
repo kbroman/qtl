@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2011, Karl W Broman
+# copyright (c) 2000-2012, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified May, 2011
+# last modified Mar, 2012
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -1308,6 +1308,9 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 
   if(pheno.col < 1 | pheno.col > nphe(cross))
     stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  if(!is.numeric(cross$pheno[,pheno.col]))
+    stop("phenotype \"", colnames(cross$pheno)[pheno.col], "\" is not numeric.")
 
   if(missing(pch)) pch <- par("pch")
   if(missing(ylab)) ylab <-  colnames(cross$pheno)[pheno.col] 

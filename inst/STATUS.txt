@@ -43,6 +43,9 @@ Minor changes:
   Revised subset.cross and clean.cross so that cross information in 4-
   and 8-way RIL don't get lost.
 
+  Revised plot.pxg, effectplot and effectscan to give a more
+  informative error if the selected phenotype is not numeric.
+
   Revised qtlversion() to use packageVersion().
 
   Fixed bug in summary.map: class included the function data.frame;
