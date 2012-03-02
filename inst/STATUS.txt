@@ -45,6 +45,9 @@ Minor changes:
 
   Revised qtlversion() to use packageVersion().
 
+  Fixed bug in summary.map: class included the function data.frame;
+  not just the character string "data.frame".
+
 
 Version 1.22, 11/28/2011:
 
