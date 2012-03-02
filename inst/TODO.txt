@@ -10,6 +10,22 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o effectplot with factor as phenotype gives a bad error message; check
+  that the phenotype is numeric.
+
+o pull.genopart function from Brian
+
+o example in help file for multitrait data uses scanall() but that
+  function has no help file.
+
+o Revise qtlversion() to use packageVersion rather than
+  installed.packages().
+
+o summary.cross: warning if phenotypes are character strings and not
+  factors? 
+
+o plot.cross/plot.pheno: convert character strings to factors
+
 o plot.scanone might take LOD score column *names* (as pheno.col does)
 
 o stepwiseqtl: Need a trap for the case that LODs are all NA
