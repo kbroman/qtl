@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2011, Karl W Broman
+# copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Dec, 2011
+# last modified Mar, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2713,9 +2713,9 @@ function(object, ...)
                              c("n.mar","length","ave.spacing", "max.spacing"))
   }
 
-  output <- output
+  output <- as.data.frame(output)
   attr(output, "sexsp") <- sexsp
-  class(output) <- c("summary.map", data.frame)
+  class(output) <- c("summary.map", "data.frame")
   output
 }
 
