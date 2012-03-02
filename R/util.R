@@ -2998,14 +2998,13 @@ function(cross, what=c("proportion","number", "both"))
 ######################################################################
 # print the installed version of R/qtl
 ######################################################################
-#qtlversion <-
-#function()
-#  installed.packages()["qtl","Version"]
 qtlversion <-
 function()
 {
-  u <- strsplit(library(help=qtl)[[3]][[1]][2]," ")[[1]]
-  u[length(u)]
+  version <- unlist(packageVersion("qtl"))
+
+  # make it like #.#-#
+  paste(c(version,".","-")[c(1,4,2,5,3)], collapse="")
 }
 
 
