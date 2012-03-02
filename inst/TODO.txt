@@ -10,6 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Fix problems from Brian Ripley:
+    - Danny's use of installed.packages()
+    - use of c("map", data.frame)
+    - Other issues in R CMD check from pre-release
+
 o effectplot with factor as phenotype gives a bad error message; check
   that the phenotype is numeric.
 
