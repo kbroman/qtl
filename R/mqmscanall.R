@@ -4,8 +4,7 @@
 #
 # Copyright (c) 2009-2012, Danny Arends
 #
-# Modified by Pjotr Prins
-#
+# Modified by Pjotr Prins and Karl Broman
 # 
 # first written Februari 2009
 # last modified March 2012
@@ -68,7 +67,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if(multicore && n.cluster >1 && suppressWarnings(require(snow,quietly=TRUE))) {
+		if(multicore && n.clusters >1 && suppressWarnings(require(snow,quietly=TRUE))) {
 
       if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
