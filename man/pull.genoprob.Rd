@@ -42,6 +42,7 @@ pr <- pull.genoprob(listeria, chr=c(5,13), omit.first.prob=TRUE, include.pos.inf
 pr[1:5,1:10]
 }
 
-\seealso{ \code{\link{pull.geno}}, \code{\link{pull.argmaxgeno}}, \code{\link{calc.genoprob}} }
+\seealso{ \code{\link{pull.geno}}, \code{\link{pull.argmaxgeno}},
+  \code{\link{pull.draws}}, \code{\link{calc.genoprob}} }
 
 \keyword{utilities}

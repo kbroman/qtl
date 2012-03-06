@@ -2,10 +2,10 @@
 #
 # pull_stuff.R
 #
-# copyright (c) 2001-2011, Karl W Broman
+# copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Dec, 2011
+# last modified Mar, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -261,5 +261,48 @@ function(cross, chr, include.pos.info=FALSE, rotate=FALSE)
 
   fullam
 }  
+
+######################################################################
+# pull.draws
+######################################################################
+pull.draws <-
+function(cross, chr)
+{  
+  if(!missing(chr))
+    cross <- subset(cross, chr=chr)
+
+  if(!("draws" %in% names(cross$geno[[1]])))
+    stop("You must first run argmax.geno.")
+  
+  dr <- lapply(cross$geno, function(a) a$draws)
+  chrnames <- names(cross$geno)
+  for(i in seq(along=dr)) {
+    w <- colnames(dr[[i]])
+    o <- grep("^loc-*[0-9]+",w)
+    if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
+      w[o] <- paste("c",chrnames[i],".",w[o],sep="")
+    colnames(dr[[i]]) <- w
+  }
+
+  fullncol <- sum(sapply(dr, ncol))
+  d <- dim(dr[[1]])
+
+  fulldr <- array(dim=c(d[1], fullncol, d[3]))
+  colnames(fulldr) <- 1:fullncol
+  curcol <- 0
+
+  for(i in seq(along=dr)) {
+    thecol <- curcol + 1:ncol(dr[[i]])
+    fulldr[,thecol,] <- dr[[i]]
+    colnames(fulldr)[thecol] <- colnames(dr[[i]])
+    curcol <- curcol + length(thecol)
+  }
+
+  id <- getid(cross)
+  if(is.null(id)) id <- paste("ind", 1:nrow(fulldr), sep="")
+  rownames(fulldr) <- id
+
+  fulldr
+}
 
 # end of pull_stuff.R
