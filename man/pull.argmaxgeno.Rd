@@ -38,6 +38,7 @@ amg <- pull.argmaxgeno(listeria, chr=c(5,13), include.pos.info=TRUE, rotate=TRUE
 amg[1:5,1:10]
 }
 
-\seealso{ \code{\link{pull.geno}}, \code{\link{pull.genoprob}}, \code{\link{argmax.geno}} }
+\seealso{ \code{\link{pull.geno}}, \code{\link{pull.genoprob}}, 
+  \code{\link{pull.draws}}, \code{\link{argmax.geno}} }
 
 \keyword{utilities}
