@@ -10,6 +10,12 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Deal with the NOTE: 
+  e.g change plot.geno to plotGeno
+  - allow plot.geno still within package but not the official name?
+  - separate R file enabling backward compatibility
+    (a file that, when sourced, enables the old function names)
+
 o Add argument to refineqtl to scan full chromosomes
 
 o Separate function to get LOD profiles from a fixed model, not
