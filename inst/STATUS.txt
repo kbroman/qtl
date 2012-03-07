@@ -17,6 +17,21 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.24, 3/7/2012:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Changes to the format of the output of summary.scanPhyloQTL for
+  format="lod".  The final column is now the maximum LOD score across
+  partitions; the difference between the maximum and the
+  second-highest is now third-to-last; the threshold argument is
+  applied to the overall maximum rather than to that difference.
+
+
 Version 1.23, 3/6/2012:
 
 Major changes:
