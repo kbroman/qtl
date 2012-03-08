@@ -31,6 +31,9 @@ Minor changes:
   second-highest is now third-to-last; the threshold argument is
   applied to the overall maximum rather than to that difference.
 
+  Renamed the README.txt file as INSTALL_ME.txt; added a new
+  README.txt that provides a brief description of the package.
+
 
 Version 1.23, 3/6/2012:
 
