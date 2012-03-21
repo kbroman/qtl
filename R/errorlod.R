@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: calc.errorlod, plotErrorlod, topErrorlod
+# Contains: calc.errorlod, plotErrorlod, top.errorlod
 #
 ######################################################################
 
@@ -231,13 +231,13 @@ function(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
 
 ######################################################################
 #
-# topErrorlod
+# top.errorlod
 #
 # Picks out the genotypes having errorlod values above some cutoff
 #
 ######################################################################
 
-topErrorlod <- top.errorlod <-
+top.errorlod <-
 function(cross, chr, cutoff=4, msg=TRUE)  
 {
   if(!any(class(cross) == "cross"))

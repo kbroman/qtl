@@ -33,7 +33,7 @@ fake.f2$pheno$id <- paste("ind", sample(nind(fake.f2)), sep="")
 getid(fake.f2)
 }
 
-\seealso{ \code{\link{subset.cross}}, \code{\link{topErrorlod}} }
+\seealso{ \code{\link{subset.cross}}, \code{\link{top.errorlod}} }
 
 
 \keyword{utilities}

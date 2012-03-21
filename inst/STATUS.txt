@@ -27,7 +27,6 @@ Major changes:
     plot.map ->      plotMap
     plot.missing ->  plotMissing
     plot.errorlod -> plotErrorlod
-    top.errorlod ->  topErrorlod
     plot.geno ->     plotGeno
     plot.info ->     plotInfo
     plot.pheno ->    plotPheno

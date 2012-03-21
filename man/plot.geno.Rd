@@ -65,14 +65,14 @@ data(hyper)
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
 # print those above a specified cutoff 
-topErrorlod(hyper,cutoff=4)
+top.errorlod(hyper,cutoff=4)
 
 # plot genotype data, flagging genotypes with error LOD > cutoff
 plotGeno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
 \seealso{ \code{\link{calc.errorlod}},
-  \code{\link{topErrorlod}}, \code{\link{subset.cross}} }
+  \code{\link{top.errorlod}}, \code{\link{subset.cross}} }
 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
