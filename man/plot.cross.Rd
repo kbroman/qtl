@@ -30,7 +30,7 @@
 \value{None.}
 
 \details{
-  Calls \code{\link{plot.missing}}, \code{\link{plotMap}} and
+  Calls \code{\link{plotMissing}}, \code{\link{plotMap}} and
   \code{\link{plot.pheno}} to plot the missing genotypes, genetic
   map, and histograms or barplots of all phenotypes. 
 
@@ -47,7 +47,7 @@ data(fake.bc)
 plot(fake.bc)
 }
 
-\seealso{ \code{\link{plot.missing}}, \code{\link{plotMap}}, 
+\seealso{ \code{\link{plotMissing}}, \code{\link{plotMap}}, 
   \code{\link{plot.pheno}} }
 
 
