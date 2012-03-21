@@ -1,6 +1,5 @@
-\name{topErrorlod}
+\name{top.errorlod}
 \alias{top.errorlod}
-\alias{topErrorlod}
 
 \title{List genotypes with large error LOD scores}
 
@@ -10,7 +9,7 @@
 }
 
 \usage{
-topErrorlod(cross, chr, cutoff=4, msg=TRUE)
+top.errorlod(cross, chr, cutoff=4, msg=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -40,7 +39,7 @@ data(hyper)
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
 # Print those above a specified cutoff 
-topErrorlod(hyper,cutoff=4)
+top.errorlod(hyper,cutoff=4)
 }
 
 \seealso{ \code{\link{calc.errorlod}}, \code{\link{plotGeno}}, \code{\link{plotErrorlod}} }

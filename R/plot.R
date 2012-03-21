@@ -698,7 +698,7 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
                    nrow=nrow(cross$geno[[1]]$data))
   dimnames(errors) <- dimnames(cross$geno[[1]]$data)
 
-  top <- topErrorlod(cross,names(cross$geno)[1],cutoff,FALSE)
+  top <- top.errorlod(cross,names(cross$geno)[1],cutoff,FALSE)
   if(length(top) > 0) 
     for(i in 1:nrow(top)) 
       errors[match(top[i,2],id),as.character(top[i,3])] <- 1
