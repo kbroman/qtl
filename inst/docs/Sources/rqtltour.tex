@@ -38,7 +38,7 @@ University of Wisconsin -- Madison
 \href{http://www.rqtl.org}{http://www.rqtl.org}
 \vspace{2mm}
 
-9 April 2009 % the date
+21 March 2012 % the date
 
 \rule{7.0in}{1mm} 
 \end{center}
@@ -164,13 +164,13 @@ experiment \\
 \textbf{Summaries} 
 & qtlversion & Gives the version number of installed R/qtl package \\
 & plot.cross & Plot various features of a cross object \\
-& plot.missing & Plot grid of missing genotypes \\
+& plotMissing & Plot grid of missing genotypes \\
 & geno.image   & Plot grid with colored pixels representing different
 genotypes \\
-& plot.pheno   & Histogram or bar plot of a phenotype \\
-& plot.info & Plot the proportion of missing genotype data \\
+& plotPheno   & Histogram or bar plot of a phenotype \\
+& plotInfo & Plot the proportion of missing genotype data \\
 & summary.cross & Print summary of QTL experiment \\ 
-& summary.map & Print summary of a genetic map \\ 
+& summaryMap & Print summary of a genetic map \\ 
 & \multicolumn{2}{l}{nchr, nind, nmar, nphe, totmar, nmissing, ntyped} \\ 
 & find.pheno & Find the column number for a particular phenotype \\
 & find.marker & Find the marker closest to a specified position \\
@@ -213,7 +213,7 @@ algorithm \\
 & checkAlleles & Identify markers with potentially switched alleles \\
 & calc.errorlod & Calculate Lincoln \& Lander (1992) error LOD scores \\
 & top.errorlod & List genotypes with highest error LOD values \\ 
-& plot.geno & Plot observed genotypes, flagging likely errors \\ 
+& plotGeno & Plot observed genotypes, flagging likely errors \\ 
 & comparecrosses & Compare two cross objects, to see if they are the same \\
 & comparegeno & Calculate proportion of matching genotypes for each
 pair of individuals \\
@@ -232,10 +232,10 @@ pair of individuals \\
 
 \textbf{Genetic mapping} 
 & est.rf & Estimate pairwise recombination fractions \\ 
-& plot.rf & Plot recombination fractions \\ 
+& plotRF & Plot recombination fractions \\ 
 & est.map & Estimate genetic map \\
-& plot.map & Plot genetic map(s) \\
-& summary.map & Print summary of a genetic map \\
+& plotMap & Plot genetic map(s) \\
+& summaryMap & Print summary of a genetic map \\
 & ripple & Assess marker order by permuting groups of adjacent
 markers \\
 & summary.ripple & Print summary of ripple output \\ 
@@ -260,7 +260,7 @@ interval for QTL location \\
 & effectplot & Plot phenotype means of genotype groups defined
 by 1 or 2 markers \\
 & effectscan & Plot estimated QTL effects across the whole genome \\
-& plot.pxg & Like effectplot, but as a dot plot of the phenotypes \\ 
+& plotPXG & Like effectplot, but as a dot plot of the phenotypes \\ 
 \hline
 
 \textbf{Multiple QTL models} 
@@ -448,9 +448,9 @@ We may plot the individual components of the above multi-plot figure
 as follows.
 
 \usercolor 
-\verb|plot.missing(hyper)| \\
-\verb|plot.map(hyper)| \\
-\verb|plot.pheno(hyper, pheno.col=1)| %$
+\verb|plotMissing(hyper)| \\
+\verb|plotMap(hyper)| \\
+\verb|plotPheno(hyper, pheno.col=1)| %$
 \normalcolor
 
 We can plot the genetic map with marker names, but they can be rather
@@ -458,7 +458,7 @@ difficult to read.  The following code plots the map with marker names
 for chr 1, 4, 6, 7 and 15.
 
 \usercolor
-\verb|plot.map(hyper, chr=c(1, 4, 6, 7, 15), show.marker.names=TRUE)|
+\verb|plotMap(hyper, chr=c(1, 4, 6, 7, 15), show.marker.names=TRUE)|
 \normalcolor
 
 \item Note the odd pattern of missing data; we may make this missing
@@ -466,7 +466,7 @@ data plot with the individuals ordered according to the value of their
 phenotype.
 
 \usercolor 
-\verb|plot.missing(hyper, reorder=TRUE)| 
+\verb|plotMissing(hyper, reorder=TRUE)| 
 \normalcolor
 
 We see that, for most markers, only individuals with extreme
@@ -491,8 +491,8 @@ that red corresponds to a small recombination fraction or a big LOD
 score, while blue is the reverse.  Gray indicates missing values.
 
 \usercolor \verb|hyper <- est.rf(hyper)| \\
-\verb|plot.rf(hyper)| \\
-\verb|plot.rf(hyper, chr=c(1,4))| \normalcolor
+\verb|plotRF(hyper)| \\
+\verb|plotRF(hyper, chr=c(1,4))| \normalcolor
 
 There are some very strange patterns in the recombination fractions,
 but this is due to the fact that some markers were typed largely on
@@ -504,14 +504,14 @@ missing data shows that this marker was typed only on a selected
 number of individuals (largely those showing recombination events
 across the interval).
 
-\usercolor \verb|plot.rf(hyper, chr=6)| \\
-\verb|plot.missing(hyper, chr=6)| \normalcolor
+\usercolor \verb|plotRF(hyper, chr=6)| \\
+\verb|plotMissing(hyper, chr=6)| \normalcolor
 
 \item Re-estimate the genetic map (keeping the order of markers
 fixed), and plot the original map against the newly estimated one. 
 
 \usercolor \verb|newmap <- est.map(hyper, error.prob=0.01)| \\
-\verb|plot.map(hyper, newmap)| \normalcolor
+\verb|plotMap(hyper, newmap)| \normalcolor
 
 We see some map expansion, especially on chr 6, 13 and 18.  It
 is questionable whether we should replace the map or not.  Keep in
@@ -549,30 +549,30 @@ Note that the results will be different, depending on whether you used
 potential errors on chr 16 (and a few on chr 13).  If you didn't, you will get a very long
 list of potential errors on chr 1, 11, 15, 16 and 17.
 
-\item The function \verb-plot.geno- may be used to inspect the
+\item The function \verb-plotGeno- may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
 flagged.  Of course, it's difficult to look at too many individuals at
 once.  Note that white = AA and black = AB (for a backcross).  
 
 \usercolor
-\verb|plot.geno(hyper, chr=16, ind=c(24:34, 71:81))|
+\verb|plotGeno(hyper, chr=16, ind=c(24:34, 71:81))|
 \normalcolor
 
 We don't have any utilities for fixing any apparent errors; it would
 be best to go back to the raw data.  (Of course, you should edit a
 copy of the file; never discard the primary data.)
 
-\item The function \verb-plot.info- plots a measure of the proportion
+\item The function \verb-plotInfo- plots a measure of the proportion
 of missing genotype information in the genotype data.  The missing
 information is calculated in two ways: as entropy, or via the
 variance of the conditional genotypes, given the observed marker
-data.  (See the help file, using \verb-?plot.info-.)  
+data.  (See the help file, using \verb-?plotInfo-.)  
 
 \usercolor
-\verb|plot.info(hyper)| \\
-\verb|plot.info(hyper, chr=c(1,4,15))| \\
-\verb|plot.info(hyper, chr=c(1,4,15), method="entropy")| \\
-\verb|plot.info(hyper, chr=c(1,4,15), method="variance")| 
+\verb|plotInfo(hyper)| \\
+\verb|plotInfo(hyper, chr=c(1,4,15))| \\
+\verb|plotInfo(hyper, chr=c(1,4,15), method="entropy")| \\
+\verb|plotInfo(hyper, chr=c(1,4,15), method="variance")| 
 \normalcolor
 
 
@@ -911,20 +911,20 @@ some errors in marker order.
 and plot them. 
 
 \usercolor \verb|badorder <- est.rf(badorder)| \\
-\verb|plot.rf(badorder)| \normalcolor
+\verb|plotRF(badorder)| \normalcolor
 
 It appears that markers on chr 2 and 3 have been switched.
 
 Also note that, if we look more closely at the recombination fractions
 for chr 1, there seem to be some errors in marker order.
 
-\usercolor \verb|plot.rf(badorder, chr=1)| \normalcolor
+\usercolor \verb|plotRF(badorder, chr=1)| \normalcolor
 
 \item Re-estimate the genetic map.  
 
 \usercolor
 \verb|newmap <- est.map(badorder, verbose=TRUE)| \\
-\verb|plot.map(badorder, newmap)|
+\verb|plotMap(badorder, newmap)|
 \normalcolor
 
 This really shows the problems on chr 2 and 3.
@@ -933,7 +933,7 @@ This really shows the problems on chr 2 and 3.
 First, we look more closely at the recombination fractions for these
 chromosoems
 
-\usercolor \verb|plot.rf(badorder, chr=2:3)| \normalcolor
+\usercolor \verb|plotRF(badorder, chr=2:3)| \normalcolor
 
 We need to move the sixth marker on chr 2 to chr 3, and
 the fifth marker on chr 3 to chr 2.  We need to figure
@@ -952,7 +952,7 @@ It seems like they should be exactly switched.
 
 Now look at the recombination fractions again.
 
-\usercolor \verb|plot.rf(badorder, chr=2:3)| \normalcolor
+\usercolor \verb|plotRF(badorder, chr=2:3)| \normalcolor
 
 \item We can check the marker order on chr 1.  The function
 \verb-ripple- will consider all permutations of a sliding window of
@@ -1019,7 +1019,7 @@ chromosome.
 
 \usercolor
 \verb|badorder.rev <- est.rf(badorder.rev)| \\
-\verb|plot.rf(badorder.rev, 1)| 
+\verb|plotRF(badorder.rev, 1)| 
 \normalcolor
 
 \end{enumerate}
@@ -1045,7 +1045,7 @@ Boyartchuk and Bill Dietrich.
 \verb|data(listeria)| \\
 \verb|summary(listeria)| \\
 \verb|plot(listeria)| \\
-\verb|plot.missing(listeria)| 
+\verb|plotMissing(listeria)| 
 \normalcolor
 
 Note that in the missing data plot, gray pixels are partially missing
@@ -1068,15 +1068,15 @@ infection.
 \item Estimate pairwise recombination fractions.
 
 \usercolor \verb|listeria <- est.rf(listeria)| \\
-\verb|plot.rf(listeria)| \\
-\verb|plot.rf(listeria, chr=c(5,13))| 
+\verb|plotRF(listeria)| \\
+\verb|plotRF(listeria, chr=c(5,13))| 
 \normalcolor
 
 \item Re-estimate the genetic map. 
  
 \usercolor 
 \verb|newmap <- est.map(listeria, error.prob=0.01)| \\
-\verb|plot.map(listeria, newmap)| \\
+\verb|plotMap(listeria, newmap)| \\
 \verb|listeria <- replace.map(listeria, newmap)|
 \normalcolor
 
@@ -1088,10 +1088,10 @@ infection.
 \verb|listeria <- calc.errorlod(listeria, error.prob=0.01)| \\
 \verb|top.errorlod(listeria)| \\
 \verb|top.errorlod(listeria, cutoff=3.5)| \\
-\verb|plot.geno(listeria, chr=13, ind=61:70, cutoff=3.5)|
+\verb|plotGeno(listeria, chr=13, ind=61:70, cutoff=3.5)|
 \normalcolor
 
-Note that in the plot given by \verb-plot.geno-, for an intercross,
+Note that in the plot given by \verb-plotGeno-, for an intercross,
 white = AA, gray = AB, black = BB, green = AA or AB, and orange = AB
 or BB.
 
