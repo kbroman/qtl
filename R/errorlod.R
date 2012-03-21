@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2001-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: calc.errorlod, plot.errorlod, top.errorlod
+# Contains: calc.errorlod, plotErrorlod, topErrorlod
 #
 ######################################################################
 
@@ -129,11 +129,11 @@ function(cross, error.prob=0.01,
 
 ######################################################################
 #
-# plot.errorlod
+# plotErrorlod
 #
 ######################################################################
 
-plot.errorlod <-
+plotErrorlod <- plot.errorlod <-
 function(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
          col=c("white","gray85","hotpink","purple3"),
          alternate.chrid=FALSE, ...)
@@ -231,13 +231,13 @@ function(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
 
 ######################################################################
 #
-# top.errorlod
+# topErrorlod
 #
 # Picks out the genotypes having errorlod values above some cutoff
 #
 ######################################################################
 
-top.errorlod <-
+topErrorlod <- top.errorlod <-
 function(cross, chr, cutoff=4, msg=TRUE)  
 {
   if(!any(class(cross) == "cross"))

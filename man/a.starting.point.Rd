@@ -119,11 +119,11 @@ identifying possible genotyping errors; it calculates the error LOD
 scores described by Lincoln and Lander (1992).  The
 \code{\link{calc.errorlod}} function return a modified version of
 the input cross, with error LOD scores included.  The function
-\code{\link{top.errorlod}} prints the genotypes with values above a
+\code{\link{topErrorlod}} prints the genotypes with values above a
 cutoff (by default, the cutoff is 4.0).
 
 \code{hyper <- calc.errorlod(hyper, error.prob=0.01)} \cr
-\code{top.errorlod(hyper)} 
+\code{topErrorlod(hyper)} 
 
 The function \code{\link{plot.geno}} may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
