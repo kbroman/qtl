@@ -2,13 +2,12 @@
 #
 # mqmscanall.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2012, Danny Arends
 #
-# Modified by Pjotr Prins
-#
+# Modified by Pjotr Prins and Karl Broman
 # 
 # first written Februari 2009
-# last modified December 2009
+# last modified March 2012
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -68,8 +67,8 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if(multicore && n.clusters>1 && ("snow" %in% installed.packages()[,1])) {
-      suppressWarnings(require(snow,quietly=TRUE))
+		if(multicore && n.clusters >1 && suppressWarnings(require(snow,quietly=TRUE))) {
+
       if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
