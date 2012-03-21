@@ -550,11 +550,11 @@ function(x, chr, horizontal=FALSE, shift=TRUE,
   }
 
   if(horizontal) 
-    plot.map(map, horizontal=horizontal, shift=shift, 
+    plotMap(map, horizontal=horizontal, shift=shift, 
          show.marker.names=show.marker.names, alternate.chrid=alternate.chrid,
          ylim=c(length(map)+0.5, 0), ...)
   else
-    plot.map(map, horizontal=horizontal, shift=shift, 
+    plotMap(map, horizontal=horizontal, shift=shift, 
          show.marker.names=show.marker.names, alternate.chrid=alternate.chrid,
          xlim=c(0.5,length(map)+1), ...)
 

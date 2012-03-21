@@ -34,7 +34,7 @@ plot.rf(badorder)
 
 # re-estimate map
 newmap <- est.map(badorder)
-plot.map(badorder, newmap)
+plotMap(badorder, newmap)
 
 # assess marker order on chr 1
 rip3 <- ripple(badorder, chr=1, window=3)
