@@ -46,7 +46,7 @@ plot(ssmap, samap)
 # error lod scores
 fake.4way <- calc.genoprob(fake.4way, err=0.01)
 fake.4way <- calc.errorlod(fake.4way, err=0.01)
-top.errorlod(fake.4way, cutoff=2.5)
+topErrorlod(fake.4way, cutoff=2.5)
 
 # genome scan
 fake.4way <- calc.genoprob(fake.4way, step=2.5)

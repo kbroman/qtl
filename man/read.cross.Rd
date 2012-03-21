@@ -116,8 +116,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
 
   \item{pheno}{data.frame of size (\code{n.ind x n.phe}) containing the
     phenotypes.  If a phenotype with the name \code{id} or \code{ID} is
-  included, these identifiers will be used in \code{\link{top.errorlod}},
-  \code{\link{plot.errorlod}}, and \code{\link{plot.geno}} as
+  included, these identifiers will be used in \code{\link{topErrorlod}},
+  \code{\link{plotErrorlod}}, and \code{\link{plot.geno}} as
   identifiers for the individual.} 
 
   While the data format is complicated, there are a number of functions,
@@ -234,7 +234,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   precisely the same information (and with the same name).  These IDs
   will be included in the data as a phenotype.  If the name \code{id} or
   \code{ID} is used, these identifiers will be used in
-  \code{\link{top.errorlod}}, \code{\link{plot.errorlod}}, and
+  \code{\link{topErrorlod}}, \code{\link{plotErrorlod}}, and
   \code{\link{plot.geno}} as identifiers for the individual.  
 
   In the genotype data file, the second row gives the chromosome IDs.
