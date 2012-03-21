@@ -37,8 +37,8 @@ starting positions are as in \code{offset}.
 data(hyper)
 shiftedhyper <- shiftmap(hyper, offset=0)
 par(mfrow=c(1,2))
-plot.map(hyper, shift=FALSE, alternate.chrid=TRUE)
-plot.map(shiftedhyper, shift=FALSE, alternate.chrid=TRUE)
+plotMap(hyper, shift=FALSE, alternate.chrid=TRUE)
+plotMap(shiftedhyper, shift=FALSE, alternate.chrid=TRUE)
 }
 
 

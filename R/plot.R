@@ -20,7 +20,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: plot.missing, plot.map, plot.cross, plot.geno, plot.info,
+# Contains: plot.missing, plotMap, plot.cross, plot.geno, plot.info,
 #           plot.pxg, plot.pheno
 #
 ######################################################################
@@ -237,7 +237,7 @@ function(x, chr, reorder=FALSE, main="Genotype data",
   invisible()
 }
 
-plot.map <-
+plotMap <- plot.map <-
 function(x, map2, chr, horizontal=FALSE, shift=TRUE,
          show.marker.names=FALSE, alternate.chrid=FALSE, ...) 
 {
@@ -318,9 +318,9 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
 
         par(mfrow=c(2,1))
         class(Map1) <- class(Map2) <- class(Map3) <- class(Map4) <- "map"
-        plot.map(Map1,Map3,horizontal=horizontal,shift=shift,
+        plotMap(Map1,Map3,horizontal=horizontal,shift=shift,
                  show.marker.names=show.marker.names,alternate.chrid=alternate.chrid)
-        plot.map(Map2,Map4,horizontal=horizontal,shift=shift,
+        plotMap(Map2,Map4,horizontal=horizontal,shift=shift,
                  show.marker.names=show.marker.names,alternate.chrid=alternate.chrid)
         return(invisible(NULL))
       }
@@ -609,10 +609,10 @@ plot.cross <-
 function (x, auto.layout = TRUE, pheno.col,
           alternate.chrid=TRUE, ...) 
 {
-  # look to see whether this should really be shipped to plot.map
+  # look to see whether this should really be shipped to plotMap
   if("map" %in% class(auto.layout) &&
      ("map" %in% class(x) || "cross" %in% class(x))) {
-    plot.map(x, auto.layout, alternate.chrid=alternate.chrid, ...)
+    plotMap(x, auto.layout, alternate.chrid=alternate.chrid, ...)
     return(invisible())
   }
 
@@ -645,7 +645,7 @@ function (x, auto.layout = TRUE, pheno.col,
   }
 
   plot.missing(x,alternate.chrid=alternate.chrid)
-  plot.map(x,alternate.chrid=alternate.chrid)
+  plotMap(x,alternate.chrid=alternate.chrid)
 
   for(i in pheno.col) plot.pheno(x, pheno.col=i)
 

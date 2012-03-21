@@ -73,7 +73,7 @@ self-explanatory.
 
 The function \code{\link{plot.cross}} gives a graphical summary of
 the data; it calls \code{\link{plot.missing}} (to plot a matrix
-displaying missing genotypes) and \code{\link{plot.map}} (to plot
+displaying missing genotypes) and \code{\link{plotMap}} (to plot
 the genetic maps), and also displays histograms or barplots of the
 phenotypes.  The \code{\link{plot.missing}} function can plot
 individuals ordered by their phenotypes; you can see that for most
@@ -82,7 +82,7 @@ markers, only individuals with extreme phenotypes were genotyped.
 \code{plot(hyper)} \cr
 \code{plot.missing(hyper)} \cr
 \code{plot.missing(hyper, reorder=TRUE)} \cr
-\code{plot.map(hyper)}
+\code{plotMap(hyper)}
 
 Note that one marker (on chromosome 14) has no genotype data.  The
 function \code{\link{drop.nullmarkers}} removes such markers from
@@ -104,14 +104,14 @@ recombination fractions show rather odd patterns.
 
 To re-estimate the genetic map for an experimental cross, use the
 function \code{\link{est.map}}.  The function
-\code{\link{plot.map}}, in addition to plotting a single map, can
+\code{\link{plotMap}}, in addition to plotting a single map, can
 plot the comparison of two genetic maps (as long as they are composed of
 the same numbers of chromosomes and markers per chromosome).  The
 function \code{\link{replace.map}} map be used to replace the
 genetic map in a cross with a new one.
 
 \code{newmap <- est.map(hyper, error.prob=0.01, verbose=TRUE)} \cr
-\code{plot.map(hyper, newmap)} \cr
+\code{plotMap(hyper, newmap)} \cr
 \code{hyper <- replace.map(hyper, newmap)}
 
 The function \code{\link{calc.errorlod}} may be used to assist in
