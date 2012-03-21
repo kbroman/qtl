@@ -43,7 +43,7 @@ hyper <- calc.errorlod(hyper,error.prob=0.01)
 topErrorlod(hyper,cutoff=4)
 }
 
-\seealso{ \code{\link{calc.errorlod}}, \code{\link{plot.geno}}, \code{\link{plotErrorlod}} }
+\seealso{ \code{\link{calc.errorlod}}, \code{\link{plotGeno}}, \code{\link{plotErrorlod}} }
 
 
 \keyword{print}

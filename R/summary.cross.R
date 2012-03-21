@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2001-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -304,7 +304,7 @@ function(object,...)
     warning("The individual IDs are not unique.")
 
   # check that chromosomes aren't too long
-  mapsum <- summary.map(object)
+  mapsum <- summaryMap(object)
   if(ncol(mapsum)==7)  # sex-specific map
     maxlen <- max(mapsum[1:(nrow(mapsum)-1),2:3])
   else  

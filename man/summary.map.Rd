@@ -1,5 +1,6 @@
-\name{summary.map}
+\name{summaryMap}
 \alias{summary.map}
+\alias{summaryMap}
 
 \title{Print summary of a genetic map}
 
@@ -9,7 +10,7 @@
 
 \usage{
 \method{summary}{map}(object, \dots)
-summary.map(object, \dots)
+summaryMap(object, \dots)
 }
 
 \arguments{

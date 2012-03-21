@@ -35,18 +35,18 @@ export(mqmplot.directedqtl, mqmplot.heatmap, mqmplot.multitrait, mqmplot.permuta
 export(mqmplot.singletrait, mqmprocesspermutation, mqmscan, mqmscanall)
 export(mqmscanfdr, mqmsetcofactors, mqmtestnormal)
 export(nchr, nind, nmar, nmissing, nphe, nqrank, ntyped, orderMarkers)
-export(phenames, pickMarkerSubset, plotErrorlod, plot.errorlod, plot.geno, plot.info, plot.map, plotMap)
-export(plotMissing, plot.missing, plot.pheno, plot.pxg, plot.rf, plotLodProfile)
+export(phenames, pickMarkerSubset, plotErrorlod, plot.errorlod, plotGeno, plot.geno, plotInfo, plot.info, plot.map, plotMap)
+export(plotMissing, plot.missing, plotPheno, plot.pheno, plotPXG, plot.pxg, plotRF, plot.rf, plotLodProfile)
 export(plotModel, polyplot, pull.geno, pull.map, pull.markers, pull.pheno, pull.rf)
 export(qtlversion, read.cross, readMWril, refineqtl, reorderqtl, replace.map)
 export(replacemap, replaceqtl, rescalemap, ripple)
 export(scanall, scanone, scanoneboot, scanPhyloQTL, scanqtl, scantwo)
 export(shiftmap, sim.cross, sim.geno, sim.map, simFounderSnps, simPhyloQTL)
 export(simulatemissingdata, stepwiseqtl, strip.partials, subrousummaryscantwo)
-export(summary.map, switch.order, switchAlleles, topErrorlod, top.errorlod)
+export(summaryMap, summary.map, switch.order, switchAlleles, topErrorlod, top.errorlod)
 export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc.scanone)
 export(clean, condense, convert)
-export(summary.scantwo.old)
+export(summaryScantwoOld, summary.scantwo.old)
 
 
 

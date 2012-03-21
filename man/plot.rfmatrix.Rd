@@ -37,7 +37,7 @@ lod <- pull.rf(fake.f2, "lod")
 plot(lod, marker, bandcol="gray70")
 }
 
-\seealso{ \code{\link{pull.rf}}, \code{\link{est.rf}}, \code{\link{plot.rf}} }
+\seealso{ \code{\link{pull.rf}}, \code{\link{est.rf}}, \code{\link{plotRF}} }
 
 
 \keyword{hplot}

@@ -99,8 +99,8 @@ many markers were typed only on recombinant individuals, the pairwise
 recombination fractions show rather odd patterns.
 
 \code{hyper <- est.rf(hyper)} \cr
-\code{plot.rf(hyper)} \cr
-\code{plot.rf(hyper, chr=c(1,4))}
+\code{plotRF(hyper)} \cr
+\code{plotRF(hyper, chr=c(1,4))}
 
 To re-estimate the genetic map for an experimental cross, use the
 function \code{\link{est.map}}.  The function
@@ -125,11 +125,11 @@ cutoff (by default, the cutoff is 4.0).
 \code{hyper <- calc.errorlod(hyper, error.prob=0.01)} \cr
 \code{topErrorlod(hyper)} 
 
-The function \code{\link{plot.geno}} may be used to inspect the
+The function \code{\link{plotGeno}} may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
 flagged.
 
-\code{plot.geno(hyper, chr=16, ind=c(24:34, 71:81))}
+\code{plotGeno(hyper, chr=16, ind=c(24:34, 71:81))}
 
 Before doing QTL analyses, some intermediate calculations need to be
 performed.  The function \code{\link{calc.genoprob}} calculates

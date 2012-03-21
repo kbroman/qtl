@@ -43,10 +43,10 @@ est.rf(cross, maxit=10000, tol=1e-6)
 \examples{
 data(badorder)
 badorder <- est.rf(badorder)
-plot.rf(badorder)
+plotRF(badorder)
 }
 
-\seealso{ \code{\link{plot.rf}}, \code{\link{pull.rf}}, \code{\link{plot.rfmatrix}},
+\seealso{ \code{\link{plotRF}}, \code{\link{pull.rf}}, \code{\link{plot.rfmatrix}},
   \code{\link{est.map}},
   \code{\link{badorder}}, \code{\link{checkAlleles}} }
 

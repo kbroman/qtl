@@ -47,7 +47,7 @@ calc.errorlod(cross, error.prob=0.01,
   Use \code{\link{topErrorlod}} to print all genotypes with error
   LOD scores above a specified threshold,
   \code{\link{plotErrorlod}} to plot the error LOD scores for
-  specified chromosomes, and \code{\link{plot.geno}} to view the
+  specified chromosomes, and \code{\link{plotGeno}} to view the
   observed genotype data with likely errors flagged.
 }
 
@@ -75,7 +75,7 @@ hyper <- calc.errorlod(hyper,error.prob=0.01)
 topErrorlod(hyper, cutoff=4)
 
 # plot genotype data, flagging genotypes with error LOD > cutoff
-plot.geno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
+plotGeno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
 \seealso{ \code{\link{plotErrorlod}},

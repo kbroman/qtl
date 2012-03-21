@@ -61,7 +61,7 @@ plotErrorlod(hyper,chr=1)
 
 \seealso{ \code{\link{calc.errorlod}},
   \code{\link{topErrorlod}}, \code{\link[graphics]{image}},
-  \code{\link{subset.cross}}, \code{\link{plot.geno}} }
+  \code{\link{subset.cross}}, \code{\link{plotGeno}} }
 
 \references{
   Lincoln, S. E. and Lander, E. S. (1992) Systematic detection of

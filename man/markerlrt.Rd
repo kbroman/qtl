@@ -29,10 +29,10 @@ markerlrt(cross)
 \examples{
 data(badorder)
 badorder <- markerlrt(badorder)
-plot.rf(badorder)
+plotRF(badorder)
 }
 
-\seealso{ \code{\link{plot.rf}}, \code{\link{est.rf}},
+\seealso{ \code{\link{plotRF}}, \code{\link{est.rf}},
   \code{\link{badorder}} }
 
 \keyword{utilities}
