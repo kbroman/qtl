@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: est.rf, plot.rf, checkAlleles, pull.rf, plot.rfmatrix
+# Contains: est.rf, plotRF, checkAlleles, pull.rf, plot.rfmatrix
 #
 ######################################################################
 
@@ -127,7 +127,7 @@ function(cross, maxit=10000, tol=1e-6)
 
   
 
-plot.rf <-
+plotRF <- plot.rf <- 
 function(x, chr, what=c("both","lod","rf"),
          alternate.chrid=FALSE, zmax=12,
          mark.diagonal=FALSE, ...)

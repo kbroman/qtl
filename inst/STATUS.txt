@@ -21,7 +21,20 @@ Version 1.24, 3/21/2012:
 
 Major changes:
 
-  None.
+  Changed the names of a number of functions, in order to avoid the
+  "Note" in R CMD check, and because Prof. Brian Ripley asked me to.
+
+    plot.map ->      plotMap
+    plot.missing ->  plotMissing
+    plot.errorlod -> plotErrorlod
+    top.errorlod ->  topErrorlod
+    plot.geno ->     plotGeno
+    plot.info ->     plotInfo
+    plot.pheno ->    plotPheno
+    plot.pxg ->      plotPXG
+    plot.rf -> 	     plotRF
+    summary.map ->   summaryMap
+    summary.scantwo.old -> summaryScantwoOld
 
 Minor changes:
 

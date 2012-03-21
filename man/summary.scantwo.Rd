@@ -134,7 +134,7 @@
 
 \section{The older version}{
   The previous version of this function is still available, though it is
-  now named \code{\link{summary.scantwo.old}}.
+  now named \code{\link{summaryScantwoOld}}.
 
   We much prefer the revised function.  However, while we are confident
   that this function (and the permutations in

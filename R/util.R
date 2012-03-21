@@ -31,7 +31,7 @@
 #           subset.cross, fill.geno, checkcovar, find.marker,
 #           find.pseudomarker,
 #           adjust.rf.ri, lodint, bayesint, 
-#           comparecrosses, movemarker, summary.map,
+#           comparecrosses, movemarker, summary.map (aka summaryMap),
 #           print.summary.map, find.pheno,
 #           convert, convert.scanone, convert.scantwo
 #           find.flanking, strip.partials, comparegeno
@@ -2677,7 +2677,7 @@ function(cross, marker, newchr, newpos)
 # Give a short summary of a genetic map object.
 # 
 ######################################################################
-summary.map <- 
+summaryMap <- summary.map <- 
 function(object, ...)
 {
   map <- object

@@ -30,7 +30,7 @@ data(badorder)
 }
 # estimate recombination fractions
 badorder <- est.rf(badorder)
-plot.rf(badorder)
+plotRF(badorder)
 
 # re-estimate map
 newmap <- est.map(badorder)

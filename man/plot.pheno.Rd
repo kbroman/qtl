@@ -1,5 +1,6 @@
-\name{plot.pheno}
+\name{plotPheno}
 \alias{plot.pheno}
+\alias{plotPheno}
 
 \title{Plot a phenotype distribution}
 
@@ -9,7 +10,7 @@
 }
 
 \usage{
-plot.pheno(x, pheno.col=1, \dots)
+plotPheno(x, pheno.col=1, \dots)
 }
 
 \arguments{
@@ -35,9 +36,9 @@ plot.pheno(x, pheno.col=1, \dots)
 
 \examples{
 data(fake.bc)
-plot.pheno(fake.bc, pheno.col=1)
-plot.pheno(fake.bc, pheno.col=3)
-plot.pheno(fake.bc, pheno.col="age")
+plotPheno(fake.bc, pheno.col=1)
+plotPheno(fake.bc, pheno.col=3)
+plotPheno(fake.bc, pheno.col="age")
 }
 
 \seealso{ \code{\link{plot.cross}}, \code{\link{plotMap}}, 

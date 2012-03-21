@@ -20,8 +20,8 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: plotMissing, plotMap, plot.cross, plot.geno, plot.info,
-#           plot.pxg, plot.pheno
+# Contains: plotMissing, plotMap, plot.cross, plotGeno, plotInfo,
+#           plotPXG, plotPheno
 #
 ######################################################################
 
@@ -647,7 +647,7 @@ function (x, auto.layout = TRUE, pheno.col,
   plotMissing(x,alternate.chrid=alternate.chrid)
   plotMap(x,alternate.chrid=alternate.chrid)
 
-  for(i in pheno.col) plot.pheno(x, pheno.col=i)
+  for(i in pheno.col) plotPheno(x, pheno.col=i)
 
   invisible()
 }
@@ -655,12 +655,12 @@ function (x, auto.layout = TRUE, pheno.col,
 
 ##################################################r####################
 #
-# plot.geno: Plot genotypes for a specified chromosome, with likely
+# plotGeno: Plot genotypes for a specified chromosome, with likely
 #           genotyping errors indicated. 
 #
 ######################################################################
 
-plot.geno <-
+plotGeno <- plot.geno <-
 function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
          cutoff=4, min.sep=2, cex=1.2, ...)
 {
@@ -1043,11 +1043,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
 ######################################################################
 #
-# plot.info: Plot the proportion of missing information in the
+# plotInfo: Plot the proportion of missing information in the
 #            genotype data.
 #
 ######################################################################
-plot.info <-
+plotInfo <- plot.info <-
 function(x,chr,method=c("entropy","variance","both"), step=1,
          off.end=0, error.prob=0.001,
          map.function=c("haldane","kosambi","c-f","morgan"),
@@ -1280,7 +1280,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
 
 
 # plot phenotypes against one or more markers
-plot.pxg <-
+plotPXG <- plot.pxg <-
 function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE, 
          pch, ylab, main, col, ...) 
 {
@@ -1296,7 +1296,7 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
-    warning("plot.pxg can take just one phenotype; only the first will be used")
+    warning("plotPXG can take just one phenotype; only the first will be used")
   }
     
   if(is.character(pheno.col)) {
@@ -1528,7 +1528,7 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 
 }
 
-plot.pheno <-
+plotPheno <- plot.pheno <-
 function(x, pheno.col=1, ...)
 {
   if(!any(class(x) == "cross"))
