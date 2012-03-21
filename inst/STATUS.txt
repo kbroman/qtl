@@ -31,6 +31,9 @@ Minor changes:
   second-highest is now third-to-last; the threshold argument is
   applied to the overall maximum rather than to that difference.
 
+  Revisions to read.cross (for the csv formats) from Steffen Moeller,
+  to give some more informative warnings/errors.
+
   Fixed a bug in interpPositions; problems if the input had missing
   rownames. 
 
@@ -55,10 +58,6 @@ Minor changes:
 
   Added function nullmarkers() for identifying markers with no
   genotype data.
-
-  Revisions to read.cross, format="csv", from Steffen Moeller, to
-  handle the case of "" as a missing value string and to give some
-  more informative warnings/errors.
 
   Revised sim.cross so that founder genotypes are included in output,
   for 4- and 8-way RIL.

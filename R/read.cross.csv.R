@@ -2,8 +2,8 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-2011, Karl W Broman
-# last modified Jul, 2011
+# copyright (c) 2000-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -83,14 +83,7 @@ function(dir, file, na.strings=c("-","NA"),
   if(rotate)
     data <- as.data.frame(t(data), stringsAsFactors=FALSE)
 
-  # empty holds the index of colums with no value in second row
-  cat("data[2,]:", paste(data[2,],collapse=",",sep=""),"\n",sep="")
   empty <- grep("^\\s*$", data[2, ])
-  if("" %in% na.strings) {
-    # sometimes there is a deviation from the (unfortunate) X as an na.string
-    empty<-sort(union(empty,which(is.na(data[2,]))))
-  }
-  cat("empty:", paste(empty,collapse=",",sep=""),"\n",sep="")
 
   if( ! 1 %in% empty)
     stop("You must include at least one phenotype (e.g., an index). ",
@@ -101,12 +94,8 @@ function(dir, file, na.strings=c("-","NA"),
   if(length(empty)==ncol(data))
     stop("Second row has all blank cells; you need to include chromosome IDs for the markers.")
   n.phe <- min((1:ncol(data))[-empty])-1
-  cat("n.phe: ",n.phe,"\n",sep="")
   empty <- rep(FALSE, n.phe)
   empty[grep("^\\s*$", data[3,1:n.phe])] <- TRUE
-  if("" %in% na.strings) {
-    empty[is.na(data[3,1:n.phe])] <- TRUE
-  }
 
   # Is map included?  yes if first n.phe columns in row 3 are all blank
   if(all(empty)) {
