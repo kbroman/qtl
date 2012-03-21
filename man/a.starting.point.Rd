@@ -72,16 +72,16 @@ self-explanatory.
 \code{totmar(hyper)}
 
 The function \code{\link{plot.cross}} gives a graphical summary of
-the data; it calls \code{\link{plot.missing}} (to plot a matrix
+the data; it calls \code{\link{plotMissing}} (to plot a matrix
 displaying missing genotypes) and \code{\link{plotMap}} (to plot
 the genetic maps), and also displays histograms or barplots of the
-phenotypes.  The \code{\link{plot.missing}} function can plot
+phenotypes.  The \code{\link{plotMissing}} function can plot
 individuals ordered by their phenotypes; you can see that for most
 markers, only individuals with extreme phenotypes were genotyped.
 
 \code{plot(hyper)} \cr
-\code{plot.missing(hyper)} \cr
-\code{plot.missing(hyper, reorder=TRUE)} \cr
+\code{plotMissing(hyper)} \cr
+\code{plotMissing(hyper, reorder=TRUE)} \cr
 \code{plotMap(hyper)}
 
 Note that one marker (on chromosome 14) has no genotype data.  The

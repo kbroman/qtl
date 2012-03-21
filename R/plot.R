@@ -20,12 +20,12 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: plot.missing, plotMap, plot.cross, plot.geno, plot.info,
+# Contains: plotMissing, plotMap, plot.cross, plot.geno, plot.info,
 #           plot.pxg, plot.pheno
 #
 ######################################################################
 
-plot.missing <-
+plotMissing <- plot.missing <-
 function(x, chr, reorder=FALSE, main="Missing genotypes",
          alternate.chrid=FALSE, ...) 
 {
@@ -644,7 +644,7 @@ function (x, auto.layout = TRUE, pheno.col,
     par(mfrow = c(nr, nc))
   }
 
-  plot.missing(x,alternate.chrid=alternate.chrid)
+  plotMissing(x,alternate.chrid=alternate.chrid)
   plotMap(x,alternate.chrid=alternate.chrid)
 
   for(i in pheno.col) plot.pheno(x, pheno.col=i)

@@ -41,7 +41,7 @@ plot.pheno(fake.bc, pheno.col="age")
 }
 
 \seealso{ \code{\link{plot.cross}}, \code{\link{plotMap}}, 
-  \code{\link{plot.missing}}, 
+  \code{\link{plotMissing}}, 
   \code{\link[graphics]{hist}}, \code{\link[graphics]{barplot}} }
 
 

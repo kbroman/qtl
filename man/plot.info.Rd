@@ -96,7 +96,7 @@ plot.info(hyper, bandcol="gray70")
 }
 
 \seealso{ \code{\link{plot.scanone}},
-  \code{\link{plot.missing}}, \code{\link{calc.genoprob}},
+  \code{\link{plotMissing}}, \code{\link{calc.genoprob}},
   \code{\link{geno.table}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
