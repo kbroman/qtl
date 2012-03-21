@@ -72,7 +72,12 @@ source("myround.R")
 {\color{blue} \tt \bfseries University of Wisconsin-Madison \\
 Department of Biostatistics \& Medical Informatics \\
 Technical Report \# 214 \\[24pt]
-4 November 2010}
+4 November 2010
+
+\color{red} Revised 21 March 2012: \color{black} some function names
+have changed \\
+(e.g., \verb|plot.geno| is now \verb|plotGeno|)
+}
 
 \end{center}
 
@@ -256,18 +261,18 @@ integrity of the data, and so I'd pay attention to any warning or
 error messages.
 
 Next, I look at the pattern of missing data, through the function
-\code{plot.missing()}. 
+\code{plotMissing()}. 
 
 % plot missing data pattern
 <<plotmissing,eval=FALSE>>=
-plot.missing(mapthis)
+plotMissing(mapthis)
 @ 
 
 \begin{figure}
 \centering
 <<plotmissingplot,fig=TRUE,echo=FALSE,height=3.5>>=
 par(mar=c(4.1,4.1,0.6,1.1))
-plot.missing(mapthis, main="")
+plotMissing(mapthis, main="")
 @ 
 \caption{Pattern of missing genotype data in the \code{mapthis} dataset.  Black
   pixels indicate missing genotypes.\label{fig:plotmissing}}
@@ -707,14 +712,14 @@ A plot of the pairwise recombination fractions and LOD scores may
 indicate how well this worked.
 
 <<plotrf,eval=FALSE>>=
-plot.rf(mapthis, alternate.chrid=TRUE)
+plotRF(mapthis, alternate.chrid=TRUE)
 @ 
 
 \begin{figure}
 \centering
 <<plotrfplot,fig=TRUE,echo=FALSE,height=5.5>>=
 par(mar=c(4.1,4.1,2.1,2.1), las=1)
-plot.rf(mapthis, main="", alternate.chrid=TRUE)
+plotRF(mapthis, main="", alternate.chrid=TRUE)
 @ 
 \caption{Plot of estimated recombination fractions (upper-left
   triangle) and LOD scores (lower-right triangle) for all pairs of
@@ -811,7 +816,7 @@ re-run \code{est.rf()} after having run \code{switchAlleles()}.)
 
 <<plotrfagain,eval=FALSE>>=
 mapthis <- est.rf(mapthis)
-plot.rf(mapthis, alternate.chrid=TRUE)
+plotRF(mapthis, alternate.chrid=TRUE)
 @ 
 
 \begin{figure}
@@ -819,7 +824,7 @@ plot.rf(mapthis, alternate.chrid=TRUE)
 <<plotrfagainplot,fig=TRUE,echo=FALSE,height=5.5>>=
 mapthis <- est.rf(mapthis)
 par(mar=c(4.1,4.1,2.1,2.1), las=1)
-plot.rf(mapthis, main="", alternate.chrid=TRUE)
+plotRF(mapthis, main="", alternate.chrid=TRUE)
 @ 
 \caption{Plot of estimated recombination fractions (upper-left
   triangle) and LOD scores (lower-right triangle) for all pairs of
@@ -887,7 +892,7 @@ It is useful to plot the pairwise recombination fractions and LOD
 scores again.
 
 <<plotrfyetagain,eval=FALSE>>=
-plot.rf(mapthis)
+plotRF(mapthis)
 @ 
 
 \begin{figure}
@@ -895,7 +900,7 @@ plot.rf(mapthis)
 <<plotrfyetagainplot,fig=TRUE,echo=FALSE,height=5.5>>=
 mapthis <- est.rf(mapthis)
 par(mar=c(4.1,4.1,1.6,1.6), las=1)
-plot.rf(mapthis, main="")
+plotRF(mapthis, main="")
 @ 
 \caption{Plot of estimated recombination fractions (upper-left
   triangle) and LOD scores (lower-right triangle) for all pairs of
@@ -1477,19 +1482,19 @@ algorithm, and we do hope to implement such a feature in the future.)
 First, we should look at the actual map: are there large gaps between
 markers, indicating adjacent markers that are only weakly linked?
 Studying the map locations with \code{pull.map()}, as above, is hard
-when there are lots of markers.  The function \code{summary.map()}
+when there are lots of markers.  The function \code{summaryMap()}
 provides a summary of the average inter-marker distance and the
 largest gap on each chromosome.
 
 <<summarymap>>=
-summary.map(mapthis)
+summaryMap(mapthis)
 @ 
 <<savesummarymap,echo=FALSE,results=hide>>=
-firstsummary <- summary.map(mapthis)
+firstsummary <- summaryMap(mapthis)
 @ 
 
 We see that chromosome~1 has a
-\Sexpr{round(summary.map(mapthis)[1,"max.spacing"],1)}~cM gap; the
+\Sexpr{round(summaryMap(mapthis)[1,"max.spacing"],1)}~cM gap; the
 other chromosomes have gaps no larger than 25~cM.  The large gap on
 chromosome~1 is suspicious, but it is not terrible.
 
@@ -1500,14 +1505,14 @@ densely spaced, but at least we learn the identity of markers that are
 surrounded by large gaps.
 
 <<plotmap,eval=FALSE>>=
-plot.map(mapthis, show.marker.names=TRUE)
+plotMap(mapthis, show.marker.names=TRUE)
 @ 
 
 \begin{figure}
 \centering
 <<plotmapplot,fig=TRUE,echo=FALSE,height=3>>=
 par(las=1, mar=c(4.1,4.1,1.1,0.1), cex=0.8)
-plot.map(mapthis, main="", show.marker.names=TRUE)
+plotMap(mapthis, main="", show.marker.names=TRUE)
 @ 
 \caption{Plot of the estimated genetic map, after the markers on each
   chromosome have been ordered.\label{fig:plotmap}}
@@ -1522,14 +1527,14 @@ order, one will often see much larger gaps, say $>$ 100~cM.
 Finally, we inspect the pairwise linkage information again.
 
 <<plotrfonemoretime,eval=FALSE>>=
-plot.rf(mapthis)
+plotRF(mapthis)
 @ 
 
 \begin{figure}
 \centering
 <<plotrfonemoretimeplot,fig=TRUE,echo=FALSE,height=5.5>>=
 par(mar=c(4.1,4.1,1.6,1.6), las=1)
-plot.rf(mapthis, main="")
+plotRF(mapthis, main="")
 @ 
 \caption{Plot of estimated recombination fractions (upper-left
   triangle) and LOD scores (lower-right triangle) for all pairs of
@@ -1555,7 +1560,7 @@ re-ordering.
 <<plotrfafterreorder,eval=FALSE>>=
 messedup <- switch.order(mapthis, chr=1, c(1:11,23:33,12:22), 
                          error.prob=0.005)
-plot.rf(messedup, chr=1)
+plotRF(messedup, chr=1)
 @ 
 
 \begin{figure}
@@ -1564,7 +1569,7 @@ plot.rf(messedup, chr=1)
 par(mar=c(4.1,4.1,1.6,1.6), las=1, pty="s", cex=0.8)
 messedup <- switch.order(mapthis, chr=1, c(1:11,23:33,12:22), 
                          error.prob=0.005)
-plot.rf(messedup, chr=1, main="")
+plotRF(messedup, chr=1, main="")
 @ 
 \caption{Plot of estimated recombination fractions (upper-left
   triangle) and LOD scores (lower-right triangle) for all pairs of
@@ -1585,14 +1590,14 @@ A plot of the genetic map (see Fig.~\ref{fig:plotmapmessedup}, page~\pageref{fig
 between the middle and last segments. 
 
 <<plotmapmessedup,eval=FALSE>>=
-plot.map(messedup, show.marker.names=TRUE)
+plotMap(messedup, show.marker.names=TRUE)
 @ 
 
 \begin{figure}
 \centering
 <<plotmapmessedupplot,fig=TRUE,echo=FALSE,height=3>>=
 par(las=1, mar=c(4.1,4.1,1.1,0.1), cex=0.8)
-plot.map(messedup, main="", show.marker.names=TRUE)
+plotMap(messedup, main="", show.marker.names=TRUE)
 @ 
 \caption{Plot of the estimated genetic map, after messing up the order
   of markers on chromosome~1.\label{fig:plotmapmessedup}}
@@ -1705,10 +1710,10 @@ to insert it into the cross object.
 <<reestimatemap>>=
 newmap <- est.map(mapthis, error.prob=0.005)
 mapthis <- replace.map(mapthis, newmap)
-summary.map(mapthis)
+summaryMap(mapthis)
 @ 
 <<savenewsummary,echo=FALSE,results=hide>>=
-secondsummary <- summary.map(mapthis)
+secondsummary <- summaryMap(mapthis)
 @ 
 
 Removing those three markers resulted in a decrease in the overall map
@@ -1783,10 +1788,10 @@ results here.  We should, finally, re-estimate the genetic map.
 <<reestmapagain>>=
 newmap <- est.map(mapthis, error.prob=0.005)
 mapthis <- replace.map(mapthis, newmap)
-summary.map(mapthis)
+summaryMap(mapthis)
 @ 
 <<savethirdsummary,echo=FALSE,results=hide>>=
-thirdsummary <- summary.map(mapthis)
+thirdsummary <- summaryMap(mapthis)
 @ 
 
 The overall map length has decreased further, from 
@@ -1910,14 +1915,14 @@ print(toperr <- top.errorlod(mapthis, cutoff=6))
 
 There are \Sexpr{nrow(toperr)} genotypes that meet this criterion.
 Let us look at the genotypes that were flagged on chromosome 1, using
-the function \code{plot.geno()}.  The argument \code{cutoff} indicates
+the function \code{plotGeno()}.  The argument \code{cutoff} indicates
 a threshold for flagging genotypes as potential errors, based on their
 error LOD scores.  If we had used the argument \code{include.xo=TRUE}
 (which is the default), inferred locations of crossovers would be
 displayed; we suppress that here to get a more clean figure.
 
 <<plotgeno,eval=FALSE>>=
-plot.geno(mapthis, chr=1, ind=toperr$id[toperr$chr==1],
+plotGeno(mapthis, chr=1, ind=toperr$id[toperr$chr==1],
           cutoff=6, include.xo=FALSE)
 @ 
 
@@ -1925,7 +1930,7 @@ plot.geno(mapthis, chr=1, ind=toperr$id[toperr$chr==1],
 \centering
 <<plotgenoplot,fig=TRUE,echo=FALSE,height=3>>=
 par(mar=c(4.1,4.1,0.6,0.6), las=1, cex.axis=0.9)
-plot.geno(mapthis, chr=1, ind=toperr$id[toperr$chr==1], main="", cex=0.8,
+plotGeno(mapthis, chr=1, ind=toperr$id[toperr$chr==1], main="", cex=0.8,
           include.xo=FALSE, cutoff=6)
 @ 
 \caption{Genotypes on chromosome 1 for individuals with some potential
@@ -2023,14 +2028,14 @@ alleles.
 And so, finally, we're done.  Let us plot the final map.  
 
 <<plotfinalmap,eval=FALSE>>=
-plot.map(mapthis, show.marker.names=TRUE)
+plotMap(mapthis, show.marker.names=TRUE)
 @ 
 
 \begin{figure}
 \centering
 <<plotfinalmapplot,fig=TRUE,echo=FALSE,height=3>>=
 par(las=1, mar=c(4.6,4.6,0.6,0.6), cex=0.8)
-plot.map(mapthis, main="", show.marker.names=TRUE)
+plotMap(mapthis, main="", show.marker.names=TRUE)
 @ 
 \caption{Plot of the final estimated genetic map\label{fig:plotfinalmap}}
 \end{figure}
@@ -2085,7 +2090,7 @@ applied quite generally.
 \noindent \textbf{\sffamily R/qtl functions useful for genetic map construction} \\
 \noindent \begin{tabular}{ll} 
 \hspace*{25mm} & \hspace*{103mm} \\ \hline
-plot.missing & Plot pattern of missing genotypes \\
+plotMissing & Plot pattern of missing genotypes \\
 ntyped & Count number of typed markers for each individual \\
 nmissing & Count number of missing genotypes for each individual \\
 subset.cross & Pull out a specified set of chromosomes and/or
@@ -2105,7 +2110,7 @@ checkAlleles & Identify markers with potentially switched alleles \\
 pull.rf & Pull out the pairwise recombination fractions or LOD scores
 as a matrix \\
 formLinkageGroups & Partition markers into linkage groups \\ 
-plot.rf & Plot recombination fractions \\ 
+plotRF & Plot recombination fractions \\ 
 markernames & Pull out the marker names from a cross \\
 plot.rfmatrix & Plot a slice through the pairwise recombination
 fractions or LOD scores \\
@@ -2119,15 +2124,15 @@ est.map & Estimate genetic map \\
 pull.map & Pull out the genetic map from a cross \\ 
 compareorder & Compare two orderings of markers on a chromosome \\
 switch.order & Switch the order of markers on a chromosome \\ 
-summary.map & Print summary of a genetic map \\
-plot.map & Plot genetic map(s) \\ 
+summaryMap & Print summary of a genetic map \\
+plotMap & Plot genetic map(s) \\ 
 droponemarker & Drop one marker at a time from a genetic map \\
 replace.map & Replace the genetic map of a cross \\ 
 countXO & Count number of obligate crossovers for each individual \\
 locateXO & Estimate locations of crossovers \\
 calc.errorlod & Calculate Lincoln \& Lander (1992) error LOD scores \\
 top.errorlod & List genotypes with highest error LOD values \\ 
-plot.geno & Plot genotypes on a particular chromosomes for selected
+plotGeno & Plot genotypes on a particular chromosomes for selected
 individuals \\ \hline
 %
 tryallpositions & Test all possible positions for a marker \\

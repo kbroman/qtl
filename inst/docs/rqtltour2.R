@@ -6,7 +6,7 @@
 #
 # http://www.rqtl.org
 #
-# 19 October 2009
+# 21 March 2012
 ##############################################################
 
 ############################################################
@@ -38,14 +38,14 @@ nphe(sug)
 
 plot(sug)
 
-plot.missing(sug)
-plot.map(sug)
-plot.pheno(sug, pheno.col=1)
-plot.pheno(sug, pheno.col=2)
-plot.pheno(sug, pheno.col=3)
-plot.pheno(sug, pheno.col=4)
-plot.pheno(sug, pheno.col=5)
-plot.pheno(sug, pheno.col=6)
+plotMissing(sug)
+plotMap(sug)
+plotPheno(sug, pheno.col=1)
+plotPheno(sug, pheno.col=2)
+plotPheno(sug, pheno.col=3)
+plotPheno(sug, pheno.col=4)
+plotPheno(sug, pheno.col=5)
+plotPheno(sug, pheno.col=6)
 
 ############################################################
 # Single-QTL analysis
@@ -112,7 +112,7 @@ bayesint(out.hk, chr=15)
 ############################################################
 max(out.hk)
 mar <- find.marker(sug, chr=7, pos=47.7)
-plot.pxg(sug, marker=mar)
+plotPXG(sug, marker=mar)
 
 effectplot(sug, mname1=mar)
 
@@ -120,11 +120,11 @@ effectplot(sug, mname1="7@47.7")
 
 max(out.hk, chr=15)
 mar2 <- find.marker(sug, chr=15, pos=12)
-plot.pxg(sug, marker=mar2)
+plotPXG(sug, marker=mar2)
 effectplot(sug, mname1="15@12")
 
-plot.pxg(sug, marker=c(mar, mar2))
-plot.pxg(sug, marker=c(mar2, mar))
+plotPXG(sug, marker=c(mar, mar2))
+plotPXG(sug, marker=c(mar2, mar))
 
 effectplot(sug, mname1="7@47.7", mname2="15@12")
 effectplot(sug, mname2="7@47.7", mname1="15@12")
@@ -161,7 +161,7 @@ plot(out2, lower="fv1")
 
 plot(out2, lower="fv1", upper="av1")
 
-operm2 <- scantwo(out2, method="hk", n.perm=5)
+operm2 <- scantwo(sug, method="hk", n.perm=5)
 
 summary(out2, perms=operm2, alpha=0.2, pvalues=TRUE)
 
@@ -179,7 +179,7 @@ summary(fitqtl(sug, qtl=qtl, method="hk", get.ests=TRUE, dropone=FALSE))
 
 out.fqi <- fitqtl(sug, qtl=qtl, method="hk", formula=y~Q1*Q2)
 out.fqi <- fitqtl(sug, qtl=qtl, method="hk", formula=y~Q1+Q2+Q1:Q2)
-summary(out.fq)
+summary(out.fqi)
 
 addint(sug, qtl=qtl, method="hk")
 

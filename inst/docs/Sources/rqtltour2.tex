@@ -49,7 +49,7 @@ University of Wisconsin -- Madison
 \href{http://www.rqtl.org}{http://www.rqtl.org}
 \vspace{2mm}
 
-19 October 2009 % the date
+21 March 2012 % the date
 
 \rule{7.0in}{1mm} 
 \end{center}
@@ -217,14 +217,14 @@ histograms or bar plots for the six phenotypes.  The last two
 \item Individual parts of the above plot may be obtained as follows.
 
 \usercolor
-\verb|plot.missing(sug)| \\
-\verb|plot.map(sug)| \\
-\verb|plot.pheno(sug, pheno.col=1)| \\
-\verb|plot.pheno(sug, pheno.col=2)| \\
-\verb|plot.pheno(sug, pheno.col=3)| \\
-\verb|plot.pheno(sug, pheno.col=4)| \\
-\verb|plot.pheno(sug, pheno.col=5)| \\
-\verb|plot.pheno(sug, pheno.col=6)|
+\verb|plotMissing(sug)| \\
+\verb|plotMap(sug)| \\
+\verb|plotPheno(sug, pheno.col=1)| \\
+\verb|plotPheno(sug, pheno.col=2)| \\
+\verb|plotPheno(sug, pheno.col=3)| \\
+\verb|plotPheno(sug, pheno.col=4)| \\
+\verb|plotPheno(sug, pheno.col=5)| \\
+\verb|plotPheno(sug, pheno.col=6)|
 \normalcolor
 
 
@@ -450,18 +450,18 @@ row is the estimated QTL location.
 \nopagebreak
 
 We may obtain plots indicating the estimated effects of the QTL via
-\verb-plot.pxg-, which creates a dot plot, or \verb-effectplot-, which
+\verb-plotPXG-, which creates a dot plot, or \verb-effectplot-, which
 plots the average phenotype for each genotype group.
 
 \begin{enumerate}
 \addtocounter{enumi}{32}
-\item For \verb-plot.pxg-, we must first identify the marker closest
+\item For \verb-plotPXG-, we must first identify the marker closest
   to the QTL peak.  Use \verb-find.marker-.
 
 \usercolor
 \verb|max(out.hk)| \\
 \verb|mar <- find.marker(sug, chr=7, pos=47.7)| \\
-\verb|plot.pxg(sug, marker=mar)|
+\verb|plotPXG(sug, marker=mar)|
 \normalcolor
 
 Note that red dots correspond to inferred genotypes (based on a single
@@ -488,16 +488,16 @@ imputation).
 \usercolor
 \verb|max(out.hk, chr=15)| \\
 \verb|mar2 <- find.marker(sug, chr=15, pos=12)| \\
-\verb|plot.pxg(sug, marker=mar2)| \\
+\verb|plotPXG(sug, marker=mar2)| \\
 \verb|effectplot(sug, mname1="15@12")|
 \normalcolor
 
 \item We may plot the joint effects of the two loci via
-  \verb-plot.pxg- as follows:
+  \verb-plotPXG- as follows:
 
 \usercolor
-\verb|plot.pxg(sug, marker=c(mar, mar2))| \\
-\verb|plot.pxg(sug, marker=c(mar2, mar))|
+\verb|plotPXG(sug, marker=c(mar, mar2))| \\
+\verb|plotPXG(sug, marker=c(mar2, mar))|
 \normalcolor
 
 \item The function \verb-effectplot- gives more readable figures in
@@ -654,7 +654,7 @@ than the null model.
   rather than \verb:n.perm=1000:, as I'd recommend).
 
 \usercolor
-\verb|operm2 <- scantwo(out2, method="hk", n.perm=5)|
+\verb|operm2 <- scantwo(sug, method="hk", n.perm=5)|
 \normalcolor
 
 \item With the permutation results in hand, we can get a summary with
@@ -732,7 +732,7 @@ effect and dominance deviation for each locus.
 \usercolor
 \verb|out.fqi <- fitqtl(sug, qtl=qtl, method="hk", formula=y~Q1*Q2)| \\
 \verb|out.fqi <- fitqtl(sug, qtl=qtl, method="hk", formula=y~Q1+Q2+Q1:Q2)| \\
-\verb|summary(out.fq)|
+\verb|summary(out.fqi)|
 \normalcolor
 
 We don't have time to cover the use of such formulas in any detail

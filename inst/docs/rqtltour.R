@@ -6,7 +6,7 @@
 #
 # http://www.rqtl.org
 #
-# 9 April 2009
+# 21 March 2012
 ##############################################################
 
 save.image()
@@ -35,26 +35,26 @@ nmar(hyper)
 
 plot(hyper)
 
-plot.missing(hyper)
-plot.map(hyper)
-plot.pheno(hyper, pheno.col=1)
+plotMissing(hyper)
+plotMap(hyper)
+plotPheno(hyper, pheno.col=1)
 
-plot.map(hyper, chr=c(1, 4, 6, 7, 15), show.marker.names=TRUE)
+plotMap(hyper, chr=c(1, 4, 6, 7, 15), show.marker.names=TRUE)
 
-plot.missing(hyper, reorder=TRUE)
+plotMissing(hyper, reorder=TRUE)
 
 hyper <- drop.nullmarkers(hyper)
 totmar(hyper)
 
 hyper <- est.rf(hyper)
-plot.rf(hyper)
-plot.rf(hyper, chr=c(1,4))
+plotRF(hyper)
+plotRF(hyper, chr=c(1,4))
 
-plot.rf(hyper, chr=6)
-plot.missing(hyper, chr=6)
+plotRF(hyper, chr=6)
+plotMissing(hyper, chr=6)
 
 newmap <- est.map(hyper, error.prob=0.01)
-plot.map(hyper, newmap)
+plotMap(hyper, newmap)
 
 hyper <- replace.map(hyper, newmap)
 
@@ -62,12 +62,12 @@ hyper <- calc.errorlod(hyper, error.prob=0.01)
 
 top.errorlod(hyper)
 
-plot.geno(hyper, chr=16, ind=c(24:34, 71:81))
+plotGeno(hyper, chr=16, ind=c(24:34, 71:81))
 
-plot.info(hyper)
-plot.info(hyper, chr=c(1,4,15))
-plot.info(hyper, chr=c(1,4,15), method="entropy")
-plot.info(hyper, chr=c(1,4,15), method="variance")
+plotInfo(hyper)
+plotInfo(hyper, chr=c(1,4,15))
+plotInfo(hyper, chr=c(1,4,15), method="entropy")
+plotInfo(hyper, chr=c(1,4,15), method="variance")
 
 hyper <- calc.genoprob(hyper, step=1, error.prob=0.01)
 
@@ -139,14 +139,14 @@ summary(badorder)
 plot(badorder)
 
 badorder <- est.rf(badorder)
-plot.rf(badorder)
+plotRF(badorder)
 
-plot.rf(badorder, chr=1)
+plotRF(badorder, chr=1)
 
 newmap <- est.map(badorder, verbose=TRUE)
-plot.map(badorder, newmap)
+plotMap(badorder, newmap)
 
-plot.rf(badorder, chr=2:3)
+plotRF(badorder, chr=2:3)
 
 pull.map(badorder, chr=2)
 pull.map(badorder, chr=3)
@@ -154,7 +154,7 @@ pull.map(badorder, chr=3)
 badorder <- movemarker(badorder, "D2M937", 3, 48)
 badorder <- movemarker(badorder, "D3M160", 2, 28.8)
 
-plot.rf(badorder, chr=2:3)
+plotRF(badorder, chr=2:3)
 
 rip1 <- ripple(badorder, chr=1, window=6)
 summary(rip1)
@@ -171,7 +171,7 @@ rip2r <- ripple(badorder.rev, chr=1, window=3, err=0.01)
 summary(rip2r)
 
 badorder.rev <- est.rf(badorder.rev)
-plot.rf(badorder.rev, 1)
+plotRF(badorder.rev, 1)
 
 ############################################################
 # Example 3: Listeria susceptibility
@@ -179,23 +179,23 @@ plot.rf(badorder.rev, 1)
 data(listeria)
 summary(listeria)
 plot(listeria)
-plot.missing(listeria)
+plotMissing(listeria)
 
 listeria$pheno$logSurv <- log(listeria$pheno[,1])
 plot(listeria)
 
 listeria <- est.rf(listeria)
-plot.rf(listeria)
-plot.rf(listeria, chr=c(5,13))
+plotRF(listeria)
+plotRF(listeria, chr=c(5,13))
 
 newmap <- est.map(listeria, error.prob=0.01)
-plot.map(listeria, newmap)
+plotMap(listeria, newmap)
 listeria <- replace.map(listeria, newmap)
 
 listeria <- calc.errorlod(listeria, error.prob=0.01)
 top.errorlod(listeria)
 top.errorlod(listeria, cutoff=3.5)
-plot.geno(listeria, chr=13, ind=61:70, cutoff=3.5)
+plotGeno(listeria, chr=13, ind=61:70, cutoff=3.5)
 
 listeria <- calc.genoprob(listeria, step=2)
 out.2p <- scanone(listeria, pheno.col=3, model="2part", upper=TRUE)
