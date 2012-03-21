@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.24, 3/7/2012:
+Version 1.24, 3/21/2012:
 
 Major changes:
 
@@ -30,6 +30,9 @@ Minor changes:
   partitions; the difference between the maximum and the
   second-highest is now third-to-last; the threshold argument is
   applied to the overall maximum rather than to that difference.
+
+  Fixed a bug in interpPositions; problems if the input had missing
+  rownames. 
 
   Renamed the README.txt file as INSTALL_ME.txt; added a new
   README.txt that provides a brief description of the package.

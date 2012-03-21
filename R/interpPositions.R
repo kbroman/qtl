@@ -2,8 +2,8 @@
 #
 # interpPositions.R
 #
-# copyright (c) 2011, Karl W Broman
-# last modified Nov, 2011
+# copyright (c) 2011-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Nov, 2011
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,6 +30,13 @@
 interpPositions <-
 function(oldpositions, oldmap, newmap)
 {
+  orig.rownames <- rownames(oldpositions)
+  # not sure why this is necessary, but it avoids a bug
+  if(is.null(rownames(oldpositions))) 
+    rownames(oldpositions) <- paste("temprn", 1:nrow(oldpositions), sep="")
+  else 
+    rownames(oldpositions) <- paste("temprn", rownames(oldpositions), sep="")
+
   oldchrnum <- match(oldpositions$chr, names(oldmap))
   newchrnum <- match(oldpositions$chr, names(newmap))
 
@@ -66,6 +73,7 @@ function(oldpositions, oldmap, newmap)
     newpositions[theposnames, "newpos"] <- result[theposnames, "pos"]
   }
 
+  rownames(newpositions) <- orig.rownames
   newpositions
 }
 
