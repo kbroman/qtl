@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.23, 1/11/2012:
+Version 1.24, 3/21/2012:
 
 Major changes:
 
@@ -25,8 +25,30 @@ Major changes:
 
 Minor changes:
 
-  Added functions pull.genoprob and pull.argmaxgeno, to pull out those
-  bits from a cross object as a single big matrix.
+  Changes to the format of the output of summary.scanPhyloQTL for
+  format="lod".  The final column is now the maximum LOD score across
+  partitions; the difference between the maximum and the
+  second-highest is now third-to-last; the threshold argument is
+  applied to the overall maximum rather than to that difference.
+
+  Fixed a bug in interpPositions; problems if the input had missing
+  rownames. 
+
+  Renamed the README.txt file as INSTALL_ME.txt; added a new
+  README.txt that provides a brief description of the package.
+
+
+Version 1.23, 3/6/2012:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added functions pull.genoprob, pull.argmaxgeno, and pull.draws, to
+  pull out those bits from a cross object as a single big matrix or
+  array.
 
   Added a function inferFounderHap() for crudely inferring founder
   haplotypes in multi-parent RIL, using groups of adjacent markers.
@@ -46,6 +68,17 @@ Minor changes:
 
   Revised subset.cross and clean.cross so that cross information in 4-
   and 8-way RIL don't get lost.
+
+  Revised plot.pxg, effectplot and effectscan to give a more
+  informative error if the selected phenotype is not numeric.
+
+  Revised qtlversion() to use packageVersion().
+
+  Fixed bug in summary.map: class included the function data.frame;
+  not just the character string "data.frame".
+
+  Revised various utility functions to retain the "onlylod" attribute
+  in cross$rf, if it's there.
 
 
 Version 1.22, 11/28/2011:

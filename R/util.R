@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2011, Karl W Broman
+# copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Dec, 2011
+# last modified Mar, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -529,8 +529,13 @@ function(cross)
 
       # results of est.rf
       if("rf" %in% names(cross)) {
+        attrib <- attributes(cross$rf)
+
         o <- match(mn.drop,colnames(cross$rf))
         cross$rf <- cross$rf[-o,-o]
+
+        if("onlylod" %in% names(attrib)) # save the onlylod attribute if its there
+          attr(cross$rf, "onlylod") <- attrib$onlylod
       }
     }
   }
@@ -632,8 +637,13 @@ function(cross, markers)
 
       # results of est.rf
       if("rf" %in% names(cross)) {
+        attrib <- attributes(cross$rf)
+
         o <- match(mn.drop,colnames(cross$rf))
         cross$rf <- cross$rf[-o,-o]
+
+        if("onlylod" %in% names(attrib))
+          attr(cross$rf, "onlylod") <- attrib$onlylod
       }
     }
   }
@@ -1218,6 +1228,8 @@ function(cross, chr, order, error.prob=0.0001,
   # save recombination fractions
   flag <- 0
   if("rf" %in% names(cross)) {
+    attrib <- attributes(cross$rf)
+
     rf <- cross$rf
     # determine column within rec fracs
     whchr <- which(names(cross$geno)==chr)
@@ -1253,6 +1265,8 @@ function(cross, chr, order, error.prob=0.0001,
     temp <- est.rf(subset(cross, chr=chr))$rf
     rf[oldcols,oldcols] <- temp
     cross$rf <- rf
+    if("onlylod" %in% names(attrib))
+      attr(cross$rf, "onlylod") <- attrib$onlylod
   }
 
   # re-estimate map
@@ -1297,6 +1311,8 @@ function(x, chr, ind, ...)
       if(totmar(x) != ncol(x$rf))
         x <- clean(x)
       else {
+        attrib <- attributes(x$rf)
+
         n.mar <- nmar(x)
         n.chr <- n.chr
         wh <- rbind(c(0,cumsum(n.mar)[-n.chr])+1,cumsum(n.mar))
@@ -1304,6 +1320,9 @@ function(x, chr, ind, ...)
         wh <- wh[,chr,drop=FALSE]
         wh <- unlist(apply(wh,2,function(a) a[1]:a[2]))
         x$rf <- x$rf[wh,wh]
+
+        if("onlylod" %in% names(attrib)) # save the onlylod attribute if its there
+          attr(x$rf, "onlylod") <- attrib$onlylod
       }
     }
 
@@ -2592,6 +2611,8 @@ function(cross, marker, newchr, newpos)
     #     and rec fracs in lower triangle
     newmar <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
+    attrib <- attributes(cross$rf)
+
     rf <- cross$rf
     lods <- rf;lods[lower.tri(rf)] <- t(rf)[lower.tri(rf)]
     rf[upper.tri(rf)] <- t(rf)[upper.tri(rf)]
@@ -2600,6 +2621,9 @@ function(cross, marker, newchr, newpos)
     rf[upper.tri(rf)] <- lods[upper.tri(rf)]
 
     cross$rf <- rf
+
+    if("onlylod" %in% names(attrib)) # save the onlylod attribute if its there
+      attr(cross$rf, "onlylod") <- attrib$onlylod
   }
 
 
@@ -2713,9 +2737,9 @@ function(object, ...)
                              c("n.mar","length","ave.spacing", "max.spacing"))
   }
 
-  output <- output
+  output <- as.data.frame(output)
   attr(output, "sexsp") <- sexsp
-  class(output) <- c("summary.map", data.frame)
+  class(output) <- c("summary.map", "data.frame")
   output
 }
 
@@ -2998,14 +3022,13 @@ function(cross, what=c("proportion","number", "both"))
 ######################################################################
 # print the installed version of R/qtl
 ######################################################################
-#qtlversion <-
-#function()
-#  installed.packages()["qtl","Version"]
 qtlversion <-
 function()
 {
-  u <- strsplit(library(help=qtl)[[3]][[1]][2]," ")[[1]]
-  u[length(u)]
+  version <- unlist(packageVersion("qtl"))
+
+  # make it like #.#-#
+  paste(c(version,".","-")[c(1,4,2,5,3)], collapse="")
 }
 
 

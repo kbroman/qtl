@@ -10,15 +10,30 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o plot.scanone might take LOD score column *names* (as pheno.col does)
+o Deal with the NOTE: 
+  e.g change plot.geno to plotGeno
+  - allow plot.geno still within package but not the official name?
+  - separate R file enabling backward compatibility
+    (a file that, when sourced, enables the old function names)
 
-o stepwiseqtl: Need a trap for the case that LODs are all NA
+o Add argument to refineqtl to scan full chromosomes
 
-o markerlrt() adds attribute "onlylod = TRUE"; this gets stripped off
-  by various functions and should be re-established
+o Separate function to get LOD profiles from a fixed model, not
+  necessarily the max?  (Or can we use refineqtl for this, but with no
+  iterations?) 
 
 o In plot.rfmatrix, include marker name in title (unless main is
   provided as an argument). 
+
+o example in help file for multitrait data uses scanall() but that
+  function has no help file.
+
+o stepwiseqtl: Need a trap for the case that LODs are all NA
+
+o plot.scanone might take LOD score column *names* (as pheno.col does)
+
+o Bug in replacemap.cross in case of sex-specific map and
+  genoprob/draws maps that need interpolation
 
 o Bugs in summary.scanone in the case of multiple phenotypes and
   multiple thresholds for formats other than allpheno and allpeaks.
@@ -32,9 +47,6 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
 o Helper function for create.map to identify locations on the grid
 
 o Use snow() with orderMarkers
-
-o Bug in replacemap.cross in case of sex-specific map and
-  genoprob/draws maps that need interpolation
 
 o beeswarm package for plot.pxg
 
