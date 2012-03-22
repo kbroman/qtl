@@ -3,4 +3,6 @@
 \.rnew$
 \.new$
 \.git
-
+^\.RData$
+^\.Rhistory$
+inst/docs/Sources/MQM/Figs
