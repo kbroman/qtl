@@ -43,6 +43,7 @@ single \qtl\ mapping (\code{scanone} in black)}
 \maketitle
 \clearpage
 
+\SweaveOpts{prefix.string=Figs/fig,eps=TRUE}
 \setkeys{Gin}{width=6.25in} %% <- change width of figures
 
 \section{Introduction}
@@ -154,7 +155,7 @@ geno.image(simcross)
 @ 
 
 \begin{figure}
-<<fig=TRUE,echo=FALSE>>=
+<<missingdataplot,fig=TRUE,echo=FALSE>>=
 <<missingdata>>
 @
 \caption{Genotype data for a simulated F$_2$ intercross generated with \code{sim.cross}, with 100
@@ -226,7 +227,7 @@ Plot the genotype data as follows:
 geno.image(augmentedcross)
 @ 
 \begin{figure}
-<<fig=TRUE,echo=FALSE>>=
+<<augment1plot,fig=TRUE,echo=FALSE>>=
 <<augment1>>
 @
 \caption{Genotypes, as visualized with \code{geno.image}, of 100 filled individuals
@@ -256,7 +257,7 @@ geno.image(augmentedcross)
 @ 
 
 \begin{figure}
-<<fig=TRUE,echo=FALSE>>=
+<<augment2plot,fig=TRUE,echo=FALSE>>=
 <<augment2>>
 @
 \caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented} 
@@ -282,9 +283,9 @@ quantitative differences in metabolite accumulation between \At\ accessions
 
 <<augment3>>=
 data(multitrait)
-msim5 <- simulatemissingdata(multitrait,5)
-msim10 <- simulatemissingdata(multitrait,10)
-msim80 <- simulatemissingdata(multitrait,80)
+msim5 <- simulatemissingdata(multitrait, 5)
+msim10 <- simulatemissingdata(multitrait, 10)
+msim80 <- simulatemissingdata(multitrait, 80)
 @
 
 Next use augmentation to fill in the missing genotypes; with more missing data
@@ -294,8 +295,8 @@ and is moved to the second round of augmentation (see the description above).
 
 <<augment4>>=
 maug5 <- mqmaugment(msim5)
-maug10 <- mqmaugment(msim10,minprob=0.25)
-maug80 <- mqmaugment(msim80,minprob=0.80)
+maug10 <- mqmaugment(msim10, minprob=0.25)
+maug80 <- mqmaugment(msim80, minprob=0.80)
 @
 
 Taking the 10\% missing set, we can try a lower \code{minprob=0.001}. The
@@ -306,8 +307,9 @@ set with a single `most likely' genotype.
 \intro{Augment with an imputation strategy}
 
 <<augmentMinProb>>=
-maug10minprob <- mqmaugment(msim10,minprob=0.001,verbose=TRUE)
-maug10minprobImpute <- mqmaugment(msim10,minprob=0.001,strategy="impute",verbose=TRUE)
+maug10minprob <- mqmaugment(msim10, minprob=0.001, verbose=TRUE)
+maug10minprobImpute <- mqmaugment(msim10, minprob=0.001, strategy="impute",
+                                  verbose=TRUE)
 # check how many individuals are expanded:
 nind(maug10minprob)
 nind(maug10minprobImpute)
@@ -336,15 +338,15 @@ one80 <- scanone(msim80)
 @
 
 <<augment6,eval=FALSE,echo=FALSE>>=
-op <- par(mfrow=c(2,2))
-plot(mqm5,mqm10,mqm80,col=c("green","blue","red"),main="MQM missing data")
-legend("topleft",c("MQM 5%","MQM 10%","MQM 80%"),col=c("green","blue","red"),lwd=1)
-plot(one5,mqm5,main="5% missing", col=c("black", "green"))
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
-plot(one10,mqm10,main="10% missing", col=c("black", "blue"))
-legend("topleft",c("scanone","MQM"),col=c("black","blue"),lwd=1)
-plot(one80,mqm80,main="80% missing", col=c("black", "red"))
-legend("topleft",c("scanone","MQM"),col=c("black","red"),lwd=1)
+op <- par(mfrow = c(2,2))
+plot(mqm5, mqm10, mqm80, col=c("green","blue","red"), main="MQM missing data")
+legend("topleft", c("MQM 5%","MQM 10%","MQM 80%"), col=c("green","blue","red"), lwd=1)
+plot(one5, mqm5, main="5% missing", col=c("black","green"))
+legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
+plot(one10, mqm10, main="10% missing", col=c("black","blue"))
+legend("topleft", c("scanone","MQM"), col=c("black","blue"), lwd=1)
+plot(one80, mqm80, main="80% missing", col=c("black","red"))
+legend("topleft", c("scanone","MQM"), col=c("black","red"), lwd=1)
 @ 
 
 \begin{figure}
@@ -376,8 +378,8 @@ section \ref{augmentation}).
 
 <<>>=
 data(multitrait)
-maug_min1 <- mqmaugment(multitrait,minprob=1.0)
-mqm_min1  <- mqmscan(maug_min1)
+maug_min1 <- mqmaugment(multitrait, minprob=1.0)
+mqm_min1 <- mqmscan(maug_min1)
 @
 
 We compare \code{mqmscan} with \code{scanone}. For \code{scanone}
@@ -396,13 +398,13 @@ Figure~\ref{Atminprob} shows that, without augmentation, the results from
 
 <<>>=
 maug <- mqmaugment(multitrait)
-mqm  <- mqmscan(maug)
+mqm <- mqmscan(maug)
 @
 
 \begin{figure}
 <<MinprobMulti,fig=TRUE,echo=FALSE,height=3>>=
-plot(m_one, mqm_min1, col=c("black", "green"), lty=1:2)
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+plot(m_one, mqm_min1, col=c("black","green"), lty=1:2)
+legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
 @ 
 \caption{\Atintrocolors. 
 \mqm\ shows similar results as single \qtl\ mapping, 
@@ -455,9 +457,9 @@ Figures~\ref{Cofactor4} and \ref{Cofactor4b}.)
 
 <<>>=
 max(mqm)
-find.marker(maug,chr=5,pos=35)
-multitoset <- find.markerindex(maug,"GH.117C")
-setcofactors <- mqmsetcofactors(maug,cofactors=multitoset)
+find.marker(maug, chr=5, pos=35)
+multitoset <- find.markerindex(maug, "GH.117C")
+setcofactors <- mqmsetcofactors(maug, cofactors=multitoset)
 mqm_co1 <- mqmscan(maug, setcofactors)
 @
 
@@ -490,7 +492,7 @@ model. \label{Cofactor4}}
 
 <<Cofactor4bMULTI,eval=FALSE>>=
 plot(m_one, mqm_co1, col=c("black","green"), lty=1:2)
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
 @
 
 \begin{figure}
@@ -517,7 +519,7 @@ adds the new cofactor to the cofactor already in \code{multitoset} (see Figure~\
 
 <<>>=
 # summary(mqm_co1)
-multitoset <- c(multitoset,find.markerindex(maug,find.marker(maug,4,10)))
+multitoset <- c(multitoset, find.markerindex(maug, find.marker(maug,4,10)))
 setcofactors <- mqmsetcofactors(maug,cofactors=multitoset)
 mqm_co2 <- mqmscan(maug, setcofactors)
 @
@@ -529,7 +531,8 @@ mqm_co2 <- mqmscan(maug, setcofactors)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_co2))
 plot(mqm_co1, mqm_co2, col=c("blue","green"), lty=1:2)
-legend("topleft",c("one cofactor","two cofactors"),col=c("blue","green"),lwd=1)
+legend("topleft", c("one cofactor","two cofactors"), col=c("blue","green"),
+       lwd=1)
 @) 
 
 \begin{figure}
@@ -547,9 +550,9 @@ cofactors, using an additional cofactor on chromosome 4 (green).  \label{twowayc
 \intro{Plot the results with 0, 1 and 2 cofactors as follows}
 
 <<threewaycomparisonmulti,eval=FALSE>>=
-plot(mqm, mqm_co1, mqm_co2,
-     col=c("green","red","blue"), lty=1:3)
-legend("topleft",c("no cofactors", "one cofactor","two cofactors"),col=c("green","red","blue"),lwd=1)
+plot(mqm, mqm_co1, mqm_co2, col=c("green","red","blue"), lty=1:3)
+legend("topleft", c("no cofactors","one cofactor","two cofactors"),
+       col=c("green","red","blue"), lwd=1)
 @ 
 
 \begin{figure}
@@ -614,16 +617,16 @@ from a RIL population of \At\, as described in section \ref{multitrait}. The
 \intro{Unsupervised cofactor selection through backward elimination} 
 
 <<eval=FALSE>>=
-autocofactors <- mqmautocofactors(maug,50)
+autocofactors <- mqmautocofactors(maug, 50)
 mqm_auto <- mqmscan(maug, autocofactors)
-setcofactors <- mqmsetcofactors(maug,5)
+setcofactors <- mqmsetcofactors(maug, 5)
 mqm_backw <- mqmscan(maug, setcofactors)
 @
 
 <<echo=FALSE>>=
-autocofactors <- mqmautocofactors(maug,50)
+autocofactors <- mqmautocofactors(maug, 50)
 mqm_auto <- mqmscan(maug, autocofactors)
-setcofactors <- mqmsetcofactors(maug,5)
+setcofactors <- mqmsetcofactors(maug, 5)
 mqm_backw <- mqmscan(maug, setcofactors)
 @
 
@@ -631,8 +634,8 @@ mqm_backw <- mqmscan(maug, setcofactors)
 
 <<ManualAutoStart,eval=FALSE>>=
 par(mfrow = c(2,1))
-mqmplot.cofactors(maug,autocofactors, justdots=TRUE)
-mqmplot.cofactors(maug,setcofactors, justdots=TRUE)
+mqmplot.cofactors(maug, autocofactors, justdots=TRUE)
+mqmplot.cofactors(maug, setcofactors, justdots=TRUE)
 @ 
 
 \begin{figure}
@@ -689,13 +692,13 @@ can also be used to obtain the location and name of the significant cofactors.
 
 <<Backward2,eval=FALSE>>=
 plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
 @ 
 
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
 plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
-legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
+legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
 @ 
 
 \begin{figure}
@@ -727,7 +730,8 @@ mqm_backw_low <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw_low))
 plot(mqm_backw,mqm_backw_low, col=c("blue","green"), lty=1:2)
-legend("topleft",c("Significance=0.02","Significance=0.002"),col=c("blue","green"),lwd=1)
+legend("topleft", c("Significance=0.02","Significance=0.002"), 
+       col=c("blue","green"), lwd=1)
 @ 
 
 %\clearpage
@@ -798,7 +802,7 @@ This requires using \code{mqmscan} with parameter \code{outputmarkers=TRUE} (def
 \intro{Create a directed QTL plot (Figure~\ref{QTLeffects})}
 
 <<QTLeffects,eval=FALSE>>=
-dirresults <- mqmplot.directedqtl(multitrait,mqm_backw_low)
+dirresults <- mqmplot.directedqtl(multitrait, mqm_backw_low)
 @ 
 
 \begin{figure}
@@ -811,20 +815,20 @@ multiplied by $\pm$1 according to the sign of the estimated \qtl\ effect.\label{
 
 The results in Figure~\ref{FigLowAlpha} imply that \qtl\ on chromosomes 4 and 5 are
 associated with the metabolite X3.Hydroxypropyl. If we want to investigate the effects
-of the QTL, we can use the functions \code{plot.pxg} and \code{effectplot}.
+of the QTL, we can use the functions \code{plotPXG} and \code{effectplot}.
 The following plots show these for markers GH.117C (main effect,
 Figure~\ref{MainEffectsD1}) and the interaction between GH.117C and
 GA1 (Figure~\ref{epistatic1}). 
 
 <<MainEffectsD1,echo=FALSE,eval=FALSE>>=
-plot.pxg(multitrait,marker="GH.117C")
+plotPXG(multitrait, marker="GH.117C")
 @ 
 
 \begin{figure}
 <<fig=TRUE, echo=FALSE,height=3>>=
 <<MainEffectsD1>>
 @
-\caption{\Atintro. Main effect plot, with \code{plot.pgx}, of marker GH.117C on
+\caption{\Atintro. Main effect plot, with \code{plotPXG}, of marker GH.117C on
 trait X3.Hydroxypropyl. For each marker genotype the individual phenotype is 
 plotted, with the mean of genotype AA (red) and BB (blue).\label{MainEffectsD1}} \end{figure}
 
@@ -916,7 +920,8 @@ parameter for permutation.
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
 require(snow)
-results <- mqmpermutation(maug,scanfunction=mqmscan,cofactors=setcofactors,n.cluster=2,n.perm=25,batchsize=25)
+results <- mqmpermutation(maug, scanfunction=mqmscan, cofactors=setcofactors,
+                          n.cluster=2, n.perm=25, batchsize=25)
 @
 \begin{figure}
 <<fig=TRUE>>=
@@ -932,7 +937,6 @@ vertical grid lines.}
 \end{figure}
 
 <<>>=
-
 resultsrqtl <- mqmprocesspermutation(results)
 summary(resultsrqtl)
 @
@@ -958,7 +962,7 @@ experiments.
 <<>>=
 data(multitrait)
 m_imp <- fill.geno(multitrait)
-mqmscanfdr(m_imp,mqmscanall,cofactors=setcofactors,n.cluster=2)
+mqmscanfdr(m_imp, mqmscanall, cofactors=setcofactors, n.cluster=2)
 @
 
 In contrast, the function \code{mqmpermutation} does single trait permutations,
@@ -1005,11 +1009,11 @@ because of an improved signal to noise ratio.
 <<>>=
 data(multitrait)
 m_imp <- fill.geno(multitrait)
-mqm_imp5 <- mqmscan(m_imp,pheno.col=c(1,2,3,4,5),n.cluster=2)
+mqm_imp5 <- mqmscan(m_imp, pheno.col=1:5, n.cluster=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.multitrait(mqm_imp5,type="image")
+mqmplot.multitrait(mqm_imp5, type="image")
 @
 \caption{\Atintro. Heatmap of five metabolite expression traits, with profiles
 created using \mqm\ without preselected cofactors. The colors represent the LOD
@@ -1018,12 +1022,13 @@ metabolite.\label{At.heatmap1}} \end{figure}
 
 
 <<>>=
-cofactorlist <- mqmsetcofactors(m_imp,3)
-mqm_imp5 <- mqmscan(m_imp,pheno.col=c(1,2,3,4,5),cofactors=cofactorlist,n.cluster=2)
+cofactorlist <- mqmsetcofactors(m_imp, 3)
+mqm_imp5 <- mqmscan(m_imp, pheno.col=1:5 , cofactors=cofactorlist,
+                    n.cluster=2)
 @
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.multitrait(mqm_imp5,type="image")
+mqmplot.multitrait(mqm_imp5, type="image")
 @
 \caption{\Atintro. Heatmap of metabolite expression traits, with profiles
 created using \mqm\ with cofactors at each third marker. The colors represent
@@ -1034,7 +1039,7 @@ Use \code{mqmplot.multitrait} for more graphical output. (Unfortunately this doe
 show in the generated PDF, but in R it shows the trait profiles)
 
 <<>>=
-mqmplot.multitrait(mqm_imp5,type="lines")
+mqmplot.multitrait(mqm_imp5, type="lines")
 @
 
 Next is \code{mqmplot.circle}. The circle plot shows a circular representation
@@ -1104,7 +1109,7 @@ the extra information}
 
 \begin{figure}
 <<fig=TRUE>>=
-mqmplot.circle(multiloc,mqm_imp5, highlight=2)
+mqmplot.circle(multiloc, mqm_imp5, highlight=2)
 @
 \caption{\Atintro. Circle plot 3 - Multiple metabolic traits with known
 locations. Highlight the second trait. The significant \qtl\ locations are
