@@ -35,6 +35,8 @@ Major changes:
     summary.map ->   summaryMap
     summary.scantwo.old -> summaryScantwoOld
 
+  Revised tutorials to use the new naming scheme.
+
 Minor changes:
 
   Changes to the format of the output of summary.scanPhyloQTL for
