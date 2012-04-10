@@ -10,6 +10,14 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Bug in scantwo: occasionally lod scores not matching what I get from
+  lm(); see example data from Quoc Tran
+
+o Scantwo permutations: currently interaction LOD is obtained by
+  taking max(full) - max(add) within chromosome pair and then maximizing
+  across chr pairs.  It should be max(full) overall - max(add)
+  overall.  The latter will be a bit smaller than the former
+
 o Deal with the NOTE: 
   e.g change plot.geno to plotGeno
   - allow plot.geno still within package but not the official name?
