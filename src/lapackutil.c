@@ -101,20 +101,20 @@ void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
 
 
 void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
-                      int *lwork, double **dwork, int **jpvt)
+                      int *n_dwork, double **dwork, int **jpvt)
 {
   int mn;
 
-  *jpvt = (double *)R_alloc(ncolx, sizeof(int));
+  *jpvt = (int *)R_alloc(ncolx, sizeof(int));
 
   mn = MIN(nrow, ncolx);
   
-  *lwork = MAX(mn + MAX(mn, ncoly), MAX(mn + 3*ncolx + 1, 2*mn*ncoly));
-  *dwork = (double *)R_alloc(*lwork, sizeof(double));
+  *n_dwork = MAX(mn + MAX(mn, ncoly), MAX(mn + 3*ncolx + 1, 2*mn*ncoly));
+  *dwork = (double *)R_alloc(*n_dwork, sizeof(double));
 }
 
 void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
-                double *rss, int lwork, double *dwork, int *jpvt,
+                double *rss, int n_dwork, double *dwork, int *jpvt,
                 double *xcopy, double *ycopy, double tol)
 {
   int i, j, lda, ldb, info, rank, row_index;
@@ -122,16 +122,13 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
 
   lda=nrow;
   ldb=nrow;
-  allocate_double(ncolx, &jpvt);
   
-  /* fill rss with 0's */
+  /* fill rss and jpvt with 0's */
   for(i=0; i<ncoly; i++) rss[i] = 0.0;
-
-  auto jpvt = new int[ncolx];
-  foreach(i; 0..ncolx) jpvt[i] = 0;  // keeps track of pivoted columns
+  for(i=0; i<ncolx; i++) jpvt[i] = 0;
 
   F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol, 
-                   &rank, work, &lwork, &info);
+                   &rank, dwork, &n_dwork, &info);
 
   if(rank < ncolx) { // x has < full rank
     // restore x, saving just the first rank columns after pivoting
@@ -143,7 +140,7 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
 
     // now run gels (which assumes x has full rank)
     
-    F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, work, &lwork, &info);
+    F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, dwork, &n_dwork, &info);
   }
 
   // calculate RSS

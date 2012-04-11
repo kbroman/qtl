@@ -24,7 +24,7 @@
  * These are some wrapper functions for several LAPACK routines.
  *
  * Contains: mydgelss, mydgemm, mydpotrf, mydpotrs
- *
+ *           linreg_rss, setup_linreg_rss
  **********************************************************************/
 
 /* DGELS/DGELSS */
@@ -45,11 +45,11 @@ void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
 
 /* set up for linear regression function */
 void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
-                      int *lwork, double **dwork, int **jpvt);
+                      int *n_dwork, double **dwork, int **jpvt);
 
 /* linear regression using dgelsy and dgels */
 void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
-                double *rss, int lwork, double *dwork, int *jpvt,
+                double *rss, int n_dwork, double *dwork, int *jpvt,
                 double *xcopy, double *ycopy, double tol);
 
 /* end of lapackutil.h */
