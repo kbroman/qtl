@@ -56,7 +56,7 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
   /* note that x0 will contain the result for QR decomposition. 
   If any diagonal element of R is zero, then input x0 is rank deficient */
   for(i=0; i<*ncolx0; i++)  {
-    if(abs(x0[*n_ind*i+i]) < TOL) {
+    if(fabs(x0[*n_ind*i+i]) < TOL) {
       singular = 1;
       break;
     }
@@ -119,7 +119,7 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
                 double *rss, int n_dwork, double *dwork, int *jpvt,
                 double *xcopy, double *ycopy, double tol)
 {
-  int i, j, lda, ldb, info, rank, row_index;
+  int i, j, lda, ldb, info, rank, row_index, singular;
   char notranspose='N';
 
   lda=nrow;
@@ -129,20 +129,40 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
   for(i=0; i<ncoly; i++) rss[i] = 0.0;
   for(i=0; i<ncolx; i++) jpvt[i] = 0;
 
-  F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol, 
-                   &rank, dwork, &n_dwork, &info);
+  /* first try dgels */
+  F77_CALL(dgels)(&notranspose, &nrow, &ncolx, &ncoly, x, &lda, y, &ldb,
+                  dwork, &n_dwork, &info);
+  
+  /* x contains QR decomposition; if diagonal element is zero, input x is rank deficient */
+  singular = 0;
+  rank = ncolx;
+  for(i=0, j=0; i<ncolx; i++, j += nrow)  {
+    if(fabs(x[j]) < tol) {
+      singular = 1;
+      break;
+    }
+  }
 
-  if(rank < ncolx) { // x has < full rank
-    // restore x, saving just the first rank columns after pivoting
-    for(i=0; i<rank; i++)
-      memcpy(x+(i*nrow), xcopy+(jpvt[i]-1)*nrow, nrow*sizeof(double));
-
-    // restore y
+  if(singular) {
+    // restore x and y
     memcpy(y, ycopy, nrow*ncoly*sizeof(double));
+    memcpy(x, xcopy, nrow*ncolx*sizeof(double));
 
-    // now run gels (which assumes x has full rank)
-    
-    F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, dwork, &n_dwork, &info);
+    // use dgelsy just to determine which x columns to use
+    F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol, 
+                     &rank, dwork, &n_dwork, &info);
+
+    if(rank < ncolx) { // x has < full rank
+      // restore x, saving just the first rank columns after pivoting
+      for(i=0; i<rank; i++)
+        memcpy(x+(i*nrow), xcopy+(jpvt[i]-1)*nrow, nrow*sizeof(double));
+        
+      // restore y
+      memcpy(y, ycopy, nrow*ncoly*sizeof(double));
+      
+      // now run dgels again (which assumes x has full rank)
+      F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, dwork, &n_dwork, &info);
+    }
   }
 
   // calculate RSS
