@@ -5,17 +5,17 @@
  * copyright (c) 2006-2012, Hao Wu and Karl Broman
  *
  * last modified Apr, 2012
- * first written Jan, 2006 
+ * first written Jan, 2006
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
  *     merchantability or fitness for a particular purpose.  See the GNU
  *     General Public License, version 3, for more details.
- * 
+ *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
@@ -43,7 +43,7 @@
 
 /* DGELSS function */
 void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
-               double *pheno, double *tmppheno, double *s, double *tol, 
+               double *pheno, double *tmppheno, double *s, double *tol,
                int *rank, double *work, int *lwork, int *info)
 {
   int i, singular=0;
@@ -51,9 +51,9 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
   /* use dgels first */
   F77_CALL(dgels)("N", n_ind, ncolx0, nphe, x0, n_ind, tmppheno, n_ind,
 		  work, lwork, info);
-  
+
   /* if there's problem like singular, use dgelss */
-  /* note that x0 will contain the result for QR decomposition. 
+  /* note that x0 will contain the result for QR decomposition.
   If any diagonal element of R is zero, then input x0 is rank deficient */
   for(i=0; i<*ncolx0; i++)  {
     if(fabs(x0[*n_ind*i+i]) < TOL) {
@@ -62,7 +62,7 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
     }
   }
 
-  
+
   if(singular) { /* switch to dgelss if input x0 is not of full rank */
     /* note that tmppheno and x0 have been destroyed already,
     we need to make another copy of them */
@@ -72,7 +72,7 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
 
     memcpy(x0, x0_bk, *n_ind*(*ncolx0)*sizeof(double));
     memcpy(tmppheno, pheno, *n_ind*(*nphe)*sizeof(double));
-    F77_CALL(dgelss) (n_ind, ncolx0, nphe, x0, n_ind, tmppheno, n_ind, 
+    F77_CALL(dgelss) (n_ind, ncolx0, nphe, x0, n_ind, tmppheno, n_ind,
       s, tol, rank, work, lwork, info);
   }
 }
@@ -80,20 +80,20 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
 
 /* DGEMM */
 void mydgemm(int *nphe, int *n_ind, double *alpha, double *tmppheno,
-             double *beta, double *rss_det) 
+             double *beta, double *rss_det)
 {
-  F77_CALL(dgemm)("T", "N", nphe, nphe, n_ind, alpha, tmppheno, n_ind, 
+  F77_CALL(dgemm)("T", "N", nphe, nphe, n_ind, alpha, tmppheno, n_ind,
              tmppheno, n_ind, beta, rss_det, nphe);
 }
 
 /* DPOTRF */
-void mydpotrf(int *nphe, double *rss_det, int *info) 
+void mydpotrf(int *nphe, double *rss_det, int *info)
 {
   F77_CALL(dpotrf)("U", nphe, rss_det, nphe, info);
 }
 
 /*DPOTRS */
-void mydpotrs(char *uplo, int *n, int *nrhs, double *A, 
+void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
               int *lda, double *B, int *ldb, int *info)
 {
   F77_CALL(dpotrs)(uplo, n, nrhs, A, lda, B, ldb, info);
@@ -101,7 +101,7 @@ void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
 
 
 /* set up workspaces for linreg_rss */
-void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
+void setup_linreg_rss(int nrow, int ncolx, int ncoly,
                       int *n_dwork, double **dwork, int **jpvt)
 {
   int mn;
@@ -109,7 +109,7 @@ void setup_linreg_rss(int nrow, int ncolx, int ncoly,
   *jpvt = (int *)R_alloc(ncolx, sizeof(int));
 
   mn = MIN(nrow, ncolx);
-  
+
   *n_dwork = MAX(mn + MAX(mn, ncoly), MAX(mn + 3*ncolx + 1, 2*mn*ncoly));
   *dwork = (double *)R_alloc(*n_dwork, sizeof(double));
 }
@@ -124,7 +124,7 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
 
   lda=nrow;
   ldb=nrow;
-  
+
   /* fill rss and jpvt with 0's */
   for(i=0; i<ncoly; i++) rss[i] = 0.0;
   for(i=0; i<ncolx; i++) jpvt[i] = 0;
@@ -132,7 +132,7 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
   /* first try dgels */
   F77_CALL(dgels)(&notranspose, &nrow, &ncolx, &ncoly, x, &lda, y, &ldb,
                   dwork, &n_dwork, &info);
-  
+
   /* x contains QR decomposition; if diagonal element is zero, input x is rank deficient */
   singular = 0;
   rank = ncolx;
@@ -149,17 +149,17 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
     memcpy(x, xcopy, nrow*ncolx*sizeof(double));
 
     // use dgelsy just to determine which x columns to use
-    F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol, 
+    F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol,
                      &rank, dwork, &n_dwork, &info);
 
     if(rank < ncolx) { // x has < full rank
       // restore x, saving just the first rank columns after pivoting
       for(i=0; i<rank; i++)
         memcpy(x+(i*nrow), xcopy+(jpvt[i]-1)*nrow, nrow*sizeof(double));
-        
+
       // restore y
       memcpy(y, ycopy, nrow*ncoly*sizeof(double));
-      
+
       // now run dgels again (which assumes x has full rank)
       F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, dwork, &n_dwork, &info);
     }
