@@ -100,6 +100,7 @@ void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
 }
 
 
+/* set up workspaces for linreg_rss */
 void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
                       int *n_dwork, double **dwork, int **jpvt)
 {
@@ -113,6 +114,7 @@ void setup_linreg_rss(int nrow, int ncolx, int ncoly,
   *dwork = (double *)R_alloc(*n_dwork, sizeof(double));
 }
 
+/* linear regression (just to calculate RSS) by LAPACK functions dgelsy and dgels */
 void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
                 double *rss, int n_dwork, double *dwork, int *jpvt,
                 double *xcopy, double *ycopy, double tol)

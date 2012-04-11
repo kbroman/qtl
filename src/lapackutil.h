@@ -43,11 +43,11 @@ void mydpotrf(int *nphe1, double *rss_det, int *info);
 void mydpotrs(char *uplo, int *n, int *nrhs, double *A, 
               int *lda, double *B, int *ldb, int *info);
 
-/* set up for linear regression function */
+/* set up workspaces for linreg_rss */
 void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
                       int *n_dwork, double **dwork, int **jpvt);
 
-/* linear regression using dgelsy and dgels */
+/* linear regression (just to calculate RSS) by LAPACK functions dgelsy and dgels */
 void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
                 double *rss, int n_dwork, double *dwork, int *jpvt,
                 double *xcopy, double *ycopy, double tol);

@@ -138,13 +138,13 @@ void scanone_hk(int n_ind, int n_pos, int n_gen, double ***Genoprob,
       pheno[j+k*n_ind] *= weights[j];
   /* note: weights are really square-root of weights */
 
-  /* make copy of phenotypes */
-  memcpy(pheno_copy, pheno, n_ind*nphe*sizeof(double));
-
   for(i=0; i<n_pos; i++) { /* loop over positions */
     R_CheckUserInterrupt(); /* check for ^C */
 
     for(k=0; k<n_ind * ncolx; k++) x[k] = 0.0;
+
+    /* make copy of phenotypes (or restore after regression) */
+    memcpy(pheno_copy, pheno, n_ind*nphe*sizeof(double));
 
     /* fill up X matrix */
     for(j=0; j<n_ind; j++) {
@@ -165,8 +165,8 @@ void scanone_hk(int n_ind, int n_pos, int n_gen, double ***Genoprob,
     memcpy(x_copy, x, n_ind*ncolx*sizeof(double));
 
     /* linear regression of phenotype on QTL genotype probabilities */
-    linreg_rss(n_ind, ncolx, x, nphe, pheno, rss, n_dwork, dwork, jpvt,
-               x_copy, pheno_copy, tol);
+    linreg_rss(n_ind, ncolx, x, nphe, pheno_copy, rss, n_dwork, dwork, jpvt,
+               x_copy, pheno, tol);
 
     /* make the result */
     /* log10 likelihood */
