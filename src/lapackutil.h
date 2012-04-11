@@ -2,9 +2,9 @@
  *
  * lapackutil.h
  *
- * copyright (c) 2006, Hao Wu
+ * copyright (c) 2006-2012, Hao Wu and Karl Broman
  *
- * last modified Feb, 2006 
+ * last modified Apr, 2012
  * first written Jan, 2006 
  *
  *     This program is free software; you can redistribute it and/or
@@ -42,5 +42,14 @@ void mydpotrf(int *nphe1, double *rss_det, int *info);
 /* DPOTRS */
 void mydpotrs(char *uplo, int *n, int *nrhs, double *A, 
               int *lda, double *B, int *ldb, int *info);
+
+/* set up for linear regression function */
+void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
+                      int *lwork, double **dwork, int **jpvt);
+
+/* linear regression using dgelsy and dgels */
+void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
+                double *rss, int lwork, double *dwork, int *jpvt,
+                double *xcopy, double *ycopy, double tol);
 
 /* end of lapackutil.h */

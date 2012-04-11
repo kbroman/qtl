@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Write regression function that uses Linpack (dgelsy and dgels);
+  modify scanone to use it; check calculation times
+
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
 

@@ -2,9 +2,9 @@
  *
  * lapackutil.c
  *
- * copyright (c) 2006, Hao Wu
+ * copyright (c) 2006-2012, Hao Wu and Karl Broman
  *
- * last modified Feb, 2006 
+ * last modified Apr, 2012
  * first written Jan, 2006 
  *
  *     This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
  * These are some wrapper functions for several LAPACK routines.
  *
  * Contains: mydgelss, mydgemm, mydpotrf, mydpotrs
+ *           linreg_rss, setup_linreg_rss;
  *
  **********************************************************************/
 
@@ -36,6 +37,7 @@
 #include <R_ext/Applic.h>
 #include <R_ext/Lapack.h>
 #include "lapackutil.h"
+#include "util.h"
 #define TOL 1e-12
 
 
@@ -97,5 +99,60 @@ void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
   F77_CALL(dpotrs)(uplo, n, nrhs, A, lda, B, ldb, info);
 }
 
+
+void setup_linreg_rss(int nrow, int ncolx, int ncoly, 
+                      int *lwork, double **dwork, int **jpvt)
+{
+  int mn;
+
+  *jpvt = (double *)R_alloc(ncolx, sizeof(int));
+
+  mn = MIN(nrow, ncolx);
+  
+  *lwork = MAX(mn + MAX(mn, ncoly), MAX(mn + 3*ncolx + 1, 2*mn*ncoly));
+  *dwork = (double *)R_alloc(*lwork, sizeof(double));
+}
+
+void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
+                double *rss, int lwork, double *dwork, int *jpvt,
+                double *xcopy, double *ycopy, double tol)
+{
+  int i, j, lda, ldb, info, rank, row_index;
+  char notranspose='N';
+
+  lda=nrow;
+  ldb=nrow;
+  allocate_double(ncolx, &jpvt);
+  
+  /* fill rss with 0's */
+  for(i=0; i<ncoly; i++) rss[i] = 0.0;
+
+  auto jpvt = new int[ncolx];
+  foreach(i; 0..ncolx) jpvt[i] = 0;  // keeps track of pivoted columns
+
+  F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol, 
+                   &rank, work, &lwork, &info);
+
+  if(rank < ncolx) { // x has < full rank
+    // restore x, saving just the first rank columns after pivoting
+    for(i=0; i<rank; i++)
+      memcpy(x+(i*nrow), xcopy+(jpvt[i]-1)*nrow, nrow*sizeof(double));
+
+    // restore y
+    memcpy(y, ycopy, nrow*ncoly*sizeof(double));
+
+    // now run gels (which assumes x has full rank)
+    
+    F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, work, &lwork, &info);
+  }
+
+  // calculate RSS
+  row_index = 0;
+  for(i=0; i<ncoly; i++) {
+    for(j=rank; j<nrow; j++)
+      rss[i] += y[row_index+j]*y[row_index+j];
+    row_index += nrow;
+  }
+}
 
 /* end of lapackutil.c */
