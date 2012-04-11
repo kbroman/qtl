@@ -52,4 +52,8 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
                 double *rss, int n_dwork, double *dwork, int *jpvt,
                 double *xcopy, double *ycopy, double tol);
 
+/* function to call linreg_rss from R (for testing) */
+void R_linreg_rss(int *nrow, int *ncolx, double *x, int *ncoly, double *y,
+                  double *rss, double *tol);
+
 /* end of lapackutil.h */

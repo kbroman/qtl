@@ -174,4 +174,18 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
   }
 }
 
+void R_linreg_rss(int *nrow, int *ncolx, double *x, int *ncoly, double *y,
+                  double *rss, double *tol)
+{
+  int n_dwork, *jpvt;
+  double *dwork, *xcopy, *ycopy;
+
+  xcopy = (double *)R_alloc(*nrow * *ncolx, sizeof(double));
+  ycopy = (double *)R_alloc(*nrow * *ncoly, sizeof(double));
+
+  setup_linreg_rss(*nrow, *ncolx, *ncoly, &n_dwork, &dwork, &jpvt);
+  linreg_rss(*nrow, *ncolx, x, *ncoly, y, rss, n_dwork, dwork, jpvt,
+             xcopy, ycopy, *tol);
+}
+
 /* end of lapackutil.c */
