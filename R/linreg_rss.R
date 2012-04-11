@@ -22,7 +22,7 @@
 ######################################################################
 
 linreg.rss <-
-function(x, y, tol=1e-8)
+function(x, y, tol=1e-8, skip.dgels=TRUE, verbose=TRUE)
 {
   if(!is.matrix(y)) y <- as.matrix(y)
 
@@ -34,9 +34,11 @@ function(x, y, tol=1e-8)
      as.integer(ncol(x)),
      as.double(x),
      as.integer(ncol(y)),
-     as.double(y),
+     y=as.double(y),
      rss=as.double(rep(0,ncol(y))),
      as.double(tol),
+     as.integer(skip.dgels),
+     as.integer(verbose),
      PACKAGE="qtl")$rss
 }
 

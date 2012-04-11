@@ -166,7 +166,7 @@ void scanone_hk(int n_ind, int n_pos, int n_gen, double ***Genoprob,
 
     /* linear regression of phenotype on QTL genotype probabilities */
     linreg_rss(n_ind, ncolx, x, nphe, pheno_copy, rss, n_dwork, dwork, jpvt,
-               x_copy, pheno, tol);
+               x_copy, pheno, tol, 1, 0); /* skip dgels and just use dgelsy; not verbose */
 
     /* make the result */
     /* log10 likelihood */

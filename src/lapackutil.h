@@ -50,10 +50,11 @@ void setup_linreg_rss(int nrow, int ncolx, int ncoly,
 /* linear regression (just to calculate RSS) by LAPACK functions dgelsy and dgels */
 void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
                 double *rss, int n_dwork, double *dwork, int *jpvt,
-                double *xcopy, double *ycopy, double tol);
+                double *xcopy, double *ycopy, double tol, 
+                int skip_dgels, int verbose);
 
 /* function to call linreg_rss from R (for testing) */
 void R_linreg_rss(int *nrow, int *ncolx, double *x, int *ncoly, double *y,
-                  double *rss, double *tol);
+                  double *rss, double *tol, int *skip_dgels, int *verbose);
 
 /* end of lapackutil.h */

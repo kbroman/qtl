@@ -117,9 +117,11 @@ void setup_linreg_rss(int nrow, int ncolx, int ncoly,
 /* linear regression (just to calculate RSS) by LAPACK functions dgelsy and dgels */
 void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
                 double *rss, int n_dwork, double *dwork, int *jpvt,
-                double *xcopy, double *ycopy, double tol)
+                double *xcopy, double *ycopy, double tol, 
+                int skip_dgels, int verbose)
 {
-  int i, j, lda, ldb, info, rank, row_index, singular;
+  int i, j, k, lda, ldb, info, rank, row_index, singular=0;
+  double fitted;
   char notranspose='N';
 
   lda=nrow;
@@ -127,45 +129,59 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
 
   /* fill rss and jpvt with 0's */
   for(i=0; i<ncoly; i++) rss[i] = 0.0;
-  for(i=0; i<ncolx; i++) jpvt[i] = 0;
 
-  /* first try dgels */
-  F77_CALL(dgels)(&notranspose, &nrow, &ncolx, &ncoly, x, &lda, y, &ldb,
-                  dwork, &n_dwork, &info);
+  if(!skip_dgels) {
+    /* first try dgels */
+    F77_CALL(dgels)(&notranspose, &nrow, &ncolx, &ncoly, x, &lda, y, &ldb,
+                    dwork, &n_dwork, &info);
 
-  /* x contains QR decomposition; if diagonal element is zero, input x is rank deficient */
-  singular = 0;
-  rank = ncolx;
-  for(i=0, j=0; i<ncolx; i++, j += nrow)  {
-    if(fabs(x[j]) < tol) {
-      singular = 1;
-      break;
+    /* x contains QR decomposition; if diagonal element is zero, input x is rank deficient */
+    rank = ncolx;
+    for(i=0; i<ncolx; i++)  {
+      if(fabs(x[i+ncolx*i]) < tol) {
+        singular = 1;
+        break;
+      }
     }
+    if(verbose && !singular) Rprintf(" -dgels worked\n");
   }
 
-  if(singular) {
-    // restore x and y
-    memcpy(y, ycopy, nrow*ncoly*sizeof(double));
-    memcpy(x, xcopy, nrow*ncolx*sizeof(double));
+  if(skip_dgels || singular) {
+    if(verbose) Rprintf(" -Running dgelsy\n");
 
-    // use dgelsy just to determine which x columns to use
+    if(!skip_dgels) {
+      /* restore x and y */
+      memcpy(y, ycopy, nrow*ncoly*sizeof(double));
+      memcpy(x, xcopy, nrow*ncolx*sizeof(double));
+    }
+
+    /* 0's in jpvt */
+    for(i=0; i<ncolx; i++) jpvt[i] = 0;
+
+    /* use dgelsy just to determine which x columns to use */
     F77_CALL(dgelsy)(&nrow, &ncolx, &ncoly, x, &lda, y, &ldb, jpvt, &tol,
                      &rank, dwork, &n_dwork, &info);
 
-    if(rank < ncolx) { // x has < full rank
-      // restore x, saving just the first rank columns after pivoting
-      for(i=0; i<rank; i++)
-        memcpy(x+(i*nrow), xcopy+(jpvt[i]-1)*nrow, nrow*sizeof(double));
+    if(verbose) Rprintf(" -rank = %d\n", rank);
 
-      // restore y
-      memcpy(y, ycopy, nrow*ncoly*sizeof(double));
+    if(rank < ncolx) { /* x has < full rank */
+      if(verbose) Rprintf("Calculating fitted values\n");
 
-      // now run dgels again (which assumes x has full rank)
-      F77_CALL(dgels)(&notranspose, &nrow, &rank, &ncoly, x, &lda, y, &ldb, dwork, &n_dwork, &info);
+      /* calculate fitted values */
+      for(j=0; j<ncoly; j++) {
+        for(i=0; i<nrow; i++) {
+          fitted = 0.0;
+          for(k=0; k<ncolx; k++)
+            fitted += (xcopy[i+k*nrow] * y[k+j*nrow]);
+          rss[j] += (ycopy[i+j*nrow] - fitted)*(ycopy[i+j*nrow] - fitted);
+        }
+      }
+      return;
     }
   }
 
-  // calculate RSS
+  if(verbose) Rprintf("Calculating RSS\n");
+  /* calculate RSS */
   row_index = 0;
   for(i=0; i<ncoly; i++) {
     for(j=rank; j<nrow; j++)
@@ -175,7 +191,7 @@ void linreg_rss(int nrow, int ncolx, double *x, int ncoly, double *y,
 }
 
 void R_linreg_rss(int *nrow, int *ncolx, double *x, int *ncoly, double *y,
-                  double *rss, double *tol)
+                  double *rss, double *tol, int *skip_dgels, int *verbose)
 {
   int n_dwork, *jpvt;
   double *dwork, *xcopy, *ycopy;
@@ -183,9 +199,12 @@ void R_linreg_rss(int *nrow, int *ncolx, double *x, int *ncoly, double *y,
   xcopy = (double *)R_alloc(*nrow * *ncolx, sizeof(double));
   ycopy = (double *)R_alloc(*nrow * *ncoly, sizeof(double));
 
+  memcpy(ycopy, y, *nrow * *ncoly * sizeof(double));
+  memcpy(xcopy, x, *nrow * *ncolx * sizeof(double));
+
   setup_linreg_rss(*nrow, *ncolx, *ncoly, &n_dwork, &dwork, &jpvt);
   linreg_rss(*nrow, *ncolx, x, *ncoly, y, rss, n_dwork, dwork, jpvt,
-             xcopy, ycopy, *tol);
+             xcopy, ycopy, *tol, *skip_dgels, *verbose);
 }
 
 /* end of lapackutil.c */
