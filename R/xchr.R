@@ -756,7 +756,7 @@ function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
 # figure out null hypothesis business for scanone on X chromosome
 ######################################################################
 scanoneXnull <-
-function(type, sexpgm)
+function(type, sexpgm, cross.attr)
 {
   sex <- sexpgm$sex
   pgm <- sexpgm$pgm
@@ -764,8 +764,10 @@ function(type, sexpgm)
   if(type == "risib" || type=="riself" || type=="dh") type <- "bc"
 
   if(type == "bcsft") {
-    type <- "bc"
-    warning("bcsft computation of scanoneXnull using bc--probably not correct")
+    if(cross.attr$scheme[2] == 0)
+      type <- "bc"
+    else
+      type <- "f2"
   }
   
   ### first figure out sex/pgm pattern
