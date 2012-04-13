@@ -239,7 +239,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     }
   }
 
-  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm)
+  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm, cross.attr)
   adjustX <- FALSE
   if(sum(qtl$chrtype[p$idx.qtl]=="X")==1 && Xadjustment$adjustX)  { # need to include X chromosome covariates
     adjustX <- TRUE
