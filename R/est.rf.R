@@ -47,7 +47,7 @@ function(cross, maxit=10000, tol=1e-6)
   is.bcsft <- (type == "bcsft")
   if(is.bcsft) {
     cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
-    is.bcsft <- cross.scheme[2] > 0
+    is.bcsft <- cross.scheme[2] > 0 ## used for fixX only
   }
   
   xchrcol <- NULL
@@ -57,7 +57,7 @@ function(cross, maxit=10000, tol=1e-6)
   for(i in 1:n.chr) {
     temp <- cross$geno[[i]]$data
 
-    # treat X chromosome specially in an intercross
+    # treat X chromosome specially in an intercross or BCsFt with t>0.
     if((type=="f2" || is.bcsft) && chrtype[i]=="X") {
       fixX <- TRUE
       if(i != 1) xchrcol <- c(xchrcol,ncol(Geno)+(1:ncol(cross$geno[[i]]$data)))
@@ -82,12 +82,8 @@ function(cross, maxit=10000, tol=1e-6)
     if(any(chrtype == "X"))
       warning("est.rf not working properly for the X chromosome for 4- or 8-way RIL.")
   }
-  else if(type == "bcsft") {
-    if(fixX)
-      warning("est.rf may not work properly for the X chromosome for bcsft.")
+  else if(type == "bcsft")
     cfunc <- "est_rf_bcsft"
-    cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
-  }
   else 
     stop("est.rf not available for cross type ", type, ".")
 
