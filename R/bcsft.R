@@ -1,28 +1,48 @@
-read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = read.cross(...),
-                             force.bcsft = FALSE)
+read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcsft = FALSE,
+                             estimate.map=TRUE, error.prob=0.0001,
+                             map.function=c("haldane", "kosambi", "c-f", "morgan"))
 {
   ## Must specify s = BC.gen and t = F.gen.
   ## Later: Could import in clever way from qtlcart? See qtlcart_io.R and their software.
 
+  ## Make sure we only estimate map once!
+  if(is.null(cross)) # Estimate map at end of this routine (called read.cross.bcsft directly).
+    cross <- read.cross(..., estimate.map = FALSE)
+  else # Estimate map in parent read.cross() call (read.cross.bcsft is pass-through from read.cross).
+    estimate.map <- FALSE
+  
   cross.class <- class(cross)[1]
   force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
   
   if((cross.class %in% c("bc","f2")) & force.bcsft) {
     class(cross)[1] <- "bcsft"
+    ## If BC.gen = 0 and F.gen = 0, then set to BC1F0 (bc) or BC0F2 (f2).
     if(cross.class == "bc" & F.gen > 0) {
       stop("input cross has only 2 genotypes--cannot have F.gen > 0")
       if(BC.gen == 0)
         BC.gen <- 1
     }
     if(cross.class == "f2") {
-      if(F.gen == 0)
-        stop("input cross has 3 genotypes--cannot have F.gen = 0")
+      if(F.gen == 0) {
+        if(BC.gen == 0)
+          F.gen <- 2
+        else
+          stop("input cross has 3 genotypes--cannot have F.gen = 0")
+      }
     }
     if(BC.gen < 0 | F.gen < 0)
       stop("BC.gen and F.gen cannot be negative")
     
     attr(cross, "scheme") <- c(BC.gen, F.gen)
     cross
+  }
+
+  # re-estimate map?
+  if(estimate.map) {
+    cat(" --Estimating genetic map\n")
+    map.function <- match.arg(map.function)
+    newmap <- est.map(cross, error.prob=error.prob, map.function=map.function)
+    cross <- replace.map(cross, newmap)
   }
 
   cross

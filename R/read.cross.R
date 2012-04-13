@@ -138,6 +138,9 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     }
   }
 
+  ## Pass through read.cross.bcsft for BCsFt (convert if appropriate).
+  cross <- read.cross.bcsft(cross = cross, ...)
+
   # re-estimate map?
   if(estimate.map) {
     cat(" --Estimating genetic map\n")
@@ -449,9 +452,6 @@ function(cross, alleles)
     cross$geno[[xchr]]$data <- Xgeno
   }
   else cross <- subset(cross,chr= -xchr) # <- omit the X chr completely
-
-  ## Pass through read.cross.bcsft (convert if appropriate).
-  read.cross.bcsft(cross = cross, ...)
 }
 
 
