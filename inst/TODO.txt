@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o weights aren't being subsetted when there are missing phenotypes
+
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
 
