@@ -13,6 +13,8 @@ SHORT TERM:
 o Write regression function that uses Linpack (dgelsy and dgels);
   modify scanone to use it; check calculation times
 
+o weights aren't being subsetted when there are missing phenotypes
+
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
 
