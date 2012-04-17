@@ -58,10 +58,10 @@ double emit_f2(int obs_gen, int true_gen, double error_prob)
     else return(log(error_prob)-M_LN2);
   case 4: /* AA or AB (not BB) */
     if(true_gen != 3) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-M_LN2);
+    else return(log(error_prob));
   case 5: /* AB or BB (not AA) */
     if(true_gen != 1) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-M_LN2);
+    else return(log(error_prob));
   }
   return(0.0); /* shouldn't get here */
 }
