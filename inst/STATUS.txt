@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.24, 4/11/2012:
+Version 1.24, 4/23/2012:
 
 Major changes:
 
@@ -36,6 +36,15 @@ Major changes:
     summary.scantwo.old -> summaryScantwoOld
 
   Revised tutorials to use the new naming scheme.
+
+  Revised the emission probabilities for dominant markers in an F2,
+  for the HMM calculations.  Previously, we had 
+      Pr(O = not A | g = AA) = Pr(O = not B | g = BB) = epsilon/2
+  these have been changed to
+      Pr(O = not A | g = AA) = Pr(O = not B | g = BB) = epsilon
+  This corresponds to "not A" being "H or B"; similarly for not B.
+  Results will change only for an intercross with dominant markers,
+  and generally only slightly.
 
 Minor changes:
 

@@ -13,6 +13,15 @@ SHORT TERM:
 o Write regression function that uses Linpack (dgelsy and dgels);
   modify scanone to use it; check calculation times
 
+o revise use of snow package to use parallel instead
+
+  library(parallel)
+  cl <- makeCluster(detectCores())
+  clusterSetRNGStream(cl)
+  clusterEvalQ(cl, library(qtl))
+  results <- clusterApply(cl, blah)
+  stopCluster(cl)
+
 o weights aren't being subsetted when there are missing phenotypes
 
 o Bug in scantwo: occasionally lod scores not matching what I get from
