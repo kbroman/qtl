@@ -2,9 +2,9 @@
  * 
  * hmm_f2.c
  * 
- * copyright (c) 2001-2010, Karl W Broman
+ * copyright (c) 2001-2012, Karl W Broman
  *
- * last modified Jul, 2010
+ * last modified Apr, 2012
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -58,10 +58,10 @@ double emit_f2(int obs_gen, int true_gen, double error_prob)
     else return(log(error_prob)-M_LN2);
   case 4: /* AA or AB (not BB) */
     if(true_gen != 3) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-M_LN2);
+    else return(log(error_prob));
   case 5: /* AB or BB (not AA) */
     if(true_gen != 1) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-M_LN2);
+    else return(log(error_prob));
   }
   return(0.0); /* shouldn't get here */
 }
@@ -126,10 +126,10 @@ double emit_f2b(int obs_gen, int true_gen, double error_prob)
     }
   case 4: /* AA or AB (not BB) */
     if(true_gen != 4) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-M_LN2);
+    else return(log(error_prob));
   case 5: /* AB or BB (not AA) */
     if(true_gen != 1) return(log(1.0-error_prob/2.0));
-    else return(log(error_prob)-M_LN2);
+    else return(log(error_prob));
   }
   return(0.0); /* shouldn't get here */
 }
