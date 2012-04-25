@@ -1,20 +1,10 @@
-read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcsft = FALSE,
-                             estimate.map=TRUE, error.prob=0.0001,
-                             map.function=c("haldane", "kosambi", "c-f", "morgan"))
+convert.cross.bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
+                                error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
+                                ...)
 {
-  ## Must specify s = BC.gen and t = F.gen.
-  ## Later: Could import in clever way from qtlcart? See qtlcart_io.R and their software.
-
-  ## Make sure we only estimate map once!
-  if(is.null(cross)) # Estimate map at end of this routine (called read.cross.bcsft directly).
-    cross <- read.cross(..., estimate.map = FALSE)
-  else # Estimate map in parent read.cross() call (read.cross.bcsft is pass-through from read.cross).
-    estimate.map <- FALSE
-  
   cross.class <- class(cross)[1]
-  force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
   
-  if((cross.class %in% c("bc","f2")) & force.bcsft) {
+  if((cross.class %in% c("bc","f2"))) {
     class(cross)[1] <- "bcsft"
     ## If BC.gen = 0 and F.gen = 0, then set to BC1F0 (bc) or BC0F2 (f2).
     if(cross.class == "bc" & F.gen > 0) {
@@ -36,14 +26,33 @@ read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcs
     attr(cross, "scheme") <- c(BC.gen, F.gen)
     cross
   }
+  else stop("cross object has to be of class bc or f2 to be converted to bcsft")
 
   # re-estimate map?
   if(estimate.map) {
     cat(" --Estimating genetic map\n")
-    map.function <- match.arg(map.function)
     newmap <- est.map(cross, error.prob=error.prob, map.function=map.function)
     cross <- replace.map(cross, newmap)
   }
+
+  cross
+}
+  
+read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcsft = FALSE,
+                             estimate.map=TRUE)
+{
+  ## Must specify s = BC.gen and t = F.gen.
+  ## Later: Could import in clever way from qtlcart? See qtlcart_io.R and their software.
+
+  ## Make sure we only estimate map once!
+  if(is.null(cross)) # Estimate map at end of this routine (called read.cross.bcsft directly).
+    cross <- read.cross(..., estimate.map = FALSE)
+  else # Estimate map in parent read.cross() call (read.cross.bcsft is pass-through from read.cross).
+    estimate.map <- FALSE
+
+  force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
+  if((class(cross)[1] %in% c("bc","f2")) & force.bcsft)
+    cross <- convert.cross.bcsft(cross, BC.gen, F.gen, estimate.map = estimate.map, ...)
 
   cross
 }
