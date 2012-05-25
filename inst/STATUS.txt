@@ -62,6 +62,9 @@ Minor changes:
   Revisions to read.cross (for the csv formats) from Steffen Moeller,
   to give some more informative warnings/errors.
 
+  Fixed a bug in scantwo permutations in case that a chromosome has
+  multiple markers but they span < step from calc.genoprob.
+
   Fixed a bug in interpPositions; problems if the input had missing
   rownames. 
 

@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2011, Karl W Broman and Hao Wu
-# last modified Nov, 2011
+# copyright (c) 2001-2012, Karl W Broman and Hao Wu
+# last modified May, 2012
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1383,8 +1383,12 @@ function(cross, chr, pheno.col=1,
   if(n.phe == 1)
     diag(out$lod) <- out.scanone[rownames(out$map),]
   else {
-    for(iphe in 1:n.phe) 
-      diag(out$lod[,,iphe]) <- out.scanone[rownames(out$map),iphe]
+    for(iphe in 1:n.phe) {
+      if(nrow(out$lod)==1)
+        out$lod[1,1,iphe] <- out.scanone[rownames(out$map),iphe]
+      else 
+        diag(out$lod[,,iphe]) <- out.scanone[rownames(out$map),iphe]
+    }
   }
 
   attr(out,"method") <- method
@@ -1564,6 +1568,7 @@ function(n.perm, cross, pheno.col, model,
             perm.result[[k]] <- as.matrix(apply(cbind(perm.result[[k]], tem[[k]]), 1, max, na.rm=TRUE))
         }
 
+
       }
     }
   }
@@ -1625,7 +1630,6 @@ function(n.perm, cross, pheno.col, model,
       cross$pheno <- cross$pheno[o,,drop=FALSE]
       if(!is.null(addcovar)) addcovarp <- addcovarp[o,,drop=FALSE]
       if(!is.null(intcovar)) intcovarp <- intcovarp[o,,drop=FALSE]
-
 
       temp <- NULL
       for(ii in nchr1) {
