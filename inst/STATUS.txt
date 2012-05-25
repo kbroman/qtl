@@ -17,9 +17,14 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.24, 4/23/2012:
+Version 1.24, 5/25/2012:
 
 Major changes:
+
+  Fixed a major bug in checkcovar, used by scanone and scantwo to omit
+  individuals with missing phenotypes.  If there is an "ID" column
+  that is numeric, the wrong individuals could be omitted, and
+  genotypes and phenotypes would be misaligned.
 
   Changed the names of a number of functions, in order to avoid the
   "Note" in R CMD check, and because Prof. Brian Ripley asked me to.
