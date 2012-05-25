@@ -10,10 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Bug in checkcovar (in util.R) regarding omitting individuals with
-  missing phenotypes when there's an ID column with numeric values.
-  The wrong individuals get omitted from the cross.
-
 o Bug in scantwo permutations if markers on chr span < step and one
   uses incl.markers=FALSE.
 
