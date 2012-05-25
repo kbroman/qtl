@@ -10,9 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
-o Bug in scantwo permutations if markers on chr span < step and one
-  uses incl.markers=FALSE.
-
 o revise use of snow package to use parallel instead
 
   library(parallel)
