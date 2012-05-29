@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-2010, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Nov, 2010
+# copyright (c) 2001-2012, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Mar, 2012
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -338,8 +338,12 @@ function(object, for.perm=FALSE)
      is.null(object$scanoneX) || length(object$scanoneX)==0) {
     if(n.phe==1) scanoneX <- diag(lod)
     else {
-      scanoneX <- diag(lod[,,1])
-      for(i in 2:n.phe) scanoneX <- cbind(scanoneX, diag(lod[,,i]))
+      if(nrow(lod)==1) scanoneX <- lod[1,1,1]
+      else scanoneX <- diag(lod[,,1])
+      for(i in 2:n.phe) {
+        if(nrow(lod)==1) scanoneX <- cbind(scanoneX, lod[1,1,i])
+        else scanoneX <- cbind(scanoneX, diag(lod[,,i]))
+      }
     }
   }
   else scanoneX <- object$scanoneX

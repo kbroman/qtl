@@ -14,6 +14,17 @@ many details as possible and possibly example data, to Karl Broman,
 <kbroman@biostat.wisc.edu>.
 ----------------------------------------------------------------------
 
+Version 1.23 bugs:
+
+   1. Bug in scantwo permutations if markers on chr span < step and one
+      uses incl.markers=FALSE. [Fixed in Version 1.24-9.]
+
+   2. Bug in checkcovar (in util.R) regarding omitting individuals with
+      missing phenotypes when there's an ID column with numeric values.
+      The wrong individuals get omitted from the cross. [Fixed in
+      Version 1.24-9.]
+
+
 Version 1.16 bugs:
 
    1. Bug in estimates from fitqtl for RIL: they need to be divided in

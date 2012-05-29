@@ -17,9 +17,26 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.24, 4/23/2012:
+Version 1.25, 5/29/2012:
 
 Major changes:
+
+  None.
+
+Minor changes:
+
+  Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
+  chromosome type.
+
+
+Version 1.24, 5/25/2012:
+
+Major changes:
+
+  Fixed a major bug in checkcovar, used by scanone and scantwo to omit
+  individuals with missing phenotypes.  If there is an "ID" column
+  that is numeric, the wrong individuals could be omitted, and
+  genotypes and phenotypes would be misaligned.
 
   Changed the names of a number of functions, in order to avoid the
   "Note" in R CMD check, and because Prof. Brian Ripley asked me to.
@@ -56,6 +73,9 @@ Minor changes:
 
   Revisions to read.cross (for the csv formats) from Steffen Moeller,
   to give some more informative warnings/errors.
+
+  Fixed a bug in scantwo permutations in case that a chromosome has
+  multiple markers but they span < step from calc.genoprob.
 
   Fixed a bug in interpPositions; problems if the input had missing
   rownames. 
