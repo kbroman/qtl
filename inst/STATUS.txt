@@ -17,6 +17,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.25, 5/29/2012:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
+  chromosome type.
+
+
 Version 1.24, 5/25/2012:
 
 Major changes:
