@@ -10,6 +10,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o speed up R CMD check
+
+o locateXO gives core dump when just one marker on chromosome?
+
 o revise use of snow package to use parallel instead
 
   library(parallel)

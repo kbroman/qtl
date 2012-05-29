@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2012, Karl W Broman
+# last modified May, 2012
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -229,6 +229,8 @@ function(map,model,n.ind,error.prob,missing.prob,
   if(any(sapply(map,is.matrix)))
     stop("Map must not be sex-specific.")
 
+  chr.type <- sapply(map, function(a) ifelse(class(a)=="X","X","A"))
+
   n.chr <- length(map)
 
   if(is.null(model)) n.qtl <- 0
@@ -269,8 +271,6 @@ function(map,model,n.ind,error.prob,missing.prob,
   n.mar <- sapply(map,length)
   mar.names <- lapply(map,names)
 
-  chr.type <- sapply(map, function(a) ifelse(class(a)=="X","X","A"))
-  
   for(i in 1:n.chr) {
     # simulate genotype data
     thedata <- sim.bcg(n.ind, map[[i]], m, p, map.function)
@@ -361,9 +361,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
     stop("Map must not be sex-specific.")
 
   # chromosome types
-  chr.type <- sapply(map,function(a)
-                     if(is.null(class(a))) return("A")
-                     else return(class(a)))
+  chr.type <- sapply(map,function(a) ifelse(class(a)=="X", "X", "A"))
   
   n.chr <- length(map)
   if(is.null(model)) n.qtl <- 0
@@ -558,7 +556,7 @@ function(map,model,n.ind,error.prob,missing.prob,partial.missing.prob,
     model[,2] <- model[,2]+1e-14 # so QTL not on top of marker
   }
 
-  chr.type <- sapply(map,function(a) ifelse(class(a)=="A", "A", "X"))
+  chr.type <- sapply(map,function(a) ifelse(class(a)=="X", "X", "A"))
 
   # if any QTLs, place qtls on map
   if(n.qtl > 0) {
