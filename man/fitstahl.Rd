@@ -77,14 +77,16 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
 \dontshow{set.seed(12201969)}
 # Simulate genetic map: one chromosome of length 200 cM with
 # a 2 cM marker spacing
-mymap <- sim.map(200, 51, TRUE, FALSE, FALSE, TRUE)
+mymap <- sim.map(200, 51, anchor.tel=TRUE, include.x=FALSE,
+                 sex.sp=FALSE, eq.spacing=TRUE)
 
 # Simulate data under the chi-square model, no errors
 mydata <- sim.cross(mymap, n.ind=250, type="bc",
                     error.prob=0, m=3, p=0)
 
 # Fit the chi-square model for specified m's
-output <- fitstahl(mydata, m=1:5, p=0, error.prob=0)
+\dontrun{output <- fitstahl(mydata, m=1:5, p=0, error.prob=0)
+}\dontshow{output <- fitstahl(mydata, m=1, p=0, error.prob=0,tol=0.001)}
 plot(output$m, output$loglik, lwd=2, type="b")
 
 # Find the MLE of m in the chi-square model
