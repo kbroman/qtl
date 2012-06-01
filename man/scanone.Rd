@@ -326,7 +326,8 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
 data(hyper)
 \dontshow{hyper <- subset(hyper,chr=1:4,ind=1:100)}
 # Genotype probabilities for EM and H-K
-hyper <- calc.genoprob(hyper, step=2.5)
+\dontrun{hyper <- calc.genoprob(hyper, step=2.5)
+}\dontshow{hyper <- calc.genoprob(hyper)}
 out.em <- scanone(hyper, method="em")
 out.hk <- scanone(hyper, method="hk")
 
@@ -345,8 +346,10 @@ plot(out.hk, out.em, chr=c(1,4), lty=1, col=c("blue","black"))
 
 # Imputation; first need to run sim.geno
 # Do just chromosomes 1 and 4, to save time
-hyper.c1n4 <- sim.geno(subset(hyper, chr=c(1,4)),
+\dontrun{hyper.c1n4 <- sim.geno(subset(hyper, chr=c(1,4)),
                        step=2.5, n.draws=8)
+}\dontshow{hyper.c1n4 <- sim.geno(subset(hyper, chr=c(1,4)),
+                       step=0, n.draws=4)}
 out.imp <- scanone(hyper.c1n4, method="imp")
 summary(out.imp, thr=3)
 
@@ -360,7 +363,7 @@ plot(out.hk, out.em, out.ehk, chr=c(1,4))
 
 # Permutation tests
 \dontrun{permo <- scanone(hyper, method="hk", n.perm=1000)
-}\dontshow{permo <- scanone(hyper, method="hk", n.perm=100)
+}\dontshow{permo <- scanone(hyper, method="hk", n.perm=5)
 }
 
 # Threshold from the permutation test
@@ -387,7 +390,7 @@ extremes <- (nmissing(hyper)/totmar(hyper) < 0.5)
 
 \dontrun{operm.strat <- scanone(hyper, method="hk", n.perm=1000,
                        perm.strata=extremes)
-}\dontshow{operm.strat <- scanone(hyper, method="hk", n.perm=100,
+}\dontshow{operm.strat <- scanone(hyper, method="hk", n.perm=5,
                        perm.strata=extremes)
 }
 
@@ -400,14 +403,15 @@ summary(operm.strat)
 ####################
 data(fake.f2)
 \dontshow{fake.f2 <- subset(fake.f2, chr=c(18:19,"X"))}
-fake.f2 <- calc.genoprob(fake.f2, step=2.5)
+\dontrun{fake.f2 <- calc.genoprob(fake.f2, step=2.5)
+}\dontshow{fake.f2 <- calc.genoprob(fake.f2, step=0)}
 
 # genome scan
 out <- scanone(fake.f2, method="hk")
 
 # X-chr-specific permutations
 \dontrun{operm <- scanone(fake.f2, method="hk", n.perm=1000, perm.Xsp=TRUE)
-}\dontshow{operm <- scanone(fake.f2, method="hk", n.perm=100, perm.Xsp=TRUE)
+}\dontshow{operm <- scanone(fake.f2, method="hk", n.perm=5, perm.Xsp=TRUE)
 }
 
 # thresholds
@@ -434,7 +438,8 @@ plot(out.imp, out.hk, out.em, chr=c(1,4), lty=1,
 ###################
 data(listeria)
 \dontshow{listeria <- subset(listeria,chr=c(1,5,13),ind=!is.na(listeria$pheno[,1]))}
-listeria <- calc.genoprob(listeria,step=2.5)
+\dontrun{listeria <- calc.genoprob(listeria,step=2.5)
+}\dontshow{listeria <- calc.genoprob(listeria,step=0)}
 out.2p <- scanone(listeria, model="2part", upper=TRUE)
 summary(out.2p, thr=c(5,3,3), format="allpeaks")
 
@@ -478,7 +483,8 @@ summary(permo)
 ###################
 data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=c(2,5,10))}
-fake.bc <- calc.genoprob(fake.bc, step=2.5)
+\dontrun{fake.bc <- calc.genoprob(fake.bc, step=2.5)
+}\dontshow{fake.bc <- calc.genoprob(fake.bc, step=0)}
 
 # genome scans without covariates
 out.nocovar <- scanone(fake.bc)
