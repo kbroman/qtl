@@ -1863,8 +1863,8 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
   orig.n.ind <- nind(cross)
 
   # drop individuals with missing phenotypes
-  if(any(is.na(pheno))) {
-    keep.ind <- as.numeric(which(apply(pheno, 1, function(x) !any(is.na(x)))))
+  if(any(!is.finite(unlist(pheno)))) {
+    keep.ind <- as.numeric(which(apply(pheno, 1, function(x) !any(!is.finite(x)))))
 #    keep.ind <- (1:length(pheno))[!is.na(pheno)]
     n.drop <- nind(cross) - length(keep.ind)
     keep.ind.boolean <- rep(FALSE, nind(cross))
@@ -1919,7 +1919,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
 
   # drop individuals missing any covariates
   if(!is.null(addcovar)) { # note that intcovar is contained in addcovar
-    wh <- apply(cbind(addcovar,intcovar),1,function(a) any(is.na(a)))
+    wh <- apply(cbind(addcovar,intcovar),1,function(a) any(!is.finite(a)))
     if(any(wh)) {
       cross <- subset.cross(cross,ind=(!wh))
       pheno <- pheno[!wh,,drop=FALSE]
@@ -1946,8 +1946,8 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
         if(any(o)) wh[i] <- (1:n.addcovar)[o]
         else wh[i] <- NA
       }
-      if(any(is.na(wh))) {
-        addcovar <- cbind(addcovar,intcovar[,is.na(wh)])
+      if(any(!is.finite(wh))) {
+        addcovar <- cbind(addcovar,intcovar[,!is.finite(wh)])
         n.addcovar <- ncol(addcovar)
         if(verbose) warning("addcovar forced to contain all columns of intcovar")
       }
