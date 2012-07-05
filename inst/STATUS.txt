@@ -17,13 +17,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.25, 6/1/2012:
+Version 1.25, 7/5/2012:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Slight change to checkcovar(): omit inidividuals with
+  phenotypes/covariates that are +/- Inf, as well as those that are
+  missing.
 
   Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
   chromosome type.
