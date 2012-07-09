@@ -316,18 +316,6 @@ double nrec2_f2(int obs1, int obs2, double rf, int *cross_scheme)
 
 double logprec_f2(int obs1, int obs2, double rf, int *cross_scheme)
 {
-  int temp;
-
-  /* make obs1 <= obs2 */
-  /*  if(obs1 > obs2) {
-    temp = obs2;
-    obs2 = obs1;
-    obs1 = temp;
-  }
-  */
-
-  /* This was messed up. Conditional probs are NOT symmetric. BSY & LMS */
-
   switch(obs1) {
   case 1: 
     switch(obs2) {
