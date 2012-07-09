@@ -2782,9 +2782,9 @@ function(object, ...)
                              c("n.mar","length","ave.spacing", "max.spacing"))
   }
 
-  output <- output
+  output <- as.data.frame(output)
   attr(output, "sexsp") <- sexsp
-  class(output) <- c("summary.map", data.frame)
+  class(output) <- c("summary.map", "data.frame")
   output
 }
 
