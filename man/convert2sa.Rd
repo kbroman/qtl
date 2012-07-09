@@ -42,6 +42,6 @@ nm <- est.map(fake.4way, sex.sp=FALSE)
 plot(convert2sa(nm))
 }
 
-\seealso{ \code{\link{est.map}}, \code{\link{plot.map}} }
+\seealso{ \code{\link{est.map}}, \code{\link{plotMap}} }
 
 \keyword{manip}

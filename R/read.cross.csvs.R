@@ -2,8 +2,8 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2005-2011, Karl W Broman
-# last modified Apr, 2011
+# copyright (c) 2005-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -48,6 +48,11 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
   }
 
   args <- list(...)
+
+  if("" %in% na.strings) {
+    na.strings <- na.strings[na.strings != ""]
+    warning("Including \"\" in na.strings will cause problems; omitted.")
+  }
 
   # if user wants to use comma for decimal point, we need
   if(length(args) > 0 && "dec" %in% names(args)) {
@@ -173,8 +178,11 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
     map <- asnumericwithdec(unlist(gen[3,]), dec=dec)
     if(any(is.na(map))) {
       temp <- unique(unlist(gen[3,])[is.na(map)])
-      stop(paste("There are missing marker positions.\n",
-                 "   In particular, we see these values: ", paste("\"", temp, "\"", collapse=" ", sep="")))
+      stop("There are missing marker positions.\n",
+           "   In particular, we see these value(s): ",
+           paste("\"",paste(temp,collapse="\",\"",sep=""),"\"",collapse=" ",sep=""),
+           " at position(s): ",
+           paste(which(is.na(map)),colapse=",",sep=""),sep="")
     }
   }
   else 
@@ -188,8 +196,11 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
 
   # pull apart phenotypes, genotypes and map
   mnames <- unlist(gen[1,])
-  if(any(is.na(mnames)))  stop("There are missing marker names.")
+  if(any(is.na(mnames)))
+        stop("There are missing marker names. Check column(s) ",paste(which(is.na(mnames))+1+n.phe,collapse=","),sep="")
   chr <- unlist(gen[2,])
+  if(any(is.na(chr)))
+        stop("There are missing chromosome IDs. Check column(s) ",paste(which(is.na(chr))+1+n.phe,collapse=","),sep="")
 
   if(any(is.na(chr))) {
     na.positions <- which(is.na(chr))
@@ -328,6 +339,7 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
     warning("There is no genotype data!\n")
 
   # determine map type: f2 or bc or 4way?
+  if(all(is.na(allgeno))) warning("There is no genotype data!\n")
   if(all(is.na(allautogeno)) || max(allautogeno,na.rm=TRUE)<=2) type <- "bc"  
   else if(max(allautogeno,na.rm=TRUE)<=5) type <- "f2" 
   else type <- "4way"

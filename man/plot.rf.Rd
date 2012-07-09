@@ -1,5 +1,6 @@
-\name{plot.rf}
+\name{plotRF}
 \alias{plot.rf}
+\alias{plotRF}
 
 \title{Plot recombination fractions}
 
@@ -10,7 +11,7 @@
 }
 
 \usage{
-plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
+plotRF(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
         zmax=12, mark.diagonal=FALSE, \dots)
 }
 
@@ -58,16 +59,16 @@ plot.rf(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
 \examples{
 data(badorder)
 badorder <- est.rf(badorder)
-plot.rf(badorder)
+plotRF(badorder)
 
 # plot just chr 1
-plot.rf(badorder, chr=1)
+plotRF(badorder, chr=1)
 
 # plot just the recombination fractions
-plot.rf(badorder, what="rf") 
+plotRF(badorder, what="rf") 
 
 # plot just the LOD scores, and just for chr 2 and 3
-plot.rf(badorder, chr=2:3, what="lod")
+plotRF(badorder, chr=2:3, what="lod")
 }
 
 \seealso{ \code{\link{est.rf}}, \code{\link{pull.rf}}, \code{\link{plot.rfmatrix}},

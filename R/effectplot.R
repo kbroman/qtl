@@ -2,8 +2,8 @@
 #
 # effectplot.R
 #
-# copyright (c) 2002-2010, Hao Wu and Karl W. Broman
-# Last modified Nov, 2010
+# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
+# Last modified Mar, 2012
 # first written Jul, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -65,6 +65,9 @@ function (cross, pheno.col = 1, mname1, mark1, geno1, mname2,
 
   if(pheno.col < 1 | pheno.col > nphe(cross))
     stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  if(!is.numeric(cross$pheno[,pheno.col]))
+    stop("phenotype \"", colnames(cross$pheno)[pheno.col], "\" is not numeric.")
 
   var.flag <- match.arg(var.flag)
 

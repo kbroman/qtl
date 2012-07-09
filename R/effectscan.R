@@ -2,9 +2,9 @@
 #
 # effectscan.R
 #
-# copyright (c) 2003-2011, Karl W. Broman
+# copyright (c) 2003-2012, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified May, 2011
+# last modified Mar, 2012
 # first written Jan, 2003
 #
 #     This program is free software; you can redistribute it and/or
@@ -48,6 +48,9 @@ function(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
 
   if(pheno.col < 1 | pheno.col > nphe(cross))
     stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  if(!is.numeric(cross$pheno[,pheno.col]))
+    stop("phenotype \"", colnames(cross$pheno)[pheno.col], "\" is not numeric.")
 
   pheno <- cross$pheno[,pheno.col]
   wh <- is.na(pheno)

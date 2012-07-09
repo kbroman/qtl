@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-2010, Karl W Broman
-# last modified Nov, 2010
+# copyright (c) 2001-2012, Karl W Broman
+# last modified Mar, 2012
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: calc.errorlod, plot.errorlod, top.errorlod
+# Contains: calc.errorlod, plotErrorlod, top.errorlod
 #
 ######################################################################
 
@@ -68,7 +68,7 @@ function(cross, error.prob=0.01,
       else cfunc <- "calc_errorlod_bc"
     }
     else if(type=="4way") cfunc <- "calc_errorlod_4way"
-    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib")
+    else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16")
       cfunc <- paste("calc_errorlod_", type, sep="")
     else 
       stop("calc.errorlod not available for cross type ", type, ".")
@@ -129,11 +129,11 @@ function(cross, error.prob=0.01,
 
 ######################################################################
 #
-# plot.errorlod
+# plotErrorlod
 #
 ######################################################################
 
-plot.errorlod <-
+plotErrorlod <- plot.errorlod <-
 function(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
          col=c("white","gray85","hotpink","purple3"),
          alternate.chrid=FALSE, ...)

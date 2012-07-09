@@ -2,8 +2,8 @@
 #
 # ril48_reorg.R
 #
-# copyright (c) 2009, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2009-2011, Karl W Broman
+# last modified Dec, 2011
 # first written Apr, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -46,10 +46,11 @@ function(cross)
 
   crosstype <- class(cross)[1]
   if(crosstype != "ri4sib" && crosstype != "ri4self" &&
-     crosstype != "ri8sib" && crosstype != "ri8self")
+     crosstype != "ri8sib" && crosstype != "ri8self" && crosstype != "bgmagic16")
     stop("reorgRIgenoprob not appropriate for cross type ", crosstype)
   
-  n.str <- as.numeric(substr(crosstype[i], 3, 3))
+  if(crosstype=="bgmagic16") n.str <- 16
+  else n.str <- as.numeric(substr(crosstype, 3, 3))
   n.ind <- nind(cross)
   for(i in names(cross$geno)) { # loop over chromosomes
     chrtype <- class(cross$geno[[i]])
@@ -111,10 +112,11 @@ function(cross)
 
   crosstype <- class(cross)[1]
   if(crosstype != "ri4sib" && crosstype != "ri4self" &&
-     crosstype != "ri8sib" && crosstype != "ri8self")
+     crosstype != "ri8sib" && crosstype != "ri8self" && crosstype != "bgmagic16")
     stop("reorgRIdraws not appropriate for cross type ", crosstype)
   
-  n.str <- as.numeric(substr(crosstype[i], 3, 3))
+  if(crosstype=="bgmagic16") n.str <- 16
+  else n.str <- as.numeric(substr(crosstype, 3, 3))
   n.ind <- nind(cross)
   for(i in names(cross$geno)) { # loop over chromosomes
     chrtype <- class(cross$geno[[i]])
@@ -173,10 +175,11 @@ function(cross)
 
   crosstype <- class(cross)[1]
   if(crosstype != "ri4sib" && crosstype != "ri4self" &&
-     crosstype != "ri8sib" && crosstype != "ri8self")
+     crosstype != "ri8sib" && crosstype != "ri8self" && crosstype != "bgmagic16")
     stop("reorgRIargmax not appropriate for cross type ", crosstype)
   
-  n.str <- as.numeric(substr(crosstype[i], 3, 3))
+  if(crosstype=="bgmagic16") n.str <- 16
+  else n.str <- as.numeric(substr(crosstype, 3, 3))
   n.ind <- nind(cross)
   for(i in names(cross$geno)) { # loop over chromosomes
     chrtype <- class(cross$geno[[i]])
@@ -234,10 +237,11 @@ function(cross, pairprob)
 
   crosstype <- class(cross)[1]
   if(crosstype != "ri4sib" && crosstype != "ri4self" &&
-     crosstype != "ri8sib" && crosstype != "ri8self")
+     crosstype != "ri8sib" && crosstype != "ri8self" && crosstype != "bgmagic16")
     stop("reorgRIargmax not appropriate for cross type ", crosstype)
   
-  n.str <- as.numeric(substr(crosstype[i], 3, 3))
+  if(crosstype=="bgmagic16") n.str <- 16
+  else n.str <- as.numeric(substr(crosstype, 3, 3))
   n.ind <- nind(cross)
   thedim <- dim(pairprob)
 

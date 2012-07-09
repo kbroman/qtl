@@ -299,7 +299,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 					}
 				}
 				if(verbose) cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
-				plot.map(pull.map(cross), new.map,main="Supplied map versus re-estimated map")
+				plotMap(pull.map(cross), new.map,main="Supplied map versus re-estimated map")
 			}
     }
     if(backward){

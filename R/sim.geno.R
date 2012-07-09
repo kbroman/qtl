@@ -86,9 +86,10 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
       cfunc <- "sim_geno_4way"
       one.map <- FALSE
     }
-    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+    else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="bgmagic16") {
       cfunc <- paste("sim_geno_", type, sep="")
-      n.gen <- as.numeric(substr(type, 3, 3))
+      if(type=="bgmagic16") n.gen <- 16
+      else n.gen <- as.numeric(substr(type, 3, 3))
       one.map <- TRUE
       if(xchr)
         warning("sim.geno not working properly for the X chromosome for 4- or 8-way RIL.")
@@ -199,7 +200,7 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
   return(cross)
   
   # 4- and 8-way RIL: reorganize the results
-  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16") 
     cross <- reorgRIdraws(cross)
 
   cross

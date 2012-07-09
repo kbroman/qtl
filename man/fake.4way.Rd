@@ -36,7 +36,7 @@ summary(fake.4way)
 
 # estimate recombination fractions
 fake.4way <- est.rf(fake.4way)
-plot.rf(fake.4way)
+plotRF(fake.4way)
 
 # estimate genetic maps
 ssmap <- est.map(fake.4way, verbose=TRUE)

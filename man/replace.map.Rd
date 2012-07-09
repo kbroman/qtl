@@ -34,7 +34,7 @@ replace.map(cross, map)
 data(fake.f2)
 \dontshow{fake.f2 <- subset(fake.f2, chr=18:19)}
 newmap <- est.map(fake.f2)
-plot.map(fake.f2, newmap)
+plotMap(fake.f2, newmap)
 fake.f2 <- replace.map(fake.f2, newmap)
 }
 

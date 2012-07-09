@@ -9,7 +9,7 @@
 }
 
 \usage{
-typingGap(cross, chr)
+typingGap(cross, chr, terminal=FALSE)
 }
 
 \arguments{
@@ -21,6 +21,8 @@ typingGap(cross, chr)
    converted to strings.  Refer to chromosomes with a preceding \code{-}
    to have all chromosomes but those considered.  A logical (TRUE/FALSE)
    vector may also be used.}
+\item{terminal}{If TRUE, just look at terminal typing gaps (from the
+ terminal markers to the first typed marker).}
 }
 
 \details{
@@ -28,7 +30,8 @@ typingGap(cross, chr)
   also distances from the beginning of the chromosome to the first typed
   marker, and similarly for the end of the chromosome.  (The start and end
   of a chromosome are taken to be the locations of the initial and final
-  markers.)  
+  markers.)  If \code{terminal=TRUE}, we look only at those beginning
+  and end distances.
 }
 
 \value{
@@ -39,8 +42,17 @@ typingGap(cross, chr)
 
 \examples{
 data(hyper)
-plot(typingGap(hyper, chr=5), ylab="Maximum gap between typed markers (cM)",
+plot(typingGap(hyper, chr=5), 
+     ylab="Maximum gap between typed markers (cM)",
      ylim=c(0, diff(range(pull.map(hyper,chr=5)[[1]]))))
+
+plot(typingGap(hyper, chr=4), 
+     ylab="Maximum gap between typed markers (cM)",
+     ylim=c(0, diff(range(pull.map(hyper,chr=4)[[1]]))))
+
+plot(typingGap(hyper, chr=4, terminal=TRUE),
+     ylab="Maximum gap between chr end and typed marker (cM)",
+     ylim=c(0, diff(range(pull.map(hyper,chr=4)[[1]]))))
 }
 
 \seealso{ \code{\link{ntyped}},

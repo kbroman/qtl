@@ -32,13 +32,13 @@
   \item{justdots}{If FALSE, just plot dots at the QTL, rather than
     arrows and QTL names.}
   \item{col}{Color used to plot indications of QTL}
-  \item{\dots}{Passed to \code{\link{plot.map}}.}
+  \item{\dots}{Passed to \code{\link{plotMap}}.}
 }
 
 \value{None.}
 
 \details{
-  Creates a plot, via \code{\link{plot.map}}, and indicates the
+  Creates a plot, via \code{\link{plotMap}}, and indicates the
   locations of the QTL in the input QTL object, \code{x}.
 }
 
@@ -56,7 +56,7 @@ plot(qtl)
 plot(qtl, justdots=TRUE, col="seagreen")
 }
 
-\seealso{ \code{\link{plot.map}}, \code{\link{makeqtl}} }
+\seealso{ \code{\link{plotMap}}, \code{\link{makeqtl}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
 

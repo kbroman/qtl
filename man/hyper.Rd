@@ -46,7 +46,7 @@ summary(hyper)
 plot(hyper)
 
 # Note the selective genotyping
-plot.missing(hyper, reorder=TRUE)
+plotMissing(hyper, reorder=TRUE)
 
 # A marker on c14 has no data; remove it
 hyper <- drop.nullmarkers(hyper)

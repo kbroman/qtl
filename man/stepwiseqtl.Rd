@@ -81,7 +81,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
 \details{
   We seek to identify the model with maximal penalized LOD score.  The
-  penalized LOD score, defined in Manichaikul et al. (in preparation),
+  penalized LOD score, defined in Manichaikul et al. (2009),
   is the LOD score for the model (the \eqn{\log_{10}}{log10} likelihood
   ratio comparing the model to the null model with no QTL) with
   penalties on the number of QTL and QTL:QTL interactions.
@@ -127,7 +127,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   interaction penalties (\eqn{T_l}{Tl}), and 1 heavy interaction penalty
   (\eqn{T_h}{Th}).  
   
-  Manichaikul et al. (in prepartion) described a system for deriving the
+  Manichaikul et al. (2009) described a system for deriving the
   three penalties on the basis of permutation results from a
   two-dimensional, two-QTL genome scan (as calculated with
   \code{\link{scantwo}}).  These may be calculated with the

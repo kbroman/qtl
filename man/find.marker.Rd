@@ -49,7 +49,7 @@ find.marker(listeria, 5, index=6)
 find.marker(listeria, c(1, 5, 13), c(81, 28, 26))
 }
 
-\seealso{ \code{\link{find.flanking}}, \code{\link{plot.pxg}},
+\seealso{ \code{\link{find.flanking}}, \code{\link{plotPXG}},
   \code{\link{find.pseudomarker}}, \code{\link{effectplot}},
 \code{\link{find.markerpos}} }
 

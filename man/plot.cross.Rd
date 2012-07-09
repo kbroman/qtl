@@ -30,8 +30,8 @@
 \value{None.}
 
 \details{
-  Calls \code{\link{plot.missing}}, \code{\link{plot.map}} and
-  \code{\link{plot.pheno}} to plot the missing genotypes, genetic
+  Calls \code{\link{plotMissing}}, \code{\link{plotMap}} and
+  \code{\link{plotPheno}} to plot the missing genotypes, genetic
   map, and histograms or barplots of all phenotypes. 
 
   If \code{auto.format=TRUE}, \code{par(mfrow)} is used with
@@ -39,7 +39,7 @@
   so that all plots fit on the plotting device.
 
   Numeric phenotypes are displayed as histograms or barplots by calling
-  \code{\link{plot.pheno}}. 
+  \code{\link{plotPheno}}. 
 }    
 
 \examples{
@@ -47,8 +47,8 @@ data(fake.bc)
 plot(fake.bc)
 }
 
-\seealso{ \code{\link{plot.missing}}, \code{\link{plot.map}}, 
-  \code{\link{plot.pheno}} }
+\seealso{ \code{\link{plotMissing}}, \code{\link{plotMap}}, 
+  \code{\link{plotPheno}} }
 
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian Yandell }

@@ -72,17 +72,17 @@ self-explanatory.
 \code{totmar(hyper)}
 
 The function \code{\link{plot.cross}} gives a graphical summary of
-the data; it calls \code{\link{plot.missing}} (to plot a matrix
-displaying missing genotypes) and \code{\link{plot.map}} (to plot
+the data; it calls \code{\link{plotMissing}} (to plot a matrix
+displaying missing genotypes) and \code{\link{plotMap}} (to plot
 the genetic maps), and also displays histograms or barplots of the
-phenotypes.  The \code{\link{plot.missing}} function can plot
+phenotypes.  The \code{\link{plotMissing}} function can plot
 individuals ordered by their phenotypes; you can see that for most
 markers, only individuals with extreme phenotypes were genotyped.
 
 \code{plot(hyper)} \cr
-\code{plot.missing(hyper)} \cr
-\code{plot.missing(hyper, reorder=TRUE)} \cr
-\code{plot.map(hyper)}
+\code{plotMissing(hyper)} \cr
+\code{plotMissing(hyper, reorder=TRUE)} \cr
+\code{plotMap(hyper)}
 
 Note that one marker (on chromosome 14) has no genotype data.  The
 function \code{\link{drop.nullmarkers}} removes such markers from
@@ -99,19 +99,19 @@ many markers were typed only on recombinant individuals, the pairwise
 recombination fractions show rather odd patterns.
 
 \code{hyper <- est.rf(hyper)} \cr
-\code{plot.rf(hyper)} \cr
-\code{plot.rf(hyper, chr=c(1,4))}
+\code{plotRF(hyper)} \cr
+\code{plotRF(hyper, chr=c(1,4))}
 
 To re-estimate the genetic map for an experimental cross, use the
 function \code{\link{est.map}}.  The function
-\code{\link{plot.map}}, in addition to plotting a single map, can
+\code{\link{plotMap}}, in addition to plotting a single map, can
 plot the comparison of two genetic maps (as long as they are composed of
 the same numbers of chromosomes and markers per chromosome).  The
 function \code{\link{replace.map}} map be used to replace the
 genetic map in a cross with a new one.
 
 \code{newmap <- est.map(hyper, error.prob=0.01, verbose=TRUE)} \cr
-\code{plot.map(hyper, newmap)} \cr
+\code{plotMap(hyper, newmap)} \cr
 \code{hyper <- replace.map(hyper, newmap)}
 
 The function \code{\link{calc.errorlod}} may be used to assist in
@@ -125,11 +125,11 @@ cutoff (by default, the cutoff is 4.0).
 \code{hyper <- calc.errorlod(hyper, error.prob=0.01)} \cr
 \code{top.errorlod(hyper)} 
 
-The function \code{\link{plot.geno}} may be used to inspect the
+The function \code{\link{plotGeno}} may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
 flagged.
 
-\code{plot.geno(hyper, chr=16, ind=c(24:34, 71:81))}
+\code{plotGeno(hyper, chr=16, ind=c(24:34, 71:81))}
 
 Before doing QTL analyses, some intermediate calculations need to be
 performed.  The function \code{\link{calc.genoprob}} calculates

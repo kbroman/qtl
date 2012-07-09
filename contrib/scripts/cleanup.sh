@@ -35,3 +35,6 @@ find src/ -name *.dll -exec rm -v \{\} \;
 rm inst/docs/Sources/MQM/MQM-tour.tex
 mv inst/docs/Sources/MQM/MQM-tour.R inst/docs/
 mv inst/docs/Sources/MQM/MQM-tour.pdf inst/docs/
+
+rm -rvf src-i386/
+rm -rvf src-x86_64/

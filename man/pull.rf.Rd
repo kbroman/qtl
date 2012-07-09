@@ -45,7 +45,7 @@ plot(rf, marker, bandcol="gray70")
 plot(lod, marker, bandcol="gray70")
 }
 
-\seealso{ \code{\link{est.rf}}, \code{\link{plot.rfmatrix}}, \code{\link{plot.rf}} }
+\seealso{ \code{\link{est.rf}}, \code{\link{plot.rfmatrix}}, \code{\link{plotRF}} }
 
 
 \keyword{utilities}

@@ -49,7 +49,7 @@ geno.image(listeria)
 }
 
 \seealso{ \code{\link{plot.cross}},
-  \code{\link{plot.missing}}, \code{\link{plot.geno}},
+  \code{\link{plotMissing}}, \code{\link{plotGeno}},
   \code{\link[graphics]{image}} }
 
 

@@ -62,6 +62,12 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   dropped.  The comparison between the new model and the full (input)
   model will be output.
 
+  The estimated percent variances explained for the QTL are simplify
+  transformations of the conditional LOD scores by the formula \eqn{h^2
+  = 1 - 10^{-(2/n) {\rm LOD}}}.  While these may be reasonable for
+  unlinked, additive QTL, \bold{they can be completely wrong in the case
+  of linked QTL}, but we don't currently have any alternative.
+
   For \code{model="binary"}, a logistic regression model is used.
 
   \bold{The part to get estimated QTL effects is fully working only for
@@ -122,6 +128,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     design matrix that is convenient for calculations but not easily
     interpreted.}
 }
+
 
 \references{
   Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping

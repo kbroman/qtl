@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2011, Karl W Broman
+copyright (c) 2001-2012, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,25 +17,172 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.22, 5/31/2011:
+Version 1.25, 5/29/2012:
 
 Major changes:
 
-  Revise plot.map to deal with a pair of maps with markers in
+  None.
+
+Minor changes:
+
+  Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
+  chromosome type.
+
+
+Version 1.24, 5/25/2012:
+
+Major changes:
+
+  Fixed a major bug in checkcovar, used by scanone and scantwo to omit
+  individuals with missing phenotypes.  If there is an "ID" column
+  that is numeric, the wrong individuals could be omitted, and
+  genotypes and phenotypes would be misaligned.
+
+  Changed the names of a number of functions, in order to avoid the
+  "Note" in R CMD check, and because Prof. Brian Ripley asked me to.
+
+    plot.map ->      plotMap
+    plot.missing ->  plotMissing
+    plot.errorlod -> plotErrorlod
+    plot.geno ->     plotGeno
+    plot.info ->     plotInfo
+    plot.pheno ->    plotPheno
+    plot.pxg ->      plotPXG
+    plot.rf -> 	     plotRF
+    summary.map ->   summaryMap
+    summary.scantwo.old -> summaryScantwoOld
+
+  Revised tutorials to use the new naming scheme.
+
+  Revised the emission probabilities for dominant markers in an F2,
+  for the HMM calculations.  Previously, we had 
+      Pr(O = not A | g = AA) = Pr(O = not B | g = BB) = epsilon/2
+  these have been changed to
+      Pr(O = not A | g = AA) = Pr(O = not B | g = BB) = epsilon
+  This corresponds to "not A" being "H or B"; similarly for not B.
+  Results will change only for an intercross with dominant markers,
+  and generally only slightly.
+
+Minor changes:
+
+  Changes to the format of the output of summary.scanPhyloQTL for
+  format="lod".  The final column is now the maximum LOD score across
+  partitions; the difference between the maximum and the
+  second-highest is now third-to-last; the threshold argument is
+  applied to the overall maximum rather than to that difference.
+
+  Revisions to read.cross (for the csv formats) from Steffen Moeller,
+  to give some more informative warnings/errors.
+
+  Fixed a bug in scantwo permutations in case that a chromosome has
+  multiple markers but they span < step from calc.genoprob.
+
+  Fixed a bug in interpPositions; problems if the input had missing
+  rownames. 
+
+  Renamed the README.txt file as INSTALL_ME.txt; added a new
+  README.txt that provides a brief description of the package.
+
+
+Version 1.23, 3/6/2012:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added functions pull.genoprob, pull.argmaxgeno, and pull.draws, to
+  pull out those bits from a cross object as a single big matrix or
+  array.
+
+  Added a function inferFounderHap() for crudely inferring founder
+  haplotypes in multi-parent RIL, using groups of adjacent markers.
+
+  Added function nullmarkers() for identifying markers with no
+  genotype data.
+
+  Revised sim.cross so that founder genotypes are included in output,
+  for 4- and 8-way RIL.
+
+  Added HMM functions to handle a special design for MAGIC lines from
+  BioGemma (http://www.biogemma.fr/indexuk.php).
+
+  Revised subset.cross and clean.cross so that cross information in 4-
+  and 8-way RIL don't get lost.
+
+  Revised plot.pxg, effectplot and effectscan to give a more
+  informative error if the selected phenotype is not numeric.
+
+  Revised qtlversion() to use packageVersion().
+
+  Fixed bug in summary.map: class included the function data.frame;
+  not just the character string "data.frame".
+
+  Revised various utility functions to retain the "onlylod" attribute
+  in cross$rf, if it's there.
+
+
+Version 1.22, 11/28/2011:
+
+Major changes:
+
+  Revised plot.map to deal with a pair of maps with markers in
   different orders (or with some markers appearing in one map and not
   the other).  We still require that the two maps have the same
   chromosomes and chromosome names (with chromosomes in the same
   order).  
 
+  Revised scantwo to allow analysis of individual chromosome pairs,
+  and reorganized the way that scantwo permutations are done (first
+  summarizing each chromosome pair and then overall); this should
+  eliminate the memory problems we've had with scantwo permutations.
+
 Minor changes:
 
+  Added warning to help file for fitqtl() regarding the estimated
+  percent variance explained in the case of linked loci: the values
+  are misleading.
+
+  Fixed problem in comparecrosses() regarding Inf/-Inf phenotypes.
+
+  Fixed a bug in scantwo, method="hk", for multiple phenotypes or
+  permutation tests in batch.  This showed up only when there were
+  missing genotypes at one or both putative QTL.
+
+  write.cross with format="csv" now exports genotypes as AA/BB for
+  RIL (previously, genotypes were written as AA/AB).
+
   Fixed bug in addint() and addcovarint()
+
+  Revised typingGap to have an argument 'terminal'; if TRUE, just look
+  at the gap from the terminal markers to the first typed interior
+  marker, giving 0 if the terminal markers are both typed.
+
+  Fixed bug in calc.genoprob with stepwidth="max" in the case that no
+  pseudomarkers are to be added.
+
+  Fixed bug in geno.table for the case that X chromosome has just one
+  observed genotype.
+
+  No longer allow "" in na.strings in read.cross for csv files.
 
   Revised all calls to data.frame() and as.data.frame() to override
   global option of stringsAsFactors, so that we know what's going to
   happen.
 
+  Revised scantwo so that if the 'chr' argument is a list, we do just
+  the scans of the chr in the first component against those in the
+  second component.
+
+  Slight change in plot.info to deal with inclusion of 'main'
+  argument. 
+
+  Added NAMESPACE file.
+
   Slight changes to avoid some R warning messages.
+
+  Slight change to imf.cf to give more accurate results.
 
   Fixed warning message in replacemap.
 

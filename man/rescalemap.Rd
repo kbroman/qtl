@@ -38,7 +38,7 @@ In either case, the positions of markers are simply multiplied by
 \examples{
 data(hyper)
 rescaled <- rescalemap(hyper, scale=2)
-plot.map(hyper, rescaled)
+plotMap(hyper, rescaled)
 }
 
 

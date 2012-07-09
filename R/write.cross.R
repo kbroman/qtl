@@ -3,7 +3,7 @@
 # write.cross.R
 #
 # copyright (c) 2001-2011, Karl W Broman and Hao Wu
-# last modified Mar, 2011
+# last modified Nov, 2011
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -240,7 +240,7 @@ function(cross, filestem="data", digits=NULL, rotate=FALSE, split=FALSE)
                  paste("not ", alle[2],alle[2],sep=""),
                  paste("not ", alle[1],alle[1],sep=""))
 
-    if(type=="dh") alleles[2:3] <- alleles[3:2]
+    if(type=="dh" || type=="riself" || type=="risib") alleles[2:3] <- alleles[3:2]
   }
   else alleles <- c("A","H","B","D","C")
 

@@ -3,7 +3,7 @@
 # tryallpositions.R
 #
 # copyright (c) 2007-2011, Karl W Broman
-# last modified May, 2011
+# last modified Dec, 2011
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -286,7 +286,7 @@ function(cross, marker, error.prob=0.0001)
   else if(type == "4way") {
     cfunc <- "marker_loglik_4way"
   }
-  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+  else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self" || type=="bgmagic16") {
     cfunc <- paste("marker_loglik_", type, sep="")
     if(chrtype=="X")
       warning("markerloglik not working properly for the X chromosome for 4- or 8-way RIL.")

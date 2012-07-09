@@ -1,5 +1,6 @@
-\name{plot.errorlod}
+\name{plotErrorlod}
 \alias{plot.errorlod}
+\alias{plotErrorlod}
 
 \title{Plot grid of error LOD values}
 
@@ -9,7 +10,7 @@
 }
 
 \usage{
-\method{plot}{errorlod}(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
+plotErrorlod(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
               col=c("white","gray85","hotpink","purple3"),
               alternate.chrid=FALSE, \dots)
 }
@@ -54,13 +55,13 @@ data(hyper)
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
 # plot the error LOD scores; print those above a specified cutoff 
-plot.errorlod(hyper)
-plot.errorlod(hyper,chr=1)
+plotErrorlod(hyper)
+plotErrorlod(hyper,chr=1)
 }
 
 \seealso{ \code{\link{calc.errorlod}},
   \code{\link{top.errorlod}}, \code{\link[graphics]{image}},
-  \code{\link{subset.cross}}, \code{\link{plot.geno}} }
+  \code{\link{subset.cross}}, \code{\link{plotGeno}} }
 
 \references{
   Lincoln, S. E. and Lander, E. S. (1992) Systematic detection of

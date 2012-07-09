@@ -134,7 +134,7 @@ function(cross)
 
 
 # get names of genotypes
-# used in discan, effectplot, plot.pxg, scanone, scantwo, vbscan, reviseXdata
+# used in discan, effectplot, plotPXG, scanone, scantwo, vbscan, reviseXdata
 # cross.attr gives the cross attributes
 getgenonames <-
 function(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
