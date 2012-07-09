@@ -2,12 +2,12 @@
  * 
  * util.c
  *
- * copyright (c) 2001-2010, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2011, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Nov, 2010
+ * last modified Dec, 2011
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@
  *                  R_locate_xo, locate_xo, matmult, expand_col2drop
  *                  dropcol_xpx, dropcol_xpy, dropcol_x,
  *                  reviseMWril, R_reviseMWril, R_calcPermPval,
- *                  calcPermPval
+ *                  calcPermPval 
  *
  **********************************************************************/
 
@@ -264,6 +264,20 @@ void allocate_double(int n, double **vector)
 void allocate_int(int n, int **vector)
 {
   *vector = (int *)R_alloc(n, sizeof(int));
+}
+
+/**********************************************************************
+ * 
+ * allocate_uint
+ *
+ * Allocate space for a vector of unsigned ints
+ *
+ * Allocation done by R_alloc, so that R does the cleanup.
+ *
+ **********************************************************************/
+void allocate_uint(int n, unsigned int **vector)
+{
+  *vector = (unsigned int *)R_alloc(n, sizeof(unsigned int));
 }
 
 /**********************************************************************
@@ -830,14 +844,16 @@ void reviseMWril(int n_ril, int n_mar, int n_str,
     R_CheckUserInterrupt(); /* check for ^C */
 
     for(j=0; j<n_mar; j++) {
-      temp = 0;
-      for(k=0; k<n_str; k++) {
-	if(Geno[j][i] == missingval) Geno[j][i] = 0;
-	else if(Parents[j][Crosses[k][i]-1]==missingval ||
-		Geno[j][i] == Parents[j][Crosses[k][i]-1])
-	  temp += (1 << k);
+      if(Geno[j][i] == missingval) Geno[j][i] = 0;
+      else {
+	temp = 0;
+	for(k=0; k<n_str; k++) {
+	  if(Parents[j][Crosses[k][i]-1]==missingval ||
+	     Geno[j][i] == Parents[j][Crosses[k][i]-1])
+	    temp += (1 << k);
+	}
+	Geno[j][i] = temp;
       }
-      Geno[j][i] = temp;
     }
   }
 }
@@ -856,7 +872,6 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
   reviseMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses,
 	      *missingval);
 }
-
 
 /* wrapper for calcPermPval */
 void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
@@ -886,6 +901,5 @@ void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
     }
   }
 }
-
 
 /* end of util.c */

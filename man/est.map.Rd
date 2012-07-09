@@ -95,7 +95,7 @@ data(fake.f2)
 \dontshow{fake.f2 <- subset(fake.f2,chr=18:19)}
 newmap <- est.map(fake.f2)
 logliks <- sapply(newmap, attr, "loglik")
-plot.map(fake.f2, newmap)
+plotMap(fake.f2, newmap)
 fake.f2 <- replace.map(fake.f2, newmap)
 }
 
@@ -119,7 +119,7 @@ fake.f2 <- replace.map(fake.f2, newmap)
   \bold{139}, 1045--1056.
 }  
 
-\seealso{ \code{\link{plot.map}}, \code{\link{replace.map}},
+\seealso{ \code{\link{plotMap}}, \code{\link{replace.map}},
   \code{\link{est.rf}}, \code{\link{fitstahl}} }
 
 \keyword{utilities}

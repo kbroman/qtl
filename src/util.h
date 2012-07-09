@@ -2,12 +2,12 @@
  *
  * util.h
  *
- * copyright (c) 2001-2010, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2011, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Nov, 2010
+ * last modified Dec, 2011
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
  * These are utility functions, mostly for the HMM engine.
  *
  * Other functions: addlog, subtrlog, reorg_geno, reorg_genoprob,
- *                  reorg_pairprob, allocate_int,
+ *                  reorg_pairprob, allocate_int, allocate_uint
  *                  allocate_alpha, reorg_draws, allocate_double,
  *                  sample_int, allocate_imatrix, allocate_dmatrix
  *                  reorg_errlod, double_permute, int_permute,
@@ -174,6 +174,17 @@ void allocate_double(int n, double **vector);
  *
  **********************************************************************/
 void allocate_int(int n, int **vector);
+
+/**********************************************************************
+ * 
+ * allocate_uint
+ *
+ * Allocate space for a vector of unsigned ints
+ *
+ * Allocation done by R_alloc, so that R does the cleanup.
+ *
+ **********************************************************************/
+void allocate_uint(int n, unsigned int **vector);
 
 /**********************************************************************
  *
@@ -364,9 +375,11 @@ void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
 /* calculate permutation p-values for summary.scanone() */
 void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
 		  double **Perms, int n_perms, double **Pval);
+
 #ifdef __cplusplus
   }
 #endif
 
 #endif 
+
 /* end of util.h */

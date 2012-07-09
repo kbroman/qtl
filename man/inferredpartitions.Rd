@@ -53,11 +53,11 @@ inferredpartitions(output, chr, lodthreshold, probthreshold=0.9)
 # example map; drop X chromosome
 data(map10)           
 map10 <- map10[1:19]
-\dontshow{map10 <- map10[1:2]}
+\dontshow{map10 <- map10[1:4]}
 
 # simulate data
 x <- simPhyloQTL(4, partition="AB|CD", crosses=c("AB", "AC", "AD"),
-                 map=map10, n.ind=100,
+                 map=map10, n.ind=150,
                  model=c(1, 50, 0.5, 0))
 
 # run calc.genoprob on each cross
@@ -67,10 +67,10 @@ x <- lapply(x, calc.genoprob, step=2)
 out <- scanPhyloQTL(x, method="hk")
 
 # inferred partitions
-inferredpartitions(out, chr=1, lodthreshold=3)
+inferredpartitions(out, chr=3, lodthreshold=3)
 
-# inferred partitions with prob'y threshold = 0.8
-inferredpartitions(out, chr=1, lodthreshold=3, probthreshold=0.8)
+# inferred partitions with prob'y threshold = 0.95
+inferredpartitions(out, chr=3, lodthreshold=3, probthreshold=0.95)
 }
 
 \seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}}, 

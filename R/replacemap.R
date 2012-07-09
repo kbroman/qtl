@@ -111,8 +111,12 @@ function(object, map)
       cross$geno[[i]]$map <- map[[i]]
   }
 
+  #### < BUG > ####
+  # the next two things don't work for sex-sp maps (4-way cross)
+  #################
+
   # maps in geno prob 
-  if("prob" %in% names(cross$geno[[1]])) {
+  if("prob" %in% names(cross$geno[[1]])) { 
     for(i in names(cross$geno)) {
       if("map" %in% names(attributes(cross$geno[[i]]$prob))) {
         temp <- attr(cross$geno[[i]]$prob, "map")

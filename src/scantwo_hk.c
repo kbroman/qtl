@@ -2,9 +2,9 @@
  * 
  * scantwo_hk.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2011, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Jul, 2011
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -614,7 +614,7 @@ void scantwo_2chr_hk(int n_ind, int n_pos1, int n_pos2, int n_gen1,
             for(itmp=0; itmp<nrss; itmp++) { /* loop thru phenotypes */
               ind_idx = itmp*n_ind;
               for(j=0, dtmp=0.0; j<n_ind; j++)
-                dtmp = tmppheno[ind_idx+j] * tmppheno[ind_idx+j];
+                dtmp += tmppheno[ind_idx+j] * tmppheno[ind_idx+j];
               Result_add[itmp][i2][i] = log10(dtmp);
             }
           }
@@ -700,7 +700,7 @@ void scantwo_2chr_hk(int n_ind, int n_pos1, int n_pos2, int n_gen1,
             for(itmp=0; itmp<nrss; itmp++) { /* loop thru phenotypes */
               ind_idx = itmp*n_ind;
               for(j=0, dtmp=0.0; j<n_ind; j++)
-                dtmp = tmppheno[ind_idx+j] * tmppheno[ind_idx+j];
+                dtmp += tmppheno[ind_idx+j] * tmppheno[ind_idx+j];
               Result_full[itmp][i][i2] = log10(dtmp);
             }
           }

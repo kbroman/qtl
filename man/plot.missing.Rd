@@ -1,5 +1,6 @@
-\name{plot.missing}
+\name{plotMissing}
 \alias{plot.missing}
+\alias{plotMissing}
 
 \title{Plot grid of missing genotypes}
 
@@ -8,7 +9,7 @@
 }
 
 \usage{
-plot.missing(x, chr, reorder=FALSE, main="Missing genotypes",
+plotMissing(x, chr, reorder=FALSE, main="Missing genotypes",
              alternate.chrid=FALSE, \dots)
 }			    
 
@@ -44,7 +45,7 @@ plot.missing(x, chr, reorder=FALSE, main="Missing genotypes",
 
 \examples{
 data(fake.f2)
-plot.missing(fake.f2)
+plotMissing(fake.f2)
 }
 
 \seealso{ \code{\link{plot.cross}},  \code{\link{geno.image}},

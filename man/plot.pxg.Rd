@@ -1,5 +1,6 @@
-\name{plot.pxg}
+\name{plotPXG}
 \alias{plot.pxg}
+\alias{plotPXG}
 
 \title{Plot phenotypes versus marker genotypes}
 
@@ -8,7 +9,7 @@
 }
 
 \usage{
-plot.pxg(x, marker, pheno.col=1, jitter=1, infer=TRUE,
+plotPXG(x, marker, pheno.col=1, jitter=1, infer=TRUE,
          pch, ylab, main, col, \dots)
 }			    
 
@@ -56,21 +57,21 @@ inferred).
 \examples{
 data(listeria)
 mname <- find.marker(listeria, 5, 28) # marker D5M357
-plot.pxg(listeria, mname)
+plotPXG(listeria, mname)
 
 mname2 <- find.marker(listeria, 13, 26) # marker D13Mit147
-plot.pxg(listeria, c(mname, mname2))
-plot.pxg(listeria, c(mname2, mname))
+plotPXG(listeria, c(mname, mname2))
+plotPXG(listeria, c(mname2, mname))
 
 data(fake.f2)
 mname <- find.marker(fake.f2, 1, 37) # marker D1M437
-plot.pxg(fake.f2, mname)
+plotPXG(fake.f2, mname)
 
 mname2 <- find.marker(fake.f2, "X", 14) # marker DXM66
-plot.pxg(fake.f2, mname2)
+plotPXG(fake.f2, mname2)
 
-plot.pxg(fake.f2, c(mname,mname2))
-plot.pxg(fake.f2, c(mname2,mname))
+plotPXG(fake.f2, c(mname,mname2))
+plotPXG(fake.f2, c(mname2,mname))
 }
 
 \seealso{ \code{\link{find.marker}}, \code{\link{effectplot}},

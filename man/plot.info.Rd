@@ -1,5 +1,6 @@
-\name{plot.info}
+\name{plotInfo}
 \alias{plot.info}
+\alias{plotInfo}
 
 \title{Plot the proportion of missing genotype information}
 
@@ -9,7 +10,7 @@
 }
 
 \usage{
-plot.info(x, chr, method=c("entropy","variance","both"), step=1,
+plotInfo(x, chr, method=c("entropy","variance","both"), step=1,
           off.end=0, error.prob=0.001,
           map.function=c("haldane","kosambi","c-f","morgan"),
           alternate.chrid=FALSE, fourwaycross=c("all", "AB", "CD"),
@@ -86,17 +87,17 @@ plot.info(x, chr, method=c("entropy","variance","both"), step=1,
 \examples{
 data(hyper)
 \dontshow{hyper <- subset(hyper,chr=1:4)}
-plot.info(hyper,chr=c(1,4))
+plotInfo(hyper,chr=c(1,4))
 
 # save the results and view maximum missing info on each chr
-info <- plot.info(hyper)
+info <- plotInfo(hyper)
 summary(info)
 
-plot.info(hyper, bandcol="gray70")
+plotInfo(hyper, bandcol="gray70")
 }
 
 \seealso{ \code{\link{plot.scanone}},
-  \code{\link{plot.missing}}, \code{\link{calc.genoprob}},
+  \code{\link{plotMissing}}, \code{\link{calc.genoprob}},
   \code{\link{geno.table}} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

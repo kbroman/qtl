@@ -36,7 +36,7 @@ find.flanking(listeria, 5, 28)
 find.flanking(listeria, c(1, 5, 13), c(81, 28, 26))
 }
 
-\seealso{ \code{\link{find.marker}}, \code{\link{plot.pxg}},
+\seealso{ \code{\link{find.marker}}, \code{\link{plotPXG}},
 \code{\link{find.markerpos}}, \code{\link{find.pseudomarker}} }
 
 \keyword{utilities}

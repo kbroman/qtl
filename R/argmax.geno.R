@@ -3,7 +3,7 @@
 # argmax.geno.R
 #
 # copyright (c) 2001-2011, Karl W Broman
-# last modified Feb, 2011
+# last modified Dec, 2011
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -84,7 +84,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       cfunc <- "argmax_geno_4way"
       one.map <- FALSE
     }
-    else if(type == "ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self") {
+    else if(type == "ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="bgmagic16") {
       cfunc <- paste("argmax_geno_", type, sep="")
       one.map <- TRUE
       if(xchr)
@@ -193,7 +193,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     storage.mode(cross$geno[[i]]$argmax) <- "integer"
 
   # 4- and 8-way RIL: reorganize the results
-  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib") 
+  if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16")
     cross <- reorgRIargmax(cross)
 
   cross

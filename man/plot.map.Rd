@@ -1,4 +1,5 @@
-\name{plot.map}
+\name{plotMap}
+\alias{plotMap}
 \alias{plot.map}
 
 \title{Plot genetic map}
@@ -9,6 +10,8 @@
 
 \usage{
 \method{plot}{map}(x, map2, chr, horizontal=FALSE, shift=TRUE,
+     show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
+plotMap(x, map2, chr, horizontal=FALSE, shift=TRUE,
      show.marker.names=FALSE, alternate.chrid=FALSE, \dots)
 }
 
@@ -57,14 +60,14 @@
 \examples{
 data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=18:19)}
-plot.map(fake.bc)
-plot.map(fake.bc,horizontal=TRUE)
+plotMap(fake.bc)
+plotMap(fake.bc,horizontal=TRUE)
 
 newmap <- est.map(fake.bc)
 plot(newmap)
-plot.map(fake.bc, newmap)
+plotMap(fake.bc, newmap)
 
-plot.map(fake.bc, show.marker.names=TRUE)
+plotMap(fake.bc, show.marker.names=TRUE)
 
 }
 

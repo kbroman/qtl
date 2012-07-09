@@ -31,19 +31,21 @@
   each partition on each chromosome (which do not necessarily occur at
   the same position).  The position corresponds to the peak location for
   the partition with the largest LOD score on that chromosome.  The
-  penultimate column indicates the partition with the largest LOD
-  score.  The final column is the difference between the LOD score for
-  the best partition and that for the second-best.  With
-  \code{format="lod"}, the \code{threshold} argument is applied to this
-  last column.
+  last column is the overall maximum LOD (across partitions) on that
+  chromosome.  The second-to-last column is the inferred partition
+  (i.e., that with the largest LOD
+  score.  The third-to-last column is the difference between the LOD score for
+  the best partition and that for the second-best.  
 
   For \code{format="postprob"}, the final column contains the maximum
-  LOD score across partitions (and the \code{threshold} argument is
-  applied to this maximum LOD score).  But instead of providing the LOD
+  LOD score across partitions.  But instead of providing the LOD
   scores for each partition, these are converted to approximate
   posterior probabilities under the assumption of a single diallelic QTL
   on that chromosome:  on each chromosome, we take
   \eqn{10^{LOD}}{10^LOD} for the partitions and rescale them to sum to 1.
+
+  The \code{threshold} argument is applied to the last column (the
+  maximum LOD score across partitions).
 }
 
 \value{

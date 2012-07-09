@@ -37,6 +37,8 @@ abline(v=cumsum(c(0,nmar(listeria)))+0.5)
 abline(h=nrow(dat)+0.5)
 }
 
-\seealso{ \code{\link{pull.pheno}}, \code{\link{pull.map}} }
+\seealso{ \code{\link{pull.pheno}}, \code{\link{pull.map}}
+  \code{\link{pull.draws}}, \code{\link{pull.genoprob}}, 
+  \code{\link{pull.argmaxgeno}} }
 
 \keyword{utilities}

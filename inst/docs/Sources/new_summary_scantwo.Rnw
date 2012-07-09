@@ -31,7 +31,7 @@
 
 \begin{document}
 
-\SweaveOpts{prefix.string=Figs/scantwo}
+\SweaveOpts{prefix.string=Figs/scantwo,eps=TRUE}
 \setkeys{Gin}{width=\textwidth} %% <- change width of figures
 % Try to get the R code from running into the margin
 <<echo=FALSE>>=
@@ -46,7 +46,7 @@ options(width=77)
 
 \textbf{The new \code{summary.scantwo} and \code{plot.scantwo}} \\
 Karl W Broman, 27 Oct 2006 \\
-(Added color 26 Oct 2010)
+(Added color 26 Oct 2010; slight change 21 Mar 2012: \verb|summary.scantwo.old| is now \verb|summaryScantwoOld|)
 
 \bigskip
 
@@ -225,10 +225,10 @@ summary(out2, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6), df=TRUE)
 @ 
 
 The old version of \code{summary.scantwo} is still available, though
-it is now called \code{summary.scantwo.old}.
+it is now called \code{summaryScantwoOld}.
 
 <<oldsummaryscantwo>>=
-summary.scantwo.old(out2, thresholds=c(6, 4, 4))
+summaryScantwoOld(out2, thresholds=c(6, 4, 4))
 @ 
 
 The permutation test with \code{scantwo} has also changed.  At each

@@ -48,14 +48,14 @@ sim.map(len=rep(100,20), n.mar=10, anchor.tel=TRUE,
 \examples{
 # simulate 4 autosomes, each with 10 markers
 map <- sim.map(c(100,90,80,40), 10, include.x=FALSE)
-plot.map(map)
+plotMap(map)
 
 # equally spaced markers
 map2 <- sim.map(c(100,90,80,40), 10, include.x=FALSE, eq.spacing=TRUE)
 plot(map2)
 }
 
-\seealso{ \code{\link{sim.cross}}, \code{\link{plot.map}},
+\seealso{ \code{\link{sim.cross}}, \code{\link{plotMap}},
   \code{\link{replace.map}}, \code{\link{pull.map}} }
 
 \keyword{datagen}

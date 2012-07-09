@@ -1,5 +1,6 @@
-\name{plot.geno}
+\name{plotGeno}
 \alias{plot.geno}
+\alias{plotGeno}
 
 \title{Plot observed genotypes, flagging likely errors}
 
@@ -9,7 +10,7 @@
 }
 
 \usage{
-plot.geno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
+plotGeno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
           cutoff=4, min.sep=2, cex=1.2, \dots) 
 }			    
 
@@ -67,7 +68,7 @@ hyper <- calc.errorlod(hyper,error.prob=0.01)
 top.errorlod(hyper,cutoff=4)
 
 # plot genotype data, flagging genotypes with error LOD > cutoff
-plot.geno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
+plotGeno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
 \seealso{ \code{\link{calc.errorlod}},

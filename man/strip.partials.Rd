@@ -30,6 +30,6 @@ listeria <- strip.partials(listeria)
 sum(nmissing(listeria))
 }
 
-\seealso{ \code{\link{plot.missing}}, \code{\link{plot.info}} }
+\seealso{ \code{\link{plotMissing}}, \code{\link{plotInfo}} }
 
 \keyword{manip}

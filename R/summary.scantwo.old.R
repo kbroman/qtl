@@ -1,6 +1,6 @@
 ######################################################################
 #
-# summary.scantwo.old.R
+# summaryScantwoOld.R
 #
 # copyright (c) 2001-2011, Karl W Broman, Hao Wu, and Brian Yandell
 # last modified May, 2011
@@ -23,11 +23,11 @@
 # summary.scantwo, but Karl re-wrote most of it later.
 #
 # Part of the R/qtl package
-# Contains: summary.scantwo.old, print.summary.scantwo.old
+# Contains: summaryScantwoOld, print.summary.scantwo.old
 #
 ######################################################################
 
-summary.scantwo.old <-
+summaryScantwoOld <- summary.scantwo.old <-
 function (object, thresholds = c(0, 0, 0), lodcolumn=1,
           type = c("joint","interaction"), ...)
 {

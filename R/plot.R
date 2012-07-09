@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2011, Karl W Broman
+# copyright (c) 2000-2012, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified May, 2011
+# last modified Mar, 2012
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -20,12 +20,12 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: plot.missing, plot.map, plot.cross, plot.geno, plot.info,
-#           plot.pxg, plot.pheno
+# Contains: plotMissing, plotMap, plot.cross, plotGeno, plotInfo,
+#           plotPXG, plotPheno
 #
 ######################################################################
 
-plot.missing <-
+plotMissing <- plot.missing <-
 function(x, chr, reorder=FALSE, main="Missing genotypes",
          alternate.chrid=FALSE, ...) 
 {
@@ -237,7 +237,7 @@ function(x, chr, reorder=FALSE, main="Genotype data",
   invisible()
 }
 
-plot.map <-
+plotMap <- plot.map <-
 function(x, map2, chr, horizontal=FALSE, shift=TRUE,
          show.marker.names=FALSE, alternate.chrid=FALSE, ...) 
 {
@@ -318,9 +318,9 @@ function(x, map2, chr, horizontal=FALSE, shift=TRUE,
 
         par(mfrow=c(2,1))
         class(Map1) <- class(Map2) <- class(Map3) <- class(Map4) <- "map"
-        plot.map(Map1,Map3,horizontal=horizontal,shift=shift,
+        plotMap(Map1,Map3,horizontal=horizontal,shift=shift,
                  show.marker.names=show.marker.names,alternate.chrid=alternate.chrid)
-        plot.map(Map2,Map4,horizontal=horizontal,shift=shift,
+        plotMap(Map2,Map4,horizontal=horizontal,shift=shift,
                  show.marker.names=show.marker.names,alternate.chrid=alternate.chrid)
         return(invisible(NULL))
       }
@@ -609,10 +609,10 @@ plot.cross <-
 function (x, auto.layout = TRUE, pheno.col,
           alternate.chrid=TRUE, ...) 
 {
-  # look to see whether this should really be shipped to plot.map
+  # look to see whether this should really be shipped to plotMap
   if("map" %in% class(auto.layout) &&
      ("map" %in% class(x) || "cross" %in% class(x))) {
-    plot.map(x, auto.layout, alternate.chrid=alternate.chrid, ...)
+    plotMap(x, auto.layout, alternate.chrid=alternate.chrid, ...)
     return(invisible())
   }
 
@@ -644,10 +644,10 @@ function (x, auto.layout = TRUE, pheno.col,
     par(mfrow = c(nr, nc))
   }
 
-  plot.missing(x,alternate.chrid=alternate.chrid)
-  plot.map(x,alternate.chrid=alternate.chrid)
+  plotMissing(x,alternate.chrid=alternate.chrid)
+  plotMap(x,alternate.chrid=alternate.chrid)
 
-  for(i in pheno.col) plot.pheno(x, pheno.col=i)
+  for(i in pheno.col) plotPheno(x, pheno.col=i)
 
   invisible()
 }
@@ -655,12 +655,12 @@ function (x, auto.layout = TRUE, pheno.col,
 
 ##################################################r####################
 #
-# plot.geno: Plot genotypes for a specified chromosome, with likely
+# plotGeno: Plot genotypes for a specified chromosome, with likely
 #           genotyping errors indicated. 
 #
 ######################################################################
 
-plot.geno <-
+plotGeno <- plot.geno <-
 function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
          cutoff=4, min.sep=2, cex=1.2, ...)
 {
@@ -1043,11 +1043,11 @@ function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
 ######################################################################
 #
-# plot.info: Plot the proportion of missing information in the
+# plotInfo: Plot the proportion of missing information in the
 #            genotype data.
 #
 ######################################################################
-plot.info <-
+plotInfo <- plot.info <-
 function(x,chr,method=c("entropy","variance","both"), step=1,
          off.end=0, error.prob=0.001,
          map.function=c("haldane","kosambi","c-f","morgan"),
@@ -1211,6 +1211,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
   class(results) <- c("scanone","data.frame")
 
   # check whether main was included as an argument
+  args <- list(...)
   if("main" %in% names(args)) hasmain <- TRUE
   else hasmain <- FALSE
 
@@ -1279,7 +1280,7 @@ function(x,chr,method=c("entropy","variance","both"), step=1,
 
 
 # plot phenotypes against one or more markers
-plot.pxg <-
+plotPXG <- plot.pxg <-
 function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE, 
          pch, ylab, main, col, ...) 
 {
@@ -1295,7 +1296,7 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
-    warning("plot.pxg can take just one phenotype; only the first will be used")
+    warning("plotPXG can take just one phenotype; only the first will be used")
   }
     
   if(is.character(pheno.col)) {
@@ -1307,6 +1308,9 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 
   if(pheno.col < 1 | pheno.col > nphe(cross))
     stop("pheno.col values should be between 1 and the no. phenotypes")
+
+  if(!is.numeric(cross$pheno[,pheno.col]))
+    stop("phenotype \"", colnames(cross$pheno)[pheno.col], "\" is not numeric.")
 
   if(missing(pch)) pch <- par("pch")
   if(missing(ylab)) ylab <-  colnames(cross$pheno)[pheno.col] 
@@ -1524,7 +1528,7 @@ function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
 
 }
 
-plot.pheno <-
+plotPheno <- plot.pheno <-
 function(x, pheno.col=1, ...)
 {
   if(!any(class(x) == "cross"))
