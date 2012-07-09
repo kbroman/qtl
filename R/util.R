@@ -365,49 +365,12 @@ function(map, step, off.end, stepwidth = c("fixed", "variable", "max"))
   }
 }
 
-
-  
-######################################################################
-#
-# convert.cross: convert a "qtl.cross" data set from the format
-#                used in old versions (<= 0.65) of R/qtl to the
-#                updated data structure (versions >= 0.70).
-#
-######################################################################
-
-#convert.cross <-
-#function(cross)   
-#{
-#  nchr <- length(cross$map)
-#  geno <- vector("list",nchr)
-#  nmar <- c(0,cumsum(sapply(cross$map,length)))
-#  for(i in 1:nchr) {
-#    whichpos <- (nmar[i]+1):nmar[i+1]
-#    geno[[i]] <- list(data=cross$geno[,whichpos],map=cross$map[[i]])
-#    dimnames(geno[[i]]$data) <- list(NULL, names(cross$map[[i]]))
-#    class(geno[[i]]) <- "A"
-#    chr.name <- names(cross$map)[i]
-#    if(chr.name == "X" || chr.name == "x")
-#      class(geno[[i]]) <- "X"
-#  }
-#  names(geno) <- names(cross$map)
-#  cross$geno <- geno
-#  type <- cross$type
-#  cross <- cross[1:2]
-#  class(cross) <- c(type,"cross")
-#  cross
-#}
-
-    
-
 ######################################################################
 # clean functions
 ######################################################################
 clean <-
 function(object, ...)
   UseMethod("clean")
-
-
 
 ######################################################################
 #
