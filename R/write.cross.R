@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-2011, Karl W Broman and Hao Wu
-# last modified Nov, 2011
+# copyright (c) 2001-2012, Karl W Broman and Hao Wu
+# last modified Jul, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 # Contains: write.cross, write.cross.mm, write.cross.csv,
 #           write.cross.gary, fixX4write
 #           [See qtlcart_io.R for write.cross.qtlcart]
+#           [write.cross.qtab in write.cross.qtab.R]
 #
 ######################################################################
 
@@ -33,8 +34,8 @@
 ######################################################################
 
 write.cross <-
-function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary"),
-         filestem="data", chr, digits=NULL)
+function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary", "qtab"),
+         filestem="data", chr, digits=NULL, descr)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
@@ -60,7 +61,11 @@ function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary"
   else if(format=="csvsr") write.cross.csv(cross,filestem,digits,TRUE,TRUE)
   else if(format=="mm") write.cross.mm(cross,filestem,digits)
   else if(format=="qtlcart") write.cross.qtlcart(cross, filestem)
-  else write.cross.gary(cross, digits)
+  else if(format=="gary") write.cross.gary(cross, digits)
+  else if(format=="qtab") {
+    if(missing(descr)) descr <- paste(deparse(substitute(cross)), "from R/qtl")
+    write.cross.qtab(cross, filestem, descr, verbose=FALSE)
+  }
 }
 
 
