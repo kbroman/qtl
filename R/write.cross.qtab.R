@@ -209,9 +209,9 @@ function(cross, filename="founder.qtab", descr)
   if(missing(descr)) descr <- paste(deparse(substitute(cross)), "from R/qtl")
 
   cat(file=filename, "# --- ",get.qtlHD.ID()," Founder ", descr, "\n", sep="")
-  cat(file=filename, "# --- Type Founder begin\n", append=TRUE)
-  cat(file=filename, "Cross\t", class(cross)[1], "\n", sep="", append=TRUE)
-  cat(file=filename, "# --- Type Founder end\n", append=TRUE)
+  cat(file=filename, "# --- Set Founder begin\n", append=TRUE)
+  cat(file=filename, "Cross\t", toupper(class(cross)[1]), "\n", sep="", append=TRUE)
+  cat(file=filename, "# --- Set Founder end\n", append=TRUE)
 }
 
 # end of write.cross.qtab.R
