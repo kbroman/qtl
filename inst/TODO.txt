@@ -10,6 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Obvious bug in backward selection part of stepwiseqtl: just looking
+  at drop in LOD and not taking into account the penalties; Quoc also
+  reports that it chooses the wrong term to drop; it probably
+  shouldn't drop intx'n on its own before dropping main + intx'n
+
 o speed up R CMD check
 
 o locateXO gives core dump when just one marker on chromosome?

@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.25, 5/29/2012:
+Version 1.25, 7/9/2012:
 
 Major changes:
 
@@ -25,8 +25,18 @@ Major changes:
 
 Minor changes:
 
+  Revised write.cross to output data in "qtab" format; see
+  https://github.com/qtlHD/qtlHD/blob/master/doc/input/qtab.md
+
+  Slight change to checkcovar(): omit inidividuals with
+  phenotypes/covariates that are +/- Inf, as well as those that are
+  missing.
+
   Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
   chromosome type.
+
+  Speed up some of the examples in the help file, so that R CMD check
+  doesn't take so long.
 
 
 Version 1.24, 5/25/2012:
