@@ -771,17 +771,23 @@ function(cross, chr, scanone.output=FALSE)
   n.chr <- nchr(cross)
 
   type <- class(cross)[1]
+  is.bcs <- type == "bcsft"
+  cross.scheme <- attr(cross, "scheme")
+  if(is.bcs)
+    is.bcs <- (cross.scheme[2] == 0)
+  
   chrtype <- sapply(cross$geno, class)
   allchrtype <- rep(chrtype, nmar(cross))
   chrname <- names(cross$geno)
   allchrname <- rep(chrname, nmar(cross))
-  
-  if(type == "f2") {
+
+  ## Actually plan to have our own geno.table.bcsft routine.
+  if(type == "f2" || (type == "bcsft" && !is.bcs)) {
     n.gen <- 5
     temp <- getgenonames("f2", "A", cross.attr=attributes(cross))
     gen.names <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type == "bc" || type == "risib" || type=="riself" || type=="dh") {
+  else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) {
     n.gen <- 2
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
   }
@@ -817,9 +823,9 @@ function(cross, chr, scanone.output=FALSE)
   rownames(results) <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
   pval <- rep(NA,nrow(results))
-  if(type=="bc" || type=="risib" || type=="riself" || type=="dh") {
+  if(type %in% c("bc","risib","riself","dh") || (type=="bcsft" & is.bcs)) {
     sexpgm <- getsex(cross)
-    if(type == "bc" && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
+    if((type == "bc" || type=="bcsft") && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
       for(i in which(allchrtype=="A")) {
         x <- results[i,2:3]
         if(sum(x) > 0)
@@ -862,20 +868,30 @@ function(cross, chr, scanone.output=FALSE)
       results <- cbind(results, P.value=pval)
     }
   }
-  else if(type=="f2") {
+  else  if(type == "f2" || (type == "bcsft" && !is.bcs)) {
     sexpgm <- getsex(cross)
 
+    ## F2 with set initial genotype probabilities.
+    init.geno <- c(0.25,0.5,0.25,0.75,0.75)
+    ## BCsFt initial genotype probabilities need to be computed.
+    if(type == "bcsft") {
+      ret <- .C("genotab_em_bcsft",
+                as.integer(cross.scheme),
+                init.geno = as.double(init.geno))
+      init.geno <- ret$init.geno
+    }
+    
     for(i in which(allchrtype=="A")) {
       dat <- results[i,2:6]
       if(sum(dat)==0) pval[i] <- 1
       else if(dat[4]==0 && dat[5]==0) 
-        pval[i] <- chisq.test(dat[1:3],p=c(0.25,0.5,0.25))$p.value
+        pval[i] <- chisq.test(dat[1:3],   p=init.geno[1:3]   )$p.value
       else if(all(dat[2:4]==0))
-        pval[i] <- chisq.test(dat[c(1,5)],p=c(0.25,0.75))$p.value
+        pval[i] <- chisq.test(dat[c(1,5)],p=init.geno[c(1,5)])$p.value
       else if(all(dat[c(1,2,5)]==0))
-        pval[i] <- chisq.test(dat[3:4],p=c(0.25,0.75))$p.value
+        pval[i] <- chisq.test(dat[3:4],   p=init.geno[3:4]   )$p.value
       else { # this is harder: some dominant and some not
-        pval[i] <- genotab.em(dat)
+        pval[i] <- genotab.em(dat, init.geno)
       }
     }
 
@@ -991,13 +1007,14 @@ function(cross, chr, scanone.output=FALSE)
 
 
 genotab.em <-
-function(dat, tol=1e-6, maxit=10000, verbose=FALSE)
+function(dat, init.geno, tol=1e-6, maxit=10000, verbose=FALSE)
 {
 
   genotab.ll <-
-    function(dat, gam)
+    function(dat, gam, init.geno)
       {
-        p <- c(0.25*(1-gam[2]),0.5*gam[1],0.25*(1-gam[3]),gam[2]*0.75, gam[3]*0.75)
+        p <- c(init.geno[1]*(1-gam[2]), init.geno[2]*gam[1], init.geno[3]*(1-gam[3]),
+               gam[2]*init.geno[4], gam[3]*init.geno[5])
         if(any(p==0 & dat > 0)) return(-Inf)
         return( sum((dat*log(p))[dat>0 & p>0]) )
       }
@@ -1006,7 +1023,7 @@ function(dat, tol=1e-6, maxit=10000, verbose=FALSE)
 
   gam <- c(sum(dat[1:3]), dat[4], dat[5])/n
 
-  curll <- genotab.ll(dat, gam)
+  curll <- genotab.ll(dat, gam, init.geno)
 
   flag <- 0
   if(verbose) cat(0, gam, curll, "\n")
@@ -1018,7 +1035,7 @@ function(dat, tol=1e-6, maxit=10000, verbose=FALSE)
     # mstep
     gamnew <- c(sum(dat[1:3])-zAA-zBB, dat[4]+zBB, dat[5]+zAA)/n
                              
-    newll <- genotab.ll(dat, gamnew)
+    newll <- genotab.ll(dat, gamnew, init.geno)
 
     if(verbose) cat(i, gamnew, newll, "\n")
 
@@ -1032,7 +1049,8 @@ function(dat, tol=1e-6, maxit=10000, verbose=FALSE)
   if(!flag) warning("Didn't converge.")
 
   gam <- gamnew
-  p <- c(0.25*(1-gam[2]),0.5*gam[1],0.25*(1-gam[3]),gam[2]*0.75, gam[3]*0.75)
+  p <- c(init.geno[1]*(1-gam[2]), init.geno[2]*gam[1], init.geno[3]*(1-gam[3]),
+         gam[2]*init.geno[4], gam[3]*init.geno[5])
   ex <- p*n
   1-pchisq(sum(((dat-ex)^2/ex)[ex>0]), 2)
 }
