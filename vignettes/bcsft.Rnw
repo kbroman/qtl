@@ -34,7 +34,7 @@
 Historically QTL mapping studies have employed a variety of crossing schemes including: backcrosses \cite{Tanks}, sib-mating \cite{Sib}, selfing \cite{Collard}, RI lines \cite{fly}, and generations of random mating within mapping populations \cite{Darvasi}.  Different cross designs offer different advantages.  Backcrossing allows for the isolation of limited regions of the donor parent genome in an otherwise recurrent parent background. Selfing and sib-mating in an intercross provide the opportunity to examine all genotype combinations and observe dominance.  RI lines allow for multiple phenotype measures on a single line.  Random mating increases recombination frequency.  In order to use a combination of these cross types and access their various benefits, a more flexible analysis approach is needed.
 
 \begin{figure}
-\includegraphics{why_we_need_a_new_program.pdf}
+%\includegraphics{why_we_need_a_new_program.pdf}
   \caption{An illustration of QTL geneotype inference in populations created through different crossing structures.  All images are of a chromosome section including 2 markers (A and B) and a putative QTL (Q).  Chromosomal segments are pink when they share a genotype with the lower case parent and black when they share a genotype with the capital parent.  Regions where the genotype cannot be observed are dashed.  Regions where the genotype is unknown are gray.}
   \label{Crossovers}
 \end{figure}
