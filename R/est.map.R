@@ -168,6 +168,10 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
         cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
         cross.scheme[2] <- 0
       }
+      ## Tolerance: need two values.
+      if(length(tol) == 1) {
+        tol[2] <- 1e-6
+      }
     }
     else 
       stop("est.map not available for cross type ", type, ".")

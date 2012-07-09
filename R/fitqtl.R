@@ -195,6 +195,10 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
           qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
       
         if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+
+        ## Yandell fix for X chr and covariates.
+        for(sp in names(sexpgm))
+          sexpgm[[sp]] <- sexpgm[[sp]][!hasmissing]
       }
     }
   }
@@ -235,7 +239,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     }
   }
 
-  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm)
+  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm, cross.attr)
   adjustX <- FALSE
   if(sum(qtl$chrtype[p$idx.qtl]=="X")==1 && Xadjustment$adjustX)  { # need to include X chromosome covariates
     adjustX <- TRUE

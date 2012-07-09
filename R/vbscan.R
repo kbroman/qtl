@@ -137,7 +137,7 @@ function(cross, pheno.col=1, upper=FALSE, method="em", maxit=4000,
     if(chrtype=="X") {
 
       # determine which covariates belong in null hypothesis
-      temp <- scanoneXnull(type, sexpgm)
+      temp <- scanoneXnull(type, sexpgm, cross.attr=attributes(cross))
       adjustX <- temp$adjustX
       parX0 <- temp$parX0
       sexpgmcovar <- temp$sexpgmcovar
