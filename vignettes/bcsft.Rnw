@@ -1,4 +1,5 @@
 \documentclass[12pt,fullpage]{article}
+%\VignetteIndexEntry{Users Guide for New $BC_sF_t$ Tools for R/qtl}
 \usepackage{fullpage}
 \marginparwidth 0pt
 \oddsidemargin 0pt
@@ -76,7 +77,7 @@ listeria.bc2s3<-read.cross(format="csv",
 Here's another way to convert a cross. Suppose the R/qtl hyper data was really a $BC_3$ (or $BC_3F_0$). You can convert it as follows:
 <<>>=
 data(hyper)
-hyper3 <- convert.cross.bcsft(hyper, BC.gen = 3)
+hyper3 <- convert2bcsft(hyper, BC.gen = 3)
 @ 
 
 We will briefly highlight the difference in results between crosses analyzed using the traditional program and those analyzed using our new tools.  However, we do not discuss the entire process of QTL mapping.  Please refer to the tutorials available through rqtl.org or A Guide to QTL Mapping with R/qtl by Karl Broman \cite{bromanbook} for guidence on complete analysis. 
