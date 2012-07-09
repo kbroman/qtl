@@ -18,7 +18,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
            estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
-           map.function=c("haldane", "kosambi", "c-f", "morgan"), \dots)
+           map.function=c("haldane", "kosambi", "c-f", "morgan"),
+           BC.gen=0, F.gen=0, \dots)
 }
 
 \arguments{
@@ -73,6 +74,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
    Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer, or Morgan map function when converting genetic
    distances into recombination fractions. (Ignored if m > 0.)}
+  \item{BC.gen}{Used only for cross type \code{"bcsft"}.}
+  \item{F.gen}{Used only for cross type \code{"bcsft"}.}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the

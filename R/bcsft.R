@@ -1,4 +1,4 @@
-convert.cross.bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
+convert2bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
                                 error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
                                 ...)
 {
@@ -52,7 +52,7 @@ read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcs
 
   force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
   if((class(cross)[1] %in% c("bc","f2")) & force.bcsft)
-    cross <- convert.cross.bcsft(cross, BC.gen, F.gen, estimate.map = estimate.map, ...)
+    cross <- convert2bcsft(cross, BC.gen, F.gen, estimate.map = estimate.map, ...)
 
   cross
 }
@@ -208,12 +208,12 @@ sim.cross.bcsft <- function(map,model,n.ind,error.prob,missing.prob,
   if(error.prob > 0) {
     for(i in 1:n.chr) {
       if(chr.type[i]=="X") {
-        a <- sample(0:1,n.mar[i]*n.ind,repl=TRUE,
+        a <- sample(0:1,n.mar[i]*n.ind,replace=TRUE,
                     prob=c(1-error.prob,error.prob))
         geno[[i]]$data[a == 1] <- 3 - geno[[i]]$data[a == 1]
       }
       else {
-        a <- sample(0:2,n.mar[i]*n.ind,repl=TRUE,
+        a <- sample(0:2,n.mar[i]*n.ind,replace=TRUE,
                     prob=c(1-error.prob,error.prob/2,error.prob/2))
         if(any(a>0 & geno[[i]]$data==1))
           geno[[i]]$data[a>0 & geno[[i]]$data==1] <-
@@ -242,7 +242,7 @@ sim.cross.bcsft <- function(map,model,n.ind,error.prob,missing.prob,
   if(partial.missing.prob > 0) {
     for(i in 1:n.chr) {
       if(chr.type[i] != "X") {
-        o <- sample(c(TRUE,FALSE),n.mar[i],repl=TRUE,
+        o <- sample(c(TRUE,FALSE),n.mar[i],replace=TRUE,
                     prob=c(partial.missing.prob,1-partial.missing.prob))
         if(any(o)) {
           o2 <- grep("^QTL[0-9]+",mar.names[[i]])
@@ -269,7 +269,7 @@ sim.cross.bcsft <- function(map,model,n.ind,error.prob,missing.prob,
       o <- grep("^QTL[0-9]+",mar.names[[i]])
       if(length(o)>0)
         x <- geno[[i]]$data[,o]
-      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,repl=TRUE,
+      geno[[i]]$data[sample(c(TRUE,FALSE),n.mar[i]*n.ind,replace=TRUE,
                             prob=c(missing.prob,1-missing.prob))] <- NA
       if(length(o)>0)
         geno[[i]]$data[,o] <- x
