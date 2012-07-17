@@ -719,7 +719,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         if(p.new$n.int==1)
           p.new$formula.intmtx <- c(p.new$formula.intmtx, rep(0,n.newcovar))
         if(p.new$n.int>1) {
-          for(i in 1:n.newcovar)
+          for(i2 in 1:n.newcovar)
             p.new$formula.intmtx <- rbind(p.new$formula.intmtx, rep(0,p.new$n.int))
         }
       }
