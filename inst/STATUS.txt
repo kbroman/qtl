@@ -32,11 +32,14 @@ Minor changes:
   row per chromosome even when there are multiple positions sharing
   the maximum LOD on that chromosome.
 
+  Revised fitqtl to include formulas as attribute in drop-one-qtl
+  analysis.
+
   Slight change to checkcovar(): omit inidividuals with
   phenotypes/covariates that are +/- Inf, as well as those that are
   missing.
 
-  Fixed bug in fitqtl.
+  Fixed rare bug in fitqtl regarding X chr loci with interactions.
 
   Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
   chromosome type.

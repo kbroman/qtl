@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
-# last modified May, 2011
+# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
+# last modified Jul, 2012
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -623,6 +623,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     rownames(result) <- rep("",length(f.order))
 
     drop.term.name <- NULL
+    formulas <- rep("", length(f.order))
     for( i in (1:length(f.order)) ) {
       # loop thru all terms in formula, from the highest order
       # the label of the term to be droped
@@ -692,6 +693,8 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # parse the input formula
       p.new <- parseformula(formula.new, qtl$altname, colnames(covar))
       n.gen.QC <- c(n.gen[p.new$idx.qtl]-1, rep(1, p.new$n.covar))
+
+      formulas[i] <- deparseQTLformula(formula.new)
 
       # covariate to be passed to C function
       covar.C <- NULL
@@ -849,6 +852,8 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # assign row name
       rownames(result)[i] <- drop.term.name[i]
     } # finish dropping terms loop
+
+    attr(result, "formulas") <- formulas
 
     # assign output object
     output$result.drop <- result
