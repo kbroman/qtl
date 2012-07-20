@@ -624,6 +624,8 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
     drop.term.name <- NULL
     formulas <- rep("", length(f.order))
+    lods <- rep(NA, length(f.order))
+                
     for( i in (1:length(f.order)) ) {
       # loop thru all terms in formula, from the highest order
       # the label of the term to be droped
@@ -830,6 +832,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # % variance explained
       result[i,4] <- result.full[1,5] - 100*(1 - 10^(-2*z$lod/n.ind))
 
+      # lod score for reduced model
+      lods[i] <- z$lod
+
       # Type III SS for this term - computed from %var
       if(model=="normal")
         result[i,2] <- result.full[3,2] * result[i,4] / 100
@@ -854,6 +859,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     } # finish dropping terms loop
 
     attr(result, "formulas") <- formulas
+    attr(result, "lods") <- lods
 
     # assign output object
     output$result.drop <- result
