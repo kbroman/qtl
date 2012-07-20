@@ -160,7 +160,9 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
     for(i in unique(chr)) {
       if(any(!is.na(object[chr==i,lodcolumn]))) {
         mx <- max(object[chr==i,lodcolumn],na.rm=TRUE)
-        wh <- c(wh, which(chr==i & object[,lodcolumn]==mx))
+        tmp <- which(chr==i & object[,lodcolumn]==mx)
+        if(length(tmp) > 1) tmp <- sample(tmp, 1) # if multiple, pick at random
+        wh <- c(wh, tmp)
       }
     }
     thechr <- as.character(object[wh,1])
@@ -193,7 +195,9 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
       for(i in unique(chr)) {
         if(any(!is.na(object[chr==i,lodcolumn]))) {
           mx <- max(object[chr==i,lodcolumn],na.rm=TRUE)
-          wh[[lodcolumn-2]] <- c(wh[[lodcolumn-2]], which(chr==i & object[,lodcolumn]==mx))
+          tmp <- which(chr==i & object[,lodcolumn]==mx)
+          if(length(tmp) > 1) tmp <- sample(tmp, 1)
+          wh[[lodcolumn-2]] <- c(wh[[lodcolumn-2]], tmp)
         }
       }
     }
