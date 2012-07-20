@@ -32,8 +32,11 @@ Minor changes:
   row per chromosome even when there are multiple positions sharing
   the maximum LOD on that chromosome.
 
-  Revised fitqtl to include formulas as attribute in drop-one-qtl
-  analysis.
+  Fixed bug in stepwiseqtl; backward deletion steps were not dealing
+  with the drop-one-qtl results from fitqtl appropriately.
+
+  Revised fitqtl to include formulas and lod scores as attribute in
+  drop-one-qtl analysis.
 
   Slight change to checkcovar(): omit inidividuals with
   phenotypes/covariates that are +/- Inf, as well as those that are
