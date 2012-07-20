@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2012, Karl W Broman
+# last modified Jul, 2012
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
