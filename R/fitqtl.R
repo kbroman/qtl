@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
-# last modified May, 2011
+# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
+# last modified Jul, 2012
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -623,6 +623,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     rownames(result) <- rep("",length(f.order))
 
     drop.term.name <- NULL
+    formulas <- rep("", length(f.order))
+    lods <- rep(NA, length(f.order))
+                
     for( i in (1:length(f.order)) ) {
       # loop thru all terms in formula, from the highest order
       # the label of the term to be droped
@@ -693,6 +696,8 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       p.new <- parseformula(formula.new, qtl$altname, colnames(covar))
       n.gen.QC <- c(n.gen[p.new$idx.qtl]-1, rep(1, p.new$n.covar))
 
+      formulas[i] <- deparseQTLformula(formula.new)
+
       # covariate to be passed to C function
       covar.C <- NULL
       if(!is.null(p.new$idx.covar))
@@ -719,7 +724,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         if(p.new$n.int==1)
           p.new$formula.intmtx <- c(p.new$formula.intmtx, rep(0,n.newcovar))
         if(p.new$n.int>1) {
-          for(i in 1:n.newcovar)
+          for(i2 in 1:n.newcovar)
             p.new$formula.intmtx <- rbind(p.new$formula.intmtx, rep(0,p.new$n.int))
         }
       }
@@ -827,6 +832,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # % variance explained
       result[i,4] <- result.full[1,5] - 100*(1 - 10^(-2*z$lod/n.ind))
 
+      # lod score for reduced model
+      lods[i] <- z$lod
+
       # Type III SS for this term - computed from %var
       if(model=="normal")
         result[i,2] <- result.full[3,2] * result[i,4] / 100
@@ -849,6 +857,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # assign row name
       rownames(result)[i] <- drop.term.name[i]
     } # finish dropping terms loop
+
+    attr(result, "formulas") <- formulas
+    attr(result, "lods") <- lods
 
     # assign output object
     output$result.drop <- result
