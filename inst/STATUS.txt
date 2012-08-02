@@ -38,6 +38,11 @@ Minor changes:
   Revised fitqtl to include formulas and lod scores as attribute in
   drop-one-qtl analysis.
 
+  Fixed a bug in fitqtl regarding the adjustment for the X
+  chromosome.  The problem shows up in stepwiseqtl; if X chr enters
+  model and is then removed, the covariates adjusting for sex and pgm
+  continue to be used.
+
   Slight change to checkcovar(): omit individuals with
   phenotypes/covariates that are +/- Inf, as well as those that are
   missing.
