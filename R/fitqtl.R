@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# last modified Jul, 2012
+# last modified Aug, 2012
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -237,7 +237,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm)
   adjustX <- FALSE
-  if(sum(qtl$chrtype[p$idx.qtl]=="X")==1 && Xadjustment$adjustX)  { # need to include X chromosome covariates
+  if(sum(qtl$chrtype[p$idx.qtl]=="X")>=1 && Xadjustment$adjustX)  { # need to include X chromosome covariates
     adjustX <- TRUE
 
     n.newcovar <- ncol(Xadjustment$sexpgmcovar)
@@ -714,7 +714,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         }
       }
 
-      if(sum(qtl$chrtype[p.new$idx.qtl]=="X")==1 && Xadjustment$adjustX) { # need to adjust for X chromosome
+      if(sum(qtl$chrtype[p.new$idx.qtl]=="X")>=1 && Xadjustment$adjustX) { # need to adjust for X chromosome
         n.newcovar <- ncol(Xadjustment$sexpgmcovar)
         n.gen.QC <- c(n.gen.QC, rep(1, n.newcovar))
         p.new$n.covar <- p.new$n.covar + n.newcovar
