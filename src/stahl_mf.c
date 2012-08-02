@@ -2,9 +2,9 @@
  * 
  * stahl_mf.c
  * 
- * copyright (c) 2006-7, Karl W Broman
+ * copyright (c) 2006-2012, Karl W Broman
  *
- * last modified Mar, 2007
+ * last modified Aug, 2012
  * first written Aug, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -39,9 +39,9 @@
 #include <R.h> 
 #include <Rmath.h>
 #include <R_ext/PrtUtil.h>
-#include <R_ext/Applic.h>
 #include "util.h"
 #include "stahl_mf.h"
+#include "zeroin.h"
 
 /***********************************************************************
  * R_mf_stahl: wrapper for R
@@ -121,7 +121,7 @@ double imf_stahl(double r, int m, double p, double tol, int maxit)
   info.m = m;
   info.p = p;
   
-  result = R_zeroin(r, -log(1.0-2.0*r)/2.0,  /* lower and upper of range */
+  result = Rqtl_zeroin(r, -log(1.0-2.0*r)/2.0,  /* lower and upper of range */
 		    (double (*)(double, void *))imf_stahl_sub,
 		    (void *)(&info), &tol, &maxit);
   return(result);
