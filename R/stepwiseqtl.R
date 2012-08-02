@@ -574,7 +574,6 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     wh <- which(!is.na(plod) & plod==maxplod)
     if(length(wh) > 1) wh <- sample(wh, 1)
 
-    lod <- lods[wh]
     todrop <- rownames(out)[wh]
 
     if(verbose) cat(" ---Dropping", todrop, "\n")
@@ -606,6 +605,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       qtl$name <- qtl$altname <- paste("Q", 1:qtl$n.qtl, sep="")
       n.qtl <- n.qtl - 1
     }
+
+    # call fitqtl again, just in case
+    lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+                  method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                  run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
 
     curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                     penalties=penalties)

@@ -530,22 +530,31 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   if(model=="normal") {  
     # compute the SS for total
-    Rss0 <- 0
-    mpheno <- mean(pheno)
-    for(i in 1:length(pheno)) 
-      Rss0 <- Rss0 + (pheno[i]-mpheno)^2
+
+    if(adjustX) {
+      mpheno <- mean(pheno)
+      Rss0 <- sum( (pheno-mpheno)^2 )
+
+      Rss0adj <- Rss0x <- sum( lm(pheno ~ Xadjustment$sexpgmcovar)$resid^2 )
+      OrigModellod <- z$lod
+      Modellod <- z$lod + length(pheno)/2 * (log10(Rss0x) - log10(Rss0))
+    } else {
+      mpheno <- mean(pheno)
+      Rss0adj <- Rss0 <- sum( (pheno-mpheno)^2 )
+      OrigModellod <- Modellod <- z$lod
+    }
 
     # third row, for Total
     result.full[3,1] <- length(pheno) - 1 # total degree of freedom
-    result.full[3,2] <- Rss0 # total sum of squares
+    result.full[3,2] <- Rss0adj # total sum of squares
     
     # first row, for Model
     result.full[1,1] <- z$df # df for Model
     # Variance explained by model
-    result.full[1,5] <- 100 * (1 - exp(-2*z$lod*log(10)/n.ind))
-    result.full[1,2] <- Rss0 * result.full[1,5]/100  # SS for model
+    result.full[1,5] <- 100 * (1 - exp(-2*Modellod*log(10)/n.ind))
+    result.full[1,2] <- Rss0adj * result.full[1,5]/100  # SS for model
     result.full[1,3] <- result.full[1,2]/z$df # MS for model
-    result.full[1,4] <- z$lod # Model LOD score
+    result.full[1,4] <- Modellod # Model LOD score
 
     # Second row, for Error
     # df
@@ -557,20 +566,14 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
     # first row, P values
     # P value (chi2) for model
-    result.full[1,6] <- 1 - pchisq(2*log(10)*z$lod, z$df)
+    result.full[1,6] <- 1 - pchisq(2*log(10)*Modellod, z$df)
     # P value (F statistics) for model
     df0 <- result.full[3,1]; df1 <- result.full[2,1];
     Rss1 <- result.full[2,2]
-    Fstat <- ((Rss0-Rss1)/(df0-df1)) / (Rss1/df1)
+    Fstat <- ((Rss0adj-Rss1)/(df0-df1)) / (Rss1/df1)
     result.full[1,7] <- 1 - pf(Fstat, df0-df1, df1)
   }
   else {
-    # compute the SS for total
-    Rss0 <- 0
-    mpheno <- mean(pheno)
-    for(i in 1:length(pheno)) 
-      Rss0 <- Rss0 + (pheno[i]-mpheno)^2
-
     # third row, for Total
     result.full[3,1] <- length(pheno) - 1 # total degree of freedom
     result.full[3,2] <- NA # total sum of squares
@@ -582,6 +585,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     result.full[1,2] <- NA  # SS for model
     result.full[1,3] <- NA # MS for model
     result.full[1,4] <- z$lod # Model LOD score
+    OrigModellod <- Modellod <- z$lod
 
     # Second row, for Error
     # df
@@ -714,7 +718,8 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         }
       }
 
-      if(sum(qtl$chrtype[p.new$idx.qtl]=="X")>=1 && Xadjustment$adjustX) { # need to adjust for X chromosome
+      if(sum(qtl$chrtype[p$idx.qtl]=="X")>=1 && Xadjustment$adjustX)  { # need to include X chromosome covariates
+
         n.newcovar <- ncol(Xadjustment$sexpgmcovar)
         n.gen.QC <- c(n.gen.QC, rep(1, n.newcovar))
         p.new$n.covar <- p.new$n.covar + n.newcovar
@@ -823,12 +828,14 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         }
       }
         
+      if(model=="normal" && adjustX) # adjust for X chromosome covariates
+        z$lod <- z$lod + length(pheno)/2 * (log10(Rss0x) - log10(Rss0))
 
       # record the result for dropping this term
       # df
       result[i,1] <- result.full[1,1] - z$df
       # LOD score
-      result[i,3] <- result.full[1,4] - z$lod
+      result[i,3] <- Modellod - z$lod
       # % variance explained
       result[i,4] <- result.full[1,5] - 100*(1 - 10^(-2*z$lod/n.ind))
 
@@ -843,9 +850,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # F value
       if(model=="normal") {
         df0 <- length(pheno) - z$df - 1; df1 <- result.full[2,1];
-        Rss0 <- result.full[2,2] + result[i,2];
-        Rss1 <- result.full[2,2]
-        Fstat <- ((Rss0-Rss1)/(df0-df1)) / (Rss1/df1)
+        Rss0p <- result.full[2,2] + result[i,2];
+        Rss1p <- result.full[2,2]
+        Fstat <- ((Rss0p-Rss1p)/(df0-df1)) / (Rss1/df1)
         result[i,5] <- Fstat
         # P value (F)
         result[i,7] <- 1 - pf(Fstat, df0-df1, df1)
