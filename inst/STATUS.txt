@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.25, 7/20/2012:
+Version 1.25, 8/2/2012:
 
 Major changes:
 
@@ -38,9 +38,11 @@ Minor changes:
   Revised fitqtl to include formulas and lod scores as attribute in
   drop-one-qtl analysis.
 
-  Slight change to checkcovar(): omit inidividuals with
+  Slight change to checkcovar(): omit individuals with
   phenotypes/covariates that are +/- Inf, as well as those that are
   missing.
+
+  Handle missing values in mf.stahl and imf.stahl.
 
   Fixed rare bug in fitqtl regarding X chr loci with interactions.
 
