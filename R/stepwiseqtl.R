@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2012, Karl W Broman
-# last modified Jul, 2012
+# last modified Aug, 2012
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -699,6 +699,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     attr(curbest, "trace") <- thetrace
 
   attr(curbest, "formula") <- deparseQTLformula(attr(curbest, "formula"), TRUE)
+  attr(curbest, "penalties") <- penalties
 
   curbest
 }

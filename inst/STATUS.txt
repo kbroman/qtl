@@ -43,6 +43,8 @@ Minor changes:
   model and is then removed, the covariates adjusting for sex and pgm
   continue to be used.
 
+  In stepwiseqtl, include penalties as attribute in the output.
+
   Slight change to checkcovar(): omit individuals with
   phenotypes/covariates that are +/- Inf, as well as those that are
   missing.
