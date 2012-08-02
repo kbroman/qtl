@@ -565,8 +565,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
     # need to calculate penalized LOD scores here
     plod <- rep(NA, length(lods))
-    for(i in seq(along=plod))
-      plod[i] <- calc.plod(lods[i], countqtlterms(formulas[i], ignore.covar=TRUE),
+    for(modi in seq(along=plod))
+      plod[modi] <- calc.plod(lods[modi], countqtlterms(formulas[modi], ignore.covar=TRUE),
                            penalties=penalties)
 
     maxplod <- max(plod, na.rm=TRUE)
