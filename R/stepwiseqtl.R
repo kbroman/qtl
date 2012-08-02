@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2007-2012, Karl W Broman
+# last modified Jul, 2012
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -552,19 +552,29 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
                   method=method, model=model, dropone=TRUE, get.ests=FALSE,
                   run.checks=FALSE, tol=tol, maxit=maxit)$result.drop 
 
+    formulas <- attr(out, "formulas")
+    lods <- attr(out, "lods")
+
     rn <- rownames(out)
     # ignore things with covariates
     wh <- c(grep("^[Qq][0-9]+$", rn),
             grep("^[Qq][0-9]+:[Qq][0-9]+$", rn))
     out <- out[wh,,drop=FALSE]
+    formulas <- formulas[wh]
+    lods <- lods[wh]
 
-    thelod <- out[,3]
-    minlod <- min(thelod, na.rm=TRUE)
+    # need to calculate penalized LOD scores here
+    plod <- rep(NA, length(lods))
+    for(modi in seq(along=plod))
+      plod[modi] <- calc.plod(lods[modi], countqtlterms(formulas[modi], ignore.covar=TRUE),
+                           penalties=penalties)
 
-    wh <- which(!is.na(thelod) & thelod==minlod)
+    maxplod <- max(plod, na.rm=TRUE)
+
+    wh <- which(!is.na(plod) & plod==maxplod)
     if(length(wh) > 1) wh <- sample(wh, 1)
 
-    lod <- lod - minlod
+    lod <- lods[wh]
     todrop <- rownames(out)[wh]
 
     if(verbose) cat(" ---Dropping", todrop, "\n")

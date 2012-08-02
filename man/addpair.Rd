@@ -147,7 +147,8 @@ w <- qtlgeno[,2]==2 & qtlgeno[,4]==2
 phe[w] <- phe[w] - 1
 fakebc$pheno[,1] <- phe
 
-fakebc <- calc.genoprob(fakebc, step=2, err=0.001)
+\dontrun{fakebc <- calc.genoprob(fakebc, step=2, err=0.001)
+}\dontshow{fakebc <- calc.genoprob(fakebc, step=0, err=0.001)}
 
 # base model has QTLs on chr 17 and 18
 qtl <- makeqtl(fakebc, chr=c("17", "18"), pos=c(40,30), what="prob")

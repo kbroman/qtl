@@ -9,16 +9,16 @@
 
 \usage{
 write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
-                            "mm", "qtlcart", "gary"),
-            filestem="data", chr, digits=NULL)
+                            "mm", "qtlcart", "gary", "qtab"),
+            filestem="data", chr, digits=NULL, descr)
 }
 
 \arguments{
   \item{cross}{An object of class \code{cross}. See
     \code{\link{read.cross}} for details.}
   \item{format}{Specifies whether to write the data in comma-delimited,
-    rotated comma-delimited, Mapmaker, QTL Cartographer, or Gary
-    Churchill's format.} 
+    rotated comma-delimited, Mapmaker, QTL Cartographer, Gary
+    Churchill's, or QTAB format.} 
   \item{filestem}{A character string giving the first part of the output
     file names (the bit before the dot).  In Windows, use forward
     slashes (\code{"/"}) or double backslashes (\code{"\\\\"}) to
@@ -32,6 +32,7 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   \item{digits}{Number of digits to which phenotype values and genetic
      map positions should be rounded. If NULL (the default), they are
      not rounded.}
+  \item{descr}{Character string description; used only with \code{format="qtab"}.}
 }
 
 %\value{
@@ -67,6 +68,10 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   \code{"mnames.txt"} - the marker names; \cr
   \code{"markerpos.txt"} - the marker positions; \cr
   \code{"pnames.txt"} - the phenotype names
+
+  QTAB format: See
+  \href{https://github.com/qtlHD/qtlHD/blob/master/doc/input/qtab.md}{documentation}.
+
 }
 
 
@@ -94,7 +99,8 @@ write.cross(fake.bc, "qtlcart", "Data/fakebc", c(1,5,13))
 # Gary's format
 write.cross(fake.bc, "gary", c(1,5,13))} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu; Brian S. Yandell}
+\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu; Brian
+  S. Yandell; Danny Arends}
 
 \seealso{ \code{\link{read.cross}} }
 
