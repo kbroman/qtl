@@ -714,7 +714,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         }
       }
 
-      if(adjustX) { # need to adjust for X chromosome
+      if(sum(qtl$chrtype[p.new$idx.qtl]=="X")==1 && Xadjustment$adjustX) { # need to adjust for X chromosome
         n.newcovar <- ncol(Xadjustment$sexpgmcovar)
         n.gen.QC <- c(n.gen.QC, rep(1, n.newcovar))
         p.new$n.covar <- p.new$n.covar + n.newcovar
