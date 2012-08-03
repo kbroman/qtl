@@ -10,6 +10,14 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
  
 SHORT TERM:
 
+o Problem in fitqtl: formula y~q1 doesn't work but y~Q1 and y~Q1+Q2 do
+    > out.fq <- fitqtl(x, qtl=qtl, formula=y~Q1, method="hk")
+    > out.fq <- fitqtl(x, qtl=qtl, formula=y~q1, method="hk")
+    Warning message:
+    In checkformula(formula, qtl$altname, colnames(covar)) :
+      Terms q1 not understood.
+   [works, but gives unnecessary warning]
+
 o apparent bug in xaxisloc.scanone if a chromosome doesn't start at 0
 
 o Obvious bug in backward selection part of stepwiseqtl: just looking
