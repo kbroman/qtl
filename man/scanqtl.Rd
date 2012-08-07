@@ -6,13 +6,14 @@
 \description{
   Performs a multiple QTL scan for specified chromosomes and positions
   or intervals, with the possible inclusion of QTL-QTL interactions and/or
-  covariates. 
+  covariates.
 }
 
 \usage{
 scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
         method=c("imp","hk"), model=c("normal", "binary"),
-        incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
+        incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000,
+        forceXcovar=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -30,7 +31,7 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
    to be scanned.  Each element should be either a single number (for a
    specific position) or a pair of numbers (for an interval).}
  \item{covar}{A matrix or data.frame of covariates.  These must be
-   strictly numeric.} 
+   strictly numeric.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are indicated as \code{Q1},
@@ -38,7 +39,7 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.  If \code{\link{calc.genoprob}} or
    \code{\link{sim.geno}} were run with
@@ -46,7 +47,9 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
  \item{verbose}{If TRUE, give feedback about progress.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
+ \item{forceXcovar}{If TRUE, force inclusion of X-chr-related covariates
+   (like sex and cross direction).}
 }
 
 \details{
@@ -54,10 +57,10 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
   formula, use \code{Q1}, \code{Q2}, etc., or \code{q1},
   \code{q2}, etc., to represent the QTLs, and the column names in the
   covariate data frame to represent the covariates.
-    
+
   We enforce a hierarchical structure on the model formula: if a QTL or
   covariate is in involved in an interaction, its main effect are also
-  be included.   
+  be included.
 
   Only the interaction terms need to be specifed in the formula. The
   main effects of all input QTLs (as specified by chr and pos) and
@@ -66,25 +69,25 @@ scanqtl(cross, pheno.col=1, chr, pos, covar=NULL, formula,
   elements in input \code{chr} and \code{pos} and Sex is one of the
   column names for
   input covariates, the formula used in genome scan will be
-  \code{y ~ Q1 + Q2 + Q3 + Sex + Q1:Q2 + Q1:Sex + Q2:Sex + Q1:Q2:Sex}. 
+  \code{y ~ Q1 + Q2 + Q3 + Sex + Q1:Q2 + Q1:Sex + Q2:Sex + Q1:Q2:Sex}.
 
   The input \code{pos} is a list or vector to specify the position/range
   of the input chromosomes to be scanned. If it is a vector, it gives the
   precise positions of the QTL on the chromosomes. If it is a list, it will
   contain either the precise positions or a range on the chromosomes. For
   example, consider the case that the input \code{chr = c(1, 6,
-    13)}. If \code{pos = c(9.8, 34.0, 18.6)}, 
+    13)}. If \code{pos = c(9.8, 34.0, 18.6)},
   it means to fit a model with QTL on chromosome 1 at 9.8cM, chromosome
   6 at 34cM and  chromosome 13 at 18.6cM.
   If \code{pos = list(c(5,15), c(30,36), 18)}, it
   means to scan chromosome 1 from 5cM to 15cM, chromosome 6 from 30cM to
   36cM, fix the QTL on chromosome 13 at 18cM.
 }
- 
+
 \value{
   An object of class \code{scanqtl}. It is a multi-dimensional
   array of LOD scores, with the number of dimension equal to the number
-  of QTLs specifed.} 
+  of QTLs specifed.}
 
 \references{
   Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping
@@ -130,6 +133,6 @@ image(chr1, chr8, t(result2), las=1, col=rev(rainbow(256,start=0,end=2/3)))
 }
 
 \seealso{ \code{\link{fitqtl}}, \code{\link{makeqtl}},
-  \code{\link{refineqtl}} } 
+  \code{\link{refineqtl}} }
 
 \keyword{models}
