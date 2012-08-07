@@ -641,7 +641,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         # this is a first order term
         # if the term label is like Q(q)1, Q(q)2, etc., then it's a QTL
         if( length(grep("Q[0-9]", label.term.drop, ignore.case=TRUE)) != 0) {
-          idx.qtlname <- as.integer(substr(label.term.drop, 2, 10))  ########## FIXME ########## 10 -> nchar(label.term.drop)
+          idx.qtlname <- as.integer(substr(label.term.drop, 2, nchar(label.term.drop)))
           drop.term.name[i] <- qtl$name[idx.qtlname]
         }
         else { # this is a covariate
@@ -657,7 +657,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
         for(j in 1:length(tmp.str)) {
           if( length(grep("Q[0-9]", tmp.str[j], ignore.case=TRUE)) != 0 ) {
             # this is a QTL
-            idx.qtlname <- as.integer(substr(tmp.str[j], 2, 100)) ########## FIXME ########## 100 -> nchar(tmp.str[j])
+            idx.qtlname <- as.integer(substr(tmp.str[j], 2, nchar(tmp.str[j])))
             tmp.str[j] <- qtl$name[idx.qtlname]
           }
           if(j == 1) # first term
@@ -681,23 +681,13 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       # the indices of term(s) to be kept
       idx.term.kept <- setdiff(1:length(f.order), idx.term.drop)
       
-########## FIX ME ##########
-# there's no reason for the for loop below, and the 100,000 is an unnecessary limit
-
       #### regenerate a formula with the kept terms additive ###
       if(length(idx.term.kept) == 0) # nothing left after drop label.term.drop
         stop("There will be nothing left if drop ", drop.term.name[i])
       else {
         # All terms for idx.term.kept will be additive
-        # Why it's so awkward? paste can't concatenate a list of strings?
-        formula.new <- NULL
-        for(j in 1:length(idx.term.kept)) {
-          formula.new <- paste(formula.new, f.label[idx.term.kept[j]], sep="+")
-        }
-        formula.new <- as.formula(paste("y~", substr(formula.new, 2, 100000), sep=""))
+        formula.new <- as.formula(paste("y~", paste(f.label[idx.term.kept], collapse="+"), sep=""))
       }
-      ### Finish generating a new formula
-^^^####### FIX ME ##########
 
       ### Start fitting model again
       # parse the input formula
