@@ -2,10 +2,10 @@
  * 
  * hmm_f2i.c
  * 
- * copyright (c) 2006-2011, Karl W Broman
+ * copyright (c) 2006-2012, Karl W Broman
  *         (Some code adapted from code from Nicola Armstrong)
  *
- * last modified Mar, 2011
+ * last modified Aug, 2012
  * first written Aug, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -205,10 +205,10 @@ void est_map_f2i(int n_ind, int n_mar, int *geno, double *d,
     /* rescale */
     for(j=0; j<n_mar-1; j++) {
       rf[j] /= (double)n_ind;
-      /*      
+
       if(rf[j] < tol/100.0) rf[j] = tol/100.0;
       else if(rf[j] > 0.5-tol/100.0) rf[j] = 0.5-tol/100.0;
-      */
+
     }
 
     /* use map function to convert back to distances */
