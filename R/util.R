@@ -5,7 +5,7 @@
 # copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified May, 2012
+# last modified Aug, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3174,6 +3174,7 @@ function(x, ...)
 }
 
 
+# map function for Stahl model
 mf.stahl <- 
 function(d, m=0, p=0)
 {
@@ -3184,16 +3185,33 @@ function(d, m=0, p=0)
   if(p < 0 || p > 1)
     stop("Must have 0 <= p <= 1\n")
 
-  .C("R_mf_stahl",
-     as.integer(length(d)),
-     as.double(d/100), # convert to Morgans
+  # handle missing values
+  if(any(!is.finite(d))) {
+    which.finite <- is.finite(d)
+    dsub <- d[which.finite]
+    dropped.some <- TRUE
+  } else {
+    dsub <- d
+    dropped.some <- FALSE
+  }
+
+  result <- .C("R_mf_stahl",
+     as.integer(length(dsub)),
+     as.double(dsub/100), # convert to Morgans
      as.integer(m),
      as.double(p),
-     result=as.double(rep(0,length(d))),
+     result=as.double(rep(0,length(dsub))),
      PACKAGE="qtl")$result
+
+  if(dropped.some) {
+    d[!which.finite] <- NA
+    d[which.finite] <- result
+    result <- d
+  }
+  result
 }
 
-
+# inverse map function for Stahl model
 imf.stahl <-
 function(r, m=0, p=0, tol=1e-12, maxit=1000)
 {
@@ -3204,15 +3222,32 @@ function(r, m=0, p=0, tol=1e-12, maxit=1000)
   if(p < 0 || p > 1)
     stop("Must have 0 <= p <= 1\n")
 
-  .C("R_imf_stahl",
-     as.integer(length(r)),
-     as.double(r),
-     as.integer(m),
-     as.double(p),
-     result=as.double(rep(0,length(r))),
-     as.double(tol),
-     as.integer(maxit),
-     PACKAGE="qtl")$result*100 # convert to cM
+  # handle missing values
+  if(any(!is.finite(r))) {
+    which.finite <- is.finite(r)
+    rsub <- r[which.finite]
+    dropped.some <- TRUE
+  } else {
+    rsub <- r
+    dropped.some <- FALSE
+  }
+
+  result <- .C("R_imf_stahl",
+               as.integer(length(rsub)),
+               as.double(rsub),
+               as.integer(m),
+               as.double(p),
+               result=as.double(rep(0,length(rsub))),
+               as.double(tol),
+               as.integer(maxit),
+               PACKAGE="qtl")$result*100 # convert to cM
+
+  if(dropped.some) {
+    r[!which.finite] <- NA
+    r[which.finite] <- result
+    result <- r
+  }
+  result
 }
 
 ######################################################################
