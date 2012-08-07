@@ -2,22 +2,22 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-2011, Karl W. Broman
-# last modified May, 2011
+# copyright (c) 2006-2012, Karl W. Broman
+# last modified Aug, 2012
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
-# 
+#
 # Part of the R/qtl package
 # Contains: refineqtl, plotLodProfile
 #
@@ -37,21 +37,22 @@
 ######################################################################
 refineqtl <-
 function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
-         method=c("imp", "hk"), model=c("normal", "binary"), verbose=TRUE, maxit=10, 
-         incl.markers=TRUE, keeplodprofile=TRUE, tol=1e-4, maxit.fitqtl=1000)
+         method=c("imp", "hk"), model=c("normal", "binary"), verbose=TRUE, maxit=10,
+         incl.markers=TRUE, keeplodprofile=TRUE, tol=1e-4, maxit.fitqtl=1000,
+         forceXcovar=FALSE)
 {
   method <- match.arg(method)
   model <- match.arg(model)
-  
+
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
-    
+
   # allow formula to be a character string
   if(!missing(formula) && is.character(formula))
     formula <- as.formula(formula)
 
   if(!is.null(covar) && !is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) 
+    if(is.matrix(covar) && is.numeric(covar))
       covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
@@ -127,7 +128,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
-  }    
+  }
 
   # minimum distance between pseudomarkers
   map <- attr(qtl, "map")
@@ -141,10 +142,10 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     pheno.col <- pheno.col[1]
     warning("refineqtl can take just one phenotype; only the first will be used")
   }
-    
+
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
-    if(is.na(num)) 
+    if(is.na(num))
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
   }
@@ -248,12 +249,12 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, model=model, dropone=TRUE, get.ests=FALSE,
                               run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                              tol=tol, maxit=maxit.fitqtl)
-    else 
+                              tol=tol, maxit=maxit.fitqtl, forceXcovar=forceXcovar)
+    else
       basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                               method=method, model=model, dropone=FALSE, get.ests=FALSE,
                               run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                              tol=tol, maxit=maxit.fitqtl)
+                              tol=tol, maxit=maxit.fitqtl, forceXcovar=forceXcovar)
 
     if(i==1) {
       origlod <- curlod <- thisitlod <- basefit$result.full[1,4]
@@ -264,7 +265,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     o <- sample(lc)
 
     # make sure the first here was not the last before
-    if(!is.null(oldo)) 
+    if(!is.null(oldo))
       while(o[1] != oldo[lc])
         o <- sample(lc)
     oldo <- o
@@ -272,7 +273,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     newpos <- curpos
     for(j in o) {
 
-      otherchr <- chrnam[-j] 
+      otherchr <- chrnam[-j]
       otherpos <- newpos[-j]
 
       thispos <- as.list(newpos)
@@ -284,16 +285,17 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
         if(any(linkedpos > newpos[j]))
           high <- min(linkedpos[linkedpos > newpos[j]])
         else high <- Inf
-        
+
         thispos[[j]] <- c(low, high)
       }
-      else 
+      else
         thispos[[j]] <- c(-Inf, Inf)
 
       out <- scanqtl(cross=cross, pheno.col=pheno.col, chr=chrnam, pos=thispos,
                      covar=covar, formula=formula, method=method, model=model,
                      incl.markers=incl.markers,
-                     verbose=scanqtl.verbose, tol=tol, maxit=maxit.fitqtl)
+                     verbose=scanqtl.verbose, tol=tol, maxit=maxit.fitqtl,
+                     forceXcovar=forceXcovar)
 
       lastout[[j]] <- out
 
@@ -328,7 +330,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   }
 
   if(!converged) warning("Didn't converge.")
-  
+
   # do the qtl have custom names?
   g <- grep("^.+@[0-9\\.]+$", qtl$name)
   if(length(g) == length(qtl$name)) thenames <- NULL
@@ -338,7 +340,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     qtl <- origqtl
     cross <- origcross
   }
-  for(j in seq(along=tovary)) 
+  for(j in seq(along=tovary))
     qtl <- replaceqtl(cross, qtl, tovary[j], chrnam[j], newpos[j])
 
   if(!is.null(thenames)) qtl$name <- thenames
@@ -351,7 +353,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
         dropresult <- rbind(c(NA,NA, basefit$result.full[1,4]))
         rownames(dropresult) <- names(lastout)
       }
-      else 
+      else
         stop("There's a problem: need dropresult, but didn't obtain one.")
     }
 
@@ -370,11 +372,11 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
     for(i in seq(along=lastout)) {
       class(lastout[[i]]) <- c("scanone", "data.frame")
       thechr <- qtl$chr[i]
-      if(method=="imp") 
+      if(method=="imp")
         detailedmap <- attr(cross$geno[[thechr]]$draws,"map")
       else
         detailedmap <- attr(cross$geno[[thechr]]$prob,"map")
-    
+
       if(is.matrix(detailedmap)) detailedmap <- detailedmap[1,]
 
       r <- range(lastout[[i]][,2])+c(-1e-5, 1e-5)
@@ -388,7 +390,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 
     attr(qtl, "lodprofile") <- lastout
   }
-  
+
   # if there's a pLOD attribute, revise it
   if("pLOD" %in% names(attributes(qtl)) && curlod > origlod)
     attr(qtl,"pLOD") <- attr(qtl,"pLOD") + curlod - origlod
@@ -400,7 +402,7 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 # plotLodProfile
 #
 # This is for creating a plot of 1-d LOD profiles calculated within
-# refineqtl.  
+# refineqtl.
 ######################################################################
 
 plotLodProfile <-
@@ -414,7 +416,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   lodprof <- attr(qtl, "lodprofile")
   if(is.null(lodprof))
     stop("You must first run refineqtl, using keeplodprofile=TRUE")
-  
+
   m <- match(qtl$name, names(lodprof))
   if(any(is.na(m)))
     qtl <- dropfromqtl(qtl, index=which(is.na(m)), drop.lod.profile=FALSE)
@@ -440,7 +442,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     }
     else lwd <- lwd[neworder]
   }
-  
+
 
   if(length(lty) == 1) lty <- rep(lty, n.qtl)
   else {
@@ -462,7 +464,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   map <- attr(qtl, "map")
   if(is.null(map))
     stop("Input qtl object should contain the genetic map.")
-  
+
   thechr <- unique(qtl$chr)
   orderedchr <- names(map)
   chr2keep <- which(!is.na(match(orderedchr, thechr)))
@@ -481,7 +483,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   dontskip <- which(!is.na(match(qtl$chr, chr)))
   if(length(dontskip)==0)
     stop("Nothing to plot.")
-  
+
   ymax <- max(sapply(lodprof[dontskip], function(a) max(a[,3], na.rm=TRUE)))
   begend <- matrix(unlist(tapply(tempscan[,2],tempscan[,1],range)),ncol=2,byrow=TRUE)
   rownames(begend) <- unique(tempscan[,1])
@@ -517,22 +519,22 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
                            (tempscan[,1] == qtl$chr[i] & (tempscan[,2] < min(lodprof[[i]][,2]) |
                                       tempscan[,2] > max(lodprof[[i]][,2]))),],
                   lodprof[[i]])
-    
+
     temp <- temp[order(match(temp[,1], orderedchr), temp[,2]),]
     class(temp) <- c("scanone", "data.frame")
 
     plot.scanone(temp, chr=chr, incl.markers=FALSE, gap=gap, add=TRUE,
                  col=col[i], lwd=lwd[i], lty=lty[i], ...)
-    
+
     if(qtl.labels) {
-      maxlod <- max(temp[,3], na.rm=TRUE) 
+      maxlod <- max(temp[,3], na.rm=TRUE)
       maxpos <- temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]]
       d <- min(c(1, diff(par("usr")[3:4]*0.05)))
 
       text(maxpos, maxlod + d, names(lodprof)[i], col=col[i], font=(lwd[i]>1)+1, ...)
     }
   }
-                 
+
   invisible()
 }
 
