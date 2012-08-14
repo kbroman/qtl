@@ -61,7 +61,8 @@ x <- simPhyloQTL(4, partition="AB|CD", crosses=c("AB", "AC", "AD"),
                  model=c(1, 50, 0.5, 0))
 
 # run calc.genoprob on each cross
-x <- lapply(x, calc.genoprob, step=2)
+\dontrun{x <- lapply(x, calc.genoprob, step=2)
+}\dontshow{x <- lapply(x, calc.genoprob, step=0)}
 
 # scan genome, at each position trying all possible partitions
 out <- scanPhyloQTL(x, method="hk")

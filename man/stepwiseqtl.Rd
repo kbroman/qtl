@@ -250,7 +250,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 \examples{
 data(fake.bc)
 \dontshow{fake.bc <- subset(fake.bc, chr=c(1,2,3,5))}
-fake.bc <- calc.genoprob(fake.bc, step=2.5)
+\dontrun{fake.bc <- calc.genoprob(fake.bc, step=2.5)
+}\dontshow{fake.bc <- calc.genoprob(fake.bc, step=0)}
 outsw <- stepwiseqtl(fake.bc, max.qtl=3, method="hk", keeptrace=TRUE)
 
 # best model

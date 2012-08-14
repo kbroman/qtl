@@ -5,7 +5,7 @@
 # copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified May, 2012
+# last modified Aug, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1863,8 +1863,8 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
   orig.n.ind <- nind(cross)
 
   # drop individuals with missing phenotypes
-  if(any(is.na(pheno))) {
-    keep.ind <- as.numeric(which(apply(pheno, 1, function(x) !any(is.na(x)))))
+  if(any(!is.finite(unlist(pheno)))) {
+    keep.ind <- as.numeric(which(apply(pheno, 1, function(x) !any(!is.finite(x)))))
 #    keep.ind <- (1:length(pheno))[!is.na(pheno)]
     n.drop <- nind(cross) - length(keep.ind)
     keep.ind.boolean <- rep(FALSE, nind(cross))
@@ -1919,7 +1919,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
 
   # drop individuals missing any covariates
   if(!is.null(addcovar)) { # note that intcovar is contained in addcovar
-    wh <- apply(cbind(addcovar,intcovar),1,function(a) any(is.na(a)))
+    wh <- apply(cbind(addcovar,intcovar),1,function(a) any(!is.finite(a)))
     if(any(wh)) {
       cross <- subset.cross(cross,ind=(!wh))
       pheno <- pheno[!wh,,drop=FALSE]
@@ -1946,8 +1946,8 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
         if(any(o)) wh[i] <- (1:n.addcovar)[o]
         else wh[i] <- NA
       }
-      if(any(is.na(wh))) {
-        addcovar <- cbind(addcovar,intcovar[,is.na(wh)])
+      if(any(!is.finite(wh))) {
+        addcovar <- cbind(addcovar,intcovar[,!is.finite(wh)])
         n.addcovar <- ncol(addcovar)
         if(verbose) warning("addcovar forced to contain all columns of intcovar")
       }
@@ -3190,6 +3190,7 @@ function(x, ...)
 }
 
 
+# map function for Stahl model
 mf.stahl <- 
 function(d, m=0, p=0)
 {
@@ -3200,16 +3201,33 @@ function(d, m=0, p=0)
   if(p < 0 || p > 1)
     stop("Must have 0 <= p <= 1\n")
 
-  .C("R_mf_stahl",
-     as.integer(length(d)),
-     as.double(d/100), # convert to Morgans
+  # handle missing values
+  if(any(!is.finite(d))) {
+    which.finite <- is.finite(d)
+    dsub <- d[which.finite]
+    dropped.some <- TRUE
+  } else {
+    dsub <- d
+    dropped.some <- FALSE
+  }
+
+  result <- .C("R_mf_stahl",
+     as.integer(length(dsub)),
+     as.double(dsub/100), # convert to Morgans
      as.integer(m),
      as.double(p),
-     result=as.double(rep(0,length(d))),
+     result=as.double(rep(0,length(dsub))),
      PACKAGE="qtl")$result
+
+  if(dropped.some) {
+    d[!which.finite] <- NA
+    d[which.finite] <- result
+    result <- d
+  }
+  result
 }
 
-
+# inverse map function for Stahl model
 imf.stahl <-
 function(r, m=0, p=0, tol=1e-12, maxit=1000)
 {
@@ -3220,15 +3238,32 @@ function(r, m=0, p=0, tol=1e-12, maxit=1000)
   if(p < 0 || p > 1)
     stop("Must have 0 <= p <= 1\n")
 
-  .C("R_imf_stahl",
-     as.integer(length(r)),
-     as.double(r),
-     as.integer(m),
-     as.double(p),
-     result=as.double(rep(0,length(r))),
-     as.double(tol),
-     as.integer(maxit),
-     PACKAGE="qtl")$result*100 # convert to cM
+  # handle missing values
+  if(any(!is.finite(r))) {
+    which.finite <- is.finite(r)
+    rsub <- r[which.finite]
+    dropped.some <- TRUE
+  } else {
+    rsub <- r
+    dropped.some <- FALSE
+  }
+
+  result <- .C("R_imf_stahl",
+               as.integer(length(rsub)),
+               as.double(rsub),
+               as.integer(m),
+               as.double(p),
+               result=as.double(rep(0,length(rsub))),
+               as.double(tol),
+               as.integer(maxit),
+               PACKAGE="qtl")$result*100 # convert to cM
+
+  if(dropped.some) {
+    r[!which.finite] <- NA
+    r[which.finite] <- result
+    result <- r
+  }
+  result
 }
 
 ######################################################################

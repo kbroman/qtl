@@ -51,6 +51,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \examples{
 	data(hyper)
+        \dontshow{hyper <- subset(hyper, chr=1:4)}
 	hyperfilled <- fill.geno(hyper)
 	cofactors <- mqmsetcofactors(hyperfilled,4)
 	result <- mqmscan(hyperfilled,cofactors)

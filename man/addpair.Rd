@@ -11,7 +11,8 @@
 \usage{
 addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
         method=c("imp","hk"), model=c("normal", "binary"),
-        incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
+        incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000,
+        forceXcovar=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -20,7 +21,7 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    missing, all chromosomes are scanned. Refer to chromosomes by
    name. Refer to chromosomes with a preceding \code{-} to have all
    chromosomes but those considered.  A logical (TRUE/FALSE) vector may
-   also be used.} 
+   also be used.}
  \item{pheno.col}{Column number in the phenotype matrix to be
    used as the phenotype.  One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of
@@ -29,9 +30,9 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link{makeqtl}}.} 
+   \code{\link{makeqtl}}.}
  \item{covar}{A matrix or data.frame of covariates.  These must be
-   strictly numeric.} 
+   strictly numeric.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are referred to as
@@ -42,7 +43,7 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.  If \code{\link{calc.genoprob}} or
    \code{\link{sim.geno}} were run with
@@ -52,7 +53,9 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    from \code{\link{scanqtl}} are also displayed.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
+ \item{forceXcovar}{If TRUE, force inclusion of X-chr-related covariates
+   (like sex and cross direction).}
 }
 
 \details{
@@ -60,10 +63,10 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   formula, use \code{Q1}, \code{Q2}, etc., or \code{q1},
   \code{q2}, etc., to represent the QTLs, and the column names in the
   covariate data frame to represent the covariates.
-    
+
   We enforce a hierarchical structure on the model formula: if a QTL or
   covariate is in involved in an interaction, its main effect must also
-  be included.   
+  be included.
 
   If neither of the two new QTL are indicated in the \code{formula}, we
   perform a two-dimensional scan as in \code{\link{scantwo}}.  That
@@ -147,12 +150,13 @@ w <- qtlgeno[,2]==2 & qtlgeno[,4]==2
 phe[w] <- phe[w] - 1
 fakebc$pheno[,1] <- phe
 
-fakebc <- calc.genoprob(fakebc, step=2, err=0.001)
+\dontrun{fakebc <- calc.genoprob(fakebc, step=2, err=0.001)
+}\dontshow{fakebc <- calc.genoprob(fakebc, step=0, err=0.001)}
 
 # base model has QTLs on chr 17 and 18
 qtl <- makeqtl(fakebc, chr=c("17", "18"), pos=c(40,30), what="prob")
 
-# scan for an additional pair of QTL, one interacting with the locus 
+# scan for an additional pair of QTL, one interacting with the locus
 #     on 17 and one interacting with the locus on 18
 out.ap <- addpair(fakebc, qtl=qtl, formula = y~Q1*Q3 + Q2*Q4, method="hk")
 
@@ -165,6 +169,6 @@ plot(out.ap)
   \code{\link{fitqtl}}, \code{\link{makeqtl}},
   \code{\link{scanqtl}}, \code{\link{refineqtl}},
   \code{\link{makeqtl}}, \code{\link{scantwo}},
-  \code{\link{addtoqtl}} }  
+  \code{\link{addtoqtl}} }
 
 \keyword{models}
