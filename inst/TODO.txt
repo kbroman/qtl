@@ -12,11 +12,6 @@ SHORT TERM:
 
 o apparent bug in xaxisloc.scanone if a chromosome doesn't start at 0
 
-o Obvious bug in backward selection part of stepwiseqtl: just looking
-  at drop in LOD and not taking into account the penalties; Quoc also
-  reports that it chooses the wrong term to drop; it probably
-  shouldn't drop intx'n on its own before dropping main + intx'n
-
 o speed up R CMD check
 
 o locateXO gives core dump when just one marker on chromosome?
@@ -39,12 +34,6 @@ o Scantwo permutations: currently interaction LOD is obtained by
   taking max(full) - max(add) within chromosome pair and then maximizing
   across chr pairs.  It should be max(full) overall - max(add)
   overall.  The latter will be a bit smaller than the former
-
-o Deal with the NOTE:
-  e.g change plot.geno to plotGeno
-  - allow plot.geno still within package but not the official name?
-  - separate R file enabling backward compatibility
-    (a file that, when sourced, enables the old function names)
 
 o Add argument to refineqtl to scan full chromosomes
 
