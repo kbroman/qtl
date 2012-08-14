@@ -2,13 +2,15 @@
 "To do" list for R/qtl
 ----------------------------------------------------------------------
 This file is intended to contain a list of many of the additions and
-revisions that are planned for the R/qtl package.  
+revisions that are planned for the R/qtl package.
 
 If you any additions or revisions to suggest, please send an email to
 Karl Broman, <kbroman@biostat.wisc.edu>.
 ----------------------------------------------------------------------
- 
+
 SHORT TERM:
+
+o apparent bug in xaxisloc.scanone if a chromosome doesn't start at 0
 
 o speed up R CMD check
 
@@ -33,20 +35,14 @@ o Scantwo permutations: currently interaction LOD is obtained by
   across chr pairs.  It should be max(full) overall - max(add)
   overall.  The latter will be a bit smaller than the former
 
-o Deal with the NOTE: 
-  e.g change plot.geno to plotGeno
-  - allow plot.geno still within package but not the official name?
-  - separate R file enabling backward compatibility
-    (a file that, when sourced, enables the old function names)
-
 o Add argument to refineqtl to scan full chromosomes
 
 o Separate function to get LOD profiles from a fixed model, not
   necessarily the max?  (Or can we use refineqtl for this, but with no
-  iterations?) 
+  iterations?)
 
 o In plot.rfmatrix, include marker name in title (unless main is
-  provided as an argument). 
+  provided as an argument).
 
 o example in help file for multitrait data uses scanall() but that
   function has no help file.
@@ -60,7 +56,7 @@ o Bug in replacemap.cross in case of sex-specific map and
 
 o Bugs in summary.scanone in the case of multiple phenotypes and
   multiple thresholds for formats other than allpheno and allpeaks.
-  I get warnings like 
+  I get warnings like
 
       In lod[, i] > threshold :
       longer object length is not a multiple of shorter object length
@@ -77,7 +73,7 @@ o In sim.cross, to get a QTL on the X chromosome, you need to use
   chr=20 rather than chr="X".
 
 o scanPhyloQTL should give warning if there are different sets of
-  markers. 
+  markers.
 
 o Function to calculate recombination fraction and LOD score for just
   adjacent markers.
@@ -88,7 +84,7 @@ o Function to get no. qtl in a QTL object; also no. interactions (via
   the formula)
 
 o Look at possible global options to see if any might interfere with
-  things. 
+  things.
 
 o Saunak reported a problem in summary.scanone:
 
@@ -96,11 +92,11 @@ o Saunak reported a problem in summary.scanone:
     function does not work (for one data set) when I ask it for p-values
     with pvalues=TRUE.  It works fine when I don't ask for the p-values.
     ------------------------------------------
-    Error in calcPermPval(peaks, perms) : 
+    Error in calcPermPval(peaks, perms) :
      NA/NaN/Inf in foreign function call (arg 4)
     -------------------------------------------
 
-o checkcovar gives messed up column numbers re 
+o checkcovar gives messed up column numbers re
   "Following phenotypes are not numeric"
 
 o Column names in output of addpair summary (particularly regarding
@@ -133,7 +129,7 @@ o replacemap when you have calc.genoprob results but from step=0;
   seems to give an error
 
 o Revise calc.errorlod to do things in parallel (by chromosome or
-  individual?  ... I'd guess in batches of individuals) 
+  individual?  ... I'd guess in batches of individuals)
 
 o Use format.pval in printing pvalues, so they're never strictly 0.
 
@@ -148,7 +144,7 @@ o qtl x covar interactions in stepwiseqtl
 o scantwo: ability to scan just specific chromosome pairs
 
 o special treatment of X chromosome in scantwo permutations and in
-  stepwiseqtl 
+  stepwiseqtl
 
 ----------------------------------------------------------------------
 
@@ -162,7 +158,7 @@ o cim(): rather than forward selection to a fixed number of markers,
   fixed maximum.
 
 o get scanone and scantwo to work with a single marker on a
-  chromosome. 
+  chromosome.
 
 o function for getting x axis location in scantwo picture (like the
   new xaxisloc.scanone)
@@ -179,13 +175,13 @@ o Better way to make use of ... in plot functions that allows
 
 o method for having alternative genetic maps and for storing a
   physical map; linear interpolation for plotting scanone output in
-  Mbp. 
+  Mbp.
 
 o make various functions work appropriately with class "special"
   (eg, plot and summary)
 
 o Fix convergence problems in scanone with method="ehk", especially
-  in the case of covariates and interactions. 
+  in the case of covariates and interactions.
 
 o Plotting scanone results for *many* phenotypes as an image plot.
   (Perhaps threshold the really high LODs and eliminate curves that
@@ -200,7 +196,7 @@ o Go through all of the various plot functions and make sure that
   modified with par(cex.axis)
 
 o Finish off the work to get coefficient estimates by imputation in
-  fitqtl for the X chromosome in BC and F2. 
+  fitqtl for the X chromosome in BC and F2.
 
 o Revise c.cross so that you can combine crosses even if there are
   different numbers of chromosomes
@@ -214,21 +210,21 @@ o Documentation on RI lines.
 MEDIUM TERM:
 
 o eQTL-related stuff:
-  
+
   - Compressing calc.genoprob results (simpler version of locations,
     or just the grid)
 
   - Mb positions within cross object; multiple genetic maps
-  
+
   - Positions in phenotype object + other annotations
 
 o For the stepwiseqtl function:
    - should be able to save all models with plod within some value
-     of the best model 
+     of the best model
    - QTL x covariate interactions in countterms
    - it'd be nice to be able to have all models that are one term
      away from the optimal model (maybe this could be a separate
-     function) 
+     function)
    - it'd be nice to be able to easily make a plot of the final model
      plus information about all models that are one term away
 
@@ -248,7 +244,7 @@ o scanone (or is it scantwo?) with method="hk": Major memory problems
 
 o X chromosome for 4- and 8-way RIL by sibling mating (also 2-way RIL).
 
-o pull all of the genoprob and imputation information out of 
+o pull all of the genoprob and imputation information out of
   the qtl objects and replace it with indices to the information
   in the cross object.  (This stuff takes up too much space!)
 
@@ -256,7 +252,7 @@ o lodint/bayesint as option to summary.scanone.
 
 o conditional LOD scores from scantwo output.
 
-o scanqtl: if formula symmetric w/ respect to two QTL that are on the 
+o scanqtl: if formula symmetric w/ respect to two QTL that are on the
   same chromosome, only scan the triangle (rather than the square)
 
 o write tools for converting the output from scanqtl() to the format
@@ -264,7 +260,7 @@ o write tools for converting the output from scanqtl() to the format
   2-d search, or print a warning otherwise.
 
 o pairprob at markers + putative QTL?  For linked loci in scanqtl by
-  HK/EM. 
+  HK/EM.
 
 o Include Bjarke's code on eHK for scantwo.
 
@@ -273,7 +269,7 @@ o revise read.cross with format="mm" to deal with ril by selfing
 
 o read.cross for "qtx" sometimes doesn't seem to take the
   genotype pattern appropriately; read in a backcross as if it
-  were an F2. 
+  were an F2.
 
 o An NA in the mapmaker data file caused an error in read.cross;
   the line became too long.  Maybe this is true whenever an item
@@ -292,10 +288,10 @@ o Add additional HMM functions for the X chr in RIL, as the marginal
   4r/(1+4r)
 
 o Add appropriate functions to analyze advanced intercrosses (AILs)
-  and advanced backcross (BCn). 
+  and advanced backcross (BCn).
 
 o Allow phenotypes on multiple individuals (esp for recombinant inbred
-  lines). 
+  lines).
 
 ----------------------------------------------------------------------
 

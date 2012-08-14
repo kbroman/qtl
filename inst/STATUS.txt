@@ -7,17 +7,17 @@ http://www.rqtl.org
     The R/qtl package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License,
     version 3, as published by the Free Software Foundation.
-    
+
     This program is distributed in the hope that it will be useful,
     but without any warranty; without even the implied warranty of
     merchantability or fitness for a particular purpose.  See the GNU
     General Public License for more details.
-    
+
     A copy of the GNU General Public License, version 3, is available
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.25, 5/29/2012:
+Version 1.25, 8/13/2012:
 
 Major changes:
 
@@ -25,8 +25,40 @@ Major changes:
 
 Minor changes:
 
+  Revised write.cross to output data in "qtab" format; see
+  https://github.com/qtlHD/qtlHD/blob/master/doc/input/qtab.md
+
+  Revised summary.scanone to be more consistent about only picking one
+  row per chromosome even when there are multiple positions sharing
+  the maximum LOD on that chromosome.
+
+  Fixed bug in stepwiseqtl; backward deletion steps were not dealing
+  with the drop-one-qtl results from fitqtl appropriately.
+
+  Revised fitqtl to include formulas and lod scores as attribute in
+  drop-one-qtl analysis.
+
+  Fixed a bug in fitqtl regarding the adjustment for the X
+  chromosome.  The problem shows up in stepwiseqtl; if X chr enters
+  model and is then removed, the covariates adjusting for sex and pgm
+  continue to be used.  Added argument to refineqtl, fitqtl, scanqtl,
+  addqtl, addpair, to force X-related covariates into model.
+
+  In stepwiseqtl, include penalties as attribute in the output.
+
+  Slight change to checkcovar(): omit individuals with
+  phenotypes/covariates that are +/- Inf, as well as those that are
+  missing.
+
+  Handle missing values in mf.stahl and imf.stahl.
+
+  Fixed rare bug in fitqtl regarding X chr loci with interactions.
+
   Fixed bug in sim.cross for type="bc" that resulted in loss of "X"
   chromosome type.
+
+  Speed up some of the examples in the help file, so that R CMD check
+  doesn't take so long.
 
 
 Version 1.24, 5/25/2012:
@@ -55,7 +87,7 @@ Major changes:
   Revised tutorials to use the new naming scheme.
 
   Revised the emission probabilities for dominant markers in an F2,
-  for the HMM calculations.  Previously, we had 
+  for the HMM calculations.  Previously, we had
       Pr(O = not A | g = AA) = Pr(O = not B | g = BB) = epsilon/2
   these have been changed to
       Pr(O = not A | g = AA) = Pr(O = not B | g = BB) = epsilon
@@ -78,7 +110,7 @@ Minor changes:
   multiple markers but they span < step from calc.genoprob.
 
   Fixed a bug in interpPositions; problems if the input had missing
-  rownames. 
+  rownames.
 
   Renamed the README.txt file as INSTALL_ME.txt; added a new
   README.txt that provides a brief description of the package.
@@ -131,7 +163,7 @@ Major changes:
   different orders (or with some markers appearing in one map and not
   the other).  We still require that the two maps have the same
   chromosomes and chromosome names (with chromosomes in the same
-  order).  
+  order).
 
   Revised scantwo to allow analysis of individual chromosome pairs,
   and reorganized the way that scantwo permutations are done (first
@@ -176,7 +208,7 @@ Minor changes:
   second component.
 
   Slight change in plot.info to deal with inclusion of 'main'
-  argument. 
+  argument.
 
   Added NAMESPACE file.
 
@@ -227,7 +259,7 @@ Major changes:
   Added the option stepwidth="max" in calc.genoprob, sim.geno, and
   argmax.geno.  This inserts the minimal number of pseudomarkers so
   that the maximum step between points is as indicated by the "step"
-  argument. 
+  argument.
 
 Minor changes:
 
@@ -238,13 +270,13 @@ Minor changes:
   crash in scantwo() for 4-way crosses with an X chromosome.
 
   Fixed a bug in mqmscan() regarding the chromosome names in the
-  output. 
+  output.
 
   Trap cases of X chromosome for crosses other than bc/f2 in
-  stepwiseqtl, makeqtl, addqtl, and addpair.  
+  stepwiseqtl, makeqtl, addqtl, and addpair.
 
   Added a function phenames() for pulling out the names of the
-  phenotypes. 
+  phenotypes.
 
   Small revisions and enhancements to some of the MQM plots.
 
@@ -259,7 +291,7 @@ Minor changes:
   names, another resulting in pseudomarkers outside the terminal
   markers even when off.end=0.
 
-  Fixed bugs in scanone and scantwo regarding batch mode for 
+  Fixed bugs in scanone and scantwo regarding batch mode for
   model != "normal".
 
   Fixed a bug in refineqtl; it was including all possible covariates
@@ -276,7 +308,7 @@ Major changes:
 
   Added a tutorial on genetic map construction; find it within the
   package at docs/geneticmaps.pdf, or (more simply, probably), find it
-  on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf 
+  on the web at http://www.rqtl.org/tutorials/geneticmaps.pdf
 
   Added two additional formats to summary.scanone(), "tabByCol" and
   "tabByChr".  These produce tables of LOD peaks organized by LOD
@@ -309,7 +341,7 @@ Minor changes:
   Added a function pull.rf for pulling out either the estimated
   recombination fractions or the lod scores, as calculated by
   est.rf(), from a cross object.  Also added a function plot.rfmatrix,
-  for plotting a slice through these. 
+  for plotting a slice through these.
 
   Added a function cleanGeno for removing genotypes that are possibly
   in error (as indicated by apparent tight double-crossovers).  Use
@@ -349,7 +381,7 @@ Minor changes:
   useful more generally.)
 
   Revised effectplot so that if mname2 or mark2 are given but mname1
-  and mark1 are not, the arguments get switched.  
+  and mark1 are not, the arguments get switched.
 
   Fixed a bug in shiftmap().
 
@@ -381,14 +413,14 @@ Minor changes:
 
   Revised geno.table so that, for 4-way crosses, it gives P-values in
   most cases.  (Previously, it just did so for fully informative
-  markers.) 
+  markers.)
 
   Changed the default format for max.scanPhyloQTL and
   summary.scanPhyloQTL from format="lod" to format="postprob".
 
   Added function inferredpartitions for pulling out the inferred
   partitions for a specified chromosome from the output of
-  scanPhyloQTL. 
+  scanPhyloQTL.
 
   Fixed a problem in ripple with method="likelihood".  (The problem
   arose in revisions in version 1.17.)
@@ -412,10 +444,10 @@ Major changes:
   Implemented the fit of models for binary traits in fitqtl(), by
   Haley-Knott regression and multiple imputation.  This model can also
   be used in refineqtl, scanqtl, addqtl, addpair, addint, stepwiseqtl,
-  and addcovarint. 
+  and addcovarint.
 
   Implemented Haley-Knott regression for binary traits in scanone and
-  scantwo. 
+  scantwo.
 
   In mqmscan(), replaced the arguments step.min and step.max with
   a single argument, off.end (to be more like scanone).
@@ -451,7 +483,7 @@ Minor changes:
   just using one CPU.
 
   Added a function pull.markers, which is the opposite of
-  drop.markers. 
+  drop.markers.
 
   Added a function drop.dupmarkers, for dropping markers with
   duplicate names.
@@ -459,7 +491,7 @@ Minor changes:
   Added an argument 'bandcol' in plot.scanone, to specify a color for
   alternating bands to indicate chromosomes.  The default
   (bandcol=NULL) is to not plot such bands.  A good choice might be
-  bandcol="gray70".  
+  bandcol="gray70".
 
   Added an argument 'chr' in est.map, to estimate maps for just a
   subset of chromosomes.
@@ -481,7 +513,7 @@ Minor changes:
   Added a function allchrsplits(), for testing whether to split a
   linkage group/chromosome into two, by calculating a LOD score for
   each interval comparing the full linkage group to the split into two
-  groups at that interval.  
+  groups at that interval.
 
   Added a function nqrank() for transforming a numeric vector into the
   corresponding normal quantiles.
@@ -491,7 +523,7 @@ Minor changes:
 
   Fixed a bug in mqmpermutation(), where it was using the wrong
   phenotype name in the output, if pheno.col is something other than
-  1. 
+  1.
 
   Revised est.map for 4-way crosses slightly.  We'd previously
   randomized the map before starting EM, which seemed a bad idea.
@@ -519,20 +551,20 @@ Minor changes:
   suggested by Brian Yandell.]
 
   Revised plot.geno so that the ... argument can include xlim and
-  ylim. 
+  ylim.
 
   Fixed bug in convert2sa for case of chromosome with just 1 or 2
-  markers. 
+  markers.
 
   Fixed bug in refineqtl that resulted in sometimes the rownames in
   the lod profile attribute being messed up.
 
   Revised scanone and scantwo to trap error if perm.strata is not of
-  the correct length. 
+  the correct length.
 
   Added argument 'ind.noqtl' to scanone, which indicates individuals
   that are assigned no QTL effect.  This is for rare (largely
-  internal) use for the case that one is combining multiple crosses.  
+  internal) use for the case that one is combining multiple crosses.
 
   Fix bug in internal function create.map, for case of a sex-specific
   map with very small length.
@@ -548,12 +580,12 @@ Minor changes:
 
   Revised fitqtl() so that estimated QTL effects in RIL or doubled
   haploid are as they should be (half the difference between the two
-  homoyzogotes).  
+  homoyzogotes).
 
   Added a function rescalemap for rescaling a genetic map (as for the
   case that a cross object has marker positions in basepairs and one
   wishes to convert them to Mbp or some approximation of cM
-  locations).  
+  locations).
 
   Added a warning message to summary.cross for the case that there are
   chromosomes > 1000 cM in length (which might indicate that they're
@@ -561,11 +593,11 @@ Minor changes:
 
   Revised pull.map to have argument as.table; if as.table=TRUE the map
   is returned as a simple table with chromosome assignments and
-  positions.  
+  positions.
 
   Revised fill.geno to have a third option, method="no_dbl_XO", which
   fills in missing genotypes between markers with exactly the same
-  genotype.  
+  genotype.
 
   Revised est.map so that the output with verbose=TRUE is less verbose
   and more informative.
@@ -594,14 +626,14 @@ Minor changes:
 
   Added functions convert2riself and convert2risib, for converting a
   cross object to be treated as RIL by selfing or sib mating,
-  respectively. 
+  respectively.
 
   Added function simulateMissingData, for omitting genotypes at random
   from a cross object.
 
   Revised write.cross so that it can handle non-numeric phenotypes.
   Also changed the default for the "digits" argument to NULL, so that
-  phenotypes and map positions are not rounded.  
+  phenotypes and map positions are not rounded.
 
   Revised read.cross to have arguments error.prob and map.function, to
   be used if est.map is called.
@@ -639,7 +671,7 @@ Minor changes:
 
   lodint and bayesint now stop with an error if chr or qtl.index have
   length > 1.  Before, they gave weird results and a meaningless
-  error. 
+  error.
 
   In read.cross with format="csv", give a better error message if
   there are odd values in the marker positions.
@@ -706,7 +738,7 @@ Minor changes:
   multiple scantwo results.
 
   Revised summary.map to deal with the case of a single marker on a
-  chromosome.  
+  chromosome.
 
   Revised scantwo so that phenotype names are in dimnames of the lod
   component of the output.
@@ -732,7 +764,7 @@ Major changes:
   genotype data on the founder strains, which may be simulated with
   the new function simFounderSnps.  The encoding of genotypes in
   multiple-strain RIL is quite complicated.  See the help file for
-  sim.cross.  
+  sim.cross.
 
   Added the ability to deal with 4- and 8-way RIL in calc.genoprob,
   sim.geno, argmax.geno, est.map, ripple, est.rf, tryallpositions,
@@ -753,7 +785,7 @@ Minor changes:
 
   Added a CITATION file; type citation("qtl") within R to get
   information on the citation to use in articles that make use of
-  R/qtl. 
+  R/qtl.
 
   You can now subset crosses with brackets, [ ], as with a matrix with
   rows=chromosomes and columns=individuals.  See the examples in the
@@ -776,7 +808,7 @@ Minor changes:
 
   Added an argument mark.diagonal to plot.rf(), to include black lines
   segments around the pixels on the diagonal.  This helps to separate
-  the upper left triangle from the lower right triangle. 
+  the upper left triangle from the lower right triangle.
   (The default is FALSE.)
 
   In geno.crosstab, the first argument (mname1) can now be a vector
@@ -790,7 +822,7 @@ Minor changes:
 
   Revised summary.scanone and summary.scantwo so that the perms
   argument can contain a single column of permutation results, in
-  which case they are assumed to apply to any  LOD score columns. 
+  which case they are assumed to apply to any  LOD score columns.
 
   Revised summary.scanone so that the perms argument can be
   scantwo permutations results; added an internal utility function,
@@ -825,18 +857,18 @@ Minor changes:
   not provided.
 
   In compareorder(), switch.order(), and ripple(), changed the default
-  value for the tol argument to 1e-6 (as in est.map). 
+  value for the tol argument to 1e-6 (as in est.map).
 
   Slight change in compareorder() so that the order argument can be of
   length n.mar+2, but with only the first n.mar items considered.
 
   Slight change in checks of chr argument in ripple and switch.order;
   added a function testchr for checking that a chromosome argument is
-  okay. 
+  okay.
 
   In the output of c.cross, there is a numeric phenotype "cross" that
   indicates which individuals are from which cross, as a single
-  column. 
+  column.
 
   Revised fixXgeno.f2 so that warnings are given the appropriate
   allele labels (if they are provided to read.cross).
@@ -845,7 +877,7 @@ Minor changes:
   QTL genotype probabilities and imputated genotypes
 
   Added a function chrnames, for pulling out the chromosome names from
-  a cross.  
+  a cross.
 
   Revised the software license to the GNU General Public License,
   version 3.
@@ -872,7 +904,7 @@ Minor changes:
   (and above), for clarity and consistency.
 
   Revised write.cross so that it may write doubled haploid (type "dh")
-  data. 
+  data.
 
   Fixed a problem with movemarker regarding the treatment of
   chromsome names.
@@ -904,7 +936,7 @@ Minor changes:
   argument for producing a self-defined title.
 
   Slight change in plot.qtl, regarding placement of text and size of
-  arrows. 
+  arrows.
 
   In summary.fitqtl, print.addint, and print.addcovarint, eliminated
   an extraneous blank line after the model formula.
@@ -948,7 +980,7 @@ Major changes:
   (calculated with est.rf) to partition markers into linkage groups.
   orderMarkers uses a quick but not very good algorithm for ordering
   the markers on a chromosome (minimizing the number of obligate
-  crossovers).  
+  crossovers).
 
   Added a function addcovarint, which is similar to addint, but adds
   one QTL x covariate interaction at a time.
@@ -959,8 +991,8 @@ Minor changes:
   enable one to plot scanone or scantwo results relative to another
   map (with positions interpolated based on marker locations).  These
   can be used, for example, so that one may plot scanone or scantwo
-  results relative to a physical map.  
-   
+  results relative to a physical map.
+
   Added a function replacemap.cross, which is the same as the long
   extant function replace.map.  This was so that I could the functions
   replacemap.scanone and replacemap.scantwo (see above).  All can be
@@ -1010,13 +1042,13 @@ Minor changes:
   markers for each individual.
 
   Revised movemarker so that one can move a marker onto a totally new
-  chromosome. 
+  chromosome.
 
   Revised sim.cross so that if the input map object has no chromosome
   names, the chromosomes in the output cross object still have names.
 
   Revised summary.cross to give a warning if the chromosomes are not
-  named. 
+  named.
 
   Added a function convert2sa for converting a sex-specific map object
   to a sex-averaged map object by pulling out the female marker
@@ -1050,7 +1082,7 @@ Minor changes:
   that there are no peaks meeting the threshold/alpha.
 
   Fixed a bug in switch.order related to the change in references to
-  chromosomes.  
+  chromosomes.
 
 
 Version 1.09, 7/18/2008:
@@ -1060,15 +1092,15 @@ Major changes:
   Added a function stepwiseqtl() for performing forward/backward
   selection to identify a multiple QTL model, with model choice made
   via a penalized LOD score, with separate penalties on main effects
-  and interactions.  
+  and interactions.
 
   The documents "Brief tour of R/qtl" and "New functions for exploring
   multiple-QTL models" were revised to discuss the stepwiseqtl
-  function. 
+  function.
 
   calc.penalties() uses permutation results for a 2-dimensional, 2-QTL
   scan to derive penalties for the penalized LOD scores used by
-  stepwiseqtl(). 
+  stepwiseqtl().
 
   plotModel() is a new function for creating a simple graphical
   representation of a QTL model.
@@ -1076,7 +1108,7 @@ Major changes:
   Added an additional cross type, "dh", for doubled haploids.  This is
   treated like a backcross, though genotypes will be indicated as
   homozygotes.  Changed a whole bunch of functions very slightly to
-  accommodate this. 
+  accommodate this.
 
   The argument pheno.col in many functions can now be a vector of
   numeric phenotypes.  This could be useful for studying the results
@@ -1134,12 +1166,12 @@ Minor changes:
 
   We now allow formulas in fitqtl, refineqtl, addqtl, etc., to be
   character string representations of formulas.  (They are then
-  converted.) 
+  converted.)
 
   Added a function cbind.scanone (which is identical to c.scanone).
 
   The output of fitqtl now includes an element "lod" containing the
-  LOD score from the fit of the full model.  
+  LOD score from the fit of the full model.
 
   In reorderqtl, if the argument neworder is not provided, the QTL are
   ordered by chromosome and then by position within a chromosome.
@@ -1196,7 +1228,7 @@ Minor changes:
   genotype labels on the x-axis.
 
   Revised print.map so that it doesn't print the log likelihood
-  attribute. 
+  attribute.
 
   Fixed a bug in addpair if the formula is missing.
 
@@ -1206,7 +1238,7 @@ Minor changes:
   the "df" (degrees of freedom) attributes.
 
   Fixed a bug in read.cross with format "csv" (or "csvs" or "csvr" or
-  "csvsr") so that dec="," can be used as an argument.  
+  "csvsr") so that dec="," can be used as an argument.
 
   Fixed a potential bug in read.cross with format "mm" for pulling out
   the cross type.
@@ -1215,7 +1247,7 @@ Minor changes:
 
   Fixed a bug in scanone permutations in the case of a single
   covariate with some individuals with missing phenotypes and/or
-  covariates. 
+  covariates.
 
   A more meaningful error message is given in makeqtl in the case that
   multiple markers are at identical positions, so that qtl locations
@@ -1277,7 +1309,7 @@ Major changes:
 
   Added a function, tryallpositions(), for testing all possible
   positions for a given marker, keeping the order of all other markers
-  fixed.  
+  fixed.
 
   Added a function, compareorder(), for comparing a given order of
   markers on a single chromosome to the current one contained within a
@@ -1305,7 +1337,7 @@ Minor changes:
 
   Added a function countXO for counting the number of obligate
   crossovers for each individual across the genome or on individual
-  chromosomes.  
+  chromosomes.
 
   Added a function plot.qtl, for plotting the locations of QTL in a
   qtl object against the genetic map.
@@ -1321,7 +1353,7 @@ Minor changes:
   not repeated multiple times when scanqtl calls fitqtl.
 
   Added the ability to calculate joint QTL probabilities assuming
-  conditional independence of QTL genotypes given markers genotypes.  
+  conditional independence of QTL genotypes given markers genotypes.
   (An approximation, but it speeds up scantwo slightly, for a chr
   versus itself.) Added an argument assumeCondIndep to scantwo().
 
@@ -1394,7 +1426,7 @@ Minor changes:
   intercross (that is, it assumed additivity of alleles); this is
   fixed: it now uses two columns.  A revised forward selection
   algorithm for intercrosses was written, to select these pairs of
-  columns together.  
+  columns together.
 
   Fixed a slight bug in lodint and bayesint that changed the marker
   names if the LOD peak was at one end of the interval.
@@ -1404,7 +1436,7 @@ Minor changes:
 
   Changed the default tolerance in est.rf and est.map to 10^-6 (rather
   than 10^-4).  Increased the default maxit (maximum no. iterations)
-  to 10000. 
+  to 10000.
 
   Added an extra column in the results of summary.map, giving the
   maximum distance between markers on each chromosome and overall.
@@ -1422,7 +1454,7 @@ Minor changes:
   Fixed a bug in scantwo perms for the use of the argument clean.scantwo.
 
   Fixed a bug in summary.cross in the case of invalid genotypes in a
-  cross. 
+  cross.
 
   Fixed a slight bug in subset.cross regarding the recombination
   fractions from est.rf().
@@ -1443,7 +1475,7 @@ Minor changes:
   exactly two markers.
 
   Fixed a bug in geno.table; missing genotypes weren't shown for the X
-  chromosome.  
+  chromosome.
 
   Fixed a bug in fit.stahl.
 
@@ -1460,7 +1492,7 @@ Minor changes:
   revisions to get things in the map file to line up.
 
   Made a minor change to plot.map, so that if the "..." contain xlim
-  or ylim, they are used in place of the defaults.  
+  or ylim, they are used in place of the defaults.
 
 
 Version 1.07, 9/20/2007:
@@ -1469,11 +1501,11 @@ Major changes:
 
   Completely rewrote the effectscan function, so that it now uses
   multiple imputation results and deals with the X chromosome
-  appropriately.  
+  appropriately.
 
   Fixed an important bug in fitqtl, in which incorrect results could
   be obtained if covariates were placed before QTL terms in the
-  formula. 
+  formula.
 
 Minor changes:
 
@@ -1533,7 +1565,7 @@ Major changes:
   Revised geno.table so that it gives reasonable p-values for the X
   chromosome and for the case of dominant markers in an intercross.
   Added a chr argument to obtain results for only selected
-  chromosomes. 
+  chromosomes.
 
   Added a function cim() for performing composite interval mapping by
   one of the schemes used in QTL Cartographer: forward selection at
@@ -1543,7 +1575,7 @@ Major changes:
   results may be plotted or summarized using the functions for output
   from scanone().  Also added a function add.cim.covar, for adding
   dots, to a plot from plot.scanone(), to indicate the selected marker
-  covariates. 
+  covariates.
 
   Extended the code for fitting the Stahl model for crossover
   interference to the case of intercross data.  (Modified the
@@ -1563,7 +1595,7 @@ Minor changes:
 
   Added a function add.threshold() for adding a significance threshold
   (estimated via permutation results) to a plot created by
-  plot.scanone(). 
+  plot.scanone().
 
   Revised plot.pxg() so that unobserved genotypes will not be
   displayed.  This was needed for the plot of two-locus genotypes on
@@ -1594,12 +1626,12 @@ Minor changes:
   the results was wrong.
 
   Fixed a bug in c.cross concerning combining backcross and
-  intercrosses. 
+  intercrosses.
 
   Fixed a bug in effectplot() regarding pseudomarkers with names like
   "c3.loc42.5".
 
-  Fixed a bug in discan, for the case of method="mr".  
+  Fixed a bug in discan, for the case of method="mr".
 
   Fixed a bug in write.qtlcart regarding RIL.
 
@@ -1608,29 +1640,29 @@ Minor changes:
   locus, among those having the maximum LOD.)
 
   Revised summary.scanone so that the rule is to pick out LOD scores >
-  (rather than >=) the threshold.  
+  (rather than >=) the threshold.
 
   Revised -.scanone, -.scanoneperm so that very small differences get
   set to 0.
 
   Added ability to halt calculations via Ctrl-c in many of the C
   routines. (Previously, you'd have to wait for an exit from the C
-  code.) 
+  code.)
 
   There was a bug in sim.cross() regarding the QTL effects for a
-  backcross.  
+  backcross.
 
   Fixed a bug in drop.markers, for a 4-way cross.
 
   Fixed a bug in est.map, for a 4-way cross and the case of
-  sex-averaged maps. 
+  sex-averaged maps.
 
   Made a slight change regarding estimating rec fracs in 4-way cross
-  (possibly immaterial).  
+  (possibly immaterial).
 
   A slight change in the C code for imf_stahl.
 
-  Modified locate.xo() slightly...when there is no crossover, it 
+  Modified locate.xo() slightly...when there is no crossover, it
   gives numeric(0) rather than NULL.
 
   Fixed a slight problem with the format of the degrees of freedom in
@@ -1643,22 +1675,22 @@ Minor changes:
   that we look only for error.prob <= 0.5.
 
   Fixed a slight bug regarding sex-specific maps in the create.map()
-  function. 
+  function.
 
   Slight revision in plot.geno, so that if the "ind" argument contains
   duplicates of individuals, only the unique individuals are
-  plotted.  
+  plotted.
 
   Slight revisions to scanone, scantwo, and discan, so that, in the
   midst of permutations, just one instance of various warnings is
-  printed.  
+  printed.
 
   Changed the names of some of the sample data files.
 
   Revised the fitstahl function to use of the estimated map for one
   value of m as the starting point for the next value.  This can
   really cut down on the required EM iterations and so speeds things
-  up. 
+  up.
 
   In the "map" component of the output from scantwo, the name of the
   second column is now "pos" rather than "map", to correspond more
@@ -1684,7 +1716,7 @@ Minor changes:
 
   Revised plot.scantwo so that the upper and lower arguments can take
   values "fv1" and "av1" as aliases for "cond-int" and "cond-add",
-  respectively.  
+  respectively.
 
 
 Version 1.05, 11/8/2006:
@@ -1731,7 +1763,7 @@ Major changes:
   functions.  I have written documents to explain the use of the new
   functions.  These are distributed with the code and are also
   available at the R/qtl website (http://www.rqtl.org), under
-  "Tutorials". 
+  "Tutorials".
 
   summary.scanone:  There is now a format argument, useful for the
   case that the scanone result contains multiple LOD score columns
@@ -1742,7 +1774,7 @@ Major changes:
   score for each the peak from each LOD column (format="allpeaks").
   The function now also can take permutation results in order to
   automatically calculate LOD thresholds or to calculate
-  genome-scan-adjusted p-values.  
+  genome-scan-adjusted p-values.
 
   summary.scantwo: This was quite radically changed.  For each pair of
   chromosomes (including a chromosome with itself), we calculate five
@@ -1755,7 +1787,7 @@ Major changes:
   best single-QTL LOD for the pair of chromosomes.  This is the
   recommended output, indicated via the argument what="best".  One may
   also set the 'what' argument to "full", "add", or "int".  (See the
-  help file for summary.scantwo.)  The 'thresholds' argument now 
+  help file for summary.scantwo.)  The 'thresholds' argument now
   requires five values, or one may provide permutation results plus a
   set of five 'alphas' (significance levels).  There is also an
   argument 'allpairs'; the default is TRUE, in which case all pairs of
@@ -1767,7 +1799,7 @@ Major changes:
   than multiple such, as before.  However, we have added functions
   c.scanone and cbind.scanoneperm for combining the columns in
   multiple runs of scanone (generally either multiple phenotypes or
-  multiple methods).  
+  multiple methods).
 
   Completely revised the summary.scantwo function.  The old version is
   saved as the function summary.scantwo.old().
@@ -1791,7 +1823,7 @@ Major changes:
   thresholds is a bit complicated.)  We've also added a function
   c.scanoneperm for combining the results of multiple permutation
   runs.  (This because their combination is not so simple as before.)
-  
+
   Added functions -.scanoneperm, +.scanoneperm, -.scantwoperm, and
   +.scantwoperm, for taking sums or differences of permutation results
   from scanone or scantwo.  This is particularly useful for getting
@@ -1821,12 +1853,12 @@ Major changes:
   Revised the sim.cross() function so that, with a backcross, the
   effect in the "model" argument is to be specified as the difference
   between the average phenotypes for the heterozygotes and the
-  homozygotes.  (Previously, it was 1/2 this, which is 
+  homozygotes.  (Previously, it was 1/2 this, which is
   different from the typical parameterization.)
 
   Added the ability, for a backcross, to estimate a genetic map under
-  the Stahl model for crossover interference (of which the chi-square 
-  model is a special case).  Also added a function, fitstahl, for 
+  the Stahl model for crossover interference (of which the chi-square
+  model is a special case).  Also added a function, fitstahl, for
   getting the maximum likelihood estimates in the Stahl model (or the
   chi-square model); the genotyping error probability may be treated
   as known or may also be estimated.
@@ -1835,10 +1867,10 @@ Major changes:
   the case that multiple phenotypes are to be run, whether only
   individuals with complete data on all phenotypes
   (use="complete.obs") or all individuals (use="all.obs") are to be
-  used. 
+  used.
 
   The degrees of freedom are added as attributes in the output from
-  scanone and scantwo, including the case of permutations.  
+  scanone and scantwo, including the case of permutations.
 
 Minor changes:
 
@@ -1846,13 +1878,13 @@ Minor changes:
   character by default.  The default is to use comment.char=""; that
   is, no symbol is treated as an indicator of comments.  For the
   comma-delimited file formats, one may have a character interpreted
-  as indicating comments using the comment.char argument.  
+  as indicating comments using the comment.char argument.
 
   Fixed a bug for the new "batch mode" permutations in scanone and
   scantwo with method="hk" or ="imp".  The trick only works if there
   is no X chromosome or all individuals have the same sex and cross
   direction or permutations are done stratified within sex and
-  direction. 
+  direction.
 
   Added an argument "show.marker.names" to plot.map and plot.scanone,
   so that marker names can be added to these plots.
@@ -1861,12 +1893,12 @@ Minor changes:
   formats.
 
   Added a function plot.pheno for plotting a histogram or barplot of
-  a phenotype distribution.  
+  a phenotype distribution.
 
   Added a function condense.scantwo for producing condensed versions
   of scantwo output, containing just the maximum LOD scores on each
   pair of chromosomes.  One can get summaries from these but not
-  plots. 
+  plots.
 
   In plot.info, added step, off.end, error.prob and map.function
   arguments.  The function now always calls calc.genoprob rather than
@@ -1880,7 +1912,7 @@ Minor changes:
   clean.cross.  Added a function clean.scantwo() for cleaning up the
   output of scantwo: any values that are missing or are < 0 are
   replaced by 0 and any LOD scores for pairs of loci that do not have
-  a marker between them are set to 0.  
+  a marker between them are set to 0.
 
   The output of scantwo() now contains the original genetic map as an
   attribute; this is needed for clean.scantwo().
@@ -1905,7 +1937,7 @@ Minor changes:
   better error message is printed if addcovar or intcovar are not
   numeric.  Also added a warning message if addcovar or intcovar
   appear to be over-specified (having columns that need to be
-  dropped). 
+  dropped).
 
   Fixed a slight problem in the column names from scanone() in the
   case of multiple phenotypes; changed the convention for this.  Now
@@ -1927,7 +1959,7 @@ Minor changes:
   more consistent with other functions.
 
   Changed the name of the argument "which" in plot.rf and nmissing to
-  "what".  
+  "what".
 
   Added an argument "verbose" to the ripple function; if
   verbose=FALSE, the function doesn't print anything.  Also modified
@@ -1943,7 +1975,7 @@ Minor changes:
   the case of method="imp" with multiple phenotypes.
 
   Fixed a bug in scanone() regarding method="mr-imp" with
-  permutations. 
+  permutations.
 
   Revised the listeria data set slightly; added an "alleles"
   attribute, with alleles "C" and "B", as this was a cross between
@@ -1980,7 +2012,7 @@ Minor changes:
 
   A couple of changes were made to the write.cross.qtlcart():
   round the map locations, make sure backcross code is correct, and
-  make sure RIL data is written as 0/2 rather than 0/1.    
+  make sure RIL data is written as 0/2 rather than 0/1.
 
   Revised plot.info() so that if method="entropy" or
   method="variance", only the column requested is returned.
@@ -1990,7 +2022,7 @@ Minor changes:
   error if QTLs were to be simulated.
 
   Fixed a bug in fill.geno for the case that a chromosome has just one
-  marker.  
+  marker.
 
   Removed the function convert.cross(), which converted cross data
   from the format used in R/qtl version < 0.65 to the current format.
@@ -2023,9 +2055,9 @@ Major changes:
   numerous small changes throughout the package.
 
   The maps used for the results from argmax.geno(), calc.genoprob()
-  and sim.geno() are now saved as an attribute on the data they 
+  and sim.geno() are now saved as an attribute on the data they
   create (within the cross object) so that create.map() doesn't have
-  to be called repeatedly. 
+  to be called repeatedly.
 
   Moved the code for simulating genotype data in sim.cross() into C,
   to increase speed, and modified it so that one may simulate under
@@ -2050,7 +2082,7 @@ Minor changes:
 
   Added a "chr" argument to pull.geno() and pull.map(), so that you
   can pull out the genotype data or map for a selected set of
-  chromosomes. 
+  chromosomes.
 
   Fixed a slight bug in locatemarker(), used by makeqtl().
 
@@ -2058,7 +2090,7 @@ Minor changes:
   the class stuff doesn't get in the way.
 
   Included an additional argument [stepwidth = c("fixed", "variable")]
-  in the internal create.map function, for Brian Yandell and the 
+  in the internal create.map function, for Brian Yandell and the
   R/bmqtl package.  This argument was also added to calc.genoprob(),
   sim.geno() and argmax.geno().  We also added a "stepwidth"
   attribute to the bits that these functions produce.
@@ -2069,7 +2101,7 @@ Minor changes:
   this function will only give the results for a single phenotype.
 
   Made a slight change regarding the sizes of the labels in
-  plot.pxg() and added an argument concerning colors. 
+  plot.pxg() and added an argument concerning colors.
 
   Fixed a bug in scanqtl() regarding the X chromosome.
 
@@ -2103,10 +2135,10 @@ Major changes:
 
   Modified the "map10" dataset: a genetic map modeled after the mouse,
   with markers having an approximately 10 cM spacing.  We've revised
-  the chromosome lengths to match those in the Mouse Genome Database. 
+  the chromosome lengths to match those in the Mouse Genome Database.
 
   Dropped support for intercrosses with sex-specific maps (class
-  "f2ss"). 
+  "f2ss").
 
   Changed the meaning of the argument "lodcolumn" in scanone(). It now
   should be an index starting at 1 rather than 3.  I think this will
@@ -2123,7 +2155,7 @@ Major changes:
   these functions, and "lodcolumn" indicates which one.
 
 Minor changes:
- 
+
   Modified summary.cross() to give a warning if there are markers at
   precisely the same position.  Added a function jittermap() to assist
   in fixing this.  Numerous functions run into problems if there are
@@ -2141,7 +2173,7 @@ Minor changes:
 
   Made a slight revision to read.map.qtlcart(), so that chromosome
   names are not required in the map file, and so that more informative
-  messages are displayed if marker or chromosome names are not found. 
+  messages are displayed if marker or chromosome names are not found.
 
   Modified qtlversion(), which prints the installed version of the
   package, to use library(help=qtl) rather than installed.packages().
@@ -2156,15 +2188,15 @@ Minor changes:
   Fixed a bug in fitqtl() regarding the names of coefficients for
   interactions between QTLs and covariates when get.ests=TRUE.
 
-  Fixed a slight problem in read.cross.csv() and read.cross.csvs() so 
-  they will read in 4-way cross data.  You need to use genotypes=NULL.	
+  Fixed a slight problem in read.cross.csv() and read.cross.csvs() so
+  they will read in 4-way cross data.  You need to use genotypes=NULL.
 
   Modified c.cross() so that it can combined crosses typed at
   different numbers of markers.  The number of chromosomes must be the
   same, and the genetic maps must be consistent.
 
   Modified plot.scanone() so that you can give it a "ylab" argument to
-  override the y-axis labels.  Eliminated the "main" argument, as that 
+  override the y-axis labels.  Eliminated the "main" argument, as that
   can be passed via "...".
 
   Modified the threshold for est.rf() to print warnings about possibly
@@ -2174,7 +2206,7 @@ Minor changes:
 
   Fixed a bug in calc.pairprob() (used by scantwo) for RILs.
 
-  Fixed a slight bug in scanone() for permutations; it dropped 
+  Fixed a slight bug in scanone() for permutations; it dropped
   covariates in permutation tests with model="binary".
 
   Fixed a slight bug in read.cross with format "csvs", for the
@@ -2191,7 +2223,7 @@ Version 1.01, 10/25/2005:
 
 Major changes:
 
-  Revised read.cross to include three additional data formats: 
+  Revised read.cross to include three additional data formats:
 
     "csvr"   The format "csv", but with rows and columns
              interchanged. I call that a "rotated" version of the CSV
@@ -2208,7 +2240,7 @@ Major changes:
              files rotated (really transposed).
 
    Added example files (of the listeria data) in these formats in the
-   "sampledata" directory. 
+   "sampledata" directory.
 
 Minor changes:
 
@@ -2227,7 +2259,7 @@ Minor changes:
 
   Changed the default value for the error.prob argument from 0 to
   0.0001 in est.map(), calc.genoprob(), sim.geno(), and other
-  functions. 
+  functions.
 
 
 Version 1.00, 9/10/2005:
@@ -2244,17 +2276,17 @@ Minor changes:
 
   Fixed a bug in read.cross for the "qtlcart" format.  There was a
   problem in the reading of map files if the inter-marker distances
-  were at all out of alignment (which occurred when two markers were 
+  were at all out of alignment (which occurred when two markers were
   100 cM apart).
 
   est.rf() was revised to treat the X chromosome properly in an
-  intercross. 
+  intercross.
 
   Fixed a bug in scanqtl() in the case that covar=NULL was specified;
   this should be treated just like if it were missing.
 
   Modified plot.scantwo() so that the default is lower="joint"; I've
-  become suspicious of lower="cond-int" and "cond-add".  
+  become suspicious of lower="cond-int" and "cond-add".
 
   Added another argument to plot.scantwo(): point.at.max, for plotting
   an X at the maximum LOD.
@@ -2264,7 +2296,7 @@ Minor changes:
 
   Revised scanqtl() so that makeqtl() doesn't get called repeatedly,
   but rather the imputations get copied over.  This sped the thing up
-  immensely.  
+  immensely.
 
   Replaced calls to print.matrix() in print.summary.ripple(), as the
   function will be dropped from R ver 2.2.
@@ -2311,7 +2343,7 @@ Major changes:
   a logit link.
 
   scantwo() now allows analysis of binary traits (model="binary"),
-  for method="em" only. 
+  for method="em" only.
 
   Added a few new utility functions: bayesint() for calculating
   Bayesian probability intervals [cf lodint()], comparegeno for
@@ -2333,15 +2365,15 @@ Minor changes:
 
   Revised plot.scanone() so that when one chromosome is plotted, it
   starts whereever the first marker on the chromosome was placed, and
-  not necessarily at 0.  
+  not necessarily at 0.
 
   Revised plot.map() so that shifting chromosomes so that the first
-  marker is at 0 cM is optional.  (Use shift=FALSE to not do such a 
+  marker is at 0 cM is optional.  (Use shift=FALSE to not do such a
   shift.)
 
   Fixed the issue regarding use of sex and/or pgm as covariates for
   the X chromosome; such covariates are dropped just for the X
-  chromosome.  
+  chromosome.
 
   Revised plot.pxg() so that it no longer returns Rsq, fit and so
   forth.  I've gone back to returning just information about the data
@@ -2353,12 +2385,12 @@ Minor changes:
 
   switch.order() no longer resets the location of the first marker on
   the chromosome to 0 cM, but retains the offset from the original
-  map. 
+  map.
 
   Changed "trace" as an argument to "verbose", to avoid clashes with
   the built-in R function trace()
 
-  Revised summary.cross() to check the class of chromosomes (the 
+  Revised summary.cross() to check the class of chromosomes (the
   components in cross$geno); they should each have class "A" or "X".
 
   Revised subset.cross() so that it won't produce duplicate
@@ -2387,7 +2419,7 @@ Minor changes:
   Modified the convergence criterion for scantwo() by the EM
   algorithm; we now just look at the log likelihood, and not at the
   parameters.
-  
+
   Fixed a bug in read.map.qtlcart().
 
   Fixed bugs in scanone and scantwo for method="imp", for the case
@@ -2467,7 +2499,7 @@ Minor changes:
   Modified summary.scantwo to allow a type option to get summaries
   based on peak "joint" or "inter" and to allow negative thresholds
   relative to max joint, inter, or individual LODs [from Brian
-  Yandell; I'm not really sure what this means]. 
+  Yandell; I'm not really sure what this means].
 
   Modified plot.scantwo to modify the contour option, making 1.5 from
   the peak the default on each half-image, and to take a numeric
@@ -2484,23 +2516,23 @@ Minor changes:
   (ignoring case) these initial strings are removed.
 
   est.rf now returns a warning if a marker appears to have its
-  genotypes miscoded (so that it shows a rec. frac. > 0.5 with 
-  LOD > 3).   
+  genotypes miscoded (so that it shows a rec. frac. > 0.5 with
+  LOD > 3).
 
   Deleted the function pull.chr(), which was deprecated in version
   0.89 in Nov, 2001.  You can use subset.cross() instead.
 
   Fixed a bug in calc.errorlod regarding the X chromosome in an
-  intercross.   
+  intercross.
 
   read.cross with format="qtlcart" printed on screen the number of
   individuals but called it the number of phenotypes.  Brian Yandell
-  provided another revision to this, to fix bugs regarding phenotypes 
+  provided another revision to this, to fix bugs regarding phenotypes
   that are factors.
 
   Fixed a slight bug in summary.cross() in the case that a cross
   contains no autosomal data.
-  
+
   Fixed a bug in read.cross for the mapmaker format; if a marker or
   phenotype name were listed without any data, an error resulted.
 
@@ -2528,12 +2560,12 @@ Minor changes:
   in scanone() and scantwo().
 
   Modified the source code in hmm_bc.c, hmm_f2.c, hmm_main.h so that
-  we don't repeatedly calculate log(0.5), log(2.0) and log(0.25), but 
+  we don't repeatedly calculate log(0.5), log(2.0) and log(0.25), but
   rather rely on #define statements
 
   Got rid of the WIN32 stuff in addlog and subtractlog in util.c,
   which were used in version 0.97 as I'd not been able to get log1p to
-  work. 
+  work.
 
   plot.missing now gives a more meaningful error if the argument
   "reorder" is greater than the number of phenotypes.
@@ -2577,17 +2609,17 @@ Minor changes:
   (Fortran routines currently used: dqrls, dpoco, dposl)
 
   Modified est.map so that it removes individuals with fewer than two
-  typed markers.  Their presence is of no value in estimating the map, 
+  typed markers.  Their presence is of no value in estimating the map,
   and can really slow things down.
 
   Revised a number of the help files to make the automated tests of
-  the integrity of the software much faster.  
+  the integrity of the software much faster.
 
   Revised read.cross.mm() so that (a) the cross type is taken as the
   4th word (rather than the last word) on the first line, in case
   someone includes additional characters, and (b) if the sample map
   format is used but chromosome assignments are not provided, a
-  meaningful error message is displayed. 
+  meaningful error message is displayed.
 
   Made a few very minor revisions to the "rqtltour.pdf" tutorial.
 
@@ -2607,9 +2639,9 @@ Minor changes:
   contours at 1.5 (or other specified values) below the maximum LOD
   [from Brian Yandell].
 
-  Revised summary.scanone and print.summary.scanone so that 
+  Revised summary.scanone and print.summary.scanone so that
   summary.scanone will never print anything, but will leave it to
-  print.summary.scanone to do so.  (Previously, summary.scanone 
+  print.summary.scanone to do so.  (Previously, summary.scanone
   printed a message if there were no peaks above the LOD threshold.)
   summary.scantwo and print.summary.scantwo were revised similarly.
 
@@ -2625,13 +2657,13 @@ Minor changes:
   Replaced the example data sets with compressed versions.
 
   Had to modify part of the C code for scanone with model="2part".
-  I'd hard-coded some of the array limits! 
+  I'd hard-coded some of the array limits!
 
   Changed the default line types and colors in plot.scanone().
 
   Added a warning for scanone() and scantwo() about the number of
   individuals that are omitted due to missing phenotype or covariate
-  information. 
+  information.
 
   Revised write.cross so that X chromosome data is converted back
   from our internal format to the standard format.
@@ -2666,7 +2698,7 @@ Minor changes:
 
   Added a function nmissing(), which calculates the total number of
   missing genotypes for each individual in a cross, or for each
-  marker.  
+  marker.
 
   Added a function pull.geno() for pulling out the set of genotype
   data for a cross as a single big matrix.
@@ -2681,7 +2713,7 @@ Minor changes:
   combine backcrosses and intercrosses, provided that they have
   exactly the same genetic maps.  Further, we no longer discard the
   results of sim.geno and calc.genoprob, provided that the same step,
-  off.end, and error.prob arguments were used.  
+  off.end, and error.prob arguments were used.
 
   Added an additional argument, cex, to the function plot.geno, for
   control of the size of the points in the plot.  Also changed the
@@ -2701,13 +2733,13 @@ Minor changes:
 
   Revised the function switch.order() so that, if estimated
   recombination fractions are present (i.e., est.rf() was used), these
-  are revised appropriately; previously they had been removed.  
+  are revised appropriately; previously they had been removed.
   Also added err and map.function arguments, to be passed to est.map()
   when the map is re-estimated.
 
   Revised scanone() and scantwo() slightly; the statement for
   producing a warning regarding the use of method=="im" (vs "imp" or
-  "em") was slightly wrong. 
+  "em") was slightly wrong.
 
   Fixed a slight bug in scanqtl() for the case that a fixed position
   is provided rather than a range (commented out two lines).
@@ -2741,13 +2773,13 @@ Minor changes:
   dealt properly with sex-specific maps.
 
   fitqtl() now stops with a more meaningful error message if imputed
-  genotypes are not available in the input "qtl" object. 
+  genotypes are not available in the input "qtl" object.
 
   Revised the marker names for the X chromosome in the map10 dataset
   that is included.
 
   Revised est.map() for the case of a sex-specific f2 (cross type
-  "f2ss"); the starting map for the EM algorithm is randomized a bit. 
+  "f2ss"); the starting map for the EM algorithm is randomized a bit.
 
   Revised a bunch of the R code files so that paste() is not included
   within stop() or warn().
@@ -2758,7 +2790,7 @@ Minor changes:
   the preferred log1p() function.
 
   Added tests of input/output that are run when doing a check of the
-  package.  
+  package.
 
 
 Version 0.96, 9/13/2002:
@@ -2796,7 +2828,7 @@ Minor changes:
 
 Version 0.95, 8/1/2002:
 
-Major changes:	
+Major changes:
 
   Modified the functions scanone and scantwo in order to treat the X
   chromosome appropriately.  Each has a new argument, x.treatment,
@@ -2840,7 +2872,7 @@ Minor changes:
   Fixed a bug in read.cross; the "genotypes" argument needs to have
   "C" and "D" reversed. "C" = "not BB" = 5 internally; "D" = "not AA"
   = 4 internally.  Thanks to Martin Grandona for identifying the
-  problem.  
+  problem.
 
   Fixed a bug in read.cross for format "csv": an error occurred if
   marker positions were not given and the first individual was
@@ -2880,7 +2912,7 @@ Major changes:
 
   Modified scanone and scantwo to include the methods "mr-imp" and
   "mr-argmax", for performing "marker regression" by first filling
-  in any missing genotypes by one imputation ("mr-imp") or using the 
+  in any missing genotypes by one imputation ("mr-imp") or using the
   Viterbi algorithm ("mr-argmax").
 
   Edited functions read.cross.*, argmax.geno, sim.cross, and
@@ -2922,7 +2954,7 @@ Minor changes:
 
   Fixed bugs in max.scantwo and scantwo.perm regarding infinite LOD
   scores (which comes up especially when running scantwo with
-  method="mr").  
+  method="mr").
 
   Fixed a bug in read.cross.qtx regarding the determination of
   whether a cross is a backcross or an intercross.  Also fixed the
@@ -2944,7 +2976,7 @@ Minor changes:
 
   Modified ripple so that orders considered are printed in a way that
   the left-most marker in the original order is always to the left
-  of the right-most marker in the original order.  
+  of the right-most marker in the original order.
 
   In various functions, made sure that 0 < error.prob < 1.
 
@@ -2975,7 +3007,7 @@ Minor changes:
 
   Added functions max.scanone and max.scantwo for getting information
   on the location with the highest LOD or joint and interaction LODs
- 
+
   Modified summary.scantwo so that if the argument thresholds has
   length 1, the interaction and conditional thresholds are assumed to
   be 0 (so that all chromosome pairs for which the maximum joint LOD
@@ -2983,8 +3015,8 @@ Minor changes:
 
   Revised the C functions emit_bc(), emit_f2(), emit_f2ss() and
   emit_4way() so that unexpected observed genotypes are treated as
-  missing. 
-  
+  missing.
+
   Revised read.cross, read.cross.csv and read.cross.mm slightly, so
   that estimate.map is TRUE by default, and so that the genetic maps
   are re-estimated only if both estimate.map is TRUE and the genetic
@@ -3007,7 +3039,7 @@ Minor changes:
   In read.cross.mm and read.cross.csv, when using the function
   read.table, we replaced the use of as.is=TRUE with
   colClasses="character". Apparently as.is=TRUE didn't work in R
-  version 1.4.0.  
+  version 1.4.0.
 
   In read.cross, changed the default of the argument "estimate.map"
   to FALSE.
@@ -3022,7 +3054,7 @@ Minor changes:
   Fixed a slight bug in summary.ripple.
 
   Previously forgot to implement the use of the "main" arg for
-  plot.scanone. 
+  plot.scanone.
 
   Fixed a slight bug in read.cross.gary related to having just one
   marker on a chromosome.
@@ -3052,7 +3084,7 @@ Minor changes:
 
   Fixed a couple of minor bugs in read.cross for the mapmaker format:
   in dealing with the "symbols" information in the mapmaker file, and
-  in counting the number of lines in the file.  
+  in counting the number of lines in the file.
 
   Added a utility function checkcovar() to check phenotypes and
   covariates in scanone and scantwo (thus removing some redundancy).
@@ -3077,7 +3109,7 @@ Major changes:
 
   Consolidated scanone, vbscan and discan into the single function
   scanone, with an argument model=c("normal","binary","2part","np").
-  The non-parametric "method" is now a "model".  
+  The non-parametric "method" is now a "model".
 
   Buried scanone.perm and scantwo.perm as internal functions.  To do
   permutation tests, one now uses the main functions (such as scantwo)
@@ -3087,10 +3119,10 @@ Major changes:
   user is expected to call either read.cross or write.cross rather
   than calling the format-specific functions directly.  This was done
   anticipating an increase in the number of such format-specific
-  read.cross functions. 
+  read.cross functions.
 
   Got rid of find.errors and plot.errors, as I don't like them.  Use
-  calc.errorlod and plot.errorlod instead.  
+  calc.errorlod and plot.errorlod instead.
 
   Wanted to toss pull.chr, but instead just kept an internal version
   which calls subset.cross and prints a warning, in case our one
@@ -3107,12 +3139,12 @@ Minor changes:
 
   Added a new example data set, badorder, with some errors in marker
   order.  (This is to illustrate the functions est.rf, ripple and
-  switch.order.) 
+  switch.order.)
 
   Fixed a slight error in summary.scantwo.  We print pairs of loci
   only if their joint LOD exceeds its threshold and either (a) the
   epistasis LOD exceeds its threshold or (b) both conditional LODs
-  exceed their thresholds.  
+  exceed their thresholds.
 
   Totally re-wrote print.summary.scantwo.  It was unnecessarily
   complicated before.
@@ -3137,7 +3169,7 @@ Major changes:
   calculating LOD scores for a two-QTL model and to test epistasis
   between each pair, with calculations done by imputation, Haley-Knott
   regression, marker regression or the EM algorithm.  Hao Wu wrote the
-  imputation method. 
+  imputation method.
 
   With Hao Wu, wrote plot.scantwo to plot the results of scantwo,
   summary.scantwo to summarize the results, and scantwo.perm to get
@@ -3152,15 +3184,15 @@ Major changes:
   calc.pairprob was created, but this is not to be called by the user,
   but rather will be called when needed.
 
-Minor changes: 
+Minor changes:
 
   Added a "method" argument to vbscan, even though only method="em" is
-  currently available. 
+  currently available.
 
   Revised scanone, scantwo, discan, vbscan, and their corresponding
   ".perm" functions so that the output has attribute "method" to
   indicate what method was used and attribute "type" to indicate the
-  type of cross that was analyzed.  
+  type of cross that was analyzed.
 
   Changed method="im" to method="em" in scanone and discan; changed
   method="markreg" again, this time to method="mg".  Changed the order
@@ -3173,7 +3205,7 @@ Minor changes:
 
   Modified the C function scanone_mr (marker regression) to avoid
   repeatedly running the null model regression in the case of complete
-  marker data.  
+  marker data.
 
   Changed a good amount of R code like "1:length(x)" to "seq(along=x)"
 
@@ -3188,13 +3220,13 @@ Minor changes:
   read.cross.csv, create.map, subset.cross.
 
   Fixed a bug in the location of chromosome labels in plot.scanone.
-  Added an argument "main" for placing a title on the plot. 
+  Added an argument "main" for placing a title on the plot.
 
   Revised lots of little pieces of code using "drop=FALSE" when
   subsetting a matrix or array in order to retain the structure.
 
   read.cross.csv can now deal with categorical phenotypes, and
-  plot.cross was revised to deal with such non-numeric phenotypes. 
+  plot.cross was revised to deal with such non-numeric phenotypes.
   Added an argument "auto.layout"; if TRUE, mfrow is set so that the
   many plots produced will all fit in one figure.  par(ask=TRUE) is no
   longer ever set.
@@ -3210,20 +3242,20 @@ Major changes:
 
   Hao Wu (hao@jax.org) has implemented the imputation method of Sen
   and Churchill (2001) for a genome scan, included as method="imp" in
-  the function scanone.  
+  the function scanone.
 
   Added a non-parametric method to the function scanone, using a
   modified version of the Kruskal-Wallis test (cf Kruglyak and Lander
   1995).
 
   scanone now allows the use of covariates for all methods except the
-  non-parametric method. 
+  non-parametric method.
 
   Phenotypes in a cross object are now a data.frame.  Modified example
   data files and the following functions to make this work:
-  sim.cross.*, read.cross.*, summary.cross, write.cross.csv. 
-  
-Minor changes:  
+  sim.cross.*, read.cross.*, summary.cross, write.cross.csv.
+
+Minor changes:
 
   Changed the name of the "anova" method in scanone to "markreg".
 
@@ -3236,17 +3268,17 @@ Minor changes:
   summary.cross() now checks that markers are in increasing order.
 
   Made the third row (marker positions) in csv file optional in
-  read.cross.csv. 
+  read.cross.csv.
 
   Added a utility function subset.cross() for pulling out specified
   chromosomes or groups of individuals from a cross object.  We should
-  not need pull.chr() any longer. 
+  not need pull.chr() any longer.
 
   Added a utility function c.cross() for concatenating multiple cross
-  objects.  
+  objects.
 
   Changed stopping rules for discan, discan.perm, vbscan, vbscan.perm,
-  est.map, est.rf, ripple, scanone, scanone.perm: 
+  est.map, est.rf, ripple, scanone, scanone.perm:
   |x(s+1) - x(s)| < e {|x(s)| + e*100} where by default e = 1e-4
 
   Fixed the utility function create.map() for the case where the
@@ -3254,12 +3286,12 @@ Minor changes:
 
   Placed help information for discan.perm, scanone.perm and
   vbscan.perm within the files for discan, scanone and vbscan,
-  respectively.  
+  respectively.
 
 
 Version 0.86, 11/4/2001:
 
-  Fixed a *real* bug in argmax.geno().  
+  Fixed a *real* bug in argmax.geno().
 
   Added discan() for doing interval mapping with a dichotomous trait.
 
@@ -3274,7 +3306,7 @@ Version 0.86, 11/4/2001:
 Version 0.85, 10/29/2001:
 
   Tried to fix up some of the plot.* and summary.* functions so that I
-  don't get warning messages in "R CMD check".	
+  don't get warning messages in "R CMD check".
 
   Fixed a few minor problems in the help files.
 
@@ -3301,9 +3333,9 @@ Version 0.84, 10/10/2001:
   to do this.
 
   Changed anova method in scanone() to use observed genotypes.
-  Individuals with missing or partially missing genotypes are dropped.  
+  Individuals with missing or partially missing genotypes are dropped.
 
-  Added Haley-Knott regression method to scanone(). 
+  Added Haley-Knott regression method to scanone().
 
   Added a function ripple() for comparing marker orders for a single
   chromosome, looking at all permutations of a sliding window of
@@ -3335,7 +3367,7 @@ Version 0.82, 09/20/2001:
 
   Added write.cross.csv(), for writing data in comma-delimited format.
   Changed write.mm() to write.cross.mm() and added write.cross() as a
-  wrapper to these two functions. 
+  wrapper to these two functions.
 
   All functions that use map functions now allow use of the
   Carter-Falconer map function.
@@ -3354,7 +3386,7 @@ Version 0.82, 09/20/2001:
   the map.
 
   Added summary.scanone(), giving a summary of the output of
-  scanone(). 
+  scanone().
 
   Added possibility of F2 intercross with sex-specific maps.  Use
   class "f2ss" rather than "f2."  This is in the testing stage.
@@ -3386,7 +3418,7 @@ Version 0.81, 09/16/2001:
   as an attribute, "loglik" for each chromosome's map.  If the "print"
   argument is used, print the loglik, too.
 
-  Made error.prob=0 the default for the functions argmax.geno(), 
+  Made error.prob=0 the default for the functions argmax.geno(),
   calc.genoprob(), est.map(), and sim.geno().
 
   Fixed the file permissions for many of the files, so that they are
@@ -3401,7 +3433,7 @@ Version 0.80, 08/07/2001:
   recreate the map each time, without having to carry it along.
 
   Changed the name of plot.geno() to plot.missing() and plot.chr() to
-  plot.geno().  
+  plot.geno().
 
   Added vbscan() and vbscan.perm() to perform the analysis described
   in V Boyartchuk et al. (2001), for a phenotype where some
@@ -3415,7 +3447,7 @@ Version 0.79, 07/27/2001:
 
   Added map functions (and inversion map functions) for Haldane and
   Kosambi, so that I'm not re-creating them all of the time within
-  functions. 
+  functions.
 
   Added a function plot.chr() to plot genotypes for a specific
   chromosome, with likely errors (as determined by calc.errorlod() or
@@ -3437,12 +3469,12 @@ Version 0.78, 07/24/2001:
   be exactly the inter-marker distance.
 
   Modified calc.genoprob(), calc.argmax(), sim.geno() and
-  calc.errorlod() so that their corresponding components have 
+  calc.errorlod() so that their corresponding components have
   attributes "error.prob", "step" and "off.end" (only "error.prob" for
   calc.errorlod()), specifying the corresponding values used in the
   calculations.  Modified calc.errorlod() to re-run calc.genoprob() if
   the error.prob attribute is different from the corresponding
-  argument. 
+  argument.
 
 
 Version 0.77, 06/22/2001:
@@ -3457,7 +3489,7 @@ Version 0.76, 05/17/2001:
   importantly, the data structure for a cross has completely
   changed.  The function convert.cross is included, for converting
   data from the old structure to the new one.  See the help file for
-  read.cross for a description of the new data structure.  
+  read.cross for a description of the new data structure.
 
   The main hidden Markov model engine has been rewritten, to make
   things more flexible and general.  We've now implemented the Viterbi
@@ -3470,7 +3502,7 @@ Version 0.76, 05/17/2001:
   The "singlescan" function (to do a genome scan with a single QTL
   model) is now called "scanone" (to save a few keystrokes).  Note
   that this function does not yet allow the use of covariates.  We'll
-  add that feature in the near future.  
+  add that feature in the near future.
 
   Saunak Sen and I are now working together on this project, and so
   things will begin to progress more quickly (we hope).

@@ -1,22 +1,22 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2007-2012, Karl W Broman
+# last modified Aug, 2012
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
-# 
+#
 # Part of the R/qtl package
 # Contains: stepwiseqtl, calc.plod, countqtlterms, calc.penalties,
 #           checkStepwiseqtlStart
@@ -50,7 +50,7 @@
 #                simulation)
 # keeplodprofile If TRUE, perform one last pass of refineqtl and save
 #                the LOD profiles.
-# keeptrace      If TRUE, retain the QTL locations, model formula and pLOD 
+# keeptrace      If TRUE, retain the QTL locations, model formula and pLOD
 #                for the best model from each step of forward and backward
 #                selection as an attribute in the output
 # verbose:    If TRUE, print a bunch of tracing information
@@ -72,6 +72,14 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     pheno.col <- 1
   }
 
+  chrtype <- sapply(cross$geno, class)
+  if(any(chrtype=="X")) {
+    Xadjustment <- scanoneXnull(class(cross)[1], getsex(cross))
+    forceXcovar <- Xadjustment$adjustX
+    Xcovar <- Xadjustment$sexpgmcovar
+  }
+  else forceXcovar <- FALSE
+
   if(!missing(qtl)) { # start f.s. at somewhere other than the null
     if( !("qtl" %in% class(qtl)) )
       stop("The qtl argument must be an object of class \"qtl\".")
@@ -86,7 +94,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
         stop("Chromosome ", wh, " (in QTL object) not in cross object.")
     }
     if(missing(formula)) { # create a formula with all covariates and all QTL add've
-      if(!is.null(covar)) 
+      if(!is.null(covar))
         formula <- paste("y ~ ", paste(names(covar), collapse="+"), "+")
       else
         formula <- "y ~ "
@@ -100,13 +108,13 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     startatnull <- FALSE
   }
   else {
-    if(!missing(formula)) 
+    if(!missing(formula))
       warning("formula ignored if qtl is not provided.")
     startatnull <- TRUE
   }
 
   # revise names in qtl object
-  if(!startatnull) 
+  if(!startatnull)
     qtl$name <- qtl$altname
 
   # check that we have the right stuff for the selected method
@@ -146,16 +154,16 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   if(!missing(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
-  }    
+  }
 
   # check that qtl object matches the method
   if(!startatnull) {
     if(method=="imp" && !("geno" %in% names(qtl)))
       stop("The qtl object doesn't contain imputations; re-run makeqtl with what=\"draws\".")
-    else if(method=="hk" && !("prob" %in% names(qtl))) 
+    else if(method=="hk" && !("prob" %in% names(qtl)))
       stop("The qtl object doesn't contain QTL genotype probabilities; re-run makeqtl with what=\"prob\".")
   }
-    
+
   # check phenotypes and covariates; drop ind'ls with missing values
   if(length(pheno.col) > 1) {
     pheno.col <- pheno.col[1]
@@ -163,7 +171,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   }
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
-    if(is.na(num)) 
+    if(is.na(num))
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
   }
@@ -181,7 +189,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
 
     if(!startatnull) {
-      if(method=="imp") 
+      if(method=="imp")
         qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
       else {
         for(i in seq(along=qtl$prob))
@@ -206,7 +214,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       firstformula <- as.formula(paste("y~", paste(names(covar), collapse="+"), "+", "Q1"))
     else firstformula <- formula
   }
-    
+
 
   # penalties
   cross.type <- class(cross)[1]
@@ -217,7 +225,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     else if(cross.type=="bc") {
       penalties <-  c(2.69, 2.62, 1.19)
     }
-    else 
+    else
       stop("No default penalties available for cross type ", cross.type)
   }
   else if(length(penalties) != 3) {
@@ -228,7 +236,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
         stop("You must include a penalty for interaction terms.")
     }
     else {
-      if(length(penalties)==2) 
+      if(length(penalties)==2)
         penalties <- penalties[c(1,2,2)]
       else {
         warning("penalties should have length 3")
@@ -246,25 +254,33 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   # initial scan : either 1d or 2d
   if(verbose) cat(" -Initial scan\n")
   if(startatnull) {
+
+    if(forceXcovar) {
+      if(is.null(covar)) covar.w.X <- Xcovar
+      else covar.w.X <- cbind(covar, Xcovar)
+    }
+    else covar.w.X <- covar
+
     if(additive.only || max.qtl == 1 || !scan.pairs) {
-      out <- scanone(cross, pheno.col=pheno.col, method=method, model="normal",
-                     addcovar=covar)
+      suppressWarnings(out <- scanone(cross, pheno.col=pheno.col, method=method, model=model,
+                                      addcovar=covar.w.X))
       lod <- max(out[,3], na.rm=TRUE)
-      
+      cat("initial lod: ", lod, "\n")
+
       curplod <- calc.plod(lod, c(1,0,0), penalties=penalties)
       wh <- which(!is.na(out[,3]) & out[,3]==lod)
       if(length(wh) > 1) wh <- sample(wh, 1)
-      
+
       qtl <- makeqtl(cross, as.character(out[wh,1]), out[wh,2], "Q1",
                      what=qtlmethod)
       formula <- firstformula
       n.qtl <- 1
     }
     else {
-      out <- scantwo(cross, pheno.col=pheno.col, method=method, model="normal",
-                     incl.markers=incl.markers, addcovar=covar, verbose=verbose.scan)
+      suppressWarnings(out <- scantwo(cross, pheno.col=pheno.col, method=method, model=model,
+                                      incl.markers=incl.markers, addcovar=covar.w.X, verbose=verbose.scan))
       lod <- out$lod
-      
+
       lod1 <- max(diag(lod), na.rm=TRUE)
       plod1 <- calc.plod(lod1, c(1,0,0), penalties=penalties)
       loda <- max(lod[upper.tri(lod)], na.rm=TRUE)
@@ -315,7 +331,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                         covar=covar, formula=formula, method=method,
                         verbose=verbose.scan, incl.markers=incl.markers,
-                        keeplodprofile=FALSE)
+                        keeplodprofile=FALSE, forceXcovar=forceXcovar)
       if(any(rqtl$pos != qtl$pos)) { # updated positions
         if(verbose) cat(" ---  Moved a bit\n")
       }
@@ -323,13 +339,13 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     }
     lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                   method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                  run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
+                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
     curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                          penalties=penalties)
     attr(qtl, "pLOD") <- curplod
     n.qtl <- length(qtl$chr)
   }
- 
+
   attr(qtl, "formula") <- deparseQTLformula(formula)
   attr(qtl, "pLOD") <- curplod
 
@@ -337,7 +353,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     curbest <- qtl
     curbestplod <- curplod
 
-    if(verbose) 
+    if(verbose)
       cat("** new best ** (pLOD increased by ", round(curplod, 4), ")\n", sep="")
   }
 
@@ -352,14 +368,14 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   if(verbose)
     cat("    no.qtl = ", n.qtl, "  pLOD =", curplod, "  formula:",
         deparseQTLformula(formula), "\n")
-  if(verbose > 1) 
+  if(verbose > 1)
     cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep="@"), "\n")
 
   # start stepwise search
   i <- 0
   while(n.qtl < max.qtl) {
     i <- i+1
-    
+
     if(verbose) {
       cat(" -Step", i, "\n")
       cat(" ---Scanning for additive qtl\n")
@@ -367,15 +383,15 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
     out <- addqtl(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
                   formula=formula, method=method, incl.markers=incl.markers,
-                  verbose=verbose.scan)
-    
-    curlod <- max(out[,3], na.rm=TRUE) 
+                  verbose=verbose.scan, forceXcovar=forceXcovar)
+
+    curlod <- max(out[,3], na.rm=TRUE)
     wh <- which(!is.na(out[,3]) & out[,3]==curlod)
     if(length(wh) > 1) wh <- sample(wh,1)
     curqtl <- addtoqtl(cross, qtl, as.character(out[wh,1]), out[wh,2],
                        paste("Q", n.qtl+1, sep=""))
     curformula <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1, sep=""))
-    curlod <- curlod + lod 
+    curlod <- curlod + lod
     curplod <- calc.plod(curlod, countqtlterms(curformula, ignore.covar=TRUE),
                     penalties=penalties)
     if(verbose) cat("        plod =", curplod, "\n")
@@ -392,7 +408,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
                                         "+Q", j, ":Q", n.qtl+1, sep=""))
         out <- addqtl(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
                        formula=thisformula, method=method, incl.markers=incl.markers,
-                       verbose=verbose.scan)
+                       verbose=verbose.scan, forceXcovar=forceXcovar)
         thislod <- max(out[,3], na.rm=TRUE)
 
         wh <- which(!is.na(out[,3]) & out[,3]==thislod)
@@ -444,9 +460,9 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
           cat(" ---Scan for an additional pair\n")
         out <- addpair(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
                        formula=formula, method=method, incl.markers=incl.markers,
-                       verbose=verbose.scan)
+                       verbose=verbose.scan, forceXcovar=forceXcovar)
         thelod <- out$lod
-        
+
         loda <- max(thelod[upper.tri(thelod)], na.rm=TRUE)
         ploda <- calc.plod(loda+lod, c(2,0,0,0)+countqtlterms(formula, ignore.covar=TRUE),
                       penalties=penalties)
@@ -475,11 +491,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
           temp <- max(out, what="full")
           if(nrow(temp) > 1)
             temp <- temp[sample(1:nrow(temp),1),]
-          
+
           curqtl <- addtoqtl(cross, qtl, c(as.character(temp[1,1]), as.character(temp[1,2])),
                              c(temp[1,3], temp[1,4]), paste("Q", n.qtl+1:2, sep=""))
           curformula <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1, "+Q",
-                                         n.qtl+2, "+Q", n.qtl+1, ":Q", n.qtl+2, 
+                                         n.qtl+2, "+Q", n.qtl+1, ":Q", n.qtl+2,
                                          sep=""))
           curplod <- plodf
           lod <- lodf+lod
@@ -495,19 +511,19 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     attr(qtl, "pLOD") <- curplod
     formula <- curformula
     lod <- curlod
-    
+
     if(refine.locations) {
       if(verbose) cat(" ---Refining positions\n")
       rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                         covar=covar, formula=formula, method=method,
                         verbose=verbose.scan, incl.markers=incl.markers,
-                        keeplodprofile=FALSE)
+                        keeplodprofile=FALSE, forceXcovar=forceXcovar)
       if(any(rqtl$pos != qtl$pos)) { # updated positions
         if(verbose) cat(" ---  Moved a bit\n")
         qtl <- rqtl
         lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                      run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
+                      run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
         curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                         penalties=penalties)
         attr(qtl, "pLOD") <- curplod
@@ -518,12 +534,12 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     if(verbose)
       cat("    no.qtl = ", n.qtl, "  pLOD =", curplod, "  formula:",
           deparseQTLformula(formula), "\n")
-    if(verbose > 1) 
+    if(verbose > 1)
       cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep="@"), "\n")
 
 
     if(curplod > curbestplod) {
-      if(verbose) 
+      if(verbose)
         cat("** new best ** (pLOD increased by ", round(curplod - curbestplod, 4),
             ")\n", sep="")
 
@@ -550,21 +566,30 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     i <- i+1
     out <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                   method=method, model=model, dropone=TRUE, get.ests=FALSE,
-                  run.checks=FALSE, tol=tol, maxit=maxit)$result.drop 
+                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.drop
+
+    formulas <- attr(out, "formulas")
+    lods <- attr(out, "lods")
 
     rn <- rownames(out)
     # ignore things with covariates
     wh <- c(grep("^[Qq][0-9]+$", rn),
             grep("^[Qq][0-9]+:[Qq][0-9]+$", rn))
     out <- out[wh,,drop=FALSE]
+    formulas <- formulas[wh]
+    lods <- lods[wh]
 
-    thelod <- out[,3]
-    minlod <- min(thelod, na.rm=TRUE)
+    # need to calculate penalized LOD scores here
+    plod <- rep(NA, length(lods))
+    for(modi in seq(along=plod))
+      plod[modi] <- calc.plod(lods[modi], countqtlterms(formulas[modi], ignore.covar=TRUE),
+                           penalties=penalties)
 
-    wh <- which(!is.na(thelod) & thelod==minlod)
+    maxplod <- max(plod, na.rm=TRUE)
+
+    wh <- which(!is.na(plod) & plod==maxplod)
     if(length(wh) > 1) wh <- sample(wh, 1)
 
-    lod <- lod - minlod
     todrop <- rownames(out)[wh]
 
     if(verbose) cat(" ---Dropping", todrop, "\n")
@@ -586,7 +611,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
              grep(paste(":[Qq]", numtodrop, "$", sep=""), cn))
       cn <- cn[-g]
       formula <- as.formula(paste("y~", paste(cn, collapse="+")))
-      
+
       if(n.qtl > numtodrop) {
         for(j in (numtodrop+1):n.qtl)
           formula <- reviseqtlnuminformula(formula, j, j-1)
@@ -597,31 +622,36 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       n.qtl <- n.qtl - 1
     }
 
+    # call fitqtl again, just in case
+    lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+                  method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+
     curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                     penalties=penalties)
 
     if(verbose)
       cat("    no.qtl = ", n.qtl, "  pLOD =", curplod, "  formula:",
           deparseQTLformula(formula), "\n")
-    if(verbose > 1) 
+    if(verbose > 1)
       cat("         qtl:", paste(qtl$chr, round(qtl$pos,1), sep=":"), "\n")
 
     attr(qtl, "formula") <- deparseQTLformula(formula)
     attr(qtl, "pLOD") <- curplod
-      
+
     if(refine.locations) {
       if(verbose) cat(" ---Refining positions\n")
       if(!is.null(qtl)) {
         rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                           covar=covar, formula=formula, method=method,
                           verbose=verbose.scan, incl.markers=incl.markers,
-                          keeplodprofile=FALSE)
+                          keeplodprofile=FALSE, forceXcovar=forceXcovar)
         if(any(rqtl$pos != qtl$pos)) { # updated positions
           if(verbose) cat(" ---  Moved a bit\n")
           qtl <- rqtl
           lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                         method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                        run.checks=FALSE, tol=tol, maxit=maxit)$result.full[1,4] - lod0
+                        run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
           curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                           penalties=penalties)
           attr(qtl, "pLOD") <- curplod
@@ -630,7 +660,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     }
 
     if(curplod > curbestplod) {
-      if(verbose) 
+      if(verbose)
         cat("** new best ** (pLOD increased by ", round(curplod - curbestplod, 4),
             ")\n", sep="")
 
@@ -656,7 +686,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     o <- order(factor(chr, levels=names(cross$geno)), pos)
 
     qtl <- makeqtl(cross, chr[o], pos[o], what=qtlmethod)
-    
+
     # need to redo numbering in formula
     formula <- as.formula(attr(curbest, "formula"))
 
@@ -667,13 +697,13 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       for(i in 1:n.qtl)
         formula <- reviseqtlnuminformula(formula, n.qtl+o[i], i)
     }
-    
+
     if(keeplodprofile) {
       if(verbose) cat(" ---One last pass through refineqtl\n")
       qtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                        covar=covar, formula=formula, method=method,
                        verbose=verbose.scan, incl.markers=incl.markers,
-                       keeplodprofile=TRUE)
+                       keeplodprofile=TRUE, forceXcovar=forceXcovar)
     }
     attr(qtl, "formula") <- deparseQTLformula(formula)
     attr(qtl, "pLOD") <- attr(curbest, "pLOD")
@@ -684,15 +714,16 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     class(curbest) <- "qtl"
     attr(curbest,"pLOD") <- 0
   }
-    
+
   if(keeptrace)
     attr(curbest, "trace") <- thetrace
 
   attr(curbest, "formula") <- deparseQTLformula(attr(curbest, "formula"), TRUE)
+  attr(curbest, "penalties") <- penalties
 
   curbest
 }
-  
+
 
 ######################################################################
 # check initial qtl model for appropriateness
@@ -705,7 +736,7 @@ function(qtl, formula, covar=NULL)
   formula <- checkformula(formula, qtl$altname, colnames(covar))
   theterms <- attr(terms(formula), "factors")[-1,,drop=FALSE]
   rn <- rownames(theterms)
-      
+
   # make sure that all covariates in covar exist in the formula
   if(!is.null(covar)) {
     covarnam <- colnames(covar)
@@ -717,11 +748,11 @@ function(qtl, formula, covar=NULL)
       theterms <- attr(terms(formula), "factors")[-1,,drop=FALSE]
       rn <- rownames(theterms)
     }
-        
+
     # make sure there are no QTL:covariate interactions
     theqtl <- grep("^Q[0-9]+$", rn)
     thecovar <- seq(along=rn)[-theqtl]
-    
+
     if(any(apply(theterms[thecovar,,drop=FALSE], 1, sum)>1))
       stop("We can't yet handle QTL:covariate or covariate:covariate interactions")
   }
@@ -785,7 +816,7 @@ function(formula, ignore.covar=TRUE)
   }
   nterm <- apply(factors, 2, sum)
 
-  if(any(nterm>2)) 
+  if(any(nterm>2))
     stop("Can't deal with higher-order interactions\n")
 
   # need to check for QTL x covariate interactions in here!
@@ -807,7 +838,7 @@ function(formula, ignore.covar=TRUE)
     return(c(main=nmain, intH=0, intL=0, inttot=0))
 
   n.int <- sum(nterm==2)
-  
+
   if(n.int <=1) # 0 or 1 interactions, so no need to figure them out
     return(c(main=nmain, intH=0, intL=n.int, inttot=n.int))
 
@@ -831,7 +862,7 @@ function(formula, ignore.covar=TRUE)
     }
     else if(any(!is.na(thegrp))) {
       grp[as.character(wh[,i])] <- thegrp[!is.na(thegrp)]
-      nint[as.character(thegrp[!is.na(thegrp)])] <- 
+      nint[as.character(thegrp[!is.na(thegrp)])] <-
            nint[as.character(thegrp[!is.na(thegrp)])] + 1
     }
     else {
@@ -846,7 +877,7 @@ function(formula, ignore.covar=TRUE)
   nH <- sum(nint)-nL
   c(main=nmain, intH=nH, intL=nL, inttot=n.int)
 }
-  
+
 ######################################################################
 # calculate penalties for pLOD using scantwo permutation results.
 ######################################################################

@@ -79,7 +79,8 @@ multitrait$pheno <- log(multitrait$pheno)}
 multitrait <- calc.genoprob(multitrait)
 result <- mqmpermutation(multitrait,pheno.col=7, n.perm=2, batchsize=2)
 
-cof <- mqmautocofactors(multitrait,50)		#Set 50 cofactors
+\dontrun{cof <- mqmautocofactors(multitrait,50)		#Set 50 cofactors
+}\dontshow{cof <- mqmautocofactors(multitrait,5)}
 multitrait <- fill.geno(multitrait)
 result <- mqmpermutation(multitrait,scanfunction=mqmscan,cofactors=cof,pheno.col=7, n.perm=2,batchsize=2,verbose=FALSE)
 #EXTRA
