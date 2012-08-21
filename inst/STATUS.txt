@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.25, 8/13/2012:
+Version 1.25, 8/21/2012:
 
 Major changes:
 
@@ -59,6 +59,8 @@ Minor changes:
 
   Speed up some of the examples in the help file, so that R CMD check
   doesn't take so long.
+
+  Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE
 
 
 Version 1.24, 5/25/2012:
