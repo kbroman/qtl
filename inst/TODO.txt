@@ -14,8 +14,6 @@ o Add pheno.col type arguments to all of the MQM functions
 
 o apparent bug in xaxisloc.scanone if a chromosome doesn't start at 0
 
-o speed up R CMD check
-
 o locateXO gives core dump when just one marker on chromosome?
 
 o revise use of snow package to use parallel instead
