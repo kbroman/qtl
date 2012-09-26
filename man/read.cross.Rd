@@ -80,9 +80,10 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the
     argument
-    \code{sep} to specify the field separator (the default is a comma)
-    and \code{dec} to specify the character used for the decimal point
-    (the default is a period).}
+    \code{sep} to specify the field separator (the default is a comma),
+    \code{dec} to specify the character used for the decimal point
+    (the default is a period), and \code{comment.char} to specify a
+    character to indicate comment lines.}
 }
 
 \value{
@@ -143,6 +144,13 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   sample data files in multiple formats.    Also see
   \url{http://www.rqtl.org/sampledata}.
 
+  The \code{\dots} argument enables additional arguments to be passed to
+  the function \code{\link[utils]{read.table}} in the case of \code{csv}
+  and \code{csvr} formats.  In particular, one may use the argument
+  \code{sep} to specify the field separator (the default is a comma),
+  \code{dec} to specify the character used for the decimal point (the
+  default is a period), and \code{comment.char} to specify a character
+  to indicate comment lines.
 }
 
 
@@ -407,8 +415,8 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
 
 \seealso{ \code{\link{subset.cross}}, \code{\link{summary.cross}},
   \code{\link{plot.cross}}, \code{\link{c.cross}}, \code{\link{clean.cross}},
-  \code{\link{write.cross}}, \code{\link{sim.cross}};
-  the \code{sampledata} directory in the package distribution contains
+  \code{\link{write.cross}}, \code{\link{sim.cross}}, \code{\link[utils]{read.table}}.
+  The \code{sampledata} directory in the package distribution contains
   sample data files in multiple formats.  Also see
   \url{http://www.rqtl.org/sampledata}.  
 }
