@@ -17,7 +17,21 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.25, 9/26/2012:
+Version 1.26, 9/26/2012:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Fixed bug in effectplot, regarding coding of genotypes on the X
+  chromosome.
+
+  Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE
+
+
+Version 1.25, 8/13/2012:
 
 Major changes:
 
@@ -31,9 +45,6 @@ Minor changes:
   Revised summary.scanone to be more consistent about only picking one
   row per chromosome even when there are multiple positions sharing
   the maximum LOD on that chromosome.
-
-  Fixed bug in effectplot, regarding coding of genotypes on the X
-  chromosome.
 
   Fixed bug in stepwiseqtl; backward deletion steps were not dealing
   with the drop-one-qtl results from fitqtl appropriately.
@@ -62,8 +73,6 @@ Minor changes:
 
   Speed up some of the examples in the help file, so that R CMD check
   doesn't take so long.
-
-  Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE
 
 
 Version 1.24, 5/25/2012:
