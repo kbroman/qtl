@@ -3,7 +3,7 @@
 # effectplot.R
 #
 # copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# Last modified Mar, 2012
+# Last modified Sep, 2012
 # first written Jul, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -544,10 +544,10 @@ function (cross, mname)
     # if X chr and backcross or intercross, get sex/dir data + revise data
     if(chrtype == "X" && (type %in% c("bc","f2","bcsft"))) {
       sexpgm <- getsex(cross)
-      mark <- as.numeric(reviseXdata(type, "standard", sexpgm, 
+      mark <- as.numeric(reviseXdata(type, "full", sexpgm, 
                                      geno = as.matrix(mark),
                                      cross.attr=attributes(cross)))
-      gennames <- getgenonames(type, chrtype, "standard", sexpgm, attributes(cross))
+      gennames <- getgenonames(type, chrtype, "full", sexpgm, attributes(cross))
     }
   }
   
@@ -558,9 +558,9 @@ function (cross, mname)
     # if X chr and backcross or intercross, get sex/dir data + revise data
     if(chrtype == "X" && (type %in% c("bc","f2","bcsft"))) {
       sexpgm <- getsex(cross)
-      mark <- reviseXdata(type, "standard", sexpgm, draws=mark,
+      mark <- reviseXdata(type, "full", sexpgm, draws=mark,
                           cross.attr=attributes(cross))[,1,]
-      gennames <- getgenonames(type, chrtype, "standard", sexpgm, attributes(cross))
+      gennames <- getgenonames(type, chrtype, "full", sexpgm, attributes(cross))
     }
     else mark <- mark[,1,]
   }
