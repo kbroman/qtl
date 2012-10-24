@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.26, 9/28/2012:
+Version 1.26, 10/24/2012:
 
 Major changes:
 
@@ -31,7 +31,9 @@ Minor changes:
   Fixed bug in effectplot, regarding coding of genotypes on the X
   chromosome.
 
-  Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE
+  Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE.
+
+  Fix bug in c.cross.
 
 
 Version 1.25, 8/13/2012:
