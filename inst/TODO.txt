@@ -35,9 +35,6 @@ o Separate function to get LOD profiles from a fixed model, not
   necessarily the max?  (Or can we use refineqtl for this, but with no
   iterations?)
 
-o example in help file for multitrait data uses scanall() but that
-  function has no help file.
-
 o stepwiseqtl: Need a trap for the case that LODs are all NA
 
 o plot.scanone might take LOD score column *names* (as pheno.col does)
