@@ -47,6 +47,9 @@ Minor changes:
   there are individuals with missing phenotype; the weights weren't
   being subsetted appropriately.
 
+  Revise example help file for multitrait data to use mqmscanall
+  rather than scanall, since the latter function has no help file.
+
 
 Version 1.25, 8/13/2012:
 
