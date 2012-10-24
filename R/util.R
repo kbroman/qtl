@@ -1817,7 +1817,7 @@ function(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
 ######################################################################
 
 checkcovar <-
-function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
+function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, weights=NULL, verbose=TRUE)
 {
   chrtype <- sapply(cross$geno, class)
 
@@ -1918,6 +1918,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
   }
   if(!is.null(perm.strata)) perm.strata <- perm.strata[keep.ind]
   if(!is.null(ind.noqtl)) ind.noqtl <- ind.noqtl[keep.ind]
+  if(!is.null(weights)) weights <- weights[keep.ind]
 
   # drop individuals missing any covariates
   if(!is.null(addcovar)) { # note that intcovar is contained in addcovar
@@ -1930,6 +1931,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
       n.ind <- nind(cross)
       if(!is.null(perm.strata)) perm.strata <- perm.strata[!wh]
       if(!is.null(ind.noqtl)) ind.noqtl <- ind.noqtl[!wh]
+      if(!is.null(weights)) weights <- weights[!wh]
       if(verbose) warning("Dropping ", sum(wh), " individuals with missing covariates.\n")
     }
   }
@@ -1969,7 +1971,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
 
   list(cross=cross, pheno=pheno, addcovar=addcovar, intcovar=intcovar,
        n.addcovar=n.addcovar, n.intcovar=n.intcovar, perm.strata=perm.strata, 
-       ind.noqtl=ind.noqtl)
+       ind.noqtl=ind.noqtl, weights=weights)
 }
 
 # Find the nearest marker to a particular position

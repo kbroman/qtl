@@ -21,8 +21,6 @@ o revise use of snow package to use parallel instead
   results <- clusterApply(cl, blah)
   stopCluster(cl)
 
-o weights aren't being subsetted when there are missing phenotypes
-
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
 
