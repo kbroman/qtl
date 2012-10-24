@@ -33,9 +33,9 @@ Minor changes:
 
   Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE.
 
-  Fix bug in c.cross.
+  Fix bug in c.cross for case that there are different sets of markers.
 
-  Fix bug in xaxisloc.scanone
+  Fix bug in xaxisloc.scanone for case that chromosomes don't start at 0.
 
 
 Version 1.25, 8/13/2012:
