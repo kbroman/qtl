@@ -5,7 +5,7 @@
 # copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2012
+# last modified Oct, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1540,8 +1540,10 @@ function(...)
         newmap[j] <- mean(themap[names(themap) == mn[j]])
 
       for(j in 1:n.args) {
-        if(any(diff(match(names(themaps[[j]]), mn)) < 0)) 
-          stop(" Markers must all be in the same order. [chr", j,"]")
+        m <- match(names(themaps[[j]]), mn)
+        m <- m[!is.na(m)]
+        if(any(diff(m)) < 0)
+          stop(" Markers must all be in the same order.")
 
         if(!all(mn %in% names(themaps[[j]]))) {
           temp <- matrix(ncol=length(mn), nrow=nind(args[[j]]))
@@ -1998,10 +2000,14 @@ function(cross, chr, pos, index)
   }
 
   markers <- rep("",length(chr))
+  chrnotfound <- NULL
   for(i in 1:length(chr)) {
     # find chromosome
     o <- match(chr[i], names(cross$geno))
-    if(is.na(o)) markers[i] <- NA  # chr not matched
+    if(is.na(o)) {
+      markers[i] <- NA  # chr not matched
+      chrnotfound <- c(chrnotfound, chr[i])
+    }
     else {
       thismap <- cross$geno[[o]]$map # genetic map
       # sex-specific map; look at female positions
@@ -2033,6 +2039,13 @@ function(cross, chr, pos, index)
         markers[i] <- names(thismap)[index[i]]
       }
     }
+  }
+  if(length(chrnotfound) > 0) {
+    chrnotfound <- sort(unique(chrnotfound))
+    if(length(chrnotfound) == 1)
+      warning("Chromosome ", paste("\"", chrnotfound, "\"", sep=""), " not found")
+    else
+      warning("Chromosomes ", paste("\"", chrnotfound, "\"", sep="", collapse=", "), " not found")
   }
 
   markers
