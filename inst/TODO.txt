@@ -12,8 +12,6 @@ SHORT TERM:
 
 o Add pheno.col type arguments to all of the MQM functions
 
-o locateXO gives core dump when just one marker on chromosome?
-
 o revise use of snow package to use parallel instead
 
   library(parallel)
