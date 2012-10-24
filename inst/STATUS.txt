@@ -40,6 +40,10 @@ Minor changes:
   Fix bug in locateXO; gave core dump if there was just one marker on
   the chromosome.
 
+  Fix bug in scanone and scantwo for case that weights are used but
+  there are individuals with missing phenotype; the weights weren't
+  being subsetted appropriately.
+
 
 Version 1.25, 8/13/2012:
 
