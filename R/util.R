@@ -3065,6 +3065,18 @@ function(cross, chr, full.info=FALSE)
       warning("locateXO works on just one chr; considering chr ", names(cross$geno)[1])
   }
 
+  # individual IDs
+  id <- getid(cross)
+  if(is.null(id)) id <- as.character(1:nind(cross))
+
+  if(nmar(cross)[1] == 1) { # just one marker; don't need to do anything
+    warning("Just one marker.")
+    res <- vector("list", nind(cross))
+    names(res) <- id
+    for(i in seq(along=res)) res[[i]] <- numeric(0)
+    return(res)
+  }
+
   geno <- cross$geno[[1]]$data
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
@@ -3146,10 +3158,8 @@ function(cross, chr, full.info=FALSE)
       }
     }
   }
-  id <- getid(cross)
-  if(is.null(id)) id <- 1:n.ind
-  names(res) <- id
 
+  names(res) <- id
   res
 }
 

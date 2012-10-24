@@ -37,6 +37,9 @@ Minor changes:
 
   Fix bug in xaxisloc.scanone for case that chromosomes don't start at 0.
 
+  Fix bug in locateXO; gave core dump if there was just one marker on
+  the chromosome.
+
 
 Version 1.25, 8/13/2012:
 
