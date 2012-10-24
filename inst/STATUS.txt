@@ -17,13 +17,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.26, 9/26/2012:
+Version 1.26, 9/28/2012:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Add warning message to find.marker if there's no match for a given
+  chromosome name.
 
   Fixed bug in effectplot, regarding coding of genotypes on the X
   chromosome.
