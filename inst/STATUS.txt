@@ -35,6 +35,8 @@ Minor changes:
 
   Fix bug in c.cross.
 
+  Fix bug in xaxisloc.scanone
+
 
 Version 1.25, 8/13/2012:
 
