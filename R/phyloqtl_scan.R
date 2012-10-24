@@ -2,7 +2,7 @@
 # phyloqtl_scan.R
 #
 # copyright (c) 2009-2012, Karl W Broman
-# last modified Mar, 2012
+# last modified Oct, 2012
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -70,6 +70,35 @@ function(crosses, partitions, chr, pheno.col=1,
     }
     if(length(unique(n.addcovar)) > 1) 
       stop("Mismatch in no. add've covariates: ", paste(n.addcovar, collapse=" "))
+  }
+
+  # check that the marker maps are all exactly the same
+  n.chr <- sapply(crosses, nchr)
+  if(!all(n.chr == n.chr[1]))
+    stop("Different numbers of chromosomes")
+  chrnam1 <- chrnames(crosses[[1]])
+  for(j in 2:length(crosses)) {
+    chrnam2 <- chrnames(crosses[[j]])
+    if(!all(chrnam1 == chrnam2))
+      stop("Different chromosome names")
+  }
+  n.mar1 <- nmar(crosses[[1]])
+  for(j in 2:length(crosses)) {
+    n.mar2 <- nmar(crosses[[j]])
+    if(!all(n.mar1 == n.mar2))
+      stop("Different numbers of markers")
+  }
+  mn1 <- markernames(crosses[[1]])
+  for(j in 2:length(crosses)) {
+    mn2 <- markernames(crosses[[j]])
+    if(!all(mn1 == mn2))
+      stop("Different marker names")
+  }
+  mp1 <- unlist(pull.map(crosses[[1]]))
+  for(j in 2:length(crosses)) {
+    mp2 <- unlist(pull.map(crosses[[j]]))
+    if(!all(mp1 == mp2))
+      stop("Different marker positions")
   }
 
   out <- vector("list", length(partitions))

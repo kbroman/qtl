@@ -60,9 +60,6 @@ o beeswarm package for plot.pxg
 o In sim.cross, to get a QTL on the X chromosome, you need to use
   chr=20 rather than chr="X".
 
-o scanPhyloQTL should give warning if there are different sets of
-  markers.
-
 o Function to calculate recombination fraction and LOD score for just
   adjacent markers.
 

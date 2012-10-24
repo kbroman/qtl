@@ -50,6 +50,8 @@ Minor changes:
   Revise example help file for multitrait data to use mqmscanall
   rather than scanall, since the latter function has no help file.
 
+  scanPhyloQTL now gives warning if there are different marker maps.
+
 
 Version 1.25, 8/13/2012:
 
