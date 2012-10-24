@@ -25,6 +25,9 @@ Major changes:
 
 Minor changes:
 
+  In plot.rfmatrix, include marker name in title (unless main is
+  provided as an argument).
+
   Add warning message to find.marker if there's no match for a given
   chromosome name.
 

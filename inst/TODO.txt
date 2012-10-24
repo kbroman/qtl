@@ -35,9 +35,6 @@ o Separate function to get LOD profiles from a fixed model, not
   necessarily the max?  (Or can we use refineqtl for this, but with no
   iterations?)
 
-o In plot.rfmatrix, include marker name in title (unless main is
-  provided as an argument).
-
 o example in help file for multitrait data uses scanall() but that
   function has no help file.
 

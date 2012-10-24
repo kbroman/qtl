@@ -3,7 +3,7 @@
 # est.rf.R
 #
 # copyright (c) 2001-2012, Karl W Broman
-# last modified Mar, 2012
+# last modified Oct, 2012
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -428,7 +428,11 @@ function(x, marker, ...)
   colnames(x)[3] <- what
   class(x) <- c("scanone", "data.frame")
 
-  plot(x, ...)
+  dots <- list(...)
+  if("main" %in% names(dots))
+    plot(x, ...)
+  else
+    plot(x, main=marker, ...)
   
   invisible(x)
 }
