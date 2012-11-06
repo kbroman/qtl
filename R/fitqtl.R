@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# last modified Nov, 2012
+# last modified Aug, 2012
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -195,9 +195,13 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
           qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
 
         if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+
+        # subset sexpgm
+        for(i in seq(along=sexpgm))
+          if(!is.null(sexpgm[[i]]))
+            sexpgm[[i]] <- sexpgm[[i]][!hasmissing]
       }
     }
-    else hasmissing <- rep(FALSE, length(pheno))
   }
 
   # parse the input formula
@@ -237,7 +241,6 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   }
 
   Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm)
-
   n.origcovar <- p$n.covar
   if((sum(qtl$chrtype[p$idx.qtl]=="X") >= 1 || forceXcovar) && Xadjustment$adjustX) { # need to include X chromosome covariates
     adjustX <- TRUE
@@ -257,9 +260,6 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   }
   else adjustX <- FALSE
 
-  if(run.checks && any(hasmissing) && adjustX)
-    Xadjustment$sexpgmcovar <- Xadjustment$sexpgmcovar[!hasmissing,,drop=FALSE]
-  
   # call C function to do the genome scan
   if(model=="normal") {
     if(method == "imp") {
@@ -538,9 +538,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
       mpheno <- mean(pheno)
       Rss0 <- sum( (pheno-mpheno)^2 )
 
-
       Rss0adj <- Rss0x <- sum( lm(pheno ~ Xadjustment$sexpgmcovar)$resid^2 )
-
       OrigModellod <- z$lod
       Modellod <- z$lod + length(pheno)/2 * (log10(Rss0x) - log10(Rss0))
     } else {
