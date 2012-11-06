@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o scanone summary warning with threshold of length 1 but multiple lod
+  score columns
+
 o Add pheno.col type arguments to all of the MQM functions
 
 o revise use of snow package to use parallel instead
