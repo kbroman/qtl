@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.26, 10/24/2012:
+Version 1.26, 11/6/2012:
 
 Major changes:
 
@@ -31,23 +31,26 @@ Minor changes:
   Add warning message to find.marker if there's no match for a given
   chromosome name.
 
+  Fixed bug in fitqtl for case that individuals have missing
+  phenotypes or covariates and there's a QTL on the X chromosome
+
   Fixed bug in effectplot, regarding coding of genotypes on the X
   chromosome.
 
-  Fix bug in mqmscan for case when estimate.map=TRUE but plot=FALSE.
+  Fixed bug in mqmscan for case when estimate.map=TRUE but plot=FALSE.
 
-  Fix bug in c.cross for case that there are different sets of markers.
+  Fixed bug in c.cross for case that there are different sets of markers.
 
-  Fix bug in xaxisloc.scanone for case that chromosomes don't start at 0.
+  Fixed bug in xaxisloc.scanone for case that chromosomes don't start at 0.
 
-  Fix bug in locateXO; gave core dump if there was just one marker on
+  Fixed bug in locateXO; gave core dump if there was just one marker on
   the chromosome.
 
-  Fix bug in scanone and scantwo for case that weights are used but
+  Fixed bug in scanone and scantwo for case that weights are used but
   there are individuals with missing phenotype; the weights weren't
   being subsetted appropriately.
 
-  Revise example help file for multitrait data to use mqmscanall
+  Revised example help file for multitrait data to use mqmscanall
   rather than scanall, since the latter function has no help file.
 
   scanPhyloQTL now gives warning if there are different marker maps.
