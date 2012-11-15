@@ -5,7 +5,7 @@
 # copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2012
+# last modified Nov, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3361,7 +3361,7 @@ function(cross, marker)
     colnames(output)[2:3] <- c("pos.female","pos.male")
   }
   
-  mnam <- colnames(pull.geno(cross))
+  mnam <- markernames(cross)
   
   for(i in seq(along=marker)) {
     

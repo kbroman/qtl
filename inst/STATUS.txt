@@ -31,6 +31,8 @@ Minor changes:
   Add warning message to find.marker if there's no match for a given
   chromosome name.
 
+  Slight change in find.markerpos(), to speed it up.
+
   Fixed bug in fitqtl for case that individuals have missing
   phenotypes or covariates and there's a QTL on the X chromosome
 
