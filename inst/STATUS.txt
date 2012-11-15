@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.26, 11/6/2012:
+Version 1.26, 11/15/2012:
 
 Major changes:
 
@@ -54,6 +54,9 @@ Minor changes:
   rather than scanall, since the latter function has no help file.
 
   scanPhyloQTL now gives warning if there are different marker maps.
+
+  Fixed bug in mqmaugment; with one phenotype, its name was getting
+  changed to "pheno".
 
 
 Version 1.25, 8/13/2012:
