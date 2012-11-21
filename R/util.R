@@ -3112,6 +3112,8 @@ function(cross, chr, full.info=FALSE)
           iright=as.integer(rep(0,n.ind*2*(n.mar-1))),
           left=as.double(rep(0,n.ind*2*(n.mar-1))),
           right=as.double(rep(0,n.ind*2*(n.mar-1))),
+          gleft=as.integer(rep(0, n.ind*2*(n.mar-1))),
+          gright=as.integer(rep(0, n.ind*2*(n.mar-1))),
           ntype=as.integer(rep(0,n.ind*2*(n.mar-1))),
           as.integer(full.info),
           PACKAGE="qtl")
@@ -3122,6 +3124,8 @@ function(cross, chr, full.info=FALSE)
     iright <- t(matrix(z$iright, nrow=n.ind))
     left <- t(matrix(z$left, nrow=n.ind))
     right <- t(matrix(z$right, nrow=n.ind))
+    gleft <- t(matrix(z$gleft, nrow=n.ind))
+    gright <- t(matrix(z$gright, nrow=n.ind))
     ntype <- t(matrix(z$ntype, nrow=n.ind))
   }
 
@@ -3144,6 +3148,12 @@ function(cross, chr, full.info=FALSE)
     right <- lapply(as.data.frame(rbind(nseen, right), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
+    gleft <- lapply(as.data.frame(rbind(nseen, gleft), stringsAsFactors=TRUE),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    gright <- lapply(as.data.frame(rbind(nseen, gright), stringsAsFactors=TRUE),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+
     ntype <- lapply(as.data.frame(rbind(nseen, ntype), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
 
@@ -3156,6 +3166,8 @@ function(cross, chr, full.info=FALSE)
                           right=right[[i]],
                           ileft=ileft[[i]],
                           iright=iright[[i]],
+                          gleft=gleft[[i]],
+                          gright=gright[[i]],
                           nTypedBetween=ntype[[i]])
       }
     }

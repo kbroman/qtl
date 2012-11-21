@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.26, 11/15/2012:
+Version 1.26, 11/20/2012:
 
 Major changes:
 
@@ -32,6 +32,9 @@ Minor changes:
   chromosome name.
 
   Slight change in find.markerpos(), to speed it up.
+
+  Slight change to locateXO to save genotypes to left and right of
+  each crossover.
 
   Fixed bug in fitqtl for case that individuals have missing
   phenotypes or covariates and there's a QTL on the X chromosome
