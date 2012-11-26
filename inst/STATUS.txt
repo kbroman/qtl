@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.26, 11/20/2012:
+Version 1.26, 11/26/2012:
 
 Major changes:
 
@@ -35,6 +35,11 @@ Minor changes:
 
   Slight change to locateXO to save genotypes to left and right of
   each crossover.
+
+  Small addition to the "A shorter tutorial of R/qtl" (rqtltour2.pdf).
+
+  Fixed slight bug in summary.scanone for format="tabByChr" or
+  format="tabByCol".
 
   Fixed bug in fitqtl for case that individuals have missing
   phenotypes or covariates and there's a QTL on the X chromosome
