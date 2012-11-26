@@ -21,7 +21,12 @@ Version 1.26, 11/26/2012:
 
 Major changes:
 
-  None.
+  We changed the treatment of the ind argument in subset.cross to
+  avoid problems that occurred when the cross contained numeric
+  individual IDs.  Now, we match the values in ind against the
+  individual IDs only if ind values are character strings.  If the ind
+  values are numeric, we treat them as numeric indices and they are
+  not compared against the individual IDs.
 
 Minor changes:
 
