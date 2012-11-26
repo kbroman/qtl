@@ -1344,54 +1344,50 @@ function(x, chr, ind, ...)
       else ind <- (1:n.ind)[ind]
     }
 
-    if(!is.null(theid)) { # cross has individual IDs
-      if(is.numeric(ind)) {
-        if(all(ind < 0)) {
-          ind <- -ind
-          if(any(is.na(match(ind, theid)))) { # treat as numbers
-            if(any(ind < 1 | ind > n.ind))
-              stop("individuals outside 1 and ", n.ind)
-            ind <- (1:n.ind)[-ind]
-          }
-          else
-            ind <- ind[-match(ind, theid)]
+    else if(is.numeric(ind)) { # treat as numeric indices; don't match against individual identifiers
+      if(all(ind < 0)) { # drop all but these
+        ind <- -ind
+        if(any(ind > nind(x))) {
+          a <- -ind[ind > nind(x)]
+          if(length(a) > 1) a <- sample(a, 1)
+          stop("Invalid ind values (e.g., ", a, ")")
         }
-        else {
-          if(all(!is.na(match(ind, theid))))
-            ind <- match(ind, theid)
-          else {
-            if(any(ind < 1 | ind > n.ind))
-              stop("individuals outside 1 and ", n.ind)
-          }
+        ind <- (1:n.ind)[-ind]
+      }
+      else if(all(ind > 0)) { # keep these
+        if(any(ind > nind(x))) {
+          a <- ind[ind > nind(x)]
+          if(length(a) > 1) a <- sample(a, 1)
+          stop("Invalid ind values (e.g., ", a, ")")
         }
       }
       else {
-        ind <- as.character(ind)
-        if(all(substr(ind, 1,1) == "-")) {
-          ind <- substr(ind, 2, nchar(ind))
-          m <- match(ind, theid)
-          if(all(is.na(m)))
-            stop("No matching individuals.")
-          if(any(is.na(m)))
-            warning("Individuals not found: ", paste(ind[is.na(m)]))
-          ind <- (1:n.ind)[-m[!is.na(m)]]
-        }
-        else  {
-          m <- match(ind, theid)
-          if(any(is.na(m)))
-            warning("Individuals not found: ", paste(ind[is.na(m)], collapse=" "))
-          ind <- m[!is.na(m)]
-        }
+        stop("Need ind to be all > 0 or all < 0.")
+      }
+    }
+
+
+    else if(!is.null(theid)) { # cross has individual IDs
+      ind <- as.character(ind)
+      if(all(substr(ind, 1,1) == "-")) {
+        ind <- substr(ind, 2, nchar(ind))
+        m <- match(ind, theid)
+        if(all(is.na(m)))
+          stop("No matching individuals.")
+        if(any(is.na(m)))
+          warning("Individuals not found: ", paste(ind[is.na(m)]))
+        ind <- (1:n.ind)[-m[!is.na(m)]]
+      }
+      else  {
+        m <- match(ind, theid)
+        if(any(is.na(m)))
+          warning("Individuals not found: ", paste(ind[is.na(m)], collapse=" "))
+        ind <- m[!is.na(m)]
       }
       ind <- ind[!is.na(ind)]
     }
     else { # no individual IDs
-      if(!is.numeric(ind))
-        stop("In the absense of individual IDs, ind should be logical or numeric.")
-      if(all(ind < 0))
-        ind <- (1:n.ind)[ind]
-      if(any(ind < 1 | ind > n.ind))
-        stop("individuals outside 1 and ", n.ind)
+      stop("In the absense of individual IDs, ind should be logical or numeric.")
     }
     # Note: ind should now be a numeric vector
 
