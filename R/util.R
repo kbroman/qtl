@@ -1339,9 +1339,7 @@ function(x, chr, ind, ...)
       ind[is.na(ind)] <- FALSE
       if(length(ind) != n.ind) 
         stop("ind argument has wrong length (", length(ind), "; should be ", n.ind, ")")
-      if(!is.null(theid)) 
-        ind <- theid[ind]
-      else ind <- (1:n.ind)[ind]
+      ind <- (1:n.ind)[ind]
     }
 
     else if(is.numeric(ind)) { # treat as numeric indices; don't match against individual identifiers
