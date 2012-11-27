@@ -46,7 +46,7 @@ xaxisloc.scanone(out, thechr, thepos, chr, gap=25)
 
 \examples{
 data(hyper)
-\dontrun{hyper <- subset(hyper, c(1,4,6,15))}
+\dontshow{hyper <- subset(hyper, c(1,4,6,15))}
 hyper <- calc.genoprob(hyper)
 out <- scanone(hyper, method="hk")
 plot(out, chr=c(1, 4, 6, 15))

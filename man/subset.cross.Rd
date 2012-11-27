@@ -37,29 +37,26 @@
   with a preceding \code{-} to have all chromosomes but those
   considered.  
 
-  The \code{ind} argument may be a logical vector with length equal to
-  the number of individuals in the input cross \code{x}.  Otherwise, its
-  treatment depends on whether the input cross contains individual
-  identifiers in the phenotype data (which is a column named either
-  \code{id} or \code{ID}).
+  If the \code{ind} argument is a logical vector
+  (\code{TRUE}/\code{FALSE}), it should have length equal to the number
+  of individuals in the input cross \code{x}.  The individuals with
+  corresponding \code{TRUE} values are retained.
 
-  If there are no individual identifiers in the input cross, the
-  \code{ind} argument should be logical or numeric.  If numeric, the
-  values should indicate which individuals to retain (if they are all
-  positive) or which to omit (if they are all negative).
+  If the \code{ind} argument is numeric, it should have values either
+  between 1 and the number of individuals in the input cross \code{x}
+  (in which case these individuals will be retained),
+  or it should have values between \code{-1} and \code{-n}, where
+  \code{n} is the number of individuals in the input cross \code{x}, in
+  which case all \emph{except} these individuals will be retained.
 
-  If there are individual identifiers in the input cross and the
-  argument \code{ind} is numeric, we first look to see whether all of
-  the values match an individual identifier.  If some do not match, we
-  treat the vector as we would if the input cross had no individual
-  identifiers.  If \code{ind} is numeric and all values match an
-  individual identifier, we treat them as such identifiers.
-
-  When the values of \code{ind} are to be treated as individual
-  identifiers, we either retain those individuals whose IDs match those
-  in \code{ind}, or (in the case that all values in \code{ind} are
-  preceded by a \code{-}), we omit those individauls whose IDs match
-  those in \code{ind}.
+  If the input cross object \code{x} contains individual identifiers (a
+  phenotype column labeled \code{"id"} or \code{"ID"}), and if the
+  \code{ind} argument contains character strings, then these will be
+  matched against the individual identifiers.
+  If all values in \code{ind} are
+  preceded by a \code{-}), we omit those individuals whose IDs match
+  those in \code{ind}.  Otherwise, we retain those individuals whose IDs
+  match those in \code{ind}.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

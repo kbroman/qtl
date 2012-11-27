@@ -2,8 +2,8 @@
 #
 # add_threshold.R
 #
-# copyright (c) 2006-10, Karl W Broman, Johns Hopkins University
-# last modified Jan, 2010
+# copyright (c) 2006-2012, Karl W Broman, Johns Hopkins University
+# last modified Oct, 2012
 # first written Dec, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -127,11 +127,11 @@ function(out, thechr, thepos, chr, gap=25)
     return(res)
   }
 
-  L <- tapply(out[,2], out[,1], function(a) diff(range(a)))
-  L <- L[!is.na(L)]
+  L <- tapply(out[,2], out[,1], function(a) diff(range(a, na.rm=TRUE)))
+  Lmin <- tapply(out[,2], out[,1], min, na.rm=TRUE)
   start <- c(0,cumsum(L+gap))
   
-  start[which(as.character(thechr)==chr)]+thepos
+  start[which(as.character(thechr)==chr)]+(thepos - Lmin[as.character(thechr)==chr])
 }
 
 # end of add_threshold.R
