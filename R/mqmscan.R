@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009-2011, Danny Arends
+# Copyright (c) 2009-2012, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified May 2011
+# last modified Aug 2012
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,

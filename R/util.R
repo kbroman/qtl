@@ -5,7 +5,7 @@
 # copyright (c) 2001-2012, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2012
+# last modified Nov, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1344,54 +1344,50 @@ function(x, chr, ind, ...)
       else ind <- (1:n.ind)[ind]
     }
 
-    if(!is.null(theid)) { # cross has individual IDs
-      if(is.numeric(ind)) {
-        if(all(ind < 0)) {
-          ind <- -ind
-          if(any(is.na(match(ind, theid)))) { # treat as numbers
-            if(any(ind < 1 | ind > n.ind))
-              stop("individuals outside 1 and ", n.ind)
-            ind <- (1:n.ind)[-ind]
-          }
-          else
-            ind <- ind[-match(ind, theid)]
+    else if(is.numeric(ind)) { # treat as numeric indices; don't match against individual identifiers
+      if(all(ind < 0)) { # drop all but these
+        ind <- -ind
+        if(any(ind > nind(x))) {
+          a <- -ind[ind > nind(x)]
+          if(length(a) > 1) a <- sample(a, 1)
+          stop("Invalid ind values (e.g., ", a, ")")
         }
-        else {
-          if(all(!is.na(match(ind, theid))))
-            ind <- match(ind, theid)
-          else {
-            if(any(ind < 1 | ind > n.ind))
-              stop("individuals outside 1 and ", n.ind)
-          }
+        ind <- (1:n.ind)[-ind]
+      }
+      else if(all(ind > 0)) { # keep these
+        if(any(ind > nind(x))) {
+          a <- ind[ind > nind(x)]
+          if(length(a) > 1) a <- sample(a, 1)
+          stop("Invalid ind values (e.g., ", a, ")")
         }
       }
       else {
-        ind <- as.character(ind)
-        if(all(substr(ind, 1,1) == "-")) {
-          ind <- substr(ind, 2, nchar(ind))
-          m <- match(ind, theid)
-          if(all(is.na(m)))
-            stop("No matching individuals.")
-          if(any(is.na(m)))
-            warning("Individuals not found: ", paste(ind[is.na(m)]))
-          ind <- (1:n.ind)[-m[!is.na(m)]]
-        }
-        else  {
-          m <- match(ind, theid)
-          if(any(is.na(m)))
-            warning("Individuals not found: ", paste(ind[is.na(m)], collapse=" "))
-          ind <- m[!is.na(m)]
-        }
+        stop("Need ind to be all > 0 or all < 0.")
+      }
+    }
+
+
+    else if(!is.null(theid)) { # cross has individual IDs
+      ind <- as.character(ind)
+      if(all(substr(ind, 1,1) == "-")) {
+        ind <- substr(ind, 2, nchar(ind))
+        m <- match(ind, theid)
+        if(all(is.na(m)))
+          stop("No matching individuals.")
+        if(any(is.na(m)))
+          warning("Individuals not found: ", paste(ind[is.na(m)]))
+        ind <- (1:n.ind)[-m[!is.na(m)]]
+      }
+      else  {
+        m <- match(ind, theid)
+        if(any(is.na(m)))
+          warning("Individuals not found: ", paste(ind[is.na(m)], collapse=" "))
+        ind <- m[!is.na(m)]
       }
       ind <- ind[!is.na(ind)]
     }
     else { # no individual IDs
-      if(!is.numeric(ind))
-        stop("In the absense of individual IDs, ind should be logical or numeric.")
-      if(all(ind < 0))
-        ind <- (1:n.ind)[ind]
-      if(any(ind < 1 | ind > n.ind))
-        stop("individuals outside 1 and ", n.ind)
+      stop("In the absense of individual IDs, ind should be logical or numeric.")
     }
     # Note: ind should now be a numeric vector
 
@@ -1540,8 +1536,10 @@ function(...)
         newmap[j] <- mean(themap[names(themap) == mn[j]])
 
       for(j in 1:n.args) {
-        if(any(diff(match(names(themaps[[j]]), mn)) < 0)) 
-          stop(" Markers must all be in the same order. [chr", j,"]")
+        m <- match(names(themaps[[j]]), mn)
+        m <- m[!is.na(m)]
+        if(any(diff(m)) < 0)
+          stop(" Markers must all be in the same order.")
 
         if(!all(mn %in% names(themaps[[j]]))) {
           temp <- matrix(ncol=length(mn), nrow=nind(args[[j]]))
@@ -1815,7 +1813,7 @@ function(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
 ######################################################################
 
 checkcovar <-
-function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
+function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, weights=NULL, verbose=TRUE)
 {
   chrtype <- sapply(cross$geno, class)
 
@@ -1916,6 +1914,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
   }
   if(!is.null(perm.strata)) perm.strata <- perm.strata[keep.ind]
   if(!is.null(ind.noqtl)) ind.noqtl <- ind.noqtl[keep.ind]
+  if(!is.null(weights)) weights <- weights[keep.ind]
 
   # drop individuals missing any covariates
   if(!is.null(addcovar)) { # note that intcovar is contained in addcovar
@@ -1928,6 +1927,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
       n.ind <- nind(cross)
       if(!is.null(perm.strata)) perm.strata <- perm.strata[!wh]
       if(!is.null(ind.noqtl)) ind.noqtl <- ind.noqtl[!wh]
+      if(!is.null(weights)) weights <- weights[!wh]
       if(verbose) warning("Dropping ", sum(wh), " individuals with missing covariates.\n")
     }
   }
@@ -1967,7 +1967,7 @@ function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verb
 
   list(cross=cross, pheno=pheno, addcovar=addcovar, intcovar=intcovar,
        n.addcovar=n.addcovar, n.intcovar=n.intcovar, perm.strata=perm.strata, 
-       ind.noqtl=ind.noqtl)
+       ind.noqtl=ind.noqtl, weights=weights)
 }
 
 # Find the nearest marker to a particular position
@@ -1998,10 +1998,14 @@ function(cross, chr, pos, index)
   }
 
   markers <- rep("",length(chr))
+  chrnotfound <- NULL
   for(i in 1:length(chr)) {
     # find chromosome
     o <- match(chr[i], names(cross$geno))
-    if(is.na(o)) markers[i] <- NA  # chr not matched
+    if(is.na(o)) {
+      markers[i] <- NA  # chr not matched
+      chrnotfound <- c(chrnotfound, chr[i])
+    }
     else {
       thismap <- cross$geno[[o]]$map # genetic map
       # sex-specific map; look at female positions
@@ -2033,6 +2037,13 @@ function(cross, chr, pos, index)
         markers[i] <- names(thismap)[index[i]]
       }
     }
+  }
+  if(length(chrnotfound) > 0) {
+    chrnotfound <- sort(unique(chrnotfound))
+    if(length(chrnotfound) == 1)
+      warning("Chromosome ", paste("\"", chrnotfound, "\"", sep=""), " not found")
+    else
+      warning("Chromosomes ", paste("\"", chrnotfound, "\"", sep="", collapse=", "), " not found")
   }
 
   markers
@@ -3052,6 +3063,18 @@ function(cross, chr, full.info=FALSE)
       warning("locateXO works on just one chr; considering chr ", names(cross$geno)[1])
   }
 
+  # individual IDs
+  id <- getid(cross)
+  if(is.null(id)) id <- as.character(1:nind(cross))
+
+  if(nmar(cross)[1] == 1) { # just one marker; don't need to do anything
+    warning("Just one marker.")
+    res <- vector("list", nind(cross))
+    names(res) <- id
+    for(i in seq(along=res)) res[[i]] <- numeric(0)
+    return(res)
+  }
+
   geno <- cross$geno[[1]]$data
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
@@ -3085,6 +3108,8 @@ function(cross, chr, full.info=FALSE)
           iright=as.integer(rep(0,n.ind*2*(n.mar-1))),
           left=as.double(rep(0,n.ind*2*(n.mar-1))),
           right=as.double(rep(0,n.ind*2*(n.mar-1))),
+          gleft=as.integer(rep(0, n.ind*2*(n.mar-1))),
+          gright=as.integer(rep(0, n.ind*2*(n.mar-1))),
           ntype=as.integer(rep(0,n.ind*2*(n.mar-1))),
           as.integer(full.info),
           PACKAGE="qtl")
@@ -3095,6 +3120,8 @@ function(cross, chr, full.info=FALSE)
     iright <- t(matrix(z$iright, nrow=n.ind))
     left <- t(matrix(z$left, nrow=n.ind))
     right <- t(matrix(z$right, nrow=n.ind))
+    gleft <- t(matrix(z$gleft, nrow=n.ind))
+    gright <- t(matrix(z$gright, nrow=n.ind))
     ntype <- t(matrix(z$ntype, nrow=n.ind))
   }
 
@@ -3117,6 +3144,12 @@ function(cross, chr, full.info=FALSE)
     right <- lapply(as.data.frame(rbind(nseen, right), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
     
+    gleft <- lapply(as.data.frame(rbind(nseen, gleft), stringsAsFactors=TRUE),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+    
+    gright <- lapply(as.data.frame(rbind(nseen, gright), stringsAsFactors=TRUE),
+                  function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
+
     ntype <- lapply(as.data.frame(rbind(nseen, ntype), stringsAsFactors=TRUE),
                   function(a) { if(a[1]==0) return(numeric(0)); a[(1:a[1])+1] })
 
@@ -3129,14 +3162,14 @@ function(cross, chr, full.info=FALSE)
                           right=right[[i]],
                           ileft=ileft[[i]],
                           iright=iright[[i]],
+                          gleft=gleft[[i]],
+                          gright=gright[[i]],
                           nTypedBetween=ntype[[i]])
       }
     }
   }
-  id <- getid(cross)
-  if(is.null(id)) id <- 1:n.ind
-  names(res) <- id
 
+  names(res) <- id
   res
 }
 
@@ -3336,7 +3369,7 @@ function(cross, marker)
     colnames(output)[2:3] <- c("pos.female","pos.male")
   }
   
-  mnam <- colnames(pull.geno(cross))
+  mnam <- markernames(cross)
   
   for(i in seq(along=marker)) {
     

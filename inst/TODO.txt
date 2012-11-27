@@ -10,11 +10,7 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o apparent bug in xaxisloc.scanone if a chromosome doesn't start at 0
-
-o speed up R CMD check
-
-o locateXO gives core dump when just one marker on chromosome?
+o Add pheno.col type arguments to all of the MQM functions
 
 o revise use of snow package to use parallel instead
 
@@ -24,8 +20,6 @@ o revise use of snow package to use parallel instead
   clusterEvalQ(cl, library(qtl))
   results <- clusterApply(cl, blah)
   stopCluster(cl)
-
-o weights aren't being subsetted when there are missing phenotypes
 
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
@@ -40,12 +34,6 @@ o Add argument to refineqtl to scan full chromosomes
 o Separate function to get LOD profiles from a fixed model, not
   necessarily the max?  (Or can we use refineqtl for this, but with no
   iterations?)
-
-o In plot.rfmatrix, include marker name in title (unless main is
-  provided as an argument).
-
-o example in help file for multitrait data uses scanall() but that
-  function has no help file.
 
 o stepwiseqtl: Need a trap for the case that LODs are all NA
 
@@ -71,9 +59,6 @@ o beeswarm package for plot.pxg
 
 o In sim.cross, to get a QTL on the X chromosome, you need to use
   chr=20 rather than chr="X".
-
-o scanPhyloQTL should give warning if there are different sets of
-  markers.
 
 o Function to calculate recombination fraction and LOD score for just
   adjacent markers.

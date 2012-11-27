@@ -195,6 +195,11 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
           qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
 
         if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+
+        # subset sexpgm
+        for(i in seq(along=sexpgm))
+          if(!is.null(sexpgm[[i]]))
+            sexpgm[[i]] <- sexpgm[[i]][!hasmissing]
       }
     }
   }
