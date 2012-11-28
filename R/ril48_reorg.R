@@ -67,6 +67,8 @@ function(cross)
     n.mar <- dim(prob)[2]
     if(dim(prob)[1] != n.ind)
       stop("Mismatch between no. individuals in cross and in genoprobs.")
+	if(dim(crosses)[2] != n.str)
+      stop("Invalid no. of founder strains specified") 
     if(dim(prob)[3] != n.str) {
       warning("Odd no. columns in genoprobs for chromosome ", i)
       next
@@ -134,6 +136,8 @@ function(cross)
     n.imp <- dim(draws)[3]
     if(dim(draws)[1] != n.ind)
       stop("Mismatch between no. individuals in cross and in draws.")
+	if(dim(crosses)[2] != n.str)
+      stop("Invalid no. of founder strains specified") 
 
     draws <- .C("R_reorgRIdraws",
                as.integer(n.ind),
@@ -196,6 +200,8 @@ function(cross)
     n.mar <- dim(argmax)[2]
     if(dim(argmax)[1] != n.ind)
       stop("Mismatch between no. individuals in cross and in argmax.")
+	if(dim(crosses)[2] != n.str)
+      stop("Invalid no. of founder strains specified") 
 
     argmax <- .C("R_reorgRIdraws",
                as.integer(n.ind),
@@ -256,6 +262,8 @@ function(cross, pairprob)
   if(thedim[3] != n.str || thedim[4] != n.str) 
     stop("Mismatch between no. founder strains in cross and in pairprob.")
 
+  if(dim(crosses)[2] != n.str)
+    stop("Invalid no. of founder strains specified") 
   n.mar <- nmar(cross)[1]
   if(n.mar*(n.mar-1)/2 != thedim[2])
     stop("Mismatch between no. markers in cross and in pairprob.")
