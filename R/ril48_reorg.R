@@ -2,8 +2,8 @@
 #
 # ril48_reorg.R
 #
-# copyright (c) 2009-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2009-2012, Karl W Broman
+# last modified Nov, 2012
 # first written Apr, 2009
 #
 #     This program is free software; you can redistribute it and/or
