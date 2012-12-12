@@ -10,6 +10,14 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o GMendel-type option for bootstrap to assess marker order for closely
+  spaced markers.
+
+o CIM-type analysis with proper treatment of missing data, using
+  fitqtl
+
+o h^2 due to QTL in results of scanone
+
 o Add pheno.col type arguments to all of the MQM functions
 
 o revise use of snow package to use parallel instead
