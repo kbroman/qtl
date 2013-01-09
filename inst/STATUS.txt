@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2012, Karl W Broman
+copyright (c) 2001-2013, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.27, 12/14/2012:
+Version 1.27, 1/9/2013:
 
 Major changes:
 
@@ -25,7 +25,8 @@ Major changes:
 
 Minor changes:
 
-  None.
+  Slight change to help file for read.cross, to be more explicit about
+  the "csvs" format.
 
 
 Version 1.26, 11/27/2012:
