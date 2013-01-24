@@ -10,13 +10,7 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o GMendel-type option for bootstrap to assess marker order for closely
-  spaced markers.
-
-o CIM-type analysis with proper treatment of missing data, using
-  fitqtl
-
-o h^2 due to QTL in results of scanone
+o Problem with stepwiseqtl when there is collinearity
 
 o Add pheno.col type arguments to all of the MQM functions
 
@@ -36,6 +30,14 @@ o Scantwo permutations: currently interaction LOD is obtained by
   taking max(full) - max(add) within chromosome pair and then maximizing
   across chr pairs.  It should be max(full) overall - max(add)
   overall.  The latter will be a bit smaller than the former
+
+o GMendel-type option for bootstrap to assess marker order for closely
+  spaced markers.
+
+o CIM-type analysis with proper treatment of missing data, using
+  fitqtl
+
+o h^2 due to QTL in results of scanone
 
 o Add argument to refineqtl to scan full chromosomes
 
