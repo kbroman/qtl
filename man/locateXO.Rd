@@ -39,7 +39,8 @@ locateXO(cross, chr, full.info=FALSE)
   If \code{full.info=TRUE}, in place of a numeric vector with estimated
   locations, there is a matrix that includes those locations, the left
   and right endpoints of the intervals to which crossovers can be
-  placed, and the marker indices corresponding to those endpoint.  The
+  placed, the marker indices corresponding to those endpoint, and
+  genotype codes for the genotypes to the left and right of each crossover.  The
   final column indicates the number of typed markers between the current
   crossover and the next one (useful for identifying potential
   genotyping errors).
