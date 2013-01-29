@@ -27,7 +27,7 @@
 
 \title{Users Guide for New $BC_sF_t$ Tools for R/qtl}
 \author{Laura M. Shannon \and Brian S. Yandell \and Karl Broman}
-\date{9 July 2012}
+\date{29 January 2013}
 \maketitle
 
 \section*{Introduction}
