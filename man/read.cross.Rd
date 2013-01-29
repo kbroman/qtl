@@ -248,6 +248,12 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \code{\link{top.errorlod}}, \code{\link{plotErrorlod}}, and
   \code{\link{plotGeno}} as identifiers for the individual.  
 
+  The first row in each file contains the column names.  For the
+  phenotype file, these are the names of the phenotypes.  For the
+  genotype file, the first cell will be the name of the identifier
+  column (\code{id} or \code{ID}) and the subsequent fields will be the
+  marker names.
+
   In the genotype data file, the second row gives the chromosome IDs.
   The cell in the second row, first column, must be blank.  A third
   row giving cM positions of markers may be included, in which case the

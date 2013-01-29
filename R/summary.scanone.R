@@ -3,7 +3,7 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-2012, Karl W Broman
-# last modified Jul, 2012
+# last modified Nov, 2012
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -440,7 +440,7 @@ function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByC
     # drop insignificant peaks
     if(!missing(threshold)) { # rows with at least one LOD > threshold
       for(i in seq(along=result))
-        result[[i]] <- result[[i]][lod[,i] > threshold,,drop=FALSE]
+        result[[i]] <- result[[i]][lod[,i] > threshold[i],,drop=FALSE]
     }
     else if(!missing(alpha)) {
       keep <- NULL

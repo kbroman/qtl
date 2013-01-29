@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-2012, Karl W Broman and Hao Wu
-# last modified May, 2012
+# last modified Oct, 2012
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -170,7 +170,7 @@ function(cross, chr, pheno.col=1,
     # If use="complete.obs", drop individuals with any missing phenotypes
     if(use=="complete.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, ind.noqtl=NULL, TRUE)
+                         perm.strata, ind.noqtl=NULL, weights, TRUE)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -178,6 +178,7 @@ function(cross, chr, pheno.col=1,
       n.addcovar <- temp[[5]]
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
+      weights <- temp[[9]]
     }
   }
 
@@ -187,7 +188,7 @@ function(cross, chr, pheno.col=1,
     # drop individuals with missing covariates
     cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
     temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,
-                         perm.strata, ind.noqtl=NULL, TRUE)
+                         perm.strata, ind.noqtl=NULL, weights, TRUE)
     cross <- temp[[1]]
     pheno <- cross$pheno[,pheno.col, drop=FALSE]
     addcovar <- temp[[3]]
@@ -195,6 +196,7 @@ function(cross, chr, pheno.col=1,
     n.addcovar <- temp[[5]]
     n.intcovar <- temp[[6]]
     perm.strata <- temp[[7]]
+    weights <- temp[[9]]
 
     # determine the batches (defined by the pattern of missing data)
     patterns <- apply(pheno, 2, function(a) paste(!is.na(a), collapse=":"))
@@ -295,7 +297,7 @@ function(cross, chr, pheno.col=1,
   if(n.perm < 0) { # in the midst of permutations
     if(use=="all.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, ind.noqtl=NULL, n.perm==-1)
+                         perm.strata, ind.noqtl=NULL, weights, n.perm==-1)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -303,6 +305,7 @@ function(cross, chr, pheno.col=1,
       n.addcovar <- temp[[5]]
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
+      weights <- temp[[9]]
     }
     else {
       pheno <- as.matrix(cross$pheno[,pheno.col])

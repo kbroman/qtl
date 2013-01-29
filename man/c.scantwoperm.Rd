@@ -37,10 +37,12 @@
 
 \examples{
 data(fake.f2)
-\dontshow{fake.f2 <- subset(fake.f2, chr=c(18:19,"X"))}
+\dontshow{fake.f2 <- subset(fake.f2, chr=c(18:19,"X"), ind=1:50)}
 fake.f2 <- calc.genoprob(fake.f2)
-operm1 <- scantwo(fake.f2, method="hk", n.perm=50)
-operm2 <- scantwo(fake.f2, method="hk", n.perm=50)
+\dontrun{operm1 <- scantwo(fake.f2, method="hk", n.perm=50)
+operm2 <- scantwo(fake.f2, method="hk", n.perm=50)}\dontshow{
+operm1 <- scantwo(fake.f2, method="hk", n.perm=3)
+operm2 <- scantwo(fake.f2, method="hk", n.perm=3)}
 
 operm <- c(operm1, operm2)
 }

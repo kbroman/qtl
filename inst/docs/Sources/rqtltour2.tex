@@ -49,7 +49,7 @@ University of Wisconsin -- Madison
 \href{http://www.rqtl.org}{http://www.rqtl.org}
 \vspace{2mm}
 
-21 March 2012 % the date
+26 November 2012 % the date
 
 \rule{7.0in}{1mm} 
 \end{center}
@@ -588,10 +588,24 @@ To do the same thing but focusing on another column, use the argument
 \verb|summary(out.all, threshold=3, format="allpheno")|
 \normalcolor
 
+\item There are two other formats that might be preferred:
+  \verb-format="tabByCol"- and \verb-format="tabByChr"-.  These give
+  tables with one significant LOD peak per phenotype, organized either
+  by phenotype (with
+  \verb-"tabByCol"-) or by chromosome (with \verb-"tabByChr"-).
+  The tables include 1.5-LOD support intervals, and so one may wish to
+  use \verb-"tabByCol"- even if there is only one LOD score column.
+
+\usercolor
+\verb|summary(out.all, threshold=3, format="tabByCol")| \\
+\verb|summary(out.all, threshold=3, format="tabByChr")|
+\normalcolor
+
 \end{enumerate}
 
 
-\vspace{12pt}
+\clearpage
+
 \textbf{Two-dimensional, two-QTL scans} \vspace{6pt}
 \nopagebreak
 
@@ -601,7 +615,7 @@ performed with \verb-scantwo-, which is much like \verb-scanone-.
 
 
 \begin{enumerate}
-\addtocounter{enumi}{45}
+\addtocounter{enumi}{46}
 \item For 2d scans, it's advantageous to run things at a coarser step
   size, by first re-running \verb-calc.genoprob-.
 

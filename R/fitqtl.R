@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# last modified Aug, 2012
+# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
+# last modified Jan, 2013
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -196,9 +196,10 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
         if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
 
-        ## Yandell fix for X chr and covariates.
-        for(sp in names(sexpgm))
-          sexpgm[[sp]] <- sexpgm[[sp]][!hasmissing]
+        # subset sexpgm
+        for(i in seq(along=sexpgm))
+          if(!is.null(sexpgm[[i]]))
+            sexpgm[[i]] <- sexpgm[[i]][!hasmissing]
       }
     }
   }

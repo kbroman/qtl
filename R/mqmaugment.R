@@ -2,13 +2,13 @@
 #
 # mqmaugment.R
 #
-# Copyright (c) 2009-2011, Danny Arends
+# Copyright (c) 2009-2012, Danny Arends
 #
-# Modified by Pjotr Prins
+# Modified by Pjotr Prins; slight modification by Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified May 2011
+# last modified Nov 2012
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -180,6 +180,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
   markONchr <- 0
   markdone <- 0
   pheno <- NULL
+  pnames <- phenames(cross)
   oldpheno <- pull.pheno(cross)
   result$augIND <- result$augIND+1
   for(x in result$augPheno[1:n.aug]){
@@ -225,5 +226,8 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
     if(verbose) warning("SERIOUS WARNING: Dropped ",abs(n.ind - n.indold)," original individuals.\n  Information lost, please increase minprob.")
   }
   if(verbose) cat("INFO: DATA-Augmentation took: ",round((endtime-starttime)[3], digits=3)," seconds\n")
+
+  colnames(cross$pheno) <- pnames # fix up phenotype names problem
+
   cross  # return cross type
 }

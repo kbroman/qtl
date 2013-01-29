@@ -63,7 +63,8 @@
 
 \usage{
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
-checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
+checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata,
+           ind.noqtl=NULL, weights=NULL, verbose=TRUE)
 clean(object, \dots)
 condense(object)
 convert(object, \dots)

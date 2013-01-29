@@ -1,7 +1,7 @@
 ##############################################################
 # R code for "A brief tour of R/qtl"
 #
-# Karl W Broman, kbroman.wisc.edu
+# Karl W Broman, kbroman@biostat.wisc.edu
 # University of Wisconsin Madison
 #
 # http://www.rqtl.org
