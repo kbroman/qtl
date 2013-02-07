@@ -15,7 +15,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
             incl.markers=TRUE, refine.locations=TRUE,
             additive.only=FALSE, scan.pairs=FALSE, penalties,
             keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
-            tol=1e-4, maxit=1000)
+            tol=1e-4, maxit=1000, require.fullrank=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -68,6 +68,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
    model.} 
+ \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
+   the linear regression is not of full rank.}
 }
 
 \section{Methods}{
