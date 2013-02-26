@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2012, Karl W Broman
+# last modified Oct, 2012
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -140,7 +140,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     # If use="complete.obs", drop individuals with any missing phenotypes
     if(use=="complete.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, ind.noqtl, TRUE)
+                         perm.strata, ind.noqtl, weights, TRUE)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -149,6 +149,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
       ind.noqtl <- temp[[8]]
+      weights <- temp[[9]]
     }
   }
 
@@ -158,7 +159,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     # drop individuals with missing covariates
     cross$pheno <- cbind(cross$pheno, rep(1, nind(cross)))
     temp <- checkcovar(cross, nphe(cross), addcovar, intcovar,
-                         perm.strata, ind.noqtl, TRUE)
+                         perm.strata, ind.noqtl, weights, TRUE)
     cross <- temp[[1]]
     pheno <- cross$pheno[,pheno.col, drop=FALSE]
     addcovar <- temp[[3]]
@@ -167,6 +168,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     n.intcovar <- temp[[6]]
     perm.strata <- temp[[7]]
     ind.noqtl <- temp[[8]]
+    weights <- temp[[9]]
 
     # determine the batches (defined by the pattern of missing data)
     patterns <- apply(pheno, 2, function(a) paste(!is.na(a), collapse=":"))
@@ -247,7 +249,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(n.perm < 0) { # in the midst of permutations
     if(use=="all.obs") {
       temp <- checkcovar(cross, pheno.col, addcovar, intcovar,
-                         perm.strata, ind.noqtl, n.perm==-1)
+                         perm.strata, ind.noqtl, weights, n.perm==-1)
       cross <- temp[[1]]
       pheno <- temp[[2]]
       addcovar <- temp[[3]]
@@ -256,6 +258,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.intcovar <- temp[[6]]
       perm.strata <- temp[[7]]
       ind.noqtl <- temp[[8]]
+      weights <- temp[[9]]
     }
     else {
       pheno <- as.matrix(cross$pheno[,pheno.col])
@@ -270,7 +273,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   n.ind <- nind(cross)
   n.phe <- ncol(pheno)
   type <- class(cross)[1]
-
+  is.bcs <- FALSE
+  if(type == "bcsft") {
+    cross.scheme <- attr(cross, "scheme")
+    is.bcs <- (cross.scheme[2] == 0)
+  }
 
   # fill in missing genotypes with imputed values
   if(n.perm==0) { # not in the midst of permutations
@@ -403,11 +410,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       newgeno[is.na(newgeno)] <- 0 
 
       # discard partially informative genotypes
-      if(type=="f2") newgeno[newgeno>3] <- 0
+      if(type=="f2" || (type=="bcsft" && !is.bcs)) newgeno[newgeno>3] <- 0
       if(type=="4way") newgeno[newgeno>4] <- 0
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          newgeno <- reviseXdata(type, "full", sexpgm, geno=newgeno,
                                 cross.attr=attributes(cross))
 
@@ -431,7 +438,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.draws <- dim(draws)[3]
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          draws <- reviseXdata(type, "full", sexpgm, draws=draws,
                               cross.attr=attributes(cross))
 
@@ -463,7 +470,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.pos <- ncol(genoprob)
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          genoprob <- reviseXdata(type, "full", sexpgm, prob=genoprob,
                                  cross.attr=attributes(cross))
 
@@ -719,7 +726,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     if(chrtype=="X") {
 
       # determine which covariates belong in null hypothesis
-      temp <- scanoneXnull(type, sexpgm)
+      temp <- scanoneXnull(type, sexpgm, cross.attr=attributes(cross))
       adjustX <- temp$adjustX
       parX0 <- temp$parX0+n.ac
       sexpgmcovar <- temp$sexpgmcovar

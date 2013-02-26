@@ -2,10 +2,10 @@
  * 
  * fitqtl_imp.c
  *
- * copyright (c) 2002-2011, Hao Wu
+ * copyright (c) 2002-2013, Hao Wu
  *     Modified by Karl W. Broman to get estimates of QTL effects
  *
- * last modified May, 2011
+ * last modified Feb, 2013
  * first written Apr, 2002
  *
  *     This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
 		  int *n_int, double *pheno, int *get_ests,
 		  /* return variables */
 		  double *lod, int *df, double *ests, double *ests_covar,
-		  double *design_mat)
+		  double *design_mat, int *matrix_rank)
 {
   int ***Draws;
   double **Cov;
@@ -63,7 +63,7 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
 
   fitqtl_imp(*n_ind, *n_qtl, n_gen, *n_draws, Draws,
 	     Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-	     ests, ests_covar, design_mat);
+	     ests, ests_covar, design_mat, matrix_rank);
 }
 
 
@@ -104,13 +104,15 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
  *
  * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
  *
+ * matrix_rank  Return min (across imputations) of rank of design matrix
+ *
  **********************************************************************/
 
 void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws, 
 		int ***Draws, double **Cov, int n_cov, 
 		int *model, int n_int, double *pheno, int get_ests,
 		double *lod, int *df, double *ests, double *ests_covar,
-		double *design_mat) 
+		double *design_mat, int *matrix_rank) 
 {
 
   /* create local variables */
@@ -173,6 +175,8 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
   /* calculate null model RSS */
   lrss0 = log10(nullRss0(pheno, n_ind));
 
+  *matrix_rank = n_ind;
+
   /* loop over imputations */
   for(i=0; i<n_draws; i++) {
 
@@ -181,7 +185,7 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
     /* calculate alternative model RSS */
     lrss = log10( galtRss(pheno, n_ind, n_gen, n_qtl, Draws[i], 
 			  Cov, n_cov, model, n_int, dwork, iwork, sizefull,
-			  get_ests, ests, Ests_covar, (i==0), design_mat) );
+			  get_ests, ests, Ests_covar, (i==0), design_mat, matrix_rank) );
 
     /* calculate the LOD score in this imputation */
     LOD_array[i] = (double)n_ind/2.0*(lrss0-lrss);
@@ -292,7 +296,7 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
 	       int **Draws, double **Cov, int n_cov, int *model, 
 	       int n_int, double *dwork, int *iwork, int sizefull,
 	       int get_ests, double *ests, double **Ests_covar,
-	       int save_design, double *designmat) 
+	       int save_design, double *designmat, int *matrix_rank) 
 {
   /* local variables */
   int i, j, k, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job;
@@ -445,6 +449,8 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* call dqrls to fit regression model */
   F77_CALL(dqrls)(x, &n_ind, &sizefull, pheno, &ny, &tol, coef, resid,
 		  qty, &k, jpvt, qraux, work);
+  /* on output, k contains the rank; we'll retain the minimum across imputations */
+  if(*matrix_rank > k) *matrix_rank = k;
 
   /* calculate RSS */
   for(i=0; i<n_ind; i++)

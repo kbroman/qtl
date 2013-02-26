@@ -2,9 +2,9 @@
  * 
  * hmm_bgmagic16.h
  * 
- * copyright (c) 2011, Karl W Broman
+ * copyright (c) 2011-2012, Karl W Broman
  *
- * last modified Dec, 2011
+ * last modified Jul, 2012
  * first written Dec, 2011
  *
  *     This program is free software; you can redistribute it and/or
@@ -37,9 +37,9 @@
  *
  **********************************************************************/
 
-double init_bgmagic16(int true_gen);
-double emit_bgmagic16(int obs_gen, int true_gen, double error_prob);
-double step_bgmagic16(int gen1, int gen2, double rf, double junk);
+double init_bgmagic16(int true_gen, int *ignored);
+double emit_bgmagic16(int obs_gen, int true_gen, double error_prob, int *ignored);
+double step_bgmagic16(int gen1, int gen2, double rf, double junk, int *ignored);
 
 void calc_genoprob_bgmagic16(int *n_ind, int *n_mar, int *geno, 
 			   double *rf, double *error_prob, double *genoprob);

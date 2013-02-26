@@ -38,7 +38,7 @@ function(object,...)
   type <- class(object)[1]
 
   if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", 
-                   "ri4self", "ri4sib", "ri8self", "ri8sib", "bgmagic16")))
+                   "ri4self", "ri4sib", "ri8self", "ri8sib", "bcsft", "bgmagic16")))
      stop("Cross type ", type, " is not supported.")
 
   # combine genotype data into one big matrix
@@ -46,14 +46,24 @@ function(object,...)
 
   # proportion of missing genotype data
   missing.gen <- mean(is.na(Geno))
+
+  # Get cross scheme for BCsFt.
+  if(type == "bcsft") {
+    cross.scheme <- attr(object, "scheme")
+    is.bcs <- (cross.scheme[2] == 0)
+  }
+  else {
+    cross.scheme <- rep(0,2)
+    is.bcs <- FALSE
+  }
   
   # table of genotype values
-  if(type=="f2") {
+  if(type %in% c("f2", "bcsft") & !is.bcs) {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:5))
     temp <- getgenonames("f2", "A", cross.attr=attributes(object))
     names(typings) <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type %in% c("bc", "riself", "risib", "dh")) {
+  else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:2))
     names(typings) <- getgenonames(type, "A", cross.attr=attributes(object))
   }
@@ -166,7 +176,7 @@ function(object,...)
             paste(names(x)[x>1], collapse="  "))
 
   # check genotype data
-  if(type %in% c("bc", "riself", "risib", "dh")) {
+  if(type %in% c("bc", "riself", "risib", "dh") | (type == "bcsft" & is.bcs)) {
     # Invalid genotypes?
     if(any(!is.na(Geno) & Geno != 1 & Geno != 2)) { 
       u <- unique(as.numeric(Geno))
@@ -184,7 +194,7 @@ function(object,...)
       warning(warn)
     }
   }
-  else if(type=="f2") {
+  else if(type %in% c("f2","bcsft") & !is.bcs) {
     # invalid genotypes
     if(any(!is.na(Geno) & Geno!=1 & Geno!=2 & Geno!=3 &
            Geno!=4 & Geno!=5)) { 
@@ -317,7 +327,7 @@ function(object,...)
 			n.chr=n.chr, n.mar=n.mar,
 			missing.gen=missing.gen,typing.freq=typings,
 			missing.phe=missing.phe,
-                        autosomes=autosomes, Xchr=Xchr)
+                        autosomes=autosomes, Xchr=Xchr, cross.scheme=cross.scheme)
   class(cross.summary) <- "summary.cross"
   cross.summary
   
@@ -342,6 +352,7 @@ function(x,...)
     print.genotypes <- FALSE
     cat("    ", n.str, "-way RIL by ", crosstype, "\n\n", sep="")
   }
+  else if(x$type=="bcsft") cat(paste("    BC(", x$cross.scheme[1], ")F(", x$cross.scheme[2], ") cross\n\n", sep = ""))
   else if(x$type %in% c("bgmagic16")) {
     n.str <- 16
     print.genotypes <- FALSE

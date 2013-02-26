@@ -2,21 +2,21 @@
 # phyloqtl_scan.R
 #
 # copyright (c) 2009-2012, Karl W Broman
-# last modified Mar, 2012
+# last modified Oct, 2012
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
-# 
+#
 # Single-QTL scan to map QTL to a phylogenetic tree
 #
 # Part of the R/qtl package
@@ -30,7 +30,7 @@ function(crosses, partitions, chr, pheno.col=1,
          model=c("normal","binary"), method=c("em","imp","hk"),
          addcovar, maxit=4000, tol=0.0001, useAllCrosses=TRUE,
          verbose=FALSE)
-{  
+{
   if(missing(chr)) chr <- names(crosses[[1]]$geno)
   model <- match.arg(model)
   method <- match.arg(method)
@@ -51,7 +51,7 @@ function(crosses, partitions, chr, pheno.col=1,
   dimnames(crossmat) <- list(thecrosses, partitions)
 
   if(!missing(addcovar)) {
-    if(!is.list(addcovar) || length(addcovar) != length(crosses)) 
+    if(!is.list(addcovar) || length(addcovar) != length(crosses))
       stop("addcovar must be a list with the same length as crosses (", length(crosses), ")")
     n.ind <- sapply(crosses, nind)
     if(is.matrix(addcovar[[1]])) {
@@ -65,11 +65,40 @@ function(crosses, partitions, chr, pheno.col=1,
     if(any(nind.addcovar != n.ind)) {
       err <- paste("crosses: ", paste(n.ind, collapse=" "), "\n",
                    "addcovar:", paste(n.addcovar, collapse=" "), "\n")
-        
+
       stop("Mismatch between no. individuals in addcovar and crosses.\n", err)
     }
-    if(length(unique(n.addcovar)) > 1) 
+    if(length(unique(n.addcovar)) > 1)
       stop("Mismatch in no. add've covariates: ", paste(n.addcovar, collapse=" "))
+  }
+
+  # check that the marker maps are all exactly the same
+  n.chr <- sapply(crosses, nchr)
+  if(!all(n.chr == n.chr[1]))
+    stop("Different numbers of chromosomes")
+  chrnam1 <- chrnames(crosses[[1]])
+  for(j in 2:length(crosses)) {
+    chrnam2 <- chrnames(crosses[[j]])
+    if(!all(chrnam1 == chrnam2))
+      stop("Different chromosome names")
+  }
+  n.mar1 <- nmar(crosses[[1]])
+  for(j in 2:length(crosses)) {
+    n.mar2 <- nmar(crosses[[j]])
+    if(!all(n.mar1 == n.mar2))
+      stop("Different numbers of markers")
+  }
+  mn1 <- markernames(crosses[[1]])
+  for(j in 2:length(crosses)) {
+    mn2 <- markernames(crosses[[j]])
+    if(!all(mn1 == mn2))
+      stop("Different marker names")
+  }
+  mp1 <- unlist(pull.map(crosses[[1]]))
+  for(j in 2:length(crosses)) {
+    mp2 <- unlist(pull.map(crosses[[j]]))
+    if(!all(mp1 == mp2))
+      stop("Different marker positions")
   }
 
   out <- vector("list", length(partitions))
@@ -97,7 +126,7 @@ function(crosses, partitions, chr, pheno.col=1,
 
     # flip crosses if necessary
     if(any(cm < 0))
-      for(j in which(cm < 0)) 
+      for(j in which(cm < 0))
         x[[j]] <- flipcross(x[[j]])
 
     # combine the crosses
@@ -145,7 +174,7 @@ function(crosses, partitions, chr, pheno.col=1,
 
   # multiple partitions
   result <- out[[1]]
-  for(j in 2:length(out)) 
+  for(j in 2:length(out))
     result <- c(result, out[[j]])
   colnames(result)[-(1:2)] <- partitions
   class(result) <- c("scanPhyloQTL", "scanone", "data.frame")
@@ -195,9 +224,9 @@ function(object, format=c("postprob", "lod"), threshold, ...)
   }
   if(format=="lod") {
     out <- data.frame(chr=unique(object[,1]), pos=whpos, themax,
-                      loddif=apply(themax, 1, function(a) -diff(sort(a, decreasing=TRUE)[1:2])), 
+                      loddif=apply(themax, 1, function(a) -diff(sort(a, decreasing=TRUE)[1:2])),
                       inferred=colnames(object)[wh+2],
-                      maxlod=apply(themax, 1, max), 
+                      maxlod=apply(themax, 1, max),
                       stringsAsFactors=TRUE)
   }
   else {
@@ -212,7 +241,7 @@ function(object, format=c("postprob", "lod"), threshold, ...)
 
   rownames(out) <- names(whpos)
 
-  if(!missing(threshold)) 
+  if(!missing(threshold))
     out <- out[out$maxlod >= threshold,,drop=FALSE]
 
   class(out) <- c("summary.scanPhyloQTL", "summary.scanone", "data.frame")
@@ -230,7 +259,7 @@ function(x, chr, incl.markers=TRUE, col, xlim, ylim, lwd=2,
   mtick <- match.arg(mtick)
 
   if(!missing(chr)) x <- subset(x, chr=chr)
-  
+
   if(missing(col)) {
     col <- c("black","blue","red","green","orange","brown","gray","cyan","magenta")
     if(ncol(x)-2 > length(col))
@@ -244,7 +273,7 @@ function(x, chr, incl.markers=TRUE, col, xlim, ylim, lwd=2,
   dots <- list(...)
 
   if(missing(xlim)) {
-    if("ylab" %in% names(dots)) 
+    if("ylab" %in% names(dots))
       plot.scanone(x, incl.markers=incl.markers, col=col[1], lodcolumn=1,
                    ylim=ylim, lwd=lwd, gap=gap, mtick=mtick,
                    show.marker.names=show.marker.names, alternate.chrid=alternate.chrid, ...)
@@ -255,7 +284,7 @@ function(x, chr, incl.markers=TRUE, col, xlim, ylim, lwd=2,
                    ylab="LOD score", ...)
   }
   else {
-    if("ylab" %in% names(dots)) 
+    if("ylab" %in% names(dots))
       plot.scanone(x, incl.markers=incl.markers, col=col[1], lodcolumn=1,
                    ylim=ylim, xlim=xlim, lwd=lwd, gap=gap, mtick=mtick,
                    show.marker.names=show.marker.names, alternate.chrid=alternate.chrid, ...)
@@ -265,9 +294,9 @@ function(x, chr, incl.markers=TRUE, col, xlim, ylim, lwd=2,
                    show.marker.names=show.marker.names, alternate.chrid=alternate.chrid,
                    ylab="LOD score", ...)
   }
-    
+
   if(ncol(x) > 3)
-    for(i in 2:(ncol(x)-2)) 
+    for(i in 2:(ncol(x)-2))
       plot.scanone(x, col=col[i], lodcolumn=i, add=TRUE, ...)
 
   if(is.character(legend) || legend) {
@@ -279,7 +308,7 @@ function(x, chr, incl.markers=TRUE, col, xlim, ylim, lwd=2,
 
   invisible()
 }
-    
+
 inferredpartitions <-
 function(output, chr, lodthreshold, probthreshold=0.9)
 {
@@ -290,7 +319,7 @@ function(output, chr, lodthreshold, probthreshold=0.9)
     chr <- output[1,1]
     warning("Missing chromosome; using ", chr)
   }
-  else if(!any(output[,1]==chr)) 
+  else if(!any(output[,1]==chr))
     stop("Chromosome \"", chr, "\" not found.")
 
   if(missing(lodthreshold)) {
@@ -303,11 +332,11 @@ function(output, chr, lodthreshold, probthreshold=0.9)
   output <- summary(output, format="postprob")
 
   if(output$maxlod < lodthreshold) return("null")
-  
+
   prob <- sort(output[,3:(ncol(output)-2)], decreasing=TRUE)
   cs <- cumsum(as.numeric(prob))
   wh <- min(which(cs >= probthreshold))
   names(prob)[1:wh]
 }
-  
+
 # end of phyloqtl_scan.R

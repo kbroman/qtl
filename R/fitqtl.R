@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# last modified Aug, 2012
+# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
+# last modified Feb, 2013
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -195,6 +195,11 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
           qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
 
         if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+
+        # subset sexpgm
+        for(i in seq(along=sexpgm))
+          if(!is.null(sexpgm[[i]]))
+            sexpgm[[i]] <- sexpgm[[i]][!hasmissing]
       }
     }
   }
@@ -235,7 +240,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
     }
   }
 
-  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm)
+  Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm, cross.attr)
   n.origcovar <- p$n.covar
   if((sum(qtl$chrtype[p$idx.qtl]=="X") >= 1 || forceXcovar) && Xadjustment$adjustX) { # need to include X chromosome covariates
     adjustX <- TRUE
@@ -276,6 +281,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               ests=as.double(rep(0,sizefull)),
               ests.cov=as.double(rep(0,sizefull*sizefull)),
               design.mat=as.double(rep(0,sizefull*n.ind)),
+              matrix.rank=as.integer(0), # on return, minimum of matrix rank across imputations
               PACKAGE="qtl")
     }
     else {
@@ -296,6 +302,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               ests=as.double(rep(0,sizefull)),
               ests.cov=as.double(rep(0,sizefull*sizefull)),
               design.mat=as.double(rep(0,sizefull*n.ind)),
+              matrix.rank=as.integer(0), # on return, rank of matrix
               PACKAGE="qtl")
     }
   }
@@ -346,7 +353,11 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               as.integer(maxit),
               PACKAGE="qtl")
     }
+
+    z$matrix.rank <- NULL
   }
+  matrix.rank <- z$matrix.rank
+  matrix.ncol <- sizefull
 
   if(get.ests) {
     # first, construct the new design matrix
@@ -746,6 +757,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   as.double(rep(0,sizefull)),
                   as.double(rep(0,sizefull*sizefull)),
                   as.double(rep(0,n.ind*sizefull)),
+                  matrix.rank=as.integer(0),
                   PACKAGE="qtl")
         }
 
@@ -767,6 +779,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   as.double(rep(0,sizefull)),
                   as.double(rep(0,sizefull*sizefull)),
                   as.double(rep(0,n.ind*sizefull)),
+                  matrix.rank=as.integer(0),
                   PACKAGE="qtl")
         }
       }
@@ -817,6 +830,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   as.integer(maxit),
                   PACKAGE="qtl")
         }
+        z$matrix.rank <- NULL
       }
 
       if(model=="normal" && adjustX) # adjust for X chromosome covariates
@@ -875,9 +889,11 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   attr(output, "formula") <- deparseQTLformula(formula)
   attr(output, "type") <- qtl$type
   attr(output, "nind") <- length(pheno)
-#  attr(output, "design.mat") <- matrix(z$design.mat, nrow=n.ind)
-  output
 
+  attr(output, "matrix.rank") <- matrix.rank
+  attr(output, "matrix.ncol") <- matrix.ncol
+
+  output
 }
 
 

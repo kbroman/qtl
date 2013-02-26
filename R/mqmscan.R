@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009-2011, Danny Arends
+# Copyright (c) 2009-2012, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified May 2011
+# last modified Aug 2012
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -278,6 +278,17 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 			#make names in the form: cX.locXX
 			names <- c(names,paste("c",ceiling(i/qtlAchromo),".loc",rep(seq(step.min,step.max,step.size),n.chr)[i],sep=""))
 		}
+    if(estimate.map){
+      new.map <- pull.map(cross)
+      chrmarkers <- nmar(cross)
+      sum <- 1
+      for(i in 1:length(chrmarkers)) {
+        for(j in 1:chrmarkers[[i]]) {
+          new.map[[i]][j] <- result$DIST[sum]
+          sum <- sum+1
+        }
+      }
+    }
 		if(plot){
 			if(estimate.map && backward){
 				op <- par(mfrow = c(3,1))
@@ -289,15 +300,6 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 				}
 			}
 			if(estimate.map){
-				new.map <- pull.map(cross)
-				chrmarkers <- nmar(cross)
-				sum <- 1
-				for(i in 1:length(chrmarkers)) {
-					for(j in 1:chrmarkers[[i]]) {
-						new.map[[i]][j] <- result$DIST[sum]
-						sum <- sum+1
-					}
-				}
 				if(verbose) cat("INFO: Viewing the user supplied map versus genetic map used during analysis.\n")
 				plotMap(pull.map(cross), new.map,main="Supplied map versus re-estimated map")
 			}

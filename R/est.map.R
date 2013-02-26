@@ -159,6 +159,20 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       if(chrtype[i] == "X")
         warning("est.map not working properly for the X chromosome for 4- or 8-way RIL.")
     }
+    else if(type == "bcsft") {
+      one.map <- TRUE
+      interf.model <- FALSE
+      cfunc <- "est_map_bcsft"
+      cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+      if(chrtype[i] == "X") { # X chromsome
+        cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+        cross.scheme[2] <- 0
+      }
+      ## Tolerance: need two values.
+      if(length(tol) == 1) {
+        tol[2] <- 1e-6
+      }
+    }
     else 
       stop("est.map not available for cross type ", type, ".")
 
@@ -202,13 +216,18 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
 
     # call the C function
     if(one.map && !interf.model) {
-      z <- .C(cfunc,
+      ## Hide cross scheme in genoprob to pass to routine. BY
+      temp <- 0
+      if(type == "bcsft")
+        temp[1] <- cross.scheme[1] * 1000 + cross.scheme[2]
+      
+     z <- .C(cfunc,
               as.integer(nrow(gen)),         # number of individuals
               as.integer(n.mar[i]),      # number of markers
               as.integer(gen),           # genotype data
               rf=as.double(rf),          # recombination fractions
               as.double(error.prob),     
-              loglik=as.double(0),       # log likelihood
+              loglik=as.double(temp),       # log likelihood
               as.integer(maxit),
               as.double(tol),
               as.integer(verbose),

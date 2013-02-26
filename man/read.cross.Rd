@@ -18,7 +18,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
            estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
-           map.function=c("haldane", "kosambi", "c-f", "morgan"), \dots)
+           map.function=c("haldane", "kosambi", "c-f", "morgan"),
+           BC.gen=0, F.gen=0, \dots)
 }
 
 \arguments{
@@ -73,13 +74,16 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
    Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer, or Morgan map function when converting genetic
    distances into recombination fractions. (Ignored if m > 0.)}
+  \item{BC.gen}{Used only for cross type \code{"bcsft"}.}
+  \item{F.gen}{Used only for cross type \code{"bcsft"}.}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the
     argument
-    \code{sep} to specify the field separator (the default is a comma)
-    and \code{dec} to specify the character used for the decimal point
-    (the default is a period).}
+    \code{sep} to specify the field separator (the default is a comma),
+    \code{dec} to specify the character used for the decimal point
+    (the default is a period), and \code{comment.char} to specify a
+    character to indicate comment lines.}
 }
 
 \value{
@@ -140,6 +144,13 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   sample data files in multiple formats.    Also see
   \url{http://www.rqtl.org/sampledata}.
 
+  The \code{\dots} argument enables additional arguments to be passed to
+  the function \code{\link[utils]{read.table}} in the case of \code{csv}
+  and \code{csvr} formats.  In particular, one may use the argument
+  \code{sep} to specify the field separator (the default is a comma),
+  \code{dec} to specify the character used for the decimal point (the
+  default is a period), and \code{comment.char} to specify a character
+  to indicate comment lines.
 }
 
 
@@ -236,6 +247,12 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \code{ID} is used, these identifiers will be used in
   \code{\link{top.errorlod}}, \code{\link{plotErrorlod}}, and
   \code{\link{plotGeno}} as identifiers for the individual.  
+
+  The first row in each file contains the column names.  For the
+  phenotype file, these are the names of the phenotypes.  For the
+  genotype file, the first cell will be the name of the identifier
+  column (\code{id} or \code{ID}) and the subsequent fields will be the
+  marker names.
 
   In the genotype data file, the second row gives the chromosome IDs.
   The cell in the second row, first column, must be blank.  A third
@@ -404,8 +421,8 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
 
 \seealso{ \code{\link{subset.cross}}, \code{\link{summary.cross}},
   \code{\link{plot.cross}}, \code{\link{c.cross}}, \code{\link{clean.cross}},
-  \code{\link{write.cross}}, \code{\link{sim.cross}};
-  the \code{sampledata} directory in the package distribution contains
+  \code{\link{write.cross}}, \code{\link{sim.cross}}, \code{\link[utils]{read.table}}.
+  The \code{sampledata} directory in the package distribution contains
   sample data files in multiple formats.  Also see
   \url{http://www.rqtl.org/sampledata}.  
 }
