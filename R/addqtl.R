@@ -2,22 +2,22 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-2011, Karl W. Broman
-# last modified May, 2011
+# copyright (c) 2007-2012, Karl W. Broman
+# last modified Aug, 2012
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
-# 
+#
 # Part of the R/qtl package
 # Contains: addint, print.addint, addqtl, addpair,
 #           reviseqtlnuminformula, qtlformulasymmetric
@@ -41,12 +41,12 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
-    
+
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
 
   if(!is.null(covar) && !is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) 
+    if(is.matrix(covar) && is.numeric(covar))
       covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
@@ -60,10 +60,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     pheno.col <- pheno.col[1]
     warning("addint can take just one phenotype; only the first will be used")
   }
-    
+
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
-    if(is.na(num)) 
+    if(is.na(num))
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
   }
@@ -102,7 +102,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
         stop("The qtl object needs to be created with makeqtl with what=\"prob\".")
     }
   }
-  
+
   if(qtl$n.ind != nind(cross)) {
     warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
     if(method=="imp")
@@ -113,7 +113,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
-  }    
+  }
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
@@ -131,7 +131,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
         qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
       else
         qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
-      
+
       if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
     }
   }
@@ -146,8 +146,8 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   if(missing(formula)) {
     tmp.Q <- paste("Q", 1:n.qtl, sep="") # QTL term names
     formula <- "y~Q1"
-    if(n.qtl > 1) 
-      for (i in 2:n.qtl) 
+    if(n.qtl > 1)
+      for (i in 2:n.qtl)
         formula <- paste(formula, tmp.Q[i], sep="+")
     if (n.covar) { # if covarariate is not empty
       tmp.C <- colnames(covar) # covarariate term names
@@ -204,7 +204,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
 
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, model=model, dropone=FALSE, get.ests=FALSE, 
+                          method=method, model=model, dropone=FALSE, get.ests=FALSE,
                           run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
                           tol=tol, maxit=maxit)
 
@@ -230,7 +230,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
   }
-                    
+
   results <- as.data.frame(results, stringsAsFactors=TRUE)
   class(results) <- c("addint", "data.frame")
   attr(results, "method") <- method
@@ -270,7 +270,7 @@ function(x, ...)
   if(mod == "binary" || simp) x <- x[,c(1,3,4), drop=FALSE]
 
   printCoefmat(x, digits=4, cs.ind=1, P.values=pval, has.Pvalue=pval)
-    
+
   cat("\n")
 }
 
@@ -281,7 +281,7 @@ summary.addint <- function(object, ...) object
 # addqtl
 #
 # scan for an additional QTL in the context of a multiple-QTL model
-# 
+#
 # If the formula includes one more QTL than in the QTL object, we
 # use it as given; otherwise, a main effect for the additional QTL
 # is added
@@ -291,14 +291,15 @@ summary.addint <- function(object, ...) object
 addqtl <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
-         incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000)
+         incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000,
+         forceXcovar=FALSE)
 {
   method <- match.arg(method)
   model <- match.arg(model)
 
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
-    
+
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
 
@@ -307,7 +308,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     formula <- as.formula(formula)
 
   if(!is.null(covar) && !is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) 
+    if(is.matrix(covar) && is.numeric(covar))
       covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
@@ -337,7 +338,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
         stop("The qtl object needs to be created with makeqtl with what=\"prob\".")
     }
   }
-  
+
   if(verbose > 1) {
     verbose <- TRUE
     verbose.scanqtl <- TRUE
@@ -358,7 +359,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
-  }    
+  }
 
   if(method=="imp") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$draws)) &&
@@ -380,17 +381,17 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   # look for the chr
   if(missing(chr)) chr <- names(cross$geno)
   else chr <- matchchr(chr, names(cross$geno))
-  
+
   # if formula is missing, make one.
   # All QTLs and covariates will be additive by default
   if(is.null(covar)) n.covar <- 0
   else n.covar <- ncol(covar)
-  
+
   if(missing(formula)) {
     tmp.Q <- paste("Q", 1:n.qtl, sep="") # QTL term names
     formula <- "y~Q1"
-    if(n.qtl > 1) 
-      for (i in 2:n.qtl) 
+    if(n.qtl > 1)
+      for (i in 2:n.qtl)
         formula <- paste(formula, tmp.Q[i], sep="+")
     if(n.covar) { # if covariate is not empty
       tmp.C <- names(covar) # covariate term names
@@ -415,7 +416,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     }
     else { # need a version without it
       newformula <- formula
-      
+
       theterms <- colnames(attr(terms(formula), "factors"))
       g <- unique(c(grep(paste("^[Qq]", n.qtl+1, "$", sep=""), theterms),
                     grep(paste("^[Qq]", n.qtl+1, " *:", sep=""), theterms),
@@ -467,10 +468,10 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     pheno.col <- pheno.col[1]
     warning("addqtl can take just one phenotype; only the first will be used")
   }
-   
+
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
-    if(is.na(num)) 
+    if(is.na(num))
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
   }
@@ -497,7 +498,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
         qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
       else
         qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
-      
+
       if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
       cross <- subset(cross, ind=!hasmissing)
     }
@@ -510,7 +511,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                        method=method, model=model, dropone=FALSE, get.ests=FALSE,
                        run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                       tol=tol, maxit=maxit)$result.full[1,4]
+                       tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4]
 
   results <- NULL
   for(i in chr) {
@@ -530,7 +531,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       else {
         stp <- attr(cross$geno[[i]]$draws, "step")
         oe <- attr(cross$geno[[i]]$draws, "off.end")
-          
+
         if("stepwidth" %in% names(attributes(cross$geno[[i]]$draws)))
           stpw <- attr(cross$geno[[i]]$draws, "stepwidth")
         else stpw <- "fixed"
@@ -543,7 +544,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       else {
         stp <- attr(cross$geno[[i]]$prob, "step")
         oe <- attr(cross$geno[[i]]$prob, "off.end")
-          
+
         if("stepwidth" %in% names(attributes(cross$geno[[i]]$prob)))
           stpw <- attr(cross$geno[[i]]$prob, "stepwidth")
         else stpw <- "fixed"
@@ -555,7 +556,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
     if(method=="imp")
       step <- attr(cross$geno[[i]]$draws,"step")
-    else 
+    else
       step <- attr(cross$geno[[i]]$prob,"step")
 
     if(!incl.markers && step>0) { # equally spaced positions
@@ -568,7 +569,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     o <- grep("^loc-*[0-9]+",w)
     if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
       w[o] <- paste("c",i,".",w[o],sep="")
-    
+
     z <- data.frame(lod=as.numeric(sqout)-lod0, stringsAsFactors=TRUE)
     z <- cbind(chr=rep(i,length(map)),
                pos=as.numeric(map), z)
@@ -603,14 +604,15 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 addpair <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
-         incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000)
+         incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000,
+         forceXcovar=FALSE)
 {
   method <- match.arg(method)
   model <- match.arg(model)
 
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
-    
+
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
 
@@ -619,7 +621,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     formula <- as.formula(formula)
 
   if(!is.null(covar) && !is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) 
+    if(is.matrix(covar) && is.numeric(covar))
       covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
@@ -669,7 +671,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3]) {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
-  }    
+  }
 
   if(method=="imp") {
     if("stepwidth" %in% names(attributes(cross$geno[[1]]$draws)) &&
@@ -698,12 +700,12 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   # All QTLs and covariates will be additive by default
   if(is.null(covar)) n.covar <- 0
   else n.covar <- ncol(covar)
-  
+
   if(missing(formula)) {
     tmp.Q <- paste("Q", 1:n.qtl, sep="") # QTL term names
     formula <- "y~Q1"
-    if(n.qtl > 1) 
-      for (i in 2:n.qtl) 
+    if(n.qtl > 1)
+      for (i in 2:n.qtl)
         formula <- paste(formula, tmp.Q[i], sep="+")
     if(n.covar) { # if covariate is not empty
       tmp.C <- names(covar) # covariate term names
@@ -748,7 +750,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
       newformula1 <- formula
       newformula2 <- NULL
-      
+
       theterms <- colnames(attr(terms(formula), "factors"))
       g <- unique(c(grep(paste("^[Qq]", n.qtl+1, "$", sep=""), theterms),
                     grep(paste("^[Qq]", n.qtl+1, " *:", sep=""), theterms),
@@ -799,14 +801,14 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
     formula <- reviseqtlnuminformula(formula, notdropped, newnum)
     newformula1 <- reviseqtlnuminformula(newformula1, c(notdropped, newqtlnum1, newqtlnum2),
                                          c(newnum, revnewqtlnum1, revnewqtlnum2))
-    if(!is.null(newformula2)) 
+    if(!is.null(newformula2))
       newformula2 <- reviseqtlnuminformula(newformula2, c(notdropped, newqtlnum1, newqtlnum2),
                                            c(newnum, revnewqtlnum1, revnewqtlnum2))
     if(scanbothways) {
       newformula1.minus1 <- reviseqtlnuminformula(newformula1.minus1,
                                                   c(notdropped, newqtlnum1),
                                                   c(newnum, revnewqtlnum1))
-    
+
       newformula1.minus2 <- reviseqtlnuminformula(newformula1.minus2,
                                                   c(notdropped, newqtlnum1),
                                                   c(newnum, revnewqtlnum1))
@@ -828,7 +830,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   }
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
-    if(is.na(num)) 
+    if(is.na(num))
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
   }
@@ -854,7 +856,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
         qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
       else
         qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
-      
+
       if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
       cross <- subset(cross, ind=!hasmissing)
     }
@@ -867,7 +869,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                        method=method, model=model, dropone=FALSE, get.ests=FALSE,
                        run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                       tol=tol, maxit=maxit)$result.full[1,4]
+                       tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4]
 
   gmap <- NULL
 
@@ -881,7 +883,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       else {
         stp <- attr(cross$geno[[ci]]$draws, "step")
         oe <- attr(cross$geno[[ci]]$draws, "off.end")
-        
+
         if("stepwidth" %in% names(attributes(cross$geno[[ci]]$draws)))
           stpw <- attr(cross$geno[[ci]]$draws, "stepwidth")
         else stpw <- "fixed"
@@ -894,7 +896,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       else {
         stp <- attr(cross$geno[[ci]]$prob, "step")
         oe <- attr(cross$geno[[ci]]$prob, "off.end")
-        
+
         if("stepwidth" %in% names(attributes(cross$geno[[ci]]$prob)))
           stpw <- attr(cross$geno[[ci]]$prob, "stepwidth")
         else stpw <- "fixed"
@@ -910,13 +912,13 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       w[o] <- paste("c",ci,".",w[o],sep="")
     map <- cbind(chr=rep(ci,length(map)),
                  pos=as.data.frame(map, stringsAsFactors=TRUE) )
-    rownames(map) <- w 
-    
+    rownames(map) <- w
+
     if(method=="imp")
       step <- attr(cross$geno[[ci]]$draws,"step")
     else
       step <- attr(cross$geno[[ci]]$prob,"step")
-        
+
     if(step==0 || stepwidth.var)  # just use markers
       eq.sp.pos <- rep(1,nrow(map))
     else {
@@ -933,7 +935,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       map <- map[eq.sp.pos==1,]
       eq.sp.pos <- eq.sp.pos[eq.sp.pos==1]
     }
-    gmap <- rbind(gmap, cbind(map, 
+    gmap <- rbind(gmap, cbind(map,
                               eq.spacing=eq.sp.pos,
                               xchr=(class(cross$geno[[i]])=="X")))
   }
@@ -966,7 +968,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       if(!is.null(newformula2)) {
         if(verbose)
            cat("Scanning add've model for chr", ci, "and", cj, "\n")
-        
+
         temp2 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                          covar=covar, formula=newformula2, method=method, model=model,
                          incl.markers=incl.markers, verbose=verbose.scanqtl,
@@ -984,7 +986,7 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
       }
 
       if(i==j) {
-        if(!is.null(newformula2)) 
+        if(!is.null(newformula2))
           temp1[upper.tri(temp1)] <- temp2[upper.tri(temp1)]
         else temp1 <- t(temp1)
 
@@ -1014,11 +1016,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
       lod.m1[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1.minus1, method=method,
-                             model=model, incl.markers=incl.markers, 
+                             model=model, incl.markers=incl.markers,
                              verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
       lod.m2[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1.minus2, method=method,
-                             model=model, incl.markers=incl.markers, 
+                             model=model, incl.markers=incl.markers,
                              verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
 
     }
@@ -1093,7 +1095,7 @@ function(formula, qtlnum1, qtlnum2)
   wh1 <- grep(paste("^[Qq]", qtlnum1, "$", sep=""), rn)
   wh2 <- grep(paste("^[Qq]", qtlnum2, "$", sep=""), rn)
   cn <- colnames(theterms)
-  
+
   if(length(wh1)==0 && length(wh2)==0) return(TRUE)
   if(length(wh1)==0 || length(wh2)==0) return(FALSE)
 
@@ -1102,7 +1104,7 @@ function(formula, qtlnum1, qtlnum2)
 
   theterms <- sort(apply(theterms, 2, paste, collapse=""))
   revterms <- sort(apply(revterms, 2, paste, collapse=""))
-  
+
   all(theterms==revterms)
 }
 
@@ -1145,23 +1147,23 @@ function(formula, qtlnum)
 #
 # Try adding each QTL x covariate interaction (that is not
 # already in the formula), and give results similar to the drop-one
-# analysis.  
+# analysis.
 ######################################################################
 addcovarint <-
-function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
+function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
          verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
-    
+
   if( !("qtl" %in% class(qtl)) )
     stop("The qtl argument must be an object of class \"qtl\".")
 
   if(missing(covar) || is.null(covar))
     stop("Must include covariate data frame.")
   if(!is.data.frame(covar)) {
-    if(is.matrix(covar) && is.numeric(covar)) 
+    if(is.matrix(covar) && is.numeric(covar))
       covar <- as.data.frame(covar, stringsAsFactors=TRUE)
     else stop("covar should be a data.frame")
   }
@@ -1175,10 +1177,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     pheno.col <- pheno.col[1]
     warning("addcovarint can take just one phenotype; only the first will be used")
   }
-    
+
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
-    if(is.na(num)) 
+    if(is.na(num))
       stop("Couldn't identify phenotype \"", pheno.col, "\"")
     pheno.col <- num
   }
@@ -1223,7 +1225,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
         stop("The qtl object needs to be created with makeqtl with what=\"prob\".")
     }
   }
-  
+
   if(qtl$n.ind != nind(cross)) {
     warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
     if(method=="imp")
@@ -1234,7 +1236,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
-  }    
+  }
 
   # check phenotypes and covariates; drop ind'ls with missing values
   phcovar <- cbind(pheno, covar)
@@ -1251,7 +1253,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
         qtl$geno <- qtl$geno[!hasmissing,,,drop=FALSE]
       else
         qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
-      
+
       covar <- covar[!hasmissing,,drop=FALSE]
     }
   }
@@ -1265,8 +1267,8 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   if(missing(formula)) {
     tmp.Q <- paste("Q", 1:n.qtl, sep="") # QTL term names
     formula <- "y~Q1"
-    if(n.qtl > 1) 
-      for (i in 2:n.qtl) 
+    if(n.qtl > 1)
+      for (i in 2:n.qtl)
         formula <- paste(formula, tmp.Q[i], sep="+")
     if (n.covar) { # if covarariate is not empty
       tmp.C <- colnames(covar) # covarariate term names
@@ -1281,7 +1283,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 
   # make sure icovar is in the formula
   m <- is.na(match(icovar, rownames(attr(terms(formula), "factors"))))
-  if(any(m)) 
+  if(any(m))
     formula <- as.formula(paste(deparseQTLformula(formula), "+",
                                 paste(icovar[m], collapse="+"), sep=""))
 
@@ -1321,7 +1323,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
 
   # fit base model
   thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
-                          method=method, model=model, dropone=FALSE, get.ests=FALSE, 
+                          method=method, model=model, dropone=FALSE, get.ests=FALSE,
                           run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
                           tol=tol, maxit=maxit)
 
@@ -1347,7 +1349,7 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
   }
-                    
+
   results <- as.data.frame(results, stringsAsFactors=TRUE)
   class(results) <- c("addcovarint", "data.frame")
   attr(results, "model") <- model
@@ -1381,13 +1383,13 @@ function(x, ...)
   cat("Add one QTL x covar interaction at a time table:\n")
   cat("--------------------------------------------\n")
   pval <- attr(x, "pvalues")
-  if(!is.null(pval) && !pval) 
+  if(!is.null(pval) && !pval)
     x <- x[,-ncol(x)+(0:1)]
 
   if(mod == "binary" || simp) x <- x[,c(1,3,4), drop=FALSE]
-  
+
   printCoefmat(x, digits=4, cs.ind=1, P.values=pval, has.Pvalue=pval)
-    
+
   cat("\n")
 }
 

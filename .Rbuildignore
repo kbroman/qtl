@@ -6,3 +6,6 @@
 ^\.RData$
 ^\.Rhistory$
 inst/docs/Sources/MQM/Figs
+^\.Rprofile$
+inst/docs/Sources/MQM/.Rprofile
+^\.Rproj\.user$
