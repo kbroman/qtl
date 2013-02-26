@@ -54,3 +54,4 @@ inst/docs/MQM-tour.R
 inst/docs/Sources/MQM/MQM-tour.R
 *.pdf
 *.tex
+.Rproj.user

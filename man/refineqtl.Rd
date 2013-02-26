@@ -12,7 +12,8 @@
 \usage{
 refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
           method=c("imp","hk"), model=c("normal", "binary"), verbose=TRUE, maxit=10,
-          incl.markers=TRUE, keeplodprofile=TRUE, tol=1e-4, maxit.fitqtl=1000)
+          incl.markers=TRUE, keeplodprofile=TRUE, tol=1e-4,
+          maxit.fitqtl=1000, forceXcovar=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -34,7 +35,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
  \item{qtl.name}{Optional user-specified name for each QTL.  If
    \code{qtl} is provided, this should not be.}
  \item{covar}{A matrix or data.frame of covariates.  These must be
-   strictly numeric.} 
+   strictly numeric.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are indicated as \code{Q1},
@@ -42,7 +43,7 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{verbose}{If TRUE, give feedback about progress.  If
    \code{verbose} is an integer > 1, further messages from
    \code{\link{scanqtl}} are also displayed.}
@@ -53,7 +54,9 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
    iteration as attributes to the output.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit.fitqtl}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
+ \item{forceXcovar}{If TRUE, force inclusion of X-chr-related covariates
+   (like sex and cross direction).}
 }
 
 \details{
@@ -78,21 +81,21 @@ refineqtl(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
   the model \code{formula} are ignored, but they remain part of the QTL
   object that is output.
 }
- 
+
 \value{
   An object of class \code{qtl}, with QTL placed in their new positions.
 
   If \code{keeplodprofile=TRUE}, LOD profiles from the last pass through
   the refinement algorithm are retained as an attribute,
   \code{"lodprofile"}, to the object.  These may be plotted with
-  \code{\link{plotLodProfile}}.  
+  \code{\link{plotLodProfile}}.
 }
 
 \references{
   Zeng, Z.-B., Kao, C.-H., and Basten, C. J. (1999) Estimating the
   genetic architecture of quantitative traits.  \emph{Genet. Res.}
   \bold{74}, 279--289.
-  
+
   Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping
   quantitative trait loci in line crosses using flanking markers.
   \emph{Heredity} \bold{69}, 315--324.

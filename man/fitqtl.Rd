@@ -4,14 +4,14 @@
 \title{Fit a multiple-QTL model}
 
 \description{
-  Fits a user-specified multiple-QTL model.  If specified, 
+  Fits a user-specified multiple-QTL model.  If specified,
   a drop-one-term analysis will be performed.
 }
 
 \usage{
 fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
-       model=c("normal", "binary"), dropone=TRUE, get.ests=FALSE, 
-       run.checks=TRUE, tol=1e-4, maxit=1000)
+       model=c("normal", "binary"), dropone=TRUE, get.ests=FALSE,
+       run.checks=TRUE, tol=1e-4, maxit=1000, forceXcovar=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -24,18 +24,18 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link{makeqtl}}.} 
+   \code{\link{makeqtl}}.}
  \item{covar}{A matrix or data.frame of covariates.  These must be
-   strictly numeric.} 
+   strictly numeric.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are referred to as
    \code{Q1}, \code{Q2}, etc.  Covariates are referred to by their names
-   in the data frame \code{covar}.  } 
+   in the data frame \code{covar}.  }
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{dropone}{If TRUE, do drop-one-term analysis.}
  \item{get.ests}{If TRUE, return estimated QTL effects and their
    estimated variance-covariance matrix.}
@@ -43,7 +43,9 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
    individuals with missing phenotypes or covariates.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
+ \item{forceXcovar}{If TRUE, force inclusion of X-chr-related covariates
+   (like sex and cross direction).}
 }
 
 \details{
@@ -51,10 +53,10 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   formula, use \code{Q1}, \code{Q2}, etc., or \code{q1},
   \code{q2}, etc., to represent the QTLs, and the column names in the
   covariate data frame to represent the covariates.
-    
+
   We enforce a hierarchical structure on the model formula: if a QTL or
   covariate is in involved in an interaction, its main effect must also
-  be included.   
+  be included.
 
   In the drop-one-term analysis, for a given QTL/covariate model, all
   submodels will be analyzed.  For each term in the input formula, when
@@ -82,7 +84,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   the two genotypes.  For doubled haploids and RIL, the coding scheme is
   \eqn{\pm}{+/-} 1 for AA and BB, so that the additive effect
   corresponds to half the difference between the phenotype averages for
-  the two homozygotes.  
+  the two homozygotes.
 
   For an intercross, the additive effect is derived from the coding
   scheme -1/0/+1 for genotypes AA/AB/BB, and so is half the difference
@@ -90,7 +92,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   deviation is derived from the coding scheme 0/+1/0 for genotypes
   AA/AB/BB, and so is the difference between the phenotype average for
   the heterozygotes and the midpoint between the phenotype averages for
-  the two homozygotes.  
+  the two homozygotes.
 
   Epistatic effects and QTL \eqn{\times}{x} covariate interaction
   effects are obtained through the products of the corresponding
@@ -119,7 +121,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     values and the P values are approximations calculated from the LOD
     score.
 
-    \item \code{ests} contains the estimated QTL effects and standard errors.  
+    \item \code{ests} contains the estimated QTL effects and standard errors.
 }
 
   \bold{The part to get estimated QTL effects is fully working only for
@@ -179,6 +181,6 @@ summary(lod.sex.add)
   \code{\link{addtoqtl}} ,
   \code{\link{dropfromqtl}},
   \code{\link{replaceqtl}},
-  \code{\link{reorderqtl}}}  
+  \code{\link{reorderqtl}}}
 
 \keyword{models}
