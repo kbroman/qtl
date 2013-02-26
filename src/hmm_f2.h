@@ -34,19 +34,19 @@
  *
  **********************************************************************/
 
-double init_f2(int true_gen);
+double init_f2(int true_gen, int *cross_scheme);
 
-double emit_f2(int obs_gen, int true_gen, double error_prob);
+double emit_f2(int obs_gen, int true_gen, double error_prob, int *cross_scheme);
   
-double step_f2(int gen1, int gen2, double rf, double junk);
+double step_f2(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
-double init_f2b(int true_gen);
+double init_f2b(int true_gen, int *cross_scheme);
 
-double emit_f2b(int obs_gen, int true_gen, double error_prob);
+double emit_f2b(int obs_gen, int true_gen, double error_prob, int *cross_scheme);
   
-double step_f2b(int gen1, int gen2, double rf, double junk);
+double step_f2b(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
-double nrec_f2b(int gen1, int gen2);
+double nrec_f2b(int gen1, int gen2, double rf, int *cross_scheme);
 
 void calc_genoprob_f2(int *n_ind, int *n_mar, int *geno, 
 		      double *rf, double *error_prob, double *genoprob);
@@ -70,9 +70,9 @@ void calc_errorlod_f2(int *n_ind, int *n_mar, int *geno,
 		      double *error_prob, double *genoprob, 
 		      double *errlod);
 
-double nrec2_f2(int obs1, int obs2, double rf);
+double nrec2_f2(int obs1, int obs2, double rf, int *cross_scheme);
 
-double logprec_f2(int obs1, int obs2, double rf);
+double logprec_f2(int obs1, int obs2, double rf, int *cross_scheme);
 
 void est_rf_f2(int *n_ind, int *n_mar, int *geno, double *rf, 
 	       int *maxit, double *tol);

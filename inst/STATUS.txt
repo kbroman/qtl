@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2012, Karl W Broman
+copyright (c) 2001-2013, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,82 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.27, 2/7/2013:
+
+Major changes:
+
+  Implemented HMM algorithms for advanced backcross/intercross.
+
+Minor changes:
+
+  Improvement in addqtl, addint, scanqtl, stepwiseqtl
+  to better handle collinearity in the design matrix that could give
+  spurious evidence for QTL in large QTL models.  This can still be a
+  problem with addpair (and stepwiseqtl with scan.pairs=TRUE).
+
+  Slight change to help file for read.cross, to be more explicit about
+  the "csvs" format.
+
+
+Version 1.26, 11/27/2012:
+
+Major changes:
+
+  We changed the treatment of the ind argument in subset.cross to
+  avoid problems that occurred when the cross contained numeric
+  individual IDs.  Now, we match the values in ind against the
+  individual IDs only if ind values are character strings.  If the ind
+  values are numeric, we treat them as numeric indices and they are
+  not compared against the individual IDs.
+
+Minor changes:
+
+  In plot.rfmatrix, include marker name in title (unless main is
+  provided as an argument).
+
+  Add warning message to find.marker if there's no match for a given
+  chromosome name.
+
+  Slight change in find.markerpos(), to speed it up.
+
+  Slight change to locateXO to save genotypes to left and right of
+  each crossover.
+
+  Small addition to the "A shorter tutorial of R/qtl" (rqtltour2.pdf).
+
+  Fixed slight bug in summary.scanone for format="tabByChr" or
+  format="tabByCol".
+
+  Fixed bug in fitqtl for case that individuals have missing
+  phenotypes or covariates and there's a QTL on the X chromosome
+
+  Fixed bug in effectplot, regarding coding of genotypes on the X
+  chromosome.
+
+  Fixed bug in mqmscan for case when estimate.map=TRUE but plot=FALSE.
+
+  Fixed bug in c.cross for case that there are different sets of markers.
+
+  Fixed bug in xaxisloc.scanone for case that chromosomes don't start at 0.
+
+  Fixed bug in locateXO; gave core dump if there was just one marker on
+  the chromosome.
+
+  Fixed bug in scanone and scantwo for case that weights are used but
+  there are individuals with missing phenotype; the weights weren't
+  being subsetted appropriately.
+
+  Revised example help file for multitrait data to use mqmscanall
+  rather than scanall, since the latter function has no help file.
+
+  scanPhyloQTL now gives warning if there are different marker maps.
+
+  Fixed bug in mqmaugment; with one phenotype, its name was getting
+  changed to "pheno".
+
+
 Version 1.25, 8/13/2012:
+>>>>>>> master
 
 Major changes:
 

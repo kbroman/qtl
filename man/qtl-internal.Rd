@@ -4,6 +4,7 @@
 \alias{clean}
 \alias{condense}
 \alias{convert}
+\alias{convert2bcsft}
 \alias{create.map}
 \alias{find.pseudomarkerpos}
 \alias{flipcross}
@@ -62,10 +63,14 @@
 
 \usage{
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
-checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, verbose=TRUE)
+checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata,
+           ind.noqtl=NULL, weights=NULL, verbose=TRUE)
 clean(object, \dots)
 condense(object)
 convert(object, \dots)
+convert2bcsft(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
+              error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
+              \dots)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable", "max"))
 find.pseudomarkerpos(cross, marker, where=c("draws", "prob"))
 flipcross(cross)
@@ -74,7 +79,7 @@ getsex(cross)
 addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
 mqm_version()
 scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
-getgenonames(type=c("f2","bc","riself","risib","4way","dh","special"),
+getgenonames(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
              chrtype=c("A","X"), expandX=c("simple","standard","full"),
              sexpgm, cross.attr)
 imf.cf(r)

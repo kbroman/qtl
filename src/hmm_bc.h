@@ -35,13 +35,13 @@
  *
  **********************************************************************/
 
-double init_bc(int true_gen);
+double init_bc(int true_gen, int *cross_scheme);
 
-double emit_bc(int obs_gen, int true_gen, double error_prob);
+double emit_bc(int obs_gen, int true_gen, double error_prob, int *cross_scheme);
 
-double step_bc(int gen1, int gen2, double rf, double junk);
+double step_bc(int gen1, int gen2, double rf, double junk, int *cross_scheme);
 
-double nrec_bc(int gen1, int gen2);
+double nrec_bc(int gen1, int gen2, double rf, int *cross_scheme);
 
 void calc_genoprob_bc(int *n_ind, int *n_mar, int *geno, 
 		      double *rf, double *error_prob, double *genoprob);

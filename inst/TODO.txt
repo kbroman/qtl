@@ -10,11 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o apparent bug in xaxisloc.scanone if a chromosome doesn't start at 0
+o Problem with stepwiseqtl when there is collinearity
 
-o speed up R CMD check
-
-o locateXO gives core dump when just one marker on chromosome?
+o Add pheno.col type arguments to all of the MQM functions
 
 o revise use of snow package to use parallel instead
 
@@ -25,8 +23,6 @@ o revise use of snow package to use parallel instead
   results <- clusterApply(cl, blah)
   stopCluster(cl)
 
-o weights aren't being subsetted when there are missing phenotypes
-
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
 
@@ -35,17 +31,19 @@ o Scantwo permutations: currently interaction LOD is obtained by
   across chr pairs.  It should be max(full) overall - max(add)
   overall.  The latter will be a bit smaller than the former
 
+o GMendel-type option for bootstrap to assess marker order for closely
+  spaced markers.
+
+o CIM-type analysis with proper treatment of missing data, using
+  fitqtl
+
+o h^2 due to QTL in results of scanone
+
 o Add argument to refineqtl to scan full chromosomes
 
 o Separate function to get LOD profiles from a fixed model, not
   necessarily the max?  (Or can we use refineqtl for this, but with no
   iterations?)
-
-o In plot.rfmatrix, include marker name in title (unless main is
-  provided as an argument).
-
-o example in help file for multitrait data uses scanall() but that
-  function has no help file.
 
 o stepwiseqtl: Need a trap for the case that LODs are all NA
 
@@ -71,9 +69,6 @@ o beeswarm package for plot.pxg
 
 o In sim.cross, to get a QTL on the X chromosome, you need to use
   chr=20 rather than chr="X".
-
-o scanPhyloQTL should give warning if there are different sets of
-  markers.
 
 o Function to calculate recombination fraction and LOD score for just
   adjacent markers.

@@ -47,7 +47,7 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
 		 int *n_int, double *pheno, int *get_ests,
 		  /* return variables */
 		 double *lod, int *df, double *ests, double *ests_covar,
-		 double *design_mat)
+		 double *design_mat, int *matrix_rank)
 {
   double ***Genoprob=0, **Cov;
   int tot_gen, i, j, curpos;
@@ -71,8 +71,8 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
   if(*n_cov != 0) reorg_errlod(*n_ind, *n_cov, cov, &Cov);
 
   fitqtl_hk(*n_ind, *n_qtl, n_gen, Genoprob, 
-	     Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-	     ests, ests_covar, design_mat); 
+            Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
+            ests, ests_covar, design_mat, matrix_rank); 
 }
 
 
@@ -110,13 +110,15 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
  *
  * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
  *
+ * matrix_rank  On return, rank of design matrix
+ *
  **********************************************************************/
 
 void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
 	       double **Cov, int n_cov, 
 	       int *model, int n_int, double *pheno, int get_ests,
 	       double *lod, int *df, double *ests, double *ests_covar,
-	       double *design_mat) 
+	       double *design_mat, int *matrix_rank) 
 {
 
   /* create local variables */
@@ -165,7 +167,7 @@ void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
   lrss = log10( galtRssHK(pheno, n_ind, n_gen, n_qtl, Genoprob,
 			  Cov, n_cov, model, n_int, dwork, iwork, 
 			  sizefull, get_ests, ests, Ests_covar,
-			  design_mat) );
+			  design_mat, matrix_rank) );
 
   *lod = (double)(n_ind)/2.0 * (lrss0 - lrss);
 
@@ -179,7 +181,7 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
 		 double ***Genoprob, double **Cov, int n_cov, int *model, 
 		 int n_int, double *dwork, int *iwork, int sizefull,
 		 int get_ests, double *ests, double **Ests_covar,
-		 double *designmat) 
+		 double *designmat, int *matrix_rank) 
 {
   /* local variables */
   int i, j, k, *jpvt, ny, idx_col, n_qc, n_int_col, job, outerrep;
@@ -302,6 +304,8 @@ double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
   /* call dqrls to fit regression model */
   F77_CALL(dqrls)(X[0], &n_ind, &sizefull, pheno, &ny, &tol, coef, resid,
 		  qty, &k, jpvt, qraux, work);
+  /* on output, k contains the rank */
+  *matrix_rank = k;
 
   /* calculate RSS */
   for(i=0; i<n_ind; i++) rss_full += resid[i]*resid[i];

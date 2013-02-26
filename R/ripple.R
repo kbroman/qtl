@@ -159,12 +159,16 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
   else { # count obligate crossovers for each order
     # which type of cross is this?
     type <- class(cross)[1]
-    if(type == "f2") {
+    is.bcs <- type == "bcsft"
+    if(is.bcs)
+      is.bcs <- (attr(cross, "scheme")[2] == 0)
+
+    if(type == "f2" || (type == "bcsft" && !is.bcs)) {
       if(class(cross$geno[[1]]) == "A") # autosomal
         func <- "R_ripple_f2"
       else func <- "R_ripple_bc"        # X chromsome  
     }
-    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_ripple_bc"
+    else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) func <- "R_ripple_bc"
     else if(type == "4way") func <- "R_ripple_4way"
     else if(type=="ri4self" || type=="ri8self" || type=="ri4sib" || type=="ri8sib" || type=="bgmagic16")
       func <- "R_ripple_ril48"

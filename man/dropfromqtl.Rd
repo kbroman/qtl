@@ -23,7 +23,7 @@ dropfromqtl(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 
 \details{
   Provide either \code{chr} and \code{pos}, or one of \code{qtl.name} or
-  \code{number}. 
+  \code{index}. 
 }
 
 \value{

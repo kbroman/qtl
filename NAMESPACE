@@ -8,6 +8,7 @@ export(inferFounderHap)
 export(pull.genoprob, pull.argmaxgeno, pull.draws)
 export(nullmarkers)
 
+export(convert2bcsft)
 export(add.cim.covar, add.threshold, addcovarint, addint)
 export(addloctocross, addmarkerstointervalmap, addpair, addqtl)
 export(addtoqtl, allchrsplits, argmax.geno, bayesint)

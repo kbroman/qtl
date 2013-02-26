@@ -3,7 +3,7 @@
 # est.rf.R
 #
 # copyright (c) 2001-2012, Karl W Broman
-# last modified Mar, 2012
+# last modified Oct, 2012
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -44,6 +44,12 @@ function(cross, maxit=10000, tol=1e-6)
   type <- class(cross)[1]
   chrtype <- sapply(cross$geno,class)
 
+  is.bcsft <- (type == "bcsft")
+  if(is.bcsft) {
+    cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+    is.bcsft <- cross.scheme[2] > 0 ## used for fixX only
+  }
+  
   xchrcol <- NULL
   fixX <- FALSE
   Geno <- NULL
@@ -51,14 +57,14 @@ function(cross, maxit=10000, tol=1e-6)
   for(i in 1:n.chr) {
     temp <- cross$geno[[i]]$data
 
-    # treat X chromosome specially in an intercross
-    if(type=="f2" && chrtype[i]=="X") {
+    # treat X chromosome specially in an intercross or BCsFt with t>0.
+    if((type=="f2" || is.bcsft) && chrtype[i]=="X") {
       fixX <- TRUE
       if(i != 1) xchrcol <- c(xchrcol,ncol(Geno)+(1:ncol(cross$geno[[i]]$data)))
       else xchrcol <- 1:ncol(cross$geno[[i]]$data)
       xchr <- temp
       xchr[is.na(xchr)] <- 0
-      temp <- reviseXdata(type,"simple",getsex(cross),geno=temp,
+      temp <- reviseXdata("f2","simple",getsex(cross),geno=temp,
                           cross.attr=attributes(cross))
     }
     Geno <- cbind(Geno,temp)
@@ -76,6 +82,8 @@ function(cross, maxit=10000, tol=1e-6)
     if(any(chrtype == "X"))
       warning("est.rf not working properly for the X chromosome for 4- or 8-way RIL.")
   }
+  else if(type == "bcsft")
+    cfunc <- "est_rf_bcsft"
   else 
     stop("est.rf not available for cross type ", type, ".")
 
@@ -88,26 +96,47 @@ function(cross, maxit=10000, tol=1e-6)
             as.integer(Geno),
             rf = as.double(rep(0,n.mar*n.mar)),
             PACKAGE="qtl")
-  else
+  else {
+    ## Hide cross scheme in genoprob to pass to routine. BY
+    temp <- as.double(rep(0,n.mar*n.mar))
+    if(type == "bcsft")
+      temp[1:2] <- cross.scheme
+    
     z <- .C(cfunc,
             as.integer(n.ind),         # number of individuals
             as.integer(n.mar),         # number of markers
             as.integer(Geno),
-            rf = as.double(rep(0,n.mar*n.mar)),
+            rf = as.double(temp),
             as.integer(maxit),
             as.double(tol),
             PACKAGE="qtl")
+  }
 
   cross$rf <- matrix(z$rf,ncol=n.mar)
   dimnames(cross$rf) <- list(mar.names,mar.names)
 
   if(fixX) {
-    zz <- .C("est_rf_bc",
-             as.integer(n.ind),
-             as.integer(ncol(xchr)),
-             as.integer(xchr),
-             rf=as.double(rep(0,ncol(xchr)^2)),
-             PACKAGE="qtl")
+    temp <- as.double(rep(0, ncol(xchr) ^ 2))
+    if(type == "bcsft") {
+      temp[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+    
+      zz <- .C(cfunc,
+               as.integer(n.ind),         # number of individuals
+               as.integer(ncol(xchr)),   # number of markers on X chr.
+               as.integer(xchr),
+               rf = as.double(temp),
+               as.integer(maxit),
+               as.double(tol),
+               PACKAGE="qtl")
+    }
+    else {
+      zz <- .C("est_rf_bc",
+               as.integer(n.ind),
+               as.integer(ncol(xchr)),
+               as.integer(xchr),
+               rf=as.double(temp),
+               PACKAGE="qtl")
+    }
     zz <- matrix(zz$rf,ncol=ncol(xchr))
     cross$rf[xchrcol,xchrcol] <- zz
   }
@@ -428,7 +457,11 @@ function(x, marker, ...)
   colnames(x)[3] <- what
   class(x) <- c("scanone", "data.frame")
 
-  plot(x, ...)
+  dots <- list(...)
+  if("main" %in% names(dots))
+    plot(x, ...)
+  else
+    plot(x, main=marker, ...)
   
   invisible(x)
 }

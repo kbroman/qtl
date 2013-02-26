@@ -45,12 +45,12 @@
 #include <R_ext/PrtUtil.h>
 #include "hmm_main.h"
 
-double init_4way(int true_gen)
+double init_4way(int true_gen, int *cross_scheme)
 {
   return(-2.0*M_LN2);
 }
 
-double emit_4way(int obs_gen, int true_gen, double error_prob)
+double emit_4way(int obs_gen, int true_gen, double error_prob, int *cross_scheme)
 {
   switch(obs_gen) {
   case 0: return(0.0);
@@ -129,7 +129,7 @@ double emit_4way(int obs_gen, int true_gen, double error_prob)
   return(0.0); /* shouldn't get here */
 }
 
-double step_4way(int gen1, int gen2, double rf1, double rf2)
+double step_4way(int gen1, int gen2, double rf1, double rf2, int *cross_scheme)
 {
   switch(gen1) {
   case 1:
@@ -164,7 +164,7 @@ double step_4way(int gen1, int gen2, double rf1, double rf2)
   return(log(-1.0)); /* shouldn't get here */
 }
 
-double nrec_4way(int gen1, int gen2)
+double nrec_4way(int gen1, int gen2, double rf, int *cross_scheme)
 {
   switch(gen1) {
   case 1:
@@ -195,7 +195,7 @@ double nrec_4way(int gen1, int gen2)
   return(log(-1.0)); /* shouldn't get here */
 }
 
-double nrec_4way1(int gen1, int gen2)
+double nrec_4way1(int gen1, int gen2, double rf, int *cross_scheme)
 {
   switch(gen1) {
   case 1: case 3:
@@ -212,7 +212,7 @@ double nrec_4way1(int gen1, int gen2)
   return(log(-1.0)); /* shouldn't get here */
 }
 
-double nrec_4way2(int gen1, int gen2)
+double nrec_4way2(int gen1, int gen2, double rf, int *cross_scheme)
 {
   switch(gen1) {
   case 1: case 2:
@@ -312,7 +312,7 @@ void calc_errorlod_4way(int *n_ind, int *n_mar, int *geno,
 		errlod, errorlod_4way);
 }
 
-double nrec2_4way(int obs1, int obs2, double rf)
+double nrec2_4way(int obs1, int obs2, double rf, int *cross_scheme)
 {
   int temp;
 
@@ -441,7 +441,7 @@ double nrec2_4way(int obs1, int obs2, double rf)
   return(log(-1.0)); /* shouldn't get here */
 }
 
-double logprec_4way(int obs1, int obs2, double rf)
+double logprec_4way(int obs1, int obs2, double rf, int *cross_scheme)
 {
   int temp;
 

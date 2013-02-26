@@ -48,10 +48,10 @@ qtl*gz
 *.Rout
 contrib/bin/mqmdebugout
 ..Rcheck/
-inst/docs/MQM-tour.tex
-inst/docs/MQM-tour.txt
-inst/docs/MQM-tour.R
-inst/docs/Sources/MQM/MQM-tour.R
+inst/doc/MQM-tour.tex
+inst/doc/MQM-tour.txt
+inst/doc/MQM-tour.R
+inst/doc/Sources/MQM/MQM-tour.R
 *.pdf
 *.tex
 .Rproj.user

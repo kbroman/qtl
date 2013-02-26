@@ -2,12 +2,12 @@
  * 
  * util.c
  *
- * copyright (c) 2001-2011, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2012, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Dec, 2011
+ * last modified Nov, 2012
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -545,9 +545,10 @@ void R_locate_xo(int *n_ind, int *n_mar, int *type,
 		 int *geno, double *map, 
 		 double *location, int *nseen,
 		 int *ileft, int *iright, double *left, double *right,
+                 int *gleft, int *gright, 
 		 int *ntyped, int *full_info)
 {
-  int **Geno, **iLeft, **iRight, **nTyped;
+  int **Geno, **iLeft, **iRight, **nTyped, **gLeft, **gRight;
   double **Location, **Left, **Right;
 
   reorg_geno(*n_ind, *n_mar, geno, &Geno);
@@ -557,20 +558,23 @@ void R_locate_xo(int *n_ind, int *n_mar, int *type,
     reorg_errlod(*n_ind, (*type+1)*(*n_mar-1), right, &Right);
     reorg_geno(*n_ind, (*type+1)*(*n_mar-1), ileft, &iLeft);
     reorg_geno(*n_ind, (*type+1)*(*n_mar-1), iright, &iRight);
+    reorg_geno(*n_ind, (*type+1)*(*n_mar-1), gleft, &gLeft);
+    reorg_geno(*n_ind, (*type+1)*(*n_mar-1), gright, &gRight);
     reorg_geno(*n_ind, (*type+1)*(*n_mar-1), ntyped, &nTyped);
   }
 
   locate_xo(*n_ind, *n_mar, *type, Geno, map, Location,
-	    nseen, iLeft, iRight, Left, Right, nTyped, *full_info);
+	    nseen, iLeft, iRight, Left, Right, gLeft, gRight, nTyped, *full_info);
 }
 
 /* Note: type ==0 for backcross and ==1 for intercross */
 void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 	       double *map, double **Location, int *nseen,
 	       int **iLeft, int **iRight, double **Left, double **Right,
+               int **gLeft, int **gRight,
 	       int **nTyped, int full_info)
 {
-  int i, j, k, curgen, number, icurpos;
+  int i, j, k, curgen, number, icurpos, tempgen;
   double curpos;
 
   for(i=0; i<n_ind; i++) {
@@ -603,6 +607,8 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 		Right[nseen[i]][i] = map[j];
 		iLeft[nseen[i]][i] = icurpos+1;
 		iRight[nseen[i]][i] = j+1;
+		gLeft[nseen[i]][i] = curgen;
+		gRight[nseen[i]][i] = Geno[j][i];
 	      }
 
 	      curgen = Geno[j][i];
@@ -612,6 +618,7 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 	    }
 	    else {
 	      number = 0; /* number of XOs; indicates to set Location[] */
+              tempgen = curgen;
 	      switch(Geno[j][i]) {
 	      case 1:
 		switch(curgen) {
@@ -657,17 +664,21 @@ void locate_xo(int n_ind, int n_mar, int type, int **Geno,
 		  Right[nseen[i]][i] = map[j];
 		  iLeft[nseen[i]][i] = icurpos+1;
 		  iRight[nseen[i]][i] = j+1;
+                  gLeft[nseen[i]][i] = tempgen;
+                  gRight[nseen[i]][i] = curgen;
 		}
 		nseen[i]++;
 	      }
 	      else if(number==2) { /* two crossovers in interval: place 1/3 and 2/3 along */
-		Location[nseen[i]][i] = (curpos+2.0*map[j])/3.0;
-		Location[nseen[i]+1][i] = (2.0*curpos+map[j])/3.0;
+		Location[nseen[i]][i] = (curpos*2.0+map[j])/3.0;
+		Location[nseen[i]+1][i] = (curpos+2.0*map[j])/3.0;
 		if(full_info) {
 		  Left[nseen[i]][i] = Left[nseen[i]+1][i] = curpos; 
 		  Right[nseen[i]][i] = Right[nseen[i]+1][i] = map[j];
 		  iLeft[nseen[i]][i] = iLeft[nseen[i]+1][i] = icurpos+1; 
 		  iRight[nseen[i]][i] = iRight[nseen[i]+1][i] = j+1;
+		  gLeft[nseen[i]][i] = gLeft[nseen[i]+1][i] = tempgen;
+		  gRight[nseen[i]][i] = gRight[nseen[i]+1][i] = curgen;
 		}
 		nseen[i] += 2;
 	      }

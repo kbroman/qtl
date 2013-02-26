@@ -1,12 +1,12 @@
 ##############################################################
 # R code for "A shorter tour of R/qtl"
 #
-# Karl W Broman, kbroman.wisc.edu
+# Karl W Broman, kbroman@biostat.wisc.edu
 # University of Wisconsin Madison
 #
 # http://www.rqtl.org
 #
-# 21 March 2012
+# 26 November 2012
 ##############################################################
 
 ############################################################
@@ -147,6 +147,9 @@ summary(out.all, threshold=3, lodcolumn=4)
 summary(out.all, threshold=3, format="allpeaks")
 
 summary(out.all, threshold=3, format="allpheno")
+
+summary(out.all, threshold=3, format="tabByCol")
+summary(out.all, threshold=3, format="tabByChr")
 
 ############################################################
 # Two-dimensional, two-QTL scans

@@ -43,13 +43,13 @@
 #include "hmm_main.h"
 #include "hmm_f2.h"
 
-double init_f2(int true_gen)
+double init_f2(int true_gen, int *cross_scheme)
 {
   if(true_gen==2) return(-M_LN2); /* ln(0.5) */
   else return(-2.0*M_LN2); /* ln(0.25) */
 }
 
-double emit_f2(int obs_gen, int true_gen, double error_prob)
+double emit_f2(int obs_gen, int true_gen, double error_prob, int *cross_scheme)
 {
   switch(obs_gen) {
   case 0: return(0.0);
@@ -67,7 +67,7 @@ double emit_f2(int obs_gen, int true_gen, double error_prob)
 }
     
   
-double step_f2(int gen1, int gen2, double rf, double junk) 
+double step_f2(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   switch(gen1) {
   case 1:
@@ -100,12 +100,12 @@ double step_f2(int gen1, int gen2, double rf, double junk)
    when considering phase-known F2 genotypes 
    (i.e. the 4-state chain: AA, AB, BA, BB             */
 
-double init_f2b(int true_gen)
+double init_f2b(int true_gen, int *cross_scheme)
 {
   return(-2.0*M_LN2);  /* ln(0.25) */
 }
 
-double emit_f2b(int obs_gen, int true_gen, double error_prob)
+double emit_f2b(int obs_gen, int true_gen, double error_prob, int *cross_scheme)
 {
   switch(obs_gen) {
   case 0: return(0.0);
@@ -135,7 +135,7 @@ double emit_f2b(int obs_gen, int true_gen, double error_prob)
 }
     
   
-double step_f2b(int gen1, int gen2, double rf, double junk) 
+double step_f2b(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   switch(gen1) {
   case 1:
@@ -166,7 +166,7 @@ double step_f2b(int gen1, int gen2, double rf, double junk)
   return(log(-1.0)); /* shouldn't get here */
 }
 
-double nrec_f2b(int gen1, int gen2)
+double nrec_f2b(int gen1, int gen2, double rf, int *cross_scheme)
 {
   switch(gen1) {
   case 1: 
@@ -274,7 +274,7 @@ void calc_errorlod_f2(int *n_ind, int *n_mar, int *geno,
 
 
 
-double nrec2_f2(int obs1, int obs2, double rf)
+double nrec2_f2(int obs1, int obs2, double rf, int *cross_scheme)
 {
   int temp;
 
@@ -314,17 +314,8 @@ double nrec2_f2(int obs1, int obs2, double rf)
 }
 
 
-double logprec_f2(int obs1, int obs2, double rf)
+double logprec_f2(int obs1, int obs2, double rf, int *cross_scheme)
 {
-  int temp;
-
-  /* make obs1 <= obs2 */
-  if(obs1 > obs2) {
-    temp = obs2;
-    obs2 = obs1;
-    obs1 = temp;
-  }
-
   switch(obs1) {
   case 1: 
     switch(obs2) {
@@ -336,19 +327,34 @@ double logprec_f2(int obs1, int obs2, double rf)
     }
   case 2:
     switch(obs2) {
+    case 1: case 3: return(log(rf*(1.0-rf)));
     case 2: return(log(rf*rf+(1.0-rf)*(1.0-rf)));
-    case 3: return(log(rf*(1.0-rf)));
     case 4: case 5: return(log(1.0-rf*(1.0-rf)));
     }
   case 3:
     switch(obs2) {
+    case 1: return(2.0*log(rf));
+    case 2: return(M_LN2 + log(rf) + log(1.0-rf));
     case 3: return(2.0*log(1.0-rf));
     case 4: return(log(1.0-(1.0-rf)*(1.0-rf)));
     case 5: return(log(1.0-rf*rf));
     }
-  case 4: case 5:
-    if(obs1==obs2) return(log(0.25*(1.0-rf)*(1.0-rf) + 0.5));
-    else return(log(0.25*rf*rf+0.5));
+  case 4:
+    switch(obs2) {
+    case 1: return(log((1.0-rf*rf) / 3.0));
+    case 2: return(log((1.0-rf*(1.0-rf)) / 3.0) + M_LN2);
+    case 3: return(log((1.0-(1.0-rf)*(1.0-rf)) / 3.0));
+    case 4: return(log(((1.0-rf)*(1.0-rf) + 2.0) / 3.0));
+    case 5: return(log((rf*rf+2.0) / 3.0));
+    }
+  case 5:
+    switch(obs2) {
+    case 1: return(log((1.0-(1.0-rf)*(1.0-rf)) / 3.0));
+    case 2: return(log((1.0-rf*(1.0-rf)) / 3.0) + M_LN2);
+    case 3: return(log((1.0-rf*rf) / 3.0));
+    case 4: return(log((rf*rf+2.0) / 3.0));
+    case 5: return(log(((1.0-rf)*(1.0-rf) + 2.0) / 3.0));
+    }
   }
   return(log(-1.0)); /* shouldn't get here */
 }

@@ -39,6 +39,7 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
          na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
          alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE,
          error.prob=0.0001, map.function=c("haldane", "kosambi", "c-f", "morgan"),
+         BC.gen = 0, F.gen = 0,
          ...)
 {
   if(format == "csvrs") {
@@ -137,6 +138,9 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
       cross <- fixXgeno.f2(cross, alleles)
     }
   }
+
+  ## Pass through read.cross.bcsft for BCsFt (convert if appropriate).
+  cross <- read.cross.bcsft(cross = cross, BC.gen = BC.gen, F.gen = F.gen, ...)
 
   # re-estimate map?
   if(estimate.map) {

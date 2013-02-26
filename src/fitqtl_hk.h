@@ -2,9 +2,9 @@
  * 
  * fitqtl_hk.h
  *
- * copyright (c) 2007, Karl W Broman
+ * copyright (c) 2007-2013, Karl W Broman
  *
- * last modified Nov, 2007
+ * last modified Feb, 2013
  * first written Nov, 2007
  *
  *     This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
 		 int *n_int, double *pheno, int *get_ests,
 		  /* return variables */
 		 double *lod, int *df, double *ests, double *ests_covar,
-		 double *design_mat);
+		 double *design_mat, int *matrix_rank);
 
 /**********************************************************************
  * 
@@ -68,19 +68,21 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
  *
  * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
  *
+ * matrix_rank  On return, rank of design matrix
+ *
  **********************************************************************/
 
 void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
 	       double **Cov, int n_cov, 
 	       int *model, int n_int, double *pheno, int get_ests,
 	       double *lod, int *df, double *ests, double *ests_covar,
-	       double *design_mat); 
+	       double *design_mat, int *matrix_rank); 
 
 /* galtRssHK - calculate RSS for full model by Haley-Knott regression */
 double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl, 
 		 double ***Genoprob, double **Cov, int n_cov, int *model, 
 		 int n_int, double *dwork, int *iwork, int sizefull,
 		 int get_ests, double *ests, double **Ests_covar,
-		 double *designmat);
+		 double *designmat, int *matrix_rank);
 
 /* end of fitqtl_hk.h */

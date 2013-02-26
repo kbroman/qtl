@@ -94,6 +94,19 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
       if(xchr)
         warning("sim.geno not working properly for the X chromosome for 4- or 8-way RIL.")
     }
+    else if(type == "bcsft") {
+      one.map <- TRUE
+      cfunc <- "sim_geno_bcsft"
+      cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+      if(!xchr) {# autosomal
+        n.gen <- 3 - (cross.scheme[1] == 0)
+      }
+      else {                             # X chromsome
+        cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+        cross.scheme[2] <- 0
+        n.gen <- 2
+      }
+    }
     else 
       stop("sim_geno not available for cross type ", type, ".")
 
@@ -135,6 +148,11 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
     
     # call C function
     if(one.map) {
+      ## Hide cross scheme in genoprob to pass to routine. BY
+      temp <- as.integer(rep(0,n.draws*n.ind*n.pos))
+      if(type == "bcsft")
+        temp[1:2] <- cross.scheme
+      
       z <- .C(cfunc,
               as.integer(n.ind),         # number of individuals
               as.integer(n.pos),         # number of markers
@@ -142,7 +160,7 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
               as.integer(newgen),        # genotype data
               as.double(rf),             # recombination fractions
               as.double(error.prob),     # 
-              draws=as.integer(rep(0,n.draws*n.ind*n.pos)), 
+              draws=as.integer(temp), 
               PACKAGE="qtl")
 
       cross$geno[[i]]$draws <- array(z$draws,dim=c(n.ind,n.pos,n.draws))
