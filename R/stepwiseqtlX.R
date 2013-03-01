@@ -461,7 +461,7 @@ stepwiseqtlX <-
         if(length(wh) > 1) wh <- sample(wh, 1)
         m <- out.AA$map[wh,]
         qtl1.AA <- makeqtl(cross, as.character(m[1,1]), m[1,2], "Q1", what=qtlmethod)
-        formula1 <- firstformula
+        formula1.AA <- firstformula
         plod1.AA <- calc.plod.X(lod1.AA, qtl=qtl1.AA, formula=formula1, penalties=penalties)
         #pLOD 1 term XX region
         lod1.XX <- max(diag(lod.XX), na.rm=TRUE)
@@ -469,7 +469,7 @@ stepwiseqtlX <-
         if(length(wh) > 1) wh <- sample(wh, 1)
         m <- out.XX$map[wh,]
         qtl1.XX <- makeqtl(cross, as.character(m[1,1]), m[1,2], "Q1", what=qtlmethod)
-        formula1 <- firstformula
+        formula1.XX <- firstformula
         plod1.XX <- calc.plod.X(lod1.XX, qtl=qtl1.XX, formula=formula1, penalties=penalties)
 
         #pLOD 2 additive terms
@@ -507,8 +507,7 @@ stepwiseqtlX <-
         qtla.AX <- makeqtl(cross, c(as.character(m.A.add[1,1]), as.character(m.X.add[1,1])),
                            c(m.A.add[1,2], m.X.add[1,2]), c("Q1","Q2"), what=qtlmethod)
         formulaa.AX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-##### fix me ##### below, what is maxlod.AX.add ?
-        ploda.AX <- calc.plod.X(maxlod.AX.add, qtl=qtla.AX, formula=formulaa.AX,
+        ploda.AX <- calc.plod.X(loda.AX, qtl=qtla.AX, formula=formulaa.AX,
                                   penalties=penalties)
         #pLOD 2 terms with interaction
         #pLOD 2 terms with interaction AA region
@@ -553,7 +552,6 @@ stepwiseqtlX <-
         wh <- which(!is.na(plod.vec) & plod.vec == curplod)
         if(length(wh) > 1) wh <- sample(wh, 1)
         qtl <- c(qtl1.AA, qtl1.XX, qtla.AA, qtla.XX, qtla.AX, qtlf.AA, qtlf.XX, qtlf.AX)[wh]
-##### fix me ##### below, what are formula1.AA and formula1.XX ?
         formula <- c(formula1.AA, formula1.XX, formulaa.AA, formulaa.XX, formulaa.AX, formulaf.AA, formulaf.XX, formulaf.AX)[wh]
         lod <- c(lod1.AA, lod1.XX, loda.AA, loda.XX, loda.AX, lodf.AA, lodf.XX, lodf.AX)[wh]
         n.qtl <- c(1,1,2,2,2,2,2,2)[wh]
