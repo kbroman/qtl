@@ -1,7 +1,7 @@
 ######################################################################
 # stepwiseqtlX.R
 #
-# copyright (c) 2007-2012, Karl W Broman and Quoc Tran
+# copyright (c) 2013, Karl W Broman and Quoc Tran
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -203,7 +203,7 @@ stepwiseqtlX <-
            method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
            additive.only=FALSE, scan.pairs=FALSE, penalties,
            keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
-           tol=1e-4, maxit=1000)
+           tol=1e-4, maxit=1000, require.fullrank=TRUE)
   {
     if(!("cross" %in% class(cross)))
       stop("Input should have class \"cross\".")
@@ -572,9 +572,11 @@ stepwiseqtlX <-
         }
         qtl <- rqtl
       }
-      lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+      fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                     method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                    run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                    run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+      lod <- fit$result.full[1,4] - lod0
+      if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
       curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                penalties=penalties) # Quoc changed
       attr(qtl, "pLOD") <- curplod
@@ -620,7 +622,8 @@ stepwiseqtlX <-
       # Add QTL in X chr
       out.X <- addqtl(cross, chr="X", pheno.col=pheno.col, qtl=qtl, covar=covar,
                       formula=formula, method=method, incl.markers=incl.markers,
-                      verbose=verbose.scan, forceXcovar=forceXcovar)
+                      verbose=verbose.scan, forceXcovar=forceXcovar,
+                      require.fullrank=require.fullrank)
 
       curlod.X <- max(out.X[,3], na.rm=TRUE)
       wh <- which(!is.na(out.X[,3]) & out.X[,3]==curlod.X)
@@ -633,7 +636,8 @@ stepwiseqtlX <-
       # Add QTL in Autosome chr
       out.A <- addqtl(cross, chr="-X", pheno.col=pheno.col, qtl=qtl, covar=covar,
                       formula=formula, method=method, incl.markers=incl.markers,
-                      verbose=verbose.scan, forceXcovar=forceXcovar)
+                      verbose=verbose.scan, forceXcovar=forceXcovar,
+                      require.fullrank=require.fullrank)
 
       curlod.A <- max(out.A[,3], na.rm=TRUE)
       wh <- which(!is.na(out.A[,3]) & out.A[,3]==curlod.A)
@@ -669,7 +673,8 @@ stepwiseqtlX <-
 
           out <- addqtl(cross, chr="-X", pheno.col=pheno.col, qtl=qtl, covar=covar,
                         formula=thisformula, method=method, incl.markers=incl.markers,
-                        verbose=verbose.scan, forceXcovar=forceXcovar)
+                        verbose=verbose.scan, forceXcovar=forceXcovar,
+                        require.fullrank=require.fullrank)
           thislod <- max(out[,3], na.rm=TRUE)
 
           wh <- which(!is.na(out[,3]) & out[,3]==thislod)
@@ -698,7 +703,8 @@ stepwiseqtlX <-
 
           out <- addqtl(cross, chr="X", pheno.col=pheno.col, qtl=qtl, covar=covar,
                         formula=thisformula, method=method, incl.markers=incl.markers,
-                        verbose=verbose.scan, forceXcovar=forceXcovar)
+                        verbose=verbose.scan, forceXcovar=forceXcovar,
+                        require.fullrank=require.fullrank)
           thislod <- max(out[,3], na.rm=TRUE)
 
           wh <- which(!is.na(out[,3]) & out[,3]==thislod)
@@ -726,7 +732,8 @@ stepwiseqtlX <-
           if(verbose)
             cat(" ---Look for additional interactions\n")
           temp <- addint(cross, pheno.col, qtl, covar=covar, formula=formula,
-                         method=method, qtl.only=TRUE, verbose=verbose.scan)
+                         method=method, qtl.only=TRUE, verbose=verbose.scan,
+                         require.fullrank=require.fullrank)
           if(!is.null(temp)) {
 
             formula.addint <- paste(deparseQTLformula(formula), "+", rownames(temp)) # formula of addint model
@@ -821,9 +828,11 @@ stepwiseqtlX <-
         if(any(rqtl$pos != qtl$pos)) { # updated positions
           if(verbose) cat(" ---  Moved a bit\n")
           qtl <- rqtl
-          lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+          fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                         method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                        run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                        run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+          lod <- fit$result.full[1,4] - lod0
+          if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
           curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                    penalties=penalties)
           attr(qtl, "pLOD") <- curplod
@@ -944,9 +953,11 @@ stepwiseqtlX <-
           if(any(rqtl$pos != qtl$pos)) { # updated positions
             if(verbose) cat(" ---  Moved a bit\n")
             qtl <- rqtl
-            lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+            fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                           method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                          run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                          run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+            lod <- fit$result.full[1,4] - lod0
+            if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
             curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                      penalties=penalties)
             attr(qtl, "pLOD") <- curplod
