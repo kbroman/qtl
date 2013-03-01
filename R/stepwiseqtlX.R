@@ -1,8 +1,32 @@
+######################################################################
+# stepwiseqtlX.R
+#
+# copyright (c) 2007-2012, Karl W Broman and Quoc Tran
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but without any warranty; without even the implied warranty of
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
+#
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
+#
+# Part of the R/qtl package
+#
+# Functions related to stepwise QTL analysis but with separate
+# penalties for autosome and X chromosome
+#
+# Contains: countqtltermsX, calc.penalties.X, stepwiseqtlX, calc.plod.X
+######################################################################
 
 ######################################################################
 # count terms in a model, for use by plod, Quoc editted
 ######################################################################
-countqtltermsQuoc <-
+countqtltermsX <-
   function(formula, qtl, ignore.covar=TRUE) # qtl is used to extract a logical vector: on "X" chr == 1
   {
     if(is.character(formula)) formula <- as.formula(formula)
@@ -116,7 +140,7 @@ countqtltermsQuoc <-
 ######################################################################
 # calculate penalties for pLOD using scantwo permutation results,  Quoc editted
 ######################################################################
-calcQuoc.penalties <-
+calc.penalties.X <-
   function(perms, alpha=0.05, lodcolumn)
   {
     if(missing(perms) || !("scantwoperm" %in% class(perms)))
@@ -163,7 +187,7 @@ calcQuoc.penalties <-
   }
 
 ######################################################################
-# stepwiseqtlQuocv12514, work for data with both A and X chromosomes, 
+# stepwiseqtlX, work for data with both A and X chromosomes, 
 # Need a check for X chromosome to switch back to standard stepwiseqtl
 # This is derived from stepwiseqtl (R/qtl v1.25.14)
 # 2 more variables than stepwiseqtl:
@@ -174,7 +198,7 @@ calcQuoc.penalties <-
 # need work on scan.pairs = TRUE 
 # need work on default penalties 
 ######################################################################
-stepwiseqtlQuocv12514 <-
+stepwiseqtlX <-
   function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, k_f=3, stop.rule=0, covar=NULL,
            method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
            additive.only=FALSE, scan.pairs=FALSE, penalties,
@@ -394,7 +418,7 @@ stepwiseqtlQuocv12514 <-
         qtl.A <- makeqtl(cross, as.character(out.A[wh,1]), out.A[wh,2], "Q1",
                          what=qtlmethod)
         
-        curplod.A <- calc.plodQuoc(lod.A, formula=firstformula, qtl=qtl.A, penalties=penalties) # update Autosome plod after choosing formula and qtl
+        curplod.A <- calc.plod.X(lod.A, formula=firstformula, qtl=qtl.A, penalties=penalties) # update Autosome plod after choosing formula and qtl
         # Calculate max plod in X chr
         lod.X <- max(out.X[,3], na.rm=TRUE)
         
@@ -404,7 +428,7 @@ stepwiseqtlQuocv12514 <-
         qtl.X <- makeqtl(cross, as.character(out.X[wh,1]), out.X[wh,2], "Q1",
                          what=qtlmethod)
         
-        curplod.X <- calc.plodQuoc(lod.X, formula=firstformula, qtl=qtl.X, penalties=penalties) # update X chr plod after choosing formula and qtl
+        curplod.X <- calc.plod.X(lod.X, formula=firstformula, qtl=qtl.X, penalties=penalties) # update X chr plod after choosing formula and qtl
         # Compare and choose plod between Autosome and X Chr 
         if (curplod.X > curplod.A) {
           curplod <- curplod.X
@@ -438,7 +462,7 @@ stepwiseqtlQuocv12514 <-
         m <- out.AA$map[wh,]
         qtl1.AA <- makeqtl(cross, as.character(m[1,1]), m[1,2], "Q1", what=qtlmethod)
         formula1 <- firstformula
-        plod1.AA <- calc.plodQuoc(lod1.AA, qtl=qtl1.AA, formula=formula1, penalties=penalties)
+        plod1.AA <- calc.plod.X(lod1.AA, qtl=qtl1.AA, formula=formula1, penalties=penalties)
         #pLOD 1 term XX region
         lod1.XX <- max(diag(lod.XX), na.rm=TRUE)
         wh <- which(!is.na(diag(lod.XX)) & diag(lod.XX) == lod1.XX)
@@ -446,7 +470,7 @@ stepwiseqtlQuocv12514 <-
         m <- out.XX$map[wh,]
         qtl1.XX <- makeqtl(cross, as.character(m[1,1]), m[1,2], "Q1", what=qtlmethod)
         formula1 <- firstformula
-        plod1.XX <- calc.plodQuoc(lod1.XX, qtl=qtl1.XX, formula=formula1, penalties=penalties)
+        plod1.XX <- calc.plod.X(lod1.XX, qtl=qtl1.XX, formula=formula1, penalties=penalties)
         
         #pLOD 2 additive terms
         #pLOD 2 additive terms AA region
@@ -457,7 +481,7 @@ stepwiseqtlQuocv12514 <-
         qtla.AA <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
                            c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
         formulaa.AA <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-        ploda.AA <- calc.plodQuoc(loda.AA, qtl=qtla.AA, formula=formulaa.AA,
+        ploda.AA <- calc.plod.X(loda.AA, qtl=qtla.AA, formula=formulaa.AA,
                                   penalties=penalties)
         
         #pLOD 2 additive terms XX region
@@ -468,7 +492,7 @@ stepwiseqtlQuocv12514 <-
         qtla.XX <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
                            c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
         formulaa.XX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-        ploda.XX <- calc.plodQuoc(loda.XX, qtl=qtla.XX, formula=formulaa.XX,
+        ploda.XX <- calc.plod.X(loda.XX, qtl=qtla.XX, formula=formulaa.XX,
                                   penalties=penalties)
         #pLOD 2 additive terms AX region
         # additive lod of AX
@@ -483,7 +507,8 @@ stepwiseqtlQuocv12514 <-
         qtla.AX <- makeqtl(cross, c(as.character(m.A.add[1,1]), as.character(m.X.add[1,1])),
                            c(m.A.add[1,2], m.X.add[1,2]), c("Q1","Q2"), what=qtlmethod)
         formulaa.AX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-        ploda.AX <- calc.plodQuoc(maxlod.AX.add, qtl=qtla.AX, formula=formulaa.AX,
+##### fix me ##### below, what is maxlod.AX.add ?
+        ploda.AX <- calc.plod.X(maxlod.AX.add, qtl=qtla.AX, formula=formulaa.AX,
                                   penalties=penalties)
         #pLOD 2 terms with interaction
         #pLOD 2 terms with interaction AA region
@@ -494,7 +519,7 @@ stepwiseqtlQuocv12514 <-
         qtlf.AA <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
                            c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
         formulaf.AA <- as.formula(paste(deparseQTLformula(firstformula), "+Q2+Q1:Q2", sep=""))
-        plodf.AA <- calc.plodQuoc(lodf.AA, qtl=qtlf.AA, formula=formulaf.AA,
+        plodf.AA <- calc.plod.X(lodf.AA, qtl=qtlf.AA, formula=formulaf.AA,
                                   penalties=penalties)
         
         #pLOD 2 terms with interaction XX region
@@ -505,7 +530,7 @@ stepwiseqtlQuocv12514 <-
         qtlf.XX <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
                            c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
         formulaf.XX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2+Q1:Q2", sep=""))
-        plodf.XX <- calc.plodQuoc(lodf.XX, qtl=qtlf.XX, formula=formulaf.XX,
+        plodf.XX <- calc.plod.X(lodf.XX, qtl=qtlf.XX, formula=formulaf.XX,
                                   penalties=penalties)
         
         #pLOD 2 terms with interaction AX region
@@ -521,13 +546,14 @@ stepwiseqtlQuocv12514 <-
         qtlf.AX <- makeqtl(cross, c(as.character(m.A.full[1,1]), as.character(m.X.full[1,1])),
                            c(m.A.full[1,2], m.X.full[1,2]), c("Q1","Q2"), what=qtlmethod)
         formulaf.AX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2+Q1:Q2", sep=""))
-        plodf.AX <- calc.plodQuoc(lodf.AX, qtl=qtlf.AX, formula=formulaf.AX,
+        plodf.AX <- calc.plod.X(lodf.AX, qtl=qtlf.AX, formula=formulaf.AX,
                                   penalties=penalties)
         plod.vec <- c(plod1.AA, plod1.XX, ploda.AA, ploda.XX, ploda.AX, plodf.AA, plodf.XX, plodf.AX)
         curplod <- max(plod.vec)
         wh <- which(!is.na(plod.vec) & plod.vec == curplod)
         if(length(wh) > 1) wh <- sample(wh, 1)
         qtl <- c(qtl1.AA, qtl1.XX, qtla.AA, qtla.XX, qtla.AX, qtlf.AA, qtlf.XX, qtlf.AX)[wh]
+##### fix me ##### below, what are formula1.AA and formula1.XX ?
         formula <- c(formula1.AA, formula1.XX, formulaa.AA, formulaa.XX, formulaa.AX, formulaf.AA, formulaf.XX, formulaf.AX)[wh]
         lod <- c(lod1.AA, lod1.XX, loda.AA, loda.XX, loda.AX, lodf.AA, lodf.XX, lodf.AX)[wh]
         n.qtl <- c(1,1,2,2,2,2,2,2)[wh]        
@@ -549,7 +575,7 @@ stepwiseqtlQuocv12514 <-
       lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                     method=method, model=model, dropone=FALSE, get.ests=FALSE,
                     run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
-      curplod <- calc.plodQuoc(lod, formula=formula, qtl=qtl,
+      curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                penalties=penalties) # Quoc changed
       attr(qtl, "pLOD") <- curplod
       n.qtl <- length(qtl$chr)
@@ -602,7 +628,7 @@ stepwiseqtlQuocv12514 <-
       qtl.X <- addtoqtl(cross, qtl, as.character(out.X[wh,1]), out.X[wh,2],
                         paste("Q", n.qtl+1, sep=""))
       curlod.X <- curlod.X+lod
-      plod.X <- calc.plodQuoc(curlod.X, formula=curformula, qtl=qtl.X,
+      plod.X <- calc.plod.X(curlod.X, formula=curformula, qtl=qtl.X,
                               penalties=penalties)
       # Add QTL in Autosome chr
       out.A <- addqtl(cross, chr="-X", pheno.col=pheno.col, qtl=qtl, covar=covar,
@@ -615,7 +641,7 @@ stepwiseqtlQuocv12514 <-
       qtl.A <- addtoqtl(cross, qtl, as.character(out.A[wh,1]), out.A[wh,2],
                         paste("Q", n.qtl+1, sep=""))
       curlod.A <-curlod.A+lod
-      plod.A <- calc.plodQuoc(curlod.A, formula=curformula, qtl=qtl.A,
+      plod.A <- calc.plod.X(curlod.A, formula=curformula, qtl=qtl.A,
                               penalties=penalties)
       if (plod.X > plod.A) {
         curplod <- plod.X
@@ -652,7 +678,7 @@ stepwiseqtlQuocv12514 <-
                               paste("Q", n.qtl+1, sep=""))
           
           thislod <- thislod + lod
-          thisplod <- calc.plodQuoc(thislod, formula=thisformula, qtl=thisqtl,
+          thisplod <- calc.plod.X(thislod, formula=thisformula, qtl=thisqtl,
                                     penalties=penalties)
           if(verbose) cat("        plod =", thisplod, "\n")
           
@@ -681,7 +707,7 @@ stepwiseqtlQuocv12514 <-
                               paste("Q", n.qtl+1, sep=""))
           
           thislod <- thislod + lod
-          thisplod <- calc.plodQuoc(thislod, formula=thisformula, qtl=thisqtl,
+          thisplod <- calc.plod.X(thislod, formula=thisformula, qtl=thisqtl,
                                     penalties=penalties)
           if(verbose) cat("        plod =", thisplod, "\n")
           
@@ -707,7 +733,7 @@ stepwiseqtlQuocv12514 <-
             thelod <- temp[,3]
             thelod <- thelod + lod
             #             browser()
-            plod.addint <- mapply(FUN=calc.plodQuoc, lod=thelod, formula=formula.addint, MoreArgs=list(qtl=qtl,penalties=penalties))
+            plod.addint <- mapply(FUN=calc.plod.X, lod=thelod, formula=formula.addint, MoreArgs=list(qtl=qtl,penalties=penalties))
             thisplod <- max(plod.addint, na.rm=TRUE)
             wh <- which(!is.na(thelod) & plod.addint==thisplod)
             if(length(wh) > 1) wh <- sample(wh, 1)
@@ -741,7 +767,7 @@ stepwiseqtlQuocv12514 <-
                              c(temp[1,3], temp[1,4]), paste("Q", n.qtl+1:2, sep=""))
           formulaspa <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1, "+Q",
                                          n.qtl+2, sep=""))
-          ploda <- calc.plodQuoc(loda+lod, formula=formulaspa, qtl=qtlspa,
+          ploda <- calc.plod.X(loda+lod, formula=formulaspa, qtl=qtlspa,
                                  penalties=penalties) 
           lodf <- max(thelod[lower.tri(thelod)], na.rm=TRUE)
           temp <- max(out, what="full")
@@ -753,7 +779,7 @@ stepwiseqtlQuocv12514 <-
           formulaspf <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1, "+Q",
                                          n.qtl+2, "+Q", n.qtl+1, ":Q", n.qtl+2, 
                                          sep=""))
-          plodf <- calc.plodQuoc(lodf+lod, formula=formulaspf, qtl=qtlspf,
+          plodf <- calc.plod.X(lodf+lod, formula=formulaspf, qtl=qtlspf,
                                  penalties=penalties)
           
           if(verbose) {
@@ -798,7 +824,7 @@ stepwiseqtlQuocv12514 <-
           lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                         method=method, model=model, dropone=FALSE, get.ests=FALSE,
                         run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
-          curplod <- calc.plodQuoc(lod, formula=formula, qtl=qtl,
+          curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                    penalties=penalties)
           attr(qtl, "pLOD") <- curplod
         }
@@ -857,7 +883,7 @@ stepwiseqtlQuocv12514 <-
       formulas <- formulas[wh,drop=FALSE] 
       #       lods <- lods[wh,drop=FALSE]
       thelod <- out[,3]
-      plod.dropone <- mapply(FUN=calc.plodQuoc, lod=lod-thelod, formula=formulas, MoreArgs=list(qtl=qtl,penalties=penalties))
+      plod.dropone <- mapply(FUN=calc.plod.X, lod=lod-thelod, formula=formulas, MoreArgs=list(qtl=qtl,penalties=penalties))
       maxplod <- max(plod.dropone, na.rm=TRUE)
       
       wh <- which(!is.na(thelod) & plod.dropone==maxplod)
@@ -896,7 +922,7 @@ stepwiseqtlQuocv12514 <-
         n.qtl <- n.qtl - 1
       }
       
-      curplod <- calc.plodQuoc(lod, formula=formula, qtl=qtl,
+      curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                penalties=penalties)
       #       browser()
       if(verbose)
@@ -921,7 +947,7 @@ stepwiseqtlQuocv12514 <-
             lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                           method=method, model=model, dropone=FALSE, get.ests=FALSE,
                           run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
-            curplod <- calc.plodQuoc(lod, formula=formula, qtl=qtl,
+            curplod <- calc.plod.X(lod, formula=formula, qtl=qtl,
                                      penalties=penalties)
             attr(qtl, "pLOD") <- curplod
           }
@@ -998,12 +1024,14 @@ stepwiseqtlQuocv12514 <-
 ######################################################################
 # penalized LOD score, Quoc changed, now central function for pLOD
 ######################################################################
-calc.plodQuoc <-
+calc.plod.X <-
   function(lod, nterms, type=c("f2","bc"), penalties, formula, qtl) {
     if (missing(nterms) & !missing(formula) & !missing(qtl)) 
-      nterms <- countqtltermsQuoc(formula, qtl)
+      nterms <- countqtltermsX(formula, qtl)
     nterms <- nterms[1:6]
     if(any(penalties==Inf & nterms > 0)) return(-Inf)
     
     as.numeric(lod - sum((nterms*penalties)[nterms > 0]))
   }
+
+# end of stepwiseqtlX.R
