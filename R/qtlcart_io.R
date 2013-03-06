@@ -2,9 +2,9 @@
 #
 # qtlcart_io.R
 #
-# copyright (c) 2002-2011, Brian S. Yandell
+# copyright (c) 2002-2013, Brian S. Yandell
 #          [with some modifications by Karl W. Broman and Hao Wu]
-# last modified May, 2011
+# last modified Mar, 2013
 # first written Jun, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -175,20 +175,20 @@ function (file)
   # cross type
   fix.bc1 <- fix.ridh <- FALSE # indicator of whether to fix genotypes
   cross <- s$cross[1]
-  if (cross == "RI1") {
+  if (cross == "RI1" || cross=="riself") {
     cross <- "riself"
     fix.ridh <- TRUE
   }
-  else if (cross == "RI2") {
+  else if (cross == "RI2" || cross=="risib") {
     cross <- "risib"
     fix.ridh <- TRUE
   }
-  else if (cross == "RI0") {
-    cross <- "bc" # doubled haploid
+  else if (cross == "RI0" || cross=="dh") {
+    cross <- "dh" # doubled haploid
     fix.ridh <- TRUE
   }
   else if (cross == "B1" || cross == "B2") {
-    fix.bc1 = cross == "B1"
+    fix.bc1 <- cross == "B1"
     cross <- "bc"
   }
   else if (cross == "SF2" || cross == "RF2")
@@ -234,7 +234,7 @@ function (file)
   f[f<0] <- NA 
 
   f[!is.na(f)] <- c(NA, 1:3, rep(NA, 7), 4, NA, 5)[2 + f[!is.na(f)]]
-  if (fix.ridh && all(is.na(f) || f == 1 || f == 3))
+  if (fix.ridh && all(is.na(f) | f == 1 | f == 3))
     f[!is.na(f) & f == 3] <- 2
   if (fix.bc1) {
     f[!is.na(f) & f == 5] <- NA
