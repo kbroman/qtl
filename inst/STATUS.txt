@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.27, 3/6/2013:
+Version 1.27, 3/7/2013:
 
 Major changes:
 
@@ -34,6 +34,10 @@ Minor changes:
   the "csvs" format.
 
   Fixed a bug in read.cross for format="qtlcart" with RIL data.
+
+  Made cross type in "qtlcart" files case insensitive in read.cross.
+  For example, any of Ri1, RI1, rI1, or ri1 will be treated the same.
+
 
 Version 1.26, 11/27/2012:
 

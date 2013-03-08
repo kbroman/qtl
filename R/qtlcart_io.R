@@ -174,26 +174,26 @@ function (file)
   
   # cross type
   fix.bc1 <- fix.ridh <- FALSE # indicator of whether to fix genotypes
-  cross <- s$cross[1]
-  if (cross == "RI1" || cross=="riself") {
+  cross <- tolower(s$cross[1])
+  if (cross == "ri1" || cross=="riself") {
     cross <- "riself"
     fix.ridh <- TRUE
   }
-  else if (cross == "RI2" || cross=="risib") {
+  else if (cross == "ri2" || cross=="risib") {
     cross <- "risib"
     fix.ridh <- TRUE
   }
-  else if (cross == "RI0" || cross=="dh") {
+  else if (cross == "ri0" || cross=="dh") {
     cross <- "dh" # doubled haploid
     fix.ridh <- TRUE
   }
-  else if (cross == "B1" || cross == "B2") {
-    fix.bc1 <- cross == "B1"
+  else if (cross == "b1" || cross == "b2") {
+    fix.bc1 <- cross == "b1"
     cross <- "bc"
   }
-  else if (cross == "SF2" || cross == "RF2")
+  else if (cross == "sf2" || cross == "rf2")
     cross <- "f2"
-  else if (cross == "SF3") {
+  else if (cross == "sf3") {
     cross <- "bcsft"
     cross.scheme <- c(0,3)
   }
