@@ -10,7 +10,15 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o Problem with stepwiseqtl when there is collinearity
+o Add to help file for ploxPXG: example on grabbing the results
+  (Same for effectplot?)
+
+    table(out[,1], out[,3])
+    data(hyper)
+    out <- plotPXG(hyper, "D1Mit123")
+    out[1:5,]
+    table(out[,1], out[,3])
+    out[ out[,3] == 1, ]
 
 o Add pheno.col type arguments to all of the MQM functions
 
