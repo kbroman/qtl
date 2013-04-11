@@ -97,7 +97,6 @@ Minor changes:
 
 
 Version 1.25, 8/13/2012:
->>>>>>> master
 
 Major changes:
 
