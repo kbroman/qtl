@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o stepwiseqtl: "initial lod: " printed even if verbose=FALSE
+
 o Add to help file for ploxPXG: example on grabbing the results
   (Same for effectplot?)
 
