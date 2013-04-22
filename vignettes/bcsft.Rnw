@@ -1,5 +1,5 @@
 \documentclass[12pt,fullpage]{article}
-%\VignetteIndexEntry{Users Guide for New $BC_sF_t$ Tools for R/qtl}
+%\VignetteIndexEntry{Users Guide for New BCsFt Tools for R/qtl}
 \usepackage{fullpage}
 \marginparwidth 0pt
 \oddsidemargin 0pt
