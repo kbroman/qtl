@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Apr, 2013
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -117,7 +117,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     else temcross$geno[[1]]$map <- m
 
     if(verbose) cat("  ", n.orders,"total orders\n")
-    if(n.cluster > 1 && suppressWarnings(require(snow, quietly=TRUE))) {
+    if(n.cluster > 1) {
       # parallelize
       if(n.orders <= n.cluster) n.cluster <- n.orders
       cl <- makeCluster(n.cluster)
@@ -181,7 +181,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     n.ind <- nind(cross)
 
     if(verbose) cat("  ", n.orders,"total orders\n")
-    if(n.cluster > 1 && suppressWarnings(require(snow, quietly=TRUE))) {
+    if(n.cluster > 1) {
       # parallelize
       if(n.orders <= n.cluster) n.cluster <- n.orders
 

@@ -1,7 +1,7 @@
 useDynLib(qtl)
 
 # Import package dependencies
-import(graphics, stats, utils)
+import(graphics, stats, utils, parallel)
 
 # Export all names
 export(inferFounderHap)
