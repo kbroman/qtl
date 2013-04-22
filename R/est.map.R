@@ -2,8 +2,8 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Apr, 2013
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -90,13 +90,8 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
   names(newmap) <- names(cross$geno)
   chrtype <- sapply(cross$geno, class)
 
-  if(n.cluster > 1 && nchr(cross) > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
+  if(n.cluster > 1 && nchr(cross) > 1) {
     cat(" -Running est.map via a cluster of", n.cluster, "nodes.\n")
-    cl <- makeCluster(n.cluster)
-    clusterStopped <- FALSE
-    on.exit(if(!clusterStopped) stopCluster(cl))
-    clusterEvalQ(cl, require(qtl, quietly=TRUE))
-    
     chr <- names(cross$geno)
 
     # temporary definition of est.map
@@ -104,10 +99,10 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
                              sex.sp, omit.noninformative)
       est.map(cross=cross, chr=chr, error.prob=error.prob, map.function=map.function,
               m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp, omit.noninformative=omit.noninformative,
-              verbose=FALSE)#, n.cluster=1)
+              verbose=FALSE)
 
-    newmap <- clusterApplyLB(cl, chr, temp.est.map, cross, error.prob, map.function, m, p,
-                             maxit, tol, sex.sp, omit.noninformative)
+    newmap <- mclapply(chr, temp.est.map, cross, error.prob, map.function, m, p,
+                             maxit, tol, sex.sp, omit.noninformative, mc.cores=n.cluster)
     for(i in seq(along=newmap)) {
       newmap[[i]] <- newmap[[i]][[1]]
       class(newmap[[i]]) <- class(cross$geno[[i]])
