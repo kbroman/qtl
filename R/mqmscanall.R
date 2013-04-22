@@ -2,12 +2,12 @@
 #
 # mqmscanall.R
 #
-# Copyright (c) 2009-2012, Danny Arends
+# Copyright (c) 2009-2013, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 # 
 # first written Februari 2009
-# last modified March 2012
+# last modified Apr 2013
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -67,9 +67,10 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 		LEFT <- 0
 
 		#TEST FOR SNOW CAPABILITIES
-		if(multicore && n.clusters >1 && suppressWarnings(require(snow,quietly=TRUE))) {
+		if(multicore && n.clusters >1) {
+                  RNGkind("L'Ecuyer-CMRG")
 
-      if(verbose) cat("INFO: Library snow found using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
+      if(verbose) cat("INFO: Using ",n.clusters," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
         if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")
@@ -102,7 +103,7 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
         }
 			}
 		}else{
-			if(verbose) cat("INFO: Library snow not found, so going into singlemode.\n")
+			if(verbose) cat("INFO: Going into singlemode.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
 				if(verbose) cat("INFO: Starting with batch",x,"/",batches,"\n")				

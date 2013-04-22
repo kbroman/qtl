@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-2012, Karl W Broman
-# last modified Oct, 2012
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Apr, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -52,12 +52,12 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself")) 
     for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
 
-  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
+  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
+    RNGkind("L'Ecuyer-CMRG")
     cl <- makeCluster(n.cluster)
     clusterStopped <- FALSE
     on.exit(if(!clusterStopped) stopCluster(cl))
-    clusterSetupRNG(cl)
     clusterEvalQ(cl, require(qtl, quietly=TRUE))
     n.perm <- ceiling(n.perm/n.cluster)
     if(missing(chr)) chr <- names(cross$geno)
