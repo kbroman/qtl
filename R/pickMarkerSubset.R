@@ -2,8 +2,8 @@
 #
 # pickMarkerSubset.R
 #
-# copyright (c) 2011, Karl W Broman
-# last modified Nov, 2011
+# copyright (c) 2011-2013, Karl W Broman
+# last modified Apr, 2013
 # first written Nov, 2011
 #
 #     This program is free software; you can redistribute it and/or
@@ -42,18 +42,14 @@ function(locations, min.distance, weights)
     warning("Markers are not in order; sorting them.")
   }
 
-  if(!is.loaded("R_pickMarkerSubset")) {
-    dyn.load("pickMarkerSubset.so")
-    cat(" -Loaded pickMarkerSubset.so\n")
-  }
-
   z <- .C("R_pickMarkerSubset",
           as.double(locations),
           as.integer(n.loc),
           as.double(weights),
           as.double(min.distance),
           path=as.integer(rep(0, n.loc)),
-          n.path=as.integer(0))
+          n.path=as.integer(0),
+          PACKAGE="qtl")
 
   path <- rev(z$path[1:z$n.path]+1) # reverse and add 1
   
