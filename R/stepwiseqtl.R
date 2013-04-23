@@ -60,7 +60,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
          method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
          additive.only=FALSE, scan.pairs=FALSE, penalties,
          keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
-         tol=1e-4, maxit=1000)
+         tol=1e-4, maxit=1000, require.fullrank=TRUE)
 {
   if(!("cross" %in% class(cross)))
     stop("Input should have class \"cross\".")
@@ -74,7 +74,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
   chrtype <- sapply(cross$geno, class)
   if(any(chrtype=="X")) {
-    Xadjustment <- scanoneXnull(class(cross)[1], getsex(cross))
+    Xadjustment <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))
     forceXcovar <- Xadjustment$adjustX
     Xcovar <- Xadjustment$sexpgmcovar
   }
@@ -337,9 +337,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       }
       qtl <- rqtl
     }
-    lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+    fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                   method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+    lod <- fit$result.full[1,4] - lod0
+    if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
     curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                          penalties=penalties)
     attr(qtl, "pLOD") <- curplod
@@ -383,7 +385,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
 
     out <- addqtl(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
                   formula=formula, method=method, incl.markers=incl.markers,
-                  verbose=verbose.scan, forceXcovar=forceXcovar)
+                  verbose=verbose.scan, forceXcovar=forceXcovar,
+                  require.fullrank=require.fullrank)
 
     curlod <- max(out[,3], na.rm=TRUE)
     wh <- which(!is.na(out[,3]) & out[,3]==curlod)
@@ -407,8 +410,9 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
         thisformula <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1,
                                         "+Q", j, ":Q", n.qtl+1, sep=""))
         out <- addqtl(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
-                       formula=thisformula, method=method, incl.markers=incl.markers,
-                       verbose=verbose.scan, forceXcovar=forceXcovar)
+                      formula=thisformula, method=method, incl.markers=incl.markers,
+                      verbose=verbose.scan, forceXcovar=forceXcovar,
+                      require.fullrank=require.fullrank)
         thislod <- max(out[,3], na.rm=TRUE)
 
         wh <- which(!is.na(out[,3]) & out[,3]==thislod)
@@ -435,7 +439,8 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
         if(verbose)
           cat(" ---Look for additional interactions\n")
         temp <- addint(cross, pheno.col, qtl, covar=covar, formula=formula,
-                       method=method, qtl.only=TRUE, verbose=verbose.scan)
+                       method=method, qtl.only=TRUE, verbose=verbose.scan,
+                       require.fullrank=require.fullrank)
         if(!is.null(temp)) {
           thislod <- max(temp[,3], na.rm=TRUE)
           wh <- which(!is.na(temp[,3]) & temp[,3] == thislod)
@@ -521,9 +526,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       if(any(rqtl$pos != qtl$pos)) { # updated positions
         if(verbose) cat(" ---  Moved a bit\n")
         qtl <- rqtl
-        lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+        fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                      run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                      run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+        lod <- fit$result.full[1,4] - lod0
+        if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
         curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                         penalties=penalties)
         attr(qtl, "pLOD") <- curplod
@@ -623,9 +630,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
     }
 
     # call fitqtl again, just in case
-    lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+    fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                   method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                  run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+    lod <- fit$result.full[1,4] - lod0
+    if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
 
     curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                     penalties=penalties)
@@ -649,9 +658,11 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
         if(any(rqtl$pos != qtl$pos)) { # updated positions
           if(verbose) cat(" ---  Moved a bit\n")
           qtl <- rqtl
-          lod <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
+          fit <- fitqtl(cross, pheno.col, qtl, covar=covar, formula=formula,
                         method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                        run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4] - lod0
+                        run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+          lod <- fit$result.full[1,4] - lod0
+          if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
           curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                           penalties=penalties)
           attr(qtl, "pLOD") <- curplod

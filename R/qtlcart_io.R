@@ -2,9 +2,9 @@
 #
 # qtlcart_io.R
 #
-# copyright (c) 2002-2011, Brian S. Yandell
+# copyright (c) 2002-2013, Brian S. Yandell
 #          [with some modifications by Karl W. Broman and Hao Wu]
-# last modified May, 2011
+# last modified Mar, 2013
 # first written Jun, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ function (dir, crofile, mapfile)
   cro <- read.cro.qtlcart( crofile )
   
   cat(" --Read the following data:\n")
-  cat("       Type of cross:         ", cro$cross, "\n")
+  cat("       Type of cross:         ", cro$cross.class, "\n")
   cat("       Number of individuals: ", nrow( cro$markers ), "\n")
   cat("       Number of markers:     ", ncol( cro$markers ), "\n")
   cat("       Number of phenotypes:  ", ncol( cro$traits ), "\n")
@@ -68,9 +68,10 @@ function (dir, crofile, mapfile)
     Geno[[i]] <- tmp
   }
   cross <- list(geno = Geno, pheno = cro$traits )
-  class(cross) <- c( cro$cross, "cross")
-  
   cross$pheno <- as.data.frame(cross$pheno, stringsAsFactors=TRUE)
+  class(cross) <- c( cro$cross.class, "cross")
+  if(cro$cross.class == "bcsft")
+    attr(cross, "scheme") <- cro$cross.scheme
   
   list(cross,FALSE)
 }
@@ -168,29 +169,36 @@ function (file)
   nmarkers <- as.numeric(s$p[1]) - 1
   ntraits <- as.numeric(s$traits[1])
 
+  # cross.scheme (used for bcsft only)
+  cross.scheme <- c(0,0)
+  
   # cross type
   fix.bc1 <- fix.ridh <- FALSE # indicator of whether to fix genotypes
-  cross <- s$cross[1]
-  if (cross == "RI1") {
+  cross <- tolower(s$cross[1])
+  if (cross == "ri1" || cross=="riself") {
     cross <- "riself"
     fix.ridh <- TRUE
   }
-  else if (cross == "RI2") {
+  else if (cross == "ri2" || cross=="risib") {
     cross <- "risib"
     fix.ridh <- TRUE
   }
-  else if (cross == "RI0") {
-    cross <- "bc" # doubled haploid
+  else if (cross == "ri0" || cross=="dh") {
+    cross <- "dh" # doubled haploid
     fix.ridh <- TRUE
   }
-  else if (cross == "B1" || cross == "B2") {
-    fix.bc1 = cross == "B1"
+  else if (cross == "b1" || cross == "b2") {
+    fix.bc1 <- cross == "b1"
     cross <- "bc"
   }
-  else if (cross == "SF2" || cross == "RF2")
+  else if (cross == "sf2" || cross == "rf2")
     cross <- "f2"
-  else if (cross != "f2" && cross != "bc" &&
-           cross != "risib" && cross != "riself" && cross != "4way") 
+  else if (cross == "sf3") {
+    cross <- "bcsft"
+    cross.scheme <- c(0,3)
+  }
+
+  if(!cross %in% c("f2","bc","risib","riself","bcsft"))
     stop("Cross type ", cross, " not supported.")
 
   notraits <- as.numeric(s$otraits[1])
@@ -226,14 +234,14 @@ function (file)
   f[f<0] <- NA 
 
   f[!is.na(f)] <- c(NA, 1:3, rep(NA, 7), 4, NA, 5)[2 + f[!is.na(f)]]
-  if (fix.ridh && all(is.na(f) || f == 1 || f == 3))
+  if (fix.ridh && all(is.na(f) | f == 1 | f == 3))
     f[!is.na(f) & f == 3] <- 2
   if (fix.bc1) {
     f[!is.na(f) & f == 5] <- NA
     f[!is.na(f) & f == 2] <- 1
     f[!is.na(f) & f == 3] <- 2
   }
-  list(traits = traits, markers = f, cross = cross)
+  list(traits = traits, markers = f, cross.class = cross, cross.scheme = cross.scheme)
 }
 
 

@@ -115,11 +115,11 @@ function(len=rep(100,20), n.mar=10, anchor.tel=TRUE, include.x=TRUE,
 sim.cross <-
 function(map, model=NULL, n.ind=100,
          type=c("f2", "bc", "4way", "risib", "riself",
-           "ri4sib", "ri4self", "ri8sib", "ri8self"),
+           "ri4sib", "ri4self", "ri8sib", "ri8self","bcsft"),
          error.prob=0, missing.prob=0, partial.missing.prob=0,
          keep.qtlgeno=TRUE, keep.errorind=TRUE, m=0, p=0,
          map.function=c("haldane","kosambi","c-f","morgan"),
-         founderGeno, random.cross=TRUE)
+         founderGeno, random.cross=TRUE, ...)
 {
   type <- match.arg(type)
   map.function <- match.arg(map.function)
@@ -179,6 +179,10 @@ function(map, model=NULL, n.ind=100,
     cross <- sim.cross.f2(map,model,n.ind,error.prob,missing.prob,
                           partial.missing.prob,keep.errorind,
                           m,p,map.function)
+  else if(type=="bcsft")
+    cross <- sim.cross.bcsft(map,model,n.ind,error.prob,missing.prob,
+                          partial.missing.prob,keep.errorind,
+                          m,p,map.function, ...)
   else
     cross <- sim.cross.4way(map,model,n.ind,error.prob,missing.prob,
                             partial.missing.prob,keep.errorind,

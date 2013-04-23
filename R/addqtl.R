@@ -37,7 +37,7 @@ addint <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
          qtl.only=FALSE, verbose=TRUE, pvalues=TRUE, simple=FALSE,
-         tol=1e-4, maxit=1000)
+         tol=1e-4, maxit=1000, require.fullrank=TRUE)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -208,9 +208,14 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
                           run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
                           tol=tol, maxit=maxit)
 
+  matrix0.rank <- attr(thefit0, "matrix.rank")
+  matrix0.ncol <- attr(thefit0, "matrix.ncol")
+
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(int2test.alt, c("df", "Type III SS", "LOD", "%var",
                                         "F value", "Pvalue(Chi2)", "Pvalue(F)"))
+
+  matrix1.rank <- matrix1.ncol <- rep(0, n2test)
 
   for(k in seq(along=int2test)) {
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
@@ -229,7 +234,11 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
     results[k,5] <- (results[k,2]/results[k,1])/thefit1$result.full[2,3]
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
+
+    matrix1.rank[k] <- attr(thefit1, "matrix.rank")
+    matrix1.ncol[k] <- attr(thefit1, "matrix.ncol")
   }
+  matrix.fullrank <- (matrix1.rank - matrix0.rank == matrix1.ncol - matrix0.ncol)
 
   results <- as.data.frame(results, stringsAsFactors=TRUE)
   class(results) <- c("addint", "data.frame")
@@ -239,6 +248,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, formula,
   if(simple) pvalues <- FALSE
   attr(results, "pvalues") <- pvalues
   attr(results, "simple") <- simple
+  attr(results, "matrix.fullrank") <- matrix.fullrank
+
+  if(require.fullrank) results[!matrix.fullrank,3] <- 0
+
   results
 }
 
@@ -292,7 +305,7 @@ addqtl <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
          incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000,
-         forceXcovar=FALSE)
+         forceXcovar=FALSE, require.fullrank=TRUE)
 {
   method <- match.arg(method)
   model <- match.arg(model)
@@ -508,12 +521,15 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   cross.attr <- attributes(cross)
 
   # fit the base model
-  lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+  fit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                        method=method, model=model, dropone=FALSE, get.ests=FALSE,
                        run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                       tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4]
+                       tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+  lod0 <- fit0$result.full[1,4]
+  matrix0.rank <- attr(fit0, "matrix.rank")
+  matrix0.ncol <- attr(fit0, "matrix.ncol")
 
-  results <- NULL
+  results <- matrix1.rank <- matrix1.ncol <- NULL
   for(i in chr) {
     if(verbose) cat("Scanning chr", i, "\n")
     thechr <- c(qtlchr, i)
@@ -523,6 +539,10 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
                      covar=covar, formula=newformula, method=method, model=model,
                      incl.markers=incl.markers, verbose=verbose.scanqtl,
                      tol=tol, maxit=maxit)
+
+    matrix1.rank <- c(matrix1.rank, attr(sqout, "matrix.rank"))
+    matrix1.ncol <- c(matrix1.ncol, attr(sqout, "matrix.ncol"))
+
 
     # get map of positions
     if(method=="imp") {
@@ -577,10 +597,14 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
 
     results <- rbind(results, z)
   }
+  matrix.fullrank <- (matrix1.rank - matrix0.rank == matrix1.ncol - matrix0.ncol)
 
   class(results) <- c("scanone","data.frame")
   attr(results,"method") <- method
   attr(results,"formula") <- deparseQTLformula(newformula)
+
+  attr(results, "matrix.fullrank") <- matrix.fullrank
+  if(require.fullrank) results[!matrix.fullrank,3] <- 0
 
   results
 }
@@ -866,10 +890,11 @@ function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   cross.attr <- attributes(cross)
 
   # fit the base model
-  lod0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
+  fit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                        method=method, model=model, dropone=FALSE, get.ests=FALSE,
                        run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                       tol=tol, maxit=maxit, forceXcovar=forceXcovar)$result.full[1,4]
+                       tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+  lod0 <- fit0$result.full[1,4]
 
   gmap <- NULL
 
@@ -1152,7 +1177,8 @@ function(formula, qtlnum)
 addcovarint <-
 function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
-         verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
+         verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000,
+         require.fullrank=TRUE)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -1326,11 +1352,14 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
                           method=method, model=model, dropone=FALSE, get.ests=FALSE,
                           run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
                           tol=tol, maxit=maxit)
+  matrix0.rank <- attr(thefit0, "matrix.rank")
+  matrix0.ncol <- attr(thefit0, "matrix.ncol")
 
   results <- matrix(ncol=7, nrow=n2test)
   dimnames(results) <- list(theint.alt, c("df", "Type III SS", "LOD", "%var",
                                         "F value", "Pvalue(Chi2)", "Pvalue(F)"))
 
+  matrix1.rank <- matrix1.ncol <- rep(0, n2test)
   for(k in seq(along=theint)) {
     thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                             formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
@@ -1348,7 +1377,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
     results[k,5] <- (results[k,2]/results[k,1])/thefit1$result.full[2,3]
     results[k,6] <- pchisq(results[k,3]*2*log(10), results[k,1], lower.tail=FALSE)
     results[k,7] <- pf(results[k,5], results[k,1], thefit1$result.full[3,1], lower.tail=FALSE)
+    matrix1.rank[k] <- attr(thefit1, "matrix.rank")
+    matrix1.ncol[k] <- attr(thefit1, "matrix.ncol")
   }
+  matrix.fullrank <- (matrix1.rank - matrix0.rank == matrix1.ncol - matrix0.ncol)
 
   results <- as.data.frame(results, stringsAsFactors=TRUE)
   class(results) <- c("addcovarint", "data.frame")
@@ -1358,6 +1390,10 @@ function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   if(simple) pvalues <- FALSE
   attr(results, "pvalues") <- pvalues
   attr(results, "simple") <- simple
+
+  attr(results, "matrix.fullrank") <- matrix.fullrank
+  if(require.fullrank) results[!matrix.fullrank,3] <- 0
+
   results
 }
 

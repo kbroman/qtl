@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-2012, Karl W Broman
-# last modified Oct, 2012
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Apr, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -52,12 +52,12 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself")) 
     for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
 
-  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1 && suppressWarnings(require(snow,quietly=TRUE))) {
+  if(!missing(n.perm) && n.perm > 0 && n.cluster > 1) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
+    RNGkind("L'Ecuyer-CMRG")
     cl <- makeCluster(n.cluster)
     clusterStopped <- FALSE
     on.exit(if(!clusterStopped) stopCluster(cl))
-    clusterSetupRNG(cl)
     clusterEvalQ(cl, require(qtl, quietly=TRUE))
     n.perm <- ceiling(n.perm/n.cluster)
     if(missing(chr)) chr <- names(cross$geno)
@@ -273,7 +273,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   n.ind <- nind(cross)
   n.phe <- ncol(pheno)
   type <- class(cross)[1]
-
+  is.bcs <- FALSE
+  if(type == "bcsft") {
+    cross.scheme <- attr(cross, "scheme")
+    is.bcs <- (cross.scheme[2] == 0)
+  }
 
   # fill in missing genotypes with imputed values
   if(n.perm==0) { # not in the midst of permutations
@@ -406,11 +410,11 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       newgeno[is.na(newgeno)] <- 0 
 
       # discard partially informative genotypes
-      if(type=="f2") newgeno[newgeno>3] <- 0
+      if(type=="f2" || (type=="bcsft" && !is.bcs)) newgeno[newgeno>3] <- 0
       if(type=="4way") newgeno[newgeno>4] <- 0
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          newgeno <- reviseXdata(type, "full", sexpgm, geno=newgeno,
                                 cross.attr=attributes(cross))
 
@@ -434,7 +438,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.draws <- dim(draws)[3]
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          draws <- reviseXdata(type, "full", sexpgm, draws=draws,
                               cross.attr=attributes(cross))
 
@@ -466,7 +470,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
       n.pos <- ncol(genoprob)
 
       # revise X chromosome genotypes
-      if(chrtype=="X" && (type=="bc" || type=="f2"))
+      if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
          genoprob <- reviseXdata(type, "full", sexpgm, prob=genoprob,
                                  cross.attr=attributes(cross))
 
@@ -722,7 +726,7 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
     if(chrtype=="X") {
 
       # determine which covariates belong in null hypothesis
-      temp <- scanoneXnull(type, sexpgm)
+      temp <- scanoneXnull(type, sexpgm, cross.attr=attributes(cross))
       adjustX <- temp$adjustX
       parX0 <- temp$parX0+n.ac
       sexpgmcovar <- temp$sexpgmcovar

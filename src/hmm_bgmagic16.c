@@ -2,9 +2,9 @@
  * 
  * hmm_bgmagic16.c
  * 
- * copyright (c) 2011, Karl W Broman
+ * copyright (c) 2011-2012, Karl W Broman
  *
- * last modified Dec, 2011
+ * last modified Jul, 2012
  * first written Dec, 2011
  *
  *     This program is free software; you can redistribute it and/or
@@ -48,19 +48,19 @@
 #include "hmm_bc.h"
 #include "util.h"
 
-double init_bgmagic16(int true_gen)
+double init_bgmagic16(int true_gen, int *ignored)
 {
   return(-4.0*M_LN2); /* log(1/16) */
 }
 
-double emit_bgmagic16(int obs_gen, int true_gen, double error_prob)
+double emit_bgmagic16(int obs_gen, int true_gen, double error_prob, int *ignored)
 {
   if(obs_gen==0) return(0.0);
   if(obs_gen & (1 << (true_gen-1))) return(log(1.0-error_prob));
   else return(log(error_prob)); 
 }
     
-double step_bgmagic16(int gen1, int gen2, double rf, double junk) 
+double step_bgmagic16(int gen1, int gen2, double rf, double junk, int *ignored) 
 {
   int tempi;
   double p0, tempd;

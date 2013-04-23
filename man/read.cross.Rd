@@ -18,7 +18,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
            estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
-           map.function=c("haldane", "kosambi", "c-f", "morgan"), \dots)
+           map.function=c("haldane", "kosambi", "c-f", "morgan"),
+           BC.gen=0, F.gen=0, \dots)
 }
 
 \arguments{
@@ -73,6 +74,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
    Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer, or Morgan map function when converting genetic
    distances into recombination fractions. (Ignored if m > 0.)}
+  \item{BC.gen}{Used only for cross type \code{"bcsft"}.}
+  \item{F.gen}{Used only for cross type \code{"bcsft"}.}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the
@@ -244,6 +247,12 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \code{ID} is used, these identifiers will be used in
   \code{\link{top.errorlod}}, \code{\link{plotErrorlod}}, and
   \code{\link{plotGeno}} as identifiers for the individual.  
+
+  The first row in each file contains the column names.  For the
+  phenotype file, these are the names of the phenotypes.  For the
+  genotype file, the first cell will be the name of the identifier
+  column (\code{id} or \code{ID}) and the subsequent fields will be the
+  marker names.
 
   In the genotype data file, the second row gives the chromosome IDs.
   The cell in the second row, first column, must be blank.  A third

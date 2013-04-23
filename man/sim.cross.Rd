@@ -10,11 +10,11 @@
 \usage{
 sim.cross(map, model=NULL, n.ind=100, 
          type=c("f2", "bc", "4way", "risib", "riself",
-           "ri4sib", "ri4self", "ri8sib", "ri8self"),
+           "ri4sib", "ri4self", "ri8sib", "ri8self", "bcsft"),
           error.prob=0, missing.prob=0, partial.missing.prob=0,
           keep.qtlgeno=TRUE, keep.errorind=TRUE, m=0, p=0,
 	  map.function=c("haldane","kosambi","c-f","morgan"),
-          founderGeno, random.cross=TRUE)
+          founderGeno, random.cross=TRUE, \dots)
 }
 
 \arguments{
@@ -51,6 +51,7 @@ sim.cross(map, model=NULL, n.ind=100,
     founder strains should be randomized, independently for each RIL, or
     whether all RIL be derived from a common cross.  In the latter case,
     for a 4-way RIL, the cross would be (AxB)x(CxD).}
+ \item{\dots}{For \code{type = "bcsft"}, additional arguments passed to \code{sim.cross.bcsft}.}
 }
 
 \details{

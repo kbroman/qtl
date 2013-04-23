@@ -1,18 +1,18 @@
 ----------------------------------------------------------------------
 R/qtl
-copyright (c) 2001-2012, Karl W Broman
+copyright (c) 2001-2013, Karl W Broman
 http://www.rqtl.org
 
 Authors: Karl W Broman <kbroman@biostat.wisc.edu> and Hao Wu, with
          ideas from Gary Churchill and Saunak Sen and contributions
-         from Danny Arends, Ritsert Jansen, Pjotr Prins, and Brian
-         Yandell
+         from Danny Arends, Ritsert Jansen, Pjotr Prins, Laura
+         Shannon, and Brian Yandell
 ----------------------------------------------------------------------
 
 R/qtl is an extensible, interactive environment for mapping
 quantitative trait loci (QTL) in experimental crosses. It is
 implemented as an add-on package for the freely available and widely
-used statistical language/software R (see http://www.R-project.org). 
+used statistical language/software R (see http://www.R-project.org).
 The development of this software as an add-on to R allows us to take
 advantage of the basic mathematical and statistical functions, and
 powerful graphics capabilities, that are provided with R. Further, the

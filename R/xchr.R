@@ -137,7 +137,7 @@ function(cross)
 # used in discan, effectplot, plotPXG, scanone, scantwo, vbscan, reviseXdata
 # cross.attr gives the cross attributes
 getgenonames <-
-function(type=c("f2","bc","riself","risib","4way","dh","special"),
+function(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
          chrtype=c("A","X"), expandX=c("simple","standard","full"),
          sexpgm, cross.attr)
 {  
@@ -145,6 +145,14 @@ function(type=c("f2","bc","riself","risib","4way","dh","special"),
   chrtype <- match.arg(chrtype)
   expandX <- match.arg(expandX)
 
+  ## Treat bcsft as bc if no intercross generations; otherwise as f2.
+  if(type == "bcsft") {
+    if(cross.attr$scheme[2] == 0)
+      type <- "bc"
+    else
+      type <- "f2"
+  }
+  
   if(chrtype=="X") {
     sex <- sexpgm$sex
     pgm <- sexpgm$pgm
@@ -279,12 +287,20 @@ function(type=c("f2","bc","riself","risib","4way","dh","special"),
 
 # revise genotype data, probabilities or imputations for the X chromosome
 reviseXdata <-
-function(type=c("f2","bc"), expandX=c("simple","standard","full"),
+function(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
          sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 {
   type <- match.arg(type)
   expandX <- match.arg(expandX)
 
+  ## Treat bcsft as bc if no intercross generations; otherwise as f2.
+  if(type == "bcsft") {
+    if(cross.attr$scheme[2] == 0)
+      type <- "bc"
+    else
+      type <- "f2"
+  }
+  
   sex <- sexpgm$sex
   pgm <- sexpgm$pgm
 
@@ -740,13 +756,20 @@ function(type=c("f2","bc"), expandX=c("simple","standard","full"),
 # figure out null hypothesis business for scanone on X chromosome
 ######################################################################
 scanoneXnull <-
-function(type, sexpgm)
+function(type, sexpgm, cross.attr)
 {
   sex <- sexpgm$sex
   pgm <- sexpgm$pgm
 
   if(type == "risib" || type=="riself" || type=="dh") type <- "bc"
 
+  if(type == "bcsft") {
+    if(cross.attr$scheme[2] == 0)
+      type <- "bc"
+    else
+      type <- "f2"
+  }
+  
   ### first figure out sex/pgm pattern
 
   # sex
@@ -889,9 +912,19 @@ function(sexpgm, covar)
 #           and for the additive model.
 ######################################################################
 dropXcol <-
-function(type=c("f2","bc", "riself", "risib", "4way", "dh", "special"), sexpgm, cross.attr)
+function(type=c("f2","bc", "riself", "risib", "4way", "dh", "special","bcsft"),
+         sexpgm, cross.attr)
 {
   type <- match.arg(type)
+
+  ## Treat bcsft as bc if no intercross generations; otherwise as f2.
+  if(type == "bcsft") {
+    if(cross.attr$scheme[2] == 0)
+      type <- "bc"
+    else
+      type <- "f2"
+  }
+
   gn <- getgenonames(type, "X", "full", sexpgm, cross.attr)
 
   if(length(gn)==2) return(rep(0,4))

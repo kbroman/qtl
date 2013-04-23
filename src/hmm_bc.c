@@ -45,12 +45,12 @@
 #include "hmm_main.h"
 #include "hmm_bc.h"
 
-double init_bc(int true_gen)
+double init_bc(int true_gen, int *cross_scheme)
 {
   return(-M_LN2); /* ln(0.5) */
 }
 
-double emit_bc(int obs_gen, int true_gen, double error_prob)
+double emit_bc(int obs_gen, int true_gen, double error_prob, int *cross_scheme)
 {
   switch(obs_gen) {
   case 0: return(0.0);
@@ -61,14 +61,14 @@ double emit_bc(int obs_gen, int true_gen, double error_prob)
   return(0.0); /* shouldn't get here */
 }
 
-double step_bc(int gen1, int gen2, double rf, double junk)
+double step_bc(int gen1, int gen2, double rf, double junk, int *cross_scheme)
 {
   if(gen1==gen2) return(log(1.0-rf));
   else return(log(rf));
   return(log(-1.0)); /* shouldn't get here */
 }
 
-double nrec_bc(int gen1, int gen2) 
+double nrec_bc(int gen1, int gen2, double rf, int *cross_scheme) 
 {
   if(gen1==gen2) return(0.0);
   else return(1.0);
