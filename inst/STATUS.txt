@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2012, Karl W Broman
+copyright (c) 2001-2013, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -16,6 +16,28 @@ http://www.rqtl.org
     A copy of the GNU General Public License, version 3, is available
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
+
+Version 1.27, 4/11/2013:
+
+Major changes:
+
+  Implemented HMM algorithms for advanced backcross/intercross.
+
+Minor changes:
+
+  Improvement in addqtl, addint, scanqtl, stepwiseqtl
+  to better handle collinearity in the design matrix that could give
+  spurious evidence for QTL in large QTL models.  This can still be a
+  problem with addpair (and stepwiseqtl with scan.pairs=TRUE).
+
+  Slight change to help file for read.cross, to be more explicit about
+  the "csvs" format.
+
+  Fixed a bug in read.cross for format="qtlcart" with RIL data.
+
+  Made cross type in "qtlcart" files case insensitive in read.cross.
+  For example, any of Ri1, RI1, rI1, or ri1 will be treated the same.
+
 
 Version 1.26, 11/27/2012:
 

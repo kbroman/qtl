@@ -37,17 +37,17 @@
  *
  **********************************************************************/
 
-double init_4way(int true_gen);
+double init_4way(int true_gen, int *cross_scheme);
 
-double emit_4way(int obs_gen, int true_gen, double error_prob);
+double emit_4way(int obs_gen, int true_gen, double error_prob, int *cross_scheme);
 
-double step_4way(int gen1, int gen2, double rf1, double rf2);
+double step_4way(int gen1, int gen2, double rf1, double rf2, int *cross_scheme);
 
-double nrec_4way(int gen1, int gen2);
+double nrec_4way(int gen1, int gen2, double rf, int *cross_scheme);
 
-double nrec_4way1(int gen1, int gen2);
+double nrec_4way1(int gen1, int gen2, double rf, int *cross_scheme);
 
-double nrec_4way2(int gen1, int gen2);
+double nrec_4way2(int gen1, int gen2, double rf, int *cross_scheme);
 
 void calc_genoprob_4way(int *n_ind, int *n_mar, int *geno, 
 			double *rf1, double *rf2, double *error_prob, 
@@ -74,9 +74,9 @@ void calc_errorlod_4way(int *n_ind, int *n_mar, int *geno,
 		      double *error_prob, double *genoprob, 
 		      double *errlod);
 
-double nrec2_4way(int obs1, int obs2, double rf);
+double nrec2_4way(int obs1, int obs2, double rf, int *cross_scheme);
 
-double logprec_4way(int obs1, int obs2, double rf);
+double logprec_4way(int obs1, int obs2, double rf, int *cross_scheme);
 
 void est_rf_4way(int *n_ind, int *n_mar, int *geno, double *rf, 
 	       int *maxit, double *tol);

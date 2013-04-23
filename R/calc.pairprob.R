@@ -133,6 +133,21 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
     if(xchr)
       warning("calc.pairprob not working properly for the X chromosome for 4- or 8-way RIL.")
   }
+  else if(type == "bcsft") {
+    one.map <- TRUE
+    cfunc <- "calc_pairprob_bcsft"
+    cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
+    if(!xchr) { # autosome
+      gen.names <- getgenonames("bcsft", "A", cross.attr=attributes(cross))
+      n.gen <- 2 + (cross.scheme[2] > 0)
+    }
+    else { ## X chromsome 
+      cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
+      cross.scheme[2] <- 0
+      gen.names <- c("g1","g2")
+      n.gen <- 2
+    }
+  }
   else 
     stop("calc.pairprob not available for cross type ", type, ".")
 
@@ -177,13 +192,18 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
   # below: at least two positions
   # call the C function
   if(one.map) {
-    z <- .C(cfunc,
+    ## Hide cross scheme in genoprob to pass to routine. BY
+    temp <- as.double(rep(0,n.gen*n.ind*n.pos))
+    if(type == "bcsft")
+      temp[1:2] <- cross.scheme
+    
+   z <- .C(cfunc,
             as.integer(n.ind),         # number of individuals
             as.integer(n.pos),         # number of markers
             as.integer(newgen),        # genotype data
             as.double(rf),             # recombination fractions
             as.double(error.prob),     # 
-            as.double(rep(0,n.gen*n.ind*n.pos)),
+            as.double(temp),
             pairprob=as.double(rep(0,n.ind*n.pos*(n.pos-1)/2*n.gen^2)),
             PACKAGE="qtl")
   }

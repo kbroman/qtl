@@ -10,6 +10,18 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o stepwiseqtl: "initial lod: " printed even if verbose=FALSE
+
+o Add to help file for ploxPXG: example on grabbing the results
+  (Same for effectplot?)
+
+    table(out[,1], out[,3])
+    data(hyper)
+    out <- plotPXG(hyper, "D1Mit123")
+    out[1:5,]
+    table(out[,1], out[,3])
+    out[ out[,3] == 1, ]
+
 o Add pheno.col type arguments to all of the MQM functions
 
 o revise use of snow package to use parallel instead
@@ -28,6 +40,14 @@ o Scantwo permutations: currently interaction LOD is obtained by
   taking max(full) - max(add) within chromosome pair and then maximizing
   across chr pairs.  It should be max(full) overall - max(add)
   overall.  The latter will be a bit smaller than the former
+
+o GMendel-type option for bootstrap to assess marker order for closely
+  spaced markers.
+
+o CIM-type analysis with proper treatment of missing data, using
+  fitqtl
+
+o h^2 due to QTL in results of scanone
 
 o Add argument to refineqtl to scan full chromosomes
 

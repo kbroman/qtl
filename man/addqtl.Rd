@@ -12,7 +12,7 @@
 addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
        method=c("imp","hk"), model=c("normal", "binary"),
        incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000,
-       forceXcovar=FALSE)
+       forceXcovar=FALSE, require.fullrank=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -55,6 +55,8 @@ addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
    model.}
  \item{forceXcovar}{If TRUE, force inclusion of X-chr-related covariates
    (like sex and cross direction).}
+ \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
+   the linear regression is not of full rank.}
 }
 
 \details{

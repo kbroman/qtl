@@ -83,15 +83,22 @@
 void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno, 
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
-		   double initf(int), 
-		   double emitf(int, int, double),
-		   double stepf(int, int, double, double)) 
+		   double initf(int, int *), 
+		   double emitf(int, int, double, int *),
+		   double stepf(int, int, double, double, int *)) 
 {
   int i, j, j2, v, v2;
   double s, **alpha, **beta;
   int **Geno;
   double ***Genoprob;
-  
+  int cross_scheme[2];
+
+  /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
+  cross_scheme[0] = genoprob[0];
+  cross_scheme[1] = genoprob[1];
+  genoprob[0] = 0.0;
+  genoprob[1] = 0.0;
+
   /* allocate space for alpha and beta and 
      reorganize geno and genoprob */
   reorg_geno(n_ind, n_pos, geno, &Geno);
@@ -105,7 +112,7 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
 
     /* initialize alpha and beta */
     for(v=0; v<n_gen; v++) {
-      alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+      alpha[v][0] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
       beta[v][n_pos-1] = 0.0;
     }
 
@@ -113,20 +120,19 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
     for(j=1,j2=n_pos-2; j<n_pos; j++, j2--) {
       
       for(v=0; v<n_gen; v++) {
-	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1]);
-	
-	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2]) + 
-	  emitf(Geno[j2+1][i],1,error_prob);
+	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1], cross_scheme);
+	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], cross_scheme) + 
+	  emitf(Geno[j2+1][i],1,error_prob, cross_scheme);
 
 	for(v2=1; v2<n_gen; v2++) {
 	  alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-			       stepf(v2+1,v+1,rf[j-1],rf2[j-1]));
+			       stepf(v2+1,v+1,rf[j-1],rf2[j-1], cross_scheme));
 	  beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-			       stepf(v+1,v2+1,rf[j2],rf2[j2]) +
-			       emitf(Geno[j2+1][i],v2+1,error_prob));
+			       stepf(v+1,v2+1,rf[j2],rf2[j2], cross_scheme) +
+			       emitf(Geno[j2+1][i],v2+1,error_prob, cross_scheme));
 	}
 
-	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob);
+	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob, cross_scheme);
       }
     }
 
@@ -175,14 +181,21 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
 void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno, 
 			   double *rf, double *rf2, 
 			   double error_prob, double *genoprob, 
-			   double initf(int), 
-			   double emitf(int, int, double),
-			   double stepf(int, int, double, double)) 
+			   double initf(int, int *), 
+			   double emitf(int, int, double, int *),
+			   double stepf(int, int, double, double, int *)) 
 {
   int i, j, j2, v, v2, curpos;
   double s, **alpha, **beta;
   int **Geno;
   double ***Genoprob;
+  int cross_scheme[2];
+
+  /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
+  cross_scheme[0] = genoprob[0];
+  cross_scheme[1] = genoprob[1];
+  genoprob[0] = 0.0;
+  genoprob[1] = 0.0;
   
   /* allocate space for alpha and beta and 
      reorganize geno and genoprob */
@@ -202,9 +215,9 @@ void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno,
       /* initialize alpha and beta */
       for(v=0; v<n_gen; v++) {
 	if(curpos==0) 
-	  alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+	  alpha[v][0] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
 	else
-	  alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, TOL);
+	  alpha[v][0] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, TOL, cross_scheme);
 	beta[v][n_pos-1] = 0.0;
       }
 
@@ -212,33 +225,33 @@ void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno,
       for(j=1,j2=n_pos-2; j<n_pos; j++, j2--) {
       
 	for(v=0; v<n_gen; v++) {
-	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1]);
+	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1], cross_scheme);
 	
 	  if(curpos==j2+1)
-	    beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2]) + 
-	      emitf(Geno[j2+1][i],1,error_prob);
+	    beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], cross_scheme) + 
+	      emitf(Geno[j2+1][i],1,error_prob, cross_scheme);
 	  else 
-	    beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2]) + 
-	      emitf(Geno[j2+1][i],1,TOL);
+	    beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], cross_scheme) + 
+	      emitf(Geno[j2+1][i],1,TOL, cross_scheme);
 
 	  for(v2=1; v2<n_gen; v2++) {
 	    alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-				 stepf(v2+1,v+1,rf[j-1],rf2[j-1]));
+				 stepf(v2+1,v+1,rf[j-1],rf2[j-1], cross_scheme));
 	    if(curpos==j2+1)
 	      beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-				   stepf(v+1,v2+1,rf[j2],rf2[j2]) +
-				   emitf(Geno[j2+1][i],v2+1,error_prob));
+				   stepf(v+1,v2+1,rf[j2],rf2[j2], cross_scheme) +
+				   emitf(Geno[j2+1][i],v2+1,error_prob, cross_scheme));
 	    else
 	      beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-				   stepf(v+1,v2+1,rf[j2],rf2[j2]) +
-				   emitf(Geno[j2+1][i],v2+1,TOL));
+				   stepf(v+1,v2+1,rf[j2],rf2[j2], cross_scheme) +
+				   emitf(Geno[j2+1][i],v2+1,TOL, cross_scheme));
 
 	  }
 
 	  if(curpos==j)
-	    alpha[v][j] += emitf(Geno[j][i],v+1,error_prob);
+	    alpha[v][j] += emitf(Geno[j][i],v+1,error_prob, cross_scheme);
 	  else
-	    alpha[v][j] += emitf(Geno[j][i],v+1,TOL);
+	    alpha[v][j] += emitf(Geno[j][i],v+1,TOL, cross_scheme);
 	}
       }
 
@@ -301,13 +314,20 @@ void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno,
 void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
 	      int *geno, double *rf, double *rf2, 
 	      double error_prob, int *draws,
-	      double initf(int), 
-	      double emitf(int, int, double),
-	      double stepf(int, int, double, double)) 
+	      double initf(int, int *), 
+	      double emitf(int, int, double, int *),
+	      double stepf(int, int, double, double, int *)) 
 {
   int i, k, j, v, v2;
   double s, **beta, *probs;
   int **Geno, ***Draws, curstate;
+  int cross_scheme[2];
+
+  /* cross scheme hidden in draws argument; used by hmm_bcsft */
+  cross_scheme[0] = draws[0];
+  cross_scheme[1] = draws[1];
+  draws[0] = 0;
+  draws[1] = 0;
   
   /* allocate space for beta and 
      reorganize geno and draws */
@@ -333,13 +353,13 @@ void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
     for(j=n_pos-2; j>=0; j--) {
       
       for(v=0; v<n_gen; v++) {
-	beta[v][j] = beta[0][j+1] + stepf(v+1,1,rf[j], rf2[j]) + 
-	  emitf(Geno[j+1][i],1,error_prob);
+	beta[v][j] = beta[0][j+1] + stepf(v+1,1,rf[j], rf2[j], cross_scheme) + 
+	  emitf(Geno[j+1][i],1,error_prob, cross_scheme);
 
 	for(v2=1; v2<n_gen; v2++) 
 	  beta[v][j] = addlog(beta[v][j], beta[v2][j+1] + 
-			      stepf(v+1,v2+1,rf[j],rf2[j]) +
-			      emitf(Geno[j+1][i],v2+1,error_prob));
+			      stepf(v+1,v2+1,rf[j],rf2[j], cross_scheme) +
+			      emitf(Geno[j+1][i],v2+1,error_prob, cross_scheme));
       }
     }
 
@@ -347,9 +367,9 @@ void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
 
       /* first draw */
       /* calculate probs */
-      s = (probs[0] = initf(1)+emitf(Geno[0][i],1,error_prob)+beta[0][0]);
+      s = (probs[0] = initf(1, cross_scheme)+emitf(Geno[0][i],1,error_prob, cross_scheme)+beta[0][0]);
       for(v=1; v<n_gen; v++) {
-	probs[v] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob) +
+	probs[v] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme) +
 	  beta[v][0];
 	s = addlog(s, probs[v]);
       }
@@ -362,8 +382,8 @@ void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
       for(j=1; j<n_pos; j++) {
 	/* calculate probs */
 	for(v=0; v<n_gen; v++) 
-	  probs[v] = exp(stepf(curstate,v+1,rf[j-1],rf2[j-1]) +
-			 emitf(Geno[j][i],v+1,error_prob) +
+	  probs[v] = exp(stepf(curstate,v+1,rf[j-1],rf2[j-1], cross_scheme) +
+			 emitf(Geno[j][i],v+1,error_prob, cross_scheme) +
 			 beta[v][j] - beta[curstate-1][j-1]);
 	/* make draw */
 	curstate = Draws[k][j][i] = sample_int(n_gen, probs);
@@ -427,10 +447,10 @@ void sim_geno(int n_ind, int n_pos, int n_gen, int n_draws,
    but in the alpha's and beta's, we use 0, 1, ... */
 
 void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf, 
-	     double *rf2, double error_prob, double initf(int), 
-	     double emitf(int, int, double),
-	     double stepf(int, int, double, double), 
-	     double nrecf1(int, int), double nrecf2(int, int), 
+	     double *rf2, double error_prob, double initf(int, int *), 
+	     double emitf(int, int, double, int *),
+	     double stepf(int, int, double, double, int *), 
+	     double nrecf1(int, int, double, int*), double nrecf2(int, int, double, int*), 
 	     double *loglik, int maxit, double tol, int sexsp, 
 	     int verbose)
 {
@@ -438,6 +458,12 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
   double s, **alpha, **beta, **gamma, *cur_rf, *cur_rf2;
   double curloglik, maxdif, temp;
   char pattern[100], text[200];
+  int cross_scheme[2];
+
+  /* cross scheme hidden in loglik argument; used by hmm_bcsft */
+  cross_scheme[0] = (int) ftrunc(*loglik / 1000.0);
+  cross_scheme[1] = ((int) *loglik) - 1000 * cross_scheme[0];
+  *loglik = 0.0;
   
   /* allocate space for beta and reorganize geno */
   reorg_geno(n_ind, n_mar, geno, &Geno);
@@ -472,7 +498,7 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 
       /* initialize alpha and beta */
       for(v=0; v<n_gen; v++) {
-	alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+	alpha[v][0] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
 	beta[v][n_mar-1] = 0.0;
       }
 
@@ -480,21 +506,19 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
       for(j=1,j2=n_mar-2; j<n_mar; j++, j2--) {
 	
 	for(v=0; v<n_gen; v++) {
-	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, cur_rf[j-1], cur_rf2[j-1]);
-	  
-	  beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,cur_rf[j2], cur_rf2[j2]) + 
-	    emitf(Geno[j2+1][i],1,error_prob);
+	  alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, cur_rf[j-1], cur_rf2[j-1], cross_scheme);
+	  beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,cur_rf[j2], cur_rf2[j2], cross_scheme) + 
+	    emitf(Geno[j2+1][i],1,error_prob, cross_scheme);
 	  
 	  for(v2=1; v2<n_gen; v2++) {
 	    alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-				 stepf(v2+1,v+1,cur_rf[j-1],cur_rf2[j-1]));
+				 stepf(v2+1,v+1,cur_rf[j-1],cur_rf2[j-1], cross_scheme));
 	    beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-				 stepf(v+1,v2+1,cur_rf[j2],cur_rf2[j2]) +
-				 emitf(Geno[j2+1][i],v2+1,error_prob));
+				 stepf(v+1,v2+1,cur_rf[j2],cur_rf2[j2], cross_scheme) +
+				 emitf(Geno[j2+1][i],v2+1,error_prob, cross_scheme));
 	  }
 	  
-	  alpha[v][j] += emitf(Geno[j][i],v+1,error_prob);
-		 
+	  alpha[v][j] += emitf(Geno[j][i],v+1,error_prob, cross_scheme);
 	}
 
       }
@@ -505,8 +529,8 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 	for(v=0, s=0.0; v<n_gen; v++) {
 	  for(v2=0; v2<n_gen; v2++) {
 	    gamma[v][v2] = alpha[v][j] + beta[v2][j+1] + 
-	      emitf(Geno[j+1][i], v2+1, error_prob) +
-	      stepf(v+1, v2+1, cur_rf[j], cur_rf2[j]);
+	      emitf(Geno[j+1][i], v2+1, error_prob, cross_scheme) +
+	      stepf(v+1, v2+1, cur_rf[j], cur_rf2[j], cross_scheme);
 
 	    if(v==0 && v2==0) s = gamma[v][v2];
 	    else s = addlog(s, gamma[v][v2]);
@@ -515,8 +539,8 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 
 	for(v=0; v<n_gen; v++) {
 	  for(v2=0; v2<n_gen; v2++) {
-	    rf[j] += nrecf1(v+1,v2+1) * exp(gamma[v][v2] - s);
-	    if(sexsp) rf2[j] += nrecf2(v+1,v2+1) * exp(gamma[v][v2] - s);
+	    rf[j] += nrecf1(v+1,v2+1, cur_rf[j], cross_scheme) * exp(gamma[v][v2] - s);
+	    if(sexsp) rf2[j] += nrecf2(v+1,v2+1, cur_rf[j], cross_scheme) * exp(gamma[v][v2] - s);
 	  }
 	}
       }
@@ -548,6 +572,10 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 	  temp = fabs(rf2[j] - cur_rf2[j])/(cur_rf2[j]+tol*100.0);
 	  if(maxdif < temp) maxdif = temp;
 	}
+	/* bsy add */
+	if(verbose > 2)
+	  Rprintf("%d %f %f\n", j+1, cur_rf[j], rf[j]); 
+	/* bsy add */
       }
       sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
       Rprintf(text, maxdif);
@@ -572,23 +600,27 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
   *loglik = 0.0;
   for(i=0; i<n_ind; i++) { /* i = individual */
     /* initialize alpha */
-    for(v=0; v<n_gen; v++) 
-      alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+    for(v=0; v<n_gen; v++) {
+      alpha[v][0] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
+    }
     /* forward equations */
     for(j=1; j<n_mar; j++) {
       for(v=0; v<n_gen; v++) {
 	alpha[v][j] = alpha[0][j-1] + 
-	  stepf(1, v+1, rf[j-1], rf2[j-1]);
+	  stepf(1, v+1, rf[j-1], rf2[j-1], cross_scheme);
+	
 	for(v2=1; v2<n_gen; v2++) 
 	  alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-			       stepf(v2+1,v+1,rf[j-1],rf2[j-1]));
-	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob);
+			       stepf(v2+1,v+1,rf[j-1],rf2[j-1], cross_scheme));
+
+	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob, cross_scheme);
       }
     }
 
     curloglik = alpha[0][n_mar-1];
-    for(v=1; v<n_gen; v++) 
+    for(v=1; v<n_gen; v++)
       curloglik = addlog(curloglik, alpha[v][n_mar-1]);
+
     *loglik += curloglik;
   }
 
@@ -659,14 +691,21 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
 void argmax_geno(int n_ind, int n_pos, int n_gen, int *geno, 
 		 double *rf, double *rf2, 
 		 double error_prob, int *argmax, 
-		 double initf(int), 
-		 double emitf(int, int, double),
-		 double stepf(int, int, double, double)) 
+		 double initf(int, int *), 
+		 double emitf(int, int, double, int *),
+		 double stepf(int, int, double, double, int *)) 
 {
   int i, j, v, v2;
   double s, t, *gamma, *tempgamma, *tempgamma2;
   int **Geno, **Argmax, **traceback;
-  
+  int cross_scheme[2];
+
+  /* cross scheme hidden in argmax argument; used by hmm_bcsft */
+  cross_scheme[0] = argmax[0];
+  cross_scheme[1] = argmax[1];
+  argmax[0] = geno[0];
+  argmax[1] = geno[1];
+
   /* Read R's random seed */
   /* in the case of multiple "most likely" genotype sequences, 
      we pick from them at random */
@@ -688,21 +727,21 @@ void argmax_geno(int n_ind, int n_pos, int n_gen, int *geno,
     /* begin viterbi algorithm */
     if(n_pos > 1) { /* multiple markers */
       for(v=0; v<n_gen; v++) 
-	gamma[v] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+	gamma[v] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
     
       for(j=0; j<n_pos-1; j++) {
 	for(v=0; v<n_gen; v++) {
-	  tempgamma[v] = s = gamma[0] + stepf(1, v+1, rf[j], rf2[j]);
+	  tempgamma[v] = s = gamma[0] + stepf(1, v+1, rf[j], rf2[j], cross_scheme);
 	  traceback[j][v] = 0;
 	  
 	  for(v2=1; v2<n_gen; v2++) {
-	    t = gamma[v2] + stepf(v2+1, v+1, rf[j], rf2[j]);
+	    t = gamma[v2] + stepf(v2+1, v+1, rf[j], rf2[j], cross_scheme);
 	    if(t > s || (fabs(t-s) < TOL && unif_rand() < 0.5)) {
 	      tempgamma[v] = s = t;
 	      traceback[j][v] = v2;
 	    }
 	  }
-	  tempgamma2[v] = tempgamma[v] + emitf(Geno[j+1][i], v+1, error_prob);
+	  tempgamma2[v] = tempgamma[v] + emitf(Geno[j+1][i], v+1, error_prob, cross_scheme);
 	}
 	for(v=0; v<n_gen; v++) gamma[v] = tempgamma2[v];
       }
@@ -722,10 +761,10 @@ void argmax_geno(int n_ind, int n_pos, int n_gen, int *geno,
 	Argmax[j][i] = traceback[j][Argmax[j+1][i]];
     }
     else {  /* for exactly one marker */
-      s = initf(1) + emitf(Geno[0][i], 1, error_prob);
+      s = initf(1, cross_scheme) + emitf(Geno[0][i], 1, error_prob, cross_scheme);
       Argmax[0][i] = 0;
       for(v=1; v<n_gen; v++) {
-	t = initf(v+1)+emitf(Geno[0][i], v+1, error_prob);
+	t = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
 	if(t > s || (fabs(t-s) < TOL && unif_rand() < 0.5)) {
 	  s = t;
 	  Argmax[0][i] = v;
@@ -827,12 +866,19 @@ void calc_errorlod(int n_ind, int n_mar, int n_gen, int *geno,
  **********************************************************************/
 
 void est_rf(int n_ind, int n_mar, int *geno, double *rf, 
-	    double erec(int, int, double), 
-	    double logprec(int, int, double), 
+	    double erec(int, int, double, int *), 
+	    double logprec(int, int, double, int *), 
 	    int maxit, double tol, int meioses_per)
 {
   int i, j1, j2, s, **Geno, n_mei=0, flag=0;
   double **Rf, next_rf=0.0, cur_rf=0.0;
+  int cross_scheme[2];
+
+  /* cross scheme hidden in rf argument; used by hmm_bcsft */
+  cross_scheme[0] = rf[0];
+  cross_scheme[1] = rf[1];
+  rf[0] = 0.0;
+  rf[1] = 0.0;
 
   /* reorganize geno and rf */
   reorg_geno(n_ind, n_mar, geno, &Geno);
@@ -855,23 +901,21 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
 	if(Geno[j1][i] != 0 && Geno[j2][i] != 0) {
 	  n_mei += meioses_per;
 	  /* check if informatve */
-	  if(fabs(logprec(Geno[j1][i], Geno[j2][i], 0.5) -
-		  logprec(Geno[j1][i], Geno[j2][i], TOL)) > TOL) flag = 1;
+	  if(fabs(logprec(Geno[j1][i], Geno[j2][i], 0.5, cross_scheme) -
+		  logprec(Geno[j1][i], Geno[j2][i], TOL, cross_scheme)) > TOL) flag = 1;
 	}
       }
-
       if(n_mei != 0 && flag == 1) {
 	flag = 0;
 	/* begin EM algorithm; start with cur_rf = 0.01 */
 	for(s=0, cur_rf=0.01; s < maxit; s++) {
 	  next_rf = 0.0; 
 	  for(i=0; i<n_ind; i++) {
-	    if(Geno[j1][i] != 0 && Geno[j2][i] != 0) 
-	      next_rf += erec(Geno[j1][i], Geno[j2][i], cur_rf);
+	    if(Geno[j1][i] != 0 && Geno[j2][i] != 0)
+	      next_rf += erec(Geno[j1][i], Geno[j2][i], cur_rf, cross_scheme);
 	  }
 
 	  next_rf /= (double) n_mei;
-	  
 	  if(fabs(next_rf - cur_rf) < tol*(cur_rf+tol*100.0)) { 
 	    flag = 1;
 	    break;
@@ -885,8 +929,8 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
 	Rf[j2][j1] = 0.0;
 	for(i=0; i<n_ind; i++) {
 	  if(Geno[j1][i] != 0 && Geno[j2][i] != 0) {
-	    Rf[j2][j1] += logprec(Geno[j1][i],Geno[j2][i], next_rf);
-	    Rf[j2][j1] -= logprec(Geno[j1][i],Geno[j2][i], 0.5);
+	    Rf[j2][j1] += logprec(Geno[j1][i],Geno[j2][i], next_rf, cross_scheme);
+	    Rf[j2][j1] -= logprec(Geno[j1][i],Geno[j2][i], 0.5, cross_scheme);
 	  }
 	}
 	Rf[j2][j1] /= log(10.0);
@@ -950,14 +994,21 @@ void calc_pairprob(int n_ind, int n_pos, int n_gen, int *geno,
 		   double *rf, double *rf2, 
 		   double error_prob, double *genoprob, 
 		   double *pairprob, 
-		   double initf(int), 
-		   double emitf(int, int, double),
-		   double stepf(int, int, double, double)) 
+		   double initf(int, int *), 
+		   double emitf(int, int, double, int *),
+		   double stepf(int, int, double, double, int *)) 
 {
   int i, j, j2, v, v2, v3;
   double s=0.0, **alpha, **beta;
   int **Geno;
   double ***Genoprob, *****Pairprob;
+  int cross_scheme[2];
+
+  /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
+  cross_scheme[0] = genoprob[0];
+  cross_scheme[1] = genoprob[1];
+  genoprob[0] = 0.0;
+  genoprob[1] = 0.0;
   
   /* n_pos must be at least 2, or there are no pairs! */
   if(n_pos < 2) error("n_pos must be > 1 in calc_pairprob");
@@ -976,7 +1027,7 @@ void calc_pairprob(int n_ind, int n_pos, int n_gen, int *geno,
 
     /* initialize alpha and beta */
     for(v=0; v<n_gen; v++) {
-      alpha[v][0] = initf(v+1) + emitf(Geno[0][i], v+1, error_prob);
+      alpha[v][0] = initf(v+1, cross_scheme) + emitf(Geno[0][i], v+1, error_prob, cross_scheme);
       beta[v][n_pos-1] = 0.0;
     }
 
@@ -984,20 +1035,20 @@ void calc_pairprob(int n_ind, int n_pos, int n_gen, int *geno,
     for(j=1,j2=n_pos-2; j<n_pos; j++, j2--) {
       
       for(v=0; v<n_gen; v++) {
-	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1]);
+	alpha[v][j] = alpha[0][j-1] + stepf(1, v+1, rf[j-1], rf2[j-1], cross_scheme);
 	
-	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2]) + 
-	  emitf(Geno[j2+1][i],1,error_prob);
+	beta[v][j2] = beta[0][j2+1] + stepf(v+1,1,rf[j2], rf2[j2], cross_scheme) + 
+	  emitf(Geno[j2+1][i],1,error_prob, cross_scheme);
 
 	for(v2=1; v2<n_gen; v2++) {
 	  alpha[v][j] = addlog(alpha[v][j], alpha[v2][j-1] + 
-			       stepf(v2+1,v+1,rf[j-1],rf2[j-1]));
+			       stepf(v2+1,v+1,rf[j-1],rf2[j-1], cross_scheme));
 	  beta[v][j2] = addlog(beta[v][j2], beta[v2][j2+1] + 
-			       stepf(v+1,v2+1,rf[j2],rf2[j2]) +
-			       emitf(Geno[j2+1][i],v2+1,error_prob));
+			       stepf(v+1,v2+1,rf[j2],rf2[j2], cross_scheme) +
+			       emitf(Geno[j2+1][i],v2+1,error_prob, cross_scheme));
 	}
 
-	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob);
+	alpha[v][j] += emitf(Geno[j][i],v+1,error_prob, cross_scheme);
       }
     }
 
@@ -1017,8 +1068,8 @@ void calc_pairprob(int n_ind, int n_pos, int n_gen, int *geno,
       for(v=0; v<n_gen; v++) {
 	for(v2=0; v2<n_gen; v2++) {
 	  Pairprob[v][v2][j][j+1][i] = alpha[v][j] + beta[v2][j+1] +
-	    stepf(v+1,v2+1,rf[j],rf2[j]) + 
-	    emitf(Geno[j+1][i],v2+1,error_prob);
+	    stepf(v+1,v2+1,rf[j],rf2[j], cross_scheme) + 
+	    emitf(Geno[j+1][i],v2+1,error_prob, cross_scheme);
 	  if(v==0 && v2==0) s=Pairprob[v][v2][j][j+1][i];
 	  else s = addlog(s,Pairprob[v][v2][j][j+1][i]);
 	}
@@ -1139,21 +1190,26 @@ void R_calc_pairprob_condindep(int *n_ind, int *n_pos, int *n_gen,
 /* Note: true genotypes coded as 1, 2 */
 
 void marker_loglik(int n_ind, int n_gen, int *geno, 
-		   double error_prob, double initf(int), 
-		   double emitf(int, int, double),
+		   double error_prob, double initf(int, int *), 
+		   double emitf(int, int, double, int *),
 		   double *loglik)
 {
   int i, v;
   double temp;
+  int cross_scheme[2];
+
+  /* cross scheme hidden in loglik argument; used by hmm_bcsft */
+  cross_scheme[0] = (int) ftrunc(*loglik / 1000.0);
+  cross_scheme[1] = ((int) *loglik) - 1000 * cross_scheme[0];
   
   *loglik = 0.0;
   for(i=0; i<n_ind; i++) { /* i = individual */
 
     R_CheckUserInterrupt(); /* check for ^C */
     
-    temp = initf(1) + emitf(geno[i], 1, error_prob);
+    temp = initf(1, cross_scheme) + emitf(geno[i], 1, error_prob, cross_scheme);
     for(v=1; v<n_gen; v++) 
-      temp = addlog(temp, initf(v+1) + emitf(geno[i], v+1, error_prob));
+      temp = addlog(temp, initf(v+1, cross_scheme) + emitf(geno[i], v+1, error_prob, cross_scheme));
 
     (*loglik) += temp;
   }

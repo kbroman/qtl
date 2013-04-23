@@ -11,7 +11,8 @@
 \usage{
 addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
             method=c("imp","hk"), model=c("normal", "binary"), 
-            verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000)
+            verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4,
+            maxit=1000, require.fullrank=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -45,6 +46,8 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
    model.} 
+ \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
+   the linear regression is not of full rank.}
 }
 
 \details{

@@ -47,19 +47,19 @@
 #include "hmm_ri8self.h"
 #include "hmm_bc.h"
 
-double init_ri8self(int true_gen)
+double init_ri8self(int true_gen, int *cross_scheme)
 {
   return(-3.0*M_LN2); /* log(1/8) */
 }
 
-double emit_ri8self(int obs_gen, int true_gen, double error_prob)
+double emit_ri8self(int obs_gen, int true_gen, double error_prob, int *cross_scheme)
 {
   if(obs_gen==0) return(0.0);
   if(obs_gen & (1 << (true_gen-1))) return(log(1.0-error_prob));
   else return(log(error_prob)); 
 }
     
-double step_ri8self(int gen1, int gen2, double rf, double junk) 
+double step_ri8self(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   int temp;
   if(gen1 > gen2) { temp = gen1; gen1 = gen2; gen2=temp; }
@@ -73,7 +73,7 @@ double step_ri8self(int gen1, int gen2, double rf, double junk)
 }
 
 /* this is needed for est.map; estimated recombination fractions on the RIL scale */
-double step_special_ri8self(int gen1, int gen2, double rf, double junk) 
+double step_special_ri8self(int gen1, int gen2, double rf, double junk, int *cross_scheme) 
 {
   double RF;
   int temp;
@@ -138,7 +138,7 @@ void est_map_ri8self(int *n_ind, int *n_mar, int *geno, double *rf,
 }
 
 /* expected no. recombinants */
-double nrec2_ri8self(int obs1, int obs2, double rf)
+double nrec2_ri8self(int obs1, int obs2, double rf, int *cross_scheme)
 {
   int n1, n2, n12, nr, and, i, nstr=8;
   int offby1;
@@ -185,7 +185,7 @@ double nrec2_ri8self(int obs1, int obs2, double rf)
 }
 
 /* log [joint probability * 8] */
-double logprec_ri8self(int obs1, int obs2, double rf)
+double logprec_ri8self(int obs1, int obs2, double rf, int *cross_scheme)
 {
   int n1, n2, n12, nr, and, i, nstr=8;
   int offby1;

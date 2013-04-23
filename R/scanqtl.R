@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# last modified Aug, 2012
+# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
+# last modified Feb, 2013
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -295,6 +295,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
     }
     # initialize output variable
     result <- array(rep(0, n.loop), rev(l.varied))
+    matrix.rank <- matrix.ncol <- array(rep(0, n.loop), rev(l.varied))
   }
   else { # fixed QTL model (no scanning)
     if(method=="imp")
@@ -306,11 +307,16 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
                            formula=formula, method=method, model=model, dropone=FALSE,
                            get.ests=FALSE, run.checks=FALSE, cross.attr=cross.attr,
                            sexpgm=sexpgm, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+    matrix.rank <- attr(result, "matrix.rank")
+    matrix.ncol <- attr(result, "matrix.ncol")
+
     result <- result[[1]][1,4]
     names(result) <- "LOD"
     class(result) <- "scanqtl"
     attr(result, "method") <- method
     attr(result, "formula") <- deparseQTLformula(formula)
+    attr(result, "matrix.rank") <- matrix.rank
+    attr(result, "matrix.ncol") <- matrix.ncol
     return(result)
   }
 
@@ -403,6 +409,9 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
                         cross.attr=cross.attr, sexpgm=sexpgm, tol=tol, maxit=maxit,
                         forceXcovar=forceXcovar)
 
+    matrix.rank[i] <- attr(fit, "matrix.rank")
+    matrix.ncol[i] <- attr(fit, "matrix.ncol")
+
     if(verbose && ((i-1) %% n.prnt) == 0)
         cat("    ", i,"/", n.loop, "\n")
 
@@ -424,6 +433,9 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
   class(result) <- "scanqtl"
   attr(result, "method") <- method
   attr(result, "formula") <- deparseQTLformula(formula)
+  attr(result, "matrix.rank") <- matrix.rank
+  attr(result, "matrix.ncol") <- matrix.ncol
+
   result
 }
 

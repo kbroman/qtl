@@ -63,7 +63,7 @@ function(cross, error.prob=0.01,
     chr.type <- class(cross$geno[[i]])
     if(type=="bc" || type=="risib" || type=="riself" || type=="dh")
       cfunc <- "calc_errorlod_bc"
-    else if(type=="f2") {
+    else if(type=="f2" || type=="bcsft") {
       if(chr.type!="X") cfunc <- "calc_errorlod_f2"
       else cfunc <- "calc_errorlod_bc"
     }
