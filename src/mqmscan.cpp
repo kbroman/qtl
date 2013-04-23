@@ -101,20 +101,15 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     Rprintf("INFO: Starting C-part of the MQM analysis\n");
   }
   int Naug;
-  int Nmark = (*nummark);
-  int run=0;
-  cvector position;
-  vector informationcontent;
-  ivector chr;
-  matrix Frun;
-  vector r;
-  r= newvector(Nmark);
-  position= newcvector(Nmark);
-  bool useREML=true;
-  bool fitQTL=false;
+  int Nmark         = (*nummark);
+  int     run       = 0;
+  vector  r         = newvector(Nmark);
+  cvector position  = newcvector(Nmark);
+  bool useREML      = true;
+  bool fitQTL       = false;
 
   // The chr vector contains the chromosome number for every marker
-  chr= newivector(Nmark);
+  ivector chr = newivector(Nmark);
   //info("Receiving the chromosome matrix from R");
   for (int i=0; i< Nmark; i++) {
     chr[i] = Chromo[0][i];
@@ -127,15 +122,13 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
 
   //info("Initialize Frun and informationcontent to 0.0");
   const int Nsteps = (int)(chr[Nmark-1]*((stepmax-stepmin)/stepsize+1));
-  Frun= newmatrix(Nsteps,Nrun+1);
-  informationcontent= newvector(Nsteps);
-  for (int i=0; i<Nrun+1; i++) {
-    for (int ii=0; ii<Nsteps; ii++) {
+  matrix Frun = newmatrix(Nsteps,Nrun+1);
+  vector informationcontent = newvector(Nsteps);
+  for (int i = 0; i < (Nrun+1); i++) {
+    for (int ii = 0; ii < Nsteps; ii++) {
+      if(i==0) informationcontent[ii] = 0.0;
       Frun[ii][i]= 0.0;
     }
-  }
-  for (int ii=0; ii<Nsteps; ii++) {
-    informationcontent[ii]= 0.0;
   }
 
   bool dropj=true;
@@ -191,10 +184,10 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   ivector newind;
   vector newy;
   MQMMarkerMatrix newmarker;
-  double ymean=0.0, yvari=0.0;
+  double ymean = 0.0, yvari = 0.0;
   //info("Number of individuals: %d Number Aug: %d",Nind,out_Naug);
   int cur = -1;
-  for (int i=0; i<Nind; i++){
+  for (int i=0; i < Nind; i++){
     if(INDlist[0][i] != cur){
       ymean += y[i];
       cur = INDlist[0][i];
@@ -202,7 +195,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   }
   ymean/= out_Naug;
   
-  for (int i=0; i<Nind; i++){
+  for (int i=0; i < Nind; i++){
     if(INDlist[0][i] != cur){
       yvari += pow(y[i]-ymean,2);
       cur = INDlist[0][i];
@@ -210,11 +203,11 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   }  
   yvari/= (out_Naug-1);
   //Fix for not doing dataaugmentation, we just copy the current as the augmented and set Naug to Nind
-  Naug=Nind;
-  Nind=out_Naug;
-  newind= newivector(Naug);
-  newy= newvector(Naug);
-  newmarker= newMQMMarkerMatrix(Nmark,Naug);
+  Naug      = Nind;
+  Nind      = out_Naug;
+  newind    = newivector(Naug);
+  newy      = newvector(Naug);
+  newmarker = newMQMMarkerMatrix(Nmark,Naug);
   for (int i=0; i<Naug; i++) {
     newy[i]= y[i];
     newind[i]= INDlist[0][i];
