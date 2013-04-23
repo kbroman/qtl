@@ -54,3 +54,4 @@ inst/doc/MQM-tour.R
 inst/doc/Sources/MQM/MQM-tour.R
 *.pdf
 *.tex
+src/symbols.rds
