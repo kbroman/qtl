@@ -39,12 +39,9 @@ inline int mqmmod(int a, int b) {
  * Helper function for truncate
  */
 static double ftruncate(double n, double p = 3){
-  int sign = 0;
-  if(n >= 0){
-      sign = 1;
-  }else{
-      sign = -1;
-  }
+  int sign = 1;           // Assume positive sign
+  if(n < 0) sign = -1;    // Test the assumption and change the sign if needed
+
   double val = fabs((pow(10,p)) * n);
   val = floor(val);
   val /= pow(10,p);
