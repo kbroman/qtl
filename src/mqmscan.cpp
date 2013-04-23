@@ -245,12 +245,10 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     Naug-= ((newy[i]==TRAITUNKNOWN) ? 1 : 0);
   }
 
-  vector weight;
-  ivector ind;
-  marker= newMQMMarkerMatrix(Nmark+1,Naug);
-  y= newvector(Naug);
-  ind= newivector(Naug);
-  weight= newvector(Naug);
+  marker        = newMQMMarkerMatrix(Nmark+1,Naug);
+  y             = newvector(Naug);
+  ivector ind   = newivector(Naug);
+  vector weight = newvector(Naug);
   int newi=0;
   for (int i=0; i<oldNaug; i++)
     if (newy[i]!=TRAITUNKNOWN) {
@@ -266,29 +264,24 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     if  (diff>1)
       for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
   }
-  delMQMMarkerMatrix(newmarker,Nmark);
+  delMQMMarkerMatrix(newmarker, Nmark);
   Free(newy);
   Free(newind);
   Free(newweight);
   //END throwing out missing phenotypes
 
-  double variance=-1.0;
-  double logL;
-  cvector selcofactor;
-  selcofactor= newcvector(Nmark); /* selected cofactors */
-
-  int dimx=designmatrixdimensions((*cofactor),Nmark,dominance);
-  double F1, F2;
-
-  F1= inverseF(1,Nind-dimx,alfa,verbose);
-  F2= inverseF(2,Nind-dimx,alfa,verbose);
+  double logL, variance=-1.0;
+  cvector selcofactor = newcvector(Nmark); /* selected cofactors */
+  int dimx   = designmatrixdimensions((*cofactor),Nmark,dominance);
+  double F1  = inverseF(1,Nind-dimx,alfa,verbose);
+  double F2  = inverseF(2,Nind-dimx,alfa,verbose);
   if (verbose) {
     info("dimX:%d nInd:%d",dimx,Nind);
     info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
     info("F(%.3f,1,%d)=%f",ftruncate3(F1),(Nind-dimx),alfa);
     info("F(%.3f,2,%d)=%f",ftruncate3(F2),(Nind-dimx),alfa);
   }
-  F2= 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
+  F2 = 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
   logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
@@ -329,11 +322,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     QTL[0][Nsteps+ii] = informationcontent[ii];
   }
   //Free used memory
-  Free(position);
-  Free(weight);
-  Free(ind);
-  Free(r);
-  Free(informationcontent);
+  Free(position); Free(weight); Free(ind); Free(r); Free(informationcontent);
   freematrix((void **)Frun,Nsteps);
   delMQMMarkerMatrix(marker,Nmark+1);
   Free(y);
@@ -393,9 +382,8 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo,
   }
 
   char reestimate = 'y';
-  if (re_estimate == 0) {
-    reestimate = 'n';
-  }
+  if(re_estimate == 0) reestimate = 'n';
+
   //determine what kind of cross we have
   //set dominance accordingly
   if (crosstype != CF2) {
