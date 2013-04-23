@@ -146,7 +146,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   //Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
   //Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   //  Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
-  for (int j=0; j<Nmark; j++) {
+  for (int j=0; j < (Nmark-1); j++) { // (Nmark-1) Should fix the out of bound in mapdistance
     if (mqmmod(f1genotype[j],11)!=0) {
       dropj=false;
       if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0) dropj=true;
