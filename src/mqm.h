@@ -56,7 +56,7 @@
         fprintf(redirect_info, format, ## __VA_ARGS__); \
         fprintf(redirect_info,"\n"); }
       // #define warning(s) { message("WARNING",s); }
-      #define fatal(s) { message("FATAL",s); exit(127); }
+      #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); exit(127); }
 
       #define debug_trace(format, ...) { \
         if(debuglevel > 0){ \
@@ -76,7 +76,7 @@
         Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
       #endif
       // #define warning(s) { Rf_warning(s); }
-      #define fatal(s) { message("FATAL",s); Rf_error(s); }
+      #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); Rf_error(s); }
     #endif
 
     #ifdef NDEBUG
@@ -89,7 +89,7 @@
     void info(const char *,...);
     void verbose(const char*,...);
     void debug_trace(const char *, ...);
-    #define fatal(s) { Rprintf("FATAL",s); Rf_error(s); }
+    #define fatal(s, ...) { Rprintf("FATAL",s, ## __VA_ARGS__); Rf_error(s); }
   #endif
 
 #endif // MQM_H
