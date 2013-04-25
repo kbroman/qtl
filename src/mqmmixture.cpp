@@ -153,7 +153,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   int iem= 0, i, j;
   bool warnZeroDist=false;
   bool biasadj=false;
-  double oldlogL=-10000, delta=1.0, calc_i, logP=0.0, Pscale=1.75;
+  double oldlogL=-10000, delta=1.0, calc_i, Pscale=1.75;
 
   vector indweight  = newvector(Nind);
   int newNaug       = ((!fitQTL) ? Naug : 3*Naug);
