@@ -41,31 +41,26 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
               windowsize, double stepsize, double stepmin, double stepmax, 
               MQMCrossType crosstype, int verbose) {
   //Rprintf("INFO: mapQTL function called.\n");
-  int Nloci, j, jj, jjj=0;
-  vector Fy;
-  Fy= newvector(Naug);
-  cvector QTLcofactor, saveQTLcofactor;
-  QTLcofactor= newcvector(Nmark+1);
-  saveQTLcofactor= newcvector(Nmark+1);
+  int j, jj, jjj=0;
+  int Nloci = Nmark+1;
+  vector Fy = newvector(Naug);
+  cvector QTLcofactor       = newcvector(Nloci);
+  cvector saveQTLcofactor   = newcvector(Nloci);
   double infocontent;
-  vector info0, info1, info2, weight;
 
-  info0= newvector(Nind);
-  info1= newvector(Nind);
-  info2= newvector(Nind);
+  vector info0 = newvector(Nind);
+  vector info1 = newvector(Nind);
+  vector info2 = newvector(Nind);
 
-  weight= newvector(Naug);
+  vector weight = newvector(Naug);
   weight[0]= -1.0;
 
   /* fit QTL on top of markers (but: should also be done with routine QTLmixture() for exact ML) */
-
-  cvector newcofactor;
-  cvector direction;
-  newcofactor= newcvector(Nmark);
-  direction = newcvector(Nmark);
-  vector cumdistance;
+  cvector newcofactor= newcvector(Nmark);
+  cvector direction = newcvector(Nmark);
+  vector cumdistance = newvector(Nmark+1);
   double QTLlikelihood=0.0;
-  cumdistance= newvector(Nmark+1);
+
   for (j=0; j<Nmark; j++) {
     if (position[j]==MLEFT)
       cumdistance[j]= -50*log(1-2.0*r[j]);
@@ -81,37 +76,27 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
 
   variance= -1.0;
   savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
-  if (verbose==1) {
-    Rprintf("INFO: log-likelihood of full model= %f\n", savelogL/2);
-  }
-  Nloci= Nmark+1;
+  if (verbose==1){ info("INFO: log-likelihood of full model= %f\n", savelogL/2); }
+
   // augment data for missing QTL observations (x 3)
   fitQTL=true;
-  int newNaug;
-  newNaug= 3*Naug;
+  int newNaug = 3 * Naug;
   Free(weight);
-  weight= newvector(newNaug);
-  weight[0]= 1.0;
-  vector weight0;
-  weight0= newvector(newNaug);
-  weight0[0]= -1.0;
+  weight           = newvector(newNaug);
+  weight[0]        = 1.0;
+  vector weight0   = newvector(newNaug);
+  weight0[0]       = -1.0;
 
-//       augmentdataforQTL(marker);
-  vector QTLr, QTLmapdistance;
-  QTLr= newvector(Nloci);
-  QTLmapdistance= newvector(Nloci);
-  cvector QTLposition;
-  QTLposition= newcvector(Nloci);
-  MQMMarkerMatrix QTLloci;
+  vector QTLr              = newvector(Nloci);
+  vector QTLmapdistance    = newvector(Nloci);
+  cvector QTLposition      = newcvector(Nloci);
+  MQMMarkerMatrix QTLloci  = (MQMMarkerMatrix)Calloc(Nloci, MQMMarkerVector);
 
-  QTLloci = (MQMMarkerMatrix)Calloc(Nloci, MQMMarkerVector);
-
-  //  Rprintf("DEBUG testing_2");
-  double moveQTL= stepmin;
+  double moveQTL = stepmin;
   char nextinterval= 'n', firsttime='y';
   double maxF=0.0, savebaseNoQTLModel=0.0;
   int baseNoQTLModel=0, step=0;
-  //Rprintf("DEBUG testing_3");
+
   for (j=0; j<Nmark; j++) {
     /* 	fit a QTL in two steps:
     1. move QTL along marker interval j -> j+1 with steps of stepsize=20 cM, starting from -20 cM up to 220 cM
@@ -119,10 +104,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
     */
     nextinterval= 'n';
 #ifndef STANDALONE
-    //Rprintf("TEST mqmmapqtl\n");
     R_CheckUserInterrupt(); /* check for ^C */
     R_FlushConsole();
-    //R_ProcessEvents(); /*  Try not to crash windows etc*/
 #endif
     while (nextinterval=='n') { // step 1:
       // Rprintf("DEBUG testing STEP 1");
