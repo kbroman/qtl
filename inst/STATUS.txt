@@ -17,6 +17,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.28, 4/26/2013:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Fixed an out-of-bounds error in the C++ code mqmscan.cpp
+
+
 Version 1.27, 4/11/2013:
 
 Major changes:
