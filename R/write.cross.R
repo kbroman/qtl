@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-2012, Karl W Broman and Hao Wu
-# last modified Jul, 2012
+# copyright (c) 2001-2013, Karl W Broman and Hao Wu
+# last modified Apr, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -54,6 +54,9 @@ function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary"
     for(i in which(chrtype=="X")) 
       cross$geno[[i]]$data <- fixX4write(cross$geno[[i]]$data,sex,pgm,crosstype)
   }
+
+  if(crosstype == "bcsft") # convert BCsFt to intercross for writing
+    class(cross)[1] <- "f2"
 
   if(format=="csv") write.cross.csv(cross,filestem,digits,FALSE,FALSE)
   else if(format=="csvr") write.cross.csv(cross,filestem,digits,TRUE,FALSE)
