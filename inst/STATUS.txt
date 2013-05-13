@@ -17,13 +17,15 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.28, 4/30/2013:
+Version 1.28, 5/13/2013:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Add function addmarker()
 
   Fix write.cross to allow use for BCsFt crosses.
 
