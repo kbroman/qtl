@@ -4,6 +4,7 @@ useDynLib(qtl)
 import(graphics, stats, utils, parallel)
 
 # Export all names
+export(addmarker)
 export(inferFounderHap)
 export(pull.genoprob, pull.argmaxgeno, pull.draws)
 export(nullmarkers)
