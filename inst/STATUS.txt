@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.28, 4/26/2013:
+Version 1.28, 5/13/2013:
 
 Major changes:
 
@@ -25,7 +25,11 @@ Major changes:
 
 Minor changes:
 
-  Fixed an out-of-bounds error in the C++ code mqmscan.cpp
+  Add function addmarker()
+
+  Fix write.cross to allow use for BCsFt crosses.
+
+  Fixed an out-of-bounds error in the C++ code mqmscan.cpp.
 
 
 Version 1.27, 4/11/2013:
