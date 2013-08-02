@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.28, 5/13/2013:
+Version 1.28, 8/2/2013:
 
 Major changes:
 
@@ -30,6 +30,8 @@ Minor changes:
   Fix write.cross to allow use for BCsFt crosses.
 
   Fixed an out-of-bounds error in the C++ code mqmscan.cpp.
+
+  stepwiseqtl with verbose=FALSE still printed the initial LOD score
 
 
 Version 1.27, 4/11/2013:
