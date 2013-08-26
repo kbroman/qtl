@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2012, Karl W Broman
-# last modified Aug, 2012
+# copyright (c) 2007-2013, Karl W Broman
+# last modified Aug, 2013
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -265,7 +265,7 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       suppressWarnings(out <- scanone(cross, pheno.col=pheno.col, method=method, model=model,
                                       addcovar=covar.w.X))
       lod <- max(out[,3], na.rm=TRUE)
-      cat("initial lod: ", lod, "\n")
+      if(verbose) cat("initial lod: ", lod, "\n")
 
       curplod <- calc.plod(lod, c(1,0,0), penalties=penalties)
       wh <- which(!is.na(out[,3]) & out[,3]==lod)
