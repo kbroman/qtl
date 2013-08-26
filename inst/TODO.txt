@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o calc.genoprob: calculate genotype probabilities at a pre-specified
+  map
+
 o Add cross type "haploid" with genotype names like "A" and "B" rather
   than "AA" and "AB", but otherwise treat like a backcross (along the
   lines of "dh").
