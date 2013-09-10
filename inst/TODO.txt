@@ -10,6 +10,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o Revise rqtltour and rqtltour2 to emphasize the use of RStudio.
+  Suggest using download.file() and then loading with File -> Open
+  rather than using url.show()
+
 o calc.genoprob: calculate genotype probabilities at a pre-specified
   map
 
