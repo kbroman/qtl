@@ -683,4 +683,7 @@ function(x, ...)
     cat("  pLOD: ", round(attr(x, "pLOD"),3), "\n")
 }
 
+# nqtl: number of qtl
+nqtl <- function(qtl) ifelse(length(qtl)==0,0,length(qtl$chr))
+
 # end of makeqtl.R
