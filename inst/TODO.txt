@@ -28,8 +28,6 @@ o Add cross type "haploid" with genotype names like "A" and "B" rather
   than "AA" and "AB", but otherwise treat like a backcross (along the
   lines of "dh").
 
-o stepwiseqtl: "initial lod: " printed even if verbose=FALSE
-
 o New function: nqtl <- function(qtl) ifelse(length(qtl)==0,0,length(qtl$chr))
 
 o Add to help file for ploxPXG: example on grabbing the results
