@@ -238,7 +238,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
 }
 
 ######################################################################
-# function for method="likelihood", for snow 
+# function for method="likelihood", for parallel processing (formerly with snow pkg)
 ######################################################################
 rippleSnowLik <-
 function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
@@ -260,7 +260,7 @@ function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
 
 
 ######################################################################
-# function for method="countxo", for snow
+# function for method="countxo", for parallel processing (formerly with snow pkg)
 ######################################################################
 rippleSnowCountxo <-
 function(orders, genodat, func)
