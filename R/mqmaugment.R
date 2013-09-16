@@ -2,13 +2,13 @@
 #
 # mqmaugment.R
 #
-# Copyright (c) 2009-2012, Danny Arends
+# Copyright (c) 2009-2013, Danny Arends
 #
 # Modified by Pjotr Prins; slight modification by Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified Nov 2012
+# last modified Sep 2013
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -95,7 +95,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
   if (crosstype == "f2") {
     ctype = isF2
   }
-  else if (crosstype == "bc" || crosstype == "dh") {
+  else if (crosstype == "bc" || crosstype == "dh" || crosstype=="haploid") {
     ctype = isBC
   }
   else if (crosstype == "riself") {

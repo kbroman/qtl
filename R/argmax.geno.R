@@ -2,8 +2,8 @@
 #
 # argmax.geno.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -76,7 +76,7 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
       else                              # X chromsome 
         cfunc <- "argmax_geno_bc"
     }
-    else if(type=="bc" || type=="dh" || type=="riself" || type=="risib") {
+    else if(type=="bc" || type=="dh" || type=="riself" || type=="risib" || type=="haploid") {
       cfunc <- "argmax_geno_bc"
       one.map <- TRUE
     }
