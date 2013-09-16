@@ -72,6 +72,10 @@ plotPXG(fake.f2, mname2)
 
 plotPXG(fake.f2, c(mname,mname2))
 plotPXG(fake.f2, c(mname2,mname))
+
+# output of the function contains the raw data
+output <- plotPXG(listeria, mname)
+head(output)
 }
 
 \seealso{ \code{\link{find.marker}}, \code{\link{effectplot}},

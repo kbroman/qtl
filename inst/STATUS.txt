@@ -30,6 +30,9 @@ Minor changes:
 
   Add function nqtl() for counting number of QTL in QTL object.
 
+  Add examples to help files for plotPXG and effectplot on getting the
+  output.
+
   Fix write.cross to allow use for BCsFt crosses.
 
   Fixed an out-of-bounds error in the C++ code mqmscan.cpp.
