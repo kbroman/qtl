@@ -19,7 +19,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
            estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
            map.function=c("haldane", "kosambi", "c-f", "morgan"),
-           BC.gen=0, F.gen=0, \dots)
+           BC.gen=0, F.gen=0, crosstype, \dots)
 }
 
 \arguments{
@@ -76,6 +76,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
    distances into recombination fractions. (Ignored if m > 0.)}
   \item{BC.gen}{Used only for cross type \code{"bcsft"}.}
   \item{F.gen}{Used only for cross type \code{"bcsft"}.}
+  \item{crosstype}{Optional character string to force a particular cross type.}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the

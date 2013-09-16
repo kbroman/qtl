@@ -110,9 +110,6 @@ o Bug in plot.scantwo: contours=TRUE gives warning:
 
 o max.scantwo could take a chr argument
 
-o Add cross type as argument to read.cross; attempt to convert data to
-  that type.
-
 o In sim.cross, do the qtl get sorted by genomic position?  And then
   do the qtlgeno need to be reordered back?
 
