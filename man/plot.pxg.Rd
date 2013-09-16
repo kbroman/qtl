@@ -63,6 +63,11 @@ mname2 <- find.marker(listeria, 13, 26) # marker D13Mit147
 plotPXG(listeria, c(mname, mname2))
 plotPXG(listeria, c(mname2, mname))
 
+# output of the function contains the raw data
+output <- plotPXG(listeria, mname)
+head(output)
+
+# another example
 data(fake.f2)
 mname <- find.marker(fake.f2, 1, 37) # marker D1M437
 plotPXG(fake.f2, mname)
@@ -73,9 +78,6 @@ plotPXG(fake.f2, mname2)
 plotPXG(fake.f2, c(mname,mname2))
 plotPXG(fake.f2, c(mname2,mname))
 
-# output of the function contains the raw data
-output <- plotPXG(listeria, mname)
-head(output)
 }
 
 \seealso{ \code{\link{find.marker}}, \code{\link{effectplot}},
