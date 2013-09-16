@@ -25,6 +25,9 @@ Major changes:
   haploids ("dh") but with genotype labels like "A" and "B" instead of
   "AA" and "AB"/"BB".
 
+  Added crosstype argument to read.cross, to force a particular cross
+  type (such as "riself").
+
 Minor changes:
 
   Added function addmarker() for adding genotypes for a marker to a
