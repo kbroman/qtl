@@ -26,15 +26,6 @@ o calc.genoprob: calculate genotype probabilities at a pre-specified
 
 o Add pheno.col type arguments to all of the MQM functions
 
-o revise use of snow package to use parallel instead
-
-  library(parallel)
-  cl <- makeCluster(detectCores())
-  clusterSetRNGStream(cl)
-  clusterEvalQ(cl, library(qtl))
-  results <- clusterApply(cl, blah)
-  stopCluster(cl)
-
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
 
@@ -75,7 +66,7 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
 
 o Helper function for create.map to identify locations on the grid
 
-o Use snow() with orderMarkers
+o Use library(parallel) with orderMarkers
 
 o beeswarm package for plot.pxg
 
