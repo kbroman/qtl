@@ -2,8 +2,8 @@
 #
 # tryallpositions.R
 #
-# copyright (c) 2007-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2007-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -280,7 +280,7 @@ function(cross, marker, error.prob=0.0001)
     else                  # X chromsome 
       cfunc <- "marker_loglik_bc"
   }
-  else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") {
+  else if(type == "bc" || type=="riself" || type=="risib" || type=="dh" || type=="haploid") {
     cfunc <- "marker_loglik_bc"
   }
   else if(type == "4way") {

@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009-2012, Danny Arends
+# Copyright (c) 2009-2013, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified Aug 2012
+# last modified Sep 2013
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -65,7 +65,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 		if(class(cross)[1] == "f2"){
 			ctype = 1
 		}
-		if(class(cross)[1] == "bc" || class(cross)[1]=="dh"){
+		if(class(cross)[1] == "bc" || class(cross)[1]=="dh" || class(cross)[1]=="haploid"){
 			ctype = 2
 		}
 		if(class(cross)[1] == "riself") {

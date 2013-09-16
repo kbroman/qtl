@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-2012, Karl W Broman
-# last modified Mar, 2012
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ function(object,...)
   n.mar <- nmar(object)
   type <- class(object)[1]
 
-  if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", 
+  if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", "haploid",
                    "ri4self", "ri4sib", "ri8self", "ri8sib", "bcsft", "bgmagic16")))
      stop("Cross type ", type, " is not supported.")
 
@@ -63,7 +63,7 @@ function(object,...)
     temp <- getgenonames("f2", "A", cross.attr=attributes(object))
     names(typings) <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) {
+  else if(type %in% c("bc", "riself", "risib", "dh", "haploid", "bcsft")) {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:2))
     names(typings) <- getgenonames(type, "A", cross.attr=attributes(object))
   }
@@ -176,7 +176,7 @@ function(object,...)
             paste(names(x)[x>1], collapse="  "))
 
   # check genotype data
-  if(type %in% c("bc", "riself", "risib", "dh") | (type == "bcsft" & is.bcs)) {
+  if(type %in% c("bc", "riself", "risib", "dh", "haploid") | (type == "bcsft" & is.bcs)) {
     # Invalid genotypes?
     if(any(!is.na(Geno) & Geno != 1 & Geno != 2)) { 
       u <- unique(as.numeric(Geno))
@@ -345,6 +345,7 @@ function(x,...)
   else if(x$type=="riself") cat("    RI strains via selfing\n\n")
   else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
   else if(x$type=="dh") cat("    Doubled haploids\n\n")
+  else if(x$type=="haploid") cat("    Haploids\n\n")
   else if(x$type %in% c("ri4self", "ri4sib", "ri8self", "ri8sib")) {
     n.str <- substr(x$type, 3, 3)
     if(substr(x$type, 4, nchar(x$type))=="sib") crosstype <- "sib-mating"

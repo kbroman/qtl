@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2012, Karl W Broman
+# copyright (c) 2001-2013, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Nov, 2012
+# last modified Sep, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -750,7 +750,7 @@ function(cross, chr, scanone.output=FALSE)
     temp <- getgenonames("f2", "A", cross.attr=attributes(cross))
     gen.names <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) {
+  else if(type %in% c("bc", "riself", "risib", "dh", "haploid", "bcsft")) {
     n.gen <- 2
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
   }
@@ -786,7 +786,7 @@ function(cross, chr, scanone.output=FALSE)
   rownames(results) <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
   pval <- rep(NA,nrow(results))
-  if(type %in% c("bc","risib","riself","dh") || (type=="bcsft" & is.bcs)) {
+  if(type %in% c("bc","risib","riself","dh","haploid") || (type=="bcsft" & is.bcs)) {
     sexpgm <- getsex(cross)
     if((type == "bc" || type=="bcsft") && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
       for(i in which(allchrtype=="A")) {
@@ -1070,7 +1070,7 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
   if(chrtype[1] != "X") {
     if(crosstype == "f2") 
       g1names <- c(g1names, paste("not", g1names[c(3,1)]))
-    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh") {
+    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
     }
     else if(crosstype == "4way") {
       temp <- g1names
@@ -1093,7 +1093,7 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
   if(chrtype[2] != "X") {
     if(crosstype == "f2") 
       g2names <- c(g2names, paste("not", g2names[c(3,1)]))
-    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh") {
+    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
     }
     else if(crosstype == "4way") {
       temp <- g2names
@@ -3061,7 +3061,7 @@ function(cross, chr, full.info=FALSE)
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
 
-  if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh")
+  if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh" && type!="haploid")
     stop("locateXO only working for backcross, intercross or RI strains.")
 
   map <- cross$geno[[1]]$map
@@ -3962,7 +3962,7 @@ function(cross, markers, switch=c("AB","CD","ABCD", "parents"))
   type <- class(cross)[1]
   switch <- match.arg(switch)
   
-  if(type %in% c("bc", "risib", "riself", "dh")) { 
+  if(type %in% c("bc", "risib", "riself", "dh", "haploid")) { 
     if(switch != "AB")
       warning("Using switch = \"AB\".")
 

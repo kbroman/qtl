@@ -17,27 +17,30 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.28, 9/13/2013:
+Version 1.28, 9/16/2013:
 
 Major changes:
 
-  None.
+  Added cross type "haploid". Like backcross ("bc") or doubled
+  haploids ("dh") but with genotype labels like "A" and "B" instead of
+  "AA" and "AB"/"BB".
 
 Minor changes:
 
-  Add function addmarker() for adding genotypes for a marker to a
+  Added function addmarker() for adding genotypes for a marker to a
   cross object.
 
-  Add function nqtl() for counting number of QTL in QTL object.
+  Added function nqtl() for counting number of QTL in QTL object.
 
-  Add examples to help files for plotPXG and effectplot on getting the
+  Added examples to help files for plotPXG and effectplot on getting the
   output.
 
-  Fix write.cross to allow use for BCsFt crosses.
+  Fixed write.cross to allow use for BCsFt crosses.
 
   Fixed an out-of-bounds error in the C++ code mqmscan.cpp.
 
-  stepwiseqtl with verbose=FALSE still printed the initial LOD score.
+  In stepwiseqtl with verbose=FALSE, the initial LOD score is no
+  longer printed.
 
 
 Version 1.27, 4/11/2013:

@@ -24,10 +24,6 @@ o Revise rqtltour and rqtltour2 to emphasize the use of RStudio.
 o calc.genoprob: calculate genotype probabilities at a pre-specified
   map
 
-o Add cross type "haploid" with genotype names like "A" and "B" rather
-  than "AA" and "AB", but otherwise treat like a backcross (along the
-  lines of "dh").
-
 o Add pheno.col type arguments to all of the MQM functions
 
 o revise use of snow package to use parallel instead

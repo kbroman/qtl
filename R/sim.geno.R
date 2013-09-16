@@ -2,8 +2,8 @@
 #
 # sim.geno.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified Feb, 2011
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -76,7 +76,7 @@ function(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
       else                              # X chromsome
         cfunc <- "sim_geno_bc"
     }
-    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") {
+    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh" || type=="haploid") {
       cfunc <- "sim_geno_bc"
       n.gen <- 2
       one.map <- TRUE
