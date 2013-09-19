@@ -2,9 +2,9 @@
  * 
  * fitqtl_hk.c
  *
- * copyright (c) 2007-8, Karl W Broman
+ * copyright (c) 2007-2013, Karl W Broman
  *
- * last modified Jan, 2008
+ * last modified Feb, 2013
  * first written Nov, 2007
  *
  *     This program is free software; you can redistribute it and/or
