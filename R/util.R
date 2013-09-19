@@ -4204,6 +4204,7 @@ function(n.cluster=1)
   s <- .Random.seed
   if(n.cluster < 1) n.cluster <- 1
   for(i in 1:n.cluster) s <- nextRNGStream(s)
+  .Random.seed <<- s ## global assign new .Random.seed
 }
     
 # end of util.R
