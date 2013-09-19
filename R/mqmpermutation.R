@@ -8,7 +8,7 @@
 #
 # 
 # first written Februari 2009
-# last modified April 2013
+# last modified Sep 2013
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -125,7 +125,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 		AVG <- 0
 		LEFT <- 0
 		if(multicore && n.cluster >1) {
-                  RNGkind("L'Ecuyer-CMRG")
+                  updateParallelRNG(n.cluster)
 			if(verbose) cat("INFO: Using ",n.cluster," Cores/CPU's/PC's for calculation.\n")
 			for(x in 1:(batches)){
 				start <- proc.time()
