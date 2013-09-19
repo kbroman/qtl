@@ -41,7 +41,7 @@
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
 #           switchAlleles, nqrank, cleanGeno, typingGap,
-#           calcPermPval, phenames
+#           calcPermPval, phenames, updateParallelRNG
 #
 ######################################################################
 
@@ -4187,6 +4187,23 @@ function(peaks, perms)
 phenames <-
 function(cross)
 colnames(cross$pheno)
-  
 
+
+######################################################################
+# updateParallelRNG
+#
+# set RNGkind
+# advance RNGstream by no. clusters
+######################################################################
+updateParallelRNG <-
+function(n.cluster=1)
+{
+  kind <- RNGkind()[1]
+  if(kind != "L'Ecuyer-CMRG") RNGkind("L'Ecuyer-CMRG")
+
+  s <- .Random.seed
+  if(n.cluster < 1) n.cluster <- 1
+  for(i in 1:n.cluster) s <- nextRNGStream(s)
+}
+    
 # end of util.R
