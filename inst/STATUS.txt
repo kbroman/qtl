@@ -38,6 +38,8 @@ Minor changes:
   Added examples to help files for plotPXG and effectplot on getting the
   output.
 
+  Fix bug in fitqtl-link functions for model="binary" (re matrix rank)
+
   Fixed write.cross to allow use for BCsFt crosses.
 
   Fixed an out-of-bounds error in the C++ code mqmscan.cpp.

@@ -2,9 +2,9 @@
  * 
  * fitqtl_imp_binary.c
  *
- * copyright (c) 2010, Karl W. Broman
+ * copyright (c) 2010-2013, Karl W. Broman
  *
- * last modified Jun, 2010
+ * last modified Sep, 2013
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
 			 double *lod, int *df, double *ests, double *ests_covar,
 			 double *design_mat,
 			 /* convergence */
-			 double *tol, int *maxit)
+			 double *tol, int *maxit, int *matrix_rank)
 {
   int ***Draws;
   double **Cov;
@@ -65,7 +65,7 @@ void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
 
   fitqtl_imp_binary(*n_ind, *n_qtl, n_gen, *n_draws, Draws,
 		    Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-		    ests, ests_covar, design_mat, *tol, *maxit);
+		    ests, ests_covar, design_mat, *tol, *maxit, matrix_rank);
 }
 
 
@@ -110,13 +110,15 @@ void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
  * 
  * maxit        Maximum number of iterations in IRLS
  *
+ * matrix_rank  Return min (across imputations) of rank of design matrix
+ *
  **********************************************************************/
 
 void fitqtl_imp_binary(int n_ind, int n_qtl, int *n_gen, int n_draws, 
 		       int ***Draws, double **Cov, int n_cov, 
 		       int *model, int n_int, double *pheno, int get_ests,
 		       double *lod, int *df, double *ests, double *ests_covar,
-		       double *design_mat, double tol, int maxit) 
+		       double *design_mat, double tol, int maxit, int *matrix_rank) 
 {
 
   /* create local variables */
@@ -179,6 +181,8 @@ void fitqtl_imp_binary(int n_ind, int n_qtl, int *n_gen, int n_draws,
   /* calculate null model log10 likelihood */
   llik0 = nullLODbin(pheno, n_ind);
 
+  *matrix_rank = n_ind;
+
   /* loop over imputations */
   for(i=0; i<n_draws; i++) {
 
@@ -188,7 +192,7 @@ void fitqtl_imp_binary(int n_ind, int n_qtl, int *n_gen, int n_draws,
     llik = galtLODimpbin(pheno, n_ind, n_gen, n_qtl, Draws[i], 
 			 Cov, n_cov, model, n_int, dwork, iwork, sizefull,
 			 get_ests, ests, Ests_covar, design_mat,
-			 tol, maxit);
+			 tol, maxit, matrix_rank);
 
     /* calculate the LOD score in this imputation */
     LOD_array[i] = (llik - llik0);
@@ -275,7 +279,7 @@ double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
 		     int **Draws, double **Cov, int n_cov, int *model, 
 		     int n_int, double *dwork, int *iwork, int sizefull,
 		     int get_ests, double *ests, double **Ests_covar,
-		     double *designmat, double tol, int maxit) 
+		     double *designmat, double tol, int maxit, int *matrix_rank) 
 {
   /* local variables */
   int i, j, k, kk, s, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job, flag;
@@ -451,6 +455,8 @@ double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     /* call dqrls to fit regression model */
     F77_CALL(dqrls)(x, &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
   		  qty, &kk, jpvt, qraux, work);
+    /* on output, k contains the rank; we'll retain the minimum across imputations */
+    if(*matrix_rank > kk) *matrix_rank = kk;
 
     /* get ests; need to permute back */
     for(i=0; i<kk; i++) ests[jpvt[i]] = coef[i];
