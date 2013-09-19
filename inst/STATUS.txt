@@ -28,6 +28,9 @@ Major changes:
   Added crosstype argument to read.cross, to force a particular cross
   type (such as "riself").
 
+  For parallel processing, replaced reliance on the snow library with
+  the use of the parallel library.
+
 Minor changes:
 
   Added function addmarker() for adding genotypes for a marker to a
