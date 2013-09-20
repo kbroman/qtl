@@ -33,6 +33,9 @@ Major changes:
 
 Minor changes:
 
+  Added formMarkerCovar(), to facilitate use of markers as covariates
+  in QTL analysis.
+
   Added function addmarker() for adding genotypes for a marker to a
   cross object.
 

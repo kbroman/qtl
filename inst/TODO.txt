@@ -10,13 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o Add formMarkerCovar() function, for pulling out marker or
-  pseudomarker probabilities or genotypes as a matrix, for use as
-  covariates in scans. Could take a vector of marker/pseudomarkers,
-  allow the "7@42.1" type format for pseudomarkers, and have an
-  argument indicating probabilities or genotypes, and how to impute
-  genotypes (imp, argmax, leave_missing)
-
 o Revise rqtltour and rqtltour2 to emphasize the use of RStudio.
   Suggest using download.file() and then loading with File -> Open
   rather than using url.show()
