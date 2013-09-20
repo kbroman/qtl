@@ -139,10 +139,8 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}			
-				cl <- makeCluster(n.cluster)
-				clusterEvalQ(cl, require(qtl, quietly=TRUE)) 
-				res <- parLapply(cl,boots, fun=snowCoreBOOT,all.data=cross,scanfunction=scanfunction,bootmethod=bootmethod,cofactors=cofactors,verbose=verbose,...)
-				stopCluster(cl)
+				res <- mclapply(boots, snowCoreBOOT, all.data=cross, scanfunction=scanfunction, bootmethod=bootmethod,
+                                                cofactors=cofactors, verbose=verbose, mc.cores=n.cluster, ...)
 				results <- c(results,res)
 				if(plot){
 					temp <- c(res0,results)
