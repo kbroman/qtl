@@ -79,10 +79,8 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
-				cl <- makeCluster(n.clusters)
-				clusterEvalQ(cl, require(qtl, quietly=TRUE))
-				result <- parLapply(cl,boots, fun=snowCoreALL,all.data=all.data,scanfunction=scanfunction,cofactors=cofactors,verbose=verbose,...)
-				stopCluster(cl)
+				result <- mclapply(boots, snowCoreALL, all.data=all.data, scanfunction=scanfunction, cofactors=cofactors,
+                                                   verbose=verbose, mc.cores=n.clusters, ...)
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
