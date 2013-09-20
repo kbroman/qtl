@@ -4207,4 +4207,98 @@ function(n.cluster=1)
   .Random.seed <<- s ## global assign new .Random.seed
 }
     
+######################################################################
+# formMarkerCovar
+#
+# cross: cross object
+#
+# markers: marker names or pseudomarker names (like "c5loc25.1" or "5@25.1")
+#
+# method: use genotype probabilities or imputated genotypes (imputed with imp or argmax)
+#
+# ...: passed to fill.geno, if necessary
+#
+######################################################################
+formMarkerCovar <-
+function(cross, markers, method=c("prob", "imp", "argmax"), ...)
+{
+  method <- match.arg(method)
+
+  # check if the marker names are all like "5@25.1"
+  grepresult <- grep("@", markers)
+  if(length(grepresult) == length(markers) && all(grepresult == seq(along=markers))) {
+    spl <- strsplit(markers, "@")
+    chr <- sapply(spl, "[", 1)
+    pos <- as.numeric(sapply(spl, "[", 2))
+    m <- match(chr, chrnames(cross))
+    if(any(is.na(m)))
+      stop("Some chr not found: ", paste(unique(chr[m]), collapse=" "))
+
+   if(method=="prob")
+     markers <- find.pseudomarker(cross, chr, pos, where="prob")
+   else
+     markers <- find.marker(cross, chr, pos)
+  }
+
+  chr <- unique(find.markerpos(cross, markers)[,1])
+
+  cross <- subset(cross, chr=chr)
+  isXchr <- (sapply(cross$geno, class) == "X")
+  crosstype <- class(cross)[1]
+  sexpgm <- getsex(cross)
+  crossattr <- attributes(cross)
+
+  if(method=="prob") {
+    if(any(isXchr) && crosstype %in% c("f2", "bc", "bcsft")) {
+      for(i in which(isXchr))
+        cross$geno[[i]]$prob <- reviseXdata(crosstype, "full", sexpgm=sexpgm, prob=cross$geno[[i]]$prob,
+                                            cross.attr=crossattr)
+
+    }
+
+    if(any(isXchr) && any(!isXchr)) # some X, some not
+        prob <- cbind(pull.genoprob(cross[!isXchr,], omit.first.prob=TRUE),
+                      pull.genoprob(cross[isXchr,], omit.first.prob=TRUE))
+    else # all X or all not X
+      prob <- pull.genoprob(cross, omit.first.prob=TRUE)
+
+    markercols <- sapply(strsplit(colnames(prob), ":"), "[", 1)
+    m <- match(markers, markercols)
+    if(any(is.na(m)))
+      warning("Some markers/pseudomarkers not found: ", paste(unique(markers[is.na(m)]), collapse=" "))
+    return(prob[,!is.na(match(markercols, markers)), drop=FALSE])
+  }
+  else {
+    cross <- fill.geno(cross, method=method, ...)
+
+    if(any(isXchr) && crosstype %in% c("f2", "bc", "bcsft")) {
+      for(i in which(isXchr))
+        cross$geno[[i]]$data <- reviseXdata(crosstype, "full", sexpgm=sexpgm, geno=cross$geno[[i]]$data,
+                                            cross.attr=crossattr)
+    }
+
+    geno <- pull.geno(cross)
+    markercols <- colnames(geno)
+    m <- match(markers, markercols)
+    if(any(is.na(m)))
+      warning("Some markers not found: ", paste(unique(markers[is.na(m)]), collapse=" "))
+
+    geno <- geno[,!is.na(match(markercols, markers)), drop=FALSE]
+
+    # expand each column
+    nalle <- apply(geno, 2, function(a) length(unique(a)))
+    g <- matrix(ncol=sum(nalle-1), nrow=nrow(geno))
+    colnames(g) <- as.character(1:ncol(g))
+    cur <- 0
+    for(i in 1:ncol(geno)) {
+      if(nalle[i] <= 1) next
+      for(j in 2:nalle[i])
+        g[,cur+j-1] <- as.numeric(geno[,i] == j)
+      colnames(g)[cur - 1 + (2:nalle[i])] <- paste(colnames(geno)[i], 2:nalle[i], sep=".")
+      cur <- cur + nalle[i] - 1
+    }
+    return(g)
+  }
+}
+
 # end of util.R
