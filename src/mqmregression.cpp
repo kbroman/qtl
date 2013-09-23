@@ -324,7 +324,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d) {
   *d=1;
   for (r=0; r<dim; r++) {
     for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
-    if (max==0.0) fatal("Singular matrix"); 
+    if (max==0.0) fatal("Singular matrix", "");
     scale[r]=1.0/max;
   }
   for (c=0; c<dim; c++) {
@@ -340,7 +340,7 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d) {
         rowmax=r;
       }
     }
-    if (max==0.0) fatal("Singular matrix"); 
+    if (max==0.0) fatal("Singular matrix", "");
     if (rowmax!=c) {
       swap=m[rowmax];
       m[rowmax]=m[c];
