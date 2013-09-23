@@ -35,7 +35,7 @@
 
 cvector relative_marker_position(const unsigned int nmark,const ivector chr){
   cvector position = newcvector(nmark); // info("Calculating relative genomepositions of the markers");
-  for(int j=0; j < nmark; j++) {
+  for(unsigned int j=0; j < nmark; j++) {
     if(j==0) {
       if (chr[j]==chr[j+1]) 
         position[j]=MLEFT;
@@ -65,13 +65,13 @@ cvector relative_marker_position(const unsigned int nmark,const ivector chr){
 //NOTE checking for r[j] <0 (marker ordering) can ahppen at contract
 vector recombination_frequencies(const unsigned int nmark, const cvector position, const vector mapdistance){
   vector r = newvector(nmark);   // info("Estimating recombinant frequencies");
-  for(int j=0; j<nmark; j++) {
+  for(unsigned int j=0; j<nmark; j++) {
     r[j]= RFUNKNOWN;
     if ((position[j]==MLEFT)||(position[j]==MMIDDLE)) {
       r[j]= recombination_frequentie((mapdistance[j+1]-mapdistance[j]));
       if (r[j]<0) {
         info("ERROR: Position=%d r[j]=%f\n", position[j], r[j]);
-        fatal("Recombination frequency is negative, (Marker ordering problem ?)");
+        fatal("Recombination frequency is negative, (Marker ordering problem ?)", "");
         return NULL;
       }
     }
@@ -91,11 +91,11 @@ double recombination_frequentie(const double cmdistance){
 
 void validate_markertype(const MQMCrossType crosstype, const char markertype){
   if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)
-    fatal("validate_markertype: Undecided markertype");
+    fatal("validate_markertype: Undecided markertype", "");
   if (crosstype==CRIL && markertype==MH) 
-    fatal("validate_markertype: Found markertype H (AB) in RIL");
+    fatal("validate_markertype: Found markertype H (AB) in RIL", "");
   if (crosstype==CBC && markertype==MBB) 
-    fatal("validate_markertype: Found markertype BB in back cross (BC)");
+    fatal("validate_markertype: Found markertype BB in back cross (BC)", "");
 }
 
 /* Chooses the starting probability (when a marker is the first, or unlinked)
@@ -155,9 +155,9 @@ double start_prob(const MQMCrossType crosstype, MQMMarker marker) {
       }
       //return (markertype==MH ? 0.5 : 0.5);
     default:
-      fatal("Strange: unknown crosstype in start_prob");
+      fatal("Strange: unknown crosstype in start_prob", "");
   }
-  fatal("Should not get here");
+  fatal("Should not get here", "");
   return R_NaN;
 }
 
@@ -206,10 +206,10 @@ double left_prob(const double r,const MQMMarker markerL,const MQMMarker markerR,
       return rr; // Not Recombinated
       break;
     default:
-      fatal("Strange: unknown crosstype in prob");
+      fatal("Strange: unknown crosstype in prob", "");
       return R_NaN;
   }
-  fatal("Should not get here");
+  fatal("Should not get here", "");
   return R_NaN;
 }
 
@@ -225,7 +225,7 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
       return ((marker==MAA)||(marker==MBB)) ? true : false;
     break;
     case CUNKNOWN:
-      fatal("Strange: unknown crosstype in is_knownMarker()");
+      fatal("Strange: unknown crosstype in is_knownMarker()", "");
       return R_NaN;
     break;
   }
