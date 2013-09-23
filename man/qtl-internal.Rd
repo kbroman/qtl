@@ -78,7 +78,8 @@ genAllPartitions(n.taxa, taxa)
 getsex(cross)
 addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
 mqm_version()
-scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
+scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1,
+        batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
 getgenonames(type=c("f2","bc","riself","risib","4way","dh","haploid","special","bcsft"),
              chrtype=c("A","X"), expandX=c("simple","standard","full"),
              sexpgm, cross.attr)
