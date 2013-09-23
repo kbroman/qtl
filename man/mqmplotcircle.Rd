@@ -7,7 +7,8 @@
 }
 
 \usage{
-	mqmplot.circle(cross,result,highlight=0,spacing=25, interactstrength=2, legend=FALSE,verbose=FALSE,transparency=FALSE)
+mqmplot.circle(cross,result,highlight=0,spacing=25, interactstrength=2,
+               legend=FALSE, verbose=FALSE, transparency=FALSE)
 }
 
 \arguments{
