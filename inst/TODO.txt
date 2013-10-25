@@ -13,6 +13,9 @@ SHORT TERM:
 o calc.penalties could take the result of summary.scanone in place of
   permutation results.
 
+o mapmaker format: if genetic map file is missing, create a bogus
+  one.
+
 o Fix documentation for fitqtl: estimated effects work except such and
   such cases (X chromosome, and 4-way crosses). Might not work right
   for all other cases, but if that's true we should fix it.
