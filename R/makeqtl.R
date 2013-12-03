@@ -2,8 +2,8 @@
 #
 # makeqtl.R
 #
-# copyright (c) 2002-2011, Hao Wu and Karl W. Broman
-# last modified May, 2011
+# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
+# last modified Dec, 2013
 # first written Apr, 2002
 #
 # Modified by Danny Arends
@@ -466,7 +466,8 @@ function(x, ...)
 summary.qtl <-
 function(object, ...)
 {
-  if(is.null(object) || length(object) == 0) {
+  if(is.null(object) || length(object) == 0 || length(object$chr)==0) {
+    object <- numeric(0)
     class(object) <- "summary.qtl"
     return(object)
   }
