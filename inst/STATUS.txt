@@ -17,6 +17,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.29, 12/3/2013:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Slight change to summary.qtl to deal with QTL objects with no QTL.
+
+
 Version 1.28, 9/23/2013:
 
 Major changes:
