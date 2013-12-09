@@ -27,6 +27,8 @@ Minor changes:
 
   Slight change to summary.qtl to deal with QTL objects with no QTL.
 
+  For the QTLRel package, now "export" reviseXdata() in NAMESPACE.
+
 
 Version 1.28, 9/23/2013:
 
