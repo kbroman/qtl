@@ -1,4 +1,5 @@
 \name{qtl-internal}
+\alias{reviseXdata}
 \alias{calc.plod}
 \alias{checkcovar}
 \alias{clean}
@@ -62,6 +63,8 @@
 }
 
 \usage{
+reviseXdata(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
+            sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
 checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata,
            ind.noqtl=NULL, weights=NULL, verbose=TRUE)
