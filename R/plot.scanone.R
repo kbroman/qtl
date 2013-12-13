@@ -2,8 +2,8 @@
 #
 # plot.scanone.R
 #
-# copyright (c) 2001-9, Karl W Broman
-# last modified Jun, 2009
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Dec, 2013
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,8 @@ plot.scanone <-
 function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
          lty=1,col=c("black","blue","red"),lwd=2,add=FALSE,gap=25,
          mtick=c("line", "triangle"), show.marker.names=FALSE,
-         alternate.chrid=FALSE, bandcol=NULL, ...)
+         alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
+         pch=1, bg="transparent", ...)
 {
   if(!any(class(x) == "scanone") ||
      (!missing(x2) && !any(class(x2) == "scanone")) ||
@@ -43,6 +44,12 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
   if(!is.factor(x$chr)) x$chr <- factor(x$chr, levels=unique(x$chr))
 
   dots <- list(...)
+
+  # handle special arguments to be used in lines()
+  if(length(type)==1) type <- rep(type, 3)
+  if(length(cex)==1) cex <- rep(cex, 3)
+  if(length(pch)==1) pch <- rep(pch, 3)
+  if(length(bg)==1) bg <- rep(bg, 3)
 
   mtick <- match.arg(mtick)
 
@@ -204,12 +211,10 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
       x <- c(x-g,x,x+g)
       y <- rep(y,3)
     }
-    lines(x,y,lwd=lwd[1],lty=lty[1],col=col[1])
+    lines(x,y,lwd=lwd[1],lty=lty[1],col=col[1], type=type[1], cex=cex[1], pch=pch[1], bg=bg[1])
     # plot chromosome number
     if(!add && !onechr) {
       tloc <- mean(c(min(x),max(x)))
-#      text(tloc,a[3]-(a[4]-a[3])*0.05,as.character(chr[i]))
-#      lines(rep(tloc,2),c(a[3],a[3]-(a[4]-a[3])*0.015))
       xtick <- c(xtick, tloc)
       xticklabel <- c(xticklabel, as.character(chr[i]))
     }
@@ -223,7 +228,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
         x <- c(x-g,x,x+g)
         y <- rep(y,3)
       }
-      lines(x,y,lty=lty[2],col=col[2],lwd=lwd[2])
+      lines(x,y,lty=lty[2],col=col[2],lwd=lwd[2], type=type[2], cex=cex[2], pch=pch[2], bg=bg[2])
     }
 
     if(third) {
@@ -234,7 +239,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
         x <- c(x-g,x,x+g)
         y <- rep(y,3)
       }
-      lines(x,y,lty=lty[3],col=col[3],lwd=lwd[3])
+      lines(x,y,lty=lty[3],col=col[3],lwd=lwd[3], type=type[3], cex=cex[3], pch=pch[3], bg=bg[3])
     }
 
     # plot lines or triangles at marker positions
