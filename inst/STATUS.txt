@@ -17,6 +17,19 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.30, 12/12/2013:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Added arguments type, cex, pch, and bg to plot.scanone, to be passed
+  to lines() in making the plot. Thus, you can use type="p" to get
+  points only.
+
+
 Version 1.29, 12/9/2013:
 
 Major changes:

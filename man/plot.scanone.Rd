@@ -13,7 +13,7 @@
      xlim, ylim, lty=1, col=c("black","blue","red"), lwd=2,
      add=FALSE, gap=25, mtick = c("line", "triangle"),
      show.marker.names=FALSE, alternate.chrid=FALSE,
-     bandcol=NULL, \dots)
+     bandcol=NULL, type="l", cex=1, pch=1, bg="transparent", \dots)
 }			    
 
 \arguments{
@@ -46,6 +46,16 @@
   \item{bandcol}{Optional color for alternating bands to indicate
   chromosomes.  If NULL (the default), no bands are plotted.  A good
   choice might be \code{bandcol="gray70"}.}
+  \item{type}{Type of plot (see \code{\link[graphics]{plot}}): for
+  example, \code{type="l"} for lines or \code{type="p"} for points only,
+  may be of length 1 or 3.}
+  \item{cex}{Point size expansion, for example if \code{type="p"} is used.
+  May be of length 1 or 3.}
+  \item{pch}{Point type, for example if \code{type="p"} is used. See \code{\link[graphics]{points}}.
+  May be of length 1 or 3.}
+  \item{bg}{Background color for points, for example if \code{type="p"}
+  and \code{pch=21} are used. See \code{\link[graphics]{points}}.
+  May be of length 1 or 3.}
   \item{\dots}{Passed to the function \code{\link[graphics]{plot}} when it
     is called.}
 }
@@ -84,6 +94,9 @@ plot(out.hk, chr=c(1,13), add=TRUE, col="slateblue")
 plot(out.hk, chr=13, show.marker.names=TRUE)
 
 plot(out.hk, bandcol="gray70")
+
+# plot points rather than lines
+plot(out.hk, bandcol="gray70", type="p", cex=0.3, pch=21, bg="slateblue")
 }
 
 \seealso{ \code{\link{scanone}},
