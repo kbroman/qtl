@@ -2,8 +2,8 @@
 #
 # map_construction.R
 #
-# copyright (c) 2008-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2008-2013, Karl W Broman
+# last modified Dec, 2013
 # first written Oct, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -61,6 +61,13 @@ function(cross, max.rf=0.25, min.lod=3, reorgMarkers=FALSE,
   diagrf <- diag(rf)
   if(ncol(rf) != tot.mar)
     stop("dimension of recombination fractions inconsistent with no. markers in cross.")
+
+  onlylod <- attr(cross$rf, "onlylod")
+  if(!is.null(onlylod) && onlylod) { # results of markerlrt()
+    if(!missing(max.rf))
+      warning("max.rf ignored, as markerlrt() was used.")
+    max.rf <- Inf
+  }
 
   marnam <- colnames(rf)
   chrstart <- rep(names(cross$geno), n.mar)
