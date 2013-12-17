@@ -10,10 +10,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o In formLinkageGroups, look for the attribute onlylod=TRUE in rf, in
-  which case take max.rf=Inf. In this case, if !missing(max.rf), give
-  a warning message.
-
 o effectplot and effectscan with method="hk" as well as "imp"
 
 o calc.penalties could take the result of summary.scanone in place of
