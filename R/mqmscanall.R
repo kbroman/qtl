@@ -2,12 +2,12 @@
 #
 # mqmscanall.R
 #
-# Copyright (c) 2009-2013, Danny Arends
+# Copyright (c) 2009-2014, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 # 
 # first written Februari 2009
-# last modified Sep 2013
+# last modified Jan 2014
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -79,8 +79,18 @@ scanall <- function(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, b
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}	
-				result <- mclapply(boots, snowCoreALL, all.data=all.data, scanfunction=scanfunction, cofactors=cofactors,
-                                                   verbose=verbose, mc.cores=n.clusters, ...)
+
+        if(Sys.info()[1] == "Windows") { # Windows doesn't support mclapply, but it's faster if available
+          cl <- makeCluster(n.clusters)
+          on.exit(stopCluster(cl))
+          result <- clusterApply(cl, boots, snowCoreALL, all.data=all.data, scanfunction=scanfunction, cofactors=cofactors,
+                                 verbose=verbose, ...)
+        }
+        else {
+          result <- mclapply(boots, snowCoreALL, all.data=all.data, scanfunction=scanfunction, cofactors=cofactors,
+                             verbose=verbose, mc.cores=n.clusters, ...)
+        }
+
 				if(plot){
 					temp <- result
 					class(temp) <- c(class(temp),"mqmmulti")
