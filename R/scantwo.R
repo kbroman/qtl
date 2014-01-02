@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2013, Karl W Broman and Hao Wu
-# last modified Sep, 2013
+# copyright (c) 2001-2014, Karl W Broman and Hao Wu
+# last modified Jan, 2014
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -95,12 +95,24 @@ function(cross, chr, pheno.col=1,
                 clean.nmar=clean.nmar, clean.distance=clean.distance, maxit=maxit, tol=tol, perm.strata=perm.strata,
                 assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0, verbose=FALSE, n.perm=n.perm)
 
-    operm <- mclapply(rep(n.perm, n.cluster), scantwoPermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
-                      model=model, method=method, addcovar=addcovar, intcovar=intcovar,
-                      weights=weights, incl.markers=incl.markers, clean.output=clean.output,
-                      clean.nmar=clean.nmar, clean.distance=clean.distance,
-                      maxit=maxit, tol=tol, perm.strata=perm.strata,
-                      assumeCondIndep=assumeCondIndep, batchsize=batchsize, mc.cores=n.cluster)
+    if(Sys.info()[1] == "Windows") { # Windows doesn't support mclapply, but it's faster if available
+      cl <- makeCluster(n.cluster)
+      on.exit(stopCluster(cl))
+      operm <- clusterApply(cl, rep(n.perm, n.cluster), scantwoPermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
+                            model=model, method=method, addcovar=addcovar, intcovar=intcovar,
+                            weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                            clean.nmar=clean.nmar, clean.distance=clean.distance,
+                            maxit=maxit, tol=tol, perm.strata=perm.strata,
+                            assumeCondIndep=assumeCondIndep, batchsize=batchsize)
+    }
+    else {
+      operm <- mclapply(rep(n.perm, n.cluster), scantwoPermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
+                        model=model, method=method, addcovar=addcovar, intcovar=intcovar,
+                        weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                        clean.nmar=clean.nmar, clean.distance=clean.distance,
+                        maxit=maxit, tol=tol, perm.strata=perm.strata,
+                        assumeCondIndep=assumeCondIndep, batchsize=batchsize, mc.cores=n.cluster)
+    }
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])

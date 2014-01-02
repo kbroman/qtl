@@ -2,13 +2,13 @@
 #
 # mqmpermutation.R
 #
-# Copyright (c) 2009-2013, Danny Arends
+# Copyright (c) 2009-2014, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified Sep 2013
+# last modified Jan 2014
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -139,8 +139,16 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 				}else{
 					boots <- bootstraps[((batchsize*(x-1))+1):(batchsize*(x-1)+batchsize)]
 				}			
-				res <- mclapply(boots, snowCoreBOOT, all.data=cross, scanfunction=scanfunction, bootmethod=bootmethod,
-                                                cofactors=cofactors, verbose=verbose, mc.cores=n.cluster, ...)
+        if(Sys.info()[1] == "Windows") { # Windows doesn't support mclapply, but it's faster if available
+          cl <- makeCluster(n.cluster)
+          on.exit(stopCluster(cl))
+          res <- clusterApply(cl, boots, snowCoreBOOT, all.data=cross, scanfunction=scanfunction, bootmethod=bootmethod,
+                              cofactors=cofactors, verbose=verbose, ...)
+        }
+        else {
+          res <- mclapply(boots, snowCoreBOOT, all.data=cross, scanfunction=scanfunction, bootmethod=bootmethod,
+                          cofactors=cofactors, verbose=verbose, mc.cores=n.cluster, ...)
+        }
 				results <- c(results,res)
 				if(plot){
 					temp <- c(res0,results)

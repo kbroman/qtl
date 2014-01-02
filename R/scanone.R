@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2014, Karl W Broman
+# last modified Jan, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -66,10 +66,20 @@ function(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 
     n.perm <- ceiling(n.perm/n.cluster)
     if(missing(chr)) chr <- names(cross$geno)
-    operm <- mclapply(rep(n.perm, n.cluster), scanonePermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
-                      model=model, method=method, addcovar=addcovar, intcovar=intcovar, weights=weights, use=use,
-                      upper=upper, ties.random=ties.random, start=start, maxit=maxit, tol=tol, perm.Xsp=perm.Xsp,
-                      perm.strata=perm.strata, batchsize=batchsize, mc.cores=n.cluster)
+    if(Sys.info()[1] == "Windows") { # Windows doesn't support mclapply, but it's faster if available
+      cl <- makeCluster(n.cluster)
+      on.exit(stopCluster(cl))
+      operm <- clusterApply(cl, rep(n.perm, n.cluster), scanonePermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
+                            model=model, method=method, addcovar=addcovar, intcovar=intcovar, weights=weights, use=use,
+                            upper=upper, ties.random=ties.random, start=start, maxit=maxit, tol=tol, perm.Xsp=perm.Xsp,
+                            perm.strata=perm.strata, batchsize=batchsize)
+    }
+    else {
+      operm <- mclapply(rep(n.perm, n.cluster), scanonePermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
+                        model=model, method=method, addcovar=addcovar, intcovar=intcovar, weights=weights, use=use,
+                        upper=upper, ties.random=ties.random, start=start, maxit=maxit, tol=tol, perm.Xsp=perm.Xsp,
+                        perm.strata=perm.strata, batchsize=batchsize, mc.cores=n.cluster)
+    }
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])
