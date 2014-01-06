@@ -34,6 +34,9 @@ Minor changes:
   to lines() in making the plot. Thus, you can use type="p" to get
   points only.
 
+  Fixed a bug in scanqtl that showed up if there were missing
+  phenotypes and no covariates.
+
 
 Version 1.29, 12/9/2013:
 
