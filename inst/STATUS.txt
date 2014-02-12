@@ -23,6 +23,10 @@ Major changes:
 
 Minor changes:
 
+  Add a couple of arguments to plotLodProfile: showallchr, to show all
+  chromosomes (and not just those with QTL), and textsep, to control
+  the separation between the QTL labels and the LOD curves.
+
   Fix problem with plotLodProfile when it's maximized at multiple
   locations.
 

@@ -12,7 +12,7 @@
 plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
                qtl.labels=TRUE, mtick=c("line", "triangle"),
                show.marker.names=FALSE, alternate.chrid=FALSE,
-               add=FALSE, \dots)
+               add=FALSE, showallchr=FALSE, textsep=5, \dots)
 
 }			    
 \arguments{
@@ -37,6 +37,9 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     plotted, alternate the placement of chromosome 
      axis labels, so that they may be more easily distinguished.}
   \item{add}{If TRUE, add curves to a current plot.}
+  \item{showallchr}{If FALSE (the default), only show the chr with a QTL}
+  \item{labelsep}{If \code{qtl.labels=TRUE}, separation between peak LOD
+    and QTL label, as percent of the height of the plot.}
   \item{\dots}{Passed to the function \code{\link[graphics]{plot}} when it
     is called.}
 }
