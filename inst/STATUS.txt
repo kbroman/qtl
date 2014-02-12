@@ -17,6 +17,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.31, 2/11/2014:
+
+Major changes:
+
+Minor changes:
+
+  Fix problem with plotLodProfile when it's maximized at multiple
+  locations.
+
+
 Version 1.30, 2/10/2014:
 
 Major changes:

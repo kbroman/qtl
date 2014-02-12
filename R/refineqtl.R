@@ -528,7 +528,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
     if(qtl.labels) {
       maxlod <- max(temp[,3], na.rm=TRUE)
-      maxpos <- temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]]
+      maxpos <- median(temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]])
       d <- min(c(1, diff(par("usr")[3:4]*0.05)))
 
       text(maxpos, maxlod + d, names(lodprof)[i], col=col[i], font=(lwd[i]>1)+1, ...)
