@@ -408,7 +408,8 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 plotLodProfile <-
 function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
          qtl.labels=TRUE, mtick=c("line", "triangle"),
-         show.marker.names=FALSE, alternate.chrid=FALSE, add=FALSE, ...)
+         show.marker.names=FALSE, alternate.chrid=FALSE, add=FALSE,
+         showallchr=FALSE, labelsep=5, ...)
 {
   if(!("qtl" %in% class(qtl)))
     stop("Input qtl is not a qtl object")
@@ -467,7 +468,8 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
   thechr <- unique(qtl$chr)
   orderedchr <- names(map)
-  chr2keep <- which(!is.na(match(orderedchr, thechr)))
+  if(showallchr) chr2keep <- seq(along=orderedchr)
+  else chr2keep <- which(!is.na(match(orderedchr, thechr)))
 
   tempscan <- NULL
   for(i in chr2keep) {
@@ -479,7 +481,11 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   }
   class(tempscan) <- c("scanone", "data.frame")
 
-  if(missing(chr)) chr <- thechr
+  if(missing(chr)) {
+    if(showallchr) chr <- orderedchr
+    else chr <- thechr
+  }
+  
   dontskip <- which(!is.na(match(qtl$chr, chr)))
   if(length(dontskip)==0)
     stop("Nothing to plot.")
@@ -499,7 +505,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     if("ylim" %in% names(dots)) {
       plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                    mtick=mtick, show.marker.names=show.marker.names,
-                   alternate.chrid=alternate.chrid, col="white", ...)
+                   alternate.chrid=alternate.chrid, type="n", ...)
     }
     else {
       if(qtl.labels)
@@ -509,7 +515,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
       plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                    mtick=mtick, show.marker.names=show.marker.names,
-                   alternate.chrid=alternate.chrid, col="white", ylim=ylim,
+                   alternate.chrid=alternate.chrid, type="n", ylim=ylim,
                    ...)
     }
   }
@@ -529,7 +535,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     if(qtl.labels) {
       maxlod <- max(temp[,3], na.rm=TRUE)
       maxpos <- median(temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]])
-      d <- min(c(1, diff(par("usr")[3:4]*0.05)))
+      d <- diff(par("usr")[3:4]*labelsep/100)
 
       text(maxpos, maxlod + d, names(lodprof)[i], col=col[i], font=(lwd[i]>1)+1, ...)
     }
