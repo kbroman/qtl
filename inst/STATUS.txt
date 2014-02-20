@@ -17,11 +17,15 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.31, 2/11/2014:
+Version 1.31, 2/19/2014:
 
 Major changes:
 
 Minor changes:
+
+  Fixed a problem in write.cross with format="csv" (for cross types
+  other than BC and F2, it would use incorrect genotype codes if there
+  was no "allele" attribute for the cross).
 
   Add a couple of arguments to plotLodProfile: showallchr, to show all
   chromosomes (and not just those with QTL), and textsep, to control
