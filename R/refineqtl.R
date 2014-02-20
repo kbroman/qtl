@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-2012, Karl W. Broman
-# last modified Aug, 2012
+# copyright (c) 2006-2014, Karl W. Broman
+# last modified Feb, 2014
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or

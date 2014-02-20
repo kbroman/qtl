@@ -12,7 +12,7 @@
 plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
                qtl.labels=TRUE, mtick=c("line", "triangle"),
                show.marker.names=FALSE, alternate.chrid=FALSE,
-               add=FALSE, showallchr=FALSE, textsep=5, \dots)
+               add=FALSE, showallchr=FALSE, labelsep=5, \dots)
 
 }			    
 \arguments{
