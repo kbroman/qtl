@@ -10,6 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o problem in refineqtl: messing up map attribute?
+
 o effectplot and effectscan with method="hk" as well as "imp"
 
 o calc.penalties could take the result of summary.scanone in place of
