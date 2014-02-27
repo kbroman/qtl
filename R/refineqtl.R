@@ -118,20 +118,24 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 
   cross <- subset(cross, chr=as.character(unique(chr))) # pull out just those chromosomes
 
+  # save map in the object
+  map <- attr(qtl, "map")
+
   if(qtl$n.ind != nind(cross)) {
     warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
     if(method=="imp")
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
     else
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+    attr(qtl, "map") <- map
   }
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    attr(qtl, "map") <- map
   }
 
   # minimum distance between pseudomarkers
-  map <- attr(qtl, "map")
   if(is.null(map))
     stop("Input qtl object should contain the genetic map.")
   mind <- min(sapply(map, function(a) { if(is.matrix(a)) a <- a[1,]; min(diff(a)) }))/2
