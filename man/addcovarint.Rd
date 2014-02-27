@@ -12,7 +12,7 @@
 addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
             method=c("imp","hk"), model=c("normal", "binary"), 
             verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4,
-            maxit=1000, require.fullrank=TRUE)
+            maxit=1000, require.fullrank=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See

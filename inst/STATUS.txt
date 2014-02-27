@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.31, 2/26/2014:
+Version 1.31, 2/27/2014:
 
 Major changes:
 
@@ -37,6 +37,10 @@ Minor changes:
   Fix problem in refineqtl and stepwiseqtl; map attribute in qtl
   object would get unintentionally subsetted if the qtl object needed
   to be re-created.
+
+  In addqtl, addint, and addcovarint, have require.fullrank=FALSE be
+  the default; require.fullrank=TRUE remains the default in
+  stepwiseqtl.
 
 
 Version 1.30, 2/10/2014:

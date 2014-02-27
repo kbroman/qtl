@@ -37,7 +37,7 @@ addint <-
 function(cross, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
          qtl.only=FALSE, verbose=TRUE, pvalues=TRUE, simple=FALSE,
-         tol=1e-4, maxit=1000, require.fullrank=TRUE)
+         tol=1e-4, maxit=1000, require.fullrank=FALSE)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
@@ -305,7 +305,7 @@ addqtl <-
 function(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
          incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000,
-         forceXcovar=FALSE, require.fullrank=TRUE)
+         forceXcovar=FALSE, require.fullrank=FALSE)
 {
   method <- match.arg(method)
   model <- match.arg(model)
@@ -1178,7 +1178,7 @@ addcovarint <-
 function(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
          method=c("imp","hk"), model=c("normal", "binary"),
          verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000,
-         require.fullrank=TRUE)
+         require.fullrank=FALSE)
 {
   if( !("cross" %in% class(cross)) )
     stop("The cross argument must be an object of class \"cross\".")
