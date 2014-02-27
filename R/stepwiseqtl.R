@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2013, Karl W Broman
-# last modified Aug, 2013
+# copyright (c) 2007-2014, Karl W Broman
+# last modified Feb, 2014
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -144,16 +144,20 @@ function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   else qtlmethod <- "prob"
 
   if(!missing(qtl) && qtl$n.ind != nind(cross)) {
+    map <- attr(qtl, "map") # save map
     warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
     if(method=="imp")
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
     else
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+    attr(qtl, "map") <- map
   }
 
   if(!missing(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    map <- attr(qtl, "map") # save map
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    attr(qtl, "map") <- map
   }
 
   # check that qtl object matches the method
