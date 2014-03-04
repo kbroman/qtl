@@ -10,7 +10,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o problem in refineqtl: messing up map attribute?
+o Include genetic map as an attribute in scanone results and use that
+  to plot marker positions.
 
 o effectplot and effectscan with method="hk" as well as "imp"
 
@@ -70,8 +71,6 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
       longer object length is not a multiple of shorter object length
 
   Also, I need to use as.numeric() on the thresholds
-
-o Helper function for create.map to identify locations on the grid
 
 o Use library(parallel) with orderMarkers
 
@@ -208,9 +207,6 @@ o Documentation on RI lines.
 MEDIUM TERM:
 
 o eQTL-related stuff:
-
-  - Compressing calc.genoprob results (simpler version of locations,
-    or just the grid)
 
   - Mb positions within cross object; multiple genetic maps
 

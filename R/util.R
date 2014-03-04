@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2013, Karl W Broman
+# copyright (c) 2001-2014, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Sep, 2013
+# last modified Feb, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: markernames, c.cross, create.map,
+# Contains: markernames, c.cross, create.map, reduce2grid,
 #           clean, clean.cross, drop.nullmarkers, nullmarkers
 #           drop.markers, pull.markers, drop.dupmarkers
 #           geno.table, genotab.em
@@ -364,6 +364,95 @@ function(map, step, off.end, stepwidth = c("fixed", "variable", "max"))
     }
   }
 }
+
+######################################################################
+# reduce2grid
+#
+# for high-density marker data, rather than run scanone at both the
+# markers and at a set of pseudomarkers, we could reduce to just
+# a set of evenly-spaced pseudomarkers
+#
+# first run calc.genoprob (or sim.geno) and then use this.
+######################################################################
+reduce2grid <-
+function(cross)
+{
+  if(!any(class(cross) == "cross"))
+    stop("Input should have class \"cross\".")
+
+  # used by submapindex
+  mysample <- function(x) { ifelse(length(x)==1, x, sample(x, 1)) }
+
+  # if match returns NAs, use this
+  submapindex <- function(map, step) {
+    if(is.matrix(map)) stop("reduce2grid isn't working for sex-specific maps")
+    submap <- seq(min(map), max(map), by=step)
+    index <- match(submap, map)
+    if(any(is.na(index)))
+      index <- sapply(submap, function(a,b) { d <- abs(a-b); mysample(which(d == min(d))) }, map)
+    index
+  }
+
+  attr2fix <- c("error.prob", "step", "off.end", "map.function", "stepwidth")
+
+  reduced <- FALSE
+  if("prob" %in% names(cross$geno[[1]])) {
+    stepwidth <- attr(cross$geno[[1]]$prob, "stepwidth")
+    if(stepwidth != "fixed") {
+      warning("You need to have run calc.genoprob with stepwidth=\"fixed\".")
+      break
+    }
+
+    step <- attr(cross$geno[[1]]$prob, "step")
+
+    for(i in 1:nchr(cross)) {
+      pr <- cross$geno[[i]]$prob
+      map <- attr(pr, "map")
+      butes <- attributes(pr)
+
+      reduced <- submapindex(map, step)
+      pr <- pr[,reduced,,drop=FALSE]
+      attr(pr, "map") <- map[reduced]
+      for(a in attr2fix)
+        attr(pr, a) <- butes[a]
+
+      cross$geno[[i]]$prob <- pr
+    }
+
+    reduced <- TRUE
+  }
+  if("draws" %in% names(cross$geno[[1]])) {
+    stepwidth <- attr(cross$geno[[1]]$draws, "stepwidth")
+    if(stepwidth != "fixed") {
+      warning("You need to have run sim.geno with stepwidth=\"fixed\".")
+      break
+    }
+
+    step <- attr(cross$geno[[1]]$draws, "step")
+
+    for(i in 1:nchr(cross)) {
+      dr <- cross$geno[[i]]$draws
+      map <- attr(dr, "map")
+      butes <- attributes(dr)
+
+      reduced <- submapindex(map, step)
+      dr <- dr[,reduced,,drop=FALSE]
+      attr(dr, "map") <- map[reduced]
+      for(a in attr2fix)
+        attr(dr, a) <- butes[a]
+
+      cross$geno[[i]]$draws <- dr
+    }
+
+    reduced <- TRUE
+  }
+
+  if(!reduced)
+    warning("You first need to run calc.genoprob or sim.geno with stepwidth=\"fixed\".")
+
+  cross
+}
+
 
 ######################################################################
 # clean functions
