@@ -17,9 +17,15 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.31, 2/27/2014:
+Version 1.31, 3/3/2014:
 
 Major changes:
+
+  Added a function reduce2grid() for subsetting the genotype
+  probabilities (from calc.genoprob) or imputations (from sim.geno) to
+  the evenly spaced grid of pseudomarkers, for use in the case of very
+  dense markers when it is too computationally intensive to perform a
+  genome scan at both the markers and the grid of pseudomarkers.
 
 Minor changes:
 
