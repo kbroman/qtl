@@ -383,7 +383,8 @@ function(cross)
   # used by submapindex
   mysample <- function(x) { ifelse(length(x)==1, x, sample(x, 1)) }
 
-  # if match returns NAs, use this
+  # for a map containing a grid with a given step size,
+  # find the submap min(map), min(map)+step, min(map)+2step, ...
   submapindex <- function(map, step) {
     if(is.matrix(map)) stop("reduce2grid isn't working for sex-specific maps")
     submap <- seq(min(map), max(map), by=step)
