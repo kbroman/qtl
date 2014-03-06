@@ -380,8 +380,8 @@ function(cross)
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
-  # used by submapindex
-  mysample <- function(x) { ifelse(length(x)==1, x, sample(x, 1)) }
+  # sample one element from a vector
+  mysample <- function(x) ifelse(length(x)==1, x, sample(x, 1))
 
   # for a map containing a grid with a given step size,
   # find the submap min(map), min(map)+step, min(map)+2step, ...
