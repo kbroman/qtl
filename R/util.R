@@ -381,16 +381,16 @@ function(cross)
     stop("Input should have class \"cross\".")
 
   # sample one element from a vector
-  mysample <- function(x) ifelse(length(x)==1, x, sample(x, 1))
+  sampleone <- function(x) ifelse(length(x)==1, x, sample(x, 1))
 
   # for a map containing a grid with a given step size,
-  # find the submap min(map), min(map)+step, min(map)+2step, ...
-  submapindex <- function(map, step) {
+  # find the grid min(map), min(map)+step, min(map)+2step, ...
+  gridindex <- function(map, step) {
     if(is.matrix(map)) stop("reduce2grid isn't working for sex-specific maps")
-    submap <- seq(min(map), max(map), by=step)
-    index <- match(submap, map)
+    grid <- seq(min(map), max(map), by=step)
+    index <- match(grid, map)
     if(any(is.na(index)))
-      index <- sapply(submap, function(a,b) { d <- abs(a-b); mysample(which(d == min(d))) }, map)
+      index <- sapply(grid, function(a,b) { d <- abs(a-b); sampleone(which(d == min(d))) }, map)
     index
   }
 
@@ -411,7 +411,7 @@ function(cross)
       map <- attr(pr, "map")
       butes <- attributes(pr)
 
-      reduced <- submapindex(map, step)
+      reduced <- gridindex(map, step)
       pr <- pr[,reduced,,drop=FALSE]
       attr(pr, "map") <- map[reduced]
       for(a in attr2fix)
@@ -436,7 +436,7 @@ function(cross)
       map <- attr(dr, "map")
       butes <- attributes(dr)
 
-      reduced <- submapindex(map, step)
+      reduced <- gridindex(map, step)
       dr <- dr[,reduced,,drop=FALSE]
       attr(dr, "map") <- map[reduced]
       for(a in attr2fix)
