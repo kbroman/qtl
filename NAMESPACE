@@ -55,6 +55,17 @@ export(summaryScantwoOld, summary.scantwo.old)
 export(reviseXdata)
 
 
+# used by funqtl
+export(checkStepwiseqtlStart)
+export(checkformula)
+export(countqtlterms)
+export(deparseQTLformula)
+export(fitqtlengine)
+export(matchchr)
+export(parseformula)
+export(reviseqtlnuminformula)
+
+
 # S3 methods
 S3method("-", scanone)
 S3method("-", scanoneperm)
