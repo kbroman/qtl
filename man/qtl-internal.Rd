@@ -54,6 +54,14 @@
 \alias{summary.addcovarint}
 \alias{summary.addint}
 \alias{summary.compactqtl}
+\alias{checkStepwiseqtlStart}
+\alias{checkformula}
+\alias{countqtlterms}
+\alias{deparseQTLformula}
+\alias{fitqtlengine}
+\alias{matchchr}
+\alias{parseformula}
+\alias{reviseqtlnuminformula}
 
 \title{Internal qtl functions}
 
@@ -133,6 +141,17 @@ subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{addcovarint}(object, \dots)
 \method{summary}{addint}(object, \dots)
 \method{summary}{compactqtl}(object, \dots)
+checkStepwiseqtlStart(qtl, formula, covar=NULL)
+checkformula(formula, qtl.name, covar.name)
+countqtlterms(formula, ignore.covar=TRUE)
+deparseQTLformula(formula, reorderterms=FALSE)
+fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
+         model=c("normal", "binary"),
+         dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
+         sexpgm, tol, maxit, forceXcovar=FALSE)
+matchchr(selection, thechr)
+parseformula(formula, qtl.dimname, covar.dimname)
+reviseqtlnuminformula(formula, oldnum, newnum)
 }
 
 
