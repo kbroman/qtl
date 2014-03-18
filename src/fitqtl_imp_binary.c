@@ -2,9 +2,9 @@
  * 
  * fitqtl_imp_binary.c
  *
- * copyright (c) 2010-2013, Karl W. Broman
+ * copyright (c) 2010-2014, Karl W. Broman
  *
- * last modified Sep, 2013
+ * last modified Mar, 2014
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
 			 double *tol, int *maxit, int *matrix_rank)
 {
   int ***Draws;
-  double **Cov;
+  double **Cov=0;
 
   /* reorganize draws */
   reorg_draws(*n_ind, *n_qtl, *n_draws, draws, &Draws);

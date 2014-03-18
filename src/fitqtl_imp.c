@@ -2,10 +2,10 @@
  * 
  * fitqtl_imp.c
  *
- * copyright (c) 2002-2013, Hao Wu
+ * copyright (c) 2002-2014, Hao Wu
  *     Modified by Karl W. Broman to get estimates of QTL effects
  *
- * last modified Feb, 2013
+ * last modified Mar, 2014
  * first written Apr, 2002
  *
  *     This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
 		  double *design_mat, int *matrix_rank)
 {
   int ***Draws;
-  double **Cov;
+  double **Cov=0;
 
   /* reorganize draws */
   reorg_draws(*n_ind, *n_qtl, *n_draws, draws, &Draws);
