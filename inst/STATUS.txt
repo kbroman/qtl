@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.31, 3/3/2014:
+Version 1.31, 3/18/2014:
 
 Major changes:
 
@@ -36,6 +36,8 @@ Minor changes:
   Add a couple of arguments to plotLodProfile: showallchr, to show all
   chromosomes (and not just those with QTL), and textsep, to control
   the separation between the QTL labels and the LOD curves.
+
+  Fix a bug in bcsft.c, regarding potentially over-running an array
 
   Fix problem with plotLodProfile when it's maximized at multiple
   locations.
