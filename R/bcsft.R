@@ -1,6 +1,6 @@
 convert2bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
                                 error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
-                                ...)
+                                verbose=FALSE)
 {
   cross.class <- class(cross)[1]
   
@@ -31,7 +31,7 @@ convert2bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
   # re-estimate map?
   if(estimate.map) {
     cat(" --Estimating genetic map\n")
-    newmap <- est.map(cross, error.prob=error.prob, map.function=map.function)
+    newmap <- est.map(cross, error.prob=error.prob, map.function=map.function, verbose=verbose)
     cross <- replace.map(cross, newmap)
   }
 

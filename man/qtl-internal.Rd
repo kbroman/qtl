@@ -70,7 +70,7 @@ condense(object)
 convert(object, \dots)
 convert2bcsft(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
               error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
-              \dots)
+              verbose=FALSE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable", "max"))
 find.pseudomarkerpos(cross, marker, where=c("draws", "prob"))
 flipcross(cross)
