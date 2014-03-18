@@ -2,9 +2,9 @@
  *
  * scantwo_imp.c
  *
- * copyright (c) 2001-2011, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2014, Karl W Broman and Hao Wu
  *
- * last modified May, 2011
+ * last modified Mar, 2014
  * first written Nov, 2001 
  *
  *     This program is free software; you can redistribute it and/or
@@ -59,8 +59,8 @@ void R_scantwo_imp(int *n_ind, int *same_chr, int *n_pos1, int *n_pos2,
 		   double *weights, double *result, int *n_col2drop,
 		   int *col2drop)
 {
-  int ***Draws1, ***Draws2;
-  double **Addcov, **Intcov;
+  int ***Draws1, ***Draws2=0;
+  double **Addcov=0, **Intcov=0;
 
   /* reorganize draws */
   reorg_draws(*n_ind, *n_pos1, *n_draws, draws1, &Draws1);

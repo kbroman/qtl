@@ -2,12 +2,12 @@
  * 
  * scanone_imp.c
  *
- * copyright (c) 2001-2011, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2014, Karl W Broman and Hao Wu
  *
  * This file is written by Hao Wu 
  * with slight modifications by Karl Broman.
  *
- * last modified May, 2011
+ * last modified Mar, 2014
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ void R_scanone_imp(int *n_ind, int *n_pos, int *n_gen, int *n_draws,
 {
   /* reorganize draws */
   int ***Draws;
-  double **Addcov, **Intcov, **Result;
+  double **Addcov=0, **Intcov=0, **Result;
   
   reorg_draws(*n_ind, *n_pos, *n_draws, draws, &Draws);
   reorg_errlod(*n_pos, *nphe, result, &Result); 

@@ -2,9 +2,9 @@
  * 
  * scantwo_em.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2014, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Mar, 2014
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -59,7 +59,7 @@ void R_scantwo_1chr_em(int *n_ind, int *n_pos, int *n_gen,
 		       int *maxit, double *tol, int *verbose,
 		       int *n_col2drop, int *col2drop)
 {
-  double **Result, **Addcov, **Intcov, *****Pairprob;
+  double **Result, **Addcov=0, **Intcov=0, *****Pairprob;
 
   reorg_pairprob(*n_ind, *n_pos, *n_gen, pairprob, &Pairprob);
   reorg_errlod(*n_pos, *n_pos, result, &Result);
@@ -327,7 +327,7 @@ void R_scantwo_2chr_em(int *n_ind, int *n_pos1, int *n_pos2,
 		       double *result_full, double *result_add,
 		       int *maxit, double *tol, int *verbose)
 {
-  double **Result_full, **Result_add, **Addcov, **Intcov;
+  double **Result_full, **Result_add, **Addcov=0, **Intcov=0;
   double ***Genoprob1, ***Genoprob2;
 
   reorg_genoprob(*n_ind, *n_pos1, *n_gen1, genoprob1, &Genoprob1);

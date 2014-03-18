@@ -2,12 +2,12 @@
  * 
  * util.c
  *
- * copyright (c) 2001-2012, Karl W Broman and Hao Wu
+ * copyright (c) 2001-2014, Karl W Broman and Hao Wu
  *
  * This file written mostly by Karl Broman with some additions
  * from Hao Wu.
  *
- * last modified Nov, 2012
+ * last modified Mar, 2014
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -548,8 +548,8 @@ void R_locate_xo(int *n_ind, int *n_mar, int *type,
                  int *gleft, int *gright, 
 		 int *ntyped, int *full_info)
 {
-  int **Geno, **iLeft, **iRight, **nTyped, **gLeft, **gRight;
-  double **Location, **Left, **Right;
+  int **Geno, **iLeft=0, **iRight=0, **nTyped=0, **gLeft=0, **gRight=0;
+  double **Location, **Left=0, **Right=0;
 
   reorg_geno(*n_ind, *n_mar, geno, &Geno);
   reorg_errlod(*n_ind, (*type+1)*(*n_mar-1), location, &Location);

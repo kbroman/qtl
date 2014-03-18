@@ -2,9 +2,9 @@
  * 
  * scanone_hk_binary.c
  *
- * copyright (c) 2010, Karl W Broman
+ * copyright (c) 2010-2014, Karl W Broman
  *
- * last modified Jul, 2010
+ * last modified Mar, 2014
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ void R_scanone_hk_binary(int *n_ind, int *n_pos, int *n_gen,
 			 double *result, double *tol, int *maxit, 
 			 int *verbose, int *ind_noqtl)
 {
-  double ***Genoprob, **Addcov, **Intcov;
+  double ***Genoprob, **Addcov=0, **Intcov=0;
 
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
 

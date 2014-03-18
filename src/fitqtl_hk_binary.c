@@ -2,9 +2,9 @@
  * 
  * fitqtl_hk_binary.c
  *
- * copyright (c) 2010-2013, Karl W Broman
+ * copyright (c) 2010-2014, Karl W Broman
  *
- * last modified Sep, 2013
+ * last modified Mar, 2014
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ void R_fitqtl_hk_binary(int *n_ind, int *n_qtl, int *n_gen,
 			/* convergence */
 			double *tol, int *maxit, int *matrix_rank)
 {
-  double ***Genoprob=0, **Cov;
+  double ***Genoprob=0, **Cov=0;
   int tot_gen, i, j, curpos;
 
   /* reorganize genotype probabilities */
@@ -129,7 +129,7 @@ void fitqtl_hk_binary(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
   /* create local variables */
   int i, j, n_qc, itmp; /* loop variants and temp variables */
   double llik, llik0;
-  double *dwork, **Ests_covar;
+  double *dwork, **Ests_covar=0;
   int *iwork, sizefull;
 
   /* initialization */
