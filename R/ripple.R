@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2014, Karl W Broman
+# last modified Mar, 2014
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -265,6 +265,7 @@ function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
 rippleSnowCountxo <-
 function(orders, genodat, func)
 {
+  func <- func
   .C(func,
      as.integer(nrow(genodat)),
      as.integer(ncol(genodat)),
