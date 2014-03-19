@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.31, 3/18/2014:
+Version 1.31, 3/19/2014:
 
 Major changes:
 
@@ -49,6 +49,9 @@ Minor changes:
   In addqtl, addint, and addcovarint, have require.fullrank=FALSE be
   the default; require.fullrank=TRUE remains the default in
   stepwiseqtl.
+
+  Fixed bug in which summary.scantwo was re-ordering the chromosome
+  factor levels.
 
 
 Version 1.30, 2/10/2014:
