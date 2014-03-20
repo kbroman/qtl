@@ -2,9 +2,9 @@
  * 
  * pickMarkerSubset.c
  *
- * copyright (c) 2011, Karl W Broman
+ * copyright (c) 2011-2014, Karl W Broman
  *
- * last modified Nov, 2011
+ * last modified Mar, 2014
  * first written Nov, 2011
  *
  *     This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ void R_pickMarkerSubset(double *locations, int *n_locations, double *weights,
 void pickMarkerSubset(double *locations, int n_locations, double *weights, 
 		      double min_distance, int *path, int *n_path)
 {
-  int i, j;
+  int i, j=0;
   double *total_weights, themax;
   int *prev_marker, *max_to_choose, n_max_to_choose;
 
@@ -82,21 +82,21 @@ void pickMarkerSubset(double *locations, int n_locations, double *weights,
         if(locations[i] < locations[j] + min_distance) break;
        
         if(total_weights[j] > themax) {
-	  n_max_to_choose = 1;
-	  max_to_choose[0] = j;
-	  themax = total_weights[j];
-	}
-	else if(total_weights[j] == themax) {
-	  max_to_choose[n_max_to_choose] = j;
-	  n_max_to_choose++;
-	}
+          n_max_to_choose = 1;
+          max_to_choose[0] = j;
+          themax = total_weights[j];
+        }
+        else if(total_weights[j] == themax) {
+          max_to_choose[n_max_to_choose] = j;
+          n_max_to_choose++;
+        }
       }
      
       /* now choose among the maxima at random */
       total_weights[i] = themax + weights[i];
       if(n_max_to_choose == 1) prev_marker[i] = max_to_choose[0];
       else /* pick random */
-	prev_marker[i] = max_to_choose[(int)(unif_rand()*(double)n_max_to_choose)]; 
+        prev_marker[i] = max_to_choose[(int)(unif_rand()*(double)n_max_to_choose)]; 
     }
   }
 
@@ -108,7 +108,7 @@ void pickMarkerSubset(double *locations, int n_locations, double *weights,
   for(i=1; i<n_locations; i++) {
     R_CheckUserInterrupt(); /* check for ^C */
 
-    if(total_weights[j] > themax) {
+    if(total_weights[i] > themax) {
       themax = total_weights[i];
       n_max_to_choose = 1;
       max_to_choose[0] = i;
