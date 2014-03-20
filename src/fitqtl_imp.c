@@ -45,11 +45,11 @@
 #define IDXINTC 10  /* maximum no. covariates in an interaction */
 
 void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
-		  int *draws, int *n_cov, double *cov, int *model, 
-		  int *n_int, double *pheno, int *get_ests,
-		  /* return variables */
-		  double *lod, int *df, double *ests, double *ests_covar,
-		  double *design_mat, int *matrix_rank)
+                  int *draws, int *n_cov, double *cov, int *model, 
+                  int *n_int, double *pheno, int *get_ests,
+                  /* return variables */
+                  double *lod, int *df, double *ests, double *ests_covar,
+                  double *design_mat, int *matrix_rank, double *residuals)
 {
   int ***Draws;
   double **Cov=0;
@@ -62,8 +62,8 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
   if(*n_cov != 0) reorg_errlod(*n_ind, *n_cov, cov, &Cov);
 
   fitqtl_imp(*n_ind, *n_qtl, n_gen, *n_draws, Draws,
-	     Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-	     ests, ests_covar, design_mat, matrix_rank);
+             Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
+             ests, ests_covar, design_mat, matrix_rank, residuals);
 }
 
 
@@ -106,13 +106,15 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
  *
  * matrix_rank  Return min (across imputations) of rank of design matrix
  *
+ * residuals    On return, the residuals (averaged across imputations) from the fit
+ *
  **********************************************************************/
 
 void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws, 
-		int ***Draws, double **Cov, int n_cov, 
-		int *model, int n_int, double *pheno, int get_ests,
-		double *lod, int *df, double *ests, double *ests_covar,
-		double *design_mat, int *matrix_rank) 
+                int ***Draws, double **Cov, int n_cov, 
+                int *model, int n_int, double *pheno, int get_ests,
+                double *lod, int *df, double *ests, double *ests_covar,
+                double *design_mat, int *matrix_rank, double *residuals) 
 {
 
   /* create local variables */
@@ -177,6 +179,9 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
 
   *matrix_rank = n_ind;
 
+  for(j=0; j<n_ind; j++)
+    residuals[j] = 0.0;
+
   /* loop over imputations */
   for(i=0; i<n_draws; i++) {
 
@@ -184,8 +189,9 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
 
     /* calculate alternative model RSS */
     lrss = log10( galtRss(pheno, n_ind, n_gen, n_qtl, Draws[i], 
-			  Cov, n_cov, model, n_int, dwork, iwork, sizefull,
-			  get_ests, ests, Ests_covar, (i==0), design_mat, matrix_rank) );
+                          Cov, n_cov, model, n_int, dwork, iwork, sizefull,
+                          get_ests, ests, Ests_covar, (i==0), design_mat, matrix_rank,
+                          residuals) );
 
     /* calculate the LOD score in this imputation */
     LOD_array[i] = (double)n_ind/2.0*(lrss0-lrss);
@@ -197,13 +203,16 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
       else tot_wt = addlog(tot_wt, wts[i]);
       
       for(ii=0; ii<sizefull; ii++) {
-	TheEsts[i][ii] = ests[ii];
-	for(jj=ii; jj<sizefull; jj++) 
-	  TheCovar[i][ii][jj] = Ests_covar[ii][jj];
+        TheEsts[i][ii] = ests[ii];
+        for(jj=ii; jj<sizefull; jj++) 
+          TheCovar[i][ii][jj] = Ests_covar[ii][jj];
       }
     }
 
   } /* end loop over imputations */
+
+  for(j=0; j<n_ind; j++)
+    residuals[j] /= (double)n_draws;
 
   /* sort the lod scores, and trim the weights */
   if(get_ests) {
@@ -293,10 +302,11 @@ double nullRss0(double *pheno, int n_ind)
 
 /* galtRss - calculate RSS for full model by multiple imputation */
 double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl, 
-	       int **Draws, double **Cov, int n_cov, int *model, 
-	       int n_int, double *dwork, int *iwork, int sizefull,
-	       int get_ests, double *ests, double **Ests_covar,
-	       int save_design, double *designmat, int *matrix_rank) 
+               int **Draws, double **Cov, int n_cov, int *model, 
+               int n_int, double *dwork, int *iwork, int sizefull,
+               int get_ests, double *ests, double **Ests_covar,
+               int save_design, double *designmat, int *matrix_rank,
+               double *residuals) 
 {
   /* local variables */
   int i, j, k, *jpvt, ny, idx_col, n_qc, itmp1, itmp2, n_int_col, tmp_idx, job;
@@ -453,9 +463,10 @@ double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
   if(*matrix_rank > k) *matrix_rank = k;
 
   /* calculate RSS */
-  for(i=0; i<n_ind; i++)
+  for(i=0; i<n_ind; i++) {
+    residuals[i] += resid[i];
     rss_full += resid[i]*resid[i];
-
+  }
 
   if(get_ests) { /* get the estimates and their covariance matrix */
     /* get ests; need to permute back */

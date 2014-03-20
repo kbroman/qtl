@@ -282,6 +282,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               ests.cov=as.double(rep(0,sizefull*sizefull)),
               design.mat=as.double(rep(0,sizefull*n.ind)),
               matrix.rank=as.integer(0), # on return, minimum of matrix rank across imputations
+              resid=as.double(rep(0,n.ind)), # on return, the average residuals across imputations
               PACKAGE="qtl")
     }
     else {
@@ -303,6 +304,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               ests.cov=as.double(rep(0,sizefull*sizefull)),
               design.mat=as.double(rep(0,sizefull*n.ind)),
               matrix.rank=as.integer(0), # on return, rank of matrix
+              resid=as.double(rep(0,n.ind)), # on return, residuals from the fit
               PACKAGE="qtl")
     }
   }
@@ -359,6 +361,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
   }
   matrix.rank <- z$matrix.rank
   matrix.ncol <- sizefull
+  residuals <- z$resid
 
   if(get.ests) {
     # first, construct the new design matrix
@@ -759,6 +762,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   as.double(rep(0,sizefull*sizefull)),
                   as.double(rep(0,n.ind*sizefull)),
                   matrix.rank=as.integer(0),
+                  resid=as.double(rep(0,n.ind)), # on return, the average residuals across imputations
                   PACKAGE="qtl")
         }
 
@@ -781,6 +785,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   as.double(rep(0,sizefull*sizefull)),
                   as.double(rep(0,n.ind*sizefull)),
                   matrix.rank=as.integer(0),
+                  resid=as.double(rep(0,n.ind)), # on return, the residuals
                   PACKAGE="qtl")
         }
       }
@@ -894,6 +899,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   attr(output, "matrix.rank") <- matrix.rank
   attr(output, "matrix.ncol") <- matrix.ncol
+
+  if(!is.null(residuals))
+    attr(output, "residuals") <- residuals
 
   output
 }
