@@ -25,7 +25,7 @@ Major changes:
 
 Minor changes:
 
-  None.
+  fitqtl with model="normal" now returns residuals as an attribute.
 
 
 Version 1.31, 3/19/2014:
