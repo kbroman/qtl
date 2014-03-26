@@ -10,6 +10,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o summary.cross: table of genotypes should be separated by cross type
+  (A vs X), with the X chromosome genotypes recoded.
+
 o Include genetic map as an attribute in scanone results and use that
   to plot marker positions.
 
