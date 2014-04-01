@@ -2,8 +2,8 @@
 #
 # plot.scanone.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Dec, 2013
+# copyright (c) 2001-2014, Karl W Broman
+# last modified Apr, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
          lty=1,col=c("black","blue","red"),lwd=2,add=FALSE,gap=25,
          mtick=c("line", "triangle"), show.marker.names=FALSE,
          alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
-         pch=1, bg="transparent", ...)
+         pch=1, bg="transparent", bgrect=NULL, ...)
 {
   if(!any(class(x) == "scanone") ||
      (!missing(x2) && !any(class(x2) == "scanone")) ||
@@ -190,6 +190,10 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
     }
   }
 
+  if(!add && !is.null(bgrect)) {
+    u <- par("usr")
+    rect(u[1], u[3], u[2], u[4], col=bgrect)
+  }
   if(!add && !onechr && !is.null(bandcol)) {
     u <- par("usr")
     for(i in seq(2, by=2, length(chr))) {
@@ -285,6 +289,11 @@ function(x,x2,x3,chr,lodcolumn=1,incl.markers=TRUE,xlim, ylim,
         axis(side=1, at=xtick[i], labels=xticklabel[i], line=+0.4, tick=FALSE)
       }
     }
+  }
+
+  if(!add && !is.null(bgrect)) {
+    u <- par("usr")
+    rect(u[1], u[3], u[2], u[4])
   }
 
   invisible()

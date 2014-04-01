@@ -13,7 +13,8 @@
      xlim, ylim, lty=1, col=c("black","blue","red"), lwd=2,
      add=FALSE, gap=25, mtick = c("line", "triangle"),
      show.marker.names=FALSE, alternate.chrid=FALSE,
-     bandcol=NULL, type="l", cex=1, pch=1, bg="transparent", \dots)
+     bandcol=NULL, type="l", cex=1, pch=1, bg="transparent",
+     bgrect=NULL, \dots)
 }			    
 
 \arguments{
@@ -56,6 +57,7 @@
   \item{bg}{Background color for points, for example if \code{type="p"}
   and \code{pch=21} are used. See \code{\link[graphics]{points}}.
   May be of length 1 or 3.}
+  \item{bgrect}{Optional background color for the rectangular plotting region.}
   \item{\dots}{Passed to the function \code{\link[graphics]{plot}} when it
     is called.}
 }
