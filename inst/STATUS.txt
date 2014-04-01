@@ -17,13 +17,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.32, 3/20/2014:
+Version 1.32, 4/1/2014:
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Add an additional argument to plot.scanone, bgrect, for making the
+  background of the plotting region a different color.
 
   fitqtl with model="normal" now returns residuals as an attribute.
 
