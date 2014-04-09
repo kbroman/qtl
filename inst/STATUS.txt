@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.32, 4/1/2014:
+Version 1.32, 4/9/2014:
 
 Major changes:
 
@@ -25,8 +25,11 @@ Major changes:
 
 Minor changes:
 
-  Add an additional argument to plot.scanone, bgrect, for making the
+  Added an additional argument to plot.scanone, bgrect, for making the
   background of the plotting region a different color.
+
+  Revised cleanGeno to work with any cross having two possible
+  genotypes (i.e., not just bc but also riself, risib, dh, haploid).
 
   fitqtl with model="normal" now returns residuals as an attribute.
 
