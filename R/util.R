@@ -4161,7 +4161,7 @@ function(x, jitter=FALSE)
 cleanGeno <-
 function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 {  
-  if(!(class(cross)[1] %in% c("bc", "riself", "risib", "dh", "haploid")) 
+  if(!(class(cross)[1] %in% c("bc", "riself", "risib", "dh", "haploid")))
     stop("This function currently only works for crosses with two genotypes")
 
   if(!missing(chr)) cleaned <- subset(cross, chr=chr)
