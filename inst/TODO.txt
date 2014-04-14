@@ -10,6 +10,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o Bug in mqmscan: it has problems when there are just two markers on a
+  chromosome. It gives a seg fault if you scan just that chromosome,
+  and it gives Infs in the "info" column in the results if you scan
+  that and other chromosomes.
+
 o summary.cross: table of genotypes should be separated by cross type
   (A vs X), with the X chromosome genotypes recoded.
 
