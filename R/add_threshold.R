@@ -2,8 +2,8 @@
 #
 # add_threshold.R
 #
-# copyright (c) 2006-2012, Karl W Broman, Johns Hopkins University
-# last modified Oct, 2012
+# copyright (c) 2006-2014, Karl W Broman, Johns Hopkins University
+# last modified Apr, 2014
 # first written Dec, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ function(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, ...)
   if(missing(perms))
     stop("You must specify permutation results, to get the thresholds")
   if(length(alpha) > 1 || alpha<0 || alpha>1)
-    stop("alpha should have length 1 and be between and 1.")
+    stop("alpha should have length 1 and be between 0 and 1.")
     
   thr <- summary(perms, alpha=alpha)
 
