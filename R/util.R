@@ -415,7 +415,7 @@ function(cross)
       pr <- pr[,reduced,,drop=FALSE]
       attr(pr, "map") <- map[reduced]
       for(a in attr2fix)
-        attr(pr, a) <- butes[a]
+        attr(pr, a) <- butes[[a]]
 
       cross$geno[[i]]$prob <- pr
     }
@@ -440,7 +440,7 @@ function(cross)
       dr <- dr[,reduced,,drop=FALSE]
       attr(dr, "map") <- map[reduced]
       for(a in attr2fix)
-        attr(dr, a) <- butes[a]
+        attr(dr, a) <- butes[[a]]
 
       cross$geno[[i]]$draws <- dr
     }
