@@ -97,7 +97,7 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
 {
   int i, j, k, s, flag=0, n_par;
   double **wts, *param, *oldparam;
-  int ncol0, error_flag;
+  int /* ncol0, */ error_flag;                                      // Unused variable 'ncol0' warning: Danny : 08-05-2014
   double llik, oldllik=0.0, *work1, *work2, temp, sw;
 
   /* recenter phenotype to have mean 0, for
@@ -115,7 +115,7 @@ void scanone_em_covar(int n_ind, int n_pos, int n_gen,
   work1 = (double *)R_alloc((n_par-1)*(n_par-1),sizeof(double));
   work2 = (double *)R_alloc(n_par-1, sizeof(double));
 
-  ncol0 = 1+n_addcov;
+  // ncol0 = 1+n_addcov;                                            // Unused variable 'ncol0' warning: Danny : 08-05-2014
 
   /* adjust phenotypes and covariates with weights */
   /* Note: weights are actually sqrt(weights) */
