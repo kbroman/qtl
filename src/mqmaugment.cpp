@@ -313,9 +313,9 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
-
-	  R_CheckUserInterrupt(); /* check for ^C */
-
+          #ifndef STANDALONE
+            R_CheckUserInterrupt(); /* check for ^C */
+          #endif
           debug_trace("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d\n",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
           //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker

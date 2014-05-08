@@ -53,7 +53,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   double savelogL    = logLfull;
   double maxlogL     = logLfull-10000.0;
 
-  if (verbose) info("INFO: Backward elimination of cofactors started\n");
+  //if (verbose) info("INFO: Backward elimination of cofactors started\n");
   for (int j=0; j<Nmark; j++) {
     (*newcofactor)[j]= cofactor[j];
     Ncof+=(cofactor[j]!=MNOCOF);
@@ -104,7 +104,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       if(verbose)
         info("Marker %d is dropped, resulting in logL of reduced model = %.3f",(dropj+1),ftruncate3(savelogL));
     } else {
-      if (verbose) { info("Backward selection of markers to be used as cofactors has finished.\n");  }
+      // if (verbose) { info("Backward selection of markers to be used as cofactors has finished.\n");  }
       finished=true;
     }
   }
