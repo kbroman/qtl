@@ -218,22 +218,3 @@ void copyvector(vector vsource, vector vdestination, int dim) {
     vdestination[i]= vsource[i];
   }
 }
-
-/* 
- * Some helper functions to help with pedantic compilation. Basically
- * variadic macros are replaced with (empty) function calls.
- */
-
-#ifndef ENABLE_C99_MACROS
-  void info(const char *,...)
-  {
-  }
-
-  void verbose(const char*,...)
-  {
-  }
-
-  void debug_trace(const char *, ...)
-  {
-  }
-#endif
