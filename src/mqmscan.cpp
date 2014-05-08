@@ -130,27 +130,12 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   // Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
   // Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   // Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
-  for (int j=0; j < (Nmark-1); j++) { // (Nmark-1) Should fix the out of bound in mapdistance
+  for (int j=0; j < Nmark; j++) { // WRONG: (Nmark-1) Should fix the out of bound in mapdistance, it does fix, but created problems for the last marker
     if (mqmmod(f1genotype[j], 11)!=0) {
       dropj=false;
-      if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0) dropj=true;
-    } else if ((*cofactor)[j]==MNOCOF) {
-      dropj=true;
-    } else if (position[j]==MLEFT) {
-      // (cofactor[j]!=MNOCOF) cofactor at non-segregating marker test whether next segregating marker is nearby (<20cM)
-      dropj='y';
-      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
-      else if (position[j+1]!=MRIGHT)
-        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<windowsize)) dropj=false;
-    } else if (position[j]==MMIDDLE) {
-      dropj=true;
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
-      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
-    } else if (position[j]==MRIGHT) {
-      dropj=true;
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
-      else if (position[j-1]!=MLEFT)
-        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<windowsize)) dropj=false;
+      if(j+1 < Nmark){  // Check if we can look ahead
+        if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0){ dropj=true; }
+      }
     }
     if (!dropj) {
       marker[jj]= marker[j];
