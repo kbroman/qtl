@@ -76,7 +76,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
 
   variance= -1.0;
   savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
-  if (verbose==1){ info("INFO: log-likelihood of full model= %f\n", savelogL/2); }
+//  if (verbose==1){ info("INFO: log-likelihood of full model= %f", savelogL/2); }
 
   // augment data for missing QTL observations (x 3)
   fitQTL=true;

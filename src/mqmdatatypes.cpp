@@ -66,18 +66,6 @@ MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Gen
       }
     }
   }
-  /*
-  switch(crosstype) {
-    case CF2: info("F2 cross");
-              break;
-    case CRIL: info("RIL cross");
-              break;
-    case CBC: info("Back cross (BC)");
-              break;
-    default:  Rprintf("Cross type=%d",crosstype);
-              fatal("Unknown cross");
-  }
-  */
   return crosstype;
 }
 
@@ -126,56 +114,38 @@ void *calloc_init(size_t num, size_t size) {
 }
 
 vector newvector(int dim) {
-  vector v;
-  v = (double *)calloc_init(dim, sizeof(double));
-  if (v==NULL) {
-    warning("Not enough memory for new vector of dimension %d",(dim+1));
-  }
+  vector v = (double *)calloc_init(dim, sizeof(double));
+  if(!v){ warning("Not enough memory for new vector of dimension %d", (dim+1)); }
   return v;
 }
 
 ivector newivector(int dim) {
-  ivector v;
-  v = (int *)calloc_init(dim, sizeof(int));
-  if (v==NULL) {
-    warning("Not enough memory for new vector of dimension %d",(dim+1));
-  }
+  ivector v = (int *)calloc_init(dim, sizeof(int));
+  if(!v){ warning("Not enough memory for new vector of dimension %d", (dim+1)); }
   return v;
 }
 
 cvector newcvector(int dim) {
-  cvector v;
-  v = (char *)calloc_init(dim, sizeof(char));
-  if (v==NULL) {
-    warning("Not enough memory for new vector of dimension %d",(dim+1));
-  }
+  cvector v = (char *)calloc_init(dim, sizeof(char));
+  if(!v){ warning("Not enough memory for new vector of dimension %d", (dim+1)); }
   return v;
 }
 
 MQMMarkerVector newMQMMarkerVector(int dim) {
-  MQMMarkerVector v;
-  v = (MQMMarker *)calloc_init(dim, sizeof(MQMMarker));
-  if (v==NULL) {
-    warning("Not enough memory for new vector of dimension %d",(dim+1));
-  }
+  MQMMarkerVector v = (MQMMarker *)calloc_init(dim, sizeof(MQMMarker));
+  if(!v){ warning("Not enough memory for new mqm marker vector of dimension %d", (dim+1)); }
   return v;
 }
 
 relmarkerarray newRelMarkerPos(int dim){
-  relmarkerarray v;
-  v = (MQMRelMarkerPos *)calloc_init(dim, sizeof(char));
-  if (v==NULL) {
-    warning("Not enough memory for the relative marker position vector with dimension %d",(dim+1));
-  }
+  relmarkerarray v = (MQMRelMarkerPos *)calloc_init(dim, sizeof(char));
+  if(!v){ warning("Not enough memory for the relative marker position vector with dimension %d",(dim+1)); }
   return v;
 }
 
 matrix newmatrix(int rows, int cols) {
-  matrix m;
-  m = (double **)calloc_init(rows, sizeof(double*));
-  if (m==NULL) {
-    warning("Not enough memory for new double matrix");
-  }
+  matrix m = (double **)calloc_init(rows, sizeof(double*));
+  if(!m){ warning("Not enough memory for new double matrix"); }
   for (int i=0; i<rows; i++) {
     m[i]= newvector(cols);
   }
@@ -183,17 +153,15 @@ matrix newmatrix(int rows, int cols) {
 }
 
 void printmatrix(matrix m, int rows, int cols) {
-
   for (int r=0; r<rows; r++) {
     for (int c=0; c<cols; c++) {
-      info("%f",m[r][c]);
+      Rprintf("%f\t",m[r][c]);
     }
-    info("col done");
+    Rprintf("\n");
   }
 }
 
 void printcmatrix(cmatrix m, int rows, int cols) {
-
   for (int r=0; r<rows; r++) {
     for (int c=0; c<cols; c++) {
       Rprintf("%c\t",m[r][c]);
@@ -203,11 +171,8 @@ void printcmatrix(cmatrix m, int rows, int cols) {
 }
 
 cmatrix newcmatrix(int rows, int cols) {
-  cmatrix m;
-  m = (char **)calloc_init(rows, sizeof(char*));
-  if (m==NULL) {
-    warning("Not enough memory for new char matrix");
-  }
+  cmatrix m = (char **)calloc_init(rows, sizeof(char*));
+  if(!m){ warning("Not enough memory for new char matrix"); }
   for (int i=0; i<rows; i++) {
     m[i]= newcvector(cols);
   }
@@ -216,11 +181,8 @@ cmatrix newcmatrix(int rows, int cols) {
 
 
 MQMMarkerMatrix newMQMMarkerMatrix(int rows, int cols) {
-  MQMMarkerMatrix m;
-  m = (MQMMarkerMatrix)calloc_init(rows, sizeof(MQMMarkerVector));
-  if (m==NULL) {
-    warning("Not enough memory for new markermatrix");
-  }
+  MQMMarkerMatrix m = (MQMMarkerMatrix)calloc_init(rows, sizeof(MQMMarkerVector));
+  if(!m){ warning("Not enough memory for new markermatrix"); }
   for (int i=0; i<rows; i++) {
     m[i]= newMQMMarkerVector(cols);
   }
@@ -232,7 +194,7 @@ void freevector(void *v) {
 }
 
 void freematrix(void **m, size_t rows) {
-  for (size_t i=0; i<rows; i++) {
+  for (size_t i = 0; i < rows; i++) {
     Free(m[i]);
   }
   Free(m);
@@ -252,27 +214,7 @@ void delMQMMarkerMatrix(MQMMarkerMatrix m, size_t rows) {
 
 
 void copyvector(vector vsource, vector vdestination, int dim) {
-
-  for (int i=0; i<dim; i++) {
+  for(int i=0; i<dim; i++) {
     vdestination[i]= vsource[i];
   }
 }
-
-/* 
- * Some helper functions to help with pedantic compilation. Basically
- * variadic macros are replaced with (empty) function calls.
- */
-
-#ifndef ENABLE_C99_MACROS
-  void info(const char *,...)
-  {
-  }
-
-  void verbose(const char*,...)
-  {
-  }
-
-  void debug_trace(const char *, ...)
-  {
-  }
-#endif
