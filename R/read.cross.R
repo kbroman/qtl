@@ -2,8 +2,8 @@
 #
 # read.cross.R
 #
-# copyright (c) 2000-9, Karl W Broman
-# last modified Dec, 2009
+# copyright (c) 2000-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,8 +39,7 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
          na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
          alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE,
          error.prob=0.0001, map.function=c("haldane", "kosambi", "c-f", "morgan"),
-         BC.gen = 0, F.gen = 0,
-         ...)
+         BC.gen = 0, F.gen = 0, crosstype, ...)
 {
   if(format == "csvrs") {
     format <- "csvsr"
@@ -180,6 +179,13 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   }
 
   attr(cross, "alleles") <- alleles
+
+  type <- class(cross)[1]
+  if(!missing(crosstype)) {
+    if(crosstype=="risib") cross <- convert2risib(cross)
+    else if(crosstype=="riself") cross <- convert2riself(cross)
+    else class(cross)[1] <- crosstype
+  }
 
   # run checks
   summary(cross)

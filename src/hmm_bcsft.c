@@ -649,7 +649,7 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
   allocate_dmatrix(n_gen, n_gen, &gamma);
   allocate_double(*n_mar-1, &cur_rf);
   allocate_dmatrix(*n_mar, 10, &countmat);
-  allocate_dmatrix(*n_mar, 10, &probmat);
+  allocate_dmatrix(*n_mar-1, 10, &probmat);
 
   /* digits in verbose output */
   if(*verbose) {
@@ -665,6 +665,10 @@ void est_map_bcsft(int *n_ind, int *n_mar, int *geno, double *rf,
       cur_rf[j] = rf[j];
        
     /* initialize step_bcsftb calculations */
+    if(*verbose > 1) {
+      Rprintf("init_stepf %f %d %d %d %d\n",
+	      cur_rf[0], n_gen, n_mar[0], cross_scheme[0], cross_scheme[1]);
+    }
     init_stepf(cur_rf, cur_rf, n_gen, *n_mar, cross_scheme, step_bcsftb, probmat);
       
     /*** reset counts for countmat ***/

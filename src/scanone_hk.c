@@ -2,9 +2,9 @@
  * 
  * scanone_hk.c
  *
- * copyright (c) 2001-2010, Karl W Broman
+ * copyright (c) 2001-2014, Karl W Broman
  *
- * last modified Jul, 2010
+ * last modified Mar, 2014
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@ void R_scanone_hk(int *n_ind, int *n_pos, int *n_gen,
 		  double *weights, double *result, 
 		  int *ind_noqtl)
 {
-  double ***Genoprob, **Result, **Addcov, **Intcov;
+  double ***Genoprob, **Result, **Addcov=0, **Intcov=0;
 
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
   reorg_errlod(*n_pos, *nphe, result, &Result); 

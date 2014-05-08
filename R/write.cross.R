@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-2013, Karl W Broman and Hao Wu
-# last modified Apr, 2013
+# copyright (c) 2001-2014, Karl W Broman and Hao Wu
+# last modified Feb, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -94,7 +94,7 @@ function(cross, filestem="data", digits=NULL)
   n.mar <- nmar(cross)
   
   type <- class(cross)[1]
-  if(type=="riself" || type=="risib" || type=="dh") type <- "bc"
+  if(type=="riself" || type=="risib" || type=="dh" || type=="haploid") type <- "bc"
   if(type != "f2" && type != "bc")
     stop("write.cross.mm only works for intercross, backcross, doubled haploid and RI data.")
 
@@ -212,8 +212,8 @@ write.cross.csv <-
 function(cross, filestem="data", digits=NULL, rotate=FALSE, split=FALSE)
 {
   type <- class(cross)[1]
-  if(type != "f2" && type != "bc" && type != "riself" && type != "risib" && type != "dh")
-    stop("write.cross.csv only works for intercross, backcross, RI, and doubled haploid data.")
+  if(type != "f2" && type != "bc" && type != "riself" && type != "risib" && type != "dh" && type != "haploid")
+    stop("write.cross.csv only works for intercross, backcross, RI, doubled haploid, and haploid data.")
 
   if(!split) 
     file <- paste(filestem, ".csv", sep="")
@@ -247,10 +247,11 @@ function(cross, filestem="data", digits=NULL, rotate=FALSE, split=FALSE)
                  paste(alle[2],alle[2],sep=""),
                  paste("not ", alle[2],alle[2],sep=""),
                  paste("not ", alle[1],alle[1],sep=""))
-
-    if(type=="dh" || type=="riself" || type=="risib") alleles[2:3] <- alleles[3:2]
   }
   else alleles <- c("A","H","B","D","C")
+
+  if(type=="dh" || type=="riself" || type=="risib") alleles[2:3] <- alleles[3:2]
+  else if(type=="haploid") alleles <- alle
 
   firstmar <- 1
   for(i in 1:n.chr) {

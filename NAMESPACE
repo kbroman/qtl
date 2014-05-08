@@ -4,6 +4,9 @@ useDynLib(qtl)
 import(graphics, stats, utils, parallel)
 
 # Export all names
+export(reduce2grid)
+export(formMarkerCovar)
+export(nqtl)
 export(addmarker)
 export(inferFounderHap)
 export(pull.genoprob, pull.argmaxgeno, pull.draws)
@@ -49,7 +52,18 @@ export(summaryMap, summary.map, switch.order, switchAlleles, top.errorlod)
 export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc.scanone)
 export(clean, condense, convert)
 export(summaryScantwoOld, summary.scantwo.old)
+export(reviseXdata)
 
+
+# used by funqtl
+export(checkStepwiseqtlStart)
+export(checkformula)
+export(countqtlterms)
+export(deparseQTLformula)
+export(fitqtlengine)
+export(matchchr)
+export(parseformula)
+export(reviseqtlnuminformula)
 
 
 # S3 methods

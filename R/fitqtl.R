@@ -3,7 +3,7 @@
 # fitqtl.R
 #
 # copyright (c) 2002-2013, Hao Wu and Karl W. Broman
-# last modified Feb, 2013
+# last modified Sep, 2013
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -328,6 +328,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               design.mat=as.double(rep(0,sizefull*n.ind)),
               as.double(tol),
               as.integer(maxit),
+              matrix.rank=as.integer(0), # on return, minimum of matrix rank across imputations
               PACKAGE="qtl")
     }
     else {
@@ -351,10 +352,10 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
               # convergence
               as.double(tol),
               as.integer(maxit),
+              matrix.rank=as.integer(0), # on return, rank of matrix
               PACKAGE="qtl")
     }
 
-    z$matrix.rank <- NULL
   }
   matrix.rank <- z$matrix.rank
   matrix.ncol <- sizefull
@@ -805,6 +806,7 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   as.double(rep(0,n.ind*sizefull)),
                   as.double(tol),
                   as.integer(maxit),
+                  matrix.rank=as.integer(0),
                   PACKAGE="qtl")
         }
         else {
@@ -828,9 +830,9 @@ function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
                   # convergence
                   as.double(tol),
                   as.integer(maxit),
+                  matrix.rank = as.integer(0),
                   PACKAGE="qtl")
         }
-        z$matrix.rank <- NULL
       }
 
       if(model=="normal" && adjustX) # adjust for X chromosome covariates

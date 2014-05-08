@@ -126,7 +126,7 @@ MQMMarker randommarker(const MQMCrossType crosstype){
       }
     break;
     case CUNKNOWN:
-      fatal("Strange: unknown crosstype in mqm augment()");
+      fatal("Strange: unknown crosstype in mqm augment()", "");
     break;
   }
   return MMISSING;
@@ -344,7 +344,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 prob2right= right_prob_RIL(MBB, j, imarker, r, position);                
               break;
               case CUNKNOWN:
-                fatal("Strange: unknown crosstype in mqm augment()");
+                fatal("Strange: unknown crosstype in mqm augment()", "");
               break;
             }
             prob1= prob1left*prob1right;
@@ -408,7 +408,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 prob1right= right_prob_RIL(MH, j, imarker, r, position);              
               break;
               case CUNKNOWN:
-                fatal("Strange: unknown crosstype in mqm augment()");
+                fatal("Strange: unknown crosstype in mqm augment()", "");
               break;
             }
             prob0= prob0left*prob0right;
@@ -477,7 +477,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 prob2right= right_prob_RIL(MBB, j, imarker, r, position);              
               break;
               case CUNKNOWN:
-                fatal("Strange: unknown crosstype in mqm augment()");
+                fatal("Strange: unknown crosstype in mqm augment()", "");
               break;
             }            
             prob0= prob0left*prob0right;
@@ -759,7 +759,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
     Free(position);
     Free(r);
     Free(chr);
-    fatal("Data augmentation failed");
+    fatal("Data augmentation failed", "");
   }
   return;
 }

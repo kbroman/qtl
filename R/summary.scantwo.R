@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-2012, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Mar, 2012
+# copyright (c) 2001-2014, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Mar, 2014
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -261,7 +261,6 @@ function(object, thresholds,
     lav1 <- out$int.lod.add - out$lod.1qtl
   }
 
-
   out <- data.frame(chr1=out$chr1, chr2=out$chr2,
                     pos1f=p1.f,
                     pos2f=p2.f,
@@ -326,7 +325,8 @@ function(object, for.perm=FALSE)
   map <- object$map
 
   pos <- map[,2]
-  chr <- factor(map[,1])
+  chr <- map[,1]
+
   tchr <- as.numeric(chr)
   n.chr <- max(tchr)
   xchr <- tapply(map[,4], map[,1], function(a) a[1])
@@ -384,8 +384,8 @@ function(object, for.perm=FALSE)
             lod.1qtl=as.double(fill),
             PACKAGE="qtl")
   
-  chr1 <- levels(chr)[out$chr1+1]
-  chr2 <- levels(chr)[out$chr2+1]
+  chr1 <- factor(levels(chr)[out$chr1+1], levels=levels(chr))
+  chr2 <- factor(levels(chr)[out$chr2+1], levels=levels(chr))
 
   if(n.phe == 1)
     out <- data.frame(chr1=chr1, chr2=chr2,

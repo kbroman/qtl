@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2013, Karl W Broman and Hao Wu
-# last modified Apr, 2013
+# copyright (c) 2001-2014, Karl W Broman and Hao Wu
+# last modified Jan, 2014
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -85,20 +85,34 @@ function(cross, chr, pheno.col=1,
 
   if(!missing(n.perm) && n.perm > 0 && n.cluster > 1) {
     cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
-    RNGkind("L'Ecuyer-CMRG")
-    cl <- makeCluster(n.cluster)
-    clusterStopped <- FALSE
-    on.exit(if(!clusterStopped) stopCluster(cl))
-    clusterEvalQ(cl, require(qtl, quietly=TRUE))
+    updateParallelRNG(n.cluster)
     n.perm <- ceiling(n.perm/n.cluster)
-    operm <- clusterCall(cl, scantwo, cross=cross, chr=chr, pheno.col=pheno.col,
-                         model=model, method=method, addcovar=addcovar, intcovar=intcovar,
-                         weights=weights, incl.markers=incl.markers, clean.output=clean.output,
-                         clean.nmar=clean.nmar, clean.distance=clean.distance,
-                         maxit=maxit, tol=tol, verbose=FALSE, n.perm=n.perm, perm.strata=perm.strata, 
-                         assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0)
-    stopCluster(cl)
-    clusterStopped <- TRUE
+    scantwoPermInParallel <- function(n.perm, cross, chr, pheno.col, model, method, addcovar, intcovar, weights,
+                                      incl.markers, clean.output, clean.nmar, clean.distance, maxit, tol,
+                                      perm.strata, assumeCondIndep, batchsize)
+        scantwo(cross=cross, chr=chr, pheno.col=pheno.col, model=model, method=method, addcovar=addcovar,
+                intcovar=intcovar, weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                clean.nmar=clean.nmar, clean.distance=clean.distance, maxit=maxit, tol=tol, perm.strata=perm.strata,
+                assumeCondIndep=assumeCondIndep, batchsize=batchsize, n.cluster=0, verbose=FALSE, n.perm=n.perm)
+
+    if(Sys.info()[1] == "Windows") { # Windows doesn't support mclapply, but it's faster if available
+      cl <- makeCluster(n.cluster)
+      on.exit(stopCluster(cl))
+      operm <- clusterApply(cl, rep(n.perm, n.cluster), scantwoPermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
+                            model=model, method=method, addcovar=addcovar, intcovar=intcovar,
+                            weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                            clean.nmar=clean.nmar, clean.distance=clean.distance,
+                            maxit=maxit, tol=tol, perm.strata=perm.strata,
+                            assumeCondIndep=assumeCondIndep, batchsize=batchsize)
+    }
+    else {
+      operm <- mclapply(rep(n.perm, n.cluster), scantwoPermInParallel, cross=cross, chr=chr, pheno.col=pheno.col,
+                        model=model, method=method, addcovar=addcovar, intcovar=intcovar,
+                        weights=weights, incl.markers=incl.markers, clean.output=clean.output,
+                        clean.nmar=clean.nmar, clean.distance=clean.distance,
+                        maxit=maxit, tol=tol, perm.strata=perm.strata,
+                        assumeCondIndep=assumeCondIndep, batchsize=batchsize, mc.cores=n.cluster)
+    }
     for(j in 2:length(operm))
       operm[[1]] <- c(operm[[1]], operm[[j]])
     return(operm[[1]])

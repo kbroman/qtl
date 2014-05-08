@@ -15,7 +15,9 @@ augmentation see the MQM tutorial online.
 }
 
 \usage{
-mqmaugment(cross, maxaugind=82, minprob=0.1, strategy=c("default","impute","drop"), verbose=FALSE)
+mqmaugment(cross, maxaugind=82, minprob=0.1,
+           strategy=c("default","impute","drop"),
+           verbose=FALSE)
 }
 
 \arguments{

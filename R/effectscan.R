@@ -2,9 +2,9 @@
 #
 # effectscan.R
 #
-# copyright (c) 2003-2012, Karl W. Broman
+# copyright (c) 2003-2013, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Mar, 2012
+# last modified Sep, 2013
 # first written Jan, 2003
 #
 #     This program is free software; you can redistribute it and/or
@@ -91,7 +91,7 @@ function(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
     }
     else marnam <- names(map)
 
-    if(type == "risib" || type=="riself" || type=="dh") {
+    if(type == "risib" || type=="riself" || type=="dh" || type=="haploid") {
       mapping <- rbind(c(+1, -1),
                        c(+1, +1))
       colnames(mapping) <- c("intercept","a")

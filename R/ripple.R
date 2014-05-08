@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Apr, 2013
+# copyright (c) 2001-2014, Karl W Broman
+# last modified Mar, 2014
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -168,7 +168,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
         func <- "R_ripple_f2"
       else func <- "R_ripple_bc"        # X chromsome  
     }
-    else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) func <- "R_ripple_bc"
+    else if(type %in% c("bc", "riself", "risib", "dh", "haploid", "bcsft")) func <- "R_ripple_bc"
     else if(type == "4way") func <- "R_ripple_4way"
     else if(type=="ri4self" || type=="ri8self" || type=="ri4sib" || type=="ri8sib" || type=="bgmagic16")
       func <- "R_ripple_ril48"
@@ -238,7 +238,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
 }
 
 ######################################################################
-# function for method="likelihood", for snow 
+# function for method="likelihood", for parallel processing (formerly with snow pkg)
 ######################################################################
 rippleSnowLik <-
 function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
@@ -260,11 +260,12 @@ function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
 
 
 ######################################################################
-# function for method="countxo", for snow
+# function for method="countxo", for parallel processing (formerly with snow pkg)
 ######################################################################
 rippleSnowCountxo <-
 function(orders, genodat, func)
 {
+  func <- func
   .C(func,
      as.integer(nrow(genodat)),
      as.integer(ncol(genodat)),

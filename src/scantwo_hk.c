@@ -2,9 +2,9 @@
  * 
  * scantwo_hk.c
  *
- * copyright (c) 2001-2011, Karl W Broman
+ * copyright (c) 2001-2014, Karl W Broman
  *
- * last modified Jul, 2011
+ * last modified Mar, 2014
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ void R_scantwo_1chr_hk(int *n_ind, int *n_pos, int *n_gen,
 		       double *pheno, int* nphe, double *weights, 
 		       double *result, int *n_col2drop, int *col2drop)
 {
-  double ***Genoprob, ***Result, **Addcov, **Intcov, *****Pairprob;
+  double ***Genoprob, ***Result, **Addcov=0, **Intcov=0, *****Pairprob;
 
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
   reorg_pairprob(*n_ind, *n_pos, *n_gen, pairprob, &Pairprob);
@@ -419,7 +419,7 @@ void R_scantwo_2chr_hk(int *n_ind, int *n_pos1, int *n_pos2,
 		       double *result_full, double *result_add)
 {
   double ***Genoprob1, ***Genoprob2, ***Result_full, ***Result_add;
-  double **Addcov, **Intcov;
+  double **Addcov=0, **Intcov=0;
 
   reorg_genoprob(*n_ind, *n_pos1, *n_gen1, genoprob1, &Genoprob1);
   reorg_genoprob(*n_ind, *n_pos2, *n_gen2, genoprob2, &Genoprob2);

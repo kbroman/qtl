@@ -2,9 +2,9 @@
  * 
  * scanone_ehk.c
  *
- * copyright (c) 2006-7, Karl W Broman
+ * copyright (c) 2006-2014, Karl W Broman
  *
- * last modified Aug, 2007
+ * last modified Mar, 2014
  * first written Jul, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@ void R_scanone_ehk(int *n_ind, int *n_pos, int *n_gen,
 		   double *weights, double *result, int *maxit,
 		   double *tol)
 {
-  double ***Genoprob, **Addcov, **Intcov;
+  double ***Genoprob, **Addcov=0, **Intcov=0;
 
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
 

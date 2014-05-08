@@ -41,7 +41,7 @@ void init_stepf(double *rf, double *rf2, int n_gen, int n_mar, int *cross_scheme
 {
   int j,obs1,obs2,tmp1;
   
-  for(j=0; j<n_mar; j++) {
+  for(j=0; j<n_mar-1; j++) {
     for(obs2=1; obs2<=n_gen; obs2++) {
       tmp1 = ((obs2 * (obs2 - 1)) / 2) - 1;
       for(obs1=1; obs1<=obs2; obs1++)

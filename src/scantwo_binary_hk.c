@@ -2,9 +2,9 @@
  * 
  * scantwo_binary_hk.c
  *
- * copyright (c) 2010, Karl W Broman
+ * copyright (c) 2010-2014, Karl W Broman
  *
- * last modified Jun, 2010
+ * last modified Mar, 2014
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ void R_scantwo_1chr_binary_hk(int *n_ind, int *n_pos, int *n_gen,
 			      double *result, int *n_col2drop, int *col2drop,
 			      double *tol, int *maxit, int *verbose)
 {
-  double ***Genoprob, **Result, **Addcov, **Intcov, *****Pairprob;
+  double ***Genoprob, **Result, **Addcov=0, **Intcov=0, *****Pairprob;
 
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
   reorg_pairprob(*n_ind, *n_pos, *n_gen, pairprob, &Pairprob);
@@ -408,7 +408,7 @@ void R_scantwo_2chr_binary_hk(int *n_ind, int *n_pos1, int *n_pos2,
 			      double *tol, int *maxit, int *verbose)
 {
   double ***Genoprob1, ***Genoprob2, **Result_full, **Result_add;
-  double **Addcov, **Intcov;
+  double **Addcov=0, **Intcov=0;
 
   reorg_genoprob(*n_ind, *n_pos1, *n_gen1, genoprob1, &Genoprob1);
   reorg_genoprob(*n_ind, *n_pos2, *n_gen2, genoprob2, &Genoprob2);
