@@ -41,7 +41,7 @@
 
 
 int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const bool dominance){
-  int dimx=1;
+  int dimx = 1;
   for (unsigned int j=0; j<nmark; j++){
     if (cofactor[j]==MCOF) dimx+= ((!dominance) ? 1 : 2);  // per QTL only additivity !!
     else if (cofactor[j]==MSEX) {
@@ -62,28 +62,21 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   MSEX: QTL at locus j, but QTL effect is not included in the model
   MQTL: QTL at locu j and QTL effect is included in the model
   */
-	//for (int j=0; j<Naug; j++){
-	//   debug_trace("J:%d, COF:%d, VAR:%f, WEIGHT:%f, Trait:%f, IND[j]:%d\n", j, cofactor[j], *variance, (*weight)[j], y[j], ind[j]);
-  //}
 
-  matrix XtWX;
-  cmatrix Xt;
-  vector XtWY;
   //Calculate the dimensions of the designMatrix
   int dimx=designmatrixdimensions(cofactor,Nmark,dominance);
   int j, jj;
   const int dimx_alloc = dimx+2;
   //Allocate structures
-  XtWX= newmatrix(dimx_alloc, dimx_alloc);
-  Xt  = newcmatrix(dimx_alloc, Naug);
-  XtWY= newvector(dimx_alloc);
+  matrix  XtWX = newmatrix(dimx_alloc, dimx_alloc);
+  cmatrix Xt   = newcmatrix(dimx_alloc, Naug);
+  vector  XtWY = newvector(dimx_alloc);
   //Reset dimension designmatrix
-  dimx=1;
+  dimx = 1;
   for (j=0; j<Nmark; j++){
     if ((cofactor[j]==MCOF)||(cofactor[j]==MQTL)) dimx+= (dominance ? 2 : 1);
   }
-  cvector xtQTL; 
-  xtQTL= newcvector(dimx);
+  cvector xtQTL = newcvector(dimx);
   int jx=0;
   for (int i=0; i<Naug; i++) Xt[jx][i]= MH;
   xtQTL[jx]= MNOCOF;
@@ -190,20 +183,15 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   }
 
   int d;
-  ivector indx;
-  indx= newivector(dimx);
+  ivector indx= newivector(dimx);
   /* solve equations */
   ludcmp(XtWX, dimx, indx, &d);
   lusolve(XtWX, dimx, indx, XtWY);
 
-  long double *indL;
-  // long double indL[Nind];
-  indL = (long double *)Calloc(Nind, long double);
-  int newNaug;
-  newNaug= ((!fitQTL) ? Naug : 3*Naug);
-  vector fit, resi;
-  fit= newvector(newNaug);
-  resi= newvector(newNaug);
+  long double* indL = (long double *)Calloc(Nind, long double);
+  int newNaug       = ((!fitQTL) ? Naug : 3*Naug);
+  vector fit        = newvector(newNaug);
+  vector resi       = newvector(newNaug);
   debug_trace("Calculate residuals\n");
   if (*variance<0) {
     *variance= 0.0;
@@ -295,8 +283,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       indL[ind[i]]+=(*weight)[i+2*Naug]*Fy[i+2*Naug];
     }
   }
-  for (int i=0; i<Nind; i++) {
-    //Sum up log likelihoods for each individual
+  for (int i=0; i<Nind; i++) { //Sum up log likelihoods for each individual
     logL+= log(indL[i]);
   }
   Free(indL);
@@ -319,8 +306,8 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
 void ludcmp(matrix m, int dim, ivector ndx, int *d) {
   int r, c, rowmax, i;
   double max, temp, sum;
-  vector scale, swap;
-  scale= newvector(dim);
+  vector swap;
+  vector scale = newvector(dim);
   *d=1;
   for (r=0; r<dim; r++) {
     for (max=0.0, c=0; c<dim; c++) if ((temp=fabs(m[r][c])) > max) max=temp;
