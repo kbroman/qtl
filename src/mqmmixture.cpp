@@ -270,7 +270,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   while ((iem<em)&&(delta>1.0e-5)) {
     iem+=1;
     if (!varknown) *variance=-1.0;
-    logL = regression(Nind, Nloci, cofactor, loci, y, weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance);
+    logL = regression(Nind, Nloci, cofactor, loci, y, weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance, verbose);
     logL = 0.0;
     for (i=0; i<Nind; i++) indL[i]= 0.0;
     if (!fitQTL) // no QTL fitted
@@ -306,9 +306,9 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   if ((useREML)&&(!varknown)) { // Bias adjustment after finished ML estimation via EM
     *variance=-1.0;
     biasadj=true;
-    logL = regression(Nind, Nloci, cofactor, loci, y, weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance);
+    logL = regression(Nind, Nloci, cofactor, loci, y, weight, ind, Naug, variance, Fy, biasadj, fitQTL, dominance, verbose);
     logL = 0.0;
-    for (int _i=0; _i<Nind; _i++) indL[_i]= 0.0;
+    for (int _i=0; _i < Nind; _i++){ indL[_i]= 0.0; }
     if (!fitQTL)
       for (i=0; i<Naug; i++) {
         (*weight)[i]= Ploci[i]*Fy[i];
