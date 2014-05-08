@@ -2,9 +2,9 @@
  * 
  * scantwo_mr.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2014, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Mar, 2014
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ void R_scantwo_1chr_mr(int *n_ind, int *n_pos, int *n_gen, int *geno,
 		       int *n_col2drop, int *col2drop)
 {
   int **Geno;
-  double **Result, **Addcov, **Intcov;
+  double **Result, **Addcov=0, **Intcov=0;
 
   reorg_geno(*n_ind, *n_pos, geno, &Geno);
   reorg_errlod(*n_pos, *n_pos, result, &Result);
@@ -336,7 +336,7 @@ void R_scantwo_2chr_mr(int *n_ind, int *n_pos1, int *n_pos2,
 		       double *result_full, double *result_add)
 {
   int **Geno1, **Geno2;
-  double **Result_full, **Result_add, **Addcov, **Intcov;
+  double **Result_full, **Result_add, **Addcov=0, **Intcov=0;
 
   reorg_geno(*n_ind, *n_pos1, geno1, &Geno1);
   reorg_geno(*n_ind, *n_pos2, geno2, &Geno2);

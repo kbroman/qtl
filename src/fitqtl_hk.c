@@ -2,9 +2,9 @@
  * 
  * fitqtl_hk.c
  *
- * copyright (c) 2007-8, Karl W Broman
+ * copyright (c) 2007-2014, Karl W Broman
  *
- * last modified Jan, 2008
+ * last modified Mar, 2014
  * first written Nov, 2007
  *
  *     This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
 		 double *lod, int *df, double *ests, double *ests_covar,
 		 double *design_mat, int *matrix_rank)
 {
-  double ***Genoprob=0, **Cov;
+  double ***Genoprob=0, **Cov=0;
   int tot_gen, i, j, curpos;
 
   /* reorganize genotype probabilities */
@@ -124,7 +124,7 @@ void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
   /* create local variables */
   int i, j, n_qc, itmp; /* loop variants and temp variables */
   double lrss, lrss0;
-  double *dwork, **Ests_covar;
+  double *dwork, **Ests_covar=0;
   int *iwork, sizefull;
 
   /* initialization */

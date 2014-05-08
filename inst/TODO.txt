@@ -10,37 +10,29 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o Include genetic map as an attribute in scanone results and use that
+  to plot marker positions.
+
+o effectplot and effectscan with method="hk" as well as "imp"
+
+o calc.penalties could take the result of summary.scanone in place of
+  permutation results.
+
+o mapmaker format: if genetic map file is missing, create a bogus
+  one.
+
+o Fix documentation for fitqtl: estimated effects work except such and
+  such cases (X chromosome, and 4-way crosses). Might not work right
+  for all other cases, but if that's true we should fix it.
+
+o Revise rqtltour and rqtltour2 to emphasize the use of RStudio.
+  Suggest using download.file() and then loading with File -> Open
+  rather than using url.show()
+
 o calc.genoprob: calculate genotype probabilities at a pre-specified
   map
 
-o Add cross type "haploid" with genotype names like "A" and "B" rather
-  than "AA" and "AB", but otherwise treat like a backcross (along the
-  lines of "dh").
-
-o stepwiseqtl: "initial lod: " printed even if verbose=FALSE
-
-o New function: nqtl <- function(qtl) ifelse(length(qtl)==0,0,length(qtl$chr))
-
-o Add to help file for ploxPXG: example on grabbing the results
-  (Same for effectplot?)
-
-    table(out[,1], out[,3])
-    data(hyper)
-    out <- plotPXG(hyper, "D1Mit123")
-    out[1:5,]
-    table(out[,1], out[,3])
-    out[ out[,3] == 1, ]
-
 o Add pheno.col type arguments to all of the MQM functions
-
-o revise use of snow package to use parallel instead
-
-  library(parallel)
-  cl <- makeCluster(detectCores())
-  clusterSetRNGStream(cl)
-  clusterEvalQ(cl, library(qtl))
-  results <- clusterApply(cl, blah)
-  stopCluster(cl)
 
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
@@ -80,9 +72,7 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
 
   Also, I need to use as.numeric() on the thresholds
 
-o Helper function for create.map to identify locations on the grid
-
-o Use snow() with orderMarkers
+o Use library(parallel) with orderMarkers
 
 o beeswarm package for plot.pxg
 
@@ -125,9 +115,6 @@ o Bug in plot.scantwo: contours=TRUE gives warning:
   Also: maybe change the color of the contour.
 
 o max.scantwo could take a chr argument
-
-o Add cross type as argument to read.cross; attempt to convert data to
-  that type.
 
 o In sim.cross, do the qtl get sorted by genomic position?  And then
   do the qtlgeno need to be reordered back?
@@ -220,9 +207,6 @@ o Documentation on RI lines.
 MEDIUM TERM:
 
 o eQTL-related stuff:
-
-  - Compressing calc.genoprob results (simpler version of locations,
-    or just the grid)
 
   - Mb positions within cross object; multiple genetic maps
 

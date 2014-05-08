@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-2012, Karl W. Broman
-# last modified Aug, 2012
+# copyright (c) 2006-2014, Karl W. Broman
+# last modified Feb, 2014
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -118,20 +118,24 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 
   cross <- subset(cross, chr=as.character(unique(chr))) # pull out just those chromosomes
 
+  # save map in the object
+  map <- attr(qtl, "map")
+
   if(qtl$n.ind != nind(cross)) {
     warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
     if(method=="imp")
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
     else
       qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
+    attr(qtl, "map") <- map
   }
   if(method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
     warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
     qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
+    attr(qtl, "map") <- map
   }
 
   # minimum distance between pseudomarkers
-  map <- attr(qtl, "map")
   if(is.null(map))
     stop("Input qtl object should contain the genetic map.")
   mind <- min(sapply(map, function(a) { if(is.matrix(a)) a <- a[1,]; min(diff(a)) }))/2
@@ -408,7 +412,8 @@ function(cross, pheno.col=1, qtl, chr, pos, qtl.name, covar=NULL, formula,
 plotLodProfile <-
 function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
          qtl.labels=TRUE, mtick=c("line", "triangle"),
-         show.marker.names=FALSE, alternate.chrid=FALSE, add=FALSE, ...)
+         show.marker.names=FALSE, alternate.chrid=FALSE, add=FALSE,
+         showallchr=FALSE, labelsep=5, ...)
 {
   if(!("qtl" %in% class(qtl)))
     stop("Input qtl is not a qtl object")
@@ -467,7 +472,8 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
   thechr <- unique(qtl$chr)
   orderedchr <- names(map)
-  chr2keep <- which(!is.na(match(orderedchr, thechr)))
+  if(showallchr) chr2keep <- seq(along=orderedchr)
+  else chr2keep <- which(!is.na(match(orderedchr, thechr)))
 
   tempscan <- NULL
   for(i in chr2keep) {
@@ -479,7 +485,11 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   }
   class(tempscan) <- c("scanone", "data.frame")
 
-  if(missing(chr)) chr <- thechr
+  if(missing(chr)) {
+    if(showallchr) chr <- orderedchr
+    else chr <- thechr
+  }
+  
   dontskip <- which(!is.na(match(qtl$chr, chr)))
   if(length(dontskip)==0)
     stop("Nothing to plot.")
@@ -499,7 +509,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     if("ylim" %in% names(dots)) {
       plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                    mtick=mtick, show.marker.names=show.marker.names,
-                   alternate.chrid=alternate.chrid, col="white", ...)
+                   alternate.chrid=alternate.chrid, type="n", ...)
     }
     else {
       if(qtl.labels)
@@ -509,7 +519,7 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
       plot.scanone(tempscan, chr=chr, incl.markers=incl.markers, gap=gap,
                    mtick=mtick, show.marker.names=show.marker.names,
-                   alternate.chrid=alternate.chrid, col="white", ylim=ylim,
+                   alternate.chrid=alternate.chrid, type="n", ylim=ylim,
                    ...)
     }
   }
@@ -528,8 +538,8 @@ function(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
 
     if(qtl.labels) {
       maxlod <- max(temp[,3], na.rm=TRUE)
-      maxpos <- temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]]
-      d <- min(c(1, diff(par("usr")[3:4]*0.05)))
+      maxpos <- median(temp[!is.na(temp[,3]) & temp[,3]==maxlod,2] + start[qtl$chr[i]])
+      d <- diff(par("usr")[3:4]*labelsep/100)
 
       text(maxpos, maxlod + d, names(lodprof)[i], col=col[i], font=(lwd[i]>1)+1, ...)
     }

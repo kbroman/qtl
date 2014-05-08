@@ -2,8 +2,8 @@
 #
 # countXO.R
 #
-# copyright (c) 2008-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2008-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Feb, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ function(cross, chr, bychr=FALSE)
         func <- "R_countXO_f2"
       else func <- "R_countXO_bc"        # X chromsome  
     }
-    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh") func <- "R_countXO_bc"
+    else if(type == "bc" || type=="riself" || type=="risib" || type=="dh" || type=="haploid") func <- "R_countXO_bc"
     else if(type == "4way") func <- "R_countXO_4way"
     else if(type=="ri4self" || type=="ri4sib" || type=="ri8self" || type=="ri8sib" || type=="bgmagic16") {
       func <- "R_countXO_ril48"

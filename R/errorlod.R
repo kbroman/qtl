@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-2012, Karl W Broman
-# last modified Mar, 2012
+# copyright (c) 2001-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ function(cross, error.prob=0.01,
   for(i in 1:n.chr) {
 
     chr.type <- class(cross$geno[[i]])
-    if(type=="bc" || type=="risib" || type=="riself" || type=="dh")
+    if(type=="bc" || type=="risib" || type=="riself" || type=="dh" || type=="haploid")
       cfunc <- "calc_errorlod_bc"
     else if(type=="f2" || type=="bcsft") {
       if(chr.type!="X") cfunc <- "calc_errorlod_f2"

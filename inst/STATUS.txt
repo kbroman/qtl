@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2013, Karl W Broman
+copyright (c) 2001-2014, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,65 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.28, 8/2/2013:
+Version 1.31, 3/19/2014:
+
+Major changes:
+
+  Added a function reduce2grid() for subsetting the genotype
+  probabilities (from calc.genoprob) or imputations (from sim.geno) to
+  the evenly spaced grid of pseudomarkers, for use in the case of very
+  dense markers when it is too computationally intensive to perform a
+  genome scan at both the markers and the grid of pseudomarkers.
+
+Minor changes:
+
+  Fixed a problem in write.cross with format="csv" (for cross types
+  other than BC and F2, it would use incorrect genotype codes if there
+  was no "allele" attribute for the cross).
+
+  Add a couple of arguments to plotLodProfile: showallchr, to show all
+  chromosomes (and not just those with QTL), and textsep, to control
+  the separation between the QTL labels and the LOD curves.
+
+  Fix a bug in bcsft.c, regarding potentially over-running an array
+
+  Fix problem with plotLodProfile when it's maximized at multiple
+  locations.
+
+  Fix problem in refineqtl and stepwiseqtl; map attribute in qtl
+  object would get unintentionally subsetted if the qtl object needed
+  to be re-created.
+
+  In addqtl, addint, and addcovarint, have require.fullrank=FALSE be
+  the default; require.fullrank=TRUE remains the default in
+  stepwiseqtl.
+
+  Fixed bug in which summary.scantwo was re-ordering the chromosome
+  factor levels.
+
+
+Version 1.30, 2/10/2014:
+
+Major changes:
+
+  Revised parallel code (in scanone, scantwo, mqmpermutation, and
+  mqmscanall) to use a different function for Windows, as mclapply()
+  doesn't work there.
+
+Minor changes:
+
+  Fixed problem in formLinkageGroups when used with results of
+  markerlrt(): no recombination fractions so use max.rf=Inf
+
+  Added arguments type, cex, pch, and bg to plot.scanone, to be passed
+  to lines() in making the plot. Thus, you can use type="p" to get
+  points only.
+
+  Fixed a bug in scanqtl that showed up if there were missing
+  phenotypes and no covariates.
+
+
+Version 1.29, 12/9/2013:
 
 Major changes:
 
@@ -25,13 +83,49 @@ Major changes:
 
 Minor changes:
 
-  Add function addmarker()
+  Slight change to summary.qtl to deal with QTL objects with no QTL.
 
-  Fix write.cross to allow use for BCsFt crosses.
+  For the QTLRel package, now "export" reviseXdata() in NAMESPACE.
+
+
+Version 1.28, 9/23/2013:
+
+Major changes:
+
+  Added cross type "haploid". Like backcross ("bc") or doubled
+  haploids ("dh") but with genotype labels like "A" and "B" instead of
+  "AA" and "AB"/"BB".
+
+  Added crosstype argument to read.cross, to force a particular cross
+  type (such as "riself").
+
+  For parallel processing, replaced reliance on the snow library with
+  the use of the parallel library.
+
+Minor changes:
+
+  Added formMarkerCovar(), to facilitate use of markers as covariates
+  in QTL analysis.
+
+  Added function addmarker() for adding genotypes for a marker to a
+  cross object.
+
+  Added function nqtl() for counting number of QTL in QTL object.
+
+  Added examples to help files for plotPXG and effectplot on getting the
+  output.
+
+  Slight change to way to handle random number generation for
+  cluster-based computing.
+
+  Fix bug in fitqtl-link functions for model="binary" (re matrix rank)
+
+  Fixed write.cross to allow use for BCsFt crosses.
 
   Fixed an out-of-bounds error in the C++ code mqmscan.cpp.
 
-  stepwiseqtl with verbose=FALSE still printed the initial LOD score
+  In stepwiseqtl with verbose=FALSE, the initial LOD score is no
+  longer printed.
 
 
 Version 1.27, 4/11/2013:

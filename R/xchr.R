@@ -2,8 +2,8 @@
 #
 # xchr.R
 #
-# copyright (c) 2004-2011, Karl W Broman
-# last modified Feb, 2011
+# copyright (c) 2004-2013, Karl W Broman
+# last modified Sep, 2013
 # first written Apr, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -137,7 +137,7 @@ function(cross)
 # used in discan, effectplot, plotPXG, scanone, scantwo, vbscan, reviseXdata
 # cross.attr gives the cross attributes
 getgenonames <-
-function(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
+function(type=c("f2","bc","riself","risib","4way","dh","haploid","special","bcsft"),
          chrtype=c("A","X"), expandX=c("simple","standard","full"),
          sexpgm, cross.attr)
 {  
@@ -181,6 +181,9 @@ function(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
 
   if(type=="riself" || type=="risib" || type=="dh") 
     gen.names <- tempgn[c(1,3)]
+
+  else if(type=="haploid")
+    gen.names <- alleles
 
   else if(type == "4way") {
     if(chrtype=="A")
@@ -761,7 +764,7 @@ function(type, sexpgm, cross.attr)
   sex <- sexpgm$sex
   pgm <- sexpgm$pgm
 
-  if(type == "risib" || type=="riself" || type=="dh") type <- "bc"
+  if(type == "risib" || type=="riself" || type=="dh" || type=="haploid") type <- "bc"
 
   if(type == "bcsft") {
     if(cross.attr$scheme[2] == 0)
@@ -912,7 +915,7 @@ function(sexpgm, covar)
 #           and for the additive model.
 ######################################################################
 dropXcol <-
-function(type=c("f2","bc", "riself", "risib", "4way", "dh", "special","bcsft"),
+function(type=c("f2","bc", "riself", "risib", "4way", "dh", "haploid", "special","bcsft"),
          sexpgm, cross.attr)
 {
   type <- match.arg(type)

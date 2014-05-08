@@ -2,9 +2,9 @@
  * 
  * discan_covar.c
  *
- * copyright (c) 2004-2010, Karl W Broman
+ * copyright (c) 2004-2014, Karl W Broman
  *
- * last modified Jul, 2010
+ * last modified Mar, 2014
  * first written Dec, 2004
  *
  *     This program is free software; you can redistribute it and/or
@@ -113,7 +113,7 @@ void R_discan_covar(int *n_ind, int *n_pos, int *n_gen,
 		    double *start, double *result, int *maxit, double *tol, 
 		    int *verbose, int *ind_noqtl)
 {
-  double ***Genoprob, **Addcov, **Intcov;
+  double ***Genoprob, **Addcov=0, **Intcov=0;
 
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
   if(*n_addcov > 0) reorg_errlod(*n_ind, *n_addcov, addcov, &Addcov);

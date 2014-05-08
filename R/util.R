@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2012, Karl W Broman
+# copyright (c) 2001-2014, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Nov, 2012
+# last modified Feb, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 # 
 # Part of the R/qtl package
-# Contains: markernames, c.cross, create.map,
+# Contains: markernames, c.cross, create.map, reduce2grid,
 #           clean, clean.cross, drop.nullmarkers, nullmarkers
 #           drop.markers, pull.markers, drop.dupmarkers
 #           geno.table, genotab.em
@@ -41,7 +41,7 @@
 #           scantwoperm2scanoneperm, subset.map, [.map, [.cross,
 #           findDupMarkers, convert2riself, convert2risib,
 #           switchAlleles, nqrank, cleanGeno, typingGap,
-#           calcPermPval, phenames
+#           calcPermPval, phenames, updateParallelRNG
 #
 ######################################################################
 
@@ -364,6 +364,96 @@ function(map, step, off.end, stepwidth = c("fixed", "variable", "max"))
     }
   }
 }
+
+######################################################################
+# reduce2grid
+#
+# for high-density marker data, rather than run scanone at both the
+# markers and at a set of pseudomarkers, we could reduce to just
+# a set of evenly-spaced pseudomarkers
+#
+# first run calc.genoprob (or sim.geno) and then use this.
+######################################################################
+reduce2grid <-
+function(cross)
+{
+  if(!any(class(cross) == "cross"))
+    stop("Input should have class \"cross\".")
+
+  # sample one element from a vector
+  sampleone <- function(x) ifelse(length(x)==1, x, sample(x, 1))
+
+  # for a map containing a grid with a given step size,
+  # find the grid min(map), min(map)+step, min(map)+2step, ...
+  gridindex <- function(map, step) {
+    if(is.matrix(map)) stop("reduce2grid isn't working for sex-specific maps")
+    grid <- seq(min(map), max(map), by=step)
+    index <- match(grid, map)
+    if(any(is.na(index)))
+      index <- sapply(grid, function(a,b) { d <- abs(a-b); sampleone(which(d == min(d))) }, map)
+    index
+  }
+
+  attr2fix <- c("error.prob", "step", "off.end", "map.function", "stepwidth")
+
+  reduced <- FALSE
+  if("prob" %in% names(cross$geno[[1]])) {
+    stepwidth <- attr(cross$geno[[1]]$prob, "stepwidth")
+    if(stepwidth != "fixed") {
+      warning("You need to have run calc.genoprob with stepwidth=\"fixed\".")
+      break
+    }
+
+    step <- attr(cross$geno[[1]]$prob, "step")
+
+    for(i in 1:nchr(cross)) {
+      pr <- cross$geno[[i]]$prob
+      map <- attr(pr, "map")
+      butes <- attributes(pr)
+
+      reduced <- gridindex(map, step)
+      pr <- pr[,reduced,,drop=FALSE]
+      attr(pr, "map") <- map[reduced]
+      for(a in attr2fix)
+        attr(pr, a) <- butes[a]
+
+      cross$geno[[i]]$prob <- pr
+    }
+
+    reduced <- TRUE
+  }
+  if("draws" %in% names(cross$geno[[1]])) {
+    stepwidth <- attr(cross$geno[[1]]$draws, "stepwidth")
+    if(stepwidth != "fixed") {
+      warning("You need to have run sim.geno with stepwidth=\"fixed\".")
+      break
+    }
+
+    step <- attr(cross$geno[[1]]$draws, "step")
+
+    for(i in 1:nchr(cross)) {
+      dr <- cross$geno[[i]]$draws
+      map <- attr(dr, "map")
+      butes <- attributes(dr)
+
+      reduced <- gridindex(map, step)
+      dr <- dr[,reduced,,drop=FALSE]
+      attr(dr, "map") <- map[reduced]
+      for(a in attr2fix)
+        attr(dr, a) <- butes[a]
+
+      cross$geno[[i]]$draws <- dr
+    }
+
+    reduced <- TRUE
+  }
+
+  if(!reduced)
+    warning("You first need to run calc.genoprob or sim.geno with stepwidth=\"fixed\".")
+
+  cross
+}
+
 
 ######################################################################
 # clean functions
@@ -750,7 +840,7 @@ function(cross, chr, scanone.output=FALSE)
     temp <- getgenonames("f2", "A", cross.attr=attributes(cross))
     gen.names <- c(temp, paste("not", temp[c(3,1)]))
   }
-  else if(type %in% c("bc", "riself", "risib", "dh", "bcsft")) {
+  else if(type %in% c("bc", "riself", "risib", "dh", "haploid", "bcsft")) {
     n.gen <- 2
     gen.names <- getgenonames(type, "A", cross.attr=attributes(cross))
   }
@@ -786,7 +876,7 @@ function(cross, chr, scanone.output=FALSE)
   rownames(results) <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
   pval <- rep(NA,nrow(results))
-  if(type %in% c("bc","risib","riself","dh") || (type=="bcsft" & is.bcs)) {
+  if(type %in% c("bc","risib","riself","dh","haploid") || (type=="bcsft" & is.bcs)) {
     sexpgm <- getsex(cross)
     if((type == "bc" || type=="bcsft") && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
       for(i in which(allchrtype=="A")) {
@@ -1070,7 +1160,7 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
   if(chrtype[1] != "X") {
     if(crosstype == "f2") 
       g1names <- c(g1names, paste("not", g1names[c(3,1)]))
-    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh") {
+    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
     }
     else if(crosstype == "4way") {
       temp <- g1names
@@ -1093,7 +1183,7 @@ function(cross, mname1, mname2, eliminate.zeros=TRUE)
   if(chrtype[2] != "X") {
     if(crosstype == "f2") 
       g2names <- c(g2names, paste("not", g2names[c(3,1)]))
-    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh") {
+    else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
     }
     else if(crosstype == "4way") {
       temp <- g2names
@@ -3061,7 +3151,7 @@ function(cross, chr, full.info=FALSE)
   geno[is.na(geno)] <- 0
   type <- class(cross)[1]
 
-  if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh")
+  if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh" && type!="haploid")
     stop("locateXO only working for backcross, intercross or RI strains.")
 
   map <- cross$geno[[1]]$map
@@ -3962,7 +4052,7 @@ function(cross, markers, switch=c("AB","CD","ABCD", "parents"))
   type <- class(cross)[1]
   switch <- match.arg(switch)
   
-  if(type %in% c("bc", "risib", "riself", "dh")) { 
+  if(type %in% c("bc", "risib", "riself", "dh", "haploid")) { 
     if(switch != "AB")
       warning("Using switch = \"AB\".")
 
@@ -4187,6 +4277,118 @@ function(peaks, perms)
 phenames <-
 function(cross)
 colnames(cross$pheno)
-  
+
+
+######################################################################
+# updateParallelRNG
+#
+# set RNGkind
+# advance RNGstream by no. clusters
+######################################################################
+updateParallelRNG <-
+function(n.cluster=1)
+{
+  kind <- RNGkind()[1]
+  if(kind != "L'Ecuyer-CMRG") RNGkind("L'Ecuyer-CMRG")
+
+  s <- .Random.seed
+  if(n.cluster < 1) n.cluster <- 1
+  for(i in 1:n.cluster) s <- nextRNGStream(s)
+  .Random.seed <<- s ## global assign new .Random.seed
+}
+    
+######################################################################
+# formMarkerCovar
+#
+# cross: cross object
+#
+# markers: marker names or pseudomarker names (like "c5loc25.1" or "5@25.1")
+#
+# method: use genotype probabilities or imputated genotypes (imputed with imp or argmax)
+#
+# ...: passed to fill.geno, if necessary
+#
+######################################################################
+formMarkerCovar <-
+function(cross, markers, method=c("prob", "imp", "argmax"), ...)
+{
+  method <- match.arg(method)
+
+  # check if the marker names are all like "5@25.1"
+  grepresult <- grep("@", markers)
+  if(length(grepresult) == length(markers) && all(grepresult == seq(along=markers))) {
+    spl <- strsplit(markers, "@")
+    chr <- sapply(spl, "[", 1)
+    pos <- as.numeric(sapply(spl, "[", 2))
+    m <- match(chr, chrnames(cross))
+    if(any(is.na(m)))
+      stop("Some chr not found: ", paste(unique(chr[m]), collapse=" "))
+
+   if(method=="prob")
+     markers <- find.pseudomarker(cross, chr, pos, where="prob")
+   else
+     markers <- find.marker(cross, chr, pos)
+  }
+
+  chr <- unique(find.markerpos(cross, markers)[,1])
+
+  cross <- subset(cross, chr=chr)
+  isXchr <- (sapply(cross$geno, class) == "X")
+  crosstype <- class(cross)[1]
+  sexpgm <- getsex(cross)
+  crossattr <- attributes(cross)
+
+  if(method=="prob") {
+    if(any(isXchr) && crosstype %in% c("f2", "bc", "bcsft")) {
+      for(i in which(isXchr))
+        cross$geno[[i]]$prob <- reviseXdata(crosstype, "full", sexpgm=sexpgm, prob=cross$geno[[i]]$prob,
+                                            cross.attr=crossattr)
+
+    }
+
+    if(any(isXchr) && any(!isXchr)) # some X, some not
+        prob <- cbind(pull.genoprob(cross[!isXchr,], omit.first.prob=TRUE),
+                      pull.genoprob(cross[isXchr,], omit.first.prob=TRUE))
+    else # all X or all not X
+      prob <- pull.genoprob(cross, omit.first.prob=TRUE)
+
+    markercols <- sapply(strsplit(colnames(prob), ":"), "[", 1)
+    m <- match(markers, markercols)
+    if(any(is.na(m)))
+      warning("Some markers/pseudomarkers not found: ", paste(unique(markers[is.na(m)]), collapse=" "))
+    return(prob[,!is.na(match(markercols, markers)), drop=FALSE])
+  }
+  else {
+    cross <- fill.geno(cross, method=method, ...)
+
+    if(any(isXchr) && crosstype %in% c("f2", "bc", "bcsft")) {
+      for(i in which(isXchr))
+        cross$geno[[i]]$data <- reviseXdata(crosstype, "full", sexpgm=sexpgm, geno=cross$geno[[i]]$data,
+                                            cross.attr=crossattr)
+    }
+
+    geno <- pull.geno(cross)
+    markercols <- colnames(geno)
+    m <- match(markers, markercols)
+    if(any(is.na(m)))
+      warning("Some markers not found: ", paste(unique(markers[is.na(m)]), collapse=" "))
+
+    geno <- geno[,!is.na(match(markercols, markers)), drop=FALSE]
+
+    # expand each column
+    nalle <- apply(geno, 2, function(a) length(unique(a)))
+    g <- matrix(ncol=sum(nalle-1), nrow=nrow(geno))
+    colnames(g) <- as.character(1:ncol(g))
+    cur <- 0
+    for(i in 1:ncol(geno)) {
+      if(nalle[i] <= 1) next
+      for(j in 2:nalle[i])
+        g[,cur+j-1] <- as.numeric(geno[,i] == j)
+      colnames(g)[cur - 1 + (2:nalle[i])] <- paste(colnames(geno)[i], 2:nalle[i], sep=".")
+      cur <- cur + nalle[i] - 1
+    }
+    return(g)
+  }
+}
 
 # end of util.R

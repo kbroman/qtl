@@ -11,7 +11,9 @@
 }
 
 \usage{
-mqmplot.multitrait(result, type=c("lines","image","contour","3Dplot"), group=NULL, meanprofile=c("none","mean","median"), theta=30, phi=15, \dots)
+mqmplot.multitrait(result, type=c("lines","image","contour","3Dplot"),
+                   group=NULL, meanprofile=c("none","mean","median"),
+                   theta=30, phi=15, \dots)
 }
 
 \arguments{

@@ -2,9 +2,9 @@
  * 
  * fitqtl_hk_binary.c
  *
- * copyright (c) 2010, Karl W Broman
+ * copyright (c) 2010-2014, Karl W Broman
  *
- * last modified Jun, 2010
+ * last modified Mar, 2014
  * first written Jun, 2010
  *
  *     This program is free software; you can redistribute it and/or
@@ -48,9 +48,9 @@ void R_fitqtl_hk_binary(int *n_ind, int *n_qtl, int *n_gen,
 			double *lod, int *df, double *ests, double *ests_covar,
 			double *design_mat, 
 			/* convergence */
-			double *tol, int *maxit)
+			double *tol, int *maxit, int *matrix_rank)
 {
-  double ***Genoprob=0, **Cov;
+  double ***Genoprob=0, **Cov=0;
   int tot_gen, i, j, curpos;
 
   /* reorganize genotype probabilities */
@@ -73,7 +73,7 @@ void R_fitqtl_hk_binary(int *n_ind, int *n_qtl, int *n_gen,
 
   fitqtl_hk_binary(*n_ind, *n_qtl, n_gen, Genoprob, 
 		   Cov, *n_cov, model, *n_int, pheno, *get_ests, lod, df,
-		   ests, ests_covar, design_mat, *tol, *maxit); 
+		   ests, ests_covar, design_mat, *tol, *maxit, matrix_rank); 
 }
 
 
@@ -115,19 +115,21 @@ void R_fitqtl_hk_binary(int *n_ind, int *n_qtl, int *n_gen,
  * 
  * maxit        Maximum number of iterations in IRLS
  *
+ * matrix_rank  On return, rank of the X matrix
+ *
  **********************************************************************/
 
 void fitqtl_hk_binary(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
 		      double **Cov, int n_cov, 
 		      int *model, int n_int, double *pheno, int get_ests,
 		      double *lod, int *df, double *ests, double *ests_covar,
-		      double *design_mat, double tol, int maxit) 
+		      double *design_mat, double tol, int maxit, int *matrix_rank) 
 {
 
   /* create local variables */
   int i, j, n_qc, itmp; /* loop variants and temp variables */
   double llik, llik0;
-  double *dwork, **Ests_covar;
+  double *dwork, **Ests_covar=0;
   int *iwork, sizefull;
 
   /* initialization */
@@ -170,7 +172,7 @@ void fitqtl_hk_binary(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
   llik = galtLODHKbin(pheno, n_ind, n_gen, n_qtl, Genoprob,
 		      Cov, n_cov, model, n_int, dwork, iwork, 
 		      sizefull, get_ests, ests, Ests_covar,
-		      design_mat, tol, maxit);
+		      design_mat, tol, maxit, matrix_rank);
 
   *lod = llik - llik0;
 
@@ -205,7 +207,7 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
 		    double ***Genoprob, double **Cov, int n_cov, int *model, 
 		    int n_int, double *dwork, int *iwork, int sizefull,
 		    int get_ests, double *ests, double **Ests_covar,
-		    double *designmat, double tol, int maxit) 
+		    double *designmat, double tol, int maxit, int *matrix_rank) 
 {
   /* local variables */
   int i, j, k, kk, *jpvt, ny, idx_col, n_qc, n_int_col, job, outerrep, s;
@@ -352,6 +354,8 @@ double galtLODHKbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
     /* call dqrls to fit regression model */
     F77_CALL(dqrls)(X[0], &n_ind, &sizefull, z, &ny, &tol2, coef, resid,
 		    qty, &kk, jpvt, qraux, work);
+    /* on output, kk contains the rank */
+    *matrix_rank = kk;
 
     /* get ests; need to permute back */
     for(i=0; i<kk; i++) ests[jpvt[i]] = coef[i];

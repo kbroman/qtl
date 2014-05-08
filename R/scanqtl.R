@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
-# last modified Feb, 2013
+# copyright (c) 2002-2014, Hao Wu and Karl W. Broman
+# last modified Jan, 2014
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -176,7 +176,7 @@ function(cross, pheno.col=1, chr, pos, covar=NULL, formula,
 
   # check phenotypes and covariates; drop ind'ls with missing values
   if(!is.null(covar)) phcovar <- cbind(pheno, covar)
-  else phcovar <- pheno
+  else phcovar <- cbind(pheno)
   if(any(is.na(phcovar))) {
     if(ncol(phcovar)==1) hasmissing <- is.na(phcovar)
     else hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))

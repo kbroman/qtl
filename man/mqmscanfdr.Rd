@@ -71,8 +71,10 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 \examples{
 data(multitrait)
 
-multitrait <- fill.geno(multitrait) # impute missing genotype data
-\dontrun{  result <- mqmscanfdr(multitrait, threshold=10.0, n.perm=1000) # Calculate the thresholds
+# impute missing genotype data
+multitrait <- fill.geno(multitrait) 
+\dontrun{# Calculate the thresholds
+result <- mqmscanfdr(multitrait, threshold=10.0, n.perm=1000)
 }\dontshow{
   multitrait <- subset(multitrait, chr=1, ind=!apply(multitrait$pheno, 1, function(a) any(is.na(a))))
   multitrait$pheno <- multitrait$pheno[,1:3]

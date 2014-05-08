@@ -2,9 +2,9 @@
  * 
  * scanone_mr.c
  *
- * copyright (c) 2001-6, Karl W Broman
+ * copyright (c) 2001-2014, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Mar, 2014
  * first written Nov, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@ void R_scanone_mr(int *n_ind, int *n_pos, int *n_gen, int *geno,
 		  double *result)
 {
   int **Geno;
-  double **Addcov, **Intcov;
+  double **Addcov=0, **Intcov=0;
 
   reorg_geno(*n_ind, *n_pos, geno, &Geno);
 

@@ -25,18 +25,18 @@ mqmplot.permutations(permutationresult, \dots)
 
 \value{ No value returned (plotting routine) }
 
-\author{ 
+\author{
 Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
   , Rutger Brouwer
 }
 
-\seealso{ 
+\seealso{
 \itemize{
   % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
-    \item The MQM tutorial: \url{http://www.rqtl.org/tutorials/MQM-tour.pdf} 
+    \item The MQM tutorial: \url{http://www.rqtl.org/tutorials/MQM-tour.pdf}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
     \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
@@ -47,14 +47,22 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 }
 
 \examples{
-#Simulated F2 Population
-f2qtl <- c(3,15,1,0)                                    # QTL at chromosome 3
-data(map10)                                             # Mouse genetic map
+# Simulated F2 Population
+# QTL at chromosome 3
+f2qtl <- c(3,15,1,0)
+
+# Mouse genetic map
+data(map10)
+
 \dontshow{map10 <- map10[1:3]}
-f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")       # Simulate a F2 Cross
+# Simulate a F2 Cross
+f2cross <- sim.cross(map10,f2qtl,n=100,type="f2")
 f2cross <- calc.genoprob(f2cross)
-\dontrun{f2result <- mqmpermutation(f2cross, n.perm=1000, method="permutation")	# Permutations to obtain significance threshold
+\dontrun{# Permutations to obtain significance threshold
+f2result <- mqmpermutation(f2cross, n.perm=1000, method="permutation")
 }\dontshow{f2result <- mqmpermutation(f2cross, n.perm=2, batchsize=2, method="permutation")}
-mqmplot.permutations(f2result)					# Plot results
+
+# Plot results
+mqmplot.permutations(f2result)
 }
 \keyword{ hplot }

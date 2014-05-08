@@ -3,7 +3,7 @@
 # addmarker.R
 #
 # copyright (c) 2013, Karl W Broman
-# last modified May, 2013
+# last modified Sep, 2013
 # first written May, 2013
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ function(cross, genotypes, markername, chr, pos)
   if(!("cross" %in% class(cross)))
     stop("cross must have class \"cross\"")
 
-  chr <- qtl:::matchchr(chr, names(cross$geno))
+  chr <- matchchr(chr, names(cross$geno))
   if(length(chr) != 1)
     stop("Only 1 chromosome should be specified.")
   if(length(pos) != 1)
