@@ -238,7 +238,9 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
  * frequencies. This function is used by augmentation.
  */ 
 double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
-  R_CheckUserInterrupt(); /* check for ^C */
+  #ifndef STANDALONE
+    R_CheckUserInterrupt(); /* check for ^C */
+  #endif
 
   if(position[j]==MRIGHT||position[j]==MUNLINKED){ return 1.0; }
 
@@ -313,8 +315,9 @@ double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imar
 
 
 double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
-  R_CheckUserInterrupt(); /* check for ^C */
-
+  #ifndef STANDALONE
+    R_CheckUserInterrupt(); /* check for ^C */
+  #endif
   if(position[j] == MRIGHT||position[j] == MUNLINKED){ return 1.0; }
   if (markerL == MBB) { return 0.0; } //info("Strange: encountered BB genotype in BC");
 
@@ -340,8 +343,9 @@ double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imar
 }
 
 double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
-  R_CheckUserInterrupt(); /* check for ^C */
-
+  #ifndef STANDALONE
+    R_CheckUserInterrupt(); /* check for ^C */
+  #endif
   if(position[j] == MRIGHT||position[j] == MUNLINKED){ return 1.0; }                        //END of chromosome or only 1 marker on a chromosome
   if(markerL == MH) { return 0.0; }                         //info("Strange: encountered H genotype in RIL");
 
