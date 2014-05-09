@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2014, Karl W Broman
+# last modified May, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -44,6 +44,20 @@ function(object,...)
   # combine genotype data into one big matrix
   Geno <- pull.geno(object)
 
+  # A and X-specific genotypes?
+  chrtype <- sapply(hyper$geno, class)
+  if(any(chrtype=="A")) {
+    GenoA <- pull.geno(object, chr=names(chrtype)[chrtype=="A"])
+  } else {
+    GenoA <- NULL
+  }    
+  if(any(chrtype=="X")) {
+    GenoX <- pull.geno(object, chr=names(chrtype)[chrtype=="X"])
+    GenoX <- reviseXdata(type, "full", getsex(object), geno=GenoX)
+  } else{
+    GenoX <- NULL
+  }
+
   # proportion of missing genotype data
   missing.gen <- mean(is.na(Geno))
 
@@ -58,10 +72,24 @@ function(object,...)
   }
   
   # table of genotype values
+  typings <- typingsA <- typingsX <- NULL
   if(type %in% c("f2", "bcsft") & !is.bcs) {
-    typings <- table(factor(Geno[!is.na(Geno)], levels=1:5))
-    temp <- getgenonames("f2", "A", cross.attr=attributes(object))
-    names(typings) <- c(temp, paste("not", temp[c(3,1)]))
+    if(is.null(GenoX)) {
+      typings <- table(factor(Geno[!is.na(Geno)], levels=1:5))
+      temp <- getgenonames("f2", "A", cross.attr=attributes(object))
+      names(typings) <- c(temp, paste("not", temp[c(3,1)]))
+    } else {
+      if(!is.null(GenoA)) {
+        typingsA <- table(factor(GenoA[!is.na(GenoA)], levels=1:5))
+        temp <- getgenonames("f2", "A", cross.attr=attributes(object))
+        names(typingsA) <- c(temp, paste("not", temp[c(3,1)]))
+      }
+      if(!is.null(GenoX)) {
+        typingsX <- table(factor(GenoX[!is.na(GenoX)], levels=1:max(GenoX, na.rm=TRUE)))
+        temp <- getgenonames("f2", "X", "full", getsex(object), cross.attr=attributes(object))
+        names(typingsX) <- temp
+      }
+    }
   }
   else if(type %in% c("bc", "riself", "risib", "dh", "haploid", "bcsft")) {
     typings <- table(factor(Geno[!is.na(Geno)], levels=1:2))
@@ -86,7 +114,10 @@ function(object,...)
   else typings <- table(factor(Geno[!is.na(Geno)]))
 
   # turn into fractions
-  typings <- typings/sum(typings)
+  if(!is.null(typings)) typings <- typings/sum(typings)
+  if(!is.null(typingsA)) typingsA <- typingsA/sum(typingsA)
+  if(!is.null(typingsX)) typingsX <- typingsX/sum(typingsX)
+  
 
   # amount of missing phenotype data
   if(ncol(object$pheno) <= 30)
@@ -324,9 +355,10 @@ function(object,...)
                   "be a problem with the genetic map.\n  (Perhaps it is in basepairs?)"))
     
   cross.summary <- list(type=type, n.ind = n.ind, n.phe=n.phe, 
-			n.chr=n.chr, n.mar=n.mar,
-			missing.gen=missing.gen,typing.freq=typings,
-			missing.phe=missing.phe,
+                        n.chr=n.chr, n.mar=n.mar,
+                        missing.gen=missing.gen,
+                        typing.freq=typings, typing.freq.A=typingsA, typing.freq.X=typingsX,
+                        missing.phe=missing.phe,
                         autosomes=autosomes, Xchr=Xchr, cross.scheme=cross.scheme)
   class(cross.summary) <- "summary.cross"
   cross.summary
@@ -413,9 +445,22 @@ function(x,...)
   cat("    Percent genotyped: ", round((1-x$missing.gen)*100,1), "\n")
   if(print.genotypes) {
     cat("    Genotypes (%):    ")
-    geno <- paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":")
-    header <- "                      "
-    printnicely(geno, header, width, "  ")
+    if(!is.null(x$typing.freq.X)) {
+      if(!is.null(x$typing.freq.A)) {
+        geno <- paste(names(x$typing.freq.A),round(x$typing.freq.A*100,1),sep=":")
+        header <- "  Autosomes:          "
+        printnicely(geno, header, width, "  ")
+      }
+        geno <- paste(names(x$typing.freq.X),round(x$typing.freq.X*100,1),sep=":")
+        header <- "  X chromosome:       "
+        printnicely(geno, header, width, "  ")
+    } else {
+      if(!is.null(x$typing.freq.A) && !is.null(x$typing.freq))
+        x$typing.freq <- x$typing.freq.A
+      geno <- paste(names(x$typing.freq),round(x$typing.freq*100,1),sep=":")
+      header <- "                      "
+      printnicely(geno, header, width, "  ")
+    }
   }
 }
 
