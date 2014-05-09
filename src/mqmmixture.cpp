@@ -244,7 +244,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  if(warnZeroDist)info("!!! 0.0 from Prob !!! Markers at same Cm but different genotype !!!"); 
+  if(warnZeroDist) info("!!! 0.0 from Prob !!! Markers at same Cm but different genotype !!!"); 
 //	Rprintf("INFO: Done fitting QTL's\n");
   if ((*weight)[0]== -1.0) {
     for (i=0; i<Nind; i++) indweight[i]= 0.0;
@@ -260,7 +260,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  debug_trace("Weights done\n");
+  debug_trace("Weights done for %d individuals (%d augmented)\n", Nind, Naug);
   debug_trace("Individual->trait,indweight weight Ploci\n");
   //for (int j=0; j<Nind; j++){
   //  debug_trace("%d->%f,%f %f %f\n", j, y[j],indweight[i], (*weight)[j], Ploci[j]);
