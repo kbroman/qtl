@@ -218,3 +218,12 @@ void copyvector(vector vsource, vector vdestination, int dim) {
     vdestination[i]= vsource[i];
   }
 }
+
+#ifndef ENABLE_C99_MACROS
+  void fatal(const char* s, ...){
+    Rf_error(s);
+  }
+  void debug_trace(const char*, ...){}
+  void info(const char* s, ...){ Rprintf(s); Rprintf("\n"); }
+#endif
+
