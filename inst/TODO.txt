@@ -19,9 +19,6 @@ o Bug in mqmscan: it has problems when there are just two markers on a
   and it gives Infs in the "info" column in the results if you scan
   that and other chromosomes.
 
-o summary.cross: table of genotypes should be separated by cross type
-  (A vs X), with the X chromosome genotypes recoded.
-
 o Include genetic map as an attribute in scanone results and use that
   to plot marker positions.
 
