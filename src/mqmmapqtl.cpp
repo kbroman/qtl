@@ -67,16 +67,16 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
     else if (position[j]==MMIDDLE)
       cumdistance[j]= cumdistance[j-1]-50*log(1-2.0*r[j]);
   }
-  double savelogL=0.0; // log-likelihood of model with all selected cofactors
+  double savelogL = 0.0; // log-likelihood of model with all selected cofactors
 
   /* fit QTL on top of markers (full ML)   fit QTL between markers (full ML) */
   // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
   /* estimate variance in mixture model with all marker cofactors */
   // cout << "estimate variance in mixture model with all cofactors" << endl;
-
+  
   variance= -1.0;
   savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
-//  if (verbose==1){ info("INFO: log-likelihood of full model= %f", savelogL/2); }
+  if (verbose) info("INFO: log-likelihood of full model= %f", savelogL/2);
 
   // augment data for missing QTL observations (x 3)
   fitQTL=true;
