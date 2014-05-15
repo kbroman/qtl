@@ -43,3 +43,11 @@ void shuffle_covar_and_phe(int n_ind, int *ind_index, double *pheno,
                            double *dwork);
 
 void create_zero_vector(int **vector, int n);
+
+void min3d(int d1, int d2, int d3, double ***Values, double *results);
+
+void min2d(int d1, int d2, double **Values, double *results);
+
+void min3d_uppertri(int d1, int d3, double ***Values, double *results);
+
+void min3d_lowertri(int d1, int d3, double ***Values, double *results);

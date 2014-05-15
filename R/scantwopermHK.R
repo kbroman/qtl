@@ -89,7 +89,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
     resid0 <- lm(pheno ~ addcovar, weights=weights^2)$resid
   else
     resid0 <- lm(pheno ~ 1, weights=weights^2)$resid
-  nllik0 <- (n.ind/2)*log10(sum((resid0*weights)^2))
+  nllik0X <- nllik0 <- (n.ind/2)*log10(sum((resid0*weights)^2))
 
   # X chromosome covariates
   if(any(chrtype=="X")) {
@@ -108,7 +108,6 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
       resid0 <- lm(pheno ~ addcovarX, weights=weights^2)$resid
       nllik0X <- (n.ind/2)*log10(sum((resid0*weights)^2))
     }
-    else nllik0X <- nllik0
 
     for(i in 1:n.chr) {
       if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
@@ -217,11 +216,13 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
                     as.double(pheno),
                     as.integer(n.perm),
                     as.double(weights),
-                    result=as.double(rep(0,n.perm*5)),
+                    result=as.double(rep(0,n.perm*6)),
                     as.integer(n.col2drop),
                     as.integer(col2drop),
                     PACKAGE="qtl")
-        result[[k]] <- matrix(thisz$result, nrow=n.perm)
+        result[[k]] <- -matrix(thisz$result, nrow=n.perm)
+        result[[k]][,c(1,4,6)] <- result[[k]][,c(1,4,6)] +
+          ifelse(chrtype[i]=="X", nllik0X, nllik0)
       } # end same chromosome
       else {
         thisz <- .C("R_scantwopermhk_2chr",
@@ -237,9 +238,11 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
                     as.double(pheno),
                     as.integer(n.perm),
                     as.double(weights),
-                    result=as.double(rep(0,n.perm*5)),
+                    result=as.double(rep(0,n.perm*6)),
                     PACKAGE="qtl")
-        result[[k]] <- matrix(thisz$result, nrow=n.perm)
+        result[[k]] <- -matrix(thisz$result, nrow=n.perm)
+        result[[k]][,c(1,4,6)] <- result[[k]][,c(1,4,6)] +
+          ifelse(chrtype[i]=="X" || chrtype[j]=="X", nllik0X, nllik0)
       } # end diff chr
     } # end loop chr 2
   } # end loop chr 1
