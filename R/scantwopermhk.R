@@ -1,6 +1,6 @@
-## scantwopermHK.R
+## scantwopermhk.R
 
-scantwopermHK <-
+scantwopermhk <-
 function(cross, chr, pheno.col=1, addcovar=NULL,
          weights=NULL, n.perm=1, batchsize=250,
          perm.strata=NULL, verbose=FALSE, assumeCondIndep=FALSE)
