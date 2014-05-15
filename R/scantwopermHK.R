@@ -17,7 +17,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
       chr1 <- matchchr(chr[[1]], thechr)
       chr2 <- matchchr(chr[[2]], thechr)
     }
-    else 
+    else
       chr1 <- chr2 <- matchchr(chr, thechr)
   }
 
@@ -26,13 +26,13 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
   thechr <- names(cross$geno)
   nchr1 <- match(chr1, thechr)
   nchr2 <- match(chr2, thechr)
-  if(!any(sapply(nchr1, function(a,b) any(a <= b), nchr2))) 
+  if(!any(sapply(nchr1, function(a,b) any(a <= b), nchr2)))
     stop("Need some of first chr to be <= some of second chr")
 
   # in RIL, treat X chromomse like an autosome
   chrtype <- sapply(cross$geno, class)
   type <- class(cross)[1]
-  if(any(chrtype=="X") && (type == "risib" || type == "riself")) 
+  if(any(chrtype=="X") && (type == "risib" || type == "riself"))
     for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
 
   # check perm.strat
@@ -49,10 +49,10 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
   if(is.character(pheno.col)) {
     num <- find.pheno(cross, pheno.col)
     if(any(is.na(num))) {
-      if(sum(is.na(num)) > 1) 
+      if(sum(is.na(num)) > 1)
         stop("Couldn't identify phenotypes ", paste(paste("\"", pheno.col[is.na(num)], "\"", sep=""),
                                                     collapse=" "))
-      else 
+      else
         stop("Couldn't identify phenotype \"", pheno.col[is.na(num)], "\"")
     }
     pheno.col <- num
@@ -84,13 +84,13 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
   n.chr <- nchr(cross)
   if(is.null(weights)) weights <- rep(1, n.ind)
 
-  # null log likelihood 
+  # null log likelihood
   if(n.addcovar > 0)
-    resid0 <- lm(pheno ~ ac, weights=weights^2)$resid
+    resid0 <- lm(pheno ~ addcovar, weights=weights^2)$resid
   else
     resid0 <- lm(pheno ~ 1, weights=weights^2)$resid
-  nllik0 <- (n.ind/2)*log10(sum((resid0*weights)^2))  
-  
+  nllik0 <- (n.ind/2)*log10(sum((resid0*weights)^2))
+
   # X chromosome covariates
   if(any(chrtype=="X")) {
     sexpgm <- getsex(cross)
@@ -122,7 +122,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
 
   # no. genotypes and positions on each chromosome
   n.gen <- n.pos <- rep(0, n.chr)
-  for(i in 1:n.chr) { 
+  for(i in 1:n.chr) {
     gen.names <- getgenonames(type, chrtype[i], "full", sexpgm, attributes(cross))
     n.gen[i] <- length(gen.names)
     n.pos[i] <- ncol(cross$geno[[i]]$prob)
@@ -176,7 +176,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
             tmap <- attr(oldXchr$geno[[1]]$prob,"map")
           else
             tmap <- create.map(oldXchr$geno[[1]]$map, stp, oe, stpw)
-        
+
           temp <- calc.pairprob(oldXchr,stp,oe,err,mf,tmap,
                                 assumeCondIndep=assumeCondIndep)
         }
@@ -186,7 +186,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
           oe <- attr(cross$geno[[i]]$prob, "off.end")
           err <- attr(cross$geno[[i]]$prob, "error.prob")
           mf <- attr(cross$geno[[i]]$prob, "map.function")
-        
+
           if("stepwidth" %in% names(attributes(cross$geno[[i]]$prob)))
             stpw <- attr(cross$geno[[i]]$prob, "stepwidth")
           else stpw <- "fixed"
@@ -194,19 +194,19 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
             tmap <- attr(cross$geno[[i]]$prob,"map")
           else
             tmap <- create.map(cross$geno[[i]]$map, stp, oe, stpw)
-        
+
           temp <- calc.pairprob(subset(cross,chr=thechr[i]),stp,oe,err,mf,tmap,
                                 assumeCondIndep=assumeCondIndep)
         }
 
         # revise pair probilities for X chromosome
-        if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) 
+        if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft")))
           temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                               cross.attr=attributes(cross))
-        
+
         if(verbose>1) cat("  --Done.\n")
 
-        thisz <- .C("R_scantwopermhk_1chr", 
+        thisz <- .C("R_scantwopermhk_1chr",
                     as.integer(n.ind),
                     as.integer(n.pos[i]),
                     as.integer(n.gen[i]),
