@@ -2,11 +2,14 @@
 
 scantwopermHK <-
 function(cross, chr, pheno.col=1, addcovar=NULL,
-         weights=NULL, n.perm=1, perm.strata=NULL,
-         verbose=FALSE, assumeCondIndep=FALSE)
+         weights=NULL, n.perm=1, batchsize=250,
+         perm.strata=NULL, verbose=FALSE, assumeCondIndep=FALSE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
+
+  if(batchsize < 1) batchsize <- 1
+  if(batchsize > n.perm) batchsize <- n.perm
 
   # pull out chromosomes to be scanned
   if(missing(chr)) chr1 <- chr2 <- chr <- names(cross$geno)
@@ -215,6 +218,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
                     as.integer(n.ac),
                     as.double(pheno),
                     as.integer(n.perm),
+                    as.integer(batchsize),
                     as.double(weights),
                     result=as.double(rep(0,n.perm*6)),
                     as.integer(n.col2drop),
@@ -237,6 +241,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
                     as.integer(n.ac),
                     as.double(pheno),
                     as.integer(n.perm),
+                    as.integer(batchsize),
                     as.double(weights),
                     result=as.double(rep(0,n.perm*6)),
                     PACKAGE="qtl")
