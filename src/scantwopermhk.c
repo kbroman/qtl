@@ -17,15 +17,14 @@
 #include "scantwopermhk.h"
 #define TOL 1e-12
 
-/**
- * R_scantwopermhk_1chr
- **/
-
+/* R wrapper for function to perform scantwo permutations by 
+   Haley-Knott regression within a chromosome */
 void R_scantwopermhk_1chr(int *n_ind, int *n_pos, int *n_gen,
                           double *genoprob, double *pairprob,
                           double *addcov, int *n_addcov,
-                          double *pheno, int* n_perm, double *weights,
-                          double *result, int *n_col2drop, int *col2drop)
+                          double *pheno, int* n_perm, int *batchsize, 
+                          double *weights, double *result,
+                          int *n_col2drop, int *col2drop)
 {
   double ***Genoprob, **Result, **Addcov=0, *****Pairprob;
 
@@ -40,69 +39,74 @@ void R_scantwopermhk_1chr(int *n_ind, int *n_pos, int *n_gen,
 
     scantwopermhk_1chr(*n_ind, *n_pos, *n_gen, Genoprob, Pairprob,
                        Addcov, *n_addcov,
-                       pheno, *n_perm, weights, Result, *n_col2drop,
-                       col2drop);
+                       pheno, *n_perm, weights, 
+                       Result, *n_col2drop, col2drop);
   }
   else {
     scantwopermhk_1chr_nocovar(*n_ind, *n_pos, *n_gen, Genoprob, Pairprob,
-                               pheno, *n_perm, weights, Result, *n_col2drop,
-                               col2drop);
+                               pheno, *n_perm, *batchsize, weights, 
+                               Result, *n_col2drop, col2drop);
   }
 
   PutRNGstate();
 }
 
-/**
- * scantwopermhk_1chr_nocovar: with no covariates, can do calculations in batch
- */
 
+/* scantwo perms within chr; with no covariates, can do calculations in batch */
 void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
                                 double ***Genoprob, double *****Pairprob,
-                                double *pheno, int n_perm, double *weights,
-                                double **Result, int n_col2drop, int *col2drop)
+                                double *pheno, int n_perm, int batchsize, 
+                                double *weights, double **Result,
+                                int n_col2drop, int *col2drop)
 {
-  int i;
+  int i, k;
   double *phematrix, *scanone_result, **scanone_Result;
   double *scantwo_result, ***scantwo_Result;
-  int *ind_noqtl;
+  int *ind_noqtl, n_perm_this;
 
   /* setup */
-  create_shuffled_phematrix(n_ind, n_perm, pheno, &phematrix);
+  allocate_double(batchsize*n_ind, &phematrix);
   create_zero_vector(&ind_noqtl, n_ind);
-  allocate_double(n_perm*n_pos, &scanone_result);
-  reorg_errlod(n_pos, n_perm, scanone_result, &scanone_Result);
-  allocate_double(n_perm*n_pos*n_pos, &scantwo_result);
-  reorg_genoprob(n_pos, n_pos, n_perm, scantwo_result, &scantwo_Result);
+  allocate_double(batchsize*n_pos, &scanone_result);
+  reorg_errlod(n_pos, batchsize, scanone_result, &scanone_Result);
+  allocate_double(batchsize*n_pos*n_pos, &scantwo_result);
+  reorg_genoprob(n_pos, n_pos, batchsize, scantwo_result, &scantwo_Result);
 
-  /* scanone */
-  scanone_hk(n_ind, n_pos, n_gen, Genoprob,
-             0, 0, 0, 0, /* null covariates */
-             phematrix, n_perm, weights, scanone_Result,
-             ind_noqtl);
+  for(k=0; k<n_perm; k+=batchsize) {
+    if(k + batchsize > n_perm) /* check if last batch is smaller */
+      n_perm_this = n_perm-k;
+    else n_perm_this = batchsize;
+    
+    /* shuffle phenotypes */
+    create_shuffled_phematrix(n_ind, n_perm_this, pheno, phematrix);
 
-  /* scantwo */
-  scantwo_1chr_hk(n_ind, n_pos, n_gen, Genoprob, Pairprob,
-                  0, 0, 0, 0, /* null covariates */
-                  phematrix, n_perm, weights,
-                  scantwo_Result, n_col2drop, col2drop);
+    /* scanone */
+    scanone_hk(n_ind, n_pos, n_gen, Genoprob,
+               0, 0, 0, 0, /* null covariates */
+               phematrix, n_perm_this, weights, scanone_Result,
+               ind_noqtl);
 
-  min3d_uppertri(n_pos, n_perm, scantwo_Result, Result[0]); /* full */
-  min3d_lowertri(n_pos, n_perm, scantwo_Result, Result[3]); /* add */
-  min2d(n_pos, n_perm, scanone_Result, Result[5]); /* scanone */
-  for(i=0; i<n_perm; i++) {
-    Result[1][i] = Result[0][i] - Result[5][i]; /* fv1 */
-    Result[2][i] = Result[0][i] - Result[3][i]; /* int */
-    Result[4][i] = Result[3][i] - Result[5][i]; /* av1 */
+    /* scantwo */
+    scantwo_1chr_hk(n_ind, n_pos, n_gen, Genoprob, Pairprob,
+                    0, 0, 0, 0, /* null covariates */
+                    phematrix, n_perm_this, weights,
+                    scantwo_Result, n_col2drop, col2drop);
+
+    min3d_uppertri(n_pos, n_perm_this, scantwo_Result, Result[0]+k); /* full */
+    min3d_lowertri(n_pos, n_perm_this, scantwo_Result, Result[3]+k); /* add */
+    min2d(n_pos, n_perm_this, scanone_Result, Result[5]+k); /* scanone */
+
+    for(i=0; i<n_perm_this; i++) {
+      Result[1][i+k] = Result[0][i+k] - Result[5][i+k]; /* fv1 */
+      Result[2][i+k] = Result[0][i+k] - Result[3][i+k]; /* int */
+      Result[4][i+k] = Result[3][i+k] - Result[5][i+k]; /* av1 */
+    }
   }
-
 }
 
 
 
-/**
- * scantwopermhk_1chr
- */
-
+/* scantwo perms within chr; with covariates, must do permutations singly */
 void scantwopermhk_1chr(int n_ind, int n_pos, int n_gen,
                         double ***Genoprob, double *****Pairprob,
                         double **Addcov, int n_addcov, double *pheno,
@@ -155,17 +159,14 @@ void scantwopermhk_1chr(int n_ind, int n_pos, int n_gen,
 
 
 
-
-/**
- * R_scantwopermhk_2chr
- **/
-
+/* R wrapper for function to perform scantwo permutations by 
+   Haley-Knott regression for a pair of chromosomes */
 void R_scantwopermhk_2chr(int *n_ind, int *n_pos1, int *n_pos2,
                           int *n_gen1, int *n_gen2,
                           double *genoprob1, double *genoprob2,
                           double *addcov, int *n_addcov,
-                          double *pheno, int *n_perm, double *weights,
-                          double *result)
+                          double *pheno, int *n_perm, int *batchsize,
+                          double *weights, double *result)
 {
   double ***Genoprob1, ***Genoprob2, **Result, **Addcov=0;
 
@@ -186,22 +187,19 @@ void R_scantwopermhk_2chr(int *n_ind, int *n_pos1, int *n_pos2,
   else {
     scantwopermhk_2chr_nocovar(*n_ind, *n_pos1, *n_pos2, *n_gen1, *n_gen2,
                                Genoprob1, Genoprob2,
-                               pheno, *n_perm, weights, Result);
+                               pheno, *n_perm, *batchsize, weights, Result);
   }
   PutRNGstate();
 }
 
 
-/**
- * scantwo permhk_2chr_nocovar: with no covariates, can do calculations in batch
- **/
-
+/* scantwo perms for chr pair; with no covariates, can do calculations in batch */
 void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                                 int n_gen2, double ***Genoprob1, double ***Genoprob2,
-                                double *pheno, int n_perm, double *weights,
+                                double *pheno, int n_perm, int batchsize, double *weights,
                                 double **Result)
 {
-  int i;
+  int i, k, n_perm_this;
   double *phematrix;
   double *scanone_result1, **scanone_Result1;
   double *scanone_result2, **scanone_Result2;
@@ -210,55 +208,61 @@ void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
   int *ind_noqtl;
 
   /* setup */
-  create_shuffled_phematrix(n_ind, n_perm, pheno, &phematrix);
+  allocate_double(batchsize*n_ind, &phematrix);
   create_zero_vector(&ind_noqtl, n_ind);
-  allocate_double(n_perm*n_pos1, &scanone_result1);
-  reorg_errlod(n_pos1, n_perm, scanone_result1, &scanone_Result1);
-  allocate_double(n_perm*n_pos2, &scanone_result2);
-  reorg_errlod(n_pos2, n_perm, scanone_result2, &scanone_Result2);
-  allocate_double(n_perm*n_pos1*n_pos2, &scantwo_result_full);
-  reorg_genoprob(n_pos2, n_pos1, n_perm, scantwo_result_full, &scantwo_Result_Full);
-  allocate_double(n_perm*n_pos1*n_pos2, &scantwo_result_add);
-  reorg_genoprob(n_pos1, n_pos2, n_perm, scantwo_result_add, &scantwo_Result_Add);
+  allocate_double(batchsize*n_pos1, &scanone_result1);
+  reorg_errlod(n_pos1, batchsize, scanone_result1, &scanone_Result1);
+  allocate_double(batchsize*n_pos2, &scanone_result2);
+  reorg_errlod(n_pos2, batchsize, scanone_result2, &scanone_Result2);
+  allocate_double(batchsize*n_pos1*n_pos2, &scantwo_result_full);
+  reorg_genoprob(n_pos2, n_pos1, batchsize, scantwo_result_full, &scantwo_Result_Full);
+  allocate_double(batchsize*n_pos1*n_pos2, &scantwo_result_add);
+  reorg_genoprob(n_pos1, n_pos2, batchsize, scantwo_result_add, &scantwo_Result_Add);
 
-  /* scanone */
-  scanone_hk(n_ind, n_pos1, n_gen1, Genoprob1,
-             0, 0, 0, 0, /* null covariates */
-             phematrix, n_perm, weights, scanone_Result1,
-             ind_noqtl);
+  for(k=0; k<n_perm; k+=batchsize) {
+    if(k + batchsize > n_perm) /* check if last batch is smaller */
+      n_perm_this = n_perm-k;
+    else n_perm_this = batchsize;
+    
+    /* shuffle phenotypes */
+    create_shuffled_phematrix(n_ind, n_perm_this, pheno, phematrix);
 
-  scanone_hk(n_ind, n_pos2, n_gen2, Genoprob2,
-             0, 0, 0, 0, /* null covariates */
-             phematrix, n_perm, weights, scanone_Result2,
-             ind_noqtl);
+    /* scanone */
+    scanone_hk(n_ind, n_pos1, n_gen1, Genoprob1,
+               0, 0, 0, 0, /* null covariates */
+               phematrix, n_perm_this, weights, scanone_Result1,
+               ind_noqtl);
 
-  /* scantwo */
-  scantwo_2chr_hk(n_ind, n_pos1, n_pos2, n_gen1, n_gen2,
-                  Genoprob1, Genoprob2,
-                  0, 0, 0, 0, /* null covariates */
-                  phematrix, n_perm, weights,
-                  scantwo_Result_Full, scantwo_Result_Add);
+    scanone_hk(n_ind, n_pos2, n_gen2, Genoprob2,
+               0, 0, 0, 0, /* null covariates */
+               phematrix, n_perm_this, weights, scanone_Result2,
+               ind_noqtl);
+    
+    /* scantwo */
+    scantwo_2chr_hk(n_ind, n_pos1, n_pos2, n_gen1, n_gen2,
+                    Genoprob1, Genoprob2,
+                    0, 0, 0, 0, /* null covariates */
+                    phematrix, n_perm_this, weights,
+                    scantwo_Result_Full, scantwo_Result_Add);
 
-  min2d(n_pos1, n_perm, scanone_Result1, Result[0]);
-  min2d(n_pos2, n_perm, scanone_Result2, Result[5]);
-  for(i=0; i<n_perm; i++)
-    if(Result[0][i] < Result[5][i])
-      Result[5][i] = Result[0][i];
+    min2d(n_pos1, n_perm_this, scanone_Result1, Result[0]+k);
+    min2d(n_pos2, n_perm_this, scanone_Result2, Result[5]+k);
+    for(i=0; i<n_perm_this; i++)
+      if(Result[0][i+k] < Result[5][i+k])
+        Result[5][i+k] = Result[0][i+k];
 
-  min3d(n_pos2, n_pos1, n_perm, scantwo_Result_Full, Result[0]);
-  min3d(n_pos1, n_pos2, n_perm, scantwo_Result_Add, Result[3]);
-  for(i=0; i<n_perm; i++) {
-    Result[1][i] = Result[0][i] - Result[5][i]; /* fv1 */
-    Result[2][i] = Result[0][i] - Result[3][i]; /* int */
-    Result[4][i] = Result[3][i] - Result[5][i]; /* av1 */
+    min3d(n_pos2, n_pos1, n_perm_this, scantwo_Result_Full, Result[0]+k);
+    min3d(n_pos1, n_pos2, n_perm_this, scantwo_Result_Add, Result[3]+k);
+    for(i=0; i<n_perm_this; i++) {
+      Result[1][i+k] = Result[0][i+k] - Result[5][i+k]; /* fv1 */
+      Result[2][i+k] = Result[0][i+k] - Result[3][i+k]; /* int */
+      Result[4][i+k] = Result[3][i+k] - Result[5][i+k]; /* av1 */
+    }
   }
 }
 
 
-/**
- * scantwopermhk_2chr
- */
-
+/* scantwo perms for chr pair; with covariates, must do perms singly */
 void scantwopermhk_2chr(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                         int n_gen2, double ***Genoprob1, double ***Genoprob2,
                         double **Addcov, int n_addcov, double *pheno,
@@ -327,16 +331,14 @@ void scantwopermhk_2chr(int n_ind, int n_pos1, int n_pos2, int n_gen1,
 
 
 /* create a matrix of shuffled phenotypes */
-void create_shuffled_phematrix(int n_ind, int n_perm, double *pheno, double **phematrix)
+void create_shuffled_phematrix(int n_ind, int n_perm, double *pheno, double *phematrix)
 {
   int i, j;
 
-  allocate_double(n_ind*n_perm, phematrix);
-
   for(i=0; i<n_perm; i++) {
     for(j=0; j<n_ind; j++)
-      (*phematrix)[i*n_ind + j] = pheno[j];
-    double_permute((*phematrix)+i*n_ind, n_ind);
+      phematrix[i*n_ind + j] = pheno[j];
+    double_permute(phematrix+i*n_ind, n_ind);
   }
 }
 
