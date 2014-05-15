@@ -32,7 +32,7 @@ void R_scantwopermhk_1chr(int *n_ind, int *n_pos, int *n_gen,
   GetRNGstate();
   reorg_genoprob(*n_ind, *n_pos, *n_gen, genoprob, &Genoprob);
   reorg_pairprob(*n_ind, *n_pos, *n_gen, pairprob, &Pairprob);
-  reorg_errlod(*n_perm, 5, result, &Result);
+  reorg_errlod(*n_perm, 6, result, &Result);
 
   /* reorganize addcov (if not empty) */
   if(*n_addcov > 0) {
@@ -61,6 +61,7 @@ void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
                                 double *pheno, int n_perm, double *weights,
                                 double **Result, int n_col2drop, int *col2drop)
 {
+  int i;
   double *phematrix, *scanone_result, **scanone_Result;
   double *scantwo_result, ***scantwo_Result;
   int *ind_noqtl;
@@ -84,6 +85,16 @@ void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
                   0, 0, 0, 0, /* null covariates */
                   phematrix, n_perm, weights,
                   scantwo_Result, n_col2drop, col2drop);
+
+  min3d_uppertri(n_pos, n_perm, scantwo_Result, Result[0]); /* full */
+  min3d_lowertri(n_pos, n_perm, scantwo_Result, Result[3]); /* add */
+  min2d(n_pos, n_perm, scanone_Result, Result[5]); /* scanone */
+  for(i=0; i<n_perm; i++) {
+    Result[1][i] = Result[0][i] - Result[5][i]; /* fv1 */
+    Result[2][i] = Result[0][i] - Result[3][i]; /* int */
+    Result[4][i] = Result[3][i] - Result[5][i]; /* av1 */
+  }
+
 }
 
 
@@ -132,6 +143,13 @@ void scantwopermhk_1chr(int n_ind, int n_pos, int n_gen,
                     pheno, 1, weights,
                     scantwo_Result, n_col2drop, col2drop);
 
+    min3d_uppertri(n_pos, 1, scantwo_Result, Result[0]+i); /* full */
+    min3d_lowertri(n_pos, 1, scantwo_Result, Result[3]+i); /* add */
+    min2d(n_pos, 1, scanone_Result, Result[5]+i); /* scanone */
+    Result[1][i] = Result[0][i] - Result[5][i]; /* fv1 */
+    Result[2][i] = Result[0][i] - Result[3][i]; /* int */
+    Result[4][i] = Result[3][i] - Result[5][i]; /* av1 */
+
   }
 }
 
@@ -155,7 +173,7 @@ void R_scantwopermhk_2chr(int *n_ind, int *n_pos1, int *n_pos2,
 
   reorg_genoprob(*n_ind, *n_pos1, *n_gen1, genoprob1, &Genoprob1);
   reorg_genoprob(*n_ind, *n_pos2, *n_gen2, genoprob2, &Genoprob2);
-  reorg_errlod(*n_perm, 5, result, &Result);
+  reorg_errlod(*n_perm, 6, result, &Result);
 
   /* reorganize addcov (if not empty) */
   if(*n_addcov > 0) {
@@ -183,6 +201,7 @@ void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                                 double *pheno, int n_perm, double *weights,
                                 double **Result)
 {
+  int i;
   double *phematrix;
   double *scanone_result1, **scanone_Result1;
   double *scanone_result2, **scanone_Result2;
@@ -220,6 +239,19 @@ void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                   phematrix, n_perm, weights,
                   scantwo_Result_Full, scantwo_Result_Add);
 
+  min2d(n_pos1, n_perm, scanone_Result1, Result[0]);
+  min2d(n_pos2, n_perm, scanone_Result2, Result[5]);
+  for(i=0; i<n_perm; i++)
+    if(Result[0][i] < Result[5][i])
+      Result[5][i] = Result[0][i];
+
+  min3d(n_pos2, n_pos1, n_perm, scantwo_Result_Full, Result[0]);
+  min3d(n_pos1, n_pos2, n_perm, scantwo_Result_Add, Result[3]);
+  for(i=0; i<n_perm; i++) {
+    Result[1][i] = Result[0][i] - Result[5][i]; /* fv1 */
+    Result[2][i] = Result[0][i] - Result[3][i]; /* int */
+    Result[4][i] = Result[3][i] - Result[5][i]; /* av1 */
+  }
 }
 
 
@@ -277,6 +309,18 @@ void scantwopermhk_2chr(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                     pheno, 1, weights,
                     scantwo_Result_Full, scantwo_Result_Add);
 
+
+    min2d(n_pos1, 1, scanone_Result1, Result[0]+i);
+    min2d(n_pos2, 1, scanone_Result2, Result[5]+i);
+    if(Result[0][i] < Result[5][i])
+      Result[5][i] = Result[0][i];
+
+    min3d(n_pos2, n_pos1, 1, scantwo_Result_Full, Result[0]+i);
+    min3d(n_pos1, n_pos2, 1, scantwo_Result_Add, Result[3]+i);
+    Result[1][i] = Result[0][i] - Result[5][i]; /* fv1 */
+    Result[2][i] = Result[0][i] - Result[3][i]; /* int */
+    Result[4][i] = Result[3][i] - Result[5][i]; /* av1 */
+
   }
 
 }
@@ -327,4 +371,69 @@ void create_zero_vector(int **vector, int n)
   allocate_int(n, vector);
 
   for(i=0; i<n; i++) (*vector)[i] = 0;
+}
+
+/* minimize over first two dimensions for each value of 3rd and place in results */
+void min3d(int d1, int d2, int d3, double ***Values, double *results)
+{
+  int i, j, k;
+
+  for(k=0; k<d3; k++) {
+    results[k] = Values[k][0][0];
+    for(i=0; i<d1; i++) {
+      for(j=0; j<d2; j++) {
+        if(Values[k][j][i] < results[k])
+          results[k] = Values[k][j][i];
+      }
+    }
+  }
+}
+
+
+/* minimize over first dimension for each value of 2nd and place in results */
+void min2d(int d1, int d2, double **Values, double *results)
+{
+  int i, k;
+
+  for(k=0; k<d2; k++) {
+    results[k] = Values[k][0];
+    for(i=0; i<d1; i++) {
+      if(Values[k][i] < results[k])
+        results[k] = Values[k][i];
+    }
+  }
+}
+
+
+/* minimize over upper triangle of square matrix d1xd1 for each value of d3 */
+void min3d_uppertri(int d1, int d3, double ***Values, double *results)
+{
+  int i, j, k;
+
+  for(k=0; k<d3; k++) {
+    results[k] = R_PosInf;
+    for(i=0; i<d1; i++) {
+      for(j=i+1; j<d1; j++) {
+        if(Values[k][i][j] < results[k])
+          results[k] = Values[k][i][j];
+      }
+    }
+  }
+}
+
+
+/* minimize over lower triangle of square matrix d1xd1 for each value of d3 */
+void min3d_lowertri(int d1, int d3, double ***Values, double *results)
+{
+  int i, j, k;
+
+  for(k=0; k<d3; k++) {
+    results[k] = R_PosInf;
+    for(i=0; i<d1; i++) {
+      for(j=i+1; j<d1; j++) {
+        if(Values[k][j][i] < results[k])
+          results[k] = Values[k][j][i];
+      }
+    }
+  }
 }
