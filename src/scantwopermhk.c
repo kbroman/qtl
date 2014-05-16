@@ -58,7 +58,7 @@ void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
                                 double *weights, double **Result,
                                 int n_col2drop, int *col2drop)
 {
-  int i, j;
+  int i;
   double *phematrix, **Phematrix, *scanone_result, **scanone_Result;
   double *scantwo_result, ***scantwo_Result;
   int *ind_noqtl;
