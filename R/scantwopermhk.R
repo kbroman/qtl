@@ -146,7 +146,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
   else { # stratified permutation
     permindex <- replicate(n.perm, 1:n.ind)
     for(i in 1:n.strata)
-      permindex[strata==i,] <- apply(permindex[strata==i,], 2, sample)
+      permindex[perm.strata==i,] <- apply(permindex[perm.strata==i,], 2, sample)
   }
   permindex <- permindex-1
 
