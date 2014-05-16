@@ -15,6 +15,7 @@
 #include "scanone_hk.h"
 #include "scantwo_hk.h"
 #include "scantwopermhk.h"
+#include "perm_strat.h"
 #define TOL 1e-12
 
 /* R wrapper for function to perform scantwo permutations by 
@@ -24,7 +25,8 @@ void R_scantwopermhk_1chr(int *n_ind, int *n_pos, int *n_gen,
                           double *addcov, int *n_addcov,
                           double *pheno, int* n_perm, int *batchsize, 
                           double *weights, double *result,
-                          int *n_col2drop, int *col2drop)
+                          int *n_col2drop, int *col2drop,
+                          int *n_strata, int *strata)
 {
   double ***Genoprob, **Result, **Addcov=0, *****Pairprob;
 
@@ -40,12 +42,14 @@ void R_scantwopermhk_1chr(int *n_ind, int *n_pos, int *n_gen,
     scantwopermhk_1chr(*n_ind, *n_pos, *n_gen, Genoprob, Pairprob,
                        Addcov, *n_addcov,
                        pheno, *n_perm, weights, 
-                       Result, *n_col2drop, col2drop);
+                       Result, *n_col2drop, col2drop,
+                       *n_strata, strata);
   }
   else {
     scantwopermhk_1chr_nocovar(*n_ind, *n_pos, *n_gen, Genoprob, Pairprob,
                                pheno, *n_perm, *batchsize, weights, 
-                               Result, *n_col2drop, col2drop);
+                               Result, *n_col2drop, col2drop,
+                               *n_strata, strata);
   }
 
   PutRNGstate();
@@ -57,7 +61,8 @@ void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
                                 double ***Genoprob, double *****Pairprob,
                                 double *pheno, int n_perm, int batchsize, 
                                 double *weights, double **Result,
-                                int n_col2drop, int *col2drop)
+                                int n_col2drop, int *col2drop,
+                                int n_strata, int *strata)
 {
   int i, k;
   double *phematrix, *scanone_result, **scanone_Result;
@@ -78,7 +83,7 @@ void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
     else n_perm_this = batchsize;
     
     /* shuffle phenotypes */
-    create_shuffled_phematrix(n_ind, n_perm_this, pheno, phematrix);
+    create_shuffled_phematrix(n_ind, n_perm_this, pheno, phematrix, n_strata, strata);
 
     /* scanone */
     scanone_hk(n_ind, n_pos, n_gen, Genoprob,
@@ -111,7 +116,8 @@ void scantwopermhk_1chr(int n_ind, int n_pos, int n_gen,
                         double ***Genoprob, double *****Pairprob,
                         double **Addcov, int n_addcov, double *pheno,
                         int n_perm, double *weights, double **Result,
-                        int n_col2drop, int *col2drop)
+                        int n_col2drop, int *col2drop,
+                        int n_strata, int *strata)
 {
   int *ind_index, i;
   double *dwork;
@@ -133,7 +139,7 @@ void scantwopermhk_1chr(int n_ind, int n_pos, int n_gen,
   allocate_double(n_ind, &dwork);
 
   for(i=0; i<n_perm; i++) {
-    shuffle_covar_and_phe(n_ind, ind_index, pheno, Addcov, n_addcov, dwork);
+    shuffle_covar_and_phe(n_ind, ind_index, pheno, Addcov, n_addcov, dwork, n_strata, strata);
 
     /* scanone */
     scanone_hk(n_ind, n_pos, n_gen, Genoprob,
@@ -166,7 +172,8 @@ void R_scantwopermhk_2chr(int *n_ind, int *n_pos1, int *n_pos2,
                           double *genoprob1, double *genoprob2,
                           double *addcov, int *n_addcov,
                           double *pheno, int *n_perm, int *batchsize,
-                          double *weights, double *result)
+                          double *weights, double *result,
+                          int *n_strata, int *strata)
 {
   double ***Genoprob1, ***Genoprob2, **Result, **Addcov=0;
 
@@ -182,12 +189,14 @@ void R_scantwopermhk_2chr(int *n_ind, int *n_pos1, int *n_pos2,
 
     scantwopermhk_2chr(*n_ind, *n_pos1, *n_pos2, *n_gen1, *n_gen2,
                        Genoprob1, Genoprob2, Addcov, *n_addcov,
-                       pheno, *n_perm, weights, Result);
+                       pheno, *n_perm, weights, Result,
+                       *n_strata, strata);
   }
   else {
     scantwopermhk_2chr_nocovar(*n_ind, *n_pos1, *n_pos2, *n_gen1, *n_gen2,
                                Genoprob1, Genoprob2,
-                               pheno, *n_perm, *batchsize, weights, Result);
+                               pheno, *n_perm, *batchsize, weights, Result,
+                               *n_strata, strata);
   }
   PutRNGstate();
 }
@@ -197,7 +206,7 @@ void R_scantwopermhk_2chr(int *n_ind, int *n_pos1, int *n_pos2,
 void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                                 int n_gen2, double ***Genoprob1, double ***Genoprob2,
                                 double *pheno, int n_perm, int batchsize, double *weights,
-                                double **Result)
+                                double **Result, int n_strata, int *strata)
 {
   int i, k, n_perm_this;
   double *phematrix;
@@ -225,7 +234,7 @@ void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
     else n_perm_this = batchsize;
     
     /* shuffle phenotypes */
-    create_shuffled_phematrix(n_ind, n_perm_this, pheno, phematrix);
+    create_shuffled_phematrix(n_ind, n_perm_this, pheno, phematrix, n_strata, strata);
 
     /* scanone */
     scanone_hk(n_ind, n_pos1, n_gen1, Genoprob1,
@@ -266,7 +275,8 @@ void scantwopermhk_2chr_nocovar(int n_ind, int n_pos1, int n_pos2, int n_gen1,
 void scantwopermhk_2chr(int n_ind, int n_pos1, int n_pos2, int n_gen1,
                         int n_gen2, double ***Genoprob1, double ***Genoprob2,
                         double **Addcov, int n_addcov, double *pheno,
-                        int n_perm, double *weights, double **Result)
+                        int n_perm, double *weights, double **Result,
+                        int n_strata, int *strata)
 {
   int *ind_index, i;
   double *dwork;
@@ -293,7 +303,7 @@ void scantwopermhk_2chr(int n_ind, int n_pos1, int n_pos2, int n_gen1,
   allocate_double(n_ind, &dwork);
 
   for(i=0; i<n_perm; i++) {
-    shuffle_covar_and_phe(n_ind, ind_index, pheno, Addcov, n_addcov, dwork);
+    shuffle_covar_and_phe(n_ind, ind_index, pheno, Addcov, n_addcov, dwork, n_strata, strata);
 
     /* scanone */
     scanone_hk(n_ind, n_pos1, n_gen1, Genoprob1,
@@ -331,26 +341,35 @@ void scantwopermhk_2chr(int n_ind, int n_pos1, int n_pos2, int n_gen1,
 
 
 /* create a matrix of shuffled phenotypes */
-void create_shuffled_phematrix(int n_ind, int n_perm, double *pheno, double *phematrix)
+void create_shuffled_phematrix(int n_ind, int n_perm, double *pheno, double *phematrix,
+                               int n_strata, int *strata)
 {
   int i, j;
 
   for(i=0; i<n_perm; i++) {
     for(j=0; j<n_ind; j++)
       phematrix[i*n_ind + j] = pheno[j];
-    double_permute(phematrix+i*n_ind, n_ind);
+    
+    if(n_strata <= 1)
+      double_permute(phematrix+i*n_ind, n_ind);
+    else /* stratified permutation */
+      permute_by_strata_double(n_ind, phematrix+i*n_ind, n_strata, strata);
   }
 }
 
 /* shuffle the rows in the phenotype data and covariate matrix */
 void shuffle_covar_and_phe(int n_ind, int *ind_index, double *pheno,
                            double **Addcov, int n_addcov,
-                           double *dwork)
+                           double *dwork,
+                           int n_strata, int *strata)
 {
   int i, j;
 
   /* shuffle index */
-  int_permute(ind_index, n_ind);
+  if(n_strata <= 1)
+    int_permute(ind_index, n_ind);
+  else
+    permute_by_strata_int(n_ind, ind_index, n_strata, strata);
 
   /* reorder phenotypes */
   memcpy(dwork, pheno, n_ind*sizeof(double));
