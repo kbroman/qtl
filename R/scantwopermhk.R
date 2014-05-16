@@ -2,14 +2,11 @@
 
 scantwopermhk <-
 function(cross, chr, pheno.col=1, addcovar=NULL,
-         weights=NULL, n.perm=1, batchsize=250,
+         weights=NULL, n.perm=1,
          perm.strata=NULL, verbose=FALSE, assumeCondIndep=FALSE)
 {
   if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
-
-  if(batchsize < 1) batchsize <- 1
-  if(batchsize > n.perm) batchsize <- n.perm
 
   # pull out chromosomes to be scanned
   if(missing(chr)) chr1 <- chr2 <- chr <- names(cross$geno)
@@ -99,7 +96,7 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
   # reorganize perm.strata
   if(!missing(perm.strata) && !is.null(perm.strata)) {
     u <- unique(perm.strata)
-    perm.strata <- match(perm.strata, u)-1 # turn into integers in {0, 1, ..., n.strata}
+    perm.strata <- match(perm.strata, u) # turn into integers in {1, ..., n.strata}
     n.strata <- length(u)
   }
   else {
@@ -142,6 +139,16 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
     n.gen[i] <- length(gen.names)
     n.pos[i] <- ncol(cross$geno[[i]]$prob)
   }
+
+  # create shuffled indices
+  if(n.strata==0)
+    permindex <- replicate(n.perm, sample(1:n.ind))
+  else { # stratified permutation
+    permindex <- replicate(n.perm, 1:n.ind)
+    for(i in 1:n.strata)
+      permindex[strata==i,] <- apply(permindex[strata==i,], 2, sample)
+  }
+  permindex <- permindex-1
 
   # begin loop over pairs of chromosomes
   result <- vector("list", length(nchr1)*length(nchr2))
@@ -231,13 +238,11 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
                     as.integer(n.ac),
                     as.double(pheno),
                     as.integer(n.perm),
-                    as.integer(batchsize),
+                    as.integer(permindex),
                     as.double(weights),
                     result=as.double(rep(0,n.perm*6)),
                     as.integer(n.col2drop),
                     as.integer(col2drop),
-                    as.integer(n.strata),
-                    as.integer(perm.strata),
                     PACKAGE="qtl")
         result[[k]] <- -matrix(thisz$result, nrow=n.perm)
         result[[k]][,c(1,4,6)] <- result[[k]][,c(1,4,6)] +
@@ -256,11 +261,9 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
                     as.integer(n.ac),
                     as.double(pheno),
                     as.integer(n.perm),
-                    as.integer(batchsize),
+                    as.integer(permindex),
                     as.double(weights),
                     result=as.double(rep(0,n.perm*6)),
-                    as.integer(n.strata),
-                    as.integer(perm.strata),
                     PACKAGE="qtl")
         result[[k]] <- -matrix(thisz$result, nrow=n.perm)
         result[[k]][,c(1,4,6)] <- result[[k]][,c(1,4,6)] +
@@ -275,40 +278,5 @@ function(cross, chr, pheno.col=1, addcovar=NULL,
   result <- lapply(result, function(a) { a <- as.matrix(a); colnames(a) <- phenames(cross)[1]; a })
   names(result) <- c("full", "fv1", "int", "add", "av1", "one")
   class(result) <- c("scantwoperm", "list")
-  result
-}
-
-
-## for testing the stratified permutations
-test_permstrat <-
-function(strata, index)
-{
-  stopifnot(length(strata) > 1)
-  n <- length(strata)
-
-  # convert strata to unique integers 0, ..., n_strat
-  u <- unique(strata)
-  n.strata <- length(u)
-  strata <- match(strata, u)-1
-  
-  if(missing(index) || is.null(index))
-    result <- .C("R_permute_by_strata_int",
-                 as.integer(n),
-                 result=as.integer(1:n),
-                 as.integer(n.strata),
-                 as.integer(strata),
-                 PACKAGE="qtl")$result
- 
-  else {
-    if(length(index) != n)
-      stop("length(index) != length(strata)")
-    result <- .C("R_permute_by_strata_double",
-                 as.integer(n),
-                 result=as.double(index),
-                 as.integer(n.strata),
-                 as.integer(strata),
-                 PACKAGE="qtl")$result
-  }
-
   result
 }
