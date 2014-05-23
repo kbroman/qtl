@@ -144,7 +144,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
 */
 double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector position,
                   vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, 
-                  int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, int verbose) {
+                  int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, bool* warned, int verbose) {
                   
   //debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%d domi=%d cross=%c\n",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
   //for (int i=0; i<Nloci; i++){ debug_trace("loci %d : recombfreq=%f\n",i,r[i]); }
@@ -152,7 +152,6 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
   bool warnZeroDist=false;
   bool biasadj=false;
   double oldlogL = -10000, delta=1.0, calc_i, Pscale=1.75;
-  bool warned = false;
   
   vector indweight  = newvector(Nind);
   int newNaug       = ((!fitQTL) ? Naug : 3*Naug);
@@ -242,9 +241,9 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
       }
     }
   }
-  if(warnZeroDist && verbose && !warned){
+  if(warnZeroDist && verbose && !(*warned)){
     Rprintf("WARNING: 0.0 from Probability calculation! Markers at same cMorgan but different genotype?\n"); 
-    warned = true;
+    (*warned) = true;
   }
 //	Rprintf("INFO: Done fitting QTL's\n");
   if ((*weight)[0]== -1.0) {

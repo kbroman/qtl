@@ -101,7 +101,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
 
   int  Naug, Nmark = (*nummark), run = 0;
   bool useREML = true, fitQTL = false;
-
+  bool warned = false;
   
   ivector chr = newivector(Nmark); // The chr vector contains the chromosome number for every marker
   for(int i = 0; i < Nmark; i++){  // Rprintf("INFO: Receiving the chromosome matrix from R");
@@ -258,7 +258,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   F2 = 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
-  double logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
+  double logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype, &warned, verbose);
   if(verbose){
     if (!R_finite(logL)) {
       Rprintf("WARNING: Log-likelihood of full model = INFINITE\n");
