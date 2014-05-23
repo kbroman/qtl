@@ -46,8 +46,8 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   vector Fy = newvector(Naug);
   cvector QTLcofactor       = newcvector(Nloci);
   cvector saveQTLcofactor   = newcvector(Nloci);
+  bool warned  = false;
   double infocontent;
-
   vector info0 = newvector(Nind);
   vector info1 = newvector(Nind);
   vector info2 = newvector(Nind);
@@ -75,7 +75,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   // cout << "estimate variance in mixture model with all cofactors" << endl;
   
   variance= -1.0;
-  savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
+  savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
   if (verbose) Rprintf("INFO: log-likelihood of full model = %f\n", savelogL/2);
 
   // augment data for missing QTL observations (x 3)
@@ -237,7 +237,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
           if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MSEX;
           else QTLcofactor[j+1]= MSEX;
           // Rprintf("INFO: Before base model\n", QTLlikelihood/-2);
-          QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, verbose);
+          QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
           // Rprintf("INFO: log-likelihood of NO QTL model= %f\n", QTLlikelihood/-2);
           weight0[0]= -1.0;
           savebaseNoQTLModel= QTLlikelihood;
@@ -252,7 +252,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MQTL;
         else QTLcofactor[j+1]= MQTL;
         if (REMLorML==MH) weight[0]= -1.0;
-        QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
+        QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
         //this is the place we error at, because the likelihood is not correct.
         if (QTLlikelihood<-0.05) {
           Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n", QTLlikelihood, (savebaseNoQTLModel/-2), j); //return 0;}

@@ -52,7 +52,8 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   vector logL        = newvector(Nmark);
   double savelogL    = logLfull;
   double maxlogL     = logLfull-10000.0;
-
+  bool warned        = false;
+  
   if (verbose) Rprintf("INFO: Backward elimination of cofactors started\n");
   for (int j=0; j<Nmark; j++) {
     (*newcofactor)[j]= cofactor[j];
@@ -64,14 +65,14 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
         // See what the likelihood is when we drop the cofactor
         (*newcofactor)[j]=MNOCOF;
         if (REMLorML=='1') variance= -1.0;
-        logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+        logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, &warned, verbose);
         // Set back the cofactor to MCOF
         (*newcofactor)[j]=MCOF;
       } else if ((*newcofactor)[j]==MSEX) {
         // See what the likelihood is when we drop the sexcofactor
         (*newcofactor)[j]=MNOCOF;
         if (REMLorML=='1') variance= -1.0;
-        logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+        logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, &warned, verbose);
         // Set back the cofactor to MSEX
         (*newcofactor)[j]=MSEX;
       } else if ((*newcofactor)[j]!=MNOCOF) {
