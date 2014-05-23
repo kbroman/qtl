@@ -92,7 +92,7 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
  */
 
 double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker,
-               vector y, ivector f1genotype, int Backwards, double **QTL,vector
+               vector y, int Backwards, double **QTL,vector
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
                double alfa, int em, int out_Naug, int **INDlist, char
@@ -124,17 +124,15 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     }
   }
 
-  bool dropj=true;
+  bool dropj = false;
   int jj=0;
   // Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
   // Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   // Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
   for (int j=0; j < Nmark; j++) { // WRONG: (Nmark-1) Should fix the out of bound in mapdistance, it does fix, but created problems for the last marker
-    if (mqmmod(f1genotype[j], 11)!=0) {
-      dropj=false;
-      if(j+1 < Nmark){  // Check if we can look ahead
-        if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0){ dropj=true; }
-      }
+    dropj = false;
+    if(j+1 < Nmark){  // Check if we can look ahead
+      if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0){ dropj=true; }
     }
     if (!dropj) {
       marker[jj]= marker[j];
@@ -319,7 +317,6 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
              RqtlCrossType rqtlcrosstype,int domi,int verbose){
   int cof_cnt=0;
   MQMMarkerMatrix markers = newMQMMarkerMatrix(Nmark+1,Nind);
-  ivector f1genotype      = newivector(Nmark);
   cvector cofactor        = newcvector(Nmark);
   vector mapdistance      = newvector(Nmark);
 
@@ -328,7 +325,6 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
   change_coding(&Nmark, &Nind, Geno, markers, crosstype); // Change all the markers from R/qtl format to MQM internal
 
   for (int i=0; i< Nmark; i++) {
-    f1genotype[i]  = 12;               // The parental strain for all markers, this was used to asses marker information
     mapdistance[i] = POSITIONUNKNOWN;  // Mapdistances
     mapdistance[i] = Dist[0][i];  
     cofactor[i]    = MNOCOF;           // Cofactors
@@ -355,7 +351,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
   if(domi != 0){ dominance=true; }
 
   //WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
-  analyseF2(Nind, &Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], f1genotype, Backwards, QTL, &mapdistance, Chromo, NRUN, RMLorML, Windowsize, 
+  analyseF2(Nind, &Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], Backwards, QTL, &mapdistance, Chromo, NRUN, RMLorML, Windowsize, 
             Steps, Stepmi, Stepma, Alfa, Emiter, out_Naug, INDlist, reestimate, crosstype, dominance, verbose);
 
   if (re_estimate) {
@@ -369,7 +365,6 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
     for (int i=0; i< Nmark; i++) { Cofactors[0][i] = cofactor[i]; }
   }
 
-  Free(f1genotype);
   Free(cofactor);
   Free(mapdistance);
   if(verbose) Rprintf("INFO: All done in C returning to R\n");
