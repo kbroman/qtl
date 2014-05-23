@@ -48,19 +48,19 @@ MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Gen
     for (int i=0; i < Nind; i++) {
       //Some checks to see if the cross really is the cross we got (So BC can't contain 3's (BB) and RILS can't contain 2's (AB)
       if (Geno[j][i] != 9 && Geno[j][i] > 3 && (rqtlcrosstype) != 1) {
-        Rprintf("ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[j][i]);
-        info("Unexpected genotype pattern, switching to F2");
+        Rprintf("INFO: ind = %d marker = %d Geno = %d\n", i+1, j+1, Geno[j][i]);
+        Rprintf("INFO: Unexpected genotype pattern, switching to F2\n");
         crosstype = CF2;
         break;
       }
       if (Geno[j][i] == 3 && (rqtlcrosstype) == 2) {
-        info("Unexpected genotype pattern, switching from BC to F2");
+        Rprintf("INFO: Unexpected genotype pattern, switching from BC to F2\n");
         crosstype = CF2;
         break;
       }
       //IF we have a RIL and find AB then the set is messed up; we have a BC genotype
       if (Geno[j][i] == 2 && (rqtlcrosstype) == 3) {
-        info("Unexpected genotype pattern, switching from RIL to BC");
+        Rprintf("INFO: Unexpected genotype pattern, switching from RIL to BC\n");
         crosstype = CBC;
         break;
       }
@@ -224,6 +224,6 @@ void copyvector(vector vsource, vector vdestination, int dim) {
     Rf_error(s);
   }
   void debug_trace(const char*, ...){}
-  void info(const char* s, ...){ Rprintf(s); Rprintf("\n"); }
+  void info(const char* s, ...){ Rprintf("INFO: "); Rprintf(s); Rprintf("\n"); }
 #endif
 

@@ -40,7 +40,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
               char REMLorML, bool fitQTL, bool dominance, int em, double
               windowsize, double stepsize, double stepmin, double stepmax, 
               MQMCrossType crosstype, int verbose) {
-  //Rprintf("INFO: mapQTL function called.\n");
+  if(verbose) Rprintf("INFO: mapQTL function called\n");
   int j, jj, jjj=0;
   int Nloci = Nmark+1;
   vector Fy = newvector(Naug);
@@ -76,7 +76,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   
   variance= -1.0;
   savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
-  if (verbose) info("INFO: log-likelihood of full model= %f", savelogL/2);
+  if (verbose) Rprintf("INFO: log-likelihood of full model = %f\n", savelogL/2);
 
   // augment data for missing QTL observations (x 3)
   fitQTL=true;
