@@ -44,7 +44,6 @@
   #include "mqmmapqtl.h"
   #include "mqmscan.h"
 
-
   #ifdef STANDALONE
     // Running mqm stand alone (without R)
     extern FILE* redirect_info;  // Redirect output for testing
