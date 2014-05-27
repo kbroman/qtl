@@ -8,7 +8,7 @@
 
 \usage{
 mqmplot.circle(cross,result,highlight=0,spacing=25, interactstrength=2,
-               legend=FALSE, verbose=FALSE, transparency=FALSE)
+               axis.legend=TRUE, col.legend=FALSE, verbose=FALSE, transparency=FALSE)
 }
 
 \arguments{
@@ -28,7 +28,8 @@ mqmplot.circle(cross,result,highlight=0,spacing=25, interactstrength=2,
   interactstrength values will generaty be more reliable.
   }  
   \item{spacing}{ User defined spacing between chromosomes in cM }
-  \item{legend}{ With a mqmmulti object, plots a legend for the non-highlighed version }
+  \item{axis.legend}{ When set to FALSE, suppresses the legends. (defaults to plotting legends besides the axis.  }
+  \item{col.legend}{ With a mqmmulti object, plots a legend for the non-highlighed version }
   \item{transparency}{ Use transparency when drawing the plots (defaults to no transparency) }
   \item{verbose}{ Be verbose }
 }
