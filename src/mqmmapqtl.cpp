@@ -40,14 +40,14 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
               char REMLorML, bool fitQTL, bool dominance, int em, double
               windowsize, double stepsize, double stepmin, double stepmax, 
               MQMCrossType crosstype, int verbose) {
-  //Rprintf("INFO: mapQTL function called.\n");
+  if(verbose) Rprintf("INFO: mapQTL function called\n");
   int j, jj, jjj=0;
   int Nloci = Nmark+1;
   vector Fy = newvector(Naug);
   cvector QTLcofactor       = newcvector(Nloci);
   cvector saveQTLcofactor   = newcvector(Nloci);
+  bool warned  = false;
   double infocontent;
-
   vector info0 = newvector(Nind);
   vector info1 = newvector(Nind);
   vector info2 = newvector(Nind);
@@ -67,16 +67,16 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
     else if (position[j]==MMIDDLE)
       cumdistance[j]= cumdistance[j-1]-50*log(1-2.0*r[j]);
   }
-  double savelogL=0.0; // log-likelihood of model with all selected cofactors
+  double savelogL = 0.0; // log-likelihood of model with all selected cofactors
 
   /* fit QTL on top of markers (full ML)   fit QTL between markers (full ML) */
   // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
   /* estimate variance in mixture model with all marker cofactors */
   // cout << "estimate variance in mixture model with all cofactors" << endl;
-
+  
   variance= -1.0;
-  savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
-//  if (verbose==1){ info("INFO: log-likelihood of full model= %f", savelogL/2); }
+  savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
+  if (verbose) Rprintf("INFO: log-likelihood of full model = %f\n", savelogL/2);
 
   // augment data for missing QTL observations (x 3)
   fitQTL=true;
@@ -237,7 +237,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
           if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MSEX;
           else QTLcofactor[j+1]= MSEX;
           // Rprintf("INFO: Before base model\n", QTLlikelihood/-2);
-          QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, verbose);
+          QTLlikelihood= -2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight0, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
           // Rprintf("INFO: log-likelihood of NO QTL model= %f\n", QTLlikelihood/-2);
           weight0[0]= -1.0;
           savebaseNoQTLModel= QTLlikelihood;
@@ -252,7 +252,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if ((position[j]==MLEFT)&&((moveQTL-stepsize)<=mapdistance[j])) QTLcofactor[j]= MQTL;
         else QTLcofactor[j+1]= MQTL;
         if (REMLorML==MH) weight[0]= -1.0;
-        QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, verbose);
+        QTLlikelihood+=2.0*QTLmixture(QTLloci, QTLcofactor, QTLr, QTLposition, y, ind, Nind, Naug, Nloci, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
         //this is the place we error at, because the likelihood is not correct.
         if (QTLlikelihood<-0.05) {
           Rprintf("WARNING: Negative QTLlikelihood=%f versus BASE MODEL: %f\nThis applies to the QTL at %d\n", QTLlikelihood, (savebaseNoQTLModel/-2), j); //return 0;}
