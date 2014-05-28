@@ -32,8 +32,6 @@
   #define __MQM_H
 
   #include <R.h>
-  // #include <R_ext/PrtUtil.h>
-  // #include <R_ext/RS.h>
   #include <R_ext/Utils.h>
   #include "standalone.h"
   #include "util.h"
@@ -45,8 +43,7 @@
   #include "mqmeliminate.h"
   #include "mqmmapqtl.h"
   #include "mqmscan.h"
-  
-  
+
   #ifdef STANDALONE
     // Running mqm stand alone (without R)
     extern FILE* redirect_info;  // Redirect output for testing
@@ -67,15 +64,23 @@
       }\
     }
   #else
-    #define message(type, format, ...) { \
-      Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
-    
-    #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); Rf_error(s); }
-    
-    #define debug_trace(format, ...) { }
-  #endif
+    #ifdef ENABLE_C99_MACROS
+      #define message(type, format, ...) { Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
+      #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); Rf_error(s); }
+      #define debug_trace(format, ...) { }
+    #else
+      void message(const char*, ...);
+      void fatal(const char*, ...);
+      void debug_trace(const char*, ...);
+    #endif // ENABLE_C99_MACROS
+  #endif // !STANDALONE
 
-  #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
-  #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
+  #ifdef ENABLE_C99_MACROS
+    #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
+    #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
+  #else
+    void info(const char*, ...);
+    void verbose(const char*, ...);
+  #endif // !ENABLE_C99_MACROS
 
 #endif // MQM_H
