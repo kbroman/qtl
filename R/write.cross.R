@@ -3,7 +3,7 @@
 # write.cross.R
 #
 # copyright (c) 2001-2014, Karl W Broman and Hao Wu
-# last modified Feb, 2014
+# last modified June, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,8 @@
 ######################################################################
 
 write.cross <-
-function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary", "qtab"),
+function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart",
+                    "gary", "qtab", "mapqtl"),
          filestem="data", chr, digits=NULL, descr)
 {
   if(!any(class(cross) == "cross"))
@@ -68,7 +69,8 @@ function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart", "gary"
   else if(format=="qtab") {
     if(missing(descr)) descr <- paste(deparse(substitute(cross)), "from R/qtl")
     write.cross.qtab(cross, filestem, descr, verbose=FALSE)
-  }
+  } else if(format == "mapqtl")
+      write.cross.mq(cross, filestem, digits)
 }
 
 
