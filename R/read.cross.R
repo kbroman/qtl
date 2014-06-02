@@ -3,7 +3,7 @@
 # read.cross.R
 #
 # copyright (c) 2000-2013, Karl W Broman
-# last modified Sep, 2013
+# last modified June, 2014
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 
 read.cross <-
 function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
-                  "qtlcart", "gary", "karl"),
+                  "qtlcart", "gary", "karl", "mapqtl"),
          dir="", file, genfile, mapfile, phefile, chridfile, mnamesfile, pnamesfile,
          na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
          alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE,
@@ -107,6 +107,10 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
 
     cross <- read.cross.gary(dir,genfile,mnamesfile,chridfile,
                              phefile,pnamesfile,mapfile,estimate.map,na.strings)
+  }
+  else if(format == "mapqtl") { # MapQTL format (same as JoinMap)
+      cross <- read.cross.mq(dir=dir, locfile=genfile, mapfile=mapfile,
+                             quafile=phefile, estimate.map=estimate.map)
   }
 
   estimate.map <- cross[[2]]
