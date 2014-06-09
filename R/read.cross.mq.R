@@ -601,7 +601,7 @@ function(mapfile){
     }
     
     genmap <- genmap[! is.na(genmap[,"chr"]), ]
-    genmap[,"chr"] <- as.factor(genmap[,"chr"])
+    genmap[,"chr"] <- factor(genmap[,"chr"], levels=unique(genmap[,"chr"]))
     
     genmap
 }
@@ -681,8 +681,9 @@ function(quafile){
     
     phenotypes[which(phenotypes == miss)] <- NA
     phenotypes <- as.data.frame(phenotypes)
+
     for(j in 1:ncol(phenotypes))
-        phenotypes[,j] <- tryCatch(expr=as.numeric(phenotypes[,j]),
+        phenotypes[,j] <- tryCatch(expr=as.numeric(as.character(phenotypes[,j])),
                                    warning=function(w)
                                    as.factor(phenotypes[,j]))
     colnames(phenotypes) <- trait.names
