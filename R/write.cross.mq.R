@@ -43,7 +43,7 @@ function(cross, filestem, digits)
 {
     if(class(cross)[1] != "4way"){
         msg <- paste("population type", class(cross)[1],
-                     "is not supported (yet)")
+                     "is not supported for writing in MapQTL format (yet)")
         stop(msg, call.=FALSE)
     }
     write.cross.mq.loc(cross, paste0(filestem, ".loc"))
