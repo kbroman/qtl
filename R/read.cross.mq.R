@@ -660,7 +660,7 @@ function(quafile){
             next
         } else if(trait.id > nb.traits && is.null(phenotypes)){
             if(length(trait.names) != nb.traits){
-                msg <- paste("there seems to be less trait names (",
+                msg <- paste("there seems to be fewer trait names (",
                              length(trait.names),
                              ") than indicated in the header (",
                              nb.traits, ")", sep="")
