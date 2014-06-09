@@ -1,0 +1,42 @@
+
+R version 3.1.0 (2014-04-10) -- "Spring Dance"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.1.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # test input/output in mapqtl format
+> 
+> library(qtl)
+> data(fake.4way)
+> 
+> write.cross(fake.4way, "mapqtl", "fake_4way_mapqtl")
+> 
+> x <- read.cross("mapqtl", "", genfile="fake_4way_mapqtl.loc",
++                 phefile="fake_4way_mapqtl.qua",
++                 mapfile="fake_4way_mapqtl_female.map")
+ --Read the following data:
+	Number of individuals:  250 
+	Number of markers:  157 
+	Number of phenotypes:  2 
+ --Estimating genetic map
+ --Cross type: 4way 
+> 
+> x <- replace.map(x, pull.map(fake.4way))
+> 
+> comparecrosses(x, fake.4way)
+	Crosses are identical.
+> 
+> proc.time()
+   user  system elapsed 
+  6.803   0.281   7.072 
