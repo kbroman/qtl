@@ -238,7 +238,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*augmentednind)=(*augmentednind)+(numimputations*current_leftover_ind);
       (*nind)= (*nind)+(current_leftover_ind);
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
-      
+      Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n", "");
       delMQMMarkerMatrix(newmarkerset, nmark);    // Free the newmarkerset, this can only be done here since: (*markers) = newmarkerset_all;
       Free(new_y_all);
       Free(new_ind_all);
@@ -252,7 +252,9 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*markers) = newmarkerset;
     }
     if(verbose) Rprintf("INFO: Done with augmentation\n");
-
+    Free(new_y);                                // Free vector indicating the new phenotypes
+    Free(new_ind);                              // Free vector indicating the new individuals
+    Free(succes_ind);                           // Free vector indicating the result of round 1 - augmentation
     Free(position);                             // Free the positions of the markers
     Free(r);                                    // Free the recombination frequencies
     return 1;
