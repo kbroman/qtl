@@ -707,8 +707,6 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    // [Danny:] This looks suspicious, we are leaking memory here because we don't clean it
-    //delMQMMarkerMatrix(markers,*Nmark);
     if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", nind0);
       Rprintf("# Unique selected individuals:%d\n", *Nind);
@@ -741,9 +739,9 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delMQMMarkerMatrix(markers,*Nmark);
     fatal("Data augmentation failed", "");
   }
+  delMQMMarkerMatrix(markers,*Nmark); // [Danny:] This looked suspicious, we are leaking memory here because we don't clean it
   Free(mapdistance);
   Free(position);
   Free(r);
