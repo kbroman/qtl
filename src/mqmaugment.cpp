@@ -140,9 +140,9 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
     if (verbose) Rprintf("INFO: Augmentation routine\n");
     const int nind0 = *nind;
     const vector originalpheno = (*pheno_value)[0];
-    MQMMarkerMatrix newmarkerset;
-    vector new_y;                   //Because we do a phenotype matrix, we optimize by storing original the R-individual 
-    ivector new_ind;                //numbers inside the trait-values, ands use new_ind etc for inside C
+    MQMMarkerMatrix newmarkerset;   // [Danny:] This LEAKS MEMORY the Matrices and vectors are not cleaned at ALL
+    vector new_y;                   // Because we do a phenotype matrix, we optimize by storing original the R-individual 
+    ivector new_ind;                // numbers inside the trait-values, ands use new_ind etc for inside C
     ivector succes_ind;
     cvector position = relative_marker_position(nmark,chr);
     vector r = recombination_frequencies(nmark, position, mapdistance);
@@ -650,7 +650,6 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
 
   if(verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
   ivector new_ind;
-  cvector position;
 
   MQMMarkerMatrix markers = newMQMMarkerMatrix(*Nmark, nind0);
   vector mapdistance = newvector(*Nmark);
@@ -661,31 +660,25 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   reorg_int(*Nmark, 1, chromo, &Chromo);
   reorg_pheno(nind0, *Npheno, pheno, &Pheno);
   reorg_pheno(*Nmark, 1, dist, &Dist);
-
   reorg_int(*maxind, *Nmark, auggeno, &NEW);
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
   reorg_pheno((*maxiaug)*nind0, 1, augPheno, &NEWPheno);
 
-  MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
-  //Change all the markers from R/qtl format to MQM internal
-  change_coding(Nmark, Nind, Geno, markers, crosstype);
+  MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);        // Determine cross
+  change_coding(Nmark, Nind, Geno, markers, crosstype);                                                 // Change all the markers from R/qtl format to MQM internal
 
   if(verbose) Rprintf("INFO: Filling the chromosome matrix\n");
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
-    mapdistance[i]=POSITIONUNKNOWN;
-    mapdistance[i]=Dist[0][i];
+    mapdistance[i] = POSITIONUNKNOWN;
+    mapdistance[i] = Dist[0][i];
     chr[i] = Chromo[0][i];
   }
-  //Calculate positions of markers and Recombinant frequencies
-  position = relative_marker_position(*Nmark, chr);
-  vector r = recombination_frequencies(*Nmark, position, mapdistance);
 
   if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&Pheno,*Nmark,chr,mapdistance,*augment_strategy,crosstype,verbose)){
-    //Data augmentation finished succesfully
-    //Push it back into RQTL format
-    for (int i=0; i<(*Nmark); i++) {
-      for (int j=0; j<(*Naug); j++) {
+    //Data augmentation finished succesfully, encode it back into RQTL format
+    for (int i = 0; i<(*Nmark); i++) {
+      for (int j = 0; j<(*Naug); j++) {
         //Rprintf("INFO: Phenotype after return: %f",NEWPheno[0][j]);
         NEWPheno[0][j] = Pheno[0][j];
         NEWIND[0][j] = new_ind[j];
@@ -728,8 +721,8 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         if (markers[i][j] == MH) {
           NEW[i][j] = 2;
         }
-        if (markers[i][j] == MBB) { // [karl:] this might need to be changed for RIL
-          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
+        if (markers[i][j] == MBB) {                       // [Karl:] this might need to be changed for RIL
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  // [Danny:] This should solve it 
         }
         if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
@@ -741,10 +734,8 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
     }
     fatal("Data augmentation failed", "");
   }
-  delMQMMarkerMatrix(markers,*Nmark); // [Danny:] This looked suspicious, we are leaking memory here because we don't clean it
+  delMQMMarkerMatrix(markers,*Nmark); // [Danny:] This looked suspicious, we were leaking memory here because we didn't clean it
   Free(mapdistance);
-  Free(position);
-  Free(r);
   Free(chr);
   return;
 }
