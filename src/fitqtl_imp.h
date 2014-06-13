@@ -2,10 +2,10 @@
  * 
  * fitqtl_imp.h
  *
- * copyright (c) 2002-2013, Hao Wu
+ * copyright (c) 2002-2014, Hao Wu
  *     Modified by Karl W. Broman to get estimates of QTL effects
  *
- * last modified Feb, 2013
+ * last modified Mar, 2014
  * first written Apr, 2002
  *
  *     This program is free software; you can redistribute it and/or
@@ -30,11 +30,11 @@
  **********************************************************************/
 
 void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
-		  int *draws, int *n_cov, double *cov, int *model, 
-		  int *n_int, double *pheno, int *get_ests,
-		  /* return variables */
-		  double *lod, int *df, double *ests, double *ests_covar,
-		  double *design_mat, int *matrix_rank);
+                  int *draws, int *n_cov, double *cov, int *model, 
+                  int *n_int, double *pheno, int *get_ests,
+                  /* return variables */
+                  double *lod, int *df, double *ests, double *ests_covar,
+                  double *design_mat, int *matrix_rank, double *residuals);
 /**********************************************************************
  * 
  * fitqtl_imp
@@ -74,13 +74,15 @@ void R_fitqtl_imp(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
  *
  * matrix_rank  Return min (across imputations) of rank of design matrix
  *
+ * residuals    On return, the residuals (averaged across imputations) from the fit
+ *
  **********************************************************************/
 
 void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws, 
-		int ***Draws, double **Cov, int n_cov, 
-		int *model, int n_int, double *pheno, int get_ests,
-		double *lod, int *df, double *ests, double *ests_covar,
-		double *design_mat, int *matrix_rank);
+                int ***Draws, double **Cov, int n_cov, 
+                int *model, int n_int, double *pheno, int get_ests,
+                double *lod, int *df, double *ests, double *ests_covar,
+                double *design_mat, int *matrix_rank, double *residuals);
 
 /* function to calculate the null model RSS. This function is different
    from the function used in scanone_imp and scantwo_imp, which contain 
@@ -88,10 +90,11 @@ void fitqtl_imp(int n_ind, int n_qtl, int *n_gen, int n_draws,
 double nullRss0(double *pheno, int n_ind);
 
 /* galtRss - calculate RSS for full model in general scan */
-double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl, 
-	       int **Draws, double **Cov, int n_cov, int *model, 
-	       int n_int, double *dwork, int *iwork, int sizefull,
-	       int get_ests, double *ests, double **Ests_covar,
-	       int save_design, double *designmat, int *matrix_rank);
+double galtRss(double *pheno, int n_ind, int *n_gen, int n_qtl,
+               int **Draws, double **Cov, int n_cov, int *model,
+               int n_int, double *dwork, int *iwork, int sizefull,
+               int get_ests, double *ests, double **Ests_covar,
+               int save_design, double *designmat, int *matrix_rank,
+               double *residuals);
 
 /* end of fitqtl_imp.h */

@@ -38,7 +38,7 @@ ENDMACRO()
 
 FIND_PACKAGE(RLibs)
 
-include_directories (../../src)
+include_directories (../../../src)
 
 # Compiler options
 add_definitions(-DSTANDALONE)
@@ -54,28 +54,28 @@ ENDIF()
 link_libraries(${R_LIBRARY} ${R_BLAS_LIBRARY})
 
 add_executable (mqm
-../../src/simulate.c
-../../src/simulate.h
-../../src/mqmaugment.cpp    
-../../src/mqmeliminate.h  
-../../src/mqmmapqtl.h     
-../../src/mqmregression.cpp
-../../src/mqmaugment.h      
-../../src/mqmmixture.cpp  
-../../src/mqmregression.h
-../../src/mqmdatatypes.cpp 
-../../src/mqmmixture.h    
-../../src/mqmscan.cpp
-../../src/mqmdatatypes.h    
-../../src/mqm.h           
-../../src/mqmprob.cpp     
-../../src/mqmscan.h
-../../src/mqmeliminate.cpp  
-../../src/mqmmapqtl.cpp   
-../../src/mqmprob.h       
-../../src/standalone.h
-../../src/util.h
-../../src/util.c
+../../../src/simulate.c
+../../../src/simulate.h
+../../../src/mqmaugment.cpp    
+../../../src/mqmeliminate.h  
+../../../src/mqmmapqtl.h     
+../../../src/mqmregression.cpp
+../../../src/mqmaugment.h      
+../../../src/mqmmixture.cpp  
+../../../src/mqmregression.h
+../../../src/mqmdatatypes.cpp 
+../../../src/mqmmixture.h    
+../../../src/mqmscan.cpp
+../../../src/mqmdatatypes.h    
+../../../src/mqm.h           
+../../../src/mqmprob.cpp     
+../../../src/mqmscan.h
+../../../src/mqmeliminate.cpp  
+../../../src/mqmmapqtl.cpp   
+../../../src/mqmprob.h       
+../../../src/standalone.h
+../../../src/util.h
+../../../src/util.c
 mqmmain.cpp
 )
 

@@ -265,7 +265,7 @@ function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
 rippleSnowCountxo <-
 function(orders, genodat, func)
 {
-  func <- func
+  func <- func # this avoids a Note from R CMD check
   .C(func,
      as.integer(nrow(genodat)),
      as.integer(ncol(genodat)),

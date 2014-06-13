@@ -37,7 +37,7 @@
 #
 #####################################################################
 
-mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstrength=2,legend=FALSE, verbose=FALSE, transparency=FALSE){
+mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstrength=2, axis.legend = TRUE, col.legend=FALSE, verbose=FALSE, transparency=FALSE){
   if(is.null(cross)){
 		stop("No cross object. Please supply a valid cross object.") 
 	}
@@ -59,11 +59,11 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
     stop("Wrong type of result file, please supply a valid scanone object.") 
   }
   if(transparency){
-	colorz <- rainbow(length(result),alpha=0.8)
+	colorz <- rainbow(length(result), alpha=0.8)
   }else{
 	colorz <- rainbow(length(result))  
   }
-  if(!legend){
+  if(!col.legend){
     totallength <- getgenomelength(templateresult)
     nchr <- length(unique(templateresult[,1]))
     cvalues <- circlelocations(totallength+(nchr*spacing))
@@ -127,7 +127,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           if(verbose) cat("Trait ",x," has no model\n")
         }
       }
-      legend("topleft",c("Trait","QTL"),col=c("black","black"),pch=c(24,19),cex=1)
+      if(axis.legend) legend("topleft",c("Trait","QTL"),col=c("black","black"),pch=c(24,19),cex=1)
     }
     if(any(class(result)=="scanone") || highlight > 0){
       #single scan result or highlighting one of the multiple
@@ -151,14 +151,14 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
           if(!(highlight>0))drawspline(traitl,qtll,col="red")
         }   
       }
-      legend("topright",c("Selected Cofactor Cofactor","Epistasis (+)","Epistasis (-)"),col=c("red","blue","green"),pch=19,lwd=c(0,1,2),cex=0.75)
-      legend("bottomright",c("Lod 3","Lod 6","Lod 9","Lod 12"),pch=19,lwd=0,pt.cex=c(1,2,3,4))
+      if(axis.legend) legend("topright",c("Selected cofactor(s)","Epistasis (+)","Epistasis (-)"), col=c("red", "blue", "green"), pch=19, lwd=c(0,1,2), cex=0.75)
+      if(axis.legend) legend("bottomright",c("LOD 3","LOD 6","LOD 9","LOD 12"), pch=19, lwd=0, pt.cex = c(1, 2, 3, 4), cex=0.75)
       if(highlight==0) title(sub = "Single trait")
     }
   }else{
     plot(c(-1,1), c(-1, 1), type = "n", axes = FALSE, xlab = "", ylab = "")
     title(main = "Legend to circular genome plot")
-    legend("center",paste(colnames(cross$pheno)),col=colorz,pch=19,cex=0.75)
+    legend("center", paste(colnames(cross$pheno)), col=colorz, pch=19, cex=0.75)
   }
   if(!is.null(retresults)){
     colnames(retresults) <- c("Marker","Marker","Change","Change","SEs")
@@ -251,8 +251,6 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
 
   }
 }
-
-
 
 loopthroughmulti <- function(cross,result,save=FALSE,spacing=100){
   n <- 1

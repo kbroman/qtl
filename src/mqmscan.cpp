@@ -92,20 +92,19 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno) {
  */
 
 double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix marker,
-               vector y, ivector f1genotype, int Backwards, double **QTL,vector
+               vector y, int Backwards, double **QTL,vector
                *mapdistance, int **Chromo, int Nrun, int RMLorML, double
                windowsize, double stepsize, double stepmin, double stepmax,
                double alfa, int em, int out_Naug, int **INDlist, char
                reestimate, MQMCrossType crosstype, bool dominance, int verbose) {
-  if (verbose) {
-    Rprintf("INFO: Starting C-part of the MQM analysis\n");
-  }
+  if (verbose) Rprintf("INFO: Starting C-part of the MQM analysis\n");
+
   int  Naug, Nmark = (*nummark), run = 0;
   bool useREML = true, fitQTL = false;
-
+  bool warned = false;
   
   ivector chr = newivector(Nmark); // The chr vector contains the chromosome number for every marker
-  for(int i = 0; i < Nmark; i++){  // info("Receiving the chromosome matrix from R");
+  for(int i = 0; i < Nmark; i++){  // Rprintf("INFO: Receiving the chromosome matrix from R");
     chr[i] = Chromo[0][i];
   }
   if(RMLorML == 1) useREML=false;  // use ML instead
@@ -114,7 +113,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   cvector position = relative_marker_position(Nmark,chr);
   vector  r = recombination_frequencies(Nmark, position, (*mapdistance));
 
-  //info("Initialize Frun and informationcontent to 0.0");
+  //Rprintf("INFO: Initialize Frun and informationcontent to 0.0");
   const int Nsteps = (int)(chr[Nmark-1]*((stepmax-stepmin)/stepsize+1));
   matrix Frun = newmatrix(Nsteps,Nrun+1);
   vector informationcontent = newvector(Nsteps);
@@ -125,32 +124,15 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     }
   }
 
-  bool dropj=true;
+  bool dropj = false;
   int jj=0;
   // Rprintf("any triple of non-segregating markers is considered to be the result of:\n");
   // Rprintf("identity-by-descent (IBD) instead of identity-by-state (IBS)\n");
   // Rprintf("no (segregating!) cofactors are fitted in such non-segregating IBD regions\n");
-  for (int j=0; j < (Nmark-1); j++) { // (Nmark-1) Should fix the out of bound in mapdistance
-    if (mqmmod(f1genotype[j], 11)!=0) {
-      dropj=false;
-      if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0) dropj=true;
-    } else if ((*cofactor)[j]==MNOCOF) {
-      dropj=true;
-    } else if (position[j]==MLEFT) {
-      // (cofactor[j]!=MNOCOF) cofactor at non-segregating marker test whether next segregating marker is nearby (<20cM)
-      dropj='y';
-      if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
-      else if (position[j+1]!=MRIGHT)
-        if ((((*mapdistance)[j+2]-(*mapdistance)[j])<windowsize)) dropj=false;
-    } else if (position[j]==MMIDDLE) {
-      dropj=true;
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
-      else if ((((*mapdistance)[j+1]-(*mapdistance)[j])<windowsize)) dropj=false;
-    } else if (position[j]==MRIGHT) {
-      dropj=true;
-      if ((((*mapdistance)[j]-(*mapdistance)[j-1])<windowsize)) dropj=false;
-      else if (position[j-1]!=MLEFT)
-        if ((((*mapdistance)[j]-(*mapdistance)[j-2])<windowsize)) dropj=false;
+  for (int j=0; j < Nmark; j++) { // WRONG: (Nmark-1) Should fix the out of bound in mapdistance, it does fix, but created problems for the last marker
+    dropj = false;
+    if(j+1 < Nmark){  // Check if we can look ahead
+      if(((*mapdistance)[j+1]-(*mapdistance)[j])==0.0){ dropj=true; }
     }
     if (!dropj) {
       marker[jj]= marker[j];
@@ -161,9 +143,9 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       position[jj]= position[j];
       jj++;
     } else{
-      if (verbose) info("Marker %d at chr %d is dropped",j,chr[j]);
+      if (verbose) Rprintf("INFO: Marker %d at chr %d is dropped\n",j,chr[j]);
       if ((*cofactor)[j]==MCOF) {
-        if (verbose) info("Cofactor at chr %d is dropped",chr[j]);
+        if (verbose) Rprintf("INFO: Cofactor at chr %d is dropped\n",chr[j]);
       }
     }
   }
@@ -181,7 +163,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   vector newy;
   MQMMarkerMatrix newmarker;
   double ymean = 0.0, yvari = 0.0;
-  //info("Number of individuals: %d Number Aug: %d",Nind,out_Naug);
+  //Rprintf("INFO: Number of individuals: %d Number Aug: %d",Nind,out_Naug);
   int cur = -1;
   for (int i=0; i < Nind; i++){
     if(INDlist[0][i] != cur){
@@ -197,7 +179,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       cur = INDlist[0][i];
     }
   }  
-  yvari/= (out_Naug-1);
+  yvari /= (out_Naug-1);
   
   Naug      = Nind;                             // Fix for not doing dataaugmentation, we just copy the current as the augmented and set Naug to Nind
   Nind      = out_Naug;
@@ -226,20 +208,20 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   //We can skip this part iirc because R throws out missing phenotypes beforehand
   int oldNind = Nind;
   for (int i=0; i<oldNind; i++) {
-    Nind-= ((y[i]==TRAITUNKNOWN) ? 1 : 0);
+    Nind -= ((y[i]==TRAITUNKNOWN) ? 1 : 0);
   }
 
   int oldNaug = Naug;
   for (int i=0; i<oldNaug; i++) {
-    Naug-= ((newy[i]==TRAITUNKNOWN) ? 1 : 0);
+    Naug -= ((newy[i]==TRAITUNKNOWN) ? 1 : 0);
   }
 
   marker        = newMQMMarkerMatrix(Nmark+1,Naug);
   y             = newvector(Naug);
   ivector ind   = newivector(Naug);
   vector weight = newvector(Naug);
-  int newi=0;
-  for (int i=0; i<oldNaug; i++)
+  int newi = 0;
+  for (int i=0; i < oldNaug; i++)
     if (newy[i]!=TRAITUNKNOWN) {
       y[newi]= newy[i];
       ind[newi]= newind[i];
@@ -248,10 +230,11 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       newi++;
     }
   int diff;
-  for (int i=0; i<Naug-1; i++) {
-    diff=ind[i+1]-ind[i];
-    if  (diff>1)
-      for (int ii=i+1; ii<Naug; ii++) ind[ii]=ind[ii]-diff+1;
+  for (int i=0; i < (Naug-1); i++) {
+    diff = ind[i+1]-ind[i];
+    if (diff>1) {
+      for (int ii=i+1; ii<Naug; ii++){ ind[ii]=ind[ii]-diff+1; }
+    }
   }
   delMQMMarkerMatrix(newmarker, Nmark);
   Free(newy);
@@ -265,27 +248,27 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   double F1  = inverseF(1,Nind-dimx,alfa,verbose);
   double F2  = inverseF(2,Nind-dimx,alfa,verbose);
   if (verbose) {
-    info("dimX:%d nInd:%d",dimx,Nind);
-    info("F(Threshold,Degrees of freedom 1,Degrees of freedom 2)=Alfa");
-    info("F(%.3f,1,%d)=%f",ftruncate3(F1),(Nind-dimx),alfa);
-    info("F(%.3f,2,%d)=%f",ftruncate3(F2),(Nind-dimx),alfa);
+    Rprintf("INFO: dimX: %d, nInd: %d\n",dimx,Nind);
+    Rprintf("INFO: F(Threshold, Degrees of freedom 1, Degrees of freedom 2) = Alfa\n");
+    Rprintf("INFO: F(%.3f, 1, %d) = %f\n",ftruncate3(F1),(Nind-dimx),alfa);
+    Rprintf("INFO: F(%.3f, 2, %d) = %f\n",ftruncate3(F2),(Nind-dimx),alfa);
   }
   F2 = 2.0* F2; // 9-6-1998 using threshold x*F(x,df,alfa)
 
   weight[0]= -1.0;
-  double logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype,verbose);
+  double logL = QTLmixture(marker,(*cofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,useREML,fitQTL,dominance,crosstype, &warned, verbose);
   if(verbose){
     if (!R_finite(logL)) {
-      info("Log-likelihood of full model= INFINITE");
+      Rprintf("WARNING: Log-likelihood of full model = INFINITE\n");
     }else{
       if (R_IsNaN(logL)) {
-        info("Log-likelihood of full model= NOT A NUMBER (NAN)");
+        Rprintf("WARNING: Log-likelihood of full model = NOT A NUMBER (NAN)\n");
       }else{
-        info("Log-likelihood of full model= %.3f",ftruncate3(logL));
+        Rprintf("INFO: Log-likelihood of full model = %.3f\n",ftruncate3(logL));
       }
     }
-    info("Residual variance= %.3f",ftruncate3(variance));
-    info("Trait mean= %.3f; Trait variation= %.3f",ftruncate3(ymean),ftruncate3(yvari));
+    Rprintf("INFO: Residual variance = %.3f\n",ftruncate3(variance));
+    Rprintf("INFO: Trait mean= %.3f; Trait variation = %.3f\n",ftruncate3(ymean),ftruncate3(yvari));
   }
   if (R_finite(logL) && !R_IsNaN(logL)) {
     if(Backwards==1){    // use only selected cofactors
@@ -304,7 +287,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
     }
   }
 
-  if (verbose) info("Number of output datapoints: %d", Nsteps);  // QTL likelihood for each location
+  if (verbose) Rprintf("INFO: Number of output datapoints: %d\n", Nsteps);  // QTL likelihood for each location
   for (int ii=0; ii<Nsteps; ii++) {
     //Convert LR to LOD before sending back
     QTL[0][ii] = Frun[ii][0] / 4.60517;
@@ -316,7 +299,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   delMQMMarkerMatrix(marker,Nmark+1);
   Free(y);
   Free(chr);
-  Free(selcofactor); // info("Analysis of data finished");
+  Free(selcofactor); // Rprintf("INFO: Analysis of data finished");
   return logL;
 }
 
@@ -334,7 +317,6 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
              RqtlCrossType rqtlcrosstype,int domi,int verbose){
   int cof_cnt=0;
   MQMMarkerMatrix markers = newMQMMarkerMatrix(Nmark+1,Nind);
-  ivector f1genotype      = newivector(Nmark);
   cvector cofactor        = newcvector(Nmark);
   vector mapdistance      = newvector(Nmark);
 
@@ -343,7 +325,6 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
   change_coding(&Nmark, &Nind, Geno, markers, crosstype); // Change all the markers from R/qtl format to MQM internal
 
   for (int i=0; i< Nmark; i++) {
-    f1genotype[i]  = 12;               // The parental strain for all markers, this was used to asses marker information
     mapdistance[i] = POSITIONUNKNOWN;  // Mapdistances
     mapdistance[i] = Dist[0][i];  
     cofactor[i]    = MNOCOF;           // Cofactors
@@ -355,16 +336,14 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
       cofactor[i] = MSEX;
       cof_cnt++;
     }
-    if (cof_cnt+10 > Nind){ fatal("Setting %d cofactors would leave less than 10 degrees of freedom.\n",cof_cnt); }
+    if (cof_cnt+10 > Nind){ fatal("Setting %d cofactors would leave less than 10 degrees of freedom.\n", cof_cnt); }
   }
 
   char reestimate = 'y';
   if(re_estimate == 0) reestimate = 'n';
 
-
-
   if (crosstype != CF2) {  // Determine what kind of cross we have
-    if (verbose==1) { info("INFO: Dominance setting ignored (dominance=0)\n"); } // Update dominance accordingly
+    if (verbose==1) Rprintf("INFO: Dominance setting ignored (setting dominance to 0)\n"); // Update dominance accordingly
     domi = 0;
   }
 
@@ -372,30 +351,27 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
   if(domi != 0){ dominance=true; }
 
   //WE HAVE EVERYTHING START WITH MAIN SCANNING FUNCTION
-  analyseF2(Nind, &Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], f1genotype, Backwards, QTL, &mapdistance, Chromo, NRUN, RMLorML, Windowsize, 
+  analyseF2(Nind, &Nmark, &cofactor, (MQMMarkerMatrix)markers, Pheno[(Npheno-1)], Backwards, QTL, &mapdistance, Chromo, NRUN, RMLorML, Windowsize, 
             Steps, Stepmi, Stepma, Alfa, Emiter, out_Naug, INDlist, reestimate, crosstype, dominance, verbose);
 
   if (re_estimate) {
-    if (verbose==1){ info("INFO: Sending back the reestimated map used during analysis\n"); }
+    if (verbose==1) Rprintf("INFO: Sending back the re-estimated map used during the MQM analysis\n");
     for (int i=0; i< Nmark; i++) {
-      Dist[0][i]=mapdistance[i];
+      Dist[0][i] = mapdistance[i];
     }
   }
   if (Backwards) {
-    if (verbose==1) { info("INFO: Sending back the model\n"); }
-    for (int i=0; i< Nmark; i++) {
-      Cofactors[0][i]=cofactor[i];
-    }
+    if (verbose==1) Rprintf("INFO: Sending back the model\n");
+    for (int i=0; i< Nmark; i++) { Cofactors[0][i] = cofactor[i]; }
   }
 
-  Free(f1genotype);
   Free(cofactor);
   Free(mapdistance);
-  if(verbose == 1){ info("INFO: All done in C returning to R\n"); }
-#ifndef STANDALONE
-  R_CheckUserInterrupt(); /* check for ^C */
-  R_FlushConsole();
-#endif
+  if(verbose) Rprintf("INFO: All done in C returning to R\n");
+  #ifndef STANDALONE
+    R_CheckUserInterrupt(); /* check for ^C */
+    R_FlushConsole();
+  #endif
   return;
 }  /* end of function mqmscan */
 

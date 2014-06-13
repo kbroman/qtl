@@ -5,6 +5,8 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+
 % revise margins
 \setlength{\headheight}{0.0in}
 \setlength{\topmargin}{-0.25in}
@@ -20,7 +22,10 @@
 % font colors
 \newcommand{\usercolor}{\color [named]{BlueViolet}}
 \newcommand{\othercolor}{\color [named]{Mahogany}}
+\definecolor{hrefcolor}{RGB}{0,65,164}
 \newcommand{\lod}{\text{LOD}}
+
+\hypersetup{colorlinks, urlcolor={hrefcolor}}
 
 % environment for references
 \newenvironment{hanging}
