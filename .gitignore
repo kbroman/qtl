@@ -58,3 +58,6 @@ inst/doc/Sources/MQM/MQM-tour.R
 src/symbols.rds
 src-i386/
 src-x64/
+inst/contrib/bin/test/
+.Rhistory
+.RData

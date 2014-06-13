@@ -44,11 +44,10 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
 /* ML estimation of parameters in mixture model via EM;
 */
 double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector position,
-                  vector y, ivector ind, int Nind, int Naug,
-                  int Nloci,
-                  double *variance, int em, vector *weight, const bool useREML,bool fitQTL,bool dominance,MQMCrossType crosstype,int verbose);
+                  vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, 
+                  int em, vector *weight, const bool useREML,bool fitQTL,bool dominance, 
+                  MQMCrossType crosstype, bool* warned,int verbose);
 
-       
 #ifdef __cplusplus
   }
 #endif

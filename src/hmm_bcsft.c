@@ -1448,10 +1448,10 @@ void count_ft(double rf, int t, double *transct)
     return;
   }
 
-  double t1,t1m2,r2,w2,rw,alpha;
+  double t1,t1m2,r2,w2,rw;
   double beta,beta1,beta2,sbeta1,sbeta2,s2beta1,s2beta2;
-  double gamma,gamma1,gamma2,sgamma1,sgamma2,s2gamma1,s2gamma2;
-  double k1b,k2b,k1g,k2g,k1b2,k2b2,k1g2,k2g2;
+  double gamma,gamma1,gamma2,sgamma1,sgamma2,s2gamma2;
+  double k1b,k2b,k1g,k1b2,k2b2,k1g2,k2g2;
 
   t1 = t - 1.0;
   t1m2 = R_pow(2.0, -t1);
@@ -1459,8 +1459,6 @@ void count_ft(double rf, int t, double *transct)
   r2 = rf * rf;
   w2 = (1.0 - rf) * (1.0 - rf);
   rw = rf * (1.0 - rf);
-
-  alpha = r2 / (w2 + r2);
 
   /* beta = probability of D or E at each step. */
   beta = (w2 + r2) / 2.0;
@@ -1481,7 +1479,6 @@ void count_ft(double rf, int t, double *transct)
   if(t > 2) gamma2 = R_pow(gamma, t1 - 1);
   sgamma1 = 1;
   sgamma2 = 0;
-  s2gamma1 = t1m2;
   s2gamma2 = 0;
   if(t > 1) {
     sgamma2 = 1;
@@ -1490,7 +1487,6 @@ void count_ft(double rf, int t, double *transct)
   if(gamma > 0) {
     sgamma1 = (1.0 - gamma1) / (1.0 - gamma); /* SGt */
     sgamma2 = (1.0 - gamma2) / (1.0 - gamma); /* SG(t-1) */
-    s2gamma1 = (t1m2 - gamma1) / (1.0 - 2.0 * gamma); /* sum from 1 to t-1 of of (2*gamma)^(k-1). */
     s2gamma2 = (2.0 * t1m2 - (gamma1 / gamma)) / (1.0 - 2.0 * gamma); /* sum from 1 to t-2 of of (2*gamma)^(k-1). */
   }
 
@@ -1498,14 +1494,12 @@ void count_ft(double rf, int t, double *transct)
   k1b = kptothek(t1, beta, beta1) / beta;
   k2b = t1m2 * kptothek(t1, 2.0 * beta, beta1 / t1m2) / (2 * beta);
   k1g = 0.0;
-  k2g = 0.0;
   k1g2 = 0.0;
   k2g2 = 0.0;
   k1b2 = 0.0;
   k2b2 = 0.0;
   if(t > 2) {
     k1g = 1.0;
-    k2g = t1m2;
     if(t > 3) {
       k1g2 = 1.0;
       k2g2 = 2.0 * t1m2;
@@ -1516,7 +1510,6 @@ void count_ft(double rf, int t, double *transct)
   if(gamma > 0) {
     /* Possible savings in doing the sum... */
     k1g = kptothek(t1, gamma, gamma1) / gamma;
-    k2g = t1m2 * kptothek(t1, 2.0 * gamma, gamma1 / t1m2) / (2.0 * gamma);
     k1g2 = kptothek(t1 - 1.0, gamma, gamma2) / gamma;
     k2g2 = 2.0 * t1m2 * kptothek(t1 - 1.0, 2.0 * gamma, gamma2 / (2.0 * t1m2)) / (2.0 * gamma);
   }

@@ -41,7 +41,9 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 *	b=inv(xtwx)(xtw)y
  */
 
-double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, vector* weight, ivector ind, int Naug, double *variance, vector Fy,const bool biasadj,const bool fitQTL,const bool dominance);
+double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, 
+                  vector* weight, ivector ind, int Naug, double *variance, vector Fy, 
+                  const bool biasadj, const bool fitQTL, const bool dominance, bool verbose);
 
 /*
 -----------------------------------------------------------------------

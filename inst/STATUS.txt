@@ -17,6 +17,33 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.32, 2014-05-28:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  fitqtl with model="normal" now returns residuals as an attribute.
+
+  Added an additional argument to plot.scanone, bgrect, for making the
+  background of the plotting region a different color.
+
+  Revised cleanGeno to work with any cross having two possible
+  genotypes (i.e., not just bc but also riself, risib, dh, haploid).
+
+  Revised summary.cross so that overall genotype frequencies are given
+  separately for autosomes and the X chromosome.
+
+  Fixed typo in a warning in add.threshold.
+
+  Fixed a bug in reduce2grid, regarding format of attributes
+
+  Fixed a bug in MQM: in some circumstances, the last marker was
+  always included as cofactor; other cleanup in MQM code.
+
+
 Version 1.31, 3/19/2014:
 
 Major changes:
