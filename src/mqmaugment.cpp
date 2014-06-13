@@ -650,15 +650,11 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
 
   if(verbose) info("Starting C-part of the data augmentation routine");
   ivector new_ind;
-  vector mapdistance;
   cvector position;
-  MQMMarkerMatrix markers, new_markers;
-  ivector chr;
 
-  markers= newMQMMarkerMatrix(*Nmark, nind0);
-  new_markers= newMQMMarkerMatrix(*Nmark, *maxind);
-  mapdistance = newvector(*Nmark);
-  chr= newivector(*Nmark);
+  MQMMarkerMatrix markers = newMQMMarkerMatrix(*Nmark, nind0);
+  vector mapdistance = newvector(*Nmark);
+  ivector chr = newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
   reorg_geno(nind0, *Nmark, geno, &Geno);
@@ -682,13 +678,9 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
     chr[i] = Chromo[0][i];
   }
   //Calculate positions of markers and Recombinant frequencies
-  position = relative_marker_position(*Nmark,chr);
+  position = relative_marker_position(*Nmark, chr);
   vector r = recombination_frequencies(*Nmark, position, mapdistance);
-  //ivector succes_ind;
-  /*
-  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, &succes_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
-  
-  */
+
   if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&Pheno,*Nmark,chr,mapdistance,*augment_strategy,crosstype,verbose)){
     //Data augmentation finished succesfully
     //Push it back into RQTL format
@@ -715,12 +707,8 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    //delMQMMarkerMatrix(new_markers,*Nmark);
+    // [Danny:] This looks suspicious, we are leaking memory here because we don't clean it
     //delMQMMarkerMatrix(markers,*Nmark);
-    Free(mapdistance);
-    Free(position);
-    Free(r);
-    Free(chr);
     if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", nind0);
       Rprintf("# Unique selected individuals:%d\n", *Nind);
@@ -753,14 +741,13 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delMQMMarkerMatrix(new_markers,*Nmark);
     delMQMMarkerMatrix(markers,*Nmark);
-    Free(mapdistance);
-    Free(position);
-    Free(r);
-    Free(chr);
     fatal("Data augmentation failed", "");
   }
+  Free(mapdistance);
+  Free(position);
+  Free(r);
+  Free(chr);
   return;
 }
 
