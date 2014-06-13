@@ -53,7 +53,7 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 
 double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y,
                   vector *weight, ivector ind, int Naug, double *variance,
-                  vector Fy, bool biasadj, bool fitQTL, bool dominance) {
+                  vector Fy, bool biasadj, bool fitQTL, bool dominance, bool verbose) {
   debug_trace("regression IN\n");
   /*
   cofactor[j] at locus j:
@@ -93,7 +93,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
           } else if (marker[j][i]==MAA) {
             Xt[jx][i]=47;  // '/' stands for -1
             Xt[jx+1][i]=48;
-          } else                        {
+          } else {
             Xt[jx][i]=49;
             Xt[jx+1][i]=48;
           }
@@ -101,7 +101,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
         xtQTL[jx]= MCOF;
       } else {
         for (int i=0; i<Naug; i++) {
-          if      (marker[j][i]==MH) {
+          if (marker[j][i]==MH) {
             Xt[jx][i]=48;  //ASCII code 47, 48 en 49 voor -1, 0, 1;
           } else if (marker[j][i]==MAA) {
             Xt[jx][i]=47;  // '/' stands for -1

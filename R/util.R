@@ -5,7 +5,7 @@
 # copyright (c) 2001-2014, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Feb, 2014
+# last modified Apr, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -415,7 +415,7 @@ function(cross)
       pr <- pr[,reduced,,drop=FALSE]
       attr(pr, "map") <- map[reduced]
       for(a in attr2fix)
-        attr(pr, a) <- butes[a]
+        attr(pr, a) <- butes[[a]]
 
       cross$geno[[i]]$prob <- pr
     }
@@ -440,7 +440,7 @@ function(cross)
       dr <- dr[,reduced,,drop=FALSE]
       attr(dr, "map") <- map[reduced]
       for(a in attr2fix)
-        attr(dr, a) <- butes[a]
+        attr(dr, a) <- butes[[a]]
 
       cross$geno[[i]]$draws <- dr
     }
@@ -4161,8 +4161,8 @@ function(x, jitter=FALSE)
 cleanGeno <-
 function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 {  
-  if(class(cross)[1] != "bc") 
-    stop("This function currently only works for a backcross.")
+  if(!(class(cross)[1] %in% c("bc", "riself", "risib", "dh", "haploid")))
+    stop("This function currently only works for crosses with two genotypes")
 
   if(!missing(chr)) cleaned <- subset(cross, chr=chr)
   else cleaned <- cross
