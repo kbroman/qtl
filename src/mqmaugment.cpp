@@ -238,6 +238,10 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*augmentednind)=(*augmentednind)+(numimputations*current_leftover_ind);
       (*nind)= (*nind)+(current_leftover_ind);
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
+      
+      delMQMMarkerMatrix(newmarkerset, nmark);    // Free the newmarkerset, this can only be done here since: (*markers) = newmarkerset_all;
+      Free(new_y_all);
+      Free(new_ind_all);
     }else{
       if(ind_still_left && augment_strategy == 3){
         if(verbose) Rprintf("INFO: Dropping %d augment_strategy individuals from further analysis\n",ind_still_left);
@@ -248,6 +252,9 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*markers) = newmarkerset;
     }
     if(verbose) Rprintf("INFO: Done with augmentation\n");
+
+    Free(position);                             // Free the positions of the markers
+    Free(r);                                    // Free the recombination frequencies
     return 1;
 }
 
@@ -705,7 +712,7 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
       Rprintf("# Unique selected individuals:%d\n", *Nind);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
-      Rprintf("INFO: Data augmentation succesfull");
+      Rprintf("INFO: Data augmentation succesfull\n");
     }
   } else {
     //Unsuccessfull data augmentation exit
