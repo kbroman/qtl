@@ -212,10 +212,10 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 			}else{
 				if(verbose) cat("INFO:",sum(cofactors!=0),"Cofactors received to be analyzed\n")
 				if((sum(cofactors) > n.ind-10 && dominance==0)){
-					stop("INFO: Cofactors don't look okay for use without dominance\n")
+					stop("Cofactors don't look okay for use without dominance\n")
 				}
 				if((sum(cofactors)*2 > n.ind-10 && dominance==1)){
-					stop("INFO: Cofactors don't look okay for use with dominance\n")
+					stop("Cofactors don't look okay for use with dominance\n")
 				}				
 				if(sum(cofactors) > 0){
 					if(verbose) cat("INFO: Doing backward elimination of selected cofactors.\n")

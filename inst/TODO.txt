@@ -10,6 +10,15 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o functions as.scanone (for converting matrix or data frame to scanone
+  format) and as.scanoneperm (for converting matrix or two to
+  scanoneperm format)
+
+o Bug in mqmscan: it has problems when there are just two markers on a
+  chromosome. It gives a seg fault if you scan just that chromosome,
+  and it gives Infs in the "info" column in the results if you scan
+  that and other chromosomes.
+
 o Include genetic map as an attribute in scanone results and use that
   to plot marker positions.
 
