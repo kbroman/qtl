@@ -252,8 +252,8 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*markers) = newmarkerset;
     }
     if(verbose) Rprintf("INFO: Done with augmentation\n");
-    Free(new_y);                                // Free vector indicating the new phenotypes
-    Free(new_ind);                              // Free vector indicating the new individuals
+    // Free(new_y);                                // Free vector indicating the new phenotypes
+    // Free(new_ind);                              // Free vector indicating the new individuals
     Free(succes_ind);                           // Free vector indicating the result of round 1 - augmentation
     Free(position);                             // Free the positions of the markers
     Free(r);                                    // Free the recombination frequencies
