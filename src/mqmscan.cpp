@@ -372,6 +372,7 @@ void mqmscan(int Nind, int Nmark,int Npheno,int **Geno,int **Chromo, double **Di
     R_CheckUserInterrupt(); /* check for ^C */
     R_FlushConsole();
   #endif
+  delMQMMarkerMatrix(markers, Nmark+1); // [Danny:] This looked suspicious, we were leaking memory here because we didn't clean it
   return;
 }  /* end of function mqmscan */
 
