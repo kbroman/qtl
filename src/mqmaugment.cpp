@@ -630,7 +630,7 @@ bailout:
   retvalue = 0;
 cleanup:
   Free(newy);
-  Free(newmarker);
+  delMQMMarkerMatrix(newmarker, Nmark+1); //Free(newmarker);
   Free(newind);
   Free(newprob);
   Free(newprobmax);
