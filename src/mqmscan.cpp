@@ -204,6 +204,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
   if(max > stepmax){ fatal("ERROR: Re-estimation of the map put markers at: %f Cm, run the algorithm with a step.max larger than %f Cm", max, max); }
 
   //Check if everything still is correct positions and R[f]
+  Free(position);     // Free position, because we reallocate them
   position = relative_marker_position(Nmark,chr);
 
   Free(r);      // Free r, because we reallocate them
