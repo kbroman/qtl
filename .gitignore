@@ -46,6 +46,7 @@ qtl*gz
 *.dll
 *.DLL
 *.Rout
+inst/contrib/bin/test/*.txt
 contrib/bin/mqmdebugout
 ..Rcheck/
 inst/doc/MQM-tour.tex
