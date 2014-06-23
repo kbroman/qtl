@@ -240,8 +240,8 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
       Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n", "");
       delMQMMarkerMatrix(newmarkerset, nmark);    // Free the newmarkerset, this can only be done here since: (*markers) = newmarkerset_all;
-      Free(new_y_all);
-      Free(new_ind_all);
+      // Free(new_y_all);
+      // Free(new_ind_all);
     }else{
       if(ind_still_left && augment_strategy == 3){
         if(verbose) Rprintf("INFO: Dropping %d augment_strategy individuals from further analysis\n",ind_still_left);
