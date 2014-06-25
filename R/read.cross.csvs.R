@@ -2,19 +2,19 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2005-2012, Karl W Broman
-# last modified Mar, 2012
+# copyright (c) 2005-2014, Karl W Broman
+# last modified Jun, 2014
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
@@ -119,10 +119,10 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
   gen <- gen[,-1,drop=FALSE]
 
   wh <- which(pheno[1,] == indname)
-  if(length(wh) < 1) 
+  if(length(wh) < 1)
     stop("Can't find the individual ID column (expected '", indname,
          "') in the phenotype file.")
-  
+
   pheind <- pheno[-1,wh[1]]
 
   if(length(genind) == length(pheind) && all(genind == pheind)) {
@@ -137,12 +137,12 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
       stop("There are missing genotype IDs")
     else if(any(is.na(pheind)))
       stop("There are missing phenotype IDs")
-    
-    if(length(genind) != length(unique(genind)) && length(pheind) != length(unique(pheind))) 
+
+    if(length(genind) != length(unique(genind)) && length(pheind) != length(unique(pheind)))
       stop("There are duplicate genotype and phenotype IDs, and they don't all line up.")
     else if(length(genind) != length(unique(genind)))
       stop("There are duplicate genotype IDs, and the genotype and phenotype IDs don't all line up.")
-    else if(length(pheind) != length(unique(pheind))) 
+    else if(length(pheind) != length(unique(pheind)))
       stop("There are duplicate phenotype IDs, and the genotype and phenotype IDs don't all line up.")
 
     mgp <- match(genind, pheind)
@@ -185,7 +185,7 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
            paste(which(is.na(map)),colapse=",",sep=""),sep="")
     }
   }
-  else 
+  else
     map <- rep(0,ncol(gen))
 
   colnames(pheno) <- unlist(pheno[1,])
@@ -233,33 +233,6 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
     allgeno <- matrix(as.numeric(gen[-(1:nondatrow),,drop=FALSE]),
                       ncol=ncol(gen))
 
-  # Fix up phenotypes
-  sw2numeric <-
-    function(x, dec) {
-      wh1 <- is.na(x)
-      n <- sum(!is.na(x))
-      y <- suppressWarnings(asnumericwithdec(as.character(x), dec=dec))
-      wh2 <- is.na(y)
-      m <- sum(!is.na(y))
-      if(n==m || (n-m) < 2 || (n-m) < n*0.05) {
-        if(sum(!wh1 & wh2) > 0) {
-          u <- unique(as.character(x[!wh1 & wh2]))
-          if(length(u) > 1) {
-            themessage <- paste("The phenotype values", paste("\"", u, "\"", sep="", collapse=" "))
-                themessage <- paste(themessage, " were", sep="")
-              }
-              else {
-                themessage <- paste("The phenotype value \"", u, "\" ", sep="")
-                themessage <- paste(themessage, " was", sep="")
-              }
-              themessage <- paste(themessage, "interpreted as missing.")
-              warning(themessage)
-
-        }
-        return(y)
-      }
-      else return(x)
-    }
   pheno <- data.frame(lapply(pheno, sw2numeric, dec=dec), stringsAsFactors=TRUE)
 
   # re-order the markers by chr and position
@@ -276,7 +249,7 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
     allgeno <- allgeno[,neworder,drop=FALSE]
     mnames <- mnames[neworder]
   }
-  
+
   # fix up dummy map
   if(!map.included) {
     map <- split(rep(0,length(chr)),chr)[unique(chr)]
@@ -291,7 +264,7 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
   geno <- vector("list",n.chr)
   names(geno) <- uchr
   min.mar <- 1
-  allautogeno <- NULL  
+  allautogeno <- NULL
   for(i in 1:n.chr) { # loop over chromosomes
     # create map
     temp.map <- map[chr==uchr[i]]
@@ -307,12 +280,12 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
       class(geno[[i]]) <- "X"
     else {
       class(geno[[i]]) <- "A"
-      if(is.null(allautogeno)) allautogeno <- data 
-      else allautogeno <- cbind(allautogeno,data) 
+      if(is.null(allautogeno)) allautogeno <- data
+      else allautogeno <- cbind(allautogeno,data)
     }
   }
 
-  if(is.null(allautogeno)) allautogeno <- allgeno 
+  if(is.null(allautogeno)) allautogeno <- allgeno
 
   # check that data dimensions match
   n.mar1 <- sapply(geno,function(a) ncol(a$data))
@@ -340,8 +313,8 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
 
   # determine map type: f2 or bc or 4way?
   if(all(is.na(allgeno))) warning("There is no genotype data!\n")
-  if(all(is.na(allautogeno)) || max(allautogeno,na.rm=TRUE)<=2) type <- "bc"  
-  else if(max(allautogeno,na.rm=TRUE)<=5) type <- "f2" 
+  if(all(is.na(allautogeno)) || max(allautogeno,na.rm=TRUE)<=2) type <- "bc"
+  else if(max(allautogeno,na.rm=TRUE)<=5) type <- "f2"
   else type <- "4way"
   cross <- list(geno=geno,pheno=pheno)
   class(cross) <- c(type,"cross")
@@ -364,7 +337,7 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
 
   # if 4-way cross, make the maps matrices
   if(type=="4way") {
-    for(i in 1:n.chr) 
+    for(i in 1:n.chr)
       cross$geno[[i]]$map <- rbind(cross$geno[[i]]$map, cross$geno[[i]]$map)
   }
 
