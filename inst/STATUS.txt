@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.33, 2014-06-09:
+Version 1.33, 2014-06-25:
 
 Major changes:
 
@@ -26,7 +26,8 @@ Major changes:
 
 Minor changes:
 
-  None.
+  Fix potential problem in read.cross with format="csv" or "csvs" when
+  there are many empty cells in the phenotype data.
 
 
 Version 1.32, 2014-05-28:
