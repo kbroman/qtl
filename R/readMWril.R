@@ -2,19 +2,19 @@
 #
 # readMWril.R
 #
-# copyright (c) 2009-2011, Karl W Broman
-# last modified Dec, 2011
+# copyright (c) 2009-2014, Karl W Broman
+# last modified Jun, 2014
 # first written Apr, 2009
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
@@ -34,9 +34,9 @@
 ######################################################################
 
 readMWril <-
-function(dir, rilfile, founderfile, 
+function(dir, rilfile, founderfile,
          type=c("ri4self", "ri4sib", "ri8self", "ri8sib", "bgmagic16"),
-         na.strings=c("-","NA"), rotate=FALSE, 
+         na.strings=c("-","NA"), rotate=FALSE,
          ...)
 {
   # create file names
@@ -123,7 +123,7 @@ function(dir, rilfile, founderfile,
   if(all(!is.na(gen[3,1:n.phe]) & gen[3,1:n.phe]=="")) {
     map.included <- TRUE
     map <- asnumericwithdec(unlist(gen[3,-(1:n.phe)]), dec=dec)
-    if(any(is.na(map))) 
+    if(any(is.na(map)))
       stop("There are missing marker positions.")
     nondatrow <- 3
   }
@@ -147,33 +147,6 @@ function(dir, rilfile, founderfile,
   gen <- matrix(as.numeric(gen[-(1:nondatrow),-(1:n.phe)]),
                 ncol=ncol(gen)-n.phe)
 
-  # Fix up phenotypes
-  sw2numeric <-
-    function(x, dec) {
-      wh1 <- is.na(x)
-      n <- sum(!is.na(x))
-      y <- suppressWarnings(asnumericwithdec(as.character(x), dec=dec))
-      wh2 <- is.na(y)
-      m <- sum(!is.na(y))
-      if(n==m || (n-m) < 2 || (n-m) < n*0.05) {
-        if(sum(!wh1 & wh2) > 0) {
-          u <- unique(as.character(x[!wh1 & wh2]))
-          if(length(u) > 1) {
-            themessage <- paste("The phenotype values", paste("\"", u, "\"", sep="", collapse=" "))
-                themessage <- paste(themessage, " were", sep="")
-              }
-              else {
-                themessage <- paste("The phenotype value \"", u, "\" ", sep="")
-                themessage <- paste(themessage, " was", sep="")
-              }
-              themessage <- paste(themessage, "interpreted as missing.")
-              warning(themessage)
-
-        }
-        return(y)
-      }
-      else return(x)
-    }
   pheno <- data.frame(lapply(pheno, sw2numeric, dec=dec), stringsAsFactors=TRUE)
 
   n.str <- nrow(founder)
@@ -223,7 +196,7 @@ function(dir, rilfile, founderfile,
   gen[wh] <- NA
   gen <- matrix(gen, nrow=d[1])
   gen[gen==0 | gen==(2^n.str-1)] <- NA
-  
+
 
   # re-order the markers by chr and position
   # try to figure out the chr labels
@@ -239,7 +212,7 @@ function(dir, rilfile, founderfile,
     gen <- gen[,neworder,drop=FALSE]
     mnames <- mnames[neworder]
   }
-  
+
   # fix up dummy map
   if(!map.included) {
     map <- split(rep(0,length(chr)),chr)[unique(chr)]
@@ -267,7 +240,7 @@ function(dir, rilfile, founderfile,
     geno[[i]] <- list(data=data,map=temp.map)
     if(uchr[i] == "X" || uchr[i] == "x")
       class(geno[[i]]) <- "X"
-    else 
+    else
       class(geno[[i]]) <- "A"
   }
 

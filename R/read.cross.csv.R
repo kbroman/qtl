@@ -2,24 +2,24 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-2012, Karl W Broman
-# last modified Mar, 2012
+# copyright (c) 2000-2014, Karl W Broman
+# last modified Jun, 2014
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: read.cross.csv 
+# Contains: read.cross.csv
 #           [See read.cross.R for the main read.cross function.]
 #
 ######################################################################
@@ -151,33 +151,8 @@ function(dir, file, na.strings=c("-","NA"),
     allgeno <- matrix(as.numeric(data[-(1:nondatrow),-(1:n.phe)]),
                       ncol=ncol(data)-n.phe)
 
-  # Fix up phenotypes
-  sw2numeric <-
-    function(x, dec) {
-      wh1 <- is.na(x)
-      n <- sum(!is.na(x))
-      y <- suppressWarnings(asnumericwithdec(as.character(x), dec))
-      wh2 <- is.na(y)
-      m <- sum(!is.na(y))
-      if(n==m || (n-m) < 2 || (n-m) < n*0.05) {
-        if(sum(!wh1 & wh2) > 0) {
-          u <- unique(as.character(x[!wh1 & wh2]))
-          if(length(u) > 1) {
-            themessage <- paste("The phenotype values", paste("\"", u, "\"", sep="", collapse=" "))
-                themessage <- paste(themessage, " were", sep="")
-              }
-              else {
-                themessage <- paste("The phenotype value \"", u, "\" ", sep="")
-                themessage <- paste(themessage, " was", sep="")
-              }
-              themessage <- paste(themessage, "interpreted as missing.")
-              warning(themessage)
+  oldpheno <- pheno
 
-        }
-        return(y)
-      }
-      else return(x)
-    }
   pheno <- data.frame(lapply(pheno, sw2numeric, dec=dec), stringsAsFactors=TRUE)
 
   # re-order the markers by chr and position
@@ -194,7 +169,7 @@ function(dir, file, na.strings=c("-","NA"),
     allgeno <- allgeno[,neworder,drop=FALSE]
     mnames <- mnames[neworder]
   }
-  
+
   # fix up dummy map
   if(!map.included) {
     map <- split(rep(0,length(chr)),chr)[unique(chr)]
@@ -209,7 +184,7 @@ function(dir, file, na.strings=c("-","NA"),
   geno <- vector("list",n.chr)
   names(geno) <- uchr
   min.mar <- 1
-  allautogeno <- NULL  
+  allautogeno <- NULL
   for(i in 1:n.chr) { # loop over chromosomes
     # create map
     temp.map <- map[chr==uchr[i]]
@@ -225,12 +200,12 @@ function(dir, file, na.strings=c("-","NA"),
       class(geno[[i]]) <- "X"
     else {
       class(geno[[i]]) <- "A"
-      if(is.null(allautogeno)) allautogeno <- data 
-      else allautogeno <- cbind(allautogeno,data) 
+      if(is.null(allautogeno)) allautogeno <- data
+      else allautogeno <- cbind(allautogeno,data)
     }
   }
 
-  if(is.null(allautogeno)) allautogeno <- allgeno 
+  if(is.null(allautogeno)) allautogeno <- allgeno
 
   # check that data dimensions match
   n.mar1 <- sapply(geno,function(a) ncol(a$data))
@@ -279,7 +254,7 @@ function(dir, file, na.strings=c("-","NA"),
 
   # if 4-way cross, make the maps matrices
   if(type=="4way") {
-    for(i in 1:n.chr) 
+    for(i in 1:n.chr)
       cross$geno[[i]]$map <- rbind(cross$geno[[i]]$map, cross$geno[[i]]$map)
   }
 

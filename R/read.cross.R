@@ -2,19 +2,19 @@
 #
 # read.cross.R
 #
-# copyright (c) 2000-2013, Karl W Broman
+# copyright (c) 2000-2014, Karl W Broman
 # last modified June, 2014
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
@@ -118,7 +118,7 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
 
   # if chr names all start with "chr" or "Chr", remove that part
   chrnam <- names(cross$geno)
-  if(all(regexpr("^[Cc][Hh][Rr]",chrnam)>0)){ 
+  if(all(regexpr("^[Cc][Hh][Rr]",chrnam)>0)){
     chrnam <- substr(chrnam,4,nchar(chrnam))
     if(all(regexpr("^[Oo][Mm][Oo][Ss][Oo][Mm][Ee]",chrnam)>0))
       chrnam <- substr(chrnam,8,nchar(chrnam))
@@ -127,7 +127,7 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   if(sum(chrnam=="x")>0) chrnam[chrnam=="x"] <- "X"
   names(cross$geno) <- chrnam
   # make sure the class of chromosomes named "X" is "X"
-    for(i in 1:length(cross$geno)) 
+    for(i in 1:length(cross$geno))
       if(names(cross$geno)[i] == "X")
         class(cross$geno[[i]]) <- "X"
 
@@ -163,18 +163,18 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
       warning("length of arg alleles should be 2")
       alleles <- alleles[1:2]
     }
-    if(length(alleles) < 2) 
+    if(length(alleles) < 2)
       stop("length of arg alleles should be 2")
   }
   else { # 4-way cross
     if(missing(alleles))
       alleles <- c("A","B","C","D")
-    
+
     if(length(alleles) > 4) {
       warning("length of arg alleles should be 4 for a 4-way cross")
       alleles <- alleles[1:4]
     }
-    if(length(alleles) < 4) 
+    if(length(alleles) < 4)
       stop("length of arg alleles should be 4 for a 4-way cross")
   }
   if(any(nchar(alleles)) != 1) {
@@ -226,7 +226,7 @@ function(cross)
       malegeno[!is.na(malegeno) & malegeno==2] <- NA
     }
     malegeno[!is.na(malegeno) & malegeno==3] <- 2
-    
+
     femalegeno <- Xgeno[sexpgm$sex==0,]
     if(any(!is.na(femalegeno) & femalegeno==3)) {
       n.omit <- sum(!is.na(femalegeno) & femalegeno==3)
@@ -236,7 +236,7 @@ function(cross)
 
     Xgeno[sexpgm$sex==1,] <- malegeno
     Xgeno[sexpgm$sex==0,] <- femalegeno
-    
+
   }
   else {
     # "sex" not provided
@@ -309,7 +309,7 @@ function(cross, alleles)
       malegeno[!is.na(malegeno) & malegeno==3] <- 2
       Xgeno[sexpgm$sex==1,] <- malegeno
     }
-    
+
     if(any(sexpgm$sex==0)) { # there are females
       femalegeno0 <- Xgeno[sexpgm$sex==0 & sexpgm$pgm==0,]
       femalegeno1 <- Xgeno[sexpgm$sex==0 & sexpgm$pgm==1,]
@@ -347,7 +347,7 @@ function(cross, alleles)
       Xgeno[sexpgm$sex==0 & sexpgm$pgm==0,] <- femalegeno0
       Xgeno[sexpgm$sex==0 & sexpgm$pgm==1,] <- femalegeno1
     }
-    
+
   }
 
   else if(!is.null(sexpgm$sex) && is.null(sexpgm$pgm)) {
@@ -363,7 +363,7 @@ function(cross, alleles)
       malegeno[!is.na(malegeno) & malegeno==3] <- 2
       Xgeno[sexpgm$sex==1,] <- malegeno
     }
-    
+
     if(any(sexpgm$sex==0)) { # there are females
       femalegeno <- Xgeno[sexpgm$sex==0,]
 
@@ -421,7 +421,7 @@ function(cross, alleles)
       Xgeno[sexpgm$pgm==1,] <- Xgeno.pgm1
     }
   }
-  
+
 
   else {
     # Neither "sex" and "pgm" provided
@@ -474,9 +474,37 @@ function(cross, alleles)
 asnumericwithdec <-
 function(x, dec=".")
 {
-  if(dec==".") x <- as.numeric(x)
-  else x <- sapply(strsplit(x, ","), function(a) as.numeric(paste(a, collapse=".")))
-  x
+  if(dec!=".") x <- gsub(paste0("\\", dec), ".", x)
+  as.numeric(x)
+}
+
+# Fix up phenotypes
+sw2numeric <-
+function(x, dec) {
+    x[x == ""] <- NA
+    wh1 <- is.na(x)
+    n <- sum(!is.na(x))
+    y <- suppressWarnings(asnumericwithdec(as.character(x), dec))
+    wh2 <- is.na(y)
+    m <- sum(!is.na(y))
+    if(n==m || (n-m) < 2 || (n-m) < n*0.05) {
+        if(sum(!wh1 & wh2) > 0) {
+            u <- unique(as.character(x[!wh1 & wh2]))
+            if(length(u) > 1) {
+                themessage <- paste("The phenotype values", paste("\"", u, "\"", sep="", collapse=" "))
+                themessage <- paste(themessage, " were", sep="")
+            }
+            else {
+                themessage <- paste("The phenotype value \"", u, "\" ", sep="")
+                themessage <- paste(themessage, " was", sep="")
+            }
+            themessage <- paste(themessage, "interpreted as missing.")
+            warning(themessage)
+
+        }
+        return(y)
+    }
+    else return(x)
 }
 
 # end of read.cross.R
