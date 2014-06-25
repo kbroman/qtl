@@ -116,11 +116,12 @@ function(dir, file, na.strings=c("-","NA"),
     map <- rep(0,ncol(data)-n.phe)
     nondatrow <- 2 # last non-data row
   }
-  pheno <- as.data.frame(data[-(1:nondatrow),1:n.phe,drop=FALSE], stringsAsFactors=TRUE)
-  colnames(pheno) <- data[1,1:n.phe]
 
   # replace empty cells with NA
   data <- sapply(data,function(a) { a[!is.na(a) & a==""] <- NA; a })
+
+  pheno <- as.data.frame(data[-(1:nondatrow),1:n.phe,drop=FALSE], stringsAsFactors=TRUE)
+  colnames(pheno) <- data[1,1:n.phe]
 
   # pull apart phenotypes, genotypes and map
   mnames <- data[1,-(1:n.phe)]
