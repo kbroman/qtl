@@ -3,7 +3,7 @@
 # read.cross.csvs.R
 #
 # copyright (c) 2005-2014, Karl W Broman
-# last modified Jun, 2014
+# last modified Jul, 2014
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -244,12 +244,15 @@ function(dir, genfile, phefile, na.strings=c("-","NA"),
     tempchr <- as.numeric(tempchr)
     if(map.included) neworder <- order(tempchr, map)
     else neworder <- order(tempchr)
-
-    chr <- chr[neworder]
-    map <- map[neworder]
-    allgeno <- allgeno[,neworder,drop=FALSE]
-    mnames <- mnames[neworder]
   }
+  else {
+    if(map.included) neworder <- order(chr, map)
+    else neworder <- order(chr)
+  }
+  chr <- chr[neworder]
+  map <- map[neworder]
+  allgeno <- allgeno[,neworder,drop=FALSE]
+  mnames <- mnames[neworder]
 
   # fix up dummy map
   if(!map.included) {
