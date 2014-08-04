@@ -30,7 +30,7 @@
 # read.cross.mq: read data from an experimental cross in MapQTL (and
 # JoinMap) format.
 #
-# We need three files: a "loc" file containing the genotype data, a 
+# We need three files: a "loc" file containing the genotype data, a
 # "map" file containing the linkage group assignments and map
 # positions, and a "qua" file containing the phenotypes.
 #
@@ -49,11 +49,11 @@ function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
         mapfile <- file.path(dir, mapfile)
         quafile <- file.path(dir, quafile)
     }
-    
+
     loc <- read.cross.mq.loc(locfile)
     map <- read.cross.mq.map(mapfile)
     pheno <- read.cross.mq.qua(quafile)
-    
+
     type <- loc$pop.type # only "4way" for the moment
     n.ind <- nrow(loc$genotypes)
     n.mar <- ncol(loc$genotypes)
@@ -66,12 +66,12 @@ function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
     if(nrow(pheno) > n.ind){
         pheno <- pheno[-((n.ind+1):nrow(pheno)),]
     }
-    
+
     cat(" --Read the following data:\n")
     cat("\tNumber of individuals: ", n.ind, "\n")
     cat("\tNumber of markers: ", n.mar, "\n")
     cat("\tNumber of phenotypes: ", n.phe, "\n")
-    
+
     geno <- list()
     for(chr in levels(map$chr)){
         geno[[chr]] <- list(data=loc$genotypes[,map$marker[map$chr == chr]],
@@ -85,7 +85,7 @@ function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
         } else
             class(geno[[chr]]) <- "A"
     }
-    
+
     cross <- list(geno=geno, pheno=pheno)
     class(cross) <- c(type, "cross")
     list(cross, estimate.map)
@@ -113,26 +113,26 @@ function(locfile){
     phase <- NULL
     classif <- NULL
     genotypes <- NULL
-    
+
     lines <- readLines(locfile)
-    
+
     locus.id <- 1
     ind.id <- 1
     for(line.id in 1:length(lines)){
-        
+
         ## skip empty lines
         tmp <- mq.rmv.comment(x=lines[line.id], symbol=";")
         tmp <- gsub(pattern=" + ", replacement=" ", x=tmp)
         if(tmp == "" || tmp == " ")
             next
-        
+
         ## extract the population name
         if(grepl(pattern="name", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
             pop.name <- strsplit(x=tmp, split="=")[[1]][2]
             next
         }
-        
+
         ## extract the population type
         if(grepl(pattern="popt", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
@@ -152,7 +152,7 @@ function(locfile){
             }
             next
         }
-        
+
         ## extract the number of loci
         if(grepl(pattern="nloc", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
@@ -162,7 +162,7 @@ function(locfile){
             classif <- rep(NA, nb.loci)
             next
         }
-        
+
         ## extract the number of individuals
         if(grepl(pattern="nind", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
@@ -172,7 +172,7 @@ function(locfile){
             ## colnames(genotypes) <- paste("ind", 1:nb.inds, sep=".")
             next
         }
-        
+
         tokens <- strsplit(x=tmp, split=" |\t")[[1]]
         if(length(tokens) > nb.inds + 4){
             msg <- paste("line", line.id, "should have a maximum of",
@@ -194,9 +194,15 @@ function(locfile){
         genotypes[locus.id,] <- tokens[(length(tokens)-nb.inds+1):length(tokens)]
         locus.id <- locus.id + 1
     }
-    
+
+    if(locus.id > nb.loci + 1){
+        msg <- paste("there seems to be more loci (", locus.id-1,
+                             ") than indicated in the header (", nb.loci, ")")
+        stop(msg, call.=FALSE)
+    }
+
     genotypes <- t(genotypes) # individuals in rows, markers in columns
-    
+
     ## convert all missing data to NA
     for(i in 1:length(genotypes)){
         if(grepl(pattern="\\.", x=genotypes[i]))
@@ -207,7 +213,7 @@ function(locfile){
                                  x=genotypes[i])
     }
     genotypes[which(genotypes == "--")] <- NA
-    
+
     ## convert segregation types and genotypes to new MapQtl format
     convert.seg <- FALSE
     new.seg.types <- c("<abxcd>", "<efxeg>", "<hkxhk>", "<lmxll>", "<nnxnp>")
@@ -266,7 +272,7 @@ function(locfile){
             }
         }
     }
-    
+
     ## check genotypes
     proper.genotypes <- c(NA, "ac", "ca", "ad", "da", "bc", "cb", "bd", "db",
                           "ee", "ef", "fe", "eg", "ge", "fg", "gf",
@@ -278,10 +284,10 @@ function(locfile){
             msg <- paste("unrecognized genotype", genotype)
             stop(msg, call.=FALSE)
         }
-    
+
     ## replace all "ca" by "ac", etc -> speed-up next step?
     ## TODO
-    
+
     ## convert genotypes to R/qtl code (mother=AB x father=CD)
     for(locus.id in 1:nb.loci){
         if(phase[locus.id] == "{0-}"){
@@ -563,7 +569,7 @@ function(locfile){
         }
     }
     storage.mode(genotypes) <- "numeric"
-    
+
     list(pop.name=pop.name, pop.type=pop.type, genotypes=genotypes,
          seg=seg, phase=phase, classif=classif)
 }
@@ -574,19 +580,19 @@ function(mapfile){
     lines <- readLines(mapfile)
     genmap <- data.frame(chr=rep(NA, length(lines)),
                          marker=NA, pos=NA)
-    
+
     whole <- paste(lines, collapse="\n")
     groups <- strsplit(x=whole, split="group")[[1]]
-    
+
     marker.id <- 1
     for(group.id in 1:length(groups)){
         tmp <- gsub(pattern=" + ", replacement=" ", x=groups[group.id])
         if(tmp == "" || tmp == " ") # empty groups
             next
-        
+
         lines <- strsplit(tmp, split="\n")[[1]]
         group.name <- gsub(pattern=" ", replacement="", x=lines[1])
-        
+
         for(line.id in 2:length(lines)){
             tmp <- mq.rmv.comment(x=lines[line.id], symbol=";")
             if(tmp == "" || tmp == " ") # empty lines
@@ -599,10 +605,10 @@ function(mapfile){
             marker.id <- marker.id + 1
         }
     }
-    
+
     genmap <- genmap[! is.na(genmap[,"chr"]), ]
     genmap[,"chr"] <- factor(genmap[,"chr"], levels=unique(genmap[,"chr"]))
-    
+
     genmap
 }
 
@@ -612,43 +618,43 @@ function(quafile){
     nb.inds <- NULL
     miss <- NULL
     phenotypes <- NULL
-    
+
     lines <- readLines(quafile)
-    
+
     ind.id <- 1
     trait.id <- 1
     trait.names <- c()
     for(line.id in 1:length(lines)){
-        
+
         ## skip empty lines
         tmp <- mq.rmv.comment(x=lines[line.id], symbol=";")
         tmp <- gsub(pattern=" + ", replacement=" ", x=tmp)
         if(tmp == "" || tmp == " ")
             next
-        
+
         ## extract the number of traits
         if(grepl(pattern="ntrt", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
             nb.traits <- as.numeric(strsplit(x=tmp, split="=")[[1]][2])
             next
         }
-        
+
         ## extract the number of individuals
         if(grepl(pattern="nind", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
             nb.inds <- as.numeric(strsplit(x=tmp, split="=")[[1]][2])
             next
         }
-        
+
         ## extract the symbol for missing values
         if(grepl(pattern="miss", x=lines[line.id])){
             tmp <- gsub(pattern=" ", replacement="", x=tmp)
             miss <- strsplit(x=tmp, split="=")[[1]][2]
             next
         }
-        
+
         tokens <- strsplit(x=tmp, split=" |\t")[[1]]
-        
+
         if(trait.id <= nb.traits){
             if(length(tokens) == 1){ # one trait name per line
                 trait.names <- c(trait.names, tokens[1])
@@ -668,7 +674,7 @@ function(quafile){
             }
             phenotypes <- matrix(NA, nrow=nb.inds, ncol=nb.traits)
         }
-        
+
         if(length(tokens) != nb.traits){
             msg <- paste0("line ", line.id, " should have ", nb.traits,
                           " column", ifelse(nb.traits > 1, "s", ""),
@@ -678,7 +684,7 @@ function(quafile){
         phenotypes[ind.id,] <- tokens
         ind.id <- ind.id + 1
     }
-    
+
     phenotypes[which(phenotypes == miss)] <- NA
     phenotypes <- as.data.frame(phenotypes)
 
@@ -687,7 +693,7 @@ function(quafile){
                                    warning=function(w)
                                    as.factor(phenotypes[,j]))
     colnames(phenotypes) <- trait.names
-    
+
     phenotypes
 }
 
