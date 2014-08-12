@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.33, 2014-08-11:
+Version 1.33, 2014-08-12:
 
 Major changes:
 
@@ -36,6 +36,8 @@ Minor changes:
   cases: markers not ordered by linkage group, no positions provided,
   and chromosome IDs non-numeric. It was a pretty bad bug, as marker
   genotypes got scrambled.
+
+  Fixed some memory leaks in MQM code.
 
 
 Version 1.32, 2014-05-28:
