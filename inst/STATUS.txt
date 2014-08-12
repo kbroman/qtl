@@ -17,7 +17,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.33, 2014-07-23:
+Version 1.33, 2014-08-11:
 
 Major changes:
 
@@ -25,6 +25,9 @@ Major changes:
   Flutre).
 
 Minor changes:
+
+  read.cross with format="qtlcart" can now read doubled haploids
+  (dh/Ri0).
 
   Fixed potential problem in read.cross with format="csv" or "csvs" when
   there are many empty cells in the phenotype data.

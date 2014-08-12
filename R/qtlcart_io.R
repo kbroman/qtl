@@ -10,12 +10,12 @@
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
@@ -37,31 +37,31 @@ function (dir, crofile, mapfile)
 {
   if (missing(mapfile)) stop("Missing mapfile.")
   if (missing(crofile)) stop("Missing crofile.")
-  
+
   if(!missing(dir) && dir != "") {
     mapfile <- file.path(dir, mapfile)
     crofile <- file.path(dir, crofile)
   }
   map <- read.map.qtlcart( mapfile )
   cro <- read.cro.qtlcart( crofile )
-  
+
   cat(" --Read the following data:\n")
   cat("       Type of cross:         ", cro$cross.class, "\n")
   cat("       Number of individuals: ", nrow( cro$markers ), "\n")
   cat("       Number of markers:     ", ncol( cro$markers ), "\n")
   cat("       Number of phenotypes:  ", ncol( cro$traits ), "\n")
-  
+
   maplen <- unlist(lapply(map,length))
   markers <- split( as.data.frame( t( cro$markers ), stringsAsFactors=TRUE),
                    ordered( rep(names( maplen ), maplen )))
-  
+
   Geno <- list()
   for( i in names( map )) {
     name.markers <- names( map[[i]] )
     markers[[i]] <- t( markers[[i]] )
     colnames( markers[[i]] ) <- name.markers
     tmp <- list( data = markers[[i]], map = map[[i]] )
-    
+
     # determine whether autosomal chromosome or X chromosome
     #     using the chromosome name
     class(tmp) <- ifelse(length(grep("[Xx]", i)), "X", "A")
@@ -72,7 +72,7 @@ function (dir, crofile, mapfile)
   class(cross) <- c( cro$cross.class, "cross")
   if(cro$cross.class == "bcsft")
     attr(cross, "scheme") <- cro$cross.scheme
-  
+
   list(cross,FALSE)
 }
 
@@ -105,13 +105,13 @@ function (file)
 
   position <- scan(file, what=character(), sep="\n",
                    skip = tmp[1] - 1, n = tmp[2], quiet=TRUE)
-  
+
 
   tmp <- grep("-b", f)
   if(length(tmp) < 1) stop("Marker names not found in map file\n")
   markers <- scan(file, list(1, 2, ""), skip = tmp[1], nlines = nmarkers,
                   blank.lines.skip = FALSE, quiet = TRUE)
-  
+
   if(length(tmp) < 2) {
     warning("Chromosome names not found in map file\n")
     chroms <- as.character(1:nchrom)
@@ -141,7 +141,7 @@ function (file)
 
 ######################################################################
 # read.cro.qtlcart
-# 
+#
 # read QTL cartographer CRO file
 ######################################################################
 read.cro.qtlcart <-
@@ -171,7 +171,7 @@ function (file)
 
   # cross.scheme (used for bcsft only)
   cross.scheme <- c(0,0)
-  
+
   # cross type
   fix.bc1 <- fix.ridh <- FALSE # indicator of whether to fix genotypes
   cross <- tolower(s$cross[1])
@@ -198,7 +198,7 @@ function (file)
     cross.scheme <- c(0,3)
   }
 
-  if(!cross %in% c("f2","bc","risib","riself","bcsft"))
+  if(!cross %in% c("f2","bc","risib","riself","bcsft", "dh"))
     stop("Cross type ", cross, " not supported.")
 
   notraits <- as.numeric(s$otraits[1])
@@ -231,7 +231,7 @@ function (file)
   f = array(as.numeric(f),dim(f))
 
   # omit negative genotypes (treat as missing)
-  f[f<0] <- NA 
+  f[f<0] <- NA
 
   f[!is.na(f)] <- c(NA, 1:3, rep(NA, 7), 4, NA, 5)[2 + f[!is.na(f)]]
   if (fix.ridh && all(is.na(f) | f == 1 | f == 3))
