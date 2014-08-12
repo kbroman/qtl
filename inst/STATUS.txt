@@ -17,6 +17,27 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.33, 2014-08-11:
+
+Major changes:
+
+  Can read/write 4-way cross data in MapQTL format (thanks to Timothee
+  Flutre).
+
+Minor changes:
+
+  read.cross with format="qtlcart" can now read doubled haploids
+  (dh/Ri0).
+
+  Fixed potential problem in read.cross with format="csv" or "csvs" when
+  there are many empty cells in the phenotype data.
+
+  Fixed bug in read.cross for format="csv" that shows up in some rare
+  cases: markers not ordered by linkage group, no positions provided,
+  and chromosome IDs non-numeric. It was a pretty bad bug, as marker
+  genotypes got scrambled.
+
+
 Version 1.32, 2014-05-28:
 
 Major changes:

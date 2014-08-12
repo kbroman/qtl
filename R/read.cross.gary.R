@@ -2,19 +2,19 @@
 #
 # read.cross.gary.R
 #
-# copyright (c) 2000-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2000-2014, Karl W Broman
+# last modified Jun, 2014
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
 #
@@ -118,7 +118,7 @@ function(dir,genfile,mnamesfile,chridfile,phefile,pnamesfile,mapfile,
   colnames(pheno) <- pnames
 
   # fix up phenotype data: make things numeric that look numeric
-  sw2numeric <-
+  sw2numeric_gary <-
     function(x) {
       pattern <- "^[ \t]*-*[0-9]*[.]*[0-9]*[ \t]*$"
       n <- sum(!is.na(x))
@@ -126,7 +126,7 @@ function(dir,genfile,mnamesfile,chridfile,phefile,pnamesfile,mapfile,
         return(as.numeric(as.character(x)))
       else return(x)
     }
-  pheno <- data.frame(lapply(as.data.frame(pheno), sw2numeric), stringsAsFactors=TRUE)
+  pheno <- data.frame(lapply(as.data.frame(pheno), sw2numeric_gary), stringsAsFactors=TRUE)
 
   # check that data dimensions match
   n.mar1 <- sapply(geno,function(a) ncol(a$data))
@@ -161,7 +161,7 @@ function(dir,genfile,mnamesfile,chridfile,phefile,pnamesfile,mapfile,
   else max.gen <- 2
 
   u <- unique(allgeno)
-  if(any(!is.na(u) & (u > max.gen | u < 1))) 
+  if(any(!is.na(u) & (u > max.gen | u < 1)))
     stop("There are stange values in the genotype data : ",
                  paste(sort(u),collapse=":"), ".")
 
