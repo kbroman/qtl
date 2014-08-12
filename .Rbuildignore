@@ -5,6 +5,8 @@
 \.git
 ^\.RData$
 ^\.Rhistory$
+^tests/\.RData$
+^tests/\.Rhistory$
 inst/docs/Sources/MQM/Figs
 ^\.Rprofile$
 inst/docs/Sources/MQM/.Rprofile
