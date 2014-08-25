@@ -41,7 +41,7 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
   # create file names
   if(missing(genfile)) genfile <- "gen.csv"
   if(missing(phefile)) phefile <- "phe.csv"
-  if(missing(mapfile)) phefile <- "map.csv"
+  if(missing(mapfile)) mapfile <- "map.csv"
 
   if(!missing(dir) && dir != "") {
     genfile <- file.path(dir, genfile)
