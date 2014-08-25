@@ -140,7 +140,7 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
   # pheno must be rotated to allow for numeric and factor variables
   pheno <- data.frame(t(pheno))
   pheno <- data.frame(lapply(pheno, sw2numeric, dec = dec), 
-                      row.names = rownames(pheno), stringsAsFactors = TRUE)
+                      row.names = NULL, stringsAsFactors = TRUE)
 
   # re-order the markers by chr and position
   # try to figure out the chr labels
@@ -173,6 +173,9 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
 
     # pull out appropriate portion of genotype data
     data <- t(allgeno[names(temp.map), ])
+    
+    # drop genotype rownames
+    rownames(data) <- NULL
 
     geno[[i]] <- list(data=data, map=temp.map)
     if(uchr[i] == "X" || uchr[i] == "x")
