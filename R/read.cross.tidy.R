@@ -36,7 +36,7 @@
 read.cross.tidy <-
 function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
          genotypes=c("A","H","B","D","C"),
-         estimate.map=TRUE, rotate=FALSE, ...)
+         estimate.map=TRUE, ...)
 {
   # create file names
   if(missing(genfile)) genfile <- "gen.csv"
