@@ -70,20 +70,22 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
   map   <- do.call("read.table", c(args, file = mapfile))
   
   # Check individual IDs
-  genind <- colnames(gen)
-  pheind <- colnames(pheno)
-
-  mp <- setdiff(genind, pheind)
+  mp <- setdiff(colnames(gen), colnames(pheno))
   if (length(mp) > 0) {
     warning(length(mp), " individuals with genotypes but no phenotypes\n    ", paste(mp, collapse="|"), "\n")
     pheno[mp] <- NA
   }
 
-  mg <- setdiff(pheind, genind)
+  mg <- setdiff(colnames(pheno), colnames(gen))
   if (length(mg) > 0) {
     warning(length(mg), " individuals with phenotypes but no genotypes\n    ", paste(mg, collapse="|"), "\n")
     gen[mg] <- NA
   }
+  
+  # ensure individual order is consistent
+  ids   <- colnames(pheno)
+  pheno <- pheno[, ids]
+  gen   <- gen[,   ids]
 
   # Check markers
   genm   <- rownames(gen)
