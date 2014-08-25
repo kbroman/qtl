@@ -72,19 +72,17 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
   # Check individual IDs
   genind <- colnames(gen)
   pheind <- colnames(pheno)
-  inds   <- intersect(genind, pheind)
-  
-  mp <- setdiff(genind, pheind)
-  if (length(mp) > 0) warning("Removing ", length(mp), 
-                              " individuals with genotypes but no phenotypes\n")
-  
-  mg <- setdiff(pheind, genind)
-  if (length(mg) > 0) warning("Removing", length(mg), 
-                              " individuals with phenotypes but no genotypes\n")
 
-  if (sum(length(mp), length(mg)) > 0) {
-    gen   <- gen[,   inds]
-    pheno <- pheno[, inds]
+  mp <- setdiff(genind, pheind)
+  if (length(mp) > 0) {
+    warning(length(mp), " individuals with genotypes but no phenotypes\n    ", paste(mp, collapse="|"), "\n")
+    pheno[mp] <- NA
+  }
+
+  mg <- setdiff(pheind, genind)
+  if (length(mg) > 0) {
+    warning(length(mg), " individuals with phenotypes but no genotypes\n    ", paste(mg, collapse="|"), "\n")
+    gen[mg] <- NA
   }
 
   # Check markers
