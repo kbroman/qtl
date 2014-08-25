@@ -141,6 +141,9 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
   pheno <- data.frame(t(pheno))
   pheno <- data.frame(lapply(pheno, sw2numeric, dec = dec), 
                       row.names = NULL, stringsAsFactors = TRUE)
+  
+  # add id column if informative identifiers are provided
+  if (ids != make.names(seq_len(nrow(pheno)))) pheno$id <- ids
 
   # re-order the markers by chr and position
   # try to figure out the chr labels
