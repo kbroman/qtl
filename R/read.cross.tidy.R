@@ -35,8 +35,7 @@
 
 read.cross.tidy <-
 function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
-         genotypes=c("A","H","B","D","C"),
-         estimate.map=TRUE, ...)
+         genotypes=c("A","H","B","D","C"), ...)
 {
   # create file names
   if(missing(genfile)) genfile <- "gen.csv"
@@ -241,12 +240,8 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
       cross$geno[[i]]$map <- rbind(cross$geno[[i]]$map, cross$geno[[i]]$map)
   }
 
-  # estimate genetic map
-  if(estimate.map) estmap <- TRUE
-  else estmap <- FALSE
-
   # return cross + indicator of whether to run est.map
-  list(cross,estmap)
+  list(cross,FALSE)
 }
 
 # end of read.cross.tidy.R
