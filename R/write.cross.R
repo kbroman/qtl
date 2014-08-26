@@ -20,7 +20,7 @@
 #
 # Part of the R/qtl package
 # Contains: write.cross, write.cross.mm, write.cross.csv,
-#           write.cross.gary, fixX4write
+#           write.cross.gary, write.cross.tidy, fixX4write
 #           [See qtlcart_io.R for write.cross.qtlcart]
 #           [write.cross.qtab in write.cross.qtab.R]
 #
@@ -35,7 +35,7 @@
 
 write.cross <-
 function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart",
-                    "gary", "qtab", "mapqtl"),
+                    "gary", "qtab", "mapqtl", "tidy"),
          filestem="data", chr, digits=NULL, descr)
 {
   if(!any(class(cross) == "cross"))
@@ -66,6 +66,7 @@ function(cross, format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtlcart",
   else if(format=="mm") write.cross.mm(cross,filestem,digits)
   else if(format=="qtlcart") write.cross.qtlcart(cross, filestem)
   else if(format=="gary") write.cross.gary(cross, digits)
+  else if(format=="tidy") write.cross.tidy(cross, filestem, digits)
   else if(format=="qtab") {
     if(missing(descr)) descr <- paste(deparse(substitute(cross)), "from R/qtl")
     write.cross.qtab(cross, filestem, descr, verbose=FALSE)
@@ -399,6 +400,77 @@ function(cross, digits=NULL)
 
 }
                           
+
+######################################################################
+#
+# write.cross.tidy: Write data for an experimental cross in tidy
+# format. There will be 3 output files, they are:
+#    geno.csv
+#    pheno.csv
+#    map.csv
+#
+######################################################################
+
+write.cross.tidy <-
+function(cross, filestem="data", digits=NULL)
+{
+  genfile <- paste(filestem, "_gen.csv", sep="")
+  phefile <- paste(filestem, "_phe.csv", sep="")
+  mapfile <- paste(filestem, "_map.csv", sep = "")
+  
+  type <- class(cross)[1]
+  
+  id <- getid(cross)
+  
+  if(is.null(id)) {
+    cross$pheno$id <- 1:nind(cross)
+    id <- getid(cross)
+  }
+  id.col <- which(colnames(cross$pheno) == attr(id,"phenam"))
+    
+  # allele codes to use
+  if("alleles" %in% names(attributes(cross))) {
+    alleles <- attr(cross, "alleles")
+  } else {
+    alleles <- c("A","H","B","D","C")
+  }
+  
+  if(type=="dh" || type=="riself" || type=="risib") alleles[2:3] <- alleles[3:2]
+  else if(type=="haploid") alleles <- alle
+  
+  geno <- pull.geno(cross)
+  geno <- matrix(alleles[geno], ncol = nind(cross),
+                 dimnames = list(markernames(cross), make.names(id)))
+
+  if(any(is.na(geno))) geno[is.na(geno)] <- "-"
+  
+  pheno <- cross$pheno[-id.col]
+  for(i in 1:ncol(pheno)) {
+    if(is.factor(pheno[,i])) pheno[,i] <- as.character(pheno[,i])
+    else if(is.numeric(pheno[,i])) {
+      if(!is.null(digits)) pheno[,i] <- round(pheno[,i], digits)
+      pheno[,i] <- as.character(pheno[,i])
+    }
+  }
+  
+  pheno <- matrix(unlist(pheno), nrow=nind(cross), 
+                  dimnames = list(make.names(id), phenames(cross)[-id.col]))
+  pheno <- t(pheno)
+  
+  if(any(is.na(pheno))) pheno[is.na(pheno)] <- "-"
+  
+  map <- pull.map(cross, as.table = TRUE)  
+
+  if(!is.null(digits))
+    map$pos <- as.character(round(map$pos, digits))
+  else 
+    map$pos <- as.character(map$pos)
+
+  write.table(geno,  genfile, quote = FALSE, sep = ",", col.names = NA)
+  write.table(pheno, phefile, quote = FALSE, sep = ",", col.names = NA)
+  write.table(map,   mapfile, quote = FALSE, sep = ",", col.names = NA)
+}
+
 
 ######################################################################
 # fixX4write
