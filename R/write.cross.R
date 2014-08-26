@@ -430,16 +430,20 @@ function(cross, filestem="data", digits=NULL)
     
   # allele codes to use
   if("alleles" %in% names(attributes(cross))) {
-    alleles <- attr(cross, "alleles")
-  } else {
-    alleles <- c("A","H","B","D","C")
+    alle <- attr(cross, "alleles")
+    alleles <- c(paste(alle[1],alle[1],sep=""),
+                 paste(alle[1],alle[2],sep=""),
+                 paste(alle[2],alle[2],sep=""),
+                 paste("not ", alle[2],alle[2],sep=""),
+                 paste("not ", alle[1],alle[1],sep=""))
   }
+  else alleles <- c("A","H","B","D","C")
   
-  if(type=="dh" || type=="riself" || type=="risib") alleles[2:3] <- alleles[3:2]
-  else if(type=="haploid") alleles <- alle
+  if (type %in% c("dh", "riself", "risib")) alleles[2:3] <- alleles[3:2]
+  else if (type == "haploid") alleles <- alle
   
-  geno <- pull.geno(cross)
-  geno <- matrix(alleles[geno], ncol = nind(cross),
+  geno <- pull.geno(cross)  
+  geno <- matrix(alleles[geno], ncol = nind(cross), byrow = TRUE,
                  dimnames = list(markernames(cross), make.names(id)))
 
   if(any(is.na(geno))) geno[is.na(geno)] <- "-"
