@@ -143,7 +143,8 @@ function(dir, genfile, phefile, mapfile, na.strings=c("-","NA"),
                       row.names = NULL, stringsAsFactors = TRUE)
   
   # add id column if informative identifiers are provided
-  if (ids != make.names(seq_len(nrow(pheno)))) pheno$id <- ids
+  default.ids <- make.names(seq_len(nrow(pheno)))
+  if (!all(ids %in% default.ids)) pheno$id <- ids
 
   # re-order the markers by chr and position
   # try to figure out the chr labels
