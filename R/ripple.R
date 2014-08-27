@@ -3,21 +3,21 @@
 # ripple.R
 #
 # copyright (c) 2001-2014, Karl W Broman
-# last modified Mar, 2014
+# last modified Aug, 2014
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
-# 
+#
 # Part of the R/qtl package
 # Contains: ripple, summary.ripple, print.summary.ripple
 #           ripple.perm1, ripple.perm2, ripple.perm.sub
@@ -36,7 +36,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
          error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
          maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE, n.cluster=1)
 {
-  if(!any(class(cross) == "cross")) 
+  if(!any(class(cross) == "cross"))
     stop("Input should have class \"cross\".")
 
   # pull out relevant chromosome
@@ -79,7 +79,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
   n.mar <- totmar(cross)
   if(n.mar <= window) # look at all possible orders
     orders <- ripple.perm2(n.mar)
-  else { 
+  else {
     temp <- ripple.perm1(window)
     n <- nrow(temp)
     orders <- cbind(temp,matrix(rep((window+1):n.mar,n),
@@ -98,7 +98,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
   }
   n.orders <- nrow(orders)
 
-  
+
   # how often to print information about current order being considered
   if(n.orders > 49) print.by <- 10
   else if(n.orders > 14) print.by <- 5
@@ -112,7 +112,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     # create temporary cross
     m <- seq(0,by=5,length=n.mar)
     temcross <- cross
-    if(is.matrix(cross$geno[[1]]$map)) 
+    if(is.matrix(cross$geno[[1]]$map))
       temcross$geno[[1]]$map <- rbind(m,m)
     else temcross$geno[[1]]$map <- m
 
@@ -124,7 +124,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       clusterStopped <- FALSE
       on.exit(if(!clusterStopped) stopCluster(cl))
       if(verbose) cat("   Running in", n.cluster, "clusters\n")
-      clusterEvalQ(cl, require(qtl, quietly=TRUE))
+      clusterEvalQ(cl, library(qtl, quietly=TRUE))
 
       whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
       order.split <- vector("list", n.cluster)
@@ -153,7 +153,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     # sort orders by lod
     o <- order(loglik[-1], decreasing=TRUE)+1
 
-    # create output 
+    # create output
     orders <- cbind(orders,LOD=loglik,chrlen)[c(1,o),]
   }
   else { # count obligate crossovers for each order
@@ -166,13 +166,13 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     if(type == "f2" || (type == "bcsft" && !is.bcs)) {
       if(class(cross$geno[[1]]) == "A") # autosomal
         func <- "R_ripple_f2"
-      else func <- "R_ripple_bc"        # X chromsome  
+      else func <- "R_ripple_bc"        # X chromsome
     }
     else if(type %in% c("bc", "riself", "risib", "dh", "haploid", "bcsft")) func <- "R_ripple_bc"
     else if(type == "4way") func <- "R_ripple_4way"
     else if(type=="ri4self" || type=="ri8self" || type=="ri4sib" || type=="ri8sib" || type=="bgmagic16")
       func <- "R_ripple_ril48"
-    else 
+    else
       stop("ripple not available for cross ", type)
 
     # data to be input
@@ -189,7 +189,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
       clusterStopped <- FALSE
       on.exit(if(!clusterStopped) stopCluster(cl))
       if(verbose) cat("   Running in", n.cluster, "clusters\n")
-      clusterEvalQ(cl, require(qtl, quietly=TRUE))
+      clusterEvalQ(cl, library(qtl, quietly=TRUE))
 
       whclust <- sort(rep(1:n.cluster, ceiling(n.orders/n.cluster))[1:n.orders])
       order.split <- vector("list", n.cluster)
@@ -214,10 +214,10 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
     # sort orders by lod
     o <- order(oblxo[-1])+1
 
-    # create output 
+    # create output
     orders <- cbind(orders,obligXO=oblxo)[c(1,o),]
   }
-  
+
   rownames(orders) <- c("Initial", paste(1:(nrow(orders)-1)))
   class(orders) <- c("ripple","matrix")
   attr(orders,"chr") <- chr.name
@@ -227,7 +227,7 @@ function(cross, chr, window=4, method=c("countxo","likelihood"),
 
   # make sure, for each order considered, that the proximal marker
   # (in the original order) is to the left of the distal marker
-  # (in the original order) 
+  # (in the original order)
   orders[,1:n.mar] <- t(apply(orders[,1:n.mar,drop=FALSE],1,
                               function(a) {
                                 n <- length(a)
@@ -247,7 +247,7 @@ function(orders, cross, error.prob, map.function, maxit, tol, sex.sp)
   temcross <- cross
   loglik <- chrlen <- rep(NA, n.orders)
   for(i in 1:n.orders) {
-    
+
     temcross$geno[[1]]$data <- cross$geno[[1]]$data[,orders[i,]]
     newmap <- est.map(temcross, error.prob=error.prob, map.function=map.function,
                       m=0, p=0, maxit=maxit, tol=tol, sex.sp=sex.sp, verbose=FALSE)
@@ -340,7 +340,7 @@ function(x, ...)
 #
 ######################################################################
 
-ripple.perm1 <-  
+ripple.perm1 <-
 function(n)
 {
   if(n == 1) return(rbind(1))
@@ -360,7 +360,7 @@ function(n)
 #
 ######################################################################
 
-ripple.perm2 <- 
+ripple.perm2 <-
 function(n)
 {
   if(n < 3) return(rbind(1:n))
