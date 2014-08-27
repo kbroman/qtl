@@ -2,22 +2,22 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2014, Karl W Broman
+# last modified Aug, 2014
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
 #     version 3, as published by the Free Software Foundation.
-# 
+#
 #     This program is distributed in the hope that it will be useful,
 #     but without any warranty; without even the implied warranty of
 #     merchantability or fitness for a particular purpose.  See the GNU
 #     General Public License, version 3, for more details.
-# 
+#
 #     A copy of the GNU General Public License, version 3, is available
 #     at http://www.r-project.org/Licenses/GPL-3
-# 
+#
 # Part of the R/qtl package
 # Contains: est.map
 #
@@ -29,7 +29,7 @@
 #
 ######################################################################
 
-est.map <- 
+est.map <-
 function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
          m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
          omit.noninformative=TRUE, offset, n.cluster=1)
@@ -50,12 +50,12 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
 
   if(m < 0 || p < 0 || p > 1)
     stop("Must have m >=0 and 0 <= p <= 1")
-  
+
   if(m > 0 && p < 1 && type != "bc" && type != "f2") {
     warning("m and p currently used only for backcrosses and intercrosses.")
     m <- p <- 0
   }
-  if(m > 0 && p < 1 && !missing(map.function)) 
+  if(m > 0 && p < 1 && !missing(map.function))
     warning("Map function not used with interference model.")
   if(m > 0 && p < 1) interf.model <- TRUE
   else interf.model <- FALSE
@@ -95,8 +95,8 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
     cl <- makeCluster(n.cluster)
     clusterStopped <- FALSE
     on.exit(if(!clusterStopped) stopCluster(cl))
-    clusterEvalQ(cl, require(qtl, quietly=TRUE))
-    
+    clusterEvalQ(cl, library(qtl, quietly=TRUE))
+
     chr <- names(cross$geno)
 
     # temporary definition of est.map
@@ -116,9 +116,9 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
     names(newmap) <- chr
 
     if(!missing(offset)) {  # shift map start positions
-      for(i in seq(along=newmap)) 
+      for(i in seq(along=newmap))
         if(is.matrix(newmap[[i]])) {
-          for(j in 1:2) 
+          for(j in 1:2)
             newmap[[i]][j,] <- newmap[[i]][j,] - newmap[[i]][j,1] + offset[i]
         } else {
           newmap[[i]] <- newmap[[i]] - newmap[[i]][1] + offset[i]
@@ -142,7 +142,7 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       one.map <- TRUE
       if(chrtype[i] != "X") # autosomal
         cfunc <- "est_map_f2"
-      else                              # X chromsome 
+      else                              # X chromsome
         cfunc <- "est_map_bc"
     }
     else if(type == "bc" || type=="riself" || type=="risib" || type=="dh" || type=="haploid") {
@@ -173,7 +173,7 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
         tol[2] <- 1e-6
       }
     }
-    else 
+    else
       stop("est.map not available for cross type ", type, ".")
 
     # genotype data
@@ -185,7 +185,7 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       o <- apply(gen,1,function(a) sum(a!=0)>1)
       gen <- gen[o,,drop=FALSE]
     }
-    
+
     # recombination fractions
     if(one.map) {
       # recombination fractions
@@ -209,10 +209,10 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       else temp.sex.sp <- sex.sp
     }
 
-    if(interf.model) 
+    if(interf.model)
       d <- diff(cross$geno[[i]]$map)
 
-    if(verbose) cat(paste("Chr ", names(cross$geno)[i], ":\n",sep="")) 
+    if(verbose) cat(paste("Chr ", names(cross$geno)[i], ":\n",sep=""))
 
     # call the C function
     if(one.map && !interf.model) {
@@ -220,13 +220,13 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
       temp <- 0
       if(type == "bcsft")
         temp[1] <- cross.scheme[1] * 1000 + cross.scheme[2]
-      
+
      z <- .C(cfunc,
               as.integer(nrow(gen)),         # number of individuals
               as.integer(n.mar[i]),      # number of markers
               as.integer(gen),           # genotype data
               rf=as.double(rf),          # recombination fractions
-              as.double(error.prob),     
+              as.double(error.prob),
               loglik=as.double(temp),       # log likelihood
               as.integer(maxit),
               as.double(tol),
@@ -234,7 +234,7 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
               PACKAGE="qtl")
 
       z$rf[z$rf < 1e-14] <- 1e-14
-      if(type=="riself" || type=="risib") 
+      if(type=="riself" || type=="risib")
         z$rf <- adjust.rf.ri(z$rf, substr(type, 3, nchar(type)),
                              chrtype[i], expand=FALSE)
       newmap[[i]] <- cumsum(c(min(cross$geno[[i]]$map),imf(z$rf)))
@@ -292,10 +292,10 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
               as.integer(temp.sex.sp),
               as.integer(verbose),
               PACKAGE="qtl")
-              
+
       z$rf[z$rf<1e-14] <- 1e-14
       z$rf2[z$rf2<1e-14] <- 1e-14
-      
+
       if(!temp.sex.sp) z$rf2 <- z$rf
 
       newmap[[i]] <- rbind(cumsum(c(min(orig[1,]),imf(z$rf))),
@@ -311,13 +311,13 @@ function(cross, chr, error.prob=0.0001, map.function=c("haldane","kosambi","c-f"
   if(!missing(offset)) {  # shift map start positions
     for(i in seq(along=newmap))
       if(is.matrix(newmap[[i]])) {
-        for(j in 1:2) 
+        for(j in 1:2)
           newmap[[i]][j,] <- newmap[[i]][j,] - newmap[[i]][j,1] + offset[i]
       } else {
           newmap[[i]] <- newmap[[i]] - newmap[[i]][1] + offset[i]
       }
   }
-      
+
 
   class(newmap) <- "map"
   newmap
