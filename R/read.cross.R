@@ -113,12 +113,18 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
                              quafile=phefile, estimate.map=estimate.map)
   }
   else if (format == "tidy") { # tidy format
+    if(!missing(file) && !missing(genfile) && !missing(mapfile) && missing(phefile)) {
+        phefile <- mapfile
+        mapfile <- genfile
+        genfile <- file
+    }
+
     if(missing(genfile)) genfile <- "gen.csv"
     if(missing(phefile)) phefile <- "phe.csv"
     if(missing(mapfile)) mapfile <- "map.csv"
-    
-    cross <- read.cross.tidy(dir=dir, 
-                             genfile=genfile, phefile=phefile, mapfile=mapfile, 
+
+    cross <- read.cross.tidy(dir=dir,
+                             genfile=genfile, phefile=phefile, mapfile=mapfile,
                              na.strings=na.strings, genotypes=genotypes)
   }
 
