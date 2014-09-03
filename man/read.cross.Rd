@@ -13,7 +13,7 @@
 
 \usage{
 read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
-                    "qtlcart", "gary", "karl", "mapqtl"),
+                    "qtlcart", "gary", "karl", "mapqtl", "tidy"),
            dir="", file, genfile, mapfile, phefile, chridfile,
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
@@ -319,6 +319,12 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   bc, RF2 or SF2 to f2.
 }  
 
+\section{Tidy format}{
+  This format requires three simple CSV files, separating the genotype,
+  phenotype, and marker map information so that each file may be of a
+  simple form.
+}
+
 \section{Gary format}{
   This format requires the six files.  All files have default names, and
   so the file names need not be specified if the default names are used. 
@@ -428,7 +434,8 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
                    phefile="phe.txt", mapfile="map.txt")}
 } 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian S. Yandell}
+\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian
+  S. Yandell; Aaron Wolen}
 
 \references{
   Broman, K. W. and Sen,
