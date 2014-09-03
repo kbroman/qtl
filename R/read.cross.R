@@ -34,7 +34,7 @@
 
 read.cross <-
 function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
-                  "qtlcart", "gary", "karl", "mapqtl"),
+                  "qtlcart", "gary", "karl", "mapqtl", "tidy"),
          dir="", file, genfile, mapfile, phefile, chridfile, mnamesfile, pnamesfile,
          na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
          alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE,
@@ -111,6 +111,21 @@ function(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   else if(format == "mapqtl") { # MapQTL format (same as JoinMap)
       cross <- read.cross.mq(dir=dir, locfile=genfile, mapfile=mapfile,
                              quafile=phefile, estimate.map=estimate.map)
+  }
+  else if (format == "tidy") { # tidy format
+    if(!missing(file) && !missing(genfile) && !missing(mapfile) && missing(phefile)) {
+        phefile <- mapfile
+        mapfile <- genfile
+        genfile <- file
+    }
+
+    if(missing(genfile)) genfile <- "gen.csv"
+    if(missing(phefile)) phefile <- "phe.csv"
+    if(missing(mapfile)) mapfile <- "map.csv"
+
+    cross <- read.cross.tidy(dir=dir,
+                             genfile=genfile, phefile=phefile, mapfile=mapfile,
+                             na.strings=na.strings, genotypes=genotypes)
   }
 
   estimate.map <- cross[[2]]
