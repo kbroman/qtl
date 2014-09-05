@@ -1,18 +1,18 @@
-----------------------------------------------------------------------
-R/qtl
+## R/qtl: A QTL mapping environment
+
+[![Build Status](https://travis-ci.org/kbroman/qtl.png?branch=master)](https://travis-ci.org/kbroman/qtl)
+
 copyright (c) 2001-2014, Karl W Broman
-http://www.rqtl.org
 
-Authors: Karl W Broman <kbroman@biostat.wisc.edu> and Hao Wu, with
-         ideas from Gary Churchill and Saunak Sen and contributions
-         from Danny Arends, Ritsert Jansen, Pjotr Prins, Laura
+Authors: Karl W Broman and Hao Wu, with ideas from Gary Churchill and
+         Saunak Sen and contributions from Danny Arends,
+         Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Laura
          Shannon, and Brian Yandell
-----------------------------------------------------------------------
 
-R/qtl is an extensible, interactive environment for mapping
+[R/qtl](http://www.rqtl.org) is an extensible, interactive environment for mapping
 quantitative trait loci (QTL) in experimental crosses. It is
 implemented as an add-on package for the freely available and widely
-used statistical language/software R (see http://www.R-project.org).
+used statistical language/software [R](http://www.R-project.org).
 The development of this software as an add-on to R allows us to take
 advantage of the basic mathematical and statistical functions, and
 powerful graphics capabilities, that are provided with R. Further, the
@@ -35,7 +35,8 @@ imputation. All of this may be done in the presence of covariates
 (such as sex, age or treatment). One may also fit higher-order QTL
 models by multiple imputation and Haley-Knott regression.
 
-----------------------------------------------------------------------
+### License
+
 The R/qtl package is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License,
 version 3, as published by the Free Software Foundation.
@@ -46,5 +47,4 @@ merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
 A copy of the GNU General Public License, version 3, is available at
-http://www.r-project.org/Licenses/GPL-3
-----------------------------------------------------------------------
+[http://www.r-project.org/Licenses/GPL-3](http://www.r-project.org/Licenses/GPL-3)
