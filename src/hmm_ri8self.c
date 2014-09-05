@@ -127,7 +127,7 @@ void est_map_ri8self(int *n_ind, int *n_mar, int *geno, double *rf,
   int i;
 
   /* expand rf */
-  for(i=0; i< *n_mar-1; i++) rf[i] = rf[i]*(1.0-rf[i])/(1.0+2.0*rf[i]);
+  for(i=0; i< *n_mar-1; i++) rf[i] = rf[i]*(4.0-rf[i])/(1.0+2.0*rf[i]);
 
   est_map(*n_ind, *n_mar, 8, geno, rf, rf, *error_prob, 
 	  init_ri8self, emit_ri8self, step_special_ri8self, nrec_bc, nrec_bc,
