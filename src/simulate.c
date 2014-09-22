@@ -145,7 +145,7 @@ void sim_bc(int n_mar, int n_ind, double *pos, int m, double p, int **Geno)
 
     /* simulate number of crossovers from ni model */
     if(p > 0)
-      n_ni_xo = rpois(L/100.0*p);
+      n_ni_xo = rpois(L/50.0*p);
     else n_ni_xo = 0;
 
     if(n_chi + n_ni_xo > max_chi) { /* need more space */
