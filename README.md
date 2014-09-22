@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/kbroman/qtl.png?branch=master)](https://travis-ci.org/kbroman/qtl)
 
-copyright (c) 2001-2014, Karl W Broman
+copyright (c) 2001-2014, [Karl W Broman](http://kbroman.org)
 
 Authors: Karl W Broman and Hao Wu, with ideas from Gary Churchill and
          Saunak Sen and contributions from Danny Arends,
@@ -46,5 +46,5 @@ without any warranty; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-A copy of the GNU General Public License, version 3, is available at
+A copy of the GNU General Public License, version 3, is available at  
 <http://www.r-project.org/Licenses/GPL-3>
