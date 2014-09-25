@@ -31,7 +31,8 @@ Minor changes:
   Fixed a bug in est_map_ri8self.c (thanks to Rohan Shah)
 
   Fixed a bug in scanone/scantwo stratified permutations in batch,
-  with multiple phenotypes, some with missing values.
+  with multiple phenotypes, some with missing values (thanks to
+  John Lovell).
 
 
 Version 1.33, 2014-08-12:
