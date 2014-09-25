@@ -209,7 +209,7 @@ scanone <-
                             method=method, addcovar=tempac, intcovar=tempic,
                             weights=weights, use="complete.obs", upper=upper, ties.random=ties.random,
                             start=start, maxit=maxit, tol=tol, n.perm=n.perm, perm.Xsp=perm.Xsp,
-                            perm.strata=perm.strata, verbose=verbose, batchsize=batchsize,
+                            perm.strata=perm.strata[upat[[i]]], verbose=verbose, batchsize=batchsize,
                             n.cluster=n.cluster)
             if(is.null(out)) out <- temp
             else out <- cbind(out, temp)

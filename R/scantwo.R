@@ -239,7 +239,7 @@ scantwo <-
                             weights=weights, use=use, incl.markers=incl.markers, clean.output=clean.output,
                             clean.nmar=clean.nmar, clean.distance=clean.distance,
                             maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
-                            perm.strata=perm.strata, assumeCondIndep=assumeCondIndep,
+                            perm.strata=perm.strata[upat[[i]]], assumeCondIndep=assumeCondIndep,
                             batchsize=batchsize, n.cluster=n.cluster)
             if(is.null(out)) out <- temp
             else out <- cbind(out, temp)
