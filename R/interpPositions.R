@@ -28,53 +28,53 @@
 # oldmap and newmap in "map" format (list of vectors of positions)
 # oldpositions as dataframe with $chr and $pos
 interpPositions <-
-function(oldpositions, oldmap, newmap)
+    function(oldpositions, oldmap, newmap)
 {
-  orig.rownames <- rownames(oldpositions)
-  # not sure why this is necessary, but it avoids a bug
-  if(is.null(rownames(oldpositions))) 
-    rownames(oldpositions) <- paste("temprn", 1:nrow(oldpositions), sep="")
-  else 
-    rownames(oldpositions) <- paste("temprn", rownames(oldpositions), sep="")
+    orig.rownames <- rownames(oldpositions)
+    # not sure why this is necessary, but it avoids a bug
+    if(is.null(rownames(oldpositions)))
+        rownames(oldpositions) <- paste("temprn", 1:nrow(oldpositions), sep="")
+    else
+        rownames(oldpositions) <- paste("temprn", rownames(oldpositions), sep="")
 
-  oldchrnum <- match(oldpositions$chr, names(oldmap))
-  newchrnum <- match(oldpositions$chr, names(newmap))
+    oldchrnum <- match(oldpositions$chr, names(oldmap))
+    newchrnum <- match(oldpositions$chr, names(newmap))
 
-  missingchr <- is.na(oldchrnum) | is.na(newchrnum)
-  if(any(missingchr))
-    warning("Chromosomes ", paste(sort(unique(oldpositions$chr[missingchr])), collapse=", "), " not found")
+    missingchr <- is.na(oldchrnum) | is.na(newchrnum)
+    if(any(missingchr))
+        warning("Chromosomes ", paste(sort(unique(oldpositions$chr[missingchr])), collapse=", "), " not found")
 
-  newpositions <- cbind(oldpositions, newpos=rep(NA, nrow(oldpositions)))
-  u <- unique(oldchrnum)
+    newpositions <- cbind(oldpositions, newpos=rep(NA, nrow(oldpositions)))
+    u <- unique(oldchrnum)
 
-  for(i in seq(along=u)) { # loop over chromosomes
-    chrnam <- names(oldmap)[u[i]] # name of chromosome
+    for(i in seq(along=u)) { # loop over chromosomes
+        chrnam <- names(oldmap)[u[i]] # name of chromosome
 
-    # the positions to be interpolated
-    wholdpositions <- !missingchr & oldchrnum==u[i]
-    theposnames <- rownames(oldpositions)[wholdpositions]
-    if(!any(wholdpositions)) next
+        # the positions to be interpolated
+        wholdpositions <- !missingchr & oldchrnum==u[i]
+        theposnames <- rownames(oldpositions)[wholdpositions]
+        if(!any(wholdpositions)) next
 
-    # data frame with oldmap positions for this chromosome
-    tempoldmap <- oldmap[[u[i]]]
-    tempoldmap.df <- data.frame(chr=rep(chrnam, length(tempoldmap)),
-                                pos=as.numeric(tempoldmap))
-    rownames(tempoldmap.df) <- names(tempoldmap)
+        # data frame with oldmap positions for this chromosome
+        tempoldmap <- oldmap[[u[i]]]
+        tempoldmap.df <- data.frame(chr=rep(chrnam, length(tempoldmap)),
+                                    pos=as.numeric(tempoldmap))
+        rownames(tempoldmap.df) <- names(tempoldmap)
 
-    # add the positions to be interpolated
-    tempoldmap.df <- rbind(tempoldmap.df, oldpositions[wholdpositions,,drop=FALSE])
-    tempoldmap.df <- tempoldmap.df[order(tempoldmap.df$pos),,drop=FALSE]
-    tempoldmap.df$chr <- as.character(tempoldmap.df$chr)
+        # add the positions to be interpolated
+        tempoldmap.df <- rbind(tempoldmap.df, oldpositions[wholdpositions,,drop=FALSE])
+        tempoldmap.df <- tempoldmap.df[order(tempoldmap.df$pos),,drop=FALSE]
+        tempoldmap.df$chr <- as.character(tempoldmap.df$chr)
 
-    # do the interpolation
-    result <- interpmap(tempoldmap.df, newmap[chrnam])
+        # do the interpolation
+        result <- interpmap(tempoldmap.df, newmap[chrnam])
 
-    # paste in the interpolated positions
-    newpositions[theposnames, "newpos"] <- result[theposnames, "pos"]
-  }
+        # paste in the interpolated positions
+        newpositions[theposnames, "newpos"] <- result[theposnames, "pos"]
+    }
 
-  rownames(newpositions) <- orig.rownames
-  newpositions
+    rownames(newpositions) <- orig.rownames
+    newpositions
 }
 
 # end of interpPositions.R
