@@ -303,17 +303,17 @@ void R_comparegeno(int *geno, int *n_ind, int *n_mar,
                    int *n_match, int *n_missing);
 
 void R_locate_xo(int *n_ind, int *n_mar, int *type,
-		 int *geno, double *map, 
-		 double *location, int *nseen,
-		 int *ileft, int *iright, double *left, double *right,
+                 int *geno, double *map, 
+                 double *location, int *nseen,
+                 int *ileft, int *iright, double *left, double *right,
                  int *gleft, int *gright, 
-		 int *ntyped, int *full_info);
+                 int *ntyped, int *full_info);
 
 /* Note: type ==0 for backcross and ==1 for intercross */
 void locate_xo(int n_ind, int n_mar, int type, int **Geno,
-	       double *map, double **Location, 
-	       int *nseen, int **iLeft, int **iRight,
-	       double **Left, double **Right, 
+               double *map, double **Location, 
+               int *nseen, int **iLeft, int **iRight,
+               double **Left, double **Right, 
                int **gLeft, int **gRight,
                int **nTyped, int full_info);
 
@@ -372,11 +372,11 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
 
 /* wrapper for calcPermPval */
 void R_calcPermPval(double *peaks, int *nc_peaks, int *nr_peaks,
-		    double *perms, int *n_perms, double *pval);
+                    double *perms, int *n_perms, double *pval);
 
 /* calculate permutation p-values for summary.scanone() */
 void calcPermPval(double **Peaks, int nc_peaks, int nr_peaks,
-		  double **Perms, int n_perms, double **Pval);
+                  double **Perms, int n_perms, double **Pval);
 
 #ifdef __cplusplus
   }
