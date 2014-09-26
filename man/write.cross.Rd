@@ -10,7 +10,7 @@
 \usage{
 write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
                             "mm", "qtlcart", "gary", "qtab",
-                            "mapqtl"),
+                            "mapqtl", "tidy"),
             filestem="data", chr, digits=NULL, descr)
 }
 
@@ -75,6 +75,10 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
 
   MapQTL format: See 
   \href{http://www.kyazma.nl/docs/MQ6Manual.pdf}{documentation}.
+
+  Tidy format: Data is written to three files, \code{"stem_gen.csv"},
+  \code{"stem_phe.csv"}, and \code{"stem_map.csv"} (where \code{stem} is
+  taken from the \code{filestem} argument.
 }
 
 
@@ -103,7 +107,7 @@ write.cross(fake.bc, "qtlcart", "Data/fakebc", c(1,5,13))
 write.cross(fake.bc, "gary", c(1,5,13))} }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu; Brian
-  S. Yandell; Danny Arends}
+  S. Yandell; Danny Arends; Aaron Wolen}
 
 \seealso{ \code{\link{read.cross}} }
 

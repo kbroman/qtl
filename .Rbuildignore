@@ -7,7 +7,8 @@
 ^\.Rhistory$
 ^tests/\.RData$
 ^tests/\.Rhistory$
-inst/docs/Sources/MQM/Figs
+inst/doc/Sources/MQM/Figs
 ^\.Rprofile$
-inst/docs/Sources/MQM/.Rprofile
-^README$
+inst/doc/Sources/MQM/\.Rprofile
+^README.md$
+^\.travis\.yml$

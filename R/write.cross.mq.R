@@ -39,7 +39,7 @@
 ######################################################################
 
 write.cross.mq <-
-function(cross, filestem, digits)
+    function(cross, filestem, digits)
 {
     if(class(cross)[1] != "4way"){
         msg <- paste("population type", class(cross)[1],
@@ -52,10 +52,10 @@ function(cross, filestem, digits)
 }
 
 write.cross.mq.loc <-
-function(cross, locfile)
+    function(cross, locfile)
 {
     sink(locfile)
-    
+
     cat(paste0("name = cross", "\n"))
     if(class(cross)[1] == "4way"){
         cat(paste0("popt = ", "CP", "\n"))
@@ -67,7 +67,7 @@ function(cross, locfile)
     cat(paste0("nloc = ", totmar(cross), "\n"))
     cat(paste0("nind = ", nind(cross), "\n"))
     cat("\n")
-    
+
     for(chr in names(cross$geno)){
         for(marker in colnames(cross$geno[[chr]]$data)){
             cat(marker)
@@ -162,12 +162,12 @@ function(cross, locfile)
             }
         }
     }
-    
+
     sink()
 }
 
 write.cross.mq.map <-
-function(cross, mapfile, digits=NULL)
+    function(cross, mapfile, digits=NULL)
 {
     if(is.matrix(cross$geno[[1]]$map)){
         mapfile.female <- sub(pattern="\\.map",
@@ -223,15 +223,15 @@ function(cross, mapfile, digits=NULL)
 }
 
 write.cross.mq.qua <-
-function(cross, quafile, digits=NULL)
+    function(cross, quafile, digits=NULL)
 {
     sink(quafile)
-    
+
     cat(paste0("ntrt = ", nphe(cross), "\n"))
     cat(paste0("nind = ", nind(cross), "\n"))
     cat(paste0("miss = ", NA, "\n"))
     cat("\n")
-    
+
     colnames(cross$pheno) <- gsub(pattern=" ", replacement="_",
                                   x=colnames(cross$pheno))
     if(any(nchar(colnames(cross$pheno)) > 20)){
@@ -246,7 +246,7 @@ function(cross, quafile, digits=NULL)
             cat(paste0("\t", colnames(cross$pheno)[j]))
     cat("\n")
     cat("\n")
-    
+
     if(is.null(digits)){
         write.table(x=cross$pheno, file=quafile, append=TRUE,
                     quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
@@ -254,7 +254,7 @@ function(cross, quafile, digits=NULL)
         write.table(x=format(x=cross$pheno, digits=digits, trim=TRUE),
                     file=quafile, append=TRUE, quote=FALSE, sep="\t",
                     row.names=FALSE, col.names=FALSE)
-    
+
     sink()
 }
 
