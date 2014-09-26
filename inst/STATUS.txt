@@ -17,7 +17,25 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.33, 2014-06-09:
+Version 1.34, 2014-09-05:
+
+Major changes:
+
+  Added "tidy" format to read.cross and write.cross. This separates
+  the data into three comma-delimited files, for genotypes,
+  phenotypes, and the marker map. Separating the data in this way
+  allows each file to be in a simpler format.
+
+Minor changes:
+
+  Fixed a bug in est_map_ri8self.c (thanks to Rohan Shah)
+
+  Fixed a bug in scanone/scantwo stratified permutations in batch,
+  with multiple phenotypes, some with missing values (thanks to
+  John Lovell).
+
+
+Version 1.33, 2014-08-12:
 
 Major changes:
 
@@ -26,7 +44,18 @@ Major changes:
 
 Minor changes:
 
-  None.
+  read.cross with format="qtlcart" can now read doubled haploids
+  (dh/Ri0).
+
+  Fixed potential problem in read.cross with format="csv" or "csvs" when
+  there are many empty cells in the phenotype data.
+
+  Fixed bug in read.cross for format="csv" that shows up in some rare
+  cases: markers not ordered by linkage group, no positions provided,
+  and chromosome IDs non-numeric. It was a pretty bad bug, as marker
+  genotypes got scrambled.
+
+  Fixed some memory leaks in MQM code.
 
 
 Version 1.32, 2014-05-28:
