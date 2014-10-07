@@ -14,7 +14,7 @@
 fill.geno(cross, method=c("imp","argmax", "no_dbl_XO", "maxmarginal"),
           error.prob=0.0001,
           map.function=c("haldane","kosambi","c-f","morgan"),
-          min_prob=0.95)
+          min.prob=0.95)
 }
 
 \arguments{
