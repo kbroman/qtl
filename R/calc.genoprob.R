@@ -127,6 +127,12 @@ function(cross, step=0, off.end=0, error.prob=0.0001,
         n.gen <- 2
       }
     }
+	else if(type == "ri8selfIRIP1") {
+	  one.map <- TRUE
+	  cfunc <- "calc_genoprob_ri8selfIRIP1"
+	  n.gen <- 8
+	  gen.names <- LETTERS[1:n.gen]
+	}
     else 
       stop("calc.genoprob not available for cross type ", type, ".")
 
