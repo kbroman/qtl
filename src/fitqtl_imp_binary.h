@@ -1,5 +1,5 @@
 /**********************************************************************
- * 
+ *
  * fitqtl_imp_binary.h
  *
  * copyright (c) 2010-2013, Karl W. Broman
@@ -10,18 +10,18 @@
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
  *     merchantability or fitness for a particular purpose.  See the GNU
  *     General Public License, version 3, for more details.
- * 
+ *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
- * These functions are for fitting a fixed multiple-QTL model by 
+ * These functions are for fitting a fixed multiple-QTL model by
  * imputation, for a binary trait.
  *
  * Contains: R_fitqtl_imp_binary, fitqtl_imp_binary, galtLODimpbin
@@ -29,30 +29,30 @@
  **********************************************************************/
 
 void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
-			 int *draws, int *n_cov, double *cov, int *model, 
-			 int *n_int, double *pheno, int *get_ests,
-			 /* return variables */
-			 double *lod, int *df, double *ests, double *ests_covar,
-			 double *design_mat,
-			 /* convergence */
-			 double *tol, int *maxit, int *matrix_rank);
+                         int *draws, int *n_cov, double *cov, int *model,
+                         int *n_int, double *pheno, int *get_ests,
+                         /* return variables */
+                         double *lod, int *df, double *ests, double *ests_covar,
+                         double *design_mat,
+                         /* convergence */
+                         double *tol, int *maxit, int *matrix_rank);
 
 
 /**********************************************************************
- * 
+ *
  * fitqtl_imp_binary
  *
  * Fits a fixed multiple-QTL model by multiple imputation.
- * 
+ *
  * n_ind        Number of individuals
  *
- * n_qtl        Number of QTLs in the model 
+ * n_qtl        Number of QTLs in the model
  *
  * n_gen        Number of different genotypes
  *
  * n_draws      Number of impiutations
  *
- * Draws        Array of genotype imputations, indexed as 
+ * Draws        Array of genotype imputations, indexed as
  *              Draws[draw][mar][ind]
  *
  * Cov          covariates matrix, Cov[mar][ind]
@@ -76,26 +76,26 @@ void R_fitqtl_imp_binary(int *n_ind, int *n_qtl, int *n_gen, int *n_draws,
  * ests_covar   Return covariance matrix of ests (sizefull^2 matrix)
  *
  * tol          Tolerance for convergence
- * 
+ *
  * maxit        Maximum number of iterations in IRLS
  *
  * matrix_rank  Return min (across imputations) of rank of design matrix
  *
  **********************************************************************/
 
-void fitqtl_imp_binary(int n_ind, int n_qtl, int *n_gen, int n_draws, 
-		       int ***Draws, double **Cov, int n_cov, 
-		       int *model, int n_int, double *pheno, int get_ests,
-		       double *lod, int *df, double *ests, double *ests_covar,
-		       double *design_mat, double tol, int maxit, int *matrix_rank);
+void fitqtl_imp_binary(int n_ind, int n_qtl, int *n_gen, int n_draws,
+                       int ***Draws, double **Cov, int n_cov,
+                       int *model, int n_int, double *pheno, int get_ests,
+                       double *lod, int *df, double *ests, double *ests_covar,
+                       double *design_mat, double tol, int maxit, int *matrix_rank);
 
 
 
 /* galtRss - calculate RSS for full model by multiple imputation */
-double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl, 
-		     int **Draws, double **Cov, int n_cov, int *model, 
-		     int n_int, double *dwork, int *iwork, int sizefull,
-		     int get_ests, double *ests, double **Ests_covar,
-		     double *designmat, double tol, int maxit, int *matrix_rank);
+double galtLODimpbin(double *pheno, int n_ind, int *n_gen, int n_qtl,
+                     int **Draws, double **Cov, int n_cov, int *model,
+                     int n_int, double *dwork, int *iwork, int sizefull,
+                     int get_ests, double *ests, double **Ests_covar,
+                     double *designmat, double tol, int maxit, int *matrix_rank);
 
 /* end of fitqtl_imp_binary.h */
