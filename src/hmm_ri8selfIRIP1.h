@@ -2,10 +2,7 @@
  * 
  * hmm_ri8self.h
  * 
- * copyright (c) 2009, Karl W Broman
- *
- * last modified Apr, 2009
- * first written Apr, 2009
+ * Rohan Shah
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,

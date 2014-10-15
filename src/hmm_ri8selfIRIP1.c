@@ -2,10 +2,9 @@
  * 
  * hmm_ri8selfIRIP.c
  * 
- * copyright (c) 2009-2014, Karl W Broman
+ * Rohan Shah
  *
- * last modified September, 2014
- * first written Apr, 2009
+ * October, 2014
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
