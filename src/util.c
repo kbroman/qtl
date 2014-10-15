@@ -869,6 +869,48 @@ void reviseMWril(int n_ril, int n_mar, int n_str,
   }
 }
 
+/**********************************************************************
+ * 
+ * reviseMWril    Revise genotypes for 4- or 8-way RIL 
+ *                to form encoding the founders' genotypes, assuming crosses are irrelevant
+ *
+ * n_ril     Number of RILs to simulate
+ * n_mar     Number of markers
+ * n_str     Number of founder strains
+ *
+ * Parents   SNP data for the founder strains [dim n_str x n_mar]
+ * 
+ * Geno      On entry, the detailed genotype data; on exit, the 
+ *           SNP data written bitwise. [dim n_ril x n_mar]
+ * 
+ *
+ * missingval  Integer indicating missing value
+ *
+ **********************************************************************/
+void reviseMWrilNoCross(int n_ril, int n_mar, int n_str, 
+		 int **Parents, int **Geno, 
+		 int missingval)
+{
+  int i, j, k, temp;
+
+  for(i=0; i<n_ril; i++) {
+    R_CheckUserInterrupt(); /* check for ^C */
+
+    for(j=0; j<n_mar; j++) {
+      if(Geno[j][i] == missingval) Geno[j][i] = 0;
+      else {
+	temp = 0;
+	for(k=0; k<n_str; k++) {
+	  if(Parents[j][k]==missingval ||
+	     Geno[j][i] == Parents[j][k])
+	    temp += (1 << k);
+	}
+	Geno[j][i] = temp;
+      }
+    }
+  }
+}
+
 /* wrapper for calling reviseMWril from R */
 void R_reviseMWril(int *n_ril, int *n_mar, int *n_str, 
 		   int *parents, int *geno, int *crosses,
@@ -881,6 +923,20 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
   reorg_geno(*n_ril, *n_str, crosses, &Crosses);
 
   reviseMWril(*n_ril, *n_mar, *n_str, Parents, Geno, Crosses,
+	      *missingval);
+}
+
+/* wrapper for calling reviseMWrilNoCross from R */
+void R_reviseMWrilNoCross(int *n_ril, int *n_mar, int *n_str, 
+		   int *parents, int *geno, 
+		   int *missingval)
+{
+  int **Parents, **Geno;
+
+  reorg_geno(*n_str, *n_mar, parents, &Parents);
+  reorg_geno(*n_ril, *n_mar, geno, &Geno);
+
+  reviseMWrilNoCross(*n_ril, *n_mar, *n_str, Parents, Geno,
 	      *missingval);
 }
 
