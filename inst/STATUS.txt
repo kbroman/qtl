@@ -17,6 +17,27 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.34, 2014-10-07:
+
+Major changes:
+
+  Added "tidy" format to read.cross and write.cross. This separates
+  the data into three comma-delimited files, for genotypes,
+  phenotypes, and the marker map. Separating the data in this way
+  allows each file to be in a simpler format.
+
+Minor changes:
+
+  Add another option to fill.geno: impute using maximum marginal
+  probability.
+
+  Fixed a bug in est_map_ri8self.c (thanks to Rohan Shah)
+
+  Fixed a bug in scanone/scantwo stratified permutations in batch,
+  with multiple phenotypes, some with missing values (thanks to
+  John Lovell).
+
+
 Version 1.33, 2014-08-12:
 
 Major changes:

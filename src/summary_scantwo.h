@@ -1,5 +1,5 @@
 /**********************************************************************
- * 
+ *
  * summary_scantwo.h
  *
  * copyright (c) 2006, Karl W Broman
@@ -10,12 +10,12 @@
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
  *     merchantability or fitness for a particular purpose.  See the GNU
  *     General Public License, version 3, for more details.
- * 
+ *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
@@ -25,30 +25,30 @@
  * for each pair of chromosomes in scantwo output.
  *
  * Contains: R_summary_scantwo, summary_scantwo
- *  
+ *
  **********************************************************************/
 
 /**********************************************************************
- * 
+ *
  * R_summary_scantwo
  *
  * Wrapper for call from R
- * 
+ *
  **********************************************************************/
 
-void R_summary_scantwo(int *n_pos, int *n_phe, double *lod, int *n_chr, 
-		       int *chr, double *pos, int *xchr, double *scanoneX, 
-		       int *n_chrpair, int *chr1, int *chr2, int *chrpair, 
-		       double *pos1_jnt, double *pos2_jnt, 
-		       double *pos1_add, double *pos2_add,
-		       double *pos1_int, double *pos2_int, 
-		       double *jnt_lod_full, double *jnt_lod_add, 
-		       double *add_lod_full, double *add_lod_add, 
-		       double *int_lod_full, double *int_lod_add, 
-		       double *lod_1qtl);
+void R_summary_scantwo(int *n_pos, int *n_phe, double *lod, int *n_chr,
+                       int *chr, double *pos, int *xchr, double *scanoneX,
+                       int *n_chrpair, int *chr1, int *chr2, int *chrpair,
+                       double *pos1_jnt, double *pos2_jnt,
+                       double *pos1_add, double *pos2_add,
+                       double *pos1_int, double *pos2_int,
+                       double *jnt_lod_full, double *jnt_lod_add,
+                       double *add_lod_full, double *add_lod_add,
+                       double *int_lod_full, double *int_lod_add,
+                       double *lod_1qtl);
 
 /**********************************************************************
- * 
+ *
  * summary_scantwo
  *
  * Function to pull out the major bits from scantwo output
@@ -71,26 +71,25 @@ void R_summary_scantwo(int *n_pos, int *n_phe, double *lod, int *n_chr,
  *                       Matrices indexed as [phe][chrpair]
  * Pos1_int, Pos2_int    On output, positions of maximum int've LOD
  *                       Matrices indexed as [phe][chrpair]
- * JNT_lod_*             On output, joint and add've LOD at pos'ns with 
+ * JNT_lod_*             On output, joint and add've LOD at pos'ns with
  *                       maximum joint LOD; matrices indexed as [phe][chrpair]
- * ADD_lod_*             On output, joint and add've LOD at pos'ns with 
+ * ADD_lod_*             On output, joint and add've LOD at pos'ns with
  *                       maximum add've LOD; matrices indexed as [phe][chrpair]
- * INT_lod_*             On output, joint and add've LOD at pos'ns with 
+ * INT_lod_*             On output, joint and add've LOD at pos'ns with
  *                       maximum int've LOD; matrices indexed as [phe][chrpair]
  * LOD_1qtl              On output, maximum 1-QTL LOD for each pair of chr
  *                       (selected from either scanone or scanoneX
- * 
+ *
  **********************************************************************/
-void summary_scantwo(int n_pos, int n_phe, double ***Lod, int n_chr, 
-		     int *chr, double *pos, int *xchr, double **ScanoneX, 
-		     int n_chrpair, int **Chrpair, 
-		     double **Pos1_jnt, double **Pos2_jnt, 
-		     double **Pos1_add, double **Pos2_add, 
-		     double **Pos1_int, double **Pos2_int, 
-		     double **JNT_lod_full, double **JNT_lod_add,
-		     double **ADD_lod_full, double **ADD_lod_add,
-		     double **INT_lod_full, double **INT_lod_add,
-		     double **LOD_1qtl);
+void summary_scantwo(int n_pos, int n_phe, double ***Lod, int n_chr,
+                     int *chr, double *pos, int *xchr, double **ScanoneX,
+                     int n_chrpair, int **Chrpair,
+                     double **Pos1_jnt, double **Pos2_jnt,
+                     double **Pos1_add, double **Pos2_add,
+                     double **Pos1_int, double **Pos2_int,
+                     double **JNT_lod_full, double **JNT_lod_add,
+                     double **ADD_lod_full, double **ADD_lod_add,
+                     double **INT_lod_full, double **INT_lod_add,
+                     double **LOD_1qtl);
 
 /* end of summary_scantwo.h */
-
