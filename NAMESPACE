@@ -4,6 +4,7 @@ useDynLib(qtl)
 import(graphics, stats, utils, parallel)
 
 # Export all names
+export(scanonevar)
 export(reduce2grid)
 export(formMarkerCovar)
 export(nqtl)
@@ -80,16 +81,16 @@ S3method("+", scantwoperm)
 S3method("[", cross)
 S3method("[", map)
 S3method("[", scanoneperm)
-S3method("[", scantwoperm) 
+S3method("[", scantwoperm)
 S3method(c, cross)
-S3method(c, scanone) 
+S3method(c, scanone)
 S3method(c, scanoneperm)
 S3method(c, scantwo)
-S3method(c, scantwoperm) 
-S3method(cbind, scanone) 
+S3method(c, scantwoperm)
+S3method(cbind, scanone)
 S3method(cbind, scanoneperm)
 S3method(cbind, scantwo)
-S3method(clean, cross) 
+S3method(clean, cross)
 S3method(clean, scantwo)
 S3method(condense, scantwo)
 S3method(convert, scanone)
@@ -183,7 +184,7 @@ S3method(summary, scantwoperm)
 #   dropfromqtlformula
 #   dropXcol
 #   effectplot.calmeanse
-#   effectplot.getmark 
+#   effectplot.getmark
 #   estimatemarkerlod
 #   expandf2covar
 #   fitqtlengine

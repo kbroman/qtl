@@ -5,7 +5,7 @@
 # copyright (c) 2001-2014, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Apr, 2014
+# last modified Oct, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1799,8 +1799,9 @@ c.cross <-
 ######################################################################
 
 fill.geno <-
-    function(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
-             map.function=c("haldane","kosambi","c-f","morgan"))
+    function(cross, method=c("imp","argmax", "no_dbl_XO", "maxmarginal"),
+             error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
+             min.prob=0.95)
 {
     if(!any(class(cross) == "cross"))
         stop("Input should have class \"cross\".")
@@ -1851,6 +1852,19 @@ fill.geno <-
                 cross$geno[[i]]$data <-
                     matrix(as.numeric(temp$geno[[i]]$argmax),ncol=n.mar[i])
             colnames(cross$geno[[i]]$data) <- nam
+        }
+    }
+    else if(method=="maxmarginal") {
+        temp <- calc.genoprob(cross, step=0, off.end=0, error.prob=error.prob,
+                              map.function=map.function)
+
+        for(i in 1:n.chr) {
+            p <- temp$geno[[i]]$prob
+            whmax <- apply(p, 1:2, which.max)
+            maxpr <- apply(p, 1:2, max)
+            g <- cross$geno[[i]]$data
+            g[maxpr > min.prob] <- whmax[maxpr > min.prob]
+            cross$geno[[i]]$data <- g
         }
     }
     else {

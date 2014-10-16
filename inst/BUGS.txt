@@ -14,6 +14,11 @@ many details as possible and possibly example data, to Karl Broman,
 <kbroman@biostat.wisc.edu>.
 ----------------------------------------------------------------------
 
+Version 1.33 bugs:
+
+>> 1. read.cross with format="mapqtl" is not working in some cases.
+
+
 Version 1.32 bugs:
 
 >> 1. mqmscan has problems when there are just two markers on a
