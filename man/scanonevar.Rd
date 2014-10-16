@@ -27,7 +27,7 @@ scanonevar(cross, pheno.col=1, mean_formula=~add, var_formula=~add,
     \code{~add}, for additive effect of the QTL.}
   \item{var_formula}{Formula describing the variance function; must begin
     \code{~add}, for additive effect of the QTL.}
-  \item{family}{Family object for \code{\link[dglm](dglm)}.}
+  \item{family}{Family object for \code{\link[dglm]{dglm}}.}
   \item{maxit}{Maximum number of iterations in the algorithm to fit the
     model at a given position.}
   \item{fixed_gamma_disp}{If \code{FALSE}, estimate the dispersion
@@ -48,20 +48,21 @@ scanonevar(cross, pheno.col=1, mean_formula=~add, var_formula=~add,
   Dunn, P. K. and Smyth, G. K. (2012) dglm: Double generalized linear
   models, \url{http://CRAN.R-project.org/package=dglm}.
 
-  R\"onneg\oard, L. and Valdar W. (2011) Detecting major genetic loci
+  Ronnegard, L. and Valdar W. (2011) Detecting major genetic loci
   controlling phenotypic variability in experimental crosses. Genetics
   188:435-447
 }
 
-\author{Lars R\"onneg\oard and Karl Broman}
+\author{Lars Ronnegard and Karl Broman}
 
 \examples{
 data(fake.bc)
 \dontshow{fake.bc <- fake.bc[18:19,]}
 fake.bc <- calc.genoprob(fake.bc, step=2.5)
 out <- scanonevar(fake.bc)
-plot(out, lod=1:2, col=c("slateblue", "violetred"),
-     bandcol="gray80")
+color <- c("slateblue", "violetred")
+plot(out, lod=1:2, col=color, bandcol="gray80")
+legend("topright", lwd=2, c("mean", "variance"), col=color)
 }
 
 \seealso{ \code{\link[dglm]{dglm}}, \code{\link{scanone}},
