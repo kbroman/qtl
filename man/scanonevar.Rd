@@ -1,7 +1,7 @@
 \name{scanonevar}
 \alias{scanonevar}
 
-\title{Genome scan for QTL affect mean and/or variance}
+\title{Genome scan for QTL affecting mean and/or variance}
 
 \description{
   Genome scan with a single QTL model using a double generalized linear
