@@ -38,7 +38,7 @@ summary.cross <-
     type <- class(object)[1]
 
     if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", "haploid",
-                     "ri4self", "ri4sib", "ri8self", "ri8sib", "bcsft", "bgmagic16")))
+                     "ri4self", "ri4sib", "ri8self", "ri8selfIRIP1", "ri8sib", "bcsft", "bgmagic16")))
         stop("Cross type ", type, " is not supported.")
 
     # combine genotype data into one big matrix
@@ -290,7 +290,7 @@ summary.cross <-
             warning(warn)
         }
     }
-    else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self", "bgmagic16")) {
+    else if(type %in% c("ri4sib", "ri4self", "ri8sib", "ri8self", "ri8selfIRIP1", "bgmagic16")) {
         if(type=="bgmagic16") n.str <- 16
         else n.str <- as.numeric(substr(type, 3, 3))
         if(any(!is.na(Geno) & (Geno != round(Geno) | Geno < 1 | Geno > 2^n.str-1))) {
@@ -392,9 +392,9 @@ print.summary.cross <-
     else if(x$type=="risib") cat("    RI strains via sib matings\n\n")
     else if(x$type=="dh") cat("    Doubled haploids\n\n")
     else if(x$type=="haploid") cat("    Haploids\n\n")
-    else if(x$type %in% c("ri4self", "ri4sib", "ri8self", "ri8sib")) {
+    else if(x$type %in% c("ri4self", "ri4sib", "ri8self", "ri8selfIRIP1", "ri8sib")) {
         n.str <- substr(x$type, 3, 3)
-        if(substr(x$type, 4, nchar(x$type))=="sib") crosstype <- "sib-mating"
+        if(substr(x$type, 4, min(6, nchar(x$type)))=="sib") crosstype <- "sib-mating"
         else crosstype <- "selfing"
         print.genotypes <- FALSE
         cat("    ", n.str, "-way RIL by ", crosstype, "\n\n", sep="")

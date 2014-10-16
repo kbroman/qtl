@@ -35,7 +35,7 @@
 
 readMWril <-
     function(dir, rilfile, founderfile,
-             type=c("ri4self", "ri4sib", "ri8self", "ri8sib", "bgmagic16"),
+             type=c("ri4self", "ri4sib", "ri8self", "ri8selfIRIP1", "ri8sib", "bgmagic16"),
              na.strings=c("-","NA"), rotate=FALSE,
              ...)
 {
@@ -151,7 +151,9 @@ readMWril <-
 
     n.str <- nrow(founder)
 
-    if(!("cross" %in% names(pheno))) {
+    if(type == "ri8selfIRIP1"){
+    }
+    else if(!("cross" %in% names(pheno))) {
         warning("Need a phenotype named \"cross\"; assuming all come from the cross ",
                 paste(LETTERS[1:n.str], collapse="x"))
         crosses <- matrix(1:n.str, ncol=n.str, nrow=nrow(gen), byrow=TRUE)
@@ -183,16 +185,31 @@ readMWril <-
     gen[wh] <- missingval
     founder[is.na(founder)] <- missingval
     d <- dim(gen)
-    gen <-
-        .C("R_reviseMWril",
-           as.integer(d[1]),
-           as.integer(d[2]),
-           as.integer(n.str),
-           as.integer(founder),
-           gen=as.integer(gen),
-           as.integer(crosses),
-           as.integer(missingval),
-           PACKAGE="qtl")$gen
+    if(type == "ri8selfIRIP1")
+    {
+        gen <-
+            .C("R_reviseMWrilNoCross",
+               as.integer(d[1]),
+               as.integer(d[2]),
+               as.integer(n.str),
+               as.integer(founder),
+               gen=as.integer(gen),
+               as.integer(missingval),
+               PACKAGE="qtl")$gen
+    }
+    else
+    {
+        gen <-
+            .C("R_reviseMWril",
+               as.integer(d[1]),
+               as.integer(d[2]),
+               as.integer(n.str),
+               as.integer(founder),
+               gen=as.integer(gen),
+               as.integer(crosses),
+               as.integer(missingval),
+               PACKAGE="qtl")$gen
+    }
     gen[wh] <- NA
     gen <- matrix(gen, nrow=d[1])
     gen[gen==0 | gen==(2^n.str-1)] <- NA
@@ -270,7 +287,10 @@ readMWril <-
     if(all(is.na(gen)))
         warning("There is no genotype data!\n")
 
-    cross$cross <- crosses
+    if(type != "ri8selfIRIP1")
+    {
+        cross$cross <- crosses
+    }
 
     # save founder genotypes in data
     founder[founder==missingval] <- NA
