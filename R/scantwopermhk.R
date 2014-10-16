@@ -19,6 +19,7 @@ scantwopermhk <-
     if(is.null(perm.Xsp) || !perm.Xsp || !any(chrtype=="X")) { # all autosomes
         result <- .scantwopermhk(cross, pheno.col=pheno.col,
                                  addcovar=addcovar, weights=weights, n.perm=n.perm,
+                                 batchsize=batchsize,
                                  perm.strata=perm.strata, verbose=verbose,
                                  assumeCondIndep=assumeCondIndep)
     }
@@ -61,7 +62,7 @@ scantwopermhk <-
                                    assumeCondIndep=assumeCondIndep)
 
         result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
-        attr(result, "L") <- list(AL=AL, XL=XL, AAL=AAL, AXL=AXL, XXL=XXL)
+        attr(result, "L") <- list(AA=AAL, AX=AXL, XX=XXL)
     }
 
     class(result) <- "scantwoperm"
@@ -72,7 +73,7 @@ scantwopermhk <-
 
 .scantwopermhk <-
     function(cross, chr, pheno.col=1, addcovar=NULL,
-             weights=NULL, n.perm=1, batchsize=batchsize,
+             weights=NULL, n.perm=1, batchsize=1000,
              perm.strata=NULL, verbose=FALSE, assumeCondIndep=FALSE)
 {
     if(!any(class(cross) == "cross"))
