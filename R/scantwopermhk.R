@@ -62,7 +62,7 @@ scantwopermhk <-
                                    assumeCondIndep=assumeCondIndep)
 
         result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
-        attr(result, "L") <- list(AA=AAL, AX=AXL, XX=XXL)
+        attr(result, "L") <- c(AA=AAL, AX=AXL, XX=XXL)
     }
 
     class(result) <- "scantwoperm"
