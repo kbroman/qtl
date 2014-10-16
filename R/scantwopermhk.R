@@ -1,12 +1,107 @@
 ## scantwopermhk.R
 
 scantwopermhk <-
+    function(cross, chr, pheno.col=1, addcovar=NULL, weights=NULL, n.perm=1,
+             batchsize=1000, perm.strata=NULL, perm.Xsp=NULL, verbose=FALSE,
+             assumeCondIndep=FALSE)
+{
+    if(!missing(chr) && !is.null(chr))
+        cross <- subset(cross, chr)
+
+    # in RIL, treat X chromosome like an autosome
+    chr.names <- chrnames(cross)
+    chrtype <- sapply(cross$geno, class)
+    type <- class(cross)[1]
+    if(any(chrtype=="X") && type=="risib" || type=="riself")
+        for(i in which(chrtype=="X"))
+            class(cross$geno[[i]]) <- chrtype[i] <- "A"
+
+    if(is.null(perm.Xsp) || !perm.Xsp || !any(chrtype=="X")) { # all autosomes
+        result <- .scantwopermhk(cross, pheno.col=pheno.col,
+                                 addcovar=addcovar, weights=weights, n.perm=n.perm,
+                                 perm.strata=perm.strata, verbose=verbose,
+                                 assumeCondIndep=assumeCondIndep)
+    }
+    else { # separate A:A, A:X, and X:X
+        # lengths of autosomes and X chr
+        chrL <- sapply(cross$geno, function(a) diff(range(a$map)))
+        AL <- sum(chrL[chrtype=="A"])
+        XL <- sum(chrL[chrtype=="X"])
+        AAL <- AL*AL/2
+        XXL <- XL*XL/2
+        AXL <- AL*XL
+        n.permAA <- n.perm
+        n.permXX <- ceiling(n.perm * AAL/XXL)
+        n.permAX <- ceiling(n.perm * AAL/AXL)
+
+        # names of autosomes and X chr
+        Achr <- chr.names[chrtype=="A"]
+        Xchr <- chr.names[chrtype=="X"]
+
+        if(verbose) message("Running ", n.permAA, " A:A permutations")
+        AAresult <- .scantwopermhk(cross, chr=Achr, pheno.col=pheno.col,
+                                   addcovar=addcovar, weights=weights, n.perm=n.permAA,
+                                   batchsize=batchsize,
+                                   perm.strata=perm.strata, verbose=verbose,
+                                   assumeCondIndep=assumeCondIndep)
+
+        if(verbose) message("Running ", n.permXX, " X:X permutations")
+        XXresult <- .scantwopermhk(cross, chr=Xchr, pheno.col=pheno.col,
+                                   addcovar=addcovar, weights=weights, n.perm=n.permXX,
+                                   batchsize=batchsize,
+                                   perm.strata=perm.strata, verbose=verbose,
+                                   assumeCondIndep=assumeCondIndep)
+
+        if(verbose) message("Running ", n.permAX, " A:X permutations")
+        AXresult <- .scantwopermhk(cross, chr=list(Achr, Xchr),
+                                   pheno.col=pheno.col,
+                                   addcovar=addcovar, weights=weights, n.perm=n.permAX,
+                                   batchsize=batchsize,
+                                   perm.strata=perm.strata, verbose=verbose,
+                                   assumeCondIndep=assumeCondIndep)
+
+        result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
+        attr(result, "L") <- list(AL=AL, XL=XL, AAL=AAL, AXL=AXL, XXL=XXL)
+    }
+
+    class(result) <- "scantwoperm"
+    result
+}
+
+
+
+.scantwopermhk <-
     function(cross, chr, pheno.col=1, addcovar=NULL,
-             weights=NULL, n.perm=1,
+             weights=NULL, n.perm=1, batchsize=batchsize,
              perm.strata=NULL, verbose=FALSE, assumeCondIndep=FALSE)
 {
     if(!any(class(cross) == "cross"))
         stop("Input should have class \"cross\".")
+
+    if(n.perm > batchsize) { # run in batches
+        if(missing(chr)) chr <- chrnames(cross)
+
+        # determine size of batches: as equal as possible
+        n.batches <- ceiling(n.perm/batchsize)
+        batchsizes <- rep(ceiling(n.perm/n.batches), n.batches)
+        batchsizes[n.batches] <- n.perm - sum(batchsizes[-n.batches])
+
+        result <- NULL
+        if(verbose) message("perms in ", n.batches, " batches.")
+        for(i in seq(along=batchsizes)) {
+            if(verbose) message("batch ", i)
+            thisresult <- .scantwopermhk(cross, chr, pheno.col=pheno.col, addcovar=addcovar,
+                                         weights=weights, n.perm=batchsizes[i], batchsize=n.perm,
+                                         perm.strata=perm.strata, verbose=verbose, assumeCondIndep)
+            if(is.null(result)) result <- thisresult
+            else {
+                for(j in seq(along=result))
+                    result[[j]] <- rbind(result[[j]], thisresult[[j]])
+            }
+        }
+        return(result)
+    }
+
 
     # pull out chromosomes to be scanned
     if(missing(chr)) chr1 <- chr2 <- chr <- names(cross$geno)
@@ -177,12 +272,12 @@ scantwopermhk <-
             }
 
             # print the current working pair
-            if(verbose) cat(" (", names(cross$geno)[i], ",",
+            if(verbose>1) cat(" (", names(cross$geno)[i], ",",
                             names(cross$geno)[j],")\n",sep="")
 
             if(i==j) { # same chromosome
 
-                if(verbose>1) cat("  --Calculating joint probs.\n")
+                if(verbose>2) cat("  --Calculating joint probs.\n")
 
                 if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
                     # calculate joint genotype probabilities for all pairs of positions
@@ -226,7 +321,7 @@ scantwopermhk <-
                     temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                                         cross.attr=attributes(cross))
 
-                if(verbose>1) cat("  --Done.\n")
+                if(verbose>2) cat("  --Done.\n")
 
                 thisz <- .C("R_scantwopermhk_1chr",
                             as.integer(n.ind),
