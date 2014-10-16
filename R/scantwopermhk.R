@@ -87,11 +87,11 @@ scantwopermhk <-
         batchsizes[n.batches] <- n.perm - sum(batchsizes[-n.batches])
 
         result <- NULL
-        if(verbose) message("perms in ", n.batches, " batches.")
+        if(verbose) message(" - perms in ", n.batches, " batches")
         for(i in seq(along=batchsizes)) {
-            if(verbose) message("batch ", i)
+            if(verbose) message("   -- batch ", i)
             thisresult <- .scantwopermhk(cross, chr, pheno.col=pheno.col, addcovar=addcovar,
-                                         weights=weights, n.perm=batchsizes[i], batchsize=n.perm,
+                                         weights=weights, n.perm=batchsizes[i], batchsize=Inf,
                                          perm.strata=perm.strata, verbose=verbose, assumeCondIndep)
             if(is.null(result)) result <- thisresult
             else {
