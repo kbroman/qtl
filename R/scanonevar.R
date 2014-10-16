@@ -98,7 +98,7 @@ function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
         for(i in 1:n.loci) {
             add <- as.numeric(a1[,i])
             d.fit<-try(dglm::dglm(formula=formula.in,dformula=dformula.in,
-                                  family = family, control=dglm.control(maxit=maxit)),silent=TRUE)
+                                  family = family, control=dglm::dglm.control(maxit=maxit)),silent=TRUE)
 
             if ((class(d.fit)!="dglm")[1]) {
                 warning("dglm did not converge on chr ", chr.names[j], " position ", i)
