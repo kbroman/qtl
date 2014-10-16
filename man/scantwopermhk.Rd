@@ -10,9 +10,10 @@
 }
 
 \usage{
-scantwopermhk(cross, chr, pheno.col=1, 
+scantwopermhk(cross, chr, pheno.col=1,
               addcovar=NULL, weights=NULL, n.perm=1,
-              batchsize=250, perm.strata=NULL,
+              batchsize=1000,
+              perm.strata=NULL, perm.Xsp=NULL,
               verbose=FALSE, assumeCondIndep=FALSE)
 }
 
@@ -36,13 +37,17 @@ scantwopermhk(cross, chr, pheno.col=1,
    or a vector of length n.ind containing positive weights. Used only
    in the case \code{model="normal"}.}
  \item{n.perm}{Number of permutation replicates.}
- \item{batchsize}{The number of phenotypes (or permutations) to be run
-   as a batch; used only when there are no additive covariates.}
+ \item{batchesize}{If \code{n.perm > batchsize}, permutations will be
+   run in batches of no more than \code{batchsize} permutations.}
  \item{perm.strata}{Used to perform a
    stratified permutation test.  This should be a vector with the same
    number of individuals as in the cross data.  Unique values indicate
    the individual strata, and permutations will be performed within the
    strata.}
+ \item{perm.Xsp}{If TRUE, run separate permutations for A:A, A:X, and
+ X:X. In this case, \code{n.perm} refers to the number of permutations
+ for the A:A part; more permutations are used for the A:X and X:X parts,
+ as estimates of quantiles farther out into the tails are needed.}
  \item{verbose}{If TRUE, display information about the progress of
    calculations.}
  \item{assumeCondIndep}{If TRUE, assume conditional independence of QTL
@@ -61,7 +66,7 @@ scantwopermhk(cross, chr, pheno.col=1,
 
 \value{
   A list with six
-  different LOD scores from each of the permutation replicates. 
+  different LOD scores from each of the permutation replicates.
   First, the maximum LOD score for the full model (two QTLs plus an
   interaction).  Second, for each pair of
   chromosomes, we take the difference between the full LOD and the
@@ -76,7 +81,10 @@ scantwopermhk(cross, chr, pheno.col=1,
   single-QTL LOD score (that is, from a single-QTL scan).  The latter is
   not used in \code{\link{summary.scantwoperm}}, but does get
   calculated at each permutation, so we include it for the sake of
-  completeness. 
+  completeness.
+
+  If \code{perm.Xsp=TRUE}, this is a list of lists, for the A:A, A:X,
+  and X:X sections, each being a list as described above.
 }
 
 \references{
