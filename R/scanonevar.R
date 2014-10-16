@@ -3,12 +3,10 @@
 # with code from Lars Ronnegard
 
 scanonevar <-
-function(cross, pheno.col=1, vQTL.formula = ~add, vQTL.dformula = ~add,
-         dglm.family = gaussian(), dglm.maxit = 25 , fixed.gamma.disp = FALSE,
+function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
+         family = gaussian(), maxit = 25 , fixed_gamma_disp = FALSE,
          quiet=TRUE)
 {
-    library(dglm)
-
     # check input
     crosstype <- class(cross)[1]
     if(!(crosstype %in% c("bc", "dh", "f2", "haploid", "risib", "riself")))
@@ -44,18 +42,18 @@ function(cross, pheno.col=1, vQTL.formula = ~add, vQTL.dformula = ~add,
     }
 
     # mean and variance formulas
-    formula.as.text<-paste(vQTL.formula,sep="")
+    formula.as.text<-paste(mean_formula,sep="")
     if(substr(formula.as.text[2],1,3)!="add")
         stop("Formula must be specified with add as first explanatory variable")
     formula.in <- as.formula(paste("pheno", formula.as.text[1], formula.as.text[2:length(formula.as.text)]))
-    formula.as.text<-paste(vQTL.dformula, sep="")
+    formula.as.text<-paste(var_formula, sep="")
     if(substr(formula.as.text[2],1,3)!="add")
         stop("Dformula must be specified with add as first explanatory variable")
     dformula.in <- as.formula(paste(formula.as.text[1], formula.as.text[2:length(formula.as.text)]))
 
     ###########
     ##BOX-COX PART
-    formula.as.text<-paste(vQTL.formula,sep="")
+    formula.as.text<-paste(var_formula,sep="")
 	n.char <- nchar(formula.as.text[2])
 	if (n.char>3) x.eff <- substr(formula.as.text[2],6, (n.char))
 	if (n.char<4) x.eff <-"1"
@@ -100,20 +98,20 @@ function(cross, pheno.col=1, vQTL.formula = ~add, vQTL.dformula = ~add,
         for(i in 1:n.loci) {
             add <- as.numeric(a1[,i])
             d.fit<-try(dglm::dglm(formula=formula.in,dformula=dformula.in,
-                                  family = dglm.family, control=dglm.control(maxit=dglm.maxit)),silent=TRUE)
+                                  family = family, control=dglm.control(maxit=maxit)),silent=TRUE)
 
             if ((class(d.fit)!="dglm")[1]) {
                 warning("dglm did not converge on chr ", chr.names[j], " position ", i)
 			}
             else {
                 p.mean <- summary(d.fit)$coef[2,4]
-                if (!fixed.gamma.disp)
+                if (!fixed_gamma_disp)
                     p.disp<- summary(d.fit$dispersion)$coef[2,4]
-                if (fixed.gamma.disp)
+                if (fixed_gamma_disp)
                     p.disp<-(summary(d.fit)$dispersion.summary$coeff[2,4])
                 logP.m[i]<- -log10(p.mean)
                 logP.d[i]<- -log10(p.disp)
-                if (d.fit$iter==dglm.maxit) {
+                if (d.fit$iter==maxit) {
                     logP.d[i]=0
                     warning("dglm did not converge on chr", chr.names[j], " position ", i)
                 }
