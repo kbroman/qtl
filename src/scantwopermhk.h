@@ -18,7 +18,7 @@ void scantwopermhk_1chr_nocovar(int n_ind, int n_pos, int n_gen,
 void scantwopermhk_1chr(int n_ind, int n_pos, int n_gen,
                         double ***Genoprob, double *****Pairprob,
                         double **Addcov, int n_addcov, double *pheno,
-                        int n_perm, int **Permindex, 
+                        int n_perm, int **Permindex,
                         double *weights, double **Result,
                         int n_col2drop, int *col2drop);
 
