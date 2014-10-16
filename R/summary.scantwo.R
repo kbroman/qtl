@@ -790,12 +790,40 @@ summary.scantwoperm <-
     if(!any(class(object) == "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
 
+    if("AA" %in% names(object)) { # X-chr-specific version
+
+        # get region-specific (nominal) signif levels
+        L <- attr(object, "L")
+        if(is.null(L)) stop("L attribute not found in input object")
+        if(length(alpha)==1)
+            one_minus_alpha <- cbind((1-alpha)^(L/sum(L)))
+        else
+            one_minus_alpha <- vapply(alpha, function(a,b) (1-a)^b, rep(0, length(L)), L/sum(L))
+
+        # get quantiles
+        out <- vector("list", length(object))
+        names(out) <- names(object)
+        for(i in seq(along=out)) {
+            out[[i]] <- lapply(object[[i]], function(a) {
+                b <- apply(a, 2, quantile, one_minus_alpha[i,,drop=FALSE])
+                rownames(b) <- paste0(alpha*100, "%")
+                b
+            })
+        }
+
+
+        attr(out, "n.perm") <- vapply(object, function(a) nrow(a[[1]]), 0)
+        class(out) <- c("summary.scantwoperm", "list")
+
+        return(out)
+    }
+
     out <- lapply(object, apply, 2, quantile, 1-alpha)
 
     for(i in 1:length(out)) {
         if(!is.matrix(out[[i]]))
             out[[i]] <- matrix(out[[i]], nrow=length(alpha))
-        rownames(out[[i]]) <- paste(alpha*100, "%", sep="")
+        rownames(out[[i]]) <- paste0(alpha*100, "%")
     }
 
     if(df && "df" %in% names(attributes(object)))
@@ -809,6 +837,38 @@ summary.scantwoperm <-
 print.summary.scantwoperm <-
     function(x, ...)
 {
+    if("AA" %in% names(x)) { # X-sp perms
+        nperm <- attr(x, "n.perm")
+        rn <- rownames(x[[1]][[1]])
+        nc <- rapply(x, ncol)
+        if(length(unique(nc)) != 1)
+            stop("The components shouldn't have varying numbers of columns.\n")
+        nc <- nc[1]
+        phe <- colnames(x[[1]][[1]])
+
+        convert2matrix <-
+            function(a, which_col=1) {
+                a <- lapply(a, "[", , which_col, drop=FALSE)
+                b <- matrix(unlist(a), ncol=6)
+                rownames(b) <- rn
+                colnames(b) <- names(a)
+                b
+            }
+
+        for(i in seq(along=phe)) {
+            cat(phe[i], ":\n", sep="")
+            y <- lapply(x, convert2matrix, i)
+            lab <- c(AA="A:A", AX="A:X", XX="X:X")
+            for(j in c("AA", "AX", "XX")) {
+                cat("  ", lab[j], " (", nperm[j], " permutations)\n", sep="")
+                print(y[[j]], digits=3)
+                cat("\n")
+            }
+            if(i != length(phe)) cat("\n")
+        }
+        invisible(return(x))
+    }
+
     nam <- names(x)
     rn <- rownames(x[[1]])
     n.perm <- attr(x, "n.perm")
