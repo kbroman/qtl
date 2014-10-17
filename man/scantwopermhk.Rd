@@ -37,7 +37,7 @@ scantwopermhk(cross, chr, pheno.col=1,
    or a vector of length n.ind containing positive weights. Used only
    in the case \code{model="normal"}.}
  \item{n.perm}{Number of permutation replicates.}
- \item{batchesize}{If \code{n.perm > batchsize}, permutations will be
+ \item{batchsize}{If \code{n.perm > batchsize}, permutations will be
    run in batches of no more than \code{batchsize} permutations.}
  \item{perm.strata}{Used to perform a
    stratified permutation test.  This should be a vector with the same
