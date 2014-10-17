@@ -3,7 +3,7 @@
 # summary.scantwo.R
 #
 # copyright (c) 2001-2014, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Mar, 2014
+# last modified Oct, 2014
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or

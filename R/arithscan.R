@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-2011, Karl W Broman
-# last modified Mar, 2011
+# copyright (c) 2005-2014, Karl W Broman
+# last modified Oct, 2014
 # first written Mar, 2005
 #
 #     This program is free software; you can redistribute it and/or

@@ -2,8 +2,8 @@
 #
 # plotperm.R
 #
-# copyright (c) 2007-2010, Karl W Broman
-# last modified Jul, 2010
+# copyright (c) 2007-2014, Karl W Broman
+# last modified Oct, 2014
 # first written Dec, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -133,8 +133,6 @@ plot.scantwoperm <-
         function(x, xlim, breaks, xlab, main, ...)
         {
             if(missing(xlim)) xlim <- c(0, max(unlist(x)))
-            if(missing(breaks))
-                breaks <- seq(0, max(unlist(x)), len=ceiling(4*sqrt(length(x[[1]]))+1))
             if(missing(xlab)) xlab <- "maximum LOD score"
             if(missing(main)) main.missing <- TRUE
             else { main.missing <- FALSE; main.input <- main }
@@ -142,6 +140,34 @@ plot.scantwoperm <-
 
             mfcol <- par("mfcol")
             on.exit(par(mfcol=mfcol))
+
+            if("AA" %in% names(x)) {
+
+                if(missing(breaks))
+                    breaks <- seq(0, max(unlist(x)), len=ceiling(4*sqrt(length(x[[1]][[1]]))+1))
+
+                par(mfrow=c(3,6))
+
+                for(i in seq(along=x)) {
+                    for(j in seq(along=x[[i]])) {
+                        if(main.missing) main <- paste(names(x)[i], names(x[[i]])[j])
+                        else {
+                            if(length(main.input) >= i) main <- main.input[i]
+                            else if(length(main.input) == 1) main <- main.input
+                            else main <- ""
+                        }
+
+                        hist(x[[i]][[j]], xlim=xlim, breaks=breaks, xlab=xlab, main=main,...)
+                        rug(x[[i]][[j]])
+                    }
+                }
+                invisible(return(NULL))
+            }
+
+            if(missing(breaks))
+                breaks <- seq(0, max(unlist(x)), len=ceiling(4*sqrt(length(x[[1]]))+1))
+
+
             par(mfcol=c(3,2))
 
             for(i in seq(along=x)) {
@@ -157,9 +183,9 @@ plot.scantwoperm <-
             }
         }
 
-    if(lodcolumn < 1 || lodcolumn > ncol(x[[1]]))
-        stop("lodcolumn should be between 1 and ", ncol(x[[1]]))
-    x <- lapply(x, function(a,b) a[,b], lodcolumn)
+    if(length(lodcolumn) > 1)
+        stop("Select just one lod column")
+    x <- x[,lodcolumn]
     hideplot.scantwoperm(x, ...)
 }
 
