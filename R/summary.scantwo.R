@@ -1012,8 +1012,26 @@ rbind.scantwoperm <- c.scantwoperm <-
 
     cl1 <- class(dots[[1]])
     if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
-
     if(length(dots)==1) return(dots[[1]])
+
+    xchrsp <- vapply(dots, function(a) "AA" %in% names(a), TRUE)
+    if(any(xchrsp)) {
+        if(!all(xchrsp)) stop("Some but not all inputs are X-chr specific")
+
+        for(i in 2:length(dots)) {
+            for(j in seq(along=dots[[1]])) {
+                for(k in seq(along=dots[[1]][[j]])) {
+                    if(ncol(dots[[1]][[j]][[k]]) != ncol(dots[[i]][[j]][[k]]))
+                        stop("Mismatch in no. columns")
+                    if(any(colnames(dots[[1]][[j]][[k]]) != colnames(dots[[1]][[j]][[k]])))
+                        warning("Mismatch in column names")
+                    dots[[1]][[j]][[k]] <- rbind(dots[[1]][[j]][[k]], dots[[i]][[j]][[k]])
+                }
+            }
+        }
+        return(dots[[1]])
+    }
+
     for(i in seq(along=dots)) {
         if(!any(class(dots[[i]]) == "scantwoperm"))
             stop("Input should have class \"scantwoperm\".")
@@ -1047,6 +1065,45 @@ rbind.scantwoperm <- c.scantwoperm <-
     dots[[1]]
 }
 
+# paste columns together
+cbind.scantwoperm <-
+function(...)
+{
+    dots <- list(...)
+    cl1 <- class(dots[[1]])
+    if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+
+    if(length(dots)==1) return(dots)
+
+    xchrsp <- vapply(dots, function(a) "AA" %in% names(a), TRUE)
+    if(any(xchrsp)) {
+        if(!all(xchrsp)) stop("Some but not all inputs are X-chr specific")
+
+        for(i in 2:length(dots)) {
+            for(j in seq(along=dots[[1]])) {
+                for(k in seq(along=dots[[1]][[j]])) {
+                    if(nrow(dots[[1]][[j]][[k]]) != nrow(dots[[i]][[j]][[k]]))
+                        stop("Mismatch in no. permutations")
+                    dots[[1]][[j]][[k]] <- cbind(dots[[1]][[j]][[k]], dots[[i]][[j]][[k]])
+                }
+            }
+        }
+        return(dots[[1]])
+    }
+
+    for(i in 2:length(dots)) {
+        for(j in seq(along=dots[[1]])) {
+            if(nrow(dots[[1]][[j]]) != nrow(dots[[i]][[j]]))
+                stop("Mismatch in no. permutations")
+            dots[[1]][[j]] <- cbind(dots[[1]][[j]], dots[[i]][[j]])
+        }
+    }
+
+    dots[[1]]
+}
+
+
+
 ######################################################################
 # condensed scantwo output
 
@@ -1073,6 +1130,19 @@ max.scantwocondensed <- max.scantwo
 subset.scantwoperm <-
     function(x, repl, lodcolumn, ...)
 {
+    if("AA" %in% names(x)) { # x chr specific
+        for(j in seq(along=x)) {
+            if(missing(lodcolumn)) lodcolumn <- 1:ncol(x[[j]][[1]])
+            else if(!is.null(attr(try(x[[j]][[1]][,lodcolumn], silent=TRUE),"try-error")))
+                stop("lodcolumn misspecified.")
+
+            repl <- 1:nrow(x[[j]][[1]])
+
+            x[[j]] <- lapply(x[[j]], function(a,b,d) unclass(a)[b,d,drop=FALSE], repl, lodcolumn)
+        }
+        return(x)
+    }
+
     att <- attributes(x)
 
     if(any(!sapply(x, is.matrix)))

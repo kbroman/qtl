@@ -30,7 +30,7 @@
   The aim of this function is to concatenate the results from multiple
   runs of a permutation test \code{\link{scantwo}}, to assist with
   the case that such permutations are done on multiple processors in
-  parallel. 
+  parallel.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
@@ -48,7 +48,6 @@ operm <- c(operm1, operm2)
 }
 
 \seealso{ \code{\link{summary.scantwoperm}},
-  \code{\link{scantwo}}, \code{\link{summary.scantwo}},
-  \code{\link{c.scanoneperm}} }
+  \code{\link{scantwo}}, \code{\link{cbind.scantwoperm}} }
 
 \keyword{manip}
