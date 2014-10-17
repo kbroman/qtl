@@ -127,10 +127,10 @@ plot.scanoneperm <-
 # plot histogram of the permutation results from scantwo
 ############################################################
 plot.scantwoperm <-
-    function(x, lodcolumn=1, ...)
+    function(x, lodcolumn=1, include_rug=TRUE, ...)
 {
     hideplot.scantwoperm <-
-        function(x, xlim, breaks, xlab, main, ...)
+        function(x, include_rug=TRUE, xlim, breaks, xlab, main, ...)
         {
             if(missing(xlim)) xlim <- c(0, max(unlist(x)))
             if(missing(xlab)) xlab <- "maximum LOD score"
@@ -158,7 +158,7 @@ plot.scantwoperm <-
                         }
 
                         hist(x[[i]][[j]], xlim=xlim, breaks=breaks, xlab=xlab, main=main,...)
-                        rug(x[[i]][[j]])
+                        if(include_rug) rug(x[[i]][[j]])
                     }
                 }
                 invisible(return(NULL))
@@ -179,14 +179,14 @@ plot.scantwoperm <-
                 }
 
                 hist(x[[i]], xlim=xlim, breaks=breaks, xlab=xlab, main=main,...)
-                rug(x[[i]])
+                if(include_rug) rug(x[[i]])
             }
         }
 
     if(length(lodcolumn) > 1)
         stop("Select just one lod column")
     x <- x[,lodcolumn]
-    hideplot.scantwoperm(x, ...)
+    hideplot.scantwoperm(x, include_rug=include_rug, ...)
 }
 
 
