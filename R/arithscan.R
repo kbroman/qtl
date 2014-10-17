@@ -365,6 +365,14 @@
     else df1 <- NULL
 
     if(missing(e2)) {
+        # x-chr-specific
+        if("AA" %in% names(e1)) {
+            for(i in seq(along=e1))
+                for(j in seq(along=e1[[i]]))
+                    e1[[i]][[j]] <- -e1[[i]][[j]]
+            return(e1)
+        }
+
         for(i in 1:length(e1))
             e1[[i]] <- -e1[[i]]
         if(!is.null(df1))
@@ -379,6 +387,20 @@
     if("df" %in% names(attributes(e2)))
         df2 <- attr(e2, "df")
     else df2 <- NULL
+
+    # x-chr-specific
+    if("AA" %in% names(e1) || "AA" %in% names(e2)) {
+        if(!("AA" %in% names(e1) && "AA" %in% names(e2)))
+            stop("Input must both be Xchr-specific, or neither")
+        for(i in seq(along=e1)) {
+            for(j in seq(along=e1[[i]])) {
+                if(any(dim(e1[[i]][[j]]) != dim(e1[[i]][[j]])))
+                    stop("dimensions do not match")
+                e1[[i]][[j]] <- e1[[i]][[j]] - e2[[i]][[j]]
+            }
+        }
+        return(e1)
+    }
 
     dim1 <- sapply(e1, dim)
     dim2 <- sapply(e2, dim)
@@ -418,6 +440,20 @@
     if("df" %in% names(attributes(e2)))
         df2 <- attr(e2, "df")
     else df2 <- NULL
+
+    # x-chr-specific
+    if("AA" %in% names(e1) || "AA" %in% names(e2)) {
+        if(!("AA" %in% names(e1) && "AA" %in% names(e2)))
+            stop("Input must both be Xchr-specific, or neither")
+        for(i in seq(along=e1)) {
+            for(j in seq(along=e1[[i]])) {
+                if(any(dim(e1[[i]][[j]]) != dim(e1[[i]][[j]])))
+                    stop("dimensions do not match")
+                e1[[i]][[j]] <- e1[[i]][[j]] + e2[[i]][[j]]
+            }
+        }
+        return(e1)
+    }
 
     dim1 <- sapply(e1, dim)
     dim2 <- sapply(e2, dim)
