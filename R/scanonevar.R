@@ -3,9 +3,9 @@
 # with code from Lars Ronnegard
 
 scanonevar <-
-function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
-         family = gaussian(), maxit = 25 , fixed_gamma_disp = FALSE,
-         quiet=TRUE)
+function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
+         additive_alleles=TRUE, family = gaussian(), maxit = 25 ,
+         fixed_gamma_disp = FALSE, quiet=TRUE)
 {
     # check input
     crosstype <- class(cross)[1]
@@ -41,33 +41,8 @@ function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
         warning('scanonevar requires a single phenotype; all but "', phenames(cross)[pheno.col[1]], '" omitted.')
     }
 
-    # mean and variance formulas
-    formula.as.text<-paste(mean_formula,sep="")
-    if(substr(formula.as.text[2],1,3)!="add")
-        stop("Formula must be specified with add as first explanatory variable")
-    formula.in <- as.formula(paste("pheno", formula.as.text[1], formula.as.text[2:length(formula.as.text)]))
-    formula.as.text<-paste(var_formula, sep="")
-    if(substr(formula.as.text[2],1,3)!="add")
-        stop("Dformula must be specified with add as first explanatory variable")
-    dformula.in <- as.formula(paste(formula.as.text[1], formula.as.text[2:length(formula.as.text)]))
-
-    ###########
-    ##BOX-COX PART
-    formula.as.text<-paste(var_formula,sep="")
-	n.char <- nchar(formula.as.text[2])
-	if (n.char>3) x.eff <- substr(formula.as.text[2],6, (n.char))
-	if (n.char<4) x.eff <-"1"
-	pheno.pos <- pheno-(min(pheno)<0)*min(pheno)+0.1
-	formula.bc <- as.formula(paste("pheno.pos",formula.as.text[1],x.eff))
-	boxc <- MASS::boxcox(formula.bc,plotit=FALSE)
-	#lambda <-boxc$x[sort(boxc$y,index.return=TRUE,decreasing=TRUE)$ix[1]]
-	lambda <- boxc$x[which.max(boxc$y)]
-    if (lambda<0.6 | lambda>1.6)
-        warning("Box-Cox transformation needed with lambda = ", round(lambda,3))
-    ##########
-
-    N <- length(pheno) #No. of individuals
-    n.chr <- nchr(cross) #No. of chromosomes
+    N <- length(pheno) # No. individuals
+    n.chr <- nchr(cross) #No. chromosomes
     chr.names <- chrnames(cross)
 
     # need to run calc.genoprob?
@@ -78,14 +53,43 @@ function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
 
     scan.logPm <- scan.logPd <- chr.names.out <- NULL
 
+    # set up data and formulas
+    X <- cbind(pheno=pheno, add=rep(0, length(pheno)))
+    mean_formula <- var_formula <- "pheno ~ add"
+    if(crosstype=="f2" && !additive_alleles) {
+        X <- cbind(X, dom=rep(0, nrow(X)))
+        mean_formula <- var_formula <- "pheno ~ add + dom"
+    }
+    if(!is.null(mean_covar)) {
+        ncolX <- ncol(X)
+        X <- cbind(X, mean_covar)
+        meancovarnames <- paste0("meancov", 1:(ncol(X)-ncolX))
+        colnames(X)[-(1:ncolX)] <- meancovarnames
+        mean_formula <- paste(mean_formula, "+",
+                              paste(meancovarnames, collapse="+"))
+    }
+    if(!is.null(var_covar)) {
+        ncolX <- ncol(X)
+        X <- cbind(X, var_covar)
+        varcovarnames <- paste0("varcov", 1:(ncol(X)-ncolX))
+        colnames(X)[-(1:ncolX)] <- varcovarnames
+        var_formula <- paste(var_formula, "+",
+                             paste(varcovarnames, collapse="+"))
+    }
+    X <- as.data.frame(X)
+    mean_formula <- as.formula(mean_formula)
+    var_formula <- as.formula(var_formula)
+
     result <- NULL
-    for(j in seq(along=cross$geno)) {
+    for(j in seq(along=cross$geno)) { # loop over chromosomes
         if(!quiet) message("Chr ", chr.names[j])
 
         if (crosstype=="f2") {
             g11 <- cross$geno[[j]]$prob[,,1]
             g12 <- cross$geno[[j]]$prob[,,2]
+            g13 <- cross$geno[[j]]$prob[,,3]
             a1  <- g11 + g12/2
+            d1 <-  g12 - (g11+g13)/2
         }
         else {
             a1 <- cross$geno[[j]]$prob[,,1]
@@ -95,14 +99,18 @@ function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
 
         logP.m <- logP.d <- numeric(n.loci)
 
-        for(i in 1:n.loci) {
-            add <- as.numeric(a1[,i])
-            d.fit<-try(dglm::dglm(formula=formula.in,dformula=dformula.in,
-                                  family = family, control=dglm::dglm.control(maxit=maxit)),silent=TRUE)
+        for(i in 1:n.loci) { # loop over positions within chromosome
+            # fill in genotype probs for this locus
+            X[,2] <- a1[,i]
+            if(crosstype=="f2" && !additive_alleles)
+                X[,3] <- d1[,i]
+
+            d.fit<-try(dglm::dglm(formula=mean_formula, dformula=var_formula,
+                                  data=X, family = family, control=dglm::dglm.control(maxit=maxit)), silent=TRUE)
 
             if ((class(d.fit)!="dglm")[1]) {
                 warning("dglm did not converge on chr ", chr.names[j], " position ", i)
-			}
+            }
             else {
                 p.mean <- summary(d.fit)$coef[2,4]
                 if (!fixed_gamma_disp)
@@ -118,6 +126,7 @@ function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
             }
         }
 
+        # set up the output
         map <- attr(cross$geno[[j]]$prob,"map")
         w <- names(map)
         o <- grep("^loc-*[0-9]+",w)
@@ -138,4 +147,3 @@ function(cross, pheno.col=1, mean_formula = ~add, var_formula = ~add,
 
     result
 }
-
