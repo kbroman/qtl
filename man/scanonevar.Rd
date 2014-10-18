@@ -9,9 +9,9 @@
 }
 
 \usage{
-scanonevar(cross, pheno.col=1, mean_formula=~add, var_formula=~add,
-           family=gaussian(), maxit=25, fixed_gamma_disp=FALSE,
-           quiet=TRUE)
+scanonevar(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
+           additive_alleles=TRUE, family=gaussian(), maxit=25,
+           fixed_gamma_disp=FALSE, quiet=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -23,10 +23,10 @@ scanonevar(cross, pheno.col=1, mean_formula=~add, var_formula=~add,
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
-  \item{mean_formula}{Formula describing the mean function; must begin
-    \code{~add}, for additive effect of the QTL.}
-  \item{var_formula}{Formula describing the variance function; must begin
-    \code{~add}, for additive effect of the QTL.}
+  \item{mean_covar}{Numeric matrix with covariates affecting the mean.}
+  \item{var_covar}{Numeric matrix with covariates affecting the variances.}
+  \item{additive_alleles}{If TRUE (the default), assume no dominance in
+    an intercross.}
   \item{family}{Family object for \code{\link[dglm]{dglm}}.}
   \item{maxit}{Maximum number of iterations in the algorithm to fit the
     model at a given position.}
@@ -63,6 +63,11 @@ out <- scanonevar(fake.bc)
 color <- c("slateblue", "violetred")
 plot(out, lod=1:2, col=color, bandcol="gray80")
 legend("topright", lwd=2, c("mean", "variance"), col=color)
+
+# with sex and age as covariates
+covar <- fake.bc$pheno[,c("sex", "age")]
+out.cov <- scanonevar(fake.bc, mean_covar=covar, var_covar=covar)
+
 }
 
 \seealso{ \code{\link[dglm]{dglm}}, \code{\link{scanone}},
