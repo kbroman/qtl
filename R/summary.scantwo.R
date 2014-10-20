@@ -866,11 +866,16 @@ summary.scantwoperm <-
         for(i in seq(along=out)) {
             out[[i]] <- lapply(object[[i]], function(a) {
                 b <- apply(a, 2, quantile, one_minus_alpha[i,,drop=FALSE])
+                if(!is.matrix(b)) {
+                    nam <- names(b)
+                    b <- as.matrix(b)
+                    colnames(b) <- nam
+                }
+
                 rownames(b) <- paste0(alpha*100, "%")
                 b
             })
         }
-
 
         attr(out, "n.perm") <- vapply(object, function(a) nrow(a[[1]]), 0)
         class(out) <- c("summary.scantwoperm", "list")
