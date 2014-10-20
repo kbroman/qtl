@@ -1,7 +1,7 @@
 ######################################################################
 # stepwiseqtlX.R
 #
-# copyright (c) 2013, Karl W Broman and Quoc Tran
+# copyright (c) 2013-2014, Karl W Broman and Quoc Tran
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -134,7 +134,9 @@ countqtltermsX <-
     nintXX <- nintXX[as.character(unique(grp))]
     nL <- sum(nintAA>0)
     nH <- sum(nintAA)-nL
-    c(mainA=nmainA, mainX=nmainX, intH=nH, intL=nL, intAX=sum(nintAX), intXX=sum(nintXX), inttot=nH+nL+sum(nintAX)+sum(nintXX))
+    c(mainA=nmainA, mainX=nmainX, intH=nH, intL=nL,
+      intAX=sum(nintAX), intXX=sum(nintXX),
+      inttot=nH+nL+sum(nintAX)+sum(nintXX))
 }
 
 ######################################################################
@@ -146,44 +148,47 @@ calc.penalties.X <-
     if(missing(perms) || !("scantwoperm" %in% class(perms)))
         stop("You must include permutation results from scantwo.")
 
+    if(!("AA" %in% names(perms)))
+        stop("perms need to be X-chr-specific")
+
+    if(length(alpha) > 1) {
+        alpha <- alpha[1]
+        warning("alpha needs to be a single value; only the first will be used.")
+    }
+
     if(missing(lodcolumn)) {
-        if(is.matrix(perms[[1]]) && ncol(perms[[1]]) > 1)
-            lodcolumn <- 1:ncol(perms[[1]])
+        if(is.matrix(perms[[1]][[1]]) && ncol(perms[[1]][[1]]) > 1)
+            lodcolumn <- 1:ncol(perms[[1]][[1]])
         else lodcolumn <- 1
     }
 
     if(length(lodcolumn)>1) {
         result <- NULL
         for(i in seq(along=lodcolumn)) {
-            temp <- calc.penalties(perms, alpha, lodcolumn[i])
+            temp <- calc.penalties.X(perms, alpha, lodcolumn[i])
             result <- rbind(result, temp)
         }
         dimnames(result) <- list(colnames(perms[[1]])[lodcolumn], names(temp))
         return(result)
     }
 
-    if(is.matrix(perms[[1]]) && ncol(perms[[1]]) >1) {
-        if(lodcolumn < 1 || lodcolumn > ncol(perms[[1]]))
+    if(is.matrix(perms[[1]][[1]]) && ncol(perms[[1]][[1]]) >1) {
+        if(lodcolumn < 1 || lodcolumn > ncol(perms[[1]][[1]]))
             stop("lodcolumn misspecified")
-        for(i in seq(along=perms))
-            perms[[i]] <- perms[[i]][,lodcolumn,drop=FALSE]
+        for(j in 1:3) {
+            for(i in seq(along=perms))
+                perms[[j]][[i]] <- perms[[j]][[i]][,lodcolumn,drop=FALSE]
+        }
     }
 
     qu <- summary(perms, alpha=alpha)
-    if(!("one" %in% names(qu)))
-        stop("You need to re-run scantwo permutations with R/qtl version >= 1.09.")
 
-    qu <- summary(perms, alpha=alpha)
-
-    if(length(alpha)>1) {
-        penalties <- cbind(qu[["one"]], qu[["trueint"]], qu[["fv1"]]-qu[["one"]])
-        colnames(penalties) <- c("main","heavy", "light")
-    }
-    else {
-        penalties <- c(qu[["one"]], qu[["trueint"]], qu[["fv1"]]-qu[["one"]])
-        names(penalties) <- c("main","heavy", "light")
-    }
-    penalties
+    cbind(mainA=qu$AA$one,
+          mainX=qu$XX$one,
+          intH=qu$AA$int,
+          intL=qu$AA$fv1 - qu$AA$one,
+          intAX=qu$AX$int,
+          intXX=qu$XX$int)
 }
 
 ######################################################################
@@ -195,18 +200,19 @@ calc.penalties.X <-
 #                             1 - early stoping rule; plod<-k_f*mainA,
 #                             2 - early stoping rule; plod<bestplod-k_f*mainA.
 #   k_f (default at 3) number of main penalty plod can go below.
-# need work on scan.pairs = TRUE
-# need work on default penalties
 ######################################################################
 stepwiseqtlX <-
     function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, k_f=3, stop.rule=0, covar=NULL,
              method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
-             additive.only=FALSE, scan.pairs=FALSE, penalties,
+             additive.only=FALSE, penalties,
              keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
              tol=1e-4, maxit=1000, require.fullrank=TRUE)
 {
     if(!("cross" %in% class(cross)))
         stop("Input should have class \"cross\".")
+
+    if(missing(penalties))
+        stop("penalties must be provided")
 
     if(!missing(chr)) cross <- subset(cross, chr)
 
@@ -358,35 +364,7 @@ stepwiseqtlX <-
     }
 
 
-    # penalties, Quoc: need change later, comment out for now
     cross.type <- class(cross)[1]
-    #     if(missing(penalties)) {
-    #       if(cross.type=="f2") {
-    #         penalties <-  c(3.52, 4.28, 2.69)
-    #       }
-    #       else if(cross.type=="bc") {
-    #         penalties <-  c(2.69, 2.62, 1.19)
-    #       }
-    #       else
-    #         stop("No default penalties available for cross type ", cross.type)
-    #     }
-    #     else if(length(penalties) != 3) {
-    #       if(length(penalties)==1) {
-    #         if(additive.only)
-    #           penalties <- c(penalties,Inf,Inf)
-    #         else
-    #           stop("You must include a penalty for interaction terms.")
-    #       }
-    #       else {
-    #         if(length(penalties)==2)
-    #           penalties <- penalties[c(1,2,2)]
-    #         else {
-    #           warning("penalties should have length 3")
-    #           penalties <- penalties[1:3]
-    #         }
-    #       }
-    #     }
-    #
     if(verbose > 2) verbose.scan <- TRUE
     else verbose.scan <- FALSE
 
@@ -402,7 +380,7 @@ stepwiseqtlX <-
             else covar.w.X <- cbind(covar, Xcovar)
         }  else covar.w.X <- covar
 
-        if(additive.only || max.qtl == 1 || !scan.pairs) {
+        if(additive.only || max.qtl == 1) {
             suppressWarnings(out.scanone <- scanone(cross, pheno.col=pheno.col, method=method, model=model,
                                                     addcovar=covar.w.X))
             out.A <- subset(out.scanone, chr='-X')
@@ -755,59 +733,6 @@ stepwiseqtlX <-
                     }
                 }
             }
-
-            if(scan.pairs) { #Quoc: changed, this part is only optional, not touch for AvsX yet.
-                if(verbose)
-                    cat(" ---Scan for an additional pair\n")
-                out <- addpair(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
-                               formula=formula, method=method, incl.markers=incl.markers,
-                               verbose=verbose.scan, forceXcovar=forceXcovar)
-                thelod <- out$lod
-
-                loda <- max(thelod[upper.tri(thelod)], na.rm=TRUE)
-                temp <- max(out, what="add")
-                if(nrow(temp) > 1)
-                    temp <- temp[sample(1:nrow(temp),1),]
-                qtlspa <- addtoqtl(cross, qtl, c(as.character(temp[1,1]), as.character(temp[1,2])),
-                                   c(temp[1,3], temp[1,4]), paste("Q", n.qtl+1:2, sep=""))
-                formulaspa <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1, "+Q",
-                                               n.qtl+2, sep=""))
-                ploda <- calc.plod.X(loda+lod, formula=formulaspa, qtl=qtlspa,
-                                     penalties=penalties)
-                lodf <- max(thelod[lower.tri(thelod)], na.rm=TRUE)
-                temp <- max(out, what="full")
-                if(nrow(temp) > 1)
-                    temp <- temp[sample(1:nrow(temp),1),]
-
-                qtlspf <- addtoqtl(cross, qtl, c(as.character(temp[1,1]), as.character(temp[1,2])),
-                                   c(temp[1,3], temp[1,4]), paste("Q", n.qtl+1:2, sep=""))
-                formulaspf <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1, "+Q",
-                                               n.qtl+2, "+Q", n.qtl+1, ":Q", n.qtl+2,
-                                               sep=""))
-                plodf <- calc.plod.X(lodf+lod, formula=formulaspf, qtl=qtlspf,
-                                     penalties=penalties)
-
-                if(verbose) {
-                    cat("        ploda =", ploda, "\n")
-                    cat("        plodf =", plodf, "\n")
-                }
-
-                if(ploda > curplod && loda > plodf) {
-                    curqtl <- qtlspa
-                    curformula <- formulaspa
-                    curplod <- ploda
-                    lod <- loda+lod
-                    curnqtl <- n.qtl+2
-                }
-                else if(plodf > curplod) {
-                    curqtl <- qtlspf
-                    curformula <- formulaspf
-                    curplod <- plodf
-                    lod <- lodf+lod
-                    curnqtl <- n.qtl+2
-                }
-            }
-
         }
 
         qtl <- curqtl
