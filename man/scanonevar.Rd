@@ -64,10 +64,13 @@ color <- c("slateblue", "violetred")
 plot(out, lod=1:2, col=color, bandcol="gray80")
 legend("topright", lwd=2, c("mean", "variance"), col=color)
 
+# to summarize results for each of mean and variance,
+#   use format="tabByCol" or format="tabByChr"
+summary(out, format="tabByChr")
+
 # with sex and age as covariates
 covar <- fake.bc$pheno[,c("sex", "age")]
 out.cov <- scanonevar(fake.bc, mean_covar=covar, var_covar=covar)
-
 }
 
 \seealso{ \code{\link[dglm]{dglm}}, \code{\link{scanone}},
