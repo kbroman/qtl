@@ -32,8 +32,6 @@
   #define __MQM_H
 
   #include <R.h>
-  // #include <R_ext/PrtUtil.h>
-  // #include <R_ext/RS.h>
   #include <R_ext/Utils.h>
   #include "standalone.h"
   #include "util.h"
@@ -46,50 +44,43 @@
   #include "mqmmapqtl.h"
   #include "mqmscan.h"
 
-  #ifdef ENABLE_C99_MACROS
-    #ifdef STANDALONE
-      // Running mqm stand alone (without R)
-      extern FILE* redirect_info;  // Redirect output for testing
-      extern int debuglevel;  // Redirect output for testing
-      #define message(type, format, ...) { \
-        fprintf(redirect_info,"%s: ",type); \
-        fprintf(redirect_info, format, ## __VA_ARGS__); \
-        fprintf(redirect_info,"\n"); }
-      // #define warning(s) { message("WARNING",s); }
-      #define fatal(s) { message("FATAL",s); exit(127); }
+  #ifdef STANDALONE
+    // Running mqm stand alone (without R)
+    extern FILE* redirect_info;  // Redirect output for testing
+    extern int debuglevel;  // Redirect output for testing
 
-      #define debug_trace(format, ...) { \
-        if(debuglevel > 0){ \
-          fprintf(redirect_info,"TRACE "); \
-          fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); \
-          fprintf(redirect_info,format, ## __VA_ARGS__); \
-        }\
-      }
-    #else
-      // Running MQM under R
-      #define debug_trace(format, ...) { }
-      #ifdef WIN32
-       #define message(type, format, ...) { \
-        Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
-      #else
-       #define message(type, format, ...) { \
-        Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
-      #endif
-      // #define warning(s) { Rf_warning(s); }
-      #define fatal(s) { message("FATAL",s); Rf_error(s); }
-    #endif
-
-    #ifdef NDEBUG
-      #define info(format, ...)
-    #else
-      #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
-      #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
-    #endif  //ndebug
+    #define message(type, format, ...) { \
+      fprintf(redirect_info,"%s: ",type); \
+      fprintf(redirect_info, format, ## __VA_ARGS__); \
+      fprintf(redirect_info,"\n"); }
+      
+    #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); exit(127); }
+    
+    #define debug_trace(format, ...) { \
+      if(debuglevel > 0){ \
+        fprintf(redirect_info,"TRACE "); \
+        fprintf(redirect_info,"%s %d:",__FILE__,__LINE__); \
+        fprintf(redirect_info,format, ## __VA_ARGS__); \
+      }\
+    }
   #else
-    void info(const char *,...);
-    void verbose(const char*,...);
-    void debug_trace(const char *, ...);
-    #define fatal(s) { Rprintf("FATAL",s); Rf_error(s); }
-  #endif
+    #ifdef ENABLE_C99_MACROS
+      #define message(type, format, ...) { Rprintf(format, ## __VA_ARGS__);Rprintf("\n");}
+      #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); Rf_error(s); }
+      #define debug_trace(format, ...) { }
+    #else
+      void message(const char*, ...);
+      void fatal(const char*, ...);
+      void debug_trace(const char*, ...);
+    #endif // ENABLE_C99_MACROS
+  #endif // !STANDALONE
+
+  #ifdef ENABLE_C99_MACROS
+    #define info(format, ...) { message("INFO",format, ## __VA_ARGS__); }
+    #define verbose(format, ...) if (verbose) { info(format, ## __VA_ARGS__); }
+  #else
+    void info(const char*, ...);
+    void verbose(const char*, ...);
+  #endif // !ENABLE_C99_MACROS
 
 #endif // MQM_H

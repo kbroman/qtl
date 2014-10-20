@@ -12,7 +12,7 @@
 addqtl(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
        method=c("imp","hk"), model=c("normal", "binary"),
        incl.markers=TRUE, verbose=FALSE, tol=1e-4, maxit=1000,
-       forceXcovar=FALSE, require.fullrank=TRUE)
+       forceXcovar=FALSE, require.fullrank=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See

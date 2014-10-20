@@ -11,8 +11,10 @@
 }
 
 \usage{
-fill.geno(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
-          map.function=c("haldane","kosambi","c-f","morgan"))
+fill.geno(cross, method=c("imp","argmax", "no_dbl_XO", "maxmarginal"),
+          error.prob=0.0001,
+          map.function=c("haldane","kosambi","c-f","morgan"),
+          min.prob=0.95)
 }
 
 \arguments{
@@ -20,13 +22,17 @@ fill.geno(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
    \code{\link{read.cross}} for details.}
  \item{method}{Indicates whether to impute using a single simulation
    replicate from \code{\link{sim.geno}}, using the Viterbi
-   algorithm, as implemented in \code{\link{argmax.geno}}, or by simply
- filling in missing genotypes between markers with matching genotypes.}
+   algorithm, as implemented in \code{\link{argmax.geno}}, by simply
+   filling in missing genotypes between markers with matching genotypes,
+   or by choosing (at each marker) the genotype with maximal marginal probability.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
  of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi or
    Carter-Falconer map function when converting genetic distances into
    recombination fractions.} 
+ \item{min.prob}{For \code{method="maxmarginal"}, genotypes with
+ probability greater than this value will be imputed; those less than
+ this value will be made missing.}
 }
 
 \details{
@@ -35,9 +41,30 @@ fill.geno(cross, method=c("imp","argmax", "no_dbl_XO"), error.prob=0.0001,
   genotype data.  \bold{We must caution the user that little trust
     should be placed in the results}.
 
-  With \code{method="no_dbl_XO"}, there may be missing genotypes
-  remaining (between two markers that show a recombination event, at the
-  ends of the chromosomes, or with incompletely informative genotypes).
+  With \code{method="imp"}, a single random imputation is performed,
+  using \code{\link{sim.geno}}.
+
+  With \code{method="argmax"}, for each individual the most probable
+  sequence of genotypes, given the observed data (via
+  \code{argmax.geno}), is used.
+
+  With \code{method="no_dbl_XO"}, non-recombinant intervals are filled
+  in; recombinant intervals are left missing. For example, a sequence of
+  genotypes like \code{A---A---H---H---A} (with \code{A} and \code{H}
+  corresponding to genotypes AA and AB, respectively, and with \code{-}
+  being a missing value) will be filled in as
+  \code{AAAAA---HHHHH---A}.
+
+  With \code{method="maxmarginal"}, the conditional genotype
+  probabilities are calculated with \code{calc.genoprob}, and then at
+  each marker, the most probable genotype is determined. This is taken
+  as the imputed genotype if it has probability greater than
+  \code{min.prob}; otherwise it is made missing.
+
+  With \code{method="no_dbl_XO"} and \code{method="maxmarginal"}, 
+  some missing genotypes likely remain. With
+  \code{method="maxmarginal"}, some observed genotypes may be made
+  missing.
 }
 
 \value{

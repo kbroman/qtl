@@ -84,6 +84,10 @@ data(fake.f2)
 mname <- find.marker(fake.f2, 1, 37) # marker D1M437
 effectplot(fake.f2, pheno.col=1, mname1=mname)
 
+### output of the function contains the means and SEs
+output <- effectplot(fake.f2, mname1=mname)
+output
+
 ### plot a phenotype
 # Plot of sex-specific phenotype means,
 # note that "sex" must be a phenotype name here

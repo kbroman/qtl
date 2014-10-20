@@ -1,7 +1,7 @@
 
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2013, Karl W Broman
+copyright (c) 2001-2014, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -17,7 +17,189 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.27, 2/7/2013:
+Version 1.34, 2014-10-07:
+
+Major changes:
+
+  Added "tidy" format to read.cross and write.cross. This separates
+  the data into three comma-delimited files, for genotypes,
+  phenotypes, and the marker map. Separating the data in this way
+  allows each file to be in a simpler format.
+
+Minor changes:
+
+  Add another option to fill.geno: impute using maximum marginal
+  probability.
+
+  Fixed a bug in est_map_ri8self.c (thanks to Rohan Shah)
+
+  Fixed a bug in scanone/scantwo stratified permutations in batch,
+  with multiple phenotypes, some with missing values (thanks to
+  John Lovell).
+
+
+Version 1.33, 2014-08-12:
+
+Major changes:
+
+  Can read/write 4-way cross data in MapQTL format (thanks to Timothee
+  Flutre).
+
+Minor changes:
+
+  read.cross with format="qtlcart" can now read doubled haploids
+  (dh/Ri0).
+
+  Fixed potential problem in read.cross with format="csv" or "csvs" when
+  there are many empty cells in the phenotype data.
+
+  Fixed bug in read.cross for format="csv" that shows up in some rare
+  cases: markers not ordered by linkage group, no positions provided,
+  and chromosome IDs non-numeric. It was a pretty bad bug, as marker
+  genotypes got scrambled.
+
+  Fixed some memory leaks in MQM code.
+
+
+Version 1.32, 2014-05-28:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  fitqtl with model="normal" now returns residuals as an attribute.
+
+  Added an additional argument to plot.scanone, bgrect, for making the
+  background of the plotting region a different color.
+
+  Revised cleanGeno to work with any cross having two possible
+  genotypes (i.e., not just bc but also riself, risib, dh, haploid).
+
+  Revised summary.cross so that overall genotype frequencies are given
+  separately for autosomes and the X chromosome.
+
+  Fixed typo in a warning in add.threshold.
+
+  Fixed a bug in reduce2grid, regarding format of attributes
+
+  Fixed a bug in MQM: in some circumstances, the last marker was
+  always included as cofactor; other cleanup in MQM code.
+
+
+Version 1.31, 3/19/2014:
+
+Major changes:
+
+  Added a function reduce2grid() for subsetting the genotype
+  probabilities (from calc.genoprob) or imputations (from sim.geno) to
+  the evenly spaced grid of pseudomarkers, for use in the case of very
+  dense markers when it is too computationally intensive to perform a
+  genome scan at both the markers and the grid of pseudomarkers.
+
+Minor changes:
+
+  Fixed a problem in write.cross with format="csv" (for cross types
+  other than BC and F2, it would use incorrect genotype codes if there
+  was no "allele" attribute for the cross).
+
+  Add a couple of arguments to plotLodProfile: showallchr, to show all
+  chromosomes (and not just those with QTL), and textsep, to control
+  the separation between the QTL labels and the LOD curves.
+
+  Fix a bug in bcsft.c, regarding potentially over-running an array
+
+  Fix problem with plotLodProfile when it's maximized at multiple
+  locations.
+
+  Fix problem in refineqtl and stepwiseqtl; map attribute in qtl
+  object would get unintentionally subsetted if the qtl object needed
+  to be re-created.
+
+  In addqtl, addint, and addcovarint, have require.fullrank=FALSE be
+  the default; require.fullrank=TRUE remains the default in
+  stepwiseqtl.
+
+  Fixed bug in which summary.scantwo was re-ordering the chromosome
+  factor levels.
+
+
+Version 1.30, 2/10/2014:
+
+Major changes:
+
+  Revised parallel code (in scanone, scantwo, mqmpermutation, and
+  mqmscanall) to use a different function for Windows, as mclapply()
+  doesn't work there.
+
+Minor changes:
+
+  Fixed problem in formLinkageGroups when used with results of
+  markerlrt(): no recombination fractions so use max.rf=Inf
+
+  Added arguments type, cex, pch, and bg to plot.scanone, to be passed
+  to lines() in making the plot. Thus, you can use type="p" to get
+  points only.
+
+  Fixed a bug in scanqtl that showed up if there were missing
+  phenotypes and no covariates.
+
+
+Version 1.29, 12/9/2013:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Slight change to summary.qtl to deal with QTL objects with no QTL.
+
+  For the QTLRel package, now "export" reviseXdata() in NAMESPACE.
+
+
+Version 1.28, 9/23/2013:
+
+Major changes:
+
+  Added cross type "haploid". Like backcross ("bc") or doubled
+  haploids ("dh") but with genotype labels like "A" and "B" instead of
+  "AA" and "AB"/"BB".
+
+  Added crosstype argument to read.cross, to force a particular cross
+  type (such as "riself").
+
+  For parallel processing, replaced reliance on the snow library with
+  the use of the parallel library.
+
+Minor changes:
+
+  Added formMarkerCovar(), to facilitate use of markers as covariates
+  in QTL analysis.
+
+  Added function addmarker() for adding genotypes for a marker to a
+  cross object.
+
+  Added function nqtl() for counting number of QTL in QTL object.
+
+  Added examples to help files for plotPXG and effectplot on getting the
+  output.
+
+  Slight change to way to handle random number generation for
+  cluster-based computing.
+
+  Fix bug in fitqtl-link functions for model="binary" (re matrix rank)
+
+  Fixed write.cross to allow use for BCsFt crosses.
+
+  Fixed an out-of-bounds error in the C++ code mqmscan.cpp.
+
+  In stepwiseqtl with verbose=FALSE, the initial LOD score is no
+  longer printed.
+
+
+Version 1.27, 4/11/2013:
 
 Major changes:
 
@@ -32,6 +214,11 @@ Minor changes:
 
   Slight change to help file for read.cross, to be more explicit about
   the "csvs" format.
+
+  Fixed a bug in read.cross for format="qtlcart" with RIL data.
+
+  Made cross type in "qtlcart" files case insensitive in read.cross.
+  For example, any of Ri1, RI1, rI1, or ri1 will be treated the same.
 
 
 Version 1.26, 11/27/2012:
@@ -92,7 +279,6 @@ Minor changes:
 
 
 Version 1.25, 8/13/2012:
->>>>>>> master
 
 Major changes:
 

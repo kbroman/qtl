@@ -410,7 +410,6 @@ int main(int argc,char *argv[]) {
     mqmalgorithmsettings = loadmqmsetting(settingsfile,mqmalgorithmsettings,verbose);
     //Create large datastructures
     double **QTL;
-    ivector f1genotype = newivector(mqmalgorithmsettings.nmark);
     ivector chr = newivector(mqmalgorithmsettings.nmark);
     cvector cofactor = newcvector(mqmalgorithmsettings.nmark);
     vector mapdistance = newvector(mqmalgorithmsettings.nmark);
@@ -443,7 +442,6 @@ int main(int argc,char *argv[]) {
     mqmmarkersinfo = readmarkerfile(markerfile,mqmalgorithmsettings.nmark,verbose);
     chr = mqmmarkersinfo.markerchr;
     pos = mqmmarkersinfo.markerdistance;
-    f1genotype = mqmmarkersinfo.markerparent;
 
     debug_trace("Markerposition file done\n");
 
@@ -493,7 +491,7 @@ int main(int argc,char *argv[]) {
    mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,1,crosstype,verbose);
 
     // Start scanning for QTLs
-    double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], f1genotype, backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
+    double logL = analyseF2(augmentednind, &mqmalgorithmsettings.nmark, &cofactor, (MQMMarkerMatrix)markers, pheno_value[phenotype], backwards,QTL, &mapdistance,&chr,0,0,mqmalgorithmsettings.windowsize,
               mqmalgorithmsettings.stepsize,mqmalgorithmsettings.stepmin,mqmalgorithmsettings.stepmax,mqmalgorithmsettings.alpha,mqmalgorithmsettings.maxiter,nind,&INDlist,mqmalgorithmsettings.estmap,crosstype,false,verbose);
     // Write final QTL profile (screen and file)
     if (!isinf(logL) && !isnan(logL)) {
@@ -501,19 +499,18 @@ int main(int argc,char *argv[]) {
         double qtlvalue = QTL[0][q];
         fprintf(fout,"%5d\t",q);
         // The following prints a 'standardized' value on Windows and Unix for regression tests (for nan and inf)
-        if (isnan(qtlvalue)) {
-            fprintf(fout,"       NAN\n");
-        }
-        else
-          if (isinf(qtlvalue)) {
+        if(isnan(qtlvalue)){
+          fprintf(fout,"       NAN\n");
+        }else{
+          if(isinf(qtlvalue)){
             fprintf(fout,"  INFINITE\n");
-          }
-          else
+          }else{
             fprintf(fout,"%.3f\n",ftruncate3(QTL[0][q]));
+          }
+        }
       }
     }
-   
-    freevector((void *)f1genotype);
+
     freevector((void *)cofactor);
     freevector((void *)mapdistance);
     freematrix((void **)markers,mqmalgorithmsettings.nmark);

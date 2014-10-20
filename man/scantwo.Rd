@@ -5,18 +5,18 @@
 
 \description{
   Perform a two-dimensional genome scan with a two-QTL model, with
-  possible allowance for covariates. 
+  possible allowance for covariates.
 }
 
 \usage{
 scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
         method=c("em","imp","hk","mr","mr-imp","mr-argmax"),
         addcovar=NULL, intcovar=NULL, weights=NULL,
-        use=c("all.obs", "complete.obs"), 
-        incl.markers=FALSE, clean.output=FALSE, 
+        use=c("all.obs", "complete.obs"),
+        incl.markers=FALSE, clean.output=FALSE,
         clean.nmar=1, clean.distance=0,
         maxit=4000, tol=1e-4,
-        verbose=TRUE, n.perm, perm.strata=NULL,
+        verbose=TRUE, n.perm, perm.strata=NULL, perm.Xsp=FALSE,
         assumeCondIndep=FALSE, batchsize=250, n.cluster=1)
 }
 
@@ -52,7 +52,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
    or a vector of length n.ind containing positive weights. Used only
    in the case \code{model="normal"}.}
  \item{use}{In the case that multiple phenotypes are selected to be
-   scanned, this argument indicates whether to use all individuals, 
+   scanned, this argument indicates whether to use all individuals,
    including those missing some phenotypes, or just those individuals
    that have data on all selected phenotypes.}
  \item{incl.markers}{If FALSE, do calculations only at points on an
@@ -72,7 +72,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
  \item{maxit}{Maximum number of iterations; used
    only with method \code{"em"}.}
  \item{tol}{Tolerance value for determining convergence; used only with
-   method \code{"em"}.} 
+   method \code{"em"}.}
  \item{verbose}{If TRUE, display information about the progress of
    calculations.  For method \code{"em"}, if \code{verbose} is an integer
    above 1, further details on the progress of the algorithm will be
@@ -80,6 +80,11 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
  \item{n.perm}{If specified, a permutation test is performed rather than
    an analysis of the observed data.  This argument defines the number
    of permutation replicates.}
+ \item{perm.Xsp}{If \code{n.perm} > 0, so that a permutation test will
+   be performed, this indicates whether separate permutations should be
+   performed for the autosomes and the X chromosome, in order to get an
+   X-chromosome-specific LOD threshold.  In this case, additional
+   permutations are performed for the X chromosome.}
  \item{perm.strata}{If \code{n.perm} > 0, this may be used to perform a
    stratified permutation test.  This should be a vector with the same
    number of individuals as in the cross data.  Unique values indicate
@@ -99,7 +104,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
   Standard interval mapping (\code{method="em"}) and Haley-Knott
   regression (\code{method="hk"}) require that multipoint genotype probabilities are
   first calculated using \code{\link{calc.genoprob}}.  The
-  imputation method uses the results of \code{\link{sim.geno}}. 
+  imputation method uses the results of \code{\link{sim.geno}}.
 
   The method \code{"em"} is standard interval mapping by the EM algorithm
   (Dempster et al. 1977; Lander and Botstein 1989).  Marker regression
@@ -107,12 +112,12 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
   marker genotypes  (individuals with missing genotypes are
   discarded). Haley-Knott regression (\code{method="hk"}) uses the
   regression of phenotypes on multipoint genotype probabilities.  The
-  imputation method (\code{method="imp"}) uses the pseudomarker 
+  imputation method (\code{method="imp"}) uses the pseudomarker
   algorithm described by Sen and Churchill (2001).
-  
+
   Individuals with missing phenotypes are dropped.
 
-  In the presence of covariates, the full model is 
+  In the presence of covariates, the full model is
   \deqn{y = \mu + \beta_{q_1} + \beta_{q_2} + \beta_{q_1 \times q_2} +
     A \gamma + Z \delta_{q_1} + Z \delta_{q_2} + Z \delta_{q_1 \times q_2} +
     \epsilon}{y = m + b[q1] + b[q2] + b[q1 x q2] + A g + Z d[q1] + Z
@@ -122,11 +127,11 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
   matrix of covariates that interact with QTL genotypes.  The columns of
   \emph{Z} are forced to be contained in the matrix \emph{A}.
 
-  The above full model is compared to the additive QTL model, 
+  The above full model is compared to the additive QTL model,
   \deqn{y = \mu + \beta_{q_1} + \beta_{q_2} + A \gamma + Z \delta_{q_1} + Z
     \delta_{q_2} + \epsilon}{y = m + b[q1] + b[q2] + A g + Z d[q1] + Z
     d[q2] + e}
-  and also to the null model, with no QTL, 
+  and also to the null model, with no QTL,
   \deqn{y = \mu + A \gamma + \epsilon}{y = m + A g + e}
 
   In the case that \code{n.perm} is specified, the R function
@@ -143,7 +148,11 @@ included, male hemizygotes are allowed to be different from female
 homozygotes, and the null hypothesis must be changed in order to ensure
 that sex- or pgm-differences in the phenotype do not results in spurious
 linkage to the X chromosome.  (See the help file for
-\code{\link{scanone}}.) 
+\code{\link{scanone}}.)
+
+If \code{n.perm} is specified and \code{perm.Xsp=TRUE},
+X-chromosome-specific permutations are performed, to obtain separate
+thresholds for the regions A:A, A:X, and X:X.
 }
 
 \value{
@@ -161,10 +170,10 @@ linkage to the X chromosome.  (See the help file for
   is on the X chromosome or not.  The final component is a version of
   the results of \code{\link{scanone}} including sex and/or cross
   direction as additive covariates, which is needed for a proper
-  calculation of conditional LOD scores. 
+  calculation of conditional LOD scores.
 
   If \code{n.perm} is specified, the function returns a list with six
-  different LOD scores from each of the permutation replicates. 
+  different LOD scores from each of the permutation replicates.
   First, the maximum LOD score for the full model (two QTLs plus an
   interaction).  Second, for each pair of
   chromosomes, we take the difference between the full LOD and the
@@ -179,7 +188,15 @@ linkage to the X chromosome.  (See the help file for
   single-QTL LOD score (that is, from a single-QTL scan).  The latter is
   not used in \code{\link{summary.scantwo}}, but does get
   calculated at each permutation, so we include it for the sake of
-  completeness. 
+  completeness.
+
+  If \code{n.perm} is specified and \code{perm.Xsp=TRUE}, the result is
+  a list with the permutation results for the regions A:A, A:X, and X:X,
+  each of which is a list with the six different LOD scores. Independent
+  permutations are performed in each region, \code{n.perm} is the number
+  of permutations for the A:A region; additional permutations are are
+  used for the A:X and X:X parts, as estimates of quantiles farther out
+  into the tails are needed.
 }
 
 \references{
@@ -204,7 +221,7 @@ linkage to the X chromosome.  (See the help file for
   Soller, M., Brody, T. and Genizi, A. (1976) On the power of experimental
   designs for the detection of linkage between marker loci and
   quantitative loci in crosses between inbred lines.
-  \emph{Theor. Appl. Genet.} \bold{47}, 35--39. 
+  \emph{Theor. Appl. Genet.} \bold{47}, 35--39.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu}

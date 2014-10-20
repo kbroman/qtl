@@ -5,7 +5,10 @@
 \.git
 ^\.RData$
 ^\.Rhistory$
-inst/docs/Sources/MQM/Figs
+^tests/\.RData$
+^tests/\.Rhistory$
+inst/doc/Sources/MQM/Figs
 ^\.Rprofile$
-inst/docs/Sources/MQM/.Rprofile
-^\.Rproj\.user$
+inst/doc/Sources/MQM/\.Rprofile
+^README.md$
+^\.travis\.yml$

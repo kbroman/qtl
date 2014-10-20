@@ -1,0 +1,42 @@
+
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.1.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(qtl)
+> data(hyper)
+> 
+> # write to tidy format
+> write.cross(hyper, "tidy", "hyper_tidy")
+> 
+> # read back in
+> x <- read.cross("tidy", "", genfile="hyper_tidy_gen.csv",
++                 mapfile="hyper_tidy_map.csv", phefile="hyper_tidy_phe.csv",
++                 genotypes=c("BB", "BA", "AA"))
+ --Read the following data:
+	 250  individuals
+	 174  markers
+	 2  phenotypes
+ --Cross type: bc 
+> 
+> # compare results
+> comparecrosses(x, hyper)
+	Crosses are identical.
+> 
+> proc.time()
+   user  system elapsed 
+  0.687   0.052   0.726 

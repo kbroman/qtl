@@ -11,7 +11,7 @@
 \usage{
 addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
        model=c("normal", "binary"), qtl.only=FALSE, verbose=TRUE,
-       pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000, require.fullrank=TRUE)
+       pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000, require.fullrank=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See

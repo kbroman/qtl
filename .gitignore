@@ -46,6 +46,7 @@ qtl*gz
 *.dll
 *.DLL
 *.Rout
+inst/contrib/bin/test/*.txt
 contrib/bin/mqmdebugout
 ..Rcheck/
 inst/doc/MQM-tour.tex
@@ -54,5 +55,9 @@ inst/doc/MQM-tour.R
 inst/doc/Sources/MQM/MQM-tour.R
 *.pdf
 *.tex
-.Rproj.user
-.Rproj
+src/symbols.rds
+src-i386/
+src-x64/
+inst/contrib/bin/test/
+.Rhistory
+.RData
