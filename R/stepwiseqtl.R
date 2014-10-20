@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2014, Karl W Broman
-# last modified Feb, 2014
+# last modified Oct, 2014
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -66,6 +66,31 @@ stepwiseqtl <-
         stop("Input should have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross, chr)
+    if(missing(qtl)) qtl <- NULL
+    if(missing(formula)) formula <- NULL
+
+    method <- match.arg(method)
+    model <- match.arg(model)
+
+    if(!missing(penalties)) {
+        if(is.matrix(penalties)) {
+            penalties <- penalties[1,]
+            warning("penalties should be a vector; only the first row will be used")
+        }
+        if(length(penalties)==6) { # X-chr-specific penalties
+            chrtype <- vapply(cross$geno, class, "")
+            if(!all(chrtype=="A")) {
+                if(scan.pairs)
+                    warning("scan.pairs=TRUE not implemented X-chr specific penalties; ignored.")
+                return(stepwiseqtlX(cross, chrnames(cross), pheno.col=pheno.col, qtl=qtl,
+                                     formula=formula, max.qtl=max.qtl, k_f=3, stop.rule=0,
+                                     covar=covar, method=method, model=model, incl.markers=incl.markers,
+                                     refine.locations=refine.locations, additive.only=additive.only,
+                                     penalties=penalties, keeplodprofile=keeplodprofile, keeptrace=keeptrace,
+                                     verbose=verbose, tol=tol, maxit=maxit, require.fullrank=require.fullrank))
+            }
+        }
+    }
 
     if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
         cross$pheno <- cbind(pheno.col, cross$pheno)
@@ -80,7 +105,7 @@ stepwiseqtl <-
     }
     else forceXcovar <- FALSE
 
-    if(!missing(qtl)) { # start f.s. at somewhere other than the null
+    if(!is.null(qtl)) { # start f.s. at somewhere other than the null
         if( !("qtl" %in% class(qtl)) )
             stop("The qtl argument must be an object of class \"qtl\".")
 
@@ -93,7 +118,7 @@ stepwiseqtl <-
             else
                 stop("Chromosome ", wh, " (in QTL object) not in cross object.")
         }
-        if(missing(formula)) { # create a formula with all covariates and all QTL add've
+        if(is.null(formula)) { # create a formula with all covariates and all QTL add've
             if(!is.null(covar))
                 formula <- paste("y ~ ", paste(names(covar), collapse="+"), "+")
             else
@@ -108,7 +133,7 @@ stepwiseqtl <-
         startatnull <- FALSE
     }
     else {
-        if(!missing(formula))
+        if(!is.null(formula))
             warning("formula ignored if qtl is not provided.")
         startatnull <- TRUE
     }
@@ -118,8 +143,6 @@ stepwiseqtl <-
         qtl$name <- qtl$altname
 
     # check that we have the right stuff for the selected method
-    method <- match.arg(method)
-    model <- match.arg(model)
     if(method=="imp") {
         if(!("draws" %in% names(cross$geno[[1]]))) {
             if("prob" %in% names(cross$geno[[1]])) {
@@ -143,7 +166,7 @@ stepwiseqtl <-
     if(method=="imp") qtlmethod <- "draws"
     else qtlmethod <- "prob"
 
-    if(!missing(qtl) && qtl$n.ind != nind(cross)) {
+    if(!is.null(qtl) && qtl$n.ind != nind(cross)) {
         map <- attr(qtl, "map") # save map
         warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
         if(method=="imp")
@@ -153,7 +176,7 @@ stepwiseqtl <-
         attr(qtl, "map") <- map
     }
 
-    if(!missing(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    if(!is.null(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
         map <- attr(qtl, "map") # save map
         warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
         qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
@@ -902,7 +925,12 @@ calc.penalties <-
     if(missing(perms) || !("scantwoperm" %in% class(perms)))
         stop("You must include permutation results from scantwo.")
 
-    if(missing(lodcolumn)) {
+    if("AA" %in% names(perms)) { # X-chr-specific penalties
+        if(missing(lodcolumn)) lodcolumn <- NULL
+        return(calc.penalties.X(perms, alpha, lodcolumn))
+    }
+
+    if(missing(lodcolumn) || is.null(lodcolumn)) {
         if(is.matrix(perms[[1]]) && ncol(perms[[1]]) > 1)
             lodcolumn <- 1:ncol(perms[[1]])
         else lodcolumn <- 1

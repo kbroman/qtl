@@ -156,7 +156,7 @@ calc.penalties.X <-
         warning("alpha needs to be a single value; only the first will be used.")
     }
 
-    if(missing(lodcolumn)) {
+    if(missing(lodcolumn) || is.null(lodcolumn)) {
         if(is.matrix(perms[[1]][[1]]) && ncol(perms[[1]][[1]]) > 1)
             lodcolumn <- 1:ncol(perms[[1]][[1]])
         else lodcolumn <- 1
@@ -168,7 +168,7 @@ calc.penalties.X <-
             temp <- calc.penalties.X(perms, alpha, lodcolumn[i])
             result <- rbind(result, temp)
         }
-        dimnames(result) <- list(colnames(perms[[1]])[lodcolumn], names(temp))
+        dimnames(result) <- list(colnames(perms[[1]][[1]])[lodcolumn], names(temp))
         return(result)
     }
 
@@ -176,19 +176,19 @@ calc.penalties.X <-
         if(lodcolumn < 1 || lodcolumn > ncol(perms[[1]][[1]]))
             stop("lodcolumn misspecified")
         for(j in 1:3) {
-            for(i in seq(along=perms))
+            for(i in seq(along=perms[[j]]))
                 perms[[j]][[i]] <- perms[[j]][[i]][,lodcolumn,drop=FALSE]
         }
     }
 
     qu <- summary(perms, alpha=alpha)
 
-    cbind(mainA=qu$AA$one,
-          mainX=qu$XX$one,
-          intH=qu$AA$int,
-          intL=qu$AA$fv1 - qu$AA$one,
-          intAX=qu$AX$int,
-          intXX=qu$XX$int)
+    c(mainA=qu$AA$one,
+      mainX=qu$XX$one,
+      intH=qu$AA$int,
+      intL=qu$AA$fv1 - qu$AA$one,
+      intAX=qu$AX$int,
+      intXX=qu$XX$int)
 }
 
 ######################################################################
@@ -208,13 +208,21 @@ stepwiseqtlX <-
              keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
              tol=1e-4, maxit=1000, require.fullrank=TRUE)
 {
+    message("Running stepwiseqtlX")
+
     if(!("cross" %in% class(cross)))
         stop("Input should have class \"cross\".")
 
     if(missing(penalties))
         stop("penalties must be provided")
 
+    if(missing(qtl)) qtl <- NULL
+    if(missing(formula)) formula <- NULL
+
     if(!missing(chr)) cross <- subset(cross, chr)
+
+    method <- match.arg(method)
+    model <- match.arg(model)
 
     if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
         cross$pheno <- cbind(pheno.col, cross$pheno)
@@ -228,7 +236,7 @@ stepwiseqtlX <-
         Xcovar <- Xadjustment$sexpgmcovar
     } else forceXcovar <- FALSE
 
-    if(!missing(qtl)) { # start f.s. at somewhere other than the null
+    if(!is.null(qtl)) { # start f.s. at somewhere other than the null
         if( !("qtl" %in% class(qtl)) )
             stop("The qtl argument must be an object of class \"qtl\".")
 
@@ -241,7 +249,7 @@ stepwiseqtlX <-
             else
                 stop("Chromosome ", wh, " (in QTL object) not in cross object.")
         }
-        if(missing(formula)) { # create a formula with all covariates and all QTL add've
+        if(is.null(formula)) { # create a formula with all covariates and all QTL add've
             if(!is.null(covar))
                 formula <- paste("y ~ ", paste(names(covar), collapse="+"), "+")
             else
@@ -256,7 +264,7 @@ stepwiseqtlX <-
         startatnull <- FALSE
     }
     else {
-        if(!missing(formula))
+        if(!is.null(formula))
             warning("formula ignored if qtl is not provided.")
         startatnull <- TRUE
     }
@@ -266,8 +274,6 @@ stepwiseqtlX <-
         qtl$name <- qtl$altname
 
     # check that we have the right stuff for the selected method
-    method <- match.arg(method)
-    model <- match.arg(model)
     if(method=="imp") {
         if(!("draws" %in% names(cross$geno[[1]]))) {
             if("prob" %in% names(cross$geno[[1]])) {
@@ -291,7 +297,7 @@ stepwiseqtlX <-
     if(method=="imp") qtlmethod <- "draws"
     else qtlmethod <- "prob"
 
-    if(!missing(qtl) && qtl$n.ind != nind(cross)) {
+    if(!is.null(qtl) && !is.nu&& qtl$n.ind != nind(cross)) {
         warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
         if(method=="imp")
             qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
@@ -299,7 +305,7 @@ stepwiseqtlX <-
             qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="prob")
     }
 
-    if(!missing(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
+    if(!is.null(qtl) && method=="imp" && dim(qtl$geno)[3] != dim(cross$geno[[1]]$draws)[3])  {
         warning("No. imputations in qtl object doesn't match that in the input cross; re-creating qtl object.")
         qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
     }
@@ -380,160 +386,43 @@ stepwiseqtlX <-
             else covar.w.X <- cbind(covar, Xcovar)
         }  else covar.w.X <- covar
 
-        if(additive.only || max.qtl == 1) {
-            suppressWarnings(out.scanone <- scanone(cross, pheno.col=pheno.col, method=method, model=model,
-                                                    addcovar=covar.w.X))
-            out.A <- subset(out.scanone, chr='-X')
-            out.X <- subset(out.scanone, chr='X')
-            formula <- firstformula
-            n.qtl <- 1
-            # Calculate max plod in Autosome
-            lod.A <- max(out.A[,3], na.rm=TRUE)
+        suppressWarnings(out.scanone <- scanone(cross, pheno.col=pheno.col, method=method, model=model,
+                                                addcovar=covar.w.X))
+        out.A <- subset(out.scanone, chr='-X')
+        out.X <- subset(out.scanone, chr='X')
+        formula <- firstformula
+        n.qtl <- 1
+        # Calculate max plod in Autosome
+        lod.A <- max(out.A[,3], na.rm=TRUE)
 
-            wh <- which(!is.na(out.A[,3]) & out.A[,3]==lod.A)
-            if(length(wh) > 1) wh <- sample(wh, 1)
+        wh <- which(!is.na(out.A[,3]) & out.A[,3]==lod.A)
+        if(length(wh) > 1) wh <- sample(wh, 1)
 
-            qtl.A <- makeqtl(cross, as.character(out.A[wh,1]), out.A[wh,2], "Q1",
-                             what=qtlmethod)
+        qtl.A <- makeqtl(cross, as.character(out.A[wh,1]), out.A[wh,2], "Q1",
+                         what=qtlmethod)
 
-            curplod.A <- calc.plod.X(lod.A, formula=firstformula, qtl=qtl.A, penalties=penalties) # update Autosome plod after choosing formula and qtl
-            # Calculate max plod in X chr
-            lod.X <- max(out.X[,3], na.rm=TRUE)
+        curplod.A <- calc.plod.X(lod.A, formula=firstformula, qtl=qtl.A, penalties=penalties) # update Autosome plod after choosing formula and qtl
+        # Calculate max plod in X chr
+        lod.X <- max(out.X[,3], na.rm=TRUE)
 
-            wh <- which(!is.na(out.X[,3]) & out.X[,3]==lod.X)
-            if(length(wh) > 1) wh <- sample(wh, 1)
+        wh <- which(!is.na(out.X[,3]) & out.X[,3]==lod.X)
+        if(length(wh) > 1) wh <- sample(wh, 1)
 
-            qtl.X <- makeqtl(cross, as.character(out.X[wh,1]), out.X[wh,2], "Q1",
-                             what=qtlmethod)
+        qtl.X <- makeqtl(cross, as.character(out.X[wh,1]), out.X[wh,2], "Q1",
+                         what=qtlmethod)
 
-            curplod.X <- calc.plod.X(lod.X, formula=firstformula, qtl=qtl.X, penalties=penalties) # update X chr plod after choosing formula and qtl
-            # Compare and choose plod between Autosome and X Chr
-            if (curplod.X > curplod.A) {
-                curplod <- curplod.X
-                qtl <- qtl.X
-                lod <- lod.X
-            } else {
-                curplod <- curplod.A
-                qtl <- qtl.A
-                lod <- lod.A
-            }
-            cat("initial lod: ", lod, "\n")
+        curplod.X <- calc.plod.X(lod.X, formula=firstformula, qtl=qtl.X, penalties=penalties) # update X chr plod after choosing formula and qtl
+        # Compare and choose plod between Autosome and X Chr
+        if (curplod.X > curplod.A) {
+            curplod <- curplod.X
+            qtl <- qtl.X
+            lod <- lod.X
         } else {
-            suppressWarnings(out.scantwo <- scantwo(cross, pheno.col=pheno.col, method=method, model=model,
-                                                    incl.markers=incl.markers, addcovar=covar.w.X, verbose=verbose.scan))
-            out.AA <- subset(out.scantwo, chr="-X")
-            out.XX <- subset(out.scantwo, chr="X")
-            #         chr.A <- matchchr("-X", unique(out.scantwo$map[, 1]))
-            #         chr.X <- matchchr("X", unique(out.scantwo$map[, 1]))
-            #         wh.A <- out.scantwo$map[, 1] %in% chr.A
-            #         wh.X <- out.scantwo$map[, 1] %in% chr.X
-            #         out.AX.add <- out.scantwo
-            #         out.AX.add$lod[-wh.X,-wh.A] <- 0
-
-            lod.AA <- out.AA$lod
-            lod.XX <- out.XX$lod
-            #pLOD 1 term
-            #pLOD 1 term AA region
-            lod1.AA <- max(diag(lod.AA), na.rm=TRUE)
-            wh <- which(!is.na(diag(lod.AA)) & diag(lod.AA) == lod1.AA)
-            if(length(wh) > 1) wh <- sample(wh, 1)
-            m <- out.AA$map[wh,]
-            qtl1.AA <- makeqtl(cross, as.character(m[1,1]), m[1,2], "Q1", what=qtlmethod)
-            formula1.AA <- firstformula
-            plod1.AA <- calc.plod.X(lod1.AA, qtl=qtl1.AA, formula=formula1, penalties=penalties)
-            #pLOD 1 term XX region
-            lod1.XX <- max(diag(lod.XX), na.rm=TRUE)
-            wh <- which(!is.na(diag(lod.XX)) & diag(lod.XX) == lod1.XX)
-            if(length(wh) > 1) wh <- sample(wh, 1)
-            m <- out.XX$map[wh,]
-            qtl1.XX <- makeqtl(cross, as.character(m[1,1]), m[1,2], "Q1", what=qtlmethod)
-            formula1.XX <- firstformula
-            plod1.XX <- calc.plod.X(lod1.XX, qtl=qtl1.XX, formula=formula1, penalties=penalties)
-
-            #pLOD 2 additive terms
-            #pLOD 2 additive terms AA region
-            loda.AA <- max(lod.AA[upper.tri(lod.AA)], na.rm=TRUE)
-            temp <- max(out.AA, what="add")
-            if(nrow(temp) > 1)
-                temp <- temp[sample(1:nrow(temp),1),]
-            qtla.AA <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
-                               c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
-            formulaa.AA <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-            ploda.AA <- calc.plod.X(loda.AA, qtl=qtla.AA, formula=formulaa.AA,
-                                    penalties=penalties)
-
-            #pLOD 2 additive terms XX region
-            loda.XX <- max(lod.XX[upper.tri(lod.XX)], na.rm=TRUE)
-            temp <- max(out.XX, what="add")
-            if(nrow(temp) > 1)
-                temp <- temp[sample(1:nrow(temp),1),]
-            qtla.XX <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
-                               c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
-            formulaa.XX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-            ploda.XX <- calc.plod.X(loda.XX, qtl=qtla.XX, formula=formulaa.XX,
-                                    penalties=penalties)
-            #pLOD 2 additive terms AX region
-            # additive lod of AX
-            out.AX.add = subset(out.scantwo, chr=list("-X","X"))
-            out.AX <- out.AX.add
-            loda.AX=max(out.AX$lod)
-            wh <- which(!is.na(out.AX$lod) & out.AX$lod == loda.AX, arr.ind=TRUE)
-            if(nrow(wh) > 1) wh <- sample(wh, 1)
-            m.A.add <- out.AX$map1[wh[1],]
-            m.X.add <- out.AX$map2[wh[2],]
-
-            qtla.AX <- makeqtl(cross, c(as.character(m.A.add[1,1]), as.character(m.X.add[1,1])),
-                               c(m.A.add[1,2], m.X.add[1,2]), c("Q1","Q2"), what=qtlmethod)
-            formulaa.AX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2", sep=""))
-            ploda.AX <- calc.plod.X(loda.AX, qtl=qtla.AX, formula=formulaa.AX,
-                                    penalties=penalties)
-            #pLOD 2 terms with interaction
-            #pLOD 2 terms with interaction AA region
-            lodf.AA <- max(lod.AA[lower.tri(lod.AA)], na.rm=TRUE)
-            temp <- max(out.AA, what="full")
-            if(nrow(temp) > 1)
-                temp <- temp[sample(1:nrow(temp),1),]
-            qtlf.AA <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
-                               c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
-            formulaf.AA <- as.formula(paste(deparseQTLformula(firstformula), "+Q2+Q1:Q2", sep=""))
-            plodf.AA <- calc.plod.X(lodf.AA, qtl=qtlf.AA, formula=formulaf.AA,
-                                    penalties=penalties)
-
-            #pLOD 2 terms with interaction XX region
-            lodf.XX <- max(lod.XX[lower.tri(lod.XX)], na.rm=TRUE)
-            temp <- max(out.XX, what="full")
-            if(nrow(temp) > 1)
-                temp <- temp[sample(1:nrow(temp),1),]
-            qtlf.XX <- makeqtl(cross, c(as.character(temp[1,1]), as.character(temp[1,2])),
-                               c(temp[1,3], temp[1,4]), c("Q1","Q2"), what=qtlmethod)
-            formulaf.XX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2+Q1:Q2", sep=""))
-            plodf.XX <- calc.plod.X(lodf.XX, qtl=qtlf.XX, formula=formulaf.XX,
-                                    penalties=penalties)
-
-            #pLOD 2 terms with interaction AX region
-            # full lod of AX
-            out.AX.full = subset(out.scantwo, chr=list("X","-X"))
-            out.AX <- out.AX.full
-            lodf.AX=max(out.AX$lod)
-            wh <- which(!is.na(out.AX$lod) & out.AX$lod == lodf.AX, arr.ind=TRUE)
-            if(nrow(wh) > 1) wh <- sample(wh, 1)
-            m.A.full <- out.AX$map1[wh[1],]
-            m.X.full <- out.AX$map2[wh[2],]
-
-            qtlf.AX <- makeqtl(cross, c(as.character(m.A.full[1,1]), as.character(m.X.full[1,1])),
-                               c(m.A.full[1,2], m.X.full[1,2]), c("Q1","Q2"), what=qtlmethod)
-            formulaf.AX <- as.formula(paste(deparseQTLformula(firstformula), "+Q2+Q1:Q2", sep=""))
-            plodf.AX <- calc.plod.X(lodf.AX, qtl=qtlf.AX, formula=formulaf.AX,
-                                    penalties=penalties)
-            plod.vec <- c(plod1.AA, plod1.XX, ploda.AA, ploda.XX, ploda.AX, plodf.AA, plodf.XX, plodf.AX)
-            curplod <- max(plod.vec)
-            wh <- which(!is.na(plod.vec) & plod.vec == curplod)
-            if(length(wh) > 1) wh <- sample(wh, 1)
-            qtl <- c(qtl1.AA, qtl1.XX, qtla.AA, qtla.XX, qtla.AX, qtlf.AA, qtlf.XX, qtlf.AX)[wh]
-            formula <- c(formula1.AA, formula1.XX, formulaa.AA, formulaa.XX, formulaa.AX, formulaf.AA, formulaf.XX, formulaf.AX)[wh]
-            lod <- c(lod1.AA, lod1.XX, loda.AA, loda.XX, loda.AX, lodf.AA, lodf.XX, lodf.AX)[wh]
-            n.qtl <- c(1,1,2,2,2,2,2,2)[wh]
+            curplod <- curplod.A
+            qtl <- qtl.A
+            lod <- lod.A
         }
+        cat("initial lod: ", lod, "\n")
     } # start at null, Quoc: changed
     else {
         if(verbose) cat(" ---Starting at a model with", length(qtl$chr), "QTL\n")
@@ -959,13 +848,14 @@ stepwiseqtlX <-
 # penalized LOD score, Quoc changed, now central function for pLOD
 ######################################################################
 calc.plod.X <-
-    function(lod, nterms, type=c("f2","bc"), penalties, formula, qtl) {
-        if (missing(nterms) & !missing(formula) & !missing(qtl))
-            nterms <- countqtltermsX(formula, qtl)
-        nterms <- nterms[1:6]
-        if(any(penalties==Inf & nterms > 0)) return(-Inf)
+    function(lod, nterms, type=c("f2","bc"), penalties, formula, qtl)
+{
+    if (missing(nterms) && (!missing(formula) && !is.null(formula)) && !missing(qtl))
+        nterms <- countqtltermsX(formula, qtl)
+    nterms <- nterms[1:6]
+    if(any(penalties==Inf & nterms > 0)) return(-Inf)
 
-        as.numeric(lod - sum((nterms*penalties)[nterms > 0]))
-    }
+    as.numeric(lod - sum((nterms*penalties)[nterms > 0]))
+}
 
 # end of stepwiseqtlX.R
