@@ -2,13 +2,13 @@
 #
 # mqmaugment.R
 #
-# Copyright (c) 2009-2012, Danny Arends
+# Copyright (c) 2009-2013, Danny Arends
 #
 # Modified by Pjotr Prins; slight modification by Karl Broman
 #
 # 
 # first written Februari 2009
-# last modified Nov 2012
+# last modified Sep 2013
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -67,14 +67,13 @@ mqmaugment_on_cofactors <- function(cross, cofactors, maxaugind=82, minprob=0.1,
 ######################################################################
 
 mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","impute","drop"), verbose=FALSE) {
+  # ---- check input supplied by user, start a timer 
+  if(minprob <= 0 || minprob > 1){ stop("Error minprob should be a value between 0 and 1.") }
+
   starttime <- proc.time()
-  maxiaug = maxaugind
-  maxaug=nind(cross)*maxiaug   # maxaug is the maximum of individuals to augment to
-  if(minprob <= 0 || minprob > 1){
-    stop("Error minprob should be a value between 0 and 1.")
-  }
+  maxaug    <- nind(cross) * maxaugind   # maxaug is the maximum of individuals to augment to
   supported <- c("default","impute","drop")
-  strategy <- pmatch(strategy, supported)
+  strategy  <- pmatch(strategy, supported)
 
   # ---- check for supported crosses and set ctype
 
@@ -95,7 +94,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
   if (crosstype == "f2") {
     ctype = isF2
   }
-  else if (crosstype == "bc" || crosstype == "dh") {
+  else if (crosstype == "bc" || crosstype == "dh" || crosstype=="haploid") {
     ctype = isBC
   }
   else if (crosstype == "riself") {
@@ -111,12 +110,11 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
   # check whether the X chromosome should be dropped
   # (backcross with one sex should be fine)
   chrtype <- sapply(cross$geno, class)
-  if (any(chrtype == "X") && (ctype == isF2 ||
-    length(getgenonames(crosstype, "X", "full",
-    getsex(cross), attributes(cross))) != 2)) { # drop X chr
-      warning("MQM not yet available for the X chromosome; omitting chr ",
-      paste(names(cross$geno)[chrtype == "X"], collapse=" "))
-      cross <- subset(cross, chr=(chrtype != "X"))
+  # Drop the X chromosome in F2 and related crosses
+  if (any(chrtype == "X") && (ctype == isF2 || length(getgenonames(crosstype, "X", "full", getsex(cross), attributes(cross))) != 2)) {
+    warning("MQM not yet available for the X chromosome; omitting chr ",
+    paste(names(cross$geno)[chrtype == "X"], collapse=" "))
+    cross <- subset(cross, chr=(chrtype != "X"))
   }
 
   # ---- Count
@@ -132,7 +130,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
   geno <- pull.geno(cross)
   chr <- rep(1:nchr(cross), nmar(cross))
   dist <- unlist(pull.map(cross))
-  #Fake Phenotype
+  # Create a fake phenotype for augmentation
   pheno <- rep(1:n.ind)
   n.mark <- ncol(geno)
   if (verbose) cat("INFO: Number of markers:",n.mark,".\n")
@@ -160,20 +158,20 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
     as.double(pheno),
     augGeno=as.integer(rep(0,n.mark*maxaug)),
     augPheno=as.double(rep(0,maxaug)),
-    augIND=as.integer(rep(0,maxiaug*n.ind)),
+    augIND=as.integer(rep(0,maxaugind*n.ind)),
     nind=as.integer(n.ind),
     naug=as.integer(n.aug),
     as.integer(n.mark),
     as.integer(1),    # 1 phenotype
     as.integer(maxaug),
-    as.integer(maxiaug),
+    as.integer(maxaugind),
     as.double(minprob),
     as.integer(chr),
     as.integer(ctype),
     as.integer(strategy),
     as.integer(verbose),
     PACKAGE="qtl")
-	
+
   n.indold = n.ind
   n.ind = result$nind
   n.aug = result$naug
@@ -211,11 +209,9 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
     cross$geno[[c]]$data <- matri
     markdone <- (markdone+markONchr)
   }
-  if(nphe(cross)>1){
-	colnames(pheno) <- colnames(cross$pheno)
-  }
+  if(nphe(cross) > 1){ colnames(pheno) <- colnames(cross$pheno) }   # Add the phenotype names if we have multiple phenotypes
   cross$pheno <- as.data.frame(pheno, stringsAsFactors=TRUE)
-  #Store extra information (needed by the MQM algorithm) which individual was which original etc..
+  # Store extra information (needed by the MQM algorithm) which individual was which original etc..
   cross$mqm$Nind <- n.ind
   cross$mqm$Naug <- n.aug
   result$augIND <- result$augIND-1

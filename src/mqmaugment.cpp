@@ -87,9 +87,9 @@ int calculate_augmentation(const int Nind, int const Nmark,const MQMMarkerMatrix
       }
     }
     if(!outoflimit){
-      info("Individual: %d has %d missing markers, leading to %d augmentations",i,missingmarkers,augind);
+      Rprintf("INFO: Individual: %d has %d missing markers, leading to %d augmentations",i,missingmarkers,augind);
     }else{
-      info("Individual: %d has %d missing markers",i,missingmarkers);
+      Rprintf("INFO: Individual: %d has %d missing markers",i,missingmarkers);
     }
   }
   return 0;
@@ -126,7 +126,7 @@ MQMMarker randommarker(const MQMCrossType crosstype){
       }
     break;
     case CUNKNOWN:
-      fatal("Strange: unknown crosstype in mqm augment()");
+      fatal("Strange: unknown crosstype in mqm augment()", "");
     break;
   }
   return MMISSING;
@@ -137,16 +137,16 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
                   const matrix* pheno_value, const int nmark, const ivector chr, const vector mapdistance,
                   const int augment_strategy, const MQMCrossType crosstype,const int verbose){
     //Prepare for the first augmentation
-    if (verbose) info("Augmentation routine");
+    if (verbose) Rprintf("INFO: Augmentation routine\n");
     const int nind0 = *nind;
     const vector originalpheno = (*pheno_value)[0];
-    MQMMarkerMatrix newmarkerset;
-    vector new_y;                   //Because we do a phenotype matrix, we optimize by storing original the R-individual 
-    ivector new_ind;                //numbers inside the trait-values, ands use new_ind etc for inside C
+    MQMMarkerMatrix newmarkerset;   // [Danny:] This LEAKS MEMORY the Matrices and vectors are not cleaned at ALL
+    vector new_y;                   // Because we do a phenotype matrix, we optimize by storing original the R-individual 
+    ivector new_ind;                // numbers inside the trait-values, ands use new_ind etc for inside C
     ivector succes_ind;
     cvector position = relative_marker_position(nmark,chr);
     vector r = recombination_frequencies(nmark, position, mapdistance);
-    if(verbose) info("Step 1: Augmentation");
+    if(verbose) Rprintf("INFO: Step 1: Augmentation");
     mqmaugment((*markers), (*pheno_value)[0], &newmarkerset, &new_y, &new_ind, &succes_ind, nind, augmentednind,  nmark, position, r, max_totalaugment, max_indaugment, neglect_unlikely, crosstype, verbose);
     //First round of augmentation, check if there are still individuals we need to do
     int ind_still_left=0;
@@ -159,14 +159,14 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
         ind_done++;
       }
     }
-    if(ind_still_left && verbose) info("Step 2: Unaugmented individuals");
+    if(ind_still_left && verbose) Rprintf("INFO: Step 2: Unaugmented individuals\n");
     if(ind_still_left && augment_strategy != 3){
       //Second round we augment dropped individuals from the first augmentation
       MQMMarkerMatrix left_markerset;
       matrix left_y_input = newmatrix(1,ind_still_left);
       vector left_y;
       ivector left_ind;
-      if(verbose) info("Done with: %d/%d individuals still need to do %d",ind_done,nind0,ind_still_left);
+      if(verbose) Rprintf("INFO: Done with: %d/%d individuals still need to do %d\n",ind_done,nind0,ind_still_left);
       //Create a new markermatrix for the individuals
       MQMMarkerMatrix indleftmarkers= newMQMMarkerMatrix(nmark,ind_still_left);
       int current_leftover_ind=0;
@@ -181,7 +181,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
         }
       }
       mqmaugment(indleftmarkers, left_y_input[0], &left_markerset, &left_y, &left_ind, &succes_ind, &current_leftover_ind, &current_leftover_ind,  nmark, position, r, max_totalaugment, max_indaugment, 1, crosstype, verbose);
-      if(verbose) info("Augmentation step 2 returned most likely for %d individuals",current_leftover_ind);
+      if(verbose) Rprintf("INFO: Augmentation step 2 returned most likely for %d individuals\n", current_leftover_ind);
       //Data augmentation done, we need to return both matrices to R
       int numimputations=1;
       if(augment_strategy==2){
@@ -238,16 +238,25 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*augmentednind)=(*augmentednind)+(numimputations*current_leftover_ind);
       (*nind)= (*nind)+(current_leftover_ind);
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
+      Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n", "");
+      delMQMMarkerMatrix(newmarkerset, nmark);    // Free the newmarkerset, this can only be done here since: (*markers) = newmarkerset_all;
+      // Free(new_y_all);
+      // Free(new_ind_all);
     }else{
       if(ind_still_left && augment_strategy == 3){
-        if (verbose) info("Dropping %d augment_strategy individuals from further analysis",ind_still_left);
+        if(verbose) Rprintf("INFO: Dropping %d augment_strategy individuals from further analysis\n",ind_still_left);
       }
       //We augmented all individuals in the first go so lets use those
       (*pheno_value)[0] = new_y;
       (*INDlist) = new_ind;
       (*markers) = newmarkerset;
     }
-    if(verbose) info("Done with augmentation");
+    if(verbose) Rprintf("INFO: Done with augmentation\n");
+    // Free(new_y);                                // Free vector indicating the new phenotypes
+    // Free(new_ind);                              // Free vector indicating the new individuals
+    Free(succes_ind);                           // Free vector indicating the result of round 1 - augmentation
+    Free(position);                             // Free the positions of the markers
+    Free(r);                                    // Free the recombination frequencies
     return 1;
 }
 
@@ -285,8 +294,8 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   prob0right=0.0, prob1right=0.0, prob2right = 0.0f;
   vector newprob = newvector(maxNaug);
   vector newprobmax = newvector(maxNaug);
-  if (verbose) info("Crosstype determined by the algorithm:%c:", crosstype);
-  if (verbose) info("Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Minprob=%f", maxNaug, imaxNaug, minprob);
+  if (verbose) Rprintf("INFO: Crosstype determined by the algorithm: %c\n", crosstype);
+  if (verbose) Rprintf("INFO: Augmentation parameters: Maximum augmentation=%d, Maximum augmentation per individual=%d, Minprob=%f\n", maxNaug, imaxNaug, minprob);
   // ---- foreach individual create one in the newmarker matrix
  
   int newNind = nind0;                  //Number of unique individuals
@@ -313,9 +322,9 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
       const int maxiaug = iaug;          // fixate maxiaug
       if ((maxiaug-previaug)<=imaxNaug)  // within bounds for individual?
         for (int ii=previaug; ii<=maxiaug; ii++) {
-
-	  R_CheckUserInterrupt(); /* check for ^C */
-
+          #ifndef STANDALONE
+            R_CheckUserInterrupt(); /* check for ^C */
+          #endif
           debug_trace("i=%d ii=%d iidx=%d maxiaug=%d previaug=%d,imaxNaug=%d\n",i,ii,iidx,maxiaug,previaug,imaxNaug);
           // ---- walk from previous augmented to current augmented genotype
           //WE HAVE 3 SPECIAL CASES: (1) NOTAA, (2) NOTBB and (3)UNKNOWN, and the std case of a next known marker
@@ -344,7 +353,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 prob2right= right_prob_RIL(MBB, j, imarker, r, position);                
               break;
               case CUNKNOWN:
-                fatal("Strange: unknown crosstype in mqm augment()");
+                fatal("Strange: unknown crosstype in mqm augment()", "");
               break;
             }
             prob1= prob1left*prob1right;
@@ -408,7 +417,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 prob1right= right_prob_RIL(MH, j, imarker, r, position);              
               break;
               case CUNKNOWN:
-                fatal("Strange: unknown crosstype in mqm augment()");
+                fatal("Strange: unknown crosstype in mqm augment()", "");
               break;
             }
             prob0= prob0left*prob0right;
@@ -477,7 +486,7 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
                 prob2right= right_prob_RIL(MBB, j, imarker, r, position);              
               break;
               case CUNKNOWN:
-                fatal("Strange: unknown crosstype in mqm augment()");
+                fatal("Strange: unknown crosstype in mqm augment()", "");
               break;
             }            
             prob0= prob0left*prob0right;
@@ -589,9 +598,9 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
         iaug= previaug-1;
         succesind[i]=0;
         //for(int x=previaug;x<previaug+imaxNaug;x++){
-        //  info("Individual: %d, variant: %d, prob: %f",i,x,newprob[x]);
+        //  Rprintf("INFO: Individual: %d, variant: %d, prob: %f",i,x,newprob[x]);
         //}
-        if (verbose) info("Individual %d moved to second augmentation round", i);
+        if (verbose) Rprintf("INFO: Individual %d moved to second augmentation round\n", i);
       }
       sumprob= 0.0;
       for (int ii=previaug; ii<=iaug; ii++) sumprob+= newprob[ii];
@@ -616,12 +625,12 @@ int mqmaugment(const MQMMarkerMatrix marker, const vector y,
   }
   goto cleanup;
 bailout:
-  Rprintf("ERROR: Dataset too large after augmentation\n");
-  if (verbose) Rprintf("INFO: Recall procedure with larger value for augmentation parameters or increase the parameter minprob\n");
+  Rprintf("INFO: Dataset too large after augmentation\n");
+  if (verbose) fatal("Recall procedure with larger value for augmentation parameters or increase the parameter minprob\n");
   retvalue = 0;
 cleanup:
   Free(newy);
-  Free(newmarker);
+  delMQMMarkerMatrix(newmarker, Nmark+1); //Free(newmarker);
   Free(newind);
   Free(newprob);
   Free(newprobmax);
@@ -648,53 +657,38 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
   const int verbose = *verbosep;
   const RqtlCrossType rqtlcrosstype = (RqtlCrossType) *rqtlcrosstypep;
 
-  if(verbose) info("Starting C-part of the data augmentation routine");
+  if(verbose) Rprintf("INFO: Starting C-part of the data augmentation routine\n");
   ivector new_ind;
-  vector mapdistance;
-  cvector position;
-  MQMMarkerMatrix markers, new_markers;
-  ivector chr;
 
-  markers= newMQMMarkerMatrix(*Nmark, nind0);
-  new_markers= newMQMMarkerMatrix(*Nmark, *maxind);
-  mapdistance = newvector(*Nmark);
-  chr= newivector(*Nmark);
+  MQMMarkerMatrix markers = newMQMMarkerMatrix(*Nmark, nind0);
+  vector mapdistance = newvector(*Nmark);
+  ivector chr = newivector(*Nmark);
 
   //Reorganise the pointers into arrays, Singletons are just cast into the function
   reorg_geno(nind0, *Nmark, geno, &Geno);
   reorg_int(*Nmark, 1, chromo, &Chromo);
   reorg_pheno(nind0, *Npheno, pheno, &Pheno);
   reorg_pheno(*Nmark, 1, dist, &Dist);
-
   reorg_int(*maxind, *Nmark, auggeno, &NEW);
   reorg_int((*maxiaug)*nind0, 1, augIND, &NEWIND);
   reorg_pheno((*maxiaug)*nind0, 1, augPheno, &NEWPheno);
 
-  MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);
-  //Change all the markers from R/qtl format to MQM internal
-  change_coding(Nmark, Nind, Geno, markers, crosstype);
+  MQMCrossType crosstype = determine_MQMCross(*Nmark, *Nind, (const int **)Geno, rqtlcrosstype);        // Determine cross
+  change_coding(Nmark, Nind, Geno, markers, crosstype);                                                 // Change all the markers from R/qtl format to MQM internal
 
-  if(verbose) info("Filling the chromosome matrix");
+  if(verbose) Rprintf("INFO: Filling the chromosome matrix\n");
   for (int i=0; i<(*Nmark); i++) {
     //Set some general information structures per marker
-    mapdistance[i]=POSITIONUNKNOWN;
-    mapdistance[i]=Dist[0][i];
+    mapdistance[i] = POSITIONUNKNOWN;
+    mapdistance[i] = Dist[0][i];
     chr[i] = Chromo[0][i];
   }
-  //Calculate positions of markers and Recombinant frequencies
-  position = relative_marker_position(*Nmark,chr);
-  vector r = recombination_frequencies(*Nmark, position, mapdistance);
-  //ivector succes_ind;
-  /*
-  if (mqmaugment(markers, Pheno[(*Npheno-1)], &new_markers, &new_y, &new_ind, &succes_ind, Nind, Naug, *Nmark, position, r, *maxind, *maxiaug, *minprob, crosstype, verbose)==1) {
-  
-  */
+
   if(mqmaugmentfull(&markers,Nind,Naug,&new_ind,*minprob, *maxind, *maxiaug,&Pheno,*Nmark,chr,mapdistance,*augment_strategy,crosstype,verbose)){
-    //Data augmentation finished succesfully
-    //Push it back into RQTL format
-    for (int i=0; i<(*Nmark); i++) {
-      for (int j=0; j<(*Naug); j++) {
-        //info("Phenotype after return: %f",NEWPheno[0][j]);
+    //Data augmentation finished succesfully, encode it back into RQTL format
+    for (int i = 0; i<(*Nmark); i++) {
+      for (int j = 0; j<(*Naug); j++) {
+        //Rprintf("INFO: Phenotype after return: %f",NEWPheno[0][j]);
         NEWPheno[0][j] = Pheno[0][j];
         NEWIND[0][j] = new_ind[j];
         NEW[i][j] = 9;
@@ -715,22 +709,16 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    //delMQMMarkerMatrix(new_markers,*Nmark);
-    //delMQMMarkerMatrix(markers,*Nmark);
-    Free(mapdistance);
-    Free(position);
-    Free(r);
-    Free(chr);
     if (verbose) {
       Rprintf("# Unique individuals before augmentation:%d\n", nind0);
       Rprintf("# Unique selected individuals:%d\n", *Nind);
       Rprintf("# Marker p individual:%d\n", *Nmark);
       Rprintf("# Individuals after augmentation:%d\n", *Naug);
-      info("Data augmentation succesfull");
+      Rprintf("INFO: Data augmentation succesfull\n");
     }
   } else {
     //Unsuccessfull data augmentation exit
-    info("This code should not be reached, data corruption could have occured. Please re-run this analysis.");
+    Rprintf("INFO: This code should not be reached, data corruption could have occured. Please re-run this analysis.\n");
     *Naug = nind0;
     for (int i=0; i<(*Nmark); i++) {
       for (int j=0; j<(*Naug); j++) {
@@ -742,8 +730,8 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         if (markers[i][j] == MH) {
           NEW[i][j] = 2;
         }
-        if (markers[i][j] == MBB) { // [karl:] this might need to be changed for RIL
-          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  //[Danny:] This should solve it 
+        if (markers[i][j] == MBB) {                       // [Karl:] this might need to be changed for RIL
+          crosstype==CRIL ? NEW[i][j]=2 : NEW[i][j] = 3;  // [Danny:] This should solve it 
         }
         if (markers[i][j] == MNOTAA) {
           NEW[i][j] = 5;
@@ -753,14 +741,11 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
         }
       }
     }
-    delMQMMarkerMatrix(new_markers,*Nmark);
-    delMQMMarkerMatrix(markers,*Nmark);
-    Free(mapdistance);
-    Free(position);
-    Free(r);
-    Free(chr);
-    fatal("Data augmentation failed");
+    fatal("Data augmentation failed", "");
   }
+  delMQMMarkerMatrix(markers,*Nmark); // [Danny:] This looked suspicious, we were leaking memory here because we didn't clean it
+  Free(mapdistance);
+  Free(chr);
   return;
 }
 

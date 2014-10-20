@@ -5,7 +5,7 @@
 \title{Subsetting two-dimensional permutation test results}
 
 \description{
-  Pull out results for a specified set LOD columns from 
+  Pull out results for a specified set LOD columns from
   permutation results from \code{\link{scantwo}}.
 }
 
@@ -15,10 +15,10 @@
 }
 
 \arguments{
- \item{x}{Permutation results from 
+ \item{x}{Permutation results from
    \code{\link{scantwo}}, run with \code{n.perm}>0.}
  \item{repl}{A vector specifying which permutation replicates to keep or (if
- negative) omit.}
+ negative) omit. Ignored in case of X-chr specific permutations}
  \item{lodcolumn}{A vector specifying which LOD columns to keep or (if
    negative) omit.  These should be between 1 and the number of LOD
    columns in the input \code{x}.}

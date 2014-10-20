@@ -30,7 +30,7 @@
 
 #include "mqm.h"
 
-/* backward elimination in regression of trait on multiple cofactors
+/* Backward elimination in regression of trait on multiple cofactors
    routine subX haalt uit matrices voor volledige model de submatrices voor
    submodellen; matrices XtWX en Xt van volledig model worden genoemd fullxtwx
    en fullxt; analoog vector XtWY wordt full xtwy genoemd; selects "important"
@@ -45,13 +45,15 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
                 fitQTL, bool dominance, int em, double windowsize, double
                 stepsize, double stepmin, double stepmax, MQMCrossType crosstype, int
                 verbose){
-  int dropj=0, Ncof=0;
-  double maxlogL, savelogL, maxF=0.0; //, minlogL=logLfull, maxFtest=0.0;
-  bool finished=false;
-  vector logL;
-  logL = newvector(Nmark);
-  savelogL= logLfull;
-  maxlogL= logLfull-10000;
+  int dropj          = 0;
+  int Ncof           = 0;
+  double maxF        = 0.0; //, minlogL=logLfull, maxFtest=0.0;
+  bool finished      = false;
+  vector logL        = newvector(Nmark);
+  double savelogL    = logLfull;
+  double maxlogL     = logLfull-10000.0;
+  bool warned        = false;
+  
   if (verbose) Rprintf("INFO: Backward elimination of cofactors started\n");
   for (int j=0; j<Nmark; j++) {
     (*newcofactor)[j]= cofactor[j];
@@ -63,14 +65,14 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
         // See what the likelihood is when we drop the cofactor
         (*newcofactor)[j]=MNOCOF;
         if (REMLorML=='1') variance= -1.0;
-        logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+        logL[j]= QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, &warned, verbose);
         // Set back the cofactor to MCOF
         (*newcofactor)[j]=MCOF;
       } else if ((*newcofactor)[j]==MSEX) {
         // See what the likelihood is when we drop the sexcofactor
         (*newcofactor)[j]=MNOCOF;
         if (REMLorML=='1') variance= -1.0;
-        logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype,verbose);
+        logL[j]=  QTLmixture(marker,(*newcofactor),r,position,y,ind,Nind,Naug,Nmark,&variance,em,&weight,REMLorML,fitQTL,dominance,crosstype, &warned, verbose);
         // Set back the cofactor to MSEX
         (*newcofactor)[j]=MSEX;
       } else if ((*newcofactor)[j]!=MNOCOF) {
@@ -80,17 +82,13 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     /* assess which cofactor 0 can be dropped */
     maxlogL= logLfull-10000.0;
     for (int j=0; j<Nmark; j++) {
-      if ((*newcofactor)[j]!=MNOCOF) {
-        if (logL[j]>maxlogL) {
-          maxlogL= logL[j];
-          dropj = j;
-        }
+      if((*newcofactor)[j]!=MNOCOF && logL[j]>maxlogL){
+        maxlogL= logL[j];
+        dropj = j;
       }
     }
 #ifndef STANDALONE
-    //Rprintf("TEST BW\n");
     R_CheckUserInterrupt(); /* check for ^C */
-    //R_ProcessEvents(); /*  Try not to crash windows */
     R_FlushConsole();
 #endif
     //See which cofactor we need to drop, if we dont drop any (or have none left) we're finished
@@ -99,23 +97,16 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
       if(verbose) 
-        info("Marker %d is dropped, resulting in reduced model logL = %.3f",(dropj+1),ftruncate3(savelogL));
+        Rprintf("INFO: Marker %d is dropped, resulting in reduced model logL = %.3f\n",(dropj+1),ftruncate3(savelogL));
     } else if ( ((*newcofactor)[dropj]==MBB) && (F1> 2.0*(savelogL-maxlogL)) ) {
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
       if(verbose)
-        info("Marker %d is dropped, resulting in logL of reduced model = %.3f",(dropj+1),ftruncate3(savelogL));
+        Rprintf("INFO: Marker %d is dropped, resulting in logL of reduced model = %.3f\n",(dropj+1),ftruncate3(savelogL));
     } else {
-      if (verbose) {
-        Rprintf("INFO: Backward selection of markers to be used as cofactors has finished.\n");
-      }
+      // if (verbose) { info("Backward selection of markers to be used as cofactors has finished.\n");  }
       finished=true;
-      for (int j=0; j<Nmark; j++) {
-        if ((*newcofactor)[j]==MCOF) {
-          //Rprintf("Marker %d is selected\n",(j+1));
-        }
-      }
     }
   }
   if (verbose) {
@@ -128,13 +119,8 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
     Rprintf("MODEL: --------------------:END MODEL:--------------------\n");
   }
   //Map using the model
-  maxF= mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position,
-               (*mapdistance), y, r, ind, Naug, variance, 'n',
-               informationcontent,Frun,run,REMLorML,fitQTL,dominance, em,
-               windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
-  // printoutput='n'
-  //Rprintf("Backward selection finished\n");
+  maxF = mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position, (*mapdistance), y, r, ind, Naug, variance, 'n',
+                informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
   Free(logL);
   return maxF;
 }
-

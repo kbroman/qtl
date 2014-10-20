@@ -10,18 +10,42 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o Problem with stepwiseqtl when there is collinearity
+o map2table: function to convert map to a table; use code from
+  pull.map and then have pull.map w/ as.table=TRUE call the new
+  function.
+
+o functions as.scanone (for converting matrix or data frame to scanone
+  format) and as.scanoneperm (for converting matrix or two to
+  scanoneperm format)
+
+o Bug in mqmscan: it has problems when there are just two markers on a
+  chromosome. It gives a seg fault if you scan just that chromosome,
+  and it gives Infs in the "info" column in the results if you scan
+  that and other chromosomes.
+
+o Include genetic map as an attribute in scanone results and use that
+  to plot marker positions.
+
+o effectplot and effectscan with method="hk" as well as "imp"
+
+o calc.penalties could take the result of summary.scanone in place of
+  permutation results.
+
+o mapmaker format: if genetic map file is missing, create a bogus
+  one.
+
+o Fix documentation for fitqtl: estimated effects work except such and
+  such cases (X chromosome, and 4-way crosses). Might not work right
+  for all other cases, but if that's true we should fix it.
+
+o Revise rqtltour and rqtltour2 to emphasize the use of RStudio.
+  Suggest using download.file() and then loading with File -> Open
+  rather than using url.show()
+
+o calc.genoprob: calculate genotype probabilities at a pre-specified
+  map
 
 o Add pheno.col type arguments to all of the MQM functions
-
-o revise use of snow package to use parallel instead
-
-  library(parallel)
-  cl <- makeCluster(detectCores())
-  clusterSetRNGStream(cl)
-  clusterEvalQ(cl, library(qtl))
-  results <- clusterApply(cl, blah)
-  stopCluster(cl)
 
 o Bug in scantwo: occasionally lod scores not matching what I get from
   lm(); see example data from Quoc Tran
@@ -61,9 +85,7 @@ o Bugs in summary.scanone in the case of multiple phenotypes and
 
   Also, I need to use as.numeric() on the thresholds
 
-o Helper function for create.map to identify locations on the grid
-
-o Use snow() with orderMarkers
+o Use library(parallel) with orderMarkers
 
 o beeswarm package for plot.pxg
 
@@ -105,14 +127,7 @@ o Bug in plot.scantwo: contours=TRUE gives warning:
     In any(contours) : coercing argument of type 'double' to logical
   Also: maybe change the color of the contour.
 
-o Add cross type "haploid" with genotype names like "A" and "B" rather
-  than "AA" and "AB", but otherwise treat like a backcross (along the
-  lines of "dh").
-
 o max.scantwo could take a chr argument
-
-o Add cross type as argument to read.cross; attempt to convert data to
-  that type.
 
 o In sim.cross, do the qtl get sorted by genomic position?  And then
   do the qtlgeno need to be reordered back?
@@ -205,9 +220,6 @@ o Documentation on RI lines.
 MEDIUM TERM:
 
 o eQTL-related stuff:
-
-  - Compressing calc.genoprob results (simpler version of locations,
-    or just the grid)
 
   - Mb positions within cross object; multiple genetic maps
 

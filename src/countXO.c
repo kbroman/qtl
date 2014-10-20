@@ -1,5 +1,5 @@
 /**********************************************************************
- * 
+ *
  * countXO.c
  *
  * copyright (c) 2008-9, Karl W Broman
@@ -10,23 +10,23 @@
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
  *     merchantability or fitness for a particular purpose.  See the GNU
  *     General Public License, version 3, for more details.
- * 
+ *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
- * These functions are for comparing marker orders by counts of 
+ * These functions are for comparing marker orders by counts of
  * obligate crossovers
  *
  * Contains: R_countXO_bc, R_countXO_f2, R_countXO_4way, countXO
  *           R_countXO_ril48
- *  
+ *
  **********************************************************************/
 
 #include <math.h>
@@ -43,10 +43,10 @@
 #include "countXO.h"
 
 /**********************************************************************
- * 
+ *
  * countXO
  *
- * This function counts the number of obligate crossovers for each 
+ * This function counts the number of obligate crossovers for each
  * individual on a chromosome
  *
  * Input:
@@ -69,87 +69,86 @@
  **********************************************************************/
 
 void countXO(int n_ind, int n_mar, int n_gen, int *geno,
-	     int *nxo, int countxo(int *curgen, int nextgen))
+             int *nxo, int countxo(int *curgen, int nextgen))
 {
-  int **Geno;
-  int j, k, curgen;
+    int **Geno;
+    int j, k, curgen;
 
-  /* reorganize genotype data and marker order matrix */
-  reorg_geno(n_ind, n_mar, geno, &Geno);
-  
-  for(j=0; j<n_ind; j++) { /* loop over individuals */
+    /* reorganize genotype data and marker order matrix */
+    reorg_geno(n_ind, n_mar, geno, &Geno);
 
-    R_CheckUserInterrupt(); /* check for ^C */
-    nxo[j] = 0;
+    for(j=0; j<n_ind; j++) { /* loop over individuals */
 
-    /* genotype at first marker */
-    curgen = Geno[0][j];
-    for(k=1; k<n_mar; k++) /* loop over markers */
-      /* count no obligate crossovers and update current genotype */
-      nxo[j] += countxo(&curgen, Geno[k][j]);
-  }
+        R_CheckUserInterrupt(); /* check for ^C */
+        nxo[j] = 0;
+
+        /* genotype at first marker */
+        curgen = Geno[0][j];
+        for(k=1; k<n_mar; k++) /* loop over markers */
+            /* count no obligate crossovers and update current genotype */
+            nxo[j] += countxo(&curgen, Geno[k][j]);
+    }
 }
 
 
 /**********************************************************************
- * 
+ *
  * R_countXO_bc
  *
  * Wrapper for call from R for a backcross
- * 
+ *
  **********************************************************************/
 
-void R_countXO_bc(int *n_ind, int *n_mar, int *geno, 
-		  int *nxo)
+void R_countXO_bc(int *n_ind, int *n_mar, int *geno,
+                  int *nxo)
 {
-  countXO(*n_ind, *n_mar, 2, geno, nxo, countxo_bc);
+    countXO(*n_ind, *n_mar, 2, geno, nxo, countxo_bc);
 }
 
 
 
 
 /**********************************************************************
- * 
+ *
  * R_countXO_f2
  *
  * Wrapper for call from R for an intercross
- * 
+ *
  **********************************************************************/
 
-void R_countXO_f2(int *n_ind, int *n_mar, int *geno, 
-		  int *nxo)
+void R_countXO_f2(int *n_ind, int *n_mar, int *geno,
+                  int *nxo)
 {
-  countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_f2);
+    countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_f2);
 }
 
 
 /**********************************************************************
- * 
+ *
  * R_countXO_4way
  *
  * Wrapper for call from R for a four-way cross
- * 
+ *
  **********************************************************************/
 
-void R_countXO_4way(int *n_ind, int *n_mar, int *geno, 
-		    int *nxo)
+void R_countXO_4way(int *n_ind, int *n_mar, int *geno,
+                    int *nxo)
 {
-  countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_4way);
+    countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_4way);
 }
 
 /**********************************************************************
- * 
+ *
  * R_countXO_ril48
  *
  * Wrapper for call from R for 4- or 8-way RIL by selfing or sibmating
- * 
+ *
  **********************************************************************/
 
-void R_countXO_ril48(int *n_ind, int *n_mar, int *geno, 
-		    int *nxo)
+void R_countXO_ril48(int *n_ind, int *n_mar, int *geno,
+                     int *nxo)
 {
-  countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_ril48);
+    countXO(*n_ind, *n_mar, 4, geno, nxo, countxo_ril48);
 }
 
 /* end of countXO.c */
-

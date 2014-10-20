@@ -9,7 +9,11 @@ of MQM scan on multiple phenotypes}
 }
 
 \usage{
-mqmplot.clusteredheatmap(cross, mqmresult, directed=TRUE, legend=FALSE, Colv=NA, scale="none", verbose=FALSE, breaks = c(-100,-10,-3,0,3,10,100), col = c("darkblue","blue","lightblue","yellow","orange","red"), \dots)
+mqmplot.clusteredheatmap(cross, mqmresult, directed=TRUE, legend=FALSE,
+                         Colv=NA, scale="none", verbose=FALSE,
+                         breaks = c(-100,-10,-3,0,3,10,100),
+                         col = c("darkblue","blue","lightblue","yellow",
+                                 "orange","red"), \dots)
 }
 
 \arguments{

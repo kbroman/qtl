@@ -1,48 +1,48 @@
 /**********************************************************************
- * 
+ *
  * fitqtl_hk.h
  *
- * copyright (c) 2007-2013, Karl W Broman
+ * copyright (c) 2007-2014, Karl W Broman
  *
- * last modified Feb, 2013
+ * last modified Mar, 2014
  * first written Nov, 2007
  *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License,
  *     version 3, as published by the Free Software Foundation.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but without any warranty; without even the implied warranty of
  *     merchantability or fitness for a particular purpose.  See the GNU
  *     General Public License, version 3, for more details.
- * 
+ *
  *     A copy of the GNU General Public License, version 3, is available
  *     at http://www.r-project.org/Licenses/GPL-3
  *
  * C functions for the R/qtl package
  *
- * These functions are for fitting a fixed multiple-QTL model by 
+ * These functions are for fitting a fixed multiple-QTL model by
  * Haley-Knott regression.
  *
  * Contains: R_fitqtl_hk, fitqtl_hk, galtRssHK
  *
  **********************************************************************/
-void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen, 
-		 double *genoprob, int *n_cov, double *cov, int *model, 
-		 int *n_int, double *pheno, int *get_ests,
-		  /* return variables */
-		 double *lod, int *df, double *ests, double *ests_covar,
-		 double *design_mat, int *matrix_rank);
+void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
+                 double *genoprob, int *n_cov, double *cov, int *model,
+                 int *n_int, double *pheno, int *get_ests,
+                 /* return variables */
+                 double *lod, int *df, double *ests, double *ests_covar,
+                 double *design_mat, int *matrix_rank, double *residuals);
 
 /**********************************************************************
- * 
+ *
  * fitqtl_hk
  *
  * Fits a fixed multiple-QTL model by Haley-Knott regression.
- * 
+ *
  * n_ind        Number of individuals
  *
- * n_qtl        Number of QTLs in the model 
+ * n_qtl        Number of QTLs in the model
  *
  * n_gen        Number of different genotypes
  *
@@ -70,19 +70,21 @@ void R_fitqtl_hk(int *n_ind, int *n_qtl, int *n_gen,
  *
  * matrix_rank  On return, rank of design matrix
  *
+ * residuals    On return, the residuals from the fit
+ *
  **********************************************************************/
 
 void fitqtl_hk(int n_ind, int n_qtl, int *n_gen, double ***Genoprob,
-	       double **Cov, int n_cov, 
-	       int *model, int n_int, double *pheno, int get_ests,
-	       double *lod, int *df, double *ests, double *ests_covar,
-	       double *design_mat, int *matrix_rank); 
+               double **Cov, int n_cov,
+               int *model, int n_int, double *pheno, int get_ests,
+               double *lod, int *df, double *ests, double *ests_covar,
+               double *design_mat, int *matrix_rank, double *residuals);
 
 /* galtRssHK - calculate RSS for full model by Haley-Knott regression */
-double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl, 
-		 double ***Genoprob, double **Cov, int n_cov, int *model, 
-		 int n_int, double *dwork, int *iwork, int sizefull,
-		 int get_ests, double *ests, double **Ests_covar,
-		 double *designmat, int *matrix_rank);
+double galtRssHK(double *pheno, int n_ind, int *n_gen, int n_qtl,
+                 double ***Genoprob, double **Cov, int n_cov, int *model,
+                 int n_int, double *dwork, int *iwork, int sizefull,
+                 int get_ests, double *ests, double **Ests_covar,
+                 double *designmat, int *matrix_rank, double *residuals);
 
 /* end of fitqtl_hk.h */

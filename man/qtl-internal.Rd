@@ -1,4 +1,5 @@
 \name{qtl-internal}
+\alias{reviseXdata}
 \alias{calc.plod}
 \alias{checkcovar}
 \alias{clean}
@@ -53,6 +54,14 @@
 \alias{summary.addcovarint}
 \alias{summary.addint}
 \alias{summary.compactqtl}
+\alias{checkStepwiseqtlStart}
+\alias{checkformula}
+\alias{countqtlterms}
+\alias{deparseQTLformula}
+\alias{fitqtlengine}
+\alias{matchchr}
+\alias{parseformula}
+\alias{reviseqtlnuminformula}
 
 \title{Internal qtl functions}
 
@@ -62,6 +71,8 @@
 }
 
 \usage{
+reviseXdata(type=c("f2","bc","bcsft"), expandX=c("simple","standard","full"),
+            sexpgm, geno, prob, draws, pairprob, cross.attr, force=FALSE)
 calc.plod(lod, nterms, type=c("f2","bc"), penalties)
 checkcovar(cross, pheno.col, addcovar, intcovar, perm.strata,
            ind.noqtl=NULL, weights=NULL, verbose=TRUE)
@@ -70,7 +81,7 @@ condense(object)
 convert(object, \dots)
 convert2bcsft(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
               error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
-              \dots)
+              verbose=FALSE)
 create.map(map, step, off.end, stepwidth=c("fixed", "variable", "max"))
 find.pseudomarkerpos(cross, marker, where=c("draws", "prob"))
 flipcross(cross)
@@ -78,8 +89,9 @@ genAllPartitions(n.taxa, taxa)
 getsex(cross)
 addmarkerstointervalmap(cross,intervalresult,verbose=FALSE)
 mqm_version()
-scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1, batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
-getgenonames(type=c("f2","bc","riself","risib","4way","dh","special","bcsft"),
+scanall(cross, scanfunction=scanone, multicore=TRUE, n.clusters=1,
+        batchsize=10, FF=0,cofactors=NULL, \dots, plot=FALSE, verbose=FALSE)
+getgenonames(type=c("f2","bc","riself","risib","4way","dh","haploid","special","bcsft"),
              chrtype=c("A","X"), expandX=c("simple","standard","full"),
              sexpgm, cross.attr)
 imf.cf(r)
@@ -129,6 +141,17 @@ subrousummaryscantwo(object, for.perm=FALSE)
 \method{summary}{addcovarint}(object, \dots)
 \method{summary}{addint}(object, \dots)
 \method{summary}{compactqtl}(object, \dots)
+checkStepwiseqtlStart(qtl, formula, covar=NULL)
+checkformula(formula, qtl.name, covar.name)
+countqtlterms(formula, ignore.covar=TRUE)
+deparseQTLformula(formula, reorderterms=FALSE)
+fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
+         model=c("normal", "binary"),
+         dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
+         sexpgm, tol, maxit, forceXcovar=FALSE)
+matchchr(selection, thechr)
+parseformula(formula, qtl.dimname, covar.dimname)
+reviseqtlnuminformula(formula, oldnum, newnum)
 }
 
 

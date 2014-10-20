@@ -72,11 +72,10 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
 
   For \code{model="binary"}, a logistic regression model is used.
 
-  \bold{The part to get estimated QTL effects is fully working only for
-    the case of autosomes in a backcross, intercross, RIL or doubled haploids.
-    In other cases the values returned are based on a
-    design matrix that is convenient for calculations but not easily
-    interpreted.}
+  \bold{The part to get estimated QTL effects is not complete for the
+    case of the X chromosome and 4-way crosses.  The values returned in
+    these cases are based on a design matrix that is convenient for
+    calculations but not easily interpreted.}
 
   The estimated QTL effects for a backcross are derived by the coding
   scheme \eqn{\pm}{+/-} 1/2 for AA and AB, so that the additive
@@ -122,7 +121,12 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
     score.
 
     \item \code{ests} contains the estimated QTL effects and standard errors.
-}
+  }
+
+  When \code{method="normal"}, residuals are saved as an attribute of
+  the output, named \code{"residuals"} and accessible via the
+  \code{\link[base]{attr}} function.
+
 
   \bold{The part to get estimated QTL effects is fully working only for
     the case of autosomes in a backcross, intercross, RIL or doubled haploids.
@@ -174,6 +178,10 @@ summary(lod.sex)
 lod.sex.add <- fitqtl(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3+Sex,
                       cov=Sex, method="hk")
 summary(lod.sex.add)
+
+# residuals
+residuals <- attr(lod.sex.add, "residuals")
+plot(residuals)
 }}
 
 \seealso{ \code{\link{summary.fitqtl}}, \code{\link{makeqtl}},

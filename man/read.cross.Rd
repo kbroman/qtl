@@ -13,13 +13,13 @@
 
 \usage{
 read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
-                    "qtlcart", "gary", "karl"),
+                    "qtlcart", "gary", "karl", "mapqtl", "tidy"),
            dir="", file, genfile, mapfile, phefile, chridfile,
            mnamesfile, pnamesfile, na.strings=c("-","NA"),
            genotypes=c("A","H","B","D","C"), alleles=c("A","B"),
            estimate.map=TRUE, convertXdata=TRUE, error.prob=0.0001,
            map.function=c("haldane", "kosambi", "c-f", "morgan"),
-           BC.gen=0, F.gen=0, \dots)
+           BC.gen=0, F.gen=0, crosstype, \dots)
 }
 
 \arguments{
@@ -30,11 +30,11 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \item{file}{The main input file for formats \code{csv}, \code{csvr}
     and \code{mm}.} 
   \item{genfile}{File with genotype data (formats \code{csvs},
-    \code{csvsr}, \code{karl} and \code{gary} only).}
+    \code{csvsr}, \code{karl}, \code{gary} and \code{mapqtl} only).}
   \item{mapfile}{File with marker position information (all 
     except the \code{csv} formats).}
   \item{phefile}{File with phenotype data (formats \code{csvs},
-    \code{csvsr}, \code{karl} and \code{gary} only).}
+    \code{csvsr}, \code{karl}, \code{gary} and \code{mapqtl} only).}
   \item{chridfile}{File with chromosome ID for each marker (\code{gary}
     format only).} 
   \item{mnamesfile}{File with marker names (\code{gary} format only).}
@@ -76,6 +76,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
    distances into recombination fractions. (Ignored if m > 0.)}
   \item{BC.gen}{Used only for cross type \code{"bcsft"}.}
   \item{F.gen}{Used only for cross type \code{"bcsft"}.}
+  \item{crosstype}{Optional character string to force a particular cross type.}
   \item{\dots}{Additional arguments, passed to the function
     \code{\link[utils]{read.table}} in the case of 
     \code{csv} and \code{csvr} formats.  In particular, one may use the
@@ -135,10 +136,11 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   genotype and phenotype data (\code{csvs}), rotated comma-delimited
   with separate files for genotype and phenotype data (\code{csvsr}),
   Mapmaker (\code{mm}), Map Manager QTX (\code{qtx}), Gary Churchill's
-  format (\code{gary}) and Karl Broman's format (\code{karl}).  The
-  required files and their specification for each format appears below.
-  The comma-delimited formats are recommended. Note that most of these
-  formats work only for backcross and intercross data.
+  format (\code{gary}), Karl Broman's format (\code{karl}) and
+  MapQTL/JoinMap (\code{mapqtl}).  The required files and their
+  specification for each format appears below. The comma-delimited
+  formats are recommended. Note that most of these formats work only
+  for backcross and intercross data.
 
   The \code{sampledata} directory in the package distribution contains
   sample data files in multiple formats.    Also see
@@ -317,6 +319,12 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   bc, RF2 or SF2 to f2.
 }  
 
+\section{Tidy format}{
+  This format requires three simple CSV files, separating the genotype,
+  phenotype, and marker map information so that each file may be of a
+  simple form.
+}
+
 \section{Gary format}{
   This format requires the six files.  All files have default names, and
   so the file names need not be specified if the default names are used. 
@@ -375,6 +383,22 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   file should give the phenotype names.
 }
 
+\section{MapQTL format}{
+  This format requires three files, described in the manual of the
+  MapQTL program (same as JoinMap).
+
+  \code{genfile} corresponds to the loc file containing the genotype
+  data. Each marker and its genotypes should be on a single line.
+
+  \code{mapfile} corresponds to the map file containing the linkage
+  group assignment, marker names and their map positions.
+
+  \code{phefile} corresponds to the qua file containing the phenotypes.
+
+  For the moment, only 4-way crosses are supported (CP population type
+  in MapQTL).
+}
+
 \examples{
 \dontrun{
 # CSV format
@@ -410,7 +434,8 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
                    phefile="phe.txt", mapfile="map.txt")}
 } 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian S. Yandell}
+\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian
+  S. Yandell; Aaron Wolen}
 
 \references{
   Broman, K. W. and Sen,
