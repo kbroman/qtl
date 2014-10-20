@@ -64,9 +64,9 @@ color <- c("slateblue", "violetred")
 plot(out, lod=1:2, col=color, bandcol="gray80")
 legend("topright", lwd=2, c("mean", "variance"), col=color)
 
-# to summarize results for each of mean and variance,
-#   use format="tabByCol" or format="tabByChr"
-summary(out, format="tabByChr")
+# use format="allpeaks" to get summary for each of mean and variance
+#  also consider format="tabByCol" or format="tabByChr"
+summary(out, format="allpeaks")
 
 # with sex and age as covariates
 covar <- fake.bc$pheno[,c("sex", "age")]
