@@ -868,7 +868,7 @@ summary.scantwoperm <-
                 b <- apply(a, 2, quantile, one_minus_alpha[i,,drop=FALSE])
                 if(!is.matrix(b)) {
                     nam <- names(b)
-                    b <- as.matrix(b)
+                    b <- matrix(b, nrow=1)
                     colnames(b) <- nam
                 }
 
