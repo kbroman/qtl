@@ -208,7 +208,7 @@ stepwiseqtlX <-
              keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
              tol=1e-4, maxit=1000, require.fullrank=TRUE)
 {
-    message("Running stepwiseqtlX")
+    if(verbose) message("Running stepwiseqtlX")
 
     if(!("cross" %in% class(cross)))
         stop("Input should have class \"cross\".")
@@ -422,7 +422,7 @@ stepwiseqtlX <-
             qtl <- qtl.A
             lod <- lod.A
         }
-        cat("initial lod: ", lod, "\n")
+        if(verbose) cat("initial lod: ", lod, "\n")
     } # start at null, Quoc: changed
     else {
         if(verbose) cat(" ---Starting at a model with", length(qtl$chr), "QTL\n")
