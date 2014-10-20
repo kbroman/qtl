@@ -44,7 +44,7 @@ scantwo <-
              incl.markers=FALSE, clean.output=FALSE, clean.nmar=1,
              clean.distance=0,
              maxit=4000, tol=1e-4, verbose=TRUE, n.perm,
-             perm.strata=NULL, assumeCondIndep=FALSE,
+             perm.Xsp=FALSE, perm.strata=NULL, assumeCondIndep=FALSE,
              batchsize=250, n.cluster=1)
 {
     if(batchsize < 1) stop("batchsize must be >= 1.")
@@ -82,6 +82,68 @@ scantwo <-
     if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself"))
         for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
 
+    # X-chr-specific perms (actually A:A, A:X, and X:X specific)
+    if(perm.Xsp && n.perm > 0) {
+        if(all(chrtype=="X") || all(chrtype=="A")) break # no need for x-chr-specific perms
+        if(length(chr1) != length(chr2) || any(chr1 != chr2))
+            stop("With perm.Xsp=TRUE, chr can't be a list")
+
+        chr.names <- chrnames(cross)
+        chrL <- sapply(cross$geno, function(a) diff(range(a$map)))
+        AL <- sum(chrL[chrtype=="A"])
+        XL <- sum(chrL[chrtype=="X"])
+        AAL <- AL*AL/2
+        XXL <- XL*XL/2
+        AXL <- AL*XL
+        n.permAA <- n.perm
+        n.permXX <- ceiling(n.perm * AAL/XXL)
+        n.permAX <- ceiling(n.perm * AAL/AXL)
+
+        # names of autosomes and X chr
+        Achr <- chr.names[chrtype=="A"]
+        Xchr <- chr.names[chrtype=="X"]
+
+        if(verbose) message("Running ", n.permAA, " A:A permutations")
+        AAresult <- scantwo(cross, chr=Achr, pheno.col=pheno.col,
+                            model=model, method=method,
+                            addcovar=addcovar, intcovar=intcovar,
+                            weights=weights, use=use,
+                            incl.markers=incl.markers, clean.output=clean.output,
+                            clean.nmar=clean.nmar, clean.distance=clean.distance,
+                            maxit=maxit, tol=tol, verbose=verbose, n.perm=n.permAA,
+                            perm.Xsp=FALSE, perm.strata=perm.strata,
+                            assumeCondIndep=assumeCondIndep,
+                            batchsize=batchsize, n.cluster=n.cluster)
+
+        if(verbose) message("Running ", n.permXX, " X:X permutations")
+        XXresult <- scantwo(cross, chr=Xchr, pheno.col=pheno.col,
+                            model=model, method=method,
+                            addcovar=addcovar, intcovar=intcovar,
+                            weights=weights, use=use,
+                            incl.markers=incl.markers, clean.output=clean.output,
+                            clean.nmar=clean.nmar, clean.distance=clean.distance,
+                            maxit=maxit, tol=tol, verbose=verbose, n.perm=n.permXX,
+                            perm.Xsp=FALSE, perm.strata=perm.strata,
+                            assumeCondIndep=assumeCondIndep,
+                            batchsize=batchsize, n.cluster=n.cluster)
+
+        if(verbose) message("Running ", n.permAX, " A:X permutations")
+        AXresult <- scantwo(cross, chr=list(Achr, Xchr), pheno.col=pheno.col,
+                            model=model, method=method,
+                            addcovar=addcovar, intcovar=intcovar,
+                            weights=weights, use=use,
+                            incl.markers=incl.markers, clean.output=clean.output,
+                            clean.nmar=clean.nmar, clean.distance=clean.distance,
+                            maxit=maxit, tol=tol, verbose=verbose, n.perm=n.permAX,
+                            perm.Xsp=FALSE, perm.strata=perm.strata,
+                            assumeCondIndep=assumeCondIndep,
+                            batchsize=batchsize, n.cluster=n.cluster)
+
+        result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
+        attr(result, "L") <- c(AA=AAL, AX=AXL, XX=XXL)
+        class(result) <- c("scantwoperm", "list")
+        return(result)
+    }
 
     if(!missing(n.perm) && n.perm > 0 && n.cluster > 1) {
         cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
