@@ -851,8 +851,6 @@ summary.scantwoperm <-
         stop("Input should have class \"scantwoperm\".")
 
     if("AA" %in% names(object)) { # X-chr-specific version
-        message("X-chr-specific")
-
         # get region-specific (nominal) signif levels
         L <- attr(object, "L")
         LL <- attr(object, "LL")
@@ -867,8 +865,6 @@ summary.scantwoperm <-
             one_minus_alpha_onechr <- vapply(alpha, function(a,b) (1-a)^b, rep(0, length(tmp)), tmp)
             one_minus_alpha <- vapply(alpha, function(a,b) (1-a)^b, rep(0, length(LL)), LL/sum(LL))
         }
-        print(one_minus_alpha_onechr)
-        print(one_minus_alpha)
         # get quantiles
         out <- vector("list", length(object))
         names(out) <- names(object)
