@@ -89,6 +89,7 @@ stepwiseqtl <-
                                      penalties=penalties, keeplodprofile=keeplodprofile, keeptrace=keeptrace,
                                      verbose=verbose, tol=tol, maxit=maxit, require.fullrank=require.fullrank))
             }
+            penalties <- penalties[c(1,3,4)] # just the autosomal penalties
         }
     }
 
