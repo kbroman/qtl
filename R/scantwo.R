@@ -140,7 +140,8 @@ scantwo <-
                             batchsize=batchsize, n.cluster=n.cluster)
 
         result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
-        attr(result, "L") <- c(AA=AAL, AX=AXL, XX=XXL)
+        attr(result, "L") <- c(A=AL, X=XL)
+        attr(result, "LL") <- c(AA=AAL, AX=AXL, XX=XXL)
         names(chrtype) <- chr.names
         attr(result, "chrtype") <- chrtype
         class(result) <- c("scantwoperm", "list")
