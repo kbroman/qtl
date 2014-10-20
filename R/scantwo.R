@@ -141,6 +141,8 @@ scantwo <-
 
         result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
         attr(result, "L") <- c(AA=AAL, AX=AXL, XX=XXL)
+        names(chrtype) <- chr.names
+        attr(result, "chrtype") <- chrtype
         class(result) <- c("scantwoperm", "list")
         return(result)
     }
