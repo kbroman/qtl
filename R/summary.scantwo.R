@@ -210,14 +210,6 @@ summary.scantwo <-
     if(!allpairs) # only look at self-self cases
         out <- out[out$chr1==out$chr2,]
 
-    if(!missing(alphas)) { # get thresholds
-        thresholds <- rep(0,5)
-        for(i in 1:5)
-            thresholds[i] <- quantile(perms[[i]], 1-alphas[i])
-        thresholds[alphas==1] <- 0
-        thresholds[alphas==0] <- Inf
-    }
-
     if(what=="best") {
         p1.f <- out$pos1.jnt
         p2.f <- out$pos2.jnt
@@ -274,10 +266,63 @@ summary.scantwo <-
         names(out)[3:4] <- c("pos1", "pos2")
     }
 
+    if(!missing(perms) && "AA" %in% names(perms)) {
+        xchr_specific <- TRUE
+        chrtype <- attr(perms, "chrtype")
+        chrpair_type <- paste0(chrtype[out$chr1], chrtype[out$chr2])
+        if(all(chrpair_type=="AA")) {
+            perms <- perms$AA
+            xchr_specific <- FALSE
+        }
+        else if(all(chrpair_type=="XX")) {
+            perms <- perms$XX
+            xchr_specific <- FALSE
+        }
+        else if(all(chrpair_type=="AX")) {
+            perms <- perms$AX
+            xchr_specific <- FALSE
+        }
+    }
+    else xchr_specific <- FALSE
+
+    if(!missing(alphas)) { # get thresholds
+        if(!xchr_specific) {
+            thresholds <- rep(0,5)
+            for(i in 1:5)
+                thresholds[i] <- quantile(perms[[i]], 1-alphas[i])
+            thresholds[alphas==1] <- 0
+            thresholds[alphas==0] <- Inf
+        }
+        else { # x-chr-specific
+            thresholds <- matrix(nrow=3, ncol=5)
+            for(j in 1:3) {
+                for(i in 1:5)
+                    thresholds[j,i] <- quantile(perms[[j]][[i]], 1-alphas[i])
+            }
+            thresholds[alphas==1] <- 0
+            thresholds[alphas==0] <- Inf
+        }
+    }
+
     if(!missing(thresholds) || !missing(alphas)) { # apply thresholds
-        out <- out[(out$lod.full >= thresholds[1] & (out$lod.fv1 >= thresholds[2] |
-                    out$lod.int >= thresholds[3])) |
-                   (out$lod.add >= thresholds[4] & out$lod.av1 >= thresholds[5]),,drop=FALSE]
+        if(!xchr_specific) {
+            out <- out[(out$lod.full >= thresholds[1] & (out$lod.fv1 >= thresholds[2] |
+                        out$lod.int >= thresholds[3])) |
+                       (out$lod.add >= thresholds[4] & out$lod.av1 >= thresholds[5]),,drop=FALSE]
+        }
+        else {
+            tokeep <- NULL
+            for(i in 1:nrow(out)) {
+                this_chrpair_type <- match(chrpair_type[i], c("AA", "AX", "XX"))
+                if((out$lod.full[i] >= thresholds[this_chrpair_type, 1] &
+                    (out$lod.fv1[i] >= thresholds[this_chrpair_type, 2] |
+                     out$lod.int[i] >= thresholds[this_chrpair_type, 3])) |
+                   (out$lod.add[i] >= thresholds[this_chrpair_type, 4] &
+                    out$lod.av1[i] >= thresholds[this_chrpair_type, 5]))
+                    tokeep <- c(tokeep, i)
+            }
+            out <- out[tokeep, , drop=FALSE]
+        }
     }
 
     if(pvalues && nrow(out) > 0) {
@@ -287,9 +332,24 @@ summary.scantwo <-
         result[,wh] <- out
         names(result)[wh] <- names(out)
         colnames(result)[wh2] <- rep("pval",5)
-        for(i in 1:5) {
-            for(j in 1:nrow(out))
-                result[j,wh2[i]] <- mean(perms[[i]] >= result[j,wh2[i]-1], na.rm=TRUE)
+
+        if(!xchr_specific) {
+            for(i in 1:5) {
+                for(j in 1:nrow(out))
+                    result[j,wh2[i]] <- mean(perms[[i]] >= result[j,wh2[i]-1], na.rm=TRUE)
+            }
+        }
+        else { # X-chr-specific
+            L <- attr(perms, "L")
+            sumL <- sum(L)
+            for(j in 1:nrow(out)) {
+                this_chrpair_type <- match(chrpair_type[j], c("AA", "AX", "XX"))
+                pow <- sumL/L[this_chrpair_type]
+                for(i in 1:5) {
+                    nominal_p <- mean(perms[[this_chrpair_type]][[i]] >= result[j,wh2[i]-1], na.rm=TRUE)
+                    result[j,wh2[i]] <- 1 - (1-nominal_p)^pow # adjusted P-value
+                }
+            }
         }
         out <- result
     }
