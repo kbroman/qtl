@@ -851,30 +851,41 @@ summary.scantwoperm <-
         stop("Input should have class \"scantwoperm\".")
 
     if("AA" %in% names(object)) { # X-chr-specific version
+        message("X-chr-specific")
 
         # get region-specific (nominal) signif levels
         L <- attr(object, "L")
-        if(is.null(L)) stop("L attribute not found in input object")
-        if(length(alpha)==1)
-            one_minus_alpha <- cbind((1-alpha)^(L/sum(L)))
-        else
-            one_minus_alpha <- vapply(alpha, function(a,b) (1-a)^b, rep(0, length(L)), L/sum(L))
-
+        LL <- attr(object, "LL")
+        if(is.null(LL)) stop("LL attribute not found in input object")
+        if(length(alpha)==1) {
+            tmp <- L/sum(L); tmp <- c(tmp[1], 1, tmp[2])
+            one_minus_alpha_onechr <- cbind((1-alpha)^tmp)
+            one_minus_alpha <- cbind((1-alpha)^(LL/sum(LL)))
+        }
+        else {
+            tmp <- L/sum(L); tmp <- c(tmp[1], 1, tmp[2])
+            one_minus_alpha_onechr <- vapply(alpha, function(a,b) (1-a)^b, rep(0, length(tmp)), tmp)
+            one_minus_alpha <- vapply(alpha, function(a,b) (1-a)^b, rep(0, length(LL)), LL/sum(LL))
+        }
+        print(one_minus_alpha_onechr)
+        print(one_minus_alpha)
         # get quantiles
         out <- vector("list", length(object))
         names(out) <- names(object)
         for(i in seq(along=out)) {
-            out[[i]] <- lapply(object[[i]], function(a) {
-                b <- apply(a, 2, quantile, one_minus_alpha[i,,drop=FALSE])
+            f <- function(a, qu) {
+                b <- apply(a, 2, quantile, qu)
                 if(!is.matrix(b)) {
                     nam <- names(b)
                     b <- matrix(b, nrow=1)
                     colnames(b) <- nam
                 }
-
                 rownames(b) <- paste0(alpha*100, "%")
                 b
-            })
+            }
+            out[[i]] <- lapply(unclass(object[[i]])[1:5], f, one_minus_alpha[i,,drop=FALSE])
+            qu_one <- f(object[[i]][[6]], one_minus_alpha_onechr[i,,drop=FALSE])
+            out[[i]] <- c(out[[i]], "one"=list(qu_one))
         }
 
         attr(out, "n.perm") <- vapply(object, function(a) nrow(a[[1]]), 0)
