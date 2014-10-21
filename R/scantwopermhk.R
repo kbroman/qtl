@@ -12,9 +12,12 @@ scantwopermhk <-
     chr.names <- chrnames(cross)
     chrtype <- sapply(cross$geno, class)
     type <- class(cross)[1]
-    if(any(chrtype=="X") && type=="risib" || type=="riself")
+    if(any(chrtype=="X") && (type=="risib" || type=="riself"))
         for(i in which(chrtype=="X"))
             class(cross$geno[[i]]) <- chrtype[i] <- "A"
+
+    if(any(chrtype=="X") && (type=="bc" || type=="f2")) # force stratified permutation test
+        perm.strata <- force_sexstrata(cross, perm.strata)
 
     if(is.null(perm.Xsp) || !perm.Xsp || !any(chrtype=="X")) { # all autosomes
         result <- .scantwopermhk(cross, pheno.col=pheno.col,
@@ -24,6 +27,9 @@ scantwopermhk <-
                                  assumeCondIndep=assumeCondIndep)
     }
     else { # separate A:A, A:X, and X:X
+        # covariates for X chr
+        Xcovar <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))$sexpgmcovar
+
         # lengths of autosomes and X chr
         chrL <- sapply(cross$geno, function(a) diff(range(a$map)))
         AL <- sum(chrL[chrtype=="A"])
@@ -39,8 +45,6 @@ scantwopermhk <-
         Achr <- chr.names[chrtype=="A"]
         Xchr <- chr.names[chrtype=="X"]
 
-        Xnull <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))
-        Xcovar <- Xnull$sexpgmcovar
 
         if(verbose) message("Running ", n.permAA, " A:A permutations")
         AAresult <- .scantwopermhk(cross, chr=Achr, pheno.col=pheno.col,
@@ -211,6 +215,15 @@ scantwopermhk <-
     if(any(chrtype=="X")) {
         sexpgm <- getsex(cross)
 
+        # get null loglik for X chr
+        Xnullcovar <- scanoneXnull(class(cross)[1], sexpgm, attributes(cross))[[3]]
+        adjcovar <- cbind(Xnullcovar, addcovar)
+        if(ncol(adjcovar) > 0) {
+            resid0 <- lm(pheno ~ adjcovar, weights=weights^2)$resid
+            nllik0X <- (n.ind/2)*log10(sum((resid0*weights)^2))
+        }
+
+        # covariates to use on X chr
         addcovarX <- revisecovar(sexpgm,addcovar)
         if(!is.null(addcovar) && (nd <- attr(addcovarX, "n.dropped")) > 0 && n.perm > -2)
             warning("Dropped ", nd, " additive covariates on X chromosome.")
@@ -220,10 +233,6 @@ scantwopermhk <-
         }
         else n.acX <- ncol(addcovarX)
 
-        if(n.acX > 0) {
-            resid0 <- lm(pheno ~ addcovarX, weights=weights^2)$resid
-            nllik0X <- (n.ind/2)*log10(sum((resid0*weights)^2))
-        }
 
         for(i in 1:n.chr) {
             if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
@@ -238,9 +247,8 @@ scantwopermhk <-
     # no. genotypes and positions on each chromosome
     n.gen <- n.pos <- rep(0, n.chr)
     for(i in 1:n.chr) {
-        gen.names <- getgenonames(type, chrtype[i], "full", sexpgm, attributes(cross))
-        n.gen[i] <- length(gen.names)
         n.pos[i] <- ncol(cross$geno[[i]]$prob)
+        n.gen[i] <- dim(cross$geno[[i]]$prob)[3]
     }
 
     # create shuffled indices
@@ -382,4 +390,30 @@ scantwopermhk <-
     names(result) <- c("full", "fv1", "int", "add", "av1", "one")
     class(result) <- c("scantwoperm", "list")
     result
+}
+
+# force stratified permutation test for X chr
+force_sexstrata <-
+function(cross, perm.strata)
+{
+    type <- class(cross)[1]
+    if(type!="bc" && type!="f2")
+        return(perm.strata)
+
+    Xcovar <- scanoneXnull(type, getsex(cross), attributes(cross))$sexpgmcovar
+
+    if(!is.null(Xcovar)) {
+        pastedcovar <- apply(Xcovar, 1, paste, collapse="")
+        upastedcovar <- unique(pastedcovar)
+        sexstrata <- match(pastedcovar, upastedcovar)
+        if(is.null(perm.strata)) perm.strata <- sexstrata
+        else {
+            u <- unique(perm.strata)
+            perm.strata <- match(perm.strata, u)
+            m <- max(perm.strata)
+            perm.strata <- perm.strata + m*(sexstrata-1)
+        }
+    }
+
+    perm.strata
 }
