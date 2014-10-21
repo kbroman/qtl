@@ -62,6 +62,10 @@ scantwopermhk(cross, chr, pheno.col=1,
 
   This is an attempt to speed things up and attentuate the memory usage
   problems in \code{\link{scantwo}}.
+
+  In the case of \code{perm.Xsp=TRUE} (X-chr-specific thresholds), we
+  use a stratified permutation test, stratified by sex and
+  cross-direction.
 }
 
 \value{
