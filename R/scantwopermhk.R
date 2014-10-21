@@ -218,7 +218,7 @@ scantwopermhk <-
         # get null loglik for X chr
         Xnullcovar <- scanoneXnull(class(cross)[1], sexpgm, attributes(cross))[[3]]
         adjcovar <- cbind(Xnullcovar, addcovar)
-        if(ncol(adjcovar) > 0) {
+        if(!is.null(adjcovar) && ncol(adjcovar) > 0) {
             resid0 <- lm(pheno ~ adjcovar, weights=weights^2)$resid
             nllik0X <- (n.ind/2)*log10(sum((resid0*weights)^2))
         }
