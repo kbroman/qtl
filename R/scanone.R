@@ -980,7 +980,7 @@ scanone.perm.engine <-
         sexpgm <- getsex(cross)
         sex <- sexpgm$sex
         pgm <- sexpgm$pgm
-        if(all(chrtype=="A") || all(chrtype=="X"))
+        if(all(chrtype=="A"))
             batch.mode <- TRUE
         else if((is.null(sex) || length(unique(sex))==1) &&
                 (is.null(pgm) || length(unique(pgm))==1))
