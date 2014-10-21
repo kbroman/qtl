@@ -14,8 +14,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
             method=c("imp", "hk"), model=c("normal", "binary"),
             incl.markers=TRUE, refine.locations=TRUE,
             additive.only=FALSE, scan.pairs=FALSE, penalties,
-            keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
-            tol=1e-4, maxit=1000, require.fullrank=TRUE)
+            keeplodprofile=TRUE, keeptrace=FALSE, verbose=TRUE,
+            tol=1e-4, maxit=1000, require.fullrank=FALSE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -25,7 +25,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    referring to chromosomes by name; numeric values are converted to
    strings.  Refer to chromosomes with a preceding \code{-} to have all
    chromosomes but those considered.  A logical (TRUE/FALSE) vector may
-   also be used.} 
+   also be used.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
    used as the phenotype.  One may also give character strings matching
    the phenotype names.  Finally, one may give a numeric vector of
@@ -36,14 +36,14 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
  \item{qtl}{Optional QTL object (of class \code{"qtl"}, as created by
    \code{\link{makeqtl}}) to use as a starting point.}
  \item{formula}{Optional formula to define the QTL model to be used as a
-   starting point.} 
+   starting point.}
  \item{max.qtl}{Maximum number of QTL to which forward selection should
    proceed.}
  \item{covar}{Data frame of additive covariates.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{incl.markers}{If FALSE, do calculations only at points on an
    evenly spaced grid.}
  \item{refine.locations}{If TRUE, use \code{\link{refineqtl}} to
@@ -53,9 +53,14 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
  consider also pairwise interactions among QTL.}
  \item{scan.pairs}{If TRUE, perform a two-dimensional, two-QTL scan at
    each step of forward selection.}
- \item{penalties}{Vector of three values indicating the penalty on main
-   effects and heavy and light penalties on interactions.  See the
-   Details below. If missing, default values are used that are based on
+ \item{penalties}{Vector of three (or six) values indicating the penalty
+   on the number of QTL terms. If three values, these are the penalties
+   on main effects and heavy and light penalties on interactions.  If
+   six values, these include X-chr-specific penalties, and the values
+   are: main effect for autosomes, main effect for X chr, heavy penalty
+   on A:A interactions, light penalty on A:A interactions, penalty on
+   A:X interactions, and penalty on X:X interactions. See the Details
+   below. If missing, default values are used that are based on
    simulations of backcrosses and intercrosses with genomes modeled
    after that of the mouse.}
  \item{keeplodprofile}{If TRUE, keep the LOD profiles from the last
@@ -64,10 +69,10 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    visited through the course of forward and backward selection as an
    attribute to the output.}
  \item{verbose}{If TRUE, give feedback about progress.  If
-   \code{verbose} is an integer > 1, even more information is printed.} 
+   \code{verbose} is an integer > 1, even more information is printed.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
  \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
    the linear regression is not of full rank.}
 }
@@ -108,13 +113,13 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   penalty.  The \code{penalties} argument is the vector \eqn{(T_m, T_h,
   T_l)}{(Tm, Th, Tl)}.  If \eqn{T_l}{Tl} is missing (\code{penalties}
   has a vector of length 2), we assume \eqn{T_l = T_h}{Tl = Th}, and so
-  all pairwise interactions are assigned the same penalty.  
+  all pairwise interactions are assigned the same penalty.
 
   The "heavy" and "light" interaction penalties can be a bit
   confusing.  Consider the clusters of QTL that are connected via one or
   more pairwise interactions.  To each such cluster, we assign at most
   one "light" interaction penalty, and give all other pairwise
-  interactions the heavy interaction penalty.  In other words, if 
+  interactions the heavy interaction penalty.  In other words, if
   \eqn{p_i}{pi} is the total number of pairwise interactions for a QTL
   model, we let \eqn{p_l}{pl} be the number of clusters of connected QTL
   with at least one pairwise interaction, and then let \eqn{p_h - p_i -
@@ -127,8 +132,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   There are three clusters of connected QTL: (1), (2,3) and (4,5,6).  We
   would assign 6 main effect penalties (\eqn{T_m}{Tm}), 2 light
   interaction penalties (\eqn{T_l}{Tl}), and 1 heavy interaction penalty
-  (\eqn{T_h}{Th}).  
-  
+  (\eqn{T_h}{Th}).
+
   Manichaikul et al. (2009) described a system for deriving the
   three penalties on the basis of permutation results from a
   two-dimensional, two-QTL genome scan (as calculated with
@@ -174,7 +179,7 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
       }
 
       \item Refine the locations of the QTL in the current model (if
-      \code{refine.locations=TRUE}).  
+      \code{refine.locations=TRUE}).
 
       \item Repeat steps 2 and 3 up to a model with some pre-determined
       number of loci.
@@ -213,13 +218,13 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
   If \code{keeplodprofile=TRUE}, LOD profiles from the last pass through
   the refinement algorithm are retained as an attribute,
   \code{"lodprofile"}, to the object.  These may be plotted with
-  \code{\link{plotLodProfile}}.  
+  \code{\link{plotLodProfile}}.
 
   If \code{keeptrace=TRUE}, the output will contain an attribute
   \code{"trace"} containing information on the best model at each step
   of forward and backward elimination.  This is a list of objects of
   class \code{"compactqtl"}, which is similar to a QTL object (as
-  produced by \code{\link{makeqtl}}) but containing just 
+  produced by \code{\link{makeqtl}}) but containing just
   a vector of chromosome IDs and positions for the QTL.  Each will also
   have attributes \code{"formula"} (containing the model formula) and
   \code{"pLOD"} (containing the penalized LOD score.

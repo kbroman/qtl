@@ -23,7 +23,7 @@
 \details{
   Thresholds derived from \code{\link{scantwo}} permutations (that
   is, for a two-dimensional, two-QTL genome scan) are used to calculate
-  penalties on main effects and interactions.  
+  penalties on main effects and interactions.
 
   The main effect penalty is the 1-\code{alpha} quantile of the null
   distribution of the genome-wide maximum LOD score from a single-QTL
@@ -41,6 +41,12 @@
   permutations (that is, the 1-\code{alpha} quantile of the LOD score
   comparing the best model with two interacting QTL to the best
   single-QTL model) and the main effect penalty.
+
+  If the permutations results were obtained with \code{perm.Xsp=TRUE},
+  to give X-chr-specific results, six penalties are calculated: main
+  effect for autosomes, main effect for X chr, heavy penalty on A:A
+  interactions, light penalty on A:A interactions, penalty on A:X
+  interactions, and penalty on X:X interactions.
 }
 
 \value{
@@ -48,6 +54,11 @@
   effects and heavy and light penalties on interactions,
   or a matrix of such results, with each row corresponding to a
   different phenotype.
+
+  If the input permutations are X-chromosome-specific, the result has
+  six values: main effect for autosomes, main effect for X chr, heavy
+  penalty on A:A interactions, light penalty on A:A interactions,
+  penalty on A:X interactions, and penalty on X:X interactions.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
