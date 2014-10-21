@@ -39,9 +39,13 @@ scantwopermhk <-
         Achr <- chr.names[chrtype=="A"]
         Xchr <- chr.names[chrtype=="X"]
 
+        Xnull <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))
+        Xcovar <- Xnull$sexpgmcovar
+
         if(verbose) message("Running ", n.permAA, " A:A permutations")
         AAresult <- .scantwopermhk(cross, chr=Achr, pheno.col=pheno.col,
-                                   addcovar=addcovar, weights=weights, n.perm=n.permAA,
+                                   addcovar=cbind(addcovar, Xcovar), # include X covariates
+                                   weights=weights, n.perm=n.permAA,
                                    batchsize=batchsize,
                                    perm.strata=perm.strata, verbose=verbose,
                                    assumeCondIndep=assumeCondIndep)
