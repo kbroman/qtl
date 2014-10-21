@@ -103,10 +103,14 @@ scantwo <-
         Achr <- chr.names[chrtype=="A"]
         Xchr <- chr.names[chrtype=="X"]
 
+        # X chr covariates
+        Xnull <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))
+        Xcovar <- Xnull$sexpgmcovar
+
         if(verbose) message("Running ", n.permAA, " A:A permutations")
         AAresult <- scantwo(cross, chr=Achr, pheno.col=pheno.col,
                             model=model, method=method,
-                            addcovar=addcovar, intcovar=intcovar,
+                            addcovar=cbind(addcovar, Xcovar), intcovar=intcovar,
                             weights=weights, use=use,
                             incl.markers=incl.markers, clean.output=clean.output,
                             clean.nmar=clean.nmar, clean.distance=clean.distance,
