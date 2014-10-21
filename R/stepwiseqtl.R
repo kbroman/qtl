@@ -59,8 +59,8 @@ stepwiseqtl <-
     function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
              method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
              additive.only=FALSE, scan.pairs=FALSE, penalties,
-             keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
-             tol=1e-4, maxit=1000, require.fullrank=TRUE)
+             keeplodprofile=TRUE, keeptrace=FALSE, verbose=TRUE,
+             tol=1e-4, maxit=1000, require.fullrank=FALSE)
 {
     if(!("cross" %in% class(cross)))
         stop("Input should have class \"cross\".")

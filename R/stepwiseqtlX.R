@@ -205,7 +205,7 @@ stepwiseqtlX <-
     function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, k_f=3, stop.rule=0, covar=NULL,
              method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
              additive.only=FALSE, penalties,
-             keeplodprofile=FALSE, keeptrace=FALSE, verbose=TRUE,
+             keeplodprofile=TRUE, keeptrace=FALSE, verbose=TRUE,
              tol=1e-4, maxit=1000, require.fullrank=TRUE)
 {
     if(verbose) message("Running stepwiseqtlX")
@@ -401,7 +401,8 @@ stepwiseqtlX <-
         qtl.A <- makeqtl(cross, as.character(out.A[wh,1]), out.A[wh,2], "Q1",
                          what=qtlmethod)
 
-        curplod.A <- calc.plod.X(lod.A, formula=firstformula, qtl=qtl.A, penalties=penalties) # update Autosome plod after choosing formula and qtl
+        # update Autosome plod after choosing formula and qtl
+        curplod.A <- calc.plod.X(lod.A, formula=firstformula, qtl=qtl.A, penalties=penalties)
         # Calculate max plod in X chr
         lod.X <- max(out.X[,3], na.rm=TRUE)
 
@@ -411,7 +412,8 @@ stepwiseqtlX <-
         qtl.X <- makeqtl(cross, as.character(out.X[wh,1]), out.X[wh,2], "Q1",
                          what=qtlmethod)
 
-        curplod.X <- calc.plod.X(lod.X, formula=firstformula, qtl=qtl.X, penalties=penalties) # update X chr plod after choosing formula and qtl
+        # update X chr plod after choosing formula and qtl
+        curplod.X <- calc.plod.X(lod.X, formula=firstformula, qtl=qtl.X, penalties=penalties)
         # Compare and choose plod between Autosome and X Chr
         if (curplod.X > curplod.A) {
             curplod <- curplod.X
