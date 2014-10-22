@@ -150,7 +150,7 @@ double analyseF2(int Nind, int *nummark, cvector *cofactor, MQMMarkerMatrix mark
       }
     }
   }
-  Rprintf("Number of markers: %d -> %d\n",Nmark,jj);
+  if(verbose) Rprintf("INFO: Number of markers: %d -> %d\n",Nmark,jj);
   Nmark = jj;
   (*nummark) = jj;
 
