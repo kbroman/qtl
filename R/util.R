@@ -4405,4 +4405,14 @@ formMarkerCovar <-
     }
 }
 
+# reduce the levels in a factor to just those that are used
+reduce_factor_levels <-
+    function(x)
+{
+    xchar <- as.character(x)
+    lev <- levels(x)
+    lev <- lev[lev %in% unique(xchar)]
+    factor(xchar, levels=lev)
+}
+
 # end of util.R

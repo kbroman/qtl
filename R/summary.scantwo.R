@@ -814,6 +814,7 @@ subset.scantwo <-
         wh <- x$map[,1] %in% chr
 
         x$map <- x$map[wh,,drop=FALSE]
+        x$map[,1] <- reduce_factor_levels(x$map[,1])
 
         if(length(dim(x$lod))==2)
             x$lod <- x$lod[wh,wh,drop=FALSE]
