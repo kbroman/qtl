@@ -1,4 +1,3 @@
-
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
 copyright (c) 2001-2014, Karl W Broman
@@ -17,9 +16,26 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.34, 2014-10-07:
+Version 1.34, 2014-10-21:
 
 Major changes:
+
+  Added ability to do X-chr-specific permutations in scantwo (argument
+  perm.Xsp, as in scanone). Separate thresholds are obtained for the
+  regions A:A, A:X, and X:X regions, maintaining control of the
+  overall false positive rates.
+
+  Added a function scantwopermhk that just performs scantwo
+  permutations with Haley-Knott regression; faster and with lower
+  memory usage than scantwo.
+
+  With X-chr-specific scantwo permutations, calc.penalties will give
+  separate main effect for autosome and X chromosome, and separate
+  interaction penalties for A:A, A:X, X:X. For A:A interactions, we
+  still use "light" and "heavy" penalties; for A:X and X:X
+  interactions, only the "heavy" penalty is used. These penalties may
+  be used in stepwiseqtl for better treatment of the X chromosome in
+  automated inference of multi-QTL models.
 
   Added "tidy" format to read.cross and write.cross. This separates
   the data into three comma-delimited files, for genotypes,
@@ -341,7 +357,7 @@ Major changes:
     plot.info ->     plotInfo
     plot.pheno ->    plotPheno
     plot.pxg ->      plotPXG
-    plot.rf -> 	     plotRF
+    plot.rf ->       plotRF
     summary.map ->   summaryMap
     summary.scantwo.old -> summaryScantwoOld
 
