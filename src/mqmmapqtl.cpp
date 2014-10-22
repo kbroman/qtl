@@ -29,21 +29,20 @@
 
 #include "mqm.h"
 
-/* 
+/*
  * mapQTL moves a QTL along the chromosome and calculated at each map position
  * the QTL likelihood. Uses either all cofactors, or selected cofactors only
  */
-double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, 
+double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
               MQMMarkerMatrix marker, cvector position, vector mapdistance, vector y,
               vector r, ivector ind, int Naug, double variance, char
               printoutput, vector *informationcontent, matrix *Frun, int run,
               char REMLorML, bool fitQTL, bool dominance, int em, double
-              windowsize, double stepsize, double stepmin, double stepmax, 
+              windowsize, double stepsize, double stepmin, double stepmax,
               MQMCrossType crosstype, int verbose) {
   if(verbose) Rprintf("INFO: mapQTL function called\n");
   int j, jj, jjj=0;
   int Nloci = Nmark+1;
-  vector Fy = newvector(Naug);
   cvector QTLcofactor       = newcvector(Nloci);
   cvector saveQTLcofactor   = newcvector(Nloci);
   bool warned  = false;
@@ -56,8 +55,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   weight[0]= -1.0;
 
   /* fit QTL on top of markers (but: should also be done with routine QTLmixture() for exact ML) */
-  cvector newcofactor= newcvector(Nmark);
-  cvector direction = newcvector(Nmark);
   vector cumdistance = newvector(Nmark+1);
   double QTLlikelihood=0.0;
 
@@ -73,7 +70,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   // cout << "please wait (mixture calculus may take quite a lot of time)" << endl;
   /* estimate variance in mixture model with all marker cofactors */
   // cout << "estimate variance in mixture model with all cofactors" << endl;
-  
+
   variance= -1.0;
   savelogL= 2.0*QTLmixture(marker, cofactor, r, position, y, ind, Nind, Naug, Nmark, &variance, em, &weight, REMLorML, fitQTL, dominance, crosstype, &warned, verbose);
   if (verbose) Rprintf("INFO: log-likelihood of full model = %f\n", savelogL/2);
@@ -81,7 +78,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   // augment data for missing QTL observations (x 3)
   fitQTL=true;
   int newNaug = 3 * Naug;
-  Free(weight);
   weight           = newvector(newNaug);
   weight[0]        = 1.0;
   vector weight0   = newvector(newNaug);
@@ -90,7 +86,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   vector QTLr              = newvector(Nloci);
   vector QTLmapdistance    = newvector(Nloci);
   cvector QTLposition      = newcvector(Nloci);
-  MQMMarkerMatrix QTLloci  = (MQMMarkerMatrix)Calloc(Nloci, MQMMarkerVector);
+  MQMMarkerMatrix QTLloci  = (MQMMarkerMatrix)R_alloc(Nloci, sizeof(MQMMarkerVector));
 
   double moveQTL = stepmin;
   char nextinterval= 'n', firsttime='y';
@@ -98,7 +94,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   int baseNoQTLModel=0, step=0;
 
   for (j=0; j<Nmark; j++) {
-    /* 	fit a QTL in two steps:
+    /*  fit a QTL in two steps:
     1. move QTL along marker interval j -> j+1 with steps of stepsize=20 cM, starting from -20 cM up to 220 cM
     2. all marker-cofactors in the neighborhood of the QTL are dropped by using cM='windows' as criterium
     */
@@ -261,7 +257,7 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
         if (run>0) (*Frun)[step][run]+= QTLlikelihood;
         else (*Frun)[step][0]+= QTLlikelihood;
 
-        /* 	Each individual has condition multilocus probabilities for being 0, 1 or 2 at the QTL.
+        /*  Each individual has condition multilocus probabilities for being 0, 1 or 2 at the QTL.
         Calculate the maximum per individu. Calculate the mean of this maximum, averaging over all individuals
         This is the information content plotted.
         */
@@ -287,21 +283,5 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor,
   }
   fitQTL=false;
 
-  freevector(direction);
-  Free(info0);
-  Free(info1);
-  Free(info2);
-  Free(weight);
-  Free(weight0);
-  Free(QTLr);
-  Free(QTLposition);
-  Free(Fy);
-  Free(newcofactor);
-  Free(QTLcofactor);
-  Free(cumdistance);
-  Free(QTLmapdistance);
-  Free(QTLloci);
-  Free(saveQTLcofactor);
   return maxF; //QTLlikelihood;
 }
-

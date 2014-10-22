@@ -59,10 +59,10 @@ const double POSITIONUNKNOWN = 999.0;
 // Marker genotypes (scored at marker)
 /*
 const unsigned char MAA       = '0';  // Homozygous AA
-const unsigned char MH        = '1';  // Heterozygous AB 
+const unsigned char MH        = '1';  // Heterozygous AB
 const unsigned char MBB       = '2';  // Homozygous BB
 const unsigned char MNOTAA    = '3';  // Not AA
-const unsigned char MNOTBB    = '4';  // Not BB 
+const unsigned char MNOTBB    = '4';  // Not BB
 const unsigned char MMISSING  = '9';  // Unknown (marker genotype missing)
 const unsigned char MUNUSED   = '-';  // Unused parameter
 */
@@ -100,11 +100,6 @@ void printmatrix(matrix m, int rows, int cols);
 void printcmatrix(cmatrix m, int rows, int cols);
 cmatrix newcmatrix(int rows, int cols);
 MQMMarkerMatrix newMQMMarkerMatrix(int rows, int cols);
-void freematrix(void **m, size_t rows);
-void freevector(void *v);
-void delmatrix(matrix m, size_t rows);
-void delcmatrix(cmatrix m, size_t rows);
-void delMQMMarkerMatrix(MQMMarkerMatrix m,size_t rows);
 void copyvector(vector vsource, vector vdestination, int dim);
 void *calloc_init(size_t num, size_t size);
 

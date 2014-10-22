@@ -131,9 +131,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
       //Rprintf("r(%d)= %f -> %f\n", j, r[j], (*mapdistance)[j]);
     }
   }
-  if (verbose==1) Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n", iem, rdelta); 
-  Free(indweight);
-  freevector(distance);
+  if (verbose==1) Rprintf("INFO: Re-estimation of the genetic map took %d iterations, to reach a rdelta of %f\n", iem, rdelta);
   return maximum;
 }
 
@@ -143,16 +141,16 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
  * multilocus information, but assuming known recombination frequencies
 */
 double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector position,
-                  vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance, 
+                  vector y, ivector ind, int Nind, int Naug, int Nloci, double *variance,
                   int em, vector *weight, const bool useREML,const bool fitQTL,const bool dominance, MQMCrossType crosstype, bool* warned, int verbose) {
-                  
+
   //debug_trace("QTLmixture called Nloci=%d Nind=%d Naug=%d, REML=%d em=%d fit=%d domi=%d cross=%c\n",Nloci,Nind,Naug,useREML,em,fitQTL,dominance,crosstype);
   //for (int i=0; i<Nloci; i++){ debug_trace("loci %d : recombfreq=%f\n",i,r[i]); }
   int iem= 0, i, j;
   bool warnZeroDist=false;
   bool biasadj=false;
   double oldlogL = -10000, delta=1.0, calc_i, Pscale=1.75;
-  
+
   vector indweight  = newvector(Nind);
   int newNaug       = ((!fitQTL) ? Naug : 3*Naug);
   vector Fy         = newvector(newNaug);
@@ -221,9 +219,9 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
             Ploci[i+2*Naug]*= calc_i;
           }
         else if (cofactor[j]<=MCOF) // locus j+1 == QTL
-          for (i=0; i<Naug; i++) { // QTL==MAA || MH || MBB means: What is the prob of finding an MAA at J=1    
+          for (i=0; i<Naug; i++) { // QTL==MAA || MH || MBB means: What is the prob of finding an MAA at J=1
             calc_i =left_prob(r[j],loci[j][i],MAA,crosstype);     //calc_i = prob(loci, r, i, j, MAA, crosstype, 0);
-            Ploci[i]*= calc_i;      
+            Ploci[i]*= calc_i;
             calc_i = left_prob(r[j],loci[j][i],MH,crosstype);     //calc_i = prob(loci, r, i, j, MH, crosstype, 0);
             Ploci[i+Naug]*= calc_i;
             calc_i = left_prob(r[j],loci[j][i],MBB,crosstype);    //calc_i = prob(loci, r, i, j, MBB, crosstype, 0);
@@ -242,7 +240,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
     }
   }
   if(warnZeroDist && verbose && !(*warned)){
-    Rprintf("WARNING: 0.0 from Probability calculation! Markers at same cMorgan but different genotype?\n"); 
+    Rprintf("WARNING: 0.0 from Probability calculation! Markers at same cMorgan but different genotype?\n");
     (*warned) = true;
   }
 //	Rprintf("INFO: Done fitting QTL's\n");
@@ -302,7 +300,7 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
     delta= fabs(logL-oldlogL);
     oldlogL= logL;
   }
-  
+
   if ((useREML)&&(!varknown)) { // Bias adjustment after finished ML estimation via EM
     *variance=-1.0;
     biasadj=true;
@@ -342,10 +340,5 @@ double QTLmixture(MQMMarkerMatrix loci, cvector cofactor, vector r, cvector posi
     }
   }
   //for (i=0; i<Nind; i++){ debug_trace("IND %d Ploci: %f Fy: %f UNLOG:%f LogL:%f LogL-LogP: %f\n", i, Ploci[i], Fy[i], indL[i], log(indL[i]), log(indL[i])-logP); }
-  Free(Fy);
-  Free(Ploci);
-  Free(indweight);
-  Free(indL);
   return logL;
 }
-
