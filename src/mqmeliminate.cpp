@@ -53,7 +53,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   double savelogL    = logLfull;
   double maxlogL     = logLfull-10000.0;
   bool warned        = false;
-  
+
   if (verbose) Rprintf("INFO: Backward elimination of cofactors started\n");
   for (int j=0; j<Nmark; j++) {
     (*newcofactor)[j]= cofactor[j];
@@ -96,7 +96,7 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
       savelogL= maxlogL;
       (*newcofactor)[dropj]= MNOCOF;
       Ncof-=1;
-      if(verbose) 
+      if(verbose)
         Rprintf("INFO: Marker %d is dropped, resulting in reduced model logL = %.3f\n",(dropj+1),ftruncate3(savelogL));
     } else if ( ((*newcofactor)[dropj]==MBB) && (F1> 2.0*(savelogL-maxlogL)) ) {
       savelogL= maxlogL;
@@ -121,6 +121,5 @@ double backward(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   //Map using the model
   maxF = mapQTL(Nind, Nmark, cofactor, (*newcofactor), marker, position, (*mapdistance), y, r, ind, Naug, variance, 'n',
                 informationcontent,Frun,run,REMLorML,fitQTL,dominance, em, windowsize, stepsize, stepmin, stepmax,crosstype,verbose);
-  Free(logL);
   return maxF;
 }
