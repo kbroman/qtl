@@ -10,7 +10,7 @@
 
 \usage{
 scanonevar(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
-           additive_alleles=TRUE, family=gaussian(), maxit=25,
+           family=gaussian(), maxit=25,
            fixed_gamma_disp=FALSE, quiet=TRUE)
 }
 \arguments{
@@ -25,8 +25,6 @@ scanonevar(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
    transformations.}
   \item{mean_covar}{Numeric matrix with covariates affecting the mean.}
   \item{var_covar}{Numeric matrix with covariates affecting the variances.}
-  \item{additive_alleles}{If TRUE (the default), assume no dominance in
-    an intercross.}
   \item{family}{Family object for \code{\link[dglm]{dglm}}.}
   \item{maxit}{Maximum number of iterations in the algorithm to fit the
     model at a given position.}

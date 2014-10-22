@@ -4,7 +4,7 @@
 
 scanonevar <-
 function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
-         additive_alleles=TRUE, family = gaussian(), maxit = 25 ,
+         family = gaussian(), maxit = 25 ,
          fixed_gamma_disp = FALSE, quiet=TRUE)
 {
     # check input
@@ -56,10 +56,6 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
     # set up data and formulas
     X <- cbind(pheno=pheno, add=rep(0, length(pheno)))
     mean_formula <- var_formula <- "pheno ~ add"
-    if(crosstype=="f2" && !additive_alleles) {
-        X <- cbind(X, dom=rep(0, nrow(X)))
-        mean_formula <- var_formula <- "pheno ~ add + dom"
-    }
     if(!is.null(mean_covar)) {
         ncolX <- ncol(X)
         X <- cbind(X, mean_covar)
@@ -102,8 +98,6 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
         for(i in 1:n.loci) { # loop over positions within chromosome
             # fill in genotype probs for this locus
             X[,2] <- a1[,i]
-            if(crosstype=="f2" && !additive_alleles)
-                X[,3] <- d1[,i]
 
             d.fit<-try(dglm::dglm(formula=mean_formula, dformula=var_formula,
                                   data=X, family = family, control=dglm::dglm.control(maxit=maxit)), silent=TRUE)
