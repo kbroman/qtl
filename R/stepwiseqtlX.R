@@ -297,7 +297,7 @@ stepwiseqtlX <-
     if(method=="imp") qtlmethod <- "draws"
     else qtlmethod <- "prob"
 
-    if(!is.null(qtl) && !is.nu&& qtl$n.ind != nind(cross)) {
+    if(!is.null(qtl) && qtl$n.ind != nind(cross)) {
         warning("No. individuals in qtl object doesn't match that in the input cross; re-creating qtl object.")
         if(method=="imp")
             qtl <- makeqtl(cross, qtl$chr, qtl$pos, qtl$name, what="draws")
