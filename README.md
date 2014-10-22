@@ -4,10 +4,11 @@
 
 copyright (c) 2001-2014, [Karl W Broman](http://kbroman.org)
 
-Authors: Karl W Broman and Hao Wu, with ideas from Gary Churchill and
-         Saunak Sen and contributions from Danny Arends,
-         Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Laura
-         Shannon, and Brian Yandell
+**Authors**: Karl W Broman and Hao Wu, with ideas from Gary Churchill
+and &#346;aunak Sen and contributions from Danny Arends,
+Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Lars
+R&ouml;nneg&aring;rd, Rohan Shah, Laura Shannon, Quoc Tran, Aaron
+Wolen, and Brian Yandell
 
 [R/qtl](http://www.rqtl.org) is an extensible, interactive environment for mapping
 quantitative trait loci (QTL) in experimental crosses. It is
@@ -46,5 +47,5 @@ without any warranty; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-A copy of the GNU General Public License, version 3, is available at  
+A copy of the GNU General Public License, version 3, is available at
 <http://www.r-project.org/Licenses/GPL-3>
