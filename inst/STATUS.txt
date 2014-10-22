@@ -37,6 +37,11 @@ Major changes:
   be used in stepwiseqtl for better treatment of the X chromosome in
   automated inference of multi-QTL models.
 
+  Added scanonevar() function, for a single-QTL genome scan for QTL
+  affecting not just the mean phenotype but also the variance. (Code
+  from Lars Ronnegard; method in Ronnegard and Valdar Genetics
+  188:435-447, 2011.)
+
   Added "tidy" format to read.cross and write.cross. This separates
   the data into three comma-delimited files, for genotypes,
   phenotypes, and the marker map. Separating the data in this way
