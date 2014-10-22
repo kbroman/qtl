@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/kbroman/qtl.png?branch=master)](https://travis-ci.org/kbroman/qtl)
 
-copyright (c) 2001-2014, [Karl W Broman](http://kbroman.org)
-
 **Authors**: Karl W Broman and Hao Wu, with ideas from Gary Churchill
 and &#346;aunak Sen and contributions from Danny Arends,
 Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Lars
