@@ -16,7 +16,7 @@ scantwo(cross, chr, pheno.col=1, model=c("normal","binary"),
         incl.markers=FALSE, clean.output=FALSE,
         clean.nmar=1, clean.distance=0,
         maxit=4000, tol=1e-4,
-        verbose=TRUE, n.perm, perm.strata=NULL, perm.Xsp=FALSE,
+        verbose=TRUE, n.perm, perm.Xsp=FALSE, perm.strata=NULL,
         assumeCondIndep=FALSE, batchsize=250, n.cluster=1)
 }
 
