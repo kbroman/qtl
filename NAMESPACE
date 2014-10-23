@@ -3,7 +3,7 @@ useDynLib(qtl)
 # Import package dependencies
 import(graphics, stats, utils, parallel)
 
-# Export all names
+export(map2table)
 export(scanonevar)
 export(reduce2grid)
 export(formMarkerCovar)
