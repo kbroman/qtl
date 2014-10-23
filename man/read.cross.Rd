@@ -28,15 +28,15 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     Windows, use forward slashes (\code{"/"}) or double backslashes
     (\code{"\\\\"}) to specify directory trees.}
   \item{file}{The main input file for formats \code{csv}, \code{csvr}
-    and \code{mm}.} 
+    and \code{mm}.}
   \item{genfile}{File with genotype data (formats \code{csvs},
     \code{csvsr}, \code{karl}, \code{gary} and \code{mapqtl} only).}
-  \item{mapfile}{File with marker position information (all 
+  \item{mapfile}{File with marker position information (all
     except the \code{csv} formats).}
   \item{phefile}{File with phenotype data (formats \code{csvs},
     \code{csvsr}, \code{karl}, \code{gary} and \code{mapqtl} only).}
   \item{chridfile}{File with chromosome ID for each marker (\code{gary}
-    format only).} 
+    format only).}
   \item{mnamesfile}{File with marker names (\code{gary} format only).}
   \item{pnamesfile}{File with phenotype names (\code{gary} format
     only).}
@@ -46,27 +46,27 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     for the entire
     file, so missing value codes in phenotypes must not be valid
     genotypes, and vice versa. For the \code{gary} format, these are
-    used only for the phenotype data.} 
+    used only for the phenotype data.}
   \item{genotypes}{A vector of character strings specifying the genotype
     codes (\code{csv} formats only).  Generally this is a vector of
-    length 5, with the elements corresponding to AA, AB, BB, not BB 
+    length 5, with the elements corresponding to AA, AB, BB, not BB
     (i.e., AA or AB), and not AA (i.e., AB or BB).  \bold{Note}: Pay
     careful attention to the third and fourth of these; the order of
     these can be confusing.
 
     If you are trying to read 4-way cross data, your file must have
-    genotypes coded as described below, and you need to set 
+    genotypes coded as described below, and you need to set
     \code{genotypes=NULL} so that no re-coding gets done.}
   \item{alleles}{A vector of two one-letter character strings (or four,
     for the four-way cross), to be used as labels for the two alleles.}
-  \item{estimate.map}{For all formats but \code{qtlcart} and
-    \code{karl}: if TRUE and marker positions are
-    not included in the input files, the genetic map is estimated using
-    the function  \code{\link{est.map}}.} 
+  \item{estimate.map}{For all formats but \code{qtlcart}, \code{mapqtl},
+    and \code{karl}: if TRUE and marker positions are not included in
+    the input files, the genetic map is estimated using the function
+    \code{\link{est.map}}.}
   \item{convertXdata}{If TRUE, any X chromosome genotype data is
     converted to the internal standard, using columns \code{sex} and
     \code{pgm} in the phenotype data if they available or by inference
-    if they are not.  If FALSE, the X chromsome data is read as is.}  
+    if they are not.  If FALSE, the X chromsome data is read as is.}
   \item{error.prob}{In the case that the marker map must be estimated:
    Assumed genotyping error rate used in the calculation of the
    penetrance Pr(observed genotype | true genotype).}
@@ -78,7 +78,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \item{F.gen}{Used only for cross type \code{"bcsft"}.}
   \item{crosstype}{Optional character string to force a particular cross type.}
   \item{\dots}{Additional arguments, passed to the function
-    \code{\link[utils]{read.table}} in the case of 
+    \code{\link[utils]{read.table}} in the case of
     \code{csv} and \code{csvr} formats.  In particular, one may use the
     argument
     \code{sep} to specify the field separator (the default is a comma),
@@ -94,22 +94,22 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     chromosomes.  \code{names(geno)} contains the names of the
     chromsomes.  Each chromosome is itself a list, and is given class
     \code{A} or \code{X} according to whether it is autosomal
-    or the X chromosome. 
-    
+    or the X chromosome.
+
     There are two components for each chromosome: \code{data}, a matrix
     whose rows are individuals and whose columns are markers, and
     \code{map}, either a vector of marker positions (in cM) or a matrix
     of dim (\code{2 x n.mar}) where the rows correspond to marker
-    positions in female and male genetic distance, respectively.  
+    positions in female and male genetic distance, respectively.
 
-    The genotype data gets converted into numeric codes, as follows.  
+    The genotype data gets converted into numeric codes, as follows.
 
     The genotype data for a backcross is coded as NA = missing,
-    1 = AA, 2 = AB.  
+    1 = AA, 2 = AB.
 
     For an F2 intercross, the coding is NA = missing, 1 = AA, 2 = AB, 3
     = BB, 4 = not BB (i.e. AA or AB; D in Mapmaker/qtl), 5 = not AA (i.e. AB
-    or BB; C in Mapmaker/qtl). 
+    or BB; C in Mapmaker/qtl).
 
     For a 4-way cross, the mother and father are assumed to have
     genotypes AB and CD, respectively.  The genotype data for the
@@ -123,7 +123,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
     phenotypes.  If a phenotype with the name \code{id} or \code{ID} is
   included, these identifiers will be used in \code{\link{top.errorlod}},
   \code{\link{plotErrorlod}}, and \code{\link{plotGeno}} as
-  identifiers for the individual.} 
+  identifiers for the individual.}
 
   While the data format is complicated, there are a number of functions,
   such as \code{\link{subset.cross}}, to
@@ -166,7 +166,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   The phenotype data should contain a column named \code{"sex"} which
   indicates the sex of each individual, either coded as \code{0}=female and
   \code{1}=male, or as a factor with levels \code{female}/\code{male} or
-  \code{f}/\code{m}.  Case will be 
+  \code{f}/\code{m}.  Case will be
   ignored both in the name and in the factor levels.  If no such
   phenotype column is included, it will be assumed that all individuals
   are of the same sex.
@@ -177,13 +177,13 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   the cross (AxB)x(AxB) or (BxA)x(AxB) and 1 indicating the cross
   (AxB)x(BxA) or (BxA)x(BxA).  If no such phenotype column is included,
   it will be assumed that all individuals come from the same direction
-  of cross. 
+  of cross.
 
   The internal storage of X chromosome data is quite different from that
   of autosomal data.  Males are coded 1=AA and 2=BB; females with pgm==0
   are coded 1=AA and 2=AB; and females with pgm==1 are coded 1=BB and
   2=AB.  If the argument \code{convertXdata} is TRUE, conversion to this
-  format is made automatically; if FALSE, no conversion is done, 
+  format is made automatically; if FALSE, no conversion is done,
   \code{\link{summary.cross}} will likely return a warning, and
   most analyses will not work properly.
 
@@ -200,7 +200,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   Europe, it is common to use a comma in place of the decimal point in
   numbers and so a semi-colon in place of a comma as the field
   separator; such data may be read by using \code{sep=";"} and
-  \code{dec=","}.  
+  \code{dec=","}.
 
   The first line should contain the phenotype names followed by the
   marker names.  \bold{At least one phenotype must be included}; for
@@ -248,7 +248,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   will be included in the data as a phenotype.  If the name \code{id} or
   \code{ID} is used, these identifiers will be used in
   \code{\link{top.errorlod}}, \code{\link{plotErrorlod}}, and
-  \code{\link{plotGeno}} as identifiers for the individual.  
+  \code{\link{plotGeno}} as identifiers for the individual.
 
   The first row in each file contains the column names.  For the
   phenotype file, these are the names of the phenotypes.  For the
@@ -283,11 +283,11 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   and cross your fingers).  The rest of the lines give genotype data
   followed by phenotype data, with marker and phenotype names always
   beginning with the \code{*} symbol.
-    
+
   A second file contains the genetic map information, specified with
   the argument \code{mapfile}.  The map file may be in
   one of two formats.  The function will determine which format of map
-  file is presented.  
+  file is presented.
 
   The simplest format for the map file is not standard for the Mapmaker
   software, but is easy to create.  The file contains two or three
@@ -301,13 +301,13 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   format was written by Brian Yandell.
 
   Marker order is taken from the map file, either by the order they are
-  presented or by the cM positions, if specified.  
+  presented or by the cM positions, if specified.
 }
 
 \section{Map Manager QTX format}{
   This format requires a single file (that produced by the Map Manager
   QTX program).
-}  
+}
 
 \section{QTL Cartographer format}{
   This format requires two files: the \code{.cro} and \code{.map} files
@@ -317,7 +317,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   Note that the QTL Cartographer cross types are converted as follows:
   RF1 to riself, RF2 to risib, RF0 (doubled haploids) to bc, B1 or B2 to
   bc, RF2 or SF2 to f2.
-}  
+}
 
 \section{Tidy format}{
   This format requires three simple CSV files, separating the genotype,
@@ -327,7 +327,7 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
 
 \section{Gary format}{
   This format requires the six files.  All files have default names, and
-  so the file names need not be specified if the default names are used. 
+  so the file names need not be specified if the default names are used.
 
   \code{genfile} (default = \code{"geno.dat"}) contains the genotype
   data.  The file contains one line per individual, with genotypes for
@@ -338,14 +338,14 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   columns with no header row: the marker names in the first column and
   their cM position in the second column.  If marker positions are not
   available, use \code{mapfile=NULL}, and a dummy map will be inserted.
-  
+
   \code{phefile} (default = \code{"pheno.dat"}) contains the phenotype
   data, with one row for each mouse and one column for each phenotype.
   There should be no header row, and missing values are coded as
-  \code{"-"}. 
+  \code{"-"}.
 
   \code{chridfile} (default = \code{"chrid.dat"}) contains the
-  chromosome identifier for each marker.  
+  chromosome identifier for each marker.
 
   \code{mnamesfile} (default = \code{"mnames.txt"}) contains the marker
   names.
@@ -353,29 +353,29 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
   \code{pnamesfile} (default = \code{"pnames.txt"}) contains the names
   of the phenotypes.  If phenotype names file is not available, use
   \code{pnamesfile=NULL}; arbitrary phenotype names will then be
-  assigned. 
+  assigned.
 }
 
 
 \section{Karl format}{
   This format requires three files; all files have default names, and so
-  need not be specified if the default name is used. 
+  need not be specified if the default name is used.
 
   \code{genfile} (default = \code{"gen.txt"}) contains the genotype
   data.  The file contains one line per individual, with genotypes
   separated by white space.  Missing values are coded 0; genotypes are
   coded as 1/2/3/4/5 for AA/AB/BB/not BB/not AA.
-    
+
   \code{mapfile} (default = \code{"map.txt"}) contains the map
   information, in the following complicated format: \cr \cr
     \code{n.chr} \cr
     \code{n.mar(1) rf(1,1) rf(1,2) \ldots rf(1,n.mar(1)-1)}\cr
-    \code{mar.name(1,1)}\cr 
-    \code{mar.name(1,2)}\cr 
-    \code{\ldots}\cr 
-    \code{mar.name(1,n.mar(1))}\cr 
+    \code{mar.name(1,1)}\cr
+    \code{mar.name(1,2)}\cr
+    \code{\ldots}\cr
+    \code{mar.name(1,n.mar(1))}\cr
     \code{n.mar(2)}\cr
-    \code{\ldots}\cr 
+    \code{\ldots}\cr
     \code{etc.} \cr
 
   \code{phefile} (default = \code{"phe.txt"}) contains a matrix of
@@ -432,7 +432,7 @@ dat6 <- read.cross("gary", dir="Mydata", genfile="geno.dat",
 # Karl format
 dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
                    phefile="phe.txt", mapfile="map.txt")}
-} 
+}
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian
   S. Yandell; Aaron Wolen}
@@ -449,7 +449,7 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
   \code{\link{write.cross}}, \code{\link{sim.cross}}, \code{\link[utils]{read.table}}.
   The \code{sampledata} directory in the package distribution contains
   sample data files in multiple formats.  Also see
-  \url{http://www.rqtl.org/sampledata}.  
+  \url{http://www.rqtl.org/sampledata}.
 }
 
 \keyword{IO}
