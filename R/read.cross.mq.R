@@ -593,6 +593,7 @@ function(mapfile){
     lines <- vapply(strsplit(lines, ";"), "[", "", 1)
 
     # drop empty lines
+    lines <- lines[!is.na(lines)]
     blank <- grep("^\\s*$", lines)
     if(length(blank) > 0)
         lines <- lines[-blank]
