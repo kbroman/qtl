@@ -1,4 +1,3 @@
-
 "To do" list for R/qtl
 ----------------------------------------------------------------------
 This file is intended to contain a list of many of the additions and
@@ -9,10 +8,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 ----------------------------------------------------------------------
 
 SHORT TERM:
-
-o map2table: function to convert map to a table; use code from
-  pull.map and then have pull.map w/ as.table=TRUE call the new
-  function.
 
 o functions as.scanone (for converting matrix or data frame to scanone
   format) and as.scanoneperm (for converting matrix or two to
