@@ -65,9 +65,9 @@ read.cross.tidy <-
     args <- c(args, list(sep = sep, na.strings = na.strings,
                          row.names = 1, header = TRUE, stringsAsFactors = FALSE))
 
-    gen   <- do.call("read.table", c(args, file = genfile))
-    pheno <- do.call("read.table", c(args, file = phefile))
-    map   <- do.call("read.table", c(args, file = mapfile))
+    gen   <- do.call("read.table", c(args, list(file = genfile)))
+    pheno <- do.call("read.table", c(args, list(file = phefile)))
+    map   <- do.call("read.table", c(args, list(file = mapfile)))
 
     # Check individual IDs
     mp <- setdiff(colnames(gen), colnames(pheno))
