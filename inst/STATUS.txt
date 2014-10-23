@@ -58,6 +58,8 @@ Minor changes:
   with multiple phenotypes, some with missing values (thanks to
   John Lovell).
 
+  Fixed some bugs in read.cross with format="mapqtl".
+
 
 Version 1.33, 2014-08-12:
 
