@@ -42,7 +42,7 @@
 ######################################################################
 
 read.cross.mq <-
-function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
+function(dir, locfile, mapfile, quafile)
 {
     if(! missing(dir) && dir != "") {
         if(length(grep("/$", dir)) > 0) # strip off ending /
@@ -91,7 +91,7 @@ function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
 
     cross <- list(geno=geno, pheno=pheno)
     class(cross) <- c(type, "cross")
-    list(cross, estimate.map)
+    list(cross, FALSE) # FALSE for "don't estimate map"
 }
 
 mq_grab_param <-
