@@ -39,7 +39,7 @@ map <- pull.map(fake.f2)
 plot(map)
 }
 
-\seealso{ \code{\link{replace.map}}, \code{\link{plotMap}} }
+\seealso{ \code{\link{replace.map}}, \code{\link{plotMap}}, \code{\link{map2table}} }
 
 
 \keyword{utilities}

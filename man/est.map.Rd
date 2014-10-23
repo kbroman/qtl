@@ -33,10 +33,10 @@ est.map(cross, chr, error.prob=0.0001,
    interference. This may be used only for a backcross or intercross.}
  \item{p}{Proportion of chiasmata from the NI mechanism, in the Stahl
    model; p=0 gives a pure chi-square model.  This may be used only for
-   a backcross or intercross.} 
+   a backcross or intercross.}
  \item{maxit}{Maximum number of EM iterations to perform.}
  \item{tol}{Tolerance for determining convergence.}
- \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
+ \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is
  used only for the 4-way cross.}
  \item{verbose}{If TRUE, print tracing information.}
  \item{omit.noninformative}{If TRUE, on each chromosome, omit individuals
@@ -49,7 +49,7 @@ est.map(cross, chr, error.prob=0.0001,
   equal to the number of chromosomes, defining individual starting
   positions for each chromosome.  For a sex-specific map (as in a 4-way
   cross), we use the same offset for both the male and female maps.}
- \item{n.cluster}{If the package \code{snow} is available 
+ \item{n.cluster}{If the package \code{snow} is available
    calculations for multiple chromosomes are run in parallel using this
    number of nodes.}
 }
@@ -103,7 +103,7 @@ fake.f2 <- replace.map(fake.f2, newmap)
   Armstrong, N. J., McPeek, M. J. and Speed, T. P. (2006) Incorporating
   interference into linkage analysis for experimental crosses.
   \emph{Biostatistics} \bold{7}, 374--386.
-  
+
   Lander, E. S. and Green, P. (1987) Construction of multilocus genetic linkage
   maps in humans.  \emph{Proc. Natl. Acad. Sci. USA} \bold{84}, 2363--2367.
 
@@ -117,9 +117,9 @@ fake.f2 <- replace.map(fake.f2, newmap)
   Zhao, H., Speed, T. P. and McPeek, M. S. (1995) Statistical analysis of
   crossover interference using the chi-square model.  \emph{Genetics}
   \bold{139}, 1045--1056.
-}  
+}
 
-\seealso{ \code{\link{plotMap}}, \code{\link{replace.map}},
+\seealso{ \code{\link{map2table}}, \code{\link{plotMap}}, \code{\link{replace.map}},
   \code{\link{est.rf}}, \code{\link{fitstahl}} }
 
 \keyword{utilities}

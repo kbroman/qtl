@@ -42,27 +42,41 @@ pull.map <-
 
     if(!missing(chr)) cross <- subset(cross, chr=chr)
     if(!as.table) {
-        a <- lapply(cross$geno,function(a) {
+        result <- lapply(cross$geno,function(a) {
             b <- a$map
             class(b) <- as.character(class(a))
             b })
-        class(a) <- "map"
+        class(result) <- "map"
+        return(result)
     } else {
-        themap <- pull.map(cross, as.table=FALSE)
-        if(is.matrix(themap[[1]])) {
-            themap1 <- unlist(lapply(themap, function(a) a[1,]))
-            themap2 <- unlist(lapply(themap, function(a) a[2,]))
-            a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
-                            pos.female=themap1, pos.male=themap2, stringsAsFactors=TRUE)
-        } else {
-            a <- data.frame(chr=rep(names(cross$geno), nmar(cross)),
-                            pos=unlist(themap), stringsAsFactors=TRUE)
-        }
-        rownames(a) <- markernames(cross)
+        return(map2table(pull.map(cross, as.table=FALSE)))
+    }
+}
+
+map2table <-
+    function(map, chr)
+{
+    if(!missing(chr)) {
+        chr <- matchchr(chr, names(map))
+        map <- map[chr]
     }
 
-    a
+    if(is.matrix(map[[1]])) {
+        map1 <- unlist(lapply(map, function(a) a[1,]))
+        map2 <- unlist(lapply(map, function(a) a[2,]))
+        result <- data.frame(chr=rep(names(map), vapply(map, ncol, 0)),
+                             pos.female=map1, pos.male=map2, stringsAsFactors=FALSE)
+        rownames(result) <- unlist(lapply(map, colnames))
+    } else {
+        result <- data.frame(chr=rep(names(map), vapply(map, length, 0)),
+                             pos=unlist(map), stringsAsFactors=FALSE)
+        rownames(result) <- unlist(lapply(map, names))
+    }
+    result[,1] <- factor(result[,1], levels=unique(result[,1]))
+
+    result
 }
+
 
 ######################################################################
 # pull.geno
