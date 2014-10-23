@@ -580,37 +580,55 @@ function(locfile){
 ## returns a data.frame with 3 columns: chr (factor), marker (char), pos (num)
 read.cross.mq.map <-
 function(mapfile){
+
+    # read all lines
     lines <- readLines(mapfile)
-    genmap <- data.frame(chr=rep(NA, length(lines)),
-                         marker=NA, pos=NA)
 
-    whole <- paste(lines, collapse="\n")
-    groups <- strsplit(x=whole, split="group")[[1]]
+    # remove comments
+    lines <- vapply(strsplit(lines, ";"), "[", "", 1)
 
-    marker.id <- 1
-    for(group.id in 1:length(groups)){
-        tmp <- gsub(pattern=" + ", replacement=" ", x=groups[group.id])
-        if(tmp == "" || tmp == " ") # empty groups
-            next
+    # drop empty lines
+    blank <- grep("^\\s*$", lines)
+    if(length(blank) > 0)
+        lines <- lines[-blank]
 
-        lines <- strsplit(tmp, split="\n")[[1]]
-        group.name <- gsub(pattern=" ", replacement="", x=lines[1])
+    # find groups
+    grouplines <- grep("group", lines)
 
-        for(line.id in 2:length(lines)){
-            tmp <- mq.rmv.comment(x=lines[line.id], symbol=";")
-            if(tmp == "" || tmp == " ") # empty lines
-                next
-            tokens <- strsplit(x=tmp, split=" |\t")[[1]]
-            tmp <- gsub(pattern=" ", replacement="", x=tokens[2])
-            genmap[marker.id, "chr"] <- group.name
-            genmap[marker.id, "marker"] <- tokens[1]
-            genmap[marker.id, "pos"] <- as.numeric(tokens[2])
-            marker.id <- marker.id + 1
-        }
+    # add lg name to end of each line
+    for(i in seq(along=grouplines)) {
+        # linkage group name
+        groupname <- strsplit(lines[grouplines[i]], "\\s+")[[1]]
+        groupname <- groupname[length(groupname)]
+
+        first <- grouplines[i]+1
+        if(i==length(grouplines))
+            last <- length(lines)
+        else last <- grouplines[i+1]-1
+
+        lines[first:last] <- paste(lines[first:last], groupname)
     }
 
-    genmap <- genmap[! is.na(genmap[,"chr"]), ]
-    genmap[,"chr"] <- factor(genmap[,"chr"], levels=unique(genmap[,"chr"]))
+    # drop initial lines
+    if(grouplines[1] > 1)
+        todrop <- 1:(grouplines[1]-1)
+    else todrop <- NULL
+    # also drop the group lines
+    todrop <- c(todrop, grouplines)
+    # now the actual dropping
+    lines <- lines[-todrop]
+
+    # split at white space
+    spl <- strsplit(lines, "\\s+")
+
+    # combine into a data frame
+    genmap <- data.frame(chr=vapply(spl, "[", "", 3),
+                         marker=vapply(spl, "[", "", 1),
+                         pos=as.numeric(vapply(spl, "[", "", 2)),
+                         stringsAsFactors=FALSE)
+
+    # make chr as factor
+    genmap[,1] <- factor(genmap[,1], levels=unique(genmap[,1]))
 
     genmap
 }
