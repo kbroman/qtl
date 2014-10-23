@@ -1,9 +1,8 @@
-
 Bugs and bug fixes for R/qtl
 ----------------------------------------------------------------------
 This file is intended to contain known bugs in the R/qtl package,
 version by version.  The bugs marked with ">>" are not yet fixed.  See
-STATUS.txt for further information on changes to the package.  
+STATUS.txt for further information on changes to the package.
 
 The list is not comprehensive.  I don't do a terribly good job of
 keeping track of things I find and fix. The git log gives an explicit
@@ -16,7 +15,8 @@ many details as possible and possibly example data, to Karl Broman,
 
 Version 1.33 bugs:
 
->> 1. read.cross with format="mapqtl" is not working in some cases.
+   1. read.cross with format="mapqtl" is not working in some cases.
+      [Fixed in version 1.34.]
 
 
 Version 1.32 bugs:
@@ -58,7 +58,7 @@ Version 1.11 bugs:
       were included specifically in a call to fitqtl, the LOD score
       attached to the X chromosome would be correct, but the model df
       in the "full model result" is wrong, as these covariates get
-      double-counted.  
+      double-counted.
 
 
 Version 1.08 bugs:
@@ -74,16 +74,16 @@ Version 1.06 bugs:
 
     1. Bug in fitqtl.  Incorrect results can be obtained if covariates
        are placed before QTL terms in the formula.  [Fixed in Version
-       1.07.] 
+       1.07.]
 
 
 Version 1.05 bugs:
 
     1. Bug in sim.cross regarding the QTL effects for a backcross.
        [Fixed in Version 1.06.]
-    
+
     2. Bug in write.cross concerning X chromosome genotypes in an
-       intercross with all males and all pgm==1. 
+       intercross with all males and all pgm==1.
        [Fixed in Version 1.06.]
 
     3. Bug in 2d scans via scanqtl; the first row of LOD scores are
@@ -111,7 +111,7 @@ Version 1.04 bugs:
 Version 1.03 bugs:
 
     1. In the "batch mode" permutations in scanone and scantwo
-       with method="hk" or ="imp", sex and pgm were stripped 
+       with method="hk" or ="imp", sex and pgm were stripped
        off, and so the results were wrong in the presence of an
        X chromosome if there are some individuals of each sex
        and/or direction.  [Fixed in version 1.04.]
@@ -121,21 +121,21 @@ Version 1.01 bugs:
 
     1. plot.pxg for X chr and autosome: results can be messed up,
        depending on the order of the markers.  [Fixed in version
-       1.03.]  
+       1.03.]
 
     2. plot.geno() can give a bus error.  This is due to a problem
        in locate.xo().  [Fixed in version 1.02.]
 
 >>  3. read.cross for "qtx" sometimes doesn't seem to take the
        genotype pattern appropriately; read in a backcross as if it
-       were an F2. 
+       were an F2.
 
 >>  4. An NA in the mapmaker data file caused an error in read.cross;
        the line became too long.  Maybe this is true whenever an item
        doesn't match what is expected.
 
     5. summary.scantwo doesn't work if there's just two positions on a
-       chromosome (or maybe it's for one position).  [Fixed in version 
+       chromosome (or maybe it's for one position).  [Fixed in version
        1.05.]
 
 
@@ -194,7 +194,7 @@ Version 0.96 bugs:
        a "sex" column in the phenotype data but all individuals have
        the same sex.  [Fixed in version 0.98.]
 
-    4. There's likely an error in write.cross.qtlcart.  See 
+    4. There's likely an error in write.cross.qtlcart.  See
        the line with "lo <- seq(1,n.ind-1,by=40)"
        [Fixed in version 0.97.]
 
@@ -207,7 +207,7 @@ Version 0.96 bugs:
 
     7. fitqtl: doesn't work when you give only one qtl. [Fixed in
        version 0.97.]
-   
+
     8. scanone: when model="binary" and method="mr", a warning message
        should be displayed, and method="em" should be used.  [This
        isn't really a bug; the software does do the binary trait
@@ -228,19 +228,19 @@ Version 0.95 bugs:
        Similarly, if there are missing values in the marker names,
        chromosome IDs, or marker poisitons, there are very cryptic
        error messages.  (Thanks to Leo Schalkwyk for reporting this
-       error.) [Fixed in version 0.96.]  
+       error.) [Fixed in version 0.96.]
 
 
 Version 0.94 bugs:
 
     1. There was a bug in read.cross; the order of "C" and "D" in the
        genotypes argument needed to be reversed.  [Fixed in version
-       0.95.] 
+       0.95.]
 
     2. For read.cross with format="csv", if there is a missing
        phenotype in the first individual (and a genetic map is not
        included) the function halts with an error. [Fixed in version
-       0.95.] 
+       0.95.]
 
 
 Version 0.93 bugs:
@@ -286,7 +286,7 @@ Version 0.90 bugs:
        a long time. [Fixed in version 0.95, except for EM in scantwo.
        For now, we just use Haley-Knott regression in place of EM, if
        there is X chromosome data and multiple sexes and/or cross
-       directions.] 
+       directions.]
 
 
 Version 0.88 bugs:
@@ -295,11 +295,11 @@ Version 0.88 bugs:
        all of the calculations are complete.  We should flush the
        print buffer after each line. [Not really a bug; the issue with
        Rgui in Windows could be fixed by simply unchecking the
-       "buffered output" option in "Misc" on the menu bar.] 
+       "buffered output" option in "Misc" on the menu bar.]
 
     2. scantwo.mr gives really bad results for the hypertension data.
        Lots of lod scores are extremely large. [Fixed in version
-       0.89-9.] 
+       0.89-9.]
 
 >>  3. scantwo with method EM can give interactive LOD scores < 0.
        This is a multiple modes problem.  In my experience so far,
@@ -315,11 +315,11 @@ Version 0.87 bugs:
        matrix.  Look at $prob, $argmax, $draws, $errorlod, too.
        Similar problem for more than 1 individual if the $draws
        argument has one one simulation replicate.  [Fixed in version
-       0.88-12.] 
+       0.88-12.]
 
     2. plot.scanone puts the chromosome numbers in the wrong place.
        Something to do with the argument gap.  [Fixed in version
-       0.88-12.] 
+       0.88-12.]
 
     3. There is apparently a problem reading in data when a chromosome
        has only one marker.  This suggests a study of *all* functions
@@ -336,8 +336,8 @@ Version 0.86 bugs:
        evidence, to support this, but I'll be doing my best to verify
        that it is working correctly. [There isn't a bug in sim.geno,
        as far as I can see.  The problem I'd noticed was in the
-       imputation method in scanone.  The return value was 
-       mean{L}+var{L}/2, but should be mean{L}+log(10)*var{L}/2. 
+       imputation method in scanone.  The return value was
+       mean{L}+var{L}/2, but should be mean{L}+log(10)*var{L}/2.
        This is fixed in version 0.86-12.]
 
 
@@ -382,10 +382,10 @@ Version 0.81 bugs:
 
     1. I often getting the following warning message when reading data
        with read.cross in "karl" format:
-       
-         "no finite arguments to min/max; returning extreme. in: 
+
+         "no finite arguments to min/max; returning extreme. in:
           max(..., na.rm = na.rm)"
-       [But who ever uses the "karl" format?  I've not fixed this, 
+       [But who ever uses the "karl" format?  I've not fixed this,
         but it's not worth emphasizing.]
 
     2. read.cross.karl can give an error when it's trying to
@@ -394,9 +394,9 @@ Version 0.81 bugs:
        not of the usual mouse form. [I believe this is fixed in
        version 0.84.]
 
-    3. Regarding the function read.cross.mm (for reading data in 
+    3. Regarding the function read.cross.mm (for reading data in
        mapmaker format):
- 
+
        a. It gives an error when the map file has *'s in front of each
           of the marker names. [Fixed in version 0.82.]
 
@@ -407,7 +407,7 @@ Version 0.81 bugs:
           chromosome. [Fixed in version 0.82.]
 
        d. It doesn't give marker names to the columns in the data
-          matrices.  This causes major problems in argmax.geno. 
+          matrices.  This causes major problems in argmax.geno.
           [Fixed in version 0.82.]
 
     4. summary.cross should ensure that there are marker names in
@@ -430,12 +430,12 @@ Version 0.78 bugs:
        incorrectly chose among the most likely sequences, if there are
        several possible such.]  [NOTE: See version 0.85 above; there
        really was a bug, though Viterbi is still not to be trusted in
-       the presence of appreciable missing data when error.prob > 0.] 
+       the presence of appreciable missing data when error.prob > 0.]
 
 
 version 0.77 bugs:
 
-    1. In create.map (used in calc.genoprob), there's a "names" 
+    1. In create.map (used in calc.genoprob), there's a "names"
        problem (resulting in an error) when the markers are
        equally-spaced and the "step" argument is at exactly that
        spacing. [Fixed in version 0.78.]
@@ -446,6 +446,6 @@ version 0.76 bugs:
     1. In sim.cross, there's a problem with the dimnames for
        the error indicator component, when simulating genotyping
        errors with a QTL present. [Fixed in version 0.77.]
-       
+
 ----------------------------------------------------------------------
 end of BUGS.txt
