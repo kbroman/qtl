@@ -110,7 +110,7 @@ read.cross <-
     }
     else if(format == "mapqtl") { # MapQTL format (same as JoinMap)
         cross <- read.cross.mq(dir=dir, locfile=genfile, mapfile=mapfile,
-                               quafile=phefile, estimate.map=estimate.map)
+                               quafile=phefile)
     }
     else if (format == "tidy") { # tidy format
         if(!missing(file) && !missing(genfile) && !missing(mapfile) && missing(phefile)) {
