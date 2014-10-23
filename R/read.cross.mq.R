@@ -94,15 +94,26 @@ function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
     list(cross, estimate.map)
 }
 
-mq.rmv.comment <-
-function(x, symbol=";")
+mq_grab_param <-
+    function(lines, param, longname, filetype)
 {
-    x.wo.comment <- x
-    comments <- regexpr(pattern=symbol, text=x)
-    if(comments[1] != -1)
-        x.wo.comment <- substr(x=x, start=1, stop=comments[1]-1)
-    return(x.wo.comment)
+    # stuff for error message
+    if(missing(filetype)) filetype <- ""
+    else filetype <- paste(" in", filetype, "file")
+    if(missing(longname)) longname <- param
+
+    g <- grep(param, lines)
+    if(length(g) == 0)
+        stop("Cannot find ", longname, " in ", filetype)
+
+    # remove white space
+    line <- gsub("\\s+", "", lines[g])
+
+    result <- strsplit(line, "=")[[1]][2]
+
+    return(list(result, g)) # g is the line number
 }
+
 
 ## each marker should be on a single line
 ## only 4-way crosses (CP type) are handled
@@ -119,89 +130,82 @@ function(locfile){
 
     lines <- readLines(locfile)
 
-    locus.id <- 1
-    ind.id <- 1
-    for(line.id in 1:length(lines)){
+    # drop comments
+    lines <- vapply(strsplit(lines, ";"), "[", "", 1)
 
-        ## skip empty lines
-        tmp <- mq.rmv.comment(x=lines[line.id], symbol=";")
-        tmp <- gsub(pattern=" + ", replacement=" ", x=tmp)
-        if(tmp == "" || tmp == " ")
-            next
+    # drop empty lines
+    blank <- grep("^\\s*$", lines)
+    if(length(blank) > 0)
+        lines <- lines[-blank]
 
-        ## extract the population name
-        if(grepl(pattern="name", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            pop.name <- strsplit(x=tmp, split="=")[[1]][2]
-            next
-        }
+    ## extract the population name
+    res <- mq_grab_param(lines, "name", "population name", "loc")
+    pop.name <- res[[1]]
+    todrop <- res[[2]]
 
-        ## extract the population type
-        if(grepl(pattern="popt", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            pop.type <- strsplit(x=tmp, split="=")[[1]][2]
-            pop.types <- c("BC1","F2","RIx","DH","DH1","DH2","HAP","HAP1","CP","BCpxFy",
-                           "IMxFy")
-            if(! pop.type %in% pop.types){
-                msg <- paste("unknown population type", pop.type)
-                stop(msg, call.=FALSE)
-            }
-            if(pop.type == "CP"){
-                pop.type <- "4way"
-            } else{
-                msg <- paste("population type", pop.type,
-                             "is not supported (yet)")
-                stop(msg, call.=FALSE)
-            }
-            next
-        }
-
-        ## extract the number of loci
-        if(grepl(pattern="nloc", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            nb.loci <- as.numeric(strsplit(x=tmp, split="=")[[1]][2])
-            seg <- rep(NA, nb.loci)
-            phase <- rep(NA, nb.loci)
-            classif <- rep(NA, nb.loci)
-            next
-        }
-
-        ## extract the number of individuals
-        if(grepl(pattern="nind", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            nb.inds <- as.numeric(strsplit(x=tmp, split="=")[[1]][2])
-            genotypes <- matrix(NA, nrow=nb.loci, ncol=nb.inds)
-            rownames(genotypes) <- paste("loc", 1:nb.loci, sep=".")
-            ## colnames(genotypes) <- paste("ind", 1:nb.inds, sep=".")
-            next
-        }
-
-        tokens <- strsplit(x=tmp, split=" |\t")[[1]]
-        if(length(tokens) > nb.inds + 4){
-            msg <- paste("line", line.id, "should have a maximum of",
-                         nb.inds + 4,
-                         "columns separated by spaces or tabs")
-            stop(msg, call.=FALSE)
-        }
-        rownames(genotypes)[locus.id] <- tokens[1]
-        if(length(tokens) > nb.inds + 1){
-            for(i in 2:(length(tokens)-nb.inds)){
-                if(length(grep(pattern="\\{", x=tokens[i])) > 0){
-                    phase[locus.id] <- tokens[i]
-                } else if(length(grep(pattern="\\(", x=tokens[i])) > 0){
-                    classif[locus.id] <- tokens[i]
-                } else
-                    seg[locus.id] <- tokens[i] # only for "4way" type
-            }
-        }
-        genotypes[locus.id,] <- tokens[(length(tokens)-nb.inds+1):length(tokens)]
-        locus.id <- locus.id + 1
+    ## extract the population type
+    res <- mq_grab_param(lines, "popt", "population type", "loc")
+    pop.type <- res[[1]]
+    todrop <- c(todrop, res[[2]])
+    pop.types <- c("BC1","F2","RIx","DH","DH1","DH2","HAP","HAP1","CP","BCpxFy",
+                   "IMxFy")
+    if(! pop.type %in% pop.types){
+        msg <- paste("unknown population type", pop.type)
+        stop(msg, call.=FALSE)
+    }
+    if(pop.type == "CP"){
+        pop.type <- "4way"
+    } else{
+        msg <- paste("population type", pop.type,
+                     "is not supported (yet)")
+        stop(msg, call.=FALSE)
     }
 
-    if(locus.id > nb.loci + 1){
+    ## extract the number of loci
+    res <- mq_grab_param(lines, "nloc", "Number of loci", "loc")
+    nb.loci <- as.numeric(res[[1]])
+    todrop <- c(todrop, res[[2]])
+    seg <- rep(NA, nb.loci)
+    phase <- rep(NA, nb.loci)
+    classif <- rep(NA, nb.loci)
+
+    res <- mq_grab_param(lines, "nind", "Number of individuals", "loc")
+    nb.inds <- as.numeric(res[[1]])
+    todrop <- c(todrop, res[[2]])
+    genotypes <- matrix(NA, nrow=nb.loci, ncol=nb.inds)
+    rownames(genotypes) <- paste("loc", 1:nb.loci, sep=".")
+    ## colnames(genotypes) <- paste("ind", 1:nb.inds, sep=".")
+
+    lines <- lines[-todrop]
+
+    spl <- strsplit(lines, "\\s+")
+    spl.lengths <- vapply(spl, length, 1)
+    if(any(spl.lengths > nb.inds+4))
+        stop("lines should have no more than ", nb.inds+4, " columns\n",
+             "Problems in lines", seq(along=spl.lengths)[spl.lengths > nb.inds+4])
+
+    rownames(genotypes) <- vapply(spl, "[", "", 1)
+
+    if(length(spl) > nb.loci + 1){
         msg <- paste("there seems to be more loci (", locus.id-1,
                              ") than indicated in the header (", nb.loci, ")")
         stop(msg, call.=FALSE)
+    }
+
+    for(line.id in 1:length(lines)){
+        tokens <- spl[[line.id]]
+
+        if(length(tokens) > nb.inds + 1){
+            for(i in 2:(length(tokens)-nb.inds)){
+                if(length(grep(pattern="\\{", x=tokens[i])) > 0){
+                    phase[line.id] <- tokens[i]
+                } else if(length(grep(pattern="\\(", x=tokens[i])) > 0){
+                    classif[line.id] <- tokens[i]
+                } else
+                    seg[line.id] <- tokens[i] # only for "4way" type
+            }
+        }
+        genotypes[line.id,] <- tokens[(length(tokens)-nb.inds+1):length(tokens)]
     }
 
     genotypes <- t(genotypes) # individuals in rows, markers in columns
@@ -215,7 +219,7 @@ function(locfile){
             genotypes[i] <- gsub(pattern="u", replacement="-",
                                  x=genotypes[i])
     }
-    genotypes[which(genotypes == "--")] <- NA
+    genotypes[genotypes == "--"] <- NA
 
     ## convert segregation types and genotypes to new MapQtl format
     convert.seg <- FALSE
@@ -642,16 +646,18 @@ function(quafile){
 
     lines <- readLines(quafile)
 
+    # remove comments
+    lines <- vapply(strsplit(lines, ";"), "[", "", 1)
+
+    # drop empty lines
+    blank <- grep("^\\s*$", lines)
+    if(length(blank) > 0)
+        lines <- lines[-blank]
+
     ind.id <- 1
     trait.id <- 1
     trait.names <- c()
     for(line.id in 1:length(lines)){
-
-        ## skip empty lines
-        tmp <- mq.rmv.comment(x=lines[line.id], symbol=";")
-        tmp <- gsub(pattern=" + ", replacement=" ", x=tmp)
-        if(tmp == "" || tmp == " ")
-            next
 
         ## extract the number of traits
         if(grepl(pattern="ntrt", x=lines[line.id])){
