@@ -45,6 +45,9 @@ read.cross.mq <-
 function(dir, locfile, mapfile, quafile, estimate.map=TRUE)
 {
     if(! missing(dir) && dir != "") {
+        if(length(grep("/$", dir)) > 0) # strip off ending /
+            dir <- substr(dir, 1, nchar(dir)-1)
+
         locfile <- file.path(dir, locfile)
         mapfile <- file.path(dir, mapfile)
         quafile <- file.path(dir, quafile)
