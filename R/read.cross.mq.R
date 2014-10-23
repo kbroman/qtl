@@ -134,6 +134,7 @@ function(locfile){
     lines <- vapply(strsplit(lines, ";"), "[", "", 1)
 
     # drop empty lines
+    lines <- lines[!is.na(lines)]
     blank <- grep("^\\s*$", lines)
     if(length(blank) > 0)
         lines <- lines[-blank]
@@ -650,37 +651,36 @@ function(quafile){
     lines <- vapply(strsplit(lines, ";"), "[", "", 1)
 
     # drop empty lines
+    lines <- lines[!is.na(lines)]
     blank <- grep("^\\s*$", lines)
     if(length(blank) > 0)
         lines <- lines[-blank]
+
+    ## extract the number of traits
+    res <- mq_grab_param(lines, "ntrt", "Number of traits", "qua")
+    nb.traits <- as.numeric(res[[1]])
+    todrop <- res[[2]]
+
+    ## extract the number of individuals
+    res <- mq_grab_param(lines, "nind", "Number of individuals", "qua")
+    nb.inds <- as.numeric(res[[1]])
+    todrop <- c(todrop, res[[2]])
+
+    ## extract the symbol for missing values
+    res <- mq_grab_param(lines, "miss", "Missing value code", "qua")
+    miss <- res[[1]]
+    todrop <- c(todrop, res[[2]])
+
+    lines <- lines[-todrop]
+
+    spl <- strsplit(lines, "\\s+")
 
     ind.id <- 1
     trait.id <- 1
     trait.names <- c()
     for(line.id in 1:length(lines)){
 
-        ## extract the number of traits
-        if(grepl(pattern="ntrt", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            nb.traits <- as.numeric(strsplit(x=tmp, split="=")[[1]][2])
-            next
-        }
-
-        ## extract the number of individuals
-        if(grepl(pattern="nind", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            nb.inds <- as.numeric(strsplit(x=tmp, split="=")[[1]][2])
-            next
-        }
-
-        ## extract the symbol for missing values
-        if(grepl(pattern="miss", x=lines[line.id])){
-            tmp <- gsub(pattern=" ", replacement="", x=tmp)
-            miss <- strsplit(x=tmp, split="=")[[1]][2]
-            next
-        }
-
-        tokens <- strsplit(x=tmp, split=" |\t")[[1]]
+        tokens <- spl[[line.id]]
 
         if(trait.id <= nb.traits){
             if(length(tokens) == 1){ # one trait name per line
