@@ -1,5 +1,5 @@
 
-R version 3.1.0 (2014-04-10) -- "Spring Dance"
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
 Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin13.1.0 (64-bit)
 
@@ -29,7 +29,6 @@ Type 'q()' to quit R.
 	Number of individuals:  250 
 	Number of markers:  157 
 	Number of phenotypes:  2 
- --Estimating genetic map
  --Cross type: 4way 
 > 
 > x <- replace.map(x, pull.map(fake.4way))
@@ -39,4 +38,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  6.803   0.281   7.072 
+  4.311   0.247   4.547 
