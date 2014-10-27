@@ -1,0 +1,34 @@
+
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.1.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(qtl)
+> data(map10)
+> map10 <- map10[1:2]
+> set.seed(8789993)
+> simcross <- sim.cross(map10, n.ind=250, type="bc",
++                       model=rbind(c(1, 50, 1.5), c(2, 50, 0)))
+> simcross$pheno[,1] <- simcross$pheno[,1] + rnorm(nind(simcross), 0, 2*simcross$qtlgeno[,2])
+> simcross <- calc.genoprob(simcross)
+> out <- scanonevar(simcross)
+> summary(out, format="allpeaks")
+  chr  pos neglogP_mean  pos neglogP_disp
+1   1 48.8        3.839 19.5         1.18
+2   2 93.3        0.418 51.8         6.89
+> 
+> proc.time()
+   user  system elapsed 
+  0.948   0.044   0.980 

@@ -3,15 +3,12 @@
 
 \title{Genome scan for QTL affecting mean and/or variance}
 
-\description{
-  Genome scan with a single QTL model using a double generalized linear
-  model, for loci that can affect the variance as well as the mean.
-}
+\description{Genome scan with a single QTL model for loci that can
+  affect the variance as well as the mean.}
 
 \usage{
 scanonevar(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
-           family=gaussian(), maxit=25,
-           fixed_gamma_disp=FALSE, quiet=TRUE)
+           maxit=25, tol=1e-6, quiet=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -25,11 +22,9 @@ scanonevar(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
    transformations.}
   \item{mean_covar}{Numeric matrix with covariates affecting the mean.}
   \item{var_covar}{Numeric matrix with covariates affecting the variances.}
-  \item{family}{Family object for \code{\link[dglm]{dglm}}.}
   \item{maxit}{Maximum number of iterations in the algorithm to fit the
     model at a given position.}
-  \item{fixed_gamma_disp}{If \code{FALSE}, estimate the dispersion
-    parameter in the gamma GLM for the residual variance.}
+  \item{tol}{Tolerance for convergence.}
   \item{quiet}{If \code{FALSE}, print some information about the course
     of the calculations.}
 }

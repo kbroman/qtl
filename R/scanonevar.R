@@ -4,8 +4,7 @@
 
 scanonevar <-
 function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
-         family = gaussian(), maxit = 25 ,
-         fixed_gamma_disp = FALSE, quiet=TRUE)
+         maxit = 25 , tol=1e-5, quiet=TRUE)
 {
     # check input
     crosstype <- class(cross)[1]
@@ -78,7 +77,7 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
 
     result <- NULL
     for(j in seq(along=cross$geno)) { # loop over chromosomes
-        if(!quiet) message("Chr ", chr.names[j])
+        if(!quiet) message(" - Chr ", chr.names[j])
 
         if (crosstype=="f2") {
             g11 <- cross$geno[[j]]$prob[,,1]
@@ -99,25 +98,13 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
             # fill in genotype probs for this locus
             X[,2] <- a1[,i]
 
-            d.fit<-try(dglm::dglm(formula=mean_formula, dformula=var_formula,
-                                  data=X, family = family, control=dglm::dglm.control(maxit=maxit)), silent=TRUE)
+            d.fit <- DHGLM_norm(m.form=mean_formula, d.form=var_formula, indata=X,
+                                maxiter=maxit, conv=tol)
 
-            if ((class(d.fit)!="dglm")[1]) {
-                warning("dglm did not converge on chr ", chr.names[j], " position ", i)
-            }
-            else {
-                p.mean <- summary(d.fit)$coef[2,4]
-                if (!fixed_gamma_disp)
-                    p.disp<- summary(d.fit$dispersion)$coef[2,4]
-                if (fixed_gamma_disp)
-                    p.disp<-(summary(d.fit)$dispersion.summary$coeff[2,4])
-                logP.m[i]<- -log10(p.mean)
-                logP.d[i]<- -log10(p.disp)
-                if (d.fit$iter==maxit) {
-                    logP.d[i]=0
-                    warning("dglm did not converge on chr", chr.names[j], " position ", i)
-                }
-            }
+            p.mean <- summary(d.fit$mean)$coef[2,4]
+            p.disp<- summary(d.fit$disp)$coef[2,4]
+            logP.m[i]<- -log10(p.mean)
+            logP.d[i]<- -log10(p.disp)
         }
 
         # set up the output
@@ -140,4 +127,27 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
     attr(result, "method") <- "scanonevar"
 
     result
+}
+
+DHGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {
+    X.mean <- model.matrix(m.form, data = indata)
+    X.disp <- model.matrix(d.form, data = indata)
+    y.name <- all.vars(m.form)[1]
+    y <- indata[,y.name]
+    w <- rep(1, nrow(indata))
+    convergence <- 1
+    iter <- 0
+    while (convergence > conv & iter < maxiter) {
+        iter <- iter +1
+        w.old <- w
+        glm1 <- lm(y~.-1, weights=w, data=data.frame(X.mean))
+        res <- resid(glm1)
+        q <- hatvalues(glm1)
+        y2 <- res^2/(1-q)
+        glm2 <- glm(y2~.-1, family=Gamma(link=log), weights=(1-q)/2, data=data.frame(X.disp))
+        w <- 1/fitted(glm2)
+        convergence <- (max(abs(w.old-w)) + (summary(glm1)$sigma-1) )
+    }
+    if (iter == maxiter) warning("Error: DHGLM did not converge")
+    return(list(mean=glm1, disp=glm2))
 }
