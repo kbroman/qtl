@@ -1005,7 +1005,8 @@ geno.table <-
             else {
                 if(allchrtype[i] == "A") {
                     res <- results[i,-1]
-                    if(all(res[-c(1,11)]==0))      # AC/not AC
+                    if(all(res==0)) pval[i] <- 1 # entirely missing
+                    else if(all(res[-c(1,11)]==0))      # AC/not AC
                         pval[i] <- chisq.test(res[c(1,11)], p=c(0.25, 0.75))$p.value
                     else if(all(res[-c(2,12)]==0)) # BC/not BC
                         pval[i] <- chisq.test(res[c(2,12)], p=c(0.25, 0.75))$p.value
