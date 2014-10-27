@@ -188,7 +188,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   ludcmp(XtWX, dimx, indx, &d);
   lusolve(XtWX, dimx, indx, XtWY);
 
-  long double* indL = (long double *)Calloc(Nind, long double);
+  long double* indL = (long double *)R_alloc(Nind, sizeof(long double));
   int newNaug       = ((!fitQTL) ? Naug : 3*Naug);
   vector fit        = newvector(newNaug);
   vector resi       = newvector(newNaug);
@@ -286,14 +286,6 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   for (int i=0; i<Nind; i++) { //Sum up log likelihoods for each individual
     logL+= log(indL[i]);
   }
-  Free(indL);
-  Free(indx);
-  Free(xtQTL);
-  delmatrix(XtWX,dimx_alloc);
-  delcmatrix(Xt,dimx_alloc);
-  Free(fit);
-  Free(resi);
-  freevector((void *)XtWY);
   return (double)logL;
 }
 
@@ -339,8 +331,6 @@ void ludcmp(matrix m, int dim, ivector ndx, int *d) {
     temp=1.0/m[c][c];
     for (r=c+1; r<dim; r++) m[r][c]*=temp;
   }
-  Free(scale);
-  //Free(swap);
 }
 
 /* Solve the set of n linear equations AX=B.

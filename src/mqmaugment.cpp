@@ -240,10 +240,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*augmentednind)=(*augmentednind)+(numimputations*current_leftover_ind);
       (*nind)= (*nind)+(current_leftover_ind);
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
-      // Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n", "");
-      delMQMMarkerMatrix(newmarkerset, nmark);    // Free the newmarkerset, this can only be done here since: (*markers) = newmarkerset_all;
-      // Free(new_y_all);
-      // Free(new_ind_all);
+      Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n", "");
     }else{
       if(ind_still_left && augment_strategy == 3){
         if(verbose) Rprintf("INFO: Dropping %d individuals from further analysis\n",ind_still_left);
@@ -253,12 +250,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*INDlist) = new_ind;
       (*markers) = newmarkerset;
     }
-    // if(verbose) Rprintf("INFO: Done with augmentation\n");
-    // Free(new_y);                                // Free vector indicating the new phenotypes
-    // Free(new_ind);                              // Free vector indicating the new individuals
-    Free(succes_ind);                           // Free vector indicating the result of round 1 - augmentation
-    Free(position);                             // Free the positions of the markers
-    Free(r);                                    // Free the recombination frequencies
+    if(verbose) Rprintf("INFO: Done with augmentation\n");
     return 1;
 }
 
@@ -631,12 +623,6 @@ bailout:
   if (verbose) fatal("Recall procedure with larger value for augmentation parameters or increase the parameter minprob\n");
   retvalue = 0;
 cleanup:
-  Free(newy);
-  delMQMMarkerMatrix(newmarker, Nmark+1); //Free(newmarker);
-  Free(newind);
-  Free(newprob);
-  Free(newprobmax);
-  Free(imarker);
   return retvalue;
 }
 
@@ -747,9 +733,6 @@ void R_mqmaugment(int *geno, double *dist, double *pheno, int *auggeno,
     }
     fatal("Data augmentation failed", "");
   }
-  delMQMMarkerMatrix(markers,*Nmark); // [Danny:] This looked suspicious, we were leaking memory here because we didn't clean it
-  Free(mapdistance);
-  Free(chr);
 
   PutRNGstate(); // write R's RNG seed
 

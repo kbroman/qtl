@@ -29,9 +29,9 @@
 
 #include "mqm.h"
 
-/* 
+/*
  * Determine the experimental cross type from the R/qtl dataset. Returns the
- * type. 
+ * type.
  */
 
 MQMCrossType determine_MQMCross(const int Nmark, const int Nind, const int **Geno, const RqtlCrossType rqtlcrosstype) {
@@ -101,15 +101,14 @@ void change_coding(int *Nmark, int *Nind, int **Geno, MQMMarkerMatrix markers, c
   }
 }
 
-/* 
+/*
  * Allocate a memory block using the 'safe' R method calloc_init, but with
  * guarantee all data has been zeroed
  */
 
 void *calloc_init(size_t num, size_t size) {
   void *buf;
-  buf = R_chk_calloc(num,size);
-  if (buf) memset(buf,0,num*size);
+  buf = S_alloc(num,size);
   return buf;
 }
 
@@ -189,30 +188,6 @@ MQMMarkerMatrix newMQMMarkerMatrix(int rows, int cols) {
   return m;
 }
 
-void freevector(void *v) {
-  Free(v);
-}
-
-void freematrix(void **m, size_t rows) {
-  for (size_t i = 0; i < rows; i++) {
-    Free(m[i]);
-  }
-  Free(m);
-}
-
-void delmatrix(matrix m, size_t rows) {
-  freematrix((void**)m,rows);
-}
-
-void delcmatrix(cmatrix m, size_t rows) {
-  freematrix((void **)m,rows);
-}
-
-void delMQMMarkerMatrix(MQMMarkerMatrix m, size_t rows) {
-  freematrix((void **)m,rows);
-}
-
-
 void copyvector(vector vsource, vector vdestination, int dim) {
   for(int i=0; i<dim; i++) {
     vdestination[i]= vsource[i];
@@ -226,4 +201,3 @@ void copyvector(vector vsource, vector vdestination, int dim) {
   void debug_trace(const char*, ...){}
   void info(const char* s, ...){ Rprintf("INFO: "); Rprintf(s); Rprintf("\n"); }
 #endif
-
