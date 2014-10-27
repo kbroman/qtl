@@ -62,16 +62,16 @@ over CIM is reduction of type I error (a QTL is indicated at a location where th
 is no QTL present) and type II error (a QTL is not detected) for QTL detection
 \cite{jansen94b}.} is a valuable addition to the \qtl\ mapper's toolbox. It
 is able to deal with QTL in coupling phase and QTL in repulsion phase. \mqm\
-handles missing data and has higher power to detect QTL (linked and unlinked) 
-than other methods.  R/qtl's \mqm\ is faster than other implementations and 
-scales on multi-CPU systems and computer clusters.  In this tutorial we will 
-show you how to use \mqm\ for \qtl\ mapping. 
+handles missing data and has higher power to detect QTL (linked and unlinked)
+than other methods.  R/qtl's \mqm\ is faster than other implementations and
+scales on multi-CPU systems and computer clusters.  In this tutorial we will
+show you how to use \mqm\ for \qtl\ mapping.
 
 \mqm\ is an integral part of the free \rqtl\
 package \cite{rqtlbook,broman09,broman03} for the R statistical
 language\footnote{We assume the reader knows how to load his data into R using
 the R/qtl \code{read.cross} function; see also the R/qtl tutorials \cite{broman09}
-and book \cite{rqtlbook}.}. 
+and book \cite{rqtlbook}.}.
 
 \section{A quick overview of \mqm}
 
@@ -93,9 +93,9 @@ the trait. The algorithm passes through the following stages:
 \item Likelihood-based estimation of the full model using all cofactors
 \item Backward elimination of cofactors, followed by a
       genome scan for \qtl
-\item If there are no \emph{cofactors\/} defined, the backward elimination of cofactors 
-      is skipped and a genome scan for \qtl\ is performed, testing each genetic (interval) 
-      location individually. In this case REML and ML will result in the same \qtl\ profile 
+\item If there are no \emph{cofactors\/} defined, the backward elimination of cofactors
+      is skipped and a genome scan for \qtl\ is performed, testing each genetic (interval)
+      location individually. In this case REML and ML will result in the same \qtl\ profile
       because there is no full model.
 \end{itemize}
 
@@ -109,7 +109,7 @@ plotting routines are available for \mqm\ results.
 \label{augmentation}
 
 In an ideal world all datasets would be complete (with the genotype
-for every 
+for every
 individual at every marker determined), however in the real world datasets are often incomplete. That is, genotype
 information is missing, or can have multiple plausible values. \mqm\
 automatically expands the
@@ -118,8 +118,8 @@ example, information is missing (unknown) at a marker location for one
 individual. Based on the values of the neighbouring markers, and the
 (estimated) recombination rate, a probability is attached to all possible
 genotypes.  With \mqm\ all possible genotypes with a probability above
-the 
-parameter \code{minprob} are considered.  
+the
+parameter \code{minprob} are considered.
 
 When encountering a missing marker genotype (possible genotypes {\bf A} and {\bf B} in a
 RIL), all possible genotypes at the missing location are created.  Thus at
@@ -138,9 +138,9 @@ follows:
 
 \intro{Simulate a dataset with missing data}
 % set seed so that everything comes out exactly the same
-<<setseed,echo=FALSE>>= 
+<<setseed,echo=FALSE>>=
 set.seed(19696527)
-@ 
+@
 <<>>=
 library(qtl)
 data(map10)
@@ -152,7 +152,7 @@ and plot the genotype data using \code{geno.image} (Figure~\ref{missing data}):
 
 <<missingdata,eval=FALSE>>=
 geno.image(simcross)
-@ 
+@
 
 \begin{figure}
 <<missingdataplot,fig=TRUE,echo=FALSE>>=
@@ -163,27 +163,27 @@ geno.image(simcross)
 \end{figure}
 
 Before going to the next step (the \qtl\ genome scan), the data has to be
-completed (i.e. no more missing data).  There are two possibilities: use (1) 
+completed (i.e. no more missing data).  There are two possibilities: use (1)
 the \mqm\ data augmentation routine \code{mqmaugment} or (2) the imputation
 routine \code{fill.geno}. Augmentation tries to analyse
 all possible genotypes of interest by leaving them in the solution space. In contrast,
 the imputation method \emph{selects} the most likely genotype, and uses that
-single individual for further analysis. 
+single individual for further analysis.
 
 The downside of augmentation is that the addition of many possible genotypes
 can exceed available computer memory.  Currently, augmentation moves an
-individual to a second augmentation round when it has too many possible 
+individual to a second augmentation round when it has too many possible
 genotypes (above the maximum number of augmented individuals \code{maxaugind}). In this second augmentation round the
 user can specify what needs to be done with these individuals: (1) Only use the
-most likely genotype, (2) use multiple imputation to create multiple possible 
-genotypes (up to \code{maxaugind}) or (3) remove the original genotype/individual 
-from the analysis.  Note that you can opt to use \code{fill.geno}'s imputation method on your dataset, 
+most likely genotype, (2) use multiple imputation to create multiple possible
+genotypes (up to \code{maxaugind}) or (3) remove the original genotype/individual
+from the analysis.  Note that you can opt to use \code{fill.geno}'s imputation method on your dataset,
 instead of augmentation, when too many individuals are dropped because of missing data.
 
 The function \code{mqmaugment} is specific to \mqm\ and the recommended
 procedure\footnote{Note that after augmentation the resulting object is
 no longer suitable for the use with other R/qtl mapping functions, like \code{scanone} and \code{cim}, because they can not account for
-duplicated or dropped individuals.}.  
+duplicated or dropped individuals.}.
 In this tutorial we focus on \mqm's augmentation. The function \code{mqmaugment} fills in
 missing genotypes for us. For each missing genotype data, at a marker, it fills
 in all possible genotypes and calculates the probability. When the total
@@ -195,7 +195,7 @@ The important parameters are: \code{cross}, \code{pheno.col}, \code{maxaugind}, 
 maximum number of \emph{augmented} genotypes per individual in a dataset. The
 default of 82 allows six missing markers per individual in a BC, and four in an
 F$_2$. As a result the user has to increase the
-\code{maxaugind} parameter when there are more missing markers. 
+\code{maxaugind} parameter when there are more missing markers.
 
 The \code{minprob} parameter sets the minimum probability of a genotype for
 inclusion in the augmented dataset. This genotype probability is calculated for
@@ -225,7 +225,7 @@ augmentedcross <- mqmaugment(simcross, minprob=1.0)
 Plot the genotype data as follows:
 <<augment1,eval=FALSE>>=
 geno.image(augmentedcross)
-@ 
+@
 \begin{figure}
 <<augment1plot,fig=TRUE,echo=FALSE>>=
 <<augment1>>
@@ -248,21 +248,21 @@ recognise expanded individuals as single entities.  Other R/qtl functions, like
 
 <<>>=
 augmentedcross <- mqmaugment(simcross, minprob=0.1)
-@ 
+@
 
 \intro{Plot the genotype data}
 
 <<augment2,eval=FALSE>>=
 geno.image(augmentedcross)
-@ 
+@
 
 \begin{figure}
 <<augment2plot,fig=TRUE,echo=FALSE>>=
 <<augment2>>
 @
-\caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented} 
-genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)} 
-`expanded' individuals in this plot, because \mqm\ fills in missing markers with 
+\caption{Genotypes, as visualized with \code{geno.image} of the \emph{augmented}
+genotypes of 100 individuals. There are a total of \Sexpr{nind(augmentedcross)}
+`expanded' individuals in this plot, because \mqm\ fills in missing markers with
 all likely genotypes (an average expansion of \Sexpr{round(nind(augmentedcross)/nind(simcross),1)} per
 individual).\label{augment2}}
 \end{figure}
@@ -290,7 +290,7 @@ msim80 <- simulatemissingdata(multitrait, 80)
 
 Next use augmentation to fill in the missing genotypes; with more missing data
 increase the \code{minprob} parameter.  When the \code{minprob} parameter is
-set too low it is possible that an individual cannot be augmented, 
+set too low it is possible that an individual cannot be augmented,
 and is moved to the second round of augmentation (see the description above).
 
 <<augment4>>=
@@ -326,7 +326,7 @@ amount of missing data on QTL mapping, using default values, can be seen in Figu
 mqm5 <- mqmscan(maug5)
 mqm10 <- mqmscan(maug10)
 mqm80 <- mqmscan(maug80)
-@ 
+@
 
 <<augment5b>>=
 msim5 <- calc.genoprob(msim5)
@@ -347,14 +347,14 @@ plot(one10, mqm10, main="10% missing", col=c("black","blue"))
 legend("topleft", c("scanone","MQM"), col=c("black","blue"), lwd=1)
 plot(one80, mqm80, main="80% missing", col=c("black","red"))
 legend("topleft", c("scanone","MQM"), col=c("black","red"), lwd=1)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
 <<augment6>>
 @
-\caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation 
-(green=5\%, blue=10\%, red=80\%) and \code{scanone} (black), after \code{fill.geno} 
+\caption{\Atintro. Effect of missing data on \code{mqmscan} after augmentation
+(green=5\%, blue=10\%, red=80\%) and \code{scanone} (black), after \code{fill.geno}
 imputation. \label{augment6}}
 \end{figure}
 \clearpage
@@ -365,13 +365,13 @@ imputation. \label{augment6}}
 
 The \code{multitrait} dataset, distributed with R/qtl, contains 24 metabolite
 traits from a RIL population of \At \cite{Keurentjes2006} (see also section
-\ref{multitrait} and \code{help(multitrait)} in R).  
+\ref{multitrait} and \code{help(multitrait)} in R).
 
 Here we analyse the \code{multitrait} dataset using both \code{scanone}
 (single-\qtl\ analysis) and \code{mqmscan} (Multiple-QTL Mapping).
 First augment the data using the \code{mqmaugment} function with
 \code{minprob=1.0}, to compare against \code{scanone} with imputation (see also
-section \ref{augmentation}). 
+section \ref{augmentation}).
 
 \intro{Scan for \qtl\ with \code{mqmscan}, after filling missing data with
 \code{mqmaugment minprob=1.0}}
@@ -391,7 +391,7 @@ mgenop <- calc.genoprob(multitrait, step=5)
 m_one <- scanone(mgenop)
 @
 
-Figure~\ref{Atminprob} shows that, without augmentation, the results from 
+Figure~\ref{Atminprob} shows that, without augmentation, the results from
 \mqm\ are similar to \code{scanone}.
 
 \intro{\code{mqmscan} after augmentation, without cofactor selection}
@@ -405,21 +405,11 @@ mqm <- mqmscan(maug)
 <<MinprobMulti,fig=TRUE,echo=FALSE,height=3>>=
 plot(m_one, mqm_min1, col=c("black","green"), lty=1:2)
 legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
-@ 
-\caption{\Atintrocolors. 
-\mqm\ shows similar results as single \qtl\ mapping, 
+@
+\caption{\Atintrocolors.
+\mqm\ shows similar results as single \qtl\ mapping,
 when used without \emph{augmentation} (\code{minprob} is 1.0), and with default parameters.\label{Atminprob}}
 \end{figure}
-
-% \begin{figure}
-% <<NoCofsMulti,fig=TRUE,echo=FALSE,height=3>>=
-% plot(m_one, mqm, col=c("black", "green"), lty=1:2)
-% legend("topleft",c("scanone","MQM"),col=c("black","green"),lwd=1)
-% @ 
-% \caption{\Atintrocolors. 
-% \mqm\ differs from \code{scanone}, after augmentation 
-% \label{AtNoCofs}}
-% \end{figure}
 
 By default \MQM\ introduces fictional markers, or `pseudo markers', at fixed intervals.
 A pseudo marker has a name like \code{c7.loc25}, which is the
@@ -427,7 +417,7 @@ pseudo marker at 25 \cM\ on chromosome 7. (Note that this reflects the standard 
 used in R/qtl.)
 Each
 chromosome is divided into evenly spaced pseudo markers, \code{step.size}
-\cM\ apart. A \lod\ score for underlying \qtl\ is calculated at these 
+\cM\ apart. A \lod\ score for underlying \qtl\ is calculated at these
 pseudo markers. A small \code{step.size} allows for smoother profiles compared
 with a pure marker-based mapping approach. The real markers are listed between
 the pseudo markers. In the result you can remove the pseudo markers by using
@@ -435,7 +425,7 @@ the function \code{mqmextractmarkers}, as follows:
 
 <<>>=
 real_markers <- mqmextractmarkers(mqm)
-@ 
+@
 
 For model selection in \mqm, first supply the
 algorithm with an initial model. This initial model can be produced in two
@@ -466,7 +456,7 @@ mqm_co1 <- mqmscan(maug, setcofactors)
 The function \code{find.marker} identifies the name of the marker
 closest to 35 \cM.  The function \code{find.markerindex} translates the
 marker name into a cofactor number.  The function \code{mqmsetcofactors}
-sets up a cofactor list for use with \code{mqmscan}.  
+sets up a cofactor list for use with \code{mqmscan}.
 
 \intro{Plot the results of the genome scan after adding a single cofactor (Figure~\ref{Cofactor4})}
 
@@ -474,7 +464,7 @@ sets up a cofactor list for use with \code{mqmscan}.
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_co1))
 plot(mqm_co1)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
@@ -482,7 +472,7 @@ plot(mqm_co1)
 <<Cofactor4multi>>
 @
 \caption{\Atintro. \code{mqmscan} after a cofactor is added at the top scoring marker of chromosome 5. During the analysis it is kept in the
-model. \label{Cofactor4}} 
+model. \label{Cofactor4}}
 \end{figure}
 
 
@@ -499,7 +489,7 @@ legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
 <<fig=TRUE,echo=FALSE,height=3>>=
 <<Cofactor4bMULTI>>
 @
-\caption{\Atintro\ after introducing a cofactor on chromosome 5 (GH.117C). 
+\caption{\Atintro\ after introducing a cofactor on chromosome 5 (GH.117C).
 \code{mqmscan} (green, dashed) differs from \code{scanone} (black). \label{Cofactor4b}}
 \end{figure}
 
@@ -515,7 +505,7 @@ chromosome 5 (Figure~\ref{Cofactor4b}).
 Figure~\ref{Cofactor4b} shows the second peak on chromosome 4 at 10
 \cM\ increases. Add a cofactor to the model and check if the model with both
 cofactors changes the \qtl. Combining \code{find.markerindex} with \code{find.marker},
-adds the new cofactor to the cofactor already in \code{multitoset} (see Figure~\ref{twowaycomparison}): 
+adds the new cofactor to the cofactor already in \code{multitoset} (see Figure~\ref{twowaycomparison}):
 
 <<>>=
 # summary(mqm_co1)
@@ -533,7 +523,7 @@ plot(mqmgetmodel(mqm_co2))
 plot(mqm_co1, mqm_co2, col=c("blue","green"), lty=1:2)
 legend("topleft", c("one cofactor","two cofactors"), col=c("blue","green"),
        lwd=1)
-@) 
+@)
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
@@ -553,14 +543,14 @@ cofactors, using an additional cofactor on chromosome 4 (green).  \label{twowayc
 plot(mqm, mqm_co1, mqm_co2, col=c("green","red","blue"), lty=1:3)
 legend("topleft", c("no cofactors","one cofactor","two cofactors"),
        col=c("green","red","blue"), lwd=1)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
 # plot closeup of threeway comparison
 <<threewaycomparisonmulti>>
 @
-\caption{\Atintro. Comparison of \mqm\ adding 0 (green), 1 (red) and 2 (blue) 
+\caption{\Atintro. Comparison of \mqm\ adding 0 (green), 1 (red) and 2 (blue)
 cofactor(s) (note that adding more cofactors
 does not improve the two QTL
 model).\label{threewaycomparison}}
@@ -576,7 +566,7 @@ many cofactors, an error message is shown.
 user. In the example the marker on chromosome 1 was informative enough, and
 included into the model.  This way a new initial model consisting of cofactors
 on chromosome 4 and 5 was created. This (forward) selection of cofactors can
-continue until there are no more informative markers. 
+continue until there are no more informative markers.
 
 Manually determining the markers to set a cofactor can be very time consuming
 in the case of many \qtl\ underlying a trait. It is also prone to overfitting.
@@ -591,10 +581,10 @@ described in the next section.
 \mqm\ provides unsupervised backward elimination on a large number of markers
 by selecting cofactors automatically. Normally the number of markers in a
 dataset is much larger than the number of individuals. \mqm\ allows using any number of
-cofactors simultaneously. This can be as low as 0 cofactors up to a maximum of 
+cofactors simultaneously. This can be as low as 0 cofactors up to a maximum of
 the number of individuals minus 12 ($Inds - 12$), as described in the Handbook of Statistical Genetics\cite{jansen07}.
 
-The functions: "\code{mqmsetcofactor}" and "\code{mqmautocofactors}" both
+The functions: ``\code{mqmsetcofactor}'' and ``\code{mqmautocofactors}'' both
 create lists of cofactors that can be used for backward elimination.
 \code{mqmautocofactor} accounts for the underlying marker density and is
 therefore suitable for datasets with few individuals.  See
@@ -614,7 +604,7 @@ from a RIL population of \At\, as described in section \ref{multitrait}. The
 \qtl\ LOD scores differ between \mqm\ and single \qtl\ mapping with
 \code{scanone} (see Figures~\ref{Backward1} and \ref{Backward2}).
 
-\intro{Unsupervised cofactor selection through backward elimination} 
+\intro{Unsupervised cofactor selection through backward elimination}
 
 <<eval=FALSE>>=
 autocofactors <- mqmautocofactors(maug, 50)
@@ -636,7 +626,7 @@ mqm_backw <- mqmscan(maug, setcofactors)
 par(mfrow = c(2,1))
 mqmplot.cofactors(maug, autocofactors, justdots=TRUE)
 mqmplot.cofactors(maug, setcofactors, justdots=TRUE)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
@@ -654,7 +644,7 @@ marker density into consideration.\label{ManualAutoStart}}
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw))
 plot(mqmgetmodel(mqm_auto))
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
@@ -671,7 +661,7 @@ marker remains informative.\label{ManualAuto}} \end{figure}
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw))
 plot(mqm_backw)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
@@ -693,13 +683,13 @@ can also be used to obtain the location and name of the significant cofactors.
 <<Backward2,eval=FALSE>>=
 plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
 legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
-@ 
+@
 
 % ------------------------------
 <<Backward2multi,eval=FALSE>>=
 plot(m_one, mqm_backw, col=c("black","green"), lty=1:2)
 legend("topleft", c("scanone","MQM"), col=c("black","green"), lwd=1)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3>>=
@@ -730,22 +720,20 @@ mqm_backw_low <- mqmscan(maug, setcofactors, cofactor.significance=0.002)
 par(mfrow = c(2,1))
 plot(mqmgetmodel(mqm_backw_low))
 plot(mqm_backw,mqm_backw_low, col=c("blue","green"), lty=1:2)
-legend("topleft", c("Significance=0.02","Significance=0.002"), 
+legend("topleft", c("Significance=0.02","Significance=0.002"),
        col=c("blue","green"), lwd=1)
-@ 
+@
 
-%\clearpage
-
-\intro{\qtl\ mapped with different \code{cofactor.significance=0.002}, using the 
-same starting markers as Figure~\ref{Backward1}. As can be seen from the plot the 
-models selected are similar. This means the QTL found significant at 0.02 are still 
+\intro{\qtl\ mapped with different \code{cofactor.significance=0.002}, using the
+same starting markers as Figure~\ref{Backward1}. As can be seen from the plot the
+models selected are similar. This means the QTL found significant at 0.02 are still
 significant at a more restrictive cutoff.\label{lowalpha}}
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE>>=
 <<FigLowAlpha>>
 @
-\caption{\Atintro. 
+\caption{\Atintro.
 \qtl\ mapped with different \code{cofactor.significance}.
 With the lower \code{cofactor.significance=0.002} the model does not change.\label{FigLowAlpha}}
 \end{figure}
@@ -761,22 +749,22 @@ Figures can be reconstructed from the result of \code{mqmscan} using the
 Figure~\ref{AutoCofactor}). Here the model and \qtl\ profile are retrieved.
 These functions can only be used with \code{mqmscan} functions, as they require
 the additional information about the inferred \qtl\ model.  The results also
-contain the \emph{estimated} information content per marker.  
+contain the \emph{estimated} information content per marker.
 
 % <<AutoCofactor,eval=FALSE>>=
 % mqmplot.singletrait(result, extended=TRUE)
-% @ 
+% @
 
 <<AutoCofactor,eval=FALSE>>=
 mqmplot.singletrait(mqm_backw_low, extended=TRUE)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE>>=
 <<AutoCofactor>>
 @
 \caption{\Atintro. Plot using \code{mqmplot.singletrait} of the first metabolic trait. The information
-content per marker (red) and the mapped \qtl\ (black).\label{AutoCofactor}} 
+content per marker (red) and the mapped \qtl\ (black).\label{AutoCofactor}}
 \end{figure}
 
 The information content \code{info} in the result is calculated from the deviation of
@@ -794,8 +782,8 @@ content (Figure~\ref{AutoCofactor}).
 \label{effectplots}
 
 The function \code{mqmplot.directedqtl} is used to plot \lod\ curves with an
-indication of the sign of the estimated QTL effects. This function because 
-it uses internal R/qtl functions cannot handle augmented cross objects. An 
+indication of the sign of the estimated QTL effects. This function because
+it uses internal R/qtl functions cannot handle augmented cross objects. An
 error will occur when the object supplied is augmented using \code{mqmaugment}.
 This requires using \code{mqmscan} with parameter \code{outputmarkers=TRUE} (default).
 
@@ -803,7 +791,7 @@ This requires using \code{mqmscan} with parameter \code{outputmarkers=TRUE} (def
 
 <<QTLeffects,eval=FALSE>>=
 dirresults <- mqmplot.directedqtl(multitrait, mqm_backw_low)
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE,echo=FALSE,height=3.5>>=
@@ -818,24 +806,24 @@ associated with the metabolite X3.Hydroxypropyl. If we want to investigate the e
 of the QTL, we can use the functions \code{plotPXG} and \code{effectplot}.
 The following plots show these for markers GH.117C (main effect,
 Figure~\ref{MainEffectsD1}) and the interaction between GH.117C and
-GA1 (Figure~\ref{epistatic1}). 
+GA1 (Figure~\ref{epistatic1}).
 
 <<MainEffectsD1,echo=FALSE,eval=FALSE>>=
 plotPXG(multitrait, marker="GH.117C")
-@ 
+@
 
 \begin{figure}
 <<fig=TRUE, echo=FALSE,height=3>>=
 <<MainEffectsD1>>
 @
 \caption{\Atintro. Main effect plot, with \code{plotPXG}, of marker GH.117C on
-trait X3.Hydroxypropyl. For each marker genotype the individual phenotype is 
+trait X3.Hydroxypropyl. For each marker genotype the individual phenotype is
 plotted, with the mean of genotype AA (red) and BB (blue).\label{MainEffectsD1}} \end{figure}
 
 %----------------------------------------------
 
 The initial scans for X3.Hydroxypropyl (Figure~\ref{Backward1}) show
-two possible \qtl\ on chromosome 4 and 5.  We can investigate 
+two possible \qtl\ on chromosome 4 and 5.  We can investigate
 interactions between these main effect QTL using the \code{effectplot}
 function. To investigate the possible epistatic interaction, select markers GA1
 (significant in Figure~\ref{Backward1} and Figure~\ref{Backward2}) and GH.117C
@@ -868,7 +856,7 @@ high LOD score on those chromosomes.  See Figure~\ref{epistatic2}.
 
 <<epistatic2,eval=FALSE>>=
 effectplot(multitrait, mname1="PVV4", mname2="GH.117C")
-@ 
+@
 
 Meanwhile, Figure~\ref{epistatic2} shows no evidence for an interaction between
 the two markers GH.117C and PVV4, as the lines are close to parallel.
@@ -878,16 +866,16 @@ the two markers GH.117C and PVV4, as the lines are close to parallel.
 <<epistatic2>>
 @
 \caption{\Atintro. \code{effectplot} shows no epistatic effects between
-markers GH.117C and PVV4, ths can be seen because the two lines run in parallel, 
-the genotype on one location (PVV4) does not affect the effect of the expression 
+markers GH.117C and PVV4, ths can be seen because the two lines run in parallel,
+the genotype on one location (PVV4) does not affect the effect of the expression
 on GH.117C other location. \label{epistatic2}}
 \end{figure}
- 
-%------------------------------------------------ 
+
+%------------------------------------------------
 
 \clearpage
 
-\section{QTL significance} 
+\section{QTL significance}
 
 \label{significance}
 
@@ -896,13 +884,13 @@ model, permutation testing is provided by the function \code{mqmpermutation}. Th
 is computationally expensive\footnote{In the tutorial, for all examples, 25
 permutations are used. A real experiment should use over 1000 permutation tests.}
 as the same test is repeated many times on shuffled data. Each test calculates
-\lod\ scores for non associated (randomly ordered) data. 
+\lod\ scores for non associated (randomly ordered) data.
 
 \mqm\ provides parametric and non-parametric bootstrapping to estimate \qtl\
 significance. Select the type with the \code{bootmethod} parameter.  If you
 have are lucky enough to have multiple CPUs on your computer you can use the
 SNOW package \cite{tierney03,tierney04}, which allows parallel computations on
-multiple CPU/cores. 
+multiple CPU/cores.
 
 SNOW is available through the Internet R archive CRAN. For example, with Rgui
 SNOW can be installed by selecting from the menu: `Packages' and `Install
@@ -915,7 +903,7 @@ INSTALL snow.tar.gz}
 
 To summarize results from \code{mqmpermutation}, \code{mqmprocespermutation}
 makes the output comparable to \code{scanone} when using the \code{n.perm}
-parameter for permutation.  
+parameter for permutation.
 
 \intro{Calculate significance - using SNOW parallelization parameters}
 <<>>=
@@ -945,7 +933,7 @@ For small datasets, with a limited amount of classical traits,
 \code{mqmpermutation} is nice.  However, for large expression studies (eQTL)
 using microarrays, use \code{mqmscanfdr} instead, which estimates false discovery
 rates (FDR) across the entire dataset at \lod\ cutoff, as described by
-Breitling \etal\cite{breitling08}. 
+Breitling \etal\cite{breitling08}.
 
 To estimate the FDR, \code{mqmscanfdr} permutes whole genome information,
 taking correlation between traits into account and giving an unbiased estimate
@@ -967,13 +955,13 @@ mqmscanfdr(m_imp, mqmscanall, cofactors=setcofactors, n.cluster=2)
 
 In contrast, the function \code{mqmpermutation} does single trait permutations,
 and does not take correlation between the traits into account. The advantage is
-that a permutation threshold is determined for each trait. This leads to different 
-significance levels per trait and could lead to certain \qtl\ being significant at 
+that a permutation threshold is determined for each trait. This leads to different
+significance levels per trait and could lead to certain \qtl\ being significant at
 their trait cut-off, which are not significant when a single cut-off.  The \mqm\
 output needs to be converted to the standard R/qtl format using the
 \code{mqmprocesspermutation} function. The resulting object is of class
 \code{scanoneperm} and can be used by the standard R/qtl functions for further
-analysis. 
+analysis.
 
 To parallelize calculations \code{n.cluster} sets the number of CPU cores to
 use. A batch consists of a number of traits to analyze on one core.  A large(r)
@@ -1086,7 +1074,7 @@ when genomic locations of the traits are known, e.g. the genomic probe
 locations in microarray eQTL studies. By default the R/qtl cross object does
 not store this data. So the user has to add this information to the cross
 object using the \code{addloctocross} function. After this operation the
-cis-trans plot can be created for \qtl\ with associated genome locations. 
+cis-trans plot can be created for \qtl\ with associated genome locations.
 
 The two axis of the cis-trans plot both show the genetic location. The X-axis
 is, normally, the \qtl\ location and the Y-axis the locations of the trait.
@@ -1099,12 +1087,12 @@ mqmplot.cistrans(mqm_imp5, multiloc, 5, FALSE, TRUE)
 @
 \caption{\Atintro. \code{mqmplot.cistrans} can be drawn when \qtl\
 have associated genome locations. \qtl\ are plotted against the position on the
-genome they were measured (here mQTL for \At), cutoff is at \lod=5. Normally 
-these plots are created using 10.000 + traits. However because this tutorial 
+genome they were measured (here mQTL for \At), cutoff is at \lod=5. Normally
+these plots are created using 10.000 + traits. However because this tutorial
 is automatically generated we only use 5 traits to illustrate.}
 \end{figure}
 
-\intro{When having locations we can, again, use the \code{mqmplot.circle} function, now with 
+\intro{When having locations we can, again, use the \code{mqmplot.circle} function, now with
 the extra information}
 
 \begin{figure}
@@ -1113,7 +1101,7 @@ mqmplot.circle(multiloc, mqm_imp5, highlight=2)
 @
 \caption{\Atintro. Circle plot 3 - Multiple metabolic traits with known
 locations. Highlight the second trait. The significant \qtl\ locations are
-depicted as solid red square circles. The known location of the trait is a 
+depicted as solid red square circles. The known location of the trait is a
 red triangle. The splines show epistatic interactions
 (see also Figure~\ref{epistatic1}).  The blue lines are locations which are
 modulating expression (higher or lower), the green lines show a flip in effect.\label{circle3}} \end{figure}
@@ -1122,82 +1110,82 @@ modulating expression (higher or lower), the green lines show a flip in effect.\
 
 \section{Overview of all \mqm\ functions}
 \begin{table}[ht]
-	\caption{Added functionality}
-	\centering
-	\begin{tabular}{| l | l | }
-	\hline
-	mqmaugment:& data augmentation \\
-	mqmscan:& \mqm\ modelling and scanning \\
-	mqmsetcofactors:& Set cofactors at markers (or at fixed locations) \\
-	find.markerindex:& Change marker numbering into mqmformat \\
-	mqmscanall:& mqmscanall scans all traits using \mqm\\
-	mqmpermutation:& Single trait permutation \\
-	mqmscanfdr:& Genome wide False Discovery Rates (FDR) \\	
-	mqmprocesspermutation:& Creates an R/qtl permutationobject \\
+    \caption{Added functionality}
+    \centering
+    \begin{tabular}{| l | l | }
+    \hline
+    mqmaugment:& data augmentation \\
+    mqmscan:& \mqm\ modelling and scanning \\
+    mqmsetcofactors:& Set cofactors at markers (or at fixed locations) \\
+    find.markerindex:& Change marker numbering into mqmformat \\
+    mqmscanall:& mqmscanall scans all traits using \mqm\\
+    mqmpermutation:& Single trait permutation \\
+    mqmscanfdr:& Genome wide False Discovery Rates (FDR) \\
+    mqmprocesspermutation:& Creates an R/qtl permutationobject \\
                 & \hspace{0.25in} from the output of the \code{mqmpermutation} function \\
-	mqmplot.multitrait:& plot multiple traits (MQMmulti object) \\
+    mqmplot.multitrait:& plot multiple traits (MQMmulti object) \\
   mqmplot.directedqtl:& plot of single trait with added \qtl\ effect\\
-	mqmplot.permutations:& plot to show single trait permutations \\
-	mqmplot.singletrait:& plot of single trait analysis with information content \\
-	mqmplot.circle:& Genome plot of \qtl\ in a circle (optional: Use of location information)\\  
-	mqmplot.cistrans:& Genomewide plot of cis- and trans-\qtl, above a threshold \\
-  addloctocross:& Adding genetic locations for traits \\	
-	mqmtestnormal:& Test normality of a trait \\ 	
-	\hline
-	\end{tabular}
-	\label{tbl:tabel1}
+    mqmplot.permutations:& plot to show single trait permutations \\
+    mqmplot.singletrait:& plot of single trait analysis with information content \\
+    mqmplot.circle:& Genome plot of \qtl\ in a circle (optional: Use of location information)\\
+    mqmplot.cistrans:& Genomewide plot of cis- and trans-\qtl, above a threshold \\
+  addloctocross:& Adding genetic locations for traits \\
+    mqmtestnormal:& Test normality of a trait \\
+    \hline
+    \end{tabular}
+    \label{tbl:tabel1}
 \end{table}
 
 \clearpage
 
 \begin{thebibliography}{9}
-	\bibitem{broman09}
-		Broman, K.W.; 2009
-		\emph{A brief tour of R/qtl.}
-		http://www.rqtl.org/tutorials/rqtltour.pdf.
+    \bibitem{broman09}
+        Broman, K.W.; 2009
+        \emph{A brief tour of R/qtl.}
+        http://www.rqtl.org/tutorials/rqtltour.pdf.
   \bibitem{rqtlbook}
-    Broman, K. W.; Sen, \'S; 2009	  	  
-	  \emph{A Guide to QTL Mapping with R/qtl.}
+    Broman, K. W.; Sen, \'S; 2009
+      \emph{A Guide to QTL Mapping with R/qtl.}
     Springer.
-	\bibitem{broman03}
-		Broman, K.W.; Wu, H.; Sen, S.; Churchill, G.A.; 2003
-		\emph{R/qtl: QTL mapping in experimental crosses.}
-		Bioinformatics, 19:889--890.
-	\bibitem{jansen07}
-		Jansen R. C.; 2007
-		\emph{Chapter 18 - Quantitative trait loci in inbred lines.} 
-		Handbook of Statistical Genetics, 3rd edition.  Wiley.
-	\bibitem{tierney04}	
-		Tierney, L.; Rossini, A.; Li, N.; and Sevcikova, H.; 2004
-		\emph{The snow Package: Simple Network of Workstations.} Version 0.2-1. 
-	\bibitem{tierney03}
-		Rossini, A.; Tierney, L.; and Li, N.; 2003
-		\emph{Simple parallel statistical computing.}
-		R. University of Washington Biostatistics working paper series, 193.
-	\bibitem{jansen01}	
-		Jansen R. C.; Nap J.P.; 2001
-		\emph{Genetical genomics: the added value from segregation.}
-		Trends in Genetics, 17, 388--391.
-	\bibitem{jansen94}		
-		Jansen R. C.; Stam P.; 1994
-		\emph{High resolution of quantitative traits into multiple loci via interval mapping.}
-		Genetics, 136, 1447--1455. 
+    \bibitem{broman03}
+        Broman, K.W.; Wu, H.; Sen, S.; Churchill, G.A.; 2003
+        \emph{R/qtl: QTL mapping in experimental crosses.}
+        Bioinformatics, 19:889--890.
+    \bibitem{jansen07}
+        Jansen R. C.; 2007
+        \emph{Chapter 18 - Quantitative trait loci in inbred lines.}
+        Handbook of Statistical Genetics, 3rd edition.  Wiley.
+    \bibitem{tierney04}
+        Tierney, L.; Rossini, A.; Li, N.; and Sevcikova, H.; 2004
+        \emph{The snow Package: Simple Network of Workstations.} Version 0.2-1.
+    \bibitem{tierney03}
+        Rossini, A.; Tierney, L.; and Li, N.; 2003
+        \emph{Simple parallel statistical computing.}
+        R. University of Washington Biostatistics working paper series, 193.
+    \bibitem{jansen01}
+        Jansen R. C.; Nap J.P.; 2001
+        \emph{Genetical genomics: the added value from segregation.}
+        Trends in Genetics, 17, 388--391.
+    \bibitem{jansen94}
+        Jansen R. C.; Stam P.; 1994
+        \emph{High resolution of quantitative traits into multiple loci via interval mapping.}
+        Genetics, 136, 1447--1455.
   \bibitem{jansen94b}
-	  Jansen R.C.; 1994
-		\emph{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci.}
+      Jansen R.C.; 1994
+        \emph{Controlling the Type I and Type II Errors in Mapping Quantitative Trait Loci.}
     Genetics, Vol 138, 871--881.
-	\bibitem{Churchill94}
-		Churchill, G. A.; and Doerge, R. W.; 1994
-		\emph{Empirical threshold values for quantitative trait mapping.}
-		Genetics 138, 963--971. 
-	\bibitem{jansen93}
-		Jansen R. C.; 1993
-		\emph{Interval mapping of multiple quantitative trait loci.}
-		Genetics, 135, 205--211.
-	\bibitem{Dempster77}
-		Dempster, A. P.; Laird, N. M. and Rubin, D. B.; 1977 
-		\emph{Maximum likelihood from incomplete data via the EM algorithm.}
-		J. Roy. Statist. Soc. B, 39, 1--38.
+    \bibitem{Churchill94}
+        Churchill, G. A.; and Doerge, R. W.; 1994
+        \emph{Empirical threshold values for quantitative trait mapping.}
+        Genetics 138, 963--971.
+    \bibitem{jansen93}
+        Jansen R. C.; 1993
+        \emph{Interval mapping of multiple quantitative trait loci.}
+        Genetics, 135, 205--211.
+    \bibitem{Dempster77}
+        Dempster, A. P.; Laird, N. M. and Rubin, D. B.; 1977
+        \emph{Maximum likelihood from incomplete data via the EM algorithm.}
+        J. Roy. Statist. Soc. B, 39, 1--38.
   \bibitem{CIMa}
          Zeng, Z. B.; 1993 \emph{Theoretical basis for separation of
            multiple linked gene effects in mapping quantitative trait
@@ -1210,11 +1198,11 @@ modulating expression (higher or lower), the green lines show a flip in effect.\
     Sugiyama, F.; Churchill, G.A.; Higgins, D.C.; Johns, C.;
     Makaritsis, K.P.; Gavras, H.; Paigen, B.; 2001 \emph{Concordance
       of murine quantitative trait loci for salt-induced hypertension
-      with rat and human loci.} Genomics, 71, 70--77. 
+      with rat and human loci.} Genomics, 71, 70--77.
   \bibitem{Keurentjes2006}
 Keurentjes, J. J.; Fu, J.; de Vos, C. H.; Lommen, A.; Hall, R. D.;
 Bino, R. J.; van der Plas, L. H.; Jansen, R. C.; Vreugdenhil, D.;
-Koornneef, M.; 
+Koornneef, M.;
      2006 \emph{The genetics of plant metabolism.} Nature Genetics.
      38, 842--849.
   \bibitem{Koornneef1998}
@@ -1224,7 +1212,7 @@ Development of an AFLP based linkage map of Ler, Col; Cvi
      Arabidopsis thaliana ecotypes; construction of a Ler/Cvi recombinant
      inbred line population.} Plant J. 14, 259--271.
   \bibitem{breitling08}
-Breitling, R.; Li, Y.; Tesson, B. M.; Fu, J.; Wu, C.; Wiltshire, T.; Gerrits, A.; Bystrykh, L. V.; de Haan, G.; Su, A. I.; Jansen, R. C.; 2008 
+Breitling, R.; Li, Y.; Tesson, B. M.; Fu, J.; Wu, C.; Wiltshire, T.; Gerrits, A.; Bystrykh, L. V.; de Haan, G.; Su, A. I.; Jansen, R. C.; 2008
 \emph{Genetical genomics: spotlight on QTL hotspots.} PLoS Genet. 4/10.
 \end{thebibliography}
 \end{document}
