@@ -4,7 +4,7 @@
 
 scanonevar <-
 function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
-         maxit = 25 , tol=1e-5, quiet=TRUE)
+         maxit = 25 , tol=1e-6, quiet=TRUE)
 {
     # check input
     crosstype <- class(cross)[1]
