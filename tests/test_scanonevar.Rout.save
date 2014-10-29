@@ -15,20 +15,77 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
+[Previously saved workspace restored]
+
 > library(qtl)
 > data(map10)
 > map10 <- map10[1:2]
 > set.seed(8789993)
-> simcross <- sim.cross(map10, n.ind=250, type="bc",
+> simcross <- sim.cross(map10, n.ind=125, type="bc",
 +                       model=rbind(c(1, 50, 1.5), c(2, 50, 0)))
 > simcross$pheno[,1] <- simcross$pheno[,1] + rnorm(nind(simcross), 0, 2*simcross$qtlgeno[,2])
 > simcross <- calc.genoprob(simcross)
-> out <- scanonevar(simcross)
+> out <- scanonevar(simcross,
++                   tol=0.01)
+> summary(out, format="allpeaks")
+  chr  pos neglogP_mean   pos neglogP_disp
+1   1 58.6         1.65 107.5        0.841
+2   2 62.2         1.17  51.8        5.817
+> 
+> ####
+> 
+> data(fake.bc)
+> fake.bc <- fake.bc[1:2,1:150] # only chr 1 and 2, and first 100 individuals
+> fake.bc <- calc.genoprob(fake.bc, step=5)
+> out <- scanonevar(fake.bc,
++                   tol=0.01)
+> summary(out, format="allpeaks")
+  chr  pos neglogP_mean pos neglogP_disp
+1   1  9.8        0.995  20        0.514
+2   2 30.0        2.200  50        1.702
+> covar <- fake.bc$pheno[,c("sex", "age")]
+> out <- scanonevar(fake.bc, mean_covar=covar, var_covar=covar,
++                   tol=0.01)
+> summary(out, format="allpeaks")
+  chr pos neglogP_mean  pos neglogP_disp
+1   1   5        0.725 37.1         2.31
+2   2  30        5.202 30.0         2.28
+> 
+> #########Simulate a vQTL on Chromosome 1########
+> 
+> chromo=1
+> qtl.position=14 # 50 cM
+> N=nind(fake.bc)
+> a1<-fake.bc$geno[[chromo]]$prob[,,1]
+> y <- fake.bc$pheno$pheno1
+> y <- y + rnorm(N,0,exp(a1[,qtl.position]))
+> out <- scanonevar(fake.bc, y, mean_covar=covar, var_covar=covar)
+> summary(out, format="allpeaks")
+  chr pos neglogP_mean  pos neglogP_disp
+1   1  45        0.784 70.0        5.781
+2   2   0        0.368 21.8        0.672
+> 
+> out <- scanonevar(fake.bc, y, mean_covar=covar,
++                   tol=0.01)
+> summary(out, format="allpeaks")
+  chr pos neglogP_mean  pos neglogP_disp
+1   1  45        0.746 70.0        6.012
+2   2   0        0.380 72.1        0.617
+> 
+> out <- scanonevar(fake.bc, y, var_covar=covar,
++                   tol=0.01)
 > summary(out, format="allpeaks")
   chr  pos neglogP_mean  pos neglogP_disp
-1   1 48.8        3.839 19.5         1.18
-2   2 93.3        0.418 51.8         6.89
+1   1 45.0        0.896 70.0         3.41
+2   2 72.1        0.645 21.8         0.53
+> 
+> out <- scanonevar(fake.bc, y,
++                   tol=0.01)
+> summary(out, format="allpeaks")
+  chr  pos neglogP_mean  pos neglogP_disp
+1   1 45.0        0.838 70.0        3.486
+2   2 72.1        0.654 21.8        0.486
 > 
 > proc.time()
    user  system elapsed 
-  0.948   0.044   0.980 
+  9.127   0.161   9.333 
