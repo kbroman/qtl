@@ -38,12 +38,13 @@ scanonevar(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
 }
 
 \references{
-  Dunn, P. K. and Smyth, G. K. (2012) dglm: Double generalized linear
-  models, \url{http://CRAN.R-project.org/package=dglm}.
-
   Ronnegard, L. and Valdar W. (2011) Detecting major genetic loci
   controlling phenotypic variability in experimental crosses. Genetics
   188:435-447
+
+  Ronnegard, L. and Valdar W. (2012) Recent developments in statistical
+  methods for detecting genetic loci affecting phenotypic
+  variability. BMC Genetics 13:63
 }
 
 \author{Lars Ronnegard and Karl Broman}

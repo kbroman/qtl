@@ -98,13 +98,20 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
             # fill in genotype probs for this locus
             X[,2] <- a1[,i]
 
-            d.fit <- DHGLM_norm(m.form=mean_formula, d.form=var_formula, indata=X,
+            d.fit <- DGLM_norm(m.form=mean_formula, d.form=var_formula, indata=X,
                                 maxiter=maxit, conv=tol)
 
             p.mean <- summary(d.fit$mean)$coef[2,4]
             p.disp<- summary(d.fit$disp)$coef[2,4]
-            logP.m[i]<- -log10(p.mean)
-            logP.d[i]<- -log10(p.disp)
+            if (d.fit$iter < maxit) {
+                logP.m[i]<- -log10(p.mean)
+                logP.d[i]<- -log10(p.disp)
+            }
+            else {
+                logP.m[i]<- -log10(p.mean)
+                logP.d[i]<- 0
+                warning("dglm did not converge on chr", chr.names[j], " position ", i)
+            }
         }
 
         # set up the output
@@ -129,7 +136,9 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
     result
 }
 
-DHGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {
+DGLM_norm <-
+    function(m.form, d.form, indata, maxiter=20, conv=1e-6)
+{
     X.mean <- model.matrix(m.form, data = indata)
     X.disp <- model.matrix(d.form, data = indata)
     y.name <- all.vars(m.form)[1]
@@ -148,6 +157,5 @@ DHGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {
         w <- 1/fitted(glm2)
         convergence <- (max(abs(w.old-w)) + (summary(glm1)$sigma-1) )
     }
-    if (iter == maxiter) warning("Error: DHGLM did not converge")
-    return(list(mean=glm1, disp=glm2))
+    return(list(mean=glm1, disp=glm2, iter=iter))
 }
