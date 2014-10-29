@@ -15,8 +15,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > library(qtl)
 > data(map10)
 > map10 <- map10[1:2]
@@ -88,4 +86,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  9.127   0.161   9.333 
+  8.548   0.071   8.682 
