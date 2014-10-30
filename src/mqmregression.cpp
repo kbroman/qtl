@@ -188,7 +188,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   ludcmp(XtWX, dimx, indx, &d);
   lusolve(XtWX, dimx, indx, XtWY);
 
-  long double* indL = (long double *)R_alloc(Nind, sizeof(long double));
+  double* indL = (double *)R_alloc(Nind, sizeof(double));
   int newNaug       = ((!fitQTL) ? Naug : 3*Naug);
   vector fit        = newvector(newNaug);
   vector resi       = newvector(newNaug);
@@ -270,7 +270,7 @@ double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker,
   }
   /* calculation of logL */
   debug_trace("calculate logL\n");
-  long double logL=0.0;
+  double logL=0.0;
   for (int i=0; i<Nind; i++) {
     indL[i]= 0.0;
   }
