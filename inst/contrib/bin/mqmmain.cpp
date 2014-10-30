@@ -191,10 +191,10 @@ unsigned int readcofactorfile(const char* filename,cvector *cofactors,const unsi
 
 void printhelp(void) {
   printf ("Commandline switches:\n");
-  printf ("-h      		This help.\n");
-  printf ("-v      		Verbose (produce a lot of textoutput).\n");
-  printf ("-d(INT) 		DebugLevel -d0,-d1.\n");
-  printf ("-t(INT) 		Phenotype under analysis.\n");
+  printf ("-h           This help.\n");
+  printf ("-v           Verbose (produce a lot of textoutput).\n");
+  printf ("-d(INT)      DebugLevel -d0,-d1.\n");
+  printf ("-t(INT)      Phenotype under analysis.\n");
   printf ("-p(FILE_NAME)	Phenotypes file in plain textformat.\n");
   printf ("-g(FILE_NAME)	Genotypes file in plain textformat.\n");
   printf ("-m(FILE_NAME)	Marker and Chromosome descriptionfile in plain textformat.\n");
@@ -247,7 +247,7 @@ bool selectivelygenotyped(const MQMMarkerMatrix markers,const ivector chr,const 
         }
         count++;
       }
-      
+
     }
     count=0;
     countmissing=0;
@@ -320,7 +320,7 @@ int main(int argc,char *argv[]) {
       break;
     case 'o':
       outputfile = optarg;
-      break;      
+      break;
     case 'a':
       mqmalgorithmsettings.stepmin = atoi(optarg);
       debug_trace("Option (a) smin: %d\n",mqmalgorithmsettings.stepmin);
@@ -339,27 +339,27 @@ int main(int argc,char *argv[]) {
     case 'f':
       mqmalgorithmsettings.windowsize = atoi(optarg);
       debug_trace("Option (f) window: %d\n",mqmalgorithmsettings.windowsize);
-    break;  
+    break;
     case 'q':
       mqmalgorithmsettings.maxiter = atoi(optarg);
       debug_trace("Option (q) maxiter: %d\n",mqmalgorithmsettings.maxiter);
-    break; 
+    break;
     case 'i':
       mqmalgorithmsettings.estmap = optarg[0];
       debug_trace("Option (i) estmap: %d\n",mqmalgorithmsettings.estmap);
-    break; 
+    break;
     case 'j':
       mqmalgorithmsettings.max_totalaugment = atoi(optarg);
       debug_trace("Option (j) max_totalaugment: %d\n",mqmalgorithmsettings.max_totalaugment);
-    break; 
+    break;
     case 'k':
       mqmalgorithmsettings.max_indaugment = atoi(optarg);
       debug_trace("Option (k) max_indaugment: %d\n",mqmalgorithmsettings.max_indaugment);
-    break; 
+    break;
     case 'l':
       mqmalgorithmsettings.neglect_unlikely = atof(optarg);
       debug_trace("Option (l) minprob: %f\n",mqmalgorithmsettings.neglect_unlikely);
-    break; 
+    break;
     default:
       fprintf(stderr, "Unknown option character '%c'.\n", optopt);
   }
@@ -405,7 +405,7 @@ int main(int argc,char *argv[]) {
     for (index = optind; index < argc; index++) {
       debug_trace("Non-option argument %s\n", argv[index]);
     }
-    
+
     //Read in settingsfile
     mqmalgorithmsettings = loadmqmsetting(settingsfile,mqmalgorithmsettings,verbose);
     //Create large datastructures
@@ -468,7 +468,7 @@ int main(int argc,char *argv[]) {
     if (set_cofactors > 0) {
       backwards = 1;
     }
-    
+
     //Initialize an empty individuals list
     for (unsigned int i=0; i< mqmalgorithmsettings.nind; i++) {
       INDlist[i] = i;
@@ -476,18 +476,18 @@ int main(int argc,char *argv[]) {
 
     int nind = mqmalgorithmsettings.nind;
     int augmentednind = mqmalgorithmsettings.nind;
-    
+
     //<dataaugmentation>
-     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind) 
-      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");   
+     if(mqmalgorithmsettings.max_totalaugment <= mqmalgorithmsettings.nind)
+      exit_on_error_gracefull("Augmentation parameter conflict max_augmentation <= individuals");
     //int testje = calculate_augmentation(mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark,markers,crosstype);
-    
+
     if(selectivelygenotyped(markers,chr,mqmalgorithmsettings.nind,mqmalgorithmsettings.nmark)){
       fprintf(fout,"Warning: Selective genotyped set, only including most likely (neglect_unlikely set to 1)\n");
       mqmalgorithmsettings.neglect_unlikely = 1;
     }
 
-   mqmaugmentfull(&markers,&nind,&augmentednind,&INDlist,mqmalgorithmsettings.neglect_unlikely, mqmalgorithmsettings.max_totalaugment, 
+   mqmaugmentfull(&markers,&nind,&augmentednind,&INDlist,mqmalgorithmsettings.neglect_unlikely, mqmalgorithmsettings.max_totalaugment,
    mqmalgorithmsettings.max_indaugment,&pheno_value,mqmalgorithmsettings.nmark,chr,mapdistance,1,crosstype,verbose);
 
     // Start scanning for QTLs
@@ -511,14 +511,6 @@ int main(int argc,char *argv[]) {
       }
     }
 
-    freevector((void *)cofactor);
-    freevector((void *)mapdistance);
-    freematrix((void **)markers,mqmalgorithmsettings.nmark);
-    freematrix((void **)pheno_value,mqmalgorithmsettings.npheno);
-    freevector((void *)chr);
-    freevector((void *)INDlist);
-    freevector((void *)pos);
-    freematrix((void **)QTL,1);
     if (outputfile) fclose(fout);
     return 0;
   }
