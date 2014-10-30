@@ -5,8 +5,8 @@ IF (NOT CMAKE_MODULE_PATH)
 ENDIF()
 
 SET(CMAKE_BUILD_TYPE Debug)
-IF(NOT WIN32)  
-  EXECUTE_PROCESS(COMMAND grep Version ../../DESCRIPTION
+IF(NOT WIN32)
+  EXECUTE_PROCESS(COMMAND grep Version ../../../DESCRIPTION
     OUTPUT_STRIP_TRAILING_WHITESPACE
     OUTPUT_VARIABLE _VERSION)
   STRING(REGEX REPLACE "Version: " "" RQTL_VERSION "${_VERSION}")
@@ -56,23 +56,23 @@ link_libraries(${R_LIBRARY} ${R_BLAS_LIBRARY})
 add_executable (mqm
 ../../../src/simulate.c
 ../../../src/simulate.h
-../../../src/mqmaugment.cpp    
-../../../src/mqmeliminate.h  
-../../../src/mqmmapqtl.h     
+../../../src/mqmaugment.cpp
+../../../src/mqmeliminate.h
+../../../src/mqmmapqtl.h
 ../../../src/mqmregression.cpp
-../../../src/mqmaugment.h      
-../../../src/mqmmixture.cpp  
+../../../src/mqmaugment.h
+../../../src/mqmmixture.cpp
 ../../../src/mqmregression.h
-../../../src/mqmdatatypes.cpp 
-../../../src/mqmmixture.h    
+../../../src/mqmdatatypes.cpp
+../../../src/mqmmixture.h
 ../../../src/mqmscan.cpp
-../../../src/mqmdatatypes.h    
-../../../src/mqm.h           
-../../../src/mqmprob.cpp     
+../../../src/mqmdatatypes.h
+../../../src/mqm.h
+../../../src/mqmprob.cpp
 ../../../src/mqmscan.h
-../../../src/mqmeliminate.cpp  
-../../../src/mqmmapqtl.cpp   
-../../../src/mqmprob.h       
+../../../src/mqmeliminate.cpp
+../../../src/mqmmapqtl.cpp
+../../../src/mqmprob.h
 ../../../src/standalone.h
 ../../../src/util.h
 ../../../src/util.c
@@ -88,22 +88,22 @@ SET(RTESTOUTPUT rtest/regression)
 
 # Test R version (updating only the C libraries)
 ADD_CUSTOM_TARGET(testR_Clibs
-  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND ${R_EXECUTABLE} CMD INSTALL --libs-only qtl_${RQTL_VERSION}.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../
+  COMMAND ${R_EXECUTABLE} CMD INSTALL --libs-only qtl_${RQTL_VERSION}.tar.gz
   COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest -R TestR)
 
 # Test R version only
 ADD_CUSTOM_TARGET(testR
-  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../
+  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz
   COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest -R TestR)
-  
+
 # All tests, including R
 ADD_CUSTOM_TARGET(testall
-  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../ 
-  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz 
+  COMMAND ${R_EXECUTABLE} CMD build --no-docs ../../
+  COMMAND ${R_EXECUTABLE} CMD INSTALL qtl_${RQTL_VERSION}.tar.gz
   COMMAND ${CMAKE_COMMAND} -E remove qtl_${RQTL_VERSION}.tar.gz
   COMMAND ctest)
 
@@ -118,7 +118,7 @@ ENDIF()
 
 # Tracetest
 ADD_CUSTOM_TARGET(tracetest
-  COMMAND ${MQMEXE} -o T12trace.log -d1 -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1 
+  COMMAND ${MQMEXE} -o T12trace.log -d1 -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt -ctest/t12/cofactors.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=n --maugment=10000 --miaugment=250 --minprob=1
 )
 
 
@@ -144,7 +144,7 @@ ADD_TEST(TestMQMF2_T12 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genoty
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T12_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t12out.txt.rnew test/regression/t12out.txt)
 
-# Run T13 
+# Run T13
 ADD_TEST(TestMQMF2_T13 ${MQMEXE} -v -ptest/std/phenotypes1.txt -gtest/std/genotypes1.txt -mtest/std/markers1.txt -stest/std/settings1.txt --smin=0 --smax=200 --sstep=2 --alpha=0.02 --window=10 --maxiter=1000 --estmap=y --maugment=10000 --miaugment=250 --minprob=1 -o test/regression/t13out.txt.rnew)
 # Immediately compare outputs against older results
 ADD_TEST(TestMQMF2_T13_cmp ${CMAKE_COMMAND} -E compare_files test/regression/t13out.txt.rnew test/regression/t13out.txt)
@@ -211,5 +211,3 @@ IF(TEST_R)
   endif()
   ADD_TEST(TestR_augmentation ${RTEST} rtest test_augmentation.R)
 ENDIF()
-
-
