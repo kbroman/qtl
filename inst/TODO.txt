@@ -9,6 +9,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o write version of formLinkageGroups for the case of very large numbers
+  of markers. Rather than calculate all pairwise rf in advance, do
+  that for one marker against all others, as we go along.
+
 o functions as.scanone (for converting matrix or data frame to scanone
   format) and as.scanoneperm (for converting matrix or two to
   scanoneperm format)
