@@ -16,6 +16,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.35, 2014-12-12:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Fix an important bug in summary.cross.
+
+
 Version 1.34, 2014-10-30:
 
 Major changes:
