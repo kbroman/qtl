@@ -3,7 +3,7 @@
 # summary.cross.R
 #
 # copyright (c) 2001-2014, Karl W Broman
-# last modified May, 2014
+# last modified Dec, 2014
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -85,9 +85,9 @@ summary.cross <-
                 names(typingsA) <- c(temp, paste("not", temp[c(3,1)]))
             }
             if(!is.null(GenoX)) {
-                typingsX <- table(factor(GenoX[!is.na(GenoX)], levels=1:max(GenoX, na.rm=TRUE)))
-                temp <- getgenonames("f2", "X", "full", getsex(object), cross.attr=attributes(object))
-                names(typingsX) <- temp
+                gnames <- getgenonames("f2", "X", "full", getsex(object), cross.attr=attributes(object))
+                typingsX <- table(factor(GenoX[!is.na(GenoX)], levels=1:length(gnames)))
+                names(typingsX) <- gnames
             }
         }
     }
@@ -103,9 +103,9 @@ summary.cross <-
                 names(typingsA) <- temp
             }
             if(!is.null(GenoX)) {
-                typingsX <- table(factor(GenoX[!is.na(GenoX)], levels=1:max(GenoX, na.rm=TRUE)))
-                temp <- getgenonames(type, "X", "full", getsex(object), cross.attr=attributes(object))
-                names(typingsX) <- temp
+                gnames <- getgenonames(type, "X", "full", getsex(object), cross.attr=attributes(object))
+                typingsX <- table(factor(GenoX[!is.na(GenoX)], levels=1:length(gnames)))
+                names(typingsX) <- gnames
             }
         }
     }

@@ -9,6 +9,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o geno.image: allow control of x- and y-axis labels; allow suppression
+  of axes.
+
 o write version of formLinkageGroups for the case of very large numbers
   of markers. Rather than calculate all pairwise rf in advance, do
   that for one marker against all others, as we go along.
