@@ -49,8 +49,6 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
   float last_step = 0.0;
   vector indweight;
   indweight = newvector(Nind);
-  vector distance;
-  distance = newvector(Nmark+1);
 
   if (reestimate=='n') {
     if (verbose==1) {
