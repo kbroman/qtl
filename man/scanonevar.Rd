@@ -67,7 +67,7 @@ covar <- fake.bc$pheno[,c("sex", "age")]
 out.cov <- scanonevar(fake.bc, mean_covar=covar, var_covar=covar)
 }
 
-\seealso{ \code{\link[dglm]{dglm}}, \code{\link{scanone}},
+\seealso{ \code{\link{scanone}},
   \code{\link{summary.scanone}}, \code{\link{calc.genoprob}},
   \code{\link{summary.scanoneperm}} }
 
