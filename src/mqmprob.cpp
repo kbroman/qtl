@@ -37,24 +37,24 @@ cvector relative_marker_position(const unsigned int nmark,const ivector chr){
   cvector position = newcvector(nmark); // info("Calculating relative genomepositions of the markers");
   for(unsigned int j=0; j < nmark; j++) {
     if(j==0) {
-      if (chr[j]==chr[j+1]) 
+      if (chr[j]==chr[j+1])
         position[j]=MLEFT;
-      else 
+      else
         position[j]=MUNLINKED;
     } else if (j==nmark-1) {
-      if (chr[j]==chr[j-1]) 
+      if (chr[j]==chr[j-1])
         position[j]=MRIGHT;
-      else 
+      else
         position[j]=MUNLINKED;
     } else if (chr[j]==chr[j-1]) {
-      if (chr[j]==chr[j+1]) 
+      if (chr[j]==chr[j+1])
         position[j]=MMIDDLE;
-      else 
+      else
         position[j]=MRIGHT;
     } else {
-      if (chr[j]==chr[j+1]) 
+      if (chr[j]==chr[j+1])
         position[j]=MLEFT;
-      else 
+      else
         position[j]=MUNLINKED;
     }
   }
@@ -85,16 +85,16 @@ double recombination_frequentie(const double cmdistance){
 
 
 
-/* 
+/*
  * Ascertain a marker is valid (AA, BB or AB) for the cross type
  */
 
 void validate_markertype(const MQMCrossType crosstype, const char markertype){
   if (markertype==MNOTAA || markertype==MNOTBB || markertype==MUNKNOWN)
     fatal("validate_markertype: Undecided markertype", "");
-  if (crosstype==CRIL && markertype==MH) 
+  if (crosstype==CRIL && markertype==MH)
     fatal("validate_markertype: Found markertype H (AB) in RIL", "");
-  if (crosstype==CBC && markertype==MBB) 
+  if (crosstype==CBC && markertype==MBB)
     fatal("validate_markertype: Found markertype BB in back cross (BC)", "");
 }
 
@@ -108,7 +108,7 @@ void validate_markertype(const MQMCrossType crosstype, const char markertype){
  *   F2     1/4    1/4   1/2
  *   RIL    1/2    1/2     x
  *   BC     1/2      x   1/2
- 
+
  in the case of marketypes that are invalid for a cross (here: x) a probability of 0.0 is returned
  This is because to make the code in augmentation & Regression more generic.
  */
@@ -171,7 +171,7 @@ double left_prob(const double r,const MQMMarker markerL,const MQMMarker markerR,
   const double r2 = r*r;        //Double recombination
   const double rr = 1.0-r;      // No recombination
   const double rr2 = rr*rr;     //Double Norecombination
- 
+
   const int recombinations = abs(markerL-markerR);    //The number of recombinations
 
   switch (crosstype) {
@@ -236,7 +236,7 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
  * Return the probability of a marker being of markertype (at j), using the
  * information from the right neighbouring marker and the known recombination
  * frequencies. This function is used by augmentation.
- */ 
+ */
 double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imarker, const vector rs, const cvector position){
   #ifndef STANDALONE
     R_CheckUserInterrupt(); /* check for ^C */
@@ -264,12 +264,12 @@ double right_prob_F2(const char markerL, const int j, const MQMMarkerVector imar
           return rr2;
           break;
         case 1:
-          return ((markerR==MH) ? 2.0*r*rr : r*rr); 
+          return ((markerR==MH) ? 2.0*r*rr : r*rr);
           break;
         default:
           return r2;
           break;
-      }        
+      }
     }
   } else if (markerR==MNOTAA) {  //SEMI unknown next marker known is it is not an A
     if (markerL==MAA) {          //Observed marker is an A
@@ -321,11 +321,11 @@ double right_prob_BC(const char markerL, const int j, const MQMMarkerVector imar
   if(position[j] == MRIGHT||position[j] == MUNLINKED){ return 1.0; }
   if (markerL == MBB) { return 0.0; } //info("Strange: encountered BB genotype in BC");
 
-  const char markerR = imarker[j+1];                   		// Next marker at the right side
-  const double r = rs[j];                              		// Recombination freq beween markerL and markerR
-  double prob0 = 0.0;                                  		// Internal variable holding the probability AA if the next rightmarker is (Semi) Unknown
-  double prob1 = 0.0;                                  		// Internal variable holding the probability H if the next rightmarker is (Semi) Unknown
-  const double rr = 1.0-r;                             		// Breeding Logic (see prob_new)
+  const char markerR = imarker[j+1];                        // Next marker at the right side
+  const double r = rs[j];                                   // Recombination freq beween markerL and markerR
+  double prob0 = 0.0;                                       // Internal variable holding the probability AA if the next rightmarker is (Semi) Unknown
+  double prob1 = 0.0;                                       // Internal variable holding the probability H if the next rightmarker is (Semi) Unknown
+  const double rr = 1.0-r;                                  // Breeding Logic (see prob_new)
   const int recombinations = abs(markerL-markerR);        // Number of recombinations between markerL and markerR
 
   if (is_knownMarker(markerR, CBC)) {
@@ -369,4 +369,3 @@ double right_prob_RIL(const char markerL, const int j, const MQMMarkerVector ima
     return prob0*right_prob_RIL(MAA, j+1, imarker, rs, position) + prob2*right_prob_RIL(MBB, j+1, imarker, rs, position);
   }
 }
-
