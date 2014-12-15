@@ -226,10 +226,10 @@ bool is_knownMarker(const char marker,const MQMCrossType crosstype){
     break;
     case CUNKNOWN:
       fatal("Strange: unknown crosstype in is_knownMarker()", "");
-      return R_NaN;
+      return false;
     break;
   }
-  return R_NaN;
+  return false;
 }
 
 /*
