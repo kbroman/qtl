@@ -130,7 +130,7 @@ void sim_bc(int n_mar, int n_ind, double *pos, int m, double p, int **Geno)
     L = pos[n_mar-1]; /* length of chromosome in cM */
 
     /* space to place the crossover locations */
-    max_chi = qpois(1e-10, L/50.0*(double)(m+2), 0, 0);
+    max_chi = (int)qpois(1e-10, L/50.0*(double)(m+2), 0, 0);
     chi = (double *)Calloc(max_chi, double);
 
     for(i=0; i<n_ind; i++) {
@@ -141,11 +141,11 @@ void sim_bc(int n_mar, int n_ind, double *pos, int m, double p, int **Geno)
         else Geno[0][i] = 2;
 
         /* simulate number of chiasmata and intermediate points */
-        n_chi = rpois(L/50.0*(double)(m+1)*(1.0-p));
+        n_chi = (int)rpois(L/50.0*(double)(m+1)*(1.0-p));
 
         /* simulate number of crossovers from ni model */
         if(p > 0)
-            n_ni_xo = rpois(L/50.0*p);
+            n_ni_xo = (int)rpois(L/50.0*p);
         else n_ni_xo = 0;
 
         if(n_chi + n_ni_xo > max_chi) { /* need more space */
