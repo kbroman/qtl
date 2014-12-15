@@ -54,7 +54,7 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
     /* note that x0 will contain the result for QR decomposition.
        If any diagonal element of R is zero, then input x0 is rank deficient */
     for(i=0; i<*ncolx0; i++)  {
-        if(abs(x0[*n_ind*i+i]) < TOL) {
+        if(fabs(x0[*n_ind*i+i]) < TOL) {
             singular = 1;
             break;
         }
