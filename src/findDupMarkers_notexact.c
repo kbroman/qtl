@@ -65,7 +65,7 @@ void findDupMarkers_notexact(int nind, int nmar, int **Geno,
             oj = order[j]-1;
 
             if(result[oj] != 0 ||
-               (adjacent_only && abs(markerloc[oi] - markerloc[oj]) > 1)) {
+               (adjacent_only && fabs(markerloc[oi] - markerloc[oj]) > 1)) {
                 /* skip */
             }
             else {
