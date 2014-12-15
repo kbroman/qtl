@@ -94,8 +94,8 @@ void calc_genoprob(int n_ind, int n_pos, int n_gen, int *geno,
     int cross_scheme[2];
 
     /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
-    cross_scheme[0] = genoprob[0];
-    cross_scheme[1] = genoprob[1];
+    cross_scheme[0] = (int)genoprob[0];
+    cross_scheme[1] = (int)genoprob[1];
     genoprob[0] = 0.0;
     genoprob[1] = 0.0;
 
@@ -192,8 +192,8 @@ void calc_genoprob_special(int n_ind, int n_pos, int n_gen, int *geno,
     int cross_scheme[2];
 
     /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
-    cross_scheme[0] = genoprob[0];
-    cross_scheme[1] = genoprob[1];
+    cross_scheme[0] = (int)genoprob[0];
+    cross_scheme[1] = (int)genoprob[1];
     genoprob[0] = 0.0;
     genoprob[1] = 0.0;
 
@@ -875,8 +875,8 @@ void est_rf(int n_ind, int n_mar, int *geno, double *rf,
     int cross_scheme[2];
 
     /* cross scheme hidden in rf argument; used by hmm_bcsft */
-    cross_scheme[0] = rf[0];
-    cross_scheme[1] = rf[1];
+    cross_scheme[0] = (int)rf[0];
+    cross_scheme[1] = (int)rf[1];
     rf[0] = 0.0;
     rf[1] = 0.0;
 
@@ -1005,8 +1005,8 @@ void calc_pairprob(int n_ind, int n_pos, int n_gen, int *geno,
     int cross_scheme[2];
 
     /* cross scheme hidden in genoprob argument; used by hmm_bcsft */
-    cross_scheme[0] = genoprob[0];
-    cross_scheme[1] = genoprob[1];
+    cross_scheme[0] = (int)genoprob[0];
+    cross_scheme[1] = (int)genoprob[1];
     genoprob[0] = 0.0;
     genoprob[1] = 0.0;
 
