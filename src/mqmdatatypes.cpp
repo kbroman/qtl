@@ -108,7 +108,7 @@ void change_coding(int *Nmark, int *Nind, int **Geno, MQMMarkerMatrix markers, c
 
 void *calloc_init(size_t num, size_t size) {
   void *buf;
-  buf = S_alloc(num,size);
+  buf = S_alloc(num,(int)size);
   return buf;
 }
 

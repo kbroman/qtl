@@ -46,7 +46,7 @@ double rmixture(MQMMarkerMatrix marker, vector weight, vector r,
   int iem= 0;
   double Nrecom, oldr=0.0, newr, rdelta=1.0;
   double maximum = 0.0;
-  float last_step = 0.0;
+  double last_step = 0.0;
   vector indweight;
   indweight = newvector(Nind);
 
