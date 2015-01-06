@@ -3,7 +3,8 @@
 # read.cross.mq.R
 #
 # copyright (c) 2014, INRA (author: Timothée Flutre)
-# last modified June, 2014
+#                     (Some revisions by Karl Broman)
+# last modified Jan, 2015
 # first written May, 2014
 #
 # This program is free software; you can redistribute it and/or
@@ -128,7 +129,7 @@ function(locfile){
     classif <- NULL
     genotypes <- NULL
 
-    lines <- readLines(locfile)
+    lines <- readLines(locfile, warn=FALSE)
 
     # drop comments
     lines <- vapply(strsplit(lines, ";"), "[", "", 1)
@@ -587,7 +588,7 @@ read.cross.mq.map <-
 function(mapfile){
 
     # read all lines
-    lines <- readLines(mapfile)
+    lines <- readLines(mapfile, warn=FALSE)
 
     # remove comments
     lines <- vapply(strsplit(lines, ";"), "[", "", 1)
@@ -646,7 +647,7 @@ function(quafile){
     miss <- NULL
     phenotypes <- NULL
 
-    lines <- readLines(quafile)
+    lines <- readLines(quafile, warn=FALSE)
 
     # remove comments
     lines <- vapply(strsplit(lines, ";"), "[", "", 1)

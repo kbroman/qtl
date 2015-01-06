@@ -16,6 +16,18 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.36, 2014-01-06:
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  Remove some warnings about missing end-of-line characters, in
+  read.cross with MapQTL format.
+
+
 Version 1.35, 2014-12-15:
 
 Major changes:
