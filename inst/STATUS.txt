@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.36, 2014-01-06:
+Version 1.36, 2014-01-26:
 
 Major changes:
 
@@ -24,8 +24,11 @@ Major changes:
 
 Minor changes:
 
-  Remove some warnings about missing end-of-line characters, in
+  Removed some warnings about missing end-of-line characters, in
   read.cross with MapQTL format.
+
+  Fixed a bug in scanonevar; was failing with an error about coercing
+  class "A" to a data.frame
 
 
 Version 1.35, 2014-12-15:
