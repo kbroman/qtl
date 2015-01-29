@@ -121,7 +121,7 @@ function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
         if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
             w[o] <- paste("c",chr.names[j],".",w[o],sep="")
         thischr <- data.frame(chr=rep(chr.names[j], length(w)),
-                              pos=map,
+                              pos=unclass(map),
                               neglogP_mean=logP.m,
                               neglogP_disp=logP.d, stringsAsFactors=FALSE)
         rownames(thischr) <- w
