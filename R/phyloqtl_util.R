@@ -156,6 +156,8 @@ flipcross <-
     if(!(crosstype %in% allowed_crosses))
         stop("The function is not working for cross type ", crosstype)
 
+    chrtype <- sapply(cross$geno, "class")
+
     # omit X chr
     if(any(chrtype=="X")) {
         cross <- subset(cross, chr = (chrtype != "X"))
@@ -164,7 +166,6 @@ flipcross <-
 
 
     if(crosstype == "f2") {
-        chrtype <- sapply(cross$geno, "class")
 
         for(i in seq(along=cross$geno)) {
             nd <- d <- cross$geno[[i]]$data
