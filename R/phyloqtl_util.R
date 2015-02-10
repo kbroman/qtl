@@ -134,9 +134,9 @@ qtlByPartition <-
 # The goal of this function is to take a QTL cross object (for R/qtl)
 # and flip the alleles A <-> B.
 #
-# Currently, this is just for the case of an intercross, in which
-# cases the allele codes (and corresponding QTL genotype probabilities
-# and/or imputated genotypes) are switched as follows:
+# For the case of an intercross, the allele codes (and corresponding
+# QTL genotype probabilities and/or imputated genotypes) are switched
+# as follows:
 #
 # genotype   old code    new code
 #   AA          1           3
@@ -151,13 +151,22 @@ flipcross <-
 {
     if(!("cross" %in% class(cross)))
         stop("The input should have class 'cross'")
-    if(class(cross)[1] != "f2")
-        stop("The function is currently working only for an intercross.")
+    allowed_crosses <- c("f2", "riself", "risib", "dh", "haploid")
+    crosstype <- class(cross)[1]
+    if(!(crosstype %in% allowed_crosses))
+        stop("The function is not working for cross type ", crosstype)
 
-    chrtype <- sapply(cross$geno, "class")
+    # omit X chr
+    if(any(chrtype=="X")) {
+        cross <- subset(cross, chr = (chrtype != "X"))
+        warning("flipcross is not yet working for the X chromosome; X chr omitted from output.")
+    }
 
-    for(i in seq(along=cross$geno)) {
-        if(chrtype[i] != "X") { # autosomal data
+
+    if(crosstype == "f2") {
+        chrtype <- sapply(cross$geno, "class")
+
+        for(i in seq(along=cross$geno)) {
             nd <- d <- cross$geno[[i]]$data
             nd[!is.na(d) & d==1] <- 3
             nd[!is.na(d) & d==3] <- 1
@@ -184,15 +193,35 @@ flipcross <-
             }
         }
     }
+    else { # riself/risib/dh/haploid
+
+        for(i in seq(along=cross$geno)) {
+            nd <- d <- cross$geno[[i]]$data
+            nd[!is.na(d) & d==1] <- 2
+            nd[!is.na(d) & d==2] <- 1
+
+            if("prob" %in% names(cross$geno[[i]])) {
+                theattr <- attributes(cross$geno[[i]]$prob)
+                cross$geno[[i]]$prob <- cross$geno[[i]]$prob[,,2:1,drop=FALSE]
+                attr(cross$geno[[i]]$prob,"map") <- theattr$map
+                attr(cross$geno[[i]]$prob,"error.prob") <- theattr$error.prob
+                attr(cross$geno[[i]]$prob,"step") <- theattr$step
+                attr(cross$geno[[i]]$prob,"off.end") <- theattr$off.end
+                attr(cross$geno[[i]]$prob,"map.function") <- theattr$map.function
+                attr(cross$geno[[i]]$prob,"stepwidth") <- theattr$stepwidth
+            }
+
+            if("draws" %in% names(cross$geno[[i]])) {
+                nd <- d <- cross$geno[[i]]$draws
+                nd[d==2] <- 1
+                nd[d==1] <- 2
+                cross$geno[[i]]$draws <- nd
+            }
+        }
+    }
 
     if("alleles" %in% names(attributes(cross)))
         attr(cross, "alleles") <- rev(attr(cross, "alleles"))
-
-    # omit X chr
-    if(any(chrtype=="X")) {
-        cross <- subset(cross, chr = (chrtype != "X"))
-        warning("flipcross is not yet working for the X chromosome; X chr omitted from output.")
-    }
 
     cross
 }
