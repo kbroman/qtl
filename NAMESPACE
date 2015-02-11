@@ -5,6 +5,8 @@ import(graphics, stats, utils, parallel)
 
 export(map2table)
 export(scanonevar)
+export(scanonevar.meanperm)
+export(scanonevar.varperm)
 export(reduce2grid)
 export(formMarkerCovar)
 export(nqtl)
