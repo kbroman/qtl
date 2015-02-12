@@ -7,7 +7,7 @@
 
 \usage{
 scanonevar.varperm(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
-           n.var.perm = 2, seed = 27517, maxit=25, tol=1e-6)
+                   maxit=25, tol=1e-6, n.var.perm = 2, seed = 27517, quiet=TRUE)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -21,11 +21,11 @@ scanonevar.varperm(cross, pheno.col=1, mean_covar=NULL, var_covar=NULL,
    transformations.}
   \item{mean_covar}{Numeric matrix with covariates affecting the mean.}
   \item{var_covar}{Numeric matrix with covariates affecting the variances.}
-  \item{n.var.perm}{Numeric vector of length one indicates the number of permutations to execute.}
-  \item{seed}{Numeric vector of length one indicates the random seed to start the permutations.}
   \item{maxit}{Maximum number of iterations in the algorithm to fit the
     model at a given position.}
   \item{tol}{Tolerance for convergence.}
+  \item{n.var.perm}{Numeric vector of length one indicates the number of permutations to execute.}
+  \item{seed}{Numeric vector of length one indicates the random seed to start the permutations.}
   \item{quiet}{If \code{FALSE}, print some information about the course
     of the calculations.}
 }
