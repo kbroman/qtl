@@ -4,9 +4,9 @@ Date: 12 Feb 2015
 Title: Tools for Analyzing QTL Experiments
 Author: Karl W Broman <kbroman@biostat.wisc.edu> and Hao Wu, with
   ideas from Gary Churchill and Saunak Sen and contributions from
-  Danny Arends, Timothee Flutre, Ritsert Jansen, Pjotr Prins, Lars
-  Ronnegard, Rohan Shah, Laura Shannon, Quoc Tran, Aaron Wolen, and
-  Brian Yandell
+  Danny Arends, Robert Corty, Timothee Flutre, Ritsert Jansen, Pjotr
+  Prins, Lars Ronnegard, Rohan Shah, Laura Shannon, Quoc Tran, Aaron
+  Wolen, and Brian Yandell
 Maintainer: Karl W Broman <kbroman@biostat.wisc.edu>
 Description: Analysis of experimental crosses to identify genes
   (called quantitative trait loci, QTLs) contributing to variation in
