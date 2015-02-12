@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.36, 2014-01-26:
+Version 1.36, 2014-02-12
 
 Major changes:
 
@@ -29,6 +29,9 @@ Minor changes:
 
   Fixed a bug in scanonevar; was failing with an error about coercing
   class "A" to a data.frame
+
+  Added scanonevar.meanperm and scanonevar.varperm (from Robert Corty)
+  for permutation tests with scanonevar().
 
 
 Version 1.35, 2014-12-15:
