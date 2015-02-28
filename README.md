@@ -4,7 +4,7 @@
 
 **Authors**: Karl W Broman and Hao Wu, with ideas from Gary Churchill
 and &#346;aunak Sen and contributions from Danny Arends,
-Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Lars
+Robert Corty, Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Lars
 R&ouml;nneg&aring;rd, Rohan Shah, Laura Shannon, Quoc Tran, Aaron
 Wolen, and Brian Yandell
 
