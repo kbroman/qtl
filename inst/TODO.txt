@@ -9,6 +9,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o plot.pxg with 4-way cross: with infer=FALSE, you get a strange error
+  message from dropping all individuals; would probably show up for any
+  cross type, with not-fully-informative genotypes
+
 o Write a function to simplify formula like y~Q1*Q2*Q3*Q4
   ...rather than halt with an error, just drop all but the pairwise
   interactions.
