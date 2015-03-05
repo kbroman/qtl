@@ -1558,21 +1558,24 @@ plotPheno <- plot.pheno <-
     if(u==2 || (u < 10  && nind(x) > 50))
         phe <- as.factor(phe)
 
-    old.las <- par("las")
-    on.exit(par(las=old.las))
-    par(las=1)
+    plot_pheno_sub <-
+        function(phe, xlab=paste("phe", pheno.col),
+                 main=colnames(x$pheno)[pheno.col], col="white",
+                 breaks=ceiling(2*sqrt(nind(x))),
+                 las=1,
+                 ...)
+        {
+            if(is.factor(phe)) {
+                barplot(table(phe), xlab=xlab, main=main, col=col, las=las, ...)
+            }
+            else {
+                phe <- as.numeric(phe)[1:nind(x)]
+                hist(phe, breaks = breaks,
+                     xlab = xlab, main = main, las=las, ...)
+            }
+        }
 
-    if(is.factor(phe)) {
-        barplot(table(phe),  xlab = paste("phe", pheno.col),
-                main = colnames(x$pheno)[pheno.col], col = "white", ...)
-    }
-    else {
-        phe <- as.numeric(phe)[1:nind(x)]
-        hist(phe, breaks = ceiling(2*sqrt(nind(x))),
-             xlab = paste("phe", pheno.col),
-             main = colnames(x$pheno)[pheno.col], ...)
-    }
-
+    plot_pheno_sub(phe, ...)
 }
 
 # end of plot.R
