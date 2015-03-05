@@ -11,7 +11,7 @@
 \usage{
 plotPXG(x, marker, pheno.col=1, jitter=1, infer=TRUE,
          pch, ylab, main, col, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
@@ -34,8 +34,9 @@ plotPXG(x, marker, pheno.col=1, jitter=1, infer=TRUE,
   \item{main}{Main title for the plot.  If missing, the names of the
     markers are used.}
   \item{col}{A vector of colors to use for the confidence intervals
-    (optional).} 
-  \item{\dots}{Ignored at this point.}
+    (optional).}
+  \item{\dots}{Passed to \code{\link[graphics]{barplot}} or
+    \code{\link[graphics]{hist}}.}
 }
 
 \details{
@@ -51,7 +52,7 @@ plotPXG(x, marker, pheno.col=1, jitter=1, infer=TRUE,
 A data.frame with initial columns the marker genotypes, then the
 phenotype data, then a column indicating whether any of the marker
 genotypes were inferred (1=at least one genotype inferred, 0=none were
-inferred). 
+inferred).
 }
 
 \examples{
