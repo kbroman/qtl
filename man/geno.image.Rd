@@ -10,7 +10,7 @@
 \usage{
 geno.image(x, chr, reorder=FALSE, main="Genotype data",
            alternate.chrid=FALSE, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
@@ -28,9 +28,9 @@ geno.image(x, chr, reorder=FALSE, main="Genotype data",
     n \tab Reorder according to phenotype n}}
   \item{main}{Title to place on plot.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
-  \item{\dots}{Ignored at this point.}
+  \item{\dots}{Passed to \code{\link[graphics]{image}}.}
 }
 
 \details{

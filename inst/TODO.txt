@@ -13,9 +13,6 @@ o Write a function to simplify formula like y~Q1*Q2*Q3*Q4
   ...rather than halt with an error, just drop all but the pairwise
   interactions.
 
-o geno.image: allow control of x- and y-axis labels; allow suppression
-  of axes.
-
 o functions as.scanone (for converting matrix or data frame to scanone
   format) and as.scanoneperm (for converting matrix or two to
   scanoneperm format)

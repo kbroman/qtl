@@ -31,6 +31,9 @@ Minor changes:
   plotPXG: if infer=FALSE and there are no fully-informative genotypes
   (e.g., in a 4-way cross), give a more informative error.
 
+  geno.image: allow control of x- and y-axis labels; allow suppression
+  of axes.
+
   Removed some warnings about missing end-of-line characters, in
   read.cross with MapQTL format.
 

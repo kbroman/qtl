@@ -151,12 +151,13 @@ geno.image <-
     Geno <- pull.geno(cross)
 
     # colors to use
+    maxgeno <- max(Geno, na.rm=TRUE)
     if(type != "4way") {
         thecolors <- c("white", "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
         thebreaks <- seq(-0.5, 5.5, by=1)
     }
     else {
-        if(max(Geno,na.rm=TRUE) <= 5) {
+        if(maxgeno <= 5) {
             thecolors <- c("white", "#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00")
             thebreaks <- seq(-0.5, 5.5, by=1)
         }
@@ -166,6 +167,8 @@ geno.image <-
             thebreaks <- seq(-0.5, 10.5, by=1)
         }
     }
+    thecolors <- thecolors[1:(maxgeno+1)]
+    thebreaks <- thebreaks[1:(maxgeno+2)]
 
     # reorder the individuals according to their phenotype
     o <- 1:nrow(Geno)
@@ -197,8 +200,17 @@ geno.image <-
     on.exit(par(xpd=old.xpd,las=old.las))
 
     # plot grid with black pixels where there is missing data
-    image(1:nrow(g),1:ncol(g),g,ylab="Individuals",xlab="Markers",col=thecolors,
-          breaks=thebreaks)
+    plot_image_sub <-
+        function(g, ylab="Individuals",xlab="Markers", col=thecolors, ...)
+        {
+            if(length(thebreaks) != length(col)+1)
+                stop("Must have one more break than color\n",
+                     "length(breaks) = ", length(thebreaks),
+                     "\nlength(col) = ", length(col))
+            image(1:nrow(g),1:ncol(g), g, col=col, xlab=xlab, ylab=ylab,
+                  breaks=thebreaks, ...)
+        }
+    plot_image_sub(g, ...)
 
     # plot lines at the chromosome boundaries
     n.mar <- nmar(cross)
