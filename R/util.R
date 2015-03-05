@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2014, Karl W Broman
+# copyright (c) 2001-2015, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2014
+# last modified Mar, 2015
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #           geno.table, genotab.em
 #           mf.k, mf.h, imf.k, imf.h, mf.cf, imf.cf, mf.m, imf.m,
 #           mf.stahl, imf.stahl
-#           switch.order, makeSSmap,
+#           switch.order, flip.order, makeSSmap,
 #           subset.cross, fill.geno, checkcovar, find.marker,
 #           find.pseudomarker,
 #           adjust.rf.ri, lodint, bayesint,
@@ -1359,6 +1359,72 @@ switch.order <-
 
     cross
 }
+
+
+######################################################################
+# flip.order: flip the order of markers on a set of chromosomes
+######################################################################
+
+flip.order <-
+    function(cross, chr)
+{
+    # utility function to flip a map
+    flipChrOnMap <-
+        function(map)
+        {
+            if(is.matrix(map)) {
+                map <- map[,ncol(map):1,drop=FALSE]
+                for(j in 1:nrow(map))
+                    map[j,] <- max(map[j,]) - map[j,]
+            } else {
+                map <- max(map) - map[length(map):1]
+            }
+            map
+        }
+
+    # utility function to flip intermediate calc
+    flipChrInterCalc <-
+        function(object, attr2consider=c("error.prob", "step", "off.end", "map.function", "stepwidth"))
+        {
+            the_attr <- attributes(object)
+            ndim <- length(dim(object))
+            if(ndim == 3)
+                object <- object[,ncol(object):1,,drop=FALSE]
+            else
+                object <- object[,ncol(object):1,drop=FALSE]
+            for(a in attr2consider) {
+                if(a %in% names(the_attr))
+                    attr(object, a) <- the_attr[[a]]
+            }
+            if("map" %in% names(the_attr))
+                attr(object, "map") <- flipChrOnMap(the_attr$map)
+
+            object
+        }
+
+    chr <- matchchr(chr, names(cross$geno))
+
+    for(i in chr) {
+        nc <- ncol(cross$geno[[i]]$data)
+        cross$geno[[i]]$data <- cross$geno[[i]]$data[,nc:1,drop=FALSE]
+        cross$geno[[i]]$map <- flipChrOnMap(cross$geno[[i]]$map)
+
+        if("prob" %in% names(cross$geno[[i]]))
+            cross$geno[[i]]$prob <- flipChrInterCalc(cross$geno[[i]]$prob)
+        if("argmax" %in% names(cross$geno[[i]]))
+            cross$geno[[i]]$argmax <- flipChrInterCalc(cross$geno[[i]]$argmax)
+        if("draws" %in% names(cross$geno[[i]]))
+            cross$geno[[i]]$draws <- flipChrInterCalc(cross$geno[[i]]$draws)
+        if("errorlod" %in% names(cross$geno[[i]]))
+            cross$geno[[i]]$errorlod <- flipChrInterCalc(cross$geno[[i]]$errorlod,
+                                                          c("error.prob", "map.function"))
+    }
+
+    cross$rf <- NULL
+
+    cross
+}
+
 
 ######################################################################
 #

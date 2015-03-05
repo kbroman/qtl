@@ -16,13 +16,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.36, 2014-02-12
+Version 1.36, 2014-03-05
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Added a function flip.order() for flipping the order of markers on
+  selected chromosomes.
 
   Removed some warnings about missing end-of-line characters, in
   read.cross with MapQTL format.
