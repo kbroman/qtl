@@ -16,10 +16,6 @@ o Write a function to simplify formula like y~Q1*Q2*Q3*Q4
 o geno.image: allow control of x- and y-axis labels; allow suppression
   of axes.
 
-o write version of formLinkageGroups for the case of very large numbers
-  of markers. Rather than calculate all pairwise rf in advance, do
-  that for one marker against all others, as we go along.
-
 o functions as.scanone (for converting matrix or data frame to scanone
   format) and as.scanoneperm (for converting matrix or two to
   scanoneperm format)
@@ -165,6 +161,10 @@ o special treatment of X chromosome in scantwo permutations and in
 ----------------------------------------------------------------------
 
 MEDIUM-SHORT TERM:
+
+o write version of formLinkageGroups for the case of very large numbers
+  of markers. Rather than calculate all pairwise rf in advance, do
+  that for one marker against all others, as we go along.
 
 o cim(): Haley-Knott-based approach to deal with missing genotypes at
   marker covariates.
