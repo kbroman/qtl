@@ -9,8 +9,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o plot.pheno: allow control over xlab, ylab, and title
-
 o plot.pxg with 4-way cross: with infer=FALSE, you get a strange error
   message from dropping all individuals; would probably show up for any
   cross type, with not-fully-informative genotypes
