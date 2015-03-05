@@ -9,9 +9,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o Add a function flip.order: use switch.order but just flip the order
-  of markers on the chromosome.
-
 o plot.pheno: allow control over xlab, ylab, and title
 
 o plot.pxg with 4-way cross: with infer=FALSE, you get a strange error

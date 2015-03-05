@@ -3,6 +3,7 @@ useDynLib(qtl)
 # Import package dependencies
 import(graphics, stats, utils, parallel)
 
+export(flip.order)
 export(map2table)
 export(scanonevar)
 export(scanonevar.meanperm)

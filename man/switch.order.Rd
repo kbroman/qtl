@@ -20,14 +20,14 @@
  \item{order}{A vector of numeric indices defining the new marker
    order. The vector may have length two more than the number of
    markers, for easy in use with the output of the function
-   \code{\link{ripple}}.} 
+   \code{\link{ripple}}.}
  \item{error.prob}{Assumed genotyping error rate (passed to
-   \code{\link{est.map}}).} 
+   \code{\link{est.map}}).}
  \item{map.function}{Map function to be used (passed to
-   \code{\link{est.map}}).} 
+   \code{\link{est.map}}).}
  \item{maxit}{Maximum number of EM iterations to perform.}
  \item{tol}{Tolerance for determining convergence.}
- \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
+ \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is
  used only for the 4-way cross.}
 }
 
@@ -36,7 +36,7 @@
   specified chromosome updated, and with any derived data removed
   (except for recombination fractions, if present, which are not
   removed);  the genetic map for the relevant chromosome is
-  re-estimated. 
+  re-estimated.
 }
 
 
@@ -47,6 +47,6 @@ data(fake.f2)
 fake.f2 <- switch.order(fake.f2, 1, c(1,3,2,4:7))
 }
 
-\seealso{ \code{\link{ripple}}, \code{\link{clean.cross}} }
+\seealso{ \code{\link{flip.order}}, \code{\link{ripple}}, \code{\link{clean.cross}} }
 
 \keyword{manip}
