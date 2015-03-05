@@ -37,7 +37,7 @@ were typed.
 \source{
   Bev Paigen and Gary Churchill (The Jackson Laboratory, Bar Harbor,
   Maine)
-  \url{http://www.jax.org/research/churchill/datasets/qtl/qtlarchive}
+  \url{http://phenome.jax.org/db/q?rtn=projects/projdet&reqprojid=119}
 }
 
 \examples{
