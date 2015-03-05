@@ -57,7 +57,7 @@ export(simulatemissingdata, stepwiseqtl, strip.partials, subrousummaryscantwo)
 export(summaryMap, summary.map, switch.order, switchAlleles, top.errorlod)
 export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc.scanone)
 export(clean, condense, convert)
-export(summaryScantwoOld, summary.scantwo.old)
+export(summaryScantwoOld)
 export(reviseXdata)
 
 

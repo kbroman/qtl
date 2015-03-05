@@ -27,7 +27,7 @@
 #
 ######################################################################
 
-summaryScantwoOld <- summary.scantwo.old <-
+summaryScantwoOld <-
     function (object, thresholds = c(0, 0, 0), lodcolumn=1,
               type = c("joint","interaction"), ...)
 {

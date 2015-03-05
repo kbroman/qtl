@@ -1,5 +1,4 @@
 \name{summaryScantwoOld}
-\alias{summary.scantwo.old}
 \alias{summaryScantwoOld}
 
 \title{Summarize the results of a two-dimensional genome scan}
@@ -25,7 +24,7 @@ summaryScantwoOld(object, thresholds = c(0, 0, 0), lodcolumn=1,
    joint, interaction, or individual QTL LOD, respectively.}
   \item{lodcolumn}{If the scantwo results contain LOD scores for
     multiple phenotypes, this argument indicates which to use in the
-    summary.} 
+    summary.}
  \item{type}{Indicates whether to pick peaks with maximal joint or
    interaction LOD.}
  \item{\dots}{Ignored at this point.}
@@ -46,7 +45,7 @@ summaryScantwoOld(object, thresholds = c(0, 0, 0), lodcolumn=1,
 }
 
 \details{
-  For each pair of chromosomes, the pair of loci for which the 
+  For each pair of chromosomes, the pair of loci for which the
   LOD score (either joint or interaction LOD, according to the argument
   \code{type}) is a maximum is considered.  The pair is printed only if
   its joint LOD score exceeds the joint threshold and either (a) the
@@ -55,7 +54,7 @@ summaryScantwoOld(object, thresholds = c(0, 0, 0), lodcolumn=1,
   where the conditional LOD score for locus \eqn{q_1}{q1}, \eqn{LOD(q_1
     | q_2)}{LOD(q1 | q2)}, is the \eqn{\log_{10}}{log10} likelihood ratio
   comparing the model with \eqn{q_1}{q1} and \eqn{q_2}{q2} acting
-  additively to the model with \eqn{q_2}{q2} alone. 
+  additively to the model with \eqn{q_2}{q2} alone.
 
   In the case the results of \code{\link{scanone}} are not
   available, the maximum locus pair for each chromosome is printed
@@ -66,7 +65,7 @@ summaryScantwoOld(object, thresholds = c(0, 0, 0), lodcolumn=1,
 }
 
 \author{Hao Wu; Karl W Broman,
-  \email{kbroman@biostat.wisc.edu}; Brian Yandell } 
+  \email{kbroman@biostat.wisc.edu}; Brian Yandell }
 
 \examples{
 data(fake.f2)
@@ -88,7 +87,7 @@ summaryScantwoOld(out.2dim,c(0,3,1000))
 }
 
 \seealso{ \code{\link{summary.scantwo}},
-  \code{\link{scantwo}}, \code{\link{plot.scantwo}}, 
+  \code{\link{scantwo}}, \code{\link{plot.scantwo}},
           \code{\link{max.scantwo}} }
 
 \keyword{print}

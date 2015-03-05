@@ -45,6 +45,9 @@ Minor changes:
   Fixed a bug in scanonevar; was failing with an error about coercing
   class "A" to a data.frame
 
+  Dropped the name summary.scantwo.old(); still available as
+  summaryScantwoOld().
+
 
 Version 1.35, 2014-12-15:
 
