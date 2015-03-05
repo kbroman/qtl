@@ -1,7 +1,7 @@
 ######################################################################
 # write.cross.mq.R
 #
-# copyright (c) 2014, INRA (author: Timothée Flutre)
+# copyright (c) 2014, INRA (author: Timothee Flutre)
 # last modified June, 2014
 # first written May, 2014
 #

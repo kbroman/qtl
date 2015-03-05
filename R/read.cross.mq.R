@@ -2,7 +2,7 @@
 #
 # read.cross.mq.R
 #
-# copyright (c) 2014, INRA (author: Timothée Flutre)
+# copyright (c) 2014, INRA (author: Timothee Flutre)
 #                     (Some revisions by Karl Broman)
 # last modified Jan, 2015
 # first written May, 2014
