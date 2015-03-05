@@ -2609,7 +2609,7 @@ comparecrosses <-
         }
     }
 
-    cat("\tCrosses are identical.\n")
+    message("\tCrosses are identical.")
 }
 
 
