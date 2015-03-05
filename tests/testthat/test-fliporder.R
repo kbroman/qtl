@@ -3,6 +3,11 @@ context("flip.order")
 test_that("flip.order, when applied twice, should get us back to the same thing", {
 
     data(hyper)
+
+    # reduce size
+    set.seed(53307443)
+    hyper <- hyper[,sample(nind(hyper), 8)]
+
     hyper <- calc.genoprob(hyper, step=1)
     hyper <- sim.geno(hyper, step=10, n.draws=2)
     hyper <- argmax.geno(hyper, step=1)
@@ -23,6 +28,11 @@ test_that("flip.order, when applied twice, should get us back to the same thing"
 test_that("flip.order for 4-way cross", {
 
     data(fake.4way)
+
+    # reduce size
+    set.seed(36461124)
+    fake.4way <- fake.4way[,sample(nind(fake.4way), 8)]
+
     fake.4way <- calc.genoprob(fake.4way, step=1)
 
     fake.4way.fl <- flip.order(fake.4way, chr=c(1, 4, 6, 15))
