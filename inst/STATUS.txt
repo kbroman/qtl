@@ -28,6 +28,9 @@ Minor changes:
   Revised plotPheno (aka plot.pheno) so that one can control the
   x-axis label and title (also, in a histogram, the breaks).
 
+  plotPXG: if infer=FALSE and there are no fully-informative genotypes
+  (e.g., in a 4-way cross), give a more informative error.
+
   Removed some warnings about missing end-of-line characters, in
   read.cross with MapQTL format.
 
