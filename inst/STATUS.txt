@@ -20,10 +20,15 @@ Version 1.36, 2014-03-05
 
 Major changes:
 
+  None.
+
+Minor changes:
+
   Added a function flip.order() for flipping the order of markers on
   selected chromosomes.
 
-Minor changes:
+  Added scanonevar.meanperm and scanonevar.varperm (from Robert Corty)
+  for permutation tests with scanonevar().
 
   Revised plotPheno (aka plot.pheno) so that one can control the
   x-axis label and title (also, in a histogram, the breaks).
@@ -39,9 +44,6 @@ Minor changes:
 
   Fixed a bug in scanonevar; was failing with an error about coercing
   class "A" to a data.frame
-
-  Added scanonevar.meanperm and scanonevar.varperm (from Robert Corty)
-  for permutation tests with scanonevar().
 
 
 Version 1.35, 2014-12-15:
