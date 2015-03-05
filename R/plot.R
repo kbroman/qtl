@@ -1387,6 +1387,8 @@ plotPXG <- plot.pxg <-
     if(!infer) { # replace partially informative genotypes with NAs
         if(type == "f2") x[x > 3] <- NA
         if(type == "4way") x[x > 4] <- NA
+        if(sum(!is.na(x)) == 0)
+            stop("Can't use infer=FALSE as there are no fully informative genotypes")
     }
 
     # in case of X chromosome, recode some genotypes
