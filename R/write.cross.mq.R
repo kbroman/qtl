@@ -1,8 +1,8 @@
 ######################################################################
 # write.cross.mq.R
 #
-# copyright (c) 2014, INRA (author: Timothee Flutre)
-# last modified June, 2014
+# copyright (c) 2014, 2015, INRA (author: Timothee Flutre)
+# last modified March, 2015
 # first written May, 2014
 #
 # This program is free software; you can redistribute it and/or
@@ -60,6 +60,7 @@ write.cross.mq.loc <-
     if(class(cross)[1] == "4way"){
         cat(paste0("popt = ", "CP", "\n"))
     } else{
+        sink()
         msg <- paste("population type", class(cross)[1],
                      "is not supported (yet)")
         stop(msg, call.=FALSE)
@@ -156,6 +157,7 @@ write.cross.mq.loc <-
                 }
                 cat("\n")
             } else{
+                sink()
                 msg <- paste("unrecognized segregation type at marker",
                              marker, "on chromosome", chr)
                 stop(msg, call.=FALSE)
@@ -235,6 +237,7 @@ write.cross.mq.qua <-
     colnames(cross$pheno) <- gsub(pattern=" ", replacement="_",
                                   x=colnames(cross$pheno))
     if(any(nchar(colnames(cross$pheno)) > 20)){
+        sink()
         msg <- paste("phenotype name",
                      colnames(cross$pheno)[which(nchar(colnames(cross$pheno)) > 20)[1]],
                      "is longer than 20 characters")
