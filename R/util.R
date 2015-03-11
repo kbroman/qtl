@@ -1930,7 +1930,8 @@ fill.geno <-
             whmax <- apply(p, 1:2, which.max)
             maxpr <- apply(p, 1:2, max)
             g <- cross$geno[[i]]$data
-            g[maxpr > min.prob] <- whmax[maxpr > min.prob]
+            g[maxpr >= min.prob] <- whmax[maxpr > min.prob]
+            g[maxpr < min.prob] <- NA
             cross$geno[[i]]$data <- g
         }
     }
