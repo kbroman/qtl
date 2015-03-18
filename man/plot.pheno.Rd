@@ -10,20 +10,25 @@
 }
 
 \usage{
-plotPheno(x, pheno.col=1, \dots)
+plotPheno(x, pheno.col=1, main=NULL, xlab=NULL, col=NULL, \dots)
 }
 
 \arguments{
- \item{x}{An object of class \code{cross}.  See
-   \code{\link{read.cross}} for details.}
- \item{pheno.col}{The phenotype column to plot: a numeric index, or the
-   phenotype name as a character string. Alternatively, one may give a numeric vector of
-   phenotypes, in which case it must have the length equal to the number
-   of individuals in the cross, and there must be either non-integers or
-   values < 1 or > no. phenotypes; this last case may be useful for studying
-   transformations.}
- \item{\dots}{Passed to \code{\link[graphics]{hist}} or
-   \code{\link[graphics]{barplot}}.} 
+  \item{x}{An object of class \code{cross}.  See
+    \code{\link{read.cross}} for details.}
+  \item{pheno.col}{The phenotype column to plot: a numeric index, or the
+    phenotype name as a character string. Alternatively, one may give a numeric vector of
+    phenotypes, in which case it must have the length equal to the number
+    of individuals in the cross, and there must be either non-integers or
+    values < 1 or > no. phenotypes; this last case may be useful for studying
+    transformations.}
+  \item{main}{an overall title for the plot. The default is the phenotype name
+    corresponding to \code{pheno.col}.}
+  \item{xlab}{a title for the x axis. The default is "phe" followed by
+    \code{pheno.col} as a numeric index.}
+  \item{col}{the colour to be used to fill the bars. The default is "white".}
+  \item{\dots}{Passed to \code{\link[graphics]{hist}} or
+    \code{\link[graphics]{barplot}}.} 
 }
 
 \value{None.}

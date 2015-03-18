@@ -4,7 +4,8 @@
 #
 # copyright (c) 2000-2012, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Mar, 2012
+#       [minor modifications of plot.pheno from Timothée Flutre]
+# last modified Mar, 2015
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -1543,7 +1544,7 @@ plotPXG <- plot.pxg <-
 }
 
 plotPheno <- plot.pheno <-
-    function(x, pheno.col=1, ...)
+    function(x, pheno.col=1, main=NULL, xlab=NULL, col=NULL, ...)
 {
     if(!any(class(x) == "cross"))
         stop("Input should have class \"cross\".")
@@ -1572,9 +1573,16 @@ plotPheno <- plot.pheno <-
     if(u==2 || (u < 10  && nind(x) > 50))
         phe <- as.factor(phe)
 
+    if(is.null(main))
+      main <- colnames(x$pheno)[pheno.col]
+    if(is.null(xlab))
+      xlab <- paste("phe", pheno.col)
+    if(is.null(col))
+      col <- "white"
+
     plot_pheno_sub <-
-        function(phe, xlab=paste("phe", pheno.col),
-                 main=colnames(x$pheno)[pheno.col], col="white",
+        function(phe, main=main, xlab=xlab,
+                 col=col,
                  breaks=ceiling(2*sqrt(nind(x))),
                  las=1,
                  ...)
@@ -1584,12 +1592,12 @@ plotPheno <- plot.pheno <-
             }
             else {
                 phe <- as.numeric(phe)[1:nind(x)]
-                hist(phe, breaks = breaks,
-                     xlab = xlab, main = main, las=las, ...)
+                hist(phe, breaks=breaks,
+                     xlab=xlab, main=main, col=col, las=las, ...)
             }
         }
 
-    plot_pheno_sub(phe, ...)
+    plot_pheno_sub(phe, main=main, xlab=xlab, col=col, ...)
 }
 
 # end of plot.R
