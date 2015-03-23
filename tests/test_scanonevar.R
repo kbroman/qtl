@@ -23,25 +23,23 @@ out <- scanonevar(fake.bc, mean_covar=covar, var_covar=covar,
                   tol=0.01)
 summary(out, format="allpeaks")
 
-#########Simulate a vQTL on Chromosome 1########
+#########Simulate a vQTL on Chromosome 10 ########
 
-chromo=1
-qtl.position=14 # 50 cM
-N=nind(fake.bc)
-a1<-fake.bc$geno[[chromo]]$prob[,,1]
-y <- fake.bc$pheno$pheno1
-y <- y + rnorm(N,0,exp(a1[,qtl.position]))
-out <- scanonevar(fake.bc, y, mean_covar=covar, var_covar=covar)
-summary(out, format="allpeaks")
+data(fake.f2)
 
-out <- scanonevar(fake.bc, y, mean_covar=covar,
-                  tol=0.01)
-summary(out, format="allpeaks")
+fake.f2 <- calc.genoprob(fake.f2, step = 2)
 
-out <- scanonevar(fake.bc, y, var_covar=covar,
-                  tol=0.01)
-summary(out, format="allpeaks")
+N = nind(fake.f2)
 
-out <- scanonevar(fake.bc, y,
-                  tol=0.01)
-summary(out, format="allpeaks")
+marker.vals <- fake.f2$geno[[10]]$data[,3]
+marker.vals[is.na(marker.vals)] <- 1
+
+fake.f2$pheno$phenotype <- fake.f2$pheno$phenotype + rnorm(N, 0, exp(marker.vals))
+
+out <- scanonevar(fake.f2, pheno.col = 'phenotype')
+plot(out, lodcolumn = 1:2)
+
+out <- scanonevar(fake.f2,
+									mean_covar = fake.f2$pheno$sex,
+									var_covar = fake.f2$pheno$sex)
+plot(out, lodcolumn = 1:2)
