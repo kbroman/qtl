@@ -90,7 +90,9 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	par(xpd=FALSE,las=1)
 	on.exit(par(xpd=old.xpd,las=old.las))
 
-	par(mfrow=c(2,num.plots/2), mar = c(3,3,1,1))
+	par(mfrow=c(2,num.plots/2),
+			oma = c(1,1,3,1),
+			mar = c(2,3,0,1))
 
 	for (plot.num in 1:num.plots) {
 
@@ -145,10 +147,11 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 			legend(x = 'top', legend = names(out)[c(y1.idx, y2.idx)], fill = col[1:2], cex = 0.8)
 
 			# plot chromosome number
-			tloc <- mean(c(min(x),max(x)))
-			xtick <- c(xtick, tloc)
-			xticklabel <- c(xticklabel, as.character(chr[i]))
-
+			if (plot.num > num.plots /2) {
+				tloc <- mean(c(min(x),max(x)))
+				xtick <- c(xtick, tloc)
+				xticklabel <- c(xticklabel, as.character(chr[i]))
+			}
 
 
 			# plot lines or triangles at marker positions
@@ -198,6 +201,9 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 			rect(u[1], u[3], u[2], u[4])
 		}
 	}
+
+	mtext(text = attr(x = out, 'pheno'), side = 3, outer = TRUE, line = 1)
+
 	invisible()
 }
 
