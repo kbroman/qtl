@@ -176,7 +176,7 @@ scanonevar <-
 			else result <- rbind(result, thischr)
 		}
 
-		class(result) <- c("scanone", "data.frame")
+		class(result) <- c("scanonevar", "scanone", "data.frame")
 		attr(result, "method") <- "scanonevar"
 		attr(result, 'dom') <- dom
 		attr(result, 'pheno') <- names(cross$pheno)[pheno.col]
