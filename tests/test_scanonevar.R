@@ -37,9 +37,11 @@ marker.vals[is.na(marker.vals)] <- 1
 fake.f2$pheno$phenotype <- fake.f2$pheno$phenotype + rnorm(N, 0, exp(marker.vals))
 
 out <- scanonevar(fake.f2, pheno.col = 'phenotype')
+
 plot(out, lodcolumn = 1:2)
 
 out <- scanonevar(fake.f2,
+									dom = TRUE,
 									mean_covar = fake.f2$pheno$sex,
 									var_covar = fake.f2$pheno$sex)
 plot(out, lodcolumn = 1:2)
