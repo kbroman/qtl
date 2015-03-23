@@ -109,6 +109,7 @@ scanonevar <-
 			logP.mean.add <- logP.disp.add <- numeric(n.loci)
 			if (dom) { logP.mean.dom <- logP.disp.dom <- numeric(n.loci) }
 
+			mean.baseline <- disp.baseline <- numeric(n.loci)
 			mean.add.effect <- disp.add.effect <- numeric(n.loci)
 			if (dom) { mean.dom.effect <- disp.dom.effect <- numeric(n.loci) }
 
@@ -124,6 +125,8 @@ scanonevar <-
 													 maxiter = maxit,
 													 conv    = tol)
 
+				mean.baseline[i] <- summary(d.fit$mean)$coef[1,1]
+				disp.baseline[i] <- summary(d.fit$disp)$coef[1,1]
 				logP.mean.add[i] <- -log10(summary(d.fit$mean)$coef[2,4])
 				logP.disp.add[i] <- -log10(summary(d.fit$disp)$coef[2,4])
 				mean.add.effect[i] <- summary(d.fit$mean)$coef[2,1]
@@ -153,6 +156,8 @@ scanonevar <-
 				w[o] <- paste("c",chr.names[j],".",w[o],sep="")
 			thischr <- data.frame(chr = rep(chr.names[j], length(w)),
 														pos = unclass(map),
+														mean.baseline = mean.baseline,
+														disp.baseline = disp.baseline,
 														neglogP_mean_add = logP.mean.add,
 														neglogP_disp_add = logP.disp.add,
 														mean_add_effect = mean.add.effect,
