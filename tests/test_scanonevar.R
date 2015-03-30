@@ -1,115 +1,178 @@
+######### Simulate mQTL and vQTL modeled with scanonevar
+
 library(qtl)
-data(map10)
-map10 <- map10[1:2]
-set.seed(8789993)
-simcross <- sim.cross(map10, n.ind=125, type="bc",
-                      model=rbind(c(1, 50, 1.5), c(2, 50, 0)))
-simcross$pheno[,1] <- simcross$pheno[,1] + rnorm(nind(simcross), 0, 2*simcross$qtlgeno[,2])
-simcross <- calc.genoprob(simcross)
-out <- scanonevar(simcross,
-                  tol=0.01)
-summary(out, format="allpeaks")
-
-####
-
-data(fake.bc)
-fake.bc <- fake.bc[1:2,1:150] # only chr 1 and 2, and first 100 individuals
-fake.bc <- calc.genoprob(fake.bc, step=5)
-out <- scanonevar(fake.bc,
-                  tol=0.01)
-summary(out, format="allpeaks")
-covar <- fake.bc$pheno[,c("sex", "age")]
-out <- scanonevar(fake.bc, mean_covar=covar, var_covar=covar,
-                  tol=0.01)
-summary(out, format="allpeaks")
-
-#########Simulate a vQTL on Chromosome 10 ########
+set.seed(27517)
 
 data(fake.f2)
+
+# artificially expand the dataset by 5 fold
+for (chr in 1:nchr(fake.f2)) {
+
+	this.data <- fake.f2$geno[[chr]]$data
+	fake.f2$geno[[chr]]$data <- rbind(this.data, this.data, this.data, this.data, this.data)
+
+	this.errors <- fake.f2$geno[[chr]]$errors
+	fake.f2$geno[[chr]]$errors <- rbind(this.errors, this.errors, this.errors, this.errors, this.errors)
+}
+fake.f2$pheno <- rbind(fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
 
 fake.f2 <- calc.genoprob(fake.f2, step = 2)
 
 N = nind(fake.f2)
 
-marker.vals <- fake.f2$geno[[10]]$data[,3]
-marker.vals[is.na(marker.vals)] <- 1
-
-fake.f2$pheno$phenotype <- fake.f2$pheno$phenotype + rnorm(N, 0, exp(marker.vals))
-
-out <- scanonevar(fake.f2, pheno.col = 'phenotype')
-
-plot(out, lodcolumn = 1:2)
 
 
 
-######### Simulate an additive mQTL on Chr5
-	# a dominance mQTL on Chr7
-	# an additive vQTL on Chr12
-	# and a dominance vQTL on Chr14  ########
+# an additive mQTL on Chr5
 
-data(fake.f2)
+marker1.vals <- fake.f2$geno[[5]]$data[,3] - 2
+marker1.vals[is.na(marker1.vals)] <- 0
 
-fake.f2 <- calc.genoprob(fake.f2, step = 2)
+fake.f2$pheno$phenotype1 <- rnorm(n = N, 25 + 5*marker1.vals, 3)
 
-N = nind(fake.f2)
+var.scan1a <- scanonevar(fake.f2,
+												pheno.col = 'phenotype1',
+												use.dglm.package = TRUE,
+												use.custom.em = FALSE,
+												chrs = 4:6,
+												dom = FALSE)
 
-marker1.vals <- fake.f2$geno[[5]]$data[,3]
-marker1.vals[is.na(marker1.vals)] <- 1
-
-marker2.vals <- fake.f2$geno[[7]]$data[,4]
-marker2.vals[is.na(marker2.vals)] <- 1
-
-marker3.vals <- fake.f2$geno[[12]]$data[,3]
-marker3.vals[is.na(marker3.vals)] <- 1
-
-marker4.vals <- fake.f2$geno[[14]]$data[,3]
-marker4.vals[is.na(marker4.vals)] <- 1
+plot(var.scan1a, bandcol = 'gray')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan1a, marker.name = 'D5M391')
 
 
-fake.f2$pheno$phenotype1 <-
-	rnorm(n = N, 25, 1) +
-	marker1.vals
+var.scan1b <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype1',
+												 use.dglm.package = FALSE,
+												 use.custom.em = TRUE,
+												 chrs = 4:6,
+												 dom = FALSE)
 
-fake.f2$pheno$phenotype2 <-
-	rnorm(n = N, 25, 1) +
-	3*(marker2.vals == 1)
+plot(var.scan1b, bandcol = 'gray')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan1b, marker.name = 'D5M391')
 
-fake.f2$pheno$phenotype3 <-
-	rnorm(n = N, 25, 1) +
-	rnorm(n = N, mean = 0, sd = 3*marker3.vals)
 
-fake.f2$pheno$phenotype4 <-
-	rnorm(n = N, 25, 1) +
-	rnorm(n = N, mean = 0, sd = 3*(marker4.vals != 1))
 
-out1 <- scanonevar(fake.f2,
-									pheno.col = 'phenotype1',
-									dom = TRUE,
-									mean_covar = fake.f2$pheno$sex,
-									var_covar = fake.f2$pheno$sex)
 
-plot(out1, bandcol = 'gray')
 
-out2 <- scanonevar(fake.f2,
-									pheno.col = 'phenotype2',
-									dom = TRUE,
-									mean_covar = fake.f2$pheno$sex,
-									var_covar = fake.f2$pheno$sex)
+# a dominance mQTL on Chr7
+marker2.vals <- fake.f2$geno[[7]]$data[,4]-2
+marker2.vals[is.na(marker2.vals)] <- 0
+marker2.dom <- marker2.vals == 0
 
-plot(out2, bandcol = 'gray')
+fake.f2$pheno$phenotype2 <- rnorm(n = N, 25 + 5*(marker2.vals != -1), 3)
 
-out3 <- scanonevar(fake.f2,
-									pheno.col = 'phenotype3',
-									dom = TRUE,
-									mean_covar = fake.f2$pheno$sex,
-									var_covar = fake.f2$pheno$sex)
+var.scan2a <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype2',
+												 dom = TRUE,
+												 use.dglm.package = TRUE,
+												 use.custom.em = FALSE,
+												 chrs = 6:8)
 
-plot(out3, bandcol = 'gray')
+#plot(var.scan2a, bandcol = 'gray')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan2a, marker.name = 'D7M285')
 
-out4 <- scanonevar(fake.f2,
-									pheno.col = 'phenotype4',
-									dom = TRUE,
-									mean_covar = fake.f2$pheno$sex,
-									var_covar = fake.f2$pheno$sex)
+var.scan2b <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype2',
+												 dom = TRUE,
+												 use.dglm.package = FALSE,
+												 use.custom.em = TRUE,
+												 chrs = 6:8)
 
-plot(out4, bandcol = 'gray')
+#plot(var.scan2B, bandcol = 'gray')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan2b, marker.name = 'D7M285')
+
+
+
+
+
+
+# an additive vQTL on Chr12
+marker3.vals <- fake.f2$geno[[12]]$data[,3] - 2
+marker3.vals[is.na(marker3.vals)] <- - 1
+marker3.dom <- marker3.vals == 0
+
+fake.f2$pheno$phenotype3 <- rnorm(n = N, 25, sd = 3*(marker3.vals + 2))
+
+var.scan3a <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype3',
+												 dom = FALSE,
+												 use.dglm.package = TRUE,
+												 use.custom.em = FALSE,
+												 chrs = 11:13)
+
+#plot(var.scan3a, bandcol = 'gray', legend.pos = c('topleft', 'bottomleft'))
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan3a, marker.name = 'D12M52')
+
+var.scan3b <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype3',
+												 dom = FALSE,
+												 use.dglm.package = FALSE,
+												 use.custom.em = TRUE,
+												 chrs = 11:13)
+
+#plot(var.scan3b, bandcol = 'gray', legend.pos = c('topleft', 'bottomleft'))
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan3b, marker.name = 'D12M52')
+
+
+
+
+# a dominance vQTL on Chr14  ########
+
+marker4.vals <- fake.f2$geno[[14]]$data[,3] - 2
+marker4.vals[is.na(marker4.vals)] <- -1
+marker4.dom <- marker4.vals == 0
+
+fake.f2$pheno$phenotype4 <-	rnorm(n = N, 25, sd = 3*((marker4.vals != -1)+1))
+
+var.scan4a <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype4',
+												 use.dglm.package = TRUE,
+												 use.custom.em = FALSE,
+												 dom = TRUE,
+												 chrs = 13:15)
+
+#plot(var.scan4a, bandcol = 'gray', legend.pos = 'topleft')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan4a, marker.name = 'D14M160')
+
+var.scan4b <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype4',
+												 use.dglm.package = FALSE,
+												 use.custom.em = TRUE,
+												 dom = TRUE,
+												 chrs = 13:15)
+
+#plot(var.scan4b, bandcol = 'gray', legend.pos = 'topleft')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan4b, marker.name = 'D14M160')
+
+
+
+# a dominance mQTL and dominance vQTL on Chr15  ########
+
+marker5.vals <- fake.f2$geno[[15]]$data[,1] - 2
+marker5.vals[is.na(marker5.vals)] <- 0
+marker5.dom <- marker5.vals == 0
+
+fake.f2$pheno$phenotype5 <-	rnorm(n = N,
+																	mean = 25 + 5*(marker5.vals != -1),
+																	sd = 3*(marker5.vals != -1)+1)
+
+var.scan5a <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype5',
+												 use.dglm.package = TRUE,
+												 use.custom.em = FALSE,
+												 dom = TRUE,
+												 chrs = 14:16)
+
+#plot(var.scan5a, bandcol = 'gray', legend.pos = 'topleft')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan5a, marker.name = 'D15M5')
+
+var.scan5b <- scanonevar(fake.f2,
+												 pheno.col = 'phenotype5',
+												 use.dglm.package = FALSE,
+												 use.custom.em = TRUE,
+												 dom = TRUE,
+												 chrs = 14:16)
+
+#plot(var.scan5b, bandcol = 'gray', legend.pos = 'topleft')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan5b, marker.name = 'D15M5')
