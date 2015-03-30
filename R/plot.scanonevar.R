@@ -1,6 +1,6 @@
 #####################################################################
 #
-# plot.scanone.R
+# plot.scanonevar.R
 #
 # copyright (c) 2001-2014, Karl W Broman
 # last modified Apr, 2014
@@ -20,7 +20,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: plot.scanone,
+# Contains: plot.scanonevar,
 #
 ######################################################################
 
@@ -34,7 +34,7 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 												 lty=1, col=c("black","blue","red"), lwd=2,gap=25,
 												 mtick=c("line", "triangle"), show.marker.names=FALSE,
 												 alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
-												 pch=1, bg="transparent", bgrect=NULL, ...)
+												 pch=1, bg="transparent", bgrect=NULL, legend.pos = 'top', ...)
 {
 
 	if(!any(class(x) == "scanone")) {
@@ -57,6 +57,8 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	if(length(bg)==1) bg <- rep(bg, 2)
 	if(length(lty)==1) lty <- rep(lty, 2)
 	if(length(lwd)==1) lwd <- rep(lwd, 2)
+
+	if(length(legend.pos) == 1) { legend.pos <- rep(legend.pos, num.plots)}
 
 	mtick <- match.arg(mtick)
 
@@ -144,7 +146,9 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 			y2 <- out[out[,1]==chr[i], y2.idx]
 			lines(x,y2,lwd=lwd[2],lty=lty[2],col=col[2], type=type[2], cex=cex[2], pch=pch[2], bg=bg[2])
 
-			legend(x = 'top', legend = names(out)[c(y1.idx, y2.idx)], fill = col[1:2], cex = 0.8)
+			legend(x = legend.pos[plot.num], legend = names(out)[c(y1.idx, y2.idx)],
+						 fill = col[1:2], cex = 0.8, bty = 'n',
+						 x.intersp = 0.3, y.intersp = 0.8, xjust = 0.5, yjust = 0)
 
 			# plot chromosome number
 			if (plot.num > num.plots /2) {
