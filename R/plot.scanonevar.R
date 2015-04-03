@@ -31,14 +31,16 @@
 ######################################################################
 
 plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
-												 lty=1, col=c("black","blue","red"), lwd=2,gap=25,
-												 mtick=c("line", "triangle"), show.marker.names=FALSE,
-												 alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
-												 pch=1, bg="transparent", bgrect=NULL, legend.pos = 'top', ...)
+														lty=1, col=c("black", "blue", "red", "green"),
+														lwd=2,gap=25,
+														mtick=c("line", "triangle"), show.marker.names=FALSE,
+														alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
+														pch=1, bg="transparent", bgrect=NULL, legend.pos = 'top',
+														plot.effects = FALSE, ...)
 {
 
-	if(!any(class(x) == "scanone")) {
-		stop("Input should have class \"scanone\".")
+	if(!any(class(x) == "scanonevar")) {
+		stop("Input should have class \"scanonevar\".")
 	}
 
 	if (!is.factor(x$chr)) {
@@ -47,16 +49,24 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 
 	dots <- list(...)
 
-	num.plots <- 2
-	if (attr(x, 'dom') == TRUE) { num.plots <- 4 }
+	line.idxs <- list()
+	line.idxs[[1]] <- grep(pattern = 'lod', x = names(x))
+	if(plot.effects == TRUE) {
+		num.plots <- 2
+		line.idxs[[2]] <- grep(pattern = 'effect', x = names(x))
+	} else {
+		num.plots <- 1
+	}
+
 
 	# handle special arguments to be used in lines()
-	if(length(type)==1) type <- rep(type, 2)
-	if(length(cex)==1) cex <- rep(cex, 2)
-	if(length(pch)==1) pch <- rep(pch, 2)
-	if(length(bg)==1) bg <- rep(bg, 2)
-	if(length(lty)==1) lty <- rep(lty, 2)
-	if(length(lwd)==1) lwd <- rep(lwd, 2)
+	if(length(col)==1) col <- rep(col, 4)
+	if(length(type)==1) type <- rep(type, 4)
+	if(length(cex)==1) cex <- rep(cex, 4)
+	if(length(pch)==1) pch <- rep(pch, 4)
+	if(length(bg)==1) bg <- rep(bg, 4)
+	if(length(lty)==1) lty <- rep(lty, 4)
+	if(length(lwd)==1) lwd <- rep(lwd, 4)
 
 	if(length(legend.pos) == 1) { legend.pos <- rep(legend.pos, num.plots)}
 
@@ -92,26 +102,17 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	par(xpd=FALSE,las=1)
 	on.exit(par(xpd=old.xpd,las=old.las))
 
-	par(mfrow=c(2,num.plots/2),
+	par(mfrow=c(num.plots, 1),
 			oma = c(1,1,3,1),
 			mar = c(2,3,0,1))
 
 	for (plot.num in 1:num.plots) {
 
-		y1.idx <- (plot.num-1)*2+5
-		y2.idx <- (plot.num-1)*2+6
-		y1 <- out[, y1.idx]
-		y2 <- out[, y2.idx]
+		ys <- out[, line.idxs[[plot.num]]]
 
 		# make frame of plot
 		if (missing(ylim)) {
-			if (grepl(pattern = 'neglogP', x = names(out)[y1.idx])) {
-				ylim.set <- c(0, max(y1, y2))
-			} else if (grepl(pattern = 'effect', x =  names(out)[y1.idx])) {
-				ylim.set <- range(c(y1, y2))
-			} else {
-				stop("Input object must have columns 5-12 as neglogPs and effects")
-			}
+			if ('lod' %in% names(ys)) {	ylim.set <- c(0, max(ys))	} else { ylim.set <- range(ys) }
 		} else {
 			ylim.set <- ylim
 		}
@@ -141,14 +142,13 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 		for(i in 1:length(chr)) {
 			# plot first out
 			x <- out[out[,1]==chr[i], 2]+start[i]
-			y1 <- out[out[,1]==chr[i], y1.idx]
-			lines(x,y1,lwd=lwd[1],lty=lty[1],col=col[1], type=type[1], cex=cex[1], pch=pch[1], bg=bg[1])
-			y2 <- out[out[,1]==chr[i], y2.idx]
-			lines(x,y2,lwd=lwd[2],lty=lty[2],col=col[2], type=type[2], cex=cex[2], pch=pch[2], bg=bg[2])
 
-			legend(x = legend.pos[plot.num], legend = names(out)[c(y1.idx, y2.idx)],
-						 fill = col[1:2], cex = 0.8, bty = 'n',
-						 x.intersp = 0.3, y.intersp = 0.8, xjust = 0.5, yjust = 0)
+			for(j in 1:ncol(ys)) {
+
+				y <- ys[out[,1]==chr[i], j]
+				lines(x,y,lwd=lwd[j],lty=lty[j],col=col[j], type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
+
+			}
 
 			# plot chromosome number
 			if (plot.num > num.plots /2) {
@@ -181,6 +181,11 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 			}
 
 		}
+
+		# draw the legend
+		legend(x = legend.pos[plot.num], legend = names(ys),
+					 fill = col, cex = 0.8, bty = 'n',
+					 x.intersp = 0.3, y.intersp = 0.8, xjust = 0.5, yjust = 0)
 
 		# draw the axis
 		if(!alternate.chrid || length(xtick) < 2) {

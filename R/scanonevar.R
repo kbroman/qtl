@@ -99,6 +99,8 @@ scanonevar <-
 		}
 
 		X <- as.data.frame(X)
+		mean_null_formula <- as.formula(mean_null_formula)
+		var_null_formula <- as.formula(var_null_formula)
 		mean_formula <- as.formula(mean_formula)
 		var_formula <- as.formula(var_formula)
 
@@ -162,18 +164,18 @@ scanonevar <-
 				log10.lik.null <- ln.lik.null / log(10)
 
 				lod.full[i] <- log10.lik.full - log10.lik.null
-				lod.mean[i] <- log10.lik.full - log10.lik.disp
-				lod.disp[i] <- log10.lik.full - log10.lik.mean
-				mean.baseline[i] <- coef(d.fit)[1]
-				disp.baseline[i] <- coef(d.fit$dispersion.fit)[1]
+				lod.mean[i] <- log10.lik.full - log10.lik.mean
+				lod.disp[i] <- log10.lik.full - log10.lik.disp
+				mean.baseline[i] <- coef(d.fit.full)[1]
+				disp.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
 				#logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
 				#logP.disp.add[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[2,4])
-				mean.add.effect[i] <- coef(d.fit)[2]
-				disp.add.effect[i] <- coef(d.fit$dispersion.fit)[2]
+				mean.add.effect[i] <- coef(d.fit.full)[2]
+				disp.add.effect[i] <- coef(d.fit.full$dispersion.fit)[2]
 
 				if (dom) {
-					mean.dom.effect[i] <- coef(d.fit)[3]
-					disp.dom.effect[i] <- coef(d.fit$dispersion.fit)[3]
+					mean.dom.effect[i] <- coef(d.fit.full)[3]
+					disp.dom.effect[i] <- coef(d.fit.full$dispersion.fit)[3]
 					#logP.mean.dom[i] <- -log10(summary(d.fit)$coefficients[3,4])
 					#logP.disp.dom[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[3,4])
 				}
@@ -224,9 +226,9 @@ scanonevar <-
 														pos = unclass(map),
 														mean.baseline = mean.baseline,
 														disp.baseline = disp.baseline,
-														lod.full <- lod.full,
-														lod.mean <- lod.mean,
-														lod.disp <- lod.disp,
+														lod.full = lod.full,
+														lod.mean = lod.mean,
+														lod.disp = lod.disp,
 														#neglogP_mean_add = logP.mean.add,
 														#neglogP_disp_add = logP.disp.add,
 														mean_add_effect = mean.add.effect,
