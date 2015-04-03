@@ -107,7 +107,6 @@ fitplot.scanonevar <- function (cross, marker.name, var.scan) {
 	if (attr(var.scan, 'dom')) {
 
 		ab.mean <- ab.mean + params$mean_dom_effect
-
 		ab.sd <- ab.sd + params$disp_dom_effect
 	}
 
