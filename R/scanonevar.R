@@ -65,6 +65,7 @@ scanonevar <-
 		# set up data and formulas
 		X <- cbind(pheno = pheno, add = rep(0, length(pheno)))
 		mean_formula <- var_formula <- "pheno ~ add"
+		mean_null_formula <- var_null_formula <- "pheno ~ 1"
 
 		if (dom) {
 			X <- cbind(X, dom = rep(0, length(pheno)))
@@ -81,6 +82,9 @@ scanonevar <-
 			colnames(X)[-(1:ncolX)] <- meancovarnames
 			mean_formula <- paste(mean_formula, "+",
 														paste(meancovarnames, collapse="+"))
+			mean_null_formula <- paste(mean_null_formula, "+",
+																 paste(meancovarnames, collapse="+"))
+
 		}
 
 		if(!is.null(var_covar)) {
@@ -90,6 +94,8 @@ scanonevar <-
 			colnames(X)[-(1:ncolX)] <- varcovarnames
 			var_formula <- paste(var_formula, "+",
 													 paste(varcovarnames, collapse="+"))
+			var_null_formula <- paste(var_null_formula, "+",
+																paste(meancovarnames, collapse="+"))
 		}
 
 		X <- as.data.frame(X)
@@ -114,8 +120,9 @@ scanonevar <-
 
 			n.loci <- dim(a1)[2]
 
-			logP.mean.add <- logP.disp.add <- numeric(n.loci)
-			if (dom) { logP.mean.dom <- logP.disp.dom <- numeric(n.loci) }
+			lod.full <- lod.mean <- lod.disp <- numeric(n.loci)
+# 			logP.mean.add <- logP.disp.add <- numeric(n.loci)
+# 			if (dom) { logP.mean.dom <- logP.disp.dom <- numeric(n.loci) }
 
 			mean.baseline <- disp.baseline <- numeric(n.loci)
 			mean.add.effect <- disp.add.effect <- numeric(n.loci)
@@ -129,56 +136,80 @@ scanonevar <-
 
 # 				if (use.dglm.package) {
 #
-# 					d.fit <- dglm(formula = mean_formula,
-# 												dformula = var_formula,
-# 												data = X)
-#
-# 					mean.baseline[i] <- coef(d.fit)[1]
-# 					disp.baseline[i] <- coef(d.fit$dispersion.fit)[1]
-# 					logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
-# 					logP.disp.add[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[2,4])
-# 					mean.add.effect[i] <- coef(d.fit)[2]
-# 					disp.add.effect[i] <- coef(d.fit$dispersion.fit)[2]
-#
-# 					if (dom) {
-# 						mean.dom.effect[i] <- coef(d.fit)[3]
-# 						disp.dom.effect[i] <- coef(d.fit$dispersion.fit)[3]
-# 						logP.mean.dom[i] <- -log10(summary(d.fit)$coefficients[3,4])
-# 						logP.disp.dom[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[3,4])
-# 					}
+				d.fit.full <- dglm(formula = mean_formula,
+													 dformula = var_formula,
+													 data = X)
+				ln.lik.full <- -0.5*d.fit.full$m2loglik
+				log10.lik.full <- ln.lik.full / log(10)
+
+
+				d.fit.mean <- dglm(formula = mean_null_formula,
+													 dformula = var_formula,
+													 data = X)
+				ln.lik.mean <- -0.5*d.fit.mean$m2loglik
+				log10.lik.mean <- ln.lik.mean / log(10)
+
+				d.fit.disp <- dglm(formula = mean_formula,
+													 dformula = var_null_formula,
+													 data = X)
+				ln.lik.disp <- -0.5*d.fit.disp$m2loglik
+				log10.lik.disp <- ln.lik.disp / log(10)
+
+				d.fit.null <- dglm(formula = mean_null_formula,
+													 dformula = var_null_formula,
+													 data = X)
+				ln.lik.null <- -0.5*d.fit.null$m2loglik
+				log10.lik.null <- ln.lik.null / log(10)
+
+				lod.full[i] <- log10.lik.full - log10.lik.null
+				lod.mean[i] <- log10.lik.full - log10.lik.disp
+				lod.disp[i] <- log10.lik.full - log10.lik.mean
+				mean.baseline[i] <- coef(d.fit)[1]
+				disp.baseline[i] <- coef(d.fit$dispersion.fit)[1]
+				#logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
+				#logP.disp.add[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[2,4])
+				mean.add.effect[i] <- coef(d.fit)[2]
+				disp.add.effect[i] <- coef(d.fit$dispersion.fit)[2]
+
+				if (dom) {
+					mean.dom.effect[i] <- coef(d.fit)[3]
+					disp.dom.effect[i] <- coef(d.fit$dispersion.fit)[3]
+					#logP.mean.dom[i] <- -log10(summary(d.fit)$coefficients[3,4])
+					#logP.disp.dom[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[3,4])
+				}
 # 				}
 
-				#if (use.custom.em) {
-
-					d.fit <- DGLM_norm(m.form  = mean_formula,
-														 d.form  = var_formula,
-														 indata  = X,
-														 maxiter = maxit,
-														 conv    = tol)
-
-					mean.baseline[i] <- summary(d.fit$mean)$coef[1,1]
-					disp.baseline[i] <- summary(d.fit$disp)$coef[1,1]
-					logP.mean.add[i] <- -log10(summary(d.fit$mean)$coef[2,4])
-					logP.disp.add[i] <- -log10(summary(d.fit$disp)$coef[2,4])
-					mean.add.effect[i] <- summary(d.fit$mean)$coef[2,1]
-					disp.add.effect[i] <- summary(d.fit$disp)$coef[2,1]
-
-					if (dom) {
-						mean.dom.effect[i] <- summary(d.fit$mean)$coef[3,1]
-						disp.dom.effect[i] <- summary(d.fit$disp)$coef[3,1]
-						logP.mean.dom[i] <- -log10(summary(d.fit$mean)$coef[3, 4])
-						logP.disp.dom[i] <- -log10(summary(d.fit$disp)$coef[3, 4])
-					}
-
-					if (d.fit$iter >= maxit) {
-						logP.disp.add[i] <-  0
-						if (dom) {
-							logP.disp.dom[i] <- 0
-						}
-						warning("dglm did not converge on chr", chr.names[j], " position ", i)
-					}
-
-				#}
+# 				if (use.custom.em) {
+#
+# 					d.fit <- DGLM_norm(m.form  = mean_formula,
+# 														 d.form  = var_formula,
+# 														 indata  = X,
+# 														 maxiter = maxit,
+# 														 conv    = tol)
+#
+# 					mean.baseline[i] <- summary(d.fit$mean)$coef[1,1]
+# 					disp.baseline[i] <- summary(d.fit$disp)$coef[1,1]
+# 					logP.mean.add[i] <- -log10(summary(d.fit$mean)$coef[2,4])
+# 					logP.disp.add[i] <- -log10(summary(d.fit$disp)$coef[2,4])
+# 					mean.add.effect[i] <- summary(d.fit$mean)$coef[2,1]
+# 					disp.add.effect[i] <- summary(d.fit$disp)$coef[2,1]
+#
+# 					if (dom) {
+# 						mean.dom.effect[i] <- summary(d.fit$mean)$coef[3,1]
+# 						disp.dom.effect[i] <- summary(d.fit$disp)$coef[3,1]
+# 						logP.mean.dom[i] <- -log10(summary(d.fit$mean)$coef[3, 4])
+# 						logP.disp.dom[i] <- -log10(summary(d.fit$disp)$coef[3, 4])
+# 					}
+#
+# 					if (d.fit$iter >= maxit) {
+# 						logP.disp.add[i] <-  0
+# 						if (dom) {
+# 							logP.disp.dom[i] <- 0
+# 						}
+# 						warning("dglm did not converge on chr", chr.names[j], " position ", i)
+# 					}
+#
+# 				}
 
 			}
 
@@ -193,14 +224,17 @@ scanonevar <-
 														pos = unclass(map),
 														mean.baseline = mean.baseline,
 														disp.baseline = disp.baseline,
-														neglogP_mean_add = logP.mean.add,
-														neglogP_disp_add = logP.disp.add,
+														lod.full <- lod.full,
+														lod.mean <- lod.mean,
+														lod.disp <- lod.disp,
+														#neglogP_mean_add = logP.mean.add,
+														#neglogP_disp_add = logP.disp.add,
 														mean_add_effect = mean.add.effect,
 														disp_add_effect = disp.add.effect,
 														stringsAsFactors = FALSE)
 			if (dom) {
-				thischr$neglogP_mean_dom = logP.mean.dom
-				thischr$neglogP_disp_dom = logP.disp.dom
+				#thischr$neglogP_mean_dom = logP.mean.dom
+				#thischr$neglogP_disp_dom = logP.disp.dom
 				thischr$mean_dom_effect = mean.dom.effect
 				thischr$disp_dom_effect = disp.dom.effect
 			}
