@@ -1,6 +1,6 @@
 ######### Simulate mQTL and vQTL modeled with scanonevar
 
-library(qtl)
+#library(qtl)
 set.seed(27517)
 
 data(fake.f2)
