@@ -145,17 +145,17 @@ scanonevar <-
 				log10.lik.full <- ln.lik.full / log(10)
 
 
-				d.fit.mean <- dglm(formula = mean_null_formula,
-													 dformula = var_formula,
-													 data = X)
-				ln.lik.mean <- -0.5*d.fit.mean$m2loglik
-				log10.lik.mean <- ln.lik.mean / log(10)
+				d.fit.nomean <- dglm(formula = mean_null_formula,
+														 dformula = var_formula,
+														 data = X)
+				ln.lik.nomean <- -0.5*d.fit.nomean$m2loglik
+				log10.lik.nomean <- ln.lik.nomean / log(10)
 
-				d.fit.disp <- dglm(formula = mean_formula,
-													 dformula = var_null_formula,
-													 data = X)
-				ln.lik.disp <- -0.5*d.fit.disp$m2loglik
-				log10.lik.disp <- ln.lik.disp / log(10)
+				d.fit.nodisp <- dglm(formula = mean_formula,
+														 dformula = var_null_formula,
+														 data = X)
+				ln.lik.nodisp <- -0.5*d.fit.nodisp$m2loglik
+				log10.lik.nodisp <- ln.lik.nodisp / log(10)
 
 				d.fit.null <- dglm(formula = mean_null_formula,
 													 dformula = var_null_formula,
@@ -164,8 +164,8 @@ scanonevar <-
 				log10.lik.null <- ln.lik.null / log(10)
 
 				lod.full[i] <- log10.lik.full - log10.lik.null
-				lod.mean[i] <- log10.lik.full - log10.lik.mean
-				lod.disp[i] <- log10.lik.full - log10.lik.disp
+				lod.mean[i] <- log10.lik.full - log10.lik.nomean
+				lod.disp[i] <- log10.lik.full - log10.lik.nodisp
 				mean.baseline[i] <- coef(d.fit.full)[1]
 				disp.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
 				#logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
