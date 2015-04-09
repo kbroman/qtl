@@ -114,6 +114,7 @@ scanonevar.meanperm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar
 	for (perm.num in 1:num.mean.perms) {
 
 		print(paste('Starting permutation number', perm.num, '...'))
+		this.perm <- sample(N)
 
 		result <- NULL
 		if (missing(chrs)) { chrs <- 1:length(cross$geno) }
@@ -145,7 +146,6 @@ scanonevar.meanperm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar
 
 				# fill in genotype probs for this locus
 				# should additive and dominance design matrices receive the same permutation?
-				this.perm <- sample(N)
 				X[,2] <- a1[this.perm,i]
 				X[,3] <- a1[,i]
 				if (dom) {
@@ -170,35 +170,35 @@ scanonevar.meanperm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar
 				ln.lik.mean <- -0.5*d.fit.mean$m2loglik
 				log10.lik.mean <- ln.lik.mean / log(10)
 
-				d.fit.disp <- dglm(formula = mean_formula,
-													 dformula = var_null_formula,
-													 family = gaussian,
-													 data = X)
-				ln.lik.disp <- -0.5*d.fit.disp$m2loglik
-				log10.lik.disp <- ln.lik.disp / log(10)
+# 				d.fit.disp <- dglm(formula = mean_formula,
+# 													 dformula = var_null_formula,
+# 													 family = gaussian,
+# 													 data = X)
+# 				ln.lik.disp <- -0.5*d.fit.disp$m2loglik
+# 				log10.lik.disp <- ln.lik.disp / log(10)
+#
+# 				d.fit.null <- dglm(formula = mean_null_formula,
+# 													 dformula = var_null_formula,
+# 													 data = X)
+# 				ln.lik.null <- -0.5*d.fit.null$m2loglik
+# 				log10.lik.null <- ln.lik.null / log(10)
 
-				d.fit.null <- dglm(formula = mean_null_formula,
-													 dformula = var_null_formula,
-													 data = X)
-				ln.lik.null <- -0.5*d.fit.null$m2loglik
-				log10.lik.null <- ln.lik.null / log(10)
+# 				lod.full[i] <- log10.lik.full - log10.lik.null
+ 				lod.mean[i] <- log10.lik.full - log10.lik.mean
+# 				lod.disp[i] <- log10.lik.full - log10.lik.disp
+# 				mean.baseline[i] <- coef(d.fit.full)[1]
+# 				disp.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
+# 				logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
+# 				logP.disp.add[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[2,4])
+# 				mean.add.effect[i] <- coef(d.fit.full)[2]
+# 				disp.add.effect[i] <- coef(d.fit.full$dispersion.fit)[2]
 
-				lod.full[i] <- log10.lik.full - log10.lik.null
-				lod.mean[i] <- log10.lik.full - log10.lik.mean
-				lod.disp[i] <- log10.lik.full - log10.lik.disp
-				mean.baseline[i] <- coef(d.fit.full)[1]
-				disp.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
-				#logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
-				#logP.disp.add[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[2,4])
-				mean.add.effect[i] <- coef(d.fit.full)[2]
-				disp.add.effect[i] <- coef(d.fit.full$dispersion.fit)[2]
-
-				if (dom) {
-					mean.dom.effect[i] <- coef(d.fit.full)[3]
-					disp.dom.effect[i] <- coef(d.fit.full$dispersion.fit)[3]
-					#logP.mean.dom[i] <- -log10(summary(d.fit)$coefficients[3,4])
-					#logP.disp.dom[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[3,4])
-				}
+# 				if (dom) {
+# 					mean.dom.effect[i] <- coef(d.fit.full)[3]
+# 					disp.dom.effect[i] <- coef(d.fit.full$dispersion.fit)[3]
+# 					logP.mean.dom[i] <- -log10(summary(d.fit)$coefficients[3,4])
+# 					logP.disp.dom[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[3,4])
+# 				}
 				# 				}
 
 				# 				if (use.custom.em) {
@@ -246,15 +246,15 @@ scanonevar.meanperm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar
 			thischr <- data.frame(perm.idx = perm.idx,
 														chr = rep(chr.names[j], length(w)),
 														pos = unclass(map),
-														mean.baseline = mean.baseline,
-														disp.baseline = disp.baseline,
-														lod.full = lod.full,
+														#mean.baseline = mean.baseline,
+														#disp.baseline = disp.baseline,
+														#lod.full = lod.full,
 														lod.mean = lod.mean,
-														lod.disp = lod.disp,
+														#lod.disp = lod.disp,
 														#neglogP_mean_add = logP.mean.add,
 														#neglogP_disp_add = logP.disp.add,
-														mean_add_effect = mean.add.effect,
-														disp_add_effect = disp.add.effect,
+														#mean_add_effect = mean.add.effect,
+														#disp_add_effect = disp.add.effect,
 														stringsAsFactors = FALSE)
 			if (dom) {
 				#thischr$neglogP_mean_dom = logP.mean.dom
