@@ -5,7 +5,6 @@ set.seed(27517)
 
 data(fake.f2)
 
-
 N = nind(fake.f2)
 
 # make an additive mQTL on Chr5
@@ -16,14 +15,15 @@ fake.f2$pheno$phenotype1 <- rnorm(n = N, 25 + 5*marker1.vals, 3)
 
 
 simple.scan <- scanone(fake.f2, pheno.col = 'phenotype1')
-plot(simple.scan)
 
 
 
-var.scan.perms <- scanonevar.varperm(fake.f2,
-																		 pheno.col = 'phenotype1',
-																		 num.var.perms = 2,
-																		 dom = FALSE,
-																		 mean_covar = fake.f2$pheno$sex)
+
+var.scan.perms <- scanonevar.meanvarperm(fake.f2,
+																				 pheno.col = 'phenotype1',
+																				 num.perms = 3,
+																				 dom = FALSE,
+																				 mean_covar = fake.f2$pheno$sex)
+
 
 
