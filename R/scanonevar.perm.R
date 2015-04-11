@@ -138,8 +138,6 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 			n.loci <- dim(a1)[2]
 
 			lod.full <- lod.mean <- lod.disp <- numeric(n.loci)
-			# 			logP.mean.add <- logP.disp.add <- numeric(n.loci)
-			# 			if (dom) { logP.mean.dom <- logP.disp.dom <- numeric(n.loci) }
 
 			mean.baseline <- disp.baseline <- numeric(n.loci)
 			mean.add.effect <- disp.add.effect <- numeric(n.loci)
@@ -149,22 +147,22 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 
 				# fill in genotype probs for this locus
 				# TODO: use $mean_add naming for setting columns of X, Y, and Z for clarity
-				X[,2] <- a1[perm1, i]
-				Y[,2] <- a1[perm1, i]
-				Z[,2] <- a1[,i]
+				X$mean_add <- a1[perm1, i]
+				Y$mean_add <- a1[perm1, i]
+				Z$mean_add <- a1[,i]
 
-				X[,3] <- a1[perm1, i]
-				Y[,3] <- a1[,i]
-				Z[,3] <- a1[perm1, i]
+				X$var_add <- a1[perm1, i]
+				Y$var_add <- a1[,i]
+				Z$var_add <- a1[perm1, i]
 
 				if (dom) {
-					X[,4] <- d1[perm1,i]
-					Y[,4] <- a1[perm1, i]
-					Z[,4] <- a1[,i]
+					X$mean_dom <- d1[perm1, i]
+					Y$mean_dom <- a1[perm1, i]
+					Z$mean_dom <- a1[,i]
 
-					X[,5] <- d1[perm1,i]
-					Y[,5] <- a1[,i]
-					Z[,5] <- a1[perm1, i]
+					X$var_dom <- d1[perm1, i]
+					Y$var_dom <- a1[,i]
+					Z$var_dom <- a1[perm1, i]
 				}
 
 				if (meanvar.perm) {
@@ -197,7 +195,7 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 					d.fit.mean <- dglm(formula = mean_null_formula,
 														 dformula = var_formula,
 														 family = gaussian,
-														 data = X)
+														 data = Y)
 					ln.lik.mean <- -0.5*d.fit.mean$m2loglik
 					log10.lik.mean <- ln.lik.mean / log(10)
 
@@ -209,14 +207,14 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 					d.fit.full <- dglm(formula = mean_formula,
 														 dformula = var_formula,
 														 family = gaussian,
-														 data = Y)
+														 data = Z)
 					ln.lik.full <- -0.5*d.fit.full$m2loglik
 					log10.lik.full <- ln.lik.full / log(10)
 
 					d.fit.disp <- dglm(formula = mean_formula,
 														 dformula = var_null_formula,
 														 family = gaussian,
-														 data = X)
+														 data = Z)
 					ln.lik.disp <- -0.5*d.fit.disp$m2loglik
 					log10.lik.disp <- ln.lik.disp / log(10)
 
@@ -239,8 +237,8 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 														pos = unclass(map),
 														stringsAsFactors = FALSE)
 			if (meanvar.perm) { thischr$lod.full = lod.full }
-			if (mean.perm) { thischr$lod.full = lod.mean }
-			if (var.perm) { thischr$lod.full = lod.var }
+			if (mean.perm) { thischr$lod.mean = lod.mean }
+			if (var.perm) { thischr$lod.disp = lod.disp }
 
 			rownames(thischr) <- w
 
@@ -261,26 +259,3 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 
 	return(all.results)
 }
-
-
-# DGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {
-# 	X.mean <- model.matrix(m.form, data = indata)
-# 	X.disp <- model.matrix(d.form, data = indata)
-# 	y.name <- all.vars(m.form)[1]
-# 	y <- indata[,y.name]
-# 	w <- rep(1, nrow(indata))
-# 	convergence <- 1
-# 	iter <- 0
-# 	while (convergence > conv & iter < maxiter) {
-# 		iter <- iter + 1
-# 		w.old <- w
-# 		glm1 <- lm(y~.-1, weights=w, data=data.frame(X.mean))
-# 		res <- resid(glm1)
-# 		q <- hatvalues(glm1)
-# 		y2 <- res^2/(1-q)
-# 		glm2 <- glm(y2~.-1, family=Gamma(link=log), weights=(1-q)/2, data=data.frame(X.disp))
-# 		w <- 1/fitted(glm2)
-# 		convergence <- (max(abs(w.old-w)) + (summary(glm1)$sigma-1) )
-# 	}
-# 	return(list(mean=glm1, disp=glm2, iter=iter))
-# }
