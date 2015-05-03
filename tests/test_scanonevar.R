@@ -9,12 +9,12 @@ data(fake.f2)
 for (chr in 1:nchr(fake.f2)) {
 
 	this.data <- fake.f2$geno[[chr]]$data
-	fake.f2$geno[[chr]]$data <- rbind(this.data, this.data, this.data, this.data, this.data)
+	fake.f2$geno[[chr]]$data <- rbind(this.data) #, this.data, this.data, this.data, this.data)
 
 	this.errors <- fake.f2$geno[[chr]]$errors
-	fake.f2$geno[[chr]]$errors <- rbind(this.errors, this.errors, this.errors, this.errors, this.errors)
+	fake.f2$geno[[chr]]$errors <- rbind(this.errors) #, this.errors, this.errors, this.errors, this.errors)
 }
-fake.f2$pheno <- rbind(fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
+fake.f2$pheno <- rbind(fake.f2$pheno) #, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
 
 fake.f2 <- calc.genoprob(fake.f2, step = 2)
 
@@ -37,7 +37,7 @@ var.scan1a <- scanonevar(fake.f2,
 												chrs = 4:6,
 												dom = FALSE)
 
-plot(var.scan1a, bandcol = 'gray')
+plot(var.scan1a, bandcol = 'gray', thresholds = c(110, 112, 55, 57, 1, 2))
 fitplot.scanonevar(cross = fake.f2, var.scan = var.scan1a, marker.name = 'D5M391')
 
 # df <- data.frame(phen1 = fake.f2$pheno$phenotype1, marker1 = marker1.vals)
