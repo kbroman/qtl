@@ -3,8 +3,6 @@
 # plot.scanonevar.R
 #
 # copyright (c) 2001-2014, Karl W Broman
-# last modified Apr, 2014
-# first written Feb, 2001
 # modified by Robert Corty in March 2015
 #
 #     This program is free software; you can redistribute it and/or

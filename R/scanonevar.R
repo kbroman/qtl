@@ -1,10 +1,36 @@
-# scanonevar
-# single-QTL genome scan for QTL affecting variance
-# with code from Lars Ronnegard
+#####################################################################
+#
+# scanonevar.R
+#
+# copyright (c) 2001-2014, Karl W Broman
+# modified by Robert Corty in March 2015
+#
+#     This program is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU General Public License,
+#     version 3, as published by the Free Software Foundation.
+#
+#     This program is distributed in the hope that it will be useful,
+#     but without any warranty; without even the implied warranty of
+#     merchantability or fitness for a particular purpose.  See the GNU
+#     General Public License, version 3, for more details.
+#
+#     A copy of the GNU General Public License, version 3, is available
+#     at http://www.r-project.org/Licenses/GPL-3
+#
+# Part of the R/qtl package
+# Contains: plot.scanonevar,
+#
+######################################################################
+
+######################################################################
+#
+# scanonevar:
+# single-QTL genome scan for QTL affecting trait mean or variance
+#
+######################################################################
 
 scanonevar <-
 	function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
-					 #use.dglm.package = TRUE, use.custom.em = FALSE,
 					 dom = FALSE, maxit = 25 , tol=1e-6, quiet=TRUE, chrs)
 	{
 
@@ -54,11 +80,6 @@ scanonevar <-
 			warning("First running calc.genoprob")
 			cross <- calc.genoprob(cross)
 		}
-
-# 		# check that we have at least one dglm-fitting method to use
-# 		if(sum(use.dglm.package, use.custom.em) == 0) {
-# 			stop("Need at least one of 'use.dglm.package' and 'use.custom.em' arguments to be TRUE")
-# 		}
 
 		scan.logPm <- scan.logPd <- chr.names.out <- NULL
 
@@ -123,8 +144,6 @@ scanonevar <-
 			n.loci <- dim(a1)[2]
 
 			lod.full <- lod.mean <- lod.disp <- numeric(n.loci)
-# 			logP.mean.add <- logP.disp.add <- numeric(n.loci)
-# 			if (dom) { logP.mean.dom <- logP.disp.dom <- numeric(n.loci) }
 
 			mean.baseline <- disp.baseline <- numeric(n.loci)
 			mean.add.effect <- disp.add.effect <- numeric(n.loci)
@@ -136,8 +155,6 @@ scanonevar <-
 				X[,2] <- a1[,i]
 				if (dom) { X[,3] <- d1[,i] }
 
-# 				if (use.dglm.package) {
-#
 				d.fit.full <- dglm(formula = mean_formula,
 													 dformula = var_formula,
 													 data = X)
@@ -168,50 +185,13 @@ scanonevar <-
 				lod.disp[i] <- log10.lik.full - log10.lik.nodisp
 				mean.baseline[i] <- coef(d.fit.full)[1]
 				disp.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
-				#logP.mean.add[i] <- -log10(summary(d.fit)$coefficients[2,4])
-				#logP.disp.add[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[2,4])
 				mean.add.effect[i] <- coef(d.fit.full)[2]
 				disp.add.effect[i] <- coef(d.fit.full$dispersion.fit)[2]
 
 				if (dom) {
 					mean.dom.effect[i] <- coef(d.fit.full)[3]
 					disp.dom.effect[i] <- coef(d.fit.full$dispersion.fit)[3]
-					#logP.mean.dom[i] <- -log10(summary(d.fit)$coefficients[3,4])
-					#logP.disp.dom[i] <- -log10(summary(d.fit)$dispersion.summary$coefficients[3,4])
 				}
-# 				}
-
-# 				if (use.custom.em) {
-#
-# 					d.fit <- DGLM_norm(m.form  = mean_formula,
-# 														 d.form  = var_formula,
-# 														 indata  = X,
-# 														 maxiter = maxit,
-# 														 conv    = tol)
-#
-# 					mean.baseline[i] <- summary(d.fit$mean)$coef[1,1]
-# 					disp.baseline[i] <- summary(d.fit$disp)$coef[1,1]
-# 					logP.mean.add[i] <- -log10(summary(d.fit$mean)$coef[2,4])
-# 					logP.disp.add[i] <- -log10(summary(d.fit$disp)$coef[2,4])
-# 					mean.add.effect[i] <- summary(d.fit$mean)$coef[2,1]
-# 					disp.add.effect[i] <- summary(d.fit$disp)$coef[2,1]
-#
-# 					if (dom) {
-# 						mean.dom.effect[i] <- summary(d.fit$mean)$coef[3,1]
-# 						disp.dom.effect[i] <- summary(d.fit$disp)$coef[3,1]
-# 						logP.mean.dom[i] <- -log10(summary(d.fit$mean)$coef[3, 4])
-# 						logP.disp.dom[i] <- -log10(summary(d.fit$disp)$coef[3, 4])
-# 					}
-#
-# 					if (d.fit$iter >= maxit) {
-# 						logP.disp.add[i] <-  0
-# 						if (dom) {
-# 							logP.disp.dom[i] <- 0
-# 						}
-# 						warning("dglm did not converge on chr", chr.names[j], " position ", i)
-# 					}
-#
-# 				}
 
 			}
 
@@ -229,14 +209,10 @@ scanonevar <-
 														lod.full = lod.full,
 														lod.mean = lod.mean,
 														lod.disp = lod.disp,
-														#neglogP_mean_add = logP.mean.add,
-														#neglogP_disp_add = logP.disp.add,
 														mean_add_effect = mean.add.effect,
 														disp_add_effect = disp.add.effect,
 														stringsAsFactors = FALSE)
 			if (dom) {
-				#thischr$neglogP_mean_dom = logP.mean.dom
-				#thischr$neglogP_disp_dom = logP.disp.dom
 				thischr$mean_dom_effect = mean.dom.effect
 				thischr$disp_dom_effect = disp.dom.effect
 			}
@@ -255,24 +231,24 @@ scanonevar <-
 		result
 	}
 
-DGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {
-    X.mean <- model.matrix(m.form, data = indata)
-    X.disp <- model.matrix(d.form, data = indata)
-    y.name <- all.vars(m.form)[1]
-    y <- indata[,y.name]
-    w <- rep(1, nrow(indata))
-    convergence <- 1
-    iter <- 0
-    while (convergence > conv & iter < maxiter) {
-        iter <- iter + 1
-        w.old <- w
-        glm1 <- lm(y~.-1, weights=w, data=data.frame(X.mean))
-        res <- resid(glm1)
-        q <- hatvalues(glm1)
-        y2 <- res^2/(1-q)
-        glm2 <- glm(y2~.-1, family=Gamma(link=log), weights=(1-q)/2, data=data.frame(X.disp))
-        w <- 1/fitted(glm2)
-        convergence <- (max(abs(w.old-w)) + (summary(glm1)$sigma-1) )
-    }
-    return(list(mean=glm1, disp=glm2, iter=iter))
-}
+# DGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {
+#     X.mean <- model.matrix(m.form, data = indata)
+#     X.disp <- model.matrix(d.form, data = indata)
+#     y.name <- all.vars(m.form)[1]
+#     y <- indata[,y.name]
+#     w <- rep(1, nrow(indata))
+#     convergence <- 1
+#     iter <- 0
+#     while (convergence > conv & iter < maxiter) {
+#         iter <- iter + 1
+#         w.old <- w
+#         glm1 <- lm(y~.-1, weights=w, data=data.frame(X.mean))
+#         res <- resid(glm1)
+#         q <- hatvalues(glm1)
+#         y2 <- res^2/(1-q)
+#         glm2 <- glm(y2~.-1, family=Gamma(link=log), weights=(1-q)/2, data=data.frame(X.disp))
+#         w <- 1/fitted(glm2)
+#         convergence <- (max(abs(w.old-w)) + (summary(glm1)$sigma-1) )
+#     }
+#     return(list(mean=glm1, disp=glm2, iter=iter))
+# }
