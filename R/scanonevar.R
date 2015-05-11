@@ -93,7 +93,6 @@ scanonevar <-
 			mean_formula <- var_formula <- "pheno ~ add + dom"
 		}
 
-
 		# todo: give the same treatment to covariates as we gave to phenotype earlier
 		# i.e., do some searching to figure out if the user provided a name of a pheno column
 		if(!is.null(mean_covar)) {
@@ -155,25 +154,28 @@ scanonevar <-
 				X[,2] <- a1[,i]
 				if (dom) { X[,3] <- d1[,i] }
 
+				# fit full model
 				d.fit.full <- dglm(formula = mean_formula,
 													 dformula = var_formula,
 													 data = X)
 				ln.lik.full <- -0.5*d.fit.full$m2loglik
 				log10.lik.full <- ln.lik.full / log(10)
 
-
+				# fit variance-only model (covariates, but not the genetic marker, may have mean effects)
 				d.fit.nomean <- dglm(formula = mean_null_formula,
 														 dformula = var_formula,
 														 data = X)
 				ln.lik.nomean <- -0.5*d.fit.nomean$m2loglik
 				log10.lik.nomean <- ln.lik.nomean / log(10)
 
+				# fit mean-only model (covariates, but not the genetic marker, may have variance effects)
 				d.fit.nodisp <- dglm(formula = mean_formula,
 														 dformula = var_null_formula,
 														 data = X)
 				ln.lik.nodisp <- -0.5*d.fit.nodisp$m2loglik
 				log10.lik.nodisp <- ln.lik.nodisp / log(10)
 
+				# fit covariate-only model (covariates, but not genetic marker, may have mean and varianc effect)
 				d.fit.null <- dglm(formula = mean_null_formula,
 													 dformula = var_null_formula,
 													 data = X)
