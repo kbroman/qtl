@@ -14,3 +14,5 @@ inst/doc/Sources/MQM/Sweave.sty
 inst/doc/Sources/MQM/\.Rprofile
 ^README.md$
 ^\.travis\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
