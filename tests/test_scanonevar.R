@@ -1,20 +1,20 @@
 ######### Simulate mQTL and vQTL modeled with scanonevar
 
 #library(qtl)
-set.seed(27517)
+set.seed(27599)
 
 data(fake.f2)
 
-# artificially expand the dataset by 5 fold
-for (chr in 1:nchr(fake.f2)) {
-
-	this.data <- fake.f2$geno[[chr]]$data
-	fake.f2$geno[[chr]]$data <- rbind(this.data) #, this.data, this.data, this.data, this.data)
-
-	this.errors <- fake.f2$geno[[chr]]$errors
-	fake.f2$geno[[chr]]$errors <- rbind(this.errors) #, this.errors, this.errors, this.errors, this.errors)
-}
-fake.f2$pheno <- rbind(fake.f2$pheno) #, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
+# # artificially expand the dataset by 5 fold
+# for (chr in 1:nchr(fake.f2)) {
+#
+# 	this.data <- fake.f2$geno[[chr]]$data
+# 	fake.f2$geno[[chr]]$data <- rbind(this.data, this.data, this.data, this.data, this.data)
+#
+# 	this.errors <- fake.f2$geno[[chr]]$errors
+# 	fake.f2$geno[[chr]]$errors <- rbind(this.errors, this.errors, this.errors, this.errors, this.errors)
+# }
+# fake.f2$pheno <- rbind(fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
 
 fake.f2 <- calc.genoprob(fake.f2, step = 2)
 
@@ -32,12 +32,10 @@ fake.f2$pheno$phenotype1 <- rnorm(n = N, 25 + 5*marker1.vals, 3)
 
 var.scan1a <- scanonevar(fake.f2,
 												pheno.col = 'phenotype1',
-# 												use.dglm.package = TRUE,
-# 												use.custom.em = FALSE,
 												chrs = 4:6,
 												dom = FALSE)
 
-plot(var.scan1a, bandcol = 'gray', thresholds = c(110, 112, 55, 57, 1, 2))
+plot(var.scan1a, bandcol = 'gray')
 fitplot.scanonevar(cross = fake.f2, var.scan = var.scan1a, marker.name = 'D5M391')
 
 # df <- data.frame(phen1 = fake.f2$pheno$phenotype1, marker1 = marker1.vals)

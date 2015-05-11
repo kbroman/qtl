@@ -34,7 +34,7 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 														mtick=c("line", "triangle"), show.marker.names=FALSE,
 														alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
 														pch=1, bg="transparent", bgrect=NULL, legend.pos = 'top',
-														thresholds = NULL, ...)
+														null.evds = NULL, ...)
 {
 
 	if(!any(class(x) == "scanonevar")) {
@@ -79,7 +79,6 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 
 	# locations to plot start of each chromosome
 	start <- c(0,cumsum(len+gap))-c(begend[,1],0)
-
 	maxx <- sum(len+gap)-gap
 
 	# graphics parameters
@@ -89,27 +88,43 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	on.exit(par(xpd=old.xpd,las=old.las))
 
 	ys <- data.frame(out[,grepl(pattern = 'lod', x = names(out))])
-	if(length(thresholds)==3) {
-		ys <- ys - rep(thresholds, each = nrow(ys))
-		thresholds <- rep(1, 3)
-	}
-	if(length(thresholds)==6) {
-		ys <- ys - rep(thresholds[c(1,3,5)], each = nrow(ys))
-		thresholds <- c(1, thresholds[2] - thresholds[1], 1, thresholds[4] - thresholds[3], 1, thresholds[6] - thresholds[5])
-	}
-
-	# make frame of plot
-	if (missing(ylim)) {
-		if ('lod' %in% names(ys)) {	ylim.set <- c(min(ys, thresholds), 1.05*max(ys, thresholds))	} else { ylim.set <- range(ys) }
-	} else {
-		ylim.set <- ylim
-	}
 	if(missing(xlim)) {
 		xlim <- c(-gap/2,maxx+gap/2)
 	}
 
-	plot(0,0,ylim=ylim.set,xlim=xlim,type="n",xaxt="n",
-			 xlab="Chromosome",ylab=NA, xaxs="i",	 ...)
+	# marks and labels on the y axis.
+	# visually nicer to not label the ticks at 0.1 and 0.3
+	marks <- seq(from = 0, to = 1, by = 0.1)
+	labels <- marks
+	labels[c(2, 4)] <- NA
+
+	if(is.null(null.evds)) # prepare a plotting window the size of the observed lods
+	{
+
+		if (missing(ylim))
+		{
+			if ('lod' %in% names(ys))
+			{
+				ylim.set <- c(min(ys, thresholds), 1.05*max(ys, thresholds))
+			} else {
+				ylim.set <- range(ys)
+			}
+		} else {
+			ylim.set <- ylim
+		}
+
+		plot(0,0,ylim=ylim.set,xlim=xlim,type="n",xaxt="n",
+				 xlab="Chromosome",ylab=NA, xaxs="i",	 ...)
+
+	} else {  # prepare a plotting window for 0-1 plotting (quantiles)
+		plot(0, 0,
+				 ylim = c(10^0, 10^1), xlim = xlim,
+				 axes = FALSE, xlab = 'Chromosome', ylab = NA,
+				 ...)
+
+		axis(side = 2, at = 10^marks, labels = labels)
+	}
+
 
 	if(!is.null(bgrect)) {
 		u <- par("usr")
@@ -135,8 +150,22 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 
 			y <- ys[out[,1]==chr[i], j]
 
-			lines(x,y,lwd=lwd[j],lty=lty[j],col=col[j], type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
+			if (is.null(null.evds)) { # plot the observed lods
 
+				lines(x, y,
+							lwd=lwd[j],lty=lty[j],col=col[j],
+							type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
+
+			} else {  # plot the observed lods as quantiles in the null distributions
+				qs <- pgev(q = y,
+									 loc = fitted(null.evds[[j]])[1],
+									 scale = fitted(null.evds[[j]])[2],
+									 shape = fitted(null.evds[[j]])[3])
+
+				lines(x, 10^(qs),
+							lwd=lwd[j],lty=lty[j],col=col[j],
+							type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
+			}
 		}
 
 		# plot chromosome number
@@ -168,16 +197,6 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 
 	}
 
-	# draw the thresholds
-	if (length(thresholds) == 3) {
-		abline(h = 1)
-	}
-	if (length(thresholds) == 6) {
-		abline(h = c(0, thresholds[2], thresholds[4], thresholds[6]),
-					 col = c('black', 'black', 'blue', 'red'),
-					 lty = c(1, 2, 2, 2))
-	}
-
 	# draw the legend
 	legend(x = legend.pos, legend = names(ys),
 				 fill = col, cex = 0.8, bty = 'n',
@@ -207,6 +226,7 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	}
 
 	mtext(text = attr(x = out, 'pheno'), side = 3, outer = TRUE, line = 1)
+	abline(h = c(0.9, 0.95, 0.99))
 
 	invisible()
 }
