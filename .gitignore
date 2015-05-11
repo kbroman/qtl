@@ -62,3 +62,6 @@ inst/contrib/bin/test/
 .Rhistory
 .RData
 .Rproj.user
+tests/.gitignore
+inst/README.md
+qtl.Rproj
