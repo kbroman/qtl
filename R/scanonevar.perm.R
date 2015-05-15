@@ -32,7 +32,7 @@
 scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
 														dom = FALSE, maxit = 25 , tol=1e-6, quiet=TRUE, chrs,
 														job.num = 1, num.perms = 5,
-														mean.perm = TRUE, var.perm = TRUE, meanvar.perm = TRUE)
+														mean.perm = FALSE, var.perm = FALSE, meanvar.perm = TRUE)
 {
 
 	set.seed(job.num)

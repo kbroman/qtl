@@ -18,7 +18,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: scanonevar,
+# Contains: plot.scanonevar,
 #
 ######################################################################
 
@@ -31,7 +31,7 @@
 
 scanonevar <-
 	function(cross, pheno.col=1, mean_covar = NULL, var_covar = NULL,
-					 dom = TRUE, maxit = 25 , tol=1e-6, quiet=TRUE, chrs)
+					 dom = FALSE, maxit = 25 , tol=1e-6, quiet=TRUE, chrs)
 	{
 
 		# check input
@@ -115,7 +115,7 @@ scanonevar <-
 			var_formula <- paste(var_formula, "+",
 													 paste(varcovarnames, collapse="+"))
 			var_null_formula <- paste(var_null_formula, "+",
-																paste(varcovarnames, collapse="+"))
+																paste(meancovarnames, collapse="+"))
 		}
 
 		X <- as.data.frame(X)
@@ -123,16 +123,6 @@ scanonevar <-
 		var_null_formula <- as.formula(var_null_formula)
 		mean_formula <- as.formula(mean_formula)
 		var_formula <- as.formula(var_formula)
-
-		# fit covariate-only model (covariates, but not genetic marker, may have mean and varianc effect)
-		# only need to do this once per scan
-		d.fit.null <- dglm(formula = mean_null_formula,
-											 dformula = var_null_formula,
-											 data = X)
-		ln.lik.null <- -0.5*d.fit.null$m2loglik
-		log10.lik.null <- ln.lik.null / log(10)
-		null.effects <- list(meancovs = d.fit.null$coef[-1],
-												 varcovs = d.fit.null$disp$coef[-1])
 
 		result <- NULL
 		if (missing(chrs)) { chrs <- 1:length(cross$geno) }
@@ -185,6 +175,13 @@ scanonevar <-
 				ln.lik.nodisp <- -0.5*d.fit.nodisp$m2loglik
 				log10.lik.nodisp <- ln.lik.nodisp / log(10)
 
+				# fit covariate-only model (covariates, but not genetic marker, may have mean and varianc effect)
+				d.fit.null <- dglm(formula = mean_null_formula,
+													 dformula = var_null_formula,
+													 data = X)
+				ln.lik.null <- -0.5*d.fit.null$m2loglik
+				log10.lik.null <- ln.lik.null / log(10)
+
 				lod.full[i] <- log10.lik.full - log10.lik.null
 				lod.mean[i] <- log10.lik.full - log10.lik.nomean
 				lod.disp[i] <- log10.lik.full - log10.lik.nodisp
@@ -228,13 +225,12 @@ scanonevar <-
 			else result <- rbind(result, thischr)
 		}
 
-		toret <- list(scan = result, null.effects = null.effects)
-		class(toret) <- c("scanonevar", "scanone", "data.frame")
-		attr(toret, "method") <- "scanonevar"
-		attr(toret, 'dom') <- dom
-		attr(toret, 'pheno') <- names(cross$pheno)[pheno.col]
+		class(result) <- c("scanonevar", "scanone", "data.frame")
+		attr(result, "method") <- "scanonevar"
+		attr(result, 'dom') <- dom
+		attr(result, 'pheno') <- names(cross$pheno)[pheno.col]
 
-		return(toret)
+		result
 	}
 
 # DGLM_norm <- function(m.form, d.form, indata, maxiter=20, conv=1e-6) {

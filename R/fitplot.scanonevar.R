@@ -1,6 +1,6 @@
 #####################################################################
 #
-# fitplot.scanonevar.R
+# scanonevar.R
 #
 # copyright (c) 2001-2014, Karl W Broman
 # modified by Robert Corty in March 2015
@@ -18,7 +18,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: fitplot.scanonevar,
+# Contains: plot.scanonevar,
 #
 ######################################################################
 
@@ -31,13 +31,12 @@
 #
 ######################################################################
 
-fitplot.scanonevar <- function (cross, marker.name, scanonevar, ...) {
+fitplot.scanonevar <- function (cross, marker.name, var.scan, ...) {
 
 # 	par(mfrow = c(1,1), mar = c(4, 4, 1, 1))
 	set.seed(27599)
 
-	phen.name <- attr(x = scanonevar, which = 'pheno')
-	var.scan <- scanonevar$scan
+	phen.name <- attr(x = var.scan, which = 'pheno')
 	phenotypes <- cross$pheno[[phen.name]]
 
 	chr.with.marker <- which(sapply(X = cross$geno,
@@ -74,7 +73,7 @@ fitplot.scanonevar <- function (cross, marker.name, scanonevar, ...) {
 	ab.sd <- params$disp.baseline
 	bb.sd <- params$disp.baseline + params$disp_add_effect
 
-	if (attr(scanonevar, 'dom')) {
+	if (attr(var.scan, 'dom')) {
 
 		ab.mean <- ab.mean + params$mean_dom_effect
 		ab.sd <- ab.sd + params$disp_dom_effect
@@ -110,12 +109,5 @@ fitplot.scanonevar <- function (cross, marker.name, scanonevar, ...) {
 					 y1 = rep(means, each = 2) + c(aa.sd, -aa.sd, ab.sd, -ab.sd, bb.sd, -bb.sd),
 					 lwd = 3,
 					 col = 'black')
-
-	# horizontalish connectors
-	segments(x0 = rep(1:2, 3),
-					 x1 = rep(2:3, 3),
-					 y0 = c(means[-3]+sds[-3], means[-3], means[-3]-sds[-3]),
-					 y1 = c(means[-1]+sds[-1], means[-1], means[-1]-sds[-1]),
-					 col = c(rep('red', 2), rep('blue', 2), rep('red', 2)))
 
 }

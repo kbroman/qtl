@@ -91,38 +91,28 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	if(missing(xlim)) {
 		xlim <- c(-gap/2,maxx+gap/2)
 	}
+	if (missing(ylim)) {
+		ylim <- c(0,8)
+	}
 
 	# marks and labels on the y axis.
 	# visually nicer to not label the ticks at 0.1 and 0.3
-	marks <- seq(from = 0, to = 1, by = 0.1)
+	marks <- seq(from = 0, to = max(ylim))
 	labels <- marks
-	labels[c(2, 4)] <- NA
 
 	if(is.null(null.evds)) # prepare a plotting window the size of the observed lods
 	{
 
-		if (missing(ylim))
-		{
-			if ('lod' %in% names(ys))
-			{
-				ylim.set <- c(min(ys, thresholds), 1.05*max(ys, thresholds))
-			} else {
-				ylim.set <- range(ys)
-			}
-		} else {
-			ylim.set <- ylim
-		}
-
-		plot(0,0,ylim=ylim.set,xlim=xlim,type="n",xaxt="n",
+		plot(0,0, ylim=ylim, xlim=xlim,type="n",xaxt="n",
 				 xlab="Chromosome",ylab=NA, xaxs="i",	 ...)
 
 	} else {  # prepare a plotting window for 0-1 plotting (quantiles)
-		plot(0, 0,
-				 ylim = c(10^0, 10^1), xlim = xlim,
-				 axes = FALSE, xlab = 'Chromosome', ylab = NA,
+		plot(-1, -1,
+				 ylim = ylim, xlim = xlim,
+				 axes = FALSE, xlab = 'Chromosome', ylab = '-log10(empirical p)',
 				 ...)
 
-		axis(side = 2, at = 10^marks, labels = labels)
+		axis(side = 2, at = marks, labels = labels)
 	}
 
 
@@ -160,9 +150,10 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 				qs <- pgev(q = y,
 									 loc = fitted(null.evds[[j]])[1],
 									 scale = fitted(null.evds[[j]])[2],
-									 shape = fitted(null.evds[[j]])[3])
+									 shape = fitted(null.evds[[j]])[3],
+									 lower.tail = FALSE)
 
-				lines(x, 10^(qs),
+				lines(x, -log10(qs),
 							lwd=lwd[j],lty=lty[j],col=col[j],
 							type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
 			}
@@ -226,8 +217,7 @@ plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
 	}
 
 	mtext(text = attr(x = out, 'pheno'), side = 3, outer = TRUE, line = 1)
-	abline(h = c(0.9, 0.95, 0.99))
-
+	abline(h = -log10(c(0.05, 0.01)), lty = c(1, 2))
 	invisible()
 }
 

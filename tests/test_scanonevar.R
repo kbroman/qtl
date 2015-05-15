@@ -1,7 +1,6 @@
 ######### Simulate mQTL and vQTL modeled with scanonevar
-setwd('tests')
 
-library(qtl)
+#library(qtl)
 set.seed(27599)
 
 data(fake.f2)
@@ -20,7 +19,7 @@ data(fake.f2)
 fake.f2 <- calc.genoprob(fake.f2, step = 2)
 
 N = nind(fake.f2)
-fake.f2$pheno$sex = rbinom(n = N, size = 1, prob = 0.5)
+
 
 
 
@@ -31,36 +30,13 @@ marker1.vals[is.na(marker1.vals)] <- 0
 
 fake.f2$pheno$phenotype1 <- rnorm(n = N, 25 + 5*marker1.vals, 3)
 
-varscan1a <- scanonevar(fake.f2,
+var.scan1a <- scanonevar(fake.f2,
 												pheno.col = 'phenotype1',
 												chrs = 4:6,
-												mean_covar = fake.f2$pheno$sex,
-												var_covar = fake.f2$pheno$sex)
+												dom = FALSE)
 
-saveRDS(object = var.scan1a, file = 'test_varscan.RDS')
-varscan1a <- readRDS('test_varscan.RDS')
-
-summary(varscan1a)
-
-varscan1a.perms <- scanonevar.perm(cross = fake.f2,
-																	 pheno.col = 'phenotype1',
-																	 chrs = 4:6,
-																	 num.perms = 10)
-saveRDS(object = varscan1a.perms, file = 'test_varscan_perms.RDS')
-varscan1a.perms <- readRDS('test_varscan_perms.RDS')
-
-maxes <- sapply(X = varscan1a.perms,
-								FUN = function(sov) { list(max.full = max(sov$lod.full),
-																					 max.mean = max(sov$lod.mean),
-																					 max.disp = max(sov$lod.disp))} )
-maxes <- t(maxes)
-
-library(evd)
-evds <- list(fit.ge)
-
-plot(var.scan1a, bandcol = 'gray', chr = 4:6, null.evds = )
-
-fitplot.scanonevar(cross = fake.f2, scanonevar = varscan1a, marker.name = 'D5M391')
+plot(var.scan1a, bandcol = 'gray')
+fitplot.scanonevar(cross = fake.f2, var.scan = var.scan1a, marker.name = 'D5M391')
 
 # df <- data.frame(phen1 = fake.f2$pheno$phenotype1, marker1 = marker1.vals)
 #
@@ -95,8 +71,8 @@ fake.f2$pheno$phenotype2 <- rnorm(n = N, 25 + 5*(marker2.vals != -1), 3)
 var.scan2a <- scanonevar(fake.f2,
 												 pheno.col = 'phenotype2',
 												 dom = TRUE,
-												 # 												 use.dglm.package = TRUE,
-												 # 												 use.custom.em = FALSE,
+# 												 use.dglm.package = TRUE,
+# 												 use.custom.em = FALSE,
 												 chrs = 6:8)
 
 plot(var.scan2a, bandcol = 'gray')
@@ -127,8 +103,8 @@ fake.f2$pheno$phenotype3 <- rnorm(n = N, 25, sd = 3*(marker3.vals + 2))
 var.scan3a <- scanonevar(fake.f2,
 												 pheno.col = 'phenotype3',
 												 dom = FALSE,
-												 # 												 use.dglm.package = TRUE,
-												 # 												 use.custom.em = FALSE,
+# 												 use.dglm.package = TRUE,
+# 												 use.custom.em = FALSE,
 												 chrs = 11:13)
 
 plot(var.scan3a, bandcol = 'gray', legend.pos = c('topleft', 'bottomleft'))
@@ -159,8 +135,8 @@ fake.f2$pheno$phenotype4 <-	rnorm(n = N,
 
 var.scan4a <- scanonevar(fake.f2,
 												 pheno.col = 'phenotype4',
-												 # 												 use.dglm.package = TRUE,
-												 # 												 use.custom.em = FALSE,
+# 												 use.dglm.package = TRUE,
+# 												 use.custom.em = FALSE,
 												 dom = TRUE,
 												 chrs = 13:15)
 
@@ -191,8 +167,8 @@ fake.f2$pheno$phenotype5 <-	rnorm(n = N,
 
 var.scan5a <- scanonevar(fake.f2,
 												 pheno.col = 'phenotype5',
-												 # 												 use.dglm.package = TRUE,
-												 # 												 use.custom.em = FALSE,
+# 												 use.dglm.package = TRUE,
+# 												 use.custom.em = FALSE,
 												 dom = TRUE,
 												 chrs = 14:16)
 
