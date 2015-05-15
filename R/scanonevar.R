@@ -40,11 +40,11 @@ scanonevar <-
 			stop('scanonevar not implemented for cross type "', crosstype, '"')
 		}
 
-		chrtype <- sapply(cross$geno, class)
-		if(any(chrtype=="X")) {
-			warning("Analysis of X chromosome not implemented for scanonevar; omitted.")
-			cross <- subset(cross, chr=(chrtype != "X"))
-		}
+# 		chrtype <- sapply(cross$geno, class)
+# 		if(any(chrtype=="X")) {
+# 			warning("Analysis of X chromosome not implemented for scanonevar; omitted.")
+# 			cross <- subset(cross, chr=(chrtype != "X"))
+# 		}
 
 		# grab phenotype
 		if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
@@ -136,18 +136,36 @@ scanonevar <-
 
 		result <- NULL
 		if (missing(chrs)) { chrs <- 1:length(cross$geno) }
+
 		for(j in chrs) { # loop over chromosomes
+
 			if(!quiet) message(" - Chr ", chr.names[j])
 
-			if (crosstype=="f2") {
-				g11 <- cross$geno[[j]]$prob[,,1]
-				g12 <- cross$geno[[j]]$prob[,,2]
-				g13 <- cross$geno[[j]]$prob[,,3]
-				a1  <- -g11 + g13
-				d1 <-  g12
+			this.chr <- cross$geno[[j]]
+
+			if (class(this.chr) == 'A') {
+				if (crosstype=="f2") {
+					g11 <- this.chr$prob[,,1]
+					g12 <- this.chr$prob[,,2]
+					g13 <- this.chr$prob[,,3]
+					a1  <- -g11 + g13
+					d1 <-  g12
+					chr.dom <- dom
+				}
+				else {
+					a1 <- cross$geno[[j]]$prob[,,1]
+				}
 			}
-			else {
-				a1 <- cross$geno[[j]]$prob[,,1]
+
+			if (class(this.chr) == 'X') {
+				chr.dom <- FALSE
+				if (crosstype=="f2") {
+					a1 <- this.chr$prob[,,1]
+				}
+				else {
+					print("X not implemented for non-F2 crosses")
+					next
+				}
 			}
 
 			n.loci <- dim(a1)[2]
@@ -156,13 +174,13 @@ scanonevar <-
 
 			mean.baseline <- disp.baseline <- numeric(n.loci)
 			mean.add.effect <- disp.add.effect <- numeric(n.loci)
-			if (dom) { mean.dom.effect <- disp.dom.effect <- numeric(n.loci) }
+			if (chr.dom) { mean.dom.effect <- disp.dom.effect <- numeric(n.loci) }
 
 			for(i in 1:n.loci) { # loop over positions within chromosome
 
 				# fill in genotype probs for this locus
 				X[,2] <- a1[,i]
-				if (dom) { X[,3] <- d1[,i] }
+				if (chr.dom) { X[,3] <- d1[,i] }
 
 				# fit full model
 				d.fit.full <- dglm(formula = mean_formula,
@@ -193,7 +211,7 @@ scanonevar <-
 				mean.add.effect[i] <- coef(d.fit.full)[2]
 				disp.add.effect[i] <- coef(d.fit.full$dispersion.fit)[2]
 
-				if (dom) {
+				if (chr.dom) {
 					mean.dom.effect[i] <- coef(d.fit.full)[3]
 					disp.dom.effect[i] <- coef(d.fit.full$dispersion.fit)[3]
 				}
@@ -217,9 +235,12 @@ scanonevar <-
 														mean_add_effect = mean.add.effect,
 														disp_add_effect = disp.add.effect,
 														stringsAsFactors = FALSE)
-			if (dom) {
+			if (chr.dom) {
 				thischr$mean_dom_effect = mean.dom.effect
 				thischr$disp_dom_effect = disp.dom.effect
+			}
+			if (dom & !chr.dom) {
+				thischr$mean_dom_effect <- thischr$disp_dom_effect <- rep(NA, n.loci)
 			}
 
 			rownames(thischr) <- w

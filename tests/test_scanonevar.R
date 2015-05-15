@@ -32,7 +32,7 @@ fake.f2$pheno$phenotype1 <- rnorm(n = N, 25 + 5*marker1.vals, 3)
 
 varscan1a <- scanonevar(fake.f2,
 												pheno.col = 'phenotype1',
-												chrs = 4:6,
+												chrs = 18:20,
 												mean_covar = fake.f2$pheno$sex,
 												var_covar = fake.f2$pheno$sex)
 
