@@ -25,7 +25,6 @@ fake.f2$pheno$sex = rbinom(n = N, size = 1, prob = 0.5)
 
 
 # an additive mQTL on Chr5
-
 marker1.vals <- fake.f2$geno[[5]]$data[,3] - 2
 marker1.vals[is.na(marker1.vals)] <- 0
 

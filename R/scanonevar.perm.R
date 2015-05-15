@@ -144,7 +144,6 @@ scanonevar.perm <- function(cross, pheno.col=1, mean_covar = NULL, var_covar = N
 
 		print(paste('Starting permutation number', perm.num, '...'))
 		perm1 <- sample(N)
-		#perm2 <- sample(N)
 
 		result <- NULL
 		if (missing(chrs)) { chrs <- 1:length(cross$geno) }
