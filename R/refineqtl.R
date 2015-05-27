@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-2014, Karl W. Broman
-# last modified Feb, 2014
+# copyright (c) 2006-2015, Karl W. Broman
+# last modified May, 2015
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -365,7 +365,9 @@ refineqtl <-
         qn <- names(lastout)
 
         for(i in seq(along=lastout)) {
-            lastout[[i]] <- lastout[[i]] - (max(lastout[[i]]) - dropresult[rn==qn[i],3])
+            if(sum(rn==qn[i])>1) # ack! multiple QTL at same position
+                warning("Multiple QTL at the same location.")
+            lastout[[i]] <- lastout[[i]] - (max(lastout[[i]]) - max(dropresult[rn==qn[i],3]))
             pos <- as.numeric(matrix(unlist(strsplit(names(lastout[[i]]), "@")),byrow=TRUE,ncol=2)[,2])
             chr <- rep(qtl$chr[tovary][i], length(pos))
             lastout[[i]] <- data.frame(chr=chr, pos=pos, lod=as.numeric(lastout[[i]]), stringsAsFactors=TRUE)
