@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.37, 2015-03-11
+Version 1.37, 2015-05-27
 
 Major changes:
 
@@ -26,6 +26,9 @@ Minor changes:
 
   Fix bug in fill.geno for method="maxmarginal" (wasn't putting NAs in
   genotypes with probability < min.prob)
+
+  Fox bug in refineqtl that arises when multiple QTL are at exactly
+  the same position, which can arise in stepwiseqtl.
 
 
 Version 1.36, 2015-03-05
