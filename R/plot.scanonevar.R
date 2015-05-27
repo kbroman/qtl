@@ -1,9 +1,7 @@
-#####################################################################
+###############################################################################
 #
 # plot.scanonevar.R
 #
-# copyright (c) 2001-2014, Karl W Broman
-# modified by Robert Corty in March 2015
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -20,205 +18,121 @@
 # Part of the R/qtl package
 # Contains: plot.scanonevar,
 #
-######################################################################
+################################################################################
 
-######################################################################
+################################################################################
 #
 # plot.scanone: plot output from scanone
 #
-######################################################################
+################################################################################
 
-plot.scanonevar <- function(x, chr, incl.markers = TRUE, xlim, ylim,
-														lty=1, col=c("black", "blue", "red", "green"),
-														lwd=2,gap=25,
-														mtick=c("line", "triangle"), show.marker.names=FALSE,
-														alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
-														pch=1, bg="transparent", bgrect=NULL, legend.pos = 'top',
-														null.evds = NULL, ...)
+plot.scanonevar <- function(varscan,
+														chrs = unique(varscan$chr),
+														col = c("black", "blue", "red", "green"),
+														bandcol = 'lightgray',
+														legend.pos = 'top',
+														gap = 25,
+														incl.markers = TRUE)
 {
 
-	if(!any(class(x) == "scanonevar")) {
-		stop("Input should have class \"scanonevar\".")
+	# store current graphical parameters and customize them for this plot
+	start.pars <- par(no.readonly = TRUE)
+	par(mar = c(3,4,2,1))
+
+	# subset varscan to necessary chrs only
+	if (!all(chrs == unique(varscan$chr))) {
+		varscan <- filter(varscan, chr %in% chrs)
 	}
 
-	if (!is.factor(x$chr)) {
-		x$chr <- factor(x$chr, levels=unique(x$chr))
+	# x coordinates for plotting
+	coords.x.chr <- varscan %>%
+		group_by(chr) %>%
+		summarise(len = max(pos) - min(pos)) %>%
+		mutate(start = cumsum(lag(len + gap, default = 0))) %>%
+		mutate(end = start + len) %>%
+		mutate(middle = (start + end)/2)
+
+	coords.x.locus <- left_join(coords.x.chr, varscan, by = 'chr') %>%
+		mutate(coord.x = start + pos)
+
+	# y coordinates for plotting
+	if (attr(varscan, 'units') == 'lods') {
+		coords.y.locus <- select(varscan, matches('lod'))
+		ylab <- 'LOD'
+	}
+	if (attr(varscan, 'units') == 'emp.ps') {
+		coords.y.locus <- -log10(select(varscan, matches('emp.p')))
+		ylab = '-log10(empirical p)'
 	}
 
-	dots <- list(...)
+	# make plotting area
+	xlim <- c(-gap/2, max(coords.x.chr$end) + gap/2)
+	ylim <- c(0, 1.05*max(coords.y.locus))
+	plot(-42, -42, xlim = xlim, ylim = ylim,
+			 type = 'n', xaxs = 'i',
+			 xlab = NA, ylab = NA, axes = FALSE)
 
-	# handle special arguments to be used in lines()
-	if(length(col)==1) col <- rep(col, 3)
-	if(length(type)==1) type <- rep(type, 3)
-	if(length(cex)==1) cex <- rep(cex, 3)
-	if(length(pch)==1) pch <- rep(pch, 3)
-	if(length(bg)==1) bg <- rep(bg, 3)
-	if(length(lty)==1) lty <- rep(lty, 3)
-	if(length(lwd)==1) lwd <- rep(lwd, 3)
-
-	mtick <- match.arg(mtick)
-
-	if(length(dim(x))!=2)
-		stop("Argument x must be a matrix or data.frame.")
-
-	out <- x
-
-	# pull out desired chromosomes
-	if(missing(chr) || length(chr)==0)
-		chr <- unique(as.character(out[,1]))
-	else chr <- matchchr(chr, unique(out[,1]))
-
-	out <- out[!is.na(match(out[,1],chr)),]
-
-	# beginning and end of chromosomes
-	temp <- out
-	begend <- matrix(unlist(tapply(temp[,2],temp[,1],range)),ncol=2,byrow=TRUE)
-	rownames(begend) <- unique(out[,1])
-	begend <- begend[as.character(chr),,drop=FALSE]
-	len <- begend[,2]-begend[,1]
-
-	# locations to plot start of each chromosome
-	start <- c(0,cumsum(len+gap))-c(begend[,1],0)
-	maxx <- sum(len+gap)-gap
-
-	# graphics parameters
-	old.xpd <- par("xpd")
-	old.las <- par("las")
-	par(xpd=FALSE,las=1)
-	on.exit(par(xpd=old.xpd,las=old.las))
-
-	ys <- data.frame(out[,grepl(pattern = 'lod', x = names(out))])
-	if(missing(xlim)) {
-		xlim <- c(-gap/2,maxx+gap/2)
-	}
-	if (missing(ylim)) {
-		ylim <- c(0,8)
-	}
-
-	# marks and labels on the y axis.
-	# visually nicer to not label the ticks at 0.1 and 0.3
-	marks <- seq(from = 0, to = max(ylim))
-	labels <- marks
-
-	if(is.null(null.evds)) # prepare a plotting window the size of the observed lods
-	{
-
-		plot(0,0, ylim=ylim, xlim=xlim,type="n",xaxt="n",
-				 xlab="Chromosome",ylab=NA, xaxs="i",	 ...)
-
-	} else {  # prepare a plotting window for 0-1 plotting (quantiles)
-		plot(-1, -1,
-				 ylim = ylim, xlim = xlim,
-				 axes = FALSE, xlab = 'Chromosome', ylab = '-log10(empirical p)',
-				 ...)
-
-		axis(side = 2, at = marks, labels = labels)
-	}
-
-
-	if(!is.null(bgrect)) {
-		u <- par("usr")
-		rect(u[1], u[3], u[2], u[4], col=bgrect)
-	}
+	# shade in bg for every other chr
 	if(!is.null(bandcol)) {
-		u <- par("usr")
-		for(i in seq(2, by=2, length(chr))) {
-			rect(min(out[out[,1]==chr[i],2]) + start[i]-gap/2, u[3],
-					 max(out[out[,1]==chr[i],2]) + start[i]+gap/2, u[4], border=bandcol, col=bandcol)
-		}
-		abline(h=u[3:4])
+		names.chrs.even <- chrs[seq(from = 2, to = length(chrs), by = 2)]
+		xs.chrs.even <- dplyr::filter(coords.x.chr, chr %in% names.chrs.even)
+
+		rect(xleft = xs.chrs.even$start - gap/2,
+				 xright = xs.chrs.even$end + gap/2,
+				 ybottom = ylim[1],
+				 ytop = ylim[2],
+				 border = bandcol, col = bandcol)
 	}
 
-	# initialize xtick and xtickmark
-	xtick <- NULL
-	xticklabel <- NULL
-	for(i in 1:length(chr)) {
-		# plot first out
-		x <- out[out[,1]==chr[i], 2]+start[i]
+	# draw x axis and label chrs
+	segments(x0 = xlim[1], x1 = xlim[2],
+					 y0 = 0, y1 = 0)
+	mtext(side = 1, text = chrs, at = coords.x.chr$middle, line = 0)
+	mtext(side = 1, text = 'Chromosome', at = mean(xlim), line = 1)
 
-		for(j in 1:ncol(ys)) {
+	# draw y axis and label chrs
+	axis(side = 2)
+	mtext(side = 2, text = ylab, line = 2, at = mean(ylim))
 
-			y <- ys[out[,1]==chr[i], j]
+	# plot lines
+	for (test.idx in 1:ncol(coords.y.locus)) {
+		test.name <- names(coords.y.locus)[test.idx]
+		segments(x0 = coords.x.locus$coord.x,
+						 x1 = lead(coords.x.locus$coord.x),
+						 y0 = coords.y.locus[[test.name]],
+						 y1 = lead(coords.y.locus[[test.name]]),
+						 lwd = 2*with(coords.x.locus, pos != len),
+						 col = col[test.idx])
+	}
 
-			if (is.null(null.evds)) { # plot the observed lods
-
-				lines(x, y,
-							lwd=lwd[j],lty=lty[j],col=col[j],
-							type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
-
-			} else {  # plot the observed lods as quantiles in the null distributions
-				qs <- pgev(q = y,
-									 loc = fitted(null.evds[[j]])[1],
-									 scale = fitted(null.evds[[j]])[2],
-									 shape = fitted(null.evds[[j]])[3],
-									 lower.tail = FALSE)
-
-				lines(x, -log10(qs),
-							lwd=lwd[j],lty=lty[j],col=col[j],
-							type=type[j], cex=cex[j], pch=pch[j], bg=bg[j])
-			}
-		}
-
-		# plot chromosome number
-		tloc <- mean(c(min(x),max(x)))
-		xtick <- c(xtick, tloc)
-		xticklabel <- c(xticklabel, as.character(chr[i]))
-
-		# plot lines or triangles at marker positions
-		nam <- dimnames(out)[[1]][out[,1]==chr[i]]
-		wh.genoprob <- grep("^c.+\\.loc-*[0-9]+", nam)
-		if(length(wh.genoprob)==0) wh.genoprob <- seq(along=nam)
-		else wh.genoprob <- (seq(along=nam))[-wh.genoprob]
-		pos <- out[out[,1]==chr[i],2][wh.genoprob]+start[i]
-
-		if(incl.markers) {
-			if(mtick=="line")
-				rug(pos, 0.02, quiet=TRUE)
-			else {
-				a <- par("usr")
-				points(pos, rep(a[3]+diff(a[3:4])*0.01, length(pos)), pch=17, cex=1.5)
-			}
-		}
-
-		if(show.marker.names) {
-			a <- par("usr")
-			text(pos, rep(a[3]+diff(a[3:4])*0.03, length(pos)), nam[wh.genoprob],
-					 srt=90, adj=c(0,0.5))
-		}
-
+	# plot lines at marker positions (rug plot)
+	if(incl.markers) {
+		marker.idxs <- !grepl(pattern = 'loc', x = varscan$marker.name)
+		segments(x0 = coords.x.locus$coord.x[marker.idxs],
+						 x1 = coords.x.locus$coord.x[marker.idxs],
+						 y0 = 0,
+						 y1 = ylim[2]*0.03,
+						 col = 'gray50')
+# 		rug(x = coords.x.locus$coord.x[marker.idxs], ticksize = 1)
 	}
 
 	# draw the legend
-	legend(x = legend.pos, legend = names(ys),
+	legend(x = legend.pos, legend = names(coords.y.locus),
 				 fill = col, cex = 0.8, bty = 'n',
 				 x.intersp = 0.3, y.intersp = 0.8, xjust = 0.5, yjust = 0)
 
-	# draw the axis
-	if(!alternate.chrid || length(xtick) < 2) {
-		for(i in seq(along=xtick))
-			axis(side=1, at=xtick[i], labels=xticklabel[i])
-	}
-	else {
-		odd <- seq(1, length(xtick), by=2)
-		even <- seq(2, length(xtick), by=2)
-		for(i in odd) {
-			axis(side=1, at=xtick[i], labels="")
-			axis(side=1, at=xtick[i], labels=xticklabel[i], line=-0.4, tick=FALSE)
-		}
-		for(i in even) {
-			axis(side=1, at=xtick[i], labels="")
-			axis(side=1, at=xtick[i], labels=xticklabel[i], line=+0.4, tick=FALSE)
-		}
+	# add the title
+	mtext(text = attr(x = varscan, 'pheno'), side = 3, line = 0)
+
+	# draw the alpha = 0.05 and 0.01 lines
+	# iff we are looking at empirical ps
+	if (units(varscan) == 'emp.ps') {
+		abline(h = -log10(c(0.05, 0.01)), lty = c(1, 2))
 	}
 
-	if(!is.null(bgrect)) {
-		u <- par("usr")
-		rect(u[1], u[3], u[2], u[4])
-	}
+	# reset graphical parameteers to how they were on start
+	par(start.pars)
 
-	mtext(text = attr(x = out, 'pheno'), side = 3, outer = TRUE, line = 1)
-	abline(h = -log10(c(0.05, 0.01)), lty = c(1, 2))
+	# return nothing
 	invisible()
 }
-
-# end of plot.scanone.R

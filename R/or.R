@@ -1,0 +1,3 @@
+or <- function(a, b) {
+	return(a|b)
+}
