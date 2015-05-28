@@ -2,7 +2,7 @@
 #
 # add_threshold.R
 #
-# copyright (c) 2006-2014, Karl W Broman, Johns Hopkins University
+# copyright (c) 2006-2014, Karl W Broman
 # last modified Apr, 2014
 # first written Dec, 2006
 #
