@@ -65,3 +65,4 @@ inst/contrib/bin/test/
 tests/.gitignore
 inst/README.md
 qtl.Rproj
+tests/test*.RDS
