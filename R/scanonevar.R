@@ -29,9 +29,9 @@
 #
 ######################################################################
 
-Scanonevar <- function(cross,
+scanonevar <- function(cross,
 											 pheno.name,
-											 chrs,
+											 chrs = 1:length(cross$geno),
 											 mean.covar.names = NULL,
 											 var.covar.names = NULL,
 											 dom = TRUE,
@@ -46,27 +46,32 @@ Scanonevar <- function(cross,
 																						 pheno.name = pheno.name,
 																						 mean.covar.names = mean.covar.names,
 																						 var.covar.names = var.covar.names)
-	pheno <- validated.input[[1]]
-	mean.covars <- validated.input[[2]]
-	var.covars <- validated.input[[3]]
+	cross <- validated.input$cross
+	pheno <- validated.input$pheno
+	mean.covars <- validated.input$mean.covars
+	var.covars <- validated.input$var.covars
 
 	# set up design matrix (X) and formulae for use in dglm
-	df.and.formulae <- AssembleDesignMatAndFormulae(pheno = pheno,
-																									dom = dom,
-																									mean.covars = mean.covars,
-																									var.covars = var.covars)
-	X <- df.and.formulae[[1]]
-	null.formulae <- df.and.formulae[c(2,3)]
-	alt.formulae <- df.and.formulae[c(4,5)]
+	X.and.formulae <- assemble.design.mat.and.formulae(pheno = pheno,
+																											dom = dom,
+																											mean.covars = mean.covars,
+																											var.covars = var.covars)
+	X <- X.and.formulae$X
+	mean.null.formula <- X.and.formulae$mean.null.formula
+	var.null.formula <- X.and.formulae$var.null.formula
+	mean.alt.formula <- X.and.formulae$mean.alt.formula
+	var.alt.formula <- X.and.formulae$var.alt.formula
 
 	# workhorse of scanonevar()
 	# applies dglm to each locus and compares to various null fits to return LOD for each locus
-	scan <- Scanonevar_(cross = cross,
+	scan <- scanonevar_(cross = cross,
 											chrs = chrs,
 											dom = dom,
 											X = X,
-											null.formulae = null.formulae,
-											alt.formulae = alt.formulae,
+											mean.null.formula = mean.null.formula,
+											var.null.formula = var.null.formula,
+											mean.alt.formula = mean.alt.formula,
+											var.alt.formula = var.alt.formula,
 											return.effects = return.effects)
 
 	return(scan)

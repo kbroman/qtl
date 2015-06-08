@@ -6,73 +6,86 @@ ValidateScanonevarInput <- function(cross,
 
 	# check cross type
 	crosstype <- class(cross)[1]
-	if(!(crosstype %in% c("bc", "dh", "f2", "haploid", "risib", "riself"))) {
+	if (!(crosstype %in% c("bc", "dh", "f2", "haploid", "risib", "riself"))) {
 		stop('scanonevar not implemented for cross type "', crosstype, '"')
 	}
 
+	# calc genotype probabilities if needed
+	if (!("prob" %in% names(cross$geno[[1]]))) {
+		message("Setup: Running calc.genoprob()")
+		cross <- calc.genoprob(cross, step = 2.0)
+	}
+
 	# grab phenotype
-	if (!(pheno.name %in% names(cross$pheno))) {
+	phen.names <- names(cross$pheno)
+	if (!(pheno.name %in% phen.names)) {
 		stop(paste(pheno.name, 'not found in cross'))
+	}
+	if (length(pheno.name) != 1) {
+		stop('Scanonevar takes exactly one phenotype')
 	}
 	message(paste('Setting up scanonevar on phenotype:', pheno.name))
 	pheno <- subset(cross$pheno, select = pheno.name)
 
-	# grab names of all markers (in case a covariate is a marker)
+
+
+	# store all marker names and ensure they are valid R variable names
 	marker.names <- unlist(lapply(X = cross$geno,
 																FUN = function(chr) { colnames(chr$data)}))
+  stopifnot(all(marker.names == make.names(marker.names)))
+  
+	# split covar names into phenotypes and markers
+	mean.covar.names <- SplitVecByMembership(v = mean.covar.names,
+																					 a = phen.names,
+																					 b = marker.names)
+	mean.covar.phen.names <- mean.covar.names[[1]]
+	mean.covar.marker.names <- mean.covar.names[[2]]
 
-	# grab names of all phenotypes (in case covariate is a phenotype)
-	phen.names <- names(cross$pheno)
 
-	# split covariate names into marker names and phenotype names
-	mean.covar.marker.idxs <- which(mean.covar.names %in% marker.names)
-	mean.covar.phen.idxs <- which(mean.covar.names %in% phen.names)
+	var.covar.names <- SplitVecByMembership(v = var.covar.names,
+																					a = phen.names,
+																					b = marker.names)
+	var.covar.phen.names <- var.covar.names[[1]]
+	var.covar.marker.names <- var.covar.names[[2]]
 
-	# if any covariate name is in neither list, error
-	if (any(and(mean.covar.marker.idxs, mean.covar.phen.idxs))) {
-		ambig.covar.namez <- which(and(mean.covar.marker.idxs,
-																	 mean.covar.phen.idxs))
-		error(paste('Ambiguity:  The following covariate names could refer',
-								'to a phenotype or a marker',
-								ambig.covar.names))
+	# pull the data specified by the covariate names
+	mean.phen.covars <- data.frame(row.names = 1:nrow(pheno))
+	if (length(mean.covar.phen.names)) {
+		mean.phen.covars <- cross$pheno[, mean.covar.phen.names, drop = FALSE]
 	}
 
-	# if any covariate name is in both lists, error
-	if (any(!or(mean.covar.marker.idxs, mean.covar.phen.idxs))) {
-		missing.covar.namez <- which(!or(mean.covar.marker.idxs,
-																		 mean.covar.phen.idxs))
-		error(paste('The following covariate names could not be found',
-								'in the list of phenotypes and markers',
-								missing.covar.names))
-	}
+	mean.marker.covars <- data.frame(row.names = 1:nrow(pheno))
+	if (length(mean.covar.marker.names)) {
 
-	# at this point each mean covar name is in exactly one list
-	mean.covar.marker.names <- mean.covar.names[mean.covar.marker.idxs]
-	mean.covar.phen.names <- mean.covar.names[mean.covar.phen.idxs]
+		for (mean.covar.marker.name in mean.covar.marker.names) {
 
-	# grab mean covars
-	mean.covars <- NULL
-	if (!is.null(mean.covar.names)) {
-		if (!all(mean.covar.names %in% names(cross$pheno))) {
-			stop(paste('at least one mean covariate is not found in the cross'))
+			mean.marker.covars <-
+				cbind(mean.marker.covars,
+							GetGenoprobsByMarkerName(cross = cross,
+																			 marker.name = mean.covar.marker.name)[,-1])
 		}
-		mean.covars <- select(cross$pheno, mean.covar.names)
 	}
 
-	# grab var covars
-	var.covars <- NULL
-	if (!is.null(var.covar.names)) {
-		if (!all(var.covar.names %in% names(cross$pheno))) {
-			stop(paste('at least one var covariate is not found in the cross'))
+	var.phen.covars <- data.frame(row.names = 1:nrow(pheno))
+	if (length(var.covar.phen.names)) {
+		var.phen.covars <- cross$pheno[, var.covar.phen.names, drop = FALSE]
+	}
+
+	var.marker.covars <- data.frame(row.names = 1:nrow(pheno))
+	if (length(var.covar.marker.names)) {
+		for (var.covar.marker.name in var.covar.marker.names) {
+			var.marker.covars <-
+				cbind(var.marker.covars,
+							GetGenoprobsByMarkerName(cross = cross,
+																			 marker.name = var.covar.marker.name)[,-1])
 		}
-		var.covars <- subset(cross$pheno, select = var.covar.names)
 	}
 
-	# calc genotype probabilities if needed
-	if(!("prob" %in% names(cross$geno[[1]]))) {
-		warning("First running calc.genoprob")
-		cross <- calc.genoprob(cross)
-	}
+	mean.covars <- cbind(mean.phen.covars, mean.marker.covars)
+	var.covars <- cbind(var.phen.covars, var.marker.covars)
 
-	return(list(pheno, mean.covars, var.covars))
+	return(list(cross = cross,
+							pheno = pheno,
+							mean.covars = mean.covars,
+							var.covars = var.covars))
 }

@@ -33,8 +33,10 @@ scanonevar_ <- function(cross,
 												dom,
 												X,
 												quiet = TRUE,
-												null.formulae,
-												alt.formulae,
+												mean.null.formula,
+												var.null.formula,
+												mean.alt.formula,
+												var.alt.formula,
 												return.effects = TRUE,
 												mean.perm = seq(1, nind(cross)),
 												var.perm = seq(1, nind(cross)),
@@ -43,13 +45,10 @@ scanonevar_ <- function(cross,
 												calc.lod.var = TRUE) {
 
 	crosstype <- class(cross)[1]
-	mean.null.formula = null.formulae[[1]]
-	var.null.formula = null.formulae[[2]]
-	mean.formula = alt.formulae[[1]]
-	var.formula = alt.formulae[[2]]
 
 	# in case user specifies mean.perm or var.perm as NULL
-	# (preferred just to omit them if no perm wanted)
+	# same effect as omitting them, but a bit more explicit in the call 
+	# as to what will be done
 	if (is.null(mean.perm)) { mean.perm <- seq(1, nind(cross)) }
 	if (is.null(var.perm)) { var.perm <- seq(1, nind(cross)) }
 
@@ -73,7 +72,10 @@ scanonevar_ <- function(cross,
 
 		# error out if chr is not autosome and not X
 		if (!(class(this.chr)[1] %in% c('A', 'X'))) {
-			stop(paste('scanonevar not implemented for chr', chr.idx, 'of type', class(this.chr)))
+			stop(paste('scanonevar not implemented for chr',
+								 chr.idx,
+								 'of type',
+								 class(this.chr)))
 		}
 
 		# set up genotype design matrix for autosome
@@ -123,8 +125,8 @@ scanonevar_ <- function(cross,
 			}
 
 			# fit full model
-			d.fit.full <- dglm(formula = mean.formula,
-												 dformula = var.formula,
+			d.fit.full <- dglm(formula = mean.alt.formula,
+												 dformula = var.alt.formula,
 												 data = X)
 			ln.lik.full <- -0.5*d.fit.full$m2loglik
 			log10.lik.full <- ln.lik.full / log(10)
@@ -134,7 +136,7 @@ scanonevar_ <- function(cross,
 			# both covariates and genetic marker have variance effects
 			if (calc.lod.mean) {
 				d.fit.nomean <- dglm(formula = mean.null.formula,
-														 dformula = var.formula,
+														 dformula = var.alt.formula,
 														 data = X)
 				ln.lik.nomean <- -0.5*d.fit.nomean$m2loglik
 				log10.lik.nomean <- ln.lik.nomean / log(10)
@@ -144,7 +146,7 @@ scanonevar_ <- function(cross,
 			# covariates, but not the genetic marker, have variance effects
 			# both covariates and genetic marker have mean effects
 			if (calc.lod.var) {
-				d.fit.novar <- dglm(formula = mean.formula,
+				d.fit.novar <- dglm(formula = mean.alt.formula,
 														dformula = var.null.formula,
 														data = X)
 				ln.lik.novar <- -0.5*d.fit.novar$m2loglik
@@ -176,7 +178,7 @@ scanonevar_ <- function(cross,
 		map <- attr(cross$geno[[chr.idx]]$prob, "map")
 		this.chr.scan <- tbl_df(data.frame(chrtype = class(this.chr)[1],
 																			 chr = chrnames(cross)[chr.idx],
-																			 pos = unclass(map),
+																			 pos = as.vector(map),
 																			 marker.name = names(map),
 																			 stringsAsFactors = FALSE,
 																			 row.names = NULL))

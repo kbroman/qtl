@@ -1,4 +1,4 @@
-lods.to.emp.ps.scanonevar <- function(scan, null.scan.maxes) {
+convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
 
 	lod.columns <- grep(pattern = 'lod', names(scan), value = TRUE)
 	chr.types <- unique(scan$chrtype)

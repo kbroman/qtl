@@ -4,7 +4,7 @@ useDynLib(qtl)
 import(graphics, stats, utils, parallel)
 
 export(map2table)
-export(scanonevar, scanonevar.perm, lods.to.emp.ps.scanonevar)
+export(scanonevar, scanonevar.perm, convert.varscan.to.empirical.ps)
 export(reduce2grid)
 export(formMarkerCovar)
 export(nqtl)

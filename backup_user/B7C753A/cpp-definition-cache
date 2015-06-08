@@ -1,0 +1,4841 @@
+[
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.c",
+                "kind" : 6,
+                "line" : 71,
+                "name" : "countXO(int, int, int, int *, int *, int (*)(int *, int))",
+                "parent_name" : "",
+                "usr" : "c:@F@countXO"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.c",
+                "kind" : 6,
+                "line" : 102,
+                "name" : "R_countXO_bc(int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_countXO_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.c",
+                "kind" : 6,
+                "line" : 119,
+                "name" : "R_countXO_f2(int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_countXO_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.c",
+                "kind" : 6,
+                "line" : 134,
+                "name" : "R_countXO_4way(int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_countXO_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.c",
+                "kind" : 6,
+                "line" : 148,
+                "name" : "R_countXO_ril48(int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_countXO_ril48"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/countXO.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan.c",
+                "kind" : 6,
+                "line" : 51,
+                "name" : "R_discan_mr(int *, int *, int *, int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_discan_mr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan.c",
+                "kind" : 6,
+                "line" : 72,
+                "name" : "R_discan_im(int *, int *, int *, double *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_discan_im"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan.c",
+                "kind" : 6,
+                "line" : 110,
+                "name" : "discan_mr(int, int, int, int **, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@discan_mr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan.c",
+                "kind" : 6,
+                "line" : 186,
+                "name" : "discan_im(int, int, int, double ***, int *, double *, int, double, double **, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@discan_im"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan_covar.c",
+                "kind" : 6,
+                "line" : 91,
+                "name" : "discan_covar(int, int, int, double ***, double **, int, double **, int, int *, double *, double *, int, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@discan_covar"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan_covar.c",
+                "kind" : 6,
+                "line" : 110,
+                "name" : "R_discan_covar(int *, int *, int *, double *, double *, int *, double *, int *, int *, double *, double *, int *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_discan_covar"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan_covar.c",
+                "kind" : 6,
+                "line" : 135,
+                "name" : "discan_covar_em(int, int, int, int, double ***, double **, int, double **, int, int *, double *, int, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@discan_covar_em"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan_covar.c",
+                "kind" : 6,
+                "line" : 351,
+                "name" : "discan_covar_loglik(int, int, int, int, double *, double ***, double **, int, double **, int, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@discan_covar_loglik"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan_covar.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/discan_covar.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/effectscan.c",
+                "kind" : 6,
+                "line" : 44,
+                "name" : "R_effectscan(int *, int *, int *, int *, int *, double *, double *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_effectscan"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/effectscan.c",
+                "kind" : 6,
+                "line" : 77,
+                "name" : "effectscan(int, int, int, int, int ***, double *, double *, double **, double **, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@effectscan"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/effectscan.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/effectscan.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fill_geno_nodblXO.c",
+                "kind" : 6,
+                "line" : 33,
+                "name" : "R_fill_geno_nodblXO(int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_fill_geno_nodblXO"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fill_geno_nodblXO.c",
+                "kind" : 6,
+                "line" : 42,
+                "name" : "fill_geno_nodblXO(int, int, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@fill_geno_nodblXO"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fill_geno_nodblXO.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fill_geno_nodblXO.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/findDupMarkers_notexact.c",
+                "kind" : 6,
+                "line" : 43,
+                "name" : "R_findDupMarkers_notexact(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_findDupMarkers_notexact"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/findDupMarkers_notexact.c",
+                "kind" : 6,
+                "line" : 56,
+                "name" : "findDupMarkers_notexact(int, int, int **, int *, int *, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@findDupMarkers_notexact"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/findDupMarkers_notexact.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/findDupMarkers_notexact.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk.c",
+                "kind" : 6,
+                "line" : 45,
+                "name" : "R_fitqtl_hk(int *, int *, int *, double *, int *, double *, int *, int *, double *, int *, double *, int *, double *, double *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_fitqtl_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk.c",
+                "kind" : 6,
+                "line" : 119,
+                "name" : "fitqtl_hk(int, int, int *, double ***, double **, int, int *, int, double *, int, double *, int *, double *, double *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@fitqtl_hk"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk.c",
+                "kind" : 6,
+                "line" : 182,
+                "name" : "galtRssHK(double *, int, int *, int, double ***, double **, int, int *, int, double *, int *, int, int, double *, double **, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@galtRssHK"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk_binary.c",
+                "kind" : 6,
+                "line" : 44,
+                "name" : "R_fitqtl_hk_binary(int *, int *, int *, double *, int *, double *, int *, int *, double *, int *, double *, int *, double *, double *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_fitqtl_hk_binary"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk_binary.c",
+                "kind" : 6,
+                "line" : 122,
+                "name" : "fitqtl_hk_binary(int, int, int *, double ***, double **, int, int *, int, double *, int, double *, int *, double *, double *, double *, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@fitqtl_hk_binary"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk_binary.c",
+                "kind" : 6,
+                "line" : 185,
+                "name" : "nullLODbin(double *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@nullLODbin"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk_binary.c",
+                "kind" : 6,
+                "line" : 206,
+                "name" : "galtLODHKbin(double *, int, int *, int, double ***, double **, int, int *, int, double *, int *, int, int, double *, double **, double *, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@galtLODHKbin"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk_binary.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_hk_binary.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp.c",
+                "kind" : 6,
+                "line" : 47,
+                "name" : "R_fitqtl_imp(int *, int *, int *, int *, int *, int *, double *, int *, int *, double *, int *, double *, int *, double *, double *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_fitqtl_imp"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp.c",
+                "kind" : 6,
+                "line" : 113,
+                "name" : "fitqtl_imp(int, int, int *, int, int ***, double **, int, int *, int, double *, int, double *, int *, double *, double *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@fitqtl_imp"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp.c",
+                "kind" : 6,
+                "line" : 282,
+                "name" : "nullRss0(double *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@nullRss0"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp.c",
+                "kind" : 6,
+                "line" : 304,
+                "name" : "galtRss(double *, int, int *, int, int **, double **, int, int *, int, double *, int *, int, int, double *, double **, int, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@galtRss"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp_binary.c",
+                "kind" : 6,
+                "line" : 47,
+                "name" : "R_fitqtl_imp_binary(int *, int *, int *, int *, int *, int *, double *, int *, int *, double *, int *, double *, int *, double *, double *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_fitqtl_imp_binary"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp_binary.c",
+                "kind" : 6,
+                "line" : 117,
+                "name" : "fitqtl_imp_binary(int, int, int *, int, int ***, double **, int, int *, int, double *, int, double *, int *, double *, double *, double *, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@fitqtl_imp_binary"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp_binary.c",
+                "kind" : 6,
+                "line" : 278,
+                "name" : "galtLODimpbin(double *, int, int *, int, int **, double **, int, int *, int, double *, int *, int, int, double *, double **, double *, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@galtLODimpbin"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp_binary.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/fitqtl_imp_binary.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/forwsel.c",
+                "kind" : 6,
+                "line" : 41,
+                "name" : "R_markerforwsel(int *, int *, double *, double *, int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_markerforwsel"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/forwsel.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "R_markerforwself2(int *, int *, int *, double *, int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_markerforwself2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/forwsel.c",
+                "kind" : 6,
+                "line" : 100,
+                "name" : "markerforwsel(int, int, double **, double *, int, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@markerforwsel"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/forwsel.c",
+                "kind" : 6,
+                "line" : 196,
+                "name" : "markerforwself2(int, int, double **, double *, int, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@markerforwself2"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/forwsel.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/forwsel.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 48,
+                "name" : "init_4way(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "emit_4way(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 132,
+                "name" : "step_4way(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 167,
+                "name" : "nrec_4way(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 198,
+                "name" : "nrec_4way1(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_4way1"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 215,
+                "name" : "nrec_4way2(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_4way2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 232,
+                "name" : "calc_genoprob_4way(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 240,
+                "name" : "calc_genoprob_special_4way(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 248,
+                "name" : "sim_geno_4way(int *, int *, int *, int *, double *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 255,
+                "name" : "est_map_4way(int *, int *, int *, double *, double *, double *, double *, int *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 270,
+                "name" : "argmax_geno_4way(int *, int *, int *, double *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 278,
+                "name" : "errorlod_4way(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 307,
+                "name" : "calc_errorlod_4way(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 315,
+                "name" : "nrec2_4way(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_4way"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 444,
+                "name" : "logprec_4way(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 574,
+                "name" : "est_rf_4way(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 581,
+                "name" : "calc_pairprob_4way(int *, int *, int *, double *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+                "kind" : 6,
+                "line" : 589,
+                "name" : "marker_loglik_4way(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_4way"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_4way.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 48,
+                "name" : "init_bc(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_bc"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "emit_bc(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_bc"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 64,
+                "name" : "step_bc(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_bc"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 71,
+                "name" : "nrec_bc(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 77,
+                "name" : "calc_genoprob_bc(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 84,
+                "name" : "calc_genoprob_special_bc(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 91,
+                "name" : "sim_geno_bc(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 98,
+                "name" : "est_map_bc(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 107,
+                "name" : "argmax_geno_bc(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_bc"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 114,
+                "name" : "errorlod_bc(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 129,
+                "name" : "calc_errorlod_bc(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 137,
+                "name" : "est_rf_bc(int *, int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 186,
+                "name" : "calc_pairprob_bc(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+                "kind" : 6,
+                "line" : 195,
+                "name" : "marker_loglik_bc(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_bc"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bc.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 87,
+                "name" : "est_map_bci(int, int, int *, double *, int, double, double, double *, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_bci"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 296,
+                "name" : "emit_bci(int, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_bci"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 313,
+                "name" : "nrec_bci(int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_bci"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 324,
+                "name" : "R_est_map_bci(int *, int *, int *, double *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_est_map_bci"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 339,
+                "name" : "step_bci(int, int, double ***, double *, int, double, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_bci"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 378,
+                "name" : "tm_bci(int, int, double *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@tm_bci"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 421,
+                "name" : "fms_bci(double, double *, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@fms_bci"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+                "kind" : 6,
+                "line" : 459,
+                "name" : "distinct_tm_bci(double, double *, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@distinct_tm_bci"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bci.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 61,
+                "name" : "assign_bcsft(int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@assign_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 83,
+                "name" : "assign_bcsftb(int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@assign_bcsftb"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 106,
+                "name" : "assign_bcsftc(int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@assign_bcsftc"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 163,
+                "name" : "init_bcsft(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 204,
+                "name" : "genotab_em_bcsft(int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@genotab_em_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 215,
+                "name" : "emit_bcsft(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 221,
+                "name" : "step_bcsft(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 265,
+                "name" : "init_bcsftb(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_bcsftb"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 314,
+                "name" : "emit_bcsftb(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_bcsftb"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 320,
+                "name" : "step_bcsftb(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_bcsftb"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 364,
+                "name" : "nrec_bcsftb(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_bcsftb"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 394,
+                "name" : "assign_bcsftd(int, int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@assign_bcsftd"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 399,
+                "name" : "comploglik_bcsft(double, int, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@comploglik_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 443,
+                "name" : "calc_genoprobo_bcsft(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprobo_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 456,
+                "name" : "calc_genoprob_bcsft(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 514,
+                "name" : "calc_genoprob_specialo_bcsft(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_specialo_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 526,
+                "name" : "calc_genoprob_special_bcsft(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 589,
+                "name" : "sim_geno_bcsft(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 605,
+                "name" : "est_mapo_bcsft(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_mapo_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 624,
+                "name" : "est_map_bcsft(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 798,
+                "name" : "argmax_genoo_bcsft(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_genoo_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 810,
+                "name" : "argmax_geno_bcsft(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 914,
+                "name" : "nrec2_bcsft(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 944,
+                "name" : "logprec_bcsft(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1002,
+                "name" : "est_rfo_bcsft(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rfo_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1019,
+                "name" : "est_rf_bcsft(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1140,
+                "name" : "calc_pairprobo_bcsft(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprobo_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1153,
+                "name" : "calc_pairprob_bcsft(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1258,
+                "name" : "marker_loglik_bcsft(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1283,
+                "name" : "prob_bcs(double, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@prob_bcs"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1308,
+                "name" : "prob_ft(double, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@prob_ft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1370,
+                "name" : "prob_bcsft(double, int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@prob_bcsft"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1416,
+                "name" : "kptothek(double, double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@kptothek"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1424,
+                "name" : "count_bcs(double, int, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@count_bcs"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1441,
+                "name" : "count_ft(double, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@count_ft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1550,
+                "name" : "count_bcsft(double, int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@count_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1585,
+                "name" : "ratio_bcsft(double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@ratio_bcsft"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+                "kind" : 6,
+                "line" : 1596,
+                "name" : "expect_bcsft(double, int, int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@expect_bcsft"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bcsft.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 51,
+                "name" : "init_bgmagic16(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_bgmagic16"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 56,
+                "name" : "emit_bgmagic16(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_bgmagic16"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 63,
+                "name" : "step_bgmagic16(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 98,
+                "name" : "calc_genoprob_bgmagic16(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 105,
+                "name" : "calc_genoprob_special_bgmagic16(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 112,
+                "name" : "argmax_geno_bgmagic16(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 119,
+                "name" : "sim_geno_bgmagic16(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 126,
+                "name" : "est_map_bgmagic16(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 137,
+                "name" : "marker_loglik_bgmagic16(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 144,
+                "name" : "calc_pairprob_bgmagic16(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_bgmagic16"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 152,
+                "name" : "errorlod_bgmagic16(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_bgmagic16"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+                "kind" : 6,
+                "line" : 173,
+                "name" : "calc_errorlod_bgmagic16(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_bgmagic16"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_bgmagic16.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 46,
+                "name" : "init_f2(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_f2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 52,
+                "name" : "emit_f2(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_f2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 70,
+                "name" : "step_f2(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_f2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 103,
+                "name" : "init_f2b(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_f2b"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 108,
+                "name" : "emit_f2b(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_f2b"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 138,
+                "name" : "step_f2b(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_f2b"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 169,
+                "name" : "nrec_f2b(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_f2b"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 203,
+                "name" : "calc_genoprob_f2(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 211,
+                "name" : "calc_genoprob_special_f2(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 219,
+                "name" : "sim_geno_f2(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 226,
+                "name" : "est_map_f2(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 236,
+                "name" : "argmax_geno_f2(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_f2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 244,
+                "name" : "errorlod_f2(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 267,
+                "name" : "calc_errorlod_f2(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_f2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 277,
+                "name" : "nrec2_f2(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_f2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 317,
+                "name" : "logprec_f2(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 363,
+                "name" : "est_rf_f2(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 370,
+                "name" : "calc_pairprob_f2(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+                "kind" : 6,
+                "line" : 378,
+                "name" : "marker_loglik_f2(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_f2"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.c",
+                "kind" : 6,
+                "line" : 88,
+                "name" : "est_map_f2i(int, int, int *, double *, int, double, double, double *, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_f2i"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.c",
+                "kind" : 6,
+                "line" : 295,
+                "name" : "emit_f2i(int, int, double, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_f2i"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.c",
+                "kind" : 6,
+                "line" : 326,
+                "name" : "nrec_f2i(int, int, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_f2i"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.c",
+                "kind" : 6,
+                "line" : 341,
+                "name" : "R_est_map_f2i(int *, int *, int *, double *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_est_map_f2i"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.c",
+                "kind" : 6,
+                "line" : 357,
+                "name" : "step_f2i(int, int, int, double ***, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_f2i"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_f2i.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 83,
+                "name" : "calc_genoprob(int, int, int, int *, double *, double *, double, double *, double (*)(int, int *), double (*)(int, int, double, int *), double (*)(int, int, double, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 181,
+                "name" : "calc_genoprob_special(int, int, int, int *, double *, double *, double, double *, double (*)(int, int *), double (*)(int, int, double, int *), double (*)(int, int, double, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 314,
+                "name" : "sim_geno(int, int, int, int, int *, double *, double *, double, int *, double (*)(int, int *), double (*)(int, int, double, int *), double (*)(int, int, double, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 449,
+                "name" : "est_map(int, int, int, int *, double *, double *, double, double (*)(int, int *), double (*)(int, int, double, int *), double (*)(int, int, double, double, int *), double (*)(int, int, double, int *), double (*)(int, int, double, int *), double *, int, double, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 691,
+                "name" : "argmax_geno(int, int, int, int *, double *, double *, double, int *, double (*)(int, int *), double (*)(int, int, double, int *), double (*)(int, int, double, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 805,
+                "name" : "calc_errorlod(int, int, int, int *, double, double *, double *, double (*)(int, double *, double))",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 868,
+                "name" : "est_rf(int, int, int *, double *, double (*)(int, int, double, int *), double (*)(int, int, double, int *), int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 993,
+                "name" : "calc_pairprob(int, int, int, int *, double *, double *, double, double *, double *, double (*)(int, int *), double (*)(int, int, double, int *), double (*)(int, int, double, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 1133,
+                "name" : "calc_pairprob_condindep(int, int, int, double ***, double *****)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_condindep"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 1153,
+                "name" : "R_calc_pairprob_condindep(int *, int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_calc_pairprob_condindep"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+                "kind" : 6,
+                "line" : 1192,
+                "name" : "marker_loglik(int, int, int *, double, double (*)(int, int *), double (*)(int, int, double, int *), double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_main.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 50,
+                "name" : "init_ri4self(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_ri4self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "emit_ri4self(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_ri4self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 63,
+                "name" : "step_ri4self(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_ri4self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 73,
+                "name" : "step_special_ri4self(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_special_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 82,
+                "name" : "calc_genoprob_ri4self(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 90,
+                "name" : "calc_genoprob_special_ri4self(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 98,
+                "name" : "argmax_geno_ri4self(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 105,
+                "name" : "sim_geno_ri4self(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 114,
+                "name" : "est_map_ri4self(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_ri4self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 132,
+                "name" : "nrec2_ri4self(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_ri4self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 153,
+                "name" : "logprec_ri4self(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 173,
+                "name" : "est_rf_ri4self(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 180,
+                "name" : "marker_loglik_ri4self(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 187,
+                "name" : "calc_pairprob_ri4self(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_ri4self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 195,
+                "name" : "errorlod_ri4self(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_ri4self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+                "kind" : 6,
+                "line" : 216,
+                "name" : "calc_errorlod_ri4self(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_ri4self"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4self.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 50,
+                "name" : "init_ri4sib(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_ri4sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "emit_ri4sib(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_ri4sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 63,
+                "name" : "step_ri4sib(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_ri4sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 73,
+                "name" : "step_special_ri4sib(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_special_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 82,
+                "name" : "calc_genoprob_ri4sib(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 89,
+                "name" : "calc_genoprob_special_ri4sib(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 97,
+                "name" : "argmax_geno_ri4sib(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 104,
+                "name" : "sim_geno_ri4sib(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 112,
+                "name" : "est_map_ri4sib(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_ri4sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 130,
+                "name" : "nrec2_ri4sib(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_ri4sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 151,
+                "name" : "logprec_ri4sib(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 171,
+                "name" : "est_rf_ri4sib(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 178,
+                "name" : "marker_loglik_ri4sib(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 185,
+                "name" : "calc_pairprob_ri4sib(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_ri4sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 193,
+                "name" : "errorlod_ri4sib(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_ri4sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+                "kind" : 6,
+                "line" : 214,
+                "name" : "calc_errorlod_ri4sib(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_ri4sib"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri4sib.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 50,
+                "name" : "init_ri8self(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_ri8self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "emit_ri8self(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_ri8self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 62,
+                "name" : "step_ri8self(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_ri8self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 76,
+                "name" : "step_special_ri8self(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_special_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 94,
+                "name" : "calc_genoprob_ri8self(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 101,
+                "name" : "calc_genoprob_special_ri8self(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 108,
+                "name" : "argmax_geno_ri8self(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 115,
+                "name" : "sim_geno_ri8self(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 123,
+                "name" : "est_map_ri8self(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_ri8self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 141,
+                "name" : "nrec2_ri8self(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_ri8self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 188,
+                "name" : "logprec_ri8self(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 231,
+                "name" : "est_rf_ri8self(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 238,
+                "name" : "marker_loglik_ri8self(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 245,
+                "name" : "calc_pairprob_ri8self(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_ri8self"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 253,
+                "name" : "errorlod_ri8self(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_ri8self"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+                "kind" : 6,
+                "line" : 274,
+                "name" : "calc_errorlod_ri8self(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_ri8self"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8self.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 52,
+                "name" : "init_ri8selfIRIP1(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_ri8selfIRIP1"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 57,
+                "name" : "emit_ri8selfIRIP1(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_ri8selfIRIP1"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 64,
+                "name" : "step_ri8selfIRIP1(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 75,
+                "name" : "calc_genoprob_ri8selfIRIP1(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 82,
+                "name" : "calc_genoprob_special_ri8selfIRIP1(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 89,
+                "name" : "argmax_geno_ri8selfIRIP1(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 96,
+                "name" : "sim_geno_ri8IRIP1(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_ri8IRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 104,
+                "name" : "est_map_ri8IRIP1(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_ri8IRIP1"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 114,
+                "name" : "nrec2_ri8selfIRIP1(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_ri8selfIRIP1"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 145,
+                "name" : "logprec_ri8selfIRIP1(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 173,
+                "name" : "est_rf_ri8selfIRIP1(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 180,
+                "name" : "marker_loglik_ri8selfIRIP1(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 187,
+                "name" : "calc_pairprob_ri8selfIRIP1(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_ri8selfIRIP1"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 195,
+                "name" : "errorlod_ri8selfIRIP1(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_ri8selfIRIP1"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+                "kind" : 6,
+                "line" : 216,
+                "name" : "calc_errorlod_ri8selfIRIP1(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_ri8selfIRIP1"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8selfIRIP1.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 51,
+                "name" : "init_ri8sib(int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_ri8sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 56,
+                "name" : "emit_ri8sib(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@emit_ri8sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 64,
+                "name" : "step_ri8sib(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_ri8sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 74,
+                "name" : "step_special_ri8sib(int, int, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_special_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 83,
+                "name" : "calc_genoprob_ri8sib(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 91,
+                "name" : "calc_genoprob_special_ri8sib(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_genoprob_special_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 99,
+                "name" : "argmax_geno_ri8sib(int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@argmax_geno_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 107,
+                "name" : "sim_geno_ri8sib(int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_geno_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 115,
+                "name" : "est_map_ri8sib(int *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_map_ri8sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 134,
+                "name" : "nrec2_ri8sib(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec2_ri8sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 155,
+                "name" : "logprec_ri8sib(int, int, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@logprec_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 175,
+                "name" : "est_rf_ri8sib(int *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@est_rf_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 182,
+                "name" : "marker_loglik_ri8sib(int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@marker_loglik_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 189,
+                "name" : "calc_pairprob_ri8sib(int *, int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_pairprob_ri8sib"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 197,
+                "name" : "errorlod_ri8sib(int, double *, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@errorlod_ri8sib"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+                "kind" : 6,
+                "line" : 218,
+                "name" : "calc_errorlod_ri8sib(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_errorlod_ri8sib"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_ri8sib.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+                "kind" : 6,
+                "line" : 38,
+                "name" : "init_stepf(double *, double *, int, int, int *, double (*)(int, int, double, double, int *), double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_stepf"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "stepfc(int, int, int, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@stepfc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+                "kind" : 6,
+                "line" : 67,
+                "name" : "forward_prob(int, int, int, int, int *, double, int **, double **, double **, double (*)(int, int *), double (*)(int, int, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@forward_prob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+                "kind" : 6,
+                "line" : 104,
+                "name" : "backward_prob(int, int, int, int, int *, double, int **, double **, double **, double (*)(int, int *), double (*)(int, int, double, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@backward_prob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+                "kind" : 6,
+                "line" : 146,
+                "name" : "calc_probfb(int, int, int, int, double **, double **, double ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_probfb"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+                "kind" : 6,
+                "line" : 171,
+                "name" : "golden_search(double *, int, int, double, int *, double (*)(double, int, double *, int *))",
+                "parent_name" : "",
+                "usr" : "c:@F@golden_search"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/hmm_util.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.c",
+                "kind" : 6,
+                "line" : 40,
+                "name" : "R_inferFounderHap(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_inferFounderHap"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "inferFounderHap(int, int, int, int **, int **, int, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@inferFounderHap"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.c",
+                "kind" : 6,
+                "line" : 121,
+                "name" : "whichUnique(unsigned int *, int, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@whichUnique"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.c",
+                "kind" : 6,
+                "line" : 164,
+                "name" : "restoreMWrilGeno(int, int, int, int **, int **, int **, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@restoreMWrilGeno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.c",
+                "kind" : 6,
+                "line" : 191,
+                "name" : "R_restoreMWrilGeno(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_restoreMWrilGeno"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/inferFounderHap.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/info.c",
+                "kind" : 6,
+                "line" : 67,
+                "name" : "R_info(int *, int *, int *, double *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_info"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/info.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/info.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/lapackutil.c",
+                "kind" : 6,
+                "line" : 43,
+                "name" : "mydgelss(int *, int *, int *, double *, double *, double *, double *, double *, double *, int *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@mydgelss"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/lapackutil.c",
+                "kind" : 6,
+                "line" : 80,
+                "name" : "mydgemm(int *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@mydgemm"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/lapackutil.c",
+                "kind" : 6,
+                "line" : 88,
+                "name" : "mydpotrf(int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@mydpotrf"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/lapackutil.c",
+                "kind" : 6,
+                "line" : 94,
+                "name" : "mydpotrs(char *, int *, int *, double *, int *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@mydpotrs"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/lapackutil.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/lapackutil.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/markerlrt.c",
+                "kind" : 6,
+                "line" : 41,
+                "name" : "R_markerlrt(int *, int *, int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_markerlrt"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/markerlrt.c",
+                "kind" : 6,
+                "line" : 54,
+                "name" : "markerlrt(int, int, int **, int, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@markerlrt"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/markerlrt.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/markerlrt.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqm.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.cpp",
+                "kind" : 6,
+                "line" : 60,
+                "name" : "calculate_augmentation(const int, const int, const MQMMarkerMatrix, const MQMCrossType)",
+                "parent_name" : "",
+                "usr" : "c:@F@calculate_augmentation"
+            },
+            {
+                "column" : 11,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.cpp",
+                "kind" : 6,
+                "line" : 100,
+                "name" : "randommarker(const MQMCrossType)",
+                "parent_name" : "",
+                "usr" : "c:@F@randommarker"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.cpp",
+                "kind" : 6,
+                "line" : 136,
+                "name" : "mqmaugmentfull(MQMMarkerMatrix *, int *, int *, ivector *, double, int, int, const matrix *, const int, const ivector, const vector, const int, const MQMCrossType, const int)",
+                "parent_name" : "",
+                "usr" : "c:@F@mqmaugmentfull"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.cpp",
+                "kind" : 6,
+                "line" : 257,
+                "name" : "mqmaugment(const MQMMarkerMatrix, const vector, MQMMarkerMatrix *, vector *, ivector *, ivector *, int *, int *, const int, const cvector, vector, const int, const int, const double, const MQMCrossType, const int)",
+                "parent_name" : "",
+                "usr" : "c:@F@mqmaugment"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.cpp",
+                "kind" : 6,
+                "line" : 633,
+                "name" : "R_mqmaugment(int *, double *, double *, int *, double *, int *, int *, int *, int *, int *, int *, int *, double *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_mqmaugment"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmaugment.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 14,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 37,
+                "name" : "determine_MQMCross(const int, const int, const int **, const RqtlCrossType)",
+                "parent_name" : "",
+                "usr" : "c:@F@determine_MQMCross"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 79,
+                "name" : "change_coding(int *, int *, int **, MQMMarkerMatrix, const MQMCrossType)",
+                "parent_name" : "",
+                "usr" : "c:@F@change_coding"
+            },
+            {
+                "column" : 7,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 109,
+                "name" : "calloc_init(size_t, size_t)",
+                "parent_name" : "",
+                "usr" : "c:@F@calloc_init"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 115,
+                "name" : "newvector(int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newvector"
+            },
+            {
+                "column" : 9,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 121,
+                "name" : "newivector(int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newivector"
+            },
+            {
+                "column" : 9,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 127,
+                "name" : "newcvector(int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newcvector"
+            },
+            {
+                "column" : 17,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 133,
+                "name" : "newMQMMarkerVector(int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newMQMMarkerVector"
+            },
+            {
+                "column" : 16,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 139,
+                "name" : "newRelMarkerPos(int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newRelMarkerPos"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 145,
+                "name" : "newmatrix(int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newmatrix"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 154,
+                "name" : "printmatrix(matrix, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@printmatrix"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 163,
+                "name" : "printcmatrix(cmatrix, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@printcmatrix"
+            },
+            {
+                "column" : 9,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 172,
+                "name" : "newcmatrix(int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newcmatrix"
+            },
+            {
+                "column" : 17,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 182,
+                "name" : "newMQMMarkerMatrix(int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@newMQMMarkerMatrix"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 191,
+                "name" : "copyvector(vector, vector, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@copyvector"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 198,
+                "name" : "fatal(const char *, ...)",
+                "parent_name" : "",
+                "usr" : "c:@F@fatal#*1C.#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 201,
+                "name" : "debug_trace(const char *, ...)",
+                "parent_name" : "",
+                "usr" : "c:@F@debug_trace"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+                "kind" : 6,
+                "line" : 202,
+                "name" : "info(const char *, ...)",
+                "parent_name" : "",
+                "usr" : "c:@F@info"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmdatatypes.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmeliminate.cpp",
+                "kind" : 6,
+                "line" : 40,
+                "name" : "backward(int, int, cvector, MQMMarkerMatrix, vector, vector, int *, int, double, double, double, double, cvector *, vector, cvector, vector *, vector *, matrix *, int, char, bool, bool, int, double, double, double, double, MQMCrossType, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@backward"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmeliminate.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmeliminate.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmapqtl.cpp",
+                "kind" : 6,
+                "line" : 36,
+                "name" : "mapQTL(int, int, cvector, cvector, MQMMarkerMatrix, cvector, vector, vector, vector, ivector, int, double, char, vector *, matrix *, int, char, bool, bool, int, double, double, double, double, MQMCrossType, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@mapQTL"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmapqtl.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmapqtl.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmixture.cpp",
+                "kind" : 6,
+                "line" : 41,
+                "name" : "rmixture(MQMMarkerMatrix, vector, vector, cvector, ivector, int, int, int, vector *, char, MQMCrossType, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@rmixture"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmixture.cpp",
+                "kind" : 6,
+                "line" : 141,
+                "name" : "QTLmixture(MQMMarkerMatrix, cvector, vector, cvector, vector, ivector, int, int, int, double *, int, vector *, const bool, const bool, const bool, MQMCrossType, bool *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@QTLmixture"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmixture.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmmixture.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 9,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 36,
+                "name" : "relative_marker_position(const unsigned int, const ivector)",
+                "parent_name" : "",
+                "usr" : "c:@F@relative_marker_position"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 66,
+                "name" : "recombination_frequencies(const unsigned int, const cvector, const vector)",
+                "parent_name" : "",
+                "usr" : "c:@F@recombination_frequencies"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 82,
+                "name" : "recombination_frequentie(const double)",
+                "parent_name" : "",
+                "usr" : "c:@F@recombination_frequentie"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 92,
+                "name" : "validate_markertype(const MQMCrossType, const char)",
+                "parent_name" : "",
+                "usr" : "c:@F@validate_markertype"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 117,
+                "name" : "start_prob(const MQMCrossType, MQMMarker)",
+                "parent_name" : "",
+                "usr" : "c:@F@start_prob"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 170,
+                "name" : "left_prob(const double, const MQMMarker, const MQMMarker, const MQMCrossType)",
+                "parent_name" : "",
+                "usr" : "c:@F@left_prob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 216,
+                "name" : "is_knownMarker(const char, const MQMCrossType)",
+                "parent_name" : "",
+                "usr" : "c:@F@is_knownMarker"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 240,
+                "name" : "right_prob_F2(const char, const int, const MQMMarkerVector, const vector, const cvector)",
+                "parent_name" : "",
+                "usr" : "c:@F@right_prob_F2"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 317,
+                "name" : "right_prob_BC(const char, const int, const MQMMarkerVector, const vector, const cvector)",
+                "parent_name" : "",
+                "usr" : "c:@F@right_prob_BC"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+                "kind" : 6,
+                "line" : 345,
+                "name" : "right_prob_RIL(const char, const int, const MQMMarkerVector, const vector, const cvector)",
+                "parent_name" : "",
+                "usr" : "c:@F@right_prob_RIL"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmprob.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.cpp",
+                "kind" : 6,
+                "line" : 43,
+                "name" : "designmatrixdimensions(const cvector, const unsigned int, const bool)",
+                "parent_name" : "",
+                "usr" : "c:@F@designmatrixdimensions"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.cpp",
+                "kind" : 6,
+                "line" : 54,
+                "name" : "regression(int, int, cvector, MQMMarkerMatrix, vector, vector *, ivector, int, double *, vector, bool, bool, bool, bool)",
+                "parent_name" : "",
+                "usr" : "c:@F@regression"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.cpp",
+                "kind" : 6,
+                "line" : 298,
+                "name" : "ludcmp(matrix, int, ivector, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@ludcmp"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.cpp",
+                "kind" : 6,
+                "line" : 343,
+                "name" : "lusolve(matrix, int, ivector, vector)",
+                "parent_name" : "",
+                "usr" : "c:@F@lusolve"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.cpp",
+                "kind" : 6,
+                "line" : 361,
+                "name" : "inverseF(int, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@inverseF"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmregression.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 12,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 34,
+                "name" : "mqmmod(int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@mqmmod"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 41,
+                "name" : "ftruncate(double, double)",
+                "parent_name" : "",
+                "usr" : "c:mqmscan.cpp@F@ftruncate#d#d#"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 56,
+                "name" : "ftruncate3(double)",
+                "parent_name" : "",
+                "usr" : "c:@F@ftruncate3"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 60,
+                "name" : "Lnormal(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@Lnormal"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 67,
+                "name" : "reorg_pheno(int, int, double *, double ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_pheno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 77,
+                "name" : "reorg_int(int, int, int *, int ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_int"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 94,
+                "name" : "analyseF2(int, int *, cvector *, MQMMarkerMatrix, vector, int, double **, vector *, int **, int, int, double, double, double, double, double, int, int, int **, char, MQMCrossType, bool, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@analyseF2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 310,
+                "name" : "mqmscan(int, int, int, int **, int **, double **, double **, int **, int, int, double, int, double, double, double, double, int, int, int **, double **, int, RqtlCrossType, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@mqmscan"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+                "kind" : 6,
+                "line" : 377,
+                "name" : "R_mqmscan(int *, int *, int *, int *, int *, double *, double *, int *, int *, int *, double *, int *, double *, double *, double *, double *, int *, int *, int *, double *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_mqmscan"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.cpp",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/mqmscan.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/pickMarkerSubset.c",
+                "kind" : 6,
+                "line" : 41,
+                "name" : "R_pickMarkerSubset(double *, int *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_pickMarkerSubset"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/pickMarkerSubset.c",
+                "kind" : 6,
+                "line" : 50,
+                "name" : "pickMarkerSubset(double *, int, double *, double, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@pickMarkerSubset"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/pickMarkerSubset.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/pickMarkerSubset.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+                "kind" : 6,
+                "line" : 50,
+                "name" : "reorgRIgenoprob(int, int, int, double ***, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorgRIgenoprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+                "kind" : 6,
+                "line" : 70,
+                "name" : "R_reorgRIgenoprob(int *, int *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_reorgRIgenoprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+                "kind" : 6,
+                "line" : 90,
+                "name" : "reorgRIdraws(int, int, int, int, int ***, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorgRIdraws"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+                "kind" : 6,
+                "line" : 102,
+                "name" : "R_reorgRIdraws(int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_reorgRIdraws"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+                "kind" : 6,
+                "line" : 120,
+                "name" : "reorgRIpairprob(int, int, int, double *****, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorgRIpairprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+                "kind" : 6,
+                "line" : 146,
+                "name" : "R_reorgRIpairprob(int *, int *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_reorgRIpairprob"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ril48_reorg.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 75,
+                "name" : "ripple(int, int, int *, int, int *, int *, int, int (*)(int *, int))",
+                "parent_name" : "",
+                "usr" : "c:@F@ripple"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 114,
+                "name" : "R_ripple_bc(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_ripple_bc"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 131,
+                "name" : "countxo_bc(int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@countxo_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 158,
+                "name" : "R_ripple_f2(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_ripple_f2"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 175,
+                "name" : "countxo_f2(int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@countxo_f2"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 237,
+                "name" : "R_ripple_4way(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_ripple_4way"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 254,
+                "name" : "countxo_4way(int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@countxo_4way"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 555,
+                "name" : "R_ripple_ril48(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_ripple_ril48"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+                "kind" : 6,
+                "line" : 572,
+                "name" : "countxo_ril48(int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@countxo_ril48"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/ripple.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_ehk.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "R_scanone_ehk(int *, int *, int *, double *, double *, int *, double *, int *, double *, double *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_ehk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_ehk.c",
+                "kind" : 6,
+                "line" : 107,
+                "name" : "scanone_ehk(int, int, int, double ***, double **, int, double **, int, double *, double *, double *, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_ehk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_ehk.c",
+                "kind" : 6,
+                "line" : 364,
+                "name" : "calc_mvz(int, int, int, double ***, double **, int, double **, int, double *, double *, double *, double, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@calc_mvz"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_ehk.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_ehk.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em.c",
+                "kind" : 6,
+                "line" : 52,
+                "name" : "R_scanone_em(int *, int *, int *, double *, double *, int *, double *, int *, double *, double *, double *, int *, double *, int *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em.c",
+                "kind" : 6,
+                "line" : 129,
+                "name" : "scanone_em(int, int, int, double ***, double *, double *, double *, int, double *, int, double, double **, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_em"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em_covar.c",
+                "kind" : 6,
+                "line" : 91,
+                "name" : "scanone_em_covar(int, int, int, double ***, double **, int, double **, int, double *, double *, double *, int, double, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_em_covar"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em_covar.c",
+                "kind" : 6,
+                "line" : 266,
+                "name" : "mstep_em_covar(int, int, double **, int, double **, int, double *, double *, double **, double *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@mstep_em_covar"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em_covar.c",
+                "kind" : 6,
+                "line" : 385,
+                "name" : "estep_em_covar(int, int, int, double ***, double **, int, double **, int, double *, double *, double **, double *, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@estep_em_covar"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em_covar.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_em_covar.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "R_scanone_hk(int *, int *, int *, double *, double *, int *, double *, int *, double *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk.c",
+                "kind" : 6,
+                "line" : 113,
+                "name" : "scanone_hk(int, int, int, double ***, double **, int, double **, int, double *, int, double *, double **, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_hk"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk_binary.c",
+                "kind" : 6,
+                "line" : 52,
+                "name" : "R_scanone_hk_binary(int *, int *, int *, double *, double *, int *, double *, int *, double *, double *, double *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_hk_binary"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk_binary.c",
+                "kind" : 6,
+                "line" : 110,
+                "name" : "scanone_hk_binary(int, int, int, double ***, double **, int, double **, int, double *, double *, double, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_hk_binary"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk_binary.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_hk_binary.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_imp.c",
+                "kind" : 6,
+                "line" : 56,
+                "name" : "R_scanone_imp(int *, int *, int *, int *, int *, double *, int *, double *, int *, double *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_imp"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_imp.c",
+                "kind" : 6,
+                "line" : 120,
+                "name" : "scanone_imp(int, int, int, int, int ***, double **, int, double **, int, double *, int, double *, double **, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_imp"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_imp.c",
+                "kind" : 6,
+                "line" : 251,
+                "name" : "nullRss(double *, double *, int, int, double **, int, double *, int, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nullRss"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_imp.c",
+                "kind" : 6,
+                "line" : 396,
+                "name" : "altRss1(double *, double *, int, int, int, int *, double **, int, double **, int, double *, int, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@altRss1"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_imp.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_imp.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_mr.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "R_scanone_mr(int *, int *, int *, int *, double *, int *, double *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_mr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_mr.c",
+                "kind" : 6,
+                "line" : 101,
+                "name" : "scanone_mr(int, int, int, int **, double **, int, double **, int, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_mr"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_mr.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_mr.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_np.c",
+                "kind" : 6,
+                "line" : 51,
+                "name" : "R_scanone_np(int *, int *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scanone_np"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_np.c",
+                "kind" : 6,
+                "line" : 85,
+                "name" : "scanone_np(int, int, int, double ***, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scanone_np"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_np.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scanone_np.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 57,
+                "name" : "R_scantwo_1chr_binary_em(int *, int *, int *, double *, double *, int *, double *, int *, int *, double *, double *, int *, double *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_1chr_binary_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 125,
+                "name" : "scantwo_1chr_binary_em(int, int, int, double *****, double **, int, double **, int, int *, double *, double **, int, double, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_1chr_binary_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 294,
+                "name" : "R_scantwo_2chr_binary_em(int *, int *, int *, int *, int *, double *, double *, double *, int *, double *, int *, int *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_2chr_binary_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 375,
+                "name" : "scantwo_2chr_binary_em(int, int, int, int, int, double ***, double ***, double **, int, double **, int, int *, double *, double **, double **, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_2chr_binary_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 548,
+                "name" : "scantwo_binary_em_mstep(int, int, int, double **, int, double **, int, int *, double ***, double *, int, int, int *, int, int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_binary_em_mstep"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 907,
+                "name" : "scantwo_binary_em_estep(int, int, int, double ***, double ***, double **, int, double **, int, int *, double *, int, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_binary_em_estep"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+                "kind" : 6,
+                "line" : 1014,
+                "name" : "scantwo_binary_em_loglik(int, int, int, double ***, double **, int, double **, int, int *, double *, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_binary_em_loglik"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_em.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_hk.c",
+                "kind" : 6,
+                "line" : 53,
+                "name" : "R_scantwo_1chr_binary_hk(int *, int *, int *, double *, double *, double *, int *, double *, int *, double *, double *, int *, int *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_1chr_binary_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_hk.c",
+                "kind" : 6,
+                "line" : 121,
+                "name" : "scantwo_1chr_binary_hk(int, int, int, double ***, double *****, double **, int, double **, int, double *, double **, int, int *, double, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_1chr_binary_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_hk.c",
+                "kind" : 6,
+                "line" : 401,
+                "name" : "R_scantwo_2chr_binary_hk(int *, int *, int *, int *, int *, double *, double *, double *, int *, double *, int *, double *, double *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_2chr_binary_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_hk.c",
+                "kind" : 6,
+                "line" : 472,
+                "name" : "scantwo_2chr_binary_hk(int, int, int, int, int, double ***, double ***, double **, int, double **, int, double *, double **, double **, double, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_2chr_binary_hk"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_hk.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_binary_hk.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "R_scantwo_1chr_em(int *, int *, int *, double *, double *, int *, double *, int *, double *, double *, double *, int *, double *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_1chr_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 129,
+                "name" : "scantwo_1chr_em(int, int, int, double *****, double **, int, double **, int, double *, double *, double **, int, double, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_1chr_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 322,
+                "name" : "R_scantwo_2chr_em(int *, int *, int *, int *, int *, double *, double *, double *, int *, double *, int *, double *, double *, double *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_2chr_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 405,
+                "name" : "scantwo_2chr_em(int, int, int, int, int, double ***, double ***, double **, int, double **, int, double *, double *, double **, double **, int, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_2chr_em"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 616,
+                "name" : "scantwo_em_mstep(int, int, int, double **, int, double **, int, double *, double *, double ***, double **, double **, double *, int, double *, double *, int *, int, int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_em_mstep"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 862,
+                "name" : "scantwo_em_estep(int, int, int, double ***, double ***, double **, double **, double **, int, double **, int, double *, double *, double *, int, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_em_estep"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+                "kind" : 6,
+                "line" : 980,
+                "name" : "scantwo_em_loglik(int, int, int, double ***, double ***, double **, double **, double **, int, double **, int, double *, double *, double *, int, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_em_loglik"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_em.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_hk.c",
+                "kind" : 6,
+                "line" : 54,
+                "name" : "R_scantwo_1chr_hk(int *, int *, int *, double *, double *, double *, int *, double *, int *, double *, int *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_1chr_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_hk.c",
+                "kind" : 6,
+                "line" : 125,
+                "name" : "scantwo_1chr_hk(int, int, int, double ***, double *****, double **, int, double **, int, double *, int, double *, double ***, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_1chr_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_hk.c",
+                "kind" : 6,
+                "line" : 413,
+                "name" : "R_scantwo_2chr_hk(int *, int *, int *, int *, int *, double *, double *, double *, int *, double *, int *, double *, int *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_2chr_hk"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_hk.c",
+                "kind" : 6,
+                "line" : 486,
+                "name" : "scantwo_2chr_hk(int, int, int, int, int, double ***, double ***, double **, int, double **, int, double *, int, double *, double ***, double ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_2chr_hk"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_hk.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_hk.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_imp.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "R_scantwo_imp(int *, int *, int *, int *, int *, int *, int *, int *, int *, double *, int *, double *, int *, double *, int *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_imp"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_imp.c",
+                "kind" : 6,
+                "line" : 133,
+                "name" : "scantwo_imp(int, int, int, int, int, int, int, int ***, int ***, double **, int, double **, int, double *, int, double *, double *, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_imp"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_imp.c",
+                "kind" : 6,
+                "line" : 349,
+                "name" : "altRss2(double *, double *, int, int, int, int, int *, int *, double **, int, double **, int, double *, double *, double *, int, double *, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@altRss2"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_imp.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_imp.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_mr.c",
+                "kind" : 6,
+                "line" : 54,
+                "name" : "R_scantwo_1chr_mr(int *, int *, int *, int *, double *, int *, double *, int *, double *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_1chr_mr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_mr.c",
+                "kind" : 6,
+                "line" : 117,
+                "name" : "scantwo_1chr_mr(int, int, int, int **, double **, int, double **, int, double *, double *, double **, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_1chr_mr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_mr.c",
+                "kind" : 6,
+                "line" : 330,
+                "name" : "R_scantwo_2chr_mr(int *, int *, int *, int *, int *, int *, int *, double *, int *, double *, int *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwo_2chr_mr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_mr.c",
+                "kind" : 6,
+                "line" : 401,
+                "name" : "scantwo_2chr_mr(int, int, int, int, int, int **, int **, double **, int, double **, int, double *, double *, double **, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwo_2chr_mr"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_mr.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwo_mr.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 22,
+                "name" : "R_scantwopermhk_1chr(int *, int *, int *, double *, double *, double *, int *, double *, int *, int *, double *, double *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwopermhk_1chr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "scantwopermhk_1chr_nocovar(int, int, int, double ***, double *****, double *, int, int **, double *, double **, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwopermhk_1chr_nocovar"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 104,
+                "name" : "scantwopermhk_1chr(int, int, int, double ***, double *****, double **, int, double *, int, int **, double *, double **, int, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwopermhk_1chr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 156,
+                "name" : "R_scantwopermhk_2chr(int *, int *, int *, int *, int *, double *, double *, double *, int *, double *, int *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_scantwopermhk_2chr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 188,
+                "name" : "scantwopermhk_2chr_nocovar(int, int, int, int, int, double ***, double ***, double *, int, int **, double *, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwopermhk_2chr_nocovar"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 252,
+                "name" : "scantwopermhk_2chr(int, int, int, int, int, double ***, double ***, double **, int, double *, int, int **, double *, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@scantwopermhk_2chr"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 319,
+                "name" : "fill_phematrix(int, int, double *, int **, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@fill_phematrix"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 329,
+                "name" : "fill_covar_and_phe(int, int *, double *, double **, int, double *, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@fill_covar_and_phe"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 341,
+                "name" : "create_zero_vector(int **, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@create_zero_vector"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 351,
+                "name" : "min3d(int, int, int, double ***, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@min3d"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 368,
+                "name" : "min2d(int, int, double **, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@min2d"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 383,
+                "name" : "min3d_uppertri(int, int, double ***, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@min3d_uppertri"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+                "kind" : 6,
+                "line" : 400,
+                "name" : "min3d_lowertri(int, int, double ***, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@min3d_lowertri"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/scantwopermhk.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate.c",
+                "kind" : 6,
+                "line" : 49,
+                "name" : "R_sim_bc_ni(int *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_sim_bc_ni"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate.c",
+                "kind" : 6,
+                "line" : 71,
+                "name" : "sim_bc_ni(int, int, double *, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_bc_ni"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate.c",
+                "kind" : 6,
+                "line" : 99,
+                "name" : "R_sim_bc(int *, int *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_sim_bc"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate.c",
+                "kind" : 6,
+                "line" : 124,
+                "name" : "sim_bc(int, int, double *, int, double, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_bc"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 45,
+                "name" : "R_sim_ril(int *, int *, int *, double *, int *, int *, double *, int *, int *, int *, int *, int *, int *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_sim_ril"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 98,
+                "name" : "sim_ril(int, int *, int, double *, int, int, double, int, int, int, int *, int *, int *, double, double, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sim_ril"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 278,
+                "name" : "allocate_individual(struct individual *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_individual"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 294,
+                "name" : "reallocate_individual(struct individual *, int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@reallocate_individual"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 314,
+                "name" : "copy_individual(struct individual *, struct individual *)",
+                "parent_name" : "",
+                "usr" : "c:@F@copy_individual"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 365,
+                "name" : "docross(struct individual, struct individual, struct individual *, double, int, double, int, int *, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@docross"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 500,
+                "name" : "meiosis(double, int, double, int *, double **, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@meiosis"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 567,
+                "name" : "R_meiosis(double *, int *, double *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_meiosis"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 599,
+                "name" : "convertMWril(int, int, int, int **, int **, int **, int, double, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@convertMWril"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+                "kind" : 6,
+                "line" : 634,
+                "name" : "R_convertMWril(int *, int *, int *, int *, int *, int *, int *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_convertMWril"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.h",
+                "kind" : 3,
+                "line" : 35,
+                "name" : "individual",
+                "parent_name" : "",
+                "usr" : "c:@S@individual"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/simulate_ril.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.c",
+                "kind" : 6,
+                "line" : 55,
+                "name" : "R_mf_stahl(int *, double *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_mf_stahl"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.c",
+                "kind" : 6,
+                "line" : 70,
+                "name" : "mf_stahl(double, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@mf_stahl"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.c",
+                "kind" : 6,
+                "line" : 96,
+                "name" : "R_imf_stahl(int *, double *, int *, double *, double *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_imf_stahl"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.c",
+                "kind" : 6,
+                "line" : 115,
+                "name" : "imf_stahl(double, int, double, double, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@imf_stahl"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.c",
+                "kind" : 6,
+                "line" : 140,
+                "name" : "imf_stahl_sub(double, struct imf_stahl_data *)",
+                "parent_name" : "",
+                "usr" : "c:@F@imf_stahl_sub"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.h",
+                "kind" : 3,
+                "line" : 37,
+                "name" : "imf_stahl_data",
+                "parent_name" : "",
+                "usr" : "c:@S@imf_stahl_data"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/stahl_mf.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/standalone.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/summary_scantwo.c",
+                "kind" : 6,
+                "line" : 49,
+                "name" : "R_summary_scantwo(int *, int *, double *, int *, int *, double *, int *, double *, int *, int *, int *, int *, double *, double *, double *, double *, double *, double *, double *, double *, double *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_summary_scantwo"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/summary_scantwo.c",
+                "kind" : 6,
+                "line" : 143,
+                "name" : "summary_scantwo(int, int, double ***, int, int *, double *, int *, double **, int, int **, double **, double **, double **, double **, double **, double **, double **, double **, double **, double **, double **, double **, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@summary_scantwo"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/summary_scantwo.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/summary_scantwo.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/test_bcsft.c",
+                "kind" : 6,
+                "line" : 56,
+                "name" : "step_wrap(int *, int *, double *, int *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@step_wrap"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/test_bcsft.c",
+                "kind" : 6,
+                "line" : 67,
+                "name" : "init_wrap(int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@init_wrap"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/test_bcsft.c",
+                "kind" : 6,
+                "line" : 80,
+                "name" : "nrec_wrap(int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@nrec_wrap"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/test_bcsft.c",
+                "kind" : 6,
+                "line" : 88,
+                "name" : "rf_wrap(int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@rf_wrap"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/test_bcsft.c",
+                "kind" : 6,
+                "line" : 96,
+                "name" : "bcsft_wrap(double *, int *, double *, double *, double *, double *, double *, double *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@bcsft_wrap"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/test_bcsft.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 59,
+                "name" : "addlog(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@addlog"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 76,
+                "name" : "subtrlog(double, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@subtrlog"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 94,
+                "name" : "reorg_geno(int, int, int *, int ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_geno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 118,
+                "name" : "reorg_genoprob(int, int, int, double *, double ****)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_genoprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 153,
+                "name" : "reorg_pairprob(int, int, int, double *, double ******)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_pairprob"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 199,
+                "name" : "allocate_alpha(int, int, double ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_alpha"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 223,
+                "name" : "reorg_draws(int, int, int, int *, int ****)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_draws"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 250,
+                "name" : "allocate_double(int, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_double"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 264,
+                "name" : "allocate_int(int, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_int"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 278,
+                "name" : "allocate_uint(int, unsigned int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_uint"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 292,
+                "name" : "allocate_dmatrix(int, int, double ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_dmatrix"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 313,
+                "name" : "allocate_imatrix(int, int, int ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@allocate_imatrix"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 332,
+                "name" : "sample_int(int, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@sample_int"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 358,
+                "name" : "reorg_errlod(int, int, double *, double ***)",
+                "parent_name" : "",
+                "usr" : "c:@F@reorg_errlod"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 383,
+                "name" : "double_permute(double *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@double_permute"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 410,
+                "name" : "int_permute(int *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@int_permute"
+            },
+            {
+                "column" : 5,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 436,
+                "name" : "random_int(int, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@random_int"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 445,
+                "name" : "wtaverage(double *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@wtaverage"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 490,
+                "name" : "comparegeno(int **, int, int, int **, int **)",
+                "parent_name" : "",
+                "usr" : "c:@F@comparegeno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 520,
+                "name" : "R_comparegeno(int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_comparegeno"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 544,
+                "name" : "R_locate_xo(int *, int *, int *, int *, double *, double *, int *, int *, int *, double *, double *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_locate_xo"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 571,
+                "name" : "locate_xo(int, int, int, int **, double *, double **, int *, int **, int **, double **, double **, int **, int **, int **, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@locate_xo"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 717,
+                "name" : "matmult(double *, double *, int, int, double *, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@matmult"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 745,
+                "name" : "expand_col2drop(int, int, int, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@expand_col2drop"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 781,
+                "name" : "dropcol_xpx(int *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@dropcol_xpx"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 800,
+                "name" : "dropcol_xpy(int, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@dropcol_xpy"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 812,
+                "name" : "dropcol_x(int *, int, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@dropcol_x"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 848,
+                "name" : "reviseMWril(int, int, int, int **, int **, int **, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@reviseMWril"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 890,
+                "name" : "reviseMWrilNoCross(int, int, int, int **, int **, int)",
+                "parent_name" : "",
+                "usr" : "c:@F@reviseMWrilNoCross"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 915,
+                "name" : "R_reviseMWril(int *, int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_reviseMWril"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 930,
+                "name" : "R_reviseMWrilNoCross(int *, int *, int *, int *, int *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_reviseMWrilNoCross"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 944,
+                "name" : "R_calcPermPval(double *, int *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_calcPermPval"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+                "kind" : 6,
+                "line" : 957,
+                "name" : "calcPermPval(double **, int, int, double **, int, double **)",
+                "parent_name" : "",
+                "usr" : "c:@F@calcPermPval"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/util.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/vbscan.c",
+                "kind" : 6,
+                "line" : 42,
+                "name" : "vbscan(int, int, int, double *, double *, int *, double *, int, double)",
+                "parent_name" : "",
+                "usr" : "c:@F@vbscan"
+            },
+            {
+                "column" : 6,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/vbscan.c",
+                "kind" : 6,
+                "line" : 292,
+                "name" : "R_vbscan(int *, int *, int *, double *, double *, int *, double *, int *, double *)",
+                "parent_name" : "",
+                "usr" : "c:@F@R_vbscan"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/vbscan.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/vbscan.h",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/zeroin.c",
+                "kind" : 6,
+                "line" : 87,
+                "name" : "Rqtl_zeroin(double, double, double (*)(double, void *), void *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@Rqtl_zeroin"
+            },
+            {
+                "column" : 8,
+                "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/zeroin.c",
+                "kind" : 6,
+                "line" : 103,
+                "name" : "Rqtl_zeroin2(double, double, double, double, double (*)(double, void *), void *, double *, int *)",
+                "parent_name" : "",
+                "usr" : "c:@F@Rqtl_zeroin2"
+            }
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/zeroin.c",
+        "file_last_write" : 1427125254
+    },
+    {
+        "definitions" : [
+        ],
+        "file" : "/Users/rcorty/Dropbox (ValdarLab)/qtl/src/zeroin.h",
+        "file_last_write" : 1427125254
+    }
+]

@@ -42,13 +42,8 @@ fitplot.scanonevar <- function (cross, name.of.marker.to.plot, varscan) {
 	if(is.null(phen)) { stop('Phenotype of scan not found in cross')}
 
 	# pull out genotypes at the marker to plot
-	idx.of.chr.with.marker <- which(sapply(X = cross$geno,
-																				 FUN = function(x, mn) { mn %in% colnames(x$data)},
-																				 name.of.marker.to.plot))
-	name.of.chr.with.marker <- names(cross$geno)[idx.of.chr.with.marker]
-	if (length(name.of.chr.with.marker) == 0) {	stop('Marker not found.')	}
-	if (length(name.of.chr.with.marker) >= 2) {	stop('Marker found 2+ times.')	}
-	genotypes <- cross$geno[[name.of.chr.with.marker]]$data[,name.of.marker.to.plot]
+	genotypes <- GetGenotypesByMarkerName(cross = cross,
+																				marker.name = name.of.marker.to.plot)
 
 	# check that varscan included chr where marker is
 	mles <- dplyr::filter(varscan, marker.name == name.of.marker.to.plot)

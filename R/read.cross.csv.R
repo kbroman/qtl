@@ -124,7 +124,7 @@ read.cross.csv <-
     colnames(pheno) <- data[1,1:n.phe]
 
     # pull apart phenotypes, genotypes and map
-    mnames <- data[1,-(1:n.phe)]
+    mnames <- make.names(data[1,-(1:n.phe)])
     if(any(is.na(mnames)))
         stop("There are missing marker names. Check column(s) ",paste(which(is.na(mnames))+1+n.phe,collapse=","),sep="")
     chr <- data[2,-(1:n.phe)]

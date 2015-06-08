@@ -32,7 +32,8 @@ plot.scanonevar <- function(varscan,
 														bandcol = 'lightgray',
 														legend.pos = 'top',
 														gap = 25,
-														incl.markers = TRUE)
+														incl.markers = TRUE,
+														main = attr(varscan, 'pheno'))
 {
 
 	# store current graphical parameters and customize them for this plot
@@ -41,7 +42,19 @@ plot.scanonevar <- function(varscan,
 
 	# subset varscan to necessary chrs only
 	if (!all(chrs == unique(varscan$chr))) {
-		varscan <- filter(varscan, chr %in% chrs)
+		temp <- dplyr::filter(varscan, chr %in% chrs)
+
+		class(temp) <- c("scanonevar", "tbl_df", "data.frame")
+		attr(temp, 'method') <- attr(varscan, 'method')
+		attr(temp, 'type') <- attr(varscan, 'type')
+		attr(temp, 'model') <- attr(varscan, 'model')
+		attr(temp, 'dom') <- attr(varscan, 'dom')
+		attr(temp, 'pheno') <- attr(varscan, 'pheno')
+		attr(temp, 'null.effects') <- attr(varscan, 'null.effects')
+		attr(temp, 'units') <- attr(varscan, 'units')
+		temp$chr <- factor(temp$chr)
+
+		varscan <- temp
 	}
 
 	# x coordinates for plotting
@@ -70,10 +83,11 @@ plot.scanonevar <- function(varscan,
 	ylim <- c(0, 1.05*max(coords.y.locus))
 	plot(-42, -42, xlim = xlim, ylim = ylim,
 			 type = 'n', xaxs = 'i',
-			 xlab = NA, ylab = NA, axes = FALSE)
+			 xlab = NA, ylab = NA, axes = FALSE,
+			 main = main)
 
 	# shade in bg for every other chr
-	if(!is.null(bandcol)) {
+	if (!is.null(bandcol) & length(chrs) > 1) {
 		names.chrs.even <- chrs[seq(from = 2, to = length(chrs), by = 2)]
 		xs.chrs.even <- dplyr::filter(coords.x.chr, chr %in% names.chrs.even)
 
@@ -106,7 +120,7 @@ plot.scanonevar <- function(varscan,
 	}
 
 	# plot lines at marker positions (rug plot)
-	if(incl.markers) {
+	if (incl.markers) {
 		marker.idxs <- !grepl(pattern = 'loc', x = varscan$marker.name)
 		segments(x0 = coords.x.locus$coord.x[marker.idxs],
 						 x1 = coords.x.locus$coord.x[marker.idxs],

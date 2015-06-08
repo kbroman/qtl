@@ -11,8 +11,7 @@ Maintainer: Karl W Broman <kbroman@biostat.wisc.edu>
 Description: Analysis of experimental crosses to identify genes
   (called quantitative trait loci, QTLs) contributing to variation in
   quantitative traits.
-Depends: R (>= 2.14.0), graphics, stats, utils, dglm, evd, dplyr
-Imports: parallel
+Depends: R (>= 2.14.0), graphics, stats, utils, dglm, evd, dplyr, doParallel
 Suggests: testthat
 License: GPL-3
 URL: http://www.rqtl.org
