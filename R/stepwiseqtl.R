@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2014, Karl W Broman
-# last modified Oct, 2014
+# copyright (c) 2007-2015, Karl W Broman
+# last modified Jun, 2015
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -71,6 +71,13 @@ stepwiseqtl <-
 
     method <- match.arg(method)
     model <- match.arg(model)
+
+    # force covar to be a data frame
+    if(!is.null(covar) && !is.data.frame(covar)) {
+        if(is.matrix(covar) && is.numeric(covar))
+            covar <- as.data.frame(covar, stringsAsFactors=TRUE)
+        else stop("covar should be a data.frame")
+    }
 
     if(!missing(penalties)) {
         if(is.matrix(penalties)) {
