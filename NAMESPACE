@@ -1,7 +1,15 @@
 useDynLib(qtl)
 
 # Import package dependencies
-import(graphics, stats, utils,parallel)
+import(graphics, stats, utils)
+importFrom(parallel,makeCluster)
+importFrom(parallel,stopCluster)
+importFrom(parallel,clusterApply)
+importFrom(parallel,mclapply)
+importFrom(parallel,clusterApplyLB)
+importFrom(parallel,clusterEvalQ)
+importFrom(parallel,nextRNGStream)
+importFrom(parallel,parLapply)
 importFrom(grDevices,topo.colors)
 importFrom(grDevices,terrain.colors)
 importFrom(grDevices,heat.colors)
