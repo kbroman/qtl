@@ -1,7 +1,17 @@
 useDynLib(qtl)
 
 # Import package dependencies
-import(graphics, stats, utils, parallel)
+import(graphics, stats, utils,parallel)
+importFrom(grDevices,topo.colors)
+importFrom(grDevices,terrain.colors)
+importFrom(grDevices,heat.colors)
+importFrom(grDevices,cm.colors)
+importFrom(grDevices,gray)
+importFrom(grDevices,rgb)
+importFrom(grDevices,rainbow)
+importFrom(grDevices,col2rgb)
+importFrom(grDevices,dev.off)
+importFrom(grDevices,png)
 
 export(flip.order)
 export(map2table)
