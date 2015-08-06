@@ -90,7 +90,7 @@ sim.cross(map, model=NULL, n.ind=100,
 
 \section{Recombinant inbred lines}{
   In the simulation of recombinant inbred lines (RIL), we simulate a
-  single individual from line, and no phenotypes are simulated (so the
+  single individual from each line, and no phenotypes are simulated (so the
   argument \code{model} is ignored).
 
   The types \code{riself} and \code{risib} are the usual two-way RIL.
