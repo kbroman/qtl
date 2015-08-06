@@ -8,12 +8,12 @@
 }
 
 \usage{
-sim.cross(map, model=NULL, n.ind=100, 
+sim.cross(map, model=NULL, n.ind=100,
          type=c("f2", "bc", "4way", "risib", "riself",
            "ri4sib", "ri4self", "ri8sib", "ri8self", "bcsft"),
           error.prob=0, missing.prob=0, partial.missing.prob=0,
           keep.qtlgeno=TRUE, keep.errorind=TRUE, m=0, p=0,
-	  map.function=c("haldane","kosambi","c-f","morgan"),
+      map.function=c("haldane","kosambi","c-f","morgan"),
           founderGeno, random.cross=TRUE, \dots)
 }
 
@@ -40,8 +40,8 @@ sim.cross(map, model=NULL, n.ind=100,
  \item{m}{Interference parameter; a non-negative integer.  0 corresponds
    to no interference.}
  \item{p}{Probability that a chiasma comes from the no-interference
-   mechanism} 
- \item{map.function}{Indicates whether to use the Haldane, Kosambi, 
+   mechanism}
+ \item{map.function}{Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer, or Morgan map function when converting genetic
    distances into recombination fractions.}
  \item{founderGeno}{For 4- or 8-way RIL, the genotype data of the
@@ -64,7 +64,7 @@ sim.cross(map, model=NULL, n.ind=100,
   with inteference parameter \code{m}.  Note that \code{m=0} corresponds
   to no interference, and with \code{p=0}, one gets a pure chi-square
   model.
-  
+
   If a chromosomes has class \code{X}, it is assumed to be the X
   chromosome, and is assumed to be segregating in the cross.  Thus, in
   an intercross, it is segregating like a backcross chromosome.  In a
@@ -86,7 +86,7 @@ sim.cross(map, model=NULL, n.ind=100,
   (\eqn{a,b,c}), where, in the case of one QTL, the mean phenotype,
   conditional on the QTL genotyping being AC, BC, AD or BD, is  \eqn{a},
   \eqn{b}, \eqn{c} or 0, respectively.
-}  
+}
 
 \section{Recombinant inbred lines}{
   In the simulation of recombinant inbred lines (RIL), we simulate a
@@ -103,7 +103,7 @@ sim.cross(map, model=NULL, n.ind=100,
   founding individuals; these may be simulated with
   \code{\link{simFounderSnps}}.  Also, the output cross will
   contain a component \code{cross}, which is a matrix with rows
-  corresponding to RIL and columns corresponding to the founders, 
+  corresponding to RIL and columns corresponding to the founders,
   indicating order of the founder strains in the crosses used to
   generate the RIL.
 
@@ -127,7 +127,7 @@ sim.cross(map, model=NULL, n.ind=100,
 
 \value{
   An object of class \code{cross}.  See \code{\link{read.cross}} for
-  details. 
+  details.
 
   If \code{keep.qtlgeno} is TRUE, the cross object will contain a
   component \code{qtlgeno} which is a matrix containing the QTL
@@ -176,7 +176,7 @@ pg <- simFounderSnps(themap, "8")
 # simulate the 8-way RIL by sib mating (256 lines)
 ril <- sim.cross(themap, n.ind=256, type="ri8sib", founderGeno=pg)
 }
-                    
+
 \references{
   Copenhaver, G. P., Housworth, E. A. and Stahl, F. W. (2002) Crossover
   interference in arabidopsis.  \emph{Genetics} \bold{160}, 1631--1639.
@@ -194,7 +194,7 @@ ril <- sim.cross(themap, n.ind=256, type="ri8sib", founderGeno=pg)
 
   Teuscher, F. and Broman, K. W. (2007) Haplotype probabilities for
   multiple-strain recombinant inbred lines.  \emph{Genetics} \bold{175},
-  1267--1274. 
+  1267--1274.
 }
-  
+
 \keyword{datagen}
