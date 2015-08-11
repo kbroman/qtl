@@ -4,7 +4,8 @@ useDynLib(qtl)
 import(graphics, stats, utils, parallel)
 
 export(map2table)
-export(scanonevar, scanonevar.perm, convert.varscan.to.empirical.ps)
+export(newScanonevar, newScanonevar.perm, vqtl_ConvertLODsToEmpPs, ScanViaDGLM)
+export(ConvenientScanoneVar)
 export(reduce2grid)
 export(formMarkerCovar)
 export(nqtl)
@@ -57,7 +58,7 @@ export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc
 export(clean, condense, convert)
 export(summaryScantwoOld, summary.scantwo.old)
 export(reviseXdata)
-
+export(newScanonevar, ValidateAndFilterInput, newConvenientScanonevar)
 
 # used by funqtl
 export(checkStepwiseqtlStart)
@@ -145,6 +146,7 @@ S3method(subset, scanoneperm)
 S3method(subset, scantwo)
 S3method(subset, scantwoperm)
 S3method(summary, scanonevar)
+S3method(filter_, scanonevar)
 S3method(summary, addcovarint)
 S3method(summary, addint)
 S3method(summary, compactqtl)

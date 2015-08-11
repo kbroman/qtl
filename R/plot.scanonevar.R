@@ -33,22 +33,26 @@ plot.scanonevar <- function(varscan,
 														legend.pos = 'top',
 														gap = 25,
 														incl.markers = TRUE,
-														main = attr(varscan, 'pheno'))
+														main = attr(varscan, 'pheno'),
+														ylim = c(0, 1.05*max(coords.y.locus, na.rm = TRUE)))
 {
 
 	# store current graphical parameters and customize them for this plot
 	start.pars <- par(no.readonly = TRUE)
-	par(mar = c(3,4,2,1))
+	par(mar = c(3,4,6,1))
 
 	# subset varscan to necessary chrs only
-	if (!all(chrs == unique(varscan$chr))) {
+	if (!identical(chrs, unique(varscan$chr))) {
 		temp <- dplyr::filter(varscan, chr %in% chrs)
 
 		class(temp) <- c("scanonevar", "tbl_df", "data.frame")
 		attr(temp, 'method') <- attr(varscan, 'method')
 		attr(temp, 'type') <- attr(varscan, 'type')
 		attr(temp, 'model') <- attr(varscan, 'model')
-		attr(temp, 'dom') <- attr(varscan, 'dom')
+		attr(temp, 'mean.null.formula') <- attr(varscan, 'mean.null.formula')
+		attr(temp, 'mean.alt.formula') <- attr(varscan, 'mean.alt.formula')
+		attr(temp, 'var.null.formula') <- attr(varscan, 'var.null.formula')
+		attr(temp, 'var.alt.formula') <- attr(varscan, 'var.alt.formula')
 		attr(temp, 'pheno') <- attr(varscan, 'pheno')
 		attr(temp, 'null.effects') <- attr(varscan, 'null.effects')
 		attr(temp, 'units') <- attr(varscan, 'units')
@@ -58,6 +62,7 @@ plot.scanonevar <- function(varscan,
 	}
 
 	# x coordinates for plotting
+	levels(varscan$chr) <- mixedsort(levels(varscan$chr))
 	coords.x.chr <- varscan %>%
 		group_by(chr) %>%
 		summarise(len = max(pos) - min(pos)) %>%
@@ -80,11 +85,9 @@ plot.scanonevar <- function(varscan,
 
 	# make plotting area
 	xlim <- c(-gap/2, max(coords.x.chr$end) + gap/2)
-	ylim <- c(0, 1.05*max(coords.y.locus))
 	plot(-42, -42, xlim = xlim, ylim = ylim,
 			 type = 'n', xaxs = 'i',
-			 xlab = NA, ylab = NA, axes = FALSE,
-			 main = main)
+			 xlab = NA, ylab = NA, axes = FALSE)
 
 	# shade in bg for every other chr
 	if (!is.null(bandcol) & length(chrs) > 1) {
@@ -127,7 +130,6 @@ plot.scanonevar <- function(varscan,
 						 y0 = 0,
 						 y1 = ylim[2]*0.03,
 						 col = 'gray50')
-# 		rug(x = coords.x.locus$coord.x[marker.idxs], ticksize = 1)
 	}
 
 	# draw the legend
@@ -136,7 +138,16 @@ plot.scanonevar <- function(varscan,
 				 x.intersp = 0.3, y.intersp = 0.8, xjust = 0.5, yjust = 0)
 
 	# add the title
-	mtext(text = attr(x = varscan, 'pheno'), side = 3, line = 0)
+	title <- paste(attr(x = varscan, 'pheno'),
+	               '\n', 'mean null:',
+	               paste(as.character(attr(varscan, 'mean.null.formula'))[c(2,1,3)], collapse = ' '),
+	               '\n', 'mean alt:',
+	               paste(as.character(attr(varscan, 'mean.alt.formula'))[c(2,1,3)], collapse = ' '),
+	               '\n', 'var null:',
+	               paste(as.character(attr(varscan, 'var.null.formula')), collapse = ' '),
+	               '\n', 'var alt:',
+	               paste(as.character(attr(varscan, 'var.alt.formula')), collapse = ' '))
+	mtext(text = title, side = 3, line = 0)
 
 	# draw the alpha = 0.05 and 0.01 lines
 	# iff we are looking at empirical ps

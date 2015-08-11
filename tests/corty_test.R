@@ -40,93 +40,90 @@ crosses <- list(all = B6.C58.cross,
 								females = female.B6.C58.cross)
 }
 
-# scanone on all mice and on each sex
-for (cross.idx in 1:length(crosses)) {
-
-	name <- names(crosses[cross.idx])
-	so <- scanone(cross = crosses[[cross.idx]],
-								pheno.col = 'TOTREAR')
-	sop <- scanone(cross = crosses[[cross.idx]],
-								 pheno.col = 'TOTREAR',
-								 n.perm = 200)
-	thresh <- quantile(sop, 0.95)
-	plot(so,
-			 ylim = c(0, max(so$lod, thresh)),
-			 bandcol = 'lightgray',
-			 main = paste('scanone', name))
-	abline(h = thresh)
-}
+B6.C58.cross$pheno$sqrt.totrear <- sqrt(B6.C58.cross$pheno$TOTREAR)
 
 
 
-vs <- scanonevar(cross = crosses[[cross.idx]],
-								 pheno.name = 'TOTREAR',
-								 mean.covar.names = NULL,
-								 var.covar.names = NULL)
+a <- newScanonevar(cross = B6.C58.cross,
+                   mean.formula =  sqrt(TOTREAR) ~ sex + X1.63.544,
+                   var.formula = ~sex + QTL.dom + QTL.add,
+                   return.effects = TRUE,
+                   quiet = FALSE)
 
-saveRDS(object = vs, file = 'tests/test_vs.RDS')
-vs <- readRDS(file = 'tests/test_vs.RDS')
-plot(vs)
+c <- newConvenientScanonevar(cross = B6.C58.cross,
+                             mean.formula = sqrt.totrear ~ sex*(QTL.add + QTL.dom) + X1.152.072,
+                             var.formula = ~sex ,
+                             n.perms = 24,
+                             n.cores = 8)
+plot(c)
+ 
+# sov <- scanonevar(cross = B6.C58.cross,
+#                   pheno.name = 'sqrt.totrear',
+# #                   chrs = 18:20,
+#                   mean.covar.names = c('sex', 'X2.136.176', 'X7.32.784'),
+#                   var.covar.names = 'sex')
 
-vs.perms <- scanonevar.perm(cross = B6.C58.cross,
-														pheno.name = 'TOTREAR',
-														mean.covar.names = 'sex',
-														var.covar.names = 'sex',
-														num.perms = 3,
-														num.processes = 3,
-														quiet = FALSE)
-saveRDS(object = vs.perms, file = 'tests/test_vs_perms.RDS')
-vs.perms <- readRDS(file = 'tests/test_vs_perms.RDS')
-
-vs.emp.ps <- convert.varscan.to.empirical.ps(scan = vs,
-																						 null.scan.maxes = vs.perms)
-
-plot(vs.emp.ps)
-plot(vs.emp.ps, chrs = 2)
+plot(sov)
 
 
-# vs.cond <- scanonevar(cross = B6.C58.cross,
-# 								 pheno.name = 'TOTREAR',
-# 								 mean.covar.names = c('sex', 'X2.65.484'),
-# 								 var.covar.names = c('sex', 'X2.65.484'))
-#
-# saveRDS(object = vs.cond, file = 'tests/test_vs_conditional.RDS')
-vs.cond <- readRDS(file = 'tests/test_vs_conditional.RDS')
-plot(vs.cond)
+svp <- scanonevar.perm(cross = B6.C58.cross,
+                       pheno.name = 'sqrt.totrear',
+#                        chrs = 15:20,
+                       mean.covar.names = c('sex', 'X2.136.176', 'X7.32.784'),
+                       var.covar.names = 'sex',
+                       num.perms = 4)
 
 
-vs.cond.perms <- scanonevar.perm(cross = B6.C58.cross,
-														pheno.name = 'TOTREAR',
-														mean.covar.names = c('sex', 'X2.65.484'),
-														var.covar.names = c('sex', 'X2.65.484'),
-														num.perms = 15,
-														quiet = FALSE)
-saveRDS(object = vs.cond.perms, file = 'tests/test_vs_cond_perms.RDS')
-vs.cond.perms <- readRDS(file = 'tests/test_vs_cond_perms.RDS')
+vqtl_ConvertLODsToEmpPs(scan = sov,
+                        null.scan.maxes = svp)
 
-vs.cond.emp.ps <- convert.varscan.to.empirical.ps(scan = vs.cond,
-																									null.scan.maxes = vs.cond.perms)
-saveRDS(object = vs.cond.emp.ps, file = 'tests/test_vs_cond_emp_ps.RDS')
-vs.cond.emp.ps <- readRDS(file = 'tests/test_vs_cond_emp_ps.RDS')
+vseps <- ConvenientScanoneVar(cross = B6.C58.cross,
+                              pheno.name = 'sqrt.totrear',
+                              #chrs = 15:20,
+                              mean.covar.names = c('sex', 'X2.136.176', 'X7.32.784'),
+                              var.covar.names = 'sex',
+                              num.perms = 50,
+                              quiet = FALSE)
 
-plot(vs.cond.emp.ps)
+plot(vseps)
 
-
-st <- scantwo(cross = B6.C58.cross, pheno.col = 'TOTREAR')
-
+summary(vseps)
 
 fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "17.45.986",
-									 varscan = vs)
+                   name.of.marker.to.plot = 'X16.56.11',
+                   varscan = vseps)
 
-fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "17.45.986",
-									 varscan = vs.emp.ps)
+plot(vseps, chr = 2)
+plot(vseps, chr = 7)
 
+# fitplots for full model hits
 fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "X.106.858",
-									 varscan = vs)
+                   name.of.marker.to.plot = 'X2.65.484',
+                   varscan = vseps)
+fitplot.scanonevar(cross = B6.C58.cross,
+                   name.of.marker.to.plot = 'X2.120.543',
+                   varscan = vseps)
+fitplot.scanonevar(cross = B6.C58.cross,
+                   name.of.marker.to.plot = 'X7.32.784',
+                   varscan = vseps)
 
+# fitplots for mean model hit
 fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "X.106.858",
-									 varscan = vs.emp.ps)
+                   name.of.marker.to.plot = 'X2.136.176',
+                   varscan = vseps)
+fitplot.scanonevar(cross = B6.C58.cross,
+                   name.of.marker.to.plot = 'X7.32.784',
+                   varscan = vseps)
+
+# fitplots for var model hits
+fitplot.scanonevar(cross = B6.C58.cross,
+                   name.of.marker.to.plot = 'X2.65.484',
+                   varscan = vseps)
+
+
+
+cond.vseps <- ConvenientScanoneVar(cross = B6.C58.cross,
+                                   pheno.name = 'sqrt.totrear',
+                                   mean.covar.names = c('sex', 'X2.65.484'),
+                                   num.perms = 52,
+                                   num.processes = 4)

@@ -1,24 +1,33 @@
-assemble.design.mat.and.formulae <- function(pheno, 
-                                             dom,
-                                             mean.covars = NULL, 
-                                             var.covars = NULL) {
+AssembleDesignMatAndFormulae <- function(pheno, 
+                                         mean.add,
+                                         mean.dom,
+                                         var.add,
+                                         var.dom,
+                                         mean.covars = NULL, 
+                                         var.covars = NULL) {
 
 	# set up data and formulas
-	X <- cbind(pheno = pheno,
-						 mean.add.genet = rep(0, length(pheno)),
-						 var.add.genet = rep(0, length(pheno)))
-
-	mean.formula <- paste(names(pheno), '~ mean.add.genet')
-	var.formula <- paste(names(pheno), '~ var.add.genet')
-	mean.null.formula <- var.null.formula <- paste(names(pheno), '~ 1')
-
-	# add two more columns to X and change alternative formulae if dom
-	if (dom) {
-		X <- cbind(X,
-							 mean.dom.genet = rep(0, length(pheno)),
-							 var.dom.genet = rep(0, length(pheno)))
-		mean.formula <- paste(mean.formula, '+ mean.dom.genet')
-		var.formula <- paste(var.formula, '+ var.dom.genet')
+  n <- length(pheno)
+	X <- data.frame(pheno = pheno)
+	
+	mean.formula <- mean.null.formula <- paste(names(pheno), '~ 1')
+	var.formula <- var.null.formula <- ' ~ 1'
+	
+	if (mean.add) { 
+	  X$mean.add <- rep(NA, n) 
+	  mean.formula <- paste(names(pheno), '~ mean.add')
+	}
+	if (mean.dom) { 
+	  X$mean.dom <- rep(NA, n)
+	  mean.formula <- paste(mean.formula, '+ mean.dom')
+	}
+	if (var.add) { 
+	  X$var.add <- rep(NA, n)
+	  var.formula <- '~ var.add'
+	}
+	if (var.dom) {
+	  X$var.dom <- rep(NA, n)
+	  var.formula <- paste(var.formula, '+ var.dom')
 	}
 
 	# add covariates to X and mean formulae

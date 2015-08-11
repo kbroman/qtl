@@ -34,10 +34,13 @@ scanonevar.perm <- function(cross,
 														chrs = 1:length(cross$geno),
 														mean.covar.names = NULL,
 														var.covar.names = NULL,
-														dom = TRUE,
+														mean.add = TRUE,
+														mean.dom = TRUE,
+														var.add = TRUE,
+														var.dom = TRUE,
 														quiet = TRUE,
 														seed = 27599,
-														num.perms = 5,
+														num.perms = 1,
 														mean.perm = TRUE,
 														var.perm = TRUE,
 														meanvar.perm = TRUE,
@@ -46,13 +49,13 @@ scanonevar.perm <- function(cross,
 
 	set.seed(seed)
 
-  # set up parllel backend
-  cl <- makeCluster(num.processes)
-  registerDoParallel(cl)
-  
-	# check that pheno.name and covar.names exist in the cross and that cross is of an acceptable type
+ 	# check that pheno.name and covar.names exist in the cross and that cross is of an acceptable type
 	validated.input <- ValidateScanonevarInput(cross = cross,
 																						 pheno.name = pheno.name,
+																						 mean.add = mean.add,
+																						 mean.dom = mean.dom,
+																						 var.add = var.add,
+																						 var.dom = var.dom,
 																						 mean.covar.names = mean.covar.names,
 																						 var.covar.names = var.covar.names)
 	cross <- validated.input$cross
@@ -61,10 +64,13 @@ scanonevar.perm <- function(cross,
 	var.covars <- validated.input$var.covars
 
 	# set up design matrix (X) and formulae for use in dglm
-	X.and.formulae <- assemble.design.mat.and.formulae(pheno = pheno,
-																											dom = dom,
-																											mean.covars = mean.covars,
-																											var.covars = var.covars)
+	X.and.formulae <- AssembleDesignMatAndFormulae(pheno = pheno,
+	                                               mean.add = mean.add,
+	                                               mean.dom = mean.dom,
+	                                               var.add = var.add,
+	                                               var.dom = var.dom,
+	                                               mean.covars = mean.covars,
+	                                               var.covars = var.covars)
 	X <- X.and.formulae$X
 	mean.null.formula <- X.and.formulae$mean.null.formula
 	var.null.formula <- X.and.formulae$var.null.formula
@@ -72,77 +78,163 @@ scanonevar.perm <- function(cross,
 	var.alt.formula <- X.and.formulae$var.alt.formula
 
 	# iterate through num.perms, calling the workhorse of scanonevar.perm() each time
- 	# scans <- vector(mode = 'list', length = num.perms)
-	# for (perm.num in 1:num.perms) {
-	scans <- foreach(perm.num = 1:num.perms) %dopar% {
-
-		if (!quiet) { message(paste('Starting permutation number', perm.num, '...')) }
-		perm <- sample(nrow(pheno))
-
-		meanvarperm <- scanonevar_(cross = cross, 
-		                           chrs = chrs, 
-		                           dom = dom,
-		                           X = X,
-															 mean.null.formula = mean.null.formula,
-															 var.null.formula = var.null.formula,
-															 mean.alt.formula = mean.alt.formula,
-															 var.alt.formula = var.alt.formula,
-															 mean.perm = perm, 
-															 var.perm = perm,
-															 return.effects = FALSE,
-															 calc.lod.full = TRUE,
-															 calc.lod.mean = FALSE, 
-															 calc.lod.var = FALSE)
-
-		meanperm <- scanonevar_(cross = cross, 
-		                        chrs = chrs, 
-		                        dom = dom,
-		                        X = X,
-		                        mean.null.formula = mean.null.formula,
-		                        var.null.formula = var.alt.formula,
-		                        mean.alt.formula = mean.alt.formula,
-		                        var.alt.formula = var.alt.formula,
-		                        mean.perm = perm, 
-		                        var.perm = NULL,
-		                        return.effects = FALSE,
-		                        calc.lod.full = FALSE,
-		                        calc.lod.mean = TRUE, 
-		                        calc.lod.var = FALSE)
-
-
-		varperm <- scanonevar_(cross = cross, 
-		                       chrs = chrs, 
-		                       dom = dom,
-		                       X = X,
-		                       mean.null.formula = mean.alt.formula,
-		                       var.null.formula = var.null.formula,
-		                       mean.alt.formula = mean.alt.formula,
-		                       var.alt.formula = var.alt.formula,
-		                       mean.perm = NULL, 
-		                       var.perm = perm,
-		                       return.effects = FALSE,
-		                       calc.lod.full = FALSE,
-		                       calc.lod.mean = FALSE, 
-		                       calc.lod.var = TRUE)
-
-		n.loci <- nrow(meanvarperm)
-		result <- cbind(perm.idx = rep(perm.num, n.loci),
-										as.data.frame(meanvarperm[,c('chrtype', 'chr', 'pos', 'lod.full')]),
-										as.data.frame(meanperm[, 'lod.mean', drop = FALSE]),
-										as.data.frame(varperm[, 'lod.var', drop = FALSE]))
-
-		#scans[[perm.num]] <- 
-		return(tbl_df(result) %>%
-			group_by(perm.idx, chrtype) %>%
-			summarize(max.lod.full = max(lod.full),
-								max.lod.mean = max(lod.mean),
-								max.lod.var = max(lod.var)))
+	# do this in parallel if num.cores > 1, and in series otherwise
+ 	if (num.processes == 1) {
+ 	  scans <- vector(mode = 'list', length = num.perms)
+ 	  for (perm.num in 1:num.perms) {
+ 	    
+ 	    if (!quiet) { print(paste('Starting permutation number', perm.num, '...')) }
+ 	    perm <- sample(nrow(pheno))
+ 	    
+ 	    meanvarperm <- scanonevar_(cross = cross, 
+ 	                               chrs = chrs, 
+ 	                               mean.add = mean.add,
+ 	                               mean.dom = mean.dom,
+ 	                               var.add = var.add,
+ 	                               var.dom = var.dom,
+ 	                               X = X,
+ 	                               mean.null.formula = mean.null.formula,
+ 	                               var.null.formula = var.null.formula,
+ 	                               mean.alt.formula = mean.alt.formula,
+ 	                               var.alt.formula = var.alt.formula,
+ 	                               mean.perm = perm, 
+ 	                               var.perm = perm,
+ 	                               return.effects = FALSE,
+ 	                               calc.lod.full = TRUE,
+ 	                               calc.lod.mean = FALSE, 
+ 	                               calc.lod.var = FALSE)
+ 	    
+ 	    meanperm <- scanonevar_(cross = cross, 
+ 	                            chrs = chrs, 
+ 	                            mean.add = mean.add,
+ 	                            mean.dom = mean.dom,
+ 	                            var.add = var.add,
+ 	                            var.dom = var.dom,
+ 	                            X = X,
+ 	                            mean.null.formula = mean.null.formula,
+ 	                            var.null.formula = var.alt.formula,
+ 	                            mean.alt.formula = mean.alt.formula,
+ 	                            var.alt.formula = var.alt.formula,
+ 	                            mean.perm = perm, 
+ 	                            return.effects = FALSE,
+ 	                            calc.lod.full = FALSE,
+ 	                            calc.lod.mean = TRUE, 
+ 	                            calc.lod.var = FALSE)
+ 	    
+ 	    
+ 	    varperm <- scanonevar_(cross = cross, 
+ 	                           chrs = chrs, 
+ 	                           mean.add = mean.add,
+ 	                           mean.dom = mean.dom,
+ 	                           var.add = var.add,
+ 	                           var.dom = var.dom,
+ 	                           X = X,
+ 	                           mean.null.formula = mean.alt.formula,
+ 	                           var.null.formula = var.null.formula,
+ 	                           mean.alt.formula = mean.alt.formula,
+ 	                           var.alt.formula = var.alt.formula,
+ 	                           var.perm = perm,
+ 	                           return.effects = FALSE,
+ 	                           calc.lod.full = FALSE,
+ 	                           calc.lod.mean = FALSE, 
+ 	                           calc.lod.var = TRUE)
+ 	    
+ 	    n.loci <- nrow(meanvarperm)
+ 	    result <- cbind(perm.idx = rep(perm.num, n.loci),
+ 	                    as.data.frame(meanvarperm[,c('chrtype', 'chr', 'pos', 'lod.full')]),
+ 	                    as.data.frame(meanperm[, 'lod.mean', drop = FALSE]),
+ 	                    as.data.frame(varperm[, 'lod.var', drop = FALSE]))
+ 	    
+ 	    result <- tbl_df(result) %>%
+ 	      group_by(perm.idx, chrtype) %>%
+ 	      summarize(max.lod.full = max(lod.full),
+ 	                max.lod.mean = max(lod.mean),
+ 	                max.lod.var = max(lod.var))
+ 	    scans[[perm.num]] <- result
+ 	  }
+ 	}
+	
+	if (num.processes > 1) {
+	  
+	  # set up parllel backend
+	  cl <- makeCluster(num.processes)
+	  registerDoParallel(cl)
+	  
+	  scans <- foreach(perm.num = 1:num.perms) %dopar% {
+	    
+	    if (!quiet) { print(paste('Starting permutation number', perm.num, '...')) }
+	    perm <- sample(nrow(pheno))
+	    
+	    meanvarperm <- scanonevar_(cross = cross, 
+	                               chrs = chrs, 
+	                               mean.add = mean.add,
+	                               mean.dom = mean.dom,
+	                               var.add = var.add,
+	                               var.dom = var.dom,
+	                               X = X,
+	                               mean.null.formula = mean.null.formula,
+	                               var.null.formula = var.null.formula,
+	                               mean.alt.formula = mean.alt.formula,
+	                               var.alt.formula = var.alt.formula,
+	                               mean.perm = perm, 
+	                               var.perm = perm,
+	                               return.effects = FALSE,
+	                               calc.lod.full = TRUE,
+	                               calc.lod.mean = FALSE, 
+	                               calc.lod.var = FALSE)
+	    
+	    meanperm <- scanonevar_(cross = cross, 
+	                            chrs = chrs, 
+	                            mean.add = mean.add,
+	                            mean.dom = mean.dom,
+	                            var.add = var.add,
+	                            var.dom = var.dom,
+	                            X = X,
+	                            mean.null.formula = mean.null.formula,
+	                            var.null.formula = var.alt.formula,
+	                            mean.alt.formula = mean.alt.formula,
+	                            var.alt.formula = var.alt.formula,
+	                            mean.perm = perm, 
+	                            return.effects = FALSE,
+	                            calc.lod.full = FALSE,
+	                            calc.lod.mean = TRUE, 
+	                            calc.lod.var = FALSE)
+	    
+	    
+	    varperm <- scanonevar_(cross = cross, 
+	                           chrs = chrs, 
+	                           mean.add = mean.add,
+	                           mean.dom = mean.dom,
+	                           var.add = var.add,
+	                           var.dom = var.dom,
+	                           X = X,
+	                           mean.null.formula = mean.alt.formula,
+	                           var.null.formula = var.null.formula,
+	                           mean.alt.formula = mean.alt.formula,
+	                           var.alt.formula = var.alt.formula,
+	                           var.perm = perm,
+	                           return.effects = FALSE,
+	                           calc.lod.full = FALSE,
+	                           calc.lod.mean = FALSE, 
+	                           calc.lod.var = TRUE)
+	    
+	    n.loci <- nrow(meanvarperm)
+	    result <- cbind(perm.idx = rep(perm.num, n.loci),
+	                    as.data.frame(meanvarperm[,c('chrtype', 'chr', 'pos', 'lod.full')]),
+	                    as.data.frame(meanperm[, 'lod.mean', drop = FALSE]),
+	                    as.data.frame(varperm[, 'lod.var', drop = FALSE]))
+	    
+	    result <- tbl_df(result) %>%
+	      group_by(perm.idx, chrtype) %>%
+	      summarize(max.lod.full = max(lod.full),
+	                max.lod.mean = max(lod.mean),
+	                max.lod.var = max(lod.var))
 		
-		#if (!quiet) { message(paste('Done with permutation number', perm.num, '...')) }
+		return(result)
+	  }
+	  # close down parallel backend
+	  stopCluster(cl)
 	}
 
-	# close down parallel backend
-	stopCluster(cl)
-	
 	return(rbind_all(scans))
 }

@@ -1,11 +1,13 @@
-convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
+vqtl_ConvertLODsToEmpPs <- function(scan, null.scan.maxes) {
+
+  ValidateConvertLODsToEmpPs(scan, null.scan.maxes)
 
 	lod.columns <- grep(pattern = 'lod', names(scan), value = TRUE)
 	chr.types <- unique(scan$chrtype)
-	scan.as.emp.ps <- scan %>%
-		select(-matches('lod'))
-# 		mutate(lod.full = NA, lod.mean = NA, lod.var = NA)
+	scan.as.emp.ps <- scan
 
+  # do each chromosome type and lod column separately
+	# empirical p values are put in place of the LOD scores for now
 	for (chr.type in chr.types) {
 
 		null.lods <- dplyr::filter(null.scan.maxes, chrtype == chr.type)
@@ -25,12 +27,12 @@ convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
 		}
 	}
 
-	class(scan.as.emp.ps) <- class(scan)
-	mostattributes(scan.as.emp.ps) <- attributes(scan)
-	attr(scan.as.emp.ps, 'names') <- c(names(scan)[-(5:7)],
-																		 'emp.p.full',
-																		 'emp.p.mean',
-																		 'emp.p.var')
+	# change names to reflect that we now have empirical p values, not LOD scores
+  for (lod.column in lod.columns) {
+    col.idx <- which(names(scan.as.emp.ps) == lod.column)
+    new.name <- paste0('emp.p.', substring(lod.column, first = 5))
+    names(scan.as.emp.ps)[col.idx] <- new.name
+  }
 	attr(scan.as.emp.ps, 'units') <- 'emp.ps'
 
 	return(scan.as.emp.ps)

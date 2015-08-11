@@ -30,47 +30,48 @@
 
 scanonevar_ <- function(cross,
 												chrs = 1:length(cross$geno),
-												dom,
 												X,
-												quiet = TRUE,
 												mean.null.formula,
 												var.null.formula,
 												mean.alt.formula,
 												var.alt.formula,
-												return.effects = TRUE,
+												quiet = TRUE,
+												mean.add = TRUE,
+												mean.dom = TRUE,
+												var.add = TRUE,
+												var.dom = TRUE,
+												return.effects = FALSE,
 												mean.perm = seq(1, nind(cross)),
 												var.perm = seq(1, nind(cross)),
-												calc.lod.full = TRUE,
-												calc.lod.mean = TRUE,
-												calc.lod.var = TRUE) {
+												calc.lod.full = (mean.add | mean.dom | var.add | var.dom) ,
+												calc.lod.mean = (mean.add | mean.dom) ,
+												calc.lod.var = (var.add | var.dom) ) {
 
 	crosstype <- class(cross)[1]
-
-	# in case user specifies mean.perm or var.perm as NULL
-	# same effect as omitting them, but a bit more explicit in the call 
-	# as to what will be done
-	if (is.null(mean.perm)) { mean.perm <- seq(1, nind(cross)) }
-	if (is.null(var.perm)) { var.perm <- seq(1, nind(cross)) }
 
 	# fit covariate-only model
 	# covariates have mean and varianc effect, genetic markers have none
 	# only need to do this once per scan
-	d.fit.null <- dglm(formula = mean.null.formula,
-										 dformula = var.null.formula,
-										 data = X)
-	ln.lik.null <- -0.5*d.fit.null$m2loglik
-	log10.lik.null <- ln.lik.null / log(10)
-	null.effects <- list(meancovs = d.fit.null$coef[-1],
-											 varcovs = d.fit.null$disp$coef[-1])
-
-	# scan by looping over the chromosomes
+	# and only if lod.full desired
+	if (calc.lod.full) {
+	  d.fit.null <- dglm(formula = mean.null.formula,
+	                     dformula = var.null.formula,
+	                     data = X)
+	  ln.lik.null <- -0.5*d.fit.null$m2loglik
+	  log10.lik.null <- ln.lik.null / log(10)
+	  null.effects <- list(meancovs = d.fit.null$coef[-1],
+	                       varcovs = d.fit.null$disp$coef[-1])
+	}
+	
+	# loop over chromosomes
 	scan <- NULL
-	for(chr.idx in chrs) {
+	for (chr.idx in chrs) {
 
-		if(!quiet) message(" - Chr ", chrnames(cross)[chr.idx])
+		if (!quiet) message(" - Chr ", chrnames(cross)[chr.idx])
 		this.chr <- cross$geno[[chr.idx]]
-
-		# error out if chr is not autosome and not X
+    this.chr.type <- class(this.chr)[1]
+    
+		# error if chr is not autosome and not X
 		if (!(class(this.chr)[1] %in% c('A', 'X'))) {
 			stop(paste('scanonevar not implemented for chr',
 								 chr.idx,
@@ -78,26 +79,33 @@ scanonevar_ <- function(cross,
 								 class(this.chr)))
 		}
 
-		# set up genotype design matrix for autosome
-		if (class(this.chr)[1] == 'A') {
-			if (crosstype=="f2") {
+		# pull out genotypes for this chr if it's an autosome
+		if (this.chr.type == 'A') {
+			if (crosstype == "f2") {
 				g11 <- this.chr$prob[,,1]
 				g12 <- this.chr$prob[,,2]
 				g13 <- this.chr$prob[,,3]
-				a1  <- -g11 + g13
-				d1 <-  g12
-				chr.dom <- dom
+				add.design  <- -g11 + g13
+				if (or(mean.dom, var.dom)) { dom.design <-  g12 }
+				this.chr.mean.add <- mean.add
+				this.chr.mean.dom <- mean.dom
+				this.chr.var.add <- var.add
+				this.chr.var.dom <- var.dom
 			}
 			else {
-				a1 <- cross$geno[[chr.idx]]$prob[,,2]
+				add.design <- cross$geno[[chr.idx]]$prob[,,2]
 			}
 		}
 
-		# set up genotype design matrix for X chromosome
-		if (class(this.chr)[1] == 'X') {
-			chr.dom <- FALSE
-			if (crosstype=="f2") {
-				a1 <- this.chr$prob[,,2]
+		# pull out genotypes for this chr if it's X chr
+		# note that with read.cross(..., convertX = FALSE),
+		# prob[,,1] = P(A) and prob[,,2] = P(B)
+		if (this.chr.type == 'X') {
+			if (crosstype == "f2") {
+				add.design <- this.chr$prob[,,2]
+				this.chr.mean.add <- mean.add
+				this.chr.mean.dom <- mean.dom
+				this.chr.mean.dom <- this.chr.var.dom <- FALSE
 			}
 			else {
 				print("scanonevar not implemented for X chromosome of non-F2 crosses")
@@ -105,29 +113,53 @@ scanonevar_ <- function(cross,
 			}
 		}
 
+		# set up containers for this chromosome
+		# todo each covar needs to be separate for mean and var
+		n.loci <- ncol(add.design)
+		
+		# 4 cols for metadata: chrtype, chr, pos, marker.name
+		map <- attr(cross$geno[[chr.idx]]$prob, "map")
+		result.this.chr <- data.frame(chrtype = class(this.chr)[1],
+		                              chr = chrnames(cross)[chr.idx],
+		                              pos = as.vector(map),
+		                              marker.name = names(map),
+		                              stringsAsFactors = FALSE,
+		                              row.names = NULL)
+		
+		# up to 3 cols for lod scores
+		if (calc.lod.full) { result.this.chr$lod.full <- NA }
+		if (calc.lod.mean) { result.this.chr$lod.mean <- NA }
+		if (calc.lod.var) { result.this.chr$lod.var <- NA }
+		
+		# cols for genetic and covariate effects added later...
 
-		# set up containers for this chr
-		n.loci <- ncol(a1)
-		lod.full <- lod.mean <- lod.var <- numeric(n.loci)
-		mean.baseline <- var.baseline <- numeric(n.loci)
-		mean.add.effect <- var.add.effect <- numeric(n.loci)
-		if (chr.dom) { mean.dom.effect <- var.dom.effect <- numeric(n.loci) }
+		# loop over loci in this chromosome
+		for (i in 1:n.loci) {
 
-		for(i in 1:n.loci) { # loop over positions within chromosome
-
+		  # remove genetic effects where they are identical to covariates
+		  locus.name <- colnames(add.design)[i]
+		  if (locus.name %in% all.vars(mean.alt.formula)) {
+		    this.chr.mean.add <- FALSE
+		    this.chr.mean.dom <- FALSE
+		  }
+		  if (locus.name %in% all.vars(var.alt.formula)) {
+		    this.chr.var.add <- FALSE
+		    this.chr.var.dom <- FALSE
+		  }
 			# fill in genotype probs for this locus
-			# mean.perm and var.perm are just 1:N by default so don't actually do any permuting
-			X$mean.add.genet <- a1[mean.perm, i]
-			X$var.add.genet <- a1[var.perm, i]
-			if (chr.dom) {
-				X$mean.dom.genet <- d1[mean.perm, i]
-				X$var.dom.genet <- d1[var.perm, i]
-			}
+			# mean.perm and var.perm are 1:N by default
+		  # setting covars to all zero makes dglm() to ignore them
+		  X$mean.add <- X$var.add <- 0
+		  X$mean.dom <- X$var.dom <- 0
+		  if (this.chr.mean.add) { X$mean.add <- add.design[mean.perm, i] }
+			if (this.chr.var.add) { X$var.add <- add.design[var.perm, i] }
+			if (this.chr.mean.dom) { X$mean.dom <- dom.design[mean.perm, i] }
+			if (this.chr.var.dom) { X$var.dom <- dom.design[var.perm, i] }
 
 			# fit full model
 			d.fit.full <- dglm(formula = mean.alt.formula,
-												 dformula = var.alt.formula,
-												 data = X)
+			                   dformula = var.alt.formula,
+			                   data = X)
 			ln.lik.full <- -0.5*d.fit.full$m2loglik
 			log10.lik.full <- ln.lik.full / log(10)
 
@@ -153,80 +185,68 @@ scanonevar_ <- function(cross,
 				log10.lik.novar <- ln.lik.novar / log(10)
 			}
 
-
 			# save LOD's and fitted effects to chr-level container
-			if (calc.lod.full) { lod.full[i] <- log10.lik.full - log10.lik.null }
-			if (calc.lod.mean) { lod.mean[i] <- log10.lik.full - log10.lik.nomean }
-			if (calc.lod.var) { lod.var[i] <- log10.lik.full - log10.lik.novar }
-
+			{
+			if (calc.lod.full) { 
+			  result.this.chr$lod.full[i] <- log10.lik.full - log10.lik.null
+			}
+			if (calc.lod.mean) { 
+			  result.this.chr$lod.mean[i] <- log10.lik.full - log10.lik.nomean
+			}
+			if (calc.lod.var) {
+			  result.this.chr$lod.var[i] <- log10.lik.full - log10.lik.novar
+			}
+			}
+			
 			if (return.effects) {
 
-				mean.baseline[i] <- coef(d.fit.full)[1]
-				var.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
-				mean.add.effect[i] <- coef(d.fit.full)[2]
-				var.add.effect[i] <- coef(d.fit.full$dispersion.fit)[2]
-
-				if (chr.dom) {
-					mean.dom.effect[i] <- coef(d.fit.full)[3]
-					var.dom.effect[i] <- coef(d.fit.full$dispersion.fit)[3]
+			  # baselines
+				result.this.chr$mean.baseline[i] <- coef(d.fit.full)[1]
+				result.this.chr$var.baseline[i] <- coef(d.fit.full$dispersion.fit)[1]
+				
+				# qtl and covariate effects on mean
+				# I suspect there is a better way to do this....
+				for (effect.name in names(coef(d.fit.full))[-1]) {
+				  result.this.chr[[effect.name]][i] <- coef(d.fit.full)[[effect.name]]
 				}
+				
+				# qtl and covariate effects on mean
+				# I suspect there is a better way to do this....
+				for (effect.name in names(coef(d.fit.full$dispersion.fit))[-1]) {
+				  result.this.chr[[effect.name]][i] <- 
+				    coef(d.fit.full$dispersion.fit)[[effect.name]]
+				}
+				
 			}
 
 		}
-
-		# set up the output
-		map <- attr(cross$geno[[chr.idx]]$prob, "map")
-		this.chr.scan <- tbl_df(data.frame(chrtype = class(this.chr)[1],
-																			 chr = chrnames(cross)[chr.idx],
-																			 pos = as.vector(map),
-																			 marker.name = names(map),
-																			 stringsAsFactors = FALSE,
-																			 row.names = NULL))
-
-		if (calc.lod.full) { this.chr.scan <- cbind(this.chr.scan, lod.full) }
-		if (calc.lod.mean) { this.chr.scan <- cbind(this.chr.scan, lod.mean) }
-		if (calc.lod.var) { this.chr.scan <- cbind(this.chr.scan, lod.var) }
-
-		if (return.effects) {
-
-			this.chr.scan <- cbind(this.chr.scan,
-														 data.frame(mean.baseline = mean.baseline,
-														 					 var.baseline = var.baseline,
-														 					 mean.add.effect = mean.add.effect,
-														 					 var.add.effect = var.add.effect))
-
-			# if dom is used in this chr, save those effects to output
-			# if dom is used in this scan but not in this chr, put NA so
-			# that the df of this chr conforms with the others
-			if (dom) {
-				if (chr.dom) {
-					this.chr.scan$mean.dom.effect <- mean.dom.effect
-					this.chr.scan$var.dom.effect <- var.dom.effect
-				} else {
-					this.chr.scan$mean.dom.effect <- this.chr.scan$var.dom.effect <- rep(NA, n.loci)
-				}
-			}
-
-		}
-
-		if(is.null(scan)) {
-			scan <- this.chr.scan
+		
+		if (is.null(scan)) {
+		  scan <- result.this.chr
 		}	else {
-			scan <- rbind(scan, this.chr.scan)
+		  scan <- rbind(scan, result.this.chr)
 		}
 	}
 
+	
+	
+	
 	# formalize output
-	scan$chr <- factor(scan$chr)
-
+	scan$chr <- factor(scan$chr,
+	                   levels = mixedsort(unique(scan$chr)),
+	                   ordered = TRUE)
+	
 	class(scan) <- c("scanonevar", "tbl_df", "data.frame")
 	attr(scan, 'method') <- 'dglm package'
 	attr(scan, 'type') <- crosstype
 	attr(scan, 'model') <- 'normal dglm'
-	attr(scan, 'dom') <- dom
 	attr(scan, 'pheno') <- names(X)[1]
-	attr(scan, 'null.effects') <- null.effects
+	if (calc.lod.full) { attr(scan, 'null.effects') <- null.effects }
 	attr(scan, 'units') <- 'lods'
+	attr(scan, 'mean.null.formula') <- mean.null.formula
+	attr(scan, 'var.null.formula') <- var.null.formula
+	attr(scan, 'mean.alt.formula') <- mean.alt.formula
+	attr(scan, 'var.alt.formula') <- var.alt.formula
 
 	return(scan)
 }

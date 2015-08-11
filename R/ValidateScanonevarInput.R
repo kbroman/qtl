@@ -1,9 +1,14 @@
 ValidateScanonevarInput <- function(cross,
 																		pheno.name,
+																		mean.add,
+																		mean.dom,
+																		var.add,
+																		var.dom,
 																		mean.covar.names,
 																		var.covar.names)
 {
 
+  # VALIDATE THE CROSS
 	# check cross type
 	crosstype <- class(cross)[1]
 	if (!(crosstype %in% c("bc", "dh", "f2", "haploid", "risib", "riself"))) {
@@ -16,6 +21,8 @@ ValidateScanonevarInput <- function(cross,
 		cross <- calc.genoprob(cross, step = 2.0)
 	}
 
+	
+	# VALIDATE THE PHENOTYPE
 	# grab phenotype
 	phen.names <- names(cross$pheno)
 	if (!(pheno.name %in% phen.names)) {
@@ -24,36 +31,37 @@ ValidateScanonevarInput <- function(cross,
 	if (length(pheno.name) != 1) {
 		stop('Scanonevar takes exactly one phenotype')
 	}
-	message(paste('Setting up scanonevar on phenotype:', pheno.name))
 	pheno <- subset(cross$pheno, select = pheno.name)
 
 
+  # VALIDATE THE GENETIC DESIGN
+	if (!mean.add & mean.dom) {
+	  stop('Doesnt make sense to fit dominance effect without additive effect.  You tried to do this with regard to phenotype mean.')
+	}
+	if (!var.add & var.dom) {
+	  stop('Doesnt make sense to fit dominance effect without additive effect.  You tried to do this with regard to phenotype variance')
+	}
 
+	# VALIDATE AND PULL COVARIATES
 	# store all marker names and ensure they are valid R variable names
 	marker.names <- unlist(lapply(X = cross$geno,
 																FUN = function(chr) { colnames(chr$data)}))
   stopifnot(all(marker.names == make.names(marker.names)))
   
-	# split covar names into phenotypes and markers
+	# split mean covar names into phenotypes and markers
 	mean.covar.names <- SplitVecByMembership(v = mean.covar.names,
 																					 a = phen.names,
 																					 b = marker.names)
 	mean.covar.phen.names <- mean.covar.names[[1]]
 	mean.covar.marker.names <- mean.covar.names[[2]]
 
-
-	var.covar.names <- SplitVecByMembership(v = var.covar.names,
-																					a = phen.names,
-																					b = marker.names)
-	var.covar.phen.names <- var.covar.names[[1]]
-	var.covar.marker.names <- var.covar.names[[2]]
-
-	# pull the data specified by the covariate names
+	# pull the data for phenotype covariates
 	mean.phen.covars <- data.frame(row.names = 1:nrow(pheno))
 	if (length(mean.covar.phen.names)) {
 		mean.phen.covars <- cross$pheno[, mean.covar.phen.names, drop = FALSE]
 	}
-
+	
+	# pull the data for marker covariates
 	mean.marker.covars <- data.frame(row.names = 1:nrow(pheno))
 	if (length(mean.covar.marker.names)) {
 
@@ -66,6 +74,14 @@ ValidateScanonevarInput <- function(cross,
 		}
 	}
 
+	
+	# same logic for variance covariates
+	var.covar.names <- SplitVecByMembership(v = var.covar.names,
+	                                        a = phen.names,
+	                                        b = marker.names)
+	var.covar.phen.names <- var.covar.names[[1]]
+	var.covar.marker.names <- var.covar.names[[2]]
+	
 	var.phen.covars <- data.frame(row.names = 1:nrow(pheno))
 	if (length(var.covar.phen.names)) {
 		var.phen.covars <- cross$pheno[, var.covar.phen.names, drop = FALSE]
@@ -81,8 +97,11 @@ ValidateScanonevarInput <- function(cross,
 		}
 	}
 
+	# compile all covariates
 	mean.covars <- cbind(mean.phen.covars, mean.marker.covars)
+	names(mean.covars) <- paste0('mean.', names(mean.covars))
 	var.covars <- cbind(var.phen.covars, var.marker.covars)
+	names(var.covars) <- paste0('var.', names(var.covars))
 
 	return(list(cross = cross,
 							pheno = pheno,
