@@ -1427,16 +1427,29 @@ plotPXG <- plot.pxg <-
     x <- x[, 1]
 
     observed <- sort(unique(x))
-    x <- match(x, observed)
 
     # amount of jitter
     u <- runif(nind(cross), -jitter, jitter)
     r <- (1 - 2 * jitter)/2
 
+    # genotype names
+    if(n.mark == 1)
+        gnames <- gen.names[[1]]
+    else {
+        gnames <- array(gen.names[[n.mark]], c(prod(n.gen), n.mark))
+        for(i in (n.mark - 1):1) {
+            tmpi <- rep(gen.names[[i]], rep(prod(n.gen[(i + 1):n.mark]),
+                                            n.gen[i]))
+            if(i > 1)
+                tmpi <- rep(tmpi, prod(n.gen[1:(i - 1)]))
+            gnames[, i] <- tmpi
+        }
+        gnames <- apply(gnames, 1, function(x) paste(x, collapse = "\n"))
+    }
+
     # create plot
     plot(x + u, y, xlab = "Genotype", ylab = ylab, type = "n",
-         main = "", xlim = c(1 - r + jitter, length(observed) + r +
-                    jitter), xaxt = "n")
+         main = "", xlim = c(1 - r + jitter, length(gnames) + r + jitter), xaxt = "n")
 
     # marker names at top
     if(missing(main))
@@ -1459,7 +1472,7 @@ plotPXG <- plot.pxg <-
     sux = sort(unique(x))
 
     # add confidence intervals
-    me <- se <- array(NA, length(observed))
+    me <- se <- array(NA, length(gnames))
     me[sux] <- tapply(y, x, mean, na.rm = TRUE)
     se[sux] <- tapply(y, x, function(a) sd(a, na.rm = TRUE)/sqrt(sum(!is.na(a))))
     thecolors <- c("black", "blue", "red", "purple", "green", "orange")
@@ -1471,75 +1484,27 @@ plotPXG <- plot.pxg <-
             col <- c("blue", "red")
     }
 
-    segments(seq(length(observed)) + jitter * 2, me, seq(length(observed)) +
+    ng <- length(gnames)
+    segments(seq(ng) + jitter * 2, me, seq(ng) +
              jitter * 4, me, lwd = 2, col = col)
-    segments(seq(length(observed)) + jitter * 3, me - se, seq(length(observed)) +
+    segments(seq(ng) + jitter * 3, me - se, seq(ng) +
              jitter * 3, me + se, lwd = 2, col = col)
-    segments(seq(length(observed)) + jitter * 2.5, me - se, seq(length(observed)) +
+    segments(seq(ng) + jitter * 2.5, me - se, seq(ng) +
              jitter * 3.5, me - se, lwd = 2, col = col)
-    segments(seq(length(observed)) + jitter * 2.5, me + se, seq(length(observed)) +
+    segments(seq(ng) + jitter * 2.5, me + se, seq(ng) +
              jitter * 3.5, me + se, lwd = 2, col = col)
 
     # add genotypes below
     u <- par("usr")
-    segments(1:length(observed), u[3], 1:length(observed), u[3] - diff(u[3:4]) *
-             0.015, xpd = TRUE)
-    if(n.mark == 1)
-        tmp <- gen.names[[1]]
-    else {
-        tmp <- array(gen.names[[n.mark]], c(prod(n.gen), n.mark))
-        for(i in (n.mark - 1):1) {
-            tmpi <- rep(gen.names[[i]], rep(prod(n.gen[(i + 1):n.mark]),
-                                            n.gen[i]))
-            if(i > 1)
-                tmpi <- rep(tmpi, prod(n.gen[1:(i - 1)]))
-            tmp[, i] <- tmpi
-        }
-        tmp <- apply(tmp, 1, function(x) paste(x, collapse = "\n"))
-        tmp <- tmp[!is.na(match(1:prod(n.gen), observed))]
-    }
-    #  text(1:length(observed), u[3] - diff(u[3:4]) * 0.05, tmp, xpd = TRUE,
-    #       cex = ifelse(n.mark==1, 1, 0.8))
     cxaxis <- par("cex.axis")
 
-    #  theline <- length(marker)-1
-    axis(side=1, at=1:length(observed), labels=tmp,
+    segments(seq(along=gnames), u[3], seq(along=gnames), u[3] - diff(u[3:4]) *
+             0.015, xpd = TRUE)
+    axis(side=1, at=seq(along=gnames), labels=gnames,
          cex=ifelse(n.mark==1, cxaxis, cxaxis*0.8),
          tick=FALSE, line = (length(marker)-1)/2)
 
     invisible(data)
-
-    # calculate return values?
-    #  if(any(which.missing == 0))
-    #    p.value <- anova(aov(y ~ x, subset = (which.missing ==
-    #                                          0)))[1, 5]
-    #  else p.value <- NA
-    #  names(p.value) <- NULL
-    #  tmp <- options(warn = -1)
-    #  form <- formula(paste("y ~", paste(marker, collapse = "*")))
-    #  if(any(is.na(me)) & n.mark > 2) {
-    #    formadd <- formula(paste("y ~", paste(marker, collapse = "+")))
-    #    fit <- aov(formadd, data, subset = (data$inferred ==
-    #                                        0))
-    #    full <- aov(form, data, subset = (data$inferred == 0))
-    #  }
-    #  else fit <- aov(form, data, subset = (data$inferred == 0))
-    #  tbl <- anova(fit, type = "marginal")
-    #  options(tmp)
-    #  p.value <- round(tbl$P[-nrow(tbl)], 4)
-    #  tmp = summary.lm(fit)
-    #  Rsq = tmp$r.sq
-    #  fstat = tmp$fstatistic
-    #  p.value = c(pf(fstat[1], fstat[2], fstat[3], lower = FALSE),
-    #    p.value)
-    #  names(p.value) <- c("overall", dimnames(tbl)[[1]][-nrow(tbl)])
-    #  if(any(is.na(me)) & n.mark > 2) {
-    #    p.value["inter"] <- round(anova(fit, full)$P[2], 4)
-    #    fit = full
-    #  }
-    #  invisible(list(Rsq = Rsq, p.value = p.value, me = me, se = se,
-    #                 fit = fit, data = data))
-
 }
 
 plotPheno <- plot.pheno <-
