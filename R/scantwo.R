@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2014, Karl W Broman and Hao Wu
-# last modified Oct, 2014
+# copyright (c) 2001-2015, Karl W Broman and Hao Wu
+# last modified Aug, 2015
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -76,6 +76,15 @@ scantwo <-
         stop("Need some of first chr to be <= some of second chr")
 
     if(missing(n.perm)) n.perm <- 0
+
+    if((method=="hk" || method=="em") && !assumeCondIndep) { # if reduce2grid was used, for assumeCondIndep
+        # if reduced2grid, force assumeCondIndep=TRUE
+        reduced2grid <- attr(cross$geno[[1]]$prob, "reduced2grid")
+        if(!is.null(reduced2grid) && reduced2grid) {
+            assumeCondIndep <- TRUE
+            warning("Using assumeCondIndep=TRUE, since probabilities reduced to grid")
+        }
+    }
 
     # in RIL, treat X chromomse like an autosome
     chrtype <- sapply(cross$geno, class)
@@ -372,7 +381,7 @@ scantwo <-
                             clean.distance=clean.distance,
                             maxit=maxit,
                             tol=tol, verbose=verbose, n.perm=n.perm,
-                            perm.strata=perm.strata,
+                            perm.strata=perm.strata, assumeCondIndep=assumeCondIndep,
                             batchsize=batchsize, chr=chr))
     }
 
