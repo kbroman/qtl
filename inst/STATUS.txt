@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.37, 2015-06-11
+Version 1.37, 2015-08-19
 
 Major changes:
 
@@ -24,13 +24,16 @@ Major changes:
 
 Minor changes:
 
-  Fix bug in stepwiseqtl, where if covar is not a data frame, they
+  Fixed a bug in plot.pxg, in the case that not all possible genotypes
+  were observed at a marker.
+
+  Fixed a bug in stepwiseqtl, where if covar is not a data frame, they
   don't get considered in the model.
 
-  Fix bug in fill.geno for method="maxmarginal" (wasn't putting NAs in
+  Fixed a bug in fill.geno for method="maxmarginal" (wasn't putting NAs in
   genotypes with probability < min.prob)
 
-  Fox bug in refineqtl that arises when multiple QTL are at exactly
+  Fixed a bug in refineqtl that arises when multiple QTL are at exactly
   the same position, which can arise in stepwiseqtl.
 
 
