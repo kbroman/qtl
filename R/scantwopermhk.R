@@ -19,6 +19,15 @@ scantwopermhk <-
     if(any(chrtype=="X") && (type=="bc" || type=="f2")) # force stratified permutation test
         perm.strata <- force_sexstrata(cross, perm.strata)
 
+    if(!assumeCondIndep) { # if reduce2grid was used, for assumeCondIndep
+        # if reduced2grid, force assumeCondIndep=TRUE
+        reduced2grid <- attr(cross$geno[[1]]$prob, "reduced2grid")
+        if(!is.null(reduced2grid) && reduced2grid) {
+            assumeCondIndep <- TRUE
+            warning("Using assumeCondIndep=TRUE, since probabilities reduced to grid")
+        }
+    }
+
     if(is.null(perm.Xsp) || !perm.Xsp || !any(chrtype=="X")) { # all autosomes
         result <- .scantwopermhk(cross, pheno.col=pheno.col,
                                  addcovar=addcovar, weights=weights, n.perm=n.perm,

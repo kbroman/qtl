@@ -24,6 +24,10 @@ Major changes:
 
 Minor changes:
 
+  Fixed a bug in scantwo and scantwopermhk in which an error would
+  occur if reduce2grid had been called and assumeCondIndep=FALSE. Now
+  forcing assumeCondIndep=TRUE in this case.
+
   Fixed a bug in plot.pxg, in the case that not all possible genotypes
   were observed at a marker.
 

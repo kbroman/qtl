@@ -5,7 +5,7 @@
 # copyright (c) 2001-2015, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Mar, 2015
+# last modified Aug, 2015
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -417,8 +417,10 @@ reduce2grid <-
             for(a in attr2fix)
                 attr(pr, a) <- butes[[a]]
 
+            attr(pr, "reduced2grid") <- TRUE
             cross$geno[[i]]$prob <- pr
         }
+
 
         reduced <- TRUE
     }
@@ -442,6 +444,7 @@ reduce2grid <-
             for(a in attr2fix)
                 attr(dr, a) <- butes[[a]]
 
+            attr(dr, "reduced2grid") <- TRUE
             cross$geno[[i]]$draws <- dr
         }
 
