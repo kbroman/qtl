@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2012, Karl W Broman
+# copyright (c) 2000-2015, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Mar, 2012
+# last modified Aug, 2015
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
