@@ -545,6 +545,9 @@ nmar <-
         else return(sapply(object, function(x) length(x)))
     }
 
+    if(length(object$geno) == 0)
+        stop("There is no genotype data.")
+
     if(!is.matrix(object$geno[[1]]$map))
         n.mar1 <- sapply(object$geno, function(x) length(x$map))
     else # sex-specific maps
@@ -569,6 +572,8 @@ totmar <-
         else return(sum(sapply(object, function(x) length(x))))
     }
 
+    if(length(object$geno) == 0)
+        stop("There is no genotype data.")
 
     if(!is.matrix(object$geno[[1]]$map))
         totmar1 <- sum(sapply(object$geno, function(x) length(x$map)))
