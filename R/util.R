@@ -707,6 +707,9 @@ drop.markers <-
         }
     }
 
+    if(sum(keep.chr) == 0)
+        stop("You're attempting to drop *all* of the markers, which isn't allowed.")
+
     if(any(!found))
         warning("Markers not found: ", paste(markers[!found],collapse=" "))
 

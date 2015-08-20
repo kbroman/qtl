@@ -16,13 +16,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.37, 2015-08-19
+Version 1.37, 2015-08-20
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  drop.markers now gives an error if you try to drop *all* of the
+  markers.
 
   Fixed a bug in scantwo and scantwopermhk in which an error would
   occur if reduce2grid had been called and assumeCondIndep=FALSE. Now

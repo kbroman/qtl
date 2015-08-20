@@ -9,9 +9,6 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
-o Don't let user drop _all_ markers in drop.markers without a
-  warning. Make sure the output is viewable with summary().
-
 o Write a function to simplify formula like y~Q1*Q2*Q3*Q4
   ...rather than halt with an error, just drop all but the pairwise
   interactions.
