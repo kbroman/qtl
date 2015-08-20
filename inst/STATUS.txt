@@ -27,6 +27,9 @@ Minor changes:
   drop.markers now gives an error if you try to drop *all* of the
   markers.
 
+  If cross object contains no genotype data, totmar() and nmar() now
+  give more meaningful errors.
+
   Fixed a bug in scantwo and scantwopermhk in which an error would
   occur if reduce2grid had been called and assumeCondIndep=FALSE. Now
   forcing assumeCondIndep=TRUE in this case.
