@@ -2,8 +2,8 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-2014, Karl W Broman
-# last modified Jul, 2014
+# copyright (c) 2000-2015, Karl W Broman
+# last modified Aug, 2015
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -166,8 +166,11 @@ read.cross.csv <-
         else neworder <- order(tempchr)
     }
     else {
-        if(map.included) neworder <- order(chr, map)
-        else neworder <- order(chr)
+        # don't let it reorder the chromosomes
+        tempchr <- factor(chr, levels=unique(chr))
+
+        if(map.included) neworder <- order(tempchr, map)
+        else neworder <- order(tempchr)
     }
     chr <- chr[neworder]
     map <- map[neworder]

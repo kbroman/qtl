@@ -16,13 +16,17 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.37, 2015-08-20
+Version 1.37, 2015-08-21
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  In read.cross with format="csv", "mm", or "tidy", don't let it
+  reorder the chromosomes (which it would do if there were chromosomes
+  named other than numbers < 1000, "X", or "x").
 
   drop.markers now gives an error if you try to drop *all* of the
   markers.
