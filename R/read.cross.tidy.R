@@ -2,8 +2,8 @@
 #
 # read.cross.tidy.R
 #
-# copyright (c) 2005-2014, Karl W Broman
-# last modified Aug, 2014
+# copyright (c) 2005-2015, Karl W Broman
+# last modified Aug, 2015
 # first written Aug, 2014
 #
 #     This program is free software; you can redistribute it and/or
@@ -154,7 +154,10 @@ read.cross.tidy <-
         tempchr <- as.numeric(tempchr)
         neworder <- order(tempchr, map[[2]])
     } else {
-        neworder <- order(chr, map[[2]])
+        # prevent reordering of chromosomes
+        tempchr <- factor(chr, levels=unique(chr))
+
+        neworder <- order(tempchr, map[[2]])
     }
     chr <- chr[neworder]
     map <- map[neworder, ]

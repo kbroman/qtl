@@ -253,11 +253,16 @@ read.cross.mm <-
             tempchr <- as.numeric(tempchr)
             if(includes.pos) neworder <- order(tempchr, pos)
             else neworder <- order(tempchr)
+        } else {
+            # prevent reordering of chromosomes
+            tempchr <- factor(chr, levels=unique(chr))
 
-            chr <- chr[neworder]
-            if(includes.pos) pos <- pos[neworder]
-            markers <- markers[neworder]
+            if(includes.pos) neworder <- order(tempchr, pos)
+            else neworder <- order(tempchr)
         }
+        chr <- chr[neworder]
+        if(includes.pos) pos <- pos[neworder]
+        markers <- markers[neworder]
     }
 
     Geno <- vector("list",length(unique(chr)))
