@@ -1,6 +1,7 @@
 ## R/qtl: A QTL mapping environment
 
 [![Build Status](https://travis-ci.org/kbroman/qtl.svg?branch=master)](https://travis-ci.org/kbroman/qtl)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/qtl)](http://cran.r-project.org/package=qtl)
 
 **Authors**: Karl W Broman and Hao Wu, with ideas from Gary Churchill
 and &#346;aunak Sen and contributions from Danny Arends,
