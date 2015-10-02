@@ -111,47 +111,32 @@ ScanViaDGLM <- function(mean.alt.formula,
                      data = mapping.df)
     log10lik.bothalt <- -0.5*both.alt.fit$m2loglik / log(10)
     
+    if (any(return.effects, return.effect.ses, return.effect.ps)) { 
+      if (ncol(marker.genoprobs == 3)) {
+        
+        mean.indices <- 1:(num.mean.effects)
+        var.indices <- (num.mean.effects + 1):(num.mean.effects + num.var.effects)
+      }
+      if (ncol(marker.genoprobs) == 2) {
+        
+        mean.idx.to.rm <- grep(pattern = 'dom', x = colnames(effect.ps[,mean.indices]))
+        mean.indices <- mean.indices[-mean.idx.to.rm] 
+        
+        var.idx.to.rm <- grep(pattern = 'dom', x = colnames(effect.ps[,var.indices]))
+        var.indices <- var.indices[-var.idx.to.rm]
+      } 
+    }
     if (return.effects) {
-      fitted.effects[marker.idx, mean.indices] <- both.alt.fit$coefficients
-      fitted.effects[marker.idx, var.indices] <- both.alt.fit$dispersion.fit$coefficients
+      fitted.effects[marker.idx, mean.indices] <- summary(both.alt.fit)$coef[,'Estimate']
+      fitted.effects[marker.idx, var.indices] <- summary(both.alt.fit$dispersion.fit)$coef[,'Estimate']
     }
     if (return.effect.ses) {
-      
-      # be careful to put NA on the .dom positions and nowhere else when we dont have a .dom effect
-      if (ncol(marker.genoprobs) == 2) {
-        
-        mean.idx.to.rm <- grep(pattern = 'dom', x = colnames(effect.ps[,mean.indices]))
-        temp.mean.indices <- mean.indices[-mean.idx.to.rm] 
-        
-        var.idx.to.rm <- grep(pattern = 'dom', x = colnames(effect.ps[,var.indices]))
-        temp.var.indices <- var.indices[-var.idx.to.rm]
-        
-        effect.ses[marker.idx, temp.mean.indices] <- summary(both.alt.fit)$coef[,2]
-        effect.ses[marker.idx, temp.var.indices] <- summary(both.alt.fit)$dispersion.summary$coef[,2]
-      } 
-      if (ncol(marker.genoprobs) == 3) {
-        effect.ses[marker.idx , mean.indices] <- summary(both.alt.fit)$coef[,2]
-        effect.ses[marker.idx, var.indices] <- summary(both.alt.fit)$dispersion.summary$coef[,2]
-      }
+        effect.ses[marker.idx , mean.indices] <- summary(both.alt.fit)$coef[,'Std. Error']
+        effect.ses[marker.idx, var.indices] <- summary(both.alt.fit$dispersion.fit)$coef[,'Std. Error']
     }
     if (return.effect.ps) {
-      
-      # be careful to put NA on the .dom positions and nowhere else when we dont have a .dom effect
-      if (ncol(marker.genoprobs) == 2) {
-        
-        mean.idx.to.rm <- grep(pattern = 'dom', x = colnames(effect.ps[,mean.indices]))
-        temp.mean.indices <- mean.indices[-mean.idx.to.rm] 
-        
-        var.idx.to.rm <- grep(pattern = 'dom', x = colnames(effect.ps[,var.indices]))
-        temp.var.indices <- var.indices[-var.idx.to.rm]
-        
-        effect.ps[marker.idx, temp.mean.indices] <- summary(both.alt.fit)$coef[,4]
-        effect.ps[marker.idx, temp.var.indices] <- summary(both.alt.fit)$dispersion.summary$coef[,4]
-      } 
-      if (ncol(marker.genoprobs) == 3) {
-        effect.ps[marker.idx, mean.indices] <- summary(both.alt.fit)$coef[,4]
-        effect.ps[marker.idx, var.indices] <- summary(both.alt.fit)$dispersion.summary$coef[,4]
-      }
+        effect.ps[marker.idx, mean.indices] <- summary(both.alt.fit)$coef[,'Pr(>|t|)']
+        effect.ps[marker.idx, var.indices] <- summary(both.alt.fit$dispersion.fit)$coef[,'Pr(>|t|)']
     }
     
     # store results

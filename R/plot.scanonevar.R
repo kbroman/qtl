@@ -148,18 +148,19 @@ plot.scanonevar <- function(varscan,
 	}
 	
 	# add thresholds if the scan has them (give precedence to varscan)
-	if (attr(varscan, 'units') == 'lods') {
-	  thresh.names <- c('alpha10thresh', 'alpha05thresh', 'alpha01thresh')
-	  for (thresh.idx in 1:length(thresh.names)) {
-	    thresh.name <- thresh.names[thresh.idx]
-	    if (!is.null(attr(varscan, thresh.name))) { 
-	      abline(h = attr(varscan, thresh.name), lty = thresh.idx) 
-	    } else if (!is.null(attr(scanone.for.comparison, thresh.name))) {
-	      abline(h = attr(scanone.for.comparison, thresh.name), lty = thresh.idx)
-	    }
-	  }
-	}
+# 	if (attr(varscan, 'units') == 'lods') {
+# 	  thresh.names <- c('alpha10thresh', 'alpha05thresh', 'alpha01thresh')
+# 	  for (thresh.idx in 1:length(thresh.names)) {
+# 	    thresh.name <- thresh.names[thresh.idx]
+# 	    if (!is.null(attr(varscan, thresh.name))) { 
+# 	      abline(h = attr(varscan, thresh.name), lty = thresh.idx) 
+# 	    } else if (!is.null(attr(scanone.for.comparison, thresh.name))) {
+# 	      abline(h = attr(scanone.for.comparison, thresh.name), lty = thresh.idx)
+# 	    }
+# 	  }
+# 	}
 	if (attr(varscan, 'units') == 'emp.ps') {
+	  mtext(text = 'alpha=0.05', side = 2, line = 0, at = -log10(0.05))
 	  abline(h = -log10(c(0.1, 0.05, 0.01)), lty = c(1, 2, 3))
 	}
 	

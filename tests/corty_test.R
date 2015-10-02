@@ -57,7 +57,7 @@ a <- newScanonevar(cross = B6.C58.cross,
                    return.effects = TRUE,
                    return.effect.ses = TRUE,
                    return.effect.ps = TRUE,
-                   chrs = c(1, 2, 3), 
+                   chrs = c(19, 'X'), 
                    exclusion.window = 0.8)
 
 plot(a, scanone.for.comparison = so)
@@ -82,7 +82,9 @@ fitplot.scanonevar(cross = B6.C58.cross,
                    fit.based = TRUE)
 
 
+b <- readRDS('../Aim1_for_local/vQTL_reanalysis/forward_selection/varscan_allmice_rint.PCT10.RDS')
 
+plot(b)
 
 # working on wald test
 theta <- both.alt.fit$coef[3:4]
