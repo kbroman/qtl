@@ -1,4 +1,4 @@
-ValidateAndFilterInput <- function(cross, mean.formula, var.formula)
+ValidateAndFilterInput <- function(cross, mean.formula, var.formula, chrs = names(cross$geno))
 {
   
   # calc genoprobs if needed
@@ -7,23 +7,26 @@ ValidateAndFilterInput <- function(cross, mean.formula, var.formula)
   }
   
   # turn genoprobs into one big tbl_df
-  for (this.chr.name in names(cross$geno))
-  {
+  all.chr.genoprobs <- NULL
+  for (this.chr.name in names(cross$geno)) {
     # pull out genoprobs and store in tbl_df
     this.chr.probs <- cross$geno[[this.chr.name]]$prob
 
     # add chr name to pseudomarker names so they don't collide
     chr.specific.names <- paste0('chr', 
-                                 this.chr.name,
+                                 str_pad(this.chr.name, 2, side = "left", pad = "0"),
                                  '_',
                                  colnames(this.chr.probs))
     
     colnames(this.chr.probs) <- chr.specific.names
     
+    new.names <- as.vector(outer(dimnames(this.chr.probs)[[2]], dimnames(this.chr.probs)[[3]], paste, sep = '_'))
+    
     this.chr.tbl <- tbl_df(data.frame(this.chr.probs))
-
+    names(this.chr.tbl) <- new.names
+    
     # aggregate
-    if (!exists('all.chr.genoprobs')) {
+    if (is.null(all.chr.genoprobs)) {
       all.chr.genoprobs <- this.chr.tbl
       chr.by.marker <- rep(this.chr.name, dim(this.chr.probs)[2])
       pos.by.marker <- attr(this.chr.probs, 'map')
@@ -43,7 +46,7 @@ ValidateAndFilterInput <- function(cross, mean.formula, var.formula)
   # split var names into those that refer to phenotypes and those that refer to markers
   mean.pheno.vars <- mean.marker.vars <- NULL
   for (var in mean.var.names) {
-    if (var == 'QTL.add' | var == 'QTL.dom') {
+    if (var == 'mean.QTL.add' | var == 'mean.QTL.dom') {
       next
     } else if (var %in% names(cross$pheno)) {
       mean.pheno.vars <- c(mean.pheno.vars, var)
@@ -56,7 +59,7 @@ ValidateAndFilterInput <- function(cross, mean.formula, var.formula)
   
   var.pheno.vars <- var.marker.vars <- NULL
   for (var in var.var.names) {
-    if (var == 'QTL.add' | var == 'QTL.dom') {
+    if (var == 'var.QTL.add' | var == 'var.QTL.dom') {
       next
     } else if (var %in% names(cross$pheno)) {
       var.pheno.vars <- c(var.pheno.vars, var)
@@ -67,8 +70,10 @@ ValidateAndFilterInput <- function(cross, mean.formula, var.formula)
     }
   }
   
-  mapping.df <- data.frame(QTL.add = rep(NA, nrow(all.chr.genoprobs)),
-                           QTL.dom = rep(NA, nrow(all.chr.genoprobs)))
+  mapping.df <- data.frame(mean.QTL.add = rep(NA, nrow(all.chr.genoprobs)),
+                           mean.QTL.dom = rep(NA, nrow(all.chr.genoprobs)),
+                           var.QTL.add = rep(NA, nrow(all.chr.genoprobs)),
+                           var.QTL.dom = rep(NA, nrow(all.chr.genoprobs)))
   
   pheno.vars <- c(mean.pheno.vars, var.pheno.vars)
   if (!is.null(pheno.vars))  {
@@ -118,6 +123,15 @@ ValidateAndFilterInput <- function(cross, mean.formula, var.formula)
       mapping.df <- cbind(mapping.df, marker.df)
     }
   }
+  
+  # now that we have used the whole genome to look for covariates, 
+  # filter down to the chromosomes of interest for mapping
+  all.chr.genoprobs <- dplyr::select(all.chr.genoprobs,
+                                     matches(paste(paste0('chr', str_pad(chrs, 2, side = "left", pad = "0"), collapse = '|'))))
+  keeps <- chr.by.marker %in% chrs
+  chr.by.marker <- chr.by.marker[keeps]
+  pos.by.marker <- pos.by.marker[keeps]
+  marker.names <- marker.names[keeps]
   
   return(list(genoprobs = all.chr.genoprobs,
               chr.by.marker = chr.by.marker,

@@ -19,13 +19,6 @@
 #
 ######################################################################
 
-######################################################################
-#
-# summary.scanonevar:
-# Summarize the key features of a scanonevar
-#
-######################################################################
-
 summary.scanonevar <- function(vs, digits = 3, thresh) {
 
 	if (!any(class(vs) == "scanonevar")) {
@@ -36,28 +29,37 @@ summary.scanonevar <- function(vs, digits = 3, thresh) {
     if (units(vs) == 'lods') { thresh <- 3 }
     if (units(vs) == 'emp.ps') { thresh <- 0.05 }    
   }
-  
-	# Print Effects Fitted by Null Model
-	null.effects <- attr(vs, 'null.effects')
-	message('Effect estimates when no marker present')
-	message('mean covariate effects:')
-	print(round(null.effects[[1]], digits))
-	message('variance covariate effects:')
-	print(round(null.effects[[2]], digits))
+
 
 	peaks <- GetPeaksFromVarscan(vs, thresh)
 	
-	
-	message('Full Model Peaks:')
-	print(peaks %>% 
-	        dplyr::filter(full.peak == TRUE, emp.p.full < thresh) %>%
-	        select(-matches('chrtype|effect|baseline|peak')))
-	message('Mean Model Peaks:')
-	print(peaks %>% 
-	        dplyr::filter(mean.peak == TRUE, emp.p.mean < thresh) %>%
-	        select(-matches('chrtype|effect|baseline|peak')))
-	message('Var Model Peaks:')
-	print(peaks %>% 
-	        dplyr::filter(var.peak == TRUE, emp.p.var < thresh) %>%
-	        select(-matches('chrtype|effect|baseline|peak')))
+	if (units(vs) == 'lods') {
+	  message('Full Model Peaks:')
+	  print(peaks %>% 
+	          dplyr::filter(full.peak == TRUE, full.lod > thresh) %>%
+	          select(-matches('chrtype|effect|baseline|peak')))
+	  message('Mean Model Peaks:')
+	  print(peaks %>% 
+	          dplyr::filter(mean.peak == TRUE, mean.lod > thresh) %>%
+	          select(-matches('chrtype|effect|baseline|peak')))
+	  message('Var Model Peaks:')
+	  print(peaks %>% 
+	          dplyr::filter(var.peak == TRUE, var.lod > thresh) %>%
+	          select(-matches('chrtype|effect|baseline|peak')))
+	}
+
+	if (units(vs) == 'emp.ps') {
+	  message('Full Model Peaks:')
+	  print(peaks %>% 
+	          dplyr::filter(full.peak == TRUE, emp.p.full.lod < thresh) %>%
+	          select(-matches('chrtype|effect|baseline|peak')))
+	  message('Mean Model Peaks:')
+	  print(peaks %>% 
+	          dplyr::filter(mean.peak == TRUE, emp.p.mean.lod < thresh) %>%
+	          select(-matches('chrtype|effect|baseline|peak')))
+	  message('Var Model Peaks:')
+	  print(peaks %>% 
+	          dplyr::filter(var.peak == TRUE, emp.p.var.lod < thresh) %>%
+	          select(-matches('chrtype|effect|baseline|peak')))
+	}	
 }

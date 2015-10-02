@@ -5,7 +5,7 @@ import(graphics, stats, utils, parallel)
 
 export(map2table)
 export(newScanonevar, newScanonevar.perm, vqtl_ConvertLODsToEmpPs, ScanViaDGLM)
-export(ConvenientScanoneVar)
+#export(ConvenientScanoneVar)
 export(reduce2grid)
 export(formMarkerCovar)
 export(nqtl)
@@ -59,6 +59,7 @@ export(clean, condense, convert)
 export(summaryScantwoOld, summary.scantwo.old)
 export(reviseXdata)
 export(newScanonevar, ValidateAndFilterInput, newConvenientScanonevar)
+export(margin.plot, predictive.plot)
 
 # used by funqtl
 export(checkStepwiseqtlStart)

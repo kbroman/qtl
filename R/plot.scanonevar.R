@@ -28,45 +28,48 @@
 
 plot.scanonevar <- function(varscan,
 														chrs = unique(varscan$chr),
-														col = c("black", "blue", "red", "green"),
+														col = c("black", "blue", "red"),
 														bandcol = 'lightgray',
+														legends = c('mean or var', 'mean', 'var'),
 														legend.pos = 'top',
 														gap = 25,
 														incl.markers = TRUE,
 														main = attr(varscan, 'pheno'),
-														ylim = c(0, 1.05*max(coords.y.locus, na.rm = TRUE)))
+														ylim = c(0, 1.05*max(coords.y.locus, na.rm = TRUE)),
+														scanone.for.comparison = NULL)
 {
 
 	# store current graphical parameters and customize them for this plot
 	start.pars <- par(no.readonly = TRUE)
-	par(mar = c(3,4,6,1))
+	par(mar = c(3,4,5,1))
 
 	# subset varscan to necessary chrs only
 	if (!identical(chrs, unique(varscan$chr))) {
-		temp <- dplyr::filter(varscan, chr %in% chrs)
+		varscan <- filter(varscan, chr %in% chrs)
 
-		class(temp) <- c("scanonevar", "tbl_df", "data.frame")
-		attr(temp, 'method') <- attr(varscan, 'method')
-		attr(temp, 'type') <- attr(varscan, 'type')
-		attr(temp, 'model') <- attr(varscan, 'model')
-		attr(temp, 'mean.null.formula') <- attr(varscan, 'mean.null.formula')
-		attr(temp, 'mean.alt.formula') <- attr(varscan, 'mean.alt.formula')
-		attr(temp, 'var.null.formula') <- attr(varscan, 'var.null.formula')
-		attr(temp, 'var.alt.formula') <- attr(varscan, 'var.alt.formula')
-		attr(temp, 'pheno') <- attr(varscan, 'pheno')
-		attr(temp, 'null.effects') <- attr(varscan, 'null.effects')
-		attr(temp, 'units') <- attr(varscan, 'units')
-		temp$chr <- factor(temp$chr)
-
-		varscan <- temp
+# 		class(temp) <- c("scanonevar", "tbl_df", "data.frame")
+# 		attr(temp, 'method') <- attr(varscan, 'method')
+# 		attr(temp, 'type') <- attr(varscan, 'type')
+# 		attr(temp, 'model') <- attr(varscan, 'model')
+# 		attr(temp, 'mean.null.formula') <- attr(varscan, 'mean.null.formula')
+# 		attr(temp, 'mean.alt.formula') <- attr(varscan, 'mean.alt.formula')
+# 		attr(temp, 'var.null.formula') <- attr(varscan, 'var.null.formula')
+# 		attr(temp, 'var.alt.formula') <- attr(varscan, 'var.alt.formula')
+# 		attr(temp, 'pheno') <- attr(varscan, 'pheno')
+# 		attr(temp, 'null.effects') <- attr(varscan, 'null.effects')
+# 		attr(temp, 'units') <- attr(varscan, 'units')
+# 		temp$chr <- factor(temp$chr)
+# 
+# 		varscan <- temp
 	}
 
 	# x coordinates for plotting
+	varscan$chr <- factor(varscan$chr)
 	levels(varscan$chr) <- mixedsort(levels(varscan$chr))
 	coords.x.chr <- varscan %>%
 		group_by(chr) %>%
 		summarise(len = max(pos) - min(pos)) %>%
-		mutate(start = cumsum(lag(len + gap, default = 0))) %>%
+		mutate(start = cumsum(dplyr::lag(len + gap, default = 0))) %>%
 		mutate(end = start + len) %>%
 		mutate(middle = (start + end)/2)
 
@@ -75,7 +78,7 @@ plot.scanonevar <- function(varscan,
 
 	# y coordinates for plotting
 	if (attr(varscan, 'units') == 'lods') {
-		coords.y.locus <- select(varscan, matches('lod'))
+		coords.y.locus <- varscan %>% select(matches('lod'))
 		ylab <- 'LOD'
 	}
 	if (attr(varscan, 'units') == 'emp.ps') {
@@ -122,6 +125,45 @@ plot.scanonevar <- function(varscan,
 						 col = col[test.idx])
 	}
 
+	# plot scanone for comparison
+	if (attr(varscan, 'units') == 'lods') {
+	  if (!is.null(scanone.for.comparison)) {
+	    segments(x0 = coords.x.locus$coord.x,
+	             x1 = lead(coords.x.locus$coord.x),
+	             y0 = scanone.for.comparison$lod,
+	             y1 = lead(scanone.for.comparison$lod),
+	             lwd = 2*with(coords.x.locus, pos != len),
+	             col = 'darkgreen')
+	  }
+	}
+	if (attr(varscan, 'units') == 'emp.ps') {
+	  if (!is.null(scanone.for.comparison)) {
+	    segments(x0 = coords.x.locus$coord.x,
+	             x1 = lead(coords.x.locus$coord.x),
+	             y0 = -log10(scanone.for.comparison$emp.p.scanone),
+	             y1 = -log10(lead(scanone.for.comparison$emp.p.scanone)),
+	             lwd = 2*with(coords.x.locus, pos != len),
+	             col = 'darkgreen')
+	  }
+	}
+	
+	# add thresholds if the scan has them (give precedence to varscan)
+	if (attr(varscan, 'units') == 'lods') {
+	  thresh.names <- c('alpha10thresh', 'alpha05thresh', 'alpha01thresh')
+	  for (thresh.idx in 1:length(thresh.names)) {
+	    thresh.name <- thresh.names[thresh.idx]
+	    if (!is.null(attr(varscan, thresh.name))) { 
+	      abline(h = attr(varscan, thresh.name), lty = thresh.idx) 
+	    } else if (!is.null(attr(scanone.for.comparison, thresh.name))) {
+	      abline(h = attr(scanone.for.comparison, thresh.name), lty = thresh.idx)
+	    }
+	  }
+	}
+	if (attr(varscan, 'units') == 'emp.ps') {
+	  abline(h = -log10(c(0.1, 0.05, 0.01)), lty = c(1, 2, 3))
+	}
+	
+	
 	# plot lines at marker positions (rug plot)
 	if (incl.markers) {
 		marker.idxs <- !grepl(pattern = 'loc', x = varscan$marker.name)
@@ -133,9 +175,14 @@ plot.scanonevar <- function(varscan,
 	}
 
 	# draw the legend
-	legend(x = legend.pos, legend = names(coords.y.locus),
+	if (!is.null(scanone.for.comparison)) { 
+	  legends <- c(legends, 'scanone for comparison')
+	  col <- c(col, 'darkgreen') 
+	}
+	legend(x = legend.pos, 
+	       legend = legends,
 				 fill = col, cex = 0.8, bty = 'n',
-				 x.intersp = 0.3, y.intersp = 0.8, xjust = 0.5, yjust = 0)
+				 x.intersp = 0.3, y.intersp = 1, xjust = 0.5, yjust = 0)
 
 	# add the title
 	title <- paste(attr(x = varscan, 'pheno'),
@@ -148,12 +195,6 @@ plot.scanonevar <- function(varscan,
 	               '\n', 'var alt:',
 	               paste(as.character(attr(varscan, 'var.alt.formula')), collapse = ' '))
 	mtext(text = title, side = 3, line = 0)
-
-	# draw the alpha = 0.05 and 0.01 lines
-	# iff we are looking at empirical ps
-	if (units(varscan) == 'emp.ps') {
-		abline(h = -log10(c(0.05, 0.01)), lty = c(1, 2))
-	}
 
 	# reset graphical parameteers to how they were on start
 	par(start.pars)
