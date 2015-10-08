@@ -9,7 +9,7 @@
 }
 
 \usage{
-\method{max}{scanone}(object, chr, lodcolumn=1, df=FALSE, na.rm=TRUE, \dots)
+\method{max}{scanone}(object, chr, lodcolumn=1, na.rm=TRUE, \dots)
 }
 
 \arguments{
@@ -24,8 +24,6 @@
  \item{lodcolumn}{An integer, indicating which of the LOD score columns
    should be considered in pulling out the peak (these are indexed 1,
    2, \dots).}
- \item{df}{If TRUE, the degrees of freedom associated with the LOD
-   scores are shown.} 
  \item{na.rm}{A logical indicating whether missing values should be
    removed.}
  \item{\dots}{Ignored.}
