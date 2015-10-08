@@ -6,11 +6,11 @@
 \description{
   Print the estimated genome-wide LOD thresholds on the basis of
   permutation results from \code{\link{scanone}} (with
-  \code{n.perm} > 0). 
+  \code{n.perm} > 0).
 }
 
 \usage{
-\method{summary}{scanoneperm}(object, alpha=c(0.05, 0.10), df=FALSE,
+\method{summary}{scanoneperm}(object, alpha=c(0.05, 0.10),
                     controlAcrossCol=FALSE, \dots)
 }
 
@@ -18,8 +18,6 @@
  \item{object}{Output from the function \code{\link{scanone}}
    with \code{n.perm} > 0.}
  \item{alpha}{Genome-wide significance levels.}
- \item{df}{If TRUE, the degrees of freedom associated with the LOD
-   scores are shown.} 
  \item{controlAcrossCol}{If TRUE, control error rate not just across
    the genome but also across the columns of LOD scores.}
  \item{\dots}{Ignored at this point.}
@@ -40,7 +38,7 @@
   Then in place of \eqn{\alpha}{alpha}, we use
   \deqn{\alpha_A = 1 - (1-\alpha)^{L_A/L_T}}{alpha_A = 1 - (1 -
     alpha)^(L_A/L_T)}
-  as the significance level for the autosomes and 
+  as the significance level for the autosomes and
   \deqn{\alpha_X = 1 - (1-\alpha)^{L_X/L_T}}{alpha_x = 1 - (1 -
     alpha)^(LX/LT)}
   as the significance level for the X chromosome.  The result is a list
@@ -52,7 +50,7 @@
   ranks, and then for each permutation replicate we find the maximum
   rank across the columns.  We then find the appropriate quantile of the
   maximized ranks, and then backtrack to the corresponding LOD score
-  within each of the columns.  
+  within each of the columns.
 }
 
 \value{
@@ -95,6 +93,6 @@ summary(operm3, controlAcrossCol=TRUE, alpha=c(0.05, 0.36))
   Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for
   quantitative trait mapping.  \emph{Genetics} \bold{138}, 963--971.
 }
-	  
+
 
 \keyword{print}

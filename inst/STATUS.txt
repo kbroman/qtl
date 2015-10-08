@@ -16,6 +16,19 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.38, 2015-10-08
+
+Major changes:
+
+  Get rid of everything to do with degrees of freedom in scanone and
+  scantwo. The checks seem to offer little value but rather produce
+  cryptic warnings that confuse many users.
+
+Minor changes:
+
+  None.
+
+
 Version 1.37, 2015-08-24
 
 Major changes:

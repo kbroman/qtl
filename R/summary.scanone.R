@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-2012, Karl W Broman
-# last modified Nov, 2012
+# copyright (c) 2001-2015, Karl W Broman
+# last modified Oct, 2015
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 ##################################################################
 summary.scanone <-
     function(object, threshold, format=c("onepheno", "allpheno", "allpeaks", "tabByCol", "tabByChr"),
-             perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE,
+             perms, alpha, lodcolumn=1, pvalues=FALSE,
              ci.function=c("lodint", "bayesint"), ...)
 {
     if(!any(class(object) == "scanone"))
@@ -137,15 +137,6 @@ summary.scanone <-
     if(missing(perms) && pvalues) {
         warning("Can show p-values only if perms are provided.")
         pvalues <- FALSE
-    }
-
-    if(!missing(perms) && "df" %in% names(attributes(object)) &&
-       "df" %in% names(attributes(perms))) {
-        df.o <- attr(object, "df")
-        df.p <- attr(perms, "df")
-        if(length(df.o) != length(df.p) ||
-           any(df.o != df.p))
-            warning("Degrees of freedom in input object and perms do not match.")
     }
     # end of check of input
 
@@ -510,10 +501,6 @@ summary.scanone <-
         attr(result, "tab") <- format
     }
 
-    if(df && "df" %in% names(attributes(object)))
-        attr(result, "df") <- attr(object, "df")
-    if(!df) attr(result, "df") <- NULL
-
     if(format=="allpeaks") rownames(result) <- as.character(result$chr)
 
     if(format=="tabByCol" || format=="tabByChr")
@@ -532,20 +519,6 @@ print.summary.scanone <-
     if(is.null(tab) && nrow(x) == 0) {
         cat("    There were no LOD peaks above the threshold.\n")
         return(invisible(NULL))
-    }
-
-    if("df" %in% names(attributes(x))) {
-        df <- attr(x, "df")
-        cat("Degrees of freedom: ")
-        if(is.matrix(df)) { # for 2-part model
-            cat("\n")
-            rownames(df) <- paste("   ", rownames(df), ": ", sep="")
-            print(df)
-        }
-        else {
-            cat(paste(names(df), ":", df, sep="", collapse="  "), "\n")
-        }
-        cat("\n")
     }
 
     flag <- FALSE
@@ -581,14 +554,10 @@ print.summary.scanone <-
 
 # pull out maximum LOD peak, genome-wide
 max.scanone <-
-    function(object, chr, lodcolumn=1, df=FALSE, na.rm=TRUE, ...)
+    function(object, chr, lodcolumn=1, na.rm=TRUE, ...)
 {
     if(!any(class(object) == "scanone"))
         stop("Input must have class \"scanone\".")
-
-    if("df" %in% names(attributes(object)))
-        thedf <- attr(object, "df")
-    else thedf <- NULL
 
     if(lodcolumn < 1 || lodcolumn+2 > ncol(object))
         stop("Argument lodcolumn misspecified.")
@@ -601,9 +570,8 @@ max.scanone <-
     object <- object[wh,]
 
     object[,1] <- factor(as.character(unique(object[,1])))
-    attr(object, "df") <- thedf
 
-    summary.scanone(object,threshold=0,lodcolumn=lodcolumn, df=df)
+    summary.scanone(object,threshold=0,lodcolumn=lodcolumn)
 }
 
 ######################################################################
@@ -617,10 +585,6 @@ subset.scanone <-
 
     if(missing(chr) && missing(lodcolumn))
         stop("You must specify either chr or lodcolumn.")
-
-    if("df" %in% names(attributes(x)))
-        df <- attr(x, "df")
-    else df <- NULL
 
     y <- x
 
@@ -652,7 +616,6 @@ subset.scanone <-
     if("model" %in% nam)
         attr(x, "model") <- attr(y,"model")
 
-    attr(x, "df") <- df
     x
 }
 
@@ -674,19 +637,6 @@ c.scanone <-
         if(!any(class(dots[[i]]) == "scanone"))
             stop("Input should have class \"scanone\".")
     }
-
-    df <- lapply(dots, attr, "df")
-    flag <- 0
-    for(i in 2:length(df)) {
-        if(length(df[[i]]) != length(df[[1]]) ||
-           any(df[[i]] != df[[1]]))
-            flag <- 1
-    }
-    if(flag) {
-        warning("Mismatch in degrees of freedom; may cause problems.")
-        df <- NULL
-    }
-    else df <- df[[1]]
 
     if(!missing(labels)) {
         if(length(labels)==1)
@@ -733,7 +683,6 @@ c.scanone <-
                         as.data.frame(dots[[i]][,-(1:2),drop=FALSE], stringsAsFactors=TRUE))
 
     class(result) <- cl
-    attr(result, "df") <- df
     result
 }
 
@@ -761,7 +710,7 @@ grab.arg.names <-
 # scanone permutation test (from scanone with n.perm > 0)
 ######################################################################
 summary.scanoneperm <-
-    function(object, alpha=c(0.05, 0.10), df=FALSE, controlAcrossCol=FALSE, ...)
+    function(object, alpha=c(0.05, 0.10), controlAcrossCol=FALSE, ...)
 {
     if(!any(class(object) == "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
@@ -811,9 +760,6 @@ summary.scanoneperm <-
             quant[[k]] <- qu
         }
 
-        if(df && "df" %in% names(attributes(object)))
-            attr(quant,"df") <- attr(object, "df")
-
         attr(quant, "n.perm") <- c("A"=nrow(object$A), "X"=nrow(object$X))
         class(quant) <- "summary.scanoneperm"
     }
@@ -849,9 +795,6 @@ summary.scanoneperm <-
         }
         else rownames(quant) <- paste(100*alpha, "%", sep="")
 
-        if(df && "df" %in% names(attributes(object)))
-            attr(quant,"df") <- attr(object, "df")
-
         attr(quant, "n.perm") <- nrow(object)
         class(quant) <- "summary.scanoneperm"
     }
@@ -861,20 +804,6 @@ summary.scanoneperm <-
 print.summary.scanoneperm <-
     function(x, ...)
 {
-    if("df" %in% names(attributes(x))) {
-        df <- attr(x, "df")
-        cat("Degrees of freedom: ")
-        if(is.matrix(df)) { # for 2-part model
-            cat("\n")
-            rownames(df) <- paste("   ", rownames(df), ": ", sep="")
-            print(df)
-        }
-        else {
-            cat(paste(names(df), ":", df, sep="", collapse="  "), "\n")
-        }
-        cat("\n")
-    }
-
     n.perm <- attr(x, "n.perm")
     if(length(n.perm)==2) {
         cat("Autosome LOD thresholds (", n.perm[1], " permutations)\n", sep="")
@@ -908,19 +837,6 @@ rbind.scanoneperm <- c.scanoneperm <-
         if(!any(class(dots[[i]]) == "scanoneperm"))
             stop("Input should have class \"scanoneperm\".")
     }
-
-    df <- lapply(dots, attr, "df")
-    flag <- 0
-    for(i in 2:length(df)) {
-        if(length(df[[i]]) != length(df[[1]]) ||
-           any(df[[i]] != df[[1]]))
-            flag <- 1
-    }
-    if(flag) {
-        warning("Mismatch in degrees of freedom; may cause problems.")
-        df <- NULL
-    }
-    else df <- df[[1]]
 
     if("xchr" %in% names(attributes(dots[[1]]))) {
         xchr <- lapply(dots, attr, "xchr")
@@ -958,7 +874,6 @@ rbind.scanoneperm <- c.scanoneperm <-
             result <- rbind(result, dots[[i]])
         class(result) <- "scanoneperm"
     }
-    attr(result, "df") <- df
     result
 }
 
@@ -975,19 +890,6 @@ cbind.scanoneperm <-
         if(!any(class(dots[[i]]) == "scanoneperm"))
             stop("Input should have class \"scanoneperm\".")
     }
-
-    df <- lapply(dots, attr, "df")
-    flag <- 0
-    for(i in 2:length(df)) {
-        if(length(df[[i]]) != length(df[[1]]) ||
-           any(df[[i]] != df[[1]]))
-            flag <- 1
-    }
-    if(flag) {
-        warning("Mismatch in degrees of freedom; may cause problems.")
-        df <- NULL
-    }
-    else df <- df[[1]]
 
     if(!missing(labels)) {
         if(length(labels)==1)
@@ -1083,7 +985,6 @@ cbind.scanoneperm <-
 
         class(result) <- "scanoneperm"
     }
-    attr(result, "df") <- df
     result
 }
 

@@ -2,8 +2,8 @@
 #
 # vbscan.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2015, Karl W Broman
+# last modified Oct, 2015
 # first written May, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -59,10 +59,6 @@ vbscan <-
 
     n.chr <- nchr(cross)
     results <- NULL
-
-    # to store the degrees of freedom
-    dfApm <- dfAp <- dfAm <- -1
-    dfXpm <- dfXp <- dfXm <- -1
 
     for(i in 1:n.chr) {
         # make sure inferred genotypes or genotype probabilities are available
@@ -128,11 +124,6 @@ vbscan <-
 
         z <- res
 
-        if(chrtype=="A" && dfApm < 0) {
-            dfApm <- (n.gen-1)*2
-            dfAp <- (n.gen-1)
-            dfAm <- (n.gen-1)
-        }
         # get null log10 likelihood for the X chromosome
         if(chrtype=="X") {
 
@@ -142,13 +133,6 @@ vbscan <-
             parX0 <- temp$parX0
             sexpgmcovar <- temp$sexpgmcovar
             sexpgmcovar.alt <- temp$sexpgmcovar.alt
-
-            if(dfXpm < 0) {
-                if(adjustX) nc <- ncol(sexpgmcovar)
-                else nc <- 1
-                dfXp <- dfXm <- n.gen - nc
-                dfXpm <- 2*dfXp
-            }
 
             if(adjustX) { # get LOD-score adjustment
                 n.gen <- ncol(sexpgmcovar)+1
@@ -180,13 +164,6 @@ vbscan <-
     attr(results,"method") <- method
     attr(results,"type") <- class(cross)[1]
     attr(results,"model") <- "twopart"
-
-    df <- NULL
-    if(dfApm > 0)
-        df <- rbind(df, "A"=c("p.mu"=dfApm, "p"=dfAp, "mu"=dfAm))
-    if(dfXpm > 0)
-        df <- rbind(df, "X"=c("p.mu"=dfXpm, "p"=dfXp, "mu"=dfXm))
-    attr(results, "df") <- df
 
     results
 }

@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-2014, Karl W Broman
-# last modified Jan, 2014
+# copyright (c) 2001-2015, Karl W Broman
+# last modified Oct, 2015
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -106,10 +106,6 @@ scanone <-
         else if(!is.logical(ind.noqtl) || length(ind.noqtl) != nind(cross))
             stop("ind.noqtl be a logical vector of length n.ind (", nind(cross), ")")
     }
-
-    # to store the degrees of freedom
-    dfA <- -1
-    dfX <- parXa <- -1
 
     if(!missing(chr)) cross <- subset(cross, chr)
     if(missing(n.perm)) n.perm <- 0
@@ -232,7 +228,6 @@ scanone <-
                        verbose, batchsize, n.cluster=0)
         nc <- ncol(out)-2
         cn <- colnames(out)[-(1:2)]
-        df <- attr(out, "df")
         for(i in 2:length(pheno.col))
             out[,ncol(out)+1:nc] <- scanone(cross, chr, pheno.col[i], model,
                                             method, addcovar, intcovar, weights,
@@ -248,7 +243,6 @@ scanone <-
         else
             colnames(out)[-(1:2)] <- colnames(cross$pheno)[pheno.col]
 
-        attr(out, "df") <- df
         return(out)
     }
 
@@ -727,14 +721,6 @@ scanone <-
                 z <- nllik0 - z
         }
 
-        if(chrtype=="A" && dfA < 0)
-            dfA <- (n.gen-1)*(n.ic+1)
-        if(chrtype=="X" && parXa < 0) {
-            parXa <- n.gen + n.ac + (n.gen-1)*n.ic
-            parX0 <- n.ac+1
-            dfX <- parXa - parX0
-        }
-
         # get null log10 likelihood for the X chromosome
         if(chrtype=="X") {
 
@@ -827,8 +813,6 @@ scanone <-
                     z <- t(t(z) + nllikX - nllik0)
                 }
             }
-
-            dfX <- parXa - parX0
         }
 
         # replace missing or negative LODs with 0
@@ -851,16 +835,6 @@ scanone <-
     attr(results,"method") <- method
     attr(results,"type") <- type
     attr(results,"model") <- model
-
-    # degrees of freedom
-    if(dfA > 0 && dfX > 0)
-        attr(results, "df") <- c("A"=dfA, "X"=dfX)
-    else if(dfA > 0)
-        attr(results, "df") <- c("A"=dfA)
-    else if(dfX > 0)
-        attr(results, "df") <- c("X"=dfX)
-    else
-        attr(results, "df") <- NA
 
     results
 }
@@ -925,8 +899,6 @@ scanone.perm <-
         res <- list("A"=resA, "X"=resX)
         attr(res, "xchr") <- xchr
         attr(res, "L") <- c("A"=La, "X"=Lx)
-        attr(res, "df") <- rbind(attr(resA, "df"), attr(resX, "df"))
-        attr(res$A, "df") <- attr(res$X, "df") <- NULL
     }
 
     else {
@@ -1032,7 +1004,6 @@ scanone.perm.engine <-
                        n.cluster=0)
 
         res <- matrix(apply(tem[,-(1:2),drop=FALSE], 2, max, na.rm=TRUE), ncol=1)
-        attr(res, "df") <- attr(tem, "df")
         colnames(res) <- "lod"
     }
     else { ## all other cases, do one permutation at a time
@@ -1091,7 +1062,6 @@ scanone.perm.engine <-
 
         } # finish permutation
 
-        attr(res, "df") <- attr(tem, "df")
         colnames(res) <- colnames(tem)[-(1:2)]
     }
 
@@ -1102,6 +1072,5 @@ scanone.perm.engine <-
     res
 
 }
-
 
 # end of scanone.R
