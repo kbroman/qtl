@@ -1,34 +1,33 @@
 predictive.plot <- function(cross,
-                             mean.formula, var.formula, 
-                             marker.name, phen.name,
-                             genotype.plotting.names = NULL) {
+                            mean.formula, 
+                            var.formula, 
+                            marker.name, 
+                            phen.name,
+                            genotype.plotting.names = c('AA', 'AB', 'BB')) {
   
   phenotypes <- cross$pheno[[phen.name]]
-  genoprobs <- GetGenoprobsByMarkerName(cross = cross, marker.name = marker.name)
-  genotypes <- GetGenotypesByMarker(cross = cross, marker.name = marker.name, as.matrix = FALSE)
+  genoprobs <- get.genoprobs.by.marker.name(cross = cross, marker.name = marker.name)
+  genotypes <- get.genotypes.by.marker.name(cross = cross, marker.name = marker.name, as.matrix = FALSE)
   response.phen <- mean.formula[[2]]
   
-  if (!is.null(genotype.plotting.names)) {
-    if (length(genotype.plotting.names) != length(unique(genotypes))) {
-      stop('length of genotype.plotting.names must be equal to the number of genotypes at marker.name')
-    }
-    
-    plotting.genotypes <- mapvalues(x = genotypes, from = unique(genotypes), to = genotype.plotting.names)
+  # set up display names for the genotype groups (rather than default AA, AB, BB)
+  if (length(genotype.plotting.names) != length(unique(genotypes))) {
+    stop('length of genotype.plotting.names must be equal to the number of genotypes at marker.name')
   }
-#   if (!is.null(phenotype.plotting.names)) {
-#     if (length(phenotype.plotting.names) != length(unique(phenotypes))) {
-#       stop('length of phenotype.plotting.names must be equal to the number of phenotypes')
-#     }
-#     
-#     phenotypes <- mapvalues(x = phenotypes, from = unique(phenotypes), to = phenotype.plotting.names)
-#   }
+  plotting.genotypes <- mapvalues(x = genotypes, from = sort(unique(genotypes)), to = genotype.plotting.names)
+  
+  # consider a similar 'plotting' version of phenotype group names?
   
   
+  if (dim(genoprobs)[2] == 3) {
+    model.df <- data.frame(mean.QTL.add = get.additive.coef.from.3.genoprobs(genoprobs),
+                           mean.QTL.dom = get.dom.coef.from.3.genoprobs(genoprobs),
+                           var.QTL.add = get.additive.coef.from.3.genoprobs(genoprobs),
+                           var.QTL.dom = get.dom.coef.from.3.genoprobs(genoprobs))
+  } else {
+    stop('predictive.plot not yet implemented for sex chromosome')
+  }
   
-  model.df <- data.frame(mean.QTL.add = AdditiveCoefficientFrom3Genoprobs(genoprobs),
-                         mean.QTL.dom = DominantCoefficientFrom3Genoprobs(genoprobs),
-                         var.QTL.add = AdditiveCoefficientFrom3Genoprobs(genoprobs),
-                         var.QTL.dom = DominantCoefficientFrom3Genoprobs(genoprobs))
   
   model.df <- cbind(model.df, cross$pheno)
   

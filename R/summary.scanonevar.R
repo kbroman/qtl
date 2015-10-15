@@ -31,7 +31,7 @@ summary.scanonevar <- function(vs, digits = 3, thresh) {
   }
 
 
-	peaks <- GetPeaksFromVarscan(vs, thresh)
+	peaks <- get.peaks.from.scanonevar(vs, thresh)
 	
 	if (units(vs) == 'lods') {
 	  message('Full Model Peaks:')

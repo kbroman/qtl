@@ -41,26 +41,58 @@ varscan1 <- scanonevar(cross = fake.f2,
 plot(varscan1, scanone.for.comparison = scan1)
 
 
-#
-# # an additive mQTL on Chr5
-# marker1.vals <- fake.f2$geno[[20]]$data[,2] - 2
-# marker1.vals[is.na(marker1.vals)] <- 0
-#
-# fake.f2$pheno$phenotype1 <- rnorm(n = N, 25 + 3*marker1.vals, 3)
-#
-# varscan1a <- scanonevar(cross = fake.f2,
-# 												pheno.name = 'phenotype1',
-# 												chrs = 16:20,
-# 												mean.covar.names = c('sex', 'age'),
-# 												var.covar.names = 'sex',
-# 												return.effects = TRUE)
-#
-# saveRDS(object = varscan1a, file = 'test_varscan.RDS')
-# varscan1a <- readRDS('test_varscan.RDS')
-#
-# summary(varscan1a)
-# plot(varscan1a)
-#
+
+
+
+# an additive mQTL on Chr19
+marker2.name <- colnames(fake.f2$geno$`19`$data)[2]
+marker2.vals <- fake.f2$geno$`19`$data[,marker2.name] - 2
+marker2.vals[is.na(marker2.vals)] <- 0
+
+fake.f2$pheno$phen2 <- rnorm(n = N, 25 + marker2.vals, 3)
+
+varscan2 <- scanonevar(cross = fake.f2,
+                       mean.formula = formula('phen2 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
+                       var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                       chrs = c(15:19, 'X'))
+
+summary(varscan2)
+plot(varscan2)
+
+
+predictive.plot(cross = fake.f2,
+                mean.formula = formula('phen2 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
+                var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                marker.name = marker2.name,
+                phen.name = 'sex')
+
+
+
+
+
+
+# an additive vQTL on chr 15
+marker3.name <- colnames(fake.f2$geno$`19`$data)[2]
+marker3.vals <- get.genotypes.by.marker.name(cross = fake.f2, marker.name = marker3.name, as.matrix = FALSE) - 2
+marker3.vals[is.na(marker3.vals)] <- 0
+
+fake.f2$pheno$phen3 <- rnorm(n = N, 25, 3 + marker3.vals)
+
+varscan3 <- scanonevar(cross = fake.f2,
+                        mean.formula = formula('phen3 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
+                        var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                        chrs = c(15:19, 'X'))
+
+summary(varscan3)
+plot(varscan3)
+
+predictive.plot(cross = fake.f2,
+                mean.formula = formula('phen2 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
+                var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                marker.name = marker3.name,
+                phen.name = 'sex')
+
+
 # varscan1a.perms <- scanonevar.perm(cross = fake.f2,
 # 																	 pheno.name = 'phenotype1',
 # 																	 chrs = 18:20,
@@ -133,19 +165,4 @@ vs.emp.ps <- convert.varscan.to.empirical.ps(scan = vs,
 
 plot(vs.emp.ps)
 
-fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "17.45.986",
-									 varscan = vs)
-
-fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "17.45.986",
-									 varscan = vs.emp.ps)
-
-fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "X.106.858",
-									 varscan = vs)
-
-fitplot.scanonevar(cross = B6.C58.cross,
-									 name.of.marker.to.plot = "X.106.858",
-									 varscan = vs.emp.ps)
 
