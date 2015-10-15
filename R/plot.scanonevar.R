@@ -16,7 +16,7 @@
 #     at http://www.r-project.org/Licenses/GPL-3
 #
 # Part of the R/qtl package
-# Contains: plot.scanonevar,
+# Contains: plot.scanonevar
 #
 ################################################################################
 
@@ -36,31 +36,44 @@ plot.scanonevar <- function(varscan,
 														incl.markers = TRUE,
 														main = attr(varscan, 'pheno'),
 														ylim = c(0, 1.05*max(coords.y.locus, na.rm = TRUE)),
-														scanone.for.comparison = NULL)
+														scanone.for.comparison = NULL,
+														show.equations = length(chrs) != 1)
 {
 
 	# store current graphical parameters and customize them for this plot
 	start.pars <- par(no.readonly = TRUE)
-	par(mar = c(3,4,5,1))
+	if (show.equations) {
+	  par(mar = c(3,4,5,1))
+	} else {
+	  par(mar = c(3,4,2,1))
+	}
 
+	# convert scanone.for.comparison to tbl_df if needed
+	if (!any(is.null(scanone.for.comparison), is.tbl(scanone.for.comparison))) {
+	  scanone.for.comparison <- tbl_df(scanone.for.comparison)
+	}
+	
 	# subset varscan to necessary chrs only
 	if (!identical(chrs, unique(varscan$chr))) {
-		varscan <- filter(varscan, chr %in% chrs)
+	  
+	  temp <- dplyr::filter(varscan, chr %in% chrs)
+	  scanone.for.comparison <- dplyr::filter(scanone.for.comparison, chr %in% chrs)
 
-# 		class(temp) <- c("scanonevar", "tbl_df", "data.frame")
-# 		attr(temp, 'method') <- attr(varscan, 'method')
-# 		attr(temp, 'type') <- attr(varscan, 'type')
-# 		attr(temp, 'model') <- attr(varscan, 'model')
-# 		attr(temp, 'mean.null.formula') <- attr(varscan, 'mean.null.formula')
-# 		attr(temp, 'mean.alt.formula') <- attr(varscan, 'mean.alt.formula')
-# 		attr(temp, 'var.null.formula') <- attr(varscan, 'var.null.formula')
-# 		attr(temp, 'var.alt.formula') <- attr(varscan, 'var.alt.formula')
-# 		attr(temp, 'pheno') <- attr(varscan, 'pheno')
-# 		attr(temp, 'null.effects') <- attr(varscan, 'null.effects')
-# 		attr(temp, 'units') <- attr(varscan, 'units')
-# 		temp$chr <- factor(temp$chr)
-# 
-# 		varscan <- temp
+		class(temp) <- class(varscan)
+		attr(temp, 'method') <- attr(varscan, 'method')
+		attr(temp, 'type') <- attr(varscan, 'type')
+		attr(temp, 'model') <- attr(varscan, 'model')
+		attr(temp, 'mean.null.formula') <- attr(varscan, 'mean.null.formula')
+		attr(temp, 'mean.alt.formula') <- attr(varscan, 'mean.alt.formula')
+		attr(temp, 'var.null.formula') <- attr(varscan, 'var.null.formula')
+		attr(temp, 'var.alt.formula') <- attr(varscan, 'var.alt.formula')
+		attr(temp, 'pheno') <- attr(varscan, 'pheno')
+		attr(temp, 'null.effects') <- attr(varscan, 'null.effects')
+		attr(temp, 'units') <- attr(varscan, 'units')
+		attr(temp, 'null.fit') <- attr(varscan, 'null.fit')
+		temp$chr <- factor(temp$chr)
+
+		varscan <- temp
 	}
 
 	# x coordinates for plotting
@@ -147,23 +160,14 @@ plot.scanonevar <- function(varscan,
 	  }
 	}
 	
-	# add thresholds if the scan has them (give precedence to varscan)
-# 	if (attr(varscan, 'units') == 'lods') {
-# 	  thresh.names <- c('alpha10thresh', 'alpha05thresh', 'alpha01thresh')
-# 	  for (thresh.idx in 1:length(thresh.names)) {
-# 	    thresh.name <- thresh.names[thresh.idx]
-# 	    if (!is.null(attr(varscan, thresh.name))) { 
-# 	      abline(h = attr(varscan, thresh.name), lty = thresh.idx) 
-# 	    } else if (!is.null(attr(scanone.for.comparison, thresh.name))) {
-# 	      abline(h = attr(scanone.for.comparison, thresh.name), lty = thresh.idx)
-# 	    }
-# 	  }
-# 	}
+	# note: I got rid of thresholds on the LOD scale, because it is visually confusing to
+	# look at 3 or 4 different alpha05 thresholds and/or 3 or 4 different alpha 01's  -RWC
+
+	# add thresholds on p-value scale
 	if (attr(varscan, 'units') == 'emp.ps') {
-	  mtext(text = 'alpha=0.05', side = 2, line = 0, at = -log10(0.05))
-	  abline(h = -log10(c(0.1, 0.05, 0.01)), lty = c(1, 2, 3))
+	  abline(h = -log10(c(0.05, 0.01)), lty = c(1, 2))
+	  text(x = coords.x.locus$coord.x[1], y = -log10(0.05), labels = 'alpha=0.05', adj = c(0.5, -0.2))
 	}
-	
 	
 	# plot lines at marker positions (rug plot)
 	if (incl.markers) {
@@ -186,16 +190,21 @@ plot.scanonevar <- function(varscan,
 				 x.intersp = 0.3, y.intersp = 1, xjust = 0.5, yjust = 0)
 
 	# add the title
-	title <- paste(attr(x = varscan, 'pheno'),
-	               '\n', 'mean null:',
-	               paste(as.character(attr(varscan, 'mean.null.formula'))[c(2,1,3)], collapse = ' '),
-	               '\n', 'mean alt:',
-	               paste(as.character(attr(varscan, 'mean.alt.formula'))[c(2,1,3)], collapse = ' '),
-	               '\n', 'var null:',
-	               paste(as.character(attr(varscan, 'var.null.formula')), collapse = ' '),
-	               '\n', 'var alt:',
-	               paste(as.character(attr(varscan, 'var.alt.formula')), collapse = ' '))
-	mtext(text = title, side = 3, line = 0)
+	if (show.equations) {
+	  title <- paste(attr(x = varscan, 'pheno'),
+	                 '\n', 'mean null:',
+	                 paste(as.character(attr(varscan, 'mean.null.formula'))[c(2,1,3)], collapse = ' '),
+	                 '\n', 'mean alt:',
+	                 paste(as.character(attr(varscan, 'mean.alt.formula'))[c(2,1,3)], collapse = ' '),
+	                 '\n', 'var null:',
+	                 paste(as.character(attr(varscan, 'var.null.formula')), collapse = ' '),
+	                 '\n', 'var alt:',
+	                 paste(as.character(attr(varscan, 'var.alt.formula')), collapse = ' '))
+	  mtext(text = title, side = 3, line = 0)
+	} else {
+	  mtext(text = attr(varscan, 'pheno'), side = 3, line = 0)
+	}
+	
 
 	# reset graphical parameteers to how they were on start
 	par(start.pars)

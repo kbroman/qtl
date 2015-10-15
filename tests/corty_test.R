@@ -40,11 +40,6 @@ library(qtl)
 
 B6.C58.cross <- readRDS('rds/B6_C58_cross.RDS')
 
-margin.plot(cross = B6.C58.cross, 
-            focal.phenotype.name = 'TOTDIST',
-            marginal.phen.names = list('sex', 'AMBEPIS'), 
-            marginal.marker.names = list("X1.52.903"))
-
 B6.C58.cross$pheno$sqrt.totrear <- sqrt(B6.C58.cross$pheno$TOTREAR)
 
 so <- scanone(cross = B6.C58.cross,
@@ -57,7 +52,7 @@ a <- newScanonevar(cross = B6.C58.cross,
                    return.effects = TRUE,
                    return.effect.ses = TRUE,
                    return.effect.ps = TRUE,
-                   chrs = c(19, 'X'), 
+                   chrs = c(1, 9, 'X'), 
                    exclusion.window = 0.8)
 
 plot(a, scanone.for.comparison = so)

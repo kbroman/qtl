@@ -1,30 +1,46 @@
 ######### Simulate mQTL and vQTL modeled with scanonevar
-setwd('tests')
 
-# library(qtl)
-# set.seed(27599)
+library(qtl)
+set.seed(27599)
+
+data(fake.f2)
+
+# # artificially expand the dataset by 5 fold
+# for (chr in 1:nchr(fake.f2)) {
 #
-# data(fake.f2)
+# 	this.data <- fake.f2$geno[[chr]]$data
+# 	fake.f2$geno[[chr]]$data <- rbind(this.data, this.data, this.data, this.data, this.data)
 #
-# # # artificially expand the dataset by 5 fold
-# # for (chr in 1:nchr(fake.f2)) {
-# #
-# # 	this.data <- fake.f2$geno[[chr]]$data
-# # 	fake.f2$geno[[chr]]$data <- rbind(this.data, this.data, this.data, this.data, this.data)
-# #
-# # 	this.errors <- fake.f2$geno[[chr]]$errors
-# # 	fake.f2$geno[[chr]]$errors <- rbind(this.errors, this.errors, this.errors, this.errors, this.errors)
-# # }
-# # fake.f2$pheno <- rbind(fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
-#
-# fake.f2 <- calc.genoprob(fake.f2, step = 2)
-#
-# N = nind(fake.f2)
-# fake.f2$pheno$sex = rbinom(n = N, size = 1, prob = 0.5)
-# fake.f2$pheno$age = rnorm(n = N, mean = 10, sd = 1)
-#
-#
-# scan1a <- scanone(cross = fake.f2, chr = 1:5, pheno.col = 'phenotype')
+# 	this.errors <- fake.f2$geno[[chr]]$errors
+# 	fake.f2$geno[[chr]]$errors <- rbind(this.errors, this.errors, this.errors, this.errors, this.errors)
+# }
+# fake.f2$pheno <- rbind(fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno, fake.f2$pheno)
+
+fake.f2 <- calc.genoprob(fake.f2, step = 2)
+
+N = nind(fake.f2)
+fake.f2$pheno$sex <- rbinom(n = N, size = 1, prob = 0.5)
+fake.f2$pheno$age <- rnorm(n = N, mean = 10, sd = 1)
+fake.f2$pheno$phen1 <- rnorm(n = N, mean = 20, sd = 2)
+
+
+margin.plot(cross = fake.f2,
+            focal.phenotype.name = 'phenotype',
+            marginal.phen.names = list('sex', 'age'),
+            marginal.marker.names = 'D17M88')
+
+
+scan1 <- scanone(cross = fake.f2, chr = c(15:19, 'X'), pheno.col = 'phen1')
+plot(scan1, bandcol = 'gray')
+
+varscan1 <- scanonevar(cross = fake.f2,
+                       mean.formula = formula('phen1 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
+                       var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                       chrs = c(15:19, 'X'))
+
+plot(varscan1, scanone.for.comparison = scan1)
+
+
 #
 # # an additive mQTL on Chr5
 # marker1.vals <- fake.f2$geno[[20]]$data[,2] - 2

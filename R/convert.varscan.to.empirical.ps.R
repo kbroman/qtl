@@ -1,4 +1,4 @@
-vqtl_ConvertLODsToEmpPs <- function(scan, null.scan.maxes) {
+convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
 
   ValidateConvertLODsToEmpPs(scan, null.scan.maxes)
 

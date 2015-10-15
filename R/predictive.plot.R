@@ -8,6 +8,7 @@ predictive.plot <- function(varscan,
   if (any(length(phen.name) != 1, length(marker.name) != 1)) {
     stop('Must input exactly one phenotype name and one marker name')
   }
+  response.phen.name <- attr(varscan, 'pheno')
   
   means <- vars <- mean.ses <- var.ses <- rep(0, nind(cross))
   
@@ -42,18 +43,19 @@ predictive.plot <- function(varscan,
   mean.ses <- phen * myrow[[paste0('se.mean.', phen.name)]] + add.coef * myrow[['se.mean.mean.QTL.add']] + dom.coef * myrow[['se.mean.mean.QTL.dom']]
   var.ses <- phen * myrow[[paste0('se.var.', phen.name)]] + add.coef * myrow[['se.var.var.QTL.add']] + dom.coef * myrow[['se.var.var.QTL.dom']]
   
-  plot(x = means, y = vars, 
+  plot(x = means, y = exp(vars),
        xlim = range(c(means + mean.ses, means - mean.ses)), 
-       ylim = range(c(vars + var.ses, vars - var.ses)))
-  segments(x0 = means, y0 = vars, x1 = means + mean.ses, y1 = vars)
-  segments(x0 = means, y0 = vars, x1 = means - mean.ses, y1 = vars)
-  segments(x0 = means, y0 = vars, x1 = means           , y1 = vars + var.ses)
-  segments(x0 = means, y0 = vars, x1 = means           , y1 = vars - var.ses)
+       ylim = range(exp(c(vars + var.ses, vars - var.ses))),
+       main = paste('Predictive of', response.phen.name, 'from', phen.name, 'and', marker.name))
+  segments(x0 = means, y0 = vars, x1 = means + mean.ses, y1 = exp(vars))
+  segments(x0 = means, y0 = vars, x1 = means - mean.ses, y1 = exp(vars))
+  segments(x0 = means, y0 = vars, x1 = means           , y1 = exp(vars + var.ses))
+  segments(x0 = means, y0 = vars, x1 = means           , y1 = exp(vars - var.ses))
   
   genotypes <- factor(apply(X = genotypes, MARGIN = 1, FUN = which.max))
   levels(genotypes) <- c('AA', 'AB', 'BB')
   
   to.plot <- !duplicated(means)
-  text(x = means[to.plot], y = vars[to.plot], labels = cross$pheno[[phen.name]][to.plot], pos = 2, cex = 3)
-  text(x = means[to.plot], y = vars[to.plot], labels = genotypes[to.plot], pos = 1, cex = 3)
+  text(x = means[to.plot], y = vars[to.plot], labels = cross$pheno[[phen.name]][to.plot], pos = 2, cex = 2)
+  text(x = means[to.plot], y = vars[to.plot], labels = genotypes[to.plot], pos = 1, cex = 2)
 }
