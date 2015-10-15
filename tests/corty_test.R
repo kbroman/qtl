@@ -1,46 +1,14 @@
 library(qtl)
 
-# # read data
-# {
-# B6.C58.cross <- read.cross(format = 'csv',
-# 													 file = file.path('rds',
-# 													 								 'F2_B6_C58_all.csv'),
-# 													 genotypes = c('B', 'H', 'C'),
-# 													 na.strings = c('O'),
-# 													 convertX = FALSE)
-# B6.C58.cross <- calc.genoprob(cross = B6.C58.cross,
-# 															step = 2)
-# 
-# male.B6.C58.cross <- read.cross(format = 'csv',
-# 													 file = file.path('~',
-# 													 								 'Dropbox (ValdarLab)',
-# 													 								 'vQTL_reanalysis',
-# 													 								 'F2_B6_C58_males.csv'),
-# 													 genotypes = c('B', 'H', 'C'),
-# 													 na.strings = c('O'),
-# 													 convertX = FALSE)
-# male.B6.C58.cross <- calc.genoprob(cross = male.B6.C58.cross,
-# 																	 step = 2)
-# 
-# female.B6.C58.cross <- read.cross(format = 'csv',
-# 																file = file.path('~',
-# 																								 'Dropbox (ValdarLab)',
-# 																								 'vQTL_reanalysis',
-# 																								 'F2_B6_C58_female.csv'),
-# 																genotypes = c('B', 'H', 'C'),
-# 																na.strings = c('O'),
-# 																convertX = FALSE)
-# female.B6.C58.cross <- calc.genoprob(cross = female.B6.C58.cross,
-# 																		 step = 2)
-# 
-# crosses <- list(all = B6.C58.cross,
-# 								males = male.B6.C58.cross,
-# 								females = female.B6.C58.cross)
-# }
-
 B6.C58.cross <- readRDS('rds/B6_C58_cross.RDS')
 
 B6.C58.cross$pheno$sqrt.totrear <- sqrt(B6.C58.cross$pheno$TOTREAR)
+
+margin.plot(cross = B6.C58.cross, focal.phenotype.name = 'sqrt.totrear', 
+            marginal.phen.names = 'sex',
+            marginal.marker.names = 'X2.65.484')
+
+B6.C58.cross$pheno$sex <- as.numeric(B6.C58.cross$pheno$sex) - 1
 
 so <- scanone(cross = B6.C58.cross,
               chr = 1:3,
@@ -52,13 +20,19 @@ a <- newScanonevar(cross = B6.C58.cross,
                    return.effects = TRUE,
                    return.effect.ses = TRUE,
                    return.effect.ps = TRUE,
-                   chrs = c(1, 9, 'X'), 
+                   chrs = c(1, 2, 'X'), 
                    exclusion.window = 0.8)
 
 plot(a, scanone.for.comparison = so)
 
-predictive.plot(varscan = a, cross = B6.C58.cross,
-                phen.name = 'sex', marker.name = 'X1.58.218')
+
+
+predictive.plot2(cross = B6.C58.cross, 
+                 mean.formula = formula('sqrt.totrear ~ sex + PCT10 + mean.QTL.add + mean.QTL.dom'),
+                 var.formula = formula('~sex + PCT4 + var.QTL.add + var.QTL.dom'),
+                 phen.name = 'sex', marker.name = 'X2.65.484', genotype.plotting.names = c('cup', 'bowl', 'mug'))
+
+GetGenotypesByMarker(cross = B6.C58.cross, marker.name = 'X2.65.484')
 
 summary(a, thresh = 3)
 
