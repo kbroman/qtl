@@ -1,3 +1,29 @@
+#'  @title Conduct a Scanonevar Using the DGLM Function
+#'  
+#'  @author Robert Corty \email{rcorty@@gmail.com}
+#'  
+#'  @description \code{scan.via.dglm} should not typically be called by a user.
+#'  This function is used by both \code{scanonevar} and \code{scanonevar.perm}.
+#'    
+#'  @param mean.alt.formula The formula for the trait mean in the alternative model.
+#'    \code{mean.null.formula} and \code{test.mean.effect} are inferred from it.
+#'  @param var.alt.formula The formula for the trait variance in the alternative model.
+#'    \code{var.null.formula} and \code{test.var.effect} are inferred from it.
+#'  @param genoprob The probability of each genotype for each individual.
+#'  @param mapping.df The tbl_df with the response, all covariates, and space for the focal genotype.
+#'  @param chr.by.marker a vector of the chromosome name of each marker
+#'  @param pos.by.marker a vector of the position of each marker
+#'  @param marker.names a vector of the name of each marker
+#'  @param cor.threshold Numeric between 0 and 1 indicating how tightly a locus must be correlated with a covariate to be skipped.
+#'    e.g. if cor.threshold is 0.8 (it's default) any locus with \code{cor(locus, covariate) > 0.8} will be skipped.
+#'  @param perm The permutation to apply to the genotypes.  Defaults to identity permutation.
+#'  @inheritParams scanonevar
+#'  
+#'  @return Returns a scanonevar object.
+#'    
+#'  @seealso  \code{\link{scanonevar}}, \code{\link{scanonevar.perm}}
+#'  
+
 scan.via.dglm <- function(mean.alt.formula,
                           var.alt.formula,
                           genoprobs,
@@ -12,9 +38,11 @@ scan.via.dglm <- function(mean.alt.formula,
                           perm = 1:nrow(genoprobs))
 { 
   
-#### figure out which tests to do based on where the QTL term appears ####
-# also make null formulae programmatically
-# todo: allow user to specity null formulae optionally
+  # todo: consider tighening up the interface...do we really need 3 vectors '.by.marker'?
+  
+  #### figure out which tests to do based on where the QTL term appears ####
+  # also make null formulae programmatically
+  # todo: allow user to specity null formulae optionally
   test.mean.effect <- test.var.effect <- test.meanvar.effect <- FALSE
   mean.terms <- terms(mean.alt.formula)
   mean.qtl.terms <- grep(pattern = 'mean.QTL', x = attr(mean.terms, 'term.labels'))
@@ -40,7 +68,7 @@ scan.via.dglm <- function(mean.alt.formula,
   }
   test.meanvar.effect <- test.mean.effect & test.var.effect
   
-#### set up containers for the scan ####
+  #### set up containers for the scan ####
   full.lod <- mean.lod <- var.lod <- rep(NA, length(marker.names))
   log10lik.bothalt <- log10lik.bothnull <- log10lik.meanalt <- log10lik.meannull <- log10lik.varalt <- log10lik.varnull <- NA
   chrtype <- rep(NA, length(marker.names))
@@ -71,7 +99,7 @@ scan.via.dglm <- function(mean.alt.formula,
                                          'p.var.intercept', paste0('p.var.', all.vars(var.alt.formula)))))
   }
   
-#### calculate null for double-test ####
+  #### calculate null for double-test ####
   if (test.meanvar.effect) {
     both.null.fit <- dglm(formula = mean.null.formula,
                      dformula = var.null.formula,
@@ -79,7 +107,7 @@ scan.via.dglm <- function(mean.alt.formula,
     log10lik.bothnull <- -0.5*both.null.fit$m2loglik / log(10)  
   }
   
-#### loop through markers (including pseudomarkers) ####
+  #### loop through markers (including pseudomarkers) ####
   for (marker.idx in 1:length(marker.names)) {
     
     # select relevant markers from genoprob df
@@ -222,7 +250,7 @@ scan.via.dglm <- function(mean.alt.formula,
     
   }
  
-#### compile data into return format ####
+  #### compile data into return format ####
   varscan <- data_frame(chr = factor(chr.by.marker,
                                      levels = mixedsort(unique(chr.by.marker))),
                         chrtype = chrtype,

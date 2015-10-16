@@ -76,7 +76,7 @@ marker3.name <- colnames(fake.f2$geno$`19`$data)[2]
 marker3.vals <- get.genotypes.by.marker.name(cross = fake.f2, marker.name = marker3.name, as.matrix = FALSE) - 2
 marker3.vals[is.na(marker3.vals)] <- 0
 
-fake.f2$pheno$phen3 <- rnorm(n = N, 25, 2 + marker3.vals)
+fake.f2$pheno$phen3 <- rnorm(n = N, 25, exp(0.5*marker3.vals))
 
 varscan3 <- scanonevar(cross = fake.f2,
                         mean.formula = formula('phen3 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
@@ -96,13 +96,16 @@ predictive.plot(cross = fake.f2,
 perms <- scanonevar.perm(cross = fake.f2,
                          mean.formula = formula('phen3 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
                          var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
-                         n.perms = 25,
+                         n.perms = 50,
                          chrs = c(15:19, 'X'))
 
 
 varscan3b <- convert.scanonevar.to.empirical.ps(scan = varscan3, 
                                                 null.scan.maxes = perms)
 
+# if the effects are really strong, the empricical p value will underflow R's float
+# and it's log will be -Inf, so we can't plot....maybe should replace 0's with .Machine$double.eps?
+# not likely to come up in real work, so I'll leave it as an error-throwing case for now
 plot(varscan3b)
 
 

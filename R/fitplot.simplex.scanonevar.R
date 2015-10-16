@@ -1,3 +1,8 @@
+# function under  development
+# idea is to plot the genoprobs of each individual on the floor (they lie on a simplex)
+# and the phenotype of interest in the vertical direction
+# could be a 3d plot?
+
 simplex.plot.scanonevar <- function(cross, 
                                     name.of.marker.to.plot,
                                     varscan,

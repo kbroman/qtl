@@ -1,3 +1,22 @@
+#'  @title Plot Phenotype of interest Averaged (Marginalized) Across Specified Markers and Phenotypes
+#'  
+#'  @author Robert Corty \email{rcorty@@gmail.com}
+#'  
+#'  @description \code{margin.plot} should be used to visually investigate the relationship
+#'    between the phenotype of interest and other phenotypes.  \code{margin.plot} can also 
+#'    be used to visualize the relationship between the phenotype of interest and genetic 
+#'    loci of interest, but \code{predictive.plot} is usually preferrable.
+#'    
+#'  @param cross The cross object to be plotted
+#'  @param focal.phenotype.name the phenotype to put on the y-axis
+#'  @param marginal.phen.names a list of phenotypes to average over (put on the x-axis).
+#'  @param marginal.marker.names a list of marker names, whose values will be averaged over (put on the x-axis).
+#'  @param genotype.plotting.names Labels for the genotype groups.  Defaults to \code{c('AA', 'AB', 'BB')}.
+#'  
+#'  @return None.  Only makes plot.
+#'  
+#'  
+#'  
 margin.plot <- function(cross, 
                         focal.phenotype.name,
                         marginal.phen.names = NULL,

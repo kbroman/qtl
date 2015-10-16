@@ -1,3 +1,7 @@
+# function under development
+# custom filter function for scanonevar objects that will persist their attributes
+# need to figure out how to get this to work right
+
 filter_.scanonevar <- function(vs, ...) {
   
   out <- vs

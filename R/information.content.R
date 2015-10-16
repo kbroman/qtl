@@ -1,3 +1,6 @@
+# function under development
+# compute standardized information content across the genome rather efficiently
+
 information.content <- function(cross) {
   
   if (!any(class(cross) == 'cross'))

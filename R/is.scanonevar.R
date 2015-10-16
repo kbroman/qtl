@@ -1,6 +1,6 @@
 #'  @title is.scanonevar
 #'  
-#'  @author Robert Corty
+#'  @author Robert Corty \email{rcorty@@gmail.com}
 #'  
 #'  @description Tests whether an object is a valid scanonevar object
 #'  
@@ -10,7 +10,7 @@
 #'    Returns FALSE if 'sov' is not a valid scanonevar object with attribute 'why.not' a list of
 #'    error messages for failed tests
 #'    
-#'  @details none
+#'  @seealso \code{\link{scanonevar}}, \code{\link{convert.scanonevar.to.empirical.ps}}
 
 is.scanonevar <- function(sov) {
   
@@ -18,7 +18,7 @@ is.scanonevar <- function(sov) {
   attr(ret, 'why.not') <- list()
   
   # check classes
-  if (!(all(classes(sov) == c('scanonevar', 'tbl_df', 'tbl', 'data.frame')))) {
+  if (!(all(class(sov) == c('scanonevar', 'tbl_df', 'tbl', 'data.frame')))) {
     ret <- FALSE
     attr(ret, 'why.not') <- c(attr(ret, 'why.not'), "classes must be c('scanonevar', 'tbl_df', 'tbl', 'data.frame')")
   }

@@ -1,3 +1,20 @@
+#'  @title Plot Predictive Interval for Categorical Genotype/Phenotype Groups
+#'  
+#'  @author Robert Corty \email{rcorty@@gmail.com}
+#'  
+#'  @description \code{predictive.plot} should be used to visually investigate loci identified
+#'    with plot.scanonevar or summary.scanonevar.  The user can specify the same mean and variance
+#'    formulae that were used in the scan, or specify new formulae to investigate interactions.
+#'    
+#'  @param cross The cross object to be plotted
+#'  @param marker.name The name of the marker the effects of which we want to investigate and visualize.
+#'  @param phen.name The categorical phenotype the effects of which we want to investigate and visualize.
+#'  @param genotype.plotting.names Labels for the genotype groups.  Defaults to \code{c('AA', 'AB', 'BB')}.
+#'  
+#'  @return None.  Only makes plot.
+#'  
+#'  @inheritParams scanonevar
+#'  
 predictive.plot <- function(cross,
                             mean.formula, 
                             var.formula, 

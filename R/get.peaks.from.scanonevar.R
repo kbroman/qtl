@@ -1,3 +1,7 @@
+# function under development
+# idea is to find local maxima
+
+
 get.peaks.from.scanonevar <- function(vs, thresh) {
   
   if (units(vs) == 'lods') {
