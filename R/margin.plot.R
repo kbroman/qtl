@@ -12,6 +12,9 @@ margin.plot <- function(cross,
   num.plots <- sum(length(marginal.phen.names), length(marginal.marker.names))
   if (num.plots == 0) { stop('Must provide a marginal phenotype or marker.')}
   
+  # store current graphical parameters and customize them for this plot
+  start.pars <- par(no.readonly = TRUE)
+  
   par(mfrow = c(1, num.plots))
   
   focal.phen <- cross$pheno[[focal.phenotype.name]]
@@ -82,5 +85,9 @@ margin.plot <- function(cross,
              lty = 2)
   }
   
+  # reset graphical parameteers to how they were on start
+  par(start.pars)
   
+  # return nothing
+  invisible()
 }

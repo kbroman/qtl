@@ -5,6 +5,9 @@ predictive.plot <- function(cross,
                             phen.name,
                             genotype.plotting.names = c('AA', 'AB', 'BB')) {
   
+  # store current graphical parameters and customize them for this plot
+  start.pars <- par(no.readonly = TRUE)
+  
   phenotypes <- cross$pheno[[phen.name]]
   genoprobs <- get.genoprobs.by.marker.name(cross = cross, marker.name = marker.name)
   genotypes <- get.genotypes.by.marker.name(cross = cross, marker.name = marker.name, as.matrix = FALSE)
@@ -129,15 +132,9 @@ predictive.plot <- function(cross,
             labels = plotting.genotype, cex = 1.5,
             col = phen.col))
   
+  # reset graphical parameteers to how they were on start
+  par(start.pars)
   
-  
-#   p <- ggplot(plotting.tbl, mapping = aes(x = group.mean.estim, y = group.var.estim))
-#   p <- p + geom_segment(mapping = aes(color = rep(factor(phen), 2),
-#                                       x = c(group.mean.estim, group.mean.lb), xend = c(group.mean.estim, group.mean.ub),
-#                                       y = c(group.var.lb, group.var.estim), yend = c(group.var.ub, group.var.estim)),
-#                         size = 2)
-#   p <- p + geom_point(color = 'white', size = 15)
-#   p <- p + geom_text(aes(label = genotype), size = 10)
-#   p <- p + theme_bw()
-#   print(p)
+  # return nothing
+  invisible()
 }

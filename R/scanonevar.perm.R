@@ -5,10 +5,10 @@ scanonevar.perm <- function(cross,
                                chrs = unique(names(cross$geno))) 
 {
   
-  validated.input <- ValidateAndFilterInput(cross = cross, 
-                                            mean.formula = mean.formula, 
-                                            var.formula = var.formula,
-                                            chrs = chrs)
+  validated.input <- validate.input.scanonevar(cross = cross, 
+                                               mean.formula = mean.formula, 
+                                               var.formula = var.formula,
+                                               chrs = chrs)
   genoprobs <- validated.input$genoprobs
   mapping.df <- validated.input$mapping.df
   chr.by.marker <- validated.input$chr.by.marker
@@ -19,16 +19,17 @@ scanonevar.perm <- function(cross,
   
   all.perms <- NULL
   for (perm.idx in 1:n.perms) {
-    perm.scan <- ScanViaDGLM(mean.alt.formula = mean.formula,
-                             var.alt.formula = var.formula,
-                             genoprobs = genoprobs,
-                             mapping.df = mapping.df,
-                             chr.by.marker = chr.by.marker,
-                             pos.by.marker = pos.by.marker,
-                             marker.names = marker.names,
-                             perm = sample(nrow(genoprobs)))
+    perm.scan <- scan.via.dglm(mean.alt.formula = mean.formula,
+                               var.alt.formula = var.formula,
+                               genoprobs = genoprobs,
+                               mapping.df = mapping.df,
+                               chr.by.marker = chr.by.marker,
+                               pos.by.marker = pos.by.marker,
+                               marker.names = marker.names,
+                               perm = sample(nrow(genoprobs)))
     
     this.perm <- perm.scan %>%
+      group_by(chrtype) %>%
       select(full.lod, mean.lod, var.lod) %>%
       summarise_each(funs(max(., na.rm = TRUE)))
     

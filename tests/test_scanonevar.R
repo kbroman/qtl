@@ -76,7 +76,7 @@ marker3.name <- colnames(fake.f2$geno$`19`$data)[2]
 marker3.vals <- get.genotypes.by.marker.name(cross = fake.f2, marker.name = marker3.name, as.matrix = FALSE) - 2
 marker3.vals[is.na(marker3.vals)] <- 0
 
-fake.f2$pheno$phen3 <- rnorm(n = N, 25, 3 + marker3.vals)
+fake.f2$pheno$phen3 <- rnorm(n = N, 25, 2 + marker3.vals)
 
 varscan3 <- scanonevar(cross = fake.f2,
                         mean.formula = formula('phen3 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
@@ -87,10 +87,28 @@ summary(varscan3)
 plot(varscan3)
 
 predictive.plot(cross = fake.f2,
-                mean.formula = formula('phen2 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
-                var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                mean.formula = formula('phen3 ~ age + sex*mean.QTL.add + sex*mean.QTL.dom'),
+                var.formula = formula('~sex + age + sex*var.QTL.add + sex*var.QTL.dom'),
                 marker.name = marker3.name,
                 phen.name = 'sex')
+
+
+perms <- scanonevar.perm(cross = fake.f2,
+                         mean.formula = formula('phen3 ~ sex + age + mean.QTL.add + mean.QTL.dom'),
+                         var.formula = formula('~sex + age + var.QTL.add + var.QTL.dom'),
+                         n.perms = 25,
+                         chrs = c(15:19, 'X'))
+
+
+varscan3b <- convert.scanonevar.to.empirical.ps(scan = varscan3, 
+                                                null.scan.maxes = perms)
+
+plot(varscan3b)
+
+
+# todo X chromosome tests
+
+
 
 
 # varscan1a.perms <- scanonevar.perm(cross = fake.f2,

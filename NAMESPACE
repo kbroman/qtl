@@ -4,8 +4,6 @@ useDynLib(qtl)
 import(graphics, stats, utils, parallel)
 
 export(map2table)
-export(convert.varscan.to.empirical.ps, scan.via.dglm)
-#export(ConvenientScanoneVar)
 export(reduce2grid)
 export(formMarkerCovar)
 export(nqtl)
@@ -57,7 +55,10 @@ export(totmar, transformPheno, tryallpositions, typingGap, write.cross, xaxisloc
 export(clean, condense, convert)
 export(summaryScantwoOld, summary.scantwo.old)
 export(reviseXdata)
-export(scanonevar, validate.input.scanonevar)
+
+# scanonevar stuff
+export(scanonevar, scanonevar.perm, convert.scanonevar.to.empirical.ps)
+export(validate.input.scanonevar, scan.via.dglm)
 export(margin.plot, predictive.plot, get.genotypes.by.marker.name, get.genoprobs.by.marker.name, information.content)
 
 # used by funqtl

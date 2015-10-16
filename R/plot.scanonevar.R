@@ -205,7 +205,6 @@ plot.scanonevar <- function(varscan,
 	  mtext(text = attr(varscan, 'pheno'), side = 3, line = 0)
 	}
 	
-
 	# reset graphical parameteers to how they were on start
 	par(start.pars)
 

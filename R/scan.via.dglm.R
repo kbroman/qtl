@@ -1,15 +1,15 @@
 scan.via.dglm <- function(mean.alt.formula,
-                        var.alt.formula,
-                        genoprobs,
-                        mapping.df,
-                        chr.by.marker,
-                        pos.by.marker,
-                        marker.names,
-                        return.effects = FALSE,
-                        return.effect.ses = FALSE,
-                        return.effect.ps = FALSE,
-                        cor.threshold = 0.8,
-                        perm = 1:nrow(genoprobs))
+                          var.alt.formula,
+                          genoprobs,
+                          mapping.df,
+                          chr.by.marker,
+                          pos.by.marker,
+                          marker.names,
+                          return.effects = FALSE,
+                          return.effect.ses = FALSE,
+                          return.effect.ps = FALSE,
+                          cor.threshold = 0.8,
+                          perm = 1:nrow(genoprobs))
 { 
   
 #### figure out which tests to do based on where the QTL term appears ####
@@ -43,6 +43,7 @@ scan.via.dglm <- function(mean.alt.formula,
 #### set up containers for the scan ####
   full.lod <- mean.lod <- var.lod <- rep(NA, length(marker.names))
   log10lik.bothalt <- log10lik.bothnull <- log10lik.meanalt <- log10lik.meannull <- log10lik.varalt <- log10lik.varnull <- NA
+  chrtype <- rep(NA, length(marker.names))
   
   if (any(return.effects, return.effect.ses, return.effect.ps)) { 
     num.mean.effects <- length(all.vars(mean.alt.formula)) # minus 1 for response, plus one for intercept term
@@ -100,10 +101,12 @@ scan.via.dglm <- function(mean.alt.formula,
     if (ncol(marker.genoprobs) == 3) {
       mapping.df$mean.QTL.add <- mapping.df$var.QTL.add <- get.additive.coef.from.3.genoprobs(marker.genoprobs)[perm]
       mapping.df$mean.QTL.dom <- mapping.df$var.QTL.dom <- get.dom.coef.from.3.genoprobs(marker.genoprobs)[perm]
+      chrtype[marker.idx] <- 'A'
     }
     if (ncol(marker.genoprobs) == 2) {
       mapping.df$mean.QTL.add <- mapping.df$var.QTL.add <- get.additive.coef.from.2.genoprobs(marker.genoprobs)[perm]
       mapping.df$mean.QTL.dom <- mapping.df$var.QTL.dom <- 0
+      chrtype[marker.idx] <- 'X'
     }
     
     both.alt.fit <- dglm(formula = mean.alt.formula,
@@ -153,14 +156,14 @@ scan.via.dglm <- function(mean.alt.formula,
       } else {
         
         if (ncol(marker.genoprobs) == 3) {
-          mapping.df$mean.QTL.add <- AdditiveCoefficientFrom3Genoprobs(marker.genoprobs)[perm]
-          mapping.df$var.QTL.add <- AdditiveCoefficientFrom3Genoprobs(marker.genoprobs)
-          mapping.df$mean.QTL.dom <- DominantCoefficientFrom3Genoprobs(marker.genoprobs)[perm]
-          mapping.df$var.QTL.dom <- DominantCoefficientFrom3Genoprobs(marker.genoprobs)
+          mapping.df$mean.QTL.add <- get.additive.coef.from.3.genoprobs(marker.genoprobs)[perm]
+          mapping.df$var.QTL.add <- get.additive.coef.from.3.genoprobs(marker.genoprobs)
+          mapping.df$mean.QTL.dom <- get.dom.coef.from.3.genoprobs(marker.genoprobs)[perm]
+          mapping.df$var.QTL.dom <- get.dom.coef.from.3.genoprobs(marker.genoprobs)
         }
         if (ncol(marker.genoprobs) == 2) {
-          mapping.df$mean.QTL.add <- AdditiveCoefficientFrom2Genoprobs(marker.genoprobs)[perm]
-          mapping.df$var.QTL.add <- AdditiveCoefficientFrom2Genoprobs(marker.genoprobs)
+          mapping.df$mean.QTL.add <- get.additive.coef.from.2.genoprobs(marker.genoprobs)[perm]
+          mapping.df$var.QTL.add <- get.additive.coef.from.2.genoprobs(marker.genoprobs)
           mapping.df$mean.QTL.dom <- mapping.df$var.QTL.dom <- 0
         }
         
@@ -190,14 +193,14 @@ scan.via.dglm <- function(mean.alt.formula,
       } else {
         
         if (ncol(marker.genoprobs) == 3) {
-          mapping.df$mean.QTL.add <- AdditiveCoefficientFrom3Genoprobs(marker.genoprobs)
-          mapping.df$var.QTL.add <- AdditiveCoefficientFrom3Genoprobs(marker.genoprobs)[perm]
-          mapping.df$mean.QTL.dom <- DominantCoefficientFrom3Genoprobs(marker.genoprobs)
-          mapping.df$var.QTL.dom <- DominantCoefficientFrom3Genoprobs(marker.genoprobs)[perm]
+          mapping.df$mean.QTL.add <- get.additive.coef.from.3.genoprobs(marker.genoprobs)
+          mapping.df$var.QTL.add <- get.additive.coef.from.3.genoprobs(marker.genoprobs)[perm]
+          mapping.df$mean.QTL.dom <- get.dom.coef.from.3.genoprobs(marker.genoprobs)
+          mapping.df$var.QTL.dom <- get.dom.coef.from.3.genoprobs(marker.genoprobs)[perm]
         }
         if (ncol(marker.genoprobs) == 2) {
-          mapping.df$mean.QTL.add <- AdditiveCoefficientFrom2Genoprobs(marker.genoprobs)
-          mapping.df$var.QTL.add <- AdditiveCoefficientFrom2Genoprobs(marker.genoprobs)[perm]
+          mapping.df$mean.QTL.add <- get.additive.coef.from.2.genoprobs(marker.genoprobs)
+          mapping.df$var.QTL.add <- get.additive.coef.from.2.genoprobs(marker.genoprobs)[perm]
           mapping.df$mean.QTL.dom <- mapping.df$var.QTL.dom <- 0
         }
         
@@ -222,11 +225,12 @@ scan.via.dglm <- function(mean.alt.formula,
 #### compile data into return format ####
   varscan <- data_frame(chr = factor(chr.by.marker,
                                      levels = mixedsort(unique(chr.by.marker))),
-                          pos = pos.by.marker,
-                          marker.name = marker.names,
-                          full.lod,
-                          mean.lod,
-                          var.lod) 
+                        chrtype = chrtype,
+                        pos = pos.by.marker,
+                        marker.name = marker.names,
+                        full.lod,
+                        mean.lod,
+                        var.lod) 
   if (return.effects) {
     varscan <- bind_cols(varscan, data.frame(fitted.effects))
   }

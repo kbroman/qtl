@@ -1,6 +1,6 @@
-convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
+convert.scanonevar.to.empirical.ps <- function(scan, null.scan.maxes) {
 
-  ValidateConvertLODsToEmpPs(scan, null.scan.maxes)
+  validate.convert.scanonevar.to.emp.ps(scan, null.scan.maxes)
 
 	lod.columns <- grep(pattern = 'lod', names(scan), value = TRUE)
 	chr.types <- unique(scan$chrtype)
@@ -15,7 +15,7 @@ convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
 
 		for (lod.column in lod.columns) {
 
-			evd <- fgev(null.lods[[paste0('max.', lod.column)]])
+			evd <- fgev(null.lods[[lod.column]])
 
 			emp.ps <- pgev(q = obs.lods[[lod.column]],
 										 loc = fitted(evd)[1],
@@ -30,7 +30,7 @@ convert.varscan.to.empirical.ps <- function(scan, null.scan.maxes) {
 	# change names to reflect that we now have empirical p values, not LOD scores
   for (lod.column in lod.columns) {
     col.idx <- which(names(scan.as.emp.ps) == lod.column)
-    new.name <- paste0('emp.p.', substring(lod.column, first = 5))
+    new.name <- paste0('emp.p.', lod.column)
     names(scan.as.emp.ps)[col.idx] <- new.name
   }
 	attr(scan.as.emp.ps, 'units') <- 'emp.ps'
