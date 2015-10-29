@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.38, 2015-10-08
+Version 1.38, 2015-10-28
 
 Major changes:
 
@@ -26,7 +26,9 @@ Major changes:
 
 Minor changes:
 
-  None.
+  In plotLodProfile, if col has length > 1 but no equal to the number
+  of QTL, give a warning, but either repeat or subset the vector
+  rather than just using the first value.
 
 
 Version 1.37, 2015-08-24
