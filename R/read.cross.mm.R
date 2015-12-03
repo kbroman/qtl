@@ -99,7 +99,7 @@ read.cross.mm <-
         if(flag == 0) {
             flag <- 1
             if(!is.na(match("intercross", a))) type <- "f2"
-            else if(!is.na(match("backcross", a))) type <- "bc"
+            else if(!is.na(match("backcross", a)) || !is.na(match("bc", a))) type <- "bc"
             else
                 stop("File indicates invalid cross type: ", a[length(a)], ".")
         }
