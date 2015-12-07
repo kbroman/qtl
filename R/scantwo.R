@@ -309,7 +309,7 @@ scantwo <-
 
             temp <- scantwo(subset(cross, ind=upat[[i]]), chr=chr, pheno.col=batches[[i]], model=model,
                             method=method, addcovar=tempac, intcovar=tempic,
-                            weights=weights, use=use, incl.markers=incl.markers, clean.output=clean.output,
+                            weights=weights[upat[[i]]], use=use, incl.markers=incl.markers, clean.output=clean.output,
                             clean.nmar=clean.nmar, clean.distance=clean.distance,
                             maxit=maxit, tol=tol, verbose=verbose, n.perm=n.perm,
                             perm.strata=perm.strata[upat[[i]]], assumeCondIndep=assumeCondIndep,

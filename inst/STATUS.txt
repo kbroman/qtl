@@ -16,6 +16,21 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.39, 2015-12-07
+
+Major changes:
+
+  Fixed a bug in scantwo() when using weights with multiple phenotypes
+  when some of the phenotypes contain missing values. (This is the
+  same as the bug fix in scanone in version 1.38. Reminder of
+  important principle: when you find a bug, look for other possible
+  instances of the same bug.)
+
+Minor changes:
+
+  None.
+
+
 Version 1.38, 2015-12-03
 
 Major changes:
