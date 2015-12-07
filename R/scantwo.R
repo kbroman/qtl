@@ -3,7 +3,7 @@
 # scantwo.R
 #
 # copyright (c) 2001-2015, Karl W Broman and Hao Wu
-# last modified Aug, 2015
+# last modified Oct, 2015
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #
 # Part of the R/qtl package
 # Contains: scantwo, scantwo.perm, scantwo.perm.engine
-#           revisescantwodf
 #
 ######################################################################
 
@@ -206,10 +205,6 @@ scantwo <-
         cross$pheno <- cbind(pheno.col, cross$pheno)
         pheno.col <- 1
     }
-
-    dfAAf <- dfAAa <- dfAA1 <- -1
-    dfAXf <- dfAXa <- dfAX1 <- -1
-    dfXXf <- dfXXa <- dfXX1 <- -1
 
     origcross <- cross
 
@@ -479,9 +474,6 @@ scantwo <-
                     addcovar=addcovar, intcovar=intcovar, weights=weights,
                     use=use, maxit=maxit, tol=tol, verbose=FALSE)
     out.scanone <- temp[,-(1:2),drop=FALSE]
-    dfAA1 <- attr(temp, "df")["A"]
-    if(any(chrtype=="X"))
-        dfAX1 <- dfXX1 <- attr(temp, "df")["X"]
     if(verbose) cat(" --Running scantwo\n")
 
     if(method=="mr" || method=="mr-imp" || method=="mr-argmax") { # marker regression
@@ -671,21 +663,6 @@ scantwo <-
             else {
                 col2drop <- rep(0,n.gen[i]*n.gen[j])
                 n.col2drop <- 0
-            }
-
-            # get degrees of freedom
-            if(dfAAf < 0 && chrtype[i]=="A" && chrtype[j]=="A") {
-                dfAAf <- (n.gen[i]*n.gen[j]-1)*(n.ic+1)
-                dfAAa <- (n.gen[i]+n.gen[j]-2)*(n.ic+1)
-            }
-            else if(dfAXf < 0 && ((chrtype[i]=="A" && chrtype[j]=="X") ||
-                                  (chrtype[i]=="X" && chrtype[j]=="A"))) {
-                dfAXf <- (n.gen[i]*n.gen[j]-1)*(n.icX+1)
-                dfAXa <- (n.gen[i]+n.gen[j]-2)*(n.icX+1)
-            }
-            if(dfXXf < 0 && chrtype[i]=="X" && chrtype[j]=="X") {
-                dfXXf <- (n.gen[i]*n.gen[j]-1-n.col2drop)*(n.icX+1)
-                dfXXa <- (n.gen[i]+n.gen[j]-2-n.col2drop.addmodel)*(n.icX+1)
             }
 
             # print the current working pair
@@ -1460,11 +1437,6 @@ scantwo <-
             }
         }
 
-        dfXXf <- dfXXf - parX0 + 1
-        dfXXa <- dfXXa - parX0 + 1
-
-        dfAXf <- dfAXf - parX0 + 1
-        dfAXa <- dfAXa - parX0 + 1
     }
 
     #  if(any(is.na(results)) && n.perm > -2)
@@ -1495,16 +1467,6 @@ scantwo <-
     attr(out,"type") <- type
     attr(out, "fullmap") <- fullmap
     class(out) <- "scantwo"
-
-    df <- NULL
-    if(any(chrtype=="A"))
-        df <- rbind(df, "AA"=c("full"=dfAAf, "add"=dfAAa, "one"=dfAA1))
-    if(any(chrtype=="A") && any(chrtype=="X"))
-        df <- rbind(df, "AX"=c("full"=dfAXf, "add"=dfAXa, "one"=dfAX1))
-    if(any(chrtype=="X"))
-        df <- rbind(df, "XX"=c("full"=dfXXf, "add"=dfXXa, "one"=dfXX1))
-    colnames(df) <- c("full","add","one")
-    attr(out, "df") <- df
 
     if(clean.output) # remove NA, 0 out positions between markers
         out <- clean(out, clean.nmar, clean.distance)
@@ -1658,9 +1620,6 @@ scantwo.perm.engine <-
                 ## find the maximum LOD on each permutation
                 if(is.null(perm.result)) {
                     perm.result <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
-
-                    if("df" %in% names(attributes(tem)))
-                        attr(perm.result, "df") <- revisescantwodf(attr(tem, "df"))
                 }
                 else {
                     tem <- lapply(subrousummaryscantwo(tem,for.perm=TRUE), as.matrix)
@@ -1765,8 +1724,6 @@ scantwo.perm.engine <-
             # maxima
             for(j in 1:6) perm.result[[j]][i,] <- temp[[j]]
 
-            if("df" %in% names(attributes(tem)))
-                attr(perm.result, "df") <- revisescantwodf(attr(tem, "df"))
         }
     }
 
@@ -1781,18 +1738,5 @@ scantwo.perm.engine <-
     perm.result
 }
 
-
-revisescantwodf <-
-    function(df)
-{
-    if(is.null(df)) return(NULL)
-    full <- df[,"full"]
-    add <- df[,"add"]
-    one <- df[,"one"]
-    out <- cbind(full=full, fv1=full-one, int=full-add,
-                 add=add, av1=add-one)
-    rownames(out) <- rownames(df)
-    out
-}
 
 # end of scantwo.R

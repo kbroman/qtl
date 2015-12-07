@@ -8,9 +8,9 @@
 ^\.Rprofile$
 ^tests/\.RData$
 ^tests/\.Rhistory$
-inst/doc/Sources/MQM/Figs
-inst/doc/Sources/MQM/\.RData
-inst/doc/Sources/MQM/Sweave.sty
-inst/doc/Sources/MQM/\.Rprofile
-^README.md$
+^inst/doc/Sources/MQM/Figs$
+^inst/doc/Sources/MQM/\.RData$
+^inst/doc/Sources/MQM/Sweave\.sty$
+^inst/doc/Sources/MQM/\.Rprofile$
+^README\.md$
 ^\.travis\.yml$

@@ -38,7 +38,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    transformations.}
  \item{model}{The phenotype model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
- \item{method}{Indicates whether to use the EM algorithm, 
+ \item{method}{Indicates whether to use the EM algorithm,
    imputation, Haley-Knott regression, the extended Haley-Knott method,
    or marker regression.  Not all methods are available for all models.
    Marker regression is performed either by dropping individuals with
@@ -53,12 +53,12 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    or a vector of length n.ind containing positive weights.  Used only
    in the case \code{model="normal"}.}
  \item{use}{In the case that multiple phenotypes are selected to be
-   scanned, this argument indicates whether to use all individuals, 
+   scanned, this argument indicates whether to use all individuals,
    including those missing some phenotypes, or just those individuals
    that have data on all selected phenotypes.}
  \item{upper}{Used only for the two-part model; if true, the
    "undefined" phenotype is the maximum observed phenotype; otherwise,
-   it is the smallest observed phenotype.} 
+   it is the smallest observed phenotype.}
  \item{ties.random}{Used only for the non-parametric "model"; if TRUE,
    ties in the phenotypes are ranked at random.  If FALSE, average ranks
    are used and a corrected LOD score is calculated.}
@@ -70,7 +70,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
  \item{maxit}{Maximum number of iterations for methods \code{"em"} and
    \code{"ehk"}.}
  \item{tol}{Tolerance value for determining convergence for methods
-   \code{"em"} and \code{"ehk"}.} 
+   \code{"em"} and \code{"ehk"}.}
  \item{n.perm}{If specified, a permutation test is performed rather than
    an analysis of the observed data.  This argument defines the number
    of permutation replicates.}
@@ -112,7 +112,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   the phenotype distribution (for example, metastatic density when many
   individuals show no metastasis, or survival time following an
   infection when individuals may recover from the infection and fail to
-  die).  The two-part model was described by 
+  die).  The two-part model was described by
   Boyartchuk et al. (2001) and Broman (2003).  Individuals with QTL
   genotype \eqn{g} have probability \eqn{p_g}{p[g]} of having an
   undefined phenotype (the spike), while if their phenotype is defined,
@@ -122,7 +122,7 @@ scanone(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   that \eqn{p_g = p}{p[g] = p} and \eqn{\mu_g = \mu}{mu[g] = mu}.
   LOD(\eqn{p}) is for the test that \eqn{p_g = p}{p[g] = p} while the
   \eqn{\mu_g}{mu[g]} may vary. LOD(\eqn{\mu}{mu}) is for the test that
-  \eqn{\mu_g = \mu}{mu[g] = mu} while the \eqn{p_g}{p[g]} may vary. 
+  \eqn{\mu_g = \mu}{mu[g] = mu} while the \eqn{p_g}{p[g]} may vary.
 
   \bold{With the non-parametric "model"}, an extension of the
   Kruskal-Wallis test is used; this is similar to the method described
@@ -172,7 +172,7 @@ model to that of the null model \eqn{y = \mu + A \gamma + \epsilon}{y =
   m + A g + e}.
 
 Covariates must be numeric matrices.  Individuals with any missing
-covariates are discarded.  
+covariates are discarded.
 }
 
 \section{X chromosome}{
@@ -187,16 +187,16 @@ the X chromosome, and so the null hypothesis must be changed to allow
 for a sex difference in the phenotype.
 
 Numerous special cases must be considered, as detailed in the following
-table. 
+table.
 
 \tabular{lllccc}{
 \bold{BC}
  \tab \tab \bold{Sexes} \tab \bold{Null} \tab \bold{Alternative} \tab \bold{df} \cr
- \tab \tab both sexes   \tab sex         \tab AA/AB/AY/BY        \tab 2         \cr 
+ \tab \tab both sexes   \tab sex         \tab AA/AB/AY/BY        \tab 2         \cr
  \tab \tab all female   \tab grand mean  \tab AA/AB              \tab 1         \cr
  \tab \tab all male     \tab grand mean  \tab AY/BY              \tab 1         \cr
  \tab \tab              \tab             \tab                    \tab           \cr
- 
+
 \bold{F2}
  \tab \bold{Direction} \tab \bold{Sexes}\tab \bold{Null}\tab \bold{Alternative} \tab \bold{df} \cr
  \tab Both             \tab both sexes  \tab femaleF/femaleR/male \tab AA/ABf/ABr/BB/AY/BY \tab 3         \cr
@@ -215,7 +215,7 @@ for the X chromosome is different from that for autosomes, a separate
 X-chromosome LOD threshold is recommended.  Autosome- and
 X-chromosome-specific LOD thresholds may be estimated by permutation
 tests with \code{scanone} by setting \code{n.perm}>0 and using
-\code{perm.Xsp=TRUE}. 
+\code{perm.Xsp=TRUE}.
 
 }
 
@@ -237,8 +237,8 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   will be run, where \eqn{L_A} and \eqn{L_X} are the total genetic
   lengths of the autosomes and X chromosome, respectively.  More
   permutations are needed for the X chromosome in order to obtain
-  thresholds of similar accuracy.  
- 
+  thresholds of similar accuracy.
+
   For further details on the models, the methods and the use of
   covariates, see below.
 }
@@ -250,13 +250,13 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   In the case of the two-part model, there are three LOD score columns
   for each phenotype: LOD(\eqn{p,\mu}{p,mu}), LOD(\eqn{p}) and
   LOD(\eqn{\mu}{mu}).   The result is given class \code{"scanone"} and
-  has attributes  \code{"model"}, \code{"method"}, \code{"df"} and
-  \code{"type"} (the latter is the type of cross analyzed). 
+  has attributes  \code{"model"}, \code{"method"}, and
+  \code{"type"} (the latter is the type of cross analyzed).
 
   If \code{n.perm} is specified, the function returns the results of a
   permutation test and the output has class \code{"scanoneperm"}.  If
   \code{perm.Xsp=FALSE}, the function returns a matrix with
-  \code{n.perm} rows, each row containing the genome-wide 
+  \code{n.perm} rows, each row containing the genome-wide
   maximum LOD score for each of the phenotypes.  In the case of the
   two-part model, there are three columns for each phenotype,
   corresponding to the three different LOD scores. If
@@ -271,10 +271,10 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   S. E. F., Starnbach, M. N. and Dietrich, W. F. (2001) Multigenic
   control of \emph{Listeria monocytogenes} susceptibility in
   mice. \emph{Nature Genetics} \bold{27}, 259--260.
-  
+
   Broman,  K. W. (2003) Mapping quantitative trait loci in the case of a
   spike in the phenotype distribution. \emph{Genetics} \bold{163},
-  1169--1175. 
+  1169--1175.
 
   Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
   Southard-Smith, E. M. and Churchill G. A. (2006)  The X chromosome in
@@ -290,7 +290,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   Feenstra, B., Skovgaard, I. M. and Broman, K. W. (2006) Mapping
   quantitative trait loci by an extension of the Haley-Knott regression
   method using estimating equations. \emph{Genetics}, \bold{173},
-  2111--2119. 
+  2111--2119.
 
   Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping
   quantitative trait loci in line crosses using flanking markers.
@@ -298,7 +298,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
 
   Kruglyak, L. and Lander, E. S. (1995) A nonparametric approach for
   mapping quantitative trait loci.  \emph{Genetics} \bold{139},
-  1421--1428. 
+  1421--1428.
 
   Lander, E. S. and Botstein, D. (1989) Mapping Mendelian factors underlying
   quantitative traits using RFLP linkage maps.  \emph{Genetics}
@@ -310,7 +310,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   Soller, M., Brody, T. and Genizi, A. (1976) On the power of experimental
   designs for the detection of linkage between marker loci and
   quantitative loci in crosses between inbred lines.
-  \emph{Theor. Appl. Genet.} \bold{47}, 35--39. 
+  \emph{Theor. Appl. Genet.} \bold{47}, 35--39.
 
   Xu, S., and Atchley, W.R. (1996) Mapping quantitative trait loci for
   complex binary diseases using line crosses. \emph{Genetics}
@@ -500,7 +500,7 @@ summary(out.covar, thr=3)
 plot(out.covar, out.nocovar, chr=c(2,5,10))
 }
 
-\seealso{ \code{\link{plot.scanone}}, 
+\seealso{ \code{\link{plot.scanone}},
   \code{\link{summary.scanone}}, \code{\link{scantwo}},
   \code{\link{calc.genoprob}}, \code{\link{sim.geno}},
   \code{\link{max.scanone}},

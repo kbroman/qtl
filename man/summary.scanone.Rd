@@ -12,7 +12,7 @@
 \usage{
 \method{summary}{scanone}(object, threshold,
         format=c("onepheno", "allpheno", "allpeaks", "tabByCol", "tabByChr"),
-        perms, alpha, lodcolumn=1, pvalues=FALSE, df=FALSE,
+        perms, alpha, lodcolumn=1, pvalues=FALSE,
         ci.function=c("lodint", "bayesint"), \dots)
 }
 
@@ -40,9 +40,7 @@
    and the number of LOD columns in the object input.}
  \item{pvalues}{If TRUE, include columns with genome-scan-adjusted
    p-values in the results.  This requires that \code{perms} be
-   provided.} 
- \item{df}{If TRUE, the degrees of freedom associated with the LOD
-   scores are shown.}
+   provided.}
  \item{ci.function}{For formats \code{"tabByCol"} and \code{"tabByChr"},
    indicates the function to use to get approximate confidence intervals
    for QTL location.}
@@ -50,7 +48,7 @@
    additional arguments are passed to the function indicated by
    \code{ci.function} (for example, \code{drop} for \code{\link{lodint}}
    or \code{prob} for \code{\link{bayesint}}, or \code{expandtomarkers}
-   for either).} 
+   for either).}
 }
 
 \details{
@@ -76,7 +74,7 @@
   Here \code{threshold} may be a vector of LOD score thresholds, one for
   each LOD score column, in which case only those positions for which a
   LOD score column exceeded its threshold are given.  If
-  \code{threshold} is a single number, it is applied to all of the LOD 
+  \code{threshold} is a single number, it is applied to all of the LOD
   score columns.  If \code{alpha} is specified, it must   be a single
   significance level, applied for all LOD score columns, and again
   \code{perms} must be specified, and these are used to calculate the
@@ -86,17 +84,17 @@
   chromosome, the maximum LOD score for each LOD score column, at the
   position at which it achieved its maximum.  Thus, the output will
   contain no more than one row per chromosome, but will contain the
-  position and maximum LOD score for each of the LOD score columns. 
+  position and maximum LOD score for each of the LOD score columns.
   The arguments \code{threshold} and \code{alpha} may be specified as
   for the \code{"allpheno"} format.  The results for a chromosome are
   returned if at least one of the LOD score columns exceeded its
-  threshold. 
+  threshold.
 
   For \code{format="tabByCol"}, there will be a separate table for each
   LOD score column, with a single peak per chromosome.  Included are
   columns indicating chromosome, peak position, lower and upper limits
   of the confidence interval calculated via \code{\link{lodint}} or
-  \code{\link{bayesint}}, and lod score.  
+  \code{\link{bayesint}}, and lod score.
 
   The output for \code{format="tabByChr"}, is similar to that of
   \code{format="tabByCol"}, but with results organized by chromosome
@@ -115,7 +113,7 @@
 
 \value{
   An object of class \code{summary.scanone}, to be printed by
-  \code{print.summary.scanone}.  
+  \code{print.summary.scanone}.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}

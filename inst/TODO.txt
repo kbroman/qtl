@@ -9,6 +9,11 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o table2map function (opposite of map2table)
+
+o summary and plot functions for comparegeno results
+  (ease the identication of sample duplicates)
+
 o Write a function to simplify formula like y~Q1*Q2*Q3*Q4
   ...rather than halt with an error, just drop all but the pairwise
   interactions.

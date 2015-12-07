@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-2014, Karl W Broman
-# last modified Oct, 2014
+# copyright (c) 2005-2015, Karl W Broman
+# last modified Oct, 2015
 # first written Mar, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -31,25 +31,15 @@
     if(!any(class(e1) == "scanone"))
         stop("Input should have class \"scanone\".")
 
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
     if(missing(e2)) {
         class(e1) <- "data.frame"
         e1[,-(1:2)] <- -e1[,-(1:2)]
         class(e1) <- c("scanone","data.frame")
-        if(!is.null(df1))
-            attr(e1, "df") <- -df1
 
         return(e1)
     }
     if(!any(class(e2) == "scanone"))
         stop("Input should have class \"scanone\".")
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     class(e1) <- class(e2) <- "data.frame"
     if(nrow(e1) != nrow(e2)) {
@@ -75,13 +65,6 @@
 
     class(e1) <- c("scanone","data.frame")
 
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 - df2
-    }
-
     e1
 }
 
@@ -91,17 +74,9 @@
     if(!any(class(e1) == "scanone"))
         stop("Input should have class \"scanone\".")
 
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
     if(missing(e2)) return(e1)
     if(!any(class(e2) == "scanone"))
         stop("Input should have class \"scanone\".")
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     class(e1) <- class(e2) <- "data.frame"
     if(nrow(e1) != nrow(e2)) {
@@ -121,13 +96,6 @@
     e1[,3:nc] <- e1[,3:nc] + e2[,3:nc]
     class(e1) <- c("scanone","data.frame")
 
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 + df2
-    }
-
     e1
 }
 
@@ -136,10 +104,6 @@
 {
     if(!any(class(e1) == "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
-
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
 
     if(missing(e2)) {
         e1.x <- ("xchr" %in% names(attributes(e1)))
@@ -153,17 +117,10 @@
             class(e1) <- theclass
         }
 
-        if(!is.null(df1))
-            attr(e1, "df") <- -df1
-
         return(e1)
     }
     if(!any(class(e2) == "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     # check input
     e1.x <- ("xchr" %in% names(attributes(e1)))
@@ -194,13 +151,6 @@
         class(e1) <- theclass
     }
 
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 - df2
-    }
-
     e1
 }
 
@@ -212,14 +162,6 @@
     if(missing(e2)) return(e1)
     if(!any(class(e2) == "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
-
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     # check input
     e1.x <- ("xchr" %in% names(attributes(e1)))
@@ -242,13 +184,6 @@
         class(e1) <- theclass
     }
 
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 + df2
-    }
-
     e1
 }
 
@@ -261,25 +196,15 @@
     if(!any(class(e1) == "scantwo"))
         stop("Input should have class \"scantwo\".")
 
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
     if(missing(e2)) {
         e1$lod <- -e1$lod
         if("scanoneX" %in% names(e1))
             e1$scanoneX <- -e1$scanoneX
-        if(!is.null(df1))
-            attr(e1, "df") <- -df1
 
         return(e1)
     }
     if(!any(class(e2) == "scantwo"))
         stop("Input should have class \"scantwo\".")
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     e1x <- "scanoneX" %in% names(e1)
     e2x <- "scanoneX" %in% names(e2)
@@ -293,13 +218,6 @@
     if(e1x) {
         if(!is.null(e1$scanoneX) && !is.null(e2$scanoneX))
             e1$scanoneX <- e1$scanoneX - e2$scanoneX
-    }
-
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 - df2
     }
 
     e1
@@ -318,14 +236,6 @@
     if(!any(class(e2) == "scantwo"))
         stop("Input should have class \"scantwo\".")
 
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
-
     e1x <- "scanoneX" %in% names(e1)
     e2x <- "scanoneX" %in% names(e2)
 
@@ -338,13 +248,6 @@
     if(e1x) {
         if(!is.null(e1$scanoneX) && !is.null(e2$scanoneX))
             e1$scanoneX <- e1$scanoneX + e2$scanoneX
-    }
-
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 + df2
     }
 
     e1
@@ -360,10 +263,6 @@
     if(!any(class(e1) == "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
 
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
     if(missing(e2)) {
         # x-chr-specific
         if("AA" %in% names(e1)) {
@@ -375,18 +274,12 @@
 
         for(i in 1:length(e1))
             e1[[i]] <- -e1[[i]]
-        if(!is.null(df1))
-            attr(e1, "df") <- -df1
 
         return(e1)
     }
 
     if(!any(class(e2) == "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     # x-chr-specific
     if("AA" %in% names(e1) || "AA" %in% names(e2)) {
@@ -410,13 +303,6 @@
     for(i in 1:length(e1))
         e1[[i]] <- e1[[i]] - e2[[i]]
 
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 - df2
-    }
-
     e1
 }
 
@@ -432,14 +318,6 @@
     if(missing(e2)) return(e1)
     if(!any(class(e2) == "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
-
-    if("df" %in% names(attributes(e1)))
-        df1 <- attr(e1, "df")
-    else df1 <- NULL
-
-    if("df" %in% names(attributes(e2)))
-        df2 <- attr(e2, "df")
-    else df2 <- NULL
 
     # x-chr-specific
     if("AA" %in% names(e1) || "AA" %in% names(e2)) {
@@ -462,13 +340,6 @@
 
     for(i in 1:length(e1))
         e1[[i]] <- e1[[i]] + e2[[i]]
-
-    if(!is.null(df1) && !is.null(df2)) {
-        if(length(df1) != length(df2))
-            warning("Dimensions of degrees of freedom don't match; this may indicate a problem.")
-        else
-            attr(e1, "df") <- df1 + df2
-    }
 
     e1
 }

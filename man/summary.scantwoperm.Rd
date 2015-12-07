@@ -10,15 +10,13 @@
 }
 
 \usage{
-\method{summary}{scantwoperm}(object, alpha=c(0.05, 0.10), df=FALSE, \dots)
+\method{summary}{scantwoperm}(object, alpha=c(0.05, 0.10), \dots)
 }
 
 \arguments{
  \item{object}{Output from the function \code{\link{scantwo}}
    with \code{n.perm} > 0.}
  \item{alpha}{Genome-wide significance levels.}
- \item{df}{If TRUE, the degrees of freedom associated with the LOD
-   scores are shown.}
  \item{\dots}{Ignored at this point.}
 }
 
