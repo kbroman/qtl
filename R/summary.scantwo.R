@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-2014, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Oct, 2014
+# copyright (c) 2001-2015, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Oct, 2015
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ summary.scantwo <-
     function(object, thresholds,
              what=c("best", "full", "add", "int"),
              perms, alphas, lodcolumn=1, pvalues=FALSE,
-             df=FALSE, allpairs=TRUE, ...)
+             allpairs=TRUE, ...)
 {
     if(!any(class(object) == "scantwo") &&
        !any(class(object) == "scantwocondensed"))
@@ -354,19 +354,6 @@ summary.scantwo <-
         out <- result
     }
 
-    attr(out, "df") <- revisescantwodf(attr(object, "df"))
-
-    if(!missing(perms) && "df" %in% names(attributes(out)) &&
-       "df" %in% names(attributes(perms))) {
-        df.o <- attr(out, "df")
-        df.p <- attr(perms, "df")
-        if(length(df.o) != length(df.p) ||
-           any(df.o != df.p))
-            warning("Degrees of freedom in input object and perms do not match.")
-    }
-
-    if(!df) attr(out, "df") <- NULL
-
     class(out) <- c("summary.scantwo", "data.frame")
 
     out
@@ -509,14 +496,6 @@ print.summary.scantwo <-
         return(invisible(NULL))
     }
 
-    if("df" %in% names(attributes(x))) {
-        df <- attr(x, "df")
-        cat("Degrees of freedom:\n")
-        rownames(df) <- paste("   ", rownames(df), ": ", sep="")
-        print(df)
-        cat("\n")
-    }
-
     z <- as.character(unlist(x[,1]))
 
     if(max(nchar(z)) == 1)
@@ -599,7 +578,7 @@ print.scantwo <-
 max.scantwo <-
     function(object, lodcolumn=1,
              what=c("best", "full", "add", "int"),
-             df=FALSE, na.rm=TRUE, ...)
+             na.rm=TRUE, ...)
 {
     if(class(object)[1] != "scantwo" &&
        class(object)[1] != "scantwocondensed")
@@ -698,8 +677,6 @@ max.scantwo <-
 
     class(out) <- c("summary.scantwo", "data.frame")
     rownames(out) <- what
-    if(df && "df" %in% names(attributes(object)))
-        attr(out, "df") <- revisescantwodf(attr(object,"df"))
 
     out
 }
@@ -830,10 +807,6 @@ subset.scantwo <-
             attr(x, "fullmap") <- fmap
         }
 
-        df <- attr(x, "df")
-        if(any(!is.na(match(c("AX","XX"), rownames(df)))) &&
-           all(!x$map$xchr))
-            attr(x, "df") <- df["AA",,drop=FALSE]
     }
 
     x
@@ -846,7 +819,7 @@ subset.scantwo <-
 # scantwo permutation test (from scantwo with n.perm > 0)
 ######################################################################
 summary.scantwoperm <-
-    function(object, alpha=c(0.05, 0.10), df=FALSE, ...)
+    function(object, alpha=c(0.05, 0.10), ...)
 {
     if(!any(class(object) == "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
@@ -899,9 +872,6 @@ summary.scantwoperm <-
         rownames(out[[i]]) <- paste0(alpha*100, "%")
     }
 
-    if(df && "df" %in% names(attributes(object)))
-        attr(out, "df") <- attr(object, "df")
-
     attr(out, "n.perm") <- nrow(object[[1]])
     class(out) <- c("summary.scantwoperm", "list")
     out
@@ -950,14 +920,6 @@ print.summary.scantwoperm <-
     if(length(unique(nc)) != 1)
         stop("The components shouldn't have varying numbers of columns.\n")
     nc <- nc[1]
-
-    if("df" %in% names(attributes(x))) {
-        df <- attr(x, "df")
-        cat("Degrees of freedom:\n")
-        rownames(df) <- paste("   ", rownames(df), ": ", sep="")
-        print(df)
-        cat("\n")
-    }
 
     if(nc==1) {
         phe <- colnames(x[[1]])
@@ -1063,14 +1025,6 @@ cbind.scantwo <- c.scantwo <-
         }
     }
 
-    df <- lapply(dots, attr, "df")
-    for(i in 2:length(df)) {
-        if(length(df[[1]]) != length(df[[i]]) || any(df[[1]] != df[[i]])) {
-            warning("Mismatch in degrees of freedom.")
-            attr(output, "df") <- NULL
-        }
-    }
-
     output
 }
 
@@ -1122,18 +1076,6 @@ rbind.scantwoperm <- c.scantwoperm <-
         }
     }
     if(flag) warning("Mismatch in column names; input may not be consistent.\n")
-
-    df <- lapply(dots, attr, "df")
-    flag <- 0
-    for(i in 2:length(df)) {
-        if(length(df[[i]]) != length(df[[1]]) ||
-           any(df[[i]] != df[[1]]))
-            flag <- 1
-    }
-    if(flag) {
-        warning("Mismatch in degrees of freedom; may cause problems.")
-        attr(dots[[1]], "df") <- NULL
-    }
 
     dots[[1]]
 }
@@ -1188,7 +1130,6 @@ condense.scantwo <-
     function(object)
 {
     out <- subrousummaryscantwo(object, for.perm=FALSE)
-    attr(out, "df") <- attr(object, "df")
     class(out) <- c("scantwocondensed", "list")
     out
 }

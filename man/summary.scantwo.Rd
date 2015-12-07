@@ -8,10 +8,10 @@
 }
 
 \usage{
-\method{summary}{scantwo}(object, thresholds, 
+\method{summary}{scantwo}(object, thresholds,
         what=c("best", "full", "add", "int"),
         perms, alphas, lodcolumn=1, pvalues=FALSE,
-        df=FALSE, allpairs=TRUE, \dots)
+        allpairs=TRUE, \dots)
 }
 
 \arguments{
@@ -21,7 +21,7 @@
    for the full, conditional-interactive, interaction, additive, and
    conditional-additive LOD scores. See Details, below.}
  \item{what}{Indicates for which LOD score the maximum should be
-   reported. See Details, below.} 
+   reported. See Details, below.}
  \item{perms}{Optional permutation results used to derive thresholds or
    to calculate genome-scan-adjusted p-values.  This must be consistent
    with the \code{object} input, in that it must have the same number of
@@ -30,20 +30,18 @@
    score column.}
  \item{alphas}{If perms are included, these are the significance levels used
    to calculate thresholds for determining which peaks to pull out.  It
-   should be a vector of length 5, giving significance levels 
+   should be a vector of length 5, giving significance levels
    for the full, conditional-interactive, interaction, additive, and
    conditional-additive LOD scores.  (It can also be a single number, in
    which case it is assumed that the same value is used for all five LOD
    scores.)  If \code{thresholds} is specified, \code{alphas} should not
-   be.} 
+   be.}
  \item{lodcolumn}{If the scantwo results contain LOD scores for
     multiple phenotypes, this argument indicates which to use in the
-    summary.  Only one LOD score column may be considered at a time.} 
+    summary.  Only one LOD score column may be considered at a time.}
  \item{pvalues}{If TRUE, include columns with genome-scan-adjusted
    p-values in the results.  This requires that \code{perms} be
-   provided.} 
- \item{df}{If TRUE, the degrees of freedom associated with the LOD
-   scores are shown.} 
+   provided.}
  \item{allpairs}{If TRUE, all pairs of chromosomes are considered.  If
    FALSE, only self-self pairs are considered, so that one may more
    conveniently check for possible linked QTL.}
@@ -69,7 +67,7 @@
   LOD score for a test for a second QTL, assuming that the two QTL act
   additively, which we call either the conditional-additive or "av1" LOD
   score.  Note that the maximum full LOD and additive LOD are allowed to
-  occur in different places. 
+  occur in different places.
 
   If \code{what="full"}, we find the maximum full LOD and extract the
   additive LOD at the corresponding pair of positions; we derive
@@ -90,13 +88,13 @@
   the interaction LOD exceed their threshold, or (b) the additive LOD
   score exceeds its threshold and the conditional-additive LOD exceeds
   its threshold.  The thresholds or alphas must be given in the order
-  full, cond-int, int, add, cond-add. 
+  full, cond-int, int, add, cond-add.
 
   Thresholds may be obtained by a permutation test with
   \code{\link{scantwo}}, but these are extremely time-consuming.
   For a mouse backcross, we suggest the thresholds (6.0, 4.7, 4.4, 4.7,
   2.6) for the full, conditional-interactive, interaction, additive, and
-  conditional-additive LOD scores, respectively.  
+  conditional-additive LOD scores, respectively.
   For a mouse intercross, we suggest the thresholds (9.1, 7.1, 6.3, 6.3,
   3.3) for the full, conditional-interactive, interaction, additive, and
   conditional-additive LOD scores, respectively.  These were obtained by
@@ -123,7 +121,7 @@
   to the model with neither of the new QTL, \code{lod.2v1b} comparing
   the full model to the model in which the first of the new QTL is
   omitted, and \code{lod.2v1a} comparing the full model to the model
-  with the second of the new QTL omitted.  
+  with the second of the new QTL omitted.
 
   The \code{thresholds} argument should have length 1 or 2, rather than
   the usual 5.  Rows will be retained if \code{lod.2v0} is greater than
@@ -142,7 +140,7 @@
   the appropriate significance levels for these relatively complex
   series of statistical tests is not yet completely clear.
 }
-  
+
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
 

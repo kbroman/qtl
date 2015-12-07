@@ -2,8 +2,8 @@
 #
 # discan.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2015, Karl W Broman
+# last modified Oct, 2015
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -44,10 +44,6 @@ discan <-
     else n.addcovar <- ncol(addcovar)
     if(is.null(intcovar)) n.intcovar <- 0
     else n.intcovar <- ncol(intcovar)
-
-    # to store the degrees of freedom
-    dfA <- -1
-    dfX <- parXa <- -1
 
     # individuals with no QTL effect
     if(missing(ind.noqtl)) ind.noqtl <- rep(FALSE, nind(cross))
@@ -250,14 +246,6 @@ discan <-
 
         colnames(z)[1] <- "lod"
 
-        if(chrtype=="A" && dfA < 0)
-            dfA <- (n.gen-1)*(n.ic+1)
-        if(chrtype=="X" && parXa < 0) {
-            parXa <- n.gen + n.ac + (n.gen-1)*n.ic
-            parX0 <- n.ac+1
-            dfX <- parXa - parX0
-        }
-
         # get null log10 likelihood for the X chromosome
         adjustX <- FALSE
         if(chrtype=="X") {
@@ -284,7 +272,6 @@ discan <-
                 z <- z - (llik0X - llik0["X"])
             }
 
-            dfX <- parXa - parX0
         }
 
         w <- names(map)
@@ -306,16 +293,6 @@ discan <-
     attr(results,"null.log10.lik") <- llik0["A"]
     if(adjustX)
         attr(results,"null.log10.lik.X") <- llik0X
-
-    # degrees of freedom
-    if(dfA > 0 && dfX > 0)
-        attr(results, "df") <- c("A"=dfA, "X"=dfX)
-    else if(dfA > 0)
-        attr(results, "df") <- c("A"=dfA)
-    else if(dfX > 0)
-        attr(results, "df") <- c("X"=dfX)
-    else
-        attr(results, "df") <- NA
 
     results
 }

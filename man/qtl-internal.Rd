@@ -102,7 +102,7 @@ imf.stahl(r, m=0, p=0, tol=1e-12, maxit=1000)
 locatemarker(map, pos, chr, flag)
 \method{max}{scantwocondensed}(object, lodcolumn=1,
     what=c("best", "full", "add", "int"),
-    df=FALSE, na.rm=TRUE, \dots)
+    na.rm=TRUE, \dots)
 mf.cf(d)
 mf.h(d)
 mf.k(d)
@@ -111,7 +111,7 @@ mf.stahl(d, m=0, p=0)
 polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
          par("cex"), pch = 19, gpch = 21, bg = par("bg"), color = par("fg"),
          col=NULL, ylim=range(x[is.finite(x)]), xlim = NULL, main = NULL, xlab =
-         NULL, ylab = NULL, add=FALSE, \dots) 
+         NULL, ylab = NULL, add=FALSE, \dots)
 \method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)
@@ -134,10 +134,10 @@ polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
 \method{print}{summary.scantwoperm}(x, \dots)
 replacemap(object, map)
 subrousummaryscantwo(object, for.perm=FALSE)
-\method{summary}{scantwocondensed}(object, thresholds, 
+\method{summary}{scantwocondensed}(object, thresholds,
          what=c("best", "full", "add", "int"),
          perms, alphas, lodcolumn=1, pvalues=FALSE,
-         df=FALSE, allpairs=TRUE, \dots)
+         allpairs=TRUE, \dots)
 \method{summary}{addcovarint}(object, \dots)
 \method{summary}{addint}(object, \dots)
 \method{summary}{compactqtl}(object, \dots)

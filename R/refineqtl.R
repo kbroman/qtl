@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-2015, Karl W. Broman
-# last modified May, 2015
+# last modified Oct, 2015
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -463,7 +463,10 @@ plotLodProfile <-
     else {
         if(length(col) != n.qtl) {
             warning("col should have length 1 or ", n.qtl)
-            col <- rep(col[1], n.qtl)
+            if(length(col) < n.qtl)
+                col <- rep(col, n.qtl)[1:n.qtl]
+            else
+                col <- col[1:n.qtl]
         }
         else col <- col[neworder]
     }
