@@ -319,4 +319,34 @@ pull.draws <-
     fulldr
 }
 
+##############################
+# table2map: create map object from a table
+#
+# rownames should be marker names
+# first column chromosome
+# second column position
+##############################
+table2map <-
+    function(tab)
+{
+    mar <- rownames(tab)
+    if(is.null(mar)) stop("marker names should be the row names")
+    chr <- factor(tab[,1], levels=unique(tab[,1]))
+    pos <- tab[,2]
+
+    map <- split(pos, chr)
+    mar <- split(mar, chr)
+    for(i in seq(along=map))
+        names(map[[i]]) <- mar[[i]]
+
+    if(all(names(map) %in% c(1:20,"X"))) { # names are as in mouse
+        for(i in seq(along=map))
+            class(map[[i]]) <- ifelse(names(map)[i]=="X", "X", "A")
+    }
+
+    class(map) <- "map"
+    map
+}
+
+
 # end of pull_stuff.R
