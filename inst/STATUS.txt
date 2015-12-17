@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.39, 2015-12-07
+Version 1.39, 2015-12-17
 
 Major changes:
 
@@ -28,7 +28,8 @@ Major changes:
 
 Minor changes:
 
-  None.
+  Added a function table2map() for converting a data frame with marker
+  positions (chr, position) into a map object.
 
 
 Version 1.38, 2015-12-03

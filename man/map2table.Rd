@@ -35,7 +35,7 @@ map <- pull.map(fake.f2)
 map_as_tab <- map2table(map)
 }
 
-\seealso{ \code{\link{pull.map}}, \code{\link{est.map}} }
+\seealso{ \code{\link{table2map}}, \code{\link{pull.map}}, \code{\link{est.map}} }
 
 
 \keyword{utilities}
