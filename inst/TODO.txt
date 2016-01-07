@@ -9,6 +9,9 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o mqmplot.circle only works when the chromosome names are numbers.
+  See http://bit.ly/1ISZvBD
+
 o summaryMap and plotMap should accept lists if they look right.
 
 o summary and plot functions for comparegeno results
