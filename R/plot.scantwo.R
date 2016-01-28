@@ -2,8 +2,8 @@
 #
 # plot.scantwo.R
 #
-# copyright (c) 2001-2011, Karl W Broman, Hao Wu and Brian Yandell
-# last modified Ma4, 2011
+# copyright (c) 2001-2016, Karl W Broman, Hao Wu and Brian Yandell
+# last modified Jan, 2016
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ plot.scantwo <-
              upper = c("int", "cond-add", "cond-int", "add", "full"),
              nodiag = TRUE,
              contours = FALSE, main, zscale = TRUE, point.at.max=FALSE,
-             col.scheme = c("redblue","cm","gray","heat","terrain","topo"),
+             col.scheme = c("viridis", "redblue","cm","gray","heat","terrain","topo"),
              gamma=0.6, allow.neg=FALSE, alternate.chrid=FALSE, ...)
 {
     if(!any(class(x) == "scantwo"))
@@ -267,7 +267,9 @@ plot.scantwo <-
                    terrain = terrain.colors(256),
                    topo = topo.colors(256),
                    cm = cm.colors(256),
-                   redblue = rev(rainbow(256, start = 0, end = 2/3)))
+                   redblue = rev(rainbow(256, start = 0, end = 2/3)),
+                   viridis = viridis_qtl(256)
+                   )
     if(col.scheme=="redblue") {
         # convert colors using gamma=0.6 (which will no longer be available in R)
         rgbval <- (col2rgb(cols)/255)^0.6

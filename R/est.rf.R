@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2016, Karl W Broman
+# last modified Jan, 2016
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -159,7 +159,9 @@ est.rf <-
 plotRF <- plot.rf <-
     function(x, chr, what=c("both","lod","rf"),
              alternate.chrid=FALSE, zmax=12,
-             mark.diagonal=FALSE, ...)
+             mark.diagonal=FALSE,
+             col.scheme=c("viridis", "redblue"),
+             ...)
 {
     if(!any(class(x) == "cross"))
         stop("Input should have class \"cross\".")
@@ -209,10 +211,15 @@ plotRF <- plot.rf <-
     }
     br <- c(-1, seq(-1e-6, zmax, length=257))
 
-    # convert colors using gamma=0.6 (which will no longer be available in R)
-    thecol <- rev(rainbow(256, start=0, end=2/3))
-    rgbval <- (col2rgb(thecol)/255)^0.6
-    thecol <- rgb(rgbval[1,], rgbval[2,], rgbval[3,])
+    col.scheme <- match.arg(col.scheme)
+    if(col.scheme=="redblue") {
+        # convert colors using gamma=0.6 (which will no longer be available in R)
+        thecol <- rev(rainbow(256, start=0, end=2/3))
+        rgbval <- (col2rgb(thecol)/255)^0.6
+        thecol <- rgb(rgbval[1,], rgbval[2,], rgbval[3,])
+    } else {
+        thecol <- viridis_qtl(256) # the new default
+    }
 
     image(1:ncol(g),1:nrow(g),t(g),ylab="Markers",xlab="Markers",breaks=br,
           col=c("lightgray",thecol))

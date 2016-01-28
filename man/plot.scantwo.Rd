@@ -12,13 +12,13 @@
      lower = c("full", "add", "cond-int", "cond-add", "int"),
      upper = c("int", "cond-add", "cond-int", "add", "full"),
      nodiag=TRUE, contours=FALSE, main, zscale=TRUE, point.at.max=FALSE,
-     col.scheme = c("redblue","cm","gray","heat","terrain","topo"),
+     col.scheme = c("viridis", "redblue","cm","gray","heat","terrain","topo"),
      gamma=0.6, allow.neg=FALSE, alternate.chrid=FALSE, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{"scantwo"}, as output by
-    \code{\link{scantwo}}.} 
+    \code{\link{scantwo}}.}
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -32,7 +32,7 @@
     \code{zlim} is missing, the maximum limits are used for each.}
   \item{lodcolumn}{If the scantwo results contain LOD scores for
     multiple phenotypes, this argument indicates which to use in the
-    plot.} 
+    plot.}
   \item{lower}{Indicates which LOD scores should be plotted in the lower
     triangle.  See the details below.}
   \item{upper}{Indicates which LOD scores should be plotted in the upper
@@ -42,11 +42,12 @@
   \item{contours}{If TRUE, add a contour to the plot at 1.5-LOD below
     its maximum, using a call to \code{\link[graphics]{contour}}.  If a
     numeric vector, contours are drawn at these values below the maximum
-    LOD.} 
+    LOD.}
   \item{main}{An optional title for the plot.}
   \item{zscale}{If TRUE, a color scale is plotted at the right.}
   \item{point.at.max}{If TRUE, plot an X at the maximum LOD.}
-  \item{col.scheme}{Name of color pallet.}
+  \item{col.scheme}{Name of color pallet. The default is "viridis"; see
+  Option D at \url{https://bids.github.io/colormap}}
   \item{gamma}{Parameter affecting range of colors when
     \code{col.scheme="gray"} or \code{="redblue"}.}
   \item{allow.neg}{If TRUE, allow the plot of negative LOD scores; in
@@ -54,7 +55,7 @@
     chiefly to allow a plot of difference between LOD scores from
     different methods, calculated via \code{\link[=-.scantwo]{-.scantwo}}.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{\dots}{Ignored at this point.}
 }
@@ -78,14 +79,14 @@
   models, \eqn{L(q_1)}{L(q1)} and \eqn{L(q_2)}{L(q2)}, the likelihood
   under an additive QTL model, \eqn{L_a(q_1,q_2)}{La(q1,q2)}, and the
   likelihood under a full QTL model (including QTL-QTL interaction),
-  \eqn{L_f(q_1,q_2)}{Lf(q1,q2)}.  
-  
+  \eqn{L_f(q_1,q_2)}{Lf(q1,q2)}.
+
   The five possible LOD scores that may be plotted are the following.
   The epistasis LOD scores (\code{"int"}) are \eqn{LOD_i = \log_{10}
     L_f(q_1,q_2) - \log_{10} L_a(q_1,q_2)}{LODi = log10 Lf(q1,q2) -
-    log10 La(q1,q2)}. 
+    log10 La(q1,q2)}.
 
-  The full LOD scores (\code{"full"}) are 
+  The full LOD scores (\code{"full"}) are
   \eqn{LOD_f = \log_{10} L_f(q_1,q_2) - \log_{10} L_0}{%
     LODj = log10 Lf(q1,q2) - log10 L0}.
 
@@ -101,14 +102,14 @@
   Finally, we may calculate, for each pair of
   chromosomes, the difference between the additive LOD score and the
   maximum single-QTL LOD scores for that pair of chromosomes
-  (\code{"cond-add"}).   
+  (\code{"cond-add"}).
 
   If a color scale is plotted (\code{zscale=TRUE}), the axis on the
   left indicates the scale for the upper-left triangle,
   while the axis on the right indicates the scale for the
   lower-right triangle.  Note that the axis labels can get screwed up
   if you change the size of the figure window; you'll need to redo the
-  plot. 
+  plot.
 }
 
 \section{Output of addpair}{
@@ -116,7 +117,7 @@
   \bold{Note} that, for output from \code{\link{addpair}} in which the
   new loci are indicated explicitly in the formula, the summary provided
   by \code{plot.scantwo} is somewhat special.  In particular, the
-  \code{lower} and \code{upper} arguments are ignored.  
+  \code{lower} and \code{upper} arguments are ignored.
 
   In the case that the formula used in \code{\link{addpair}} was
   not symmetric in the two new QTL, the x-axis in the plot corresponds
@@ -156,6 +157,6 @@ plot(out2.hk - out2.em, allow.neg=TRUE)
   \code{\link[=-.scantwo]{-.scantwo}} }
 
 \author{Hao Wu; Karl W Broman,
-  \email{kbroman@biostat.wisc.edu}; Brian Yandell } 
+  \email{kbroman@biostat.wisc.edu}; Brian Yandell }
 
 \keyword{hplot}

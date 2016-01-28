@@ -1,6 +1,6 @@
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2015, Karl W Broman
+copyright (c) 2001-2016, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.39, 2015-12-17
+Version 1.39, 2016-01-28
 
 Major changes:
 
@@ -25,6 +25,11 @@ Major changes:
   same as the bug fix in scanone in version 1.38. Reminder of
   important principle: when you find a bug, look for other possible
   instances of the same bug.)
+
+  Changed the color scheme for plot.scantwo and plot.rf from red/blue
+  rainbow to Viridis (see Option D at https://bids.github.io/colormap/)
+  The plot.rf function has a new argument col.scheme; if you want to
+  use the old red/blue scheme, use col.scheme="redblue".
 
 Minor changes:
 
