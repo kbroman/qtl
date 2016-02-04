@@ -5,7 +5,7 @@
 
 \description{
   Data for a set of 4- or 8-way recombinant inbred lines (RIL) is read
-  from a pair of comma-delimited files and converted 
+  from a pair of comma-delimited files and converted
   into an object of class \code{cross}.
   We require chromosome
   assignments for the genetic markers, and assume that markers are in
@@ -34,12 +34,12 @@ readMWril(dir="", rilfile, founderfile,
     for the entire
     file, so missing value codes in phenotypes must not be valid
     genotypes, and vice versa. For the \code{gary} format, these are
-    used only for the phenotype data.} 
+    used only for the phenotype data.}
   \item{rotate}{If TRUE, the \code{rilfile} and \code{founderfile} are
   rotated (really transposed), with rows corresponding to markers
   and columns corresponding to individuals.}
   \item{\dots}{Additional arguments, passed to the function
-    \code{\link[utils]{read.table}} in the case of 
+    \code{\link[utils]{read.table}} in the case of
     \code{csv} and \code{csvr} formats.  In particular, one may use the
     argument
     \code{sep} to specify the field separator (the default is a comma)
@@ -58,11 +58,16 @@ readMWril(dir="", rilfile, founderfile,
 \details{
   The \code{rilfile} should include a phenotype \code{cross} containing
   character strings of the form \code{ABCDEFGH}, indicating the cross
-  used to generate each RIL.  
+  used to generate each RIL.  The genotypes should be coded as
+  \textbf{integers} (e.g., 1 and 2).
 
   The founder strains in the \code{founderfile} should be the strains
   \code{A}, \code{B}, \code{C}, \dots, as indicated in the \code{cross}
-  phenotype.  
+  phenotype.
+
+  The default arrangement of the files is to have markers as columns and
+  individuals/founders as rows. If \code{rotate=TRUE}, do the opposite:
+  markers as rows and individuals/founders as columns.
 }
 
 
@@ -71,7 +76,7 @@ readMWril(dir="", rilfile, founderfile,
 \dontrun{
 ril <- read.cross("../Data", "ril_data.csv", "founder_geno.csv", "ri4self",
                   rotate=TRUE)}
-} 
+}
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
 
