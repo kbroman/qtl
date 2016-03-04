@@ -59,7 +59,7 @@ readMWril(dir="", rilfile, founderfile,
   The \code{rilfile} should include a phenotype \code{cross} containing
   character strings of the form \code{ABCDEFGH}, indicating the cross
   used to generate each RIL.  The genotypes should be coded as
-  \textbf{integers} (e.g., 1 and 2).
+  \bold{integers} (e.g., 1 and 2).
 
   The founder strains in the \code{founderfile} should be the strains
   \code{A}, \code{B}, \code{C}, \dots, as indicated in the \code{cross}
