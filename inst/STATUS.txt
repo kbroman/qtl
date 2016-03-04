@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.39, 2016-02-04
+Version 1.39, 2016-03-04
 
 Major changes:
 
@@ -30,6 +30,8 @@ Major changes:
   rainbow to Viridis (see Option D at https://bids.github.io/colormap/)
   The plot.rf function has a new argument col.scheme; if you want to
   use the old red/blue scheme, use col.scheme="redblue".
+
+  Fixed a bug in cim() that was causing a segmentation fault.
 
 Minor changes:
 

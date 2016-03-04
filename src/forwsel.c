@@ -150,7 +150,7 @@ void markerforwsel(int n, int m, double **X, double *y,
 
                 currss = syy - sxy*sxy/sxx;
 
-                if(currss < minrss) { /* best so far */
+                if(currss < minrss || chosen[k] == -1) { /* best so far */
                     rss[k] = minrss = currss;
                     minsxx = sxx;
                     minsxy = sxy;
@@ -268,7 +268,7 @@ void markerforwself2(int n, int m, double **X, double *y,
 
                 currss = tsyy - sxy*sxy/sxx;
 
-                if(currss < minrss) { /* best so far */
+                if(currss < minrss || chosen[k] == -1) { /* best so far */
                     rss[k] = minrss = currss;
                     chosen[k] = j;
                 }
