@@ -9,6 +9,8 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o sim.cross should give a warning if model is specified but not used.
+
 o mqmplot.circle only works when the chromosome names are numbers.
   See http://bit.ly/1ISZvBD
 
