@@ -16,6 +16,19 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.40, 2016-06-03
+
+Major changes:
+
+  None
+
+Minor changes:
+
+  Small change to the way Bayesian credible intervals are calculated
+  by bayesint(), concerning the treatment of widths of intervals
+  between positions.
+
+
 Version 1.39, 2016-03-04
 
 Major changes:

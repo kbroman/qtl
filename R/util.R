@@ -2461,7 +2461,8 @@ bayesint <-
     if(all(is.na(results[,lodcolumn+2]))) return(NULL)
 
     loc <- results[,2]
-    width <- diff(( c(loc[1],loc) + c(loc, loc[length(loc)]) )/ 2)
+    width <- (c(loc[-1], loc[length(loc)]) - c(loc[1], loc[-length(loc)]))/2
+    width[c(1, length(width))] <- width[c(1, length(width))]*2 # adjust widths at ends
 
     area <- 10^results[,lodcolumn+2]*width
     area <- area/sum(area)
@@ -2470,7 +2471,7 @@ bayesint <-
 
     cs <- cumsum(area[o])
 
-    wh <- min((1:length(loc))[cs >= prob])
+    wh <- min(which(cs >= prob))
     int <- range(o[1:wh])
 
     if(expandtomarkers) {
