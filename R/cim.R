@@ -2,8 +2,8 @@
 #
 # cim.R
 #
-# copyright (c) 2009, Karl W Broman
-# last modified Apr, 2009
+# copyright (c) 2007-2016, Karl W Broman
+# last modified Jun, 2016
 # first written Jan, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -41,6 +41,8 @@ cim <-
     map.function <- match.arg(map.function)
 
     type <- class(cross)[1]
+    if(type=="4way")
+        stop("cim() has not been implemented for 4-way crosses")
 
     if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
         cross$pheno <- cbind(pheno.col, cross$pheno)

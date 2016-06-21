@@ -16,11 +16,13 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.40, 2016-06-03
+Version 1.40, 2016-06-21
 
 Major changes:
 
-  None
+  cim() now halts with an error for cross type "4way". The method has
+  not been implemented for 4-way crosses, and the results are not
+  meaningful.
 
 Minor changes:
 
