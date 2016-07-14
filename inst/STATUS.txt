@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.40, 2016-06-21
+Version 1.40, 2016-07-14
 
 Major changes:
 
@@ -29,6 +29,10 @@ Minor changes:
   Small change to the way Bayesian credible intervals are calculated
   by bayesint(), concerning the treatment of widths of intervals
   between positions.
+
+  Fix bug in switchAlleles() so that it works with cross type "bcsft"
+  (and will give an appropriate error message for unsupported cross
+  types).
 
 
 Version 1.39, 2016-03-04

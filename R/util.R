@@ -4160,7 +4160,7 @@ switchAlleles <-
         }
 
     }
-    else if(type=="f2") {
+    else if(type=="f2" || type=="bcsft") {
         if(switch != "AB")
             warning("Using switch = \"AB\".")
 
@@ -4205,6 +4205,9 @@ switchAlleles <-
             }
         }
 
+    }
+    else {
+        stop("Cross type ", type, " not supported by switchAlleles()")
     }
 
     if(any(!found))
