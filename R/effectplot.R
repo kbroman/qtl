@@ -124,7 +124,7 @@ effectplot <-
         if(class(mark1) != "matrix")
             mark1 <- matrix(mark1, ncol=1)
         if(dim(mark1)[1] != n.ind)
-            stop("Marker 1 data hass the wrong dimension")
+            stop("Marker 1 data has the wrong dimension")
         if(missing(mname1))
             mname1 <- "Marker 1"
     }
