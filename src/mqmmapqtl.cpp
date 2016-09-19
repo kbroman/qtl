@@ -29,6 +29,8 @@
 
 #include "mqm.h"
 
+using namespace std;
+
 /*
  * mapQTL moves a QTL along the chromosome and calculated at each map position
  * the QTL likelihood. Uses either all cofactors, or selected cofactors only

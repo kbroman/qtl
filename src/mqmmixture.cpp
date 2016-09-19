@@ -29,6 +29,8 @@
 
 #include "mqm.h"
 
+using namespace std;
+
 /*
  * ML estimation of recombination frequencies via EM; calculation of multilocus
  * genotype probabilities; ignorance of unlikely genotypes. Called by the

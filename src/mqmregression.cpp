@@ -30,6 +30,7 @@
 #include "mqm.h"
 #include <Rmath.h>
 
+using namespace std;
 
 /* regression of trait on multiple cofactors  y=xb+e with weight w
 *							(xtwx)b=(xtw)y

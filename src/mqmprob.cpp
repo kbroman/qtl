@@ -30,6 +30,8 @@
 #include "mqm.h"
 #include <R_ext/Arith.h>
 
+using namespace std;
+
 /* This function walks the marker list and determins for every position whether the marker is in the Middle, Left,Right of the chromosome
  When there is only 1 marker on a chromosome it is defined Unlinked*/
 

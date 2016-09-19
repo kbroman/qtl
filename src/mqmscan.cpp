@@ -31,6 +31,8 @@
 #include <Rmath.h>
 #include <limits>
 
+using namespace std;
+
 inline int mqmmod(int a, int b) {
   return a%b;
 }
