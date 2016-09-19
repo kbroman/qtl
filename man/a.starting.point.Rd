@@ -5,17 +5,17 @@
 \title{Introductory comments on R/qtl}
 \description{
   A brief introduction to the R/qtl package, with a walk-through of an
-  analysis.  
+  analysis.
 }
 
 \section{New to R and/or R/qtl?}{
   \itemize{
     \item In order to use the R/qtl package, you must type (within R)
     \code{library(qtl)}.  You may wish to include this in a
-    \code{\link[base:Startup]{.Rprofile}} file. 
+    \code{\link[base:Startup]{.Rprofile}} file.
 
     \item Documention and several tutorials are available
-    at the R archive (\url{http://cran.r-project.org}).
+    at the R archive (\url{https://cran.r-project.org}).
 
     \item Use the \code{\link[utils]{help.start}} function to start the
     html version of the R help.
@@ -27,7 +27,7 @@
     of the various functions in R/qtl.
 
     \item A tutorial on the use of R/qtl is distributed with the
-    package and is also available at \url{http://www.rqtl.org/rqtltour.pdf}. 
+    package and is also available at \url{http://www.rqtl.org/rqtltour.pdf}.
 
     \item Download the latest version of R/qtl from the R archive or
     from \url{http://www.rqtl.org}.
@@ -54,7 +54,7 @@ files and code at \url{http://www.rqtl.org/sampledata}.
 We consider the example data \code{\link{hyper}}, an experiment on
 hypertension in the mouse, kindly provided
 by Bev Paigen and Gary Churchill.  Use the \code{\link[utils]{data}}
-function to load the data.  
+function to load the data.
 
 \code{data(hyper)}
 
@@ -86,7 +86,7 @@ markers, only individuals with extreme phenotypes were genotyped.
 
 Note that one marker (on chromosome 14) has no genotype data.  The
 function \code{\link{drop.nullmarkers}} removes such markers from
-the data. 
+the data.
 
 \code{hyper <- drop.nullmarkers(hyper)} \cr
 \code{totmar(hyper)}
@@ -123,7 +123,7 @@ the input cross, with error LOD scores included.  The function
 cutoff (by default, the cutoff is 4.0).
 
 \code{hyper <- calc.errorlod(hyper, error.prob=0.01)} \cr
-\code{top.errorlod(hyper)} 
+\code{top.errorlod(hyper)}
 
 The function \code{\link{plotGeno}} may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
@@ -144,7 +144,7 @@ which the calculations will be performed, and determines the density at
 which LOD scores will be calculated.
 
 \code{hyper <- calc.genoprob(hyper, step=2.5, error.prob=0.01)} \cr
-\code{hyper <- sim.geno(hyper, step=2.5, n.draws=64, error.prob=0.01)} 
+\code{hyper <- sim.geno(hyper, step=2.5, n.draws=64, error.prob=0.01)}
 
 The function \code{\link{scanone}} performs a genome scan with a
 single QTL model.  By default, it performs standard interval mapping
@@ -171,7 +171,7 @@ against each other, as long as they conform appropriately.
 \code{plot(out.hk, col="blue", add=TRUE)} \cr
 \code{plot(out.imp, col="red", add=TRUE)} \cr
 \code{plot(out.hk, out.imp, out.em, chr=c(1,4), lty=1,} \cr
-\code{     col=c("blue","red","black"))} 
+\code{     col=c("blue","red","black"))}
 
 The function \code{\link{summary.scanone}} may be used to list
 information on the peak LOD for each chromosome for which the LOD
@@ -190,7 +190,7 @@ score, genome-wide.
 \code{max(out.imp)}
 
 One may also use \code{\link{scanone}} to perform a permutation
-test to get a genome-wide LOD significance threshold.  
+test to get a genome-wide LOD significance threshold.
 
 \code{operm.hk <- scanone(hyper, method="hk", n.perm=1000)}
 
@@ -243,18 +243,18 @@ LOD score indicating evidence for a second QTL, allowing for epistasis),
 \eqn{M_{fv1}(k,l)}{M_fv1(k,l)}; a LOD score indicating evidence for
 epistasis, \eqn{M_i(k,l)}; the LOD score for the additive QTL model,
 \eqn{M_a(k,l)}; and a LOD score indicating evidence for a second QTL,
-assuming no epistasis, \eqn{M_{av1}(k,l)}{M_av1(k,l)}.  
+assuming no epistasis, \eqn{M_{av1}(k,l)}{M_av1(k,l)}.
 
 You must provide five LOD thresholds, corresponding to the above five
 LOD scores, and in that order.  A chromosome pair is printed if either
 (a) \eqn{M_f(k,l) \ge T_f}{M_f(k,l) >= T_f} and (\eqn{M_{fv1}(k,l) \ge
   T_{fv1}}{M_fv1(k,l) >= T_fv1} or \eqn{M_i(k,l) \ge
-  T_i}{M_i(k,l) >= T_i}), or (b) 
+  T_i}{M_i(k,l) >= T_i}), or (b)
 \eqn{M_a(k,l) \ge T_a}{M_a(k,l) >= T_a} and \eqn{M_{av1}(k,l) \ge
   T_{av1}}{M_av1(k,l) >= T_av1}.
 
 \code{summary(out2.em, thresholds=c(6.2, 5.0, 4.6, 4.5, 2.3))} \cr
-\code{summary(out2.em, thresholds=c(6.2, 5.0, Inf, 4.5, 2.3))} 
+\code{summary(out2.em, thresholds=c(6.2, 5.0, Inf, 4.5, 2.3))}
 
 In the latter case, the interaction LOD score will be ignored.
 
@@ -264,8 +264,8 @@ and additive LODs for a two-dimensional genome scan.
 \code{max(out2.em)}
 
 Permutation tests may also performed with \code{\link{scantwo}};
-it may take a few days of CPU time.  The output is a list containing the 
-maxima of the above five LOD scores for each of the imputations.  
+it may take a few days of CPU time.  The output is a list containing the
+maxima of the above five LOD scores for each of the imputations.
 
 \code{operm2 <- scantwo(hyper, method="hk", n.perm=100)} \cr
 \code{summary(operm2, alpha=0.05)}
@@ -283,7 +283,7 @@ maxima of the above five LOD scores for each of the imputations.
 
   Broman, K. W., Wu, H., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2003) R/qtl: QTL
   mapping in experimental crosses.  \emph{Bioinformatics} \bold{19},
-  889--890. 
+  889--890.
 
   Haley, C. S. and Knott, S. A. (1992) A simple regression method for mapping
   quantitative trait loci in line crosses using flanking markers.

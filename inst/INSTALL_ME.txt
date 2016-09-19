@@ -8,8 +8,8 @@ any problems with installation, send an email to Karl Broman
 OBTAINING R
 
   You can download R from the Comprehensive R Archive Network (CRAN).
-  Visit http://cran.r-project.org or a local mirror (for example,
-  http://cran.us.r-project.org).  Source code is available for Unix,
+  Visit https://cran.r-project.org or a local mirror (for example,
+  https://cran.rstudio.com).  Source code is available for Unix,
   and binaries are available for Windows, MacOS, and many versions of
   Linux.
 
@@ -114,7 +114,7 @@ GETTING STARTED
   of the R language.  Learning R may require a formidable investment
   of time, but it will definitely be worth the effort.  Numerous free
   documents on getting started with R are available on CRAN
-  (http://cran.r-project.org).  In addition, several books are
+  (https://cran.r-project.org).  In addition, several books are
   available.  For example, see WN Venables, BD Ripley (2002) Modern
   Applied Statistics with S, 4th edition. Springer.
 
