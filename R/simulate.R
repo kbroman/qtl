@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-2012, Karl W Broman
-# last modified May, 2012
+# copyright (c) 2001-2016, Karl W Broman
+# last modified Sep, 2016
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -133,6 +133,9 @@ sim.cross <-
 
     # 2-way RIL by sibmating or selfing
     if(type=="risib" || type=="riself") {
+        if(!is.null(model))
+            warning('"model" argument currently ignored in simulating RILs')
+
         if(type=="risib") type <- "sibmating"
         else type <- "selfing"
         cross <- sim.ril(map, n.ind, type, "2", m=m, p=p,
@@ -143,6 +146,9 @@ sim.cross <-
     }
     # 4- or 8-way RIL by sibmating or selfing
     if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self") {
+        if(!is.null(model))
+            warning('"model" argument currently ignored in simulating RILs')
+
         if(substr(type, 4, nchar(type))=="self") crosstype <- "selfing"
         else crosstype <- "sibmating"
         n.str <- substr(type, 3, 3)

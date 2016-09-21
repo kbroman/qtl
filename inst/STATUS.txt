@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.40, 2016-07-14
+Version 1.40, 2016-09-21
 
 Major changes:
 
@@ -33,6 +33,10 @@ Minor changes:
   Fix bug in switchAlleles() so that it works with cross type "bcsft"
   (and will give an appropriate error message for unsupported cross
   types).
+
+  sim.cross gives a warning if model is specified but not used (this
+  is the case for RILs, where we've not implemented the simulation of
+  QTL effects)
 
 
 Version 1.39, 2016-03-04
