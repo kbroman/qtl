@@ -9,6 +9,10 @@ Karl Broman, <kbroman@biostat.wisc.edu>.
 
 SHORT TERM:
 
+o stepwiseqtl() for a 4-way cross: have the function give an error
+  message? Looks like plod() is only for a backcross or f2. This stuff
+  needs further testing.
+
 o sim.cross should give a warning if model is specified but not used.
 
 o mqmplot.circle only works when the chromosome names are numbers.
