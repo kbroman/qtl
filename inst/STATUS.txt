@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.40, 2016-09-21
+Version 1.40, 2016-09-26
 
 Major changes:
 
@@ -37,6 +37,9 @@ Minor changes:
   sim.cross gives a warning if model is specified but not used (this
   is the case for RILs, where we've not implemented the simulation of
   QTL effects)
+
+  plot.pxg (aka plotPXG) passes ... to plot(), so now you can control
+  the y-axis limits via ylim.
 
 
 Version 1.39, 2016-03-04

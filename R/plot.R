@@ -1449,7 +1449,8 @@ plotPXG <- plot.pxg <-
 
     # create plot
     plot(x + u, y, xlab = "Genotype", ylab = ylab, type = "n",
-         main = "", xlim = c(1 - r + jitter, length(gnames) + r + jitter), xaxt = "n")
+         main = "", xlim = c(1 - r + jitter, length(gnames) + r + jitter), xaxt = "n",
+         ...)
 
     # marker names at top
     if(missing(main))
