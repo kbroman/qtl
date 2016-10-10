@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.40, 2016-09-26
+Version 1.40, 2016-10-10
 
 Major changes:
 
@@ -40,6 +40,8 @@ Minor changes:
 
   plot.pxg (aka plotPXG) passes ... to plot(), so now you can control
   the y-axis limits via ylim.
+
+  Fix problem with column names of output of scantwopermhk.
 
 
 Version 1.39, 2016-03-04

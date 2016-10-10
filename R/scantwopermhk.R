@@ -394,8 +394,8 @@ scantwopermhk <-
 
     result <- apply( array(unlist(result[1:k]), dim=c(n.perm, 6, k)), 1:2, max, na.rm=TRUE)
     result <- as.list(as.data.frame(result))
-    phename <- phenames(cross)[1]
-    result <- lapply(result, function(a) { a <- as.matrix(a); colnames(a) <- phenames(cross)[1]; a })
+    phename <- phenames(cross)[pheno.col]
+    result <- lapply(result, function(a) { a <- as.matrix(a); colnames(a) <- phename; a })
     names(result) <- c("full", "fv1", "int", "add", "av1", "one")
     class(result) <- c("scantwoperm", "list")
     result
