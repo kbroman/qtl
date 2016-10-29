@@ -4,16 +4,16 @@
 
 \title{Data on Listeria monocytogenes susceptibility}
 
-\description{ 
+\description{
   Data from an experiment on susceptibility to \emph{Listeria
-  monocytogenes} infection in the mouse.  
-} 
+  monocytogenes} infection in the mouse.
+}
 
 \usage{data(listeria)}
 
 \format{
   An object of class \code{cross}.  See \code{\link{read.cross}}
-  for details. 
+  for details.
 }
 
 \details{
@@ -22,7 +22,7 @@
 
   The phenotype is the survival time (in hours) following infection.
   Mice with phenotype 264 hours may be considered to have recovered
-  from the infection. See the references below.  
+  from the infection. See the references below.
 }
 
 \references{
@@ -30,16 +30,15 @@
   S. E. F., Starnbach, M. N. and Dietrich, W. F. (2001) Multigenic
   control of \emph{Listeria monocytogenes} susceptibility in
   mice. \emph{Nature Genetics} \bold{27}, 259--260.
-  
+
   Broman,  K. W. (2003) Mapping quantitative trait loci in the case of a
   spike in the phenotype distribution. \emph{Genetics} \bold{163},
-  1169--1175. 
+  1169--1175.
 }
-  
+
 \source{
   Victor Boyartchuk and William Dietrich (Department of Genetics,
   Harvard Medical School and Howard Hughes Medical Institute)
-  \url{http://genetics.med.harvard.edu/~bdlab}
 }
 
 \examples{
