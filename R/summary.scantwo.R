@@ -141,9 +141,16 @@ summary.scantwo <-
         d <- dim(object$lod)
         if(length(d)==3) {
             if(!missing(perms)) {
-                ncp <- sapply(perms, ncol)
+                if("AA" %in% names(perms)) { # contains X-specific results
+                    ncp <- sapply(perms$AA, ncol)
+                }
+                else {
+                    ncp <- sapply(perms, ncol)
+                }
+
                 if(all(ncp==1)) onepermcol <- TRUE
                 else onepermcol <- FALSE
+
                 if(any(ncp != d[3])) {
                     if(onepermcol)  {
                         if(lodcolumn > 1)
@@ -158,8 +165,15 @@ summary.scantwo <-
                 stop("lodcolumn must be between 1 and ", d[3])
 
             object$lod <- object$lod[,,lodcolumn]
-            if(!missing(perms) && !onepermcol)
-                perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
+            if(!missing(perms) && !onepermcol) {
+                if("AA" %in% names(perms)) {
+                    for(i in seq(along=perms))
+                        perms[[i]] <- lapply(perms[[i]], function(a, b) a[,b,drop=FALSE], lodcolumn)
+                }
+                else {
+                    perms <- lapply(perms, function(a, b) a[,b,drop=FALSE], lodcolumn)
+                }
+            }
         }
     }
     else { # condensed version
