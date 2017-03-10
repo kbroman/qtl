@@ -194,7 +194,7 @@ pull.genoprob <-
             colnames(fullpr)[thecol] <- paste(colnames(pr[[i]]), thisgen, sep=":")
             if(include.pos.info) {
                 thechr[thecol] <- rep(names(cross$geno)[i], length(thecol))
-                map <- attr(am[[i]], "map")
+                map <- attr(pr[[i]], "map")
                 if(is.matrix(map)) map <- map[1,] # sex-specific map; take female positions
                 thepos[thecol] <- map
             }
