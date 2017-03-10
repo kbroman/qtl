@@ -286,7 +286,7 @@ pull.draws <-
         cross <- subset(cross, chr=chr)
 
     if(!("draws" %in% names(cross$geno[[1]])))
-        stop("You must first run argmax.geno.")
+        stop("You must first run sim.geno.")
 
     dr <- lapply(cross$geno, function(a) a$draws)
     chrnames <- names(cross$geno)
