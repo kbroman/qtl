@@ -1,6 +1,6 @@
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2016, Karl W Broman
+copyright (c) 2001-2017, Karl W Broman
 http://www.rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.41, 2016-12-02
+Version 1.41, 2017-03-10
 
 Major changes:
 
@@ -26,6 +26,9 @@ Minor changes:
 
   Fixed a bug in summary.scantwo for the case of autosome/X chromosome
   specific permutations.
+
+  Fix bugs in pull.argmaxgeno and pull.genoprob for 4-way crosses with
+  include.pos.info=TRUE. (Need to account for map being a matrix.)
 
 
 Version 1.40, 2016-10-31
