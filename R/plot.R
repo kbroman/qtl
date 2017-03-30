@@ -176,7 +176,7 @@ geno.image <-
         # if reorder is a number, use the corresponding phenotype
         if(is.numeric(reorder)) {
             if(reorder < 1 || reorder > nphe(cross))
-                stop("reorder should be TRUE, FALSE, or an integer between 1 and", nphe(cross))
+                stop("reorder should be TRUE, FALSE, or an integer between 1 and ", nphe(cross))
 
             o <- order(cross$pheno[,reorder])
         }
