@@ -379,7 +379,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         #Now we handle the off-end and any shifts comming from that (newcmbase)
         #We didn't thow away the old names, and could thus get duplicates
         qtlnew <- qtl
-        rownames(qtlnew) <- NULL
+        rownames(qtlnew) <- paste0("qtlnew_X", 1:nrow(qtl))
         oldnames <- rownames(qtl)
         for(x in 1:n.chr){
             #Do per chromosome
