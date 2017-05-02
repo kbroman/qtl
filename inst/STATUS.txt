@@ -16,13 +16,15 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.41, 2017-03-10
+Version 1.41, 2017-05-02
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Fixed a bug in mqmscan that gave an error about duplicate row names.
 
   Fixed a bug in summary.scantwo for the case of autosome/X chromosome
   specific permutations.
