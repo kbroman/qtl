@@ -1,4 +1,4 @@
-useDynLib(qtl)
+useDynLib(qtl, .registration=TRUE)
 
 # Import package dependencies
 importFrom(graphics,plot)
