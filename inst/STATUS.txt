@@ -16,13 +16,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.41, 2017-05-06
+Version 1.41, 2017-05-15
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Fixed a bug in reviseXdata in case of intercross with both sexes but
+  backward direction only.
 
   Fixed a bug in mqmscan that gave an error about duplicate row names.
 
