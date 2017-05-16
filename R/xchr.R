@@ -335,7 +335,7 @@ reviseXdata <-
         else { # both sexes
 
             if(!missing(geno)) {
-                gmale <- geno[sex==1,,drop=FALSE]
+                gmale <- geno[sex==1,]
                 if(expandX=="simple")
                     gmale[!is.na(gmale) & gmale==2] <- 3
                 else {
@@ -347,7 +347,7 @@ reviseXdata <-
             }
 
             else if(!missing(draws)) {
-                gmale <- draws[sex==1,,,drop=FALSE]
+                gmale <- draws[sex==1,,]
                 if(expandX=="simple")
                     gmale[gmale==2] <- 3
                 else {
@@ -448,7 +448,7 @@ reviseXdata <-
                     dimnames(newprob) <- c(dimnames(prob)[1:2],list(genonames))
                     newprob[pgm==0,,1:2] <- prob[pgm==0,,1:2]
 
-                    if(expandX=="simple") { # simple/standard
+                    if(expandX!="full") { # simple/standard
                         newprob[pgm==1,,3] <- prob[pgm==1,,1]
                         newprob[pgm==1,,2] <- prob[pgm==1,,2]
                     }
@@ -494,7 +494,7 @@ reviseXdata <-
 
             if(length(pgm)==0 || all(pgm==0)) { # both sexes, forw dir
                 if(!missing(geno)) {
-                    gmale <- geno[sex==1,,drop=FALSE]
+                    gmale <- geno[sex==1,]
                     if(expandX=="simple")
                         gmale[!is.na(gmale) & gmale==2] <- 3
                     else {
@@ -506,7 +506,7 @@ reviseXdata <-
                 }
 
                 else if(!missing(draws)) {
-                    gmale <- draws[sex==1,,,drop=FALSE]
+                    gmale <- draws[sex==1,,]
                     if(expandX=="simple")
                         gmale[gmale==2] <- 3
                     else {
@@ -559,7 +559,7 @@ reviseXdata <-
 
             if(all(pgm==1) && !force) { # both sexes, backw dir
                 if(!missing(geno)) {
-                    gmale <- geno[sex==1,,drop=FALSE]
+                    gmale <- geno[sex==1,]
                     if(expandX=="simple") {
                         gmale[!is.na(gmale) & gmale==1] <- 3
                         gmale[!is.na(gmale) & gmale==2] <- 1
@@ -573,7 +573,7 @@ reviseXdata <-
                 }
 
                 else if(!missing(draws)) {
-                    gmale <- draws[sex==1,,,drop=FALSE]
+                    gmale <- draws[sex==1,,]
                     if(expandX=="simple") {
                         gmale[gmale==1] <- 3
                         gmale[gmale==2] <- 1
@@ -629,8 +629,8 @@ reviseXdata <-
             else { # both dir, both sexes
 
                 if(!missing(geno)) {
-                    gmale <- geno[sex==1,,drop=FALSE]
-                    gfemaler <- geno[sex==0 & pgm==1,,drop=FALSE]
+                    gmale <- geno[sex==1,]
+                    gfemaler <- geno[sex==0 & pgm==1,]
                     if(expandX=="simple") {
                         gmale[!is.na(gmale) & gmale==2] <- 3
                         gfemaler[!is.na(gfemaler) & gfemaler==1] <- 3
@@ -652,8 +652,8 @@ reviseXdata <-
                 }
 
                 else if(!missing(draws)) {
-                    gmale <- draws[sex==1,,,drop=FALSE]
-                    gfemaler <- draws[sex==0 & pgm==1,,,drop=FALSE]
+                    gmale <- draws[sex==1,,]
+                    gfemaler <- draws[sex==0 & pgm==1,,]
                     if(expandX=="simple") {
                         gmale[gmale==2] <- 3
                         gfemaler[gfemaler==1] <- 3
