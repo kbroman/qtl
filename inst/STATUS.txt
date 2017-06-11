@@ -16,13 +16,16 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.41, 2017-05-16
+Version 1.41, 2017-06-11
 
 Major changes:
 
   None.
 
 Minor changes:
+
+  Fixed bugs in formMarkerCovar to give better error messages if
+  markers aren't found.
 
   Fixed a bug in reviseXdata in case of intercross with both sexes but
   backward direction only.

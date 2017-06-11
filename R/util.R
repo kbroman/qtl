@@ -4406,9 +4406,11 @@ formMarkerCovar <-
 {
     method <- match.arg(method)
 
+    if(!is.character(markers)) markers <- as.character(markers)
+
     # check if the marker names are all like "5@25.1"
-    grepresult <- grep("@", markers)
-    if(length(grepresult) == length(markers) && all(grepresult == seq(along=markers))) {
+    grepresult <- grepl("@\\d", markers)
+    if(all(grepresult)) {
         spl <- strsplit(markers, "@")
         chr <- sapply(spl, "[", 1)
         pos <- as.numeric(sapply(spl, "[", 2))
@@ -4420,9 +4422,18 @@ formMarkerCovar <-
             markers <- find.pseudomarker(cross, chr, pos, where="prob")
         else
             markers <- find.marker(cross, chr, pos)
-    }
 
-    chr <- unique(find.markerpos(cross, markers)[,1])
+        chr <- unique(chr)
+    }
+    else {
+        if(method=="prob") z <- find.pseudomarkerpos(cross, markers, where="prob")
+        else z <- find.markerpos(cross, markers)
+
+        if(any(is.na(z[,1])))
+            stop("Some markers not found: ", paste(markers[is.na(z[,1])], collapse=", "))
+
+        chr <- unique(z$chr)
+    }
 
     cross <- subset(cross, chr=chr)
     isXchr <- (sapply(cross$geno, class) == "X")
