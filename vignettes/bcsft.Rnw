@@ -1,28 +1,32 @@
 \documentclass[12pt,fullpage]{article}
 %\VignetteIndexEntry{Users Guide for New BCsFt Tools for R/qtl}
+
+\usepackage{Sweave}
 \usepackage{fullpage}
-\marginparwidth 0pt
-\oddsidemargin 0pt
-\evensidemargin 0pt
-\topmargin 0pt
-\textwidth 16cm
-\textheight 21cm
 \usepackage{fancyheadings}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{cite}
+
+\bibliographystyle{plos}
+
 \raggedbottom
 \lhead{\bf R/qtl bcsft vignette}
-\usepackage{cite}
-\bibliographystyle{plos}
 \chead{}
 \rhead{}
 \lfoot{}
 \cfoot{}
 \rfoot{}
+
+\setlength{\marginparwidth}{0pt}
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\topmargin}{0pt}
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{21cm}
 \setlength{\parindent}{0cm}
 \addtolength{\parskip}{\baselineskip}
-\setlength{\footrulewidth}{\headrulewidth}
-\usepackage{Sweave}
+
 \begin{document}
 
 \title{Users Guide for New $BC_sF_t$ Tools for R/qtl}

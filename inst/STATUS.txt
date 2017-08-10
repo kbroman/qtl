@@ -16,6 +16,13 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.41-7, 2017-08-10
+
+Minor changes:
+
+  Removed the file vignettes/fancyheadings.sty
+
+
 Version 1.41, 2017-06-11
 
 Major changes:
