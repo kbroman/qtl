@@ -17,15 +17,15 @@
 \arguments{
   \item{scanresult}{
 An object returned by \code{mqmscan}, including cofactors and QTL model. % \mqmscanobject
-  } 
+  }
 }
 
 \value{
-  The function returns the QTL model created (cofactors selected in modeling
-  found to be significant at cofactor.significance) and used during the mqmscan
-  See for the format of the model: \code{\link{makeqtl}} returns NULL when no
-  cofactors reach the significance threshold during QTL modeling.
-}  
+  The function returns the multiple QTL model created, which consists of the cofactors selected during the modeling phase of the algorithm. 
+  This model was used when scanning for additional QTL in the mqmscan function. The format of the model is compatible with the 
+  \code{\link{makeqtl}} function. For more information about the format of the model see the \code{\link{makeqtl}} page. 
+  When no cofactor was selected in the modeling phase no model was created, then this function will return a NULL value.
+}
 
 \author{ 
 Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
