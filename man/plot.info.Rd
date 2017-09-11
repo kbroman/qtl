@@ -1,12 +1,11 @@
 \name{plotInfo}
-\alias{plot.info}
 \alias{plotInfo}
 
 \title{Plot the proportion of missing genotype information}
 
 \description{
   Plot a measure of the proportion of missing information in the
-  genotype data.  
+  genotype data.
 }
 
 \usage{
@@ -37,15 +36,15 @@ plotInfo(x, chr, method=c("entropy","variance","both"), step=1,
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi or
    Carter-Falconer map function when converting genetic distances into
-   recombination fractions.} 
+   recombination fractions.}
  \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
     axis labels, so that they may be more easily distinguished.}
   \item{fourwaycross}{For a phase-known four-way cross, measure missing
  genotype information overall (\code{"all"}), or just for the alleles
  from the first parent (\code{"AB"}) or from the second parent (\code{"CD"}).}
   \item{include.genofreq}{If TRUE, estimated genotype frequencies (from
- the results of 
+ the results of
  \code{\link{calc.genoprob}} averaged across the individuals) are
  included as additional columns in the output.}
  \item{\dots}{Passed to \code{\link{plot.scanone}}.}
@@ -63,8 +62,8 @@ plotInfo(x, chr, method=c("entropy","variance","both"), step=1,
   We calculate the missing information at a particular position as the
   average of \eqn{H} across individuals.  For an intercross, we don't
   scale by \eqn{\log n} but by the entropy in the case of genotype
-  probabilities (1/4, 1/2, 1/4). 
-  
+  probabilities (1/4, 1/2, 1/4).
+
   The variance version of the missing information: we calculate the
   average, across individuals, of the variance of the genotype
   distribution (conditional on the observed marker data) at a particular
@@ -76,7 +75,7 @@ plotInfo(x, chr, method=c("entropy","variance","both"), step=1,
 
   Note that \code{\link{summary.scanone}} may be used to display
   the maximum missing information on each chromosome.
-}  
+}
 
 \value{
   An object with class \code{scanone}: a data.frame with columns the

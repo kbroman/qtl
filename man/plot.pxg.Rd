@@ -1,5 +1,4 @@
 \name{plotPXG}
-\alias{plot.pxg}
 \alias{plotPXG}
 
 \title{Plot phenotypes versus marker genotypes}

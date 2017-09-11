@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2017, Karl W Broman
+# last modified Sep, 2017
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -133,7 +133,7 @@ calc.errorlod <-
 #
 ######################################################################
 
-plotErrorlod <- plot.errorlod <-
+plotErrorlod <-
     function(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
              col=c("white","gray85","hotpink","purple3"),
              alternate.chrid=FALSE, ...)

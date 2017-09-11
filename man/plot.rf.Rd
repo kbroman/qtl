@@ -1,5 +1,4 @@
 \name{plotRF}
-\alias{plot.rf}
 \alias{plotRF}
 
 \title{Plot recombination fractions}

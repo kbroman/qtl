@@ -1,12 +1,11 @@
 \name{plotPheno}
-\alias{plot.pheno}
 \alias{plotPheno}
 
 \title{Plot a phenotype distribution}
 
 \description{
   Plots a histogram or barplot of the data for a phenotype from an
-  experimental cross. 
+  experimental cross.
 }
 
 \usage{
@@ -23,7 +22,7 @@ plotPheno(x, pheno.col=1, \dots)
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{\dots}{Passed to \code{\link[graphics]{hist}} or
-   \code{\link[graphics]{barplot}}.} 
+   \code{\link[graphics]{barplot}}.}
 }
 
 \value{None.}
@@ -32,7 +31,7 @@ plotPheno(x, pheno.col=1, \dots)
   Numeric phenotypes are displayed as histograms with approximately
   \eqn{2\sqrt{n}}{2 sqrt(n)} bins.  Phenotypes that are factors or that
   have very few unique values are displayed as barplots.
-}    
+}
 
 \examples{
 data(fake.bc)
@@ -41,8 +40,8 @@ plotPheno(fake.bc, pheno.col=3)
 plotPheno(fake.bc, pheno.col="age")
 }
 
-\seealso{ \code{\link{plot.cross}}, \code{\link{plotMap}}, 
-  \code{\link{plotMissing}}, 
+\seealso{ \code{\link{plot.cross}}, \code{\link{plotMap}},
+  \code{\link{plotMissing}},
   \code{\link[graphics]{hist}}, \code{\link[graphics]{barplot}} }
 
 

@@ -1,5 +1,4 @@
 \name{plotMissing}
-\alias{plot.missing}
 \alias{plotMissing}
 
 \title{Plot grid of missing genotypes}
@@ -11,7 +10,7 @@
 \usage{
 plotMissing(x, chr, reorder=FALSE, main="Missing genotypes",
              alternate.chrid=FALSE, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
@@ -29,7 +28,7 @@ plotMissing(x, chr, reorder=FALSE, main="Missing genotypes",
     n \tab Reorder according to phenotype n}}
   \item{main}{Title to place on plot.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{\dots}{Ignored at this point.}
 }

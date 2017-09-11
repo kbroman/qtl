@@ -1,5 +1,4 @@
 \name{plotErrorlod}
-\alias{plot.errorlod}
 \alias{plotErrorlod}
 
 \title{Plot grid of error LOD values}
@@ -30,7 +29,7 @@ plotErrorlod(x, chr, ind, breaks=c(-Inf,2,3,4.5,Inf),
     the right, except for the lowest interval.}
   \item{col}{A vector of colors to appear in the image.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{\dots}{Ignored at this point.}
 }
@@ -54,7 +53,7 @@ data(hyper)
 # Calculate error LOD scores
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
-# plot the error LOD scores; print those above a specified cutoff 
+# plot the error LOD scores; print those above a specified cutoff
 plotErrorlod(hyper)
 plotErrorlod(hyper,chr=1)
 }

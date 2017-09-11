@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2015, Karl W Broman
+# copyright (c) 2000-2017, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Aug, 2015
+# last modified Sep, 2017
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #
 ######################################################################
 
-plotMissing <- plot.missing <-
+plotMissing <-
     function(x, chr, reorder=FALSE, main="Missing genotypes",
              alternate.chrid=FALSE, ...)
 {
@@ -672,7 +672,7 @@ plot.cross <-
 #
 ######################################################################
 
-plotGeno <- plot.geno <-
+plotGeno <-
     function(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
              cutoff=4, min.sep=2, cex=1.2, ...)
 {
@@ -1059,7 +1059,7 @@ plotGeno <- plot.geno <-
 #            genotype data.
 #
 ######################################################################
-plotInfo <- plot.info <-
+plotInfo <-
     function(x,chr,method=c("entropy","variance","both"), step=1,
              off.end=0, error.prob=0.001,
              map.function=c("haldane","kosambi","c-f","morgan"),
@@ -1292,7 +1292,7 @@ plotInfo <- plot.info <-
 
 
 # plot phenotypes against one or more markers
-plotPXG <- plot.pxg <-
+plotPXG <-
     function(x, marker, pheno.col = 1, jitter = 1, infer = TRUE,
              pch, ylab, main, col, ...)
 {
@@ -1508,7 +1508,7 @@ plotPXG <- plot.pxg <-
     invisible(data)
 }
 
-plotPheno <- plot.pheno <-
+plotPheno <-
     function(x, pheno.col=1, ...)
 {
     if(!any(class(x) == "cross"))

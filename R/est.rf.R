@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-2016, Karl W Broman
-# last modified Jan, 2016
+# copyright (c) 2001-2017, Karl W Broman
+# last modified Sep, 2017
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -156,7 +156,7 @@ est.rf <-
 
 
 
-plotRF <- plot.rf <-
+plotRF <-
     function(x, chr, what=c("both","lod","rf"),
              alternate.chrid=FALSE, zmax=12,
              mark.diagonal=FALSE,

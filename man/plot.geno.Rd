@@ -1,5 +1,4 @@
 \name{plotGeno}
-\alias{plot.geno}
 \alias{plotGeno}
 
 \title{Plot observed genotypes, flagging likely errors}
@@ -11,19 +10,19 @@
 
 \usage{
 plotGeno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
-          cutoff=4, min.sep=2, cex=1.2, \dots) 
-}			    
+          cutoff=4, min.sep=2, cex=1.2, \dots)
+}
 
 \arguments{
   \item{x}{An object of class \code{cross}.  See
     \code{\link{read.cross}} for details. }
   \item{chr}{The chromosome to plot.  Only one chromosome is
   allowed. (This should be a character string referring to the
-  chromosomes by name.)} 
+  chromosomes by name.)}
   \item{ind}{Vector of individuals to plot (passed to \code{\link{subset.cross}}).  If missing, all individuals
     are plotted.}
   \item{include.xo}{If TRUE, plot X's in intervals having a
-    crossover. Not available for a 4-way cross.} 
+    crossover. Not available for a 4-way cross.}
   \item{horizontal}{If TRUE, chromosomes are plotted horizontally.}
   \item{cutoff}{Genotypes with error LOD scores above this value are
     flagged as possible errors.}
@@ -46,13 +45,13 @@ plotGeno(x, chr, ind, include.xo=TRUE, horizontal=TRUE,
 
   For the X chromosome in a backcross or intercross, hemizygous males
   are plotted as if they were homozygous (that is, with white and black
-  circles).  
+  circles).
 
   For a 4-way cross, two lines are plotted for each individual.  The
   left or upper line indicates the allele A (white) or B (black); the
   right or lower line indicates the allele C (white) or D (black).  For
   the case that genotype is known to be only AC/BD or AD/BC, we use
-  green and orange, respectively. 
+  green and orange, respectively.
 
 }
 
@@ -64,7 +63,7 @@ data(hyper)
 # Calculate error LOD scores
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
-# print those above a specified cutoff 
+# print those above a specified cutoff
 top.errorlod(hyper,cutoff=4)
 
 # plot genotype data, flagging genotypes with error LOD > cutoff

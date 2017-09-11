@@ -16,7 +16,28 @@ http://www.rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.41-7, 2017-08-10
+Version 1.42, 2017-09-11
+
+Major changes:
+
+  Removed the functions plot.errorlod, plot.geno, plot.info,
+  plot.missing, plot.pheno, plot.pxg, and plot.rf. Changes in the
+  process of submitting packages to CRAN have made this necessary.
+  Each of the packages has alternative names that have been used in
+  the tutorials for some years:
+
+  plot.errorlod  plotErrorlod
+  plot.geno      plotGeno
+  plot.info      plotInfo
+  plot.missing   plotMissing
+  plot.pheno     plotPheno
+  plot.pxg       plotPXG
+  plot.rf        plotRF
+
+  If you have old scripts that use these function names, add the
+  following code at the top:
+
+  source("http://rqtl.org/dotfunc.R")
 
 Minor changes:
 
