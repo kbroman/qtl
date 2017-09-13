@@ -51,8 +51,24 @@ read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcs
         estimate.map <- FALSE
 
     force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
-    if((class(cross)[1] %in% c("bc","f2")) & force.bcsft)
-        cross <- convert2bcsft(cross, BC.gen, F.gen, estimate.map = estimate.map, ...)
+    if((class(cross)[1] %in% c("bc","f2")) & force.bcsft) {
+
+        # deal with ... args
+        dots <- list(...)
+
+        if("verbose" %in% names(dots)) verbose <- dots$verbose
+        else verbose <- TRUE
+
+        if("error.prob" %in% names(dots)) error.prob <- dots$error.prob
+        else error.prob <- 0.0001
+
+        if("map.function" %in% names(dots)) map.function <- dots$map.function
+        else map.function <- "haldane"
+
+        cross <- convert2bcsft(cross, BC.gen, F.gen, estimate.map = estimate.map,
+                               error.prob=error.prob, map.function=map.function,
+                               verbose=verbose)
+    }
 
     cross
 }
