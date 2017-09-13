@@ -16,7 +16,7 @@ https://rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.42, 2017-09-11
+Version 1.42, 2017-09-13
 
 Major changes:
 
@@ -40,6 +40,9 @@ Major changes:
   source("https://rqtl.org/dotfunc.R")
 
 Minor changes:
+
+  Revised read.cross for the "bcsft" cross type so that it should be
+  able to handle sep=";".
 
   Removed the file vignettes/fancyheadings.sty
 
