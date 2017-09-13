@@ -37,7 +37,7 @@ read.cross <-
              "qtlcart", "gary", "karl", "mapqtl", "tidy"),
              dir="", file, genfile, mapfile, phefile, chridfile, mnamesfile, pnamesfile,
              na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
-             alleles=c("A","B"), estimate.map=TRUE, convertXdata=TRUE,
+             alleles=c("A","B"), estimate.map=FALSE, convertXdata=TRUE,
              error.prob=0.0001, map.function=c("haldane", "kosambi", "c-f", "morgan"),
              BC.gen = 0, F.gen = 0, crosstype, ...)
 {

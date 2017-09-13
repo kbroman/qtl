@@ -41,6 +41,8 @@ Major changes:
 
 Minor changes:
 
+  Make estimate.map=FALSE the default in read.cross.
+
   Revised read.cross for the "bcsft" cross type so that it should be
   able to handle sep=";".
 
