@@ -59,8 +59,8 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
 
 \seealso{
         \itemize{
-% \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
-    \item The MQM tutorial: \url{http://www.rqtl.org/tutorials/MQM-tour.pdf}
+% \input{"inst/doc/Sources/MQM/mqm/standard_seealso.txt"}
+    \item The MQM tutorial: \url{https://rqtl.org/tutorials/MQM-tour.pdf}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis
@@ -69,7 +69,7 @@ Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biosta
     \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
-% -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
+% -----^^ inst/doc/Sources/MQM/mqm/standard_seealso.txt ^^-----
         }
 }
 
@@ -101,14 +101,14 @@ summary(f2perm)
 
 \references{
 \itemize{
-% \input{"inst/docs/Sources/MQM/mqm/significance_references.txt"}
+% \input{"inst/doc/Sources/MQM/mqm/significance_references.txt"}
     \item Bruno M. Tesson, Ritsert C. Jansen (2009) Chapter 3.7. Determining the significance threshold \emph{eQTL Analysis in Mice and Rats} \bold{1}, 20--25
                 \item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
-% -----^^ inst/docs/Sources/MQM/mqm/significance_references.txt ^^-----
-% \input{"inst/docs/Sources/MQM/mqm/parallelisation_references.txt"}
+% -----^^ inst/doc/Sources/MQM/mqm/significance_references.txt ^^-----
+% \input{"inst/doc/Sources/MQM/mqm/parallelisation_references.txt"}
                 \item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
                 \item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1.
-% -----^^ inst/docs/Sources/MQM/mqm/parallelisation_references.txt ^^-----
+% -----^^ inst/doc/Sources/MQM/mqm/parallelisation_references.txt ^^-----
 }
 }
 

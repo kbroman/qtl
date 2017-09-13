@@ -1,7 +1,7 @@
-    \item The MQM tutorial: \url{http://www.rqtl.org/tutorials/MQM-tour.pdf} 
+    \item The MQM tutorial: \url{https://rqtl.org/tutorials/MQM-tour.pdf}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
-    \item \code{\link{mqmscanall}} - Parallellized traits analysis 
+    \item \code{\link{mqmscanall}} - Parallellized traits analysis
     \item \code{\link{mqmaugment}} - Augmentation routine for estimating missing data
     \item \code{\link{mqmautocofactors}} - Set cofactors using marker density
     \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations

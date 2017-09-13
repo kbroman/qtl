@@ -4,7 +4,7 @@
 \title{Plot results from mqmpermutation}
 
 \description{
-	Plotting routine to display the results from a permutation QTL scan. (the
+    Plotting routine to display the results from a permutation QTL scan. (the
   output of \code{\link{mqmpermutation}})
 }
 
@@ -32,8 +32,8 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 
 \seealso{
 \itemize{
-  % \input{"inst/docs/Sources/MQM/mqm/standard_seealso.txt"}
-    \item The MQM tutorial: \url{http://www.rqtl.org/tutorials/MQM-tour.pdf}
+  % \input{"inst/doc/Sources/MQM/mqm/standard_seealso.txt"}
+    \item The MQM tutorial: \url{https://rqtl.org/tutorials/MQM-tour.pdf}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis
@@ -42,7 +42,7 @@ Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
     \item \code{\link{mqmsetcofactors}} - Set cofactors at fixed locations
     \item \code{\link{mqmpermutation}} - Estimate significance levels
     \item \code{\link{scanone}} - Single QTL scanning
-% -----^^ inst/docs/Sources/MQM/mqm/standard_seealso.txt ^^-----
+% -----^^ inst/doc/Sources/MQM/mqm/standard_seealso.txt ^^-----
   }
 }
 
