@@ -16,7 +16,7 @@ https://rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.42, 2017-09-13
+Version 1.42, 2017-10-17
 
 Major changes:
 
@@ -40,6 +40,9 @@ Major changes:
   source("https://rqtl.org/dotfunc.R")
 
 Minor changes:
+
+  Fix a bug in mqmscanfdr (to permute all chromosomes not just
+  chromosome 1).
 
   Make estimate.map=FALSE the default in read.cross.
 
