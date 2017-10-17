@@ -51,9 +51,9 @@ mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,
 
         neworder <- sample(nind(cross))
         for(chr in 1:nchr(cross)){
-            perm$geno[[1]]$data <- perm$geno[[1]]$data[neworder,]
+            perm$geno[[chr]]$data <- perm$geno[[chr]]$data[neworder,]
         }
-        res <- scanfunction(perm,...)
+        res <- scanfunction(perm, ...)
         for(threshold in thresholds){
             above.in.perm <- 0
             for(y in 1:nphe(cross)){
