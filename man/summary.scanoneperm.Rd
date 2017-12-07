@@ -50,7 +50,8 @@
   ranks, and then for each permutation replicate we find the maximum
   rank across the columns.  We then find the appropriate quantile of the
   maximized ranks, and then backtrack to the corresponding LOD score
-  within each of the columns.
+  within each of the columns. See Burrage et al. (2010),
+  right column on page 118.
 }
 
 \value{
@@ -86,11 +87,16 @@ summary(operm3, controlAcrossCol=TRUE, alpha=c(0.05, 0.36))
   \code{\link{plot.scanoneperm}} }
 
 \references{
-  Broman, K. W., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens, S. E., Manichaikul, A.,
-  Southard-Smith, E. M. and Churchill G. A. (2006)  The X chromosome in
+  Broman KW, Sen \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}, Owens SE, Manichaikul A,
+  Southard-Smith EM, Churchill GA (2006)  The X chromosome in
   quantitative trait locus mapping.  \emph{Genetics}, \bold{174}, 2151--2158.
 
-  Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for
+  Burrage LC, Baskin-Hill AE, Sinasac DS, Singer JB, Croniger CM, Kirby A,
+  Kulbokas EJ, Daly MJ, Lander ES, Broman KW, Nadeau JH (2010) Genetic
+  resistance to diet-induced obesity in chromosome substitution strains of
+  mice. \emph{Mamm Genome}, \bold{21}, 115--129.
+
+  Churchill GA, Doerge RW (1994) Empirical threshold values for
   quantitative trait mapping.  \emph{Genetics} \bold{138}, 963--971.
 }
 
