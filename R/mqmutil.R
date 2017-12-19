@@ -2,13 +2,13 @@
 #
 # mqmutil.R
 #
-# Copyright (c) 2009, Danny Arends
+# Copyright (c) 2009-2017, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified December 2009
+# last modified December 2017
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -259,11 +259,11 @@ mqmtestnormal <- function(cross, pheno.col=1,significance=0.05, verbose=FALSE){
     if(pheno.col <0 || pheno.col > nphe(cross)){
         stop("No such phenotype (pheno.col = ",pheno.col,")")
     }
-    if(!is.numeric(cross$pheno[[pheno.col]])){
+    if(!is.numeric(cross$pheno[,pheno.col])){
         stop("Please supply a numeric trait (pheno.col = ",pheno.col," is not numeric)")
     }
 
-    if((shapiro.test(cross$pheno[[pheno.col]])$p.value)  > significance){
+    if((shapiro.test(cross$pheno[,pheno.col])$p.value)  > significance){
         if(verbose) cat("Trait distribution normal\n")
         returnval<- TRUE
     }else{

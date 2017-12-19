@@ -2,13 +2,13 @@
 #
 # mqmpermutation.R
 #
-# Copyright (c) 2009-2014, Danny Arends
+# Copyright (c) 2009-2017, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Jan 2014
+# last modified Dec 2017
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -102,7 +102,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
         }
 
         #Set the Phenotype under interest as the first
-        cross$pheno[[1]] <- cross$pheno[[pheno.col]]
+        cross$pheno[,1] <- cross$pheno[,pheno.col]
         names(cross$pheno)[1] <- names(cross$pheno)[pheno.col]
 
         if(n.cluster > batchsize){

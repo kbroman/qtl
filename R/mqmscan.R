@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009-2013, Danny Arends
+# Copyright (c) 2009-2017, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Sep 2013
+# last modified Dec 2017
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -136,7 +136,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         if(test.normality && !mqmtestnormal(cross, pheno.col, 0.01, FALSE)){
             warning("Trait might not be normal (Shapiro normality test)\n")
         }
-        pheno <- cross$pheno[[pheno.col]]
+        pheno <- cross$pheno[,pheno.col]
         phenovar = var(pheno,na.rm = TRUE)
         if(phenovar > 1000){
             if(!logtransform){
@@ -147,7 +147,7 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
         if(logtransform){
             #transform the cross file
             cross <- transformPheno(cross,pheno.col,transf=log)
-            pheno <- cross$pheno[[pheno.col]]
+            pheno <- cross$pheno[,pheno.col]
         }
         n.mark <- ncol(geno)
         if(verbose) cat("INFO: Number of markers:",n.mark,"\n")
