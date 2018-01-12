@@ -17,3 +17,4 @@ Suggests: testthat
 License: GPL-3
 URL: https://rqtl.org, https://github.com/kbroman/qtl
 BugReports: https://github.com/kbroman/qtl/issues
+Encoding: UTF-8
