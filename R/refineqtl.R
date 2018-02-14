@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-2015, Karl W. Broman
-# last modified Oct, 2015
+# copyright (c) 2006-2018, Karl W. Broman
+# last modified Feb, 2018
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -303,13 +303,13 @@ refineqtl <-
 
             lastout[[j]] <- out
 
-            newpos[j] <- as.numeric(strsplit(names(out)[out==max(out)],"@")[[1]][2])
+            newpos[j] <- as.numeric(strsplit(names(out)[!is.na(out) & out==max(out,na.rm=TRUE)],"@")[[1]][2])
 
             if(verbose) {
                 cat(" Q", j, " pos: ", curpos[j], " -> ", newpos[j], "\n", sep="")
-                cat("    LOD increase: ", round(max(out) - curlod, 3), "\n")
+                cat("    LOD increase: ", round(max(out, na.rm=TRUE) - curlod, 3), "\n")
             }
-            curlod <- max(out)
+            curlod <- max(out, na.rm=TRUE)
         }
 
         if(verbose) {
@@ -365,9 +365,10 @@ refineqtl <-
         qn <- names(lastout)
 
         for(i in seq(along=lastout)) {
+            cat(i, ":", sum(is.na(lastout[[i]])), "\n")
             if(sum(rn==qn[i])>1) # ack! multiple QTL at same position
                 warning("Multiple QTL at the same location.")
-            lastout[[i]] <- lastout[[i]] - (max(lastout[[i]]) - max(dropresult[rn==qn[i],3]))
+            lastout[[i]] <- lastout[[i]] - (max(lastout[[i]], na.rm=TRUE) - max(dropresult[rn==qn[i],3]))
             pos <- as.numeric(matrix(unlist(strsplit(names(lastout[[i]]), "@")),byrow=TRUE,ncol=2)[,2])
             chr <- rep(qtl$chr[tovary][i], length(pos))
             lastout[[i]] <- data.frame(chr=chr, pos=pos, lod=as.numeric(lastout[[i]]), stringsAsFactors=TRUE)
@@ -532,7 +533,7 @@ plotLodProfile <-
     for(i in dontskip) {
         temp <- rbind(tempscan[tempscan[,1] != qtl$chr[i] |
                                (tempscan[,1] == qtl$chr[i] & (tempscan[,2] < min(lodprof[[i]][,2]) |
-                                        tempscan[,2] > max(lodprof[[i]][,2]))),],
+                                        tempscan[,2] > max(lodprof[[i]][,2], na.rm=TRUE))),],
                       lodprof[[i]])
 
         temp <- temp[order(match(temp[,1], orderedchr), temp[,2]),]

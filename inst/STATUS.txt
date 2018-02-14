@@ -1,6 +1,6 @@
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2017, Karl W Broman
+copyright (c) 2001-2018, Karl W Broman
 https://rqtl.org
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@ https://rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.42, 2017-10-17
+Version 1.42, 2018-02-14
 
 Major changes:
 
@@ -40,6 +40,8 @@ Major changes:
   source("https://rqtl.org/dotfunc.R")
 
 Minor changes:
+
+  Deal with possibility NA LOD scores in refineqtl().
 
   Fix a bug in mqmscanfdr (to permute all chromosomes not just
   chromosome 1).
