@@ -365,7 +365,6 @@ refineqtl <-
         qn <- names(lastout)
 
         for(i in seq(along=lastout)) {
-            cat(i, ":", sum(is.na(lastout[[i]])), "\n")
             if(sum(rn==qn[i])>1) # ack! multiple QTL at same position
                 warning("Multiple QTL at the same location.")
             lastout[[i]] <- lastout[[i]] - (max(lastout[[i]], na.rm=TRUE) - max(dropresult[rn==qn[i],3]))
