@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2015, Karl W Broman
-# last modified Jun, 2015
+# copyright (c) 2007-2018, Karl W Broman
+# last modified Feb, 2018
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -365,6 +365,7 @@ stepwiseqtl <-
             if(verbose) cat(" ---Refining positions\n")
             rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
                               covar=covar, formula=formula, method=method,
+                              model=model,
                               verbose=verbose.scan, incl.markers=incl.markers,
                               keeplodprofile=FALSE, forceXcovar=forceXcovar)
             if(any(rqtl$pos != qtl$pos)) { # updated positions
@@ -376,6 +377,7 @@ stepwiseqtl <-
                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
                       run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
         lod <- fit$result.full[1,4] - lod0
+
         if(require.fullrank && attr(fit, "matrix.rank") < attr(fit, "matrix.ncol")) lod <- 0
         curplod <- calc.plod(lod, countqtlterms(formula, ignore.covar=TRUE),
                              penalties=penalties)
@@ -419,7 +421,7 @@ stepwiseqtl <-
         }
 
         out <- addqtl(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
-                      formula=formula, method=method, incl.markers=incl.markers,
+                      formula=formula, method=method, model=model, incl.markers=incl.markers,
                       verbose=verbose.scan, forceXcovar=forceXcovar,
                       require.fullrank=require.fullrank)
 
@@ -445,7 +447,7 @@ stepwiseqtl <-
                 thisformula <- as.formula(paste(deparseQTLformula(formula), "+Q", n.qtl+1,
                                                 "+Q", j, ":Q", n.qtl+1, sep=""))
                 out <- addqtl(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
-                              formula=thisformula, method=method, incl.markers=incl.markers,
+                              formula=thisformula, method=method, model=model, incl.markers=incl.markers,
                               verbose=verbose.scan, forceXcovar=forceXcovar,
                               require.fullrank=require.fullrank)
                 thislod <- max(out[,3], na.rm=TRUE)
@@ -474,7 +476,7 @@ stepwiseqtl <-
                 if(verbose)
                     cat(" ---Look for additional interactions\n")
                 temp <- addint(cross, pheno.col, qtl, covar=covar, formula=formula,
-                               method=method, qtl.only=TRUE, verbose=verbose.scan,
+                               method=method, model=model, qtl.only=TRUE, verbose=verbose.scan,
                                require.fullrank=require.fullrank)
                 if(!is.null(temp)) {
                     thislod <- max(temp[,3], na.rm=TRUE)
@@ -499,7 +501,7 @@ stepwiseqtl <-
                 if(verbose)
                     cat(" ---Scan for an additional pair\n")
                 out <- addpair(cross, pheno.col=pheno.col, qtl=qtl, covar=covar,
-                               formula=formula, method=method, incl.markers=incl.markers,
+                               formula=formula, method=method, model=model, incl.markers=incl.markers,
                                verbose=verbose.scan, forceXcovar=forceXcovar)
                 thelod <- out$lod
 
@@ -555,7 +557,7 @@ stepwiseqtl <-
         if(refine.locations) {
             if(verbose) cat(" ---Refining positions\n")
             rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
-                              covar=covar, formula=formula, method=method,
+                              covar=covar, formula=formula, method=method, model=model,
                               verbose=verbose.scan, incl.markers=incl.markers,
                               keeplodprofile=FALSE, forceXcovar=forceXcovar)
             if(any(rqtl$pos != qtl$pos)) { # updated positions
@@ -687,7 +689,7 @@ stepwiseqtl <-
             if(verbose) cat(" ---Refining positions\n")
             if(!is.null(qtl)) {
                 rqtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
-                                  covar=covar, formula=formula, method=method,
+                                  covar=covar, formula=formula, method=method, model=model,
                                   verbose=verbose.scan, incl.markers=incl.markers,
                                   keeplodprofile=FALSE, forceXcovar=forceXcovar)
                 if(any(rqtl$pos != qtl$pos)) { # updated positions
@@ -747,7 +749,7 @@ stepwiseqtl <-
         if(keeplodprofile) {
             if(verbose) cat(" ---One last pass through refineqtl\n")
             qtl <- refineqtl(cross, pheno.col=pheno.col, qtl=qtl,
-                             covar=covar, formula=formula, method=method,
+                             covar=covar, formula=formula, method=method, model=model,
                              verbose=verbose.scan, incl.markers=incl.markers,
                              keeplodprofile=TRUE, forceXcovar=forceXcovar)
         }
