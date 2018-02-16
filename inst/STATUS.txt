@@ -16,7 +16,7 @@ https://rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-Version 1.42, 2018-02-15
+Version 1.42, 2018-02-16
 
 Major changes:
 
