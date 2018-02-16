@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-2015, Karl W Broman
-# last modified Oct, 2015
+# copyright (c) 2001-2018, Karl W Broman
+# last modified Feb, 2018
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1002,11 +1002,11 @@ subset.scanoneperm <-
             x <- lapply(x, as.matrix)
 
         if(missing(lodcolumn)) lodcolumn <- 1:ncol(x[[1]])
-        else if(!is.null(attr(try(x[[1]][,lodcolumn], silent=TRUE),"try-error")))
+        else if(!check_colindex(lodcolumn, x[[1]]))
             stop("lodcolumn misspecified.")
 
         if(missing(repl)) repl <- 1:nrow(x[[1]])
-        else if(!is.null(attr(try(x[[1]][repl,], silent=TRUE),"try-error")))
+        else if(!check_rowindex(repl, x[[1]]))
             stop("repl misspecified.")
 
         cl <- class(x)
@@ -1017,11 +1017,11 @@ subset.scanoneperm <-
         if(!is.matrix(x)) x <- as.matrix(x)
 
         if(missing(lodcolumn)) lodcolumn <- 1:ncol(x)
-        else if(!is.null(attr(try(x[,lodcolumn], silent=TRUE),"try-error")))
+        else if(!check_colindex(lodcolumn, x))
             stop("lodcolumn misspecified.")
 
         if(missing(repl)) repl <- 1:nrow(x)
-        else if(!is.null(attr(try(x[repl,], silent=TRUE),"try-error")))
+        else if(!check_rowindex(repl, x))
             stop("repl misspecified.")
 
         cl <- class(x)
@@ -1041,5 +1041,45 @@ subset.scanoneperm <-
 `[.scanoneperm` <-
     function(x, repl, lodcolumn)
     subset.scanoneperm(x, repl, lodcolumn)
+
+# function to check if column indices are okay
+check_colindex <-
+    function(index, mat)
+{
+    if(any(is.na(index))) return(FALSE)
+
+    n <- ncol(mat)
+
+    if(is.logical(index) && length(index) != n)
+        return(FALSE)
+    if(is.numeric(index)) {
+        if(any(index <= 0) && !all(index < 0)) return(FALSE) # don't mix pos and neg
+        if(all(index < 0) && any(index < -n)) return(FALSE) # out of bounds
+        if(all(index > 0) && any(index > n)) return(FALSE) # out of bounds
+    }
+    if(is.character(index) && !all(index %in% colnames(mat))) return(FALSE)
+
+    TRUE
+}
+
+# function to check if row indices are okay
+check_rowindex <-
+    function(index, mat)
+{
+    if(any(is.na(index))) return(FALSE)
+
+    n <- nrow(mat)
+
+    if(is.logical(index) && length(index) != n)
+        return(FALSE)
+    if(is.numeric(index)) {
+        if(any(index <= 0) && !all(index < 0)) return(FALSE) # don't mix pos and neg
+        if(all(index < 0) && any(index < -n)) return(FALSE) # out of bounds
+        if(all(index > 0) && any(index > n)) return(FALSE) # out of bounds
+    }
+    if(is.character(index) && !all(index %in% rownames(mat))) return(FALSE)
+
+    TRUE
+}
 
 # end of summary.scanone.R

@@ -47,6 +47,9 @@ Minor changes:
 
   Dealt with possibility NA LOD scores in refineqtl().
 
+  Removed questionable use of try() from subset.scanoneperm() and
+  subset.scantwoperm().
+
   Fixed a bug in mqmscanfdr (to permute all chromosomes not just
   chromosome 1).
 

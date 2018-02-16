@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-2015, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Oct, 2015
+# copyright (c) 2001-2018, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Feb, 2018
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -1161,7 +1161,7 @@ subset.scantwoperm <-
     if("AA" %in% names(x)) { # x chr specific
         for(j in seq(along=x)) {
             if(missing(lodcolumn)) lodcolumn <- 1:ncol(x[[j]][[1]])
-            else if(!is.null(attr(try(x[[j]][[1]][,lodcolumn], silent=TRUE),"try-error")))
+            else if(!check_colindex(lodcolumn, x[[j]][[1]]))
                 stop("lodcolumn misspecified.")
 
             repl <- 1:nrow(x[[j]][[1]])
@@ -1177,11 +1177,11 @@ subset.scantwoperm <-
         x <- lapply(x, as.matrix)
 
     if(missing(lodcolumn)) lodcolumn <- 1:ncol(x[[1]])
-    else if(!is.null(attr(try(x[[1]][,lodcolumn], silent=TRUE),"try-error")))
+    else if(!check_colindex(lodcolumn, x[[1]]))
         stop("lodcolumn misspecified.")
 
     if(missing(repl)) repl <- 1:nrow(x[[1]])
-    else if(!is.null(attr(try(x[[1]][repl,], silent=TRUE),"try-error")))
+    else if(!check_rowindex(repl, x[[1]]))
         stop("repl misspecified.")
 
     cl <- class(x)
