@@ -41,7 +41,7 @@ Major changes:
 
 Minor changes:
 
-  Fixed a bug in refineqtl() regarding model="binary"; a number of
+  Fixed a bug in stepwiseqtl() regarding model="binary"; a number of
   cases where I wasn't passing model to other functions, like
   refineqtl().
 
