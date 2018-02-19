@@ -401,54 +401,53 @@ reduce2grid <-
         stepwidth <- attr(cross$geno[[1]]$prob, "stepwidth")
         if(stepwidth != "fixed") {
             warning("You need to have run calc.genoprob with stepwidth=\"fixed\".")
-            break
         }
+        else {
+            step <- attr(cross$geno[[1]]$prob, "step")
 
-        step <- attr(cross$geno[[1]]$prob, "step")
+            for(i in 1:nchr(cross)) {
+                pr <- cross$geno[[i]]$prob
+                map <- attr(pr, "map")
+                butes <- attributes(pr)
 
-        for(i in 1:nchr(cross)) {
-            pr <- cross$geno[[i]]$prob
-            map <- attr(pr, "map")
-            butes <- attributes(pr)
+                reduced <- gridindex(map, step)
+                pr <- pr[,reduced,,drop=FALSE]
+                attr(pr, "map") <- map[reduced]
+                for(a in attr2fix)
+                    attr(pr, a) <- butes[[a]]
 
-            reduced <- gridindex(map, step)
-            pr <- pr[,reduced,,drop=FALSE]
-            attr(pr, "map") <- map[reduced]
-            for(a in attr2fix)
-                attr(pr, a) <- butes[[a]]
+                attr(pr, "reduced2grid") <- TRUE
+                cross$geno[[i]]$prob <- pr
+            }
 
-            attr(pr, "reduced2grid") <- TRUE
-            cross$geno[[i]]$prob <- pr
+            reduced <- TRUE
         }
-
-
-        reduced <- TRUE
     }
     if("draws" %in% names(cross$geno[[1]])) {
         stepwidth <- attr(cross$geno[[1]]$draws, "stepwidth")
         if(stepwidth != "fixed") {
             warning("You need to have run sim.geno with stepwidth=\"fixed\".")
-            break
         }
+        else {
+            step <- attr(cross$geno[[1]]$draws, "step")
 
-        step <- attr(cross$geno[[1]]$draws, "step")
+            for(i in 1:nchr(cross)) {
+                dr <- cross$geno[[i]]$draws
+                map <- attr(dr, "map")
+                butes <- attributes(dr)
 
-        for(i in 1:nchr(cross)) {
-            dr <- cross$geno[[i]]$draws
-            map <- attr(dr, "map")
-            butes <- attributes(dr)
+                reduced <- gridindex(map, step)
+                dr <- dr[,reduced,,drop=FALSE]
+                attr(dr, "map") <- map[reduced]
+                for(a in attr2fix)
+                    attr(dr, a) <- butes[[a]]
 
-            reduced <- gridindex(map, step)
-            dr <- dr[,reduced,,drop=FALSE]
-            attr(dr, "map") <- map[reduced]
-            for(a in attr2fix)
-                attr(dr, a) <- butes[[a]]
+                attr(dr, "reduced2grid") <- TRUE
+                cross$geno[[i]]$draws <- dr
+            }
 
-            attr(dr, "reduced2grid") <- TRUE
-            cross$geno[[i]]$draws <- dr
+            reduced <- TRUE
         }
-
-        reduced <- TRUE
     }
 
     if(!reduced)

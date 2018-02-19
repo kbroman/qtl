@@ -91,8 +91,7 @@ scantwo <-
         for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
 
     # X-chr-specific perms (actually A:A, A:X, and X:X specific)
-    if(perm.Xsp && n.perm > 0) {
-        if(all(chrtype=="X") || all(chrtype=="A")) break # no need for x-chr-specific perms
+    if(perm.Xsp && n.perm > 0 && !(all(chrtype=="X") || all(chrtype=="A"))) { # no need for x-chr-specific perms
         if(length(chr1) != length(chr2) || any(chr1 != chr2))
             stop("With perm.Xsp=TRUE, chr can't be a list")
 
