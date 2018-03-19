@@ -24,6 +24,9 @@ Major changes:
 
 Minor changes:
 
+  Small change in getgenonames() to avoid a problem if there aren't
+  enough allele codes.
+
   plotLodProfile() now gives a more informative error message if
   called with a null QTL model.
 

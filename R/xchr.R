@@ -2,8 +2,8 @@
 #
 # xchr.R
 #
-# copyright (c) 2004-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2004-2018, Karl W Broman
+# last modified Mar, 2018
 # first written Apr, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -164,8 +164,14 @@ getgenonames <-
         if(type == "4way") alleles <- LETTERS[1:4]
         else alleles <- LETTERS[1:2]
     }
-    else
+    else {
         alleles <- cross.attr$alleles
+    }
+    if(type=="4way") { # ensure that we have enough allele codes
+        if(length(alleles) < 4) alleles <- LETTERS[1:4]
+    } else {
+        if(length(alleles) < 2) alleles <- LETTERS[1:2]
+    }
 
     tempgn <- c(paste(rep(alleles[1],2),collapse=""),
                 paste(alleles,collapse=""),
