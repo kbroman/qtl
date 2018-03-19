@@ -16,6 +16,18 @@ https://rqtl.org
     at http://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+Version 1.43, 2018-03-19
+
+Major changes:
+
+  None.
+
+Minor changes:
+
+  plotLodProfile() now gives a more informative error message if
+  called with a null QTL model.
+
+
 Version 1.42, 2018-02-19
 
 Major changes:

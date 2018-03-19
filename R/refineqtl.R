@@ -3,7 +3,7 @@
 # refineqtl.R
 #
 # copyright (c) 2006-2018, Karl W. Broman
-# last modified Feb, 2018
+# last modified Mar, 2018
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -419,6 +419,9 @@ plotLodProfile <-
 {
     if(!("qtl" %in% class(qtl)))
         stop("Input qtl is not a qtl object")
+
+    if(nqtl(qtl) == 0)
+        stop("Null QTL model; there are no profiles to plot")
 
     lodprof <- attr(qtl, "lodprofile")
     if(is.null(lodprof))
