@@ -2,13 +2,13 @@
 #
 # mqmutil.R
 #
-# Copyright (c) 2009-2017, Danny Arends
+# Copyright (c) 2009-2018, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified December 2017
+# last modified Mar 2018
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -43,7 +43,7 @@
 # RQTL, RMQM and MQM.
 
 mqm_version <- function() {
-    rqtl_version = packageDescription("qtl")["Version"]$Version
+    rqtl_version = qtlversion()
     rmqm_version  = "0.90-pre1"
     mqm_version   = rmqm_version # fetch from C code, later
     list(RQTL=rqtl_version, RMQM=rmqm_version, MQM=mqm_version)
