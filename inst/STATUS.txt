@@ -24,6 +24,8 @@ Major changes:
 
 Minor changes:
 
+  Improved error message in scanone() when phenotypes are not numeric.
+
   Small change in getgenonames() to avoid a problem if there aren't
   enough allele codes.
 

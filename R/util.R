@@ -2014,8 +2014,8 @@ checkcovar <-
     pheno <- cross$pheno[,pheno.col,drop=FALSE]
     idx.nonnum <- which(!apply(pheno,2, is.numeric))
     if(length(idx.nonnum) > 0)
-        stop("Following phenotypes are not numeric: Column ",
-             paste(idx.nonnum, collapse=","))
+        stop("Following phenotypes are not numeric: ",
+             paste(colnames(pheno)[idx.nonnum], collapse=", "))
 
     orig.n.ind <- nind(cross)
 
