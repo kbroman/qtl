@@ -11,7 +11,7 @@
 simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
             error.prob=0, missing.prob=0, partial.missing.prob=0,
             keep.qtlgeno=FALSE, keep.errorind=TRUE, m=0, p=0,
-  	    map.function=c("haldane","kosambi","c-f","morgan"))
+        map.function=c("haldane","kosambi","c-f","morgan"))
 }
 
 \arguments{
@@ -43,8 +43,8 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
  \item{m}{Interference parameter; a non-negative integer.  0 corresponds
    to no interference.}
  \item{p}{Probability that a chiasma comes from the no-interference
-   mechanism} 
- \item{map.function}{Indicates whether to use the Haldane, Kosambi, 
+   mechanism}
+ \item{map.function}{Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer, or Morgan map function when converting genetic
    distances into recombination fractions.}
 }
@@ -59,7 +59,7 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
   with inteference parameter \code{m}.  Note that \code{m=0} corresponds
   to no interference, and with \code{p=0}, one gets a pure chi-square
   model.
-  
+
   QTLs are assumed to act additively, and the residual phenotypic
   variation is assumed to be normally distributed with variance 1.
 
@@ -69,7 +69,7 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
   difference between the heterozygote and the midpoint between the
   homozygotes).
 
-}  
+}
 
 \value{
   A list with each component being an object of class \code{cross}.  See \code{\link{read.cross}} for
@@ -87,15 +87,15 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
 
-\seealso{ \code{\link{scanPhyloQTL}},   \code{\link{inferredpartitions}}, 
+\seealso{ \code{\link{scanPhyloQTL}},   \code{\link{inferredpartitions}},
   \code{\link{summary.scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}},
-  \code{\link{plot.scanPhyloQTL}}, 
+  \code{\link{plot.scanPhyloQTL}},
   \code{\link{sim.cross}}, \code{\link{read.cross}} }
 
 \examples{
 \dontrun{
 # example map; drop X chromosome
-data(map10)           
+data(map10)
 map10 <- map10[1:19]
 
 # simulate data
@@ -125,10 +125,10 @@ summary(out, format="postprob", threshold=3)
 plot(out)
 }
 }
-                    
+
 \references{
   Broman, K. W., Kim, S., An\'e, C. and Payseur, B. A.  Mapping
   quantitative trait loci to a phylogenetic tree.  In preparation.
 }
-  
+
 \keyword{datagen}

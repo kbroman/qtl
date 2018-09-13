@@ -28,10 +28,10 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    phenotypes, in which case it must have the length equal to the number
    of individuals in the cross, and there must be either non-integers or
    values < 1 or > no. phenotypes; this last case may be useful for studying
-   transformations.}  
+   transformations.}
  \item{model}{The phenotypic model: the usual normal model, a model for
    binary traits, a two-part model or non-parametric analysis}
- \item{method}{Indicates whether to use the EM algorithm, 
+ \item{method}{Indicates whether to use the EM algorithm,
    imputation, Haley-Knott regression, the extended Haley-Knott method,
    or marker regression.  Not all methods are available for all models.
    Marker regression is performed either by dropping individuals with
@@ -46,12 +46,12 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
    or a vector of length n.ind containing positive weights.  Used only
    in the case \code{model="normal"}.}
  \item{use}{In the case that multiple phenotypes are selected to be
-   scanned, this argument indicates whether to use all individuals, 
+   scanned, this argument indicates whether to use all individuals,
    including those missing some phenotypes, or just those individuals
    that have data on all selected phenotypes.}
  \item{upper}{Used only for the two-part model; if true, the
    "undefined" phenotype is the maximum observed phenotype; otherwise,
-   it is the smallest observed phenotype.} 
+   it is the smallest observed phenotype.}
  \item{ties.random}{Used only for the non-parametric "model"; if TRUE,
    ties in the phenotypes are ranked at random.  If FALSE, average ranks
    are used and a corrected LOD score is calculated.}
@@ -63,10 +63,10 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
  \item{maxit}{Maximum number of iterations for methods \code{"em"} and
    \code{"ehk"}.}
  \item{tol}{Tolerance value for determining convergence for methods
-   \code{"em"} and \code{"ehk"}.} 
+   \code{"em"} and \code{"ehk"}.}
  \item{n.boot}{Number of bootstrap replicates.}
  \item{verbose}{If TRUE, display information about the progress of the
-   bootstrap.} 
+   bootstrap.}
 }
 
 \details{
@@ -85,7 +85,7 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   the same size as the input cross; some individuals with be duplicated
   and some omitted).  The same scan is performed with the resampled data;
   for each bootstrap replicate, we store only the location with maximum
-  LOD score. 
+  LOD score.
 
   Use \code{\link{summary.scanoneboot}} to obtain the desired
   confidence interval.
@@ -94,17 +94,17 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
 \value{
   A vector of length \code{n.boot}, giving the estimated QTL locations
   in the bootstrap replicates.  The results for the original data are
-  included as an attribute, \code{"results"}.  
+  included as an attribute, \code{"results"}.
 }
 
 \references{
   Manichaikul, A., Dupuis, J., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S} and Broman, K. W. (2006) Poor
   performance of bootstrap confidence intervals for the location of a
   quantitative trait locus. \emph{Genetics} \bold{174}, 481--489.
-  
+
   Visscher, P. M., Thompson, R. and Haley, C. S. (1996) Confidence
   intervals in QTL mapping by bootstrap.  \emph{Genetics} \bold{143},
-  1013--1020.  
+  1013--1020.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu}}

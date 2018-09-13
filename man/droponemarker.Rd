@@ -23,7 +23,7 @@ droponemarker(cross, chr, error.prob=0.0001,
    strings referring to chromosomes by name; numeric values are
    converted to strings.  Refer to chromosomes with a preceding \code{-}
    to have all chromosomes but those considered.  A logical (TRUE/FALSE)
-   vector may also be used.} 
+   vector may also be used.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,
@@ -34,10 +34,10 @@ droponemarker(cross, chr, error.prob=0.0001,
    interference. This may be used only for a backcross or intercross.}
  \item{p}{Proportion of chiasmata from the NI mechanism, in the Stahl
    model; p=0 gives a pure chi-square model.  This may be used only for
-   a backcross or intercross.} 
+   a backcross or intercross.}
  \item{maxit}{Maximum number of EM iterations to perform.}
  \item{tol}{Tolerance for determining convergence.}
- \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
+ \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is
  used only for the 4-way cross.}
  \item{verbose}{If TRUE, print information on progress; if > 1, print
    even more information.}
@@ -53,7 +53,7 @@ droponemarker(cross, chr, error.prob=0.0001,
 
   In the case of a 4-way cross, with \code{sex.sp=TRUE}, there are two
   additional columns with the change in the estimated female and male genetic lengths
-  of the respective chromosome, upon deleting that marker.  
+  of the respective chromosome, upon deleting that marker.
   With \code{sex.sp=FALSE}, or for other types of crosses, there is one
   additional column, with the change in estimated genetic length of the respective
   chromosome, when the marker is omitted.

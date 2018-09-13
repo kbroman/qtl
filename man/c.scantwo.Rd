@@ -18,7 +18,7 @@
  \item{\dots}{A set of objects of class \code{scantwo}. (This can also
  be a list of \code{scantwo} objects.) These are
    the results from  \code{\link{scantwo}} (with \code{n.perm=0}),
-   generally run with different phenotypes or methods.  All must 
+   generally run with different phenotypes or methods.  All must
    conform with each other, meaning that
    \code{\link{calc.genoprob}} and/or \code{\link{sim.geno}}
    were run with the same values for \code{step} and \code{off.end} and

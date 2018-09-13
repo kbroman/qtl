@@ -39,7 +39,7 @@ scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
    transformations.}
  \item{model}{The phenotype model: the usual normal model or a model for
    binary traits}
- \item{method}{Indicates whether to use the EM algorithm, 
+ \item{method}{Indicates whether to use the EM algorithm,
    imputation, or Haley-Knott regression.}
  \item{addcovar}{Optional set of additive covariates to include in the
    analysis, as a list with the same length as \code{crosses}.  They
@@ -63,7 +63,7 @@ scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
   consideration, we pull out the set of crosses that are segregating the
   QTL, re-code the alleles, and combine the crosses into one large cross.
   Crosses not segregating the QTL are also used, though with no QTL
-  effects.  
+  effects.
 
   Additive covariate indicators for the crosses are included in the
   analysis, to allow for the possibility that there are overall shifts
@@ -86,7 +86,7 @@ scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
 \examples{
 \dontshow{set.seed(66787403)}
 # example map; drop X chromosome
-data(map10)           
+data(map10)
 map10 <- map10[1:19]
 \dontshow{map10 <- map10[1:4]}
 
@@ -118,9 +118,9 @@ summary(out, format="postprob", threshold=3)
 plot(out)
 }
 
-\seealso{ \code{\link{plot.scanPhyloQTL}}, 
+\seealso{ \code{\link{plot.scanPhyloQTL}},
   \code{\link{summary.scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}},
-  \code{\link{inferredpartitions}}, 
+  \code{\link{inferredpartitions}},
   \code{\link{simPhyloQTL}} }
 
 \keyword{models}

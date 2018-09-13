@@ -14,9 +14,9 @@
  \item{results}{Output from \code{\link{scanone}}, or a qtl object
  as output from \code{\link{refineqtl}}.}
  \item{chr}{A chromosome ID (if input \code{results} are from
- \code{\link{scanone}} (should have length 1).} 
+ \code{\link{scanone}} (should have length 1).}
  \item{qtl.index}{Numeric index for a QTL (if input \code{results} are
- from \code{\link{refineqtl}} (should have length 1).} 
+ from \code{\link{refineqtl}} (should have length 1).}
  \item{prob}{Probability coverage of the interval.}
  \item{lodcolumn}{An integer indicating which
    of the LOD score columns should be considered (if input

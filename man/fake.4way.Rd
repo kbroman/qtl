@@ -4,26 +4,26 @@
 
 \title{Simulated data for a 4-way cross}
 
-\description{ 
+\description{
   Simulated data for a phase-known 4-way cross, obtained using
   \code{\link{sim.cross}}.
-} 
+}
 
 \usage{data(fake.4way)}
 
 \format{
   An object of class \code{cross}.  See \code{\link{read.cross}}
-  for details.  
+  for details.
 }
 
 \details{
 There are 250 individuals typed at 157 markers, including 8 on the X
-chromosome.  
+chromosome.
 
 There are two phenotypes (including sex, for which 0=female and 1=male).
 The quantitative phenotype is affected by three QTLs: two on chromosome
 2 at positions 10 and 25 cM on the female genetic map, and one on
-chromosome 7 at position 40 cM on the female map. 
+chromosome 7 at position 40 cM on the female map.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

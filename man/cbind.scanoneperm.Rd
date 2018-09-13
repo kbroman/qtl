@@ -30,7 +30,7 @@
   The aim of this function is to concatenate the results from multiple
   runs of a permutation test \code{\link{scanone}}, generally for
   different phenotypes and/or methods, to be used in parallel with
-  \code{\link{c.scanone}}. 
+  \code{\link{c.scanone}}.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
@@ -48,6 +48,6 @@ summary(operm)
 
 \seealso{ \code{\link{summary.scanoneperm}},
   \code{\link{scanone}}, \code{\link{c.scanoneperm}},
-  \code{\link{c.scanone}} } 
+  \code{\link{c.scanone}} }
 
 \keyword{manip}

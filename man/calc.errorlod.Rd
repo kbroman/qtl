@@ -5,7 +5,7 @@
 
 \description{
   Calculates a LOD score for each genotype, measuring the evidence for
-  genotyping errors. 
+  genotyping errors.
 }
 
 \usage{
@@ -29,14 +29,14 @@ calc.errorlod(cross, error.prob=0.01,
 \details{
   Calculates, for each individual at each marker, a LOD score
   measuring the strength of evidence for a genotyping error, as
-  described by Lincoln and Lander (1992). 
+  described by Lincoln and Lander (1992).
 
   In the latest version, evidence for a genotype being in
   error is considered assuming that all other genotypes (for that
   individual, on that chromosome) are correct.  The argument
   \code{version} allows one to specify whether this new version is used,
   or whether the original (old) version of the calculation is
-  performed. 
+  performed.
 
   Note that values below 4 are generally not interesting.  Also note
   that if markers are extremely tightly linked, \emph{recombination
@@ -55,7 +55,7 @@ calc.errorlod(cross, error.prob=0.01,
   The input \code{cross} object is returned with a component,
   \code{errorlod}, added to each component of \code{cross$geno}.  The
   \code{errorlod} component is a matrix of size (n.ind x n.mar).  An
-  attribute \code{"error.prob"} is set to the value of the corresponding 
+  attribute \code{"error.prob"} is set to the value of the corresponding
   argument, for later reference.
 }
 
@@ -71,7 +71,7 @@ data(hyper)
 \dontshow{hyper <- subset(hyper,chr=c(1,19))}
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
-# print those above a specified cutoff 
+# print those above a specified cutoff
 top.errorlod(hyper, cutoff=4)
 
 # plot genotype data, flagging genotypes with error LOD > cutoff
@@ -79,7 +79,7 @@ plotGeno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
 }
 
 \seealso{ \code{\link{plotErrorlod}},
-  \code{\link{top.errorlod}}, \code{\link{cleanGeno}} } 
+  \code{\link{top.errorlod}}, \code{\link{cleanGeno}} }
 
 
 \keyword{utilities}

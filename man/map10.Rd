@@ -4,10 +4,10 @@
 
 \title{An example genetic map}
 
-\description{ 
+\description{
   A genetic map corresponding approximately to the mouse genome with
   a 10 cM marker spacing.
-} 
+}
 
 \usage{data(map10)}
 
@@ -24,7 +24,7 @@
   plot(map10)
 
   mycross <- sim.cross(map10, type="f2", n.ind=100)
-}    
+}
 
 \seealso{ \code{\link{sim.map}}, \code{\link{plotMap}},
   \code{\link{pull.map}} }

@@ -19,7 +19,7 @@ inferredpartitions(output, chr, lodthreshold, probthreshold=0.9)
  \item{lodthreshold}{LOD threshold; if maximum LOD score is less than
    this, the null model is considered.}
  \item{probthreshold}{Threshold on posterior probabilities.  See Details
-   below.} 
+   below.}
 }
 
 
@@ -30,7 +30,7 @@ inferredpartitions(output, chr, lodthreshold, probthreshold=0.9)
   \code{lodthreshold}.  In this case, we then convert the LOD scores for
   the partitions to approximate posterior probabilities by taking
   \eqn{10^{LOD}}{10^LOD} and then rescaling them to sum to 1.
-  These are sorted from largest to smallest, and we 
+  These are sorted from largest to smallest, and we
   then take as the inferred partitions the smallest set whose posterior
   probabilities cumulatively add up to at least \code{probthreshold}.
 }
@@ -51,7 +51,7 @@ inferredpartitions(output, chr, lodthreshold, probthreshold=0.9)
 \examples{
 \dontshow{set.seed(66787403)}
 # example map; drop X chromosome
-data(map10)           
+data(map10)
 map10 <- map10[1:19]
 \dontshow{map10 <- map10[1:4]}
 
@@ -74,7 +74,7 @@ inferredpartitions(out, chr=3, lodthreshold=3)
 inferredpartitions(out, chr=3, lodthreshold=3, probthreshold=0.95)
 }
 
-\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}}, 
+\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}},
   \code{\link{summary.scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}},
   \code{\link{simPhyloQTL}} }
 

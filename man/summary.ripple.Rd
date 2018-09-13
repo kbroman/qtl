@@ -29,7 +29,7 @@
   marker orders with likelihood (or number of obligate crossovers)
   within some cutoff of the initial order. If no marker order, other
   than the initial one, has likelihood within the specified range, the
-  initial and next-best orders are returned. 
+  initial and next-best orders are returned.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

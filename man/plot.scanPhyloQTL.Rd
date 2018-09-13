@@ -13,7 +13,7 @@
 \method{plot}{scanPhyloQTL}(x, chr, incl.markers=TRUE,
      col, xlim, ylim, lwd=2, gap=25, mtick=c("line", "triangle"),
      show.marker.names=FALSE, alternate.chrid=FALSE, legend=TRUE, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{"scanPhyloQTL"}, as output by
@@ -34,7 +34,7 @@
     upward-pointing triangels).}
   \item{show.marker.names}{If TRUE, show the marker names along the x axis.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{legend}{Indicates whether to include a legend in the plot.}
   \item{\dots}{Passed to the function \code{\link{plot.scanone}} when it
@@ -48,7 +48,7 @@
 \examples{
 \dontrun{
 # example map; drop X chromosome
-data(map10)           
+data(map10)
 map10 <- map10[1:19]
 
 # simulate data
@@ -79,11 +79,11 @@ plot(out)
 }
 }
 
-\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}}, 
+\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}},
   \code{\link{summary.scanPhyloQTL}}, \code{\link{plot.scanone}},
-  \code{\link{inferredpartitions}}, 
-  \code{\link{simPhyloQTL}}, 
-  \code{\link[graphics]{par}}, \code{\link[grDevices]{colors}} } 
+  \code{\link{inferredpartitions}},
+  \code{\link{simPhyloQTL}},
+  \code{\link[graphics]{par}}, \code{\link[grDevices]{colors}} }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
 

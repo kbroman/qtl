@@ -29,7 +29,7 @@ fill.geno(cross, method=c("imp","argmax", "no_dbl_XO", "maxmarginal"),
  of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi or
    Carter-Falconer map function when converting genetic distances into
-   recombination fractions.} 
+   recombination fractions.}
  \item{min.prob}{For \code{method="maxmarginal"}, genotypes with
  probability greater than this value will be imputed; those less than
  this value will be made missing.}
@@ -61,7 +61,7 @@ fill.geno(cross, method=c("imp","argmax", "no_dbl_XO", "maxmarginal"),
   as the imputed genotype if it has probability greater than
   \code{min.prob}; otherwise it is made missing.
 
-  With \code{method="no_dbl_XO"} and \code{method="maxmarginal"}, 
+  With \code{method="no_dbl_XO"} and \code{method="maxmarginal"},
   some missing genotypes likely remain. With
   \code{method="maxmarginal"}, some observed genotypes may be made
   missing.
@@ -71,7 +71,7 @@ fill.geno(cross, method=c("imp","argmax", "no_dbl_XO", "maxmarginal"),
   The input \code{cross} object with the genotype data replaced by an
   imputed version.  Any intermediate calculations (such as is produced
   by \code{\link{calc.genoprob}}, \code{\link{argmax.geno}}
-  and \code{\link{sim.geno}}) are removed. 
+  and \code{\link{sim.geno}}) are removed.
 }
 
 \examples{

@@ -8,7 +8,7 @@
 
 \description{
   Add or subtract LOD scores in permutation results from
-  \code{\link{scanone}} or \code{\link{scantwo}}. 
+  \code{\link{scanone}} or \code{\link{scantwo}}.
 }
 
 \usage{
@@ -26,7 +26,7 @@
   This is used to calculate the sum or difference of LOD scores of two
   sets of permutation results from \code{\link{scanone}} or
   \code{\link{scantwo}}.  One must be careful to ensure that the
-  permutations are perfectly linked, which 
+  permutations are perfectly linked, which
   will require the use of \code{\link[base:Random]{set.seed}}.
 }
 
@@ -59,7 +59,7 @@ set.seed(theseed)
 set.seed(theseed)
 
 # permutations with interactive covariate
-\dontrun{operm.icovar <- scanone(fake.bc, addcovar=ac, intcovar=ic, 
+\dontrun{operm.icovar <- scanone(fake.bc, addcovar=ac, intcovar=ic,
                       n.perm=1000)
 }\dontshow{operm.icovar <- scanone(fake.bc, pheno.col=1, addcovar=ac,
                       intcovar=ic, method="hk", n.perm=100)

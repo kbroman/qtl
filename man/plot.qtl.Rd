@@ -15,7 +15,7 @@
 
 \arguments{
   \item{x}{An object of class \code{"qtl"}, as produced by
-    \code{\link{makeqtl}}.} 
+    \code{\link{makeqtl}}.}
   \item{chr}{Optional vector indicating the chromosomes to plot.
   This should be a vector of character strings referring to chromosomes
   by name; numeric values are converted to strings.  Refer to
@@ -27,7 +27,7 @@
     at 0 cM.}
   \item{show.marker.names}{If TRUE, marker names are included.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
     axis labels, so that they may be more easily distinguished.}
   \item{justdots}{If FALSE, just plot dots at the QTL, rather than
     arrows and QTL names.}

@@ -22,7 +22,7 @@ cleanGeno(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
    to have all chromosomes but those considered.  A logical (TRUE/FALSE)
    vector may also be used.}
  \item{maxdist}{A vector specifying the maximum distance between two
- crossovers.} 
+ crossovers.}
  \item{maxmark}{A vector specifying the maximum number of typed markers
  between two crossovers.}
  \item{verbose}{If TRUE, print information on the numbers of genotypes
@@ -35,7 +35,7 @@ cleanGeno(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
   If a pair of adjacted crossovers are separated by no more than
   \code{maxdist} and contain no more than \code{maxmark} genotyped
   markers, the intervening genotypes are omitted (that is, changed to
-  \code{NA}).  
+  \code{NA}).
 
   The arguments \code{maxdist} and \code{maxmark} may be vectors.  (If
   both have length greater than 1, they must have the same length.)  If

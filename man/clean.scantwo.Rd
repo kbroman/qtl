@@ -22,7 +22,7 @@
  \item{n.mar}{Pairs of positions not separated by at least this many
  markers have LOD scores set to 0.}
  \item{distance}{Pairs of positions not separated by at least this
- distance have LOD scores set to 0.} 
+ distance have LOD scores set to 0.}
  \item{\dots}{Ignored at this point.}
 }
 

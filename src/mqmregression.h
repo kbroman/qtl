@@ -41,8 +41,8 @@ int designmatrixdimensions(const cvector cofactor,const unsigned int nmark,const
 *	b=inv(xtwx)(xtw)y
  */
 
-double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y, 
-                  vector* weight, ivector ind, int Naug, double *variance, vector Fy, 
+double regression(int Nind, int Nmark, cvector cofactor, MQMMarkerMatrix marker, vector y,
+                  vector* weight, ivector ind, int Naug, double *variance, vector Fy,
                   const bool biasadj, const bool fitQTL, const bool dominance, bool verbose);
 
 /*
@@ -60,5 +60,5 @@ double inverseF(int df1, int df2, double alfa,int verbose);
 #ifdef __cplusplus
 }
 #endif
-     
+
 /* end of mqmregression.h */

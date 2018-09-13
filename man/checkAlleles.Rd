@@ -35,7 +35,7 @@
   \bold{Note}: Markers that are tightly linked to a marker whose alleles
   are switched are likely to also be flagged by this method.  The real
   problem markers are likely those with the biggest difference in LOD
-  scores. 
+  scores.
 }
 
 

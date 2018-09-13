@@ -37,6 +37,6 @@ double mapQTL(int Nind, int Nmark, cvector cofactor, cvector selcofactor, MQMMar
 #ifdef __cplusplus
   }
 #endif
-     
+
 
 /* end of mqmmapqtl.h */

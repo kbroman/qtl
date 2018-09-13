@@ -6,7 +6,7 @@
 \description{
   Drop markers, from the data matrices and genetic maps, that have no
   genotype data.
-} 
+}
 
 \usage{
 drop.nullmarkers(cross)

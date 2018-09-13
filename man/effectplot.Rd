@@ -4,7 +4,7 @@
 \title{Plot phenotype means against genotypes at one or two markers}
 
 \description{
-  Plot the phenotype means for each group defined by the genotypes at 
+  Plot the phenotype means for each group defined by the genotypes at
   one or two markers (or the values at a discrete covariate).
 }
 
@@ -59,7 +59,7 @@ effectplot(cross, pheno.col=1, mname1, mark1, geno1, mname2, mark2,
   the x-axis is the genotype for that marker. In the case of two
   markers, the x-axis is for different genotypes of the second marker,
   and the genotypes of first marker are represented by lines in
-  different colors.  Error bars are plotted at \eqn{\pm}{+/-} 1 SE. 
+  different colors.  Error bars are plotted at \eqn{\pm}{+/-} 1 SE.
 
   The results of \code{sim.geno} are used; if they are not available,
   \code{sim.geno} is run with \code{n.draws=16}.  The average phenotype
@@ -114,7 +114,7 @@ effectplot(fake.f2, mname1="1@35", mname2="13@25")
 pmnames <- find.pseudomarker(fake.f2, chr=c(1, 13), c(35, 25))
 effectplot(fake.f2, mname1=pmnames[1], mname2=pmnames[2])
 
-### Plot of sex- and genotype-specific phenotype means 
+### Plot of sex- and genotype-specific phenotype means
 mname <- find.marker(fake.f2, 13, 24) # marker D13M254
 # sex and a marker
 effectplot(fake.f2, mname1=mname, mname2="Sex",
@@ -137,6 +137,6 @@ effectplot(fake.f2, mname1=mnames[1], mname2=mnames[2])
 \author{Hao Wu; Karl W Broman, \email{broman@wisc.edu} }
 
 \seealso{ \code{\link{plotPXG}}, \code{\link{find.marker}},
-  \code{\link{effectscan}}, \code{\link{find.pseudomarker}} } 
+  \code{\link{effectscan}}, \code{\link{find.pseudomarker}} }
 
 \keyword{hplot}

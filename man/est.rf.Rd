@@ -18,7 +18,7 @@ est.rf(cross, maxit=10000, tol=1e-6)
  \item{maxit}{Maximum number of iterations for the EM algorithm (not
    used with backcrosses).}
  \item{tol}{Tolerance for determining convergence (not used with
-   backcrosses).} 
+   backcrosses).}
 }
 
 \value{

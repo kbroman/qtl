@@ -13,7 +13,7 @@ transformPheno(cross, pheno.col=1, transf=log, \dots)
 }
 
 \arguments{
-  \item{cross}{ 
+  \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
  \item{pheno.col}{
@@ -28,7 +28,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
   The input cross object with the transformed phenotypes
 }
 
-\author{  
+\author{
 Danny Arends \email{danny.arends@gmail.com} % \dannyauthor
 }
 

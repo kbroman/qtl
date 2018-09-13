@@ -38,7 +38,7 @@ data(hyper)
 # Calculate error LOD scores
 hyper <- calc.errorlod(hyper,error.prob=0.01)
 
-# Print those above a specified cutoff 
+# Print those above a specified cutoff
 top.errorlod(hyper,cutoff=4)
 }
 

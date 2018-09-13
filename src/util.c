@@ -870,8 +870,8 @@ void reviseMWril(int n_ril, int n_mar, int n_str,
 }
 
 /**********************************************************************
- * 
- * reviseMWril    Revise genotypes for 4- or 8-way RIL 
+ *
+ * reviseMWril    Revise genotypes for 4- or 8-way RIL
  *                to form encoding the founders' genotypes, assuming crosses are irrelevant
  *
  * n_ril     Number of RILs to simulate
@@ -879,17 +879,17 @@ void reviseMWril(int n_ril, int n_mar, int n_str,
  * n_str     Number of founder strains
  *
  * Parents   SNP data for the founder strains [dim n_str x n_mar]
- * 
- * Geno      On entry, the detailed genotype data; on exit, the 
+ *
+ * Geno      On entry, the detailed genotype data; on exit, the
  *           SNP data written bitwise. [dim n_ril x n_mar]
- * 
+ *
  *
  * missingval  Integer indicating missing value
  *
  **********************************************************************/
-void reviseMWrilNoCross(int n_ril, int n_mar, int n_str, 
-		 int **Parents, int **Geno, 
-		 int missingval)
+void reviseMWrilNoCross(int n_ril, int n_mar, int n_str,
+         int **Parents, int **Geno,
+         int missingval)
 {
   int i, j, k, temp;
 
@@ -899,13 +899,13 @@ void reviseMWrilNoCross(int n_ril, int n_mar, int n_str,
     for(j=0; j<n_mar; j++) {
       if(Geno[j][i] == missingval) Geno[j][i] = 0;
       else {
-	temp = 0;
-	for(k=0; k<n_str; k++) {
-	  if(Parents[j][k]==missingval ||
-	     Geno[j][i] == Parents[j][k])
-	    temp += (1 << k);
-	}
-	Geno[j][i] = temp;
+    temp = 0;
+    for(k=0; k<n_str; k++) {
+      if(Parents[j][k]==missingval ||
+         Geno[j][i] == Parents[j][k])
+        temp += (1 << k);
+    }
+    Geno[j][i] = temp;
       }
     }
   }
@@ -927,9 +927,9 @@ void R_reviseMWril(int *n_ril, int *n_mar, int *n_str,
 }
 
 /* wrapper for calling reviseMWrilNoCross from R */
-void R_reviseMWrilNoCross(int *n_ril, int *n_mar, int *n_str, 
-		   int *parents, int *geno, 
-		   int *missingval)
+void R_reviseMWrilNoCross(int *n_ril, int *n_mar, int *n_str,
+           int *parents, int *geno,
+           int *missingval)
 {
   int **Parents, **Geno;
 
@@ -937,7 +937,7 @@ void R_reviseMWrilNoCross(int *n_ril, int *n_mar, int *n_str,
   reorg_geno(*n_ril, *n_mar, geno, &Geno);
 
   reviseMWrilNoCross(*n_ril, *n_mar, *n_str, Parents, Geno,
-	      *missingval);
+          *missingval);
 }
 
 /* wrapper for calcPermPval */

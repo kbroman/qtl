@@ -4,16 +4,16 @@
 
 \title{Data on bristle number in Drosophila}
 
-\description{ 
+\description{
   Data from bristle number in chromosome X recombinant isogenic lines of
   \emph{Drosophila melanogaster}.
-} 
+}
 
 \usage{data(bristleX)}
 
 \format{
   An object of class \code{cross}.  See \code{\link{read.cross}}
-  for details. 
+  for details.
 }
 
 \details{
@@ -35,7 +35,7 @@
   factors affecting abdominal bristle number in \emph{Drosophila
     melanogaster}.  \emph{Genetics} \bold{139}, 1273--1291.
 }
-  
+
 %\source{
 %}
 
@@ -50,7 +50,7 @@ bristleX <- calc.genoprob(bristleX, step=2)
 out <- scanone(bristleX, pheno.col=c(1,3,5,7))
 
 # Plot the results
-    # maximum LOD score among four phenotypes    
+    # maximum LOD score among four phenotypes
 ym <- max(apply(out[,-(1:2)], 2, max))
 plot(out, lod=1:3, ylim=c(0,ym))
 plot(out, lod=4, add=TRUE, col="green")

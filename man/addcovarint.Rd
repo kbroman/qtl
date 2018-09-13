@@ -9,8 +9,8 @@
 }
 
 \usage{
-addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula, 
-            method=c("imp","hk"), model=c("normal", "binary"), 
+addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
+            method=c("imp","hk"), model=c("normal", "binary"),
             verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4,
             maxit=1000, require.fullrank=FALSE)
 }
@@ -25,27 +25,27 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link{makeqtl}}.} 
+   \code{\link{makeqtl}}.}
  \item{covar}{A matrix or data.frame of covariates.  These must be
-   strictly numeric.} 
+   strictly numeric.}
  \item{icovar}{Vector of character strings indicating the columns in
    \code{covar} to be considered for QTL x covariate interactions.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
    indicating the model to be fitted.  (It can also be the character
    string representation of a formula.)  QTLs are referred to as
    \code{Q1}, \code{Q2}, etc.  Covariates are referred to by their names
-   in the data frame \code{covar}.} 
+   in the data frame \code{covar}.}
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{verbose}{If TRUE, will print a message if there are no
    interactions to test.}
  \item{pvalues}{If FALSE, p-values will not be included in the results.}
  \item{simple}{If TRUE, don't include p-values or sums of squares in the summary.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
  \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
    the linear regression is not of full rank.}
 }
@@ -55,16 +55,16 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   formula, use \code{Q1}, \code{Q2}, etc., or \code{q1},
   \code{q2}, etc., to represent the QTLs, and the column names in the
   covariate data frame to represent the covariates.
-    
+
   We enforce a hierarchical structure on the model formula: if a QTL or
   covariate is in involved in an interaction, its main effect must also
-  be included.   
+  be included.
 }
 
 \section{Value}{
   An object of class \code{addcovarint}, with results as in the
   drop-one-term analysis from \code{\link{fitqtl}}.  This is a data
-  frame (given class \code{"addcovarint"}, with the following columns: 
+  frame (given class \code{"addcovarint"}, with the following columns:
   degrees of freedom (df), Type III sum of squares (Type III
   SS), LOD score(LOD), percentage of variance explained (\%var), F
   statistics (F value),  and P values for chi square (Pvalue(chi2))
@@ -78,7 +78,7 @@ addcovarint(cross, pheno.col=1, qtl, covar=NULL, icovar, formula,
   LOD score.
 
   QTL x covariate interactions already included in the input \code{formula} are
-  not tested. 
+  not tested.
 }
 
 \references{

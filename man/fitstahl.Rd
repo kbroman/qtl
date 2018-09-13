@@ -35,7 +35,7 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
 
 \details{
   This function is currently only available for backcrosses and
-  intercrosses. 
+  intercrosses.
 
   The Stahl model of crossover interference (of which the chi-square
   model is a special case) is fit.      In the chi-square model, points
@@ -45,7 +45,7 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
   random meiotic product are obtained by thinning the chiasma process.
   The parameter \eqn{m} (a non-negative integer) governs the strength of
   crossover interference, with \eqn{m=0} corresponding to no
-  interference. 
+  interference.
 
   In the Stahl model, chiasmata on the four-strand bundle are a
   superposition of chiasmata from two mechanisms, one following a
@@ -54,7 +54,7 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
   interference mechanism.
 
   If all of \code{m}, \code{p}, and \code{error.prob} are specified, any
-  of them with length > 1 must all have the same length.  
+  of them with length > 1 must all have the same length.
 
   If \code{m} is unspecified, we do a grid search starting at 0 and stop
   when the likelihood decreases (thus assuming a single mode), or
@@ -68,7 +68,7 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
   likelihood for each set are given.
 
   If some are left unspecified, the maximum likelihood estimates are
-  provided in the results.  
+  provided in the results.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
@@ -97,7 +97,7 @@ plot(output$m, output$loglik, lwd=2, type="b")
 mydata <- sim.cross(mymap, n.ind=250, type="bc",
                     error.prob=0, m=3, p=0.1)
 
-# Find MLE of m for the Stahl model with known p 
+# Find MLE of m for the Stahl model with known p
 mle.stahl <- fitstahl(mydata, p=0.1, error.prob=0)
 
 # Fit the Stahl model with unknown p and m,
@@ -110,11 +110,11 @@ plot(output$m, output$loglik, type="b", lwd=2)}
   Armstrong, N. J., McPeek, M. J. and Speed, T. P. (2006) Incorporating
   interference into linkage analysis for experimental crosses.
   \emph{Biostatistics} \bold{7}, 374--386.
-  
+
   Zhao, H., Speed, T. P. and McPeek, M. S. (1995) Statistical analysis of
   crossover interference using the chi-square model.  \emph{Genetics}
   \bold{139}, 1045--1056.
-}  
+}
 
 \seealso{ \code{\link{est.map}}, \code{\link{sim.cross}}}
 

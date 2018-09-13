@@ -29,7 +29,7 @@ rescalemap(object, scale=1e-6)
 If the input is a \code{map} object, a \code{map} object is returned; if
 the input is a \code{cross} object, a \code{cross} object is returned.
 In either case, the positions of markers are simply multiplied by
-\code{scale}.  
+\code{scale}.
 
 }
 

@@ -30,7 +30,7 @@
   The aim of this function is to concatenate the results from multiple
   runs of a permutation test \code{\link{scanone}}, to assist with
   the case that such permutations are done on multiple processors in
-  parallel. 
+  parallel.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

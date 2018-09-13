@@ -5,7 +5,7 @@
 \title{Subsetting chromosomes for a genetic map}
 
 \description{
-  Pull out a specified set of chromosomes from a 
+  Pull out a specified set of chromosomes from a
   \code{map} object.
 }
 

@@ -24,7 +24,7 @@
  that appear in \code{object}.}
 }
 
-\value{The input \code{object} with the positions of LOD scores 
+\value{The input \code{object} with the positions of LOD scores
   revised to match those in the input \code{map}.}
 
 \details{
@@ -33,7 +33,7 @@
   terminal markers on chromosomes, we use the overall lengths of the
   chromosome in \code{object} and \code{map} to determine the new
   spacing.
-}  
+}
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
 

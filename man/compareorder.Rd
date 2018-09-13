@@ -9,7 +9,7 @@
 }
 
 \usage{
-compareorder(cross, chr, order, error.prob=0.0001, 
+compareorder(cross, chr, order, error.prob=0.0001,
              map.function=c("haldane","kosambi","c-f","morgan"),
              maxit=4000, tol=1e-6, sex.sp=TRUE)
 }
@@ -18,7 +18,7 @@ compareorder(cross, chr, order, error.prob=0.0001,
    \code{\link{read.cross}} for details.}
 \item{chr}{The chromosome to investigate.  Only one chromosome is
   allowed. (This should be a character string referring to the
-  chromosomes by name.)} 
+  chromosomes by name.)}
 \item{order}{The alternate order of markers on the chromosome: a numeric
              vector that is a permutation of the integers from 1 to the
              number of markers on the chromosome.}
@@ -29,17 +29,17 @@ compareorder(cross, chr, order, error.prob=0.0001,
    distances into recombination fractions.}
  \item{maxit}{Maximum number of EM iterations to perform.}
  \item{tol}{Tolerance for determining convergence.}
- \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
+ \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is
    used only for the 4-way cross.}
 }
 
 \value{
   A data frame with two rows: the current order in the input cross object, and the
   revised order.  The first column is the log10 likelihood of the new order relative
-  to the original one (positive values indicate that the new order is better supported). 
-  The second column is the estimated genetic length of the chromosome for each order.  
+  to the original one (positive values indicate that the new order is better supported).
+  The second column is the estimated genetic length of the chromosome for each order.
   In the case of sex-specific maps, there are separate columns for the female and male
-  genetic lengths. 
+  genetic lengths.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

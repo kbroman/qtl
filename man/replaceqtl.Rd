@@ -18,15 +18,15 @@ replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
  \item{qtl}{A qtl object, as created by \code{\link{makeqtl}}.}
  \item{index}{Numeric index indicating the QTL to be replaced.}
  \item{chr}{Vector (of same length as \code{index}) indicating the
-   chromosomes for the new QTL.} 
+   chromosomes for the new QTL.}
  \item{pos}{Vector (of same length as \code{index}) indicating the
    positions for the new QTL. If there is no marker or pseudomarker at a
- position, the nearest position is used.} 
+ position, the nearest position is used.}
  \item{qtl.name}{Optional vector (of same length as \code{index})
    of user-specified names for each new QTL, used in the
    drop-one-term ANOVA table in \code{\link{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a
-   QTL on Chromsome 1 at 10 cM.} 
+   QTL on Chromsome 1 at 10 cM.}
  \item{drop.lod.profile}{If TRUE, remove any LOD profiles from the object.}
 }
 
@@ -34,7 +34,7 @@ replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 \value{
   The input \code{qtl} object,
   but with some QTL replaced by new ones.  See \code{\link{makeqtl}} for
-  details on the format. 
+  details on the format.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu}}

@@ -23,12 +23,12 @@ dropfromqtl(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 
 \details{
   Provide either \code{chr} and \code{pos}, or one of \code{qtl.name} or
-  \code{index}. 
+  \code{index}.
 }
 
 \value{
   The input \code{qtl} object with the specified QTL omitted.   See \code{\link{makeqtl}} for
-  details on the format. 
+  details on the format.
 }
 
 \author{Karl W Broman, \code{broman@wisc.edu}}

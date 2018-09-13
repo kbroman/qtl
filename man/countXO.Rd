@@ -25,13 +25,13 @@ countXO(cross, chr, bychr=FALSE)
 
 \details{
   For each individual we count the minimal number of crossovers that
-  explain the observed genotype data.  
+  explain the observed genotype data.
 }
 
 \value{
   If \code{bychr=TRUE}, a matrix of counts is returned, with rows
   corresponding to individuals and columns corresponding to
-  chromosomes. 
+  chromosomes.
 
   If \code{bychr=FALSE}, a vector of counts (the total number of
   crossovers across all selected chromosomes) is returned.

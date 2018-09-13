@@ -7,7 +7,7 @@
   This function takes a cross object and specified chromosome numbers
   and positions and pulls out the genotype probabilities or imputed
   genotypes at the nearest pseudomarkers, for later use by the function
-  \code{\link{fitqtl}}. 
+  \code{\link{fitqtl}}.
 }
 
 \usage{
@@ -25,7 +25,7 @@ makeqtl(cross, chr, pos, qtl.name, what=c("draws","prob"))
  \item{qtl.name}{Optional user-specified name for each QTL, used in the
    drop-one-term ANOVA table in \code{\link{fitqtl}}.
    If unspecified, the names will be of the form \code{"Chr1@10"} for a
-   QTL on Chromsome 1 at 10 cM.} 
+   QTL on Chromsome 1 at 10 cM.}
  \item{what}{Indicates whether to pull out the imputed genotypes or the
    genotype probabilities.}
 }
@@ -48,7 +48,7 @@ makeqtl(cross, chr, pos, qtl.name, what=c("draws","prob"))
   \item{\code{name}}{User-defined name for each QTL, or a name of the
     form \code{"Chr1@10"}.}
   \item{\code{altname}}{QTL names of the form \code{"Q1"}, \code{"Q2"},
-    etc.} 
+    etc.}
   \item{\code{chr}}{Input vector of chromosome numbers.}
   \item{\code{pos}}{Input vector of chromosome positions.}
   \item{\code{n.qtl}}{Number of QTLs.}
@@ -74,6 +74,6 @@ summary(qtl)
 \seealso{ \code{\link{fitqtl}}, \code{\link{calc.genoprob}},
   \code{\link{sim.geno}}, \code{\link{dropfromqtl}},
   \code{\link{replaceqtl}}, \code{\link{addtoqtl}}, \code{\link{summary.qtl}},
-  \code{\link{reorderqtl}}  } 
+  \code{\link{reorderqtl}}  }
 
 \keyword{utilities}

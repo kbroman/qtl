@@ -27,7 +27,7 @@ reorderqtl(qtl, neworder)
 \details{
   Everything in the input \code{qtl} is reordered except the
   \code{altname} component, which contains names of the form \code{Q1},
-  \code{Q2}, etc.  
+  \code{Q2}, etc.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu}}

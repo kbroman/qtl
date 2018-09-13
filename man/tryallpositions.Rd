@@ -6,7 +6,7 @@
 \description{
   Try all possible positions for a marker, keeping all other markers
   fixed, and evaluate the log likelihood and estimate the chromosome
-  length. 
+  length.
 }
 
 \usage{
@@ -24,7 +24,7 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
    strings referring to chromosomes by name; numeric values are
    converted to strings.  Refer to chromosomes with a preceding \code{-}
    to have all chromosomes but those considered.  A logical (TRUE/FALSE)
-   vector may also be used.} 
+   vector may also be used.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,
@@ -35,10 +35,10 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
    interference. This may be used only for a backcross or intercross.}
  \item{p}{Proportion of chiasmata from the NI mechanism, in the Stahl
    model; p=0 gives a pure chi-square model.  This may be used only for
-   a backcross or intercross.} 
+   a backcross or intercross.}
  \item{maxit}{Maximum number of EM iterations to perform.}
  \item{tol}{Tolerance for determining convergence.}
- \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
+ \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is
  used only for the 4-way cross.}
  \item{verbose}{If TRUE, print information on progress.}
 }
@@ -47,7 +47,7 @@ tryallpositions(cross, marker, chr, error.prob=0.0001,
   A data frame (actually, an object of class \code{"scanone"}, so that
   one may use \code{\link{plot.scanone}},
   \code{\link{summary.scanone}}, etc.) with each row being a
-  possible position for the marker. 
+  possible position for the marker.
   The first two columns are the chromosome ID and position.  The third
   column is a LOD score comparing the hypotheses that the marker is in that
   position versus the hypothesis that it is not linked to that chromosome.

@@ -10,7 +10,7 @@
 
 \usage{
 xaxisloc.scanone(out, thechr, thepos, chr, gap=25)
-}			    
+}
 
 \arguments{
   \item{out}{An object of class \code{"scanone"}, as output by
@@ -21,7 +21,7 @@ xaxisloc.scanone(out, thechr, thepos, chr, gap=25)
     determined.}
   \item{chr}{Optional vector specifying which chromosomes were plotted.
   This must be identical to what was used in the call to
-  \code{\link{plot.scanone}}.} 
+  \code{\link{plot.scanone}}.}
   \item{gap}{Gap separating chromosomes (in cM).  This must be identical
   to what was used in the call to \code{\link{plot.scanone}}.}
 }
@@ -29,7 +29,7 @@ xaxisloc.scanone(out, thechr, thepos, chr, gap=25)
 \value{A numeric vector of x-axis locations.}
 
 \details{
-  This function allows you to identify the x-axis locations in a plot of 
+  This function allows you to identify the x-axis locations in a plot of
   genome scan results, produced by
   \code{\link{plot.scanone}}.  This is useful for adding
   annotations, such as text or arrows.
@@ -58,8 +58,8 @@ arrows(x+30, mxout$lod, x+5, mxout$lod, len=0.1, col="blue")
 text(x+35, mxout$lod, "the peak", col="blue", adj=c(0, 0.5))
 }
 
-\seealso{ 
-  \code{\link{plot.scanone}}, 
+\seealso{
+  \code{\link{plot.scanone}},
   \code{\link{add.threshold}} }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

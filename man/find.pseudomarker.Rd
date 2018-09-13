@@ -5,7 +5,7 @@
 
 \description{
   Find the pseudomarker closest to a specified position on a
-  chromosome. 
+  chromosome.
 }
 
 \usage{find.pseudomarker(cross, chr, pos, where=c("draws", "prob"), addchr=TRUE)}
@@ -25,7 +25,7 @@
 
 \value{
   A vector of pseudomarker names (of the same length as the input \code{pos}),
-  corresponding to the markers nearest to the specified chromosomes/positions. 
+  corresponding to the markers nearest to the specified chromosomes/positions.
 }
 
 \details{

@@ -23,13 +23,13 @@ simFounderSnps(map, n.str=c("4","8"), pat.freq)
 }
 
 \details{
-  The SNPs are simulated to be in linkage equilibrium. 
-}  
+  The SNPs are simulated to be in linkage equilibrium.
+}
 
 \value{
   A vector of the same length as there are chromosomes in \code{map},
   with each component being a matrix of 0's and 1's, of dim \code{n.str}
-  x \code{n.mar}. 
+  x \code{n.mar}.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
@@ -40,5 +40,5 @@ simFounderSnps(map, n.str=c("4","8"), pat.freq)
 data(map10)
 x <- simFounderSnps(map10, "8", c(0, 0.5, 0.2, 0.2, 0.1))
 }
-                    
+
 \keyword{datagen}

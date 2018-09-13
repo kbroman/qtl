@@ -19,17 +19,17 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
     \code{\link{read.cross}} for details.}
   \item{format}{Specifies whether to write the data in comma-delimited,
     rotated comma-delimited, Mapmaker, QTL Cartographer, Gary
-    Churchill's, QTAB, MapQTL format.} 
+    Churchill's, QTAB, MapQTL format.}
   \item{filestem}{A character string giving the first part of the output
     file names (the bit before the dot).  In Windows, use forward
     slashes (\code{"/"}) or double backslashes (\code{"\\\\"}) to
-    specify directory trees.} 
+    specify directory trees.}
   \item{chr}{A vector specifying for which chromosomes genotype data
     should be written.  This should be a vector of character strings
   referring to chromosomes by name; numeric values are converted to
   strings.  Refer to chromosomes with a preceding \code{-} to have all
   chromosomes but those considered.  A logical (TRUE/FALSE) vector may
-  also be used.} 
+  also be used.}
   \item{digits}{Number of digits to which phenotype values and genetic
      map positions should be rounded. If NULL (the default), they are
      not rounded.}
@@ -56,11 +56,11 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   order, and inter-marker distances.
 
   QTL Cartographer format: Data is written to two files.    Suppose
-  \code{filestem="file"}.  Then \code{"file.cro"} will contain 
+  \code{filestem="file"}.  Then \code{"file.cro"} will contain
   the genotype and phenotype data, and \code{"file.map"} will contain
   the genetic map information.  Note that cross types are converted to
   QTL Cartographer cross types as follows: riself to RF1, risib to RF2,
-  bc to B1 and f2 to RF2. 
+  bc to B1 and f2 to RF2.
 
   Gary's format: Data is written to six files. They are: \cr
   \code{"geno.data"} - genotype data; \cr
@@ -73,7 +73,7 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   QTAB format: See
   \href{https://github.com/qtlHD/qtlHD/blob/master/doc/input/qtab.md}{documentation}.
 
-  MapQTL format: See 
+  MapQTL format: See
   \href{http://www.kyazma.nl/docs/MQ6Manual.pdf}{documentation}.
 
   Tidy format: Data is written to three files, \code{"stem_gen.csv"},

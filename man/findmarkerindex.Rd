@@ -18,7 +18,7 @@
 
 \value{
   A vector of numeric indices, from 1, 2, \dots, \code{totmar(cross)},
-  with \code{NA} for markers not found. 
+  with \code{NA} for markers not found.
 }
 
 

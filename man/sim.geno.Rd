@@ -11,7 +11,7 @@
 }
 
 \usage{
-sim.geno(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001, 
+sim.geno(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
          map.function=c("haldane","kosambi","c-f","morgan"),
          stepwidth=c("fixed", "variable", "max"))
 }
@@ -27,7 +27,7 @@ sim.geno(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
    chromosome to which the genotype simulations will be carried.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
- \item{map.function}{Indicates whether to use the Haldane, Kosambi, 
+ \item{map.function}{Indicates whether to use the Haldane, Kosambi,
    Carter-Falconer, or Morgan map function when converting genetic
    distances into recombination fractions.}
  \item{stepwidth}{Indicates whether the intermediate points should with
@@ -41,11 +41,11 @@ sim.geno(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
 \details{
   After performing the forward-backward equations, we draw from
   \eqn{Pr(g_1 = v | O)}{Pr(g[1] = v | O)} and then \eqn{Pr(g_{k+1} = v |
-    O, g_k = u)}{Pr(g[k+1] = v | O, g[k] = u)}. 
+    O, g_k = u)}{Pr(g[k+1] = v | O, g[k] = u)}.
 
   In the case of the 4-way cross, with a sex-specific map, we assume a
   constant ratio of female:male recombination rates within the
-  inter-marker intervals. 
+  inter-marker intervals.
 }
 
 \value{
@@ -67,6 +67,6 @@ fake.f2 <- sim.geno(fake.f2, step=2, n.draws=8)
 }
 
 \seealso{ \code{\link{calc.genoprob}},
-  \code{\link{argmax.geno}} } 
+  \code{\link{argmax.geno}} }
 
 \keyword{utilities}

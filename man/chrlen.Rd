@@ -31,6 +31,6 @@ chrlen(map)
 }
 
 \seealso{ \code{\link{summaryMap}}, \code{\link{pull.map}},
-  \code{\link{summary.cross}} } 
+  \code{\link{summary.cross}} }
 
 \keyword{print}

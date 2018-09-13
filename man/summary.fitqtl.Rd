@@ -44,6 +44,6 @@ summary(lod)
 }
 
 \seealso{ \code{\link{fitqtl}}, \code{\link{makeqtl}},
-\code{\link{scanqtl}} }  
+\code{\link{scanqtl}} }
 
 \keyword{print}

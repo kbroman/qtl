@@ -6,7 +6,7 @@
 #
 # Modified by Pjotr Prins and Karl Broman
 #
-# 
+#
 # first written Februari 2009
 # last modified April 2010
 #
@@ -24,21 +24,21 @@
 #
 # Part of the R/qtl package
 # Contains: mqmfind.marker
-#           
+#
 #
 #####################################################################
 
 mqmfind.marker <- function(cross,mqmscan=NULL,perm=NULL,alpha=0.05,verbose=FALSE){
-	thesum <- summary(mqmscan[,1:3],alpha=alpha,perms=perm,pvalues=FALSE)
-	chr <- thesum$'chr'
-	pos <- thesum$'pos'
-	if(verbose) cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
-	ret <- NULL
-	for(i in 1:length(chr)){
-		ret <- rbind(ret,cbind(find.marker(cross,chr=chr[i],pos=pos[i]),as.integer(chr[i]),as.double(pos[i])))
-	}
-	colnames(ret) <- c("marker","chr","pos (cM)")
-	ret
+    thesum <- summary(mqmscan[,1:3],alpha=alpha,perms=perm,pvalues=FALSE)
+    chr <- thesum$'chr'
+    pos <- thesum$'pos'
+    if(verbose) cat("INFO: Found",length(chr),"markers with alpha <",alpha,".\n")
+    ret <- NULL
+    for(i in 1:length(chr)){
+        ret <- rbind(ret,cbind(find.marker(cross,chr=chr[i],pos=pos[i]),as.integer(chr[i]),as.double(pos[i])))
+    }
+    colnames(ret) <- c("marker","chr","pos (cM)")
+    ret
 }
 
 

@@ -14,14 +14,14 @@ add.cim.covar(cimresult, chr, gap=25, \dots)
 
 \arguments{
  \item{cimresult}{Composite interval mapping results, as output from
-   \code{\link{cim}}.} 
+   \code{\link{cim}}.}
   \item{chr}{Optional vector specifying which chromosomes to plot. (The
     chromosomes must be specified by name.)  This should be identical to
   that used in the call to \code{\link{plot.scanone}}.}
   \item{gap}{Gap separating chromosomes (in cM). This should be identical to
     that used in the call to \code{\link{plot.scanone}}.}
   \item{\dots}{Additional plot arguments, passed to the function
-    \code{\link[graphics]{points}}.} 
+    \code{\link[graphics]{points}}.}
 }
 
 

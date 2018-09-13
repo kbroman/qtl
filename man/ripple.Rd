@@ -24,7 +24,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
    greater number of marker orders, but will require a considerable
    increase in computation time.}
  \item{method}{Indicates whether to compare orders by counting the
-   number of obligate crossovers, or by a likelihood analysis.} 
+   number of obligate crossovers, or by a likelihood analysis.}
  \item{error.prob}{Assumed genotyping error rate used in the calculation
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi,
@@ -32,7 +32,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
    distances into recombination fractions.}
  \item{maxit}{Maximum number of EM iterations to perform.}
  \item{tol}{Tolerance for determining convergence.}
- \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is 
+ \item{sex.sp}{Indicates whether to estimate sex-specific maps; this is
    used only for the 4-way cross.}
  \item{verbose}{If TRUE, information about the number of orders (and, if
    \code{method="likelihood"}, about progress) are printed.}
@@ -47,7 +47,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
   to the R function \code{\link{est.map}}.  Of course, it would be
   faster to do everything within C, but this was a lot easier to code.
 
-  For \code{method="countxo"}, calculations are done within C.  
+  For \code{method="countxo"}, calculations are done within C.
 }
 
 \value{

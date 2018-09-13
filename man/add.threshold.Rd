@@ -4,13 +4,13 @@
 \title{Add significance threshold to plot}
 
 \description{
-  Add a significance threshold to a plot created by 
+  Add a significance threshold to a plot created by
   \code{\link{plot.scanone}}), using the permutation results.
 }
 
 \usage{
 add.threshold(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, \dots)
-}			    
+}
 
 \arguments{
   \item{out}{An object of class \code{"scanone"}, as output by
@@ -18,7 +18,7 @@ add.threshold(out, chr, perms, alpha=0.05, lodcolumn=1, gap=25, \dots)
   in the call to \code{\link{plot.scanone}}.}
   \item{chr}{Optional vector specifying which chromosomes to plot. If a
     selected subset of chromosomes were plotted, they must be specified
-    here.} 
+    here.}
   \item{perms}{Permutation results from \code{\link{scanone}}, used
     to calculate the significance threshold.}
   \item{alpha}{Significance level of the threshold.}
@@ -59,7 +59,7 @@ add.threshold(out, chr=c(1,4,6,15,"X"), perms=operm, alpha=0.1,
 }
 
 \seealso{ \code{\link{scanone}},
-  \code{\link{plot.scanone}}, 
+  \code{\link{plot.scanone}},
   \code{\link{summary.scanoneperm}}, \code{\link{xaxisloc.scanone}} }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

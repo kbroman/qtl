@@ -18,7 +18,7 @@
  \item{\dots}{A set of objects of class \code{scanone}. (This can also
  be a list of \code{scanone} objects.) These are
    the results from  \code{\link{scanone}} (with \code{n.perm=0}),
-   generally run with different phenotypes or methods.  All must 
+   generally run with different phenotypes or methods.  All must
    conform with each other, meaning that
    \code{\link{calc.genoprob}} and/or \code{\link{sim.geno}}
    were run with the same values for \code{step} and \code{off.end} and
@@ -34,7 +34,7 @@
   The aim of this function is to concatenate the results from multiple
   runs \code{\link{scanone}}, generally for
   different phenotypes and/or methods, to be used in parallel with
-  \code{\link{summary.scanone}}. 
+  \code{\link{summary.scanone}}.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
@@ -51,6 +51,6 @@ plot(out, lod=1:2, col=c("blue", "red"))
 }
 
 \seealso{ \code{\link{summary.scanone}},
-  \code{\link{scanone}}, \code{\link{cbind.scanoneperm}} } 
+  \code{\link{scanone}}, \code{\link{cbind.scanoneperm}} }
 
 \keyword{manip}

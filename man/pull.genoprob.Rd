@@ -30,7 +30,7 @@
 \value{
   A matrix containing genotype probabilities.
   Multiple chromosomes and the multiple genotypes at each position are
-  pasted together. 
+  pasted together.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }

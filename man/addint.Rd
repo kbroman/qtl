@@ -24,7 +24,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
    values < 1 or > no. phenotypes; this last case may be useful for studying
    transformations.}
  \item{qtl}{An object of class \code{qtl}, as output from
-   \code{\link{makeqtl}}.} 
+   \code{\link{makeqtl}}.}
  \item{covar}{A matrix or data.frame of covariates.  These must be
    strictly numeric.}
  \item{formula}{An object of class \code{\link[stats]{formula}}
@@ -36,7 +36,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
  \item{method}{Indicates whether to use multiple imputation or
    Haley-Knott regression.}
  \item{model}{The phenotype model: the usual model or a model for binary
-  traits} 
+  traits}
  \item{qtl.only}{If TRUE, only test QTL:QTL interactions (and not
    interactions with covariates).}
  \item{verbose}{If TRUE, will print a message if there are no
@@ -45,7 +45,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
  \item{simple}{If TRUE, don't include p-values or sums of squares in the summary.}
  \item{tol}{Tolerance for convergence for the binary trait model.}
  \item{maxit}{Maximum number of iterations for fitting the binary trait
-   model.} 
+   model.}
  \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
    the linear regression is not of full rank.}
 }
@@ -55,17 +55,17 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
   formula, use \code{Q1}, \code{Q2}, etc., or \code{q1},
   \code{q2}, etc., to represent the QTLs, and the column names in the
   covariate data frame to represent the covariates.
-    
+
   We enforce a hierarchical structure on the model formula: if a QTL or
   covariate is in involved in an interaction, its main effect must also
-  be included.   
+  be included.
 
 }
 
 \section{Value}{
   An object of class \code{addint}, with results as in the
   drop-one-term analysis from \code{\link{fitqtl}}.  This is a data
-  frame (given class \code{"addint"}, with the following columns: 
+  frame (given class \code{"addint"}, with the following columns:
   degrees of freedom (df), Type III sum of squares (Type III
   SS), LOD score(LOD), percentage of variance explained (\%var), F
   statistics (F value),  and P values for chi square (Pvalue(chi2))
@@ -79,7 +79,7 @@ addint(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp","hk"),
   LOD score.
 
   Pairwise interactions already included in the input \code{formula} are
-  not tested. 
+  not tested.
 }
 
 \references{
@@ -110,6 +110,6 @@ addint(fake.f2, pheno.col=1, qtl, formula=y~Q1+Q2+Q3, method="hk")
 
 \seealso{ \code{\link{addcovarint}}, \code{\link{fitqtl}}, \code{\link{makeqtl}},
   \code{\link{scanqtl}}, \code{\link{refineqtl}},
-  \code{\link{addqtl}}, \code{\link{addpair}} }  
+  \code{\link{addqtl}}, \code{\link{addpair}} }
 
 \keyword{models}

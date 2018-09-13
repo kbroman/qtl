@@ -4,7 +4,7 @@
 \title{Composite interval mapping}
 
 \description{
-  Composite interval mapping by a scheme from QTL Cartographer: 
+  Composite interval mapping by a scheme from QTL Cartographer:
   forward selection at the markers (here, with filled-in genotype data)
   to a fixed number, followed by interval mapping with the selected
   markers as covariates, dropping marker covariates if they are within
@@ -30,9 +30,9 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
    transformations.}
  \item{n.marcovar}{Number of marker covariates to use.}
  \item{window}{Window size, in cM.}
- \item{method}{Indicates whether to use the EM algorithm, 
+ \item{method}{Indicates whether to use the EM algorithm,
    imputation, Haley-Knott regression, or the extended Haley-Knott
-   method.} 
+   method.}
  \item{imp.method}{Method used to impute any missing marker genotype
    data.}
  \item{error.prob}{Genotyping error probability assumed when imputing
@@ -52,7 +52,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
 
   We then perform forward selection to a fixed number of markers.  These
   will be used (again, with any missing data filled in) as covariates in
-  the subsequent genome scan. 
+  the subsequent genome scan.
 }
 
 \value{
@@ -66,7 +66,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
 
   If \code{n.perm} > 0, the function results the results of a
   permutation test: a vector giving the genome-wide maximum LOD score in
-  each of the permutations. 
+  each of the permutations.
 }
 
 \references{
@@ -76,7 +76,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
   Jansen, R. C. and Stam, P. (1994) High resolution of quantitative
   traits into multiple loci via interval mapping.  \emph{Genetics},
   \bold{136}, 1447-1455.
-  
+
   Zeng, Z. B. (1993) Theoretical basis for separation of multiple linked
   gene effects in mapping quantitative trait loci.
   \emph{Proc. Natl. Acad. Sci. USA}, \bold{90}, 10972--10976.
@@ -99,8 +99,8 @@ plot(out, out.cim, chr=c(1,4,6,15), col=c("blue", "red"))
 add.cim.covar(out.cim, chr=c(1,4,6,15))
 }
 
-\seealso{ \code{\link{add.cim.covar}}, \code{\link{scanone}}, 
+\seealso{ \code{\link{add.cim.covar}}, \code{\link{scanone}},
   \code{\link{summary.scanone}}, \code{\link{plot.scanone}},
-  \code{\link{fill.geno}}} 
+  \code{\link{fill.geno}}}
 
 \keyword{models}

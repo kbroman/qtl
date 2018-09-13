@@ -9,7 +9,7 @@
 }
 
 \usage{
-\method{summary}{scanPhyloQTL}(object, format=c("postprob", "lod"), 
+\method{summary}{scanPhyloQTL}(object, format=c("postprob", "lod"),
         threshold, \dots)
 }
 
@@ -35,7 +35,7 @@
   chromosome.  The second-to-last column is the inferred partition
   (i.e., that with the largest LOD
   score.  The third-to-last column is the difference between the LOD score for
-  the best partition and that for the second-best.  
+  the best partition and that for the second-best.
 
   For \code{format="postprob"}, the final column contains the maximum
   LOD score across partitions.  But instead of providing the LOD
@@ -50,7 +50,7 @@
 
 \value{
   An object of class \code{summary.scanPhyloQTL}, to be printed by
-  \code{print.summary.scanPhyloQTL}.  
+  \code{print.summary.scanPhyloQTL}.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu}}
@@ -58,7 +58,7 @@
 \examples{
 \dontrun{
 # example map; drop X chromosome
-data(map10)           
+data(map10)
 map10 <- map10[1:19]
 
 # simulate data
@@ -89,10 +89,10 @@ plot(out)
 }
 }
 
-\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}}, 
+\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}},
   \code{\link{max.scanPhyloQTL}}, \code{\link{summary.scanone}},
-  \code{\link{inferredpartitions}}, 
-  \code{\link{simPhyloQTL}} 
+  \code{\link{inferredpartitions}},
+  \code{\link{simPhyloQTL}}
 }
 
 \references{

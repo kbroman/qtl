@@ -10,7 +10,7 @@
 }
 
 \usage{
-argmax.geno(cross, step=0, off.end=0, error.prob=0.0001, 
+argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
             map.function=c("haldane","kosambi","c-f","morgan"),
             stepwidth=c("fixed", "variable", "max"))
 }
@@ -44,7 +44,7 @@ argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
 
   This is done by calculating
   \eqn{\gamma_k(v_k) = \max_{v_1, \ldots, v_{k-1}} \Pr(g_1 = v_1,
-    \ldots, g_k = v_k, O_1, \ldots, O_k)}{% 
+    \ldots, g_k = v_k, O_1, \ldots, O_k)}{%
     Q[k](v[k]) = max{v[1], \ldots, v[k-1]} Pr(g[1] = v[1],
     \ldots, g[k] = v[k], O[1], \ldots, O[k])}
   for \eqn{k = 1, \ldots, n} and then tracing back through the
@@ -66,7 +66,7 @@ argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
 \section{Warning}{
   The Viterbi algorithm can behave badly when \code{step} is small but
   positive. One may observe quite different results for different values
-  of \code{step}. 
+  of \code{step}.
 
   The problem is that, in the presence of data like \code{A----H},  the
   sequences \code{AAAAAA} and \code{HHHHHH} may be more likely than any
@@ -92,7 +92,7 @@ data(fake.f2)
   applications in speech recognition.  \emph{Proceedings of the IEEE}
   \bold{77}, 257--286.
 }
-  
+
 
 \seealso{ \code{\link{sim.geno}}, \code{\link{calc.genoprob}},
 \code{\link{fill.geno}} }

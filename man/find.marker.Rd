@@ -5,7 +5,7 @@
 
 \description{
   Find the genetic marker closest to a specified position on a
-  chromosome. 
+  chromosome.
 }
 
 \usage{find.marker(cross, chr, pos, index)}
@@ -16,14 +16,14 @@
  \item{chr}{A vector of chromosome identifiers, or a single such.}
  \item{pos}{A vector of cM positions.}
  \item{index}{A vector of numeric indices of the markers within
-   chromosomes.} 
+   chromosomes.}
 }
 
 \value{
   A vector of marker names (of the same length as the input \code{pos}),
   corresponding to the markers nearest to the specified
   chromosomes/positions (if \code{pos} is specified) or to the input
-  numeric indices (in \code{index} is specified). 
+  numeric indices (in \code{index} is specified).
 }
 
 \details{

@@ -34,7 +34,7 @@ plotMap(x, map2, chr, horizontal=FALSE, shift=TRUE,
     at 0 cM.}
   \item{show.marker.names}{If TRUE, marker names are included.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{\dots}{Passed to \code{\link[graphics]{plot}}.}
 }
@@ -54,7 +54,7 @@ plotMap(x, map2, chr, horizontal=FALSE, shift=TRUE,
   For a sex-specific map, female and male maps are plotted against one
   another.  For two sex-specific maps, the two female maps are plotted
   against one another and the two male maps are plotted against one
-  another. 
+  another.
 }
 
 \examples{

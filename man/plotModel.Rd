@@ -6,13 +6,13 @@
 \description{
   Plot a graphical representation of a QTL model, with nodes
   representing QTL and line segments representing pairwise
-  interactions. 
+  interactions.
 }
 
 \usage{
 plotModel(qtl, formula, circrad.rel=0.25, circrad.abs,
          cex.name=1, chronly=FALSE, order, \dots)
-}			    
+}
 
 \arguments{
   \item{qtl}{A QTL object (as created by \code{\link{makeqtl}}) or

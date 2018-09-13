@@ -15,7 +15,7 @@
      show.marker.names=FALSE, alternate.chrid=FALSE,
      bandcol=NULL, type="l", cex=1, pch=1, bg="transparent",
      bgrect=NULL, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{"scanone"}, as output by
@@ -42,7 +42,7 @@
     upward-pointing triangels).}
   \item{show.marker.names}{If TRUE, show the marker names along the x axis.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{bandcol}{Optional color for alternating bands to indicate
   chromosomes.  If NULL (the default), no bands are plotted.  A good
@@ -66,7 +66,7 @@
 \details{
   This function allows you to plot the results of up to three genome
   scans against one another.  Such objects must conform with each
-  other. 
+  other.
 
   One may alternatively use the argument \code{add} to add the plot of
   an additional genome scan to the current figure, but some care is

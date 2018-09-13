@@ -23,7 +23,7 @@ summaryMap(object, \dots)
 }
 
 \value{
-  An object of class \code{summary.map}, which is just a data.frame 
+  An object of class \code{summary.map}, which is just a data.frame
   containing the number of markers, length, the average inter-marker
   spacing, and the maximum distance between markers, for each chromosome
   and overall.  An attribute \code{sexsp} indicates whether the map was
@@ -38,6 +38,6 @@ summary(map10)
 }
 
 \seealso{ \code{\link{chrlen}}, \code{\link{pull.map}},
-  \code{\link{summary.cross}} } 
+  \code{\link{summary.cross}} }
 
 \keyword{print}

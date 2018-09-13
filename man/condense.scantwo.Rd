@@ -26,7 +26,7 @@
   This produces a very reduced version of the output of
   \code{\link{scantwo}}, for which a summary may still be created
   via \code{\link{summary.scantwo}}, though plots can no longer be
-  made. 
+  made.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu}}

@@ -4,12 +4,12 @@
 \title{Maximum peak in genome scan to map a QTL to a phylogenetic tree}
 
 \description{
-  Print the chromosome with the maximum LOD score across partitions, 
+  Print the chromosome with the maximum LOD score across partitions,
   from the results of \code{\link{scanPhyloQTL}}.
 }
 
 \usage{
-\method{max}{scanPhyloQTL}(object, chr, format=c("postprob", "lod"), 
+\method{max}{scanPhyloQTL}(object, chr, format=c("postprob", "lod"),
         \dots)
 }
 
@@ -28,12 +28,12 @@
 
 \details{
   The output, and the use of the argument \code{format}, is as in
-  \code{\link{summary.scanPhyloQTL}}. 
+  \code{\link{summary.scanPhyloQTL}}.
 }
 
 \value{
   An object of class \code{summary.scanPhyloQTL}, to be printed by
-  \code{print.summary.scanPhyloQTL}.  
+  \code{print.summary.scanPhyloQTL}.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu}}
@@ -41,7 +41,7 @@
 \examples{
 \dontrun{
 # example map; drop X chromosome
-data(map10)           
+data(map10)
 map10 <- map10[1:19]
 
 # simulate data
@@ -72,10 +72,10 @@ plot(out)
 }
 }
 
-\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}}, 
+\seealso{ \code{\link{scanPhyloQTL}}, \code{\link{plot.scanPhyloQTL}},
   \code{\link{summary.scanPhyloQTL}}, \code{\link{max.scanone}},
-  \code{\link{inferredpartitions}}, 
-  \code{\link{simPhyloQTL}} 
+  \code{\link{inferredpartitions}},
+  \code{\link{simPhyloQTL}}
 }
 
 \references{

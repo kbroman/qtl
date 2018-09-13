@@ -17,7 +17,7 @@ sim.map(len=rep(100,20), n.mar=10, anchor.tel=TRUE,
  \item{n.mar}{A vector specifying the number of markers per chromosome.}
  \item{anchor.tel}{If true, markers at the two telomeres will always be
    included, so if \code{n.mar} = 1 or 2, we'll give just the two
-   telomeric markers.} 
+   telomeric markers.}
  \item{include.x}{Indicates whether the last chromosome should be
    considered the X chromosome.}
  \item{sex.sp}{Indicates whether to create sex-specific maps, in which
@@ -34,7 +34,7 @@ sim.map(len=rep(100,20), n.mar=10, anchor.tel=TRUE,
 
   If \code{eq.spacing} is TRUE, markers are equally spaced between 0 and
   \eqn{L}.  If \code{anchor.tel} is FALSE, telomeric markers are not
-  included.  
+  included.
 }
 
 \value{

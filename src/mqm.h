@@ -53,9 +53,9 @@
       fprintf(redirect_info,"%s: ",type); \
       fprintf(redirect_info, format, ## __VA_ARGS__); \
       fprintf(redirect_info,"\n"); }
-      
+
     #define fatal(s, ...) { message("FATAL",s, ## __VA_ARGS__); exit(127); }
-    
+
     #define debug_trace(format, ...) { \
       if(debuglevel > 0){ \
         fprintf(redirect_info,"TRACE "); \

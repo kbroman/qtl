@@ -30,7 +30,7 @@
 #ifdef __cplusplus
   extern "C" {
 #endif
-     
+
 double Lnormal(double residual, double variance);
 int mqmmod(int a, int b);
 double ftruncate3(double n);
@@ -39,13 +39,13 @@ void reorg_int(int n_ind, int n_mar, int *pheno, int ***Pheno);
 
 /* analyseF2 - analyse one F2/BC/RIL family */
 
-double analyseF2(int Nind, int *Nmark, cvector *cofactor, MQMMarkerMatrix marker, 
+double analyseF2(int Nind, int *Nmark, cvector *cofactor, MQMMarkerMatrix marker,
                vector y, int Backwards, double **QTL,vector
                *mapdistance,int **Chromo,int Nrun,int RMLorML, double
                windowsize,double stepsize, double stepmin,double stepmax,double
                alfa,int em,int out_Naug,int **INDlist,char reestimate, MQMCrossType
                crosstype,bool dominance,int verbose);
-      
+
 //R calling interface
 void R_mqmscan(int *Nind,int *Nmark,int *Npheno,
                int *geno,int *chromo, double *dist, double *pheno,

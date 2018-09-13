@@ -5,19 +5,19 @@
 
 \description{
   Plot a histogram of the permutation results from a single-QTL genome
-  scan. 
+  scan.
 }
 
 \usage{
 \method{plot}{scanoneperm}(x, lodcolumn=1, \dots)
-}			    
+}
 
 \arguments{
   \item{x}{An object of class \code{"scanoneperm"}, as output by
     \code{\link{scanone}} when \code{n.perm} is specified.}
   \item{lodcolumn}{This indicates the LOD score column to plot.  This
-    should be a single number between 1 and the number of LOD columns in 
-    the object input.} 
+    should be a single number between 1 and the number of LOD columns in
+    the object input.}
   \item{\dots}{Passed to the function \code{\link[graphics]{hist}} when it
     is called.}
 }
@@ -39,7 +39,7 @@ plot(operm)
 }
 
 \seealso{ \code{\link{scanone}},
-  \code{\link{summary.scanoneperm}} } 
+  \code{\link{summary.scanoneperm}} }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
 

@@ -4,7 +4,7 @@
 \title{Subsetting the results of a genome scan}
 
 \description{
-  Pull out a specified set of chromosomes and/or LOD columns from 
+  Pull out a specified set of chromosomes and/or LOD columns from
   \code{\link{scanone}} output.
 }
 
@@ -19,7 +19,7 @@
  This should be a vector of character strings referring to
  chromosomes by name; numeric values are converted to strings.  Refer to
  chromosomes with a preceding \code{-} to have all chromosomes but those
- considered.  A logical (TRUE/FALSE) vector may also be used.} 
+ considered.  A logical (TRUE/FALSE) vector may also be used.}
  \item{lodcolumn}{A vector specifying which LOD columns to keep (or, if
    negative), omit.  These should be between 1 and the number of LOD
    columns in the input \code{x}.}

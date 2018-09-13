@@ -31,7 +31,7 @@ the location of marker \eqn{i}, for \eqn{i \in 1, \dots, M}{i in 1,
 \dots, M}.  We use the dynamic programming algorithm of Broman and Weber
 (1999) to identify the subset of markers \eqn{i_1, \dots, i_k}{i[1], \dots,
 i[k]} for which \eqn{d_{i_{j+1}} - d_{i_j} \le}{d(i[j+1]) - d(i[j]) <=}
-\code{min.distance} and \eqn{\sum w_{i_j}}{sum w(i[j])} is maximized. 
+\code{min.distance} and \eqn{\sum w_{i_j}}{sum w(i[j])} is maximized.
 
 If there are multiple optimal subsets, we pick one at random.
 }

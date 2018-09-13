@@ -29,7 +29,7 @@
 
   For an intercross, we exchange the two homozygotes, and exchange C
   (i.e., not AA) and D (i.e., not BB). (The heterozygotes in an intercross are
-  left unchanged.)  
+  left unchanged.)
 
   For a 4-way cross, we consider the argument \code{switch}, and the
   exchanges among the genotypes are more complicated.

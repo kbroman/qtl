@@ -14,7 +14,7 @@
 
 \arguments{
  \item{object}{A genetic map object, of class \code{"map"}: A list whose
- components are vectors of marker locations.} 
+ components are vectors of marker locations.}
  \item{old.map.function}{The map function used in forming the map in
    \code{object}.}
  \item{new.map.function}{The new map function to be used.}

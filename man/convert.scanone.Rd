@@ -20,7 +20,7 @@
 
 \value{
   The same scanone output, but revised for use with R/qtl version 0.98
-  and later.  
+  and later.
 }
 
 \details{

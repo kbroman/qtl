@@ -24,7 +24,7 @@ convert2sa(map, tol=1e-4)
 }
 
 \value{
-  A map object, with sex-averaged distances.  
+  A map object, with sex-averaged distances.
 }
 
 \details{

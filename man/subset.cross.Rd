@@ -22,7 +22,7 @@
  Details, below.}
  \item{ind}{Optional vector specifying which individuals to keep
    discard. This may be a logical, numeric or chacter string vector.
- See Details, below.} 
+ See Details, below.}
  \item{\dots}{Ignored at this point.}
 }
 
@@ -35,7 +35,7 @@
   should be a vector of character strings referring to chromosomes by
   name.  Numeric values are converted to strings.  Refer to chromosomes
   with a preceding \code{-} to have all chromosomes but those
-  considered.  
+  considered.
 
   If the \code{ind} argument is a logical vector
   (\code{TRUE}/\code{FALSE}), it should have length equal to the number

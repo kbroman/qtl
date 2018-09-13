@@ -11,7 +11,7 @@
 }
 
 \usage{
-calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001, 
+calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001,
               map.function=c("haldane","kosambi","c-f","morgan"),
               stepwidth=c("fixed", "variable", "max"))
 }
@@ -28,7 +28,7 @@ calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001,
    of the penetrance Pr(observed genotype | true genotype).}
  \item{map.function}{Indicates whether to use the Haldane, Kosambi or
    Carter-Falconer map function when converting genetic distances into
-   recombination fractions.} 
+   recombination fractions.}
  \item{stepwidth}{Indicates whether the intermediate points should with
    fixed or variable step sizes.  We recommend using
    \code{"fixed"}; \code{"variable"} is included for the qtlbim
@@ -40,12 +40,12 @@ calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001,
 \details{
   Let \eqn{O_k}{O[k]} denote the observed marker genotype at position
   \eqn{k}, and \eqn{g_k}{g[k]} denote the corresponding true underlying
-  genotype. 
+  genotype.
 
   We use the forward-backward equations to calculate
   \eqn{\alpha_{kv} = \log Pr(O_1, \ldots, O_k, g_k = v)}{%
     a[k][v] = log Pr(O[1], \ldots, O[k], g[k] = v)}
-  and 
+  and
   \eqn{\beta_{kv} = \log Pr(O_{k+1}, \ldots, O_n | g_k = v)}{%
     b[k][v] = log Pr(O[k+1], \ldots, O[n] | g[k] = v)}
 

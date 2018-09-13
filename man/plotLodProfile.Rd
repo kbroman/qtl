@@ -14,7 +14,7 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
                show.marker.names=FALSE, alternate.chrid=FALSE,
                add=FALSE, showallchr=FALSE, labelsep=5, \dots)
 
-}			    
+}
 \arguments{
   \item{qtl}{An object of class \code{"qtl"}; must have been produced by
     \code{\link{refineqtl}} using \code{keeplodprofiles=TRUE}.}
@@ -34,7 +34,7 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
     upward-pointing triangels).}
   \item{show.marker.names}{If TRUE, show the marker names along the x axis.}
   \item{alternate.chrid}{If TRUE and more than one chromosome is
-    plotted, alternate the placement of chromosome 
+    plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
   \item{add}{If TRUE, add curves to a current plot.}
   \item{showallchr}{If FALSE (the default), only show the chr with a QTL}
@@ -56,7 +56,7 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   we calculate a LOD score comparing the full model, with the QTL of
   interest at that particular position (and all others at their fixed
   positions) to the model with the QTL of interest (and any
-  interactions that include that QTL) omitted.  
+  interactions that include that QTL) omitted.
 
   Care should be take regarding the arguments \code{lwd}, \code{lty},
   and \code{col}; if vectors are given, they should be in the order of
@@ -92,7 +92,7 @@ plot(out, add=TRUE, chr=c(2,5), col="red")
   Zeng  Z.-B., Liu, J., Stam, L. F., Kao, C.-H., Mercer, J. M. and
   Laurie, C. C. (2000) Genetic architecture of a morphological shape
   difference between two Drosophila species. \emph{Genetics} \bold{154},
-  299--310. 
+  299--310.
 }
 
 \keyword{hplot}
