@@ -9,7 +9,7 @@ Robert Corty, Timoth&eacute;e Flutre, Ritsert Jansen, Pjotr Prins, Lars
 R&ouml;nneg&aring;rd, Rohan Shah, Laura Shannon, Quoc Tran, Aaron
 Wolen, and Brian Yandell
 
-[R/qtl](https://rqtl.org) is an extensible, interactive environment for mapping
+[R/qtl](http://rqtl.org) is an extensible, interactive environment for mapping
 quantitative trait loci (QTL) in experimental crosses. It is
 implemented as an add-on package for the freely available and widely
 used statistical language/software [R](https://www.r-project.org).

@@ -15,7 +15,7 @@ Depends: R (>= 2.14.0)
 Imports: parallel, graphics, stats, utils, grDevices
 Suggests: testthat
 License: GPL-3
-URL: https://rqtl.org, https://github.com/kbroman/qtl
+URL: http://rqtl.org, https://github.com/kbroman/qtl
 BugReports: https://github.com/kbroman/qtl/issues
 Encoding: UTF-8
 ByteCompile: true

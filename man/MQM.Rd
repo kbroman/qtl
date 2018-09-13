@@ -62,7 +62,7 @@ BC, and selfed RIL, (2) MQM does not treat sex
 chromosomes differently from autosomal chromosomes - though one can
 introduce sex as a cofactor. Future versions of R/qtl-MQM may improve on
 these points. Check the website and change log
-(\url{https://rqtl.org/STATUS.txt}) for updates.
+(\url{http://rqtl.org/STATUS.txt}) for updates.
 
 % -----^^ inst/doc/Sources/MQM/mqm/limitations.txt ^^-----
 }
@@ -70,7 +70,7 @@ these points. Check the website and change log
 \seealso{
     \itemize{
 % \input{"inst/doc/Sources/MQM/mqm/standard_seealso.txt"}
-    \item The MQM tutorial: \url{https://rqtl.org/tutorials/MQM-tour.pdf}
+    \item The MQM tutorial: \url{http://rqtl.org/tutorials/MQM-tour.pdf}
     \item \code{\link{MQM}} - MQM description and references
     \item \code{\link{mqmscan}} - Main MQM single trait analysis
     \item \code{\link{mqmscanall}} - Parallellized traits analysis
