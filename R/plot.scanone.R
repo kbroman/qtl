@@ -121,6 +121,13 @@ plot.scanone <-
     else start <- 0
 
     maxx <- sum(len+gap)-gap
+
+    # replace +/- Inf with NA
+    out[!is.finite(out[,3]),3] <- NA
+    if(second) out2[!is.finite(out2[,3]),3] <- NA
+    if(third) out3[!is.finite(out3[,3]),3] <- NA
+
+    # get max y-axis value
     if(all(is.na(out[,3]))) maxy <- 1
     else maxy <- max(out[,3],na.rm=TRUE)
     if(second) maxy <- max(c(maxy,out2[,3]),na.rm=TRUE)

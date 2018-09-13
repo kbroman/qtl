@@ -16,6 +16,13 @@ copyright (c) 2001-2018, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+## Version 1.44, 2018-09-13
+
+## Minor changes
+
+- Revision to plot.scanone() to handle +/- Inf in the LOD score column.
+
+
 ## Version 1.43, 2018-03-19
 
 ### Major changes:
