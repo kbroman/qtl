@@ -20,7 +20,7 @@ nqtl(qtl)
   The number of QTL in the input QTL object.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

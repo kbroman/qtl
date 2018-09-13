@@ -39,6 +39,6 @@ listeria <- drop.dupmarkers(listeria)
 \seealso{ \code{\link{drop.nullmarkers}}, \code{\link{pull.markers}}, \code{\link{drop.markers}},
   \code{\link{summary.cross}}, \code{\link{clean.cross}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{manip}

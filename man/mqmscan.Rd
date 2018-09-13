@@ -97,7 +97,7 @@ order. For more information on the scanone object see: \code{\link{scanone}}
 }
 
 \author{
-Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{broman@wisc.edu} % \mqmauthors
 }
 
 \note{

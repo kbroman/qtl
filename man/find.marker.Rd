@@ -40,7 +40,7 @@
   are assumed to correspond to the female genetic map.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(listeria)

@@ -5,7 +5,7 @@
 
 \description{
   Identify markers in a cross that have no genotype data.
-} 
+}
 
 \usage{
 nullmarkers(cross)
@@ -32,6 +32,6 @@ nullmarkers(listeria)
 
 \seealso{ \code{\link{drop.nullmarkers}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

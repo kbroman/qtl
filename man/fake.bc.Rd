@@ -29,7 +29,7 @@
   second phenotype. Age has an effect of increasing the phenotypes.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.bc)

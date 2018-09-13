@@ -224,7 +224,7 @@ thresholds for the regions A:A, A:X, and X:X.
   \emph{Theor. Appl. Genet.} \bold{47}, 35--39.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu}
+\author{Karl W Broman, \email{broman@wisc.edu}; Hao Wu}
 
 \examples{
 data(fake.f2)

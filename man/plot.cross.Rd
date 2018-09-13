@@ -51,6 +51,6 @@ plot(fake.bc)
   \code{\link{plotPheno}} }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian Yandell }
+\author{Karl W Broman, \email{broman@wisc.edu}; Brian Yandell }
 
 \keyword{hplot}

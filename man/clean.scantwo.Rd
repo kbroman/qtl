@@ -47,6 +47,6 @@ out2cl2 <- clean(out2, n.mar=2, distance=5)
 \seealso{ \code{\link{scantwo}},
   \code{\link{summary.scantwo}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{manip}

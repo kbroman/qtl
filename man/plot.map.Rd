@@ -73,6 +73,6 @@ plotMap(fake.bc, show.marker.names=TRUE)
 
 \seealso{ \code{\link{est.map}}, \code{\link{plot.cross}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

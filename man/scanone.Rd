@@ -317,7 +317,7 @@ tests with \code{scanone} by setting \code{n.perm}>0 and using
   \bold{143}, 1417--1424.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu}
+\author{Karl W Broman, \email{broman@wisc.edu}; Hao Wu}
 
 \examples{
 ###################

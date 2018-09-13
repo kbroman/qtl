@@ -107,7 +107,7 @@ scanoneboot(cross, chr, pheno.col=1, model=c("normal","binary","2part","np"),
   1013--1020.  
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

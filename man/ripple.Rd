@@ -62,7 +62,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
   original.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(badorder)

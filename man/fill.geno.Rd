@@ -84,6 +84,6 @@ plot(out.mr)
 \seealso{ \code{\link{sim.geno}},
           \code{\link{argmax.geno}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

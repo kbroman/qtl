@@ -42,7 +42,7 @@ compareorder(cross, chr, order, error.prob=0.0001,
   genetic lengths. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(badorder)

@@ -65,7 +65,7 @@ summaryScantwoOld(object, thresholds = c(0, 0, 0), lodcolumn=1,
 }
 
 \author{Hao Wu; Karl W Broman,
-  \email{kbroman@biostat.wisc.edu}; Brian Yandell }
+  \email{broman@wisc.edu}; Brian Yandell }
 
 \examples{
 data(fake.f2)

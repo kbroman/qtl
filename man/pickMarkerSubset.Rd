@@ -36,7 +36,7 @@ i[k]} for which \eqn{d_{i_{j+1}} - d_{i_j} \le}{d(i[j+1]) - d(i[j]) <=}
 If there are multiple optimal subsets, we pick one at random.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \references{
   Broman,  K. W. and Weber,  J. L. (1999) Method for constructing

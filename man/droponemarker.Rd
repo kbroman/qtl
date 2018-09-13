@@ -67,7 +67,7 @@ droponemarker(cross, chr, error.prob=0.0001,
   positive LOD score being bad.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.bc)

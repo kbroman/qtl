@@ -22,7 +22,7 @@ nmar(object)
   A vector with the numbers of markers on each chromosome in the input.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

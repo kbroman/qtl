@@ -41,6 +41,6 @@ plot(operm)
 \seealso{ \code{\link{scanone}},
   \code{\link{summary.scanoneperm}} } 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

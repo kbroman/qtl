@@ -26,7 +26,7 @@ The quantitative phenotype is affected by three QTLs: two on chromosome
 chromosome 7 at position 40 cM on the female map. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.4way)

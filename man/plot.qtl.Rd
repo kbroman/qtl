@@ -58,6 +58,6 @@ plot(qtl, justdots=TRUE, col="seagreen")
 
 \seealso{ \code{\link{plotMap}}, \code{\link{makeqtl}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

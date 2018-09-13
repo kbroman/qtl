@@ -71,7 +71,7 @@ fitstahl(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
   provided in the results.  
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 \dontshow{set.seed(12201969)}

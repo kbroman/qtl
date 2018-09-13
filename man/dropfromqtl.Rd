@@ -31,7 +31,7 @@ dropfromqtl(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
   details on the format. 
 }
 
-\author{Karl W Broman, \code{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \code{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

@@ -51,6 +51,6 @@ plotMissing(fake.f2)
   \code{\link[graphics]{image}} }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

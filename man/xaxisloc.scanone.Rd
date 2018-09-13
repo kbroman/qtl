@@ -62,6 +62,6 @@ text(x+35, mxout$lod, "the peak", col="blue", adj=c(0, 0.5))
   \code{\link{plot.scanone}}, 
   \code{\link{add.threshold}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

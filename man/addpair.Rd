@@ -126,7 +126,7 @@ addpair(cross, chr, pheno.col=1, qtl, covar=NULL, formula,
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 # A totally contrived example to show some of what you can do

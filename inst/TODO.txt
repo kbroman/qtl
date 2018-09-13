@@ -4,7 +4,7 @@ This file is intended to contain a list of many of the additions and
 revisions that are planned for the R/qtl package.
 
 If you any additions or revisions to suggest, please send an email to
-Karl Broman, <kbroman@biostat.wisc.edu>.
+Karl Broman, <broman@wisc.edu>.
 ----------------------------------------------------------------------
 
 SHORT TERM:

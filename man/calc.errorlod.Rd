@@ -59,7 +59,7 @@ calc.errorlod(cross, error.prob=0.01,
   argument, for later reference.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \references{
   Lincoln, S. E. and Lander, E. S. (1992) Systematic detection of

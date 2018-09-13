@@ -28,7 +28,7 @@ replace.map(cross, map)
   \code{\link{argmax.geno}} are also replaced, using interpolation if
   necessary.}
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

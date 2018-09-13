@@ -67,6 +67,6 @@ plotErrorlod(hyper,chr=1)
   errors in genetic linkage data.  \emph{Genomics} \bold{14}, 604--610.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

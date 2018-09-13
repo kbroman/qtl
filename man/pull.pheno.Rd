@@ -24,7 +24,7 @@
   If there is just one phenotype, a vector (rather than a data.frame) is returned.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(listeria)

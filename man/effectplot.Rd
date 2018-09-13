@@ -134,7 +134,7 @@ mnames <- find.marker(fake.f2, c(13, "X"), c(24, 14))
 effectplot(fake.f2, mname1=mnames[1], mname2=mnames[2])
 }
 
-\author{Hao Wu; Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Hao Wu; Karl W Broman, \email{broman@wisc.edu} }
 
 \seealso{ \code{\link{plotPXG}}, \code{\link{find.marker}},
   \code{\link{effectscan}}, \code{\link{find.pseudomarker}} } 

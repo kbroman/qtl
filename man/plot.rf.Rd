@@ -80,6 +80,6 @@ plotRF(badorder, chr=2:3, what="lod")
   \code{\link[graphics]{image}},
   \code{\link{badorder}}, \code{\link{ripple}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

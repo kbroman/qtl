@@ -33,7 +33,7 @@ addtoqtl(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
   details. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

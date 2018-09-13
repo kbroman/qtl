@@ -20,7 +20,7 @@ mqmextractmarkers(mqmresult)
 }
 
 \author{
-Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{broman@wisc.edu} % \mqmauthors
 }
 
 \seealso{

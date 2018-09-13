@@ -76,7 +76,7 @@ argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
 }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

@@ -33,6 +33,6 @@ listeria2 <- drop.markers(listeria, c("D10M44","D1M3","D1M75"))
 \seealso{ \code{\link{drop.nullmarkers}}, \code{\link{pull.markers}}, \code{\link{geno.table}},
   \code{\link{clean.cross}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{manip}

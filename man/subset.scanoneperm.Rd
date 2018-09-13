@@ -28,7 +28,7 @@
 \value{The input \code{scanone} permutation results, but with only the specified
   subset of the data.}
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.bc)

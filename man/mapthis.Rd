@@ -28,7 +28,7 @@ See \url{https://rqtl.org/tutorials/geneticmaps.pdf} for a tutorial
 on how to construct a genetic map with these data.}
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(mapthis)

@@ -58,6 +58,6 @@ plot(typingGap(hyper, chr=4, terminal=TRUE),
 \seealso{ \code{\link{ntyped}},
           \code{\link{nmissing}}, \code{\link{locateXO}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

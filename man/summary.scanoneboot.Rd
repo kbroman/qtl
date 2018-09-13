@@ -26,7 +26,7 @@
   for the estimated bootstrap confidence interval.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 \dontrun{data(fake.f2)

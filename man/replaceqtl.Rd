@@ -37,7 +37,7 @@ replaceqtl(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
   details on the format. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

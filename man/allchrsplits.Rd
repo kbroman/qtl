@@ -56,7 +56,7 @@ allchrsplits(cross, chr, error.prob=0.0001,
   The row names indicate the flanking markers for each interval.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.bc)

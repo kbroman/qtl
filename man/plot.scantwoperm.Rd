@@ -42,6 +42,6 @@ plot(operm2)
 \seealso{ \code{\link{scantwo}},
   \code{\link{summary.scantwoperm}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

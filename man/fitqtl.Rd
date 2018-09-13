@@ -145,7 +145,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 
-\author{Hao Wu; Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Hao Wu; Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

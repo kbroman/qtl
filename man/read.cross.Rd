@@ -434,7 +434,7 @@ dat7 <- read.cross("karl", dir="Mydata", genfile="gen.txt",
                    phefile="phe.txt", mapfile="map.txt")}
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian
+\author{Karl W Broman, \email{broman@wisc.edu}; Brian
   S. Yandell; Aaron Wolen}
 
 \references{

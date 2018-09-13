@@ -19,7 +19,7 @@
  to chromosomes) are vectors of marker positions.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 tab <- data.frame(chr=c(1,1,1,1,2,2,2,2,3,3,3,3),

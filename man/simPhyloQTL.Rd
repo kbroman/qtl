@@ -85,7 +85,7 @@ simPhyloQTL(n.taxa=3, partition, crosses, map, n.ind=100, model,
   with 1's indicating simulated genotyping errors.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \seealso{ \code{\link{scanPhyloQTL}},   \code{\link{inferredpartitions}}, 
   \code{\link{summary.scanPhyloQTL}}, \code{\link{max.scanPhyloQTL}},

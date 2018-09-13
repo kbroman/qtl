@@ -22,7 +22,7 @@ totmar(object)
   The total number of markers in the input.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

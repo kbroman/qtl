@@ -89,7 +89,7 @@ effectscan(fake.f2, chr="13", mtick="triangle", get.se=TRUE)
   trait mapping.  \emph{Genetics} \bold{159}, 371--387.
 }
 
-\author{Karl W. Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W. Broman, \email{broman@wisc.edu}}
 
 \seealso{ \code{\link{effectplot}}, \code{\link{plotPXG}},
   \code{\link{sim.geno}} } 

@@ -53,6 +53,6 @@ plot(out, incl.markers=FALSE)}
 \seealso{ \code{\link{calc.genoprob}},
           \code{\link{sim.geno}}, \code{\link{scanone}}, \code{\link{plot.scanone}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

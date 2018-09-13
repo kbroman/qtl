@@ -28,7 +28,7 @@
   suitable for use as covariates in \code{\link{scanone}}.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)

@@ -37,7 +37,7 @@ inferFounderHap(cross, chr, max.n.markers=15)
   with the inferred founder origin for each line at each marker. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 map <- sim.map(100, n.mar=101, include.x=FALSE, eq.spacing=TRUE)

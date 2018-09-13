@@ -62,6 +62,6 @@ add.threshold(out, chr=c(1,4,6,15,"X"), perms=operm, alpha=0.1,
   \code{\link{plot.scanone}}, 
   \code{\link{summary.scanoneperm}}, \code{\link{xaxisloc.scanone}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

@@ -105,6 +105,6 @@ plot(out.hk, bandcol="gray70", type="p", cex=0.3, pch=21, bg="slateblue")
   \code{\link{summary.scanone}}, \code{\link[graphics]{par}},
   \code{\link[grDevices]{colors}}, \code{\link{add.threshold}}, \code{\link{xaxisloc.scanone}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

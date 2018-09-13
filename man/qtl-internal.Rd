@@ -155,6 +155,6 @@ reviseqtlnuminformula(formula, oldnum, newnum)
 }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{internal}

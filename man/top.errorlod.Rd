@@ -30,7 +30,7 @@ top.errorlod(cross, chr, cutoff=4, msg=TRUE)
   number, individual number, marker name, and error LOD score.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)

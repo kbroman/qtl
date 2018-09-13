@@ -33,7 +33,7 @@ convert2riself(cross)
   class \code{"A"} (autosomal).
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)

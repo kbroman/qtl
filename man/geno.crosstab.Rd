@@ -39,6 +39,6 @@ geno.crosstab(hyper, c("DXMit22", "DXMit16"))
 \seealso{ \code{\link{geno.table}},
   \code{\link{find.marker}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

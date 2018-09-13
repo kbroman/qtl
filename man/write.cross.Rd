@@ -106,7 +106,7 @@ write.cross(fake.bc, "qtlcart", "Data/fakebc", c(1,5,13))
 # Gary's format
 write.cross(fake.bc, "gary", c(1,5,13))} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu; Brian
+\author{Karl W Broman, \email{broman@wisc.edu}; Hao Wu; Brian
   S. Yandell; Danny Arends; Aaron Wolen}
 
 \seealso{ \code{\link{read.cross}} }

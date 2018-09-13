@@ -78,7 +78,7 @@ ril <- read.cross("../Data", "ril_data.csv", "founder_geno.csv", "ri4self",
                   rotate=TRUE)}
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \seealso{ \code{\link{read.cross}}, \code{\link{sim.cross}} }
 

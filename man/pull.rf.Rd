@@ -30,7 +30,7 @@ scores (for the test of rf=1/2) for all marker pairs.
 The genetic map is included as an attribute.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

@@ -30,7 +30,7 @@ convert2risib(cross)
   the genotypes with code==3 and call those with code==2 the BB genotypes.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)

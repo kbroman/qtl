@@ -43,7 +43,7 @@ sim.map(len=rep(100,20), n.mar=10, anchor.tel=TRUE,
   to whether it is autosomal or the X chromosome.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 # simulate 4 autosomes, each with 10 markers

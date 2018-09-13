@@ -26,7 +26,7 @@ with \code{\link{plot.scanone}}), containing the estimated recombination
 fractions or LOD scores for the input marker against all others.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

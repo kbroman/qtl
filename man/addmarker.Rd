@@ -33,7 +33,7 @@ addmarker(cross, genotypes, markername, chr, pos)
   The input \code{cross} object with the single marker added.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

@@ -74,6 +74,6 @@ plotGeno(hyper, chr=1, ind=160:200, cutoff=7, min.sep=2)
   \code{\link{top.errorlod}}, \code{\link{subset.cross}} }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

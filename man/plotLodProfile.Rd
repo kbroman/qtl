@@ -86,7 +86,7 @@ plot(out, add=TRUE, chr=c(2,5), col="red")
 \seealso{ \code{\link{refineqtl}},
   \code{\link{makeqtl}}, \code{\link{scanqtl}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \references{
   Zeng  Z.-B., Liu, J., Stam, L. F., Kao, C.-H., Mercer, J. M. and

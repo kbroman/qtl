@@ -43,7 +43,7 @@ add.cim.covar(cimresult, chr, gap=25, \dots)
 }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 \dontrun{data(hyper)

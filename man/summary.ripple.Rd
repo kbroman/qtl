@@ -32,7 +32,7 @@
   initial and next-best orders are returned. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{ % I don't run the following, since they are run in ripple.Rd
 \dontrun{data(badorder)

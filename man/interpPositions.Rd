@@ -38,7 +38,7 @@ markers, we use linear extrapolation, using the chromosome-wide average
 recombination rate.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 
 \examples{

@@ -83,6 +83,6 @@ plotPXG(fake.f2, c(mname2,mname))
   \code{\link{find.flanking}}, \code{\link{effectscan}} }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Brian Yandell }
+\author{Karl W Broman, \email{broman@wisc.edu}; Brian Yandell }
 
 \keyword{hplot}

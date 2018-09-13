@@ -157,6 +157,6 @@ plot(out2.hk - out2.em, allow.neg=TRUE)
   \code{\link[=-.scantwo]{-.scantwo}} }
 
 \author{Hao Wu; Karl W Broman,
-  \email{kbroman@biostat.wisc.edu}; Brian Yandell }
+  \email{broman@wisc.edu}; Brian Yandell }
 
 \keyword{hplot}

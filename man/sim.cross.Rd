@@ -139,7 +139,7 @@ sim.cross(map, model=NULL, n.ind=100,
   with 1's indicating simulated genotyping errors.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \seealso{ \code{\link{sim.map}}, \code{\link{read.cross}},
     \code{\link{fake.f2}}, \code{\link{fake.bc}}

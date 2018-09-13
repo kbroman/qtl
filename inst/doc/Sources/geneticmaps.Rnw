@@ -95,7 +95,7 @@ simulated data on an F$_2$ intercross derived from two inbred strains.
 
 \vfill
 
-\noindent \emph{email}: \verb|kbroman@biostat.wisc.edu|
+\noindent \emph{email}: \verb|broman@wisc.edu|
 
 
 

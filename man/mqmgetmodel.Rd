@@ -28,7 +28,7 @@ An object returned by \code{mqmscan}, including cofactors and QTL model. % \mqms
 }
 
 \author{
-Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{broman@wisc.edu} % \mqmauthors
 }
 
 \seealso{

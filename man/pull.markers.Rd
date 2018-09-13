@@ -34,6 +34,6 @@ listeria2 <- pull.markers(listeria, c("D10M44","D1M3","D1M75"))
   \code{\link{geno.table}},
   \code{\link{clean.cross}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{manip}

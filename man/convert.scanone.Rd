@@ -28,7 +28,7 @@
   \code{loc7.5.c3}; these were changed to \code{c3.loc7.5}.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 \dontrun{out.new <- convert(out.old)}

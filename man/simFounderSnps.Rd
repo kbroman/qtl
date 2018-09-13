@@ -32,7 +32,7 @@ simFounderSnps(map, n.str=c("4","8"), pat.freq)
   x \code{n.mar}. 
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \seealso{ \code{\link{sim.map}}, \code{\link{sim.cross}} }
 

@@ -70,7 +70,7 @@ orderMarkers(cross, chr, window=7, use.ripple=TRUE, error.prob=0.0001,
   compared via \code{\link{ripple}}.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(listeria)

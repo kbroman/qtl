@@ -57,6 +57,6 @@ sum(ntyped(hyperc))
 \seealso{ \code{\link{locateXO}},
           \code{\link{countXO}}, \code{\link{calc.errorlod}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

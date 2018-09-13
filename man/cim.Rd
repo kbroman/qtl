@@ -85,7 +85,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
   \emph{Genetics}, \bold{136}, 1457--1468.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(hyper)

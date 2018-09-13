@@ -82,7 +82,7 @@ calc.genoprob(cross, step=0, off.end=0, error.prob=0.0001,
   \bold{77}, 257--286.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

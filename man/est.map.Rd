@@ -88,7 +88,7 @@ est.map(cross, chr, error.prob=0.0001,
   and p are also included as attributes.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.f2)

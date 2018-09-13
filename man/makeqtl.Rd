@@ -56,7 +56,7 @@ makeqtl(cross, chr, pos, qtl.name, what=c("draws","prob"))
   \item{\code{n.gen}}{A vector indicating the number of genotypes for each QTL.}
 }
 
-\author{Hao Wu; Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Hao Wu; Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 data(fake.f2)

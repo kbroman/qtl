@@ -66,6 +66,6 @@ plot(out, lod=2)
 \seealso{ \code{\link{summary.cross}},
   \code{\link{drop.markers}}, \code{\link{drop.nullmarkers}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{utilities}

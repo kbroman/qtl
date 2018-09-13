@@ -27,7 +27,7 @@ List of cofactors to be analysed in the QTL model. To set cofactors use \code{\l
 }
 
 \author{
-Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{kbroman@biostat.wisc.edu} % \mqmauthors
+Ritsert C Jansen; Danny Arends; Pjotr Prins; Karl W Broman \email{broman@wisc.edu} % \mqmauthors
 }
 
 \seealso{

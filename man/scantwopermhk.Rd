@@ -100,7 +100,7 @@ scantwopermhk(cross, chr, pheno.col=1,
   \emph{Heredity} \bold{69}, 315--324.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}; Hao Wu}
+\author{Karl W Broman, \email{broman@wisc.edu}; Hao Wu}
 
 \examples{
 data(fake.f2)

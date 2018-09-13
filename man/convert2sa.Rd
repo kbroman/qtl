@@ -32,7 +32,7 @@ convert2sa(map, tol=1e-4)
   there are large differences between the female and male maps.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.4way)

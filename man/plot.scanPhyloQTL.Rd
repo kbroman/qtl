@@ -85,7 +85,7 @@ plot(out)
   \code{\link{simPhyloQTL}}, 
   \code{\link[graphics]{par}}, \code{\link[grDevices]{colors}} } 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \references{
   Broman, K. W., Kim, S., An\'e, C. and Payseur, B. A.  Mapping

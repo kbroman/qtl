@@ -36,6 +36,6 @@ names(fake.f2$geno)
 \seealso{ \code{\link{drop.nullmarkers}},
   \code{\link{drop.markers}}, \code{\link{clean.scantwo}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{manip}

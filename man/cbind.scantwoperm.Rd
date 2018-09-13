@@ -22,7 +22,7 @@
 
 \value{The column-binded input, as a \code{scantwoperm} object.}
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(fake.bc)

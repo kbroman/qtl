@@ -49,7 +49,7 @@ formLinkageGroups(cross, max.rf=0.25, min.lod=3, reorgMarkers=FALSE,
   linked to C then A is linked to C) is used to close the groups.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(listeria)

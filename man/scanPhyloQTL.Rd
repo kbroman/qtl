@@ -81,7 +81,7 @@ scanPhyloQTL(crosses, partitions, chr, pheno.col=1,
   quantitative trait loci to a phylogenetic tree.  In preparation.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu}}
+\author{Karl W Broman, \email{broman@wisc.edu}}
 
 \examples{
 \dontshow{set.seed(66787403)}

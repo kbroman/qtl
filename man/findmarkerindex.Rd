@@ -22,7 +22,7 @@
 }
 
 
-\author{Danny Arends; Karl W Broman \email{kbroman@biostat.wisc.edu} }
+\author{Danny Arends; Karl W Broman \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)

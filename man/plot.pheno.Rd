@@ -45,6 +45,6 @@ plotPheno(fake.bc, pheno.col="age")
   \code{\link[graphics]{hist}}, \code{\link[graphics]{barplot}} }
 
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}

@@ -99,7 +99,7 @@ plotInfo(hyper, bandcol="gray70")
   \code{\link{plotMissing}}, \code{\link{calc.genoprob}},
   \code{\link{geno.table}} }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \keyword{hplot}
 \keyword{univar}

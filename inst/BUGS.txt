@@ -10,7 +10,7 @@ of source code changes, and contains descriptions of bug fixes.
 
 If you find a potential bug in R/qtl, please send an email, with as
 many details as possible and possibly example data, to Karl Broman,
-<kbroman@biostat.wisc.edu>.
+<broman@wisc.edu>.
 ----------------------------------------------------------------------
 
 Version 1.33 bugs:

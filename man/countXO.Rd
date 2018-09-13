@@ -37,7 +37,7 @@ countXO(cross, chr, bychr=FALSE)
   crossovers across all selected chromosomes) is returned.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)

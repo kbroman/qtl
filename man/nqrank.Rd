@@ -23,8 +23,8 @@ nqrank(x, jitter)
   normal quantiles.
 }
 
-\author{  
-Karl W Broman, \email{kbroman@biostat.wisc.edu}
+\author{
+Karl W Broman, \email{broman@wisc.edu}
 }
 
 \seealso{ \code{\link{rank}}, \code{\link{qnorm}}, \code{transformPheno} }

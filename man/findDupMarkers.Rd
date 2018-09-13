@@ -42,7 +42,7 @@ findDupMarkers(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
   genotypes to the markers with the fewest observed genotypes.
 }
 
-\author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }
+\author{Karl W Broman, \email{broman@wisc.edu} }
 
 \examples{
 data(hyper)
