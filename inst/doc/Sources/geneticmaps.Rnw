@@ -43,7 +43,7 @@ set.seed(61777369)
 
 % function (to be used later) to round numbers in a nicer way.
 <<myround,echo=FALSE,results=hide>>=
-source("myround.R")
+library(broman) # includes myround() and holmans triangle stuff
 @
 
 % Change S input/output font size
@@ -548,7 +548,6 @@ one individual stands out as unreasonable.
 \begin{figure}
 \centering
 <<triangleplot,fig=TRUE,echo=FALSE,height=3,results=hide>>=
-source("holmans_triangle.R")
 par(mar=rep(0.1,4), pty="s")
 triplot(labels=c("AA","AB","BB"))
 tripoints(gfreq, cex=0.8)

@@ -10,7 +10,7 @@ set.seed(61777369)
 ###################################################
 ### code chunk number 2: myround
 ###################################################
-source("myround.R")
+library(broman) # includes myround() and holmans triangle stuff
 
 
 ###################################################
@@ -175,7 +175,6 @@ for(i in 1:3)
 ###################################################
 ### code chunk number 23: triangleplot
 ###################################################
-source("holmans_triangle.R")
 par(mar=rep(0.1,4), pty="s")
 triplot(labels=c("AA","AB","BB"))
 tripoints(gfreq, cex=0.8)
