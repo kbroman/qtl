@@ -61,6 +61,6 @@ totmar(hyper) # 169 markers
 }
 
 \seealso{ \code{\link{drop.nullmarkers}},
-  \code{\link{drop.markers}} }
+  \code{\link{drop.markers}}, \code{\link{pickMarkerSubset}} }
 
 \keyword{manip}

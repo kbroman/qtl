@@ -60,6 +60,7 @@ wts <- -log( (n.missing+1) / (nind(hyper)+1) )
 pickMarkerSubset(pull.map(hyper)[[4]], 5, wts)
 }
 
-\seealso{ \code{\link{drop.markers}}, \code{\link{pull.markers}} }
+\seealso{ \code{\link{drop.markers}}, \code{\link{pull.markers}},
+          \code{\link{findDupMarkers}} }
 
 \keyword{manip}
