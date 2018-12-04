@@ -196,8 +196,10 @@ function(locfile){
         stop(msg, call.=FALSE)
     }
 
+    nb.fields <- rep(NA, length(lines))
     for(line.id in 1:length(lines)){
         tokens <- spl[[line.id]]
+        nb.fields[line.id] <- length(tokens)
 
         if(length(tokens) > nb.inds + 1){
             for(i in 2:(length(tokens)-nb.inds)){
@@ -211,6 +213,8 @@ function(locfile){
         }
         genotypes[line.id,] <- tokens[(length(tokens)-nb.inds+1):length(tokens)]
     }
+    if(length(unique(nb.fields)) > 1)
+        stop("some markers have more fields than others")
 
     genotypes <- t(genotypes) # individuals in rows, markers in columns
 
@@ -240,7 +244,7 @@ function(locfile){
             stop(msg, call.=FALSE)
         }
         for(locus.id in 1:nb.loci){
-            if(seg[locus.id] == "<abxcd>"){
+            if(seg[locus.id] %in% new.seg.types){
                 next
             } else if(seg[locus.id] == "<abxac>"){
                 seg[locus.id] <- "<efxeg>"
