@@ -16,11 +16,13 @@ copyright (c) 2001-2018, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.44, 2018-09-13
+## Version 1.44, 2018-12-04
 
 ## Minor changes
 
 - Revision to plot.scanone() to handle +/- Inf in the LOD score column.
+
+- Add better error message in read.cross with format="mapqtl"
 
 
 ## Version 1.43, 2018-03-19

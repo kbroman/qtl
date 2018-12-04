@@ -186,7 +186,10 @@ function(locfile){
         stop("lines should have no more than ", nb.inds+4, " columns\n",
              "Problems in lines", seq(along=spl.lengths)[spl.lengths > nb.inds+4])
 
-    rownames(genotypes) <- vapply(spl, "[", "", 1)
+    rn <- vapply(spl, "[", "", 1)
+    if(nrow(genotypes) != length(rn))
+        stop(paste0("nloc = ", nrow(genotypes), ", but .loc file contains ", length(rn), " genotype rows"))
+    rownames(genotypes) <- rn
 
     if(length(spl) > nb.loci + 1){
         msg <- paste("there seems to be more loci (", locus.id-1,
