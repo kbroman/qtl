@@ -4,7 +4,7 @@
 #
 # copyright (c) 2014, INRA (author: Timothee Flutre)
 #                     (Some revisions by Karl Broman)
-# last modified Jan, 2015
+# last modified Dec, 2018
 # first written May, 2014
 #
 # This program is free software; you can redistribute it and/or
@@ -181,6 +181,8 @@ function(locfile){
     lines <- lines[-todrop]
 
     spl <- strsplit(lines, "\\s+")
+    if(length(spl) != nb.loci)
+      stop("nloc=", nb.loci, " but genotypes are found at ", length(spl), " markers")
     spl.lengths <- vapply(spl, length, 1)
     if(any(spl.lengths > nb.inds+4))
         stop("lines should have no more than ", nb.inds+4, " columns\n",
