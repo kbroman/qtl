@@ -27,15 +27,6 @@ copyright (c) 2001-2019, Karl W Broman
 - Revision to summary.map to just give warning if input does not have
   class "cross" or "map".
 
-
-## Version 1.43, 2018-03-19
-
-### Major changes:
-
-- None.
-
-### Minor changes:
-
 - Improved error message in scanone() when phenotypes are not numeric.
 
 - Small change in getgenonames() to avoid a problem if there aren't
