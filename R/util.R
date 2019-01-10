@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2015, Karl W Broman
+# copyright (c) 2001-2019, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2015
+# last modified Jan, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2857,7 +2857,7 @@ summaryMap <- summary.map <-
     if(any(class(map) == "cross")) # a cross object
         map <- pull.map(map)
     if(!any(class(map) == "map"))
-        stop("Input should have class \"cross\" or \"map\".")
+        warning("Input should have class \"cross\" or \"map\".")
 
     n.chr <- length(map)
     chrnames <- names(map)
