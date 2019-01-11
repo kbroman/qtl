@@ -2,9 +2,9 @@
 #
 # plot.R
 #
-# copyright (c) 2000-2017, Karl W Broman
+# copyright (c) 2000-2019, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Sep, 2017
+# last modified Jan, 2019
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -127,7 +127,7 @@ plotMissing <-
 
 geno.image <-
     function(x, chr, reorder=FALSE, main="Genotype data",
-             alternate.chrid=FALSE, ...)
+             alternate.chrid=FALSE, col=NULL, ...)
 {
     cross <- x
     if(!any(class(cross) == "cross"))
@@ -169,6 +169,15 @@ geno.image <-
     }
     thecolors <- thecolors[1:(maxgeno+1)]
     thebreaks <- thebreaks[1:(maxgeno+2)]
+    if(!is.null(col)) { # colors provided
+        if(length(col) < length(thecolors)) {
+            warning("col should have length ", maxgeno+1)
+            thecolors[seq_along(col)] <- col
+        }
+        else {
+            thecolors <- col[1:(maxgeno+1)]
+        }
+    }
 
     # reorder the individuals according to their phenotype
     o <- 1:nrow(Geno)

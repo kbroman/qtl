@@ -16,9 +16,11 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.44, 2019-01-09
+## Version 1.44, 2019-01-10
 
 ### Minor changes
+
+- Added col argument to geno.image() for custom colors.
 
 - Revision to plot.scanone() to handle +/- Inf in the LOD score column.
 

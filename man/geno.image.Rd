@@ -9,7 +9,7 @@
 
 \usage{
 geno.image(x, chr, reorder=FALSE, main="Genotype data",
-           alternate.chrid=FALSE, \dots)
+           alternate.chrid=FALSE, col=NULL, \dots)
 }
 
 \arguments{
@@ -30,6 +30,9 @@ geno.image(x, chr, reorder=FALSE, main="Genotype data",
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
+  \item{col}{Vector of colors. The first is for missing genotypes,
+  followed by colors for each of the genotypes. If \code{NULL}, a
+  default set of colors are used.}
   \item{\dots}{Passed to \code{\link[graphics]{image}}.}
 }
 
