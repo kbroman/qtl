@@ -16,7 +16,7 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.44, 2019-01-10
+## Version 1.44, 2019-01-22
 
 ### Minor changes
 
@@ -36,6 +36,9 @@ copyright (c) 2001-2019, Karl W Broman
 
 - plotLodProfile() now gives a more informative error message if
   called with a null QTL model.
+
+- Revised mqmplot.circle() so that chromosome IDs don't need to be
+  numbers.
 
 
 ## Version 1.42, 2018-02-19

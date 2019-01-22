@@ -13,11 +13,6 @@ o stepwiseqtl() for a 4-way cross: have the function give an error
   message? Looks like plod() is only for a backcross or f2. This stuff
   needs further testing.
 
-o mqmplot.circle only works when the chromosome names are numbers.
-  See http://bit.ly/1ISZvBD
-
-o summaryMap and plotMap should accept lists if they look right.
-
 o summary and plot functions for comparegeno results
   (ease the identication of sample duplicates)
 

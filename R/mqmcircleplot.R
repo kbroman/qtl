@@ -83,8 +83,8 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
                     if(verbose) cat("Model found for trait ",x,"\n")
                     if(!is.null(cross$locations)){
                         if(verbose) cat("Locations of traits available\n")
-                        location <- as.numeric(cross$locations[[x]])
-                        traitl <- locationtocircle(templateresult,location[1],location[2],spacing=spacing)
+                        location <- cross$locations[[x]]
+                        traitl <- locationtocircle(templateresult,location[[1]],location[[2]],spacing=spacing)
                     }else{
                         if(verbose) cat("Locations of traits not available\n")
                         traitl <- t(c(0,0+0.25*(0.5-(x/length(result)))))
@@ -142,8 +142,8 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
                     points(qtll,col="red",pch=19,cex=1)
                     text(qtll*1.15,model[[2]][y],col="red",cex=0.7)
                     if(!is.null(cross$locations)){
-                        location <- as.numeric(cross$locations[[highlight]])
-                        traitl <- locationtocircle(templateresult,location[1],location[2],spacing=spacing)
+                        location <- cross$locations[[highlight]]
+                        traitl <- locationtocircle(templateresult,location[[1]],location[[2]],spacing=spacing)
                         points(traitl,col="red",lwd=2,pch=24,cex=1.5)
                     }else{
                         traitl <- c(0,0)
@@ -238,7 +238,7 @@ drawcirculargenome <- function(result,lodmarkers=FALSE,spacing=50){
             points(locationtocircle(result,result[x,1],result[x,2],spacing=spacing),pch=20)
         }
     }
-    for(x in 1:nchr){
+    for(x in unique(result$chr)) {
         chrnumberloc <- locationtocircle(result,x,getchromosomelength(result,x)/2,spacing=spacing)
         points(t(c(-1.1, -1.15)))
         points(t(c(-0.9, -1.15)))
