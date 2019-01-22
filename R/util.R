@@ -2008,7 +2008,7 @@ checkcovar <-
     }
 
     # check phenotypes - we allow multiple phenotypes here
-    if(pheno.col < 1 || pheno.col > nphe(cross))
+    if(any(pheno.col < 1 | pheno.col > nphe(cross)))
         stop("Specified phenotype column is invalid.")
     # check if all phenotypes are numeric
     pheno <- cross$pheno[,pheno.col,drop=FALSE]
