@@ -1652,7 +1652,7 @@ c.cross <-
         y <- args[[i]]
         y.marnam <- unlist(lapply(y$geno, function(b) colnames(b$data)))
         y.marpos <- unlist(lapply(y$geno, function(b) b$map))
-        if(chr != names(y$geno) || any(n.mar != nmar(y)) ||
+        if(any(chr != names(y$geno)) || any(n.mar != nmar(y)) ||
            any(marnam != y.marnam) || any(marpos != y.marpos)) {
             map.mismatch <- 1
             break

@@ -40,6 +40,8 @@ copyright (c) 2001-2019, Karl W Broman
 - Revised mqmplot.circle() so that chromosome IDs don't need to be
   numbers.
 
+- Fix small bugs in c.cross() and checkcovar().
+
 
 ## Version 1.42, 2018-02-19
 
