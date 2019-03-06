@@ -4,15 +4,19 @@ citEntry(entry="article",
          title = "R/qtl: {QTL} mapping in experimental crosses",
          author = personList(person(c("Karl", "W."), "Broman"),
                              person("Hao", "Wu"),
-                 person("Saunak", "Sen"),
-                 person(c("Gary", "A."), "Churchill")),
+                             person("Śaunak", "Sen"),
+                             person(c("Gary", "A."), "Churchill")),
          journal = "Bioinformatics",
          year = 2003,
          volume = 19,
          pages = "889-890",
          key = "Broman2003",
+         doi = "10.1093/bioinformatics/btg112",
+         url = "https://doi.org/10.1093/bioinformatics/btg112",
+         eprint = "https://academic.oup.com/bioinformatics/article-pdf/19/7/889/499910/btg112.pdf",
 
          textVersion =
          paste("Broman et al. (2003) R/qtl: QTL mapping in",
-               "experimental crosses. Bioinformatics 19:889-890")
+               "experimental crosses. Bioinformatics 19:889-890",
+               "doi:10.1093/bioinformatics/btg112")
          )
