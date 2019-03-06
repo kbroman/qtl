@@ -11,6 +11,7 @@ Maintainer: Karl W Broman <broman@wisc.edu>
 Description: Analysis of experimental crosses to identify genes
   (called quantitative trait loci, QTLs) contributing to variation in
   quantitative traits.
+  Broman et al. (2003) <doi:10.1093/bioinformatics/btg112>.
 Depends: R (>= 2.14.0)
 Imports: parallel, graphics, stats, utils, grDevices
 Suggests: testthat
