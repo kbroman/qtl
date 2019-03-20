@@ -2,8 +2,8 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2005-2015, Karl W Broman
-# last modified Aug, 2015
+# copyright (c) 2005-2019, Karl W Broman
+# last modified Mar, 2019
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -340,12 +340,6 @@ read.cross.csvs <-
             cross$geno[[i]]$map <- cross$geno[[i]]$map[o]
             cross$geno[[i]]$data <- cross$geno[[i]]$data[,o,drop=FALSE]
         }
-    }
-
-    # if 4-way cross, make the maps matrices
-    if(type=="4way") {
-        for(i in 1:n.chr)
-            cross$geno[[i]]$map <- rbind(cross$geno[[i]]$map, cross$geno[[i]]$map)
     }
 
     # estimate genetic map

@@ -2,8 +2,8 @@
 #
 # read.cross.R
 #
-# copyright (c) 2000-2014, Karl W Broman
-# last modified June, 2014
+# copyright (c) 2000-2019, Karl W Broman
+# last modified Mar, 2019
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ read.cross <-
              na.strings=c("-","NA"), genotypes=c("A","H","B","D","C"),
              alleles=c("A","B"), estimate.map=FALSE, convertXdata=TRUE,
              error.prob=0.0001, map.function=c("haldane", "kosambi", "c-f", "morgan"),
-             BC.gen = 0, F.gen = 0, crosstype, ...)
+             BC.gen = 0, F.gen = 0, crosstype=NULL, ...)
 {
     if(format == "csvrs") {
         format <- "csvsr"
@@ -160,14 +160,6 @@ read.cross <-
     ## Pass through read.cross.bcsft for BCsFt (convert if appropriate).
     cross <- read.cross.bcsft(cross = cross, BC.gen = BC.gen, F.gen = F.gen, ...)
 
-    # re-estimate map?
-    if(estimate.map) {
-        cat(" --Estimating genetic map\n")
-        map.function <- match.arg(map.function)
-        newmap <- est.map(cross, error.prob=error.prob, map.function=map.function)
-        cross <- replace.map(cross, newmap)
-    }
-
     # store genotype data as integers
     for(i in 1:nchr(cross))
         storage.mode(cross$geno[[i]]$data) <- "integer"
@@ -199,11 +191,26 @@ read.cross <-
 
     attr(cross, "alleles") <- alleles
 
-    type <- class(cross)[1]
-    if(!missing(crosstype)) {
-        if(crosstype=="risib") cross <- convert2risib(cross)
-        else if(crosstype=="riself") cross <- convert2riself(cross)
-        else class(cross)[1] <- crosstype
+    if(is.null(crosstype)) crosstype <- class(cross)[1]
+    if(crosstype=="risib") cross <- convert2risib(cross)
+    else if(crosstype=="riself") cross <- convert2riself(cross)
+    else class(cross)[1] <- crosstype
+
+    # if 4-way cross, make the maps matrices
+    if(crosstype=="4way") {
+        for(i in seq_along(cross$geno)) {
+            if(!is.matrix(cross$geno[[i]]$map) || nrow(cross$geno[[i]]$map) < 2) {
+                cross$geno[[i]]$map <- rbind(cross$geno[[i]]$map, cross$geno[[i]]$map)
+            }
+        }
+    }
+
+    # re-estimate map?
+    if(estimate.map) {
+        cat(" --Estimating genetic map\n")
+        map.function <- match.arg(map.function)
+        newmap <- est.map(cross, error.prob=error.prob, map.function=map.function)
+        cross <- replace.map(cross, newmap)
     }
 
     # run checks

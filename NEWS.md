@@ -16,6 +16,14 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+## Version 1.45, 2019-03-20
+
+### Bug fixes
+
+- Fix bug related to reading 4-way cross data, to ensure that the
+  genetic map for each chromosome is a 2-row matrix
+
+
 ## Version 1.44, 2019-01-22
 
 ### Minor changes
