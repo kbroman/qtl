@@ -4058,6 +4058,3 @@ copyright (c) 2001-2019, Karl W Broman
 
 - Saunak Sen and I are now working together on this project, and so
   things will begin to progress more quickly (we hope).
-
-----------------------------------------------------------------------
-End of STATUS.txt

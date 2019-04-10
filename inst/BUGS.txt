@@ -2,7 +2,8 @@ Bugs and bug fixes for R/qtl
 ----------------------------------------------------------------------
 This file is intended to contain known bugs in the R/qtl package,
 version by version.  The bugs marked with ">>" are not yet fixed.  See
-STATUS.txt for further information on changes to the package.
+https://github.com/kbroman/qtl/blob/master/NEWS.md
+for further information on changes to the package.
 
 The list is not comprehensive.  I don't do a terribly good job of
 keeping track of things I find and fix. The git log gives an explicit
