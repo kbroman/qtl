@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2018, Karl W Broman
-# last modified Feb, 2018
+# copyright (c) 2007-2019, Karl W Broman
+# last modified Aug, 2019
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -215,13 +215,14 @@ stepwiseqtl <-
     pheno <- cross$pheno[,pheno.col]
     if(!is.null(covar)) phcovar <- cbind(pheno, covar)
     else phcovar <- as.data.frame(pheno, stringsAsFactors=TRUE)
-    hasmissing <- apply(phcovar, 1, function(a) any(is.na(a)))
+    hasmissing <- rowSums(is.na(phcovar)) > 0
     if(all(hasmissing))
         stop("All individuals are missing phenotypes or covariates.")
     if(any(hasmissing)) {
         pheno <- pheno[!hasmissing]
         cross <- subset(cross, ind=!hasmissing)
         if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+        if(forceXcovar) Xcovar <- Xcovar[!hasmissing,,drop=FALSE]
 
         if(!startatnull) {
             if(method=="imp")
