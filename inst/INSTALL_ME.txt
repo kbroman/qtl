@@ -18,7 +18,7 @@ OBTAINING R/QTL
 
   You can obtain the latest version of R/qtl from
 
-      http://rqtl.org
+      https://rqtl.org
 
   Copies of R/qtl will also be placed on CRAN (cran.r-project.org).
   Binaries are available for Windows and MacOS; source code is
@@ -141,7 +141,7 @@ GETTING STARTED
   examples.  The tutorial is bundled with R/qtl, as "rqtltour.pdf" and
   is also available from the R/qtl website:
 
-      http://rqtl.org
+      https://rqtl.org
 
 
 CITING R/QTL

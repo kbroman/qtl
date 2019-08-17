@@ -1,7 +1,7 @@
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
 copyright (c) 2001-2019, Karl W Broman
-<http://rqtl.org>
+<https://rqtl.org>
 
     The R/qtl package is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License,
@@ -77,7 +77,7 @@ copyright (c) 2001-2019, Karl W Broman
   following code at the top:
 
   ```
-  source("http://rqtl.org/dotfunc.R")
+  source("https://rqtl.org/dotfunc.R")
   ```
 
 ### Minor changes:
@@ -864,7 +864,7 @@ copyright (c) 2001-2019, Karl W Broman
 
 - Added a tutorial on genetic map construction; find it within the
   package at docs/geneticmaps.pdf, or (more simply, probably), find it
-  on the web at http://rqtl.org/tutorials/geneticmaps.pdf
+  on the web at https://rqtl.org/tutorials/geneticmaps.pdf
 
 - Added two additional formats to summary.scanone(), "tabByCol" and
   "tabByChr".  These produce tables of LOD peaks organized by LOD
@@ -1172,7 +1172,7 @@ copyright (c) 2001-2019, Karl W Broman
   we have incorporated Ritsert Jansen's MQM mapping software within
   R/qtl. (Previously, it was available only through the commercial
   software package, mapqtl).  See the tutorial at
-  http://rqtl.org/tutorials/MQM-tour.pdf
+  https://rqtl.org/tutorials/MQM-tour.pdf
 
 ### Minor changes:
 
@@ -2320,7 +2320,7 @@ copyright (c) 2001-2019, Karl W Broman
 - Completely revised the summary.scanone and summary.scantwo
   functions.  I have written documents to explain the use of the new
   functions.  These are distributed with the code and are also
-  available at the R/qtl website (http://rqtl.org), under
+  available at the R/qtl website (https://rqtl.org), under
   "Tutorials".
 
 - summary.scanone:  There is now a format argument, useful for the
