@@ -22,7 +22,7 @@ help(read.cross)
 ############################################################
 # Data import
 ############################################################
-sug <- read.cross("csv", "http://www.rqtl.org", "sug.csv",
+sug <- read.cross("csv", "https://rqtl.org", "sug.csv",
                   genotypes=c("CC", "CB", "BB"), alleles=c("C", "B"))
 
 ############################################################
@@ -81,7 +81,7 @@ plot(out.imp - out.em, out.hk - out.em, col=c("green", "red"), ylim=c(-1,1))
 ############################################################
 # Permutation tests
 ############################################################
-load(url("http://www.rqtl.org/various.RData"))
+load(url("https://rqtl.org/various.RData"))
 
 operm <- scanone(sug, method="hk", n.perm=1000)
 

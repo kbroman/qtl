@@ -51,12 +51,12 @@ Department of Biostatistics and Medical Informatics\\
 University of Wisconsin -- Madison
 
 \vspace{2mm}
-\href{http://www.rqtl.org}{http://www.rqtl.org}
+\href{https://rqtl.org}{https://rqtl.org}
 \vspace{2mm}
 
 26 November 2012 % the date
 
-\rule{7.0in}{1mm} 
+\rule{7.0in}{1mm}
 \end{center}
 
 
@@ -82,30 +82,30 @@ that here.)
 
 \item The best way to get help on the functions and data sets in R
 (and in R/qtl) is via the html version of the help files. One way to
-get access to this is to type 
+get access to this is to type
 
 \usercolor \verb-help.start()- \normalcolor
 
-This should open a browser with the main help menu.  
+This should open a browser with the main help menu.
 If you then click on \othercolor Packages \normalcolor $\rightarrow$
 \othercolor qtl\normalcolor , you can see all of the available
 functions and datasets in R/qtl.  For example, look at the help file
 for the function \verb-read.cross-.
 
 An alternative method to view this help file is to type one of the
-following: 
+following:
 
 \usercolor \verb|help(read.cross)| \\
 \verb|?read.cross| \normalcolor
 
 The html version of the help files are somewhat easier to read, and
-allow use of hotlinks between different functions.  
+allow use of hotlinks between different functions.
 
 \item All of the code in this tutorial is available as a file from
   which you may copy and paste into R, if you prefer that to typing.
   Type the following within R to get access to the file:
 
-\usercolor \verb-url.show("http://www.rqtl.org/rqtltour2.R")-
+\usercolor \verb-url.show("https://rqtl.org/rqtltour2.R")-
 \normalcolor
 
 \end{enumerate}
@@ -115,7 +115,7 @@ allow use of hotlinks between different functions.
 \textbf{Data import} \vspace{6pt}
 
 We will consider data from Sugiyama et al., Physiol Genomics 10:5--12,
-2002. 
+2002.
 The
 data are from an intercross between BALB/cJ and CBA/CaJ; only male
 offspring were considered.  There are four phenotypes: blood pressure,
@@ -123,15 +123,15 @@ heart rate, body weight, and heart weight.  We will focus on the blood
 pressure phenotype, will consider just the 163 individuals with
 genotype data and, for simplicity, will focus on the autosomes.
 The data are contained in the comma-delimited file
-\href{http://www.rqtl.org/sug.csv}{http://www.rqtl.org/sug.csv}.  
+\href{https://rqtl.org/sug.csv}{https://rqtl.org/sug.csv}.
 
 \begin{enumerate}
 \addtocounter{enumi}{5}
 
 \item Load the data into R/qtl as follows.
 
-\usercolor 
-\verb|sug <- read.cross("csv", "http://www.rqtl.org", "sug.csv",| \\
+\usercolor
+\verb|sug <- read.cross("csv", "https://rqtl.org", "sug.csv",| \\
 \verb|                  genotypes=c("CC", "CB", "BB"), alleles=c("C", "B"))|
 \normalcolor
 \end{enumerate}
@@ -145,7 +145,7 @@ used in plots and such.
 
 \verb-read.cross- loads the data from the file and formats it into
 a special cross object, which is then assigned to \verb-sug- via the
-assignment operator (\verb:<-:).  
+assignment operator (\verb:<-:).
 
 
 \clearpage
@@ -154,7 +154,7 @@ assignment operator (\verb:<-:).
 Generally, at this point, one would spend considerable time studying
 the genotype and phenotype data, looking for potential errors.  In
 many cases, about half of the analysis time is devoted to such
-diagnostics.  
+diagnostics.
 
 \vspace{12pt}
 
@@ -162,7 +162,7 @@ In previous tutorials, we've often gotten bogged down in this part,
 and so we'll skip it here, assume that the data are okay, and
 jump right into QTL mapping.  See the longer (``brief'') tour of R/qtl
 at
-\href{http://www.rqtl.org/tutorials}{http://www.rqtl.org/tutorials},
+\href{https://rqtl.org/tutorials}{https://rqtl.org/tutorials},
 or Chapter 3 of Broman and Sen (2009).
 
 
@@ -174,7 +174,7 @@ The data object \verb-sug- is complex; it contains the genotype
 data, phenotype data and genetic map.  R has a certain amount of
 ``object oriented'' facilities, so that calls to functions like
 \verb-summary- and \verb-plot- are interpreted appropriately for the object
-considered.  
+considered.
 
 The object \verb-sug- has ``class'' \verb-"cross"-, and so calls to
 \verb-summary- and \verb-plot- are actually sent to the functions
@@ -238,7 +238,7 @@ histograms or bar plots for the six phenotypes.  The last two
 \vspace{12pt}
 \textbf{Single-QTL analysis} \vspace{6pt}
 
-Let's now proceed to QTL mapping via a single-QTL model.  
+Let's now proceed to QTL mapping via a single-QTL model.
 
 \begin{enumerate}
 \addtocounter{enumi}{10}
@@ -289,7 +289,7 @@ data), though it could have also been assigned to a new object.
 \normalcolor
 
 \item We can do the genome scan via Haley-Knott regression by calling
-  \verb-scanone- with the argument \verb-method="hk"-.  
+  \verb-scanone- with the argument \verb-method="hk"-.
 
 \usercolor
 \verb|out.hk <- scanone(sug, method="hk")|
@@ -306,7 +306,7 @@ data), though it could have also been assigned to a new object.
 
 \usercolor
 \verb|plot(out.em, col="blue")| \\
-\verb|plot(out.hk, col="red", add=TRUE)| 
+\verb|plot(out.hk, col="red", add=TRUE)|
 \normalcolor
 
 \item It's perhaps more informative to plot the differences:
@@ -314,7 +314,7 @@ data), though it could have also been assigned to a new object.
 \usercolor
 \verb|plot(out.hk - out.em, ylim=c(-0.3, 0.3), ylab="LOD(HK)-LOD(EM)")|
 \normalcolor
- 
+
 \item To perform a genome scan by the multiple imputation method, one
   must first call \verb-sim.geno- to perform the multiple
   imputations.  This is similar to \verb-calc.genoprob-, but with an
@@ -365,7 +365,7 @@ skip it (here) and load the results (that I calculated previously) for
 this plus other time-consuming stuff we'll see shortly as follows.\label{various}
 
 \usercolor
-\verb|load(url("http://www.rqtl.org/various.RData"))|
+\verb|load(url("https://rqtl.org/various.RData"))|
 \normalcolor
 
 
@@ -410,7 +410,7 @@ chromosomes 7 and 15.  Interval estimates of the location of QTL are
 commonly obtained via 1.5-LOD support intervals, which may be
 calculated via the function \verb-lodint-.  Alternatively, an
 approximate Bayes credible interval may be obtained with
-\verb-bayesint-.  
+\verb-bayesint-.
 
 \begin{enumerate}
 \addtocounter{enumi}{28}
@@ -419,7 +419,7 @@ approximate Bayes credible interval may be obtained with
 
 \usercolor
 \verb|lodint(out.hk, chr=7)| \\
-\verb|bayesint(out.hk, chr=7)| 
+\verb|bayesint(out.hk, chr=7)|
 \normalcolor
 
 The first and last rows define the ends of the intervals; the middle
@@ -430,7 +430,7 @@ row is the estimated QTL location.
 
 \usercolor
 \verb|lodint(out.hk, chr=7, expandtomarkers=TRUE)| \\
-\verb|bayesint(out.hk, chr=7, expandtomarkers=TRUE)| 
+\verb|bayesint(out.hk, chr=7, expandtomarkers=TRUE)|
 \normalcolor
 
 \item We can calculate the 2-LOD support interval and the 99\% Bayes
@@ -438,14 +438,14 @@ row is the estimated QTL location.
 
 \usercolor
 \verb|lodint(out.hk, chr=7, drop=2)| \\
-\verb|bayesint(out.hk, chr=7, prob=0.99)| 
+\verb|bayesint(out.hk, chr=7, prob=0.99)|
 \normalcolor
 
 \item The intervals for the chr 15 locus may be calculated as follows.
 
 \usercolor
 \verb|lodint(out.hk, chr=15)| \\
-\verb|bayesint(out.hk, chr=15)| 
+\verb|bayesint(out.hk, chr=15)|
 \normalcolor
 
 \end{enumerate}
@@ -470,7 +470,7 @@ plots the average phenotype for each genotype group.
 \normalcolor
 
 Note that red dots correspond to inferred genotypes (based on a single
-imputation). 
+imputation).
 
 
 \item The function \verb-effectplot- uses the multiple imputation
@@ -510,7 +510,7 @@ imputation).
 
 \usercolor
 \verb|effectplot(sug, mname1="7@47.7", mname2="15@12")| \\
-\verb|effectplot(sug, mname2="7@47.7", mname1="15@12")| 
+\verb|effectplot(sug, mname2="7@47.7", mname1="15@12")|
 \normalcolor
 
 The two loci do not appear to interact.
@@ -568,10 +568,10 @@ argument \verb-pheno.col-.
 
 Here, it looks at the first LOD score column and picks off the peaks
 that are above 3, and then gives the LOD scores at that location for
-the other three columns.  
+the other three columns.
 
 To do the same thing but focusing on another column, use the argument
-\verb-lodcolumn-. 
+\verb-lodcolumn-.
 
 \usercolor
 \verb|summary(out.all, threshold=3, lodcolumn=4)|
@@ -649,7 +649,7 @@ contains the ``full'' LOD scores, comparing the full two-locus model
 to the null model.  Because of the clear evidence for QTL on
 chromosomes 7 and 15, we see ``tails'' along those two chromosomes:
 the two locus model with either chr 7 or chr 15 and anything else is clearly better
-than the null model.  
+than the null model.
 
 \item It's best to replace the lower-triangle with the LOD score comparing the full model to
   the best single-QTL model, using either \verb:lower="cond-int": or
@@ -729,7 +729,7 @@ genotype probabilities for use in Haley-Knott regression.
 
 A key part of the output is the ``drop one term at a time'' table,
 which compares the fit of the two-QTL model to the reduced model in
-which a single QTL is omitted.  
+which a single QTL is omitted.
 
 \item We may obtain the estimated effects of the QTL via
   \verb-get.ests=TRUE-.  We use \verb-dropone=FALSE- to suppress the
@@ -846,7 +846,7 @@ LOD score.  The output is a QTL object.
 \normalcolor
 
 With \verb-verbose=2-, we get an indication of the location of the QTL
-at each step.  
+at each step.
 
 The result is exactly the model that we had after \verb-refineqtl-.
 
@@ -868,10 +868,10 @@ The result is exactly the model that we had after \verb-refineqtl-.
 \item Broman KW, Sen \'S (2009) A guide to QTL mapping with
     R/qtl.  Springer
 
-\item 	Manichaikul A, Moon JY, Sen \'S, Yandell BS, Broman KW (2009)
+\item   Manichaikul A, Moon JY, Sen \'S, Yandell BS, Broman KW (2009)
   A model selection approach for the identification of quantitative
   trait loci in experimental crosses, allowing epistasis. Genetics
-  181:1077--1086 
+  181:1077--1086
 
 \item Dalgaard P (2008) Introductory statistics with R, 2nd edition.
   Springer

@@ -41,12 +41,12 @@ Department of Biostatistics and Medical Informatics\\
 University of Wisconsin -- Madison
 
 \vspace{2mm}
-\href{http://www.rqtl.org}{http://www.rqtl.org}
+\href{https://rqtl.org}{https://rqtl.org}
 \vspace{2mm}
 
 21 March 2012 % the date
 
-\rule{7.0in}{1mm} 
+\rule{7.0in}{1mm}
 \end{center}
 
 \noindent \textbf{Overview of R/qtl} \vspace{6pt}
@@ -55,7 +55,7 @@ R/qtl is an extensible, interactive environment for mapping
 quantitative trait loci (QTL) in experimental crosses. It is
 implemented as an add-on package for the freely available and widely
 used statistical language/software R (see
-\href{http://www.r-project.org}{www.r-project.org}). The development
+\href{https://www.r-project.org}{www.r-project.org}). The development
 of this software as an add-on to R allows us to take advantage of the
 basic mathematical and statistical functions, and powerful graphics
 capabilities, that are provided with R. Further, the user will benefit
@@ -89,7 +89,7 @@ terms in that license.
 
 R is an open-source implementation of the S language. As described on
 the R-project homepage
-(\href{http://www.r-project.org}{www.r-project.org}):
+(\href{https://www.r-project.org}{www.r-project.org}):
 
 \begin{quote}
 R is a system for statistical computation and graphics.  It consists
@@ -110,7 +110,7 @@ also a large set of functions which provide a flexible graphical
 environment for creating various kinds of data
 presentations. Additional modules are available for a variety of
 specific purposes.
-\end{quote} 
+\end{quote}
 
 R is freely available for Windows, Unix and Mac OS X, and may be
 downloaded from the Comprehensive R Archive Network (CRAN;
@@ -137,37 +137,37 @@ experimental crosses.  Bioinformatics 19:889-890
 
 \newpage
 
-\noindent \textbf{Selected R/qtl functions} 
+\noindent \textbf{Selected R/qtl functions}
 
 %\renewcommand{\arraystretch}{0.9}
-\noindent \begin{tabular}{lll} 
+\noindent \begin{tabular}{lll}
 \hspace*{35mm} & \hspace*{25mm} & \hspace*{103mm} \\ \hline
-\textbf{Sample data} 
+\textbf{Sample data}
 & badorder & An intercross with misplaced markers \\
 & bristle3 & Data on bristle number for Drosophila chromosome 3 \\
 & bristleX & Data on bristle number for Drosophila X chromosome \\
 & fake.4way & Simulated data for a 4-way cross \\
 & fake.bc & Simulated data for a backcross \\
 & fake.f2 & Simulated data for an F$_2$ intercross \\
-& hyper & Backcross data on salt-induced hypertension \\ 
+& hyper & Backcross data on salt-induced hypertension \\
 & listeria & Intercross data on Listeria monocytogenes
-susceptibility \\ 
+susceptibility \\
 & map10 & A genetic map modeled after the mouse genome (10 cM
-spacing)\\ 
+spacing)\\
 \hline
 
-\textbf{Input/output} 
+\textbf{Input/output}
 & read.cross & Read data for a QTL
 experiment \\
 & write.cross & Write data for a QTL experiment to a file \\
-\hline 
-
-\textbf{Simulation} 
-& sim.cross & Simulate a QTL experiment \\
-& sim.map & Generate a genetic map \\ 
 \hline
 
-\textbf{Summaries} 
+\textbf{Simulation}
+& sim.cross & Simulate a QTL experiment \\
+& sim.map & Generate a genetic map \\
+\hline
+
+\textbf{Summaries}
 & qtlversion & Gives the version number of installed R/qtl package \\
 & plot.cross & Plot various features of a cross object \\
 & plotMissing & Plot grid of missing genotypes \\
@@ -175,9 +175,9 @@ experiment \\
 genotypes \\
 & plotPheno   & Histogram or bar plot of a phenotype \\
 & plotInfo & Plot the proportion of missing genotype data \\
-& summary.cross & Print summary of QTL experiment \\ 
-& summaryMap & Print summary of a genetic map \\ 
-& \multicolumn{2}{l}{nchr, nind, nmar, nphe, totmar, nmissing, ntyped} \\ 
+& summary.cross & Print summary of QTL experiment \\
+& summaryMap & Print summary of a genetic map \\
+& \multicolumn{2}{l}{nchr, nind, nmar, nphe, totmar, nmissing, ntyped} \\
 & find.pheno & Find the column number for a particular phenotype \\
 & find.marker & Find the marker closest to a specified position \\
 & find.flanking & Find the markers flanking a particular position \\
@@ -186,12 +186,12 @@ particular position \\
 & find.markerpos & Find the map positions of a marker \\
 \hline
 
-\textbf{Data manipulation} 
+\textbf{Data manipulation}
 & clean.cross & Remove intermediate calculations from a cross \\
 & drop.markers & Remove a list of markers \\
 & drop.nullmarkers & Remove markers without data \\
-& fill.geno & Fill in holes in genotype data by 
-imputation or Viterbi \\ 
+& fill.geno & Fill in holes in genotype data by
+imputation or Viterbi \\
 & strip.partials & Replace partially informative genotypes with
 missing values \\
 & pull.map & Pull out the genetic map from a cross \\
@@ -202,24 +202,24 @@ missing values \\
 & subset.cross & Select a subset of chromosomes and/or individuals from
 a cross \\
 & c.cross & Combine two crosses into one object \\
-& switch.order & Switch the order of markers on a chromosome \\ 
-& movemarker & Move a marker from one chromosome to another \\ 
-\hline 
-
-\textbf{HMM engine} 
-& argmax.geno & Reconstruct underlying genotypes by the Viterbi
-algorithm \\ 
-& calc.genoprob & Calculate conditional genotype probabilities \\ 
-& sim.geno & Simulate genotypes given observed marker data \\ 
+& switch.order & Switch the order of markers on a chromosome \\
+& movemarker & Move a marker from one chromosome to another \\
 \hline
 
-\textbf{Diagnostics} 
-& geno.table & Create table of genotype distributions \\ 
+\textbf{HMM engine}
+& argmax.geno & Reconstruct underlying genotypes by the Viterbi
+algorithm \\
+& calc.genoprob & Calculate conditional genotype probabilities \\
+& sim.geno & Simulate genotypes given observed marker data \\
+\hline
+
+\textbf{Diagnostics}
+& geno.table & Create table of genotype distributions \\
 & geno.crosstab & Create cross-tabulation of genotypes at two markers \\
 & checkAlleles & Identify markers with potentially switched alleles \\
 & calc.errorlod & Calculate Lincoln \& Lander (1992) error LOD scores \\
-& top.errorlod & List genotypes with highest error LOD values \\ 
-& plotGeno & Plot observed genotypes, flagging likely errors \\ 
+& top.errorlod & List genotypes with highest error LOD values \\
+& plotGeno & Plot observed genotypes, flagging likely errors \\
 & comparecrosses & Compare two cross objects, to see if they are the same \\
 & comparegeno & Calculate proportion of matching genotypes for each
 pair of individuals \\
@@ -229,27 +229,27 @@ pair of individuals \\
 
 \newpage
 
-\noindent \textbf{Selected R/qtl functions (continued)} 
+\noindent \textbf{Selected R/qtl functions (continued)}
 
 %\renewcommand{\arraystretch}{0.9}
-\noindent \begin{tabular}{lll} 
-\hspace*{35mm} & \hspace*{25mm} & \hspace*{103mm} \\ 
+\noindent \begin{tabular}{lll}
+\hspace*{35mm} & \hspace*{25mm} & \hspace*{103mm} \\
 \hline
 
-\textbf{Genetic mapping} 
-& est.rf & Estimate pairwise recombination fractions \\ 
-& plotRF & Plot recombination fractions \\ 
+\textbf{Genetic mapping}
+& est.rf & Estimate pairwise recombination fractions \\
+& plotRF & Plot recombination fractions \\
 & est.map & Estimate genetic map \\
 & plotMap & Plot genetic map(s) \\
 & summaryMap & Print summary of a genetic map \\
 & ripple & Assess marker order by permuting groups of adjacent
 markers \\
-& summary.ripple & Print summary of ripple output \\ 
+& summary.ripple & Print summary of ripple output \\
 & compareorder & Compare two orderings of markers on a chromosome \\
 & tryallpositions & Test all possible positions for a marker \\
 \hline
 
-\textbf{QTL mapping} 
+\textbf{QTL mapping}
 & scanone & Genome scan with a single QTL model \\
 & scantwo & Two-dimensional genome scan with a two-QTL model \\
 & lodint & Calculate a LOD support interval \\
@@ -258,30 +258,30 @@ markers \\
 interval for QTL location \\
 & plot.scanone & Plot output for a one-dimensional genome scan \\
 & add.threshold & Add a horizontal line at a LOD threshold to a genome scan plot \\
-& plot.scantwo & Plot output for a two-dimensional genome scan \\ 
+& plot.scantwo & Plot output for a two-dimensional genome scan \\
 & summary.scanone & Print summary of scanone output \\
-& summary.scantwo & Print summary of scantwo output \\ 
+& summary.scantwo & Print summary of scantwo output \\
 & max.scanone & Maximum peak in scanone output \\
 & max.scantwo & Maximum peak in scantwo output \\
 & effectplot & Plot phenotype means of genotype groups defined
 by 1 or 2 markers \\
 & effectscan & Plot estimated QTL effects across the whole genome \\
-& plotPXG & Like effectplot, but as a dot plot of the phenotypes \\ 
+& plotPXG & Like effectplot, but as a dot plot of the phenotypes \\
 \hline
 
-\textbf{Multiple QTL models} 
-& makeqtl & Make a qtl object for use by fitqtl \\ 
+\textbf{Multiple QTL models}
+& makeqtl & Make a qtl object for use by fitqtl \\
 & fitqtl & Fit a multiple QTL model \\
 & summary.fitqtl & Get summary of the result of fitqtl \\
 & scanqtl & Perform a multi-dimensional genome scan \\
 & refineqtl & Refine the QTL locations in a multiple QTL model \\
 & plotLodProfile & Plot 1-dimensional LOD profiles for a multiple QTL
 model \\
-& addqtl & Scan for an additional QTL, in a 
+& addqtl & Scan for an additional QTL, in a
 multiple-QTL model \\
-& addpair & Scan for an additional pair of QTL, in a 
+& addpair & Scan for an additional pair of QTL, in a
 multiple-QTL model \\
-& addint & Add pairwise interactions, 
+& addint & Add pairwise interactions,
 one at a time, in a multiple-QTL model \\
 & summary.qtl & Print a summary of a QTL object \\
 & plot.qtl & Plot the QTL locations on the genetic map \\
@@ -296,7 +296,7 @@ Mapping \\
 & calc.penalties & Calculate penalties for use with stepwiseqtl \\
 & plotModel & Plot a graphical representation of a multiple-QTL model \\
 \hline
-\end{tabular} 
+\end{tabular}
 \newpage
 
 
@@ -316,7 +316,7 @@ user is running either Windows or Mac OS X.
 
 \begin{enumerate}
 
-\item To start R, double-click its icon.  
+\item To start R, double-click its icon.
 
 \item To exit, type:
 
@@ -330,7 +330,7 @@ Click yes or no to save or discard your work.
   along, so that, should R crash, you won't have to start from
   scratch.  You would type:
 
-\usercolor \verb|save.image()| \normalcolor 
+\usercolor \verb|save.image()| \normalcolor
 
 \item Load the R/qtl package:
 
@@ -342,29 +342,29 @@ Click yes or no to save or discard your work.
 
 \item The best way to get help on the functions and data sets in R
 (and in R/qtl) is via the html version of the help files. One way to
-get access to this is to type 
+get access to this is to type
 
 \usercolor \verb-help.start()- \normalcolor
 
-This should open a browser with the main help menu.  
+This should open a browser with the main help menu.
 If you then click on \othercolor Packages \normalcolor $\rightarrow$
 \othercolor qtl\normalcolor , you can see all of the available
 functions and datasets in R/qtl.  For example, look at the help file
 for the function \verb-read.cross-.
 
 An alternative method to view this help file is to type one of the
-following: 
+following:
 
 \usercolor \verb|help(read.cross)| \\
 \verb|?read.cross| \normalcolor
 
 The html version of the help files are somewhat easier to read, and
-allow use of hotlinks between different functions.  
+allow use of hotlinks between different functions.
 
 %You can create a file \othercolor \verb-"c:\.Rprofile"- \normalcolor
 %(\othercolor \verb-~/.Rprofile- \normalcolor in Mac OS X) containing any
 %R code to be executed whenever R is started.  The command \usercolor
-%\verb-library(qtl)- \normalcolor 
+%\verb-library(qtl)- \normalcolor
 %is a good candidate for
 %placement in such a file.
 
@@ -372,7 +372,7 @@ allow use of hotlinks between different functions.
   which you may copy and paste into R, if you prefer that to typing.
   Type the following within R to get access to the file:
 
-\usercolor \verb-url.show("http://www.rqtl.org/rqtltour.R")-
+\usercolor \verb-url.show("https://rqtl.org/rqtltour.R")-
 \normalcolor
 
 \end{enumerate}
@@ -385,7 +385,7 @@ allow use of hotlinks between different functions.
 software is the import of data.  With R/qtl, one may import data in
 several different formats by use of the function \verb-read.cross-.
 (Example data files are available at
-\href{http://www.rqtl.org/sampledata}{www.rqtl.org/sampledata}.)  The
+\href{https://rqtl.org/sampledata}{https://rqtl.org/sampledata}.)  The
 internal data structure used by R/qtl is rather complicated, and is
 described in the help file for \verb-read.cross-.  (Also see Example
 6 on page~\pageref{example6}.) We won't discuss data import any further here, except to
@@ -423,11 +423,11 @@ by R/qtl until later.  For now we'll just say that the data
 call that function directly, or we may simply use \verb-summary- and
 the data is sent to the appropriate function according to its class.
 
-\usercolor \verb|summary(hyper)| 
+\usercolor \verb|summary(hyper)|
 \normalcolor
 
 Several other utility functions are available for getting summary
-information on the data.  Hopefully these are self-explanatory.  
+information on the data.  Hopefully these are self-explanatory.
 
 \usercolor
 \verb|nind(hyper)| \\
@@ -453,7 +453,7 @@ To initiate this, click (on the menu bar) \othercolor History
 We may plot the individual components of the above multi-plot figure
 as follows.
 
-\usercolor 
+\usercolor
 \verb|plotMissing(hyper)| \\
 \verb|plotMap(hyper)| \\
 \verb|plotPheno(hyper, pheno.col=1)| %$
@@ -471,8 +471,8 @@ for chr 1, 4, 6, 7 and 15.
 data plot with the individuals ordered according to the value of their
 phenotype.
 
-\usercolor 
-\verb|plotMissing(hyper, reorder=TRUE)| 
+\usercolor
+\verb|plotMissing(hyper, reorder=TRUE)|
 \normalcolor
 
 We see that, for most markers, only individuals with extreme
@@ -482,7 +482,7 @@ markers were typed only on recombinant individuals.
 \item The function \verb-drop.nullmarkers- may be used to remove
 markers that have no genotype data (such as the marker on chr
 14).  A call to \verb-totmar- will show that there are now 173 markers
-(rather than 174, as there were initially).  
+(rather than 174, as there were initially).
 
 \usercolor
 \verb|hyper <- drop.nullmarkers(hyper)| \\
@@ -514,7 +514,7 @@ across the interval).
 \verb|plotMissing(hyper, chr=6)| \normalcolor
 
 \item Re-estimate the genetic map (keeping the order of markers
-fixed), and plot the original map against the newly estimated one. 
+fixed), and plot the original map against the newly estimated one.
 
 \usercolor \verb|newmap <- est.map(hyper, error.prob=0.01)| \\
 \verb|plotMap(hyper, newmap)| \normalcolor
@@ -536,8 +536,8 @@ following, we calculate the error LOD scores of Lincoln and Lander
 (1992).  A LOD score is calculated for each individual at each marker;
 large scores indicate likely genotyping errors.
 
-\usercolor 
-\verb|hyper <- calc.errorlod(hyper, error.prob=0.01)| 
+\usercolor
+\verb|hyper <- calc.errorlod(hyper, error.prob=0.01)|
 \normalcolor
 
 This calculates the genotype error LOD scores and inserts them into
@@ -546,8 +546,8 @@ the \verb-hyper- object.
 The function \verb-top.errorlod- gives a list of genotypes that may be
 in error.  Error LOD scores $<$ 4 can probably be ignored.
 
-\usercolor 
-\verb|top.errorlod(hyper)| 
+\usercolor
+\verb|top.errorlod(hyper)|
 \normalcolor
 
 Note that the results will be different, depending on whether you used
@@ -558,7 +558,7 @@ list of potential errors on chr 1, 11, 15, 16 and 17.
 \item The function \verb-plotGeno- may be used to inspect the
 observed genotypes for a chromosome, with likely genotyping errors
 flagged.  Of course, it's difficult to look at too many individuals at
-once.  Note that white = AA and black = AB (for a backcross).  
+once.  Note that white = AA and black = AB (for a backcross).
 
 \usercolor
 \verb|plotGeno(hyper, chr=16, ind=c(24:34, 71:81))|
@@ -572,25 +572,25 @@ copy of the file; never discard the primary data.)
 of missing genotype information in the genotype data.  The missing
 information is calculated in two ways: as entropy, or via the
 variance of the conditional genotypes, given the observed marker
-data.  (See the help file, using \verb-?plotInfo-.)  
+data.  (See the help file, using \verb-?plotInfo-.)
 
 \usercolor
 \verb|plotInfo(hyper)| \\
 \verb|plotInfo(hyper, chr=c(1,4,15))| \\
 \verb|plotInfo(hyper, chr=c(1,4,15), method="entropy")| \\
-\verb|plotInfo(hyper, chr=c(1,4,15), method="variance")| 
+\verb|plotInfo(hyper, chr=c(1,4,15), method="variance")|
 \normalcolor
 
 
-\item We now, finally, get to QTL mapping.  
+\item We now, finally, get to QTL mapping.
 
 The core of R/qtl is a set of functions which make use of the hidden
 Markov model (HMM) technology to calculate QTL genotype probabilities,
 to simulate from the joint genotype distribution and to calculate the
 most likely sequence of underlying genotypes (all conditional on the
 observed marker data).  This is done in a quite general way, with
-possible allowance for the presence of genotyping errors.  Of course, 
-for convenience we assume no crossover interference.  
+possible allowance for the presence of genotyping errors.  Of course,
+for convenience we assume no crossover interference.
 
 The function \verb-calc.genoprob- calculates QTL genotype
 probabilities, conditional on the available marker data. These are
@@ -610,11 +610,11 @@ regression (Haley and Knott 1992).
 \usercolor
 \verb|out.em <- scanone(hyper)| \\
 \verb|out.hk <- scanone(hyper, method="hk")|
-\normalcolor  
+\normalcolor
 
 We may also use the multiple imputation method of Sen and Churchill
 (2001).  This requires that we first use \verb-sim.geno- to simulate
-from the joint genotype distribution, given the observed marker data.  
+from the joint genotype distribution, given the observed marker data.
 Again, the argument \verb-step- indicates the step size at which the
 imputations are performed and determines the step size at which LOD
 scores will be calculated.  The \verb-n.draws- indicates the number of
@@ -635,7 +635,7 @@ require considerably more computer memory and computation time.
 \verb|summary(out.em)| \\
 \verb|summary(out.em, threshold=3)| \\
 \verb|summary(out.hk, threshold=3)| \\
-\verb|summary(out.imp, threshold=3)| 
+\verb|summary(out.imp, threshold=3)|
 \normalcolor
 
 \item The function \verb-max.scanone- returns just the highest peak
@@ -644,7 +644,7 @@ from output of \verb-scanone-.
 \usercolor
 \verb|max(out.em)| \\
 \verb|max(out.hk)| \\
-\verb|max(out.imp)| 
+\verb|max(out.imp)|
 \normalcolor
 
 \item We may also plot the results.  \verb-plot.scanone- can plot up
@@ -663,16 +663,16 @@ appropriately.  Alternatively, one may use the argument \verb-add-.
 permutation test to get a genome-wide LOD significance threshold.
 For Haley-Knott regression, this can be quite fast.
 
-\usercolor 
+\usercolor
 \verb|operm.hk <- scanone(hyper, method="hk", n.perm=1000)|
 \normalcolor
 
 The permutation output has class \verb-"scanoneperm"-.  The function
 \verb-summary.scanoneperm- can be used to get significance
-thresholds.  
+thresholds.
 
-\usercolor 
-\verb|summary(operm.hk, alpha=0.05)| 
+\usercolor
+\verb|summary(operm.hk, alpha=0.05)|
 \normalcolor
 
 In addition, if the permutations results are included in a call to
@@ -699,10 +699,10 @@ threshold calculated automatically.
 %
 %The argument \verb-breaks- is used to specify the number of bins in
 %the histogram.  The funtion \verb-rug- is used to add tick marks at
-%the bottom at the data points.  
+%the bottom at the data points.
 %
 %In this figure, we see that individuals were missing genotypes at
-%either $<$ 30 or $>$ 120.  
+%either $<$ 30 or $>$ 120.
 %
 %This calls into question the permutation test we ran above, as the
 %phenotypes were permuted across all individuals.  It would be better
@@ -714,7 +714,7 @@ threshold calculated automatically.
 %which will define strata in which permutations will be performed.  The
 %stratified permutation test may be performed as follows.
 %
-%\usercolor 
+%\usercolor
 %\verb|operm2.hk <- scanone(hyper, method="hk", n.perm=1000,| \\
 %\verb|                     perm.strata=(nm > 100))|
 %\normalcolor
@@ -730,7 +730,7 @@ threshold calculated automatically.
 
 \item We should mention at this point that the function
 \verb-save.image- may be used to save your workspace to disk.  If R
-crashes, you will wish you had used this.  
+crashes, you will wish you had used this.
 
 \usercolor \verb|save.image()| \normalcolor
 
@@ -742,9 +742,9 @@ quite time consuming, and so you may wish to do the calculations on a
 coarser grid.
 
 \usercolor
-\verb|hyper <- calc.genoprob(hyper, step=5, error.prob=0.01)| 
+\verb|hyper <- calc.genoprob(hyper, step=5, error.prob=0.01)|
 \\
-\verb|out2.hk <- scantwo(hyper, method="hk")| 
+\verb|out2.hk <- scantwo(hyper, method="hk")|
 \normalcolor
 
 One can also use \verb-method="em"- or \verb-method="imp"-, but they
@@ -761,9 +761,9 @@ score for a test of epistasis, $M_i = M_f - M_a$, and two LOD scores
 that concern evidence for a second QTL: $M_{fv1}$ is the LOD score
 comparing the full model to the best single-QTL model and $M_{av1}$ is
 the LOD score comparing the additive model to the best single-QTL
-model.  
+model.
 
-In the summary, we must provide five thresholds, for $M_f$, 
+In the summary, we must provide five thresholds, for $M_f$,
 $M_{fv1}$, $M_i$, $M_a$, and $M_{av1}$, respectively.  Call these $T_f$,
 $T_{fv1}$, $T_i$, $T_a$, and $T_{av1}$.  We then report those pairs of
 chromosomes for which at least one of the following holds:
@@ -798,7 +798,7 @@ threshold, as follows.
 \normalcolor
 
 \item Plots of \verb-scantwo- results are created via
-  \verb-plot.scantwo-.  
+  \verb-plot.scantwo-.
 
 \usercolor
 \verb|plot(out2.hk)| \\
@@ -839,7 +839,7 @@ And again these may be used in the summary of the \verb-scantwo-
 output to calculate thresholds and p-values.  If you want to ignore
 the LOD score for the interaction in the rule about what chromosome
 pairs to report, give $\alpha=0$, corresponding to a threshold
-$T=\infty$. 
+$T=\infty$.
 
 \usercolor
 \verb|summary(out2.hk, perms=operm2.hk, pvalues=TRUE,| \\
@@ -870,7 +870,7 @@ Finally, we use the function \verb-fitqtl- to fit a model with five
 QTL, and allowing the QTL on chr 6 and 15 to interact.
 
 \usercolor
-\verb|my.formula <- y ~ Q1 + Q2 + Q3 + Q4 + Q5 + Q4:Q5| \\ 
+\verb|my.formula <- y ~ Q1 + Q2 + Q3 + Q4 + Q5 + Q4:Q5| \\
 \verb|out.fitqtl <- fitqtl(hyper, qtl=qtl, formula=my.formula)| \\ %$
 \verb|summary(out.fitqtl)|
 \normalcolor
@@ -881,9 +881,9 @@ the multiple QTL mapping methods in R/qtl.
 \item You may wish to clean up your workspace before we move on to the
 next example.
 
-\usercolor 
-\verb|ls()| \\ 
-\verb|rm(list=ls())| 
+\usercolor
+\verb|ls()| \\
+\verb|rm(list=ls())|
 \normalcolor
 
 \end{enumerate}
@@ -907,14 +907,14 @@ these utilities.
 \item Get access to some sample data.  This is simulated data with
 some errors in marker order.
 
-\usercolor 
+\usercolor
 \verb|data(badorder)|  \\
 \verb|summary(badorder)| \\
 \verb|plot(badorder)|
 \normalcolor
 
 \item Estimate recombination fractions between all pairs of markers,
-and plot them. 
+and plot them.
 
 \usercolor \verb|badorder <- est.rf(badorder)| \\
 \verb|plotRF(badorder)| \normalcolor
@@ -926,7 +926,7 @@ for chr 1, there seem to be some errors in marker order.
 
 \usercolor \verb|plotRF(badorder, chr=1)| \normalcolor
 
-\item Re-estimate the genetic map.  
+\item Re-estimate the genetic map.
 
 \usercolor
 \verb|newmap <- est.map(badorder, verbose=TRUE)| \\
@@ -947,7 +947,7 @@ out which markers these are.
 
 \usercolor
 \verb|pull.map(badorder, chr=2)| \\
-\verb|pull.map(badorder, chr=3)| 
+\verb|pull.map(badorder, chr=3)|
 \normalcolor
 
 Now we can use the function \verb-movemarker- to move the markers.
@@ -965,28 +965,28 @@ Now look at the recombination fractions again.
 adjacent markers.  A quick-and-dirty approach is to count the number
 of obligate crossovers for each possible order, to find the order with
 the minimum number of crossovers.  A more refined, but also more
-computationally intensive, approach is to 
+computationally intensive, approach is to
 re-estimate the genetic map for each order, calculating LOD
 scores (log$_{10}$ likelihood ratios) relative to the initial order.
 (This may be done with allowance for the presence of genotyping
 errors.)  The default approach is the quick-and-dirty method.
 
 The following checks the marker order on chr 1, permuting
-groups of six contiguous markers.  
+groups of six contiguous markers.
 
 \usercolor
 \verb|rip1 <- ripple(badorder, chr=1, window=6)| \\
-\verb|summary(rip1)| 
+\verb|summary(rip1)|
 \normalcolor
 
 In the summary output, markers 9--11 clearly need to be flipped.
-There also seems to be a problem with the order of markers 4--6.  
+There also seems to be a problem with the order of markers 4--6.
 
 \item The following performs the likelihood analysis, permuting groups of
 three adjacent markers, assuming a genotyping error rate of
 1\%.  It's considerably slower, but more trustworthy.
- 
-\usercolor 
+
+\usercolor
 \verb|rip2 <- ripple(badorder, chr=1, window=3, err=0.01, method="likelihood")| \\
 \verb|summary(rip2)|
 \normalcolor
@@ -997,7 +997,7 @@ higher likelihood than the original.
 \item We can switch the order of markers 9--11 with the function
 \verb-switch.order- (which works only for a single chromosome) and
 then re-assess the order.  Note that the second row of \verb-rip1-
-corresponds to the improved order.  
+corresponds to the improved order.
 
 \usercolor
 \verb|badorder.rev <- switch.order(badorder, 1, rip1[2,])| \\
@@ -1007,12 +1007,12 @@ corresponds to the improved order.
 
 It looks like the marker pairs (5,6) and (1,2) should each be
 inverted.  We use \verb-switch.order- again, and then check marker
-order using the likelihood method.  
+order using the likelihood method.
 
 \usercolor
 \verb|badorder.rev <- switch.order(badorder.rev, 1, rip1r[2,])|  \\
 \verb|rip2r <- ripple(badorder.rev, chr=1, window=3, err=0.01)| \\
-\verb|summary(rip2r)| 
+\verb|summary(rip2r)|
 \normalcolor
 
 It's probably best to start out using the quick-and-dirty method, with
@@ -1025,7 +1025,7 @@ chromosome.
 
 \usercolor
 \verb|badorder.rev <- est.rf(badorder.rev)| \\
-\verb|plotRF(badorder.rev, 1)| 
+\verb|plotRF(badorder.rev, 1)|
 \normalcolor
 
 \end{enumerate}
@@ -1047,11 +1047,11 @@ Boyartchuk and Bill Dietrich.
 \begin{enumerate}
 \item Get access to the data and view some summaries.
 
-\usercolor 
+\usercolor
 \verb|data(listeria)| \\
 \verb|summary(listeria)| \\
 \verb|plot(listeria)| \\
-\verb|plotMissing(listeria)| 
+\verb|plotMissing(listeria)|
 \normalcolor
 
 Note that in the missing data plot, gray pixels are partially missing
@@ -1075,12 +1075,12 @@ infection.
 
 \usercolor \verb|listeria <- est.rf(listeria)| \\
 \verb|plotRF(listeria)| \\
-\verb|plotRF(listeria, chr=c(5,13))| 
+\verb|plotRF(listeria, chr=c(5,13))|
 \normalcolor
 
-\item Re-estimate the genetic map. 
- 
-\usercolor 
+\item Re-estimate the genetic map.
+
+\usercolor
 \verb|newmap <- est.map(listeria, error.prob=0.01)| \\
 \verb|plotMap(listeria, newmap)| \\
 \verb|listeria <- replace.map(listeria, newmap)|
@@ -1088,9 +1088,9 @@ infection.
 
 \item Investigate genotyping errors; nothing gets flagged with a
   cutoff of 4, but one genotype is indicated with error LOD
-  $\sim$3.8. 
+  $\sim$3.8.
 
-\usercolor 
+\usercolor
 \verb|listeria <- calc.errorlod(listeria, error.prob=0.01)| \\
 \verb|top.errorlod(listeria)| \\
 \verb|top.errorlod(listeria, cutoff=3.5)| \\
@@ -1135,11 +1135,11 @@ phenotype column by name: \verb-pheno.col="logSurv"-.
 
 Because the two-part model has three extra parameters, the
 appropriate LOD threshold is higher---around 4.5 rather than 3.5.  The
-three different LOD curves are in columns 3--5 of the output.  
+three different LOD curves are in columns 3--5 of the output.
 
 \usercolor
 \verb|summary(out.2p)| \\
-\verb|summary(out.2p, threshold=4.5)| 
+\verb|summary(out.2p, threshold=4.5)|
 \normalcolor
 
 Alternatively, we may use \verb-format="allpeaks"-, in which case it
@@ -1150,7 +1150,7 @@ each column.
 
 \usercolor
 \verb|summary(out.2p, format="allpeaks", threshold=3)| \\
-\verb|summary(out.2p, format="allpeaks", threshold=c(4.5,3,3))| 
+\verb|summary(out.2p, format="allpeaks", threshold=c(4.5,3,3))|
 \normalcolor
 
 \item By default, \verb-plot.scanone- will plot the first LOD score
@@ -1167,16 +1167,16 @@ each column.
 Note that the locus on chr 1 shows effect mostly on the
 mean time-to-death, conditional on death; the locus on chr 5
 shows effect mostly on the probability of survival; and the loci on
-chr 13 and 15 shows some effect on each. 
+chr 13 and 15 shows some effect on each.
 
 \item Permutation tests may be performed as before.  The output will
 have three columns, corresponding to the three LOD scores.
 
-\usercolor 
+\usercolor
 \verb|operm.2p <- scanone(listeria, model="2part", pheno.col=3,| \\
 \verb|                    upper=TRUE, n.perm=25)| \\
 \verb|summary(operm.2p, alpha=0.05)|
-\normalcolor 
+\normalcolor
 
 We may again use the permutation results in \verb-summary.scanone- to
 have thresholds calculated automatically and to obtain
@@ -1193,7 +1193,7 @@ survival time, conditional on death, and the binary phenotype
 survival/death.  First we set up these phenotypes.
 
 \usercolor
-\verb|y <- listeria$pheno$logSurv| \\ 
+\verb|y <- listeria$pheno$logSurv| \\
 \verb|my <- max(y, na.rm=TRUE)| \\
 \verb|z <- as.numeric(y==my)| \\
 \verb|y[y==my] <- NA| \\
@@ -1212,7 +1212,7 @@ on death; the results are slightly different from LOD($\mu$).
 
 We can use \verb-scanone- with \verb-model="binary"- to analyze the
 binary phenotype.  Again, the results are only slight different from
-LOD($p$). 
+LOD($p$).
 
 \usercolor
 \verb|out.p <- scanone(listeria, pheno.col=5, model="binary")| \\
@@ -1241,7 +1241,7 @@ to the LOD score.
 
 \usercolor
 \verb|out.np1 <- scanone(listeria, model="np", ties.random=TRUE)| \\
-\verb|out.np2 <- scanone(listeria, model="np", ties.random=FALSE)| 
+\verb|out.np2 <- scanone(listeria, model="np", ties.random=FALSE)|
 
 \verb|plot(out.np1, out.np2, col=c("blue","red"))| \\
 \verb|plot(out.2p, out.np1, out.np2, chr=c(1,5,13,15))|
@@ -1274,7 +1274,7 @@ QTL mapping.  We consider some simulated backcross data.
 \usercolor
 \verb|data(fake.bc)| \\
 \verb|summary(fake.bc)| \\
-\verb|plot(fake.bc)| 
+\verb|plot(fake.bc)|
 \normalcolor
 
 \item Perform genome scans for the two phenotypes without covariates.
@@ -1304,10 +1304,10 @@ the two sexes.
 
 \usercolor
 \verb|summary(out.nocovar, threshold=3, format="allpeaks")| \\
-\verb|summary(out.acovar, threshold=3, format="allpeaks")| 
+\verb|summary(out.acovar, threshold=3, format="allpeaks")|
 
 \verb|plot(out.nocovar, out.acovar, chr=c(2, 5))| \\
-\verb|plot(out.nocovar, out.acovar, chr=c(2, 5), lodcolumn=2)| 
+\verb|plot(out.nocovar, out.acovar, chr=c(2, 5), lodcolumn=2)|
 \normalcolor
 
 \item Let us now perform genome scans with sex as an interactive
@@ -1345,7 +1345,7 @@ the two sexes.
 \normalcolor
 
 The green and purple curves are for the first and second phenotypes,
-respectively.  
+respectively.
 
 \item To test for the QTL$\times$sex interaction, we may perform a
   permutation test.  This is not perfect, as the permutation test
@@ -1439,7 +1439,7 @@ of selective genotyping, which was used for the \verb-hyper- data.
 \verb|plot(out1)|
 \normalcolor
 
-As you may recall from the results in Example 1, we have clear evidence 
+As you may recall from the results in Example 1, we have clear evidence
 for a QTL on chr 4, and strong evidence for a QTL on chr 1.
 The LOD curve on chr 1 has an interesting double peak, suggestive of
 possibly two QTL.
@@ -1448,7 +1448,7 @@ There is a hint of further loci on chr 6 and 15 and elsewhere.
 
 \item In the presence of a large-effect QTL, as seen on chr 4,
   one may wish to repeat the scan, controlling for that locus.  This
-  can make the loci with more modest effect more apparent.  
+  can make the loci with more modest effect more apparent.
 
   A simple (but rough) approach is to pull out the genotypes for a
   marker near the peak locus, and use that marker as an additive
@@ -1458,7 +1458,7 @@ There is a hint of further loci on chr 6 and 15 and elsewhere.
   \usercolor \verb|max(out1)| \normalcolor
 
   If the peak LOD score is not at a marker, we may use
-  \verb-find.marker- to identify the marker closest to the LOD peak.  
+  \verb-find.marker- to identify the marker closest to the LOD peak.
 
   \usercolor \verb|find.marker(hyper, 4, 29.5)| \normalcolor
 
@@ -1474,7 +1474,7 @@ There is a hint of further loci on chr 6 and 15 and elsewhere.
   is not ideal; we'll do this analysis properly below.
 
   \usercolor \verb|g <- pull.geno(fill.geno(hyper))[,"D4Mit164"]|
-  \normalcolor 
+  \normalcolor
 
 \item Now we perform the genome scan, controlling for the chr 4
   locus. (Note that in an intercross, we would have to re-code the genotype
@@ -1498,10 +1498,10 @@ There is a hint of further loci on chr 6 and 15 and elsewhere.
 
 \item We may also look for loci that interact with the chr 4
   locus, by including marker D4Mit164 as
-  an interactive covariate. 
+  an interactive covariate.
 
   \usercolor
-  \verb|out1.c4i <- scanone(hyper, method="imp", addcovar=g, intcovar=g)| 
+  \verb|out1.c4i <- scanone(hyper, method="imp", addcovar=g, intcovar=g)|
 \normalcolor
 
   The difference between these LOD scores and those obtained with D4Mit164 as a
@@ -1529,7 +1529,7 @@ There is a hint of further loci on chr 6 and 15 and elsewhere.
 Your results may be different from mine, since we are using so few
 imputations, but I see evidence for loci on chr 1 and 4 (which
 don't appear to interact) and loci on chr 6 and 15 (which do
-show evidence of epistasis).  
+show evidence of epistasis).
 
 This didn't pick up evidence for two QTL on chr 1; we can look
 directly at the chr 1 results as follows.
@@ -1537,7 +1537,7 @@ directly at the chr 1 results as follows.
 \usercolor \verb|summary( subset(out2, chr=1) )| \normalcolor
 
 The LOD score for a second, additive QTL on chr 2
-($\lod_{av1}$) is $\sim$1.6; not strong, but not uninteresting. 
+($\lod_{av1}$) is $\sim$1.6; not strong, but not uninteresting.
 
 Evidence for an interaction between loci on chr 7 and 15 had
 been previously reported.  Those results may be inspected as follows.
@@ -1565,7 +1565,7 @@ assuming no epistasis) is displayed.
 
 Again, evidence for a second QTL on chr 1 is not strong.
 Evidence for interacting QTL on chr 6 and 15 is quite strong;
-the 7$\times$15 interaction is not.  
+the 7$\times$15 interaction is not.
 
 \item We can also perform the 2d scan conditional on the chr 4
   locus.  We'll do this just for chr 1, 6, 7, and 15, to save
@@ -1579,7 +1579,7 @@ the 7$\times$15 interaction is not.
 
 \usercolor \verb|summary(out2.c4, thr=c(6.0, 4.7, Inf, 4.7, 2.6))| \\
 \verb|summary( subset(out2.c4, chr=1) )| \\
-\verb|summary( subset(out2.c4, chr=c(7,15)) )| 
+\verb|summary( subset(out2.c4, chr=c(7,15)) )|
 \normalcolor
 
   The sort of plots we made before remain interesting.
@@ -1594,14 +1594,14 @@ the 7$\times$15 interaction is not.
   subset our original results, since we only scanned selected
   chromosomes in the conditional analysis.  The \verb-allow.neg-
   argument is used to allow negative LOD scores in the \verb-scantwo-
-  plot, as they would generally be replaced with 0.  
+  plot, as they would generally be replaced with 0.
 
 \usercolor \verb|out2sub <- subset(out2, chr=c(1,6,7,15))| \\
 \verb|plot(out2.c4 - out2sub, allow.neg=TRUE, lower="cond-int")|
 \normalcolor
 
 \item Now let us turn to the fit of multiple-QTL models.  The function
-  \verb-fitqtl- is used to fit a specific model. 
+  \verb-fitqtl- is used to fit a specific model.
 
   One must first pull out the data on fixed QTL locations using
   \verb-makeqtl-.  We will consider the possibility of two QTL on
@@ -1609,16 +1609,16 @@ the 7$\times$15 interaction is not.
 
 \usercolor \verb|qc <- c(1, 1, 4, 6, 15)| \\
 \verb|qp <- c(43.3, 78.3, 30.0, 62.5, 18.0)| \\
-\verb|qtl <- makeqtl(hyper, chr=qc, pos=qp)| \normalcolor 
+\verb|qtl <- makeqtl(hyper, chr=qc, pos=qp)| \normalcolor
 
   We also create a ``formula'' which indicates which QTL are to be
   included in the fit and which interact; the colon (:) indicates an
-  interaction.  
+  interaction.
 
-\usercolor \verb|myformula <- y ~ Q1+Q2+Q3+Q4+Q5 + Q4:Q5| \normalcolor  
+\usercolor \verb|myformula <- y ~ Q1+Q2+Q3+Q4+Q5 + Q4:Q5| \normalcolor
 
   We can now fit a model, including the 6$\times$15 interaction, and
-  get a summary of the results.  
+  get a summary of the results.
 
 \usercolor
 \verb|out.fq <- fitqtl(hyper, qtl=qtl, formula = myformula)| \\
@@ -1661,7 +1661,7 @@ between the differences.
 \normalcolor
 
 The output is a QTL object, like \verb-qtl-; typing its name gives a
-brief summary.  
+brief summary.
 
 \usercolor \verb|revqtl| \normalcolor
 
@@ -1723,10 +1723,10 @@ omitting any terms including the additional QTL being scanned, rather
 than relative to the null model.).
 
 We may now plot these results with those obtained earlier.  The
-results are actually not too different. 
+results are actually not too different.
 
 \usercolor
-\verb|plot(out1.c4, out1.c4r, col=c("blue", "red"))| 
+\verb|plot(out1.c4, out1.c4r, col=c("blue", "red"))|
 \normalcolor
 
 It may be more informative to plot the differences
@@ -1766,7 +1766,7 @@ Again, things have not changed dramatically.
 
 \usercolor
 \verb|out.1more <- addqtl(hyper, qtl=revqtl, formula=myformula)| \\
-\verb|plot(out.1more)| 
+\verb|plot(out.1more)|
 \normalcolor
 
 There is not much evidence for an additional QTL.
@@ -1778,7 +1778,7 @@ There is not much evidence for an additional QTL.
 
 \usercolor
 \verb|out.iw4 <- addqtl(hyper, qtl=revqtl, formula=y~Q1+Q2+Q3+Q4+Q5+Q4:Q5+Q6+Q5:Q6)| \\
-\verb|plot(out.iw4)| 
+\verb|plot(out.iw4)|
 \normalcolor
 
 The LOD scores are just slightly higher, but there are two degrees of
@@ -1789,7 +1789,7 @@ freedom in the test.  There's nothing particularly exciting here.
   and 15.
 
 \usercolor
-\verb|out.2more <- addpair(hyper, qtl=revqtl, formula=myformula, chr=c(2,5,7,15))| 
+\verb|out.2more <- addpair(hyper, qtl=revqtl, formula=myformula, chr=c(2,5,7,15))|
 \normalcolor
 
 Again, the results are of the form produced by \verb-scantwo-, and so
@@ -1799,11 +1799,11 @@ we may use the same plot and summary functions.
 \verb|plot(out.2more, lower="cond-int")|
 \normalcolor
 
-Again, there's nothing particularly exciting.  
+Again, there's nothing particularly exciting.
 
 \item Another function of interest is \verb-addint-, for testing the
   addition of each possible pairwise interactions, one at a time, to a
-  multiple-QTL model.  
+  multiple-QTL model.
 
 \usercolor
 \verb|out.ai <- addint(hyper, qtl=revqtl, formula=myformula)| \\
@@ -1818,7 +1818,7 @@ interaction is not tested.
 
 \item We should mention the functions for manipulating
   QTL objects (produced by \verb-makeqtl-): \verb-addtoqtl-,
-  \verb-dropfromqtl-, \verb-replaceqtl-, and \verb-reorderqtl-.  
+  \verb-dropfromqtl-, \verb-replaceqtl-, and \verb-reorderqtl-.
 
   If the use of \verb-addqtl- and \verb-addpair- had indicated
   evidence for additional QTL, one could add them to the QTL object
@@ -1860,7 +1860,7 @@ interaction is not tested.
   The function seeks to optimize a penalized LOD score criterion,
   which is the LOD score for a model (relative to the null model with
   no QTL) with penalties on each QTL main effect and a separate
-  penalty on interactions.  
+  penalty on interactions.
 
   Actually, we include include two penalties on interactions, a light
   penalty and a heavy penalty.  We focus on models with possible
@@ -1872,7 +1872,7 @@ interaction is not tested.
   interactions between QTL.  In the penalized LOD score considered by
   \verb-stepwiseqtl-, each disconnected component of a model is
   allowed one light interaction penalty; all other interactions are
-  assigned the heavy penalty.  
+  assigned the heavy penalty.
 
   The three penalties may be calculed from permutation results with
   \verb-scantwo-, using the function \verb-calc.penalties-.  We will
@@ -1905,11 +1905,11 @@ interaction is not tested.
 
   I obtained a model with four QTL, including one on each of chr 1,
   4, 6 and 15, and including an interaction between the loci on chr 6
-  and 15. 
+  and 15.
 
 \item Note that all of the above could be performed using
   Haley-Knott regression rather than multiple imputation.  Just three
-  changes need to be made.  
+  changes need to be made.
 
   First, one needs to run
   \verb-calc.genoprob- rather than \verb-sim.geno-, to calculate the
@@ -1964,16 +1964,16 @@ data.
 
 \item The phenotype data is simply a matrix (more strictly a
 data.frame) with rows corresponding to individuals and columns
-corresponding to phenotypes.  
+corresponding to phenotypes.
 
 \usercolor \verb|fake.bc$pheno[1:10,]| \normalcolor %$
 
 \item  The genotype data is a list with components corresponding to
 chromosomes.  Each chromosome has a name and a class.  The class for a
 chromosome is either \verb-"A"- or \verb-"X"-, according to whether it
-is an autosome or the X chromosome.  
+is an autosome or the X chromosome.
 
-\usercolor 
+\usercolor
 \verb|names(fake.bc$geno)| \\ %$
 \verb|sapply(fake.bc$geno, class)| %$
 \normalcolor
@@ -1984,7 +1984,7 @@ is an autosome or the X chromosome.
 
 \usercolor
 \verb|names(fake.bc$geno[[3]])| \\ %$
-\verb|fake.bc$geno[[3]]$data[1:5,]| \\ 
+\verb|fake.bc$geno[[3]]$data[1:5,]| \\
 \verb|fake.bc$geno[[3]]$map|
 \normalcolor
 
@@ -1993,14 +1993,14 @@ That's it for the raw data.
 \item When one runs \verb-calc.genoprob-, \verb-sim.geno-,
 \verb-argmax.geno- or \verb-calc.errorlod-, the output is the input
 cross object with the derived data attached to each component (the
-chromosomes) of the \verb-geno- component.  
+chromosomes) of the \verb-geno- component.
 
 \usercolor
 \verb|names(fake.bc$geno[[3]])| \\ %$
 \verb|fake.bc <- calc.genoprob(fake.bc, step=10, err=0.01)| \\
-\verb|names(fake.bc$geno[[3]])| \\ %$ 
+\verb|names(fake.bc$geno[[3]])| \\ %$
 \verb|fake.bc <- sim.geno(fake.bc, step=10, n.draws=8, err=0.01)| \\
-\verb|names(fake.bc$geno[[3]])| \\ %$ 
+\verb|names(fake.bc$geno[[3]])| \\ %$
 \verb|fake.bc <- argmax.geno(fake.bc, step=10, err=0.01)| \\
 \verb|names(fake.bc$geno[[3]])| \\ %$
 \verb|fake.bc <- calc.errorlod(fake.bc, err=0.01)| \\

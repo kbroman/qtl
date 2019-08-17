@@ -897,7 +897,7 @@ SNOW can be installed by selecting from the menu: `Packages' and `Install
 Package(s)` from the drop down menu. Select a CRAN mirror near you and select
 the SNOW package. Rgui will start downloading the package, and install any
 dependencies needed. Linux users can download a copy of SNOW from
-\url{http://cran.r-project.org/web/packages/snow/index.html}. Once the package
+\url{https://cran.r-project.org/package=snow}. Once the package
 has finished downloading the tar.gz file can be installed using \code{R CMD
 INSTALL snow.tar.gz}
 
@@ -1142,7 +1142,7 @@ modulating expression (higher or lower), the green lines show a flip in effect.\
     \bibitem{broman09}
         Broman, K.W.; 2009
         \emph{A brief tour of R/qtl.}
-        http://www.rqtl.org/tutorials/rqtltour.pdf.
+        https://rqtl.org/tutorials/rqtltour.pdf.
   \bibitem{rqtlbook}
     Broman, K. W.; Sen, \'S; 2009
       \emph{A Guide to QTL Mapping with R/qtl.}
