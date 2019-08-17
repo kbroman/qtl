@@ -27,17 +27,17 @@
     of the various functions in R/qtl.
 
     \item A tutorial on the use of R/qtl is distributed with the
-    package and is also available at \url{http://rqtl.org/rqtltour.pdf}.
+    package and is also available at \url{https://rqtl.org/rqtltour.pdf}.
 
     \item Download the latest version of R/qtl from the R archive or
-    from \url{http://rqtl.org}.
+    from \url{https://rqtl.org}.
   }
 }
 
 \section{Walk-through of an analysis}{
 Here we briefly describe the use of R/qtl to analyze an experimental
 cross.  A more extensive tutorial on its use is distributed with the
-package and is also available at \url{http://rqtl.org/rqtltour.pdf}.
+package and is also available at \url{https://rqtl.org/rqtltour.pdf}.
 
 A difficult first step in the use of most data analysis software is the
 import of data.  With R/qtl, one may import data in several different
@@ -49,7 +49,7 @@ comma-delimited format (\code{"csv"}) is recommended.  If you have
 trouble importing data, send an email to Karl Broman,
 \email{broman@wisc.edu}, perhaps attaching examples of your data
 files.  (Such data will be kept confidential.)  Also see the sample data
-files and code at \url{http://rqtl.org/sampledata}.
+files and code at \url{https://rqtl.org/sampledata}.
 
 We consider the example data \code{\link{hyper}}, an experiment on
 hypertension in the mouse, kindly provided
@@ -279,7 +279,7 @@ maxima of the above five LOD scores for each of the imputations.
 \references{
   Broman, K. W. and Sen,
   \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. (2009) \emph{A
-  guide to QTL mapping with R/qtl.}  Springer.  \url{http://rqtl.org/book}
+  guide to QTL mapping with R/qtl.}  Springer.  \url{https://rqtl.org/book}
 
   Broman, K. W., Wu, H., Sen, \if{latex}{\out{\'S}}\if{html}{\out{&#346;}}\if{text}{S}. and Churchill, G. A. (2003) R/qtl: QTL
   mapping in experimental crosses.  \emph{Bioinformatics} \bold{19},
