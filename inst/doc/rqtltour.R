@@ -4,7 +4,7 @@
 # Karl W Broman, broman@wisc.edu
 # University of Wisconsin Madison
 #
-# http://www.rqtl.org
+# https://rqtl.org
 #
 # 21 March 2012
 ##############################################################
