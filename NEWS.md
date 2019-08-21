@@ -30,6 +30,9 @@ copyright (c) 2001-2019, Karl W Broman
 - Fix bug related to reading 4-way cross data, to ensure that the
   genetic map for each chromosome is a 2-row matrix.
 
+- Added explanations of a couple of arguments for mqmscan() that had
+  previously not been explained.
+
 
 ## Version 1.44, 2019-01-22
 
