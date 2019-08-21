@@ -2,13 +2,13 @@
 #
 # mqmscan.R
 #
-# Copyright (c) 2009-2017, Danny Arends
+# Copyright (c) 2009-2019, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Dec 2017
+# last modified Aug 2019
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -42,6 +42,9 @@ mqmscan <- function(cross,cofactors=NULL,pheno.col=1,model=c("additive","dominan
 
     start <- proc.time()
     model <- match.arg(model)
+
+    # omit X chromosome
+    cross <- omit_x_chr(cross)
 
     #Because iirc we cannot pass booleans from R to C
     if(forceML){

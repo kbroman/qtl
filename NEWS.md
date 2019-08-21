@@ -16,7 +16,12 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.45, 2019-08-12
+## Version 1.45, 2019-08-21
+
+### Minor changes
+
+- mqmscan() and mqmscanall() now give a warning about omitting the X
+  chromosome, and give a more meaningful error if there are no autosomes.
 
 ### Bug fixes
 
