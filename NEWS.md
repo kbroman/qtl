@@ -18,6 +18,11 @@ copyright (c) 2001-2019, Karl W Broman
 
 ## Version 1.45, 2019-09-18
 
+### Minor changes
+
+- mqmscan() and mqmscanall() now give a warning about omitting the X
+  chromosome, and give a more meaningful error if there are no autosomes.
+
 ### Bug fixes
 
 - Fix bug regarding missing phenotypes in `stepwiseqtl()`.
@@ -28,6 +33,9 @@ copyright (c) 2001-2019, Karl W Broman
 - Fix bug in `refineqtl()` that gave a warning about `min(diff(a))`
   when there was a single marker on a chromosome.
   ([Issue #78](https://github.com/kbroman/qtl/issues/78))
+
+- Added explanations of a couple of arguments for mqmscan() that had
+  previously not been explained.
 
 
 ## Version 1.44, 2019-01-22

@@ -5,7 +5,7 @@
 # copyright (c) 2001-2019, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Jan, 2019
+# last modified Aug, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -4491,6 +4491,25 @@ formMarkerCovar <-
         }
         return(g)
     }
+}
+
+# omit the X chromosome from a cross
+omit_x_chr <-
+    function(cross, warn=TRUE)
+{
+    is_x <- vapply(cross$geno, function(chr) {
+        chrtype <- class(chr)
+        !is.null(chrtype) && chrtype=="X" }, FALSE)
+
+    if(any(is_x)) {
+        if(all(is_x)) stop("Omitting X chromosome, but there are no other chromosomes.")
+        if(warn) warning("Omitting X chromosome",
+                         ifelse(sum(is_x)>1, "s", ""), " (",
+                         paste0(names(cross$geno)[is_x], collapse=", "), ")")
+        cross <- cross[!is_x, ]
+    }
+
+    cross
 }
 
 # end of util.R
