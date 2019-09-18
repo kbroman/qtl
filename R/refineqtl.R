@@ -138,7 +138,10 @@ refineqtl <-
     # minimum distance between pseudomarkers
     if(is.null(map))
         stop("Input qtl object should contain the genetic map.")
-    mind <- min(sapply(map, function(a) { if(is.matrix(a)) a <- a[1,]; min(diff(a)) }))/2
+    mind <- min(unlist(lapply(map, function(a) { if(is.matrix(a)) a <- a[1,];
+        if(length(a) <= 1) return(NULL) # deal with case of a single marker
+        min(diff(a)) })))/2
+    print(mind)
     if(mind <= 0) mind <- 1e-6
 
     # check phenotypes and covariates; drop ind'ls with missing values

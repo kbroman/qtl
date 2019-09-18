@@ -16,14 +16,18 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.45, 2019-08-12
+## Version 1.45, 2019-09-18
 
 ### Bug fixes
 
-- Fix bug regarding missing phenotypes in stepwiseqtl().
+- Fix bug regarding missing phenotypes in `stepwiseqtl()`.
 
 - Fix bug related to reading 4-way cross data, to ensure that the
   genetic map for each chromosome is a 2-row matrix.
+
+- Fix bug in `refineqtl()` that gave a warning about `min(diff(a))`
+  when there was a single marker on a chromosome.
+  ([Issue #78](https://github.com/kbroman/qtl/issues/78))
 
 
 ## Version 1.44, 2019-01-22
