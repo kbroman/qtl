@@ -5,7 +5,7 @@
 # copyright (c) 2001-2019, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Aug, 2019
+# last modified Oct, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2336,8 +2336,9 @@ lodint <-
                 }
                 else {
                     if(length(qtl.index)>1) stop("qtl.index should have length 1")
-                    if(qtl.index < 1 || qtl.index > length(results))
-                        stop("qtl.index misspecified.")
+                    if(qtl.index < 1 || qtl.index > length(results)) {
+                        stop("qtl.index should be between 1 and ", length(results))
+                    }
                     results <- results[[qtl.index]]
                 }
                 chr <- results[1,1]
@@ -2346,7 +2347,7 @@ lodint <-
     }
     else {
         if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
-            stop("Argument lodcolumn misspecified.")
+            stop("Argument lodcolumn should be between 1 and ", ncol(results)-2)
 
         if(missing(chr)) {
             if(length(unique(results[,1]))>1)
@@ -2355,7 +2356,7 @@ lodint <-
         else {
             if(length(chr) > 1) stop("chr should have length 1")
             if(is.na(match(chr, results[,1])))
-                stop("Chromosome misspecified.")
+                stop("Chromosome ", chr, " not found.")
             results <- results[results[,1]==chr,]
         }
     }
@@ -2434,7 +2435,7 @@ bayesint <-
                 else {
                     if(length(qtl.index)>1) stop("qtl.index should have length 1")
                     if(qtl.index < 1 || qtl.index > length(results))
-                        stop("qtl.index misspecified.")
+                        stop("qtl.index should be between 1 and ", length(results))
                     results <- results[[qtl.index]]
                 }
                 chr <- results[1,1]
@@ -2443,7 +2444,7 @@ bayesint <-
     }
     else {
         if(lodcolumn < 1 || lodcolumn +2 > ncol(results))
-            stop("Argument lodcolumn misspecified.")
+            stop("Argument lodcolumn should be between 1 and ", ncol(results)-2)
 
         if(missing(chr)) {
             if(length(unique(results[,1]))>1)
@@ -2452,7 +2453,7 @@ bayesint <-
         else {
             if(length(chr) > 1) stop("chr should have length 1")
             if(is.na(match(chr, results[,1])))
-                stop("Chromosome misspecified.")
+                stop("Chromosome ", chr, " not found.")
             results <- results[results[,1]==chr,]
         }
     }

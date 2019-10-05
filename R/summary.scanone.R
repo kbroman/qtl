@@ -2,8 +2,8 @@
 #
 # summary.scanone.R
 #
-# copyright (c) 2001-2018, Karl W Broman
-# last modified Feb, 2018
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Oct, 2019
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -560,7 +560,7 @@ max.scanone <-
         stop("Input must have class \"scanone\".")
 
     if(lodcolumn < 1 || lodcolumn+2 > ncol(object))
-        stop("Argument lodcolumn misspecified.")
+        stop("Argument lodcolumn should be between 1 and ", ncol(object)-2)
 
     if(!missing(chr)) object <- subset(object, chr=chr)
 
