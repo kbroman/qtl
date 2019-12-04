@@ -2,8 +2,8 @@
 #
 # countXO.R
 #
-# copyright (c) 2008-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2008-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Feb, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,14 +37,14 @@
 countXO <-
     function(cross, chr, bychr=FALSE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     # pull out relevant chromosome
     if(!missing(chr)) cross <- subset(cross,chr=chr)
     chr.name <- names(cross$geno)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     n.ind <- nind(cross)
     n.chr <- nchr(cross)
     nxo <- matrix(0, ncol=n.chr, nrow=n.ind)
@@ -54,7 +54,7 @@ countXO <-
 
     for(i in 1:n.chr) {
 
-        chrtype <- class(cross$geno[[i]])
+        chrtype <- chrtype(cross$geno[[i]])
         if(chrtype=="X") xchr <- TRUE
         else xchr <- FALSE
 

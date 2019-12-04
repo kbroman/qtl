@@ -2,10 +2,10 @@ convert2bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
                           error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
                           verbose=FALSE)
 {
-    cross.class <- class(cross)[1]
+    cross.class <- crosstype(cross)
 
     if((cross.class %in% c("bc","f2"))) {
-        class(cross)[1] <- "bcsft"
+        class(cross) <- c("bcsft", "cross")
         ## If BC.gen = 0 and F.gen = 0, then set to BC1F0 (bc) or BC0F2 (f2).
         if(cross.class == "bc" & F.gen > 0) {
             stop("input cross has only 2 genotypes--cannot have F.gen > 0")
@@ -51,7 +51,7 @@ read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcs
         estimate.map <- FALSE
 
     force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
-    if((class(cross)[1] %in% c("bc","f2")) & force.bcsft) {
+    if((crosstype(cross) %in% c("bc","f2")) && force.bcsft) {
 
         # deal with ... args
         dots <- list(...)
@@ -99,9 +99,7 @@ sim.cross.bcsft <- function(map,model,n.ind,error.prob,missing.prob,
     n.eff <- 3 + (cross.scheme[2] > 0)
 
     ## chromosome types
-    chr.type <- sapply(map,function(a)
-                       if(is.null(class(a))) return("A")
-                       else return(class(a)))
+    chr.type <- sapply(map,chrtype)
 
     n.chr <- length(map)
     if(is.null(model)) n.qtl <- 0

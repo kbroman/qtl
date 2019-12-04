@@ -22,6 +22,9 @@ copyright (c) 2001-2019, Karl W Broman
 
 - Added internal functions `crosstype()` and `chrtype()`.
 
+- Went through full package to replace use of `class(blah)=="blah"`
+  with `inherits(blah, "blah")`.
+
 - mqmscan() and mqmscanall() now give a warning about omitting the X
   chromosome, and give a more meaningful error if there are no autosomes.
 

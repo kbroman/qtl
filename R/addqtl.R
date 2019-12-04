@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-2019, Karl W. Broman
-# last modified Aug, 2019
+# last modified Dec, 2019
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,10 +39,10 @@ addint <-
              qtl.only=FALSE, verbose=TRUE, pvalues=TRUE, simple=FALSE,
              tol=1e-4, maxit=1000, require.fullrank=FALSE)
 {
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     if(!is.null(covar) && !is.data.frame(covar)) {
@@ -310,10 +310,10 @@ addqtl <-
     method <- match.arg(method)
     model <- match.arg(model)
 
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     # allow formula to be a character string
@@ -634,10 +634,10 @@ addpair <-
     method <- match.arg(method)
     model <- match.arg(model)
 
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     # allow formula to be a character string
@@ -962,7 +962,7 @@ addpair <-
         }
         gmap <- rbind(gmap, cbind(map,
                                   eq.spacing=eq.sp.pos,
-                                  xchr=(class(cross$geno[[i]])=="X")))
+                                  xchr=inherits(cross$geno[[i]], "X")))
     }
 
     lod <- matrix(ncol=nrow(gmap), nrow=nrow(gmap))
@@ -1180,10 +1180,10 @@ addcovarint <-
              verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000,
              require.fullrank=FALSE)
 {
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross"))
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl"))
         stop("The qtl argument must be an object of class \"qtl\".")
 
     if(missing(covar) || is.null(covar))

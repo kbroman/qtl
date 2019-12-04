@@ -2,8 +2,8 @@
 #
 # add_threshold.R
 #
-# copyright (c) 2006-2014, Karl W Broman
-# last modified Apr, 2014
+# copyright (c) 2006-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Dec, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ add.threshold <-
 {
     if(missing(out))
         stop("You must provide scanone output, so we can get chromosome lengths.")
-    if(!any(class(out) == "scanone"))
+    if(!inherits(out, "scanone"))
         stop("out should have class \"scanone\".")
     if(!missing(chr))
         out <- subset(out, chr=chr)
@@ -103,7 +103,7 @@ xaxisloc.scanone <-
 {
     if(missing(out))
         stop("You must provide scanone output, so we can get chromosome lengths.")
-    if(!any(class(out) == "scanone"))
+    if(!inherits(out, "scanone"))
         stop("out should have class \"scanone\".")
     if(!missing(chr))
         out <- subset(out, chr=chr)

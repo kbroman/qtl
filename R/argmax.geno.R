@@ -2,8 +2,8 @@
 #
 # argmax.geno.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ argmax.geno <-
              map.function=c("haldane","kosambi","c-f","morgan"),
              stepwidth=c("fixed", "variable", "max"))
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("cross should have class \"cross\".")
 
     # map function
@@ -57,14 +57,14 @@ argmax.geno <-
     n.ind <- nind(cross)
     n.chr <- nchr(cross)
     n.mar <- nmar(cross)
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     # loop over chromosomes
     for(i in 1:n.chr) {
         if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
         else temp.offend <- off.end
 
-        chrtype <- class(cross$geno[[i]])
+        chrtype <- chrtype(cross$geno[[i]])
         if(chrtype=="X") xchr <- TRUE
         else xchr <- FALSE
 
