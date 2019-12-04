@@ -4513,4 +4513,24 @@ omit_x_chr <-
     cross
 }
 
+# determine cross type
+crosstype <-
+    function(cross)
+    {
+        type <- class(cross)
+        type <- type[type != "cross" & type != "list"]
+        if(length(type) > 1) {
+            warning("cross has multiple classes")
+        }
+        type[1]
+    }
+
+# determine chromosome type
+chrtype <-
+    function(object)
+    {
+        if("X" %in% class(object)) return("X")
+        "A"
+    }
+
 # end of util.R

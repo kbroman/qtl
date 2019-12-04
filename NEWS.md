@@ -20,6 +20,8 @@ copyright (c) 2001-2019, Karl W Broman
 
 ### Minor changes
 
+- Added internal functions `crosstype()` and `chrtype()`.
+
 - mqmscan() and mqmscanall() now give a warning about omitting the X
   chromosome, and give a more meaningful error if there are no autosomes.
 
