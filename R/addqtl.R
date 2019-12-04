@@ -2,8 +2,8 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-2012, Karl W. Broman
-# last modified Aug, 2012
+# copyright (c) 2007-2019, Karl W. Broman
+# last modified Aug, 2019
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -936,7 +936,7 @@ addpair <-
         if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
             w[o] <- paste("c",ci,".",w[o],sep="")
         map <- cbind(chr=rep(ci,length(map)),
-                     pos=as.data.frame(map, stringsAsFactors=TRUE) )
+                     pos=as.data.frame(unclass(map), stringsAsFactors=TRUE) )
         rownames(map) <- w
 
         if(method=="imp")

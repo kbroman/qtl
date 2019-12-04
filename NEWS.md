@@ -16,7 +16,7 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.45, 2019-10-05
+## Version 1.45, 2019-12-04
 
 ### Minor changes
 
@@ -29,6 +29,9 @@ copyright (c) 2001-2019, Karl W Broman
 ### Bug fixes
 
 - Fix bug regarding missing phenotypes in `stepwiseqtl()`.
+
+- Fix bug in `addpair()` re converting map to data frame (getting
+  error like `cannot coerce class "A" to data.frame`).
 
 - Fix bug related to reading 4-way cross data, to ensure that the
   genetic map for each chromosome is a 2-row matrix.
