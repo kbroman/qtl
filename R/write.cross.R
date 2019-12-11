@@ -2,8 +2,8 @@
 #
 # write.cross.R
 #
-# copyright (c) 2001-2014, Karl W Broman and Hao Wu
-# last modified June, 2014
+# copyright (c) 2001-2019, Karl W Broman and Hao Wu
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -38,15 +38,15 @@ write.cross <-
                     "gary", "qtab", "mapqtl", "tidy"),
              filestem="data", chr, digits=NULL, descr)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     format <- match.arg(format)
     if(!missing(chr)) cross <- subset(cross,chr=chr)
 
     # revise X data
-    chrtype <- sapply(cross$geno,class)
-    crosstype <- class(cross)[1]
+    chrtype <- sapply(cross$geno,chrtype)
+    crosstype <- crosstype(cross)
     if((crosstype=="bc" || crosstype=="f2") &&
        any(chrtype=="X")) {
         sexpgm <- getsex(cross)
@@ -57,7 +57,7 @@ write.cross <-
     }
 
     if(crosstype == "bcsft") # convert BCsFt to intercross for writing
-        class(cross)[1] <- "f2"
+        class(cross) <- c("f2", "cross")
 
     if(format=="csv") write.cross.csv(cross,filestem,digits,FALSE,FALSE)
     else if(format=="csvr") write.cross.csv(cross,filestem,digits,TRUE,FALSE)
@@ -96,7 +96,7 @@ write.cross.mm <-
     n.chr <- nchr(cross)
     n.mar <- nmar(cross)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type=="riself" || type=="risib" || type=="dh" || type=="haploid") type <- "bc"
     if(type != "f2" && type != "bc")
         stop("write.cross.mm only works for intercross, backcross, doubled haploid and RI data.")
@@ -214,7 +214,7 @@ write.cross.mm <-
 write.cross.csv <-
     function(cross, filestem="data", digits=NULL, rotate=FALSE, split=FALSE)
 {
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type != "f2" && type != "bc" && type != "riself" && type != "risib" && type != "dh" && type != "haploid")
         stop("write.cross.csv only works for intercross, backcross, RI, doubled haploid, and haploid data.")
 
@@ -418,7 +418,7 @@ write.cross.tidy <-
     phefile <- paste(filestem, "_phe.csv", sep="")
     mapfile <- paste(filestem, "_map.csv", sep = "")
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     id <- getid(cross)
 

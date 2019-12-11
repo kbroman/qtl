@@ -30,7 +30,7 @@
 getsex <-
     function(cross)
 {
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type != "bc" && type != "f2" && type != "4way") return(list(sex=NULL, pgm=NULL))
 
     phe.names <- names(cross$pheno)

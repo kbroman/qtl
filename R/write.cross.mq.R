@@ -5,6 +5,8 @@
 # last modified March, 2015
 # first written May, 2014
 #
+# small modification by Karl Broman, 2019
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License,
 # version 3, as published by the Free Software Foundation.
@@ -41,8 +43,8 @@
 write.cross.mq <-
     function(cross, filestem, digits)
 {
-    if(class(cross)[1] != "4way"){
-        msg <- paste("population type", class(cross)[1],
+    if(crosstype(cross) != "4way"){
+        msg <- paste("population type", crosstype(cross),
                      "is not supported for writing in MapQTL format (yet)")
         stop(msg, call.=FALSE)
     }
@@ -57,11 +59,11 @@ write.cross.mq.loc <-
     sink(locfile)
 
     cat(paste0("name = cross", "\n"))
-    if(class(cross)[1] == "4way"){
+    if(crosstype(cross) == "4way"){
         cat(paste0("popt = ", "CP", "\n"))
     } else{
         sink()
-        msg <- paste("population type", class(cross)[1],
+        msg <- paste("population type", crosstype(cross),
                      "is not supported (yet)")
         stop(msg, call.=FALSE)
     }

@@ -2,8 +2,8 @@
 #
 # vbscan.R
 #
-# copyright (c) 2001-2015, Karl W Broman
-# last modified Oct, 2015
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written May, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ vbscan <-
              tol=1e-4)
 {
     method <- match.arg(method)
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     # check arguments are okay
     if(length(pheno.col) > 1) pheno.col <- pheno.col[1]
@@ -71,7 +71,7 @@ vbscan <-
         n.pos <- dim(genoprob)[2]
         n.ind <- length(y)
 
-        chrtype <- class(cross$geno[[i]])
+        chrtype <- chrtype(cross$geno[[i]])
         if(chrtype=="X") sexpgm <- getsex(cross)
         else sexpgm <- NULL
 
@@ -162,7 +162,7 @@ vbscan <-
 
     class(results) <- c("scanone","data.frame")
     attr(results,"method") <- method
-    attr(results,"type") <- class(cross)[1]
+    attr(results,"type") <- crosstype(cross)
     attr(results,"model") <- "twopart"
 
     results
