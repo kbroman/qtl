@@ -4529,7 +4529,7 @@ crosstype <-
 chrtype <-
     function(object)
     {
-        if("X" %in% class(object)) return("X")
+        if(inherits(object, "X")) return("X")
         "A"
     }
 
