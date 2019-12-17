@@ -181,8 +181,9 @@ convertMWril <-
 {
     crosstype <- crosstype(cross)
     n.str.by.crosstype <- as.numeric(substr(crosstype, 3, 3))
-    if(grepl("un$", crosstype))
+    if(!grepl("un$", crosstype)) {
         stop("cross appears to have already been converted.")
+    }
     class(cross) <- c(sub("un$", "", crosstype), "cross")
 
     n.ril <- nind(cross)
