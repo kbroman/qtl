@@ -2,8 +2,8 @@
 #
 # fitqtl.R
 #
-# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
-# last modified Sep, 2013
+# copyright (c) 2002-2019, Hao Wu and Karl W. Broman
+# last modified Dec, 2019
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,10 +39,10 @@ fitqtl <-
              run.checks=TRUE, tol=1e-4, maxit=1000, forceXcovar=FALSE)
 {
     # some input checking stuff in here
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     if(!is.null(covar) && !is.data.frame(covar)) {
@@ -120,7 +120,7 @@ fitqtl <-
 
     fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                  method=method, model=model, dropone=dropone, get.ests=get.ests,
-                 run.checks=run.checks, cross.attr=attributes(cross),
+                 run.checks=run.checks, cross.attr=attributes(cross), crosstype=crosstype(cross),
                  sexpgm=getsex(cross), tol=tol, maxit=maxit, forceXcovar=forceXcovar)
 }
 
@@ -129,7 +129,7 @@ fitqtlengine <-
     function(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
              model=c("normal", "binary"),
              dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
-             sexpgm, tol, maxit, forceXcovar=FALSE)
+             crosstype, sexpgm, tol, maxit, forceXcovar=FALSE)
 {
     model <- match.arg(model)
     method <- match.arg(method)
@@ -240,7 +240,7 @@ fitqtlengine <-
         }
     }
 
-    Xadjustment <- scanoneXnull(cross.attr$class[1], sexpgm, cross.attr)
+    Xadjustment <- scanoneXnull(crosstype, sexpgm, cross.attr)
     n.origcovar <- p$n.covar
     if((sum(qtl$chrtype[p$idx.qtl]=="X") >= 1 || forceXcovar) && Xadjustment$adjustX) { # need to include X chromosome covariates
         adjustX <- TRUE
@@ -380,7 +380,7 @@ fitqtlengine <-
         }
 
         if(any(qtl$n.gen[p$idx.qtl]>=4)) {
-            type <- cross.attr$class[1]
+            type <- crosstype
             if(type == "4way")
                 genotypes <- c("AC","BC","AD","BD")
             else {
@@ -464,7 +464,7 @@ fitqtlengine <-
             for(i in seq(along=p$idx.qtl)) {
                 if(n.gen[i]==2) {
                     if(method=="imp") {
-                        if(cross.attr$class[1] == "bc") {
+                        if(crosstype == "bc") {
                             Z[qtl$geno[,p$idx.qtl[i],1]==1,curcol+1] <- -0.5
                             Z[qtl$geno[,p$idx.qtl[i],1]==2,curcol+1] <- 0.5
                         } else {
@@ -473,7 +473,7 @@ fitqtlengine <-
                         }
                     }
                     else
-                        if(cross.attr$class[1] == "bc") {
+                        if(crosstype == "bc") {
                             Z[,curcol+1] <- (qtl$prob[[p$idx.qtl[i]]][,2] - qtl$prob[[p$idx.qtl[i]]][,1])/2
                         } else {
                             Z[,curcol+1] <- (qtl$prob[[p$idx.qtl[i]]][,2] - qtl$prob[[p$idx.qtl[i]]][,1])
@@ -1082,7 +1082,7 @@ parseformula <- function(formula, qtl.dimname, covar.dimname)
 summary.fitqtl <-
     function(object, pvalues=TRUE, simple=FALSE, ...)
 {
-    if(!any(class(object) == "fitqtl"))
+    if(!inherits(object, "fitqtl"))
         stop("Input should have class \"fitqtl\".")
 
     # this is just an interface.

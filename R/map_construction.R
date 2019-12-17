@@ -2,8 +2,8 @@
 #
 # map_construction.R
 #
-# copyright (c) 2008-2013, Karl W Broman
-# last modified Dec, 2013
+# copyright (c) 2008-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Oct, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -104,8 +104,8 @@ formLinkageGroups <-
 
     if(reorgMarkers) {
         cross <- clean(cross)
-        chrtype <- rep(sapply(cross$geno, class), n.mar)
-        crosstype <- class(cross)[1]
+        chrtype <- rep(sapply(cross$geno, chrtype), n.mar)
+        crosstype <- crosstype(cross)
         g <- pull.geno(cross)
 
         cross$geno <- vector("list", max(revgrp))

@@ -205,8 +205,8 @@ addint <-
     # fit base model
     thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                             method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                            tol=tol, maxit=maxit)
+                            run.checks=FALSE, cross.attr=cross.attr,
+                            crosstype=crosstype(cross), sexpgm=sexpgm, tol=tol, maxit=maxit)
 
     matrix0.rank <- attr(thefit0, "matrix.rank")
     matrix0.ncol <- attr(thefit0, "matrix.ncol")
@@ -221,7 +221,8 @@ addint <-
         thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                                 formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
                                 method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                                run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                                run.checks=FALSE, cross.attr=cross.attr,
+                                crosstype=crosstype(cross), sexpgm=sexpgm,
                                 tol=tol, maxit=maxit)
 
         results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
@@ -523,7 +524,8 @@ addqtl <-
     # fit the base model
     fit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                          method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                         run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                         run.checks=FALSE, cross.attr=cross.attr,
+                         crosstype=crosstype(cross), sexpgm=sexpgm,
                          tol=tol, maxit=maxit, forceXcovar=forceXcovar)
     lod0 <- fit0$result.full[1,4]
     matrix0.rank <- attr(fit0, "matrix.rank")
@@ -892,7 +894,8 @@ addpair <-
     # fit the base model
     fit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                          method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                         run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                         run.checks=FALSE, cross.attr=cross.attr,
+                         crosstype=crosstype(cross), sexpgm=sexpgm,
                          tol=tol, maxit=maxit, forceXcovar=forceXcovar)
     lod0 <- fit0$result.full[1,4]
 
@@ -1350,7 +1353,8 @@ addcovarint <-
     # fit base model
     thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                             method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                            run.checks=FALSE, cross.attr=cross.attr,
+                            crosstype=crosstype(cross), sexpgm=sexpgm,
                             tol=tol, maxit=maxit)
     matrix0.rank <- attr(thefit0, "matrix.rank")
     matrix0.ncol <- attr(thefit0, "matrix.ncol")
@@ -1364,7 +1368,8 @@ addcovarint <-
         thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                                 formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
                                 method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                                run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                                run.checks=FALSE, cross.attr=cross.attr,
+                                crosstype=crosstype(cross), sexpgm=sexpgm,
                                 tol=tol, maxit=maxit)
 
         results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]

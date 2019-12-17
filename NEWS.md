@@ -22,6 +22,9 @@ copyright (c) 2001-2019, Karl W Broman
 
 - Added internal functions `crosstype()` and `chrtype()`.
 
+- Added argument `crosstype` to internal function `fitqtlengine()`
+  rather than taking it from the cross attributes.
+
 - Went through full package to replace use of `class(blah)=="blah"`
   with `inherits(blah, "blah")`.
 
