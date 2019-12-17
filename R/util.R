@@ -34,7 +34,7 @@
 #           comparecrosses, movemarker, summary.map (aka summaryMap),
 #           print.summary.map, find.pheno,
 #           convert, convert.scanone, convert.scantwo
-#           find.flanking, strip.partials, comparegeno
+#           find.flanking, strip.partials,
 #           qtlversion, locateXO, jittermap, getid,
 #           find.markerpos, geno.crosstab, LikePheVector,
 #           matchchr, convert2sa, charround, testchr,
@@ -3152,46 +3152,6 @@ strip.partials <-
     }
     cross
 }
-
-######################################################################
-# comparegeno
-######################################################################
-comparegeno <-
-    function(cross, what=c("proportion","number", "both"))
-{
-    if(!inherits(cross, "cross"))
-        stop("Input should have class \"cross\".")
-
-    what <- match.arg(what)
-    g <- pull.geno(cross)
-    g[is.na(g)] <- 0
-    n.ind <- nrow(g)
-    n.mar <- ncol(g)
-    z <- .C("R_comparegeno",
-            as.integer(g),
-            as.integer(n.ind),
-            as.integer(n.mar),
-            n.match=as.integer(rep(0,n.ind^2)),
-            n.missing=as.integer(rep(0,n.ind^2)),
-            PACKAGE="qtl")
-
-    if(what=="number") {
-        z <- matrix(z$n.match,n.ind,n.ind)
-    }
-    else {
-        if(what=="proportion") {
-            z <- matrix(z$n.match/(n.mar-z$n.missing),n.ind,n.ind)
-            diag(z) <- NA
-        }
-        else {
-            prop <- matrix(z$n.match/(n.mar-z$n.missing),n.ind,n.ind)
-            z <- matrix(z$n.match,n.ind,n.ind)
-            z[lower.tri(z)] <- prop[lower.tri(z)]
-        }
-    }
-    z
-}
-
 
 ######################################################################
 # print the installed version of R/qtl
