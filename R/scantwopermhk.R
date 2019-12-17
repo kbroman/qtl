@@ -10,13 +10,13 @@ scantwopermhk <-
 
     # in RIL, treat X chromosome like an autosome
     chr.names <- chrnames(cross)
-    chrtype <- sapply(cross$geno, class)
-    type <- class(cross)[1]
-    if(any(chrtype=="X") && (type=="risib" || type=="riself"))
-        for(i in which(chrtype=="X"))
-            class(cross$geno[[i]]) <- chrtype[i] <- "A"
+    chr_type <- sapply(cross$geno, chrtype)
+    type <- crosstype(cross)
+    if(any(chr_type=="X") && (type=="risib" || type=="riself"))
+        for(i in which(chr_type=="X"))
+            class(cross$geno[[i]]) <- chr_type[i] <- "A"
 
-    if(any(chrtype=="X") && (type=="bc" || type=="f2")) # force stratified permutation test
+    if(any(chr_type=="X") && (type=="bc" || type=="f2")) # force stratified permutation test
         perm.strata <- force_sexstrata(cross, perm.strata)
 
     if(!assumeCondIndep) { # if reduce2grid was used, for assumeCondIndep
@@ -28,7 +28,7 @@ scantwopermhk <-
         }
     }
 
-    if(is.null(perm.Xsp) || !perm.Xsp || !any(chrtype=="X")) { # all autosomes
+    if(is.null(perm.Xsp) || !perm.Xsp || !any(chr_type=="X")) { # all autosomes
         result <- .scantwopermhk(cross, pheno.col=pheno.col,
                                  addcovar=addcovar, weights=weights, n.perm=n.perm,
                                  batchsize=batchsize,
@@ -37,12 +37,12 @@ scantwopermhk <-
     }
     else { # separate A:A, A:X, and X:X
         # covariates for X chr
-        Xcovar <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))$sexpgmcovar
+        Xcovar <- scanoneXnull(crosstype(cross), getsex(cross), attributes(cross))$sexpgmcovar
 
         # lengths of autosomes and X chr
         chrL <- sapply(cross$geno, function(a) diff(range(a$map)))
-        AL <- sum(chrL[chrtype=="A"])
-        XL <- sum(chrL[chrtype=="X"])
+        AL <- sum(chrL[chr_type=="A"])
+        XL <- sum(chrL[chr_type=="X"])
         AAL <- AL*AL/2
         XXL <- XL*XL/2
         AXL <- AL*XL
@@ -51,8 +51,8 @@ scantwopermhk <-
         n.permAX <- ceiling(n.perm * AAL/AXL)
 
         # names of autosomes and X chr
-        Achr <- chr.names[chrtype=="A"]
-        Xchr <- chr.names[chrtype=="X"]
+        Achr <- chr.names[chr_type=="A"]
+        Xchr <- chr.names[chr_type=="X"]
 
 
         if(verbose) message("Running ", n.permAA, " A:A permutations")
@@ -81,8 +81,8 @@ scantwopermhk <-
         result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
         attr(result, "L") <- c(A=AL, X=XL)
         attr(result, "LL") <- c(AA=AAL, AX=AXL, XX=XXL)
-        names(chrtype) <- chr.names
-        attr(result, "chrtype") <- chrtype
+        names(chr_type) <- chr.names
+        attr(result, "chrtype") <- chr_type
     }
 
     class(result) <- "scantwoperm"
@@ -96,7 +96,7 @@ scantwopermhk <-
              weights=NULL, n.perm=1, batchsize=1000,
              perm.strata=NULL, verbose=FALSE, assumeCondIndep=FALSE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(n.perm > batchsize) { # run in batches
@@ -146,10 +146,10 @@ scantwopermhk <-
         stop("Need some of first chr to be <= some of second chr")
 
     # in RIL, treat X chromomse like an autosome
-    chrtype <- sapply(cross$geno, class)
-    type <- class(cross)[1]
-    if(any(chrtype=="X") && (type == "risib" || type == "riself"))
-        for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
+    chr_type <- sapply(cross$geno, chrtype)
+    type <- crosstype(cross)
+    if(any(chr_type=="X") && (type == "risib" || type == "riself"))
+        for(i in which(chr_type=="X")) class(cross$geno[[i]]) <- "A"
 
     # check perm.strat
     if(!missing(perm.strata) && !is.null(perm.strata)) {
@@ -221,11 +221,11 @@ scantwopermhk <-
     }
 
     # X chromosome covariates
-    if(any(chrtype=="X")) {
+    if(any(chr_type=="X")) {
         sexpgm <- getsex(cross)
 
         # get null loglik for X chr
-        Xnullcovar <- scanoneXnull(class(cross)[1], sexpgm, attributes(cross))[[3]]
+        Xnullcovar <- scanoneXnull(crosstype(cross), sexpgm, attributes(cross))[[3]]
         adjcovar <- cbind(Xnullcovar, addcovar)
         if(!is.null(adjcovar) && ncol(adjcovar) > 0) {
             resid0 <- lm(pheno ~ adjcovar, weights=weights^2)$resid
@@ -244,7 +244,7 @@ scantwopermhk <-
 
 
         for(i in 1:n.chr) {
-            if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
+            if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
                 oldXchr <- subset(cross, chr=thechr[i])
                 cross$geno[[i]]$prob <-
                     reviseXdata(type, "full", sexpgm, prob=cross$geno[[i]]$prob,
@@ -278,7 +278,7 @@ scantwopermhk <-
             if(j < i) next
             k <- k + 1
 
-            if(chrtype[i]=="X" || chrtype[j]=="X") {
+            if(chr_type[i]=="X" || chr_type[j]=="X") {
                 ac <- addcovarX
                 n.ac <- n.acX
             }
@@ -286,7 +286,7 @@ scantwopermhk <-
                 ac <- addcovar
                 n.ac <- n.addcovar
             }
-            if(i==j && chrtype[i]=="X") {
+            if(i==j && chr_type[i]=="X") {
                 col2drop <- dropXcol(type, sexpgm, attributes(cross))
                 n.col2drop <- sum(col2drop)
                 n.col2drop.addmodel <- sum(col2drop[1:(2*n.gen[i]-1)])
@@ -304,7 +304,7 @@ scantwopermhk <-
 
                 if(verbose>2) cat("  --Calculating joint probs.\n")
 
-                if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
+                if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
                     # calculate joint genotype probabilities for all pairs of positions
                     stp <- attr(oldXchr$geno[[1]]$prob, "step")
                     oe <- attr(oldXchr$geno[[1]]$prob, "off.end")
@@ -342,7 +342,7 @@ scantwopermhk <-
                 }
 
                 # revise pair probilities for X chromosome
-                if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft")))
+                if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft")))
                     temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                                         cross.attr=attributes(cross))
 
@@ -366,7 +366,7 @@ scantwopermhk <-
                             PACKAGE="qtl")
                 result[[k]] <- -matrix(thisz$result, nrow=n.perm)
                 result[[k]][,c(1,4,6)] <- result[[k]][,c(1,4,6)] +
-                    ifelse(chrtype[i]=="X", nllik0X, nllik0)
+                    ifelse(chr_type[i]=="X", nllik0X, nllik0)
             } # end same chromosome
             else {
                 thisz <- .C("R_scantwopermhk_2chr",
@@ -387,7 +387,7 @@ scantwopermhk <-
                             PACKAGE="qtl")
                 result[[k]] <- -matrix(thisz$result, nrow=n.perm)
                 result[[k]][,c(1,4,6)] <- result[[k]][,c(1,4,6)] +
-                    ifelse(chrtype[i]=="X" || chrtype[j]=="X", nllik0X, nllik0)
+                    ifelse(chr_type[i]=="X" || chr_type[j]=="X", nllik0X, nllik0)
             } # end diff chr
         } # end loop chr 2
     } # end loop chr 1
@@ -405,7 +405,7 @@ scantwopermhk <-
 force_sexstrata <-
 function(cross, perm.strata)
 {
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type!="bc" && type!="f2")
         return(perm.strata)
 

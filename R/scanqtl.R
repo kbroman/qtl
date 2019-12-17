@@ -2,8 +2,8 @@
 #
 # scanqtl.R
 #
-# copyright (c) 2002-2014, Hao Wu and Karl W. Broman
-# last modified Jan, 2014
+# copyright (c) 2002-2019, Hao Wu and Karl W. Broman
+# last modified Dec, 2019
 # first written Apr, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ scanqtl <-
              incl.markers=FALSE, verbose=TRUE, tol=1e-4, maxit=1000,
              forceXcovar=FALSE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!is.null(covar) && !is.data.frame(covar)) {
@@ -107,8 +107,8 @@ scanqtl <-
         else stepwidth.var <- FALSE
     }
 
-    type <- class(cross)[1]
-    chrtype <- sapply(cross$geno,class)
+    type <- crosstype(cross)
+    chr_type <- sapply(cross$geno, chrtype)
 
     # input data checking
     if( length(chr) != length(pos))
@@ -306,6 +306,7 @@ scanqtl <-
         result <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                                formula=formula, method=method, model=model, dropone=FALSE,
                                get.ests=FALSE, run.checks=FALSE, cross.attr=cross.attr,
+                               crosstype=crosstype(cross),
                                sexpgm=sexpgm, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
         matrix.rank <- attr(result, "matrix.rank")
         matrix.ncol <- attr(result, "matrix.ncol")
@@ -382,7 +383,7 @@ scanqtl <-
                         qtl.obj$prob[[kk]] <- cross$geno[[ichr[kk]]]$prob[,w,]
                     thew[kk] <- w ####
 
-                    if(chrtype[ichr[kk]]=="X" && (type=="bc" || type=="f2")) {
+                    if(chr_type[ichr[kk]]=="X" && (type=="bc" || type=="f2")) {
                         if(method=="imp")
                             qtl.obj$geno[,kk,] <-
                                 reviseXdata(type,"full",sexpgm,draws=qtl.obj$geno[,kk,,drop=FALSE],
@@ -406,7 +407,8 @@ scanqtl <-
         fit <- fitqtlengine(pheno=pheno, qtl=qtl.obj, covar=covar,
                             formula=formula, method=method, model=model, dropone=FALSE,
                             get.ests=FALSE, run.checks=FALSE,
-                            cross.attr=cross.attr, sexpgm=sexpgm, tol=tol, maxit=maxit,
+                            cross.attr=cross.attr, crosstype=crosstype(cross),
+                            sexpgm=sexpgm, tol=tol, maxit=maxit,
                             forceXcovar=forceXcovar)
 
         matrix.rank[i] <- attr(fit, "matrix.rank")

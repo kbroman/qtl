@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2019, Karl W Broman
-# last modified Aug, 2019
+# last modified Dec, 2019
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ stepwiseqtl <-
              keeplodprofile=TRUE, keeptrace=FALSE, verbose=TRUE,
              tol=1e-4, maxit=1000, require.fullrank=FALSE)
 {
-    if(!("cross" %in% class(cross)))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross, chr)
@@ -85,8 +85,8 @@ stepwiseqtl <-
             warning("penalties should be a vector; only the first row will be used")
         }
         if(length(penalties)==6) { # X-chr-specific penalties
-            chrtype <- vapply(cross$geno, class, "")
-            if(!all(chrtype=="A")) {
+            chr_type <- vapply(cross$geno, chrtype, "")
+            if(!all(chr_type=="A")) {
                 if(scan.pairs)
                     warning("scan.pairs=TRUE not implemented X-chr specific penalties; ignored.")
                 return(stepwiseqtlX(cross, chrnames(cross), pheno.col=pheno.col, qtl=qtl,
@@ -105,16 +105,16 @@ stepwiseqtl <-
         pheno.col <- 1
     }
 
-    chrtype <- sapply(cross$geno, class)
-    if(any(chrtype=="X")) {
-        Xadjustment <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))
+    chr_type <- sapply(cross$geno, chrtype)
+    if(any(chr_type=="X")) {
+        Xadjustment <- scanoneXnull(crosstype(cross), getsex(cross), attributes(cross))
         forceXcovar <- Xadjustment$adjustX
         Xcovar <- Xadjustment$sexpgmcovar
     }
     else forceXcovar <- FALSE
 
     if(!is.null(qtl)) { # start f.s. at somewhere other than the null
-        if( !("qtl" %in% class(qtl)) )
+        if( !inherits(qtl, "qtl") )
             stop("The qtl argument must be an object of class \"qtl\".")
 
         # check that chromosomes were retained, otherwise give error
@@ -253,7 +253,7 @@ stepwiseqtl <-
 
 
     # penalties
-    cross.type <- class(cross)[1]
+    cross.type <- crosstype(cross)
     if(missing(penalties)) {
         if(cross.type=="f2") {
             penalties <-  c(3.52, 4.28, 2.69)
@@ -933,7 +933,7 @@ countqtlterms <-
 calc.penalties <-
     function(perms, alpha=0.05, lodcolumn)
 {
-    if(missing(perms) || !("scantwoperm" %in% class(perms)))
+    if(missing(perms) || !inherits(perms, "scantwoperm"))
         stop("You must include permutation results from scantwo.")
 
     if("AA" %in% names(perms)) { # X-chr-specific penalties

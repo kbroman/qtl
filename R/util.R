@@ -5,7 +5,7 @@
 # copyright (c) 2001-2019, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2019
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@
 markernames <-
     function(cross, chr)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross, chr=chr)
@@ -377,7 +377,7 @@ create.map <-
 reduce2grid <-
     function(cross)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     # sample one element from a vector
@@ -476,7 +476,7 @@ clean <-
 clean.cross <-
     function(object, ...)
 {
-    if(!any(class(object) == "cross"))
+    if(!inherits(object, "cross"))
         stop("Input should have class \"cross\".")
 
     cross2 <- list(geno=object$geno,pheno=object$pheno)
@@ -547,7 +547,7 @@ clean.cross <-
 drop.nullmarkers <-
     function(cross)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     n.chr <- nchr(cross)
@@ -618,7 +618,7 @@ drop.nullmarkers <-
 nullmarkers <-
     function(cross)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     n.chr <- nchr(cross)
@@ -647,7 +647,7 @@ nullmarkers <-
 drop.markers <-
     function(cross, markers)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     n.chr <- nchr(cross)
@@ -820,7 +820,7 @@ drop.dupmarkers <-
 geno.table <-
     function(cross, chr, scanone.output=FALSE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr))
@@ -828,14 +828,14 @@ geno.table <-
 
     n.chr <- nchr(cross)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     is.bcs <- type == "bcsft"
     cross.scheme <- attr(cross, "scheme")
     if(is.bcs)
         is.bcs <- (cross.scheme[2] == 0)
 
-    chrtype <- sapply(cross$geno, class)
-    allchrtype <- rep(chrtype, nmar(cross))
+    chr_type <- sapply(cross$geno, chrtype)
+    allchrtype <- rep(chr_type, nmar(cross))
     chrname <- names(cross$geno)
     allchrname <- rep(chrname, nmar(cross))
 
@@ -883,7 +883,7 @@ geno.table <-
     pval <- rep(NA,nrow(results))
     if(type %in% c("bc","risib","riself","dh","haploid") || (type=="bcsft" & is.bcs)) {
         sexpgm <- getsex(cross)
-        if((type == "bc" || type=="bcsft") && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
+        if((type == "bc" || type=="bcsft") && any(chr_type == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
             for(i in which(allchrtype=="A")) {
                 x <- results[i,2:3]
                 if(sum(x) > 0)
@@ -897,7 +897,7 @@ geno.table <-
             colnames(temp) <- gn[wh]
             results <- cbind(results, temp)
 
-            for(i in which(chrtype=="X")) {
+            for(i in which(chr_type=="X")) {
                 dat <- reviseXdata("bc", "full", sexpgm, geno=cross$geno[[i]]$data,
                                    cross.attr=attributes(cross))
                 dat[is.na(dat)] <- 0
@@ -953,7 +953,7 @@ geno.table <-
             }
         }
 
-        for(i in which(chrtype=="X")) {
+        for(i in which(chr_type=="X")) {
             gn <- getgenonames("f2","X","full", getsex(cross), attributes(cross))
             wh <- which(is.na(match(gn, colnames(results))))
             temp <- matrix(0, nrow=nrow(results), ncol=length(wh))
@@ -1123,7 +1123,7 @@ genotab.em <-
 geno.crosstab <-
     function(cross, mname1, mname2, eliminate.zeros=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(missing(mname2) && length(mname1)>1) {
@@ -1145,25 +1145,25 @@ geno.crosstab <-
             stop("Marker ", rownames(pos)[is.na(pos$chr)], " not found.")
     }
 
-    chrtype <- sapply(cross$geno[pos$chr], class)
-    crosstype <- class(cross)[1]
+    chr_type <- sapply(cross$geno[pos$chr], chrtype)
+    crosstype <- crosstype(cross)
 
     g1 <- pull.geno(cross, pos$chr[1])[,mname1, drop=FALSE]
     g2 <- pull.geno(cross, pos$chr[2])[,mname2, drop=FALSE]
 
-    if(chrtype[1] == "X")
+    if(chr_type[1] == "X")
         g1 <- reviseXdata(crosstype, "full", getsex(cross), geno=g1, cross.attr=attributes(cross))
 
-    if(chrtype[2] == "X")
+    if(chr_type[2] == "X")
         g2 <- reviseXdata(crosstype, "full", getsex(cross), geno=g2, cross.attr=attributes(cross))
 
     g1[is.na(g1)] <- 0
     g2[is.na(g2)] <- 0
 
-    g1names <- getgenonames(crosstype, chrtype[1], "full", getsex(cross), attributes(cross))
-    g2names <- getgenonames(crosstype, chrtype[2], "full", getsex(cross), attributes(cross))
+    g1names <- getgenonames(crosstype, chr_type[1], "full", getsex(cross), attributes(cross))
+    g2names <- getgenonames(crosstype, chr_type[2], "full", getsex(cross), attributes(cross))
 
-    if(chrtype[1] != "X") {
+    if(chr_type[1] != "X") {
         if(crosstype == "f2")
             g1names <- c(g1names, paste("not", g1names[c(3,1)]))
         else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
@@ -1186,7 +1186,7 @@ geno.crosstab <-
         }
         else stop("Unknown cross type: ",crosstype)
     }
-    if(chrtype[2] != "X") {
+    if(chr_type[2] != "X") {
         if(crosstype == "f2")
             g2names <- c(g2names, paste("not", g2names[c(3,1)]))
         else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
@@ -1278,7 +1278,7 @@ switch.order <-
              map.function=c("haldane","kosambi","c-f","morgan"),
              maxit=4000, tol=1e-6, sex.sp=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     map.function <- match.arg(map.function)
@@ -1440,7 +1440,7 @@ flip.order <-
 subset.cross <-
     function(x, chr, ind, ...)
 {
-    if(!any(class(x) == "cross"))
+    if(!inherits(x, "cross"))
         stop("Input should have class \"cross\".")
 
     if(missing(chr) && missing(ind))
@@ -1615,18 +1615,18 @@ c.cross <-
     n.args <- length(args)
 
     for(i in seq(along=args)) {
-        if(!any(class(args[[i]]) == "cross"))
+        if(!inherits(args[[i]], "cross"))
             stop("Input should have class \"cross\".")
     }
 
     # if only one cross, just return it
     if(n.args==1) return(args[[1]])
 
-    if(any(sapply(args, function(a) !any(class(a) == "cross"))))
+    if(any(sapply(args, function(a) !inherits(a, "cross"))))
         stop("All arguments must be cross objects.")
 
     # crosses must be all the same, or must be combination of F2 and BC
-    classes <- sapply(args,function(a) class(a)[1])
+    classes <- sapply(args, crosstype)
     if(length(unique(classes))==1) {
         allsame <- TRUE
         type <- classes[1]
@@ -1875,7 +1875,7 @@ fill.geno <-
              error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
              min.prob=0.95)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     method <- match.arg(method)
@@ -1974,10 +1974,10 @@ fill.geno <-
 checkcovar <-
     function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, weights=NULL, verbose=TRUE)
 {
-    chrtype <- sapply(cross$geno, class)
+    chr_type <- sapply(cross$geno, chrtype)
 
     # drop individuals whose sex or pgm is missing if X chr is included
-    if(any(chrtype=="X")) {
+    if(any(chr_type=="X")) {
         sexpgm <- getsex(cross)
         keep <- rep(TRUE,nind(cross))
         flag <- 0
@@ -2033,7 +2033,7 @@ checkcovar <-
     else keep.ind <- 1:nind(cross)
     n.ind <- nind(cross)
     n.chr <- nchr(cross)      # number of chromosomes
-    type <- class(cross)[1]   # type of cross
+    type <- crosstype(cross)   # type of cross
 
     n.addcovar <- n.intcovar <- 0
     if(!is.null(addcovar)) { # for additive covariates
@@ -2133,7 +2133,7 @@ checkcovar <-
 find.marker <-
     function(cross, chr, pos, index)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(missing(pos) && missing(index))
@@ -2213,7 +2213,7 @@ find.marker <-
 find.pseudomarker <-
     function(cross, chr, pos, where=c("draws","prob"), addchr=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     # if chr has length 1, expand if necessary
@@ -2316,8 +2316,8 @@ lodint <-
     function(results, chr, qtl.index, drop=1.5, lodcolumn=1,
              expandtomarkers=FALSE)
 {
-    if(!("scanone" %in% class(results))) {
-        if(!("qtl" %in% class(results)))
+    if(!inherits(results, "scanone")) {
+        if(!inherits(results, "qtl"))
             stop("Input must have class \"scanone\" or \"qtl\".")
         else {
             if(!("lodprofile" %in% names(attributes(results))))
@@ -2414,8 +2414,8 @@ lodint <-
 bayesint <-
     function(results, chr, qtl.index, prob=0.95, lodcolumn=1, expandtomarkers=FALSE)
 {
-    if(!("scanone" %in% class(results))) {
-        if(!("qtl" %in% class(results)))
+    if(!inherits(results, "scanone")) {
+        if(!inherits(results, "qtl"))
             stop("Input must have class \"scanone\" or \"qtl\".")
         else {
             if(!("lodprofile" %in% names(attributes(results))))
@@ -2503,7 +2503,7 @@ bayesint <-
 makeSSmap <-
     function(cross)
 {
-    if(!any(class(cross) == "map")) {
+    if(!inherits(cross, "map")) {
         # input object is a genetic map
         for(i in 1:length(cross)) {
             if(!is.matrix(cross[[i]]))
@@ -2534,12 +2534,12 @@ comparecrosses <-
         stop("Two crosses must be input.")
 
     # both are of class "cross"
-    if(!any(class(cross1) == "cross") ||
-       !any(class(cross2) == "cross"))
+    if(!inherits(cross1, "cross") ||
+       !inherits(cross2, "cross"))
         stop("Input should have class \"cross\".")
 
     # classes are the same
-    if(any(class(cross1) != class(cross2)))
+    if(crosstype(cross1) != crosstype(cross2))
         stop("crosses are not the same type.")
 
     if(nchr(cross1) != nchr(cross2))
@@ -2561,9 +2561,9 @@ comparecrosses <-
     }
 
 
-    chrtype1 <- sapply(cross1$geno, class)
-    chrtype2 <- sapply(cross2$geno, class)
-    if(any(chrtype1 != chrtype2))
+    chr_type1 <- sapply(cross1$geno, chrtype)
+    chr_type2 <- sapply(cross2$geno, chrtype)
+    if(any(chr_type1 != chr_type2))
         stop("Chromosome types (autosomal vs X) do not match.")
 
     for(i in 1:nchr(cross1)) {
@@ -2628,7 +2628,7 @@ comparecrosses <-
 movemarker <-
     function(cross, marker, newchr, newpos)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     mnames <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
@@ -2646,7 +2646,7 @@ movemarker <-
     # pull out genotype data
     g <- cross$geno[[chr]]$data[,pos]
 
-    chrtype <- class(cross$geno[[chr]])
+    chr_type <- chrtype(cross$geno[[chr]])
     mapmatrix <- is.matrix(cross$geno[[chr]]$map)
 
     # delete marker
@@ -2670,7 +2670,7 @@ movemarker <-
         cross$geno[[n+1]] <- list("data"=as.matrix(g),
                                   "map"=as.numeric(0))
         names(cross$geno)[n+1] <- newchr
-        class(cross$geno[[n+1]]) <- chrtype
+        class(cross$geno[[n+1]]) <- chr_type
         colnames(cross$geno[[n+1]]$data) <- marker
         if(mapmatrix) {
             if(missing(newpos)) newpos <- 0
@@ -2855,9 +2855,9 @@ summaryMap <- summary.map <-
     function(object, ...)
 {
     map <- object
-    if(any(class(map) == "cross")) # a cross object
+    if(inherits(map, "cross")) # a cross object
         map <- pull.map(map)
-    if(!any(class(map) == "map"))
+    if(!inherits(map, "map"))
         warning("Input should have class \"cross\" or \"map\".")
 
     n.chr <- length(map)
@@ -2955,7 +2955,7 @@ convert <-
 convert.scanone <-
     function(object, ...)
 {
-    if(!any(class(object) == "scanone"))
+    if(!inherits(object, "scanone"))
         stop("Input should have class \"scanone\".")
 
     rn <- rownames(object)
@@ -2983,7 +2983,7 @@ convert.scanone <-
 convert.scantwo <-
     function(object, ...)
 {
-    if(!any(class(object) == "scantwo"))
+    if(!inherits(object, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     lod <- object$lod
@@ -3012,7 +3012,7 @@ convert.map <-
 {
     old.map.function <- match.arg(old.map.function)
     new.map.function <- match.arg(new.map.function)
-    if(!("map" %in% class(object)))
+    if(!inherits(object, "map"))
         stop("Input should have class \"map\".")
 
     if(old.map.function==new.map.function) {
@@ -3064,7 +3064,7 @@ convert.map <-
 find.pheno <-
     function( cross,  pheno )
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     seq( ncol( cross$pheno ))[match(pheno,names(cross$pheno))]
@@ -3078,7 +3078,7 @@ find.pheno <-
 find.flanking <-
     function( cross, chr, pos)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     map = pull.map(cross)
@@ -3129,10 +3129,10 @@ find.flanking <-
 strip.partials <-
     function(cross, verbose=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type != "f2")
         stop("This is for intercrosses only")
 
@@ -3159,7 +3159,7 @@ strip.partials <-
 comparegeno <-
     function(cross, what=c("proportion","number", "both"))
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     what <- match.arg(what)
@@ -3238,7 +3238,7 @@ locateXO <-
 
     geno <- cross$geno[[1]]$data
     geno[is.na(geno)] <- 0
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh" && type!="haploid")
         stop("locateXO only working for backcross, intercross or RI strains.")
@@ -3249,7 +3249,7 @@ locateXO <-
 
     # bc or intercross?  thetype==0 for BC and ==1 for intercross
     if(type=="f2") {
-        if(class(geno) == "X") thetype <- 0
+        if(chrtype(geno) == "X") thetype <- 0
         else thetype <- 1
     }
     else thetype <- 0
@@ -3338,12 +3338,12 @@ locateXO <-
 jittermap <-
     function(object, amount=1e-6) # x is either a cross object or a map
 {
-    if(any(class(object) == "cross")) {
+    if(inherits(object, "cross")) {
         themap <- pull.map(object)
         return.cross <- TRUE
     }
     else {
-        if(!any(class(object) == "map"))
+        if(!inherits(object, "map"))
             stop("Input must be a cross or a map")
         return.cross <- FALSE
         themap <- object
@@ -3737,13 +3737,13 @@ testchr <-
 convert2sa <-
     function(map, tol=1e-4)
 {
-    if(!("map" %in% class(map)))
+    if(!inherits(map, "map"))
         stop("Input should have class \"map\".")
 
     if(!is.matrix(map[[1]]))
         stop("Input map doesn't seem to be a sex-specific map.")
 
-    theclass <- sapply(map, class)
+    theclass <- sapply(map, chrtype)
 
     fem <- lapply(map, function(a) a[1,])
 
@@ -3795,12 +3795,12 @@ charround <-
 scantwoperm2scanoneperm <-
     function(scantwoperms)
 {
-    if(!("scantwoperm" %in% class(scantwoperms)))
+    if(!inherits(scantwoperms, "scantwoperm"))
         stop("Input must have class \"scantwoperm\".")
     if(!("one" %in% names(scantwoperms)))
         stop("Input doesn't contain scanone permutation results.")
     scanoneperms <- scantwoperms$one
-    class(scanoneperms) <- c("scanoneperm")
+    class(scanoneperms) <- "scanoneperm"
     scanoneperms
 }
 
@@ -3955,13 +3955,13 @@ findDupMarkers <-
 convert2riself <-
     function(cross)
 {
-    if(class(cross)[2] != "cross")
+    if(!inherits(cross, "cross"))
         stop("input must be a cross object.")
-    curtype <- class(cross)[1]
-    chrtype <- sapply(cross$geno, class)
+    curtype <- crosstype(cross)
+    chr_type <- sapply(cross$geno, chrtype)
     whX <- NULL
-    if(any(chrtype != "A")) { # there's an X chromosome
-        whX <- names(cross$geno)[chrtype != "A"]
+    if(any(chr_type != "A")) { # there's an X chromosome
+        whX <- names(cross$geno)[chr_type != "A"]
         if(length(whX) > 1)
             warning("Converting chromosomes ", paste(whX, collapse=" "), " to autosomal.")
         else
@@ -3984,7 +3984,7 @@ convert2riself <-
         g2 <- sum(!is.na(dat) & dat==2)
         g3 <- sum(!is.na(dat) & dat==3)
         g4 <- sum(!is.na(dat) & dat>3)
-        if(usethree && chrtype[i] == "A") {
+        if(usethree && chr_type[i] == "A") {
             dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
             dat[!is.na(dat) & dat==3] <- 2
             g2omit <- g2omit + g2
@@ -4004,7 +4004,7 @@ convert2riself <-
     if(g4omit > 0)
         warning("Omitting ", g4omit, " genotypes with code>3.")
 
-    class(cross)[1] <- "riself"
+    class(cross) <- c("riself", "cross")
 
     cross
 }
@@ -4016,10 +4016,10 @@ convert2riself <-
 convert2risib <-
     function(cross)
 {
-    if(class(cross)[2] != "cross")
+    if(!inherits(cross, "cross"))
         stop("input must be a cross object.")
-    curtype <- class(cross)[1]
-    chrtype <- sapply(cross$geno, class)
+    curtype <- crosstype(cross)
+    chr_type <- sapply(cross$geno, chrtype)
 
     gtab <- table(pull.geno(cross))
     usethree <- FALSE
@@ -4037,7 +4037,7 @@ convert2risib <-
         g3 <- sum(!is.na(dat) & dat==3)
         g4 <- sum(!is.na(dat) & dat>3)
         if(usethree) {
-            if(chrtype[i] == "A") {
+            if(chr_type[i] == "A") {
                 dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
                 dat[!is.na(dat) & dat==3] <- 2
                 g2omit <- g2omit + g2
@@ -4071,7 +4071,7 @@ convert2risib <-
     if(g4omit > 0)
         warning("Omitting ", g4omit, " genotypes with code>3.")
 
-    class(cross)[1] <- "risib"
+    class(cross) <- c("risib", "cross")
 
     cross
 }
@@ -4080,14 +4080,14 @@ convert2risib <-
 rescalemap <-
     function(object, scale=1e-6)
 {
-    if("cross" %in% class(object)) {
+    if(inherits(object, "cross")) {
         for(i in 1:nchr(object)) {
             object$geno[[i]]$map <-
                 object$geno[[i]]$map * scale
         }
         if(abs(scale - 1) > 1e-6)
             object <- clean(object) # strip off intermediate calculations
-    } else if("map" %in% class(object)) {
+    } else if(inherits(object, "map")) {
         for(i in seq(along=object)) {
             object[[i]] <- object[[i]] * scale
         }
@@ -4101,7 +4101,7 @@ rescalemap <-
 shiftmap <-
     function(object, offset=0)
 {
-    if("cross" %in% class(object)) {
+    if(inherits(object, "cross")) {
         if(length(offset) == 1) offset <- rep(offset, nchr(object))
         else if(length(offset) != nchr(object))
             stop("offset must have length 1 or n.chr (", nchr(object), ")")
@@ -4114,7 +4114,7 @@ shiftmap <-
                 object$geno[[i]]$map <- object$geno[[i]]$map - object$geno[[i]]$map[1] + offset[i]
             }
         }
-    } else if("map" %in% class(object)) {
+    } else if(inherits(object, "map")) {
         if(length(offset) == 1) offset <- rep(offset, length(object))
         else if(length(offset) != length(object))
             stop("offset must have length 1 or n.chr (", length(object), ")")
@@ -4138,7 +4138,7 @@ shiftmap <-
 switchAlleles <-
     function(cross, markers, switch=c("AB","CD","ABCD", "parents"))
 {
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     switch <- match.arg(switch)
 
     if(type %in% c("bc", "risib", "riself", "dh", "haploid")) {
@@ -4253,7 +4253,7 @@ nqrank <-
 cleanGeno <-
     function(cross, chr, maxdist=2.5, maxmark=2, verbose=TRUE)
 {
-    if(!(class(cross)[1] %in% c("bc", "riself", "risib", "dh", "haploid")))
+    if(!(crosstype(cross) %in% c("bc", "riself", "risib", "dh", "haploid")))
         stop("This function currently only works for crosses with two genotypes")
 
     if(!missing(chr)) cleaned <- subset(cross, chr=chr)
@@ -4436,8 +4436,8 @@ formMarkerCovar <-
     }
 
     cross <- subset(cross, chr=chr)
-    isXchr <- (sapply(cross$geno, class) == "X")
-    crosstype <- class(cross)[1]
+    isXchr <- (sapply(cross$geno, chrtype) == "X")
+    crosstype <- crosstype(cross)
     sexpgm <- getsex(cross)
     crossattr <- attributes(cross)
 
@@ -4499,8 +4499,8 @@ omit_x_chr <-
     function(cross, warn=TRUE)
 {
     is_x <- vapply(cross$geno, function(chr) {
-        chrtype <- class(chr)
-        !is.null(chrtype) && chrtype=="X" }, FALSE)
+        chr_type <- chrtype(chr)
+        !is.null(chr_type) && chr_type=="X" }, FALSE)
 
     if(any(is_x)) {
         if(all(is_x)) stop("Omitting X chromosome, but there are no other chromosomes.")
@@ -4512,5 +4512,25 @@ omit_x_chr <-
 
     cross
 }
+
+# determine cross type
+crosstype <-
+    function(cross)
+    {
+        type <- class(cross)
+        type <- type[type != "cross" & type != "list"]
+        if(length(type) > 1) {
+            warning("cross has multiple classes")
+        }
+        type[1]
+    }
+
+# determine chromosome type
+chrtype <-
+    function(object)
+    {
+        if(inherits(object, "X")) return("X")
+        "A"
+    }
 
 # end of util.R

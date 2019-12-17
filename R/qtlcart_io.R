@@ -2,9 +2,9 @@
 #
 # qtlcart_io.R
 #
-# copyright (c) 2002-2013, Brian S. Yandell
+# copyright (c) 2002-2019, Brian S. Yandell
 #          [with some modifications by Karl W. Broman and Hao Wu]
-# last modified Mar, 2013
+# last modified Dec, 2019
 # first written Jun, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -259,7 +259,7 @@ write.cross.qtlcart <-
     n.chr <- nchr(cross)
     n.mar <- nmar(cross)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type=="bc") {
         type <- paste("B", 1 + match(1, names(table(c(pull.geno(cross)))),
                                      nomatch = 0), sep = "")

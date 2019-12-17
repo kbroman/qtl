@@ -4,7 +4,7 @@
 #
 # copyright (c) 2000-2019, Karl W Broman
 #       [modifications of plot.cross from Brian Yandell]
-# last modified Jan, 2019
+# last modified Dec, 2019
 # first written Mar, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ plotMissing <-
              alternate.chrid=FALSE, ...)
 {
     cross <- x
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
     if(!missing(chr)) cross <- subset(cross,chr=chr)
 
@@ -58,7 +58,7 @@ plotMissing <-
     # make matrix with  0 where genotype data is missing
     #                   1 where data is not missing
     #                 0.5 where data is partially missing
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     g <- t(Geno[o,])
     g[is.na(g)] <- 0
     if(type == "bc" || type=="risib" || type=="riself" || type=="bc")
@@ -130,17 +130,17 @@ geno.image <-
              alternate.chrid=FALSE, col=NULL, ...)
 {
     cross <- x
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
     if(!missing(chr)) cross <- subset(cross,chr=chr)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     # revise X chromosome data
     if(type=="bc" || type=="f2") {
-        chrtype <- sapply(cross$geno, class)
-        if(any(chrtype=="X")) {
-            for(i in which(chrtype=="X"))
+        chr_type <- sapply(cross$geno, chrtype)
+        if(any(chr_type=="X")) {
+            for(i in which(chr_type=="X"))
                 cross$geno[[i]]$data <- reviseXdata(type, "simple", getsex(cross),
                                                     geno=cross$geno[[i]]$data,
                                                     cross.attr=attributes(cross))
@@ -302,12 +302,12 @@ plotMap <- plot.map <-
     map <- x
     # figure out if the input is a cross (containing a map)
     #    or is the map itself
-    if(any(class(map) == "cross"))
+    if(inherits(map, "cross"))
         map <- pull.map(map)
-    if(!missing(map2) && any(class(map2) == "cross"))
+    if(!missing(map2) && inherits(map2, "cross"))
         map2 <- pull.map(map2)
 
-    if(!any(class(map)=="map")  || (!missing(map2) && !any(class(map2) == "map")))
+    if(!inherits(map, "map")  || (!missing(map2) && !inherits(map2, "map")))
         warning("Input should have class \"cross\" or \"map\".")
 
     if(!missing(map2) && is.matrix(map[[1]]) != is.matrix(map2[[1]]))
@@ -631,14 +631,14 @@ plot.cross <-
               alternate.chrid=TRUE, ...)
 {
     # look to see whether this should really be shipped to plotMap
-    if("map" %in% class(auto.layout) &&
-       ("map" %in% class(x) || "cross" %in% class(x))) {
+    if(inherits(auto.layout, "map") &&
+       (inherits(x, "map") || inherits(x, "cross"))) {
         plotMap(x, auto.layout, alternate.chrid=alternate.chrid, ...)
         return(invisible())
     }
 
     # make sure this is a cross
-    if(!("cross" %in% class(x)))
+    if(!inherits(x, "cross"))
         stop("Input should have class \"cross\".")
 
     old.yaxt <- par("yaxt")
@@ -686,7 +686,7 @@ plotGeno <-
              cutoff=4, min.sep=2, cex=1.2, ...)
 {
     cross <- x
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(missing(chr)) chr <- names(cross$geno)[1]
@@ -703,7 +703,7 @@ plotGeno <-
     if(is.null(id)) id <- 1:nind(cross)
     use.id <- TRUE
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     old.las <- par("las")
     on.exit(par(las=old.las))
@@ -740,8 +740,8 @@ plotGeno <-
 
     # revise X chr data for backcross/intercross
     data <- cross$geno[[1]]$data
-    chrtype <- class(cross$geno[[1]])
-    if(chrtype=="X" && (type=="f2" || type=="bc"))
+    chr_type <- chrtype(cross$geno[[1]])
+    if(chr_type=="X" && (type=="f2" || type=="bc"))
         data <- reviseXdata(type, sexpgm=getsex(cross), geno=data, cross.attr=attributes(cross), force=TRUE)
 
     if(include.xo) {
@@ -752,7 +752,7 @@ plotGeno <-
         }
         else { # 4-way cross
             mcross <- dcross <- cross
-            class(mcross)[1] <- class(dcross)[1] <- "bc"
+            class(mcross) <- class(dcross) <- c("bc", "cross")
             mcross$geno[[1]]$data[!is.na(data) & data==1 | data==3 | data==5] <- 1
             mcross$geno[[1]]$data[!is.na(data) & data==2 | data==4 | data==6] <- 2
             mcross$geno[[1]]$data[!is.na(data) & data==7 | data==8 | data==9 | data==10] <- NA
@@ -975,11 +975,11 @@ plotGeno <-
 
             # AB genotypes
             ind <- tind; ind[!is.na(data) & data!=2] <- NA
-            if(type=="f2" || (type=="bc" && chrtype=="X"))
+            if(type=="f2" || (type=="bc" && chr_type=="X"))
                 points(x,ind,pch=21,col="black", bg=color[2],cex=cex)
             else points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
 
-            if(type=="f2" || (type=="bc" && chrtype=="X")) {
+            if(type=="f2" || (type=="bc" && chr_type=="X")) {
                 # BB genotypes
                 ind <- tind; ind[!is.na(data) & data!=3] <- NA
                 points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
@@ -1025,11 +1025,11 @@ plotGeno <-
 
             # AB genotypes
             ind <- tind; ind[!is.na(data) & data!=2] <- NA
-            if(type=="f2" || (type=="bc" && chrtype=="X"))
+            if(type=="f2" || (type=="bc" && chr_type=="X"))
                 points(ind,y,pch=21,col="black", bg=color[2],cex=cex)
             else points(ind,y,pch=21,col="black", bg=color[3],cex=cex)
 
-            if(type=="f2" || (type=="bc" && chrtype=="X")) {
+            if(type=="f2" || (type=="bc" && chr_type=="X")) {
                 # BB genotypes
                 ind <- tind; ind[!is.na(data) & data!=3] <- NA
                 points(ind,y,pch=21,col="black", bg=color[3],cex=cex)
@@ -1076,7 +1076,7 @@ plotInfo <-
              include.genofreq=FALSE, ...)
 {
     cross <- x
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     method <- match(match.arg(method),c("entropy","variance","both"))-1
@@ -1171,8 +1171,8 @@ plotInfo <-
 
         if(include.genofreq) {
             p <- cross$geno[[i]]$prob
-            if(class(cross$geno[[i]])=="X")
-                p <- reviseXdata(class(cross)[1], expandX="full", sexpgm=getsex(cross), prob=p,
+            if(chrtype(cross$geno[[i]])=="X")
+                p <- reviseXdata(crosstype(cross), expandX="full", sexpgm=getsex(cross), prob=p,
                                  cross.attr=attributes(cross))
             p <- apply(p, 2:3, mean, na.rm=TRUE)
             if(is.null(theprob))
@@ -1306,9 +1306,9 @@ plotPXG <-
              pch, ylab, main, col, ...)
 {
     cross <- x
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
         cross$pheno <- cbind(pheno.col, cross$pheno)
@@ -1357,19 +1357,19 @@ plotPXG <-
     map <- pull.map(cross)
     pos <- NULL
     for(i in seq(length(chr))) pos[i] <- map[[chr[i]]][marker[i]]
-    chrtype <- sapply(cross$geno, class)
-    names(chrtype) <- names(cross$geno)
-    chrtype <- chrtype[chr]
+    chr_type <- sapply(cross$geno, chrtype)
+    names(chr_type) <- names(cross$geno)
+    chr_type <- chr_type[chr]
 
     # if X chromosome and backcross or intercross, get sex/direction data
-    if(any(chrtype == "X") && (type == "bc" || type == "f2"))
+    if(any(chr_type == "X") && (type == "bc" || type == "f2"))
         sexpgm <- getsex(cross)
     else sexpgm <- NULL
 
     # number of possible genotypes
     gen.names <- list()
     for(i in seq(length(chr)))
-        gen.names[[i]] <- getgenonames(type, chrtype[i], "full", sexpgm, attributes(cross))
+        gen.names[[i]] <- getgenonames(type, chr_type[i], "full", sexpgm, attributes(cross))
     n.gen <- sapply(gen.names, length)
 
     jitter <- jitter/10
@@ -1413,8 +1413,8 @@ plotPXG <-
     }
 
     # in case of X chromosome, recode some genotypes
-    if(any(chrtype == "X") && (type == "bc" || type == "f2")) {
-        ix = seq(n.mark)[chrtype == "X"]
+    if(any(chr_type == "X") && (type == "bc" || type == "f2")) {
+        ix = seq(n.mark)[chr_type == "X"]
         for(i in ix)
             x[, i] <- as.numeric(reviseXdata(type, "full", sexpgm,
                                              geno = as.matrix(x[, i]),
@@ -1520,7 +1520,7 @@ plotPXG <-
 plotPheno <-
     function(x, pheno.col=1, ...)
 {
-    if(!any(class(x) == "cross"))
+    if(!inherits(x, "cross"))
         stop("Input should have class \"cross\".")
 
     if(LikePheVector(pheno.col, nind(x), nphe(x))) {

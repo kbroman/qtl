@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2015, Karl W Broman and Hao Wu
-# last modified Oct, 2015
+# copyright (c) 2001-2019, Karl W Broman and Hao Wu
+# last modified Dec, 2019
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ scantwo <-
              batchsize=250, n.cluster=1)
 {
     if(batchsize < 1) stop("batchsize must be >= 1.")
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     method <- match.arg(method)
@@ -86,19 +86,20 @@ scantwo <-
     }
 
     # in RIL, treat X chromomse like an autosome
-    chrtype <- sapply(cross$geno, class)
-    if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself"))
-        for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
+    chr_type <- sapply(cross$geno, chrtype)
+    crosstype <- crosstype(cross)
+    if(any(chr_type=="X") && (crosstype == "risib" || crosstype == "riself"))
+        for(i in which(chr_type=="X")) class(cross$geno[[i]]) <- "A"
 
     # X-chr-specific perms (actually A:A, A:X, and X:X specific)
-    if(perm.Xsp && n.perm > 0 && !(all(chrtype=="X") || all(chrtype=="A"))) { # no need for x-chr-specific perms
+    if(perm.Xsp && n.perm > 0 && !(all(chr_type=="X") || all(chr_type=="A"))) { # no need for x-chr-specific perms
         if(length(chr1) != length(chr2) || any(chr1 != chr2))
             stop("With perm.Xsp=TRUE, chr can't be a list")
 
         chr.names <- chrnames(cross)
         chrL <- sapply(cross$geno, function(a) diff(range(a$map)))
-        AL <- sum(chrL[chrtype=="A"])
-        XL <- sum(chrL[chrtype=="X"])
+        AL <- sum(chrL[chr_type=="A"])
+        XL <- sum(chrL[chr_type=="X"])
         AAL <- AL*AL/2
         XXL <- XL*XL/2
         AXL <- AL*XL
@@ -107,11 +108,11 @@ scantwo <-
         n.permAX <- ceiling(n.perm * AAL/AXL)
 
         # names of autosomes and X chr
-        Achr <- chr.names[chrtype=="A"]
-        Xchr <- chr.names[chrtype=="X"]
+        Achr <- chr.names[chr_type=="A"]
+        Xchr <- chr.names[chr_type=="X"]
 
         # X chr covariates
-        Xnull <- scanoneXnull(class(cross)[1], getsex(cross), attributes(cross))
+        Xnull <- scanoneXnull(crosstype(cross), getsex(cross), attributes(cross))
         Xcovar <- Xnull$sexpgmcovar
 
         if(verbose) message("Running ", n.permAA, " A:A permutations")
@@ -153,8 +154,8 @@ scantwo <-
         result <- list(AA=AAresult, AX=AXresult, XX=XXresult)
         attr(result, "L") <- c(A=AL, X=XL)
         attr(result, "LL") <- c(AA=AAL, AX=AXL, XX=XXL)
-        names(chrtype) <- chr.names
-        attr(result, "chrtype") <- chrtype
+        names(chr_type) <- chr.names
+        attr(result, "chrtype") <- chr_type
         class(result) <- c("scantwoperm", "list")
         return(result)
     }
@@ -405,15 +406,15 @@ scantwo <-
     n.chr <- nchr(cross)
     n.ind <- nind(cross)
     n.phe <- length(pheno.col)
-    type <- class(cross)[1]
-    chrtype <- sapply(cross$geno,class)
+    type <- crosstype(cross)
+    chr_type <- sapply(cross$geno,chrtype)
     is.bcs <- FALSE
     if(type == "bcsft") {
         cross.scheme <- attr(cross, "scheme")
         is.bcs <- (cross.scheme[2] == 0)
     }
 
-    if(any(chrtype=="X")) {
+    if(any(chr_type=="X")) {
         sexpgm <- getsex(cross)
 
         addcovarX <- revisecovar(sexpgm,addcovar)
@@ -484,12 +485,12 @@ scantwo <-
         gmap <- data.frame(chr=rep(names(cross$geno),n.pos),
                            pos=map,
                            eq.spacing=rep(1,sum(n.pos)),
-                           xchr=rep(sapply(cross$geno,class)=="X",nmar(cross)), stringsAsFactors=TRUE)
+                           xchr=rep(sapply(cross$geno,chrtype)=="X",nmar(cross)), stringsAsFactors=TRUE)
 
         # number of possible genotypes for each chromosome
         n.gen <- 1:n.chr
         for(i in 1:n.chr) {
-            gen.names <- getgenonames(type, chrtype[i], "full", sexpgm, attributes(cross))
+            gen.names <- getgenonames(type, chr_type[i], "full", sexpgm, attributes(cross))
             n.gen[i] <- length(gen.names)
         }
     } # end of if(method=="mr")
@@ -537,7 +538,7 @@ scantwo <-
         some.dropped <- rep(FALSE,n.chr)
 
         for(i in 1:n.chr) {
-            gen.names <- getgenonames(type, chrtype[i], "full", sexpgm, attributes(cross))
+            gen.names <- getgenonames(type, chr_type[i], "full", sexpgm, attributes(cross))
             n.gen[i] <- length(gen.names)
 
             # construct the genetic map for this chromesome
@@ -600,11 +601,11 @@ scantwo <-
             }
             else keep.pos[[i]] <- seq(along=eq.sp.pos)
             gmap <- rbind(gmap, cbind(map,eq.spacing=eq.sp.pos,
-                                      xchr=(class(cross$geno[[i]])=="X")))
+                                      xchr=(chrtype(cross$geno[[i]])=="X")))
             n.pos[i] <- length(keep.pos[[i]])
 
             # Revise X chromosome genotype probabilities or imputations
-            if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
+            if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
                 if(method=="imp")
                     cross$geno[[i]]$draws <-
                         reviseXdata(type, "full", sexpgm, draws=cross$geno[[i]]$draws,
@@ -642,7 +643,7 @@ scantwo <-
         for(j in nchr2) { # loop over the 2nd chromosome
             if(j < i) next
 
-            if(chrtype[i]=="X" || chrtype[j]=="X") {
+            if(chr_type[i]=="X" || chr_type[j]=="X") {
                 ac <- addcovarX
                 n.ac <- n.acX
                 ic <- intcovarX
@@ -654,7 +655,7 @@ scantwo <-
                 ic <- intcovar
                 n.ic <- n.intcovar
             }
-            if(i==j && chrtype[i]=="X") {
+            if(i==j && chr_type[i]=="X") {
                 col2drop <- dropXcol(type, sexpgm, attributes(cross))
                 n.col2drop <- sum(col2drop)
                 n.col2drop.addmodel <- sum(col2drop[1:(2*n.gen[i]-1)])
@@ -789,7 +790,7 @@ scantwo <-
 
                     if(verbose>1) cat("  --Calculating joint probs.\n")
 
-                    if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
+                    if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
                         # calculate joint genotype probabilities for all pairs of positions
                         stp <- attr(oldXchr$geno[[1]]$prob, "step")
                         oe <- attr(oldXchr$geno[[1]]$prob, "off.end")
@@ -841,7 +842,7 @@ scantwo <-
                     }
 
                     # revise pair probilities for X chromosome
-                    if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft")))
+                    if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft")))
                         temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                                             cross.attr=attributes(cross))
 
@@ -1064,7 +1065,7 @@ scantwo <-
 
                     if(verbose>1) cat("  --Calculating joint probs.\n")
 
-                    if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
+                    if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft"))) {
                         # calculate joint genotype probabilities for all pairs of positions
                         stp <- attr(oldXchr$geno[[1]]$prob, "step")
                         oe <- attr(oldXchr$geno[[1]]$prob, "off.end")
@@ -1116,7 +1117,7 @@ scantwo <-
                     }
 
                     # revise pair probilities for X chromosome
-                    if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft")))
+                    if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft")))
                         temp <- reviseXdata(type, "full", sexpgm, pairprob=temp,
                                             cross.attr=attributes(cross))
 
@@ -1231,7 +1232,7 @@ scantwo <-
                 if(type=="f2" || (type=="bcsft" & !is.bcs)) datai[datai>3] <- 0
                 else if(type=="4way") datai[datai>4] <- 0
 
-                if(chrtype[i]=="X" && (type %in% c("bc","f2","bcsft")))
+                if(chr_type[i]=="X" && (type %in% c("bc","f2","bcsft")))
                     datai <- reviseXdata(type, "full", sexpgm, geno=datai,
                                          cross.attr=attributes(cross))
 
@@ -1266,7 +1267,7 @@ scantwo <-
                     if(type=="f2" || (type=="bcsft" && !is.bcs)) dataj[dataj>3] <- 0
                     else if(type=="4way") dataj[dataj>4] <- 0
 
-                    if(chrtype[j]=="X" && (type %in% c("bc","f2","bcsft")))
+                    if(chr_type[j]=="X" && (type %in% c("bc","f2","bcsft")))
                         dataj <- reviseXdata(type, "full", sexpgm, geno=dataj,
                                              cross.attr=attributes(cross))
 
@@ -1414,7 +1415,7 @@ scantwo <-
             else
                 results[wh] <- results[wh] + nllikX - nllik0
 
-            notxchr <- names(cross$geno)[sapply(cross$geno,class)!="X"]
+            notxchr <- names(cross$geno)[sapply(cross$geno,chrtype)!="X"]
             if(length(notxchr) > 0) {
                 if(verbose) cat(" --Running scanone with special X chr covariates\n")
                 temp <- scanone(subset(cross,chr=notxchr),
@@ -1541,11 +1542,11 @@ scantwo.perm.engine <-
     if( (n.phe==1) && ((method=="imp") || (method=="hk")) &&
        model=="normal" &&
        is.null(addcovar) && is.null(intcovar) ) {
-        chrtype <- sapply(cross$geno, class)
+        chr_type <- sapply(cross$geno, chrtype)
         sexpgm <- getsex(cross)
         sex <- sexpgm$sex
         pgm <- sexpgm$pgm
-        if(all(chrtype=="A"))
+        if(all(chr_type=="A"))
             batch.mode <- TRUE
         else if((is.null(sex) || length(unique(sex))==1) &&
                 (is.null(pgm) || length(unique(pgm))==1))

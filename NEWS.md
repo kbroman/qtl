@@ -16,9 +16,17 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.45, 2019-12-04
+## Version 1.45, 2019-12-17
 
 ### Minor changes
+
+- Added internal functions `crosstype()` and `chrtype()`.
+
+- Added argument `crosstype` to internal function `fitqtlengine()`
+  rather than taking it from the cross attributes.
+
+- Went through full package to replace use of `class(blah)=="blah"`
+  with `inherits(blah, "blah")`.
 
 - mqmscan() and mqmscanall() now give a warning about omitting the X
   chromosome, and give a more meaningful error if there are no autosomes.

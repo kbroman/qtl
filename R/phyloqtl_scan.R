@@ -1,8 +1,8 @@
 ######################################################################
 # phyloqtl_scan.R
 #
-# copyright (c) 2009-2012, Karl W Broman
-# last modified Oct, 2012
+# copyright (c) 2009-2019, Karl W Broman
+# last modified Dec, 2019
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -312,7 +312,7 @@ plot.scanPhyloQTL <-
 inferredpartitions <-
     function(output, chr, lodthreshold, probthreshold=0.9)
 {
-    if(!("scanPhyloQTL" %in% class(output)))
+    if(!inherits(output, "scanPhyloQTL"))
         stop("Argument 'output' must be of class \"scanPhyloQTL\", as output by scanPhyloQTL.")
 
     if(missing(chr)) {

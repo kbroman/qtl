@@ -148,7 +148,7 @@ deparseQTLformula(formula, reorderterms=FALSE)
 fitqtlengine(pheno, qtl, covar=NULL, formula, method=c("imp", "hk"),
          model=c("normal", "binary"),
          dropone=TRUE, get.ests=FALSE, run.checks=TRUE, cross.attr,
-         sexpgm, tol, maxit, forceXcovar=FALSE)
+         crosstype, sexpgm, tol, maxit, forceXcovar=FALSE)
 matchchr(selection, thechr)
 parseformula(formula, qtl.dimname, covar.dimname)
 reviseqtlnuminformula(formula, oldnum, newnum)

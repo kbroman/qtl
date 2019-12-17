@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-2018, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Feb, 2018
+# copyright (c) 2001-2019, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Dec, 2019
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -38,8 +38,8 @@ summary.scantwo <-
              perms, alphas, lodcolumn=1, pvalues=FALSE,
              allpairs=TRUE, ...)
 {
-    if(!any(class(object) == "scantwo") &&
-       !any(class(object) == "scantwocondensed"))
+    if(!inherits(object, "scantwo") &&
+       !inherits(object, "scantwocondensed"))
         stop("Input should have class \"scantwo\".")
 
     addpair <- attr(object, "addpair")
@@ -133,11 +133,11 @@ summary.scantwo <-
             stop("alphas should be a numeric vector")
     }
 
-    if(!missing(perms) && !any(class(perms) == "scantwoperm"))
+    if(!missing(perms) && !inherits(perms, "scantwoperm"))
         stop("perms must be in scantwoperm format.")
 
     # subset object and permutations, if necessary
-    if(any(class(object) == "scantwo")) {
+    if(inherits(object, "scantwo")) {
         d <- dim(object$lod)
         if(length(d)==3) {
             if(!missing(perms)) {
@@ -216,7 +216,7 @@ summary.scantwo <-
         warning("p-values may be calculated only if perms are provided.")
     }
 
-    if(any(class(object) == "scantwo"))
+    if(inherits(object, "scantwo"))
         out <- subrousummaryscantwo(object, for.perm=FALSE)
     else
         out <- as.data.frame(object)
@@ -282,8 +282,8 @@ summary.scantwo <-
 
     if(!missing(perms) && "AA" %in% names(perms)) {
         xchr_specific <- TRUE
-        chrtype <- attr(perms, "chrtype")
-        chrpair_type <- paste0(chrtype[out$chr1], chrtype[out$chr2])
+        chr_type <- attr(perms, "chrtype")
+        chrpair_type <- paste0(chr_type[out$chr1], chr_type[out$chr2])
         if(all(chrpair_type=="AA")) {
             perms <- perms$AA
             xchr_specific <- FALSE
@@ -594,8 +594,8 @@ max.scantwo <-
              what=c("best", "full", "add", "int"),
              na.rm=TRUE, ...)
 {
-    if(class(object)[1] != "scantwo" &&
-       class(object)[1] != "scantwocondensed")
+    if(!inherits(object, "scantwo") &&
+       !inherits(object, "scantwocondensed"))
         stop("Input must have class \"scantwo\".")
 
     addpair <- attr(object, "addpair")
@@ -606,7 +606,7 @@ max.scantwo <-
     }
 
     what <- match.arg(what)
-    if(class(object)[1] == "scantwo") {
+    if(inherits(object, "scantwo")) {
         d <- dim(object$lod)
         if(length(d)==3) {
             if(lodcolumn < 1 || lodcolumn > d[3])
@@ -709,7 +709,7 @@ max.scantwo <-
 clean.scantwo <-
     function(object, n.mar=1, distance=0, ...)
 {
-    if(class(object)[1] != "scantwo")
+    if(!inherits(object, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     addpair <- attr(object, "addpair")
@@ -778,7 +778,7 @@ clean.scantwo <-
 subset.scantwo <-
     function(x, chr, lodcolumn, ...)
 {
-    if(class(x)[1] != "scantwo")
+    if(!inherits(x, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     if((missing(chr) || length(chr)==0) && missing(lodcolumn)) return(x)
@@ -835,7 +835,7 @@ subset.scantwo <-
 summary.scantwoperm <-
     function(object, alpha=c(0.05, 0.10), ...)
 {
-    if(!any(class(object) == "scantwoperm"))
+    if(!inherits(object, "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
 
     if("AA" %in% names(object)) { # X-chr-specific version
@@ -973,12 +973,11 @@ cbind.scantwo <- c.scantwo <-
 {
     dots <- list(...)
 
-    cl1 <- class(dots[[1]])
-    if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+    if(length(dots)==1 && is.list(dots[[1]])) dots <- dots[[1]]
 
     if(length(dots)==1) return(dots[[1]])
     for(i in seq(along=dots)) {
-        if(!any(class(dots[[i]]) == "scantwo"))
+        if(!inherits(dots[[i]], "scantwo"))
             stop("Input should have class \"scantwo\".")
     }
 
@@ -1051,8 +1050,7 @@ rbind.scantwoperm <- c.scantwoperm <-
 {
     dots <- list(...)
 
-    cl1 <- class(dots[[1]])
-    if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+    if(length(dots)==1 && is.list(dots[[1]])) dots <- dots[[1]]
     if(length(dots)==1) return(dots[[1]])
 
     xchrsp <- vapply(dots, function(a) "AA" %in% names(a), TRUE)
@@ -1074,7 +1072,7 @@ rbind.scantwoperm <- c.scantwoperm <-
     }
 
     for(i in seq(along=dots)) {
-        if(!any(class(dots[[i]]) == "scantwoperm"))
+        if(!inherits(dots[[i]], "scantwoperm"))
             stop("Input should have class \"scantwoperm\".")
     }
 
@@ -1099,8 +1097,7 @@ cbind.scantwoperm <-
 function(...)
 {
     dots <- list(...)
-    cl1 <- class(dots[[1]])
-    if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+    if(length(dots)==1 && is.list(dots[[1]])) dots <- dots[[1]]
 
     if(length(dots)==1) return(dots)
 

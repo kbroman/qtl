@@ -2,8 +2,8 @@
 #
 # refineqtl.R
 #
-# copyright (c) 2006-2018, Karl W. Broman
-# last modified Mar, 2018
+# copyright (c) 2006-2019, Karl W. Broman
+# last modified Dec, 2019
 # first written Jun, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ refineqtl <-
     method <- match.arg(method)
     model <- match.arg(model)
 
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
     # allow formula to be a character string
@@ -254,12 +254,14 @@ refineqtl <-
         if(keeplodprofile) # do drop-one analysis
             basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                                     method=method, model=model, dropone=TRUE, get.ests=FALSE,
-                                    run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                                    run.checks=FALSE, cross.attr=cross.attr,
+                                    crosstype=crosstype(cross), sexpgm=sexpgm,
                                     tol=tol, maxit=maxit.fitqtl, forceXcovar=forceXcovar)
         else
             basefit <- fitqtlengine(pheno=pheno, qtl=reducedqtl, covar=covar, formula=formula,
                                     method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                                    run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                                    run.checks=FALSE, cross.attr=cross.attr,
+                                    crosstype=crosstype(cross), sexpgm=sexpgm,
                                     tol=tol, maxit=maxit.fitqtl, forceXcovar=forceXcovar)
 
         if(i==1) {
@@ -419,7 +421,7 @@ plotLodProfile <-
              show.marker.names=FALSE, alternate.chrid=FALSE, add=FALSE,
              showallchr=FALSE, labelsep=5, ...)
 {
-    if(!("qtl" %in% class(qtl)))
+    if(!inherits(qtl, "qtl"))
         stop("Input qtl is not a qtl object")
 
     if(nqtl(qtl) == 0)

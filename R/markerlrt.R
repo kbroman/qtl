@@ -2,8 +2,8 @@
 #
 # markerlrt.R
 #
-# copyright (c) 2010, Karl W Broman
-# last modified Jul, 2010
+# copyright (c) 2010-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Jul, 2010
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 markerlrt <-
     function(cross)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     Geno <- pull.geno(cross)

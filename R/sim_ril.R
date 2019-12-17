@@ -179,12 +179,12 @@ simFounderSnps <-
 convertMWril <-
     function(cross, parents, error.prob=0)
 {
-    crosstype <- class(cross)[1]
+    crosstype <- crosstype(cross)
     n.str.by.crosstype <- as.numeric(substr(crosstype, 3, 3))
-    un <- substr(crosstype, nchar(crosstype)-1, nchar(crosstype))
-    if(un != "un")
+    if(!grepl("un$", crosstype)) {
         stop("cross appears to have already been converted.")
-    class(cross)[1] <- substr(crosstype, 1, nchar(crosstype)-2)
+    }
+    class(cross) <- c(sub("un$", "", crosstype), "cross")
 
     n.ril <- nind(cross)
     thecrosses <- cross$cross

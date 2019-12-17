@@ -3,7 +3,7 @@
 # addqtl.R
 #
 # copyright (c) 2007-2019, Karl W. Broman
-# last modified Aug, 2019
+# last modified Dec, 2019
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,10 +39,10 @@ addint <-
              qtl.only=FALSE, verbose=TRUE, pvalues=TRUE, simple=FALSE,
              tol=1e-4, maxit=1000, require.fullrank=FALSE)
 {
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     if(!is.null(covar) && !is.data.frame(covar)) {
@@ -205,8 +205,8 @@ addint <-
     # fit base model
     thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                             method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
-                            tol=tol, maxit=maxit)
+                            run.checks=FALSE, cross.attr=cross.attr,
+                            crosstype=crosstype(cross), sexpgm=sexpgm, tol=tol, maxit=maxit)
 
     matrix0.rank <- attr(thefit0, "matrix.rank")
     matrix0.ncol <- attr(thefit0, "matrix.ncol")
@@ -221,7 +221,8 @@ addint <-
         thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                                 formula=as.formula(paste(deparseQTLformula(formula), int2test[k], sep="+")),
                                 method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                                run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                                run.checks=FALSE, cross.attr=cross.attr,
+                                crosstype=crosstype(cross), sexpgm=sexpgm,
                                 tol=tol, maxit=maxit)
 
         results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]
@@ -310,10 +311,10 @@ addqtl <-
     method <- match.arg(method)
     model <- match.arg(model)
 
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     # allow formula to be a character string
@@ -523,7 +524,8 @@ addqtl <-
     # fit the base model
     fit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                          method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                         run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                         run.checks=FALSE, cross.attr=cross.attr,
+                         crosstype=crosstype(cross), sexpgm=sexpgm,
                          tol=tol, maxit=maxit, forceXcovar=forceXcovar)
     lod0 <- fit0$result.full[1,4]
     matrix0.rank <- attr(fit0, "matrix.rank")
@@ -634,10 +636,10 @@ addpair <-
     method <- match.arg(method)
     model <- match.arg(model)
 
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross") )
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl") )
         stop("The qtl argument must be an object of class \"qtl\".")
 
     # allow formula to be a character string
@@ -892,7 +894,8 @@ addpair <-
     # fit the base model
     fit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                          method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                         run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                         run.checks=FALSE, cross.attr=cross.attr,
+                         crosstype=crosstype(cross), sexpgm=sexpgm,
                          tol=tol, maxit=maxit, forceXcovar=forceXcovar)
     lod0 <- fit0$result.full[1,4]
 
@@ -962,7 +965,7 @@ addpair <-
         }
         gmap <- rbind(gmap, cbind(map,
                                   eq.spacing=eq.sp.pos,
-                                  xchr=(class(cross$geno[[i]])=="X")))
+                                  xchr=inherits(cross$geno[[i]], "X")))
     }
 
     lod <- matrix(ncol=nrow(gmap), nrow=nrow(gmap))
@@ -1180,10 +1183,10 @@ addcovarint <-
              verbose=TRUE, pvalues=TRUE, simple=FALSE, tol=1e-4, maxit=1000,
              require.fullrank=FALSE)
 {
-    if( !("cross" %in% class(cross)) )
+    if( !inherits(cross, "cross"))
         stop("The cross argument must be an object of class \"cross\".")
 
-    if( !("qtl" %in% class(qtl)) )
+    if( !inherits(qtl, "qtl"))
         stop("The qtl argument must be an object of class \"qtl\".")
 
     if(missing(covar) || is.null(covar))
@@ -1350,7 +1353,8 @@ addcovarint <-
     # fit base model
     thefit0 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar, formula=formula,
                             method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                            run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                            run.checks=FALSE, cross.attr=cross.attr,
+                            crosstype=crosstype(cross), sexpgm=sexpgm,
                             tol=tol, maxit=maxit)
     matrix0.rank <- attr(thefit0, "matrix.rank")
     matrix0.ncol <- attr(thefit0, "matrix.ncol")
@@ -1364,7 +1368,8 @@ addcovarint <-
         thefit1 <- fitqtlengine(pheno=pheno, qtl=qtl, covar=covar,
                                 formula=as.formula(paste(deparseQTLformula(formula), theint[k], sep="+")),
                                 method=method, model=model, dropone=FALSE, get.ests=FALSE,
-                                run.checks=FALSE, cross.attr=cross.attr, sexpgm=sexpgm,
+                                run.checks=FALSE, cross.attr=cross.attr,
+                                crosstype=crosstype(cross), sexpgm=sexpgm,
                                 tol=tol, maxit=maxit)
 
         results[k,1] <- thefit1$result.full[1,1] - thefit0$result.full[1,1]

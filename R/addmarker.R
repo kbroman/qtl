@@ -2,8 +2,8 @@
 #
 # addmarker.R
 #
-# copyright (c) 2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2013-2019, Karl W Broman
+# last modified Dec, 2019
 # first written May, 2013
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 addmarker <-
     function(cross, genotypes, markername, chr, pos)
 {
-    if(!("cross" %in% class(cross)))
+    if(!inherits(cross, "cross"))
         stop("cross must have class \"cross\"")
 
     chr <- matchchr(chr, names(cross$geno))

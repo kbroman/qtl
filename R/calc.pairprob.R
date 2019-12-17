@@ -2,8 +2,8 @@
 #
 # calc.pairprob.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ calc.pairprob <-
              map, assumeCondIndep=FALSE)
 {
     # which type of cross is this?
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     if(assumeCondIndep) { # assume conditional independence of QTL given markers
         if(!("prob" %in% names(cross$geno[[1]]))) {
@@ -87,7 +87,7 @@ calc.pairprob <-
     n.chr <- nchr(cross)
 
     # type of chromosome?
-    chrtype <- class(cross$geno[[1]])
+    chrtype <- chrtype(cross$geno[[1]])
     if(chrtype=="X") xchr <- TRUE
     else xchr <- FALSE
 
@@ -160,7 +160,7 @@ calc.pairprob <-
         #    map <- create.map(cross$geno[[1]]$map,step,off.end)
         rf <- mf(diff(map))
         if(type=="risib" || type=="riself")
-            rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),class(cross$geno[[1]]))
+            rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype(cross$geno[[1]]))
         rf[rf < 1e-14] <- 1e-14
 
         # new genotype matrix with pseudomarkers filled in

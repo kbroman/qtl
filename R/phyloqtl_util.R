@@ -1,8 +1,8 @@
 ######################################################################
 # phyloqtl_util.R
 #
-# copyright (c) 2009-2010, Karl W Broman
-# last modified Feb, 2010
+# copyright (c) 2009-2019, Karl W Broman
+# last modified Dec, 2019
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -149,18 +149,18 @@ qtlByPartition <-
 flipcross <-
     function(cross)
 {
-    if(!("cross" %in% class(cross)))
+    if(!inherits(cross, "cross"))
         stop("The input should have class 'cross'")
     allowed_crosses <- c("f2", "riself", "risib", "dh", "haploid")
-    crosstype <- class(cross)[1]
+    crosstype <- crosstype(cross)
     if(!(crosstype %in% allowed_crosses))
         stop("The function is not working for cross type ", crosstype)
 
-    chrtype <- sapply(cross$geno, "class")
+    chr_type <- sapply(cross$geno, chrtype)
 
     # omit X chr
-    if(any(chrtype=="X")) {
-        cross <- subset(cross, chr = (chrtype != "X"))
+    if(any(chr_type=="X")) {
+        cross <- subset(cross, chr = (chr_type != "X"))
         warning("flipcross is not yet working for the X chromosome; X chr omitted from output.")
     }
 

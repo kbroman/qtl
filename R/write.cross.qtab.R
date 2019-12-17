@@ -1,8 +1,8 @@
 ######################################################################
 # write.cross.qtab.R
 #
-# copyright (c) 2012, Karl W Broman and Danny Arends
-# last modified Jul, 2012
+# copyright (c) 2012-2019, Karl W Broman and Danny Arends
+# last modified Dec, 2019
 # first written Jul, 2012
 #
 #     This program is free software; you can redistribute it and/or
@@ -30,15 +30,15 @@
 write.cross.qtab <-
     function(cross, filestem="data", descr, verbose=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(missing(descr)) descr <- paste(deparse(substitute(cross)), "from R/qtl")
 
     # for now, omit X chromosome
-    chrtype <- sapply(cross$geno, class)
-    if(any(chrtype == "X")) {
-        cross <- subset(cross, chr=names(chrtype)[chrtype != "X"])
+    chr_type <- sapply(cross$geno, chrtype)
+    if(any(chr_type == "X")) {
+        cross <- subset(cross, chr=names(chr_type)[chr_type != "X"])
         warning("Omitting X chromosome.")
     }
 
@@ -80,8 +80,8 @@ get.indID.for.qtab <-
 getgenonames.for.qtab <-
     function(cross)
 {
-    gnames <- getgenonames(class(cross)[1], "A", "full", getsex(cross), attributes(cross))
-    if(class(cross)[1] == "f2") {
+    gnames <- getgenonames(crosstype(cross), "A", "full", getsex(cross), attributes(cross))
+    if(crosstype(cross) == "f2") {
         gnames <- c(gnames, paste(gnames[1], "or", gnames[2], sep=""), paste(gnames[2], "or", gnames[3], sep=""))
     }
 
@@ -92,7 +92,7 @@ getgenonames.for.qtab <-
 get.qtab.geno.symbols <-
     function(cross)
 {
-    crtype <- class(cross)[1]
+    crtype <- crosstype(cross)
     if(crtype == "bc") {
         return(c("None", "0,0", "0,1"))
     }
@@ -197,9 +197,9 @@ rqtl.to.qtab.phenotypes <-
 get.phenotype.type <-
     function(cross, phenotype)
 {
-    if(class(cross$pheno[,phenotype])=="numeric") return("Float")
-    if(class(cross$pheno[,phenotype])=="character") return("Char")
-    if(class(cross$pheno[,phenotype])=="factor") return("Char")
+    if(is.numeric(cross$pheno[,phenotype])) return("Float")
+    if(is.character(cross$pheno[,phenotype])) return("Char")
+    if(is.factor(cross$pheno[,phenotype])) return("Char")
     return("Float")
 }
 
@@ -210,7 +210,7 @@ rqtl.to.qtab.founder <-
 
     cat(file=filename, "# --- ",get.qtlHD.ID()," Founder ", descr, "\n", sep="")
     cat(file=filename, "# --- Set Founder begin\n", append=TRUE)
-    cat(file=filename, "Cross\t", toupper(class(cross)[1]), "\n", sep="", append=TRUE)
+    cat(file=filename, "Cross\t", toupper(crosstype(cross)), "\n", sep="", append=TRUE)
     cat(file=filename, "# --- Set Founder end\n", append=TRUE)
 }
 

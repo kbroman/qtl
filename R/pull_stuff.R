@@ -2,10 +2,10 @@
 #
 # pull_stuff.R
 #
-# copyright (c) 2001-2017, Karl W Broman
+# copyright (c) 2001-2019, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Mar, 2017
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,14 +37,14 @@
 pull.map <-
     function(cross, chr, as.table=FALSE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross, chr=chr)
     if(!as.table) {
         result <- lapply(cross$geno,function(a) {
             b <- a$map
-            class(b) <- as.character(class(a))
+            class(b) <- chrtype(a)
             b })
         class(result) <- "map"
         return(result)
@@ -84,7 +84,7 @@ map2table <-
 pull.geno <-
     function(cross, chr)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr))
@@ -103,7 +103,7 @@ pull.geno <-
 pull.pheno <-
     function(cross, pheno.col)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     pheno <- cross$pheno

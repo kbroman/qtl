@@ -2,8 +2,8 @@
 #
 # ripple.R
 #
-# copyright (c) 2001-2014, Karl W Broman
-# last modified Aug, 2014
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ ripple <-
              error.prob=0.0001, map.function=c("haldane","kosambi","c-f","morgan"),
              maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE, n.cluster=1)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     # pull out relevant chromosome
@@ -158,13 +158,13 @@ ripple <-
     }
     else { # count obligate crossovers for each order
         # which type of cross is this?
-        type <- class(cross)[1]
+        type <- crosstype(cross)
         is.bcs <- type == "bcsft"
         if(is.bcs)
             is.bcs <- (attr(cross, "scheme")[2] == 0)
 
         if(type == "f2" || (type == "bcsft" && !is.bcs)) {
-            if(class(cross$geno[[1]]) == "A") # autosomal
+            if(chrtype(cross$geno[[1]]) == "A") # autosomal
                 func <- "R_ripple_f2"
             else func <- "R_ripple_bc"        # X chromsome
         }
@@ -289,7 +289,7 @@ rippleSnowCountxo <-
 summary.ripple <-
     function(object, lod.cutoff = -1, ...)
 {
-    if(!any(class(object) == "ripple"))
+    if(!inherits(object, "ripple"))
         stop("Input should have class \"ripple\".")
 
     n <- ncol(object)

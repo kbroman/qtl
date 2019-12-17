@@ -2,8 +2,8 @@
 #
 # makeqtl.R
 #
-# copyright (c) 2002-2013, Hao Wu and Karl W. Broman
-# last modified Dec, 2013
+# copyright (c) 2002-2019, Hao Wu and Karl W. Broman
+# last modified Dec, 2019
 # first written Apr, 2002
 #
 # Modified by Danny Arends
@@ -39,13 +39,13 @@
 makeqtl <-
     function(cross, chr, pos, qtl.name, what=c("draws", "prob"))
 {
-    if( !sum(class(cross) == "cross") )
+    if( !inherits(cross, "cross") )
         stop("The first input variable must be an object of class cross")
 
     # cross type
-    type <- class(cross)[1]
-    chrtype <- sapply(cross$geno, class)
-    names(chrtype) <- names(cross$geno)
+    type <- crosstype(cross)
+    chr_type <- sapply(cross$geno, chrtype)
+    names(chr_type) <- names(cross$geno)
     sexpgm <- getsex(cross)
 
     what <- match.arg(what)
@@ -117,10 +117,10 @@ makeqtl <-
             pos[i] <- map[marker.idx]
 
             # no. genotypes
-            n.gen[i] <- length(getgenonames(type,chrtype[i.chr],"full",sexpgm, attributes(cross)))
+            n.gen[i] <- length(getgenonames(type,chr_type[i.chr],"full",sexpgm, attributes(cross)))
 
             # Fix up X chromsome here
-            if(chrtype[i.chr]=="X" && (type=="bc" || type=="f2"))
+            if(chr_type[i.chr]=="X" && (type=="bc" || type=="f2"))
                 geno[,i,] <- reviseXdata(type,"full",sexpgm,draws=geno[,i,,drop=FALSE],
                                          cross.attr=attributes(cross))
         }
@@ -169,7 +169,7 @@ makeqtl <-
                 stop("Multiple markers at the same position; run jittermap.")
 
             # take genoprob
-            if(chrtype[i.chr]=="X" && (type=="bc" || type=="f2")) { # fix X chromosome probs
+            if(chr_type[i.chr]=="X" && (type=="bc" || type=="f2")) { # fix X chromosome probs
                 prob[[i]] <- reviseXdata(type, "full", sexpgm,
                                          prob=cross$geno[[i.chr]]$prob[,marker.idx,,drop=FALSE],
                                          cross.attr=attributes(cross))[,1,]
@@ -217,7 +217,7 @@ makeqtl <-
     qtl$n.qtl <- n.pos
     qtl$n.ind <- nind(cross)
     qtl$n.gen <- n.gen
-    qtl$chrtype <- chrtype[qtl$chr]
+    qtl$chrtype <- chr_type[qtl$chr]
     names(qtl$chrtype) <- NULL
 
     class(qtl) <- "qtl"
@@ -236,7 +236,7 @@ makeqtl <-
 replaceqtl <-
     function(cross, qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
-    if(class(qtl) != "qtl")
+    if(!inherits(qtl, "qtl"))
         stop("qtl should have class \"qtl\".")
 
     if(any(index < 1 | index > qtl$n.qtl))
@@ -287,7 +287,7 @@ replaceqtl <-
 addtoqtl <-
     function(cross, qtl, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
-    if(class(qtl) != "qtl")
+    if(!inherits(qtl, "qtl"))
         stop("qtl should have class \"qtl\".")
 
     if("geno" %in% names(qtl)) what <- "draws"
@@ -341,7 +341,7 @@ addtoqtl <-
 dropfromqtl <-
     function(qtl, index, chr, pos, qtl.name, drop.lod.profile=TRUE)
 {
-    if(class(qtl) != "qtl")
+    if(!inherits(qtl, "qtl"))
         stop("qtl should have class \"qtl\".")
 
     if(!missing(chr) || !missing(pos)) {
@@ -532,7 +532,7 @@ plot.qtl <-
              show.marker.names=FALSE,  alternate.chrid=FALSE,
              justdots=FALSE, col="red", ...)
 {
-    if(!("qtl" %in% class(x)))
+    if(!inherits(x, "qtl"))
         stop("input should be a qtl object")
 
     if(length(x) == 0)
@@ -603,7 +603,7 @@ plot.qtl <-
 reorderqtl <-
     function(qtl, neworder)
 {
-    if(class(qtl) != "qtl")
+    if(!inherits(qtl, "qtl"))
         stop("qtl should have class \"qtl\".")
 
     if(missing(neworder)) {

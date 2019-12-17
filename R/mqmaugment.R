@@ -2,13 +2,13 @@
 #
 # mqmaugment.R
 #
-# Copyright (c) 2009-2013, Danny Arends
+# Copyright (c) 2009-2019, Danny Arends
 #
 # Modified by Pjotr Prins; slight modification by Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Sep 2013
+# last modified Dec 2019
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -55,7 +55,7 @@ mqmaugment_on_cofactors <- function(cross, cofactors, maxaugind=82, minprob=0.1,
         augmented$geno[[chr]]$map <- cross$geno[[chr]]$map
         augmented$geno[[chr]]$data <- newgenomatrix[,names(cross$geno[[chr]]$map)]
         names(augmented$geno) <- names(cross$geno)
-        class(augmented$geno[[chr]]) <- as.character(class(cross$geno[[chr]]))
+        class(augmented$geno[[chr]]) <- chrtype(cross$geno[[chr]])
     }
     augmented
 }
@@ -89,7 +89,7 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
     isNOTAA    = 5
     isMISSING  = 9
 
-    crosstype <- class(cross)[1]
+    crosstype <- crosstype(cross)
 
     if (crosstype == "f2") {
         ctype = isF2
@@ -109,12 +109,12 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
     # ---- Check sex chromosome
     # check whether the X chromosome should be dropped
     # (backcross with one sex should be fine)
-    chrtype <- sapply(cross$geno, class)
+    chr_type <- sapply(cross$geno, chrtype)
     # Drop the X chromosome in F2 and related crosses
-    if (any(chrtype == "X") && (ctype == isF2 || length(getgenonames(crosstype, "X", "full", getsex(cross), attributes(cross))) != 2)) {
+    if (any(chr_type == "X") && (ctype == isF2 || length(getgenonames(crosstype, "X", "full", getsex(cross), attributes(cross))) != 2)) {
         warning("MQM not yet available for the X chromosome; omitting chr ",
-                paste(names(cross$geno)[chrtype == "X"], collapse=" "))
-        cross <- subset(cross, chr=(chrtype != "X"))
+                paste(names(cross$geno)[chr_type == "X"], collapse=" "))
+        cross <- subset(cross, chr=(chr_type != "X"))
     }
 
     # ---- Count

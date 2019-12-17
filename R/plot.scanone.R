@@ -2,8 +2,8 @@
 #
 # plot.scanone.R
 #
-# copyright (c) 2001-2014, Karl W Broman
-# last modified Apr, 2014
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,9 +36,9 @@ plot.scanone <-
              alternate.chrid=FALSE, bandcol=NULL, type="l", cex=1,
              pch=1, bg="transparent", bgrect=NULL, ...)
 {
-    if(!any(class(x) == "scanone") ||
-       (!missing(x2) && !any(class(x2) == "scanone")) ||
-       (!missing(x3) && !any(class(x3) == "scanone")))
+    if(!inherits(x, "scanone") ||
+       (!missing(x2) && !inherits(x2, "scanone")) ||
+       (!missing(x3) && !inherits(x3, "scanone")))
         stop("Input should have class \"scanone\".")
 
     if(!is.factor(x$chr)) x$chr <- factor(x$chr, levels=unique(x$chr))

@@ -2,8 +2,8 @@
 #
 # fitstahl.R
 #
-# copyright (c) 2006-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2006-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Aug, 2006
 #
 #     This program is free software; you can redistribute it and/or
@@ -61,10 +61,10 @@ fitstahl <-
     function(cross, chr, m, p, error.prob=0.0001, maxit=4000, tol=1e-4,
              maxm=15, verbose=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type != "bc" && type != "f2")
         stop("fitstahl only working for backcrosses and intercrosses.")
 

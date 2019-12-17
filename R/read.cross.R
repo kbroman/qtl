@@ -3,7 +3,7 @@
 # read.cross.R
 #
 # copyright (c) 2000-2019, Karl W Broman
-# last modified Mar, 2019
+# last modified Dec, 2019
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -147,11 +147,11 @@ read.cross <-
             class(cross$geno[[i]]) <- "X"
 
     # Fix up the X chromosome data for a backcross or intercross
-    chrtype <- sapply(cross$geno,class)
-    if(any(chrtype=="X") && convertXdata) {
-        if(class(cross)[1]=="bc")
+    chr_type <- sapply(cross$geno,chrtype)
+    if(any(chr_type=="X") && convertXdata) {
+        if(crosstype(cross)=="bc")
             cross <- fixXgeno.bc(cross)
-        if(class(cross)[1]=="f2") {
+        if(crosstype(cross)=="f2") {
             if(missing(alleles)) alleles <- c("A","B")
             cross <- fixXgeno.f2(cross, alleles)
         }
@@ -165,7 +165,7 @@ read.cross <-
         storage.mode(cross$geno[[i]]$data) <- "integer"
 
     # check alleles
-    if(class(cross)[1] != "4way") {
+    if(crosstype(cross) != "4way") {
         if(length(alleles) > 2) {
             warning("length of arg alleles should be 2")
             alleles <- alleles[1:2]
@@ -191,10 +191,10 @@ read.cross <-
 
     attr(cross, "alleles") <- alleles
 
-    if(is.null(crosstype)) crosstype <- class(cross)[1]
+    if(is.null(crosstype)) crosstype <- crosstype(cross)
     if(crosstype=="risib") cross <- convert2risib(cross)
     else if(crosstype=="riself") cross <- convert2riself(cross)
-    else class(cross)[1] <- crosstype
+    else class(cross) <- c(crosstype, "cross")
 
     # if 4-way cross, make the maps matrices
     if(crosstype=="4way") {
@@ -216,7 +216,7 @@ read.cross <-
     # run checks
     summary(cross)
 
-    cat(" --Cross type:", class(cross)[1], "\n")
+    cat(" --Cross type:", crosstype(cross), "\n")
 
     cross
 }
@@ -233,8 +233,8 @@ fixXgeno.bc <-
     omitX <- FALSE
 
     # pull out X chr genotype data
-    chrtype <- sapply(cross$geno,class)
-    xchr <- which(chrtype=="X")
+    chr_type <- sapply(cross$geno,chrtype)
+    xchr <- which(chr_type=="X")
     Xgeno <- cross$geno[[xchr]]$data
 
     # find "sex" and "pgm" in the phenotype data
@@ -303,8 +303,8 @@ fixXgeno.f2 <-
     omitX <- FALSE
 
     # pull out X chr genotype data
-    chrtype <- sapply(cross$geno,class)
-    xchr <- which(chrtype=="X")
+    chr_type <- sapply(cross$geno,chrtype)
+    xchr <- which(chr_type=="X")
     Xgeno <- cross$geno[[xchr]]$data
 
     # find "sex" and "pgm" in the phenotype data

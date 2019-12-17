@@ -84,7 +84,7 @@ simulatemissingdata <- function(cross,percentage=5){
 
 # Return the real markers in the set (remove fake ones)
 mqmextractmarkers <- function(mqmresult){
-    if(!("scanone" %in% class(mqmresult))){
+    if(!inherits(mqmresult, "scanone")){
         stop("Wrong type of result file, please supply a valid scanone (from MQM) object.")
     }
     result <- NULL
@@ -102,7 +102,7 @@ mqmextractmarkers <- function(mqmresult){
 
 # Return the fake markers in the set (remove real ones)
 mqmextractpseudomarkers <- function(mqmresult){
-    if(!("scanone" %in% class(mqmresult))){
+    if(!inherits(mqmresult, "scanone")){
         stop("Wrong type of result file, please supply a valid scanone (from MQM) object.")
     }
     result <- NULL
@@ -176,7 +176,7 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
     if(is.null(cross)){
         stop("No cross object. Please supply a valid cross object.")
     }
-    if(!("scanone" %in% class(intervalresult))){
+    if(!inherits(intervalresult, "scanone")) {
         stop("Wrong type of result file, please supply a valid scanone (from MQM) object.")
     }
     map <- pull.map(cross)
@@ -187,7 +187,7 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
         for(mar in 1:length(map[[chr]])){
 
             if(verbose) cat(chr,"Placing marker: ",names(map[[chr]])[mar]," at ",map[[chr]][mar],"\t",intervalresult[intervalmaploc,2],"\n")
-            if((class(map[[chr]])=="A")){
+            if((chrtype(map[[chr]])=="A")){
                 while(intervalresult[intervalmaploc,2] < map[[chr]][mar]  || intervalresult[intervalmaploc,1] < chr ){
                     newres <- rbind(newres,intervalresult[intervalmaploc,])
                     n <- c(n,rownames(intervalresult)[intervalmaploc])
@@ -207,7 +207,7 @@ addmarkerstointervalmap <- function(cross,intervalresult,verbose=FALSE){
             }
         }
         while(intervalmaploc < nrow(intervalresult) && intervalresult[intervalmaploc,1] <= chr ){
-            if((class(map[[chr]])=="A")){
+            if((chrtype(map[[chr]])=="A")){
                 newres <- rbind(newres,intervalresult[intervalmaploc,])
                 n <- c(n,rownames(intervalresult)[intervalmaploc])
             }

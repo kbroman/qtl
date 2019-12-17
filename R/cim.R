@@ -2,8 +2,8 @@
 #
 # cim.R
 #
-# copyright (c) 2007-2016, Karl W Broman
-# last modified Jun, 2016
+# copyright (c) 2007-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Jan, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ cim <-
     imp.method <- match.arg(imp.method)
     map.function <- match.arg(map.function)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type=="4way")
         stop("cim() has not been implemented for 4-way crosses")
 

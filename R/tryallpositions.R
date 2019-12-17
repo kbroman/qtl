@@ -2,8 +2,8 @@
 #
 # tryallpositions.R
 #
-# copyright (c) 2007-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2007-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Oct, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -240,10 +240,10 @@ tryallpositions <-
 markerloglik <-
     function(cross, marker, error.prob=0.0001)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     if(length(marker) > 1) {
         ll <- sapply(marker, function(a,b,d) markerloglik(b, a, d), cross, error.prob)
@@ -264,7 +264,7 @@ markerloglik <-
     if(is.na(thechr))
         stop("Marker ", marker, " not found.")
 
-    chrtype <- class(cross$geno[[thechr]])
+    chr_type <- chrtype(cross$geno[[thechr]])
 
     g <- pull.geno(cross, chr=thechr)
     m <- match(marker, colnames(g))
@@ -275,7 +275,7 @@ markerloglik <-
 
     # which type of cross is this?
     if(type == "f2") {
-        if(chrtype == "A") # autosomal
+        if(chr_type == "A") # autosomal
             cfunc <- "marker_loglik_f2"
         else                  # X chromsome
             cfunc <- "marker_loglik_bc"
@@ -288,13 +288,13 @@ markerloglik <-
     }
     else if(type=="ri4sib" || type=="ri4self" || type=="ri8sib" || type=="ri8self" || type=="bgmagic16") {
         cfunc <- paste("marker_loglik_", type, sep="")
-        if(chrtype=="X")
+        if(chr_type=="X")
             warning("markerloglik not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else if(type == "bcsft") {
         cfunc <- "marker_loglik_bcsft"
         cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
-        if(chrtype != "A") { ## X chromosome
+        if(chr_type != "A") { ## X chromosome
             cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
             cross.scheme[2] <- 0
         }

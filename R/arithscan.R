@@ -2,8 +2,8 @@
 #
 # arithscan.R
 #
-# copyright (c) 2005-2015, Karl W Broman
-# last modified Oct, 2015
+# copyright (c) 2005-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Mar, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@
 "-.scanone" <-
     function(e1,e2)
 {
-    if(!any(class(e1) == "scanone"))
+    if(!inherits(e1, "scanone"))
         stop("Input should have class \"scanone\".")
 
     if(missing(e2)) {
@@ -38,7 +38,7 @@
 
         return(e1)
     }
-    if(!any(class(e2) == "scanone"))
+    if(!inherits(e2, "scanone"))
         stop("Input should have class \"scanone\".")
 
     class(e1) <- class(e2) <- "data.frame"
@@ -71,11 +71,11 @@
 "+.scanone" <-
     function(e1,e2)
 {
-    if(!any(class(e1) == "scanone"))
+    if(!inherits(e1, "scanone"))
         stop("Input should have class \"scanone\".")
 
     if(missing(e2)) return(e1)
-    if(!any(class(e2) == "scanone"))
+    if(!inherits(e2, "scanone"))
         stop("Input should have class \"scanone\".")
 
     class(e1) <- class(e2) <- "data.frame"
@@ -102,7 +102,7 @@
 "-.scanoneperm" <-
     function(e1, e2)
 {
-    if(!any(class(e1) == "scanoneperm"))
+    if(!inherits(e1, "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
 
     if(missing(e2)) {
@@ -119,7 +119,7 @@
 
         return(e1)
     }
-    if(!any(class(e2) == "scanoneperm"))
+    if(!inherits(e2, "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
 
     # check input
@@ -157,10 +157,10 @@
 "+.scanoneperm" <-
     function(e1, e2)
 {
-    if(!any(class(e1) == "scanoneperm"))
+    if(!inherits(e1, "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
     if(missing(e2)) return(e1)
-    if(!any(class(e2) == "scanoneperm"))
+    if(!inherits(e2, "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
 
     # check input
@@ -193,7 +193,7 @@
 "-.scantwo" <-
     function(e1, e2)
 {
-    if(!any(class(e1) == "scantwo"))
+    if(!inherits(e1, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     if(missing(e2)) {
@@ -203,7 +203,7 @@
 
         return(e1)
     }
-    if(!any(class(e2) == "scantwo"))
+    if(!inherits(e2, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     e1x <- "scanoneX" %in% names(e1)
@@ -230,10 +230,10 @@
 "+.scantwo" <-
     function(e1, e2)
 {
-    if(!any(class(e1) == "scantwo"))
+    if(!inherits(e1, "scantwo"))
         stop("Input should have class \"scantwo\".")
     if(missing(e2)) return(e1)
-    if(!any(class(e2) == "scantwo"))
+    if(!inherits(e2, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     e1x <- "scanoneX" %in% names(e1)
@@ -260,7 +260,7 @@
 "-.scantwoperm" <-
     function(e1, e2)
 {
-    if(!any(class(e1) == "scantwoperm"))
+    if(!inherits(e1, "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
 
     if(missing(e2)) {
@@ -278,7 +278,7 @@
         return(e1)
     }
 
-    if(!any(class(e2) == "scantwoperm"))
+    if(!inherits(e2, "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
 
     # x-chr-specific
@@ -313,10 +313,10 @@
 "+.scantwoperm" <-
     function(e1, e2)
 {
-    if(!any(class(e1) == "scantwoperm"))
+    if(!inherits(e1, "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
     if(missing(e2)) return(e1)
-    if(!any(class(e2) == "scantwoperm"))
+    if(!inherits(e2, "scantwoperm"))
         stop("Input should have class \"scantwoperm\".")
 
     # x-chr-specific
