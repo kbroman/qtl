@@ -3,7 +3,7 @@
 # read.cross.csvs.R
 #
 # copyright (c) 2005-2019, Karl W Broman
-# last modified Mar, 2019
+# last modified Dec, 2019
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -327,9 +327,8 @@ read.cross.csvs <-
     class(cross) <- c(type,"cross")
 
     # check that nothing is strange in the genotype data
-    cross.type <- class(cross)[1]
-    if(cross.type=="f2") max.gen <- 5
-    else if(cross.type=="bc") max.gen <- 2
+    if(type=="f2") max.gen <- 5
+    else if(type=="bc") max.gen <- 2
     else max.gen <- 14
 
     # check that markers are in proper order

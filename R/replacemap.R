@@ -2,8 +2,8 @@
 #
 # replacemap.R
 #
-# copyright (c) 2001-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ replacemap.cross <-
     function(object, map)
 {
     cross <- object
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     chr.names <- names(cross$geno)

@@ -2,8 +2,8 @@
 #
 # read.cross.gary.R
 #
-# copyright (c) 2000-2014, Karl W Broman
-# last modified Jun, 2014
+# copyright (c) 2000-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -156,8 +156,7 @@ read.cross.gary <-
     class(cross) <- c(type,"cross")
 
     # check that nothing is strange in the genotype data
-    cross.type <- class(cross)[1]
-    if(cross.type=="f2") max.gen <- 5
+    if(type=="f2") max.gen <- 5
     else max.gen <- 2
 
     u <- unique(allgeno)
