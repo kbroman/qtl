@@ -2,8 +2,8 @@
 #
 # plot.scantwo.R
 #
-# copyright (c) 2001-2016, Karl W Broman, Hao Wu and Brian Yandell
-# last modified Jan, 2016
+# copyright (c) 2001-2019, Karl W Broman, Hao Wu and Brian Yandell
+# last modified Dec, 2019
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ plot.scantwo <-
              col.scheme = c("viridis", "redblue","cm","gray","heat","terrain","topo"),
              gamma=0.6, allow.neg=FALSE, alternate.chrid=FALSE, ...)
 {
-    if(!any(class(x) == "scantwo"))
+    if(!inherits(x, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     col.scheme <- match.arg(col.scheme)
