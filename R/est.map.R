@@ -88,7 +88,7 @@ est.map <-
 
     newmap <- vector("list",n.chr)
     names(newmap) <- names(cross$geno)
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     if(n.cluster > 1 && nchr(cross) > 1) {
         cat(" -Running est.map via a cluster of", n.cluster, "nodes.\n")
@@ -140,7 +140,7 @@ est.map <-
         # which type of cross is this?
         if(type == "f2") {
             one.map <- TRUE
-            if(chrtype[i] != "X") # autosomal
+            if(chr_type[i] != "X") # autosomal
                 cfunc <- "est_map_f2"
             else                              # X chromsome
                 cfunc <- "est_map_bc"
@@ -156,7 +156,7 @@ est.map <-
         else if(type=="ri8sib" || type=="ri4sib" || type=="ri8self" || type=="ri4self" || type=="bgmagic16") {
             cfunc <- paste("est_map_", type, sep="")
             one.map <- TRUE
-            if(chrtype[i] == "X")
+            if(chr_type[i] == "X")
                 warning("est.map not working properly for the X chromosome for 4- or 8-way RIL.")
         }
         else if(type == "bcsft") {
@@ -164,7 +164,7 @@ est.map <-
             interf.model <- FALSE
             cfunc <- "est_map_bcsft"
             cross.scheme <- attr(cross, "scheme") ## c(s,t) for BC(s)F(t)
-            if(chrtype[i] == "X") { # X chromsome
+            if(chr_type[i] == "X") { # X chromsome
                 cross.scheme[1] <- cross.scheme[1] + cross.scheme[2] - (cross.scheme[1] == 0)
                 cross.scheme[2] <- 0
             }
@@ -191,7 +191,7 @@ est.map <-
             # recombination fractions
             rf <- mf(diff(cross$geno[[i]]$map))
             if(type=="risib" || type=="riself")
-                rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype[i])
+                rf <- adjust.rf.ri(rf, sub("^ri", "", type), chr_type[i])
             rf[rf < 1e-14] <- 1e-14
         }
         else {
@@ -204,7 +204,7 @@ est.map <-
             rf[rf < 1e-14] <- 1e-14
             rf2 <- mf(diff(cross$geno[[i]]$map[2,]))
             rf2[rf2 < 1e-14] <- 1e-14
-            if(!sex.sp && chrtype[i]=="X")
+            if(!sex.sp && chr_type[i]=="X")
                 temp.sex.sp <- TRUE
             else temp.sex.sp <- sex.sp
         }
@@ -236,13 +236,13 @@ est.map <-
             z$rf[z$rf < 1e-14] <- 1e-14
             if(type=="riself" || type=="risib")
                 z$rf <- adjust.rf.ri(z$rf, substr(type, 3, nchar(type)),
-                                     chrtype[i], expand=FALSE)
+                                     chr_type[i], expand=FALSE)
             newmap[[i]] <- cumsum(c(min(cross$geno[[i]]$map),imf(z$rf)))
             names(newmap[[i]]) <- names(cross$geno[[i]]$map)
             attr(newmap[[i]],"loglik") <- z$loglik
         }
         else if(interf.model) { # Chi-square / Stahl model
-            if(type=="bc" || (type=="f2" && chrtype[i]=="X")) {
+            if(type=="bc" || (type=="f2" && chr_type[i]=="X")) {
                 z <- .C("R_est_map_bci",
                         as.integer(nrow(gen)),         # number of individuals
                         as.integer(n.mar[i]),      # number of markers
@@ -304,7 +304,7 @@ est.map <-
             attr(newmap[[i]],"loglik") <- z$loglik
         }
 
-        class(newmap[[i]]) <- chrtype[i]
+        class(newmap[[i]]) <- chr_type[i]
     } # end loop over chromosomes
 
 

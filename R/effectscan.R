@@ -61,7 +61,7 @@ effectscan <-
 
     if(!missing(chr)) cross <- subset.cross(cross, chr=chr)
 
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     n.ind <- length(pheno)
 
@@ -98,7 +98,7 @@ effectscan <-
             dropcol <- 1
         }
         else if(type=="bc") {
-            if(chrtype[i] == "X") {
+            if(chr_type[i] == "X") {
                 sexpgm <- getsex(cross)
                 draws <- reviseXdata(type, "full", sexpgm, draws=draws,
                                      cross.attr=attributes(cross))
@@ -126,7 +126,7 @@ effectscan <-
             } # end bc autosome
         } # end bc
         else { # intercross
-            if(chrtype[i] == "X") {
+            if(chr_type[i] == "X") {
                 sexpgm <- getsex(cross)
                 draws <- reviseXdata(type, "full", sexpgm, draws=draws,
                                      cross.attr=attributes(cross))

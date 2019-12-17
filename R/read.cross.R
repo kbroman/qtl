@@ -147,8 +147,8 @@ read.cross <-
             class(cross$geno[[i]]) <- "X"
 
     # Fix up the X chromosome data for a backcross or intercross
-    chrtype <- sapply(cross$geno,class)
-    if(any(chrtype=="X") && convertXdata) {
+    chr_type <- sapply(cross$geno,chrtype)
+    if(any(chr_type=="X") && convertXdata) {
         if(crosstype(cross)=="bc")
             cross <- fixXgeno.bc(cross)
         if(crosstype(cross)=="f2") {
@@ -233,8 +233,8 @@ fixXgeno.bc <-
     omitX <- FALSE
 
     # pull out X chr genotype data
-    chrtype <- sapply(cross$geno,chrtype)
-    xchr <- which(chrtype=="X")
+    chr_type <- sapply(cross$geno,chrtype)
+    xchr <- which(chr_type=="X")
     Xgeno <- cross$geno[[xchr]]$data
 
     # find "sex" and "pgm" in the phenotype data
@@ -303,8 +303,8 @@ fixXgeno.f2 <-
     omitX <- FALSE
 
     # pull out X chr genotype data
-    chrtype <- sapply(cross$geno,chrtype)
-    xchr <- which(chrtype=="X")
+    chr_type <- sapply(cross$geno,chrtype)
+    xchr <- which(chr_type=="X")
     Xgeno <- cross$geno[[xchr]]$data
 
     # find "sex" and "pgm" in the phenotype data

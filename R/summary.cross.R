@@ -45,14 +45,14 @@ summary.cross <-
     Geno <- pull.geno(object)
 
     # A and X-specific genotypes?
-    chrtype <- sapply(object$geno, chrtype)
-    if(any(chrtype=="A")) {
-        GenoA <- pull.geno(object, chr=chrnames(object)[chrtype=="A"])
+    chr_type <- sapply(object$geno, chrtype)
+    if(any(chr_type=="A")) {
+        GenoA <- pull.geno(object, chr=chrnames(object)[chr_type=="A"])
     } else {
         GenoA <- NULL
     }
-    if(any(chrtype=="X") && type %in% c("f2", "bc", "bcsft")) {
-        GenoX <- pull.geno(object, chr=chrnames(object)[chrtype=="X"])
+    if(any(chr_type=="X") && type %in% c("f2", "bc", "bcsft")) {
+        GenoX <- pull.geno(object, chr=chrnames(object)[chr_type=="X"])
         GenoX <- reviseXdata(type, "full", getsex(object), geno=GenoX, cross.attr=attributes(object))
     } else{
         GenoX <- NULL

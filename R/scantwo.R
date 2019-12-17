@@ -1415,7 +1415,7 @@ scantwo <-
             else
                 results[wh] <- results[wh] + nllikX - nllik0
 
-            notxchr <- names(cross$geno)[sapply(cross$geno,chr_type)!="X"]
+            notxchr <- names(cross$geno)[sapply(cross$geno,chrtype)!="X"]
             if(length(notxchr) > 0) {
                 if(verbose) cat(" --Running scanone with special X chr covariates\n")
                 temp <- scanone(subset(cross,chr=notxchr),

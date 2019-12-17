@@ -42,7 +42,7 @@ est.rf <-
     mar.names <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
     type <- crosstype(cross)
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     is.bcsft <- (type == "bcsft")
     if(is.bcsft) {
@@ -58,7 +58,7 @@ est.rf <-
         temp <- cross$geno[[i]]$data
 
         # treat X chromosome specially in an intercross or BCsFt with t>0.
-        if((type=="f2" || is.bcsft) && chrtype[i]=="X") {
+        if((type=="f2" || is.bcsft) && chr_type[i]=="X") {
             fixX <- TRUE
             if(i != 1) xchrcol <- c(xchrcol,ncol(Geno)+(1:ncol(cross$geno[[i]]$data)))
             else xchrcol <- 1:ncol(cross$geno[[i]]$data)
@@ -79,7 +79,7 @@ est.rf <-
         cfunc <- "est_rf_4way"
     else if(type=="ri8sib" || type=="ri8self" || type=="ri4sib" || type=="ri4self") {
         cfunc <- paste("est_rf_", type, sep="")
-        if(any(chrtype == "X"))
+        if(any(chr_type == "X"))
             warning("est.rf not working properly for the X chromosome for 4- or 8-way RIL.")
     }
     else if(type == "bcsft")
@@ -341,13 +341,13 @@ checkAlleles <-
         stop("checkAlleles not available for cross type ", type, ".")
 
     # drop X chromosome
-    chrtype <- sapply(cross$geno, chrtype)
-    if(all(chrtype=="X")) {
+    chr_type <- sapply(cross$geno, chrtype)
+    if(all(chr_type=="X")) {
         if(verbose) cat("checkAlleles() only works for autosomal data.\n")
         return(NULL)
     }
 
-    cross <- subset(cross, chr = (chrtype != "X"))
+    cross <- subset(cross, chr = (chr_type != "X"))
 
     n.mar <- nmar(cross)
     mar.names <- unlist(lapply(cross$geno,function(a) colnames(a$data)))

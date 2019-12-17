@@ -138,9 +138,9 @@ geno.image <-
 
     # revise X chromosome data
     if(type=="bc" || type=="f2") {
-        chrtype <- sapply(cross$geno, chrtype)
-        if(any(chrtype=="X")) {
-            for(i in which(chrtype=="X"))
+        chr_type <- sapply(cross$geno, chrtype)
+        if(any(chr_type=="X")) {
+            for(i in which(chr_type=="X"))
                 cross$geno[[i]]$data <- reviseXdata(type, "simple", getsex(cross),
                                                     geno=cross$geno[[i]]$data,
                                                     cross.attr=attributes(cross))
@@ -740,8 +740,8 @@ plotGeno <-
 
     # revise X chr data for backcross/intercross
     data <- cross$geno[[1]]$data
-    chrtype <- chrtype(cross$geno[[1]])
-    if(chrtype=="X" && (type=="f2" || type=="bc"))
+    chr_type <- chrtype(cross$geno[[1]])
+    if(chr_type=="X" && (type=="f2" || type=="bc"))
         data <- reviseXdata(type, sexpgm=getsex(cross), geno=data, cross.attr=attributes(cross), force=TRUE)
 
     if(include.xo) {
@@ -975,11 +975,11 @@ plotGeno <-
 
             # AB genotypes
             ind <- tind; ind[!is.na(data) & data!=2] <- NA
-            if(type=="f2" || (type=="bc" && chrtype=="X"))
+            if(type=="f2" || (type=="bc" && chr_type=="X"))
                 points(x,ind,pch=21,col="black", bg=color[2],cex=cex)
             else points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
 
-            if(type=="f2" || (type=="bc" && chrtype=="X")) {
+            if(type=="f2" || (type=="bc" && chr_type=="X")) {
                 # BB genotypes
                 ind <- tind; ind[!is.na(data) & data!=3] <- NA
                 points(x,ind,pch=21,col="black", bg=color[3],cex=cex)
@@ -1025,11 +1025,11 @@ plotGeno <-
 
             # AB genotypes
             ind <- tind; ind[!is.na(data) & data!=2] <- NA
-            if(type=="f2" || (type=="bc" && chrtype=="X"))
+            if(type=="f2" || (type=="bc" && chr_type=="X"))
                 points(ind,y,pch=21,col="black", bg=color[2],cex=cex)
             else points(ind,y,pch=21,col="black", bg=color[3],cex=cex)
 
-            if(type=="f2" || (type=="bc" && chrtype=="X")) {
+            if(type=="f2" || (type=="bc" && chr_type=="X")) {
                 # BB genotypes
                 ind <- tind; ind[!is.na(data) & data!=3] <- NA
                 points(ind,y,pch=21,col="black", bg=color[3],cex=cex)
@@ -1357,19 +1357,19 @@ plotPXG <-
     map <- pull.map(cross)
     pos <- NULL
     for(i in seq(length(chr))) pos[i] <- map[[chr[i]]][marker[i]]
-    chrtype <- sapply(cross$geno, chrtype)
-    names(chrtype) <- names(cross$geno)
-    chrtype <- chrtype[chr]
+    chr_type <- sapply(cross$geno, chrtype)
+    names(chr_type) <- names(cross$geno)
+    chr_type <- chr_type[chr]
 
     # if X chromosome and backcross or intercross, get sex/direction data
-    if(any(chrtype == "X") && (type == "bc" || type == "f2"))
+    if(any(chr_type == "X") && (type == "bc" || type == "f2"))
         sexpgm <- getsex(cross)
     else sexpgm <- NULL
 
     # number of possible genotypes
     gen.names <- list()
     for(i in seq(length(chr)))
-        gen.names[[i]] <- getgenonames(type, chrtype[i], "full", sexpgm, attributes(cross))
+        gen.names[[i]] <- getgenonames(type, chr_type[i], "full", sexpgm, attributes(cross))
     n.gen <- sapply(gen.names, length)
 
     jitter <- jitter/10
@@ -1413,8 +1413,8 @@ plotPXG <-
     }
 
     # in case of X chromosome, recode some genotypes
-    if(any(chrtype == "X") && (type == "bc" || type == "f2")) {
-        ix = seq(n.mark)[chrtype == "X"]
+    if(any(chr_type == "X") && (type == "bc" || type == "f2")) {
+        ix = seq(n.mark)[chr_type == "X"]
         for(i in ix)
             x[, i] <- as.numeric(reviseXdata(type, "full", sexpgm,
                                              geno = as.matrix(x[, i]),

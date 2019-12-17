@@ -48,10 +48,10 @@ scanone <-
     use <- match.arg(use)
 
     # in RIL, treat X chromomse like an autosome
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
     crosstype <- crosstype(cross)
-    if(any(chrtype=="X") && (crosstype == "risib" || crosstype == "riself"))
-        for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
+    if(any(chr_type=="X") && (crosstype == "risib" || crosstype == "riself"))
+        for(i in which(chr_type=="X")) class(cross$geno[[i]]) <- "A"
 
     if(!missing(n.perm) && n.perm > 0 && n.cluster > 1) {
         cat(" -Running permutations via a cluster of", n.cluster, "nodes.\n")
@@ -366,8 +366,8 @@ scanone <-
 
     # scan genome one chromosome at a time
     for(i in 1:n.chr) {
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype=="X") {
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type=="X") {
             sexpgm <- getsex(cross)
             ac <- revisecovar(sexpgm,addcovar)
 
@@ -397,7 +397,7 @@ scanone <-
         }
 
         # get genotype names
-        gen.names <- getgenonames(type,chrtype,"full",sexpgm,attributes(cross))
+        gen.names <- getgenonames(type,chr_type,"full",sexpgm,attributes(cross))
         n.gen <- length(gen.names)
 
         # starting values for interval mapping
@@ -422,7 +422,7 @@ scanone <-
             if(type=="4way") newgeno[newgeno>4] <- 0
 
             # revise X chromosome genotypes
-            if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
+            if(chr_type=="X" && (type %in% c("bc","f2","bcsft")))
                 newgeno <- reviseXdata(type, "full", sexpgm, geno=newgeno,
                                        cross.attr=attributes(cross))
 
@@ -446,7 +446,7 @@ scanone <-
             n.draws <- dim(draws)[3]
 
             # revise X chromosome genotypes
-            if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
+            if(chr_type=="X" && (type %in% c("bc","f2","bcsft")))
                 draws <- reviseXdata(type, "full", sexpgm, draws=draws,
                                      cross.attr=attributes(cross))
 
@@ -478,7 +478,7 @@ scanone <-
             n.pos <- ncol(genoprob)
 
             # revise X chromosome genotypes
-            if(chrtype=="X" && (type %in% c("bc","f2","bcsft")))
+            if(chr_type=="X" && (type %in% c("bc","f2","bcsft")))
                 genoprob <- reviseXdata(type, "full", sexpgm, prob=genoprob,
                                         cross.attr=attributes(cross))
 
@@ -723,7 +723,7 @@ scanone <-
         }
 
         # get null log10 likelihood for the X chromosome
-        if(chrtype=="X") {
+        if(chr_type=="X") {
 
             # determine which covariates belong in null hypothesis
             temp <- scanoneXnull(type, sexpgm, cross.attr=attributes(cross))
@@ -949,11 +949,11 @@ scanone.perm.engine <-
     if( (n.phe==1) && ((method=="imp") || (method=="hk")) &&
        model == "normal" &&
        is.null(addcovar) && is.null(intcovar) ) {
-        chrtype <- sapply(cross$geno, chrtype)
+        chr_type <- sapply(cross$geno, chrtype)
         sexpgm <- getsex(cross)
         sex <- sexpgm$sex
         pgm <- sexpgm$pgm
-        if(all(chrtype=="A"))
+        if(all(chr_type=="A"))
             batch.mode <- TRUE
         else if((is.null(sex) || length(unique(sex))==1) &&
                 (is.null(pgm) || length(unique(pgm))==1))

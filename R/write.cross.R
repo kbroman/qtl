@@ -45,14 +45,14 @@ write.cross <-
     if(!missing(chr)) cross <- subset(cross,chr=chr)
 
     # revise X data
-    chrtype <- sapply(cross$geno,chrtype)
+    chr_type <- sapply(cross$geno,chrtype)
     crosstype <- crosstype(cross)
     if((crosstype=="bc" || crosstype=="f2") &&
-       any(chrtype=="X")) {
+       any(chr_type=="X")) {
         sexpgm <- getsex(cross)
         sex <- sexpgm$sex
         pgm <- sexpgm$pgm
-        for(i in which(chrtype=="X"))
+        for(i in which(chr_type=="X"))
             cross$geno[[i]]$data <- fixX4write(cross$geno[[i]]$data,sex,pgm,crosstype)
     }
 

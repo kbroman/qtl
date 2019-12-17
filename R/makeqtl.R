@@ -44,8 +44,8 @@ makeqtl <-
 
     # cross type
     type <- crosstype(cross)
-    chrtype <- sapply(cross$geno, chrtype)
-    names(chrtype) <- names(cross$geno)
+    chr_type <- sapply(cross$geno, chrtype)
+    names(chr_type) <- names(cross$geno)
     sexpgm <- getsex(cross)
 
     what <- match.arg(what)
@@ -117,10 +117,10 @@ makeqtl <-
             pos[i] <- map[marker.idx]
 
             # no. genotypes
-            n.gen[i] <- length(getgenonames(type,chrtype[i.chr],"full",sexpgm, attributes(cross)))
+            n.gen[i] <- length(getgenonames(type,chr_type[i.chr],"full",sexpgm, attributes(cross)))
 
             # Fix up X chromsome here
-            if(chrtype[i.chr]=="X" && (type=="bc" || type=="f2"))
+            if(chr_type[i.chr]=="X" && (type=="bc" || type=="f2"))
                 geno[,i,] <- reviseXdata(type,"full",sexpgm,draws=geno[,i,,drop=FALSE],
                                          cross.attr=attributes(cross))
         }
@@ -169,7 +169,7 @@ makeqtl <-
                 stop("Multiple markers at the same position; run jittermap.")
 
             # take genoprob
-            if(chrtype[i.chr]=="X" && (type=="bc" || type=="f2")) { # fix X chromosome probs
+            if(chr_type[i.chr]=="X" && (type=="bc" || type=="f2")) { # fix X chromosome probs
                 prob[[i]] <- reviseXdata(type, "full", sexpgm,
                                          prob=cross$geno[[i.chr]]$prob[,marker.idx,,drop=FALSE],
                                          cross.attr=attributes(cross))[,1,]
@@ -217,7 +217,7 @@ makeqtl <-
     qtl$n.qtl <- n.pos
     qtl$n.ind <- nind(cross)
     qtl$n.gen <- n.gen
-    qtl$chrtype <- chrtype[qtl$chr]
+    qtl$chrtype <- chr_type[qtl$chr]
     names(qtl$chrtype) <- NULL
 
     class(qtl) <- "qtl"

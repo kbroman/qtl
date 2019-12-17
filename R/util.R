@@ -834,8 +834,8 @@ geno.table <-
     if(is.bcs)
         is.bcs <- (cross.scheme[2] == 0)
 
-    chrtype <- sapply(cross$geno, chrtype)
-    allchrtype <- rep(chrtype, nmar(cross))
+    chr_type <- sapply(cross$geno, chrtype)
+    allchrtype <- rep(chr_type, nmar(cross))
     chrname <- names(cross$geno)
     allchrname <- rep(chrname, nmar(cross))
 
@@ -883,7 +883,7 @@ geno.table <-
     pval <- rep(NA,nrow(results))
     if(type %in% c("bc","risib","riself","dh","haploid") || (type=="bcsft" & is.bcs)) {
         sexpgm <- getsex(cross)
-        if((type == "bc" || type=="bcsft") && any(chrtype == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
+        if((type == "bc" || type=="bcsft") && any(chr_type == "X") && !is.null(sexpgm$sex) && any(sexpgm$sex==1)) {
             for(i in which(allchrtype=="A")) {
                 x <- results[i,2:3]
                 if(sum(x) > 0)
@@ -897,7 +897,7 @@ geno.table <-
             colnames(temp) <- gn[wh]
             results <- cbind(results, temp)
 
-            for(i in which(chrtype=="X")) {
+            for(i in which(chr_type=="X")) {
                 dat <- reviseXdata("bc", "full", sexpgm, geno=cross$geno[[i]]$data,
                                    cross.attr=attributes(cross))
                 dat[is.na(dat)] <- 0
@@ -953,7 +953,7 @@ geno.table <-
             }
         }
 
-        for(i in which(chrtype=="X")) {
+        for(i in which(chr_type=="X")) {
             gn <- getgenonames("f2","X","full", getsex(cross), attributes(cross))
             wh <- which(is.na(match(gn, colnames(results))))
             temp <- matrix(0, nrow=nrow(results), ncol=length(wh))
@@ -1145,25 +1145,25 @@ geno.crosstab <-
             stop("Marker ", rownames(pos)[is.na(pos$chr)], " not found.")
     }
 
-    chrtype <- sapply(cross$geno[pos$chr], chrtype)
+    chr_type <- sapply(cross$geno[pos$chr], chrtype)
     crosstype <- crosstype(cross)
 
     g1 <- pull.geno(cross, pos$chr[1])[,mname1, drop=FALSE]
     g2 <- pull.geno(cross, pos$chr[2])[,mname2, drop=FALSE]
 
-    if(chrtype[1] == "X")
+    if(chr_type[1] == "X")
         g1 <- reviseXdata(crosstype, "full", getsex(cross), geno=g1, cross.attr=attributes(cross))
 
-    if(chrtype[2] == "X")
+    if(chr_type[2] == "X")
         g2 <- reviseXdata(crosstype, "full", getsex(cross), geno=g2, cross.attr=attributes(cross))
 
     g1[is.na(g1)] <- 0
     g2[is.na(g2)] <- 0
 
-    g1names <- getgenonames(crosstype, chrtype[1], "full", getsex(cross), attributes(cross))
-    g2names <- getgenonames(crosstype, chrtype[2], "full", getsex(cross), attributes(cross))
+    g1names <- getgenonames(crosstype, chr_type[1], "full", getsex(cross), attributes(cross))
+    g2names <- getgenonames(crosstype, chr_type[2], "full", getsex(cross), attributes(cross))
 
-    if(chrtype[1] != "X") {
+    if(chr_type[1] != "X") {
         if(crosstype == "f2")
             g1names <- c(g1names, paste("not", g1names[c(3,1)]))
         else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
@@ -1186,7 +1186,7 @@ geno.crosstab <-
         }
         else stop("Unknown cross type: ",crosstype)
     }
-    if(chrtype[2] != "X") {
+    if(chr_type[2] != "X") {
         if(crosstype == "f2")
             g2names <- c(g2names, paste("not", g2names[c(3,1)]))
         else if(crosstype == "bc" || crosstype == "risib" || crosstype=="riself" || crosstype=="dh" || crosstype=="haploid") {
@@ -1974,10 +1974,10 @@ fill.geno <-
 checkcovar <-
     function(cross, pheno.col, addcovar, intcovar, perm.strata, ind.noqtl=NULL, weights=NULL, verbose=TRUE)
 {
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     # drop individuals whose sex or pgm is missing if X chr is included
-    if(any(chrtype=="X")) {
+    if(any(chr_type=="X")) {
         sexpgm <- getsex(cross)
         keep <- rep(TRUE,nind(cross))
         flag <- 0
@@ -2561,9 +2561,9 @@ comparecrosses <-
     }
 
 
-    chrtype1 <- sapply(cross1$geno, chrtype)
-    chrtype2 <- sapply(cross2$geno, chrtype)
-    if(any(chrtype1 != chrtype2))
+    chr_type1 <- sapply(cross1$geno, chrtype)
+    chr_type2 <- sapply(cross2$geno, chrtype)
+    if(any(chr_type1 != chr_type2))
         stop("Chromosome types (autosomal vs X) do not match.")
 
     for(i in 1:nchr(cross1)) {
@@ -2646,7 +2646,7 @@ movemarker <-
     # pull out genotype data
     g <- cross$geno[[chr]]$data[,pos]
 
-    chrtype <- chrtype(cross$geno[[chr]])
+    chr_type <- chrtype(cross$geno[[chr]])
     mapmatrix <- is.matrix(cross$geno[[chr]]$map)
 
     # delete marker
@@ -2670,7 +2670,7 @@ movemarker <-
         cross$geno[[n+1]] <- list("data"=as.matrix(g),
                                   "map"=as.numeric(0))
         names(cross$geno)[n+1] <- newchr
-        class(cross$geno[[n+1]]) <- chrtype
+        class(cross$geno[[n+1]]) <- chr_type
         colnames(cross$geno[[n+1]]$data) <- marker
         if(mapmatrix) {
             if(missing(newpos)) newpos <- 0
@@ -3958,10 +3958,10 @@ convert2riself <-
     if(!inherits(cross, "cross"))
         stop("input must be a cross object.")
     curtype <- crosstype(cross)
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
     whX <- NULL
-    if(any(chrtype != "A")) { # there's an X chromosome
-        whX <- names(cross$geno)[chrtype != "A"]
+    if(any(chr_type != "A")) { # there's an X chromosome
+        whX <- names(cross$geno)[chr_type != "A"]
         if(length(whX) > 1)
             warning("Converting chromosomes ", paste(whX, collapse=" "), " to autosomal.")
         else
@@ -3984,7 +3984,7 @@ convert2riself <-
         g2 <- sum(!is.na(dat) & dat==2)
         g3 <- sum(!is.na(dat) & dat==3)
         g4 <- sum(!is.na(dat) & dat>3)
-        if(usethree && chrtype[i] == "A") {
+        if(usethree && chr_type[i] == "A") {
             dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
             dat[!is.na(dat) & dat==3] <- 2
             g2omit <- g2omit + g2
@@ -4019,7 +4019,7 @@ convert2risib <-
     if(!inherits(cross, "cross"))
         stop("input must be a cross object.")
     curtype <- crosstype(cross)
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     gtab <- table(pull.geno(cross))
     usethree <- FALSE
@@ -4037,7 +4037,7 @@ convert2risib <-
         g3 <- sum(!is.na(dat) & dat==3)
         g4 <- sum(!is.na(dat) & dat>3)
         if(usethree) {
-            if(chrtype[i] == "A") {
+            if(chr_type[i] == "A") {
                 dat[!is.na(dat) & dat!=1 & dat!=3] <- NA
                 dat[!is.na(dat) & dat==3] <- 2
                 g2omit <- g2omit + g2
@@ -4499,8 +4499,8 @@ omit_x_chr <-
     function(cross, warn=TRUE)
 {
     is_x <- vapply(cross$geno, function(chr) {
-        chrtype <- chrtype(chr)
-        !is.null(chrtype) && chrtype=="X" }, FALSE)
+        chr_type <- chrtype(chr)
+        !is.null(chr_type) && chr_type=="X" }, FALSE)
 
     if(any(is_x)) {
         if(all(is_x)) stop("Omitting X chromosome, but there are no other chromosomes.")

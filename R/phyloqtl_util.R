@@ -156,11 +156,11 @@ flipcross <-
     if(!(crosstype %in% allowed_crosses))
         stop("The function is not working for cross type ", crosstype)
 
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     # omit X chr
-    if(any(chrtype=="X")) {
-        cross <- subset(cross, chr = (chrtype != "X"))
+    if(any(chr_type=="X")) {
+        cross <- subset(cross, chr = (chr_type != "X"))
         warning("flipcross is not yet working for the X chromosome; X chr omitted from output.")
     }
 

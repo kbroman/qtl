@@ -229,8 +229,8 @@ stepwiseqtlX <-
         pheno.col <- 1
     }
 
-    chrtype <- sapply(cross$geno, class)
-    if(any(chrtype=="X")) {
+    chr_type <- sapply(cross$geno, chrtype)
+    if(any(chr_type=="X")) {
         Xadjustment <- scanoneXnull(class(cross)[1], getsex(cross))
         forceXcovar <- Xadjustment$adjustX
         Xcovar <- Xadjustment$sexpgmcovar

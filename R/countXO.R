@@ -54,8 +54,8 @@ countXO <-
 
     for(i in 1:n.chr) {
 
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype=="X") xchr <- TRUE
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type=="X") xchr <- TRUE
         else xchr <- FALSE
 
         # which type of cross is this?

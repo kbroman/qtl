@@ -108,7 +108,7 @@ scanqtl <-
     }
 
     type <- crosstype(cross)
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
 
     # input data checking
     if( length(chr) != length(pos))
@@ -383,7 +383,7 @@ scanqtl <-
                         qtl.obj$prob[[kk]] <- cross$geno[[ichr[kk]]]$prob[,w,]
                     thew[kk] <- w ####
 
-                    if(chrtype[ichr[kk]]=="X" && (type=="bc" || type=="f2")) {
+                    if(chr_type[ichr[kk]]=="X" && (type=="bc" || type=="f2")) {
                         if(method=="imp")
                             qtl.obj$geno[,kk,] <-
                                 reviseXdata(type,"full",sexpgm,draws=qtl.obj$geno[,kk,,drop=FALSE],

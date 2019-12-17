@@ -36,9 +36,9 @@ write.cross.qtab <-
     if(missing(descr)) descr <- paste(deparse(substitute(cross)), "from R/qtl")
 
     # for now, omit X chromosome
-    chrtype <- sapply(cross$geno, chrtype)
-    if(any(chrtype == "X")) {
-        cross <- subset(cross, chr=names(chrtype)[chrtype != "X"])
+    chr_type <- sapply(cross$geno, chrtype)
+    if(any(chr_type == "X")) {
+        cross <- subset(cross, chr=names(chr_type)[chr_type != "X"])
         warning("Omitting X chromosome.")
     }
 

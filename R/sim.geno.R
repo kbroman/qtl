@@ -63,8 +63,8 @@ sim.geno <-
         if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
         else temp.offend <- off.end
 
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype=="X") xchr <- TRUE
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type=="X") xchr <- TRUE
         else xchr <- FALSE
 
         # which type of cross is this?
@@ -120,7 +120,7 @@ sim.geno <-
             map <- create.map(cross$geno[[i]]$map,step,temp.offend,stepwidth)
             rf <- mf(diff(map))
             if(type=="risib" || type=="riself")
-                rf <- adjust.rf.ri(rf,substr(type,3,nchar(type)),chrtype)
+                rf <- adjust.rf.ri(rf, sub("^ri", "", type), chr_type)
             rf[rf < 1e-14] <- 1e-14
 
             # new genotype matrix with pseudomarkers filled in

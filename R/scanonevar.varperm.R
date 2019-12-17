@@ -14,10 +14,10 @@ scanonevar.varperm <-
     crosstype <- crosstype(cross)
     if(!(crosstype %in% c("bc", "dh", "f2", "haploid", "risib", "riself")))
       stop('scanonevar not implemented for cross type "', crosstype, '"')
-    chrtype <- sapply(cross$geno, chrtype)
-    if(any(chrtype=="X")) {
+    chr_type <- sapply(cross$geno, chrtype)
+    if(any(chr_type=="X")) {
       warning("Analysis of X chromosome not implemented for scanonevar; omitted.")
-      cross <- subset(cross, chr=(chrtype != "X"))
+      cross <- subset(cross, chr=(chr_type != "X"))
     }
 
     # grab phenotype

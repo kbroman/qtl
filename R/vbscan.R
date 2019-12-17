@@ -71,15 +71,15 @@ vbscan <-
         n.pos <- dim(genoprob)[2]
         n.ind <- length(y)
 
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype=="X") sexpgm <- getsex(cross)
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type=="X") sexpgm <- getsex(cross)
         else sexpgm <- NULL
 
-        gen.names <- getgenonames(type,chrtype,"full", sexpgm, attributes(cross))
+        gen.names <- getgenonames(type,chr_type,"full", sexpgm, attributes(cross))
         n.gen <- length(gen.names)
 
         # revise X chromosome genotypes
-        if(chrtype=="X" && (type=="f2" || type=="bc"))
+        if(chr_type=="X" && (type=="f2" || type=="bc"))
             genoprob <- reviseXdata(type, "full", sexpgm, prob=genoprob,
                                     cross.attr=attributes(cross))
 
@@ -125,7 +125,7 @@ vbscan <-
         z <- res
 
         # get null log10 likelihood for the X chromosome
-        if(chrtype=="X") {
+        if(chr_type=="X") {
 
             # determine which covariates belong in null hypothesis
             temp <- scanoneXnull(type, sexpgm, cross.attr=attributes(cross))

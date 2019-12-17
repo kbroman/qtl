@@ -104,7 +104,7 @@ formLinkageGroups <-
 
     if(reorgMarkers) {
         cross <- clean(cross)
-        chrtype <- rep(sapply(cross$geno, chrtype), n.mar)
+        chr_type <- rep(sapply(cross$geno, chrtype), n.mar)
         crosstype <- crosstype(cross)
         g <- pull.geno(cross)
 
@@ -123,7 +123,7 @@ formLinkageGroups <-
             else
                 names(cross$geno[[i]]$map) <- colnames(cross$geno[[i]]$data)
 
-            thechrtype <- unique(chrtype[revgrp==i])
+            thechrtype <- unique(chr_type[revgrp==i])
             if(length(thechrtype) > 1)
                 warning("Problem with linkage group ", i, ": A or X?\n", paste(thechrtype, collapse=" "))
             else

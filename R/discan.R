@@ -79,8 +79,8 @@ discan <-
 
     for(i in 1:n.chr) {
 
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype=="X") {
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type=="X") {
             sexpgm <- getsex(cross)
 
             ac <- revisecovar(sexpgm,addcovar)
@@ -109,18 +109,18 @@ discan <-
         }
 
         # get null log liklihood
-        if(is.na(llik0[chrtype])) {
+        if(is.na(llik0[chr_type])) {
             if(n.ac > 0)
                 nullfit <- glm(pheno ~ ac, family=binomial(link="logit"))
             else if(i==1)
                 nullfit <- glm(pheno ~ 1, family=binomial(link="logit"))
             fitted <- nullfit$fitted
-            nullcoef[[chrtype]] <- nullfit$coef
-            llik0[chrtype] <- sum(pheno*log10(fitted) + (1-pheno)*log10(1-fitted))
+            nullcoef[[chr_type]] <- nullfit$coef
+            llik0[chr_type] <- sum(pheno*log10(fitted) + (1-pheno)*log10(1-fitted))
         }
 
         # get genotype names
-        gen.names <- getgenonames(type,chrtype,"full",sexpgm,attributes(cross))
+        gen.names <- getgenonames(type,chr_type,"full",sexpgm,attributes(cross))
         n.gen <- length(gen.names)
 
         # pull out genotype data (mr)
@@ -134,7 +134,7 @@ discan <-
             if(type=="4way") newgeno[newgeno>4] <- 0
 
             # revise X chromosome genotypes
-            if(chrtype=="X" && (type=="bc" || type=="f2"))
+            if(chr_type=="X" && (type=="bc" || type=="f2"))
                 newgeno <- reviseXdata(type, "full", sexpgm, geno=newgeno,
                                        cross.attr=attributes(cross))
 
@@ -161,7 +161,7 @@ discan <-
             n.pos <- ncol(genoprob)
 
             # revise X chromosome genotypes
-            if(chrtype=="X" && (type=="bc" || type=="f2"))
+            if(chr_type=="X" && (type=="bc" || type=="f2"))
                 genoprob <- reviseXdata(type, "full", sexpgm, prob=genoprob,
                                         cross.attr=attributes(cross))
 
@@ -199,9 +199,9 @@ discan <-
             }
             else if(n.ac + n.ic > 0) {
 
-                start <- rep(nullcoef[[chrtype]][1],n.gen)
+                start <- rep(nullcoef[[chr_type]][1],n.gen)
                 if(n.ac > 0)
-                    start <- c(start, nullcoef[[chrtype]][-1])
+                    start <- c(start, nullcoef[[chr_type]][-1])
                 if(n.ic > 0)
                     start <- c(start, rep(0, n.ic*(n.gen-1)))
 
@@ -239,7 +239,7 @@ discan <-
         }
         z <- matrix(z$result,nrow=n.pos)
 
-        if(method != "mr") z[,1] <- z[,1] - llik0[chrtype]
+        if(method != "mr") z[,1] <- z[,1] - llik0[chr_type]
         z[is.na(z[,1]),1] <- 0
 
         z <- z[,1,drop=FALSE]
@@ -248,7 +248,7 @@ discan <-
 
         # get null log10 likelihood for the X chromosome
         adjustX <- FALSE
-        if(chrtype=="X") {
+        if(chr_type=="X") {
             # determine which covariates belong in null hypothesis
             temp <- scanoneXnull(type, sexpgm, cross.attr=attributes(cross))
             adjustX <- temp$adjustX

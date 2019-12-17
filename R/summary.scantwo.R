@@ -282,8 +282,8 @@ summary.scantwo <-
 
     if(!missing(perms) && "AA" %in% names(perms)) {
         xchr_specific <- TRUE
-        chrtype <- attr(perms, "chrtype")
-        chrpair_type <- paste0(chrtype[out$chr1], chrtype[out$chr2])
+        chr_type <- attr(perms, "chrtype")
+        chrpair_type <- paste0(chr_type[out$chr1], chr_type[out$chr2])
         if(all(chrpair_type=="AA")) {
             perms <- perms$AA
             xchr_specific <- FALSE

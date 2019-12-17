@@ -109,12 +109,12 @@ mqmaugment <- function(cross,maxaugind=82, minprob=0.1, strategy=c("default","im
     # ---- Check sex chromosome
     # check whether the X chromosome should be dropped
     # (backcross with one sex should be fine)
-    chrtype <- sapply(cross$geno, chrtype)
+    chr_type <- sapply(cross$geno, chrtype)
     # Drop the X chromosome in F2 and related crosses
-    if (any(chrtype == "X") && (ctype == isF2 || length(getgenonames(crosstype, "X", "full", getsex(cross), attributes(cross))) != 2)) {
+    if (any(chr_type == "X") && (ctype == isF2 || length(getgenonames(crosstype, "X", "full", getsex(cross), attributes(cross))) != 2)) {
         warning("MQM not yet available for the X chromosome; omitting chr ",
-                paste(names(cross$geno)[chrtype == "X"], collapse=" "))
-        cross <- subset(cross, chr=(chrtype != "X"))
+                paste(names(cross$geno)[chr_type == "X"], collapse=" "))
+        cross <- subset(cross, chr=(chr_type != "X"))
     }
 
     # ---- Count

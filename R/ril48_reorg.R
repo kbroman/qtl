@@ -53,8 +53,8 @@ reorgRIgenoprob <-
     else n.str <- as.numeric(substr(crosstype, 3, 3))
     n.ind <- nind(cross)
     for(i in names(cross$geno)) { # loop over chromosomes
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype == "X")
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type == "X")
             warning("reorgRIgenoprob not working properly for the X chromosome.")
 
         if(!("prob" %in% names(cross$geno[[i]]))) {
@@ -121,8 +121,8 @@ reorgRIdraws <-
     else n.str <- as.numeric(substr(crosstype, 3, 3))
     n.ind <- nind(cross)
     for(i in names(cross$geno)) { # loop over chromosomes
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype == "X")
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type == "X")
             warning("reorgRIdraws not working properly for the X chromosome.")
 
         if(!("draws" %in% names(cross$geno[[i]]))) {
@@ -186,8 +186,8 @@ reorgRIargmax <-
     else n.str <- as.numeric(substr(crosstype, 3, 3))
     n.ind <- nind(cross)
     for(i in names(cross$geno)) { # loop over chromosomes
-        chrtype <- chrtype(cross$geno[[i]])
-        if(chrtype == "X")
+        chr_type <- chrtype(cross$geno[[i]])
+        if(chr_type == "X")
             warning("reorgRIargmax not working properly for the X chromosome.")
 
         if(!("argmax" %in% names(cross$geno[[i]]))) {
@@ -251,8 +251,8 @@ reorgRIpairprob <-
     n.ind <- nind(cross)
     thedim <- dim(pairprob)
 
-    chrtype <- chrtype(cross$geno[[1]])
-    if(chrtype == "X")
+    chr_type <- chrtype(cross$geno[[1]])
+    if(chr_type == "X")
         warning("reorgRIpairprob not working properly for the X chromosome.")
 
     att <- attributes(pairprob)

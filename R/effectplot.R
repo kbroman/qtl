@@ -75,7 +75,7 @@ effectplot <-
     n.ind <- nind(cross)
     pheno <- cross$pheno[, pheno.col]
     type <- crosstype(cross)
-    chrtype1 <- chrtype2 <- "A"
+    chr_type1 <- chr_type2 <- "A"
     gennames1 <- gennames2 <- NULL
 
     # If imputations are not available, create them
@@ -499,7 +499,7 @@ effectplot.getmark <-
         if( !(chr %in% names(cross$geno)) )
             stop("Couldn't find marker ", mname)
         mar.type <- "pm"
-        chrtype <- chrtype(cross$geno[[chr]])
+        chr_type <- chrtype(cross$geno[[chr]])
         pm.name <- paste("loc", tmp[2],sep="") # this will be like loc10
         idx.pos <- which(pm.name==colnames(cross$geno[[chr]]$draws))
         if(length(idx.pos) == 0)
@@ -512,14 +512,14 @@ effectplot.getmark <-
             if(mname %in% colnames(cross$geno[[i]]$draws)) { # this is a pseudomarker
                 mar.type <- "pm"
                 chr <- i
-                chrtype <- chrtype(cross$geno[[chr]])
+                chr_type <- chrtype(cross$geno[[chr]])
                 idx.pos <- which(mname == colnames(cross$geno[[i]]$draws))
                 break
             }
             else if(mname %in% colnames(cross$geno[[i]]$data)) { # this is a typed marker
                 mar.type <- "marker"
                 chr <- i
-                chrtype <- chrtype(cross$geno[[i]])
+                chr_type <- chrtype(cross$geno[[i]])
                 idx.pos <- which(mname == colnames(cross$geno[[i]]$data))
                 break
             }
@@ -542,12 +542,12 @@ effectplot.getmark <-
     else if(mar.type=="marker") { # this is a real marker
         mark <- cross$geno[[chr]]$data[, idx.pos]
         # if X chr and backcross or intercross, get sex/dir data + revise data
-        if(chrtype == "X" && (type %in% c("bc","f2","bcsft"))) {
+        if(chr_type == "X" && (type %in% c("bc","f2","bcsft"))) {
             sexpgm <- getsex(cross)
             mark <- as.numeric(reviseXdata(type, "full", sexpgm,
                                            geno = as.matrix(mark),
                                            cross.attr=attributes(cross)))
-            gennames <- getgenonames(type, chrtype, "full", sexpgm, attributes(cross))
+            gennames <- getgenonames(type, chr_type, "full", sexpgm, attributes(cross))
         }
     }
 
@@ -556,11 +556,11 @@ effectplot.getmark <-
         mark <- cross$geno[[chr]]$draws[,idx.pos,,drop=FALSE]
 
         # if X chr and backcross or intercross, get sex/dir data + revise data
-        if(chrtype == "X" && (type %in% c("bc","f2","bcsft"))) {
+        if(chr_type == "X" && (type %in% c("bc","f2","bcsft"))) {
             sexpgm <- getsex(cross)
             mark <- reviseXdata(type, "full", sexpgm, draws=mark,
                                 cross.attr=attributes(cross))[,1,]
-            gennames <- getgenonames(type, chrtype, "full", sexpgm, attributes(cross))
+            gennames <- getgenonames(type, chr_type, "full", sexpgm, attributes(cross))
         }
         else mark <- mark[,1,]
     }
