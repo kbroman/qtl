@@ -2,8 +2,8 @@
 #
 # scanone.R
 #
-# copyright (c) 2001-2015, Karl W Broman
-# last modified Oct, 2015
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -48,8 +48,9 @@ scanone <-
     use <- match.arg(use)
 
     # in RIL, treat X chromomse like an autosome
-    chrtype <- sapply(cross$geno, class)
-    if(any(chrtype=="X") && (class(cross)[1] == "risib" || class(cross)[1] == "riself"))
+    chrtype <- sapply(cross$geno, chrtype)
+    crosstype <- crosstype(cross)
+    if(any(chrtype=="X") && (crosstype == "risib" || crosstype == "riself"))
         for(i in which(chrtype=="X")) class(cross$geno[[i]]) <- "A"
 
     if(!missing(n.perm) && n.perm > 0 && n.cluster > 1) {
@@ -279,7 +280,7 @@ scanone <-
     n.chr <- nchr(cross)
     n.ind <- nind(cross)
     n.phe <- ncol(pheno)
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     is.bcs <- FALSE
     if(type == "bcsft") {
         cross.scheme <- attr(cross, "scheme")
@@ -365,7 +366,7 @@ scanone <-
 
     # scan genome one chromosome at a time
     for(i in 1:n.chr) {
-        chrtype <- class(cross$geno[[i]])
+        chrtype <- chrtype(cross$geno[[i]])
         if(chrtype=="X") {
             sexpgm <- getsex(cross)
             ac <- revisecovar(sexpgm,addcovar)
@@ -866,7 +867,7 @@ scanone.perm <-
         addcovar <- intcovar <- NULL
     }
 
-    chr.type <- sapply(cross$geno, class)
+    chr.type <- sapply(cross$geno, chrtype)
     if((all(chr.type=="X") || all(chr.type=="X")) && perm.Xsp==TRUE)
         warning("All chromosomes of the same type, so X-chr specific permutations not needed.\n")
 
@@ -910,7 +911,7 @@ scanone.perm <-
 
     attr(res,"method") <- method
     attr(res,"model") <- model
-    attr(res,"type") <- class(cross)[1]
+    attr(res,"type") <- crosstype(cross)
 
     if(any(chr.type=="X") && any(chr.type=="A") && perm.Xsp)
         class(res) <- c("scanoneperm", "list")
@@ -948,7 +949,7 @@ scanone.perm.engine <-
     if( (n.phe==1) && ((method=="imp") || (method=="hk")) &&
        model == "normal" &&
        is.null(addcovar) && is.null(intcovar) ) {
-        chrtype <- sapply(cross$geno, class)
+        chrtype <- sapply(cross$geno, chrtype)
         sexpgm <- getsex(cross)
         sex <- sexpgm$sex
         pgm <- sexpgm$pgm

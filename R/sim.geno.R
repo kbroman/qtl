@@ -2,8 +2,8 @@
 #
 # sim.geno.R
 #
-# copyright (c) 2001-2013, Karl W Broman
-# last modified Sep, 2013
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ sim.geno <-
              map.function=c("haldane","kosambi","c-f","morgan"),
              stepwidth=c("fixed", "variable", "max"))
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     # map function
@@ -56,14 +56,14 @@ sim.geno <-
     n.ind <- nind(cross)
     n.chr <- nchr(cross)
     n.mar <- nmar(cross)
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     # calculate genotype probabilities one chromosome at a time
     for(i in 1:n.chr) {
         if(n.mar[i]==1) temp.offend <- max(c(off.end,5))
         else temp.offend <- off.end
 
-        chrtype <- class(cross$geno[[i]])
+        chrtype <- chrtype(cross$geno[[i]])
         if(chrtype=="X") xchr <- TRUE
         else xchr <- FALSE
 
