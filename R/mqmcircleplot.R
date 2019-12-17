@@ -8,7 +8,7 @@
 #
 #
 # first written Februari 2009
-# last modified January 2019
+# last modified December 2019
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -43,7 +43,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
     }
     retresults <- NULL
     lod<-FALSE
-    if(any(class(result)=="mqmmulti")){
+    if(inherits(result, "mqmmulti")){
         if(highlight > 0){
             templateresult <- mqmextractmarkers(result[[highlight]])
             lod<-TRUE
@@ -55,7 +55,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
         templateresult <- mqmextractmarkers(result)
         lod<-TRUE
     }
-    if(!("scanone" %in% class(templateresult))){
+    if(!inherits(templateresult, "scanone")) {
         stop("Wrong type of result file, please supply a valid scanone object.")
     }
     if(transparency){
@@ -70,7 +70,7 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
 
         drawcirculargenome(templateresult,spacing=spacing,lodmarkers=lod)
 
-        if(any(class(result)=="mqmmulti")){
+        if(inherits(result, "mqmmulti")){
             #multiple scan results, so plot em all
             todo <- 1:length(result)
             if(highlight!=0){
@@ -129,9 +129,9 @@ mqmplot.circle <- function(cross, result, highlight=0, spacing=25, interactstren
             }
             if(axis.legend) legend("topleft",c("Trait","QTL"),col=c("black","black"),pch=c(24,19),cex=1)
         }
-        if(any(class(result)=="scanone") || highlight > 0){
+        if(inherits(result, "scanone") || highlight > 0){
             #single scan result or highlighting one of the multiple
-            if(!any(class(result)=="scanone")){
+            if(!inherits(result, "scanone")){
                 #Just highlight the template result
                 result <- templateresult
             }

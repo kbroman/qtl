@@ -2,14 +2,14 @@
 #
 # mqmplots.R
 #
-# Copyright (c) 2009-2011, Danny Arends
+# Copyright (c) 2009-2019, Danny Arends
 # Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Feb 2011
+# last modified Dec 2019
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -49,7 +49,7 @@ mqmplot.directedqtl <- function(cross, mqmresult, pheno.col=1, draw = TRUE)
     if(is.null(mqmresult)){
         stop("No mqmresult object. Please supply a valid scanone object.")
     }
-    if(!any(class(mqmresult)=="scanone")){
+    if(!inherits(mqmresult, "scanone")){
         stop("No mqmresult object. Please supply a valid scanone object.")
     }
     onlymarkers <- mqmextractmarkers(mqmresult)
@@ -75,7 +75,7 @@ mqmplot.heatmap <- function(cross, result, directed=TRUE, legend=FALSE, breaks =
     if(is.null(result)){
         stop("No result object. Please supply a valid scanone object.")
     }
-    if(!any(class(result)=="mqmmulti")){
+    if(!inherits(result,"mqmmulti")){
         stop("Not a mqmmulti object. Please supply a valid scanone object.")
     }
     cross <- sim.geno(cross)
@@ -133,7 +133,7 @@ mqmplot.clusteredheatmap <- function(cross, mqmresult, directed=TRUE, legend=FAL
     if(is.null(mqmresult)){
         stop("No mqmresult object. Please supply a valid mqmmulti object.")
     }
-    if(!any(class(mqmresult)=="mqmmulti")){
+    if(!inherits(mqmresult,"mqmmulti")){
         stop("Not a mqmmulti object. Please supply a valid mqmmulti object.")
     }
     cross <- sim.geno(cross)
@@ -183,7 +183,7 @@ mqmplot.cistrans <- function(result,cross,threshold=5,onlyPEAK=TRUE,highPEAK=FAL
     if(is.null(cross$locations)){
         stop("Please add trait locations to the cross file\n")
     }
-    if(any(class(result) == "mqmmulti")){
+    if(inherits(result, "mqmmulti")){
         sum.map <- 0
         chr.breaks <- NULL
         for(j in 1:nchr(cross)){
@@ -396,7 +396,7 @@ mqmplot.multitrait <- function(result, type=c("lines","image","contour","3Dplot"
     #Helperfunction to plot mqmmulti objects made by doing multiple mqmscan runs (in a LIST)
     type <- match.arg(type)
     meanprofile <- match.arg(meanprofile)
-    if(class(result)[2] != "mqmmulti"){
+    if(!inherits(result, "mqmmulti")){
         stop("Wrong type of result file, please supply a valid mqmmulti object.")
     }
     n.pheno <- length(result)
@@ -468,7 +468,7 @@ mqmplot.permutations <- function(permutationresult, ...)
     row1 <- NULL
     row2 <- NULL
     i <- 1
-    if(class(permutationresult)[2] != "mqmmulti")
+    if(!inherits(permutationresult, "mqmmulti"))
         ourstop("Wrong type of result file, please supply a valid mqmmulti object.")
 
     for( j in 1:length( permutationresult[[i]][,3] ) ) {
@@ -504,7 +504,7 @@ mqmplot.permutations <- function(permutationresult, ...)
 mqmplot.singletrait <- function(result, extended=0,...)
 {
     #Helperfunction to show scanone objects made by doing mqmscan runs
-    if(!("scanone" %in% class(result))){
+    if(!inherits(result, "scanone")){
         stop("Wrong type of result file, please supply a valid scanone (from MQM) object.")
     }
     if(is.null(result$"info")){

@@ -2,13 +2,13 @@
 #
 # mqmpermutation.R
 #
-# Copyright (c) 2009-2017, Danny Arends
+# Copyright (c) 2009-2019, Danny Arends
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Dec 2017
+# last modified Dec 2019
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -84,7 +84,8 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
     if(missing(cross))
         stop("No cross file. Please supply a valid cross object.")
 
-    if(class(cross)[1] == "f2" || class(cross)[1] == "bc" || class(cross)[1] == "riself"){
+    crosstype <- crosstype(cross)
+    if(crosstype == "f2" || crosstype == "bc" || crosstype == "riself"){
         #Echo back the cross type
         if(verbose) {
             cat("------------------------------------------------------------------\n")
@@ -92,7 +93,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
             cat("Number of permutations:",n.perm,"\n")
             cat("Batchsize:",batchsize," & n.cluster:",n.cluster,"\n")
             cat("------------------------------------------------------------------\n")
-            cat("INFO: Received a valid cross file type:",class(cross)[1],".\n")
+            cat("INFO: Received a valid cross file type:",crosstype,".\n")
         }
         b <- proc.time()
         if(!bootmethod){
@@ -223,7 +224,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
 }
 
 mqmprocesspermutation <- function(mqmpermutationresult = NULL){
-    if(!is.null(mqmpermutationresult) && class(mqmpermutationresult)[2] == "mqmmulti"){
+    if(!is.null(mqmpermutationresult) && inherits(mqmpermutationresult, "mqmmulti")){
         result <- NULL
         result <- sapply(mqmpermutationresult[-1], function(a) max(a[,3], na.rm=TRUE))
         result <- as.matrix(result)
