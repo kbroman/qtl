@@ -2,8 +2,8 @@
 #
 # droponemarker.R
 #
-# copyright (c) 2010, Karl W Broman
-# last modified Oct, 2010
+# copyright (c) 2019, Karl W Broman
+# last modified Dec, 2019
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ droponemarker <-
              map.function=c("haldane", "kosambi", "c-f", "morgan"),
              m=0, p=0, maxit=4000, tol=1e-6, sex.sp=TRUE, verbose=TRUE)
 {
-    if(!("cross" %in% class(cross)))
+    if(!inherits(cross, "cross"))
         stop("Input must have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross, chr=chr)

@@ -2,8 +2,8 @@
 #
 # errorlod.R
 #
-# copyright (c) 2001-2017, Karl W Broman
-# last modified Sep, 2017
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ calc.errorlod <-
 {
     version <- match.arg(version)
 
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     origcross <- cross
@@ -55,12 +55,12 @@ calc.errorlod <-
     n.ind <- nind(cross)
     n.chr <- nchr(cross)
     n.mar <- nmar(cross)
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     # calculate genotype probabilities one chromosome at a time
     for(i in 1:n.chr) {
 
-        chr.type <- class(cross$geno[[i]])
+        chr.type <- chrtype(cross$geno[[i]])
         if(type=="bc" || type=="risib" || type=="riself" || type=="dh" || type=="haploid")
             cfunc <- "calc_errorlod_bc"
         else if(type=="f2" || type=="bcsft") {
@@ -138,7 +138,7 @@ plotErrorlod <-
              col=c("white","gray85","hotpink","purple3"),
              alternate.chrid=FALSE, ...)
 {
-    if(!any(class(x) == "cross"))
+    if(!inherits(x, "cross"))
         stop("Input should have class \"cross\".")
 
     if(length(breaks) != length(col)+1)
@@ -240,7 +240,7 @@ plotErrorlod <-
 top.errorlod <-
     function(cross, chr, cutoff=4, msg=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross,chr=chr)

@@ -2,8 +2,8 @@
 #
 # est.map.R
 #
-# copyright (c) 2001-2014, Karl W Broman
-# last modified Aug, 2014
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,13 +34,13 @@ est.map <-
              m=0, p=0, maxit=10000, tol=1e-6, sex.sp=TRUE, verbose=FALSE,
              omit.noninformative=TRUE, offset, n.cluster=1)
 {
-    if(!("cross" %in% class(cross)))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     if(!missing(chr))
         cross <- subset(cross, chr=chr)
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
 
     if(!missing(offset)) {
         if(length(offset)==1) offset <- rep(offset, nchr(cross))
@@ -88,7 +88,7 @@ est.map <-
 
     newmap <- vector("list",n.chr)
     names(newmap) <- names(cross$geno)
-    chrtype <- sapply(cross$geno, class)
+    chrtype <- sapply(cross$geno, chrtype)
 
     if(n.cluster > 1 && nchr(cross) > 1) {
         cat(" -Running est.map via a cluster of", n.cluster, "nodes.\n")

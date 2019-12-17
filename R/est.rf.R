@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-2017, Karl W Broman
-# last modified Sep, 2017
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@
 est.rf <-
     function(cross, maxit=10000, tol=1e-6)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     n.chr <- nchr(cross)
@@ -41,8 +41,8 @@ est.rf <-
     n.ind <- nind(cross)
     mar.names <- unlist(lapply(cross$geno,function(a) colnames(a$data)))
 
-    type <- class(cross)[1]
-    chrtype <- sapply(cross$geno,class)
+    type <- crosstype(cross)
+    chrtype <- sapply(cross$geno, chrtype)
 
     is.bcsft <- (type == "bcsft")
     if(is.bcsft) {
@@ -163,7 +163,7 @@ plotRF <-
              col.scheme=c("viridis", "redblue"),
              ...)
 {
-    if(!any(class(x) == "cross"))
+    if(!inherits(x, "cross"))
         stop("Input should have class \"cross\".")
 
     what <- match.arg(what)
@@ -332,16 +332,16 @@ plotRF <-
 checkAlleles <-
     function(cross, threshold=3, verbose=TRUE)
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("checkAlleles() only works for cross objects.")
 
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(type != "f2" && type != "bc" &&
        type != "risib" && type != "riself" && type != "dh" && type!="haploid")
         stop("checkAlleles not available for cross type ", type, ".")
 
     # drop X chromosome
-    chrtype <- sapply(cross$geno,class)
+    chrtype <- sapply(cross$geno, chrtype)
     if(all(chrtype=="X")) {
         if(verbose) cat("checkAlleles() only works for autosomal data.\n")
         return(NULL)
@@ -392,7 +392,7 @@ checkAlleles <-
 pull.rf <-
     function(cross, what=c("rf", "lod"), chr)
 {
-    if(!("cross" %in% class(cross)))
+    if(!inherits(cross, "cross"))
         stop("Input must have class \"cross\".")
 
     if(!missing(chr)) cross <- subset(cross, chr=chr)
@@ -432,7 +432,7 @@ pull.rf <-
 plot.rfmatrix <-
     function(x, marker, ...)
 {
-    if(!("rfmatrix" %in% class(x)))
+    if(!inherits(x, "rfmatrix"))
         stop("Input must have class \"rfmatrix\".")
 
     if(missing(marker))

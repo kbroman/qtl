@@ -2,9 +2,9 @@
 #
 # effectscan.R
 #
-# copyright (c) 2003-2013, Karl W. Broman
+# copyright (c) 2003-2019, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Sep, 2013
+# last modified Dec, 2019
 # first written Jan, 2003
 #
 #     This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ effectscan <-
              gap=25, ylim, mtick=c("line","triangle"),
              add.legend=TRUE, alternate.chrid=FALSE, ...)
 {
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     mtick <- match.arg(mtick)
     if(type == "4way")
         stop("effect scan not working for 4-way cross yet.")
@@ -61,7 +61,7 @@ effectscan <-
 
     if(!missing(chr)) cross <- subset.cross(cross, chr=chr)
 
-    chrtype <- sapply(cross$geno, class)
+    chrtype <- sapply(cross$geno, chrtype)
 
     n.ind <- length(pheno)
 

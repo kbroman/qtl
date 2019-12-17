@@ -2,8 +2,8 @@
 #
 # discan.R
 #
-# copyright (c) 2001-2015, Karl W Broman
-# last modified Oct, 2015
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Oct, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ discan <-
 
     n.ind <- nind(cross)
     n.chr <- nchr(cross)
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     if(is.null(addcovar)) n.addcovar <- 0
     else n.addcovar <- ncol(addcovar)
     if(is.null(intcovar)) n.intcovar <- 0
@@ -79,7 +79,7 @@ discan <-
 
     for(i in 1:n.chr) {
 
-        chrtype <- class(cross$geno[[i]])
+        chrtype <- chrtype(cross$geno[[i]])
         if(chrtype=="X") {
             sexpgm <- getsex(cross)
 
