@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-2014, Karl W Broman
-# last modified Dec, 2014
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 summary.cross <-
     function(object,...)
 {
-    if(!any(class(object) == "cross"))
+    if(!inherits(object, "cross"))
         stop("Input should have class \"cross\".")
 
     n.ind <- nind(object)
@@ -35,7 +35,7 @@ summary.cross <-
     n.phe <- nphe(object)
     n.chr <- nchr(object)
     n.mar <- nmar(object)
-    type <- class(object)[1]
+    type <- crosstype(object)
 
     if(!(type %in% c("f2", "bc", "4way", "riself", "risib", "dh", "haploid",
                      "ri4self", "ri4sib", "ri8self", "ri8selfIRIP1", "ri8sib", "bcsft", "bgmagic16")))
@@ -45,7 +45,7 @@ summary.cross <-
     Geno <- pull.geno(object)
 
     # A and X-specific genotypes?
-    chrtype <- sapply(object$geno, class)
+    chrtype <- sapply(object$geno, chrtype)
     if(any(chrtype=="A")) {
         GenoA <- pull.geno(object, chr=chrnames(object)[chrtype=="A"])
     } else {
@@ -253,7 +253,7 @@ summary.cross <-
 
         # X chromosome
         for(i in 1:n.chr) {
-            if(class(object$geno[[i]]) == "X") {
+            if(chrtype(object$geno[[i]]) == "X") {
                 dat <- object$geno[[i]]$data
                 if(any(!is.na(dat) & dat!=1 & dat!=2)) {
                     u <- unique(as.numeric(dat))
@@ -269,7 +269,7 @@ summary.cross <-
         # Missing genotype category on autosomes?
         dat <- NULL; flag <- 0
         for(i in 1:n.chr) {
-            if(class(object$geno[[i]]) != "X") {
+            if(chrtype(object$geno[[i]]) != "X") {
                 dat <- cbind(dat,object$geno[[i]]$data)
                 flag <- 1
             }
@@ -317,7 +317,7 @@ summary.cross <-
         warning("The $data objects should be simple matrices, not data frames.")
 
     # make sure each chromosome has class "A" or "X"
-    chr.class <- sapply(object$geno, class)
+    chr.class <- sapply(object$geno, chrtype)
     if(!all(chr.class == "A" | chr.class == "X"))
         warning("Each chromosome should have class \"A\" or \"X\".")
     chr.nam <- names(object$geno)
@@ -509,7 +509,7 @@ print.summary.cross <-
 nind <-
     function(object)
 {
-    if(!any(class(object) == "cross"))
+    if(!inherits(object, "cross"))
         stop("Input should have class \"cross\".")
 
     n.ind1 <- nrow(object$pheno)
@@ -522,28 +522,28 @@ nind <-
 nchr <-
     function(object)
 {
-    cl <- class(object)
-    if(!("cross" %in% cl || "map" %in% cl))
-        stop("Input should have class \"cross\" or \"map\".")
-
-    if("map" %in% cl)
+    if(inherits(object, "map")) {
         return(length(object))
-
-    length(object$geno)
+    } else if(inherits(object, "cross")) {
+        return(length(object$geno))
+    } else {
+        # neither cross nor map object
+        stop("Input should have class \"cross\" or \"map\".")
+    }
 }
 
 nmar <-
     function(object)
 {
-    cl <- class(object)
-    if(!("cross" %in% cl || "map" %in% cl))
-        stop("Input should have class \"cross\" or \"map\".")
-
-    if("map" %in% cl) {
+    if(inherits(object, "map")) {
         if(is.matrix(object[[1]]))
             return(sapply(object, function(x) ncol(x)))
         else return(sapply(object, function(x) length(x)))
     }
+    else if(!inherits(object, "cross")) {
+        stop("Input should have class \"cross\" or \"map\".")
+    }
+
 
     if(length(object$geno) == 0)
         stop("There is no genotype data.")
@@ -562,14 +562,12 @@ nmar <-
 totmar <-
     function(object)
 {
-    cl <- class(object)
-    if(!("cross" %in% cl || "map" %in% cl))
-        stop("Input should have class \"cross\" or \"map\".")
-
-    if("map" %in% cl) {
+    if(inherits(object, "map")) {
         if(is.matrix(object[[1]]))
             return(sum(sapply(object, function(x) ncol(x))))
         else return(sum(sapply(object, function(x) length(x))))
+    } else if(!inherits(object, "cross")) {
+        stop("Input should have class \"cross\" or \"map\".")
     }
 
     if(length(object$geno) == 0)
@@ -588,7 +586,7 @@ totmar <-
 nphe <-
     function(object)
 {
-    if(!any(class(object) == "cross"))
+    if(!inherits(object, "cross"))
         stop("Input should have class \"cross\".")
 
     ncol(object$pheno)
@@ -598,7 +596,7 @@ nphe <-
 nmissing <-
     function(cross,what=c("ind","mar"))
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     what <- match.arg(what)
@@ -628,7 +626,7 @@ nmissing <-
 ntyped <-
     function(cross, what=c("ind","mar"))
 {
-    if(!any(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
 
     what <- match.arg(what)
@@ -657,10 +655,10 @@ print.cross <-
 chrlen <-
     function(object)
 {
-    if(!any(class(object) == "map") && !any(class(object) == "cross"))
+    if(!inherits(object, "map") && !inherits(object, "cross"))
         stop("Input should have class \"map\" or \"cross\".")
 
-    if(!any(class(object) == "map"))
+    if(!inherits(object, "map"))
         x <- pull.map(object)
     else x <- object
 

@@ -2,8 +2,8 @@
 #
 # summaryScantwoOld.R
 #
-# copyright (c) 2001-2011, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified May, 2011
+# copyright (c) 2001-2019, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Dec, 2019
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ summaryScantwoOld <-
 {
     warning("This function is provided solely for continuity of the software;\n",
             "it is not recommended.\n")
-    if(!any(class(object) == "scantwo"))
+    if(!inherits(object, "scantwo"))
         stop("Input should have class \"scantwo\".")
 
     type <- match.arg(type)

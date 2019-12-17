@@ -3,7 +3,7 @@
 # summary.scanone.R
 #
 # copyright (c) 2001-2019, Karl W Broman
-# last modified Oct, 2019
+# last modified Dec, 2019
 # first written Sep, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ summary.scanone <-
              perms, alpha, lodcolumn=1, pvalues=FALSE,
              ci.function=c("lodint", "bayesint"), ...)
 {
-    if(!any(class(object) == "scanone"))
+    if(!inherits(object, "scanone"))
         stop("Input should have class \"scanone\".")
 
     format <- match.arg(format)
@@ -51,9 +51,9 @@ summary.scanone <-
         warning("lodcolumn ignored except when format=\"onepheno\".")
 
     if(!missing(perms)) {
-        if("scantwoperm" %in% class(perms))
+        if(inherits(perms, "scantwoperm"))
             perms <- scantwoperm2scanoneperm(perms)
-        else if(!("scanoneperm" %in% class(perms)))
+        else if(!inherits(perms, "scanoneperm"))
             warning("perms need to be in scanoneperm format.")
     }
 
@@ -556,7 +556,7 @@ print.summary.scanone <-
 max.scanone <-
     function(object, chr, lodcolumn=1, na.rm=TRUE, ...)
 {
-    if(!any(class(object) == "scanone"))
+    if(!inherits(object, "scanone"))
         stop("Input must have class \"scanone\".")
 
     if(lodcolumn < 1 || lodcolumn+2 > ncol(object))
@@ -580,7 +580,7 @@ max.scanone <-
 subset.scanone <-
     function(x, chr, lodcolumn, ...)
 {
-    if(!any(class(x) == "scanone"))
+    if(!inherits(x, "scanone"))
         stop("Input should have class \"scanone\".")
 
     if(missing(chr) && missing(lodcolumn))
@@ -629,12 +629,11 @@ c.scanone <-
     function(..., labels)
 {
     dots <- list(...)
-    cl1 <- class(dots[[1]])
-    if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+    if(length(dots)==1 && is.list(dots[[1]])) dots <- dots[[1]]
 
     if(length(dots)==1) return(dots[[1]])
     for(i in seq(along=dots)) {
-        if(!any(class(dots[[i]]) == "scanone"))
+        if(!inherits(dots[[i]], "scanone"))
             stop("Input should have class \"scanone\".")
     }
 
@@ -712,7 +711,7 @@ grab.arg.names <-
 summary.scanoneperm <-
     function(object, alpha=c(0.05, 0.10), controlAcrossCol=FALSE, ...)
 {
-    if(!any(class(object) == "scanoneperm"))
+    if(!inherits(object, "scanoneperm"))
         stop("Input should have class \"scanoneperm\".")
 
     if(any(alpha < 0 | alpha > 1))
@@ -829,12 +828,11 @@ rbind.scanoneperm <- c.scanoneperm <-
 {
     dots <- list(...)
 
-    cl1 <- class(dots[[1]])
-    if(length(dots)==1 && length(cl1)==1 && cl1=="list") dots <- dots[[1]]
+    if(length(dots)==1 && is.list(dots[[1]])) dots <- dots[[1]]
 
     if(length(dots)==1) return(dots[[1]])
     for(i in seq(along=dots)) {
-        if(!any(class(dots[[i]]) == "scanoneperm"))
+        if(!inherits(dots[[i]], "scanoneperm"))
             stop("Input should have class \"scanoneperm\".")
     }
 
@@ -887,7 +885,7 @@ cbind.scanoneperm <-
     if(length(dots)==1) return(dots[[1]])
 
     for(i in seq(along=dots)) {
-        if(!any(class(dots[[i]]) == "scanoneperm"))
+        if(!inherits(dots[[i]], "scanoneperm"))
             stop("Input should have class \"scanoneperm\".")
     }
 

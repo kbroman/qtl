@@ -2,8 +2,8 @@
 #
 # simulate.R
 #
-# copyright (c) 2001-2016, Karl W Broman
-# last modified Sep, 2016
+# copyright (c) 2001-2019, Karl W Broman
+# last modified Dec, 2019
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -163,7 +163,7 @@ sim.cross <-
                 rcross$geno[[i]]$truegeno <- cross$geno[[i]]$data
 
         # remove "un" from cross type
-        class(rcross)[1] <- substr(class(cross)[1], 1, nchar(class(cross)[1])-2)
+        class(rcross) <- c(sub("un$", "", crosstype(cross)), "cross")
 
         fg <- t(founderGeno[[1]])
         if(length(founderGeno)>1)
@@ -239,7 +239,7 @@ sim.cross.bc <-
     if(any(sapply(map,is.matrix)))
         stop("Map must not be sex-specific.")
 
-    chr.type <- sapply(map, function(a) ifelse(class(a)=="X","X","A"))
+    chr.type <- sapply(map, chrtype)
 
     n.chr <- length(map)
 
@@ -371,7 +371,7 @@ sim.cross.f2 <-
         stop("Map must not be sex-specific.")
 
     # chromosome types
-    chr.type <- sapply(map,function(a) ifelse(class(a)=="X", "X", "A"))
+    chr.type <- sapply(map, chrtype)
 
     n.chr <- length(map)
     if(is.null(model)) n.qtl <- 0
@@ -566,7 +566,7 @@ sim.cross.4way <-
         model[,2] <- model[,2]+1e-14 # so QTL not on top of marker
     }
 
-    chr.type <- sapply(map,function(a) ifelse(class(a)=="X", "X", "A"))
+    chr.type <- sapply(map, chrtype)
 
     # if any QTLs, place qtls on map
     if(n.qtl > 0) {
