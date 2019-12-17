@@ -20,6 +20,9 @@ copyright (c) 2001-2019, Karl W Broman
 
 ### Minor changes
 
+- Added `plot()` and `summary()` functions for the output of
+  `comparegeno()`.
+
 - Added internal functions `crosstype()` and `chrtype()`.
 
 - Added argument `crosstype` to internal function `fitqtlengine()`

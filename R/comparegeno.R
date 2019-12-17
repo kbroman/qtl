@@ -35,40 +35,99 @@ comparegeno <-
         }
     }
 
+    id <- getid(cross)
+    if(is.null(id)) id <- as.character(seq_len(nind(cross)))
+
+    dimnames(z) <- list(id, id)
     class(z) <- c("comparegeno", class(z))
+    attr(z, "what") <- what
 
     z
 }
 
-# report which pairs of lines have nearly-matching genotypes
+# report which pairs of individuals have nearly-matching genotypes
 summary.comparegeno <-
-    function(object, line_name="line", thresh=0.8)
+    function(object, thresh=0.8)
 {
-    wh <- which(!is.na(cg) & cg > thresh & row(cg) < col(cg), arr=TRUE)
-    if(length(wh)==0) return(NULL)
+    what <- attr(object, "what")
+    if(is.null(what)) what <- "proportion"
 
-    if(is.null(line_name))
-        id <- 1:nrow(cg)
-    else
-        id <- cross$pheno[,line_name]
+    if(what=="number" && thresh < 1) thresh <- thresh*max(diag(object), na.rm=TRUE)
 
-    g <- pull.geno(cross)
-
-    match <- not_mis <- rep(0, nrow(wh))
-    for(i in 1:nrow(wh)) {
-        match[i] <- sum(g[wh[i,1],] == g[wh[i,2],], na.rm=TRUE)
-        not_mis[i] <- sum(!is.na(g[wh[i,1],]) & !is.na(g[wh[i,2],]))
+    wh <- which(!is.na(object) & object >= thresh & row(object) > col(object), arr=TRUE)
+    if(length(wh)==0) {
+        result <- data.frame(ind1=character(0),
+                             ind2=character(0),
+                             prop_match=numeric(0),
+                             stringsAsFactors=FALSE)
+        class(result) <- c("summary.comparegeno", "data.frame")
+        return(result)
     }
 
-    result <- data.frame(line1=id[wh[,1]],
-                         line2=id[wh[,2]],
-                         percent_match=match/not_mis*100,
-                         match=match,
-                         total=not_mis)
+    id <- rownames(object)
+    if(is.null(id)) id <- as.character(seq_len(nrow(object)))
+
+
+    # create results object
+    result <- data.frame(ind1=id[wh[,2]],
+                         ind2=id[wh[,1]],
+                         prop_match=rep(0, nrow(wh)),
+                         stringsAsFactors=FALSE)
+
+    # fill in values with lower triangle
+    for(i in seq_len(nrow(wh))) {
+        result[i,3] <- object[wh[i,1], wh[i,2]]
+    }
+
+
+    # if both count and proportion is provided, determine number of markers
+    if(what=="both") {
+        result <- cbind(result,
+                        n_markers=rep(0, nrow(wh)))
+
+        for(i in seq_len(nrow(wh))) {
+            result[i,4] <- round(object[wh[i,2], wh[i,1]]/object[wh[i,1], wh[i,2]])
+        }
+    }
+
+    if(what=="number") { # change column name
+        colnames(result)[3] <- "number_match"
+    }
 
     # sort by decreasing percent matching
-    result <- result[order(result$percent_match, decreasing=TRUE),,drop=FALSE]
+    result <- result[order(result[,3], decreasing=TRUE),,drop=FALSE]
     rownames(result) <- 1:nrow(result)
 
+    class(result) <- c("summary.comparegeno", "data.frame")
+
     result
+
+}
+
+
+print.summary.comparegeno <-
+    function(x, ...)
+{
+    if(nrow(x)==0) {
+        cat("No pairs above threshold.\n")
+    } else {
+        print.data.frame(x, digits=3)
+    }
+}
+
+
+plot.comparegeno <-
+    function(x, breaks=NULL, main="", xlab="Proportion matching genotypes", ...)
+{
+    vals <- x[lower.tri(x)]
+
+    if(is.null(breaks)) breaks <- 2*sqrt(length(vals))
+
+    if(attr(x, "what")=="number" && missing(xlab)) {
+        xlab <- "Number matching genotypes"
+    }
+
+    hist(vals, breaks=breaks, main=main, xlab=xlab, ...)
+    rug(vals)
+    invisible()
 }
