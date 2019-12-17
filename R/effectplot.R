@@ -2,8 +2,8 @@
 #
 # effectplot.R
 #
-# copyright (c) 2002-2012, Hao Wu and Karl W. Broman
-# Last modified Sep, 2012
+# copyright (c) 2002-2019, Hao Wu and Karl W. Broman
+# Last modified Dec, 2019
 # first written Jul, 2002
 #
 #     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ effectplot <-
               mark2, geno2, main, ylim, xlab, ylab, col, add.legend = TRUE,
               legend.lab, draw=TRUE, var.flag=c("pooled","group"))
 {
-    if(!sum(class(cross) == "cross"))
+    if(!inherits(cross, "cross"))
         stop("The first input variable must be an object of class cross")
 
     if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
@@ -74,7 +74,7 @@ effectplot <-
     # local variables
     n.ind <- nind(cross)
     pheno <- cross$pheno[, pheno.col]
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     chrtype1 <- chrtype2 <- "A"
     gennames1 <- gennames2 <- NULL
 
@@ -121,7 +121,7 @@ effectplot <-
     }
     else {
         # make mark1 a matrix if it's not
-        if(class(mark1) != "matrix")
+        if(!is.matrix(mark1))
             mark1 <- matrix(mark1, ncol=1)
         if(dim(mark1)[1] != n.ind)
             stop("Marker 1 data has the wrong dimension")
@@ -148,7 +148,7 @@ effectplot <-
         }
         else { # mark2 data is given
             # make mark2 a matrix if it's not
-            if(class(mark2) != "matrix")
+            if(!is.matrix(mark2))
                 mark2 <- matrix(mark2, ncol=1)
             if(dim(mark2)[1] != n.ind)
                 stop("Marker 2 data has the wrong dimension")
@@ -466,7 +466,7 @@ effectplot.getmark <-
     function (cross, mname)
 {
     # cross type
-    type <- class(cross)[1]
+    type <- crosstype(cross)
     # return variables
     mark <- NULL
     gennames <- NULL
@@ -499,7 +499,7 @@ effectplot.getmark <-
         if( !(chr %in% names(cross$geno)) )
             stop("Couldn't find marker ", mname)
         mar.type <- "pm"
-        chrtype <- class(cross$geno[[chr]])
+        chrtype <- chrtype(cross$geno[[chr]])
         pm.name <- paste("loc", tmp[2],sep="") # this will be like loc10
         idx.pos <- which(pm.name==colnames(cross$geno[[chr]]$draws))
         if(length(idx.pos) == 0)
@@ -512,14 +512,14 @@ effectplot.getmark <-
             if(mname %in% colnames(cross$geno[[i]]$draws)) { # this is a pseudomarker
                 mar.type <- "pm"
                 chr <- i
-                chrtype <- class(cross$geno[[chr]])
+                chrtype <- chrtype(cross$geno[[chr]])
                 idx.pos <- which(mname == colnames(cross$geno[[i]]$draws))
                 break
             }
             else if(mname %in% colnames(cross$geno[[i]]$data)) { # this is a typed marker
                 mar.type <- "marker"
                 chr <- i
-                chrtype <- class(cross$geno[[i]])
+                chrtype <- chrtype(cross$geno[[i]])
                 idx.pos <- which(mname == colnames(cross$geno[[i]]$data))
                 break
             }
@@ -569,7 +569,7 @@ effectplot.getmark <-
         stop("Couldn't find marker ", mname)
 
     # make mark a matrix if it's not one
-    if(class(mark) != "matrix")
+    if(!is.matrix(mark))
         mark <- matrix(mark, ncol=1)
 
     # return
