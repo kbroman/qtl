@@ -54,7 +54,7 @@ summary.comparegeno <-
 
     if(what=="number" && thresh < 1) thresh <- thresh*max(diag(object), na.rm=TRUE)
 
-    wh <- which(!is.na(object) & object >= thresh & row(object) > col(object), arr=TRUE)
+    wh <- which(!is.na(object) & object >= thresh & row(object) > col(object), arr.ind=TRUE)
     if(length(wh)==0) {
         result <- data.frame(ind1=character(0),
                              ind2=character(0),
