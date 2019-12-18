@@ -47,7 +47,7 @@ comparegeno <-
 
 # report which pairs of individuals have nearly-matching genotypes
 summary.comparegeno <-
-    function(object, thresh=0.8)
+    function(object, thresh=0.9, ...)
 {
     what <- attr(object, "what")
     if(is.null(what)) what <- "proportion"

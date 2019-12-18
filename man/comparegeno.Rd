@@ -27,6 +27,9 @@ genotypes (or both).}
   If called with \code{what="proportion"}, the diagonal contains missing
   values.  Otherwise, the diagonal contains the number of typed markers
   for each individual.
+
+  The output is given class \code{"comparegeno"} so that appropriate
+  \code{summary} and \code{plot} functions may be used.
 }
 
 \author{Karl W Broman, \email{broman@wisc.edu} }
@@ -34,19 +37,13 @@ genotypes (or both).}
 \examples{
 data(listeria)
 
-output <- comparegeno(listeria)
+cg <- comparegeno(listeria)
 
-# image of the proportions
-n.ind <- nind(listeria)
-image(1:n.ind, 1:n.ind, output, col=gray((0:99)/99),
-      breaks=seq(0,1,len=101))
-
-# histogram
-hist(output, breaks=150, prob=TRUE,
-     xlab="Proportion of matching genotypes")
-rug(output)
+summary(cg, 0.7)
+plot(cg)
 }
 
-\seealso{ \code{\link{nmissing}} }
+\seealso{ \code{\link{nmissing}}, \code{\link{summary.comparegeno}},
+          \code{\link{plot.comparegeno}} }
 
 \keyword{utilities}
