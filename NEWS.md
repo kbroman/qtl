@@ -16,9 +16,12 @@ copyright (c) 2001-2019, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.45, 2019-12-17
+## Version 1.45, 2019-12-18
 
 ### Minor changes
+
+- Added `plot()` and `summary()` functions for the output of
+  `comparegeno()`.
 
 - Added internal functions `crosstype()` and `chrtype()`.
 

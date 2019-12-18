@@ -38,6 +38,7 @@
 \alias{print.scantwo}
 \alias{print.summary.addpair}
 \alias{print.summary.compactqtl}
+\alias{print.summary.comparegeno}
 \alias{print.summary.cross}
 \alias{print.summary.fitqtl}
 \alias{print.summary.map}
@@ -115,6 +116,7 @@ polyplot(x, type='b', legend=TRUE,legendloc=0, labels=NULL, cex =
 \method{print}{addcovarint}(x, \dots)
 \method{print}{addint}(x, \dots)
 \method{print}{compactqtl}(x, \dots)
+\method{print}{summary.comparegeno}(x, \dots)
 \method{print}{cross}(x, \dots)
 \method{print}{map}(x, \dots)
 \method{print}{qtl}(x, \dots)

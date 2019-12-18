@@ -241,8 +241,9 @@ S3method(summary, scanPhyloQTL)
 S3method(summary, scantwo)
 S3method(summary, scantwocondensed)
 S3method(summary, scantwoperm)
-
-
+S3method(plot, comparegeno)
+S3method(summary, comparegeno)
+S3method(print, summary.comparegeno)
 
 
 
