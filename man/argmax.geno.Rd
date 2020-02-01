@@ -30,8 +30,8 @@ argmax.geno(cross, step=0, off.end=0, error.prob=0.0001,
    distances into recombination fractions.}
  \item{stepwidth}{Indicates whether the intermediate points should with
    fixed or variable step sizes.  We recommend using
-   \code{"fixed"}; \code{"variable"} is included for the qtlbim
-   package (\url{http://www.ssg.uab.edu/qtlbim}).  The \code{"max"}
+   \code{"fixed"}; \code{"variable"} was included for the qtlbim
+   package (\url{https://cran.r-project.org/src/contrib/Archive/qtlbim}).  The \code{"max"}
    option inserts the minimal number of intermediate points so that the
    maximum distance between points is \code{step}.}
 }
