@@ -33,7 +33,7 @@ sim.geno(cross, n.draws=16, step=0, off.end=0, error.prob=0.0001,
  \item{stepwidth}{Indicates whether the intermediate points should with
    fixed or variable step sizes.  We recommend using
    \code{"fixed"}; \code{"variable"} was included for the qtlbim
-   package (\url{{https://cran.r-project.org/src/contrib/Archive/qtlbim}).  The \code{"max"}
+   package (\url{https://cran.r-project.org/src/contrib/Archive/qtlbim}).  The \code{"max"}
    option inserts the minimal number of intermediate points so that the
    maximum distance between points is \code{step}.}
 }
