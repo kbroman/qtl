@@ -16,6 +16,14 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+## Version 1.46, 2020-02-12
+
+### Bug fixes
+
+- Fix bug in `mqmpermutation()` by removing the uses of batches and
+  the `batchsize` argument.
+
+
 ## Version 1.45, 2020-02-01
 
 ### Minor changes
