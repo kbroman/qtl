@@ -75,7 +75,7 @@ mqmscanfdr <- function(cross, scanfunction=mqmscanall, thresholds=c(1,2,3,4,5,7,
 #
 ######################################################################
 
-mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,batchsize=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),cofactors=NULL,plot=FALSE,verbose=FALSE,...)
+mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE,n.perm=10,file="MQM_output.txt",n.cluster=1,method=c("permutation","simulation"),cofactors=NULL,plot=FALSE,verbose=FALSE,...)
 {
     bootmethod <- 0
 
@@ -91,7 +91,7 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
             cat("------------------------------------------------------------------\n")
             cat("Starting permutation analysis\n")
             cat("Number of permutations:",n.perm,"\n")
-            cat("Batchsize:",batchsize," & n.cluster:",n.cluster,"\n")
+            cat("n.cluster:",n.cluster,"\n")
             cat("------------------------------------------------------------------\n")
             cat("INFO: Received a valid cross file type:",crosstype,".\n")
         }
@@ -106,15 +106,12 @@ mqmpermutation <- function(cross,scanfunction=scanone,pheno.col=1,multicore=TRUE
         cross$pheno[,1] <- cross$pheno[,pheno.col]
         names(cross$pheno)[1] <- names(cross$pheno)[pheno.col]
 
-        if(n.cluster > batchsize){
-            stop("Please have more items in a batch then clusters assigned per batch")
-        }
-
         #Scan the original
         #cross <- fill.geno(cross) # <- this should be done outside of this function
         res0 <- lapply(1, FUN=snowCoreALL,all.data=cross,scanfunction=scanfunction,verbose=verbose,cofactors=cofactors,...)
 
         #Setup bootstraps by generating a list of random numbers to set as seed for each bootstrap
+        batchsize <- n.perm
         bootstraps <- runif(n.perm)
         batches <- length(bootstraps) %/% batchsize
         last.batch.num <- length(bootstraps) %% batchsize
