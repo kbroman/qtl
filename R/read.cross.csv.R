@@ -2,8 +2,8 @@
 #
 # read.cross.csv.R
 #
-# copyright (c) 2000-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2000-2020, Karl W Broman
+# last modified Feb, 2020
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -63,20 +63,24 @@ read.cross.csv <-
         if(length(args) < 1 || !("comment.char" %in% names(args)))
             data <- read.table(file, sep=",", na.strings=na.strings,
                                colClasses="character", fill=TRUE,
+                               stringsAsFactors=TRUE,
                                blank.lines.skip=TRUE, comment.char="", ...)
         else
             data <- read.table(file, sep=",", na.strings=na.strings,
                                colClasses="character", fill=TRUE,
+                               stringsAsFactors=TRUE,
                                blank.lines.skip=TRUE, ...)
     }
     else {
         if(length(args) < 1 || !("comment.char" %in% names(args)))
             data <- read.table(file, na.strings=na.strings,
                                colClasses="character", fill=TRUE,
+                               stringsAsFactors=TRUE,
                                blank.lines.skip=TRUE, comment.char="", ...)
         else
             data <- read.table(file, na.strings=na.strings,
                                colClasses="character", fill=TRUE,
+                               stringsAsFactors=TRUE,
                                blank.lines.skip=TRUE, ...)
     }
 

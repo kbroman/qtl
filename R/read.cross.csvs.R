@@ -2,8 +2,8 @@
 #
 # read.cross.csvs.R
 #
-# copyright (c) 2005-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2005-2020, Karl W Broman
+# last modified Feb, 2020
 # first written Oct, 2005
 #
 #     This program is free software; you can redistribute it and/or
@@ -66,17 +66,21 @@ read.cross.csvs <-
         if(length(args) < 1 || !("comment.char" %in% names(args))) {
             gen <- read.table(genfile, sep=",", na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, comment.char="", ...)
             pheno <- read.table(phefile, sep=",", na.strings=na.strings,
                                 colClasses="character", fill=TRUE,
+                                stringsAsFactors=TRUE,
                                 blank.lines.skip=TRUE, comment.char="", ...)
         }
         else {
             gen <- read.table(genfile, sep=",", na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, ...)
             pheno <- read.table(phefile, sep=",", na.strings=na.strings,
                                 colClasses="character", fill=TRUE,
+                                stringsAsFactors=TRUE,
                                 blank.lines.skip=TRUE, ...)
         }
     }
@@ -84,17 +88,21 @@ read.cross.csvs <-
         if(length(args) < 1 || !("comment.char" %in% names(args))) {
             gen <- read.table(genfile, na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, comment.char="", ...)
             pheno <- read.table(phefile, na.strings=na.strings,
                                 colClasses="character", fill=TRUE,
+                                stringsAsFactors=TRUE,
                                 blank.lines.skip=TRUE, comment.char="", ...)
         }
         else {
             gen <- read.table(genfile, na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, ...)
             pheno <- read.table(phefile, na.strings=na.strings,
                                 colClasses="character", fill=TRUE,
+                                stringsAsFactors=TRUE,
                                 blank.lines.skip=TRUE, ...)
         }
     }

@@ -2,14 +2,14 @@
 #
 # mqmplots.R
 #
-# Copyright (c) 2009-2019, Danny Arends
+# Copyright (c) 2009-2020, Danny Arends
 # Copyright polyplot routine (c) 2009, Rutger Brouwer
 #
 # Modified by Pjotr Prins and Karl Broman
 #
 #
 # first written Februari 2009
-# last modified Dec 2019
+# last modified Feb 2020
 #
 #     This program is free software; you can redistribute it and/or
 #     modify it under the terms of the GNU General Public License,
@@ -279,7 +279,7 @@ addloctocross <- function(cross,locations=NULL,locfile="locations.txt", verbose=
         stop("No cross object. Please supply a valid cross object.")
     }
     if(is.null(locations)){
-        locations <- read.table(locfile,row.names=1,header=TRUE)
+        locations <- read.table(locfile,row.names=1,header=TRUE, stringsAsFactors=TRUE)
     }
     if(verbose) {
         cat("Phenotypes in cross:",nphe(cross),"\n")

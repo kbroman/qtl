@@ -2,8 +2,8 @@
 #
 # readMWril.R
 #
-# copyright (c) 2009-2014, Karl W Broman
-# last modified Jun, 2014
+# copyright (c) 2009-2020, Karl W Broman
+# last modified Feb, 2020
 # first written Apr, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -64,17 +64,21 @@ readMWril <-
         if(length(args) < 1 || !("comment.char" %in% names(args))) {
             gen <- read.table(rilfile, sep=",", na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, comment.char="", ...)
             founder <- read.table(founderfile, sep=",", na.strings=na.strings,
                                   colClasses="character", fill=TRUE,
+                                  stringsAsFactors=TRUE,
                                   blank.lines.skip=TRUE, comment.char="", ...)
         }
         else {
             gen <- read.table(rilfile, sep=",", na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, ...)
             founder <- read.table(founderfile, sep=",", na.strings=na.strings,
                                   colClasses="character", fill=TRUE,
+                                  stringsAsFactors=TRUE,
                                   blank.lines.skip=TRUE, ...)
         }
     }
@@ -82,17 +86,21 @@ readMWril <-
         if(length(args) < 1 || !("comment.char" %in% names(args))) {
             gen <- read.table(rilfile, na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, comment.char="", ...)
             founder <- read.table(founderfile, na.strings=na.strings,
                                   colClasses="character", fill=TRUE,
+                                  stringsAsFactors=TRUE,
                                   blank.lines.skip=TRUE, comment.char="", ...)
         }
         else {
             gen <- read.table(rilfile, na.strings=na.strings,
                               colClasses="character", fill=TRUE,
+                              stringsAsFactors=TRUE,
                               blank.lines.skip=TRUE, ...)
             founder <- read.table(founderfile, na.strings=na.strings,
                                   colClasses="character", fill=TRUE,
+                                  stringsAsFactors=TRUE,
                                   blank.lines.skip=TRUE, ...)
         }
     }
