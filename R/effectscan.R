@@ -2,9 +2,9 @@
 #
 # effectscan.R
 #
-# copyright (c) 2003-2019, Karl W. Broman
+# copyright (c) 2003-2020, Karl W. Broman
 # [completely re-written in Sep, 2007, based partly on code from Hao Wu]
-# last modified Dec, 2019
+# last modified Feb, 2020
 # first written Jan, 2003
 #
 #     This program is free software; you can redistribute it and/or
@@ -220,7 +220,7 @@ effectscan <-
         rownames(z) <- w
 
         z <- as.data.frame(z, stringsAsFactors=TRUE)
-        z <- cbind(chr=rep(names(cross$geno)[i],length(map)),
+        z <- cbind(chr=factor(rep(names(cross$geno)[i],length(map)),levels=names(cross$geno)),
                    pos=as.numeric(map), z)
         rownames(z) <- w
 

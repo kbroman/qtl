@@ -2,8 +2,8 @@
 #
 # scantwo.R
 #
-# copyright (c) 2001-2019, Karl W Broman and Hao Wu
-# last modified Dec, 2019
+# copyright (c) 2001-2020, Karl W Broman and Hao Wu
+# last modified Feb, 2020
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -576,7 +576,7 @@ scantwo <-
 
             if(length(o) > 0) # inter-marker locations cited as "c*.loc*"
                 w[o] <- paste("c",names(cross$geno)[i],".",w[o],sep="")
-            map <- cbind(chr=rep(names(cross$geno)[i],length(map)),
+            map <- cbind(chr=factor(rep(names(cross$geno)[i],length(map)),levels=names(cross$geno)),
                          pos=as.data.frame(as.numeric(map), stringsAsFactors=TRUE) )
             rownames(map) <- w
 

@@ -2,8 +2,8 @@
 #
 # summary.scantwo.R
 #
-# copyright (c) 2001-2019, Karl W Broman, Hao Wu, and Brian Yandell
-# last modified Dec, 2019
+# copyright (c) 2001-2020, Karl W Broman, Hao Wu, and Brian Yandell
+# last modified Feb, 2020
 # first written Nov, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -219,7 +219,7 @@ summary.scantwo <-
     if(inherits(object, "scantwo"))
         out <- subrousummaryscantwo(object, for.perm=FALSE)
     else
-        out <- as.data.frame(object)
+        out <- as.data.frame(object, stringsAsFactors=TRUE)
 
     if(!allpairs) # only look at self-self cases
         out <- out[out$chr1==out$chr2,]
@@ -273,7 +273,7 @@ summary.scantwo <-
                       lod.full=lf, lod.fv1=lfv1, lod.int=li,
                       pos1a=p1.a,
                       pos2a=p2.a,
-                      lod.add=la, lod.av1=lav1)
+                      lod.add=la, lod.av1=lav1, stringsAsFactors=TRUE)
 
     if(what != "best") {
         out <- out[,-(8:9)]
@@ -340,7 +340,7 @@ summary.scantwo <-
     }
 
     if(pvalues && nrow(out) > 0) {
-        result <- as.data.frame(matrix(ncol=11+5, nrow=nrow(out)))
+        result <- as.data.frame(matrix(ncol=11+5, nrow=nrow(out)), stringsAsFactors=TRUE)
         wh <- c(1,2,3,4,5,7,9,11,12,13,15)
         wh2 <- (1:16)[-wh]
         result[,wh] <- out
@@ -386,7 +386,7 @@ subrousummaryscantwo <-
     map <- object$map
 
     pos <- map[,2]
-    chr <- map[,1]
+    chr <- as.factor(map[,1])
 
     tchr <- as.numeric(chr)
     n.chr <- max(tchr)
@@ -448,7 +448,7 @@ subrousummaryscantwo <-
     chr1 <- factor(levels(chr)[out$chr1+1], levels=levels(chr))
     chr2 <- factor(levels(chr)[out$chr2+1], levels=levels(chr))
 
-    if(n.phe == 1)
+    if(n.phe == 1) {
         out <- data.frame(chr1=chr1, chr2=chr2,
                           pos1.jnt=out$pos1.jnt,
                           pos2.jnt=out$pos2.jnt,
@@ -462,7 +462,9 @@ subrousummaryscantwo <-
                           pos2.int=out$pos2.int,
                           int.lod.full=out$int.lod.full,
                           int.lod.add=out$int.lod.add,
-                          lod.1qtl=out$lod.1qtl)
+                          lod.1qtl=out$lod.1qtl,
+                          stringsAsFactors=TRUE)
+    }
     else
         out <- list(chr1=chr1, chr2=chr2,
                     pos1.jnt=matrix(out$pos1.jnt, ncol=n.phe),
@@ -625,7 +627,7 @@ max.scantwo <-
             for(i in 3:length(object))
                 object[[i]] <- object[[i]][,lodcolumn]
         }
-        out <- as.data.frame(object)
+        out <- as.data.frame(object, stringsAsFactors=TRUE)
     }
 
     if(what=="best") {
@@ -682,7 +684,7 @@ max.scantwo <-
                       lod.full=lf, lod.fv1=lfv1, lod.int=li,
                       pos1a=p1.a,
                       pos2a=p2.a,
-                      lod.add=la, lod.av1=lav1)
+                      lod.add=la, lod.av1=lav1, stringsAsFactors=TRUE)
 
     if(what != "best") {
         out <- out[,-(8:9)]

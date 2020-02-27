@@ -20,3 +20,4 @@ URL: https://rqtl.org, https://github.com/kbroman/qtl
 BugReports: https://github.com/kbroman/qtl/issues
 Encoding: UTF-8
 ByteCompile: true
+RoxygenNote: 7.0.2
