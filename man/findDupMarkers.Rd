@@ -18,7 +18,7 @@ findDupMarkers(cross, chr, exact.only=TRUE, adjacent.only=FALSE)
    This may be a logical, numeric, or character string vector.}
  \item{exact.only}{If TRUE, look only for markers that have matching
  genotypes and the same pattern of missing data; if FALSE, also look for
- cases where one the observed genotypes at marker match those at
+ cases where the observed genotypes at one marker match those at
  another, and where the first marker has missing genotype whenever the
  genotype for the second marker is missing.}
  \item{adjacent.only}{If TRUE, look only for sets of markers that are

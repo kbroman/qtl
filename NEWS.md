@@ -16,6 +16,10 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+## Version 1.47, 2020-05-03
+
+
+
 ## Version 1.46, 2020-02-28
 
 ### Minor changes
