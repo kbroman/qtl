@@ -28,11 +28,11 @@ Num	Name	Chr	cM
 Num is the number of the phenotype in the cross object
 Name is the name of the phenotype (will be checked against the name already in the cross object at position num
 Chr Chromosome
-cM	postion from start of chromosome in cM
+cM	position from start of chromosome in cM
 }
 
 \value{
-  The input cross object, with the locations added as an aditional component \code{locations}
+  The input cross object, with the locations added as an additional component \code{locations}
 }
 
 \author{
