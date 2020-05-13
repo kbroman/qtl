@@ -83,6 +83,7 @@ importFrom(grDevices,dev.off)
 importFrom(grDevices,png)
 
 # export functions for users
+export(find_large_intervals)
 export(table2map)
 export(flip.order)
 export(map2table)
