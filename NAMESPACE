@@ -1,7 +1,6 @@
 useDynLib(qtl, .registration=TRUE)
 
 # Import package dependencies
-importFrom(graphics,plot)
 importFrom(graphics,par)
 importFrom(graphics,abline)
 importFrom(graphics,points)

@@ -47,7 +47,7 @@
   \item{bandcol}{Optional color for alternating bands to indicate
   chromosomes.  If NULL (the default), no bands are plotted.  A good
   choice might be \code{bandcol="gray70"}.}
-  \item{type}{Type of plot (see \code{\link[graphics]{plot}}): for
+  \item{type}{Type of plot (see \code{\link[base]{plot}}): for
   example, \code{type="l"} for lines or \code{type="p"} for points only,
   may be of length 1 or 3.}
   \item{cex}{Point size expansion, for example if \code{type="p"} is used.
@@ -58,7 +58,7 @@
   and \code{pch=21} are used. See \code{\link[graphics]{points}}.
   May be of length 1 or 3.}
   \item{bgrect}{Optional background color for the rectangular plotting region.}
-  \item{\dots}{Passed to the function \code{\link[graphics]{plot}} when it
+  \item{\dots}{Passed to the function \code{\link[base]{plot}} when it
     is called.}
 }
 \value{None.}
