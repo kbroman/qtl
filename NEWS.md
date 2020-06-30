@@ -16,7 +16,7 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.47, 2020-06-25
+## Version 1.47, 2020-06-30
 
 ### Minor changes
 
@@ -25,6 +25,10 @@ copyright (c) 2001-2020, Karl W Broman
 
 - Fixed potential problem in documentation, since `plot()` has moved
   from the graphics package to base.
+
+- Acknowledge R Core Team among contributors, as zeroin function
+  (in C) had been taken from R version 2.15.1. Also add a Copyrights
+  field to the DESCRIPTION file.
 
 
 ## Version 1.46, 2020-02-28
