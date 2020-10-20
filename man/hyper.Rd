@@ -37,7 +37,7 @@ were typed.
 \source{
   Bev Paigen and Gary Churchill (The Jackson Laboratory, Bar Harbor,
   Maine)
-  \url{http://phenome.jax.org/db/q?rtn=projects/projdet&reqprojid=119}
+  \url{https://phenome.jax.org/projects/Sugiyama2}
 }
 
 \examples{
