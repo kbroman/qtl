@@ -2,8 +2,8 @@
 #
 # read.cross.R
 #
-# copyright (c) 2000-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2000-2020, Karl W Broman
+# last modified Oct, 2020
 # first written Aug, 2000
 #
 #     This program is free software; you can redistribute it and/or
@@ -164,6 +164,11 @@ read.cross <-
     for(i in 1:nchr(cross))
         storage.mode(cross$geno[[i]]$data) <- "integer"
 
+    if(is.null(crosstype)) crosstype <- crosstype(cross)
+    if(crosstype=="risib") cross <- convert2risib(cross)
+    else if(crosstype=="riself") cross <- convert2riself(cross)
+    else class(cross) <- c(crosstype, "cross")
+
     # check alleles
     if(crosstype(cross) != "4way") {
         if(length(alleles) > 2) {
@@ -190,11 +195,6 @@ read.cross <-
     }
 
     attr(cross, "alleles") <- alleles
-
-    if(is.null(crosstype)) crosstype <- crosstype(cross)
-    if(crosstype=="risib") cross <- convert2risib(cross)
-    else if(crosstype=="riself") cross <- convert2riself(cross)
-    else class(cross) <- c(crosstype, "cross")
 
     # if 4-way cross, make the maps matrices
     if(crosstype=="4way") {

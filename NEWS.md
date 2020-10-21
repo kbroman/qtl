@@ -16,7 +16,7 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.47, 2020-06-30
+## Version 1.47, 2020-10-21
 
 ### Minor changes
 
@@ -29,6 +29,11 @@ copyright (c) 2001-2020, Karl W Broman
 - Acknowledge R Core Team among contributors, as zeroin function
   (in C) had been taken from R version 2.15.1. Also add a Copyrights
   field to the DESCRIPTION file.
+
+### Bug fixes
+
+- Small change to `read.cross()` to avoid warning about length of
+  `alleles` argument for `crosstype="4way"`. (Fixes Issue #90.)
 
 
 ## Version 1.46, 2020-02-28
