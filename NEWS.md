@@ -16,7 +16,7 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.47, 2020-10-21
+## Version 1.47, 2020-10-26
 
 ### Minor changes
 
@@ -29,6 +29,9 @@ copyright (c) 2001-2020, Karl W Broman
 - Acknowledge R Core Team among contributors, as zeroin function
   (in C) had been taken from R version 2.15.1. Also add a Copyrights
   field to the DESCRIPTION file.
+
+- Allow `rescalemap()`, `shiftmap()`, `summaryMap()`, and
+  `jittermap()` to work with plain lists.
 
 ### Bug fixes
 

@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2019, Karl W Broman
+# copyright (c) 2001-2020, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Dec, 2019
+# last modified Oct, 2020
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -2857,7 +2857,7 @@ summaryMap <- summary.map <-
     map <- object
     if(inherits(map, "cross")) # a cross object
         map <- pull.map(map)
-    if(!inherits(map, "map"))
+    if(!inherits(map, "map") && !is.list(map))
         warning("Input should have class \"cross\" or \"map\".")
 
     n.chr <- length(map)
@@ -3303,7 +3303,7 @@ jittermap <-
         return.cross <- TRUE
     }
     else {
-        if(!inherits(object, "map"))
+        if(!inherits(object, "map") && !is.list(object))
             stop("Input must be a cross or a map")
         return.cross <- FALSE
         themap <- object
@@ -4047,12 +4047,13 @@ rescalemap <-
         }
         if(abs(scale - 1) > 1e-6)
             object <- clean(object) # strip off intermediate calculations
-    } else if(inherits(object, "map")) {
+    } else if(inherits(object, "map") || is.list(object)) {
         for(i in seq(along=object)) {
             object[[i]] <- object[[i]] * scale
         }
-    } else
+    } else {
         stop("rescalemap works only for objects of class \"cross\" or \"map\".")
+    }
 
     object
 }
@@ -4074,7 +4075,7 @@ shiftmap <-
                 object$geno[[i]]$map <- object$geno[[i]]$map - object$geno[[i]]$map[1] + offset[i]
             }
         }
-    } else if(inherits(object, "map")) {
+    } else if(inherits(object, "map") || is.list(object)) {
         if(length(offset) == 1) offset <- rep(offset, length(object))
         else if(length(offset) != length(object))
             stop("offset must have length 1 or n.chr (", length(object), ")")
