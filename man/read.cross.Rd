@@ -23,7 +23,8 @@ read.cross(format=c("csv", "csvr", "csvs", "csvsr", "mm", "qtx",
 }
 
 \arguments{
-  \item{format}{Specifies the format of the data.}
+  \item{format}{Specifies the format of the data file or files. Details
+  on the various file formats are provided below.}
   \item{dir}{Directory in which the data files will be found.  In
     Windows, use forward slashes (\code{"/"}) or double backslashes
     (\code{"\\\\"}) to specify directory trees.}
