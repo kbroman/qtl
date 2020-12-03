@@ -3,7 +3,7 @@
 
 \usepackage{Sweave}
 \usepackage{fullpage}
-\usepackage{fancyheadings}
+\usepackage{fancyhdr}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{cite}
