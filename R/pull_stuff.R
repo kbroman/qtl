@@ -2,10 +2,10 @@
 #
 # pull_stuff.R
 #
-# copyright (c) 2001-2019, Karl W Broman
+# copyright (c) 2001-2020, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Dec, 2019
+# last modified Dec, 2020
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -66,15 +66,33 @@ map2table <-
         map2 <- unlist(lapply(map, function(a) a[2,]))
         result <- data.frame(chr=rep(names(map), vapply(map, ncol, 0)),
                              pos.female=map1, pos.male=map2, stringsAsFactors=FALSE)
-        rownames(result) <- unlist(lapply(map, colnames))
+        rownames(result) <- make_unique(unlist(lapply(map, colnames)), "marker names")
     } else {
         result <- data.frame(chr=rep(names(map), vapply(map, length, 0)),
                              pos=unlist(map), stringsAsFactors=FALSE)
-        rownames(result) <- unlist(lapply(map, names))
+        rownames(result) <- make_unique(unlist(lapply(map, names)), "marker names")
     }
     result[,1] <- factor(result[,1], levels=unique(result[,1]))
 
     result
+}
+
+# force a string of names to be unique
+# 'label' used if there are mismatches
+make_unique <-
+    function(nam, label="names")
+{
+    tab <- table(nam)
+    if(any(tab > 1)) {
+        warning(label, " are not all distinct; output names adjusted to make them distinct")
+
+        for(marker in names(tab)[tab > 1]) {
+            wh <- (nam==marker)
+            nam[wh] <- paste0(marker, "_", seq_len(sum(wh)))
+        }
+    }
+
+    nam
 }
 
 

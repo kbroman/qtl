@@ -16,7 +16,7 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.47, 2020-10-26
+## Version 1.47, 2020-12-03
 
 ### Minor changes
 
@@ -32,6 +32,9 @@ copyright (c) 2001-2020, Karl W Broman
 
 - Allow `rescalemap()`, `shiftmap()`, `summaryMap()`, and
   `jittermap()` to work with plain lists.
+
+- Fixed Issue #91 where pull.rf() gives a cryptic error if marker
+  names are not all distinct.
 
 ### Bug fixes
 
