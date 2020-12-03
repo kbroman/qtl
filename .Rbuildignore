@@ -12,5 +12,5 @@
 ^inst/doc/Sources/MQM/\.RData$
 ^inst/doc/Sources/MQM/Sweave\.sty$
 ^inst/doc/Sources/MQM/\.Rprofile$
-^\.travis\.yml$
 ^LICENSE\.md$
+^\.github$

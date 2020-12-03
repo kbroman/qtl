@@ -1,9 +1,0 @@
-language: r
-sudo: false
-
-notifications:
-  email:
-    on_success: change
-    on_failure: always
-
-warnings_are_errors: false
