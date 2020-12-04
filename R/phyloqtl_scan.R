@@ -1,8 +1,8 @@
 ######################################################################
 # phyloqtl_scan.R
 #
-# copyright (c) 2009-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2009-2020, Karl W Broman
+# last modified Dec, 2020
 # first written May, 2009
 #
 #     This program is free software; you can redistribute it and/or
@@ -327,16 +327,24 @@ inferredpartitions <-
         lodthreshold=0
     }
 
+    if(probthreshold >= 1 || probthreshold <= 0) {
+        stop("probthreshold should be in (0,1)")
+    }
+
     output <- output[output[,1]==chr,]
     output[,1] <- as.factor(as.character(output[,1]))
     output <- summary(output, format="postprob")
 
     if(output$maxlod < lodthreshold) return("null")
 
-    prob <- sort(output[,3:(ncol(output)-2)], decreasing=TRUE)
+    prob <- sort(unlist(output[,3:(ncol(output)-2)]), decreasing=TRUE)
     cs <- cumsum(as.numeric(prob))
+    if(!any(cs >= probthreshold)) {
+        warning("No values >= probthreshold")
+        return(NULL)
+    }
     wh <- min(which(cs >= probthreshold))
-    names(prob)[1:wh]
+    names(prob)[seq_len(wh)]
 }
 
 # end of phyloqtl_scan.R

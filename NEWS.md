@@ -38,6 +38,9 @@ copyright (c) 2001-2020, Karl W Broman
 
 ### Bug fixes
 
+- Fix a problem in `inferredpartitions()` that occurs in the devel
+  version of R.
+
 - Small change to `read.cross()` to avoid warning about length of
   `alleles` argument for `crosstype="4way"`. (Fixes Issue #90.)
 
