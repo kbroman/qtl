@@ -47,7 +47,7 @@
   \item{zscale}{If TRUE, a color scale is plotted at the right.}
   \item{point.at.max}{If TRUE, plot an X at the maximum LOD.}
   \item{col.scheme}{Name of color pallet. The default is "viridis"; see
-  Option D at \url{https://bids.github.io/colormap}}
+  Option D at \url{https://bids.github.io/colormap/}}
   \item{gamma}{Parameter affecting range of colors when
     \code{col.scheme="gray"} or \code{="redblue"}.}
   \item{allow.neg}{If TRUE, allow the plot of negative LOD scores; in

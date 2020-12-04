@@ -34,7 +34,7 @@ plotRF(x, chr, what=c("both","lod","rf"), alternate.chrid=FALSE,
   pixels along the diagonal, to better separate the upper left triangle
   from the lower right triangle.}
   \item{col.scheme}{The color palette. The default is "viridis"; see
-  Option D at \url{https://bids.github.io/colormap}}
+  Option D at \url{https://bids.github.io/colormap/}}
   \item{\dots}{Generally ignored, but you can include \code{main} to
   change or omit the title of the figure.}
 }
