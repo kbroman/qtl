@@ -1,6 +1,6 @@
 Package: qtl
-Version: 1.47-7
-Date: 2020-12-03
+Version: 1.47-8
+Date: 2020-12-17
 Title: Tools for Analyzing QTL Experiments
 Author: Karl W Broman <broman@wisc.edu> and Hao Wu, with
   ideas from Gary Churchill and Saunak Sen and contributions from
@@ -22,4 +22,3 @@ URL: https://rqtl.org, https://github.com/kbroman/qtl
 BugReports: https://github.com/kbroman/qtl/issues
 Encoding: UTF-8
 ByteCompile: true
-RoxygenNote: 7.0.2

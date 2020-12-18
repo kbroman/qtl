@@ -16,7 +16,7 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.47, 2020-12-03
+## Version 1.47, 2020-12-17
 
 ### Minor changes
 
@@ -43,6 +43,9 @@ copyright (c) 2001-2020, Karl W Broman
 
 - Small change to `read.cross()` to avoid warning about length of
   `alleles` argument for `crosstype="4way"`. (Fixes Issue #90.)
+
+- Small change to `read.cross()` to avoid messing with X chromosome
+  genotypes when `crosstype=4way"`. (Fixes Issue #88.)
 
 
 ## Version 1.46, 2020-02-28
