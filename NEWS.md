@@ -1,6 +1,6 @@
 Revision history for the R/qtl package
 ----------------------------------------------------------------------
-copyright (c) 2001-2020, Karl W Broman
+copyright (c) 2001-2021, Karl W Broman
 <https://rqtl.org>
 
     The R/qtl package is free software; you can redistribute it and/or
@@ -16,7 +16,7 @@ copyright (c) 2001-2020, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.47, 2020-12-17
+## Version 1.47, 2021-01-07
 
 ### Minor changes
 
