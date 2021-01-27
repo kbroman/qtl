@@ -34,7 +34,7 @@ plotPXG(x, marker, pheno.col=1, jitter=1, infer=TRUE,
     markers are used.}
   \item{col}{A vector of colors to use for the confidence intervals
     (optional).}
-  \item{\dots}{Passed to \code{\link[base]{plot}}.}
+  \item{\dots}{Passed to \code{plot}.}
 }
 
 \details{

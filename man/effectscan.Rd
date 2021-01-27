@@ -35,7 +35,7 @@ effectscan(cross, pheno.col=1, chr, get.se=FALSE, draw=TRUE,
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
-  \item{\dots}{Passed to the function \code{\link[base]{plot}} when it
+  \item{\dots}{Passed to the function \code{plot} when it
     is called.}
 }
 \value{

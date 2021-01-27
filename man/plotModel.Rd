@@ -34,7 +34,7 @@ plotModel(qtl, formula, circrad.rel=0.25, circrad.abs,
   \item{order}{Optional vector indicating a permutation of the QTL to
   define where they are to appear in the plot.  QTL are placed around a
   circle, starting at the top and going clockwise.}
-  \item{\dots}{Passed to the function \code{\link[base]{plot}}.}
+  \item{\dots}{Passed to the function \code{plot}.}
 }
 
 %\details{

@@ -40,7 +40,7 @@ plotLodProfile(qtl, chr, incl.markers=TRUE, gap=25, lwd=2, lty=1, col="black",
   \item{showallchr}{If FALSE (the default), only show the chr with a QTL}
   \item{labelsep}{If \code{qtl.labels=TRUE}, separation between peak LOD
     and QTL label, as percent of the height of the plot.}
-  \item{\dots}{Passed to the function \code{\link[base]{plot}} when it
+  \item{\dots}{Passed to the function \code{plot} when it
     is called.}
 }
 \value{None.}

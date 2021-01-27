@@ -36,7 +36,7 @@ plotMap(x, map2, chr, horizontal=FALSE, shift=TRUE,
   \item{alternate.chrid}{If TRUE and more than one chromosome is
     plotted, alternate the placement of chromosome
      axis labels, so that they may be more easily distinguished.}
-  \item{\dots}{Passed to \code{\link[base]{plot}}.}
+  \item{\dots}{Passed to \code{plot}.}
 }
 
 \value{None.}

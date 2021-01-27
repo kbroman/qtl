@@ -23,7 +23,7 @@ mqmplot.multitrait(result, type=c("lines","image","contour","3Dplot"),
   \item{meanprofile}{ Plot a mean/median profile from the group selected }
   \item{theta}{ Horizontal axis rotation in a 3D plot }
   \item{phi}{ Vertical axis rotation in a 3D plot }
-  \item{\dots}{Additional arguments passed to \code{\link[base]{plot}}.}
+  \item{\dots}{Additional arguments passed to \code{plot}.}
 }
 
 \author{
