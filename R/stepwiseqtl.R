@@ -1,8 +1,8 @@
 ######################################################################
 # stepwiseqtl.R
 #
-# copyright (c) 2007-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2007-2021, Karl W Broman
+# last modified Mar, 2021
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -245,7 +245,12 @@ stepwiseqtl <-
         else firstformula <- formula
     }
     else {
-        lod0 <- length(pheno)/2 * log10(sum((pheno-mean(pheno))^2) / sum(lm(pheno ~ as.matrix(covar))$resid^2))
+        nullformula <- as.formula(paste("y~", paste(names(covar), collapse="+")))
+        tempqtl <- makeqtl(cross, chrnames(f2)[1], 0, what=ifelse(method=="imp", "draws", "prob"))
+        fit <- fitqtl(cross, pheno.col, tempqtl, covar=covar, formula=nullformula,
+                      method=method, model=model, dropone=FALSE, get.ests=FALSE,
+                      run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
+        lod0 <- fit$result.full[1,4]
         if(startatnull)
             firstformula <- as.formula(paste("y~", paste(names(covar), collapse="+"), "+", "Q1"))
         else firstformula <- formula

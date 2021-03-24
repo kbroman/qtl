@@ -2,8 +2,8 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-2020, Karl W. Broman
-# last modified Feb, 2020
+# copyright (c) 2007-2021, Karl W. Broman
+# last modified Mar, 2021
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -540,7 +540,7 @@ addqtl <-
         sqout <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                          covar=covar, formula=newformula, method=method, model=model,
                          incl.markers=incl.markers, verbose=verbose.scanqtl,
-                         tol=tol, maxit=maxit)
+                         tol=tol, maxit=maxit, forceXcovar=forceXcovar)
 
         matrix1.rank <- c(matrix1.rank, attr(sqout, "matrix.rank"))
         matrix1.ncol <- c(matrix1.ncol, attr(sqout, "matrix.ncol"))
@@ -991,7 +991,7 @@ addpair <-
             temp1 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                              covar=covar, formula=newformula1, method=method, model=model,
                              incl.markers=incl.markers, verbose=verbose.scanqtl,
-                             tol=tol, maxit=maxit) - lod0
+                             tol=tol, maxit=maxit, forceXcovar=forceXcovar) - lod0
 
             if(!is.null(newformula2)) {
                 if(verbose)
@@ -1000,7 +1000,7 @@ addpair <-
                 temp2 <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                                  covar=covar, formula=newformula2, method=method, model=model,
                                  incl.markers=incl.markers, verbose=verbose.scanqtl,
-                                 tol=tol, maxit=maxit) - lod0
+                                 tol=tol, maxit=maxit, forceXcovar=forceXcovar) - lod0
             }
             else {
                 if(i != j && scanbothways) {
@@ -1009,7 +1009,7 @@ addpair <-
                     temp1r <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                                       covar=covar, formula=newformula1, method=method, model=model,
                                       incl.markers=incl.markers, verbose=verbose.scanqtl,
-                                      tol=tol, maxit=maxit) - lod0
+                                      tol=tol, maxit=maxit, forceXcovar=forceXcovar) - lod0
                 }
             }
 
@@ -1045,11 +1045,11 @@ addpair <-
             lod.m1[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                                    covar=covar, formula=newformula1.minus1, method=method,
                                    model=model, incl.markers=incl.markers,
-                                   verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
+                                   verbose=verbose.scanqtl, tol=tol, maxit=maxit, forceXcovar=forceXcovar) - lod0
             lod.m2[whi] <- scanqtl(cross, pheno.col=pheno.col, chr=thechr, pos=thepos,
                                    covar=covar, formula=newformula1.minus2, method=method,
                                    model=model, incl.markers=incl.markers,
-                                   verbose=verbose.scanqtl, tol=tol, maxit=maxit) - lod0
+                                   verbose=verbose.scanqtl, tol=tol, maxit=maxit, forceXcovar=forceXcovar) - lod0
 
         }
 

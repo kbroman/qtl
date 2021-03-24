@@ -16,6 +16,17 @@ copyright (c) 2001-2021, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+## Version 1.48, 2021-03-24
+
+### Bug fixes
+
+- Fixed bug in `addqtl()` and `addpair()` in which the argument
+  `forceXcovar` wasn't getting passed to `scanqtl()`.
+
+- Fixed bug in `stepwiseqtl()` regarding the way the null LOD score is
+  calculated.
+
+
 ## Version 1.47, 2021-01-07
 
 ### Minor changes
