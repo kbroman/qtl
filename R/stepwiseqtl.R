@@ -246,7 +246,7 @@ stepwiseqtl <-
     }
     else {
         nullformula <- as.formula(paste("y~", paste(names(covar), collapse="+")))
-        tempqtl <- makeqtl(cross, chrnames(f2)[1], 0, what=ifelse(method=="imp", "draws", "prob"))
+        tempqtl <- makeqtl(cross, chrnames(cross)[1], 0, what=ifelse(method=="imp", "draws", "prob"))
         fit <- fitqtl(cross, pheno.col, tempqtl, covar=covar, formula=nullformula,
                       method=method, model=model, dropone=FALSE, get.ests=FALSE,
                       run.checks=FALSE, tol=tol, maxit=maxit, forceXcovar=forceXcovar)
