@@ -2,8 +2,8 @@
 #
 # cim.R
 #
-# copyright (c) 2007-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2007-2021, Karl W Broman
+# last modified Jun, 2021
 # first written Jan, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -34,11 +34,18 @@ cim <-
              method=c("em", "imp", "hk", "ehk"),
              imp.method=c("imp", "argmax"), error.prob=0.0001,
              map.function=c("haldane", "kosambi", "c-v", "morgan"),
-             n.perm)
+             addcovar=NULL, n.perm)
 {
     method <- match.arg(method)
     imp.method <- match.arg(imp.method)
     map.function <- match.arg(map.function)
+
+    if(!is.null(addcovar)) {
+        if(!is.matrix(addcovar)) addcovar <- as.matrix(addcovar)
+        if(nrow(addcovar) != nind(cross)) {
+            stop("nrow(addcovar) != no. individuals in cross")
+        }
+    }
 
     type <- crosstype(cross)
     if(type=="4way")
@@ -78,7 +85,8 @@ cim <-
             cross$pheno[,pheno.col] <- y
             temp <- cim(cross, pheno.col=pheno.col, n.marcovar=n.marcovar,
                         window=window, method=method, imp.method=imp.method,
-                        error.prob=error.prob, map.function=map.function)
+                        error.prob=error.prob, map.function=map.function,
+                        addcovar=addcovar)
             results[i,1] <- max(temp[,3], na.rm=TRUE)
         }
         class(results) <- c("scanoneperm", "matrix")
@@ -104,7 +112,7 @@ cim <-
     if(type=="f2") useac <- expandf2covar(ac)
     else useac <- ac
 
-    firstscan <- scanone(cross, pheno.col=pheno.col, addcovar=useac,
+    firstscan <- scanone(cross, pheno.col=pheno.col, addcovar=cbind(useac,addcovar),
                          method=method)
 
     # scan again, dropping one marker covariate at a time
@@ -112,7 +120,7 @@ cim <-
         if(type=="f2") useac <- expandf2covar(ac[,-i])
         else useac <- ac[,-i]
 
-        temp <- scanone(cross, pheno.col=pheno.col, addcovar=useac,
+        temp <- scanone(cross, pheno.col=pheno.col, addcovar=cbind(useac,addcovar),
                         method=method, chr=chrpos[i,1])
         wh1 <- (firstscan[,1]==chrpos[i,1] & firstscan[,2] >= chrpos[i,2]-window &
                 firstscan[,2] <= chrpos[i,2]+window)
@@ -149,7 +157,7 @@ cim <-
 
                     if(type=="f2") useac <- expandf2covar(tempac)
                     else useac <- tempac
-                    temp <- scanone(cross, pheno.col=pheno.col, addcovar=useac,
+                    temp <- scanone(cross, pheno.col=pheno.col, addcovar=cbind(useac,addcovar),
                                     method=method, chr=j)
 
                     firstscan[whpos2,3] <- temp[whpos,3]

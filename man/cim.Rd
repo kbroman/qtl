@@ -16,7 +16,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
     method=c("em", "imp", "hk", "ehk"),
     imp.method=c("imp", "argmax"), error.prob=0.0001,
     map.function=c("haldane", "kosambi", "c-v", "morgan"),
-    n.perm)
+    addcovar=NULL, n.perm)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -39,6 +39,7 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
    the missing marker genotype data.}
  \item{map.function}{Map function used when imputing the missing marker
    genotype data.}
+ \item{addcovar}{Optional numeric matrix of additional covariates to include.}
  \item{n.perm}{If specified, a permutation test is performed rather than
    an analysis of the observed data.  This argument defines the number
    of permutation replicates.}

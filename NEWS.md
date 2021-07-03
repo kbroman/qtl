@@ -16,6 +16,14 @@ copyright (c) 2001-2021, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
+## Verison 1.49, 2021-06-30
+
+## New features
+
+- `cim()` now includes an `addcovar` argument for including additional
+  covariates in the model.
+
+
 ## Version 1.48, 2021-03-24
 
 ### Bug fixes
