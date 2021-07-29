@@ -16,12 +16,18 @@ copyright (c) 2001-2021, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Verison 1.49, 2021-06-30
+## Verison 1.49, 2021-07-29
 
 ## New features
 
 - `cim()` now includes an `addcovar` argument for including additional
   covariates in the model.
+
+- `stepwiseqtl()` includes new arguments `stop.rule` taking values 0,
+  1, or 2 (controlling early stopping of the algorithm; implemented
+  only for the case of X-chr-specific penalties) and `k_f`, a
+  parameter used in the early stopping rule, as the number of main
+  effect penalities that pLOD can go below 0 before stopping.
 
 
 ## Version 1.48, 2021-03-24

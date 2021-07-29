@@ -2,7 +2,7 @@
 # stepwiseqtl.R
 #
 # copyright (c) 2007-2021, Karl W Broman
-# last modified Mar, 2021
+# last modified Jul, 2021
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -53,14 +53,26 @@
 # keeptrace      If TRUE, retain the QTL locations, model formula and pLOD
 #                for the best model from each step of forward and backward
 #                selection as an attribute in the output
-# verbose:    If TRUE, print a bunch of tracing information
+# verbose:       If TRUE, print a bunch of tracing information
+#
+# stop.rule      Integer indicating early stopping rule:
+#                       0 - no early stopping rule,
+#                       1 - early stopping rule of plod<k_f*mainA
+#                       2 - early stopping rule of plod<bestplod-k_f*mainA
+#                (This has been implemented only in the case that
+#                 there are six penalties (that is, with
+#                 X-chromosome-specific penalties.)
+#
+# k_f            Parameter in the early stopping rules; number of main effect
+#                penalties by which the pLOD can go below 0 before stopping.
+#
 ######################################################################
 stepwiseqtl <-
     function(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
              method=c("imp", "hk"), model=c("normal", "binary"), incl.markers=TRUE, refine.locations=TRUE,
              additive.only=FALSE, scan.pairs=FALSE, penalties,
              keeplodprofile=TRUE, keeptrace=FALSE, verbose=TRUE,
-             tol=1e-4, maxit=1000, require.fullrank=FALSE)
+             tol=1e-4, maxit=1000, require.fullrank=FALSE, stop.rule=0, k_f=3)
 {
     if(!inherits(cross, "cross"))
         stop("Input should have class \"cross\".")
@@ -90,7 +102,7 @@ stepwiseqtl <-
                 if(scan.pairs)
                     warning("scan.pairs=TRUE not implemented X-chr specific penalties; ignored.")
                 return(stepwiseqtlX(cross, chrnames(cross), pheno.col=pheno.col, qtl=qtl,
-                                     formula=formula, max.qtl=max.qtl, k_f=3, stop.rule=0,
+                                     formula=formula, max.qtl=max.qtl, k_f=k_f, stop.rule=stop.rule,
                                      covar=covar, method=method, model=model, incl.markers=incl.markers,
                                      refine.locations=refine.locations, additive.only=additive.only,
                                      penalties=penalties, keeplodprofile=keeplodprofile, keeptrace=keeptrace,

@@ -15,7 +15,8 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
             incl.markers=TRUE, refine.locations=TRUE,
             additive.only=FALSE, scan.pairs=FALSE, penalties,
             keeplodprofile=TRUE, keeptrace=FALSE, verbose=TRUE,
-            tol=1e-4, maxit=1000, require.fullrank=FALSE)
+            tol=1e-4, maxit=1000, require.fullrank=FALSE,
+            stop.rule=0, k_f=3)
 }
 \arguments{
  \item{cross}{An object of class \code{cross}. See
@@ -75,7 +76,16 @@ stepwiseqtl(cross, chr, pheno.col=1, qtl, formula, max.qtl=10, covar=NULL,
    model.}
  \item{require.fullrank}{If TRUE, give LOD=0 when covariate matrix in
    the linear regression is not of full rank.}
+ \item{stop.rule}{Integer indicating early stopping rule: 0 - no early stopping rule,
+   1 - early stopping rule of plod<k_f*mainA, and 3 - early stopping
+   rule of plod<bestplod-k_f*mainA. This has been implemented only in
+   the case that there are six penalties (that is, with
+   X-chromosome-specific penalties.)}
+ \item{k_f}{Parameter used in the early stopping rules, if stop.rule>0.
+   Number of main effect penalties by which pLOD can dip below 0
+   before stopping.}
 }
+
 
 \section{Methods}{
   \bold{\code{imp}}: multiple imputation is used, as described by Sen
