@@ -2,9 +2,9 @@
  *
  * effectscan.c
  *
- * copyright (c) 2007-8, Karl W Broman
+ * copyright (c) 2007-2021, Karl W Broman
  *
- * last modified Jan, 2008
+ * last modified Sep, 2021
  * first written Sep, 2007
  *
  *     This program is free software; you can redistribute it and/or
@@ -28,9 +28,11 @@
  *
  **********************************************************************/
 
+#define USE_FC_LEN_T
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <Rconfig.h>
 #include <R.h>
 #include <Rmath.h>
 #include <R_ext/PrtUtil.h>
@@ -38,6 +40,9 @@
 #include <R_ext/Lapack.h>
 #include "effectscan.h"
 #include "util.h"
+#ifndef FCONE
+# define FCONE
+#endif
 
 /* R_effectscan: wrapper for effectscan */
 
@@ -126,7 +131,7 @@ void effectscan(int nind, int ngen, int ndraws, int npos,
             if(!flag[i]) {
                 /* linear regression */
                 F77_CALL(dgels)("N", &nind, &ngen, &nphe, x, &nind, resid, &nind,
-                                dwork, &lwork, &info);
+                                dwork, &lwork, &info FCONE);
 
                 /* coefficient estimates */
                 for(j=0; j<ngen; j++) wbeta[j+i*ngen] = resid[j];
@@ -147,7 +152,7 @@ void effectscan(int nind, int ngen, int ndraws, int npos,
                     memcpy(var+j*ngen, x+j*nind, ngen*sizeof(double));
 
                 /* (X'X)^-1 */
-                F77_CALL(dpotri)("U", &ngen, var, &ngen, &info);
+                F77_CALL(dpotri)("U", &ngen, var, &ngen, &info FCONE);
 
                 /* estimated variances of estimated coefficients */
                 for(j=0; j<ngen; j++) wvar[j + i*ngen] = sigmasq * var[j+j*ngen];

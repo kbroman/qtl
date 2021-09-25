@@ -2,9 +2,9 @@
  *
  * lapackutil.c
  *
- * copyright (c) 2006, Hao Wu
+ * copyright (c) 2006-2021, Hao Wu and Karl Broman
  *
- * last modified Feb, 2006
+ * last modified Sep, 2021
  * first written Jan, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -27,9 +27,11 @@
  *
  **********************************************************************/
 
+#define USE_FC_LEN_T
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <Rconfig.h>
 #include <R.h>
 #include <Rmath.h>
 #include <R_ext/PrtUtil.h>
@@ -37,6 +39,9 @@
 #include <R_ext/Lapack.h>
 #include "lapackutil.h"
 #define TOL 1e-12
+#ifndef FCONE
+# define FCONE
+#endif
 
 
 /* DGELSS function */
@@ -48,7 +53,7 @@ void mydgelss (int *n_ind, int *ncolx0, int *nphe, double *x0, double *x0_bk,
 
     /* use dgels first */
     F77_CALL(dgels)("N", n_ind, ncolx0, nphe, x0, n_ind, tmppheno, n_ind,
-                    work, lwork, info);
+                    work, lwork, info FCONE);
 
     /* if there's problem like singular, use dgelss */
     /* note that x0 will contain the result for QR decomposition.
@@ -81,21 +86,15 @@ void mydgemm(int *nphe, int *n_ind, double *alpha, double *tmppheno,
              double *beta, double *rss_det)
 {
     F77_CALL(dgemm)("T", "N", nphe, nphe, n_ind, alpha, tmppheno, n_ind,
-                    tmppheno, n_ind, beta, rss_det, nphe);
+                    tmppheno, n_ind, beta, rss_det, nphe FCONE FCONE);
 }
 
 /* DPOTRF */
 void mydpotrf(int *nphe, double *rss_det, int *info)
 {
-    F77_CALL(dpotrf)("U", nphe, rss_det, nphe, info);
+    F77_CALL(dpotrf)("U", nphe, rss_det, nphe, info FCONE);
 }
 
-/*DPOTRS */
-void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
-              int *lda, double *B, int *ldb, int *info)
-{
-    F77_CALL(dpotrs)(uplo, n, nrhs, A, lda, B, ldb, info);
-}
 
 
 /* end of lapackutil.c */

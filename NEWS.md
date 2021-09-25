@@ -27,6 +27,9 @@ copyright (c) 2001-2021, Karl W Broman
 
 - Revised qtlversion() to handle a case like "1.50".
 
+- Added `#define USE_FC_LEN_T` in C code that calls Fortran, because
+  of a change in R 3.6.5 that's going to be required in R 4.2.0.
+
 
 ## Version 1.48, 2021-03-24
 

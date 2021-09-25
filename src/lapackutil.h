@@ -23,7 +23,7 @@
  *
  * These are some wrapper functions for several LAPACK routines.
  *
- * Contains: mydgelss, mydgemm, mydpotrf, mydpotrs
+ * Contains: mydgelss, mydgemm, mydpotrf
  *
  **********************************************************************/
 
@@ -38,9 +38,5 @@ void mydgemm(int *nphe, int *n_ind, double *alpha, double *tmppheno, double *bet
 
 /* DPOTRF */
 void mydpotrf(int *nphe1, double *rss_det, int *info);
-
-/* DPOTRS */
-void mydpotrs(char *uplo, int *n, int *nrhs, double *A,
-              int *lda, double *B, int *ldb, int *info);
 
 /* end of lapackutil.h */
