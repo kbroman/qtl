@@ -1,6 +1,6 @@
 Package: qtl
-Version: 1.49-3
-Date: 2021-09-25
+Version: 1.50
+Date: 2021-10-06
 Title: Tools for Analyzing QTL Experiments
 Author: Karl W Broman <broman@wisc.edu> and Hao Wu, with
   ideas from Gary Churchill and Saunak Sen and contributions from

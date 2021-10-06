@@ -16,7 +16,7 @@ copyright (c) 2001-2021, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Verison 1.49, 2021-08-05
+## Verison 1.50, 2021-10-06
 
 ## New features
 
