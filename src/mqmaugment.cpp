@@ -28,6 +28,7 @@
  **********************************************************************/
 
 #include <R.h>
+#include <limits.h> /* needed for UINT_MAX */
 #include "mqm.h"
 #include "simulate.h"
 
