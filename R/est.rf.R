@@ -2,8 +2,8 @@
 #
 # est.rf.R
 #
-# copyright (c) 2001-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2001-2022, Karl W Broman
+# last modified Jun, 2022
 # first written Apr, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -356,6 +356,12 @@ checkAlleles <-
         warning("First running est.rf.")
         cross <- est.rf(cross)
     }
+    onlylod <- attr(cross$rf, "onlylod")
+    if(!is.null(onlylod) && onlylod) { # need to re-run est.rf()
+        warning("First running est.rf.")
+        cross <- est.rf(cross)
+    }
+
     diag(cross$rf) <- 0
     lod <- rf <- cross$rf
     lod[lower.tri(lod)] <- t(lod)[lower.tri(lod)]
