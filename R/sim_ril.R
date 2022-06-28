@@ -2,8 +2,8 @@
 #
 # sim_ril.R
 #
-# copyright (c) 2004-2011, Karl W Broman
-# last modified May, 2011
+# copyright (c) 2004-2022, Karl W Broman
+# last modified June, 2022
 # first written May, 2004
 #
 #     This program is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@ sim.ril <-
     omap <- map
     map <- lapply(map, function(a) a-min(a))
 
-    if(!selfing && class(omap[[length(omap)]])=="X")
+    if(!selfing && inherits(omap[[length(omap)]], "X"))
         include.x <- TRUE
     else {
         for(i in seq(along=omap)) class(omap[[i]]) <- "A"

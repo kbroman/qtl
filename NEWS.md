@@ -24,6 +24,9 @@ copyright (c) 2001-2022, Karl W Broman
   cross object are not only LOD scores (such as from `markerlrt()`);
   if they are, it re-runs `est.rf()`.
 
+- In `sim.ril()`, changed an instance of `if(class(x)=="X")` to
+  `if(inherits(x, "X"))`
+
 
 ## Verison 1.50, 2021-10-06
 
