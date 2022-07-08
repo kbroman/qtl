@@ -28,7 +28,7 @@ copyright (c) 2001-2022, Karl W Broman
   `if(inherits(x, "X"))`
 
 
-## Verison 1.50, 2021-10-06
+## Version 1.50, 2021-10-06
 
 ### New features
 
