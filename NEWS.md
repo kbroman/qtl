@@ -16,7 +16,7 @@ copyright (c) 2001-2022, Karl W Broman
     at https://www.r-project.org/Licenses/GPL-3
 ----------------------------------------------------------------------
 
-## Version 1.51, 2022-06-28
+## Version 1.52, 2022-07-09
 
 ### Minor changes
 
