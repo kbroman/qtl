@@ -1,20 +1,4 @@
-Revision history for the R/qtl package
-----------------------------------------------------------------------
-copyright (c) 2001-2022, Karl W Broman
-<https://rqtl.org>
-
-    The R/qtl package is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License,
-    version 3, as published by the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful,
-    but without any warranty; without even the implied warranty of
-    merchantability or fitness for a particular purpose.  See the GNU
-    General Public License for more details.
-
-    A copy of the GNU General Public License, version 3, is available
-    at https://www.r-project.org/Licenses/GPL-3
-----------------------------------------------------------------------
+# Revision history for the R/qtl package
 
 ## Version 1.52, 2022-07-09
 
@@ -2545,7 +2529,7 @@ copyright (c) 2001-2022, Karl W Broman
 - The degrees of freedom are added as attributes in the output from
   scanone and scantwo, including the case of permutations.
 
-## Minor changes:
+### Minor changes:
 
 - In read.cross, the symbol "#" is no longer treated as a comment
   character by default.  The default is to use comment.char=""; that
@@ -2826,7 +2810,7 @@ copyright (c) 2001-2022, Karl W Broman
   multiple phenotypes; only results for a single phenotype are used by
   these functions, and "lodcolumn" indicates which one.
 
-## Minor changes:
+### Minor changes:
 
 - Modified summary.cross() to give a warning if there are markers at
   precisely the same position.  Added a function jittermap() to assist
