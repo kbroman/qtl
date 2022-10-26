@@ -3,6 +3,7 @@ convert2bcsft <- function(cross, BC.gen = 0, F.gen = 0, estimate.map = TRUE,
                           verbose=FALSE)
 {
     cross.class <- crosstype(cross)
+    if(cross.class=="bcsft") cross.class <- "f2"
 
     if((cross.class %in% c("bc","f2"))) {
         class(cross) <- c("bcsft", "cross")
@@ -51,7 +52,7 @@ read.cross.bcsft <- function(..., BC.gen = 0, F.gen = 0, cross = NULL, force.bcs
         estimate.map <- FALSE
 
     force.bcsft <- force.bcsft | (BC.gen > 0 | F.gen > 0)
-    if((crosstype(cross) %in% c("bc","f2")) && force.bcsft) {
+    if((crosstype(cross) %in% c("bc","f2","bcsft")) && force.bcsft) {
 
         # deal with ... args
         dots <- list(...)

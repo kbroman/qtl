@@ -6,6 +6,9 @@
 
 - Fixed a bug in `summary.cross()` re `&` vs `&&`.
 
+- Fix bug in `read.cross.bcsft()` so that in `read.cross()` you can
+  use `crosstype="bcsft"`
+
 
 ## Version 1.52, 2022-07-09
 
