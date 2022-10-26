@@ -2,10 +2,10 @@
 #
 # util.R
 #
-# copyright (c) 2001-2020, Karl W Broman
+# copyright (c) 2001-2022, Karl W Broman
 #     [find.pheno, find.flanking, and a modification to create.map
 #      from Brian Yandell]
-# last modified Oct, 2020
+# last modified Oct, 2022
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
@@ -3204,15 +3204,15 @@ locateXO <-
     geno[is.na(geno)] <- 0
     type <- crosstype(cross)
 
-    if(type != "bc" && type != "f2" && type != "riself" && type != "risib" && type!="dh" && type!="haploid")
-        stop("locateXO only working for backcross, intercross or RI strains.")
+    if(!(type %in% c("bc", "f2", "riself", "risib", "dh", "haploid", "bcsft")))
+        stop("locateXO only working for backcross, intercross, RI strains, or BCsFt.")
 
     map <- cross$geno[[1]]$map
     if(is.matrix(map)) map <- map[1,]
     #  map <- map - map[1] # shift first marker to 0
 
     # bc or intercross?  thetype==0 for BC and ==1 for intercross
-    if(type=="f2") {
+    if(type=="f2" || type=="bcsft") {
         if(chrtype(geno) == "X") thetype <- 0
         else thetype <- 1
     }

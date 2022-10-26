@@ -2,8 +2,8 @@
 #
 # countXO.R
 #
-# copyright (c) 2008-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2008-2022, Karl W Broman
+# last modified Oct, 2022
 # first written Feb, 2008
 #
 #     This program is free software; you can redistribute it and/or
@@ -59,7 +59,7 @@ countXO <-
         else xchr <- FALSE
 
         # which type of cross is this?
-        if(type == "f2") {
+        if(type == "f2" || type=="bcsft") {
             if(!xchr) # autosomal
                 func <- "R_countXO_f2"
             else func <- "R_countXO_bc"        # X chromsome

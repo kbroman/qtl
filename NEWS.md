@@ -2,7 +2,12 @@
 
 ## Version 1.53-1, 2022-10-26
 
-## Bug fixes
+### Minor changes
+
+- `locateXO()` and `countXO()` are now working for cross type BCsFt
+  (by treating it as an F2 intercross).
+
+### Bug fixes
 
 - Fixed a bug in `summary.cross()` re `&` vs `&&`.
 
