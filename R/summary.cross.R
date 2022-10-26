@@ -73,7 +73,7 @@ summary.cross <-
 
     # table of genotype values
     typings <- typingsA <- typingsX <- NULL
-    if(type %in% c("f2", "bcsft") & !is.bcs) {
+    if(type %in% c("f2", "bcsft") && !is.bcs) {
         if(is.null(GenoX)) {
             typings <- table(factor(Geno[!is.na(Geno)], levels=1:5))
             temp <- getgenonames("f2", "A", cross.attr=attributes(object))

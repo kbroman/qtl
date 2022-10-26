@@ -1,5 +1,12 @@
 # Revision history for the R/qtl package
 
+## Version 1.53-1, 2022-10-26
+
+## Bug fixes
+
+- Fixed a bug in `summary.cross()` re `&` vs `&&`.
+
+
 ## Version 1.52, 2022-07-09
 
 ### Minor changes
