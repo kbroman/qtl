@@ -2,8 +2,8 @@
 #
 # summary.cross.R
 #
-# copyright (c) 2001-2019, Karl W Broman
-# last modified Dec, 2019
+# copyright (c) 2001-2022, Karl W Broman
+# last modified Oct, 2022
 # first written Feb, 2001
 #
 #     This program is free software; you can redistribute it and/or
