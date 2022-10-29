@@ -47,17 +47,9 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check", build_args="--compact-vignettes=both")
-        shell: Rscript {0}
-
-      - name: Show testthat output
-        if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
-
-      - uses: actions/upload-artifact@main
-        with:
-          upload-snapshots: true
+      - uses: r-lib/actions/check-r-package@v2
+          with:
+            args: 'c("--no-manual", "--as-cran")'
+            build_args: '"--compact-vignettes=both"'
+            error-on: '"warning"'
+            check-dir: '"check"'
