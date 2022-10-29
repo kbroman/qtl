@@ -1,6 +1,6 @@
 ## R/qtl: A QTL mapping environment
 
-[![R build status](https://github.com/kbroman/qtl/workflows/R-CMD-check/badge.svg)](https://github.com/kbroman/qtl/actions)
+[![R-CMD-check](https://github.com/kbroman/qtl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kbroman/qtl/actions/workflows/R-CMD-check.yaml)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/qtl)](https://cran.r-project.org/package=qtl)
 
 **Authors**: Karl W Broman and Hao Wu, with ideas from Gary Churchill
