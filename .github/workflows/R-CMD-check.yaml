@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: r-lib/actions/setup-tinytex@v1
+      - uses: r-lib/actions/setup-tinytex@v2
       - run: tlmgr install ae preprint fancyhdr cite
 
       - uses: r-lib/actions/setup-pandoc@v2
@@ -48,8 +48,8 @@ jobs:
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
-          with:
-            args: 'c("--no-manual", "--as-cran")'
-            build_args: '"--compact-vignettes=both"'
-            error-on: '"warning"'
-            check-dir: '"check"'
+        with:
+          args: 'c("--no-manual", "--as-cran")'
+          build_args: '"--compact-vignettes=both"'
+          error-on: '"warning"'
+          check-dir: '"check"'
