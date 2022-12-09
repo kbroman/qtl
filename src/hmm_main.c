@@ -2,9 +2,9 @@
  *
  * hmm_main.c
  *
- * copyright (c) 2001-2010, Karl W Broman
+ * copyright (c) 2001-2022, Karl W Broman
  *
- * last modified Aug, 2010
+ * last modified Dec, 2022
  * first written Feb, 2001
  *
  *     This program is free software; you can redistribute it and/or
@@ -477,7 +477,7 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
     if(verbose) {
         ndigits = (int)ceil(-log10(tol));
         if(ndigits > 16) ndigits=16;
-        sprintf(pattern, "%s%d.%df", "%", ndigits+3, ndigits+1);
+        snprintf(pattern, sizeof(pattern), "%s%d.%df", "%", ndigits+3, ndigits+1);
     }
 
     /* begin EM algorithm */
@@ -577,7 +577,7 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
                     Rprintf("%d %f %f\n", j+1, cur_rf[j], rf[j]);
                 /* bsy add */
             }
-            sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
+            snprintf(text, sizeof(text), "%s%s\n", "  max rel've change = ", pattern);
             Rprintf(text, maxdif);
         }
 
@@ -637,7 +637,7 @@ void est_map(int n_ind, int n_mar, int n_gen, int *geno, double *rf,
                     if(maxdif < temp) maxdif = temp;
                 }
             }
-            sprintf(text, "%s%s\n", "  max rel've change at last step = ", pattern);
+            snprintf(text, sizeof(text), "%s%s\n", "  max rel've change at last step = ", pattern);
             Rprintf(text, maxdif);
         }
 

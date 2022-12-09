@@ -2,10 +2,10 @@
  *
  * hmm_bci.c
  *
- * copyright (c) 2006-2012, Karl W Broman
+ * copyright (c) 2006-2022, Karl W Broman
  *         (Some code adapted from code from Nicola Armstrong)
  *
- * last modified Aug, 2012
+ * last modified Dec, 2022
  * first written Aug, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -128,7 +128,7 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
     if(verbose) {
         ndigits = (int)ceil(-log10(tol));
         if(ndigits > 16) ndigits=16;
-        sprintf(pattern, "%s%d.%df", "%", ndigits+3, ndigits+1);
+        snprintf(pattern, sizeof(pattern), "%s%d.%df", "%", ndigits+3, ndigits+1);
     }
 
     for(j=0; j<n_mar-1; j++) d[j] /= 100.0; /* convert to Morgans */
@@ -221,7 +221,7 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
                 tempdif = fabs(d[j] - cur_d[j])/(cur_d[j]+tol*100.0);
                 if(maxdif < tempdif) maxdif = tempdif;
             }
-            sprintf(text, "%s%s\n", "  max rel've change = ", pattern);
+            snprintf(text, sizeof(text), "%s%s\n", "  max rel've change = ", pattern);
             Rprintf(text, maxdif);
         }
 
@@ -278,7 +278,7 @@ void est_map_bci(int n_ind, int n_mar, int *geno, double *d,
                 tempdif = fabs(d[j] - cur_d[j])/(cur_d[j]+tol*100.0);
                 if(maxdif < tempdif) maxdif = tempdif;
             }
-            sprintf(text, "%s%s\n", "  max rel've change at last step = ", pattern);
+            snprintf(text, sizeof(text), "%s%s\n", "  max rel've change at last step = ", pattern);
             Rprintf(text, maxdif);
         }
 

@@ -1,5 +1,13 @@
 # Revision history for the R/qtl package
 
+## Version 1.56, 2022-12-09
+
+### Minor changes
+
+- In compiled code, replace calls to `sprintf()` with calls to
+  `snprintf()`, to avoid warnings on CRAN.
+
+
 ## Version 1.54, 2022-12-01
 
 ### Minor changes
