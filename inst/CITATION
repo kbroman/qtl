@@ -1,6 +1,6 @@
 citHeader("To cite R/qtl in publications use:")
 
-citEntry(entry="article",
+bibentry(bibtype="article",
          title = "R/qtl: {QTL} mapping in experimental crosses",
          author = personList(person(c("Karl", "W."), "Broman"),
                              person("Hao", "Wu"),

@@ -1,5 +1,12 @@
 # Revision history for the R/qtl package
 
+## Version 1.59, 2023-02-18
+
+### Minor changes
+
+- In the CITATION file, change from `citEntry()` to `bibentry()`.
+
+
 ## Version 1.58, 2022-12-22
 
 ### Minor changes
