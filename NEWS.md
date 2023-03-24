@@ -1,10 +1,16 @@
 # Revision history for the R/qtl package
 
-## Version 1.59, 2023-02-18
+## Version 1.59-2, 2023-03-23
 
 ### Minor changes
 
 - In the CITATION file, change from `citEntry()` to `bibentry()`.
+
+### Bug fixes
+
+- Fixed bug in addint() and addcovarint(): when X chr QTL and missing
+  phenotypes, would halt with error because cross wasn't getting
+  subset. (Issue #101)
 
 
 ## Version 1.58, 2022-12-22

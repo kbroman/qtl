@@ -2,8 +2,8 @@
 #
 # addqtl.R
 #
-# copyright (c) 2007-2021, Karl W. Broman
-# last modified Mar, 2021
+# copyright (c) 2007-2023, Karl W. Broman
+# last modified Mar, 2023
 # first written Nov, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -133,6 +133,7 @@ addint <-
                 qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
 
             if(!is.null(covar)) covar <- covar[!hasmissing,,drop=FALSE]
+            cross <- subset(cross, ind=!hasmissing)
         }
     }
 
@@ -1284,6 +1285,7 @@ addcovarint <-
                 qtl$prob <- lapply(qtl$prob, function(a) a[!hasmissing,,drop=FALSE])
 
             covar <- covar[!hasmissing,,drop=FALSE]
+            cross <- subset(cross, ind=!hasmissing)
         }
     }
 
