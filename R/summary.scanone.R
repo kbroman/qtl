@@ -158,8 +158,13 @@ summary.scanone <-
         }
         thechr <- as.character(object[wh,1])
 
-        if(!missing(threshold))
+        if(!missing(threshold)) {
+            if(length(threshold) > 1) {
+                warning('when format="allpheno", threshold should have length 1')
+                threshold <- threshold[1]
+            }
             wh <- wh[object[wh,lodcolumn] > threshold]
+        }
         else if(!missing(alpha)) {
             thr <- summary(perms, alpha)
             if("xchr" %in% names(attributes(perms))) {

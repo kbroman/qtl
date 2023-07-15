@@ -1,5 +1,13 @@
 # Revision history for the R/qtl package
 
+## Version 1.61, 2023-07-15
+
+### Bug fixes
+
+- Fixed bug in `summary.scanone()` for the case `format="onepheno"` but
+  `threshold` has length > 1. (Issue #102.)
+
+
 ## Version 1.60, 2023-04-18
 
 ### Minor changes
