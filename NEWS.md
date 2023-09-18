@@ -1,11 +1,14 @@
 # Revision history for the R/qtl package
 
-## Version 1.61, 2023-07-15
+## Version 1.61, 2023-09-19
 
 ### Bug fixes
 
 - Fixed bug in `summary.scanone()` for the case `format="onepheno"` but
   `threshold` has length > 1. (Issue #102.)
+
+- Fixed bug in `read.cross()` for format `"csvs"` when the phenotype
+  file contains only the identifiers. (Issue #103.)
 
 
 ## Version 1.60, 2023-04-18

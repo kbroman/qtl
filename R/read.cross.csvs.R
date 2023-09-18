@@ -196,9 +196,11 @@ read.cross.csvs <-
     else
         map <- rep(0,ncol(gen))
 
-    colnames(pheno) <- unlist(pheno[1,])
+    colnames_pheno <- unlist(pheno[1,])
+
     pheno <- apply(pheno, 2, function(a) { a[!is.na(a) & a==""] <- NA; a })
     pheno <- as.data.frame(pheno[-1,], stringsAsFactors=TRUE)
+    colnames(pheno) <- colnames_pheno
 
     # replace empty cells with NA
     gen <- sapply(gen,function(a) { a[!is.na(a) & a==""] <- NA; a })
