@@ -74,7 +74,7 @@ write.cross(cross, format=c("csv", "csvr", "csvs", "csvsr",
   \href{https://github.com/qtlHD/qtlHD/blob/master/doc/input/qtab.md}{documentation}.
 
   MapQTL format: See
-  \href{https://www.kyazma.nl/docs/MQ6Manual.pdf}{documentation}.
+  \href{https://www.kyazma.nl/docs/MQ7Manual.pdf}{documentation}.
 
   Tidy format: Data is written to three files, \code{"stem_gen.csv"},
   \code{"stem_phe.csv"}, and \code{"stem_map.csv"} (where \code{stem} is

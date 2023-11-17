@@ -35,7 +35,7 @@
 # positions, and a "qua" file containing the phenotypes.
 #
 # File formats are described in the MapQTL manual available online at
-# http://www.kyazma.nl/docs/MQ6Manual.pdf
+# http://www.kyazma.nl/docs/MQ7Manual.pdf
 # Only 4-way crosses are supported ("CP" type in MapQTL/JoinMap).
 #
 ######################################################################
