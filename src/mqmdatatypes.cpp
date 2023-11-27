@@ -196,8 +196,11 @@ void copyvector(vector vsource, vector vdestination, int dim) {
 
 #ifndef ENABLE_C99_MACROS
   void fatal(const char* s, ...){
-    Rf_error(s);
+      Rprintf("%s", s);
+      Rf_error("Fatal error\n");
   }
   void debug_trace(const char*, ...){}
-  void info(const char* s, ...){ Rprintf("INFO: "); Rprintf(s); Rprintf("\n"); }
+  void info(const char* s, ...){
+      Rprintf("INFO: %s\n", s);
+  }
 #endif
