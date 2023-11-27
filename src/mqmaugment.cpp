@@ -2,7 +2,7 @@
  *
  * mqmaugment.cpp
  *
- * Copyright (c) 1996-2011 by
+ * Copyright (c) 1996-2023 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
@@ -241,7 +241,7 @@ int mqmaugmentfull(MQMMarkerMatrix* markers,int* nind, int* augmentednind, ivect
       (*augmentednind)=(*augmentednind)+(numimputations*current_leftover_ind);
       (*nind)= (*nind)+(current_leftover_ind);
       debug_trace("nind:%d,naugmented:%d",(*nind)+(current_leftover_ind),(*augmentednind)+(current_leftover_ind));
-      Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n", "");
+      Rprintf("INFO: VALGRIND MEMORY DEBUG BARRIERE TRIGGERED\n");
     }else{
       if(ind_still_left && augment_strategy == 3){
         if(verbose) Rprintf("INFO: Dropping %d individuals from further analysis\n",ind_still_left);

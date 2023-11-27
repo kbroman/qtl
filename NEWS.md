@@ -1,5 +1,13 @@
 # Revision history for the R/qtl package
 
+## Version 1.64, 2023-11-27
+
+### Bug fixes
+
+- Fixed problem in a call to Rprintf() in C++ code, identified by CRAN.
+  (Issue #104.)
+
+
 ## Version 1.62, 2023-11-17
 
 ### Bug fixes
