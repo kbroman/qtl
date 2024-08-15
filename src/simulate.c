@@ -2,9 +2,9 @@
  *
  * simulate.c
  *
- * copyright (c) 2006, Karl W Broman
+ * copyright (c) 2024, Karl W Broman
  *
- * last modified Dec, 2006
+ * last modified Aug, 2024
  * first written Jul, 2006
  *
  *     This program is free software; you can redistribute it and/or
@@ -131,7 +131,7 @@ void sim_bc(int n_mar, int n_ind, double *pos, int m, double p, int **Geno)
 
     /* space to place the crossover locations */
     max_chi = (int)qpois(1e-10, L/50.0*(double)(m+2), 0, 0);
-    chi = (double *)Calloc(max_chi, double);
+    chi = (double *)R_Calloc(max_chi, double);
 
     for(i=0; i<n_ind; i++) {
         R_CheckUserInterrupt(); /* check for ^C */
@@ -150,7 +150,7 @@ void sim_bc(int n_mar, int n_ind, double *pos, int m, double p, int **Geno)
 
         if(n_chi + n_ni_xo > max_chi) { /* need more space */
             max_chi = n_chi + n_ni_xo;
-            chi = (double *)Realloc(chi, max_chi, double);
+            chi = (double *)R_Realloc(chi, max_chi, double);
         }
 
         /* simulate locations */
@@ -203,7 +203,7 @@ void sim_bc(int n_mar, int n_ind, double *pos, int m, double p, int **Geno)
                 Geno[j][i] = Geno[j-1][i];
         }
     }
-    Free(chi);
+    R_Free(chi);
 }
 
 

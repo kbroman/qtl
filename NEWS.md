@@ -1,10 +1,13 @@
 # Revision history for the R/qtl package
 
-## Version 1.67-1, 2024-08-14
+## Version 1.67-2, 2024-08-14
 
 ### Minor changes
 
 - Fixed a typo in the help file for `fitqtl()`.
+
+- Small change to C code in simulate.c for R-devel: change calls to
+  Calloc, Realloc, and Free to R_Calloc, R_Realloc, and R_Free.
 
 
 ## Version 1.66, 2023-11-27
