@@ -1,5 +1,12 @@
 # Revision history for the R/qtl package
 
+## Version 1.67-1, 2024-08-14
+
+### Minor changes
+
+- Fixed a typo in the help file for `fitqtl()`.
+
+
 ## Version 1.66, 2023-11-27
 
 ### Bug fixes

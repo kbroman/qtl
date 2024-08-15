@@ -64,7 +64,7 @@ fitqtl(cross, pheno.col=1, qtl, covar=NULL, formula, method=c("imp", "hk"),
   dropped.  The comparison between the new model and the full (input)
   model will be output.
 
-  The estimated percent variances explained for the QTL are simplify
+  The estimated percent variances explained for the QTL are simply
   transformations of the conditional LOD scores by the formula \eqn{h^2
   = 1 - 10^{-(2/n) {\rm LOD}}}.  While these may be reasonable for
   unlinked, additive QTL, \bold{they can be completely wrong in the case
