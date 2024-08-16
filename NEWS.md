@@ -1,6 +1,6 @@
 # Revision history for the R/qtl package
 
-## Version 1.67-2, 2024-08-14
+## Version 1.67-3, 2024-08-16
 
 ### Minor changes
 
@@ -8,6 +8,9 @@
 
 - Small change to C code in simulate.c for R-devel: change calls to
   Calloc, Realloc, and Free to R_Calloc, R_Realloc, and R_Free.
+
+- In mqmdatatypes.cpp, changed calls to warning() to calls to Rf_warning()
+  to avoid compile error in R-devel.
 
 
 ## Version 1.66, 2023-11-27

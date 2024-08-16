@@ -2,7 +2,7 @@
  *
  * mqmdatatypes.cpp
  *
- * Copyright (c) 1996-2009 by
+ * Copyright (c) 1996-2024 by
  * Ritsert C Jansen, Danny Arends, Pjotr Prins and Karl W Broman
  *
  * initial MQM C code written between 1996-2002 by Ritsert C. Jansen
@@ -95,7 +95,7 @@ void change_coding(int *Nmark, int *Nind, int **Geno, MQMMarkerMatrix markers, c
         case 9: markers[j][i] = MMISSING;
                 break;
         default:
-                error("Can not convert R/qtl genotype with value %d",Geno[j][i]);
+                Rf_error("Can not convert R/qtl genotype with value %d",Geno[j][i]);
       }
     }
   }
@@ -114,37 +114,37 @@ void *calloc_init(size_t num, size_t size) {
 
 vector newvector(int dim) {
   vector v = (double *)calloc_init(dim, sizeof(double));
-  if(!v){ warning("Not enough memory for new vector of dimension %d", (dim+1)); }
+  if(!v){ Rf_warning("Not enough memory for new vector of dimension %d", (dim+1)); }
   return v;
 }
 
 ivector newivector(int dim) {
   ivector v = (int *)calloc_init(dim, sizeof(int));
-  if(!v){ warning("Not enough memory for new vector of dimension %d", (dim+1)); }
+  if(!v){ Rf_warning("Not enough memory for new vector of dimension %d", (dim+1)); }
   return v;
 }
 
 cvector newcvector(int dim) {
   cvector v = (char *)calloc_init(dim, sizeof(char));
-  if(!v){ warning("Not enough memory for new vector of dimension %d", (dim+1)); }
+  if(!v){ Rf_warning("Not enough memory for new vector of dimension %d", (dim+1)); }
   return v;
 }
 
 MQMMarkerVector newMQMMarkerVector(int dim) {
   MQMMarkerVector v = (MQMMarker *)calloc_init(dim, sizeof(MQMMarker));
-  if(!v){ warning("Not enough memory for new mqm marker vector of dimension %d", (dim+1)); }
+  if(!v){ Rf_warning("Not enough memory for new mqm marker vector of dimension %d", (dim+1)); }
   return v;
 }
 
 relmarkerarray newRelMarkerPos(int dim){
   relmarkerarray v = (MQMRelMarkerPos *)calloc_init(dim, sizeof(char));
-  if(!v){ warning("Not enough memory for the relative marker position vector with dimension %d",(dim+1)); }
+  if(!v){ Rf_warning("Not enough memory for the relative marker position vector with dimension %d",(dim+1)); }
   return v;
 }
 
 matrix newmatrix(int rows, int cols) {
   matrix m = (double **)calloc_init(rows, sizeof(double*));
-  if(!m){ warning("Not enough memory for new double matrix"); }
+  if(!m){ Rf_warning("Not enough memory for new double matrix"); }
   for (int i=0; i<rows; i++) {
     m[i]= newvector(cols);
   }
@@ -171,7 +171,7 @@ void printcmatrix(cmatrix m, int rows, int cols) {
 
 cmatrix newcmatrix(int rows, int cols) {
   cmatrix m = (char **)calloc_init(rows, sizeof(char*));
-  if(!m){ warning("Not enough memory for new char matrix"); }
+  if(!m){ Rf_warning("Not enough memory for new char matrix"); }
   for (int i=0; i<rows; i++) {
     m[i]= newcvector(cols);
   }
@@ -181,7 +181,7 @@ cmatrix newcmatrix(int rows, int cols) {
 
 MQMMarkerMatrix newMQMMarkerMatrix(int rows, int cols) {
   MQMMarkerMatrix m = (MQMMarkerMatrix)calloc_init(rows, sizeof(MQMMarkerVector));
-  if(!m){ warning("Not enough memory for new markermatrix"); }
+  if(!m){ Rf_warning("Not enough memory for new markermatrix"); }
   for (int i=0; i<rows; i++) {
     m[i]= newMQMMarkerVector(cols);
   }
