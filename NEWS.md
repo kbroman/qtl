@@ -12,6 +12,8 @@
 - In mqmdatatypes.cpp, changed calls to warning() to calls to Rf_warning()
   to avoid compile error in R-devel.
 
+- Add Authors@R field in the Description file
+
 
 ## Version 1.66, 2023-11-27
 
