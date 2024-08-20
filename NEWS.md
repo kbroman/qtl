@@ -1,6 +1,6 @@
 # Revision history for the R/qtl package
 
-## Version 1.67-3, 2024-08-16
+## Version 1.68, 2024-08-20
 
 ### Minor changes
 
