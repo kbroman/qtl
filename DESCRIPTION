@@ -2,7 +2,7 @@ Package: qtl
 Version: 1.70
 Date: 2024-08-21
 Title: Tools for Analyzing QTL Experiments
-Author: Karl W Broman [aut, cre] (<https://orcid.org/0000-0002-4914-6671>), Hao Wu [aut], Gary Churchill [ctb] (<https://orcid.org/0000-0001-9190-9284>), Saunak Sen [ctb] (<https://orcid.org/0000-0003-4519-6361>), Danny Arends [ctb], Robert Corty [ctb], Timothee Flutre [ctb], Ritsert Jansen [ctb], Pjotr Prins [ctb] (<https://orcid.org/0000-0002-8021-9162>), Lars Ronnegard [ctb], Rohan Shah [ctb], Laura Shannon [ctb], Quoc Tran [ctb], Aaron Wolen [ctb], Brian Yandell [ctb] (<https://orcid.org/0000-0002-8774-9377>), R Core Team [ctb]
+Author: Karl W Broman [aut, cre] (<https://orcid.org/0000-0002-4914-6671>), Hao Wu [aut], Gary Churchill [ctb] (<https://orcid.org/0000-0001-9190-9284>), Saunak Sen [ctb] (<https://orcid.org/0000-0003-4519-6361>), Danny Arends [ctb] (<https://orcid.org/0000-0001-8738-0162>), Robert Corty [ctb], Timothee Flutre [ctb], Ritsert Jansen [ctb], Pjotr Prins [ctb] (<https://orcid.org/0000-0002-8021-9162>), Lars Ronnegard [ctb], Rohan Shah [ctb], Laura Shannon [ctb], Quoc Tran [ctb], Aaron Wolen [ctb], Brian Yandell [ctb] (<https://orcid.org/0000-0002-8774-9377>), R Core Team [ctb]
 Authors@R: c(person(given = c("Karl", "W"),
                     family = "Broman",
                     role = c("aut", "cre"),
@@ -21,7 +21,8 @@ Authors@R: c(person(given = c("Karl", "W"),
                     comment=c(ORCID = "0000-0003-4519-6361")),
              person(given = "Danny",
                     family = "Arends",
-                    role = "ctb"),
+                    role = "ctb",
+                    comment=c(ORCID = "0000-0001-8738-0162")),
              person(given = "Robert",
                     family = "Corty",
                     role = "ctb"),
