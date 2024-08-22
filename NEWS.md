@@ -1,6 +1,6 @@
 # Revision history for the R/qtl package
 
-## Version 1.67-3, 2024-08-16
+## Version 1.70, 2024-08-21
 
 ### Minor changes
 
@@ -11,6 +11,8 @@
 
 - In mqmdatatypes.cpp, changed calls to warning() to calls to Rf_warning()
   to avoid compile error in R-devel.
+
+- Add Authors@R field in the Description file
 
 
 ## Version 1.66, 2023-11-27
