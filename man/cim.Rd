@@ -22,12 +22,11 @@ cim(cross, pheno.col=1, n.marcovar=3, window=10,
  \item{cross}{An object of class \code{cross}. See
    \code{\link{read.cross}} for details.}
  \item{pheno.col}{Column number in the phenotype matrix which should be
-   used as the phenotype.  One may also give a character string matching
+   used as the phenotype.  (The function takes only a single phenotype.)
+   One may also give a character string matching
    a phenotype name. Finally, one may give a numeric vector of
-   phenotypes, in which case it must have the length equal to the number
-   of individuals in the cross, and there must be either non-integers or
-   values < 1 or > no. phenotypes; this last case may be useful for studying
-   transformations.}
+   phenotype values, with length equal to the number of individuals in
+   the cross.}
  \item{n.marcovar}{Number of marker covariates to use.}
  \item{window}{Window size, in cM.}
  \item{method}{Indicates whether to use the EM algorithm,

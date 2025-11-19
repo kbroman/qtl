@@ -2,8 +2,8 @@
 #
 # cim.R
 #
-# copyright (c) 2007-2021, Karl W Broman
-# last modified Jun, 2021
+# copyright (c) 2007-2025, Karl W Broman
+# last modified Nov, 2025
 # first written Jan, 2007
 #
 #     This program is free software; you can redistribute it and/or
@@ -51,6 +51,9 @@ cim <-
     if(type=="4way")
         stop("cim() has not been implemented for 4-way crosses")
 
+    if(length(pheno.col) > 1 && length(pheno.col) != nind(cross))
+        stop("cim() can only take a single phenotype.")
+
     if(LikePheVector(pheno.col, nind(cross), nphe(cross))) {
         cross$pheno <- cbind(pheno.col, cross$pheno)
         pheno.col <- 1
@@ -69,7 +72,7 @@ cim <-
     }
 
     if(any(pheno.col < 1 | pheno.col > nphe(cross)))
-        stop("pheno.col values should be between 1 and the no. phenotypes")
+        stop("pheno.col should be between 1 and the no. phenotypes")
 
     y <- cross$pheno[,pheno.col]
     if(any(is.na(y))) {

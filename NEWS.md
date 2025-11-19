@@ -1,5 +1,14 @@
 # Revision history for the R/qtl package
 
+## Version 1.71-1, 2025-11-19
+
+### Minor changes
+
+- Improve error message in cim() if multiple `pheno.col` provided,
+  as well as help file (to emphasize that only a single phenotype can
+  be considered.) (Issue #107)
+
+
 ## Version 1.70, 2024-08-21
 
 ### Minor changes
