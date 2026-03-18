@@ -1,5 +1,10 @@
 # Revision history for the R/qtl package
 
+## Version 1.75-1, 2026-03-18
+
+- In the help for move.marker, add tryallpositions to the "see also".
+
+
 ## Version 1.74, 2025-12-08
 
 - Removed includes of `R_ext/PrtUtil.h` which began causing warnings on CRAN.

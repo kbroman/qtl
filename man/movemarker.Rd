@@ -36,6 +36,6 @@ badorder <- movemarker(badorder, "D2M937", 3, 48.15)
 badorder <- movemarker(badorder, "D3M160", 2, 28.83)
 }
 
-\seealso{ \code{\link{switch.order}} }
+\seealso{ \code{\link{switch.order}}, \code{\link{tryallpositions}} }
 
 \keyword{manip}
