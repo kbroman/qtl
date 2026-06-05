@@ -15,23 +15,10 @@ Provides a set of tools to perform quantitative trait locus (QTL) analysis in ex
     \code{library(qtl)}.  You may wish to include this in a
     \code{\link[base:Startup]{.Rprofile}} file.
 
-    \item Documention and several tutorials are available
-    at the R archive (\url{https://cran.r-project.org}).
-
-    \item Use the \code{\link[utils]{help.start}} function to start the
-    html version of the R help.
-
-    \item Type \code{library(help=qtl)} to get a list of the functions
-    in R/qtl.
-
-    \item Use the \code{\link[utils]{example}} function to run examples
-    of the various functions in R/qtl.
-
     \item A tutorial on the use of R/qtl is distributed with the
     package and is also available at \url{https://rqtl.org/rqtltour.pdf}.
 
-    \item Download the latest version of R/qtl from the R archive or
-    from \url{https://rqtl.org}.
+    \item There's a slightly shorter tutorial at \url{https://rqtl.org/rqtltour2.pdf}.
   }
 }
 
