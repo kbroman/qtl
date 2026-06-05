@@ -1,8 +1,12 @@
 # Revision history for the R/qtl package
 
-## Version 1.75-1, 2026-03-18
+## Version 1.75-2, 2026-06-05
+
+### Minor changes
 
 - In the help for move.marker, add tryallpositions to the "see also".
+
+- Added a package logo.
 
 
 ## Version 1.74, 2025-12-08
