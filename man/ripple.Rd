@@ -36,8 +36,7 @@ ripple(cross, chr, window=4, method=c("countxo","likelihood"),
    used only for the 4-way cross.}
  \item{verbose}{If TRUE, information about the number of orders (and, if
    \code{method="likelihood"}, about progress) are printed.}
- \item{n.cluster}{If the package \code{snow} is available and
-   \code{n.perm} > 0, permutations are run in parallel using this number
+ \item{n.cluster}{If > 1, calculations are run in parallel using this number
    of nodes.  This is really only useful with \code{method="likelihood"}.}
 }
 

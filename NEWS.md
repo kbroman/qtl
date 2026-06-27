@@ -1,12 +1,16 @@
 # Revision history for the R/qtl package
 
-## Version 1.75-2, 2026-06-05
+## Version 1.75-3, 2026-06-27
 
 ### Minor changes
 
 - In the help for move.marker, add tryallpositions to the "see also".
 
 - Added a package logo.
+
+- In help files, removed references to the snow package, as parallel
+  calculations have long been incorporated into the parallel package
+  that is distributed with R.
 
 
 ## Version 1.74, 2025-12-08

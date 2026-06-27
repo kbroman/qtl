@@ -36,11 +36,7 @@ An object of class \code{cross}. See \code{\link{read.cross}} for details. % \cr
 
 \details{
   This function wraps the analysis of \code{\link{scanone}}, \code{\link{cim}}
-  and \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data. It is
-  recommended to also install the \code{snow} library for parallelization of
-  calculations. The \code{snow} library allows
-  calculations to run on multiple cores or even scale it up to an entire cluster,
-  thus speeding up calculation by the number of computers used.
+  and \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data.
 }
 
 \value{
@@ -88,10 +84,6 @@ result <- mqmscanfdr(multitrait, threshold=10.0, n.perm=1000)
     \item Bruno M. Tesson, Ritsert C. Jansen (2009) Chapter 3.7. Determining the significance threshold \emph{eQTL Analysis in Mice and Rats} \bold{1}, 20--25
         \item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
 % -----^^ inst/doc/Sources/MQM/mqm/significance_references.txt ^^-----
-% \input{"inst/doc/Sources/MQM/mqm/parallelisation_references.txt"}
-        \item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
-        \item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1.
-% -----^^ inst/doc/Sources/MQM/mqm/parallelisation_references.txt ^^-----
 }
 }
 

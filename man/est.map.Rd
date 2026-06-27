@@ -49,7 +49,7 @@ est.map(cross, chr, error.prob=0.0001,
   equal to the number of chromosomes, defining individual starting
   positions for each chromosome.  For a sex-specific map (as in a 4-way
   cross), we use the same offset for both the male and female maps.}
- \item{n.cluster}{If the package \code{snow} is available
+ \item{n.cluster}{If > 1,
    calculations for multiple chromosomes are run in parallel using this
    number of nodes.}
 }

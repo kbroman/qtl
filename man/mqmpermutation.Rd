@@ -9,7 +9,7 @@
    \item Random redistribution of traits (method='permutation')
    \item Random redistribution of simulated trait values (method='simulation')
    }
-   Calculations can be parallelized using the SNOW package.
+   Calculations can be parallelized.
 }
 
 \usage{
@@ -44,8 +44,7 @@ List of cofactors to be analysed in the QTL model. To set cofactors use \code{\l
 
 \details{
   Analysis of \code{\link{scanone}}, \code{\link{cim}} or
-            \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data. It is recommended to also install the \code{snow} library.
-  The \code{snow} library allows calculations to run on multiple cores or even scale it up to an entire cluster, thus speeding up calculation.
+            \code{\link{mqmscan}} to scan for QTL in shuffled/randomized data.
 }
 
 \value{
@@ -104,10 +103,6 @@ summary(f2perm)
     \item Bruno M. Tesson, Ritsert C. Jansen (2009) Chapter 3.7. Determining the significance threshold \emph{eQTL Analysis in Mice and Rats} \bold{1}, 20--25
                 \item Churchill, G. A. and Doerge, R. W. (1994) Empirical threshold values for quantitative trait mapping. \emph{Genetics} \bold{138}, 963--971.
 % -----^^ inst/doc/Sources/MQM/mqm/significance_references.txt ^^-----
-% \input{"inst/doc/Sources/MQM/mqm/parallelisation_references.txt"}
-                \item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
-                \item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1.
-% -----^^ inst/doc/Sources/MQM/mqm/parallelisation_references.txt ^^-----
 }
 }
 

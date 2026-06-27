@@ -4,7 +4,7 @@
 \title{Parallelized MQM on multiple phenotypes in a cross object}
 
 \description{
-  Parallelized QTL analysis using MQM on multiple phenotypes in a cross object (uses SNOW)
+  Parallelized QTL analysis using MQM on multiple phenotypes in a cross object
 }
 
 \usage{
@@ -15,7 +15,7 @@
   \item{cross}{
 An object of class \code{cross}. See \code{\link{read.cross}} for details. % \crossobject
   }
-  \item{multicore}{ Use multiple cores (only if the package SNOW is available, otherwise this setting will be ignored)
+  \item{multicore}{ Use multiple cores
   }
   \item{n.clusters}{ Number of parallel processes to spawn, recommended is setting this lower than the number of cores in the computer
   }
@@ -31,8 +31,6 @@ List of cofactors to be analysed in the QTL model. To set cofactors use \code{\l
 
 \details{
   Uses \code{mqmscan} to scan for QTL's for each phenotype in the cross object.
-  It is recomended that the package SNOW is installed before using this function
-  on large numbers of phenotypes.
 }
 
 \value{
@@ -72,13 +70,5 @@ result <- mqmscanall(multitrait,cofactors=cof,batchsize=5)
 mqmplot.multitrait(result,"lines")
 }
 
-\references{
-    \itemize{
-% \input{"inst/doc/Sources/MQM/mqm/parallelisation_references.txt"}
-        \item Rossini, A., Tierney, L., and Li, N. (2003), Simple parallel statistical computing.  \emph{R. UW Biostatistics working paper series} University of Washington. \bold{193}
-        \item Tierney, L., Rossini, A., Li, N., and Sevcikova, H. (2004), The snow Package: Simple Network of Workstations. Version 0.2-1.
-% -----^^ inst/doc/Sources/MQM/mqm/parallelisation_references.txt ^^-----
-    }
-}
 
 \keyword{ models }
