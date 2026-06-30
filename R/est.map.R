@@ -104,7 +104,7 @@ est.map <-
                                  sex.sp, omit.noninformative)
             est.map(cross=cross, chr=chr, error.prob=error.prob, map.function=map.function,
                     m=m, p=p, maxit=maxit, tol=tol, sex.sp=sex.sp, omit.noninformative=omit.noninformative,
-                    verbose=FALSE)#, n.cluster=1)
+                    verbose=FALSE)
 
         newmap <- clusterApplyLB(cl, chr, temp.est.map, cross, error.prob, map.function, m, p,
                                  maxit, tol, sex.sp, omit.noninformative)
